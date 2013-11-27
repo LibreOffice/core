@@ -64,10 +64,10 @@
 class SVL_DLLPUBLIC SfxSimpleHint: public SfxHint
 {
 private:
-    sal_uLong nId;
+    sal_uLong mnId;
 public:
     SfxSimpleHint( sal_uLong nId );
-    sal_uLong GetId() const { return nId; }
+    sal_uLong GetId() const { return mnId; }
 };
 
 //--------------------------------------------------------------------

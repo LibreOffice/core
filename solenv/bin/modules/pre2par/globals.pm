@@ -38,8 +38,7 @@ BEGIN
 
     @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
                  "Shortcut", "Custom", "Unixlink", "Procedure", "Module", "Profile", "ProfileItem",
-                 "Folder", "FolderItem", "RegistryItem", "StarRegistryItem", "WindowsCustomAction",
-                 "MergeModule");
+                 "Folder", "FolderItem", "RegistryItem", "StarRegistryItem", "WindowsCustomAction");
 
     $logging     = 0;
     $logfilename = "logfile.log";   # the default logfile name for global errors

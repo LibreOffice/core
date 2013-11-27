@@ -27,9 +27,7 @@ Globals
             NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
             SERVICEPACK 1
-            UPDATE_DATABASE 1
             CREATE_MSP_INSTALLSET 0
-            UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL 8
             OOOVENDOR Apache Software Foundation
@@ -241,48 +239,6 @@ Apache_OpenOffice_Dev
     }
 }
 
-URE
-{
-    Settings
-    {
-        downloadname URE_{productversion}_{os}_install_{languages}
-        variables
-        {
-            FULLPRODUCTNAME URE
-            PRODUCTNAME URE
-            PRODUCTVERSION 4.1.0
-            PACKAGEVERSION 4.1
-            PACKAGEREVISION 1
-            PRODUCTEXTENSION
-            LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION
-            LICENSENAME ALv2
-            SETSTATICPATH 1
-            NOVERSIONINDIRNAME 1
-            PCPFILENAME ure.pcp
-            POOLPRODUCT 0
-            GLOBALFILEGID gid_File_Dl_Cppu
-            DOWNLOADBANNER urebanner.bmp
-            DOWNLOADBITMAP urebitmap.bmp
-            DOWNLOADSETUPICO ooosetup.ico
-            DONTUSESTARTMENUFOLDER 1
-            RELATIVE_PATHES_IN_DDF 1
-            NOLANGUAGESELECTIONPRODUCT 1
-            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-URE
-            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
-            STARTCENTER_LAYOUT_STYLE 0
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
-            PACKAGEMAP package_names_ext.txt
-            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
-        }
-        active 1
-        compression 5
-        script ure
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/xml.{minor},{solarenvpath}/{os}/MS
-    }
-}
 
 Apache_OpenOffice_SDK
 {
@@ -309,7 +265,6 @@ Apache_OpenOffice_SDK
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
-            NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
             NOLANGUAGESELECTIONPRODUCT 1
             CHANGETARGETDIR 1
@@ -364,7 +319,6 @@ Apache_OpenOffice_Dev_SDK
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
-            NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
             NOLANGUAGESELECTIONPRODUCT 1
             CHANGETARGETDIR 1

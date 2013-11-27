@@ -37,7 +37,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.h>
 #include<sfx2/viewfrm.hxx>
-
+//IAccessibility2 Implementation 2009-----
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <sfx2/objsh.hxx>
+//-----IAccessibility2 Implementation 2009
 #include <svx/AccessibleShape.hxx>
 
 #include <svx/svdobj.hxx>
@@ -46,8 +49,16 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "Window.hxx"
 #include <vcl/svapp.hxx>
+//IAccessibility2 Implementation 2009-----
+#include "OutlineViewShell.hxx"
 
+#include "SlideViewShell.hxx"
 
+#include <svx/svdlayer.hxx>
+#include <editeng/editobj.hxx>
+#include "LayerTabBar.hxx"
+#include <svtools/colorcfg.hxx>
+//-----IAccessibility2 Implementation 2009
 #include "ViewShell.hxx"
 #include "View.hxx"
 #include <memory>
@@ -88,6 +99,9 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
 
     mxWindow = ::VCLUnoHelper::GetInterface (pSdWindow);
+//IAccessibility2 Implementation 2009-----
+    mpViewShell = pViewShell;
+//-----IAccessibility2 Implementation 2009
 }
 
 
@@ -159,6 +173,11 @@ void AccessibleDocumentViewBase::Init (void)
             }
         }
     }
+//IAccessibility2 Implementation 2009-----
+    SfxObjectShell* pObjShell = mpViewShell->GetViewFrame()->GetObjectShell();
+    if(!pObjShell->IsReadOnly())
+        SetState(AccessibleStateType::EDITABLE);
+//-----IAccessibility2 Implementation 2009
 }
 
 
@@ -434,6 +453,10 @@ uno::Any SAL_CALL
             static_cast<beans::XPropertyChangeListener*>(this),
             static_cast<awt::XWindowListener*>(this),
             static_cast<awt::XFocusListener*>(this)
+//IAccessibility2 Implementation 2009-----
+           ,static_cast<XAccessibleExtendedAttributes*>(this)
+           ,static_cast<XAccessibleGetAccFlowTo*>(this)
+//-----IAccessibility2 Implementation 2009
             );
     return aReturn;
 }
@@ -835,4 +858,156 @@ void
 {
 }
 
+//IAccessibility2 Implementation 2009-----
+uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Any anyAtrribute;
+    rtl::OUString sValue;
+    ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >(mpViewShell);
+
+    if(pDrViewSh)
+    {
+        rtl::OUString sName;
+        String sDisplay;
+            sName = rtl::OUString::createFromAscii("page-name:");
+            // MT IA2: Not used...
+            // SdPage*  pCurrPge = pDrViewSh->getCurrentPage();
+            SdDrawDocument* pDoc = pDrViewSh->GetDoc();
+            sDisplay = pDrViewSh->getCurrentPage()->GetName();
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "\\" ), String::CreateFromAscii("\\\\" ));
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "=" ), String::CreateFromAscii("\\=" ) );
+            sDisplay.SearchAndReplace( String::CreateFromAscii( ";" ), String::CreateFromAscii("\\;" ) );
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "," ), String::CreateFromAscii("\\," ) );
+            sDisplay.SearchAndReplace( String::CreateFromAscii( ":" ), String::CreateFromAscii("\\:" ) );
+            sValue = sName + sDisplay ;
+            sName = rtl::OUString::createFromAscii(";page-number:");
+            sValue += sName;
+            sValue += String::CreateFromInt32((sal_Int16)((sal_uInt16)((pDrViewSh->getCurrentPage()->GetPageNumber()-1)>>1) + 1)) ;
+            sName = rtl::OUString::createFromAscii(";total-pages:");
+            sValue += sName;
+            sValue += String::CreateFromInt32(pDrViewSh->GetPageTabControl()->GetPageCount()) ;
+            sValue +=  rtl::OUString::createFromAscii(";");
+        if(pDrViewSh->IsLayerModeActive() )
+        {
+            sName = rtl::OUString::createFromAscii("page-name:");
+            sValue = sName;
+            sDisplay = pDrViewSh->GetLayerTabControl()->GetPageText(pDrViewSh->GetLayerTabControl()->GetCurPageId());
+            if( pDoc )
+            {
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetModelLayerAdmin();
+                SdrLayer* aSdrLayer = rLayerAdmin.GetLayer(sDisplay, sal_False);
+                if( aSdrLayer )
+                {
+                    String layerAltText = aSdrLayer->GetTitle();
+                    if(  layerAltText.Len() > 0)
+                    {
+                        sName = rtl::OUString::createFromAscii(" ");
+                        sDisplay = sDisplay + sName;
+                        sDisplay += layerAltText;
+                    }
+                }
+            }
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "\\" ), String::CreateFromAscii("\\\\" ));
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "=" ), String::CreateFromAscii("\\=" ));
+            sDisplay.SearchAndReplace( String::CreateFromAscii( ";" ), String::CreateFromAscii("\\;" ));
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "," ), String::CreateFromAscii("\\," ));
+            sDisplay.SearchAndReplace( String::CreateFromAscii( ":" ), String::CreateFromAscii("\\:" ));
+            sValue +=  sDisplay;
+            sName = rtl::OUString::createFromAscii(";page-number:");
+            sValue += sName;
+            sValue += String::CreateFromInt32(pDrViewSh->GetActiveTabLayerIndex()+1) ;
+            sName = rtl::OUString::createFromAscii(";total-pages:");
+            sValue += sName;
+            sValue += String::CreateFromInt32(pDrViewSh->GetLayerTabControl()->GetPageCount()) ;
+            sValue +=  rtl::OUString::createFromAscii(";");
+        }
+    }
+
+    ::sd::PresentationViewShell* pPresViewSh = dynamic_cast< ::sd::PresentationViewShell* >(mpViewShell);
+
+    if(pPresViewSh)
+    {
+        SdPage* pCurrPge = pPresViewSh->getCurrentPage();
+        SdDrawDocument* pDoc = pPresViewSh->GetDoc();
+        SdPage* pNotesPge = (SdPage*)pDoc->GetSdPage((pCurrPge->GetPageNumber()-1)>>1, PK_NOTES);
+        if (pNotesPge)
+        {
+            SdrObject* pNotesObj = pNotesPge->GetPresObj(PRESOBJ_NOTES);
+            if (pNotesObj)
+            {
+                OutlinerParaObject* pPara = pNotesObj->GetOutlinerParaObject();
+                if (pPara)
+                {
+                    sValue += rtl::OUString::createFromAscii("note:");
+                    const EditTextObject& rEdit = pPara->GetTextObject();
+                    for (sal_uInt16 i=0;i<rEdit.GetParagraphCount();i++)
+                    {
+                        String strNote = rEdit.GetText(i);
+                        strNote.SearchAndReplace( String::CreateFromAscii( "\\" ), String::CreateFromAscii("\\\\" ));
+                        strNote.SearchAndReplace( String::CreateFromAscii( "=" ), String::CreateFromAscii("\\=" ));
+                        strNote.SearchAndReplace( String::CreateFromAscii( ";" ), String::CreateFromAscii("\\;" ));
+                        strNote.SearchAndReplace( String::CreateFromAscii( "," ), String::CreateFromAscii("\\," ));
+                        strNote.SearchAndReplace( String::CreateFromAscii( ":" ), String::CreateFromAscii("\\:" ));
+                        sValue += rtl::OUString( strNote );
+                        sValue += rtl::OUString::createFromAscii(";");//to divide each paragraph
+                    }
+                }
+            }
+        }
+    }
+
+    ::sd::OutlineViewShell* pOutlineViewSh = dynamic_cast< ::sd::OutlineViewShell* >(mpViewShell);
+
+    if(pOutlineViewSh)
+    {
+        rtl::OUString sName;
+        String sDisplay;
+        SdPage* pCurrPge = mpViewShell->GetActualPage();
+        SdDrawDocument* pDoc = mpViewShell->GetDoc();
+        if(pCurrPge && pDoc)
+        {
+            sName = rtl::OUString::createFromAscii("page-name:");
+            sDisplay = pCurrPge->GetName();
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "=" ), String::CreateFromAscii("\\=" ) );
+            sDisplay.SearchAndReplace( String::CreateFromAscii( ";" ), String::CreateFromAscii("\\;" ) );
+            sDisplay.SearchAndReplace( String::CreateFromAscii( "," ), String::CreateFromAscii("\\," ) );
+            sDisplay.SearchAndReplace( String::CreateFromAscii( ":" ), String::CreateFromAscii("\\:" ) );
+            sValue = sName + sDisplay ;
+            sName = rtl::OUString::createFromAscii(";page-number:");
+            sValue += sName;
+            sValue += String::CreateFromInt32((sal_Int16)((sal_uInt16)((pCurrPge->GetPageNumber()-1)>>1) + 1)) ;
+            sName = rtl::OUString::createFromAscii(";total-pages:");
+            sValue += sName;
+            sValue += String::CreateFromInt32(pDoc->GetSdPageCount(PK_STANDARD)) ;
+            sValue +=  rtl::OUString::createFromAscii(";");
+        }
+    }
+    if (sValue.getLength())
+        anyAtrribute <<= sValue;
+    return anyAtrribute;
+}
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL AccessibleDocumentViewBase::get_AccFlowTo(const ::com::sun::star::uno::Any&, sal_Int32 )
+        throw ( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Sequence< uno::Any> aRet;
+
+    return aRet;
+}
+
+sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
+        throw (uno::RuntimeException)
+{
+    return COL_BLACK;
+}
+
+sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
+        throw (uno::RuntimeException)
+{
+     ThrowIfDisposed ();
+    ::osl::MutexGuard aGuard (maMutex);
+    return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+}
+//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

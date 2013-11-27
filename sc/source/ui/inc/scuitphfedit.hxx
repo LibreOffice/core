@@ -91,6 +91,9 @@ private:
 
     sal_uInt16          nWhich;
     String          aCmdArr[6];
+    //IAccessibility2 Implementation 2009-----
+    DECL_LINK( ObjectSelectHdl, ScEditWindow* );
+    //-----IAccessibility2 Implementation 2009
 
 private:
 #ifdef _TPHFEDIT_CXX

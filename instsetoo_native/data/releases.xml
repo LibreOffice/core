@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+<releases>
+  <release>
+    <version>4.0.0</version>
+    <download>
+      <package-format>msi</package-format>
+      <url-template>
+        http://archive.apache.org/dist/openoffice/4.0.0/binaries/%L/Apache_OpenOffice_4.0.0_Win_x86_install_%L.exe
+      </url-template>
+      <item>
+        <language>ast</language>
+        <checksum type="sha256">415e2f3cf4d99a3f6ad495e33b89c716ef6966c9c4d7df90ad6e004fcf0222f4</checksum>
+        <size>154219869</size>
+      </item>
+      <item>
+        <language>cs</language>
+        <checksum type="sha256">a90a2c00c58f3e30654b89b4a363b099b0a7d1f829ebf9c7c18333d387f4bf41</checksum>
+        <size>130773239</size>
+      </item>
+      <item>
+        <language>de</language>
+        <checksum type="sha256">5569634ac40b42a710c666d0511f6aa4dbcb05d1a525e06f6be038e828c507f0</checksum>
+        <size>162401424</size>
+      </item>
+      <item>
+        <language>el</language>
+        <checksum type="sha256">cc5cde6314cea634200da6861da527c11ca7d74338074cdd4e5a22e1ffd9ef7c</checksum>
+        <size>139633387</size>
+      </item>
+      <item>
+        <language>en-GB</language>
+        <checksum type="sha256">7f83397877b72e7f2da38f11b76c3f46e30b93713b40becba699d21f913847e0</checksum>
+        <size>136201626</size>
+      </item>
+      <item>
+        <language>en-US</language>
+        <checksum type="sha256">8db246183f549c298d731cf61771f8f8adb37028d8ecc737fe1ad452899adb2d</checksum>
+        <size>143436858</size>
+      </item>
+      <item>
+        <language>es</language>
+        <checksum type="sha256">eb991c71b436c4d740f3d2b5441716fc321bb57eb7f36c7019ec86feebb7f5d4</checksum>
+        <size>132424454</size>
+      </item>
+      <item>
+        <language>fi</language>
+        <checksum type="sha256">fa2b9015864651be44afc940988ed20c6093bc8707aea72ab1b75cf147d81ed2</checksum>
+        <size>138474963</size>
+      </item>
+      <item>
+        <language>fr</language>
+        <checksum type="sha256">b4b20eac7f6220a4a6250e79d950a328d08b927b8856d762b0b1e033833e198f</checksum>
+        <size>133397214</size>
+      </item>
+      <item>
+        <language>gd</language>
+        <checksum type="sha256">c2e5ac75f899efab61f039a193a68ec2f4d092fd43c6eb46d8b2d34d8166ce6e</checksum>
+        <size>154472734</size>
+      </item>
+      <item>
+        <language>gl</language>
+        <checksum type="sha256">bac4915fd47b9e219d72a02a268fa590096c0884ebafd966b10e9b77fe16eee0</checksum>
+        <size>137952793</size>
+      </item>
+      <item>
+        <language>hu</language>
+        <checksum type="sha256">2e01d00431692cb6071cf520e71b900dba28a846dccf4ed3a85c245761c98906</checksum>
+        <size>133240224</size>
+      </item>
+      <item>
+        <language>it</language>
+        <checksum type="sha256">8663c01de8f62b26a7864ac4da6abd316a1c2e00b35c60372cad5287120fe409</checksum>
+        <size>138823014</size>
+      </item>
+      <item>
+        <language>ja</language>
+        <checksum type="sha256">559f165ee9ff516a80573befaf7d0936ca81fa89aca655213b4f265eb7c7059a</checksum>
+        <size>136416679</size>
+      </item>
+      <item>
+        <language>ko</language>
+        <checksum type="sha256">daa7f3b51e6ffb0b541a98fbcdc0bad53eea579a7d74c9acbdd73ad660b117b1</checksum>
+        <size>131617051</size>
+      </item>
+      <item>
+        <language>nl</language>
+        <checksum type="sha256">fcc6e55c7a1407be8e8f2faf7305ebb9a8f7e1bea882e5d917b5846a2c0ee955</checksum>
+        <size>138526756</size>
+      </item>
+      <item>
+        <language>pt</language>
+        <checksum type="sha256">58307e0eeb485840e1462a23f8741e793422ccdc468123f85876ae287482a987</checksum>
+        <size>130929247</size>
+      </item>
+      <item>
+        <language>pt-BR</language>
+        <checksum type="sha256">08ef83f28e138dc0bc6bdf761e4676eb13c2b30717ce47e0becec2de90c73f7a</checksum>
+        <size>130814647</size>
+      </item>
+      <item>
+        <language>ru</language>
+        <checksum type="sha256">dda689b273eb9ddadfb156a08df8e73c3b41e3cc8178a16546e282f8e1c54d77</checksum>
+        <size>137558077</size>
+      </item>
+      <item>
+        <language>sk</language>
+        <checksum type="sha256">d2722d2569178838a57705e76062603f995f71d5219e8f910bc7a6b46fa6039a</checksum>
+        <size>131199460</size>
+      </item>
+      <item>
+        <language>sl</language>
+        <checksum type="sha256">eecea1c75833a873a3cc00f81c85f411319b085728224c716ac90159622c0c3e</checksum>
+        <size>132340393</size>
+      </item>
+      <item>
+        <language>ta</language>
+        <checksum type="sha256">4051b4831a960a8f27a3f56f32d7bd5a7bbdfcf859238a149aca9cd69ae0121c</checksum>
+        <size>136961005</size>
+      </item>
+      <item>
+        <language>zh-CN</language>
+        <checksum type="sha256">94424b9c24d3237e70d6452da8366cf9c6617a46fa171901db093b1a1166934d</checksum>
+        <size>131840961</size>
+      </item>
+    </download>
+  </release>
+  <release>
+    <version>4.0.1</version>
+    <download>
+      <package-format>msi</package-format>
+      <url-template>
+        http://archive.apache.org/dist/openoffice/4.0.1/binaries/%L/Apache_OpenOffice_4.0.1_Win_x86_install_%L.exe
+      </url-template>
+      <item>
+    <language>ast</language>
+    <checksum type="sha256">9854b6a99c6e56902e30ec01009e294aafe091e4733e9b8933690ee0365d6754</checksum>
+    <size>154320289</size>
+      </item>
+      <item>
+    <language>cs</language>
+    <checksum type="sha256">b23c5dc07a6e521a7ad24e7c1d131c96ea3a6fdf3a2f96020b5cad2e7ebe0253</checksum>
+    <size>130785256</size>
+      </item>
+      <item>
+    <language>de</language>
+    <checksum type="sha256">fbbe39def767e6ecd16c7b6802f35d6e4b035c4b72328bbf0a8f045cf585aaa7</checksum>
+    <size>163606685</size>
+      </item>
+      <item>
+    <language>el</language>
+    <checksum type="sha256">e59f47b986c4bcd8f21062446b299f68ac7ed941356813b0e2dbd651fb59c847</checksum>
+    <size>139717373</size>
+      </item>
+      <item>
+    <language>en-GB</language>
+    <checksum type="sha256">75f06dbe9f13804ea9f3ef20d831e300a55df1bf1a5b656d2422206a8a0d8bda</checksum>
+    <size>136295104</size>
+      </item>
+      <item>
+    <language>en-US</language>
+    <checksum type="sha256">3b68145a33fa83d246febb3b7551fb0cbf57363bc772401ac0c37cfc1cde21b3</checksum>
+    <size>143485940</size>
+      </item>
+      <item>
+    <language>es</language>
+    <checksum type="sha256">5136276a370378d11327b9a0bd074d269a49e797c7186f2e3cc9cf6c0bbc20fc</checksum>
+    <size>132478227</size>
+      </item>
+      <item>
+    <language>eu</language>
+    <checksum type="sha256">aae1ff61af9ac117637842ccc1c28221620c79b05ffbb1fb47d8a6fcbe3b1700</checksum>
+    <size>131476228</size>
+      </item>
+      <item>
+    <language>fi</language>
+    <checksum type="sha256">65ff3209a51afefde11dd1326921340ebe035f09626d8884f37a0f72f8c2785b</checksum>
+    <size>138523539</size>
+      </item>
+      <item>
+    <language>fr</language>
+    <checksum type="sha256">70c97dc59412a8e4aeb87e51e8714cbba776397beb6a774804591653150e78d5</checksum>
+    <size>134622711</size>
+      </item>
+      <item>
+    <language>gd</language>
+    <checksum type="sha256">a57115a636f4004de2df9599e72bc4d07937b65a6bb99fe126dc18a788a57142</checksum>
+    <size>154574682</size>
+      </item>
+      <item>
+    <language>gl</language>
+    <checksum type="sha256">4c8fe9b42193dc37dc6a2b979b790ea6317ea25a6fa27fcb9007036c5725111d</checksum>
+    <size>138019151</size>
+      </item>
+      <item>
+    <language>hu</language>
+    <checksum type="sha256">97765ef536ed1e3f07220fe4cb90520efdfb376fab751ad2cac7390316f14e65</checksum>
+    <size>133302800</size>
+      </item>
+      <item>
+    <language>it</language>
+    <checksum type="sha256">c6fa3e0e9bef615d804b5d24d3f2cc49f7655aee01ef34cecb9b520a47249d02</checksum>
+    <size>138894766</size>
+      </item>
+      <item>
+    <language>ja</language>
+    <checksum type="sha256">93d20ae5f96f4a93c705894849f01b6501604bf003e9b66f7d0dbdc6f2282965</checksum>
+    <size>136444096</size>
+      </item>
+      <item>
+    <language>km</language>
+    <checksum type="sha256">4fc263c631d4ba797633d28ca529202b600d5fe676a8c215904d12d08ed8cc49</checksum>
+    <size>151866955</size>
+      </item>
+      <item>
+    <language>ko</language>
+    <checksum type="sha256">2abd13afe2978c4300d872a06dcec00ae23592ed563be3d0d046ef81738d7a87</checksum>
+    <size>131671507</size>
+      </item>
+      <item>
+    <language>lt</language>
+    <checksum type="sha256">4ac6c2c88edb5254e0cf93f49daaf5e411ea0168d6c431d11da5d89638977cff</checksum>
+    <size>136935582</size>
+      </item>
+      <item>
+    <language>nl</language>
+    <checksum type="sha256">85292dad5aa80711c126091d3565dc9cd2219d818a59cbd5c7c9a4bc5282ebb8</checksum>
+    <size>139734741</size>
+      </item>
+      <item>
+    <language>pl</language>
+    <checksum type="sha256">c71c63d0c0e76f28b7d3bebb39e1cb9c0ca35e29557c53528f631e6c1aeca04c</checksum>
+    <size>133661993</size>
+      </item>
+      <item>
+    <language>pt-BR</language>
+    <checksum type="sha256">e6baed3d30d4b18e32e21ab4fcd22446ac1f8a40efe49a4f105e9c3fc0ba1611</checksum>
+    <size>130866989</size>
+      </item>
+      <item>
+    <language>pt</language>
+    <checksum type="sha256">dd855dc99fc41fd509e938881397798fa2e9ed92e663cb8b9ea6c356d5d5a096</checksum>
+    <size>130989882</size>
+      </item>
+      <item>
+    <language>ru</language>
+    <checksum type="sha256">7e965822f8dfb0aa4a67bf5bff8ddb852901c672886bb9f2ee275c5c976c0a48</checksum>
+    <size>137584051</size>
+      </item>
+      <item>
+    <language>sk</language>
+    <checksum type="sha256">4400eb30ca5072b175da7963049bb0ecca761af73b7dbccb9a0b4cd789b26042</checksum>
+    <size>131265676</size>
+      </item>
+      <item>
+    <language>sl</language>
+    <checksum type="sha256">83d384d9e50ddcb9c1d74069d8796e5f37bed55b5da6f43c326c0784a6e61cef</checksum>
+    <size>132368586</size>
+      </item>
+      <item>
+    <language>sr</language>
+    <checksum type="sha256">a2d2e043c1c3fa9a90924ae29138641b238d7749984f873a8672e2844a55e3d9</checksum>
+    <size>136961170</size>
+      </item>
+      <item>
+    <language>sv</language>
+    <checksum type="sha256">15cbdb4f5a7ecf253f31981d0203c08e279a26603ca737e64f740524e1d672ca</checksum>
+    <size>131330363</size>
+      </item>
+      <item>
+    <language>ta</language>
+    <checksum type="sha256">352083d6d2fc6c39027a03fbbb6449d4a67955b370c5a8efba0407b74a456bc9</checksum>
+    <size>137001517</size>
+      </item>
+      <item>
+    <language>tr</language>
+    <checksum type="sha256">bdfbf83cc905bf44f086ea51295899a042667fa6334e6378ef5b5b354843ba37</checksum>
+    <size>130397087</size>
+      </item>
+      <item>
+    <language>vi</language>
+    <checksum type="sha256">0483c20036f47738ae86a19d0ab4e66eff8d8f5226f716970a4ec7f56a78bff6</checksum>
+    <size>131526617</size>
+      </item>
+      <item>
+    <language>zh-CN</language>
+    <checksum type="sha256">f2966f3c251cf31a24d7931950838c04e410935dd15a6fdd9241acf81bc5e784</checksum>
+    <size>131863915</size>
+      </item>
+      <item>
+    <language>zh-TW</language>
+    <checksum type="sha256">a194cfb2dc2cbcae2e89740485ebfcbf605b7c80a5bbdffb699e447c53698e53</checksum>
+    <size>131990994</size>
+      </item>
+    </download>
+  </release>
+</releases>

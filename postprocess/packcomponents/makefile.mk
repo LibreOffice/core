@@ -328,6 +328,7 @@ my_components += \
     java_uno_accessbridge \
     sysmail \
     sysdtrans \
+    winaccessibility \
     wininetbe1
 .END
 

@@ -119,6 +119,9 @@ SdNavigatorWin::SdNavigatorWin(
     // set focus to listbox, otherwise it is in the toolbox which is only useful
     // for keyboard navigation
     maTlbObjects.GrabFocus();
+//IAccessibility2 Implementation 2009-----
+       maTlbObjects.SetSdNavigatorWinFlag(sal_True);
+//-----IAccessibility2 Implementation 2009
 
     // DragTypeListBox
     maLbDocs.SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
@@ -175,6 +178,28 @@ SdNavigatorWin::~SdNavigatorWin()
 
 // -----------------------------------------------------------------------
 
+//IAccessibility2 Implementation 2009-----
+//Solution: when object is marked , fresh the corresponding entry tree .
+//==================================================
+void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
+{
+    SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
+    sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
+    String aDocShName( pDocShell->GetName() );
+    String aDocName = pDocShell->GetMedium()->GetName();
+    maTlbObjects.SetSaveTreeItemStateFlag(sal_True); //Added by yanjun for sym2_6385
+    maTlbObjects.Clear();
+    maTlbObjects.Fill( pDoc, false, aDocName ); // Nur normale Seiten
+    maTlbObjects.SetSaveTreeItemStateFlag(sal_False); //Added by yanjun for sym2_6385
+    RefreshDocumentLB();
+    maLbDocs.SelectEntry( aDocShName );
+}
+void SdNavigatorWin::FreshEntry( )
+{
+    maTlbObjects.FreshCurEntry();
+}
+//==================================================
+//-----IAccessibility2 Implementation 2009
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 {
     SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
@@ -245,7 +270,16 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
 }
 
 // -----------------------------------------------------------------------
-
+//IAccessibility2 Implementation 2009-----
+//Solution: Get  SdDrawDocShell
+sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
+{
+    if( !pDoc )
+        return NULL; // const as const can...
+    sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
+    return pDocShell;
+}
+//-----IAccessibility2 Implementation 2009
 
 IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
 {
@@ -403,6 +437,10 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, EMPTYARG )
                 SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
                 mpBindings->GetDispatcher()->Execute(
                     SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
+//IAccessibility2 Implementation 2009-----
+                //Solution: set sign variable
+                maTlbObjects.MarkCurEntry(aStr);
+//-----IAccessibility2 Implementation 2009
 
                 // #98821# moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the

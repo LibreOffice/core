@@ -173,8 +173,8 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             InsertString( aPam, pEntry->GetText() );
                             aPam.SetMark();
                             aPam.GetMark()->nContent -= pEntry->GetText().Len();
-                            InsertPoolItem( aPam, pEntry->GetRubyAttr(),
-                                    nsSetAttrMode::SETATTR_DONTEXPAND );
+                            InsertPoolItem(
+                                aPam, pEntry->GetRubyAttr(), nsSetAttrMode::SETATTR_DONTEXPAND );
                         }
                         else
                             break;

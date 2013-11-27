@@ -93,9 +93,8 @@ class ScValidationDlg :public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
 
-    //Start_Moddify by liliang 03/26/2008 SODC_13677_2
     DECL_LINK( OkHdl, Button * );
-    //End_Moddify by liliang 03/26/2008 SODC_13677_2
+
     bool    m_bOwnRefHdlr:1;
 
     ScTabViewShell *m_pTabVwSh;

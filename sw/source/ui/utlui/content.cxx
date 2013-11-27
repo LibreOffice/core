@@ -85,7 +85,15 @@
 #include <numrule.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
+//IAccessibility2 Implementation 2009-----
+//#include <ndgrf.hxx>
+#include <fmtcntnt.hxx>
 #include <PostItMgr.hxx>
+//#include <../../core/inc/flyfrm.hxx>
+//#include <../../core/inc/cntfrm.hxx>
+//#include <ndnotxt.hxx>
+//-----IAccessibility2 Implementation 2009
+//#include <postit.hxx>
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -891,7 +899,8 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         bIsLastReadOnly(sal_False),
         bIsOutlineMoveable(sal_True),
         bViewHasChanged(sal_False),
-        bIsImageListInitialized(sal_False)
+        bIsImageListInitialized(sal_False),
+        bIsKeySpace(sal_False) //IAccessibility2 Implementation 2009
 {
     sal_uInt16 i;
 
@@ -928,6 +937,149 @@ SwContentTree::~SwContentTree()
     bIsInDrag = sal_False;
 }
 
+//IAccessibility2 Implementation 2009-----
+String SwContentTree::GetEntryAltText( SvLBoxEntry* pEntry ) const
+{
+    if( pEntry == NULL)
+        return String();
+
+    SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+    if( pCnt == NULL || pCnt->GetParent() == NULL)
+        return String();
+
+    sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
+    SdrObject* pTemp;
+
+    switch(nJumpType)
+    {
+        case CONTENT_TYPE_DRAWOBJECT:
+            {
+                SdrView* pDrawView = pActiveShell->GetDrawView();
+                if (pDrawView)
+                {
+                    SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                    SdrPage* pPage = pDrawModel->GetPage(0);
+                    const sal_uInt32 nCount = pPage->GetObjCount();
+                    for( sal_uInt32 i=0; i< nCount; i++ )
+                    {
+                        pTemp = pPage->GetObj(i);
+                        sal_uInt16 nCmpId(OBJ_NONE);
+                        switch( pTemp->GetObjIdentifier() )
+                        {
+                        case OBJ_GRUP:
+                        case OBJ_TEXT:
+                        case OBJ_RECT:
+                        case OBJ_CUSTOMSHAPE:
+                        case OBJ_CIRC:
+                        case OBJ_POLY:
+                        case OBJ_CAPTION:
+                            nCmpId = OBJ_GRUP;
+                            break;
+                        default:
+                            nCmpId = pTemp->GetObjIdentifier();
+                        }
+                        if(nCmpId == OBJ_GRUP && pTemp->GetName() == pCnt->GetName())
+                        {
+                            return pTemp->GetTitle();
+                        }
+                        //Commented End
+                    }
+                }
+            }
+            break;
+        case CONTENT_TYPE_GRAPHIC   :
+            {
+                if( pActiveShell && pActiveShell->GetDoc() )
+                {
+                    const SwFlyFrmFmt* pFrmFmt = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                    if( pFrmFmt )
+                    {
+//                        SwNodeIndex aIdx( *(pFrmFmt->GetCntnt().GetCntntIdx()), 1 );
+//                        const SwGrfNode* pGrfNd = aIdx.GetNode().GetGrfNode();
+//                        if( pGrfNd )
+//                            return pGrfNd->GetAlternateText();
+                        return pFrmFmt->GetObjTitle();
+                    }
+                }
+            }
+            break;
+        case CONTENT_TYPE_OLE       :
+        case CONTENT_TYPE_FRAME     :
+            {
+                //Can't find the GetAlternateText function. Need to verify again.
+                const SwFlyFrmFmt* pFlyFmt = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                if( pFlyFmt )
+                    return pFlyFmt->/*GetAlternateText*/GetName();
+            }
+            break;
+    }
+    return String();
+}
+
+String SwContentTree::GetEntryLongDescription( SvLBoxEntry* pEntry ) const
+{
+    if( pEntry == NULL)
+        return String();
+
+    SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+    if( pCnt == NULL || pCnt->GetParent() == NULL)
+        return String();
+
+    sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
+    SdrObject* pTemp;
+
+    switch(nJumpType)
+    {
+        case CONTENT_TYPE_DRAWOBJECT:
+            {
+                SdrView* pDrawView = pActiveShell->GetDrawView();
+                if (pDrawView)
+                {
+                    SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                    SdrPage* pPage = pDrawModel->GetPage(0);
+                    sal_uInt32 nCount = pPage->GetObjCount();
+                    for( sal_uInt32 i=0; i< nCount; i++ )
+                    {
+                        pTemp = pPage->GetObj(i);
+                        sal_uInt16 nCmpId(OBJ_NONE);
+                        switch( pTemp->GetObjIdentifier() )
+                        {
+                        case OBJ_GRUP:
+                        case OBJ_TEXT:
+                        case OBJ_RECT:
+                        case OBJ_CUSTOMSHAPE:
+                        case OBJ_CIRC:
+                        case OBJ_POLY:
+                        case OBJ_CAPTION:
+                            nCmpId = OBJ_GRUP;
+                            break;
+                        default:
+                            nCmpId = pTemp->GetObjIdentifier();
+                        }
+                        if(nCmpId == OBJ_GRUP && pTemp->GetName() == pCnt->GetName())
+                        {
+                            return pTemp->GetDescription();
+                        }
+                        //Commented End
+                    }
+                }
+            }
+            break;
+        case CONTENT_TYPE_GRAPHIC   :
+        case CONTENT_TYPE_OLE       :
+        case CONTENT_TYPE_FRAME     :
+            {
+                //Can't find the function "GetLongDescription". Need to verify again.
+                const SwFlyFrmFmt* pFlyFmt = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                if( pFlyFmt )
+                    return pFlyFmt->GetDescription();
+            }
+            break;
+    }
+    return String();
+}
+
+//-----IAccessibility2 Implementation 2009
 /***************************************************************************
     Drag&Drop methods
 ***************************************************************************/
@@ -1211,10 +1363,27 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
                     String sEntry = pCnt->GetName();
                     if(!sEntry.Len())
                         sEntry = sSpace;
-                    InsertEntry(sEntry, pParent,
+                    SvLBoxEntry* pChild = InsertEntry(sEntry, pParent,
                             sal_False, LIST_APPEND, (void*)pCnt);
+                    //IAccessibility2 Implementation 2009-----
+                    //Solution: If object is marked , the corresponding entry is set true ,
+                    //else the corresponding entry is set false .
+                    //==================================================
+                    SdrObject * pObj = GetDrawingObjectsByContent(pCnt);
+                    if(pChild)
+                          pChild->SetMarked(sal_False);
+                    if(pObj)
+                    {
+                        SdrView* pDrawView = pActiveShell->GetDrawView();
+                        const bool Marked(pDrawView->isSdrObjectSelected(*pObj));
+                        if(Marked)
+                        {
+                            //sEntry += String::CreateFromAscii(" *");
+                            pChild->SetMarked(true);
+                        }
+                    }
+                    //-----IAccessibility2 Implementation 2009
                 }
-
             }
         }
     }
@@ -1223,6 +1392,41 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
     Beschreibung:   Expand - Zustand fuer Inhaltstypen merken
 ***************************************************************************/
 
+//IAccessibility2 Implementation 2009-----
+//Solution: Get drawing Objects by content .
+SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
+{
+    SdrObject *pRetObj = NULL;
+    sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
+    switch(nJumpType)
+    {
+        case CONTENT_TYPE_DRAWOBJECT:
+        {
+            SdrView* pDrawView = pActiveShell->GetDrawView();
+            if (pDrawView)
+            {
+                SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                SdrPage* pPage = pDrawModel->GetPage(0);
+                sal_uInt32 nCount = pPage->GetObjCount();
+
+                for( sal_uInt32 i=0; i< nCount; i++ )
+                {
+                    SdrObject* pTemp = pPage->GetObj(i);
+                    if( pTemp->GetName() == pCnt->GetName())
+                    {
+                        pRetObj = pTemp;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        default:
+            pRetObj = NULL;
+    }
+    return pRetObj;
+}
+//-----IAccessibility2 Implementation 2009
 
 sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 {
@@ -2222,6 +2426,15 @@ IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
         {
             FindActiveTypeAndRemoveUserData();
             Display(sal_True);
+            //IAccessibility2 Implementation 2009-----
+            //Solution: Set focus
+            if( bIsKeySpace )
+            {
+                HideFocus();
+                ShowFocus( oldRectangle);
+                bIsKeySpace = sal_False;
+            }
+            //-----IAccessibility2 Implementation 2009
         }
     }
     else if(!pView && bIsActive && !bIsIdleClear)
@@ -2444,6 +2657,113 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
             GrabFocus();
         }
     }
+    //IAccessibility2 Implementation 2009-----
+    //Solution: Make KEY_SPACE has same function as DoubleClick ,
+    //and realize multi-selection .
+    else if(aCode.GetCode() == KEY_SPACE && 0 == aCode.GetModifier())
+    {
+
+        SvLBoxEntry* pEntry = GetCurEntry();
+        if( GetChildCount( pEntry ) == 0 )
+            bIsKeySpace = sal_True;
+        Point tempPoint = GetEntryPosition( pEntry );//Change from "GetEntryPos" to "GetEntryPosition" for acc migration
+        oldRectangle = GetFocusRect( pEntry,tempPoint.Y() );
+
+        if(pEntry)
+        {
+            if(bIsActive || bIsConstant)
+            {
+                if(bIsConstant)
+                {
+                    pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
+                }
+
+                SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+
+                sal_Bool bSel = sal_False;
+                sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
+                switch(nJumpType)
+                {
+                    case CONTENT_TYPE_DRAWOBJECT:
+                    {
+                        SdrView* pDrawView = pActiveShell->GetDrawView();
+                        if (pDrawView)
+                        {
+                            pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
+
+                            SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                            SdrPage* pPage = pDrawModel->GetPage(0);
+                            sal_uInt32 nCount = pPage->GetObjCount();
+                            sal_Bool hasObjectMarked = sal_False;
+
+                            SdrObject* pObject = NULL;
+                            pObject = GetDrawingObjectsByContent( pCnt );
+                            if( pObject )
+                            {
+                                const bool bUnMark(pDrawView->isSdrObjectSelected(*pObject));
+                                pDrawView->MarkObj(*pObject, bUnMark);
+                            }
+                            for( sal_uInt32 i=0; i< nCount; i++ )
+                            {
+                                SdrObject* pTemp = pPage->GetObj(i);
+
+                                if(!pTemp)
+                                {
+                                    OSL_ENSURE(false, "Null pointer SdrObject in SdrPage's GetObj with valid index (!)");
+                                    continue;
+                                }
+
+                                sal_uInt16 nCmpId(OBJ_NONE);
+                                const bool bMark(pDrawView->isSdrObjectSelected(*pTemp));
+                                switch( pTemp->GetObjIdentifier() )
+                                {
+                                    case OBJ_GRUP:
+                                    case OBJ_TEXT:
+                                    case OBJ_RECT:
+                                    case OBJ_CIRC:
+                                    case OBJ_POLY:
+                                    case OBJ_CAPTION:
+                                    case OBJ_CUSTOMSHAPE:
+                                        nCmpId = OBJ_GRUP;
+                                        if( bMark )
+                                            hasObjectMarked = sal_True;
+                                        break;
+                                    default:
+                                        nCmpId = pTemp->GetObjIdentifier();
+                                        //IAccessibility2 Implementation 2009-----
+                                        if ( bMark )
+                                        {
+                                            pDrawView->MarkObj(*pTemp, true);
+                                        }
+                                        //-----IAccessibility2 Implementation 2009
+                                }
+                                //mod end
+                            }
+                            if ( pActiveShell && !hasObjectMarked )
+                            {
+                                SwEditWin& pEditWindow =
+                                    pActiveShell->GetView().GetEditWin();
+                                if( &pEditWindow )
+                                {
+                                    KeyCode tempKeycode( KEY_ESCAPE );
+                                    KeyEvent rKEvt( 0 , tempKeycode );
+                                    ((Window*)&pEditWindow)->KeyInput( rKEvt );
+
+                                }
+                                //rView.GetEditWin().GrabFocus();
+                            }
+                        }
+                    }
+                    break;
+                }
+
+
+                bViewHasChanged = sal_True;
+            }
+        }
+
+    }
+    //-----IAccessibility2 Implementation 2009
     else
         SvTreeListBox::KeyInput(rEvent);
 
@@ -3202,6 +3522,26 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
         rDev.DrawText( rPos, GetText() );
         rDev.SetFont( aOldFont );
     }
+    //IAccessibility2 Implementation 2009-----
+    // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
+    /*
+    else if (pEntry->IsMarked())
+    {
+            rDev.DrawText( rPos, GetText() );
+            XubString str;
+            str = XubString::CreateFromAscii("*");
+            Point rPosStar(rPos.X()-6,rPos.Y());
+            Font aOldFont( rDev.GetFont());
+            Font aFont(aOldFont);
+            Color aCol( aOldFont.GetColor() );
+            aCol.DecreaseLuminance( 200 );
+            aFont.SetColor( aCol );
+            rDev.SetFont( aFont );
+            rDev.DrawText( rPosStar, str);
+            rDev.SetFont( aOldFont );
+    }
+    //-----IAccessibility2 Implementation 2009
+    */
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
 }
@@ -3222,3 +3562,18 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
+//IAccessibility2 Implementation 2009-----
+sal_Int32  SwContentTree::GetEntryRealChildsNum( SvLBoxEntry* pParent ) const
+{
+    // ist es ein Inhaltstyp?
+    if(lcl_IsContentType(pParent))
+    {
+        if(!pParent->HasChilds())
+        {
+            SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
+            return pCntType->GetMemberCount();
+        }
+    }
+    return 0;
+}
+//-----IAccessibility2 Implementation 2009

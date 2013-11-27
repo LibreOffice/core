@@ -200,7 +200,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                         sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16              nNewPage;
-
+    //IAccessibility2 Implementation 2009-----
+    sal_uInt16          nOldPageNum;
+    String          nOldSectionName;
+    //-----IAccessibility2 Implementation 2009
     Point               aTabColFromDocPos;  //Verschieben von Tabellenspalten aus
                                             //aus dem Dokument heraus.
     SwTxtNode           * pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#

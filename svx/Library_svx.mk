@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleShape \
     svx/source/accessibility/AccessibleShapeInfo \
     svx/source/accessibility/AccessibleShapeTreeInfo \
+    svx/source/accessibility/AccessibleSvxFindReplaceDialog \
     svx/source/accessibility/AccessibleTextEventQueue \
     svx/source/accessibility/AccessibleTextHelper \
     svx/source/accessibility/charmapacc \
@@ -87,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/DGColorNameLookUp \
     svx/source/accessibility/GraphCtlAccessibleContext \
     svx/source/accessibility/ShapeTypeHandler \
+    svx/source/accessibility/svxpixelctlaccessiblecontext \
     svx/source/accessibility/svxrectctaccessiblecontext \
     svx/source/accessibility/SvxShapeTypes \
     svx/source/customshapes/EnhancedCustomShape3d \

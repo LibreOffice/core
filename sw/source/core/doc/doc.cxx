@@ -260,9 +260,8 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                 if (pOutlineRule)
                 {
                     pOutlineRule->Validate();
-                    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+                    // counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
-                    // <--
                 }
             }
             break;
@@ -304,30 +303,31 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbDoNotCaptureDrawObjsOnPage = value;
             break;
 
-        // --> OD 2006-08-25 #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
-        // <--
+
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
+
         case PROTECT_FORM:
-        mbProtectForm = value;
-        break;
+            mbProtectForm = value;
+            break;
 
         case USE_OLD_PRINTER_METRICS:
             mbOldPrinterMetrics = value;
             break;
+
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
         break;
-        // --> OD 2008-06-05 #i89181#
+
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
         break;
-        // <--
-         // COMPATIBILITY FLAGS END
+
+        // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
             mbLastBrowseMode = value;
@@ -2707,24 +2707,21 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
     return aResult;
 }
 
-// -> #111840#
-SwField * SwDoc::GetField(const SwPosition & rPos)
+SwField * SwDoc::GetFieldAtPos(const SwPosition & rPos)
 {
-    SwTxtFld * const pAttr = GetTxtFld(rPos);
+    SwTxtFld * const pAttr = GetTxtFldAtPos(rPos);
 
     return (pAttr) ? const_cast<SwField *>( pAttr->GetFmtFld().GetField() ) : 0;
 }
 
-SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
+SwTxtFld * SwDoc::GetTxtFldAtPos(const SwPosition & rPos)
 {
     SwTxtNode * const pNode = rPos.nNode.GetNode().GetTxtNode();
 
-    return (pNode)
-        ? static_cast<SwTxtFld*>( pNode->GetTxtAttrForCharAt(
-                    rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
+    return (pNode != NULL)
+        ? pNode->GetFldTxtAttrAt( rPos.nContent.GetIndex(), true )
         : 0;
 }
-// <- #111840#
 
 bool SwDoc::ContainsHiddenChars() const
 {

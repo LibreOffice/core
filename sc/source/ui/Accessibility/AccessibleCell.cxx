@@ -40,7 +40,9 @@
 #include "editsrc.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
-
+//IAccessibility2 Implementation 2009-----
+#include "validat.hxx"
+//-----IAccessibility2 Implementation 2009
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
@@ -58,6 +60,9 @@
 #include <comphelper/sequence.hxx>
 #include <float.h>
 
+//IAccessibility2 Implementation 2009-----
+#include "AccessibleSpreadsheet.hxx"
+//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -117,11 +122,11 @@ void SAL_CALL ScAccessibleCell::disposing()
 
     //=====  XInterface  =====================================================
 
-IMPLEMENT_FORWARD_XINTERFACE2( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase )
+IMPLEMENT_FORWARD_XINTERFACE3( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase, ScAccessibleCellAttributeImpl )
 
     //=====  XTypeProvider  ===================================================
 
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase )
+IMPLEMENT_FORWARD_XTYPEPROVIDER3( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase, ScAccessibleCellAttributeImpl )
 
     //=====  XAccessibleComponent  ============================================
 
@@ -240,6 +245,25 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
+//IAccessibility2 Implementation 2009-----
+        if (IsFormulaMode())
+        {
+            pStateSet->AddState(AccessibleStateType::ENABLED);
+            pStateSet->AddState(AccessibleStateType::MULTI_LINE);
+            pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
+            if (IsOpaque(xParentStates))
+                pStateSet->AddState(AccessibleStateType::OPAQUE);
+            pStateSet->AddState(AccessibleStateType::SELECTABLE);
+            if (IsSelected())
+                pStateSet->AddState(AccessibleStateType::SELECTED);
+            if (isShowing())
+                pStateSet->AddState(AccessibleStateType::SHOWING);
+            pStateSet->AddState(AccessibleStateType::TRANSIENT);
+            if (isVisible())
+                pStateSet->AddState(AccessibleStateType::VISIBLE);
+            return pStateSet;
+        }
+//-----IAccessibility2 Implementation 2009
         if (IsEditable(xParentStates))
         {
             pStateSet->AddState(AccessibleStateType::EDITABLE);
@@ -248,6 +272,9 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
+//IAccessibility2 Implementation 2009-----
+        pStateSet->AddState(AccessibleStateType::FOCUSABLE);
+//-----IAccessibility2 Implementation 2009
         if (IsOpaque(xParentStates))
             pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
@@ -344,6 +371,17 @@ sal_Bool ScAccessibleCell::IsOpaque(
 
 sal_Bool ScAccessibleCell::IsSelected()
 {
+//IAccessibility2 Implementation 2009-----
+    if (IsFormulaMode())
+    {
+        const ScAccessibleSpreadsheet *pSheet =static_cast<const ScAccessibleSpreadsheet*>(mxParent.get());
+        if (pSheet)
+        {
+            return pSheet->IsScAddrFormulaSel(maCellAddress);
+        }
+        return sal_False;
+    }
+//-----IAccessibility2 Implementation 2009
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -363,6 +401,12 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 
 ::std::auto_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
+//IAccessibility2 Implementation 2009-----
+    if (IsFormulaMode())
+    {
+        return ::std::auto_ptr< SvxEditSource >();
+    }
+//-----IAccessibility2 Implementation 2009
     ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
         ( new ScAccessibleCellTextData( pViewShell, aCell, eSplitPos, this ) );
     ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
@@ -453,3 +497,146 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         pRelationSet->AddRelation(aRelation);
     }
 }
+//IAccessibility2 Implementation 2009-----
+::rtl::OUString ReplaceOneChar(::rtl::OUString oldOUString, ::rtl::OUString replacedChar, ::rtl::OUString replaceStr)
+{
+    int iReplace = -1;
+    iReplace = oldOUString.lastIndexOf(replacedChar);
+    if (iReplace > -1)
+    {
+        for(;iReplace>-1;)
+        {
+            oldOUString = oldOUString.replaceAt(iReplace,1, replaceStr);
+            iReplace=oldOUString.lastIndexOf(replacedChar,iReplace);
+        }
+    }
+    return oldOUString;
+}
+::rtl::OUString ReplaceFourChar(::rtl::OUString oldOUString)
+{
+    oldOUString = ReplaceOneChar(oldOUString,::rtl::OUString::createFromAscii("\\"),::rtl::OUString::createFromAscii("\\\\"));
+    oldOUString = ReplaceOneChar(oldOUString,::rtl::OUString::createFromAscii(";"),::rtl::OUString::createFromAscii("\\;"));
+    oldOUString = ReplaceOneChar(oldOUString,::rtl::OUString::createFromAscii("="),::rtl::OUString::createFromAscii("\\="));
+    oldOUString = ReplaceOneChar(oldOUString,::rtl::OUString::createFromAscii(","),::rtl::OUString::createFromAscii("\\,"));
+    oldOUString = ReplaceOneChar(oldOUString,::rtl::OUString::createFromAscii(":"),::rtl::OUString::createFromAscii("\\:"));
+    return oldOUString;
+}
+
+uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Any strRet;
+    if (mpViewShell)
+    {
+        const ::rtl::OUString strAttr(::rtl::OUString::createFromAscii(":"));
+        const ::rtl::OUString strSplit(::rtl::OUString::createFromAscii(";"));
+        ::rtl::OUString strFor = mpViewShell->GetFormula(maCellAddress) ;
+        strFor = strFor.replaceAt(0,1,::rtl::OUString::createFromAscii(""));
+        strFor = ReplaceFourChar(strFor);
+        strFor =::rtl::OUString::createFromAscii("Formula:") + strFor;
+        strFor +=strSplit;
+        strFor +=::rtl::OUString::createFromAscii("Note:");
+        strFor +=ReplaceFourChar(GetAllDisplayNote());
+        strFor +=strSplit;
+        strFor += getShadowAttrs();//the string returned contains the spliter ";"
+        strFor += getBorderAttrs();//the string returned contains the spliter ";"
+        //end of cell attributes
+        if( mpDoc )
+        {
+            strFor += ::rtl::OUString::createFromAscii("isdropdown:");
+            if( IsDropdown() )
+                strFor+= ::rtl::OUString::createFromAscii("true");
+            else
+                strFor+= ::rtl::OUString::createFromAscii("false");
+            strFor += ::rtl::OUString::createFromAscii(";");
+        }
+        strRet <<= strFor ;
+    }
+    return strRet;
+}
+
+// cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
+uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    uno::Sequence< beans::PropertyValue > aAttribs = AccessibleStaticTextBase::getCharacterAttributes( nIndex, aRequestedAttributes );
+    beans::PropertyValue *pAttribs = aAttribs.getArray();
+
+    sal_uInt16 nParaIndent = static_cast< const SfxUInt16Item* >( mpDoc->GetAttr( maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), ATTR_INDENT ) )->GetValue();
+    if (nParaIndent > 0)
+    {
+        ::rtl::OUString sLeftMarginName (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLeftMargin")));
+        for (int i = 0; i < aAttribs.getLength(); ++i)
+        {
+            if (sLeftMarginName == pAttribs[i].Name)
+            {
+                pAttribs[i].Value = uno::makeAny( nParaIndent );
+                break;
+            }
+        }
+    }
+    return aAttribs;
+}
+
+sal_Bool ScAccessibleCell::IsFormulaMode()
+{
+    ScAccessibleSpreadsheet* pSheet =static_cast<ScAccessibleSpreadsheet*>(mxParent.get());
+    if (pSheet)
+    {
+        return pSheet->IsFormulaMode();
+    }
+    return sal_False;
+}
+sal_Bool ScAccessibleCell::IsDropdown()
+{
+    sal_uInt16 nPosX = maCellAddress.Col();
+    sal_uInt16 nPosY = sal_uInt16(maCellAddress.Row());
+    sal_uInt16 nTab = maCellAddress.Tab();
+    //IAccessibility2 Implementation 2009-----
+    sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_VALIDDATA ) )->GetValue();
+    if( nValidation )
+    {
+        const ScValidationData* pData = mpDoc->GetValidationEntry( nValidation );
+        if( pData && pData->HasSelectionList() )
+            return sal_True;
+    }
+    //-----IAccessibility2 Implementation 2009
+    ScMergeFlagAttr* pAttr;
+    pAttr = (ScMergeFlagAttr*)mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
+    if( pAttr->HasAutoFilter() )
+    {
+        return sal_True;
+    }
+    else
+    {
+        sal_uInt16 nTabCount = mpDoc->GetTableCount();
+        if ( nTab+1<nTabCount && mpDoc->IsScenario(nTab+1) && !mpDoc->IsScenario(nTab) )
+        {
+            sal_uInt16 i;
+            ScMarkData aMarks;
+            for (i=nTab+1; i<nTabCount && mpDoc->IsScenario(i); i++)
+                mpDoc->MarkScenario( i, nTab, aMarks, sal_False, SC_SCENARIO_SHOWFRAME );
+            ScRangeList aRanges;
+            aMarks.FillRangeListWithMarks( &aRanges, sal_False );
+            sal_Bool bHasScenario;
+            sal_uInt16 nRangeCount = (sal_uInt16)aRanges.Count();
+            for (i=0; i<nRangeCount; i++)
+            {
+                ScRange aRange = *aRanges.GetObject(i);
+                mpDoc->ExtendTotalMerge( aRange );
+                sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
+                // MT IA2: Not used: sal_Bool bIsInScen = sal_False;
+                if ( bTextBelow )
+                {
+                    bHasScenario = (aRange.aStart.Col() == nPosX && aRange.aEnd.Row() == nPosY-1);
+                }
+                else
+                {
+                    bHasScenario = (aRange.aStart.Col() == nPosX && aRange.aStart.Row() == nPosY+1);
+                }
+                if( bHasScenario ) return sal_True;
+            }
+        }
+    }
+    return sal_False;
+}
+//-----IAccessibility2 Implementation 2009

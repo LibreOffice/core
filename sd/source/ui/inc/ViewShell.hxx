@@ -304,6 +304,14 @@ public:
     basegfx::B2DPoint GetWinViewPos() const;
     basegfx::B2DPoint GetViewOrigin() const;
 
+//IAccessibility2 Implementation 2009-----
+    virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc );
+    virtual void SwitchActiveViewFireFocus( );
+    // Move these two methods from DrawViewShell to enable slide show view
+    void    NotifyAccUpdate();
+    void    fireSwitchCurrentPage(sal_Int32 pageIndex);
+//-----IAccessibility2 Implementation 2009
+
     /** Return the window updater of this view shell.
         @return
             In rare circumstances the returned pointer may be <null/>,

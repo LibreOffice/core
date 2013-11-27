@@ -2485,9 +2485,9 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( RES_TXTATR_FIELD == pHt->Which() )      // Felder nicht
                 continue;                               // ausgeben
 
-            if ( pHt->GetEnd() && !pHt->HasDummyChar() )
+            if ( pHt->End() && !pHt->HasDummyChar() )
             {
-                xub_StrLen nHtEnd = *pHt->GetEnd(),
+                const xub_StrLen nHtEnd = *pHt->End(),
                        nHtStt = *pHt->GetStart();
                 if( !rHTMLWrt.bWriteAll && nHtEnd <= nStrPos )
                     continue;
@@ -2545,11 +2545,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 && nStrPos != nEnde )
             {
                 do {
-                    if ( pHt->GetEnd() && !pHt->HasDummyChar() )
+                    if ( pHt->End() && !pHt->HasDummyChar() )
                     {
                         if( RES_CHRATR_KERNING == pHt->Which() &&
                             rHTMLWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) &&
-                            *pHt->GetEnd() - nStrPos == 1 &&
+                            *pHt->End() - nStrPos == 1 &&
                             ' ' == rStr.GetChar(nStrPos) &&
                             ((const SvxKerningItem&)pHt->GetAttr()).GetValue() > 0 )
                         {
@@ -2564,13 +2564,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                             // Der Hint braucht nun doch nicht weiter
                             // beruecksichtigt werden.
                         }
-                        else if( *pHt->GetEnd() != nStrPos )
+                        else if( *pHt->End() != nStrPos )
                         {
                             // Hints mit Ende einsortieren, wenn sie keinen
                             // leeren Bereich aufspannen (Hints, die keinen
                             // Bereich aufspannen werden ignoriert
                             aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
-                                               *pHt->GetEnd() + nOffset,
+                                               *pHt->End() + nOffset,
                                                rHTMLWrt.aChrFmtInfos );
                         }
                     }
@@ -3413,7 +3413,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_CHARFMT */            OutHTML_SwTxtCharFmt,
 /* RES_TXTATR_CJK_RUBY */           0,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
-/* RES_TXTATR_DUMMY5 */             0,
+/* RES_TXTATR_INPUTFIELD */         OutHTML_SwFmtFld,
 
 /* RES_TXTATR_FIELD */              OutHTML_SwFmtFld,
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,

@@ -2052,12 +2052,12 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     sStandard(CUI_RES(ST_STANDARD))
 {
-    aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );
-    aDblStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_STD) ) );
-    aStartQuotePB.SetAccessibleName( String(CUI_RES(STR_PB_DBL_START) ));
-    aEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_END) ));
-    aSglStartQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_START) ));
-    aSglEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_END) ) );
+    //aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );
+    //aDblStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_STD) ) );
+    //aStartQuotePB.SetAccessibleName( String(CUI_RES(STR_PB_DBL_START) ));
+    //aEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_END) ));
+    //aSglStartQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_START) ));
+    //aSglEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_END) ) );
 
     FreeResource();
 
@@ -2100,6 +2100,15 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aDblStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
     aSglStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
 
+    //IAccessibility2 Implementation 2009-----
+    // Move down from the position before FreeResource()
+    // For lost help ID issue
+    aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );
+    aDblStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_STD) ) );
+    aStartQuotePB.SetAccessibleName( String(CUI_RES(STR_PB_DBL_START) ));
+    aEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_END) ));
+    aSglStartQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_START) ));
+    aSglEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_END) ) );
     aSglStartQuotePB.SetAccessibleRelationLabeledBy( &aSglStartQuoteFT );
     aSglEndQuotePB.SetAccessibleRelationLabeledBy( &aSglEndQuoteFT );
     aSglStartQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );

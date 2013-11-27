@@ -705,6 +705,15 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             // Tell the draw view and the tab control of the new active layer.
             mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
             pBar->SetCurPageId(static_cast< sal_uInt16 >(pBar->GetPageId(nIndex)));
+        //IAccessibility2 Implementation 2009-----
+        SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
+            GetViewShellBase().GetDrawController(),
+            *this,
+            *GetView());
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
+        GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
+        delete pUnoDrawView;
+        //-----IAccessibility2 Implementation 2009
         }
     }
 }

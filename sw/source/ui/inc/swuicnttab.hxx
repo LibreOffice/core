@@ -286,6 +286,12 @@ class SwTokenWindow : public Window
     Link            aButtonSelectedHdl;
     Control*        pActiveCtrl;
     Link            aModifyHdl;
+//IAccessibility2 Impplementaton 2009-----
+    String      accessibleName;
+    String      sAdditionalAccnameString1;
+    String      sAdditionalAccnameString2;
+    String      sAdditionalAccnameString3;
+//-----IAccessibility2 Impplementaton 2009
 
     SwTOXEntryTabPage*  m_pParent;
 
@@ -337,6 +343,11 @@ public:
 
     virtual void        Resize();
     virtual void        GetFocus();
+//IAccessibility2 Impplementaton 2009-----
+    void SetFocus2theAllBtn();
+private:
+    sal_uInt32 GetControlIndex(FormTokenType eType, const Control* pCurControl) const;
+//-----IAccessibility2 Impplementaton 2009
 };
 /* -----------------------------23.12.99 14:16--------------------------------
 
@@ -482,6 +493,10 @@ public:
     String              GetLevelHelp(sal_uInt16 nLevel) const;
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
+//IAccessibility2 Impplementaton 2009-----
+    void SetFocus2theAllBtn();
+    virtual long Notify( NotifyEvent& rNEvt );
+//-----IAccessibility2 Impplementaton 2009
 };
 /* -----------------05.07.99 13:00-------------------
 

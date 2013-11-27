@@ -266,7 +266,9 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rPixPnt ) );
-    if( rSh.ChgCurrPam( aDocPt ) || rSh.IsOverReadOnlyPos( aDocPt ) )
+    if( rSh.ChgCurrPam( aDocPt )
+        || rSh.IsOverReadOnlyPos( aDocPt )
+        || rSh.DocPtInsideInputFld( aDocPt ) )
         return 0;
 
     SdrObject *pObj = NULL;

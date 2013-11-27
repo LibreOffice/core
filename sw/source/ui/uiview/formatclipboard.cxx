@@ -509,7 +509,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     // #144857# collect items from character style
                     lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
                     sal_uInt16 nFlags=0; //(nMode & KEY_SHIFT) ? SETATTR_DONTREPLACE : SETATTR_DEFAULT;
-                    rWrtShell.SetAttr( aFmt, nFlags );
+                    rWrtShell.SetAttrItem( aFmt, nFlags );
                 }
             }
             if(m_aParaStyle.Len() && !bNoParagraphFormats )
@@ -550,7 +550,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     rWrtShell.SetFlyFrmAttr(*pTemplateItemSet);
                 else
                 {
-                    rWrtShell.SetAttr(*pTemplateItemSet);
+                    rWrtShell.SetAttrSet(*pTemplateItemSet);
 
                     // additional numbering properties for paragraph styles
                     if( nSelectionType & nsSelectionType::SEL_TXT && rWrtShell.GetCurNumRule() )

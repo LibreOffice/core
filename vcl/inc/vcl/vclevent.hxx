@@ -153,6 +153,10 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_ITEM_COLLAPSED             1175
 // <--
 #define VCLEVENT_DROPDOWN_PRE_OPEN          1176
+//IAccessibility2 Implementation 2009-----
+#define VCLEVENT_LISTBOX_FOCUSITEMCHANGED   1180
+// #define VCLEVENT_EDIT_CARETCHANGED       xxxx    // IA2 CWS. MT: VCL only has selection API - difference for selection_changed vs. caret_changed is handled in accessibility wrapper since OOo 3.2
+//-----IAccessibility2 Implementation 2009
 
 // VclMenuEvent
 #define VCLEVENT_MENU_ACTIVATE              1200
@@ -171,24 +175,39 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_MENU_ITEMCHECKED           1213
 #define VCLEVENT_MENU_ITEMUNCHECKED         1214
 #define VCLEVENT_MENU_ACCESSIBLENAMECHANGED 1215
+//IAccessibility2 Implementation 2009-----
+#define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
+#define VCLEVENT_TOOLBOX_ITEMUPDATED  1217
+//-----IAccessibility2 Implementation 2009
 
 #define VCLEVENT_MENU_SHOW                  1250
 #define VCLEVENT_MENU_HIDE                  1251
 
 #define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
+//IAccessibility2 Implementation 2009-----
+#define VCLEVENT_LISTBOX_TREEEXPAND             1218
+#define VCLEVENT_LISTBOX_TREECOLLAPSE           1219
+#define VCLEVENT_LISTBOX_TREEFOCUS              1220
+#define VCLEVENT_LISTBOX_TREESELECT             1221
+#define VCLEVENT_EDIT_CARETCHANGED  1222
+#define VCLEVENT_COMBOBOX_UPDATEVALUE  1223
 
+#define VCLEVENT_LISTBOX_FOCUS             1224
+#define VCLEVENT_LISTBOX_CLEAR             1225
+//-----IAccessibility2 Implementation 2009
 // DockingWindow
-#define VCLEVENT_WINDOW_STARTDOCKING            1217    // pData = DockingData
-#define VCLEVENT_WINDOW_DOCKING                 1218
-#define VCLEVENT_WINDOW_ENDDOCKING              1219    // pData = EndDockingData
-#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1220    // pData = sal_Bool
-#define VCLEVENT_WINDOW_TOGGLEFLOATING          1221
-#define VCLEVENT_WINDOW_ENDPOPUPMODE            1222    // pData = EndPopupModeData
+#define VCLEVENT_WINDOW_STARTDOCKING            1227    // pData = DockingData
+#define VCLEVENT_WINDOW_DOCKING                 1228
+#define VCLEVENT_WINDOW_ENDDOCKING              1229    // pData = EndDockingData
+#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1230    // pData = sal_Bool
+#define VCLEVENT_WINDOW_TOGGLEFLOATING          1231
+#define VCLEVENT_WINDOW_ENDPOPUPMODE            1232    // pData = EndPopupModeData
 
-#define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
-#define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
-#define VCLEVENT_TABLEROW_SELECT                1225
-
+#define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1233    // pData = itempos
+#define VCLEVENT_TABLECELL_NAMECHANGED          1234    // pData = struct(Entry, Column, oldText)
+#define VCLEVENT_TABLEROW_SELECT                1235
+// IAccessible2 implementation 2009
+#define VCLEVENT_LISTBOX_STATEUPDATE            1236
 class VCL_DLLPUBLIC VclSimpleEvent
 {
 private:

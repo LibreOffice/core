@@ -45,3 +45,10 @@ ScAccessibleDocumentBase::ScAccessibleDocumentBase(
 ScAccessibleDocumentBase::~ScAccessibleDocumentBase(void)
 {
 }
+//IAccessibility2 Implementation 2009-----
+void ScAccessibleDocumentBase::SwitchViewFireFocus()
+{
+    CommitFocusGained();
+}
+//-----IAccessibility2 Implementation 2009
+

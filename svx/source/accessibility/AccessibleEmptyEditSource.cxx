@@ -154,7 +154,7 @@ namespace accessibility
         OutputDevice*   GetRefDevice() const { return NULL; }
         sal_Bool        GetIndexAtPoint( const Point&, sal_uInt16&, sal_uInt16& ) const { return sal_False; }
         sal_Bool        GetWordIndices( sal_uInt16, sal_uInt16, sal_uInt16&, sal_uInt16& ) const { return sal_False; }
-        sal_Bool        GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_uInt16, sal_uInt16 ) const { return sal_False; }
+    sal_Bool        GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_uInt16, sal_uInt16, sal_Bool) const { return sal_False; }
         sal_uInt16          GetLineCount( sal_uInt16 nPara ) const { return nPara == 0 ? 1 : 0; }
         sal_uInt16          GetLineLen( sal_uInt16, sal_uInt16 ) const { return 0; }
         void            GetLineBoundaries( /*out*/sal_uInt16 & rStart, /*out*/sal_uInt16 & rEnd, sal_uInt16 /*nParagraph*/, sal_uInt16 /*nLine*/ ) const  { rStart = rEnd = 0; }

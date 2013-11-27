@@ -38,13 +38,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .ELSE # "$(WITH_CPPUNIT)" != "YES"
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 

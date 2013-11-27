@@ -30,6 +30,7 @@
 
 class SwCrsrShell;
 class SwShellCrsr;
+class SwTxtInputFld;
 
 // --------  Ab hier Klassen / Methoden fuer den nicht Text-Cursor ------
 
@@ -76,6 +77,7 @@ public:
 
 // #i75172# predefines
 namespace sdr { namespace overlay { class OverlayObject; }}
+namespace sw { namespace overlay { class OverlayRangesOutline; }}
 
 class SwSelPaintRects : public SwRects
 {
@@ -89,7 +91,6 @@ class SwSelPaintRects : public SwRects
     const SwCrsrShell* pCShell;
 
     virtual void Paint( const Rectangle& rRect );
-    virtual void FillRects() = 0;
 
     // #i75172#
     sdr::overlay::OverlayObject*    mpCursorOverlay;
@@ -98,9 +99,16 @@ class SwSelPaintRects : public SwRects
     sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
     void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
 
+    bool mbShowTxtInputFldOverlay;
+    sw::overlay::OverlayRangesOutline* mpTxtInputFldOverlay;
+
+    void HighlightInputFld();
+
 public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
     virtual ~SwSelPaintRects();
+
+    virtual void FillRects() = 0;
 
     // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
     // make a complete swap access to mpCursorOverlay is needed there
@@ -109,6 +117,11 @@ public:
     void Show();
     void Hide();
     void Invalidate( const SwRect& rRect );
+
+    inline void SetShowTxtInputFldOverlay( const bool bShow )
+    {
+        mbShowTxtInputFldOverlay = bShow;
+    }
 
     const SwCrsrShell* GetShell() const { return pCShell; }
     // check current MapMode of the shell and set possibly the static members.
@@ -124,8 +137,6 @@ class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
     Point aMkPt, aPtPt;
     const SwPosition* pPt;      // fuer Zuordung vom GetPoint() zum aPtPt
 
-    virtual void FillRects();   // fuer Table- und normalen Crsr
-
     using SwCursor::UpDown;
 
 public:
@@ -134,6 +145,8 @@ public:
                     const Point& rPtPos, SwPaM* pRing = 0 );
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
+
+    virtual void FillRects();   // fuer Table- und normalen Crsr
 
     void Show();            // Update und zeige alle Selektionen an
     void Hide();            // verstecke alle Selektionen
@@ -181,7 +194,6 @@ class SwShellTableCrsr : public virtual SwShellCrsr, public virtual SwTableCurso
     // die Selection hat die gleiche Reihenfolge wie die
     // TabellenBoxen. D.h., wird aus dem einen Array an einer Position
     // etwas geloescht, dann muss es auch im anderen erfolgen!!
-
 
 public:
     SwShellTableCrsr( const SwCrsrShell& rCrsrSh, const SwPosition& rPos );

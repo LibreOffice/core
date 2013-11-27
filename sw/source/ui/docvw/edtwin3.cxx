@@ -142,6 +142,34 @@ sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
 // <--
+//IAccessibility2 Impplementaton 2009-----
+void AccessibilityScrollMDI(ViewShell* pVwSh, const SwRect& rRect , sal_uInt16 nRangeX, sal_uInt16 nRangeY, sal_Bool isLeftTop)
+{
+    SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
+    SwView* pView = dynamic_cast< SwView* >(pSfxVwSh);
+
+    if(pView)
+    {
+        Size aSz( rRect.Left(), rRect.Top());
+        aSz = pView->GetEditWin().PixelToLogic( aSz );
+
+        Point aTopLeft( aSz.Width(), aSz.Height() );
+        Point aPoint;
+        Rectangle aRect(aTopLeft,aPoint);
+
+        sal_Bool bIsCrsrAtTop = pView->IsCrsrAtTop();
+        sal_Bool bIsCrsrAtCenter = pView->IsCrsrAtCenter();
+        if(isLeftTop)
+            pView->SetCrsrAtTop(sal_True);
+
+        pView->Scroll( aRect, nRangeX, nRangeY );
+
+        if(isLeftTop)
+            pView->SetCrsrAtTop(bIsCrsrAtTop, bIsCrsrAtCenter);
+    }
+
+}
+//-----IAccessibility2 Impplementaton 2009
 
 LAYOUT_NS Dialog* GetSearchDialog()
 {

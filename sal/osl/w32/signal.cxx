@@ -36,6 +36,8 @@
 #endif
 #include <ErrorRep.h>
 #include <systools/win32/uwinapi.h>
+#include <eh.h>
+#include <stdexcept>
 
 typedef struct _oslSignalHandlerImpl
 {
@@ -423,10 +425,53 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 /*****************************************************************************/
 /* osl_setErrorReporting */
 /*****************************************************************************/
+
+void win_seh_translator( unsigned nSEHCode, _EXCEPTION_POINTERS* pExcPtrs)
+{
+    (void*)pExcPtrs; // currently unused, but useful inside a debugger
+    const char* pSEHName = NULL;
+    switch( nSEHCode)
+    {
+        case EXCEPTION_ACCESS_VIOLATION:         pSEHName = "SEH Exception: ACCESS VIOLATION"; break;
+        case EXCEPTION_DATATYPE_MISALIGNMENT:    pSEHName = "SEH Exception: DATATYPE MISALIGNMENT"; break;
+        case EXCEPTION_BREAKPOINT:               /*pSEHName = "SEH Exception: BREAKPOINT";*/ break;
+        case EXCEPTION_SINGLE_STEP:              /*pSEHName = "SEH Exception: SINGLE STEP";*/ break;
+        case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:    pSEHName = "SEH Exception: ARRAY BOUNDS EXCEEDED"; break;
+        case EXCEPTION_FLT_DENORMAL_OPERAND:     pSEHName = "SEH Exception: DENORMAL FLOAT OPERAND"; break;
+        case EXCEPTION_FLT_DIVIDE_BY_ZERO:       pSEHName = "SEH Exception: FLOAT DIVIDE_BY_ZERO"; break;
+        case EXCEPTION_FLT_INEXACT_RESULT:       pSEHName = "SEH Exception: FLOAT INEXACT RESULT"; break;
+        case EXCEPTION_FLT_INVALID_OPERATION:    pSEHName = "SEH Exception: INVALID FLOAT OPERATION"; break;
+        case EXCEPTION_FLT_OVERFLOW:             pSEHName = "SEH Exception: FLOAT OVERFLOW"; break;
+        case EXCEPTION_FLT_STACK_CHECK:          pSEHName = "SEH Exception: FLOAT STACK_CHECK"; break;
+        case EXCEPTION_FLT_UNDERFLOW:            pSEHName = "SEH Exception: FLOAT UNDERFLOW"; break;
+        case EXCEPTION_INT_DIVIDE_BY_ZERO:       pSEHName = "SEH Exception: INTEGER DIVIDE_BY_ZERO"; break;
+        case EXCEPTION_INT_OVERFLOW:             pSEHName = "SEH Exception: INTEGER OVERFLOW"; break;
+        case EXCEPTION_PRIV_INSTRUCTION:         pSEHName = "SEH Exception: PRIVILEDGED INSTRUCTION"; break;
+        case EXCEPTION_IN_PAGE_ERROR:            pSEHName = "SEH Exception: IN_PAGE_ERROR"; break;
+        case EXCEPTION_ILLEGAL_INSTRUCTION:      pSEHName = "SEH Exception: ILLEGAL INSTRUCTION"; break;
+        case EXCEPTION_NONCONTINUABLE_EXCEPTION: pSEHName = "SEH Exception: NONCONTINUABLE EXCEPTION"; break;
+        case EXCEPTION_STACK_OVERFLOW:           pSEHName = "SEH Exception: STACK OVERFLOW"; break;
+        case EXCEPTION_INVALID_DISPOSITION:      pSEHName = "SEH Exception: INVALID DISPOSITION"; break;
+        case EXCEPTION_GUARD_PAGE:               pSEHName = "SEH Exception: GUARD PAGE"; break;
+        case EXCEPTION_INVALID_HANDLE:           pSEHName = "SEH Exception: INVALID HANDLE"; break;
+//      case EXCEPTION_POSSIBLE_DEADLOCK:        pSEHName = "SEH Exception: POSSIBLE DEADLOCK"; break;
+        default:                                 pSEHName = "Unknown SEH Exception"; break;
+    }
+
+    if( pSEHName)
+        throw std::runtime_error( pSEHName);
+}
+
 sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
 {
     sal_Bool bOld = bErrorReportingEnabled;
     bErrorReportingEnabled = bEnable;
+
+    if( !bEnable) // if the crash reporter is disabled
+    {
+        // fall back to handle Window's SEH events as C++ exceptions
+        _set_se_translator( win_seh_translator);
+    }
 
     return bOld;
 }

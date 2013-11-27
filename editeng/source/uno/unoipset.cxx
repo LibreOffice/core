@@ -27,8 +27,6 @@
 #include <svl/eitem.hxx>
 #include <tools/list.hxx>
 
-#include <hash_map>
-#include <vector>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>

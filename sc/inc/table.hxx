@@ -937,6 +937,11 @@ private:
         SCROW mnCurRow;
         SCROW mnUBound;
     };
+
+//IAccessibility2 Implementation 2009-----
+public :
+    ScColumn* GetColumnByIndex(sal_Int32 index);
+//-----IAccessibility2 Implementation 2009
 };
 
 

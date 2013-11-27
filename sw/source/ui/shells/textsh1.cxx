@@ -255,7 +255,7 @@ void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,c
             rWrtSh.AutoUpdatePara(pColl, aTmpSet);
         }
         else
-            rWrtSh.SetAttr( aTmpSet );
+            rWrtSh.SetAttrSet( aTmpSet );
         if (pReq)
             pReq->Done(aTmpSet);
         if(bInsert)
@@ -462,7 +462,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                                     //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
-                rWrtSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+                rWrtSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, sal_False);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFtnTxt();
@@ -1039,7 +1039,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         if ( ((SfxStringItem*)pItem)->GetValue().Len() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
                     }
-                    rWrtSh.SetAttr( *pSet );
+                    rWrtSh.SetAttrSet( *pSet );
 //                    rWrtSh.EndUndo( UNDO_END );
                     rWrtSh.EndAction();
                     SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
@@ -1119,8 +1119,35 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
+//IAccessibility2 Implementation 2009-----
+            //According to the requirement, modified the behavior when user
+            //using the indent button on the toolbar. Now if we increase/decrease indent for a
+            //paragraph which has bullet style it will increase/decrease the bullet level.
+            {
+                //If the current paragraph has bullet call the function to
+                //increase or decrease the bullet level.
+                //Why could I know wheter a paragraph has bullet or not by checking the below conditions?
+                //Please refer to the "case KEY_TAB:" section in SwEditWin::KeyInput(..) :
+                //      if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
+                //                  !rSh.HasReadonlySel() )
+                //              eKeyState = KS_NumDown;
+                //Above code demonstrates that when the cursor is at the start of a paragraph which has bullet,
+                //press TAB will increase the bullet level.
+                //So I copied from that ^^
+                if ( rWrtSh.GetCurNumRule() && !rWrtSh.HasReadonlySel() )
+                {
+                    rWrtSh.NumUpDown( SID_INC_INDENT == nSlot );
+                }
+                else//execute the original processing functions
+                {
+                    //below is copied of the old codes
             rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot,
                                     rReq.GetModifier() != KEY_MOD1 );
+                }
+            }
+            //rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot,
+            //                      rReq.GetModifier() != KEY_MOD1 );
+//-----IAccessibility2 Implementation 2009
             rReq.Done();
             break;
         case FN_DEC_INDENT_OFFSET:
@@ -1143,7 +1170,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // besteht eine Selektion, wird sie gleich gefaerbt
                 if(!pApply && rWrtSh.HasSelection())
                 {
-                    rWrtSh.SetAttr(SvxColorItem (aSet, RES_CHRATR_COLOR));
+                    rWrtSh.SetAttrItem(SvxColorItem (aSet, RES_CHRATR_COLOR));
                 }
                 else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
@@ -1151,17 +1178,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 rReq.Done();
-/*              OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
-                SwEditWin& rEdtWin = GetView().GetEditWin();
-
-                SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-                SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
-
-                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
-                {
-                    GetShell().SetAttr(aItem);
-                }
-*/
             }
         }
         break;
@@ -1183,7 +1199,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aBrushItem.SetColor(aSet);
                 else
                     aBrushItem.SetColor(Color(COL_TRANSPARENT));
-                rWrtSh.SetAttr( aBrushItem );
+                rWrtSh.SetAttrItem( aBrushItem );
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
@@ -1192,15 +1208,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             rReq.Done();
 
-/*          OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
-            if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-            {
-                Brush aBrush(pItem ? BRUSH_SOLID : BRUSH_NULL);
-                if(pItem)
-                    aBrush.SetColor( aSet );
-                GetShell().SetAttr( SvxBrushItem(aBrush, RES_CHRATR_BACKGROUND) );
-            }
-*/
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
@@ -1215,12 +1222,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if(nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
                 {
-                    rWrtSh.SetAttr( SvxBrushItem(
-                        rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
+                    rWrtSh.SetAttrItem(
+                        SvxBrushItem( rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
                 }
                 else
-                    rWrtSh.SetAttr( SvxColorItem( rEdtWin.GetTextColor(),
-                                                                RES_CHRATR_COLOR) );
+                    rWrtSh.SetAttrItem(
+                        SvxColorItem( rEdtWin.GetTextColor(), RES_CHRATR_COLOR) );
             }
             else
             {
@@ -1464,6 +1471,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
                     rSh.IsNumRuleStart()));
         break;
+
         case FN_EDIT_FORMULA:
         case SID_CHARMAP:
             {
@@ -1471,7 +1479,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if (!(nType & nsSelectionType::SEL_TXT) &&
                     !(nType & nsSelectionType::SEL_TBL) &&
                     !(nType & nsSelectionType::SEL_NUM))
+                {
                     rSet.DisableItem(nWhich);
+                }
+                else if ( nWhich == FN_EDIT_FORMULA
+                          && rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem( nWhich );
+                }
             }
             break;
 
@@ -1479,16 +1494,35 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_FOOTNOTE_DLG:
             {
-                const sal_uInt16 nNoType = FRMTYPE_FLY_ANY | FRMTYPE_HEADER |
-                                        FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE;
+                const sal_uInt16 nNoType =
+                    FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FOOTNOTE;
                 if ( (rSh.GetFrmType(0,sal_True) & nNoType) )
                     rSet.DisableItem(nWhich);
+
+                if ( rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem( nWhich );
+                }
             }
             break;
-        case FN_INSERT_TABLE:
-            if ( rSh.GetTableFmt() ||
-                    (rSh.GetFrmType(0,sal_True) & FRMTYPE_FOOTNOTE) )
+
+        case FN_INSERT_HYPERLINK:
+        case SID_INSERTDOC:
+        case FN_INSERT_GLOSSARY:
+        case FN_EXPAND_GLOSSARY:
+            if ( rSh.CrsrInsideInputFld() )
+            {
                 rSet.DisableItem( nWhich );
+            }
+            break;
+
+        case FN_INSERT_TABLE:
+            if ( rSh.CrsrInsideInputFld()
+                 || rSh.GetTableFmt()
+                 || (rSh.GetFrmType(0,sal_True) & FRMTYPE_FOOTNOTE) )
+            {
+                rSet.DisableItem( nWhich );
+            }
             break;
 
         case FN_CALCULATE:
@@ -1507,20 +1541,53 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get()->IsAutoFmtByInput() ));
             }
             break;
+
         case FN_GLOSSARY_DLG:
             {
-                rSet.Put(SfxBoolItem(nWhich), sal_True);
+                if ( rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem( nWhich );
+                }
+                else
+                {
+                    rSet.Put(SfxBoolItem(nWhich), sal_True);
+                }
             }
             break;
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
             {
+//IAccessibility2 Implementation 2009-----
+                //if the paragrah has bullet we'll do the following things:
+                //1: if the bullet level is the first level, disable the decrease-indent button
+                //2: if the bullet level is the last level, disable the increase-indent button
+                if ( rSh.GetCurNumRule() && !rSh.HasReadonlySel() )
+                {
+                    sal_uInt8 nLevel = rSh.GetNumLevel();
+                    if ( nLevel == (MAXLEVEL-1) && nWhich == SID_INC_INDENT ||
+                        nLevel == 0 && nWhich == SID_DEC_INDENT )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                else//if the paragraph has no bullet, execute the original functions
+                {
+                    //below is copied of the old codes
                 sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
                 nHtmlMode &= HTMLMODE_ON|HTMLMODE_SOME_STYLES;
                 if( (nHtmlMode == HTMLMODE_ON) || !rSh.IsMoveLeftMargin(
                                         SID_INC_INDENT == nWhich, sal_True ))
                     rSet.DisableItem( nWhich );
+                }
+                //old code begins
+                //sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
+                //nHtmlMode &= HTMLMODE_ON|HTMLMODE_SOME_STYLES;
+                //if( (nHtmlMode == HTMLMODE_ON) || !rSh.IsMoveLeftMargin(
+                //  SID_INC_INDENT == nWhich, TRUE ))
+                //  rSet.DisableItem( nWhich );
+                //old code ends
+//-----IAccessibility2 Implementation 2009
             }
             break;
 
@@ -1557,9 +1624,22 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, pApply && pApply->nColor == nWhich));
             }
             break;
+
         case FN_INSERT_BOOKMARK:
-            if( rSh.IsTableMode() )
+            if( rSh.IsTableMode()
+                || rSh.CrsrInsideInputFld() )
+            {
                 rSet.DisableItem( nWhich );
+            }
+            break;
+
+        case FN_INSERT_BREAK_DLG:
+        case FN_INSERT_COLUMN_BREAK:
+        case FN_INSERT_PAGEBREAK:
+            if( rSh.CrsrInsideInputFld() )
+            {
+                rSet.DisableItem( nWhich );
+            }
             break;
 
         case FN_INSERT_PAGEHEADER:
@@ -1596,42 +1676,50 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         (FN_TABLE_SORT_DIALOG == nWhich && !rSh.GetTableFmt()))
                     rSet.DisableItem( nWhich );
             break;
+
             case SID_RUBY_DIALOG:
-            {
-                SvtCJKOptions aCJKOptions;
-                if(!aCJKOptions.IsRubyEnabled())
                 {
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    SvtCJKOptions aCJKOptions;
+                    if( !aCJKOptions.IsRubyEnabled()
+                        || rSh.CrsrInsideInputFld() )
+                    {
+                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                        rSet.DisableItem(nWhich);
+                    }
+                    else
+                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                }
+                break;
+
+            case SID_HYPERLINK_DIALOG:
+                if( GetView().GetDocShell()->IsReadOnly()
+                    || ( !GetView().GetViewFrame()->HasChildWindow(nWhich)
+                         && rSh.HasReadonlySel() )
+                    || rSh.CrsrInsideInputFld() )
+                {
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                {
+                    rSet.Put(SfxBoolItem( nWhich, 0 != GetView().GetViewFrame()->GetChildWindow( nWhich ) ));
+                }
                 break;
-            }
-            //no break!
-            case SID_HYPERLINK_DIALOG:
-                if( GetView().GetDocShell()->IsReadOnly() ||
-                    (!GetView().GetViewFrame()->HasChildWindow(nWhich) &&
-                     rSh.HasReadonlySel()) )
-                    rSet.DisableItem(nWhich);
-                else
-                    rSet.Put(SfxBoolItem( nWhich, 0 != GetView().
-                                GetViewFrame()->GetChildWindow( nWhich ) ));
-                break;
+
             case FN_EDIT_HYPERLINK:
             case FN_REMOVE_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
-            {
-                SfxItemSet aSet(GetPool(),
-                                RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT);
-                rSh.GetCurAttr(aSet);
-                if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, sal_True ) || rSh.HasReadonlySel())
                 {
-                    rSet.DisableItem(nWhich);
+                    SfxItemSet aSet(GetPool(),
+                        RES_TXTATR_INETFMT,
+                        RES_TXTATR_INETFMT);
+                    rSh.GetCurAttr(aSet);
+                    if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, sal_True ) || rSh.HasReadonlySel())
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
                 }
-            }
-            break;
+                break;
+
             case SID_TRANSLITERATE_HALFWIDTH:
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
@@ -1755,13 +1843,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
-                // --> OD 2009-08-26 #i86492#
-                // Allow continuation of previous list, even if at current cursor
-                // a list is active.
-//                if ( rSh.GetCurNumRule() )
-//                    rSet.DisableItem(nWhich);
-//                else
-                // <--
                 {
                     // --> OD 2009-08-26 #i86492#
                     // Search also for bullet list

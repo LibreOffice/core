@@ -256,7 +256,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool    PageCrsr(SwTwips lOffset, sal_Bool bSelect);
 
     // Felder Update
-    void    UpdateInputFlds( SwInputFieldList* pLst = 0, sal_Bool bOnlyInSel = sal_False );
+    void    UpdateInputFlds( SwInputFieldList* pLst = 0 );
 
     void    NoEdit(sal_Bool bHideCrsr = sal_True);
     void    Edit();
@@ -445,9 +445,6 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const sal_uInt16 nAction );
-
-    // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
-    virtual void NewCoreSelection();
 
     virtual void ApplyViewOptions( const SwViewOption &rOpt );
 

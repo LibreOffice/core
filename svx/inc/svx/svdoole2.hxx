@@ -90,6 +90,10 @@ public:
     /// create a copy, evtl. with a different target model (if given)
     virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
+//IAccessibility2 Implementation 2009-----
+    String GetStyleString();
+//-----IAccessibility2 Implementation 2009
+
     // react on model/page change
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
     virtual bool IsClosedObj() const;

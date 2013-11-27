@@ -1329,16 +1329,6 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         }
         break;
 
-/* Seit dem neuen Blocksatz muessen wir immer neu formatieren:
-        case RES_PARATR_ADJUST:
-        {
-            if( GetShell() )
-            {
-                Prepare( PREP_CLEAR );
-            }
-            break;
-        }
-*/
         // 6870: SwDocPosUpdate auswerten.
         case RES_DOCPOS_UPDATE:
         {

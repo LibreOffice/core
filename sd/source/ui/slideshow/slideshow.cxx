@@ -819,6 +819,12 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     }
                 }
             }
+            //IAccessibility2 Implementation 2009-----
+            //Fire the acc focus event when focus is switched back. The above method mpCurrentViewShellBase->GetWindow()->GrabFocus() will
+            //set focus to WorkWindow instead of the sd::window, so here call Shell's method to fire the focus event
+            if (pViewShell)
+                pViewShell->SwitchActiveViewFireFocus();
+            //-----IAccessibility2 Implementation 2009
         }
         mpCurrentViewShellBase = 0;
     }
@@ -1045,6 +1051,10 @@ void SlideShow::activate( ViewShellBase& rBase )
             if( mxController->startShow(mxCurrentSettings.get()) )
             {
                 pShell->Resize();
+                //IAccessibility2 Implementation 2009-----
+                // Defer the sd::ShowWindow's GrabFocus to here. so that the accessible event can be fired correctly.
+                pShell->GetActiveWindow()->GrabFocus();
+                //-----IAccessibility2 Implementation 2009
             }
             else
             {
@@ -1219,6 +1229,13 @@ void SlideShow::StartInPlacePresentation()
 
         if( !bSuccess )
             end();
+        //IAccessibility2 Implementation 2009-----
+        else
+        {
+            if(mpCurrentViewShellBase)
+                mpCurrentViewShellBase->GetWindow()->GrabFocus();
+        }
+        //-----IAccessibility2 Implementation 2009
     }
 }
 

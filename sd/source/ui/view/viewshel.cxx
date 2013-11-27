@@ -95,7 +95,9 @@
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
 #include <glob.hrc>
-
+//IAccessibility2 Implementation 2009-----
+#include "AccessibleDocumentViewBase.hxx"
+//-----IAccessibility2 Implementation 2009
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
@@ -470,6 +472,9 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         bReturn = GetViewShell()->KeyInput(rKEvt);
     }
 
+//IAccessibility2 Implementation 2009-----
+    const sal_uInt32 OriCount(GetView()->getSelectedSdrObjectCount());
+//-----IAccessibility2 Implementation 2009
     if(!bReturn)
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
@@ -499,6 +504,14 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             }
         }
     }
+//IAccessibility2 Implementation 2009-----
+    const sal_uInt32 EndCount(GetView()->getSelectedSdrObjectCount());
+    // Here, oriCount or endCount must have one value=0, another value > 0, then to switch focus between Document and shape objects
+    if(bReturn &&  (OriCount + EndCount > 0) && (OriCount * EndCount == 0))
+    {
+        SwitchActiveViewFireFocus();
+    }
+//-----IAccessibility2 Implementation 2009
 
     if(!bReturn && GetActiveWindow())
     {
@@ -1604,7 +1617,36 @@ bool ViewShell::RelocateToParentWindow (::Window* pParentWindow)
     return true;
 }
 
+//IAccessibility2 Implementation 2009-----
+void ViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc )
+{
+    if (xAcc.get())
+    {
+        ::accessibility::AccessibleDocumentViewBase* pBase = static_cast< ::accessibility::AccessibleDocumentViewBase* >(xAcc.get());
+        if (pBase)
+        {
+            pBase->SwitchViewActivated();
+        }
+    }
+}
+void ViewShell::SwitchActiveViewFireFocus()
+{
+    if (mpContentWindow)
+    {
+        SwitchViewFireFocus(mpContentWindow->GetAccessible(sal_False));
+    }
+}
+// move these two methods from DrawViewShell.
+void ViewShell::fireSwitchCurrentPage(sal_Int32 pageIndex)
+{
+    GetViewShellBase().GetDrawController().fireSwitchCurrentPage(pageIndex);
+}
+void ViewShell::NotifyAccUpdate( )
+{
+    GetViewShellBase().GetDrawController().NotifyAccUpdate();
+}
 
+//-----IAccessibility2 Implementation 2009
 
 } // end of namespace sd
 

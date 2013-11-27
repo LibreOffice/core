@@ -321,7 +321,7 @@ sub filter_log_error ($$$$)
 
         # Remove all filenames that contain the word "Error".
         my $work_string = $message;
-        $work_string =~ s/Error\.(idt|mlf|ulf|html|hpp|ipp)//g;
+        $work_string =~ s/Error\.(idt|mlf|ulf|idl|html|hpp|ipp)//g;
 
         if ($work_string =~ /\bError\b/i)
         {
@@ -497,7 +497,7 @@ sub check_updatepack
 
                     # try to write into $shipdrive
 
-                    my $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test_$$";
+                    my $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproduct . "_test_$$";
                     $directory =~ s/\,/\_/g;    # for the list of languages
                     $directory =~ s/\-/\_/g;    # for en-US, pt-BR, ...
                     $directory = $shipdrive . $installer::globals::separator . $directory;

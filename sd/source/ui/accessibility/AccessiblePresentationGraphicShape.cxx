@@ -119,5 +119,12 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
     return aDG();
 }
+//IAccessibility2 Implementation 2009-----
+sal_Int16 SAL_CALL AccessiblePresentationGraphicShape::getAccessibleRole ()
+    throw (::com::sun::star::uno::RuntimeException)
+{
 
+    return  AccessibleRole::GRAPHIC ;
+}
+//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

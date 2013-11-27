@@ -42,14 +42,14 @@ CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
     @echo "No nss -> no libxmlsec -> no xmlsecurity/nss"
 .ENDIF
 
-.IF "$(SYSTEM_MOZILLA)" != "YES"
+.IF "$(SYSTEM_NSS)" != "YES"
 MOZ_INC = $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 NSS_INC = $(MOZ_INC)$/nss
 NSPR_INC = $(MOZ_INC)$/nspr
 .ELSE
-# MOZ_INC already defined from environment
-NSS_INC = $(MOZ_NSS_CFLAGS)
-NSPR_INC = $(MOZ_INC)$/nspr
+# TODO: better use pkgconfig to find the proper system include path
+NSS_INC = /usr/include/nss3
+NSPR_INC = /usr/include/nspr4
 .ENDIF
 
 .IF "$(GUI)" == "WNT"
@@ -105,9 +105,8 @@ CDEFS += -DXMLSEC_NO_XSLT
 # --- Files --------------------------------------------------------
 
 SOLARINC += \
- -I$(MOZ_INC) \
--I$(NSPR_INC) \
--I$(PRJ)$/source$/xmlsec
+ -I$(NSPR_INC) \
+ -I$(PRJ)$/source$/xmlsec
 
 SOLARINC += -I$(NSS_INC)
 

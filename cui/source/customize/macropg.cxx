@@ -166,6 +166,9 @@ _HeaderTabListBox::_HeaderTabListBox( Window* pParent, const ResId& rId ) :
     maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
 {
     maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
+
+    // enable the cell focus to show visible focus
+    maListBox.EnableCellFocus();
 }
 
 _HeaderTabListBox::~_HeaderTabListBox()

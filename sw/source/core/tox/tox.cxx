@@ -240,7 +240,7 @@ String SwTOXMark::GetText() const
         aStr = aAltText;
     else if( pTxtAttr && pTxtAttr->GetpTxtNd() )
     {
-        xub_StrLen* pEndIdx = pTxtAttr->GetEnd();
+        const xub_StrLen* pEndIdx = pTxtAttr->GetEnd();
         ASSERT( pEndIdx, "TOXMark ohne Mark!!");
         if( pEndIdx )
         {

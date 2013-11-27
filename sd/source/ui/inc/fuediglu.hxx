@@ -53,6 +53,16 @@ public:
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
+//IAccessibility2 Implementation 2009-----
+  //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+  //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    virtual void ForcePointer(const MouseEvent* pMEvt = NULL);
+private:
+    Point           maOldPoint;
+
+    /// bitfield
+    bool            mbBeginInsertPoint : 1;
+//-----IAccessibility2 Implementation 2009
 protected:
     FuEditGluePoints (
         ViewShell* pViewSh,

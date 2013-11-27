@@ -91,6 +91,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vector>
 #include "svx/lathe3d.hxx"
 #include "svx/extrud3d.hxx"

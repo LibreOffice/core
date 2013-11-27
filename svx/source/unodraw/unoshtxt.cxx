@@ -52,6 +52,12 @@
 #include <comphelper/processfactory.hxx>
 #include <vos/mutex.hxx>
 #include <svx/svdlegacy.hxx>
+
+//IAccessibility2 Implementation 2009-----
+#include <svx/svdotable.hxx>
+#include <../table/cell.hxx>
+//-----IAccessibility2 Implementation 2009
+
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrtexthelpers.hxx>
 
@@ -354,6 +360,29 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 if( mpObject == pSdrHint->GetSdrHintObject() )
                 {
+                    //IAccessibility2 Implementation 2009-----, one EditSource object is created for each AccessibleCell, and it will monitor the hint.
+                    // Once HINT_BEGEDIT is broadcast, each EditSource of AccessibleCell will handle it here and
+                    // call below: mpView->GetTextEditOutliner()->SetNotifyHdl(), which will replace the Notifer for current
+                    // editable cell. It is totally wrong. So add check here to avoid the incorrect replacement of notifer.
+                    // To be safe, add accessibility check here because currently it only happen on the editsource of AccessibleCell
+                    if (Application::IsAccessibilityEnabled())
+                    {
+                        if (mpObject && mpText)
+                        {
+                            sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >(mpObject);
+                            if(pTableObj)
+                            {
+                                sdr::table::CellRef xCell = pTableObj->getActiveCell();
+                                if (xCell.is())
+                                {
+                                    sdr::table::Cell* pCellObj = dynamic_cast< sdr::table::Cell* >( mpText );
+                                    if (pCellObj && xCell.get() != pCellObj)
+                                            break;
+                                }
+                            }
+                        }
+                    }
+                    //-----IAccessibility2 Implementation 2009
                     // invalidate old forwarder
                     if( !mbForwarderIsEditMode )
                     {

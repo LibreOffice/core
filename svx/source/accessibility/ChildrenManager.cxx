@@ -86,7 +86,22 @@ long ChildrenManager::GetChildCount (void) const throw ()
     return mpImpl->GetChild (nIndex);
 }
 
+//IAccessibility2 Implementation 2009-----
+Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShape>& xShape)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    return mpImpl->GetChild (xShape);
+}
 
+::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape> ChildrenManager::GetChildShape(long nIndex)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    return mpImpl->GetChildShape(nIndex);
+}
+//-----IAccessibility2 Implementation 2009
 
 
 void ChildrenManager::Update (bool bCreateNewObjectsOnDemand)

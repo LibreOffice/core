@@ -200,6 +200,15 @@ sal_Bool ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
     return sal_False;
 }
 
+//IAccessibility2 Implementation 2009-----
+ScTable* ScDocument::GetTableByIndex(sal_Int32 nIndex)
+{
+  if ( nIndex <= MAXTAB && nIndex >= 0)
+     return  pTab[nIndex];
+
+  return NULL;
+}
+//-----IAccessibility2 Implementation 2009
 
 sal_Bool ScDocument::ValidTabName( const String& rName ) const
 {

@@ -77,17 +77,6 @@ sub get_registry_component_name
     my $styles = "";
     if ( $registryref->{'Styles'} ) { $styles = $registryref->{'Styles'}; }
 
-    # Layer links must have unique Component GUID for all products. This is necessary, because only the
-    # uninstallation of the last product has to delete registry keys.
-    if ( $styles =~ /\bLAYER_REGISTRY\b/ )
-    {
-        $componentname = "g_m_root_registry_layer_ooo_reglayer";
-        # Styles USE_URELAYERVERSION, USE_OOOBASEVERSION
-        if ( $styles =~ /\bUSE_URELAYERVERSION\b/ ) { $addon = "_ure_" . $allvariables->{'URELAYERVERSION'}; }
-        if ( $styles =~ /\bUSE_OOOBASEVERSION\b/ ) { $addon = "_basis_" . $allvariables->{'OOOBASEVERSION'}; }
-        $addon =~ s/\.//g;
-    }
-
     $componentname = $componentname . $addon;
 
     if (( $styles =~ /\bLANGUAGEPACK\b/ ) && ( $installer::globals::languagepack )) { $componentname = $componentname . "_lang"; }

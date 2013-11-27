@@ -81,7 +81,7 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
+    SwTxtFld * pTxtFld = SwDoc::GetTxtFldAtPos(GetPosition());
     const SwField * pField = pTxtFld->GetFmtFld().GetField();
 
     if (pField)
@@ -92,7 +92,7 @@ void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoFieldFromDoc::DoImpl()
 {
-    SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
+    SwTxtFld * pTxtFld = SwDoc::GetTxtFldAtPos(GetPosition());
     const SwField * pField = pTxtFld->GetFmtFld().GetField();
 
     if (pField)
@@ -129,7 +129,7 @@ SwUndoFieldFromAPI::~SwUndoFieldFromAPI()
 
 void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwField * pField = SwDoc::GetField(GetPosition());
+    SwField * pField = SwDoc::GetFieldAtPos(GetPosition());
 
     if (pField)
         pField->PutValue(aOldVal, nWhich);
@@ -137,7 +137,7 @@ void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoFieldFromAPI::DoImpl()
 {
-    SwField * pField = SwDoc::GetField(GetPosition());
+    SwField * pField = SwDoc::GetFieldAtPos(GetPosition());
 
     if (pField)
         pField->PutValue(aNewVal, nWhich);

@@ -42,6 +42,7 @@ SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart )
     , m_bDontExpandStart( false )
     , m_bNesting( false )
     , m_bHasDummyChar( false )
+    , m_bHasContent( false )
 {
 }
 

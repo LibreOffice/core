@@ -215,7 +215,9 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 
 // Object data and state ------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 ) const
+//IAccessibility2 Implementation 2009-----
+OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
+//-----IAccessibility2 Implementation 2009
 {
     OUString aRetText;
     switch( eObjType )
@@ -233,7 +235,18 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell" ) );
+//IAccessibility2 Implementation 2009-----
+            if( ColCount() !=0 && GetRowCount()!=0)
+            {
+
+                sal_Int32 columnId = _nPosition % ColCount() +1;
+                aRetText = OUString( GetColumnDescription( sal_Int16( columnId ) ) );
+                sal_Int32 rowId = _nPosition / GetRowCount() + 1;
+                aRetText += OUString::valueOf(rowId);
+            }
+            else
+//-----IAccessibility2 Implementation 2009
+                aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell" ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
@@ -243,7 +256,11 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
+            {
+            sal_Int32 rowId = _nPosition + 1;
+            aRetText = OUString::valueOf( rowId );
+            }
+            //aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
@@ -253,7 +270,8 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderCell" ) );
+            //aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderCell" ) );
+            aRetText = OUString( GetColumnDescription( sal_Int16( _nPosition ) ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));

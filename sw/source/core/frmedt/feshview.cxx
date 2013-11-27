@@ -1032,9 +1032,43 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
     if ( IsFrmSelected() || !Imp()->HasDrawView() )
         return sal_False;
     else
-        return Imp()->GetDrawView()->IsObjMarked(rObj);
+        return Imp()->GetDrawView()->isSdrObjectSelected(rObj);
 }
 
+//IAccessibility2 Implementation 2009-----
+bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject& rObj) const
+{
+    if(!Imp()->GetDrawView()->areSdrObjectsSelected())
+    {
+        return true;
+    }
+
+    const SdrObjectVector aSdrObjectVector(Imp()->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+
+    if(aSdrObjectVector.empty())
+    {
+        OSL_ENSURE(false, "OOps, areSdrObjectsSelected is true, but SdrObjectVector is empty (!)");
+    }
+    else
+    {
+        const SdrObject& rFirstMarked = *aSdrObjectVector[0];
+
+        return rFirstMarked.GetParentSdrObject() == rObj.GetParentSdrObject();
+    }
+
+    return false;
+}
+
+SdrObject* SwFEShell::getSingleSelected() const
+{
+    if(Imp()->GetDrawView())
+    {
+        return Imp()->GetDrawView()->getSelectedIfSingle();
+    }
+
+    return 0;
+}
+//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |*  SwFEShell::EndTextEdit()

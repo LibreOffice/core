@@ -239,7 +239,9 @@ private:
     void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const String& rStr );
 
     sal_Bool            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
-
+//IAccessibility2 Implementation 2009-----
+    sal_Bool            HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRange& rScenRange );
+//-----IAccessibility2 Implementation 2009
     sal_Bool            DropScroll( const Point& rMousePos );
 
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
@@ -388,6 +390,9 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
+//IAccessibility2 Implementation 2009-----
+    virtual void SwitchView();
+//-----IAccessibility2 Implementation 2009
 
     void            UpdateDPFromFieldPopupMenu();
 

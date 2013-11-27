@@ -70,7 +70,7 @@ APP1RPATH=UREBIN
 
 # Include all relevant (see ure/source/README) dynamic libraries, so that C++
 # UNO components running in the uno executable have a defined environment
-# (stlport, unxlngi6 libstdc++.so.6, and wntmsci10 uwinapi.dll are already
+# (unxlngi6 libstdc++.so.6, and wntmsci10 uwinapi.dll are already
 # included via APP1STDLIB, unxlngi6 libgcc_s.so.1 and wntmsci10 msvcr71.dll and
 # msvcp71.dll are magic---TODO):
 APP1STDLIBS= \

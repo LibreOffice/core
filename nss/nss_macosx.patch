@@ -1,6 +1,6 @@
---- misc/nss-3.12.6/mozilla/security/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/security/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
-@@ -104,6 +104,9 @@
+--- misc/nss-3.14.4/mozilla/security/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
+@@ -73,6 +73,9 @@
  ifeq ($(OS_TARGET),WIN95)
  NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
  endif
@@ -9,4 +9,19 @@
 +endif
  ifdef USE_DEBUG_RTL
  NSPR_CONFIGURE_OPTS += --enable-debug-rtl
+ endif
+--- misc/nss-3.14.4/mozilla/security/nss/lib/sqlite/config.mk	2012-12-12 13:30:51.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/nss/lib/sqlite/config.mk	2013-10-31 15:45:49.000000000 +0100
+@@ -39,9 +39,9 @@
+ # OSAtomicCompareAndSwapPtrBarrier, which is only available on Mac OS X 10.5
+ # (Darwin 9.0) and later. Define SQLITE_WITHOUT_ZONEMALLOC to disable
+ # that code for older versions of Mac OS X. See bug 820374.
+-DARWIN_VER_MAJOR := $(shell uname -r | cut -f1 -d.)
+-DARWIN_LT_9 := $(shell [ $(DARWIN_VER_MAJOR) -lt 9 ] && echo true)
+-ifeq ($(DARWIN_LT_9),true)
++OSX_TARGET_MINOR := $(shell echo $(MACOSX_DEPLOYMENT_TARGET) | cut -f2 -d.)
++OSX_MINOR_LT_5 := $(shell [ $(OSX_TARGET_MINOR) -lt 5 ] && echo true)
++ifeq ($(OSX_MINOR_LT_5),true)
+ OS_CFLAGS += -DSQLITE_WITHOUT_ZONEMALLOC
+ endif # Darwin
  endif

@@ -452,8 +452,8 @@ sal_uLong SwASCIIParser::ReadChars()
                             InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );
-                        pDoc->InsertPoolItem( *pPam, SvxFmtBreakItem(
-                                    SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
+                        pDoc->InsertPoolItem(
+                            *pPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;

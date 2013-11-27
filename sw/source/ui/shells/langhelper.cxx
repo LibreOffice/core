@@ -282,7 +282,7 @@ namespace SwLangHelper
                     {
                         rWrtSh.GetCurAttr( rCoreSet );
                         rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
-                        rWrtSh.SetAttr( rCoreSet );
+                        rWrtSh.SetAttrSet( rCoreSet );
                     }
                 }
                 else // change language for all text
@@ -298,7 +298,7 @@ namespace SwLangHelper
 
                     // #i102191: hard set respective language attribute in text document
                     // (for all text in the document - which should be selected by now...)
-                    rWrtSh.SetAttr( SvxLanguageItem( nLang, nLangWhichId ) );
+                    rWrtSh.SetAttrItem( SvxLanguageItem( nLang, nLangWhichId ) );
                 }
             }
         }
@@ -346,7 +346,7 @@ namespace SwLangHelper
                 rWrtSh.GetCurAttr( rCoreSet );
                 for (sal_uInt16 i = 0; i < 3; ++i)
                     rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ));
-                rWrtSh.SetAttr( rCoreSet );
+                rWrtSh.SetAttrSet( rCoreSet );
             }
         }
         else // change language for all text

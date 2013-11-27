@@ -46,6 +46,8 @@
 #include <unoredline.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
+#include <fmtfld.hxx>
+#include <fldbas.hxx>
 #include <fmtmeta.hxx>
 #include <fmtanchr.hxx>
 #include <fmtrfmrk.hxx>
@@ -438,7 +440,7 @@ lcl_CreateRefMarkPortion(
     {
         pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_REFMARK_START);
         pPortion->SetRefMark(xContent);
-        pPortion->SetCollapsed(rAttr.GetEnd() ? false : true);
+        pPortion->SetCollapsed(rAttr.End() ? false : true);
     }
     else
     {
@@ -459,7 +461,7 @@ lcl_InsertRubyPortion(
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCrsr,
             static_cast<const SwTxtRuby&>(rAttr), xParent, bEnd);
     rPortions.push_back(pPortion);
-    pPortion->SetCollapsed(rAttr.GetEnd() ? false : true);
+    pPortion->SetCollapsed(rAttr.End() ? false : true);
 }
 
 //-----------------------------------------------------------------------------
@@ -760,34 +762,56 @@ lcl_ExportHints(
                             SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFmtFld());
                         pPortion->SetTextField(xField);
                     }
-                break;
-                case RES_TXTATR_FLYCNT   :
+                    break;
+
+                case RES_TXTATR_INPUTFIELD:
+                    if(!bRightMoveForbidden)
+                    {
+
+                        pUnoCrsr->Right(
+                            pAttr->GetFmtFld().GetField()->GetPar1().Len() + 2,
+                            CRSR_SKIP_CHARS,
+                            sal_False,
+                            sal_False );
+                        if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
+                            break;
+                        SwXTextPortion* pPortion =
+                            new SwXTextPortion( pUnoCrsr, xParent, PORTION_FIELD);
+                        xRef = pPortion;
+                        Reference<XTextField> xField =
+                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFmtFld());
+                        pPortion->SetTextField(xField);
+                    }
+                    break;
+
+                case RES_TXTATR_FLYCNT:
                     if(!bRightMoveForbidden)
                     {
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break; // Robust #i81708 content in covered cells
                         pUnoCrsr->Exchange();
-                        xRef = new SwXTextPortion(
-                                pUnoCrsr, xParent, PORTION_FRAME);
+                        xRef = new SwXTextPortion( pUnoCrsr, xParent, PORTION_FRAME);
                     }
-                break;
-                case RES_TXTATR_FTN      :
-                {
-                    if(!bRightMoveForbidden)
+                    break;
+
+                case RES_TXTATR_FTN:
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
-                        if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
-                            break;
-                        SwXTextPortion* pPortion;
-                        xRef = pPortion = new SwXTextPortion(
+                        if(!bRightMoveForbidden)
+                        {
+                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
+                            if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
+                                break;
+                            SwXTextPortion* pPortion;
+                            xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FOOTNOTE);
-                        Reference<XFootnote> xContent =
-                            SwXFootnotes::GetObject(*pDoc, pAttr->GetFtn());
-                        pPortion->SetFootnote(xContent);
+                            Reference<XFootnote> xContent =
+                                SwXFootnotes::GetObject(*pDoc, pAttr->GetFtn());
+                            pPortion->SetFootnote(xContent);
+                        }
                     }
-                }
-                break;
+                    break;
+
                 case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_REFMARK:
                 {

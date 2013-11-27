@@ -425,7 +425,7 @@ EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const R
 
 static bool implIsInsideGroup( SdrObject* pObj )
 {
-    return pObj && pObj->getParentOfSdrObject() && pObj->getParentOfSdrObject()->getSdrObjectFromSdrObjList();
+    return pObj && pObj->GetParentSdrObject();
 }
 
 void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEffect )

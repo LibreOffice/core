@@ -52,6 +52,14 @@
 
 #include "ViewShell.hxx"
 #include "View.hxx"
+//IAccessibility2 Implementation 2009-----
+#include "DrawDocShell.hxx"
+#include <drawdoc.hxx>
+#include <algorithm>
+#include "sdpage.hxx"
+#include "slideshow.hxx"
+#include "anminfo.hxx"
+//-----IAccessibility2 Implementation 2009
 #include <memory>
 
 #include "accessibility.hrc"
@@ -70,6 +78,22 @@ class SfxViewFrame;
 namespace accessibility {
 
 
+//IAccessibility2 Implementation 2009-----
+struct XShapePosCompareHelper
+{
+    bool operator() ( const uno::Reference<drawing::XShape>& xshape1,
+        const uno::Reference<drawing::XShape>& xshape2 ) const
+    {
+        // modify the compare method to return the Z-Order, not layout order
+        SdrObject* pObj1 = GetSdrObjectFromXShape(xshape1);
+        SdrObject* pObj2 = GetSdrObjectFromXShape(xshape2);
+        if(pObj1 && pObj2)
+            return pObj1->GetNavigationPosition() < pObj2->GetNavigationPosition();
+        else
+            return 0;
+    }
+};
+//-----IAccessibility2 Implementation 2009
 //=====  internal  ============================================================
 
 AccessibleDrawDocumentView::AccessibleDrawDocumentView (
@@ -78,6 +102,7 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
+      mpSdViewSh( pViewShell ),
       mpChildrenManager (NULL)
 {
     OSL_TRACE ("AccessibleDrawDocumentView");
@@ -260,9 +285,44 @@ uno::Reference<XAccessible> SAL_CALL
             static_cast<uno::XWeak*>(this));
 }
 
+//IAccessibility2 Implementation 2009-----
+OUString SAL_CALL
+    AccessibleDrawDocumentView::getAccessibleName(void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString sName = String( SdResId(SID_SD_A11Y_D_PRESENTATION) );
+    ::sd::View* pSdView = static_cast< ::sd::View* >( maShapeTreeInfo.GetSdrView() );
+    if ( pSdView )
+    {
+        SdDrawDocument* pDoc = pSdView->GetDoc();
+        if ( pDoc )
+        {
+            rtl::OUString sFileName = pDoc->getDocAccTitle();
+            if ( !sFileName.getLength() )
+            {
+                ::sd::DrawDocShell* pDocSh = pSdView->GetDocSh();
+                if ( pDocSh )
+                {
+                    sFileName = pDocSh->GetTitle( SFX_TITLE_APINAME );
+                }
+            }
 
+            OUString sReadOnly;
+            if(pDoc->getDocReadOnly())
+            {
+                sReadOnly = String(SdResId(SID_SD_A11Y_D_PRESENTATION_READONLY));
+            }
 
+            if ( sFileName.getLength() )
+            {
+                sName = sFileName + sReadOnly + OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")) + sName;
+            }
+        }
+    }
 
+    return sName;
+}
+//-----IAccessibility2 Implementation 2009
 //=====  XEventListener  ======================================================
 
 void SAL_CALL
@@ -295,7 +355,9 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleDrawDocumentView::propertyChange");
-    if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("CurrentPage")))
+    // add page switch event for slide show mode
+    if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("CurrentPage")) ||
+        rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("PageChange")) )
     {
         OSL_TRACE ("    current page changed");
 
@@ -329,6 +391,9 @@ void SAL_CALL
         }
         else
             OSL_TRACE ("View invalid");
+//IAccessibility2 Implementation 2009-----
+        CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
+//-----IAccessibility2 Implementation 2009
     }
     else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
     {
@@ -338,6 +403,59 @@ void SAL_CALL
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
                 &maViewForwarder);
     }
+//IAccessibility2 Implementation 2009-----
+    else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("ActiveLayer")))
+    {
+        CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
+    }
+    else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("UpdateAcc")))
+    {
+        OSL_TRACE ("    acc on current page should be updated");
+
+        // The current page changed.  Update the children manager accordingly.
+        uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
+        if (xView.is() && mpChildrenManager!=NULL)
+        {
+            // Inform the children manager to forget all children and give
+            // him the new ones.
+            mpChildrenManager->ClearAccessibleShapeList ();
+            // update the slide show page's accessible info
+            //mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
+            //    xView->getCurrentPage(), uno::UNO_QUERY));
+        rtl::Reference< sd::SlideShow > xSlideshow( sd::SlideShow::GetSlideShow( mpSdViewSh->GetViewShellBase() ) );
+        if( xSlideshow.is() && xSlideshow->isRunning() && xSlideshow->isFullScreen() )
+        {
+            ::com::sun::star::uno::Reference< drawing::XDrawPage > xSlide;
+            // MT IA2: Not used...
+            // sal_Int32 currentPageIndex = xSlideshow->getCurrentPageIndex();
+            ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > mpSlideController = xSlideshow->getController();
+            if( mpSlideController.is() )
+            {
+                xSlide = mpSlideController->getCurrentSlide();
+                if (xSlide.is())
+                {
+                    mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
+                                xSlide, uno::UNO_QUERY));
+                }
+            }
+        }
+            // Create the page shape and initialize it.  The shape is
+            // acquired before initialization and released after
+            // transferring ownership to the children manager to prevent
+            // premature disposing of the shape.
+            AccessiblePageShape* pPage = CreateDrawPageShape ();
+            if (pPage != NULL)
+            {
+                pPage->acquire();
+                pPage->Init();
+                mpChildrenManager->AddAccessibleShape (
+                    std::auto_ptr<AccessibleShape>(pPage));
+                mpChildrenManager->Update (false);
+                pPage->release();
+            }
+    }
+    }
+//-----IAccessibility2 Implementation 2009
     else
     {
         OSL_TRACE ("  unhandled");
@@ -379,9 +497,135 @@ void SAL_CALL
     return aServiceNames;
 }
 
+//IAccessibility2 Implementation 2009-----
+//=====  XInterface  ==========================================================
 
+uno::Any SAL_CALL
+    AccessibleDrawDocumentView::queryInterface (const uno::Type & rType)
+    throw (uno::RuntimeException)
+{
+    uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
+    if ( ! aReturn.hasValue())
+        aReturn = ::cppu::queryInterface (rType,
+            static_cast<XAccessibleGroupPosition*>(this)
+            );
+    return aReturn;
+}
 
-
+void SAL_CALL
+    AccessibleDrawDocumentView::acquire (void)
+    throw ()
+{
+    AccessibleDocumentViewBase::acquire ();
+}
+void SAL_CALL
+    AccessibleDrawDocumentView::release (void)
+    throw ()
+{
+    AccessibleDocumentViewBase::release ();
+}
+//=====  XAccessibleGroupPosition  =========================================
+uno::Sequence< sal_Int32 > SAL_CALL
+    AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
+    throw (uno::RuntimeException)
+{
+    // we will return the:
+    // [0] group level(always be 0 now)
+    // [1] similar items counts in the group
+    // [2] the position of the object in the group
+    uno::Sequence< sal_Int32 > aRet( 3 );
+    //get the xShape of the current selected drawing object
+    uno::Reference<XAccessibleContext> xAccContent;
+    rAny >>= xAccContent;
+    if ( !xAccContent.is() )
+    {
+        return aRet;
+    }
+    AccessibleShape* pAcc = AccessibleShape::getImplementation( xAccContent );
+    if ( !pAcc )
+    {
+        return aRet;
+    }
+    uno::Reference< drawing::XShape > xCurShape = pAcc->GetXShape();
+    if ( !xCurShape.is() )
+    {
+        return aRet;
+    }
+    //find all the child in the page, insert them into a vector and sort
+    if ( mpChildrenManager == NULL )
+    {
+        return aRet;
+    }
+    std::vector< uno::Reference<drawing::XShape> > vXShapes;
+    sal_Int32 nCount = mpChildrenManager->GetChildCount();
+    //get pointer of SdView & SdrPageView for further use.
+    ::sd::View* pSdView = NULL;
+    if ( mpSdViewSh )
+    {
+        pSdView = mpSdViewSh->GetView();
+    }
+    for ( sal_Int32 i = 0; i < nCount; i++ )
+    {
+        uno::Reference< drawing::XShape > xShape = mpChildrenManager->GetChildShape(i);
+        if ( xShape.is() )
+        {
+            //if the object is visable in the page, we add it into the group list.
+            SdrObject* pObj = GetSdrObjectFromXShape(xShape);
+            if(pObj && pSdView && pSdView->IsObjMarkable(*pObj))
+            {
+                vXShapes.push_back( xShape );
+            }
+        }
+    }
+    std::sort( vXShapes.begin(), vXShapes.end(), XShapePosCompareHelper() );
+    //get the the index of the selected object in the group
+    std::vector< uno::Reference<drawing::XShape> >::iterator aIter;
+    //we start counting position from 1
+    sal_Int32 nPos = 1;
+    for ( aIter = vXShapes.begin(); aIter != vXShapes.end(); aIter++, nPos++ )
+    {
+        if ( (*aIter).get() == xCurShape.get() )
+        {
+            sal_Int32* pArray = aRet.getArray();
+            pArray[0] = 1; //it should be 1 based, not 0 based.
+            pArray[1] = vXShapes.size();
+            pArray[2] = nPos;
+            break;
+        }
+    }
+    return aRet;
+}
+::rtl::OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
+    throw (uno::RuntimeException)
+{
+    ::rtl::OUString aRet;
+    //get the xShape of the current selected drawing object
+    uno::Reference<XAccessibleContext> xAccContent;
+    rAny >>= xAccContent;
+    if ( !xAccContent.is() )
+    {
+        return aRet;
+    }
+    AccessibleShape* pAcc = AccessibleShape::getImplementation( xAccContent );
+    if ( !pAcc )
+    {
+        return aRet;
+    }
+    uno::Reference< drawing::XShape > xCurShape = pAcc->GetXShape();
+    if ( !xCurShape.is() )
+    {
+        return aRet;
+    }
+    SdrObject* pObj = GetSdrObjectFromXShape(xCurShape);
+    if (pObj)
+    {
+        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
+        if( pInfo && (pInfo->meClickAction == presentation::ClickAction_DOCUMENT) )
+            aRet = (::rtl::OUString)pInfo->GetBookmark();
+    }
+    return aRet;
+}
+//-----IAccessibility2 Implementation 2009
 /// Create a name for this view.
 ::rtl::OUString
     AccessibleDrawDocumentView::CreateAccessibleName (void)
@@ -637,13 +881,25 @@ void AccessibleDrawDocumentView::Activated (void)
 {
     if (mpChildrenManager != NULL)
     {
-        mpChildrenManager->UpdateSelection();
+//IAccessibility2 Implementation 2009-----
+        //mpChildrenManager->UpdateSelection();
+    sal_Bool bChange = sal_False;
+//-----IAccessibility2 Implementation 2009
         // When none of the children has the focus then claim it for the
         // view.
         if ( ! mpChildrenManager->HasFocus())
+    {
             SetState (AccessibleStateType::FOCUSED);
+        bChange = sal_True;
+    }
         else
             ResetState (AccessibleStateType::FOCUSED);
+//IAccessibility2 Implementation 2009-----
+    mpChildrenManager->UpdateSelection();
+    // if the child gets focus in UpdateSelection(), needs to reset the focus on document.
+    if (mpChildrenManager->HasFocus() && bChange)
+        ResetState (AccessibleStateType::FOCUSED);
+//-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -690,8 +946,158 @@ void SAL_CALL AccessibleDrawDocumentView::disposing (void)
     AccessibleDocumentViewBase::disposing ();
 }
 
+//IAccessibility2 Implementation 2009-----
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL AccessibleDrawDocumentView::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
+        throw ( ::com::sun::star::uno::RuntimeException )
+{
+    const sal_Int32 SPELLCHECKFLOWTO = 1;
+    const sal_Int32 FINDREPLACEFLOWTO = 2;
+    if ( nType == SPELLCHECKFLOWTO )
+    {
+        uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+        rAny >>= xShape;
+        if ( mpChildrenManager && xShape.is() )
+        {
+            uno::Reference < XAccessible > xAcc = mpChildrenManager->GetChild(xShape);
+            uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
+            if ( xAccSelection.is() )
+            {
+                if ( xAccSelection->getSelectedAccessibleChildCount() )
+                {
+                    uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 );
+                    if ( xSel.is() )
+                    {
+                        uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
+                        if ( xSelContext.is() )
+                        {
+                            //if in sw we find the selected paragraph here
+                            if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+                            {
+                                uno::Sequence<uno::Any> aRet( 1 );
+                                aRet[0] = uno::makeAny( xSel );
+                                return aRet;
+                            }
+                        }
+                    }
+                }
+            }
+            uno::Reference<XAccessible> xPara = GetSelAccContextInTable();
+            if ( xPara.is() )
+            {
+                uno::Sequence<uno::Any> aRet( 1 );
+                aRet[0] = uno::makeAny( xPara );
+                return aRet;
+            }
+        }
+        else
+        {
+            goto Rt;
+        }
+    }
+    else if ( nType == FINDREPLACEFLOWTO )
+    {
+        sal_Int32 nChildCount = getSelectedAccessibleChildCount();
+        if ( nChildCount )
+        {
+            uno::Reference < XAccessible > xSel = getSelectedAccessibleChild( 0 );
+            if ( xSel.is() )
+            {
+                uno::Reference < XAccessibleSelection > xAccChildSelection( xSel, uno::UNO_QUERY );
+                if ( xAccChildSelection.is() )
+                {
+                    if ( xAccChildSelection->getSelectedAccessibleChildCount() )
+                    {
+                        uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
+                        if ( xChildSel.is() )
+                        {
+                            uno::Reference < XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
+                            if ( xChildSelContext.is() &&
+                                xChildSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+                            {
+                                uno::Sequence<uno::Any> aRet( 1 );
+                                aRet[0] = uno::makeAny( xChildSel );
+                                return aRet;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            uno::Reference<XAccessible> xPara = GetSelAccContextInTable();
+            if ( xPara.is() )
+            {
+                uno::Sequence<uno::Any> aRet( 1 );
+                aRet[0] = uno::makeAny( xPara );
+                return aRet;
+            }
+        }
+    }
 
+Rt:
+    ::com::sun::star::uno::Sequence< uno::Any> aRet;
+    return aRet;
+}
+uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable()
+{
+    uno::Reference<XAccessible> xRet;
+    sal_Int32 nCount = mpChildrenManager ? mpChildrenManager->GetChildCount() : 0;
+    if ( nCount )
+    {
+        for ( sal_Int32 i = 0; i < nCount; i++ )
+        {
+            try
+            {
+                uno::Reference<XAccessible> xObj = mpChildrenManager->GetChild(i);
+                if ( xObj.is() )
+                {
+                    uno::Reference<XAccessibleContext> xObjContext( xObj, uno::UNO_QUERY );
+                    if ( xObjContext.is() && xObjContext->getAccessibleRole() == AccessibleRole::TABLE )
+                    {
+                        uno::Reference<XAccessibleSelection> xObjSelection( xObj, uno::UNO_QUERY );
+                        if ( xObjSelection.is() && xObjSelection->getSelectedAccessibleChildCount() )
+                        {
+                            uno::Reference<XAccessible> xCell = xObjSelection->getSelectedAccessibleChild(0);
+                            if ( xCell.is() )
+                            {
+                                uno::Reference<XAccessibleSelection> xCellSel( xCell, uno::UNO_QUERY );
+                                if ( xCellSel.is() && xCellSel->getSelectedAccessibleChildCount() )
+                                {
+                                    uno::Reference<XAccessible> xPara = xCellSel->getSelectedAccessibleChild( 0 );
+                                    if ( xPara.is() )
+                                    {
+                                        uno::Reference<XAccessibleContext> xParaContext( xPara, uno::UNO_QUERY );
+                                        if ( xParaContext.is() &&
+                                            xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+                                        {
+                                            xRet = xPara;
+                                            return xRet;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( lang::IndexOutOfBoundsException )
+            {
+                uno::Reference<XAccessible> xEmpty;
+                return xEmpty;
+            }
+            catch ( uno::RuntimeException )
+            {
+                uno::Reference<XAccessible> xEmpty;
+                return xEmpty;
+            }
+        }
+    }
 
+    return xRet;
+}
+//-----IAccessibility2 Implementation 2009
 
 void AccessibleDrawDocumentView::UpdateAccessibleName (void)
 {

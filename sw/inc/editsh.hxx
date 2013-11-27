@@ -54,7 +54,7 @@ class SfxPoolItem;
 class SfxItemSet;
 class SvxAutoCorrect;
 
-class SwField;          // fuer Felder
+class SwField;
 class SwFieldType;
 class SwDDEFieldType;
 class SwNewDBMgr;
@@ -256,8 +256,8 @@ public:
     sal_Bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     // <--
-    void SetAttr( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
-    void SetAttr( const SfxItemSet&, sal_uInt16 nFlags = 0 );
+    void SetAttrItem( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
+    void SetAttrSet( const SfxItemSet&, sal_uInt16 nFlags = 0 );
 
     // Setze das Attribut als neues default Attribut im Dokument.
     void SetDefault( const SfxPoolItem& );
@@ -332,7 +332,6 @@ public:
 
     // Felder
     void Insert2(SwField&, const bool bForceExpandHints = false);
-    SwField* GetCurFld() const;
 
     void UpdateFlds( SwField & );       // ein einzelnes Feld
 

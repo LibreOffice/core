@@ -180,6 +180,10 @@ sal_Bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
                         bUsed = sal_False;                  // nichts geloescht
+//IAccessibility2 Implementation 2009-----
+                    if(bOldMarked)
+                        GetFocus();
+//-----IAccessibility2 Implementation 2009
                 }
             if (!bLeaveDraw)
                 UpdateStatusPosSize();      // #108137# for moving/resizing etc. by keyboard

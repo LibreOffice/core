@@ -89,7 +89,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
-
+/// Return this object's role.
+    virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException);
+//-----IAccessibility2 Implementation 2009
 protected:
     /// Create a name string that contains the accessible name.
     virtual ::rtl::OUString

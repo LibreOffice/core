@@ -110,6 +110,14 @@ published constants AccessibleRelationType
         @since OOo 3.0
     */
     const short NODE_CHILD_OF = 9;
+
+    /** Described-by relation type.
+
+        <p>Indicates an object is described by the target object.</p>
+
+        @since OOo 3.5
+    */
+    const short DESCRIBED_BY = 10;
 };
 
 }; }; }; };

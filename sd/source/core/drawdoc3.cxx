@@ -1842,8 +1842,8 @@ void SdDrawDocument::SetMasterPage(
         //{
         //  // Aus dem Source-Dokument austragen
         //  SdrPage* pTest = NULL;
-        //  pTest = pSourceDoc->RemoveMasterPage(pNotesMaster->GetPageNum());
-        //  pTest = pSourceDoc->RemoveMasterPage(pMaster->GetPageNum());
+        //  pTest = pSourceDoc->RemoveMasterPage(pNotesMaster->GetPageNumber());
+        //  pTest = pSourceDoc->RemoveMasterPage(pMaster->GetPageNumber());
         //}
 
         /*********************************************************************

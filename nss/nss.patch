@@ -1,12 +1,12 @@
---- misc/nss-3.12.6/mozilla/nsprpub/config/rules.mk	2009-12-09 22:24:37.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/config/rules.mk	2010-06-11 16:35:54.946870871 +0200
-@@ -345,7 +345,12 @@
+--- misc/nss-3.14.4/mozilla/nsprpub/config/rules.mk	2009-12-09 22:24:37.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/nsprpub/config/rules.mk	2010-06-11 16:35:54.946870871 +0200
+@@ -377,7 +377,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
  else
 -	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
-+        #We remove stl from the paths to avoid that rc.exe finds the stlport of
-+        #OOo. stlport includes the system stl which will fail. By removing it,
++        #We remove stl from the paths to avoid that rc.exe finds the stl wrapper
++        #of AOO. stlport includes the system stl which will fail. By removing it,
 +        #rc will use the stl from the system if the path is in the INCLUDE
 +        #variable.
 +	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
@@ -14,9 +14,9 @@
  endif # GCC
  	@echo $(RES) finished
  endif
---- misc/nss-3.12.6/mozilla/nsprpub/configure	2010-02-08 19:41:35.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/configure	2010-06-11 16:35:54.960188991 +0200
-@@ -3900,7 +3900,7 @@
+--- misc/nss-3.14.4/mozilla/nsprpub/configure	2010-02-08 19:41:35.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/nsprpub/configure	2010-06-11 16:35:54.960188991 +0200
+@@ -4443,7 +4443,7 @@
      PR_MD_CSRCS=linux.c
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
@@ -25,26 +25,27 @@
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
---- misc/nss-3.12.6/mozilla/security/coreconf/Darwin.mk	2010-02-04 19:59:10.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
-@@ -39,8 +39,12 @@
+--- misc/nss-3.14.4/mozilla/security/coreconf/Darwin.mk	2010-02-04 19:59:10.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
+@@ -5,10 +5,12 @@
  
- DEFAULT_COMPILER = cc
+ include $(CORE_DEPTH)/coreconf/UNIX.mk
  
--CC		= cc
--CCC		= c++
+-DEFAULT_COMPILER = gcc
++DEFAULT_COMPILER = cc
++
 +# CC is taken from environment automatically.
 +#CC		= cc
-+# Use CCC from environment.
-+#CCC		= c++
 +CCC		= $(CXX)
-+
+ 
+-CC		= gcc
+-CCC		= g++
  RANLIB		= ranlib
  
  ifndef CPU_ARCH
---- misc/nss-3.12.6/mozilla/security/coreconf/Linux.mk	2010-01-15 23:19:00.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/Linux.mk	2010-06-11 16:35:54.981151732 +0200
-@@ -46,8 +46,11 @@
+--- misc/nss-3.14.4/mozilla/security/coreconf/Linux.mk	2010-01-15 23:19:00.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/Linux.mk	2010-06-11 16:35:54.981151732 +0200
+@@ -16,8 +16,11 @@
  	IMPL_STRATEGY = _PTH
  endif
  
@@ -58,7 +59,7 @@
  RANLIB			= ranlib
  
  DEFAULT_COMPILER = gcc
-@@ -147,7 +150,7 @@
+@@ -143,7 +146,7 @@
  # incorrectly reports undefined references in the libraries we link with, so
  # we don't use -z defs there.
  ZDEFS_FLAG		= -Wl,-z,defs
@@ -66,10 +67,10 @@
 +DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-rpath,$$ORIGIN'
  LDFLAGS			+= $(ARCHFLAG)
  
- # INCLUDES += -I/usr/include -Y/usr/include/linux
-@@ -158,8 +161,13 @@
- #
- CPU_TAG = _$(CPU_ARCH)
+ # On Maemo, we need to use the -rpath-link flag for even the standard system
+@@ -174,8 +177,13 @@
+ endif
+ endif
  
 +ifeq ($(SYSTEM_ZLIB),YES)  
 +# Currently (3.12.4) only the tools modutil and signtool are linked with libz
@@ -81,9 +82,9 @@
  
  # The -rpath '$$ORIGIN' linker option instructs this library to search for its
  # dependencies in the same directory where it resides.
---- misc/nss-3.12.6/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/SunOS5.mk	2010-06-11 16:35:54.985571182 +0200
-@@ -89,8 +89,12 @@
+--- misc/nss-3.14.4/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/SunOS5.mk	2010-06-11 16:35:54.985571182 +0200
+@@ -48,8 +48,12 @@
  	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
  	endif
  else
@@ -98,9 +99,9 @@
  	ASFLAGS   += -Wa,-P
  	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
  	ifndef BUILD_OPT
---- misc/nss-3.12.6/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/arch.mk	2010-06-11 16:35:54.990913282 +0200
-@@ -324,7 +324,12 @@
+--- misc/nss-3.14.4/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/arch.mk	2010-06-11 16:35:54.990913282 +0200
+@@ -302,7 +302,12 @@
  # IMPL_STRATEGY may be defined too.
  #
  
@@ -114,9 +115,9 @@
  
  ifeq (,$(filter-out WIN%,$(OS_TARGET)))
  ifndef BUILD_OPT
---- misc/nss-3.12.6/mozilla/security/coreconf/rules.mk	2009-12-08 02:33:36.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/rules.mk	2010-06-11 16:35:54.996448704 +0200
-@@ -355,7 +355,12 @@
+--- misc/nss-3.14.4/mozilla/security/coreconf/rules.mk	2009-12-08 02:33:36.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/rules.mk	2010-06-11 16:35:54.996448704 +0200
+@@ -318,7 +318,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
  else
@@ -130,27 +131,22 @@
  endif
  	@echo $(RES) finished
  endif
---- misc/nss-3.12.6/mozilla/security/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
-@@ -41,27 +41,28 @@
+--- misc/nss-3.14.4/mozilla/security/nss/cmd/platlibs.mk	2010-02-04 19:59:10.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/nss/cmd/platlibs.mk	2010-06-11 16:35:55.004869805 +0200
+@@ -10,17 +10,18 @@
+ 
  ifeq ($(OS_ARCH), SunOS) 
- ifeq ($(BUILD_SUN_PKG), 1)
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1/64:/usr/lib/mps/64'
-+#In OOo we would probable put the executables next to libs
++#In AOO we would probable put the executables next to libs
 +EXTRA_SHARED_LIBS += -R '$$ORIGIN'
  else
 -EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1:/usr/lib/mps'
 +EXTRA_SHARED_LIBS += -R '$$ORIGIN'
  endif
- else
--EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -R '$$ORIGIN'
- endif
  endif
  
  ifeq ($(OS_ARCH), Linux)
- ifeq ($(BUILD_SUN_PKG), 1)
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
 +EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
@@ -158,19 +154,11 @@
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
 +EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
  endif
- else
- ifeq ($(USE_64), 1)
--EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
- else
--EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
  endif
- endif
- endif
---- misc/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2009-08-07 21:06:37.000000000 +0200
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2010-06-11 16:35:55.009851148 +0200
-@@ -78,10 +78,15 @@
+ 
+--- misc/nss-3.14.4/mozilla/security/nss/cmd/shlibsign/Makefile	2009-08-07 21:06:37.000000000 +0200
++++ misc/build/nss-3.14.4/mozilla/security/nss/cmd/shlibsign/Makefile	2010-06-11 16:35:55.009851148 +0200
+@@ -46,10 +46,15 @@
  
  # sign any and all shared libraries that contain the word freebl
  

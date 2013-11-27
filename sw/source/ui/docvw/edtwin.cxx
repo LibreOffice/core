@@ -82,6 +82,7 @@
 #include <dselect.hxx>
 #include <textsh.hxx>
 #include <shdwcrsr.hxx>
+#include <txatbase.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -924,7 +925,7 @@ void SwEditWin::FlushInBuffer()
                 if(bLang)
                 {
                     SvxLanguageItem aLangItem( eBufferLanguage, nWhich );
-                    rSh.SetAttr( aLangItem );
+                    rSh.SetAttrItem( aLangItem );
                 }
             }
         }
@@ -1372,8 +1373,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // pressing this inside a note will switch to next/previous note
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {
-        bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN ? true : false;
-        SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
+        const bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN ? true : false;
+        const SwFieldType* pFldType = rSh.GetFldType( 0, RES_POSTITFLD );
         rSh.MoveFldType( pFldType, bNext );
         return;
     }
@@ -1491,9 +1492,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
 
 
-    SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
-                                           : KS_CheckKey,
-                eNextKeyState = KS_Ende;
+    SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys : KS_CheckKey;
+    SW_KeyState eNextKeyState = KS_Ende;
     sal_uInt8 nDir = 0;
 
     if (nKS_NUMDOWN_Count > 0)
@@ -1778,7 +1778,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_RETURN:                // Return
-                    if( !rSh.HasReadonlySel() )
+                    if ( !rSh.HasReadonlySel()
+                         && !rSh.CrsrInsideInputFld() )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & nsSelectionType::SEL_OLE)
@@ -1814,8 +1815,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_RETURN | KEY_MOD2:     // ALT-Return
-                    if( !rSh.HasReadonlySel() && !rSh.IsSttPara() && rSh.GetCurNumRule() )
+                    if ( !rSh.HasReadonlySel()
+                         && !rSh.IsSttPara()
+                         && rSh.GetCurNumRule()
+                         && !rSh.CrsrInsideInputFld() )
+                    {
                         eKeyState = KS_NoNum;
+                    }
                     else if( rSh.CanSpecialInsert() )
                         eKeyState = KS_SpecialInsert;
                     break;
@@ -1926,6 +1932,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         eKeyState=KS_GotoNextFieldMark;
                     }
+                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                    {
+                        GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_NEXT_INPUTFLD );
+                        eKeyState = KS_Ende;
+                    }
                     else
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
@@ -1976,8 +1987,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
                     sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
 #endif
-                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT) {
+                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
+                    {
                         eKeyState=KS_GotoPrevFieldMark;
+                    }
+                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                    {
+                        GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PREV_INPUTFLD );
+                        eKeyState = KS_Ende;
                     }
                     else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                          !rSh.HasReadonlySel() )
@@ -2094,9 +2111,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = rKeyCode.GetModifier() & KEY_SHIFT ?
                                                 KS_PrevObject : KS_NextObject;
                         }
+                        else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                        {
+                            GetView().GetViewFrame()->GetDispatcher()->Execute(
+                                KEY_SHIFT != rKeyCode.GetModifier() ? FN_GOTO_NEXT_INPUTFLD : FN_GOTO_PREV_INPUTFLD );
+                        }
                         else
-                            rSh.SelectNextPrevHyperlink(
-                                            KEY_SHIFT != rKeyCode.GetModifier() );
+                        {
+                            rSh.SelectNextPrevHyperlink( KEY_SHIFT != rKeyCode.GetModifier() );
+                        }
                     break;
                     case KEY_RETURN:
                     {
@@ -2739,12 +2762,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    //Man kann sich in einem Selektionszustand befinden, wenn zuletzt
-    //mit dem Keyboard selektiert wurde, aber noch kein CURSOR_KEY
-    //anschliessend bewegt worden ist. In diesem Fall muss die vorher-
-    //gehende Selektion zuerst beendet werden.
-    //MA 07. Oct. 95: Und zwar nicht nur bei Linker Maustaste sondern immer.
-    //siehe auch Bug: 19263
     if ( rSh.IsInSelect() )
         rSh.EndSelect();
 
@@ -4165,7 +4182,19 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                             if( SwContentAtPos::SW_FIELD == aCntntAtPos.eCntntAtPos )
                             {
-                                rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                if ( aCntntAtPos.pFndTxtAttr != NULL
+                                     && aCntntAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD )
+                                {
+                                    // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
+                                    // and CH_TXT_ATR_INPUTFIELDEND
+                                    rSh.SttSelect();
+                                    rSh.SelectTxt( *(aCntntAtPos.pFndTxtAttr->GetStart()) + 1,
+                                                   *(aCntntAtPos.pFndTxtAttr->End()) - 1 );
+                                }
+                                else
+                                {
+                                    rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                }
                             }
                             else if ( SwContentAtPos::SW_SMARTTAG == aCntntAtPos.eCntntAtPos )
                             {
@@ -4320,10 +4349,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         Color aColor( COL_TRANSPARENT  );
                         if( !SwEditWin::bTransparentBackColor )
                             aColor = SwEditWin::aTextBackColor;
-                        rSh.SetAttr( SvxBrushItem( aColor, nId ) );
+                        rSh.SetAttrItem( SvxBrushItem( aColor, nId ) );
                     }
                     else
-                        rSh.SetAttr( SvxColorItem(SwEditWin::aTextColor, nId) );
+                        rSh.SetAttrItem( SvxColorItem(SwEditWin::aTextColor, nId) );
                     rSh.UnSetVisCrsr();
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);
@@ -4359,7 +4388,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
-                        rSh.SetAttr( SwFmtCharFmt(pApplyTempl->aColl.pCharFmt) );
+                        rSh.SetAttrItem( SwFmtCharFmt(pApplyTempl->aColl.pCharFmt) );
                         rSh.UnSetVisCrsr();
                         rSh.EnterStdMode();
                         rSh.SetVisCrsr(aDocPt);
@@ -5709,3 +5738,17 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         return Selection( nPos - nStartPos, nPos - nStartPos );
     }
 }
+//IAccessibility2 Implementation 2009-----
+// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
+// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
+void SwEditWin::SwitchView()
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if (!Application::IsAccessibilityEnabled())
+    {
+        return ;
+    }
+    rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
+}
+//-----IAccessibility2 Implementation 2009

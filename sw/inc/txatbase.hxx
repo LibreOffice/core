@@ -60,6 +60,7 @@ private:
     bool m_bDontExpandStart     : 1;    // don't expand start at paragraph start (ruby)
     bool m_bNesting             : 1;    // SwTxtAttrNesting
     bool m_bHasDummyChar        : 1;    // without end + meta
+    bool m_bHasContent          : 1;    // text attribute with content
 
 protected:
     SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart );
@@ -72,6 +73,7 @@ protected:
     void SetDontExpandStartAttr(bool bFlag) { m_bDontExpandStart = bFlag; }
     void SetNesting(const bool bFlag)       { m_bNesting = bFlag; }
     void SetHasDummyChar(const bool bFlag)  { m_bHasDummyChar = bFlag; }
+    void SetHasContent( const bool bFlag )  { m_bHasContent = bFlag; }
 
 public:
 
@@ -83,10 +85,10 @@ public:
             const xub_StrLen* GetStart() const  { return & m_nStart; }
 
     /// end position
-    virtual      xub_StrLen* GetEnd();
-    inline const xub_StrLen* GetEnd() const;
-    /// end (if available), else start
-    inline const xub_StrLen* GetAnyEnd() const;
+            virtual xub_StrLen* GetEnd(); // also used to change the end position
+            inline const xub_StrLen* End() const;
+            /// end (if available), else start
+            inline const xub_StrLen* GetAnyEnd() const;
 
     inline void SetDontExpand( bool bDontExpand );
     bool DontExpand() const                 { return m_bDontExpand; }
@@ -99,6 +101,7 @@ public:
     bool IsDontExpandStartAttr() const      { return m_bDontExpandStart; }
     bool IsNesting() const                  { return m_bNesting; }
     bool HasDummyChar() const               { return m_bHasDummyChar; }
+    bool HasContent() const                 { return m_bHasContent; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();
@@ -127,21 +130,20 @@ protected:
 public:
     SwTxtAttrEnd( SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();
 };
 
 
 // --------------- Inline Implementierungen ------------------------
 
-inline const xub_StrLen* SwTxtAttr::GetEnd() const
+inline const xub_StrLen* SwTxtAttr::End() const
 {
     return const_cast<SwTxtAttr * >(this)->GetEnd();
 }
 
 inline const xub_StrLen* SwTxtAttr::GetAnyEnd() const
 {
-    const xub_StrLen* pEnd = GetEnd();
+    const xub_StrLen* pEnd = End();
     return pEnd ? pEnd : GetStart();
 }
 
@@ -183,8 +185,10 @@ inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
 
 inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
 {
-    ASSERT( m_pAttr && m_pAttr->Which() == RES_TXTATR_FIELD,
-        "Wrong attribute" );
+    ASSERT( m_pAttr
+            && ( m_pAttr->Which() == RES_TXTATR_FIELD
+                 || m_pAttr->Which() == RES_TXTATR_INPUTFIELD ),
+            "Wrong attribute" );
     return (const SwFmtFld&)(*m_pAttr);
 }
 

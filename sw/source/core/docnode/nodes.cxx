@@ -180,10 +180,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             if ( rNd.IsTxtNode() )
             {
                 SwTxtNode* pTxtNode = rNd.GetTxtNode();
-                // --> OD 2008-03-13 #refactorlists#
-//                pTxtNode->UnregisterNumber();
                 pTxtNode->RemoveFromList();
-                // <--
 
                 //if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )//#outline level,zhaojianwei
                 if ( pTxtNode->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
@@ -199,10 +196,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             if( rNd.IsTxtNode() )
             {
                 SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
-                // --> OD 2008-03-13 #refactorlists#
-//                rTxtNd.SyncNumberAndNumRule();
                 rTxtNd.AddToList();
-                // <--
 
                 if( bInsOutlineIdx &&
                     //NO_NUMBERING != rTxtNd.GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
@@ -273,10 +267,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     // Numerierungen auch aktualisiert werden.
                     pTxtNd->InvalidateNumRule();
 
-                // --> OD 2008-03-13 #refactorlists#
-//                pTxtNd->UnregisterNumber();
                 pTxtNd->RemoveFromList();
-                // <--
             }
 
             RemoveNode( rDelPos.GetIndex(), 1, sal_False );     // Indizies verschieben !!
@@ -298,10 +289,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                         rNds.pOutlineNds->Insert( pTxtNd );
                     }
 
-                    // --> OD 2008-03-13 #refactorlists#
-//                    pTxtNd->SyncNumberAndNumRule();
                     pTxtNd->AddToList();
-                    // <--
 
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
@@ -316,9 +304,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             switch ( pAttr->Which() )
                             {
                             case RES_TXTATR_FIELD:
+                            case RES_TXTATR_INPUTFIELD:
                                 {
-                                    SwTxtFld* pTxtFld =
-                                        static_cast<SwTxtFld*>(pAttr);
+                                    SwTxtFld* pTxtFld = static_cast<SwTxtFld*>(pAttr);
                                     rNds.GetDoc()->InsDelFldInFldLst( !bToUndo, *pTxtFld );
 
                                     const SwFieldType* pTyp = pTxtFld->GetFmtFld().GetField()->GetTyp();
@@ -909,6 +897,17 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_TEXTNODE:
+            //IAccessibility2 Implementation 2009-----
+            //Solution:Add special function to text node.
+            {
+                if( bNewFrms && pAktNode->GetCntntNode() )
+                    ((SwCntntNode*)pAktNode)->DelFrms( sal_False );
+                pAktNode->pStartOfSection = aSttNdStack[ nLevel ];
+                nInsPos++;
+                aRg.aEnd--;
+            }
+            break;
+            //-----IAccessibility2 Implementation 2009
         case ND_GRFNODE:
         case ND_OLENODE:
             {

@@ -79,7 +79,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
                                rFont.GetStyleName(), rFont.GetPitch(),
                                eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
-            rSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+            rSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
             rSh.ResetSelect(0, sal_False);
             rSh.Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
         }

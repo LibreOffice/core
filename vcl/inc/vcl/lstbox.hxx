@@ -67,7 +67,10 @@ private:
     DECL_DLLPRIVATE_LINK(  ImplPopupModeEndHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplSelectionChangedHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplUserDrawHdl, UserDrawEvent* );
-
+//IAccessibility2 Implementation 2009-----
+                    DECL_DLLPRIVATE_LINK( ImplFocusHdl, void* );
+                    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
+//-----IAccessibility2 Implementation 2009
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
@@ -217,7 +220,9 @@ public:
     XubString       GetMRUEntries( xub_Unicode cSep = ';' ) const;
     void            SetMaxMRUCount( sal_uInt16 n );
     sal_uInt16          GetMaxMRUCount() const;
-
+//IAccessibility2 Implementation 2009-----
+    sal_uInt16          GetMRUCount() const;
+//-----IAccessibility2 Implementation 2009
     sal_uInt16          GetDisplayLineCount() const;
 
     void            EnableMirroring();

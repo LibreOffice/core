@@ -127,12 +127,17 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
             break;
     }
 
-    const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
-    for( i = 0; i < rFilterList.Count(); ++i)
+//IAccessibility2 Impplementaton 2009-----
+    if( pFamilyItem )
     {
-        aFilterLB.InsertEntry(rFilterList.GetObject(i)->aName);
-        sal_uInt16* pFilter = new sal_uInt16(rFilterList.GetObject(i)->nFlags);
-        aFilterLB.SetEntryData(i, pFilter);
+        const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
+        for( i = 0; i < rFilterList.Count(); ++i)
+        {
+            aFilterLB.InsertEntry(rFilterList.GetObject(i)->aName);
+            sal_uInt16* pFilter = new sal_uInt16(rFilterList.GetObject(i)->nFlags);
+            aFilterLB.SetEntryData(i, pFilter);
+        }
+//-----IAccessibility2 Impplementaton 2009
     }
     aFilterLB.SelectEntryPos(1);
 

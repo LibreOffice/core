@@ -481,6 +481,9 @@ private:
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
+    //IAccessibility2 Implementation 2009-----
+    sal_Bool    bIsPrepareSelAll        :1;
+    //-----IAccessibility2 Implementation 2009
 
 #ifdef DBG_UTIL
     bool mbXMLExport : 1;                // sal_True: during XML export
@@ -701,6 +704,11 @@ private:
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, sal_Bool, sal_Bool );
 
+//IAccessibility2 Implementation 2009-----
+private:
+    sal_Bool bReadOnly;
+    String msDocAccTitle;
+
      void InitTOXTypes();
      void   Paste( const SwDoc& );
      bool DeleteAndJoinImpl(SwPaM&, const bool);
@@ -710,6 +718,12 @@ private:
      bool ReplaceRangeImpl(SwPaM&, String const&, const bool);
 
 public:
+    virtual void setDocReadOnly( sal_Bool b) { bReadOnly = b; }
+    virtual sal_Bool getDocReadOnly() const { return bReadOnly; }
+    virtual void setDocAccTitle( const String& rTitle ) { msDocAccTitle = rTitle; }
+    virtual const String getDocAccTitle() const { return msDocAccTitle; }
+    //-----IAccessibility2 Implementation 2009
+
     enum DocumentType {
         DOCTYPE_NATIVE,
         DOCTYPE_MSWORD              //This doc medul is come from Ms Word
@@ -853,13 +867,13 @@ public:
        @param rPos position to search at
        @return pointer to field at the given position or NULL in case no field is found
     */
-    static SwField* GetField(const SwPosition& rPos);
+    static SwField* GetFieldAtPos(const SwPosition& rPos);
 
     /** Returns the field at a certain position.
        @param rPos position to search at
        @return pointer to field at the given position or NULL in case no field is found
     */
-    static SwTxtFld* GetTxtFld(const SwPosition& rPos);
+    static SwTxtFld* GetTxtFldAtPos(const SwPosition& rPos);
 
     /** IDocumentContentOperations
     */
@@ -867,12 +881,10 @@ public:
     virtual void DeleteSection(SwNode* pNode);
     virtual bool DeleteRange(SwPaM&);
     virtual bool DelFullPara(SwPaM&);
-    // --> OD 2009-08-20 #i100466#
     // Add optional parameter <bForceJoinNext>, default value <false>
     // Needed for hiding of deletion redlines
     virtual bool DeleteAndJoin( SwPaM&,
                                 const bool bForceJoinNext = false );
-    // <--
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
     virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
@@ -886,11 +898,13 @@ public:
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
-    //Modify here for #119405, by chengjh, 2012-08-16
-    //Add a para for the char attribute exp...
-    virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const SetAttrMode nFlags,bool bExpandCharToPara=false);
-    //End
+
+    virtual bool InsertPoolItem(
+        const SwPaM &rRg,
+        const SfxPoolItem&,
+        const SetAttrMode nFlags,
+        const bool bExpandCharToPara=false);
+
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
                                 const SetAttrMode nFlags);
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
@@ -1049,6 +1063,14 @@ public:
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
+    //-----IAccessibility2 Implementation 2009
+    void SetSelAll( sal_Bool bSel )
+    {
+        bIsPrepareSelAll = bSel;
+    }
+    sal_Bool IsPrepareSelAll()  { return bIsPrepareSelAll; }
+    void SetPrepareSelAll() { bIsPrepareSelAll = sal_True; }
+    //IAccessibility2 Implementation 2009-----
 
     void SetContainsAtPageObjWithContentAnchor( const bool bFlag )
     {

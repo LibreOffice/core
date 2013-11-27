@@ -50,7 +50,15 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
+//IAccessibility2 Implementation 2009-----
+//add TEXT_SELECTION_CHANGED event
+#ifndef _TEXTDATA_HXX
+#include <svtools/textdata.hxx>
+#endif
 
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+//-----IAccessibility2 Implementation 2009
 //------------------------------------------------------------------------
 //
 // Project-local header
@@ -68,6 +76,10 @@
 #include "editeng/AccessibleEditableTextPara.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
+//IAccessibility2 Implementation 2009-----
+#include "../table/cell.hxx"
+#include "../table/accessiblecell.hxx"
+//-----IAccessibility2 Implementation 2009
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -77,6 +89,22 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
+//IAccessibility2 Implementation 2009-----
+    Window* GetCurrentEditorWnd()
+    {
+        Window* pWin = NULL;
+        SfxViewFrame* pFrame = SfxViewFrame::Current();
+        if (pFrame)
+        {
+            const SfxViewShell * pViewShell = pFrame->GetViewShell();
+            if(pViewShell)
+            {
+                pWin = pViewShell->GetWindow();
+            }
+        }
+        return pWin;
+    }
+//-----IAccessibility2 Implementation 2009
 
 //------------------------------------------------------------------------
 //
@@ -456,12 +484,38 @@ namespace accessibility
         {
             if( bHaveFocus )
             {
-                GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                //IAccessibility2 Implementation 2009-----
+                if( mxFrontEnd.is() )
+                {
+                    AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+                    if ( !pAccessibleCell )
+                        GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                    else    // the focus event on cell should be fired on table directly
+                    {
+                        AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
+                        if (pAccTable)
+                            pAccTable->SetStateDirectly(AccessibleStateType::FOCUSED);
+                    }
+                }
+                //-----IAccessibility2 Implementation 2009
                 DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
             }
             else
             {
-                LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                // The focus state should be reset directly on table.
+                //LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                if( mxFrontEnd.is() )
+                {
+                    AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+                    if ( !pAccessibleCell )
+                            LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                    else
+                    {
+                            AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
+                            if (pAccTable)
+                                pAccTable->ResetStateDirectly(AccessibleStateType::FOCUSED);
+                    }
+                }
                 DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
             }
         }
@@ -509,6 +563,18 @@ namespace accessibility
             if( !pViewForwarder )
                 return sal_False;
 
+            //IAccessibility2 Implementation 2009-----
+            if( mxFrontEnd.is() )
+            {
+                AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
+                if ( pAccessibleCell )
+                {
+                    sdr::table::CellRef xCell = pAccessibleCell->getCellRef();
+                    if ( xCell.is() )
+                        return xCell->IsTextEditActive();
+                }
+            }
+            //-----IAccessibility2 Implementation 2009
             if( pViewForwarder->IsValid() )
                 return sal_True;
             else
@@ -817,9 +883,12 @@ namespace accessibility
 
                 // convert to screen coordinates
                 aParaBB = ::accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
-
+        //IAccessibility2 Implementation 2009-----
+                /*
                 if( aParaBB.IsOver( aViewArea ) )
                 {
+                */
+                //-----IAccessibility2 Implementation 2009
                     // at least partially visible
                     if( bFirstChild )
                     {
@@ -840,6 +909,8 @@ namespace accessibility
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
                                           AccessibleEventId::CHILD );
                     }
+            //IAccessibility2 Implementation 2009-----
+                /*
                 }
                 else
                 {
@@ -853,7 +924,8 @@ namespace accessibility
                         // clear reference
                         maParaManager.Release( nCurrPara );
                     }
-                }
+                }*/
+                //-----IAccessibility2 Implementation 2009
             }
         }
         catch( const uno::Exception& )
@@ -1326,6 +1398,12 @@ namespace accessibility
                         {
                             case HINT_BEGEDIT:
                             {
+                //IAccessibility2 Implementation 2009-----
+                                if(!IsActive())
+                                {
+                                    break;
+                                }
+//-----IAccessibility2 Implementation 2009
                                 // change children state
                                 maParaManager.SetActive();
 

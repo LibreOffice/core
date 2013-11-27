@@ -232,6 +232,9 @@ OutlineViewShell::OutlineViewShell (
     Construct(GetDocSh());
 
     SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OutlineText));
+//IAccessibility2 Implementation 2009-----
+    m_StrOldPageName.EmptyString();
+//-----IAccessibility2 Implementation 2009
 }
 
 /*************************************************************************
@@ -1467,6 +1470,14 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         aLayoutStr = pPage->GetLayoutName();
         aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+        //IAccessibility2 Implementation 2009-----
+            //Now, CurrentPage property change is already sent for DrawView and OutlineView, so it is not necessary to send again here
+            if(m_StrOldPageName!=aPageStr)
+            {
+                GetViewShellBase().GetDrawController().fireSwitchCurrentPage(nPos);
+                m_StrOldPageName = aPageStr;
+            }
+        //-----IAccessibility2 Implementation 2009
     }
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );

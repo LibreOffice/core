@@ -1902,6 +1902,35 @@ ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
     return mpShapeChilds;
 }
 
+//IAccessibility2 Implementation 2009-----
+::rtl::OUString ScAccessibleDocumentPagePreview::getAccessibleName(void)
+throw (::com::sun::star::uno::RuntimeException)
+{
+    rtl::OUString sName = String(ScResId(STR_ACC_DOC_SPREADSHEET));
+    ScDocument* pScDoc = mpViewShell->GetDocument();
+    if ( pScDoc )
+    {
+        rtl::OUString sFileName = pScDoc->getDocAccTitle();
+        if ( !sFileName.getLength() )
+        {
+            SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+            if ( pObjSh )
+            {
+                sFileName = pObjSh->GetTitle( SFX_TITLE_APINAME );
+            }
+        }
+        if ( sFileName.getLength() )
+        {
+            sName = sFileName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")) + sName;
+            sName += String(ScResId(STR_ACC_DOC_PREVIEW_SUFFIX));
+
+        }
+    }
+
+    return sName;
+}
+//-----IAccessibility2 Implementation 2009=======
+
 //UNUSED2009-05 uno::Reference < XAccessible > ScAccessibleDocumentPagePreview::GetCurrentAccessibleTable()
 //UNUSED2009-05 {
 //UNUSED2009-05     if (!mpTable)

@@ -47,26 +47,19 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
+#include <txatbase.hxx>
 
 #include "tabfrm.hxx"
 #include "flyfrms.hxx"
 #include "crstate.hxx"
 #include "sectfrm.hxx"
 
-// OD 29.10.2003 #113049#
 #include <tocntntanchoredobjectposition.hxx>
-// OD 2004-05-24 #i28701#
 #include <dcontact.hxx>
 #include <sortedobjs.hxx>
-// --> OD 2005-09-29 #125370#,#125957#
 #include <layouter.hxx>
-// <--
-// --> OD 2005-11-17 #i56300#
 #include <objectformattertxtfrm.hxx>
-// <--
-// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
-// <--
 
 using namespace ::com::sun::star;
 
@@ -1475,6 +1468,15 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             if( pCnt->GetCrsrOfst( pPos, aPt, &eTmpState )
                 && pPos->nNode == *pCnt->GetNode() )
             {
+                if ( pCnt->GetNode()->GetTxtNode() != NULL )
+                {
+                    const SwTxtAttr* pTxtInputFld =
+                        pCnt->GetNode()->GetTxtNode()->GetTxtAttrAt( pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
+                    if ( pTxtInputFld != NULL )
+                    {
+                        pPos->nContent = *(pTxtInputFld->GetStart());
+                    }
+                }
                 ResetLastCharRectHeight();
                 if( text::RelOrientation::CHAR == pFmt->GetVertOrient().GetRelationOrient() )
                     nY = LONG_MAX;
@@ -1493,7 +1495,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             pPos->nContent.Assign( pCnt->GetNode(), 0 );
         }
 
-        // --> OD 2006-02-27 #125892#
         // handle change of anchor node:
         // if count of the anchor frame also change, the fly frames have to be
         // re-created. Thus, delete all fly frames except the <this> before the
@@ -1502,9 +1503,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFmt, aAnch, this );
             pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
         }
-        // <--
     }
-    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
     else if ( pTmpPage && pTmpPage != GetPageFrm() )
         GetPageFrm()->MoveFly( this, pTmpPage );
 
@@ -1515,8 +1514,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
-        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
-                             sal_False );
+        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, sal_False );
 }
 
 // OD 2004-08-12 #i32795# - Note: method no longer used in <flyincnt.cxx>

@@ -56,6 +56,8 @@
 #define SVLISTENTRYFLAG_FOCUSED         0x0004
 #define SVLISTENTRYFLAG_CURSORED        0x0008
 #define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
+// IAccessible2 implementation
+#define SVLISTENTRYFLAG_OBJSELECTED 0x0040
 
 class SvListEntry;
 
@@ -152,6 +154,14 @@ public:
             nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
     }
     bool IsSelectable() const { return (bool)(nFlags&SVLISTENTRYFLAG_NOT_SELECTABLE)==0; }
+    // IAccessible2 implementation
+    void SetObjectSelected(sal_Bool bSelected)
+    {
+    if ( !bSelected )
+        nFlags &= (~SVLISTENTRYFLAG_OBJSELECTED);
+    else
+        nFlags |= SVLISTENTRYFLAG_OBJSELECTED;
+    }
 };
 
 enum SvSortMode { SortAscending, SortDescending, SortNone };

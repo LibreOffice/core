@@ -78,6 +78,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
+    //IAccessibility2 Implementation 2009-----
+    void            SetObjectSelectHdl( const Link& aLink){ aObjectSelectLink = aLink; };
+    //-----IAccessibility2 Implementation 2009
 protected:
     virtual void    Paint( const Rectangle& rRec );
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -96,6 +99,11 @@ private:
 
     com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
+
+    //IAccessibility2 Implementation 2009-----
+    Link                aObjectSelectLink;
+    //-----IAccessibility2 Implementation 2009
+
 };
 
 //===================================================================

@@ -129,7 +129,7 @@ if (DEBUG_ShowTokens())
 UnoIDL_PE &
 TokenDistributor::ProcessingData::CurEnvironment() const
 {
-    csv_assert(aEnvironments.size() > 0);
+    csv_assert(!aEnvironments.empty());
     csv_assert(aEnvironments.back().first != 0);
 
     return *aEnvironments.back().first;

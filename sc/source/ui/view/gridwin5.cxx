@@ -59,6 +59,9 @@
 #include "tabvwsh.hxx"
 #include "userdat.hxx"
 #include "postit.hxx"
+//IAccessibility2 Implementation 2009-----
+#include <vcl/svapp.hxx>
+//-----IAccessibility2 Implementation 2009
 
 // -----------------------------------------------------------------------
 
@@ -422,13 +425,42 @@ void ScGridWindow::HideNoteMarker()
 com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
     ScGridWindow::CreateAccessible()
 {
+//IAccessibility2 Implementation 2009-----
+    com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc= GetAccessible(sal_False);
+    if (xAcc.is())
+    {
+        return xAcc;
+    }
+//-----IAccessibility2 Implementation 2009
     ScAccessibleDocument* pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
             pViewData->GetViewShell(), eWhich);
-
-    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
+//IAccessibility2 Implementation 2009-----
+    //com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
+    xAcc = pAccessibleDocument;
+    SetAccessible(xAcc);
+//-----IAccessibility2 Implementation 2009
 
     pAccessibleDocument->Init();
-
-    return xAccessible;
+//IAccessibility2 Implementation 2009-----
+    //return xAccessible;
+    return xAcc;
+//-----IAccessibility2 Implementation 2009
 }
+//IAccessibility2 Implementation 2009-----
+// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
+// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
+void ScGridWindow::SwitchView()
+{
+    if (!Application::IsAccessibilityEnabled())
+    {
+        return ;
+    }
+    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(sal_False).get());
+    if (pAccDoc)
+    {
+        pAccDoc->SwitchViewFireFocus();
+    }
+}
+//-----IAccessibility2 Implementation 2009
+

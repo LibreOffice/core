@@ -151,6 +151,10 @@ public:
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
 //UNUSED2009-05 void                    CaptionTextDirection(sal_uInt16 nSlot);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
+//IAccessibility2 Implementation 2009-----
+    SdrObject*  GetObjectByName(const String& rName);
+    sal_Bool           SelectCurrentViewObject( const String& rName );
+//-----IAccessibility2 Implementation 2009
 };
 
 

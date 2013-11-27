@@ -68,10 +68,7 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
     {
         pNewFnt = new SwFont( *pFnt );
     }
-    // --> OD 2009-11-25 #i107143#
-    // pass placeholder property to created <SwFldPortion> instance.
     SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
-    // <--
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
@@ -91,6 +88,9 @@ SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, sal_Bool bP
     , m_bNoLength( sal_False )
 {
     SetWhichPor( POR_FLD );
+    //IAccessibility2 Implementation 2009-----
+    m_nAttrFldType = 0;
+    //-----IAccessibility2 Implementation 2009
 }
 
 SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
@@ -394,20 +394,10 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
-                // --> FME 2006-01-11 #i59759# Erase additional control
-                // characters from field string, otherwise we get stuck in
-                // a loop.
                 case CHAR_ZWSP :
                 case CHAR_ZWNBSP :
-        //        case CHAR_RLM :
-        //        case CHAR_LRM :
-                // <--
-                // --> OD 2010-06-03 #i111750#
-                // - Erasing further control characters from field string in
-                // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
-                // <--
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
@@ -481,6 +471,12 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) c
 void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Special( GetLen(), aExpand, GetWhichPor() );
+    //IAccessibility2 Implementation 2009-----
+    if( GetWhichPor() == POR_FLD )
+    {
+        rPH.SetAttrFieldType(m_nAttrFldType);
+    }
+    //-----IAccessibility2 Implementation 2009
 }
 
 /*************************************************************************

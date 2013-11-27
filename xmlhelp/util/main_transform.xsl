@@ -613,7 +613,7 @@
 <xsl:variable name="archive"><xsl:value-of select="concat(substring-before(substring-after(@href,'text/'),'/'),'/')"/></xsl:variable>
 <xsl:variable name="dbpostfix"><xsl:call-template name="createDBpostfix"><xsl:with-param name="archive" select="$archive"/></xsl:call-template></xsl:variable>
 	<xsl:choose>
-		<xsl:when test="starts-with(@href,'http://')">  <!-- web links -->
+		<xsl:when test="starts-with(@href,'http://') or starts-with(@href,'https://')">  <!-- web links -->
 			<a href="{@href}"><xsl:apply-templates /></a>
 		</xsl:when>
 		<xsl:when test="contains(@href,'#')">

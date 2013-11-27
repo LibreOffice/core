@@ -406,7 +406,7 @@ sal_Bool ImpSvNumFor::HasNewCurrency() const
     return sal_False;
 }
 
-const bool ImpSvNumFor::HasTextFormatCode() const
+bool ImpSvNumFor::HasTextFormatCode() const
 {
     return aI.eScannedType == NUMBERFORMAT_TEXT;
 }
@@ -1722,7 +1722,7 @@ sal_Bool SvNumberformat::HasNewCurrency() const
     return sal_False;
 }
 
-const bool SvNumberformat::HasTextFormatCode() const
+bool SvNumberformat::HasTextFormatCode() const
 {
     for ( sal_uInt16 j=0; j<4; j++ )
     {

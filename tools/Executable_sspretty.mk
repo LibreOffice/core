@@ -30,13 +30,6 @@ $(eval $(call gb_Executable_set_include,sspretty,\
     -I$(SRCDIR)/tools/bootstrp/ \
 ))
 
-STLPORT_DEBUGFLAG =
-ifneq ($(USE_SYSTEM_STL),YES)
-ifeq ($(PRODUCT),)
-STLPORT_DEBUGFLAG = -D_DEBUG
-endif
-endif
-
 $(eval $(call gb_Executable_set_cxxflags,sspretty,\
     $$(CXXFLAGS) \
     -D_TOOLS_STRINGLIST \

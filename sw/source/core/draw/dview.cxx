@@ -1079,7 +1079,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
             {
                 SdrObject* pRefObj = &(static_cast<SwDrawVirtObj*>(pMarkObj)->ReferencedObj());
 
-                if ( !_rMarkView.IsObjMarked( *pRefObj )  )
+                if ( !_rMarkView.isSdrObjectSelected( *pRefObj )  )
                 {
                     _rMarkView.MarkObj( *pRefObj );
                 }

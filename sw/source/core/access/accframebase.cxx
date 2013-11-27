@@ -42,6 +42,26 @@
 #include "accmap.hxx"
 #include "accframebase.hxx"
 
+//IAccessibility2 Implementation 2009-----
+#ifndef _CRSRSH_HXX
+#include <crsrsh.hxx>
+#endif
+#ifndef _FESH_HXX
+#include "fesh.hxx"
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _FMTANCHR_HXX
+#include <fmtanchr.hxx>
+#endif
+//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
@@ -94,6 +114,10 @@ void SwAccessibleFrameBase::GetStates(
         if( pWin && pWin->HasFocus() )
             rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
+    //IAccessibility2 Implementation 2009-----
+    if( GetSelectedState() )
+        rStateSet.AddState( AccessibleStateType::SELECTED );
+    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -167,20 +191,26 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
         Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() && bNewSelected )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
-        FireStateChangedEvent( AccessibleStateType::SELECTED, bNewSelected );
+        //IAccessibility2 Implementation 2009-----
+        //FireStateChangedEvent( AccessibleStateType::SELECTED, bNewSelected );
         if( pWin && pWin->HasFocus() && !bNewSelected )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
-
-        uno::Reference< XAccessible > xParent( GetWeakParent() );
-        if( xParent.is() )
+        if(bNewSelected)
         {
-            SwAccessibleContext *pAcc =
-                static_cast <SwAccessibleContext *>( xParent.get() );
+            uno::Reference< XAccessible > xParent( GetWeakParent() );
+            if( xParent.is() )
+            {
+                SwAccessibleContext *pAcc =
+                    static_cast <SwAccessibleContext *>( xParent.get() );
 
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-            pAcc->FireAccessibleEvent( aEvent );
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
+                uno::Reference< XAccessible > xChild(this);
+                aEvent.NewValue <<= xChild;
+                pAcc->FireAccessibleEvent( aEvent );
+            }
         }
+        //-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -248,13 +278,13 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         break;
     case RES_OBJECTDYING:
         // mba: it seems that this class intentionally does not call code in base class SwClient
-        if( GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) )
+        if( pOld && ( GetRegisteredIn() == static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) ) )
             GetRegisteredInNonConst()->Remove( this );
         break;
 
     case RES_FMT_CHG:
-        if( static_cast< const SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
+        if( pOld &&
+            static_cast< const SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
             static_cast< const SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
             GetRegisteredInNonConst()->Remove( this );
         break;
@@ -274,3 +304,123 @@ void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
 
     SwAccessibleContext::Dispose( bRecursive );
 }
+//IAccessibility2 Implementation 2009-----
+//Get the selection cursor of the document.
+SwPaM* SwAccessibleFrameBase::GetCrsr()
+{
+    // get the cursor shell; if we don't have any, we don't have a
+    // cursor/selection either
+    SwPaM* pCrsr = NULL;
+    SwCrsrShell* pCrsrShell = GetCrsrShell();
+    if( pCrsrShell != NULL && !pCrsrShell->IsTableMode() )
+    {
+        SwFEShell *pFESh = dynamic_cast< SwFEShell* >(pCrsrShell);
+        if( !pFESh ||
+            !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
+        {
+            // get the selection, and test whether it affects our text node
+            pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
+        }
+    }
+
+    return pCrsr;
+}
+//Return the selected state of the object.
+//when the object's anchor are in the selection cursor, we should return true.
+sal_Bool SwAccessibleFrameBase::GetSelectedState( )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    //IAccessibility2 Implementation 2009-----
+    if(GetMap()->IsDocumentSelAll())
+    {
+        return sal_True;
+    }
+    //-----IAccessibility2 Implementation 2009
+
+    // SELETED.
+    SwFlyFrm* pFlyFrm = getFlyFrm();
+    const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
+    const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
+    const SwPosition *pPos = pAnchor.GetCntntAnchor();
+    if( !pPos )
+        return sal_False;
+    int pIndex = pPos->nContent.GetIndex();
+    if( pPos->nNode.GetNode().GetTxtNode() )
+    {
+        SwPaM* pCrsr = GetCrsr();
+        if( pCrsr != NULL )
+        {
+            const SwTxtNode* pNode = pPos->nNode.GetNode().GetTxtNode();
+            sal_uLong nHere = pNode->GetIndex();
+
+            // iterate over ring
+            SwPaM* pRingStart = pCrsr;
+            do
+            {
+                // ignore, if no mark
+                if( pCrsr->HasMark() )
+                {
+                    // check whether nHere is 'inside' pCrsr
+                    SwPosition* pStart = pCrsr->Start();
+                    sal_uLong nStartIndex = pStart->nNode.GetIndex();
+                    SwPosition* pEnd = pCrsr->End();
+                    sal_uLong nEndIndex = pEnd->nNode.GetIndex();
+                    if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
+                    {
+                        if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
+                        {
+                            //IAccessibility2 Implementation 2009-----
+                            if( (nHere == nStartIndex) && (pIndex >= pStart->nContent.GetIndex()) || (nHere > nStartIndex) )
+                                if( (nHere == nEndIndex) && (pIndex < pEnd->nContent.GetIndex()) || (nHere < nEndIndex) )
+                                return sal_True;
+                            //-----IAccessibility2 Implementation 2009
+                        }
+                        else if( pAnchor.GetAnchorId() == FLY_AT_PARA )
+                        {
+                            if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
+                                && (nHere < nEndIndex ) )
+                                return sal_True;
+                        }
+                        break;
+                    }
+                    // else: this PaM doesn't point to this paragraph
+                }
+                // else: this PaM is collapsed and doesn't select anything
+
+                // next PaM in ring
+                pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+            }
+            while( pCrsr != pRingStart );
+        }
+    }
+    return sal_False;
+}
+
+SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
+{
+    SwFlyFrm* pFlyFrm = NULL;
+
+    const SwFrm* pFrm = GetFrm();
+    DBG_ASSERT( pFrm != NULL, "frame expected" );
+    if( pFrm->IsFlyFrm() )
+    {
+        pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
+    }
+
+    return pFlyFrm;
+}
+
+sal_Bool SwAccessibleFrameBase::SetSelectedState( sal_Bool )
+{
+    sal_Bool bParaSeleted = GetSelectedState() || IsSelected();
+
+    if(bIsSeletedInDoc != bParaSeleted)
+    {
+        bIsSeletedInDoc = bParaSeleted;
+        FireStateChangedEvent( AccessibleStateType::SELECTED, bParaSeleted );
+        return sal_True;
+    }
+    return sal_False;
+}
+//-----IAccessibility2 Implementation 2009

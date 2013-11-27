@@ -21,36 +21,37 @@
 
 
 
- #ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
- #define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+#ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+#define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 
- #ifndef _SAL_TYPES_H_
- #include <sal/types.h>
- #endif
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
- class SwPaM;
- struct SwPosition;
- class SwNode;
- class SwNodeRange;
- class String;
- class Graphic;
- class SfxItemSet;
- class SfxPoolItem;
- class GraphicObject;
- class SdrObject;
- class SwFrmFmt;
- class SwDrawFrmFmt;
- class SwFlyFrmFmt;
- class SwNodeIndex;
+class SwPaM;
+struct SwPosition;
+class SwNode;
+class SwNodeRange;
+class String;
+class Graphic;
+class SfxItemSet;
+class SfxPoolItem;
+class GraphicObject;
+class SdrObject;
+class SwFrmFmt;
+class SwDrawFrmFmt;
+class SwFlyFrmFmt;
+class SwNodeIndex;
+class SwFmtFld;
 
- namespace utl { class TransliterationWrapper; }
- namespace svt { class EmbeddedObjectRef; }
+namespace utl { class TransliterationWrapper; }
+namespace svt { class EmbeddedObjectRef; }
 
- /** Text operation/manipulation interface
- */
- class IDocumentContentOperations
- {
- public:
+/** Text operation/manipulation interface
+*/
+class IDocumentContentOperations
+{
+public:
     enum SwMoveFlags
     {
         DOC_MOVEDEFAULT = 0x00,
@@ -68,9 +69,9 @@
     ,   INS_FORCEHINTEXPAND = 0x04 // expand all hints at insert position
     };
 
- public:
+public:
     /** Kopieren eines Bereiches im oder in ein anderes Dokument !
-        Die Position kann auch im Bereich liegen !!
+    Die Position kann auch im Bereich liegen !!
     */
     virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll ) const = 0;
 
@@ -88,12 +89,12 @@
 
     /** complete delete of a given PaM
 
-        OD 2009-08-20 #i100466#
-        Add optional parameter <bForceJoinNext>, default value <false>
-        Needed for hiding of deletion redlines
+    OD 2009-08-20 #i100466#
+    Add optional parameter <bForceJoinNext>, default value <false>
+    Needed for hiding of deletion redlines
     */
     virtual bool DeleteAndJoin( SwPaM&,
-                                const bool bForceJoinNext = false ) = 0;
+        const bool bForceJoinNext = false ) = 0;
 
     /** verschieben eines Bereiches
     */
@@ -114,7 +115,7 @@
     /** Insert string into existing text node at position rRg.Point().
     */
     virtual bool InsertString(const SwPaM &rRg, const String&,
-              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) = 0;
+        const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) = 0;
 
     /** change text to Upper/Lower/Hiragana/Katagana/...
     */
@@ -123,29 +124,29 @@
     /** Einfuegen einer Grafik, Formel. Die XXXX werden kopiert.
     */
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /**
     */
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** austauschen einer Grafik (mit Undo)
     */
     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) = 0;
 
     /** Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-        angemeldet sein.
+    angemeldet sein.
     */
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*) = 0;
 
     /** Einfuegen von OLE-Objecten.
     */
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
-                           const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** Aufspalten eines Nodes an rPos (nur fuer den TxtNode implementiert)
     */
@@ -156,45 +157,48 @@
     virtual bool AppendTxtNode(SwPosition& rPos) = 0;
 
     /** Ersetz einen selektierten Bereich in einem TextNode mit dem
-        String. Ist fuers Suchen&Ersetzen gedacht.
-        bRegExpRplc - ersetze Tabs (\\t) und setze den gefundenen String
-                 ein ( nicht \& )
-                    z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
-                        --> "xx\t<Tab>..zzz..&"
+    String. Ist fuers Suchen&Ersetzen gedacht.
+    bRegExpRplc - ersetze Tabs (\\t) und setze den gefundenen String
+    ein ( nicht \& )
+    z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
+    --> "xx\t<Tab>..zzz..&"
     */
     virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
-                              const bool bRegExReplace) = 0;
+        const bool bRegExReplace) = 0;
 
     /** Einfuegen eines Attributs. Erstreckt sich rRg ueber
-        mehrere Nodes, wird das Attribut aufgespaltet, sofern
-        dieses Sinn macht. Nodes, in denen dieses Attribut keinen
-        Sinn macht, werden ignoriert.  In vollstaendig in der
-        Selektion eingeschlossenen Nodes wird das Attribut zu
-        harter Formatierung, in den anderen (Text-)Nodes wird das
-        Attribut in das Attributearray eingefuegt. Bei einem
-        Zeichenattribut wird ein "leerer" Hint eingefuegt,
-        wenn keine Selektion
-        vorliegt; andernfalls wird das Attribut als harte
-        Formatierung dem durch rRg.Start() bezeichneten Node
-        hinzugefuegt.  Wenn das Attribut nicht eingefuegt werden
-        konnte, liefert die Methode sal_False.
+    mehrere Nodes, wird das Attribut aufgespaltet, sofern
+    dieses Sinn macht. Nodes, in denen dieses Attribut keinen
+    Sinn macht, werden ignoriert.  In vollstaendig in der
+    Selektion eingeschlossenen Nodes wird das Attribut zu
+    harter Formatierung, in den anderen (Text-)Nodes wird das
+    Attribut in das Attributearray eingefuegt. Bei einem
+    Zeichenattribut wird ein "leerer" Hint eingefuegt,
+    wenn keine Selektion
+    vorliegt; andernfalls wird das Attribut als harte
+    Formatierung dem durch rRg.Start() bezeichneten Node
+    hinzugefuegt.  Wenn das Attribut nicht eingefuegt werden
+    konnte, liefert die Methode sal_False.
     */
     //Modify here for #119405, by chengjh, 2012-08-16
     //Add a para for the char attribute exp...
-    virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const sal_uInt16 nFlags,bool bExpandCharToPara=false) = 0;
+    virtual bool InsertPoolItem(
+        const SwPaM &rRg,
+        const SfxPoolItem&,
+        const sal_uInt16 nFlags,
+        const bool bExpandCharToPara=false ) = 0;
     //End
 
     /**
     */
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-                                const sal_uInt16 nFlags) = 0;
+        const sal_uInt16 nFlags) = 0;
 
     /** Removes any leading white space from the paragraph
     */
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos ) = 0;
 
- protected:
+protected:
     virtual ~IDocumentContentOperations() {};
 };
 

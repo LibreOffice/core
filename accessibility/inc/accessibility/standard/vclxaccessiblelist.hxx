@@ -76,6 +76,7 @@ public:
     /** Process some of the events and delegate the rest to the base classes.
     */
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent);
+    virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
 
     /** Called on reception of selection events this method checks all known
         list items for a possible change in their selection state and
@@ -143,7 +144,14 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool    IsInDropDown();
+    void        HandleDropOpen();
+    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent, bool b_IsDropDownList);
+    void UpdateSelection_Acc (::rtl::OUString sTextOfSelectedItem, bool b_IsDropDownList);
+    void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
+    void UpdateFocus_Impl_Acc ( sal_uInt16 nPos, bool b_IsDropDownList) ;
+    void NotifyListItem(::com::sun::star::uno::Any& val);
 protected:
     BoxType     m_aBoxType;
     ::accessibility::IComboListBoxHelper* m_pListBoxHelper;
@@ -155,7 +163,7 @@ protected:
     sal_uInt16      m_nLastSelectedPos;
     bool        m_bDisableProcessEvent;
     bool        m_bVisible;
-
+    sal_uInt16  m_nCurSelectedPos;
 
 
     /// The currently selected item.

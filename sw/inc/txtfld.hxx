@@ -33,44 +33,69 @@ class SwTxtNode;
 
 class SwTxtFld : public SwTxtAttr
 {
-    mutable   String m_aExpand;
+    mutable String m_aExpand; // only used to determine, if field content is changing in <ExpandTxtFld()>
     SwTxtNode * m_pTxtNode;
 
 public:
-    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart);
+    SwTxtFld(
+        SwFmtFld & rAttr,
+        xub_StrLen const nStart );
+
     virtual ~SwTxtFld();
 
-    void CopyFld( SwTxtFld *pDest ) const;
-    void Expand() const;
-    inline void ExpandAlways();
+    void CopyTxtFld( SwTxtFld *pDest ) const;
+
+    void ExpandTxtFld() const;
+    inline void ExpandAlways()
+    {
+        m_aExpand += ' '; // changing current value to assure that <ExpandTxtFld()> changes the value.
+        ExpandTxtFld();
+    }
 
     // get and set TxtNode pointer
-    SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
-    inline SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    inline SwTxtNode* GetpTxtNode() const
+    {
+        return m_pTxtNode;
+    }
+    inline SwTxtNode& GetTxtNode() const
+    {
+        ASSERT( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
+        return *m_pTxtNode;
+    }
+    inline void ChgTxtNode( SwTxtNode* pNew )
+    {
+        m_pTxtNode = pNew;
+    }
+
+    bool IsFldInDoc() const;
+
     // enable notification that field content has changed and needs reformatting
-    void NotifyContentChange(SwFmtFld& rFmtFld);
+    virtual void NotifyContentChange( SwFmtFld& rFmtFld );
 
-    // #111840#
-    /**
-       Returns position of this field.
-
-       @return position of this field. Has to be deleted explicitly.
-    */
-//    SwPosition * GetPosition() const;
 };
 
-inline SwTxtNode& SwTxtFld::GetTxtNode() const
+class SwTxtInputFld : public SwTxtFld
 {
-    ASSERT( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
-    return *m_pTxtNode;
-}
+public:
+    SwTxtInputFld(
+        SwFmtFld & rAttr,
+        xub_StrLen const nStart,
+        xub_StrLen const nEnd );
 
-inline void SwTxtFld::ExpandAlways()
-{
-    m_aExpand += ' ';
-    Expand();
-}
+    virtual ~SwTxtInputFld();
+
+    virtual xub_StrLen* GetEnd();
+
+    virtual void NotifyContentChange( SwFmtFld& rFmtFld );
+
+    void UpdateTextNodeContent( const String& rNewContent );
+
+    const String GetFieldContent() const;
+    void UpdateFieldContent();
+
+private:
+    xub_StrLen m_nEnd;
+};
 
 #endif
 

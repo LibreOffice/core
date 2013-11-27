@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-//#include "svsys.h"
+#include "svsys.h"
 
 #include "comphelper/processfactory.hxx"
 
@@ -76,6 +76,10 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 
 #include <utility>
+
+#ifdef WNT
+#include <tchar.h>
+#endif
 
 using namespace ::com::sun::star::uno;
 
@@ -2045,7 +2049,13 @@ void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 
 sal_Bool Application::IsAccessibilityEnabled()
 {
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+    return IsWNTInitAccessBridge();
+#else
     return sal_False;
+#endif
+//-----IAccessible2 Implementation 2009
 }
 
 sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
@@ -2057,22 +2067,52 @@ sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
     (void) bShowCancel; // unsued
     (void) rCancelled; // unused
 #else
-    bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
-
-    if( !bRet && bShowCancel && !rCancelled )
+    // Checking HasAtHook() was introduced with IBM's IA2 CWS.
+    if( HasAtHook() )
     {
-        // disable accessibility if the user chooses to continue
-        AllSettings aSettings = Application::GetSettings();
-        MiscSettings aMisc = aSettings.GetMiscSettings();
-        aMisc.SetEnableATToolSupport( sal_False );
-        aSettings.SetMiscSettings( aMisc );
-        Application::SetSettings( aSettings );
+        bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
+
+        if( !bRet && bShowCancel && !rCancelled )
+        {
+            // disable accessibility if the user chooses to continue
+            AllSettings aSettings = Application::GetSettings();
+            MiscSettings aMisc = aSettings.GetMiscSettings();
+            aMisc.SetEnableATToolSupport( sal_False );
+            aSettings.SetMiscSettings( aMisc );
+            Application::SetSettings( aSettings );
+        }
+    }
+    else
+    {
+        bRet = false;
     }
 #endif // !UNX
 
     return bRet;
 }
 
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+sal_Bool HasAtHook()
+{
+    sal_Int32 bIsRuning=0;
+    // BOOL WINAPI SystemParametersInfo(
+    //    __in     UINT uiAction,
+    //    __in     UINT uiParam,
+    //    __inout  PVOID pvParam,
+    //    __in     UINT fWinIni
+    //  );
+    // pvParam must be BOOL (defined in MFC as int)
+    // End
+    if(SystemParametersInfo(SPI_GETSCREENREADER,0,&bIsRuning,0))
+    {
+        if( bIsRuning )
+            return sal_True;
+    }
+    return sal_False;
+}
+#endif
+//-----IAccessible2 Implementation 2009
 // MT: AppProperty, AppEvent was in oldsv.cxx, but is still needed...
 // ------------------------------------------------------------------------
 
@@ -2090,6 +2130,21 @@ void Application::SetPropertyHandler( PropertyHandler* p )
         delete pHandler;
     pHandler = p;
 }
+//IAccessible2 Implementation 2009-----
+bool Application::EnableAccessInterface(bool bEnable)
+{
+#ifdef WNT
+    return WNTEnableAccessInterface(bEnable);
+#else
+    bEnable = true; // avoid compiler warning
+    return true;
+#endif
+}
+bool Application::IsEnableAccessInterface()
+{
+    return ImplGetSVData()->maAppData.m_bEnableAccessInterface;
+}
+//-----IAccessibility2 Implementation 2009
 
 
 

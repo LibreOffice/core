@@ -148,6 +148,37 @@ uno::Reference<XAccessible> SAL_CALL
     return maTextHelper.GetChild(nIndex);
 }
 
+//IAccessibility2 Implementation 2009-----
+#include <drawdoc.hxx>
+::rtl::OUString SAL_CALL
+    AccessibleOutlineView::getAccessibleName(void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::rtl::OUString sName = String( SdResId(SID_SD_A11Y_D_PRESENTATION) );
+    ::sd::View* pSdView = static_cast< ::sd::View* >( maShapeTreeInfo.GetSdrView() );
+    if ( pSdView )
+    {
+        SdDrawDocument* pDoc = pSdView->GetDoc();
+        if ( pDoc )
+        {
+            rtl::OUString sFileName = pDoc->getDocAccTitle();
+            if ( !sFileName.getLength() )
+            {
+                ::sd::DrawDocShell* pDocSh = pSdView->GetDocSh();
+                if ( pDocSh )
+                {
+                    sFileName = pDocSh->GetTitle( SFX_TITLE_APINAME );
+                }
+            }
+            if ( sFileName.getLength() )
+            {
+                sName = sFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")) + sName;
+            }
+        }
+    }
+    return sName;
+}
+//-----IAccessibility2 Implementation 2009
 //=====  XAccessibleEventBroadcaster  ========================================
 
 void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -155,6 +186,9 @@ void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAc
     // delegate listener handling to children manager.
     if ( ! IsDisposed())
         maTextHelper.AddEventListener(xListener);
+//IAccessibility2 Implementation 2009-----
+    AccessibleContextBase::addEventListener(xListener);
+//-----IAccessibility2 Implementation 2009
 }
 
 void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -162,6 +196,9 @@ void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< 
     // forward
     if ( ! IsDisposed())
         maTextHelper.RemoveEventListener(xListener);
+//IAccessibility2 Implementation 2009-----
+    AccessibleContextBase::removeEventListener(xListener);
+//-----IAccessibility2 Implementation 2009
 }
 
 //=====  XServiceInfo  ========================================================
@@ -226,12 +263,17 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleOutlineView::propertyChange");
-    if (rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CurrentPage")))
+    //add page switch event for slide show mode
+    if (rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CurrentPage")) ||
+        rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PageChange")) )
     {
         OSL_TRACE ("    current page changed");
 
         // The current page changed. Update the children accordingly.
         UpdateChildren();
+//IAccessibility2 Implementation 2009-----
+        CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
+//-----IAccessibility2 Implementation 2009
     }
     else if (rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
     {

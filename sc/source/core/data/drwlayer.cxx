@@ -2059,7 +2059,27 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )     
     }
     return 0;
 }
+//IAccessibility2 Implementation 2009-----
+ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
+{
+    ScIMapInfo* pIMapInfo = const_cast<ScIMapInfo*>( GetIMapInfo( pObj ) );
+    if ( pIMapInfo )
+    {
+        return const_cast<ImageMap*>( &(pIMapInfo->GetImageMap()) );
+    }
+    return NULL;
+}
 
+sal_Int32 ScDrawLayer::GetHyperlinkCount(SdrObject* pObj)
+{
+    sal_Int32 nHLCount = 0;
+    ScMacroInfo* pMacroInfo = GetMacroInfo(pObj, sal_False);
+    if (pMacroInfo)
+        // MT IA2: GetHlink*( doesn|t exist in DEV300 anymore...
+        nHLCount = 0; // pMacroInfo->GetHlink().getLength() > 0 ? 1 : 0;
+    return nHLCount;
+}
+//-----IAccessibility2 Implementation 2009
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // static
 {
     DBG_ASSERT(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");

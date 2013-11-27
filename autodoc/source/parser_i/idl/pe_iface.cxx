@@ -395,7 +395,7 @@ PE_Interface::TransferData()
 {
     if (NOT bIsPreDeclaration)
     {
-        csv_assert(sData_Name.size() > 0);
+        csv_assert(!sData_Name.empty());
         csv_assert(nCurInterface.IsValid());
     }
     else

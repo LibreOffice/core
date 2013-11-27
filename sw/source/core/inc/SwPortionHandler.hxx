@@ -92,6 +92,10 @@ public:
      * paragraph's portions have been processed.
      */
     virtual void Finish() = 0;
+    //IAccessibility2 Implementation 2009-----
+    virtual void SetAttrFieldType( sal_uInt16 )
+    { return; }
+    //-----IAccessibility2 Implementation 2009
 };
 
 #endif

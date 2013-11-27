@@ -208,6 +208,18 @@ void OAccessibleMenuItemComponent::SetAccessibleName( const ::rtl::OUString& sAc
         if ( sName.getLength() == 0 )
             sName = m_pParent->GetItemText( nItemId );
         sName = OutputDevice::GetNonMnemonicString( sName );
+
+        // IA2 CWS, MT: Is adding 5 blanks really before the accelname reasonable? And which Platform / Accessibility API does need it this way? ATK has API for this...
+        // Also, IAccessible2 has IAccessibleAction::keyBinding, so I doubt that this is needed.
+        // But if so, it needs to move to the IA2 bridge.
+        /*
+        ::rtl::OUString sAccName = m_pParent->GetAccelKey( nItemId ).GetName();
+        if ( sAccName.getLength() )
+        {
+            sName += ::rtl::OUString::createFromAscii("     ");
+            sName += aAccelName;
+        }
+        */
     }
 
     return sName;
@@ -240,7 +252,8 @@ void OAccessibleMenuItemComponent::SetItemText( const ::rtl::OUString& sItemText
 
 void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    if ( IsEnabled() )
+    sal_Bool bEnabled = IsEnabled();
+    if ( bEnabled )
     {
         rStateSet.AddState( AccessibleStateType::ENABLED );
         rStateSet.AddState( AccessibleStateType::SENSITIVE );
@@ -248,10 +261,10 @@ void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateS
 
     if ( IsVisible() )
     {
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
         rStateSet.AddState( AccessibleStateType::SHOWING );
+        if( !IsMenuHideDisabledEntries() || bEnabled )
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
     }
-
     rStateSet.AddState( AccessibleStateType::OPAQUE );
 }
 
@@ -497,3 +510,23 @@ Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  ) throw (Runtime
 }
 
 // -----------------------------------------------------------------------------
+
+sal_Bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()
+{
+    if (m_pParent )
+    {
+        if( m_pParent->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES)
+        {
+            return sal_True;
+        }
+        // IA2 CWS, but the menus shouldn't have different flags, and even if so, the GetStartedFromMenu shouldn't matter
+        /*
+        else if (m_pParent->GetStartedFromMenu() &&
+                m_pParent->GetStartedFromMenu()->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES)
+        {
+            return sal_True;
+        }
+        */
+    }
+    return sal_False;
+}

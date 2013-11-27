@@ -785,7 +785,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
     else
         bInsTxt = sal_False;
 
-    SetAttr( rFmt );
+    SetAttrItem( rFmt );
     if (bInsTxt && !IsCrsrPtAtEnd())
         SwapPam();
     if(!bKeepSelection)
@@ -815,7 +815,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
             {
                 SwTxtINetFmt& rAttr = *pFnd;
                 String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
-                                    *rAttr.GetEnd() - *rAttr.GetStart() ) );
+                                    *rAttr.End() - *rAttr.GetStart() ) );
 
                 sTxt.EraseAllChars( 0x0a );
                 sTxt.EraseLeadingChars().EraseTrailingChars();

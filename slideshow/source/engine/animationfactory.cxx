@@ -611,8 +611,8 @@ namespace slideshow
                                               pGetValue,
                                               pSetValue,
                                               // no modification necessary, use identity functor here
-                                              ::std::identity< typename AnimationBase::ValueType >(),
-                                              ::std::identity< typename AnimationBase::ValueType >() ) );
+                                              std::identity< typename AnimationBase::ValueType >(),
+                                              std::identity< typename AnimationBase::ValueType >()));
             }
 
             class Scaler

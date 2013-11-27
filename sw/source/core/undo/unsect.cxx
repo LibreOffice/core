@@ -239,15 +239,16 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
     ASSERT( pTxtNd, "wo ist mein TextNode?" );
 
     {
-        RemoveIdxRel( nNode + 1, SwPosition( aIdx,
-                            SwIndex( pTxtNd, pTxtNd->GetTxt().Len() )));
+        RemoveIdxRel(
+            nNode + 1,
+            SwPosition( aIdx, SwIndex( pTxtNd, pTxtNd->GetTxt().Len() ) ) );
     }
     pTxtNd->JoinNext();
 
     if (m_pHistory.get())
     {
         SwIndex aCntIdx( pTxtNd, 0 );
-        pTxtNd->RstAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
+        pTxtNd->RstTxtAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
     }
 }
 

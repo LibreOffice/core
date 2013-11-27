@@ -480,6 +480,8 @@ private:
     sal_Bool            bInSelection;
     sal_Bool            bIsInUndo;
     sal_Bool            bUpdate;
+    // IAccessible2 migration fix
+    sal_Bool            bUpdateForAcc;
     sal_Bool            bUndoEnabled;
     sal_Bool            bOwnerOfRefDev;
     sal_Bool            bDowning;
@@ -713,6 +715,9 @@ public:
 
     void                    SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
     sal_Bool                GetUpdateMode() const   { return bUpdate; }
+    // IAccessible2 migration fix
+    void                    SetUpdateModeForAcc( sal_Bool bUp);
+    sal_Bool                GetUpdateModeForAcc();
 
     const ParaPortionList&  GetParaPortions() const { return aParaPortionList; }
     ParaPortionList&        GetParaPortions()       { return aParaPortionList; }

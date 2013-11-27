@@ -36,6 +36,12 @@
 #include <vcl/lstbox.hxx>
 #include <toolkit/helper/convert.hxx>
 
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -65,6 +71,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
       m_nLastSelectedPos        ( LISTBOX_ENTRY_NOTFOUND ),
       m_bDisableProcessEvent    ( false ),
       m_bVisible                ( true ),
+    m_nCurSelectedPos       ( LISTBOX_ENTRY_NOTFOUND ),
       m_xParent                 ( _xParent )
 {
     // Because combo boxes and list boxes have the no common interface for
@@ -89,6 +96,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
         }
     }
     UpdateVisibleLineCount();
+    m_nCurSelectedPos=m_pListBoxHelper->GetSelectEntryPos();
 
     sal_uInt16 nCount = static_cast<sal_uInt16>(getAccessibleChildCount());
     m_aAccessibleChildren.reserve(nCount);
@@ -188,6 +196,218 @@ void VCLXAccessibleList::notifyVisibleStates(sal_Bool _bSetNew )
     }
 }
 // -----------------------------------------------------------------------------
+void VCLXAccessibleList::UpdateSelection_Acc (::rtl::OUString sTextOfSelectedItem, bool b_IsDropDownList)
+{
+    if ( m_aBoxType == COMBOBOX )
+    {
+        ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
+        if ( pBox != NULL )
+        {
+        // Find the index of the selected item inside the VCL control...
+        sal_uInt16 nIndex = pBox->GetEntryPos (XubString(sTextOfSelectedItem));
+        // ...and then find the associated accessibility object.
+        if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
+            nIndex = 0;
+        UpdateSelection_Impl_Acc(b_IsDropDownList);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool b_IsDropDownList)
+{
+    uno::Any aOldValue, aNewValue;
+    VCLXAccessibleListItem* pCurItem =NULL;
+
+    {
+        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+            Reference< XAccessible > xNewAcc;
+        if ( m_pListBoxHelper )
+        {
+            sal_uInt16 i=0;
+            m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
+            for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
+                  aIter != m_aAccessibleChildren.end(); ++aIter,++i)
+            {
+                Reference< XAccessible > xHold = *aIter;
+                if ( xHold.is() )
+                {
+                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( xHold.get() );
+                    // Retrieve the item's index from the list entry.
+                    sal_Bool bNowSelected = m_pListBoxHelper->IsEntryPosSelected (i);
+                    if (bNowSelected)
+                        m_nCurSelectedPos = i;
+
+                    if ( bNowSelected && !pItem->IsSelected() )
+                    {
+                        xNewAcc = *aIter;
+                        aNewValue <<= xNewAcc;
+
+                        pCurItem = pItem;
+
+                    }
+                    else if ( pItem->IsSelected() )
+                        m_nLastSelectedPos = i;
+
+                    pItem->SetSelected( bNowSelected );
+                }
+                else
+                { // it could happen that a child was not created before
+                    checkEntrySelected(i,aNewValue,xNewAcc);
+                }
+            }
+            sal_uInt16 nCount = m_pListBoxHelper->GetEntryCount();
+            if ( i < nCount ) // here we have to check the if any other listbox entry is selected
+            {
+                for (; i < nCount && !checkEntrySelected(i,aNewValue,xNewAcc) ;++i )
+                    ;
+            }
+            if ( xNewAcc.is() && GetWindow()->HasFocus() )
+            {
+                if ( m_nLastSelectedPos != LISTBOX_ENTRY_NOTFOUND )
+                    aOldValue <<= getAccessibleChild( (sal_Int32)m_nLastSelectedPos );
+                aNewValue <<= xNewAcc;
+            }
+        }
+    }
+    if (m_aBoxType == COMBOBOX && b_IsDropDownList)
+    {
+        //VCLXAccessibleDropDownComboBox
+        //when in list is dropped down, xText = NULL
+        if (m_pListBoxHelper->IsInDropDown())
+        {
+            if ( aNewValue.hasValue() || aOldValue.hasValue() )
+            {
+                NotifyAccessibleEvent(
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                    aOldValue,
+                    aNewValue );
+
+                NotifyListItem(aNewValue);
+
+            }
+        }
+    }
+    else if (m_aBoxType == COMBOBOX && !b_IsDropDownList)
+    {
+        //VCLXAccessibleComboBox
+        NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, uno::Any(), uno::Any() );
+    }
+    else if (m_aBoxType == LISTBOX && b_IsDropDownList)
+    {
+        //VCLXAccessibleDropdownListBox
+        //when in list is dropped down, xText = NULL
+        if (m_pListBoxHelper->IsInDropDown())
+        {
+            if ( aNewValue.hasValue() || aOldValue.hasValue() )
+            {
+                NotifyAccessibleEvent(
+                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                    aOldValue,
+                    aNewValue );
+
+                NotifyListItem(aNewValue);
+            }
+        }
+    }
+    else if (m_aBoxType == LISTBOX && !b_IsDropDownList)
+    {
+        //VCLXAccessibleListBox, xText = NULL.
+
+
+        if ( aNewValue.hasValue())
+        {
+            NotifyListItem(aNewValue);
+        }
+    }
+}
+void VCLXAccessibleList::NotifyListItem(::com::sun::star::uno::Any& val)
+{
+    Reference< XAccessible > xCurItem;
+    val >>= xCurItem;
+    if (xCurItem.is())
+    {
+        VCLXAccessibleListItem* pCurItem = static_cast< VCLXAccessibleListItem* >(xCurItem.get());
+        if (pCurItem)
+        {
+            pCurItem->NotifyAccessibleEvent(AccessibleEventId::SELECTION_CHANGED,Any(),Any());
+        }
+    }
+}
+
+
+void VCLXAccessibleList::UpdateFocus_Impl_Acc (sal_uInt16 nPos ,bool b_IsDropDownList)
+{
+    if (!(m_aBoxType == LISTBOX && !b_IsDropDownList))
+    {
+        return ;
+    }
+    Reference<XAccessible> xChild= CreateChild(nPos);
+    if ( !xChild.is() )
+    {
+        return ;
+    }
+    m_nCurSelectedPos = nPos;
+    uno::Any aOldValue, aNewValue;
+    aNewValue <<= xChild;
+
+    NotifyAccessibleEvent(
+            AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+            aOldValue,
+            aNewValue );
+}
+
+// -----------------------------------------------------------------------------
+void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent,  bool b_IsDropDownList)
+{
+    switch ( rVclWindowEvent.GetId() )
+      {
+        case VCLEVENT_LISTBOX_SELECT:
+            if ( !m_bDisableProcessEvent )
+                UpdateSelection_Impl_Acc(b_IsDropDownList);
+            break;
+        case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
+            if ( !m_bDisableProcessEvent )
+                UpdateFocus_Impl_Acc((sal_uInt16)reinterpret_cast<sal_uIntPtr>(rVclWindowEvent.GetData()),b_IsDropDownList);
+            break;
+        case VCLEVENT_WINDOW_GETFOCUS:
+            break;
+        case VCLEVENT_CONTROL_GETFOCUS:
+            {
+                VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
+                if (m_aBoxType == COMBOBOX && b_IsDropDownList)
+                {
+                    //VCLXAccessibleDropDownComboBox
+                }
+                else if (m_aBoxType == LISTBOX && b_IsDropDownList)
+                {
+                }
+                else if ( m_aBoxType == LISTBOX && !b_IsDropDownList)
+                {
+                    if ( m_pListBoxHelper )
+                    {
+                        uno::Any    aOldValue,
+                                    aNewValue;
+                        sal_uInt16 nPos = m_nCurSelectedPos; //m_pListBoxHelper->GetSelectEntryPos();
+
+                        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+                            nPos = m_pListBoxHelper->GetTopEntry();
+                        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+                            aNewValue <<= CreateChild(nPos);
+                        NotifyAccessibleEvent(  AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                                                aOldValue,
+                                                aNewValue );
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+}
+// -----------------------------------------------------------------------------
 void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)
 {
     // Create a reference to this object to prevent an early release of the
@@ -206,11 +426,13 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
         case VCLEVENT_COMBOBOX_SCROLLED:
             UpdateEntryRange_Impl();
             break;
-
+        // IAccessible2 implementation, 2009
+        /*
         case VCLEVENT_LISTBOX_SELECT:
             if ( !m_bDisableProcessEvent )
                 UpdateSelection_Impl();
             break;
+        */
         // The selection events VCLEVENT_COMBOBOX_SELECT and
         // VCLEVENT_COMBOBOX_DESELECT are not handled here because here we
         // have no access to the edit field.  Its text is necessary to
@@ -236,25 +458,52 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                 rVclWindowEvent.GetData()));
             break;
         case VCLEVENT_CONTROL_GETFOCUS:
-            VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
-            if ( m_pListBoxHelper )
             {
-                uno::Any    aOldValue,
-                            aNewValue;
-                sal_uInt16 nPos = m_pListBoxHelper->GetSelectEntryPos();
-                if ( nPos == LISTBOX_ENTRY_NOTFOUND )
-                    nPos = m_pListBoxHelper->GetTopEntry();
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-                    aNewValue <<= CreateChild(nPos);
+                VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
+                // Added by IBM Symphony Acc team to handle the list item focus when List control get focus
+                sal_Bool b_IsDropDownList = sal_True;
+                if (m_pListBoxHelper)
+                    b_IsDropDownList = ((m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN);
+                if ( m_aBoxType == LISTBOX && !b_IsDropDownList )
+                {
+                    if ( m_pListBoxHelper )
+                    {
+                        uno::Any    aOldValue,
+                                    aNewValue;
+                        sal_uInt16 nPos = m_nCurSelectedPos;
 
-                NotifyAccessibleEvent(  AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                                        aOldValue,
-                                        aNewValue );
+                        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+                            nPos = m_pListBoxHelper->GetTopEntry();
+                        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+                            aNewValue <<= CreateChild(nPos);
+                        NotifyAccessibleEvent(  AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                                                aOldValue,
+                                                aNewValue );
+                    }
+                }
             }
             break;
 
         default:
             VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
+    }
+}
+
+ void VCLXAccessibleList::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
+{
+    ListBox* pBox = static_cast<ListBox*>(GetWindow());
+    if( m_aBoxType == LISTBOX  )
+    {
+        if (m_pListBoxHelper && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) != WB_DROPDOWN)
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pBox->GetAccessible();
+            rRelationSet.AddRelation( com::sun::star::accessibility::AccessibleRelation( com::sun::star::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        }
+    }
+    else
+    {
+        VCLXAccessibleComponent::FillAccessibleRelationSet(rRelationSet);
     }
 }
 // -----------------------------------------------------------------------------
@@ -315,9 +564,12 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         // check if position is empty and can be used else we have to adjust all entries behind this
         if ( xChild.is() )
         {
+            // IAccessible2 implementation, 2009
+            /*
             ListItems::iterator aIter = m_aAccessibleChildren.begin() + nPos;
             ::std::mem_fun_t<bool, VCLXAccessibleListItem> aTemp(&VCLXAccessibleListItem::IncrementIndexInParent);
             adjustEntriesIndexInParent( aIter, aTemp);
+            */
         }
         else
         {
@@ -332,6 +584,9 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         sal_Bool bNowSelected = sal_False;
         if ( m_pListBoxHelper )
             bNowSelected = m_pListBoxHelper->IsEntryPosSelected ((sal_uInt16)i);
+        // IAccessible2 implementation 2009
+        if (bNowSelected)
+            m_nCurSelectedPos = sal_uInt16(i);
         VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
         pItem->SetSelected( bNowSelected );
 
@@ -350,6 +605,8 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
 
 void VCLXAccessibleList::HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex)
 {
+    // IAccessible2 implementation 2009
+    /*
     if ( !bItemInserted )
     {
         if ( nIndex == -1 ) // special handling here
@@ -368,7 +625,8 @@ void VCLXAccessibleList::HandleChangedItemList (bool bItemInserted, sal_Int32 nI
     }
     else
         getAccessibleChild(nIndex);
-
+    */
+    clearItems();
     NotifyAccessibleEvent (
         AccessibleEventId::INVALIDATE_ALL_CHILDREN,
         Any(), Any());
@@ -415,7 +673,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int3
 
     Reference< XAccessible > xChild;
     // search for the child
-    if ( static_cast<sal_uInt16>(i) >= m_aAccessibleChildren.size() )
+    if ( i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         xChild = CreateChild (i);
     else
     {
@@ -600,6 +858,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
         if ( m_pListBoxHelper )
         {
             sal_uInt16 i=0;
+            m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
             for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
                   aIter != m_aAccessibleChildren.end(); ++aIter,++i)
             {
@@ -609,6 +868,8 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
                     VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( xHold.get() );
                     // Retrieve the item's index from the list entry.
                     sal_Bool bNowSelected = m_pListBoxHelper->IsEntryPosSelected (i);
+                    if (bNowSelected)
+                        m_nCurSelectedPos = i;
 
                     if ( bNowSelected && !pItem->IsSelected() )
                     {
@@ -639,14 +900,19 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
             }
         }
     }
-
-    if ( aNewValue.hasValue() || aOldValue.hasValue() )
-        NotifyAccessibleEvent(
-            AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-            aOldValue,
-            aNewValue );
-
-    NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+    if (!m_pListBoxHelper->IsInDropDown())
+    {
+    }
+    else
+    {
+        if ( aNewValue.hasValue() || aOldValue.hasValue() )
+            NotifyAccessibleEvent(
+                AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                aOldValue,
+                aNewValue );
+        //the SELECTION_CHANGED is not necessary
+        //NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -808,10 +1074,12 @@ awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
             if ( pBox )
             {
                 Size aSize = pBox->GetSubEdit()->GetSizePixel();
-                aBounds.X += aSize.Height();
-                aBounds.Y += aSize.Width();
+                // IAccessible2 implementation, 2009
+                //aBounds.X += aSize.Height();
+                //aBounds.Y += aSize.Width();
+                aBounds.Y += aSize.Height();
                 aBounds.Height -= aSize.Height();
-                aBounds.Width  -= aSize.Width();
+                //aBounds.Width  -= aSize.Width();
             }
         }
     }
@@ -839,12 +1107,33 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeExcept
             ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
             if ( pBox )
             {
-                aPos.X += pBox->GetSubEdit()->GetSizePixel().Height();
-                aPos.Y += pBox->GetSubEdit()->GetSizePixel().Width();
+                //aPos.X += pBox->GetSubEdit()->GetSizePixel().Height();
+                //aPos.Y += pBox->GetSubEdit()->GetSizePixel().Width();
+                aPos.Y += pBox->GetSubEdit()->GetSizePixel().Height();
             }
         }
     }
     return aPos;
 }
 // -----------------------------------------------------------------------------
-
+sal_Bool    VCLXAccessibleList::IsInDropDown()
+{
+    return m_pListBoxHelper->IsInDropDown();
+}
+// -----------------------------------------------------------------------------
+void VCLXAccessibleList::HandleDropOpen()
+{
+    if ( !m_bDisableProcessEvent )
+        UpdateSelection_Impl();
+    if (m_nCurSelectedPos != LISTBOX_ENTRY_NOTFOUND &&
+        m_nLastSelectedPos != LISTBOX_ENTRY_NOTFOUND)
+    {
+        Reference< XAccessible > xChild = getAccessibleChild(m_nCurSelectedPos);
+        if(xChild.is())
+        {
+            uno::Any aNewValue;
+            aNewValue <<= xChild;
+            NotifyAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
+        }
+    }
+}

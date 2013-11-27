@@ -1039,7 +1039,9 @@ SwCntntNode::~SwCntntNode()
     // der Abhaengikeitsliste raus!
     // Daher muessen alle Frames in der Abhaengigkeitsliste geloescht werden.
     if( GetDepends() )
-        DelFrms();
+        //IAccessibility2 Implementation 2009-----
+        DelFrms(sal_True, sal_False);
+        //-----IAccessibility2 Implementation 2009
 
     if( pCondColl )
         delete pCondColl;
@@ -1366,12 +1368,82 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
  */
 
 
-void SwCntntNode::DelFrms()
+//IAccessibility2 Implementation 2009-----
+//Solution:Add a input param to identify if the acc table should be disposed.
+//add a flag(bNeedDel) to indicate whether to del corresponding frm even in doc loading process,
+//void SwCntntNode::DelFrms()
+void SwCntntNode::DelFrms( sal_Bool bNeedDel, sal_Bool bIsDisposeAccTable )
+//-----IAccessibility2 Implementation 2009
 {
     if( !GetDepends() )
         return;
 
-    SwCntntFrm::DelFrms(*this);
+    SwClientIter aIter( *this );
+
+    for(SwClient* pCandidate = aIter.SwClientIter_First(); pCandidate; pCandidate = aIter.SwClientIter_Next() )
+    {
+        SwCntntFrm* pFrm = dynamic_cast< SwCntntFrm* >(pCandidate);
+
+        if(!pFrm)
+        {
+            continue;
+        }
+
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        if ( pFrm->IsTxtFrm() )
+        {
+            ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+            }
+        }
+        // <--
+        if( pFrm->HasFollow() )
+            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
+        if( pFrm->IsFollow() )
+        {
+            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            pMaster->SetFollow( pFrm->GetFollow() );
+            pFrm->_SetIsFollow( sal_False );
+        }
+        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
+                                //Andernfalls kann es sein, dass ein Follow
+                                //vor seinem Master zerstoert wird, der Master
+                                //greift dann ueber den ungueltigen
+                                //Follow-Pointer auf fremdes Memory zu.
+                                //Die Kette darf hier zerknauscht werden, weil
+                                //sowieso alle zerstoert werden.
+        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
+            !pFrm->GetIndPrev() )
+        {
+            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+            ASSERT( pFtn, "You promised a FtnFrm?" );
+            SwCntntFrm* pCFrm;
+            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
+                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
+            {
+                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
+            }
+        }
+        //IAccessibility2 Implementation 2009-----
+        //Solution:Set acc table dispose state
+        pFrm->SetAccTableDispose( bIsDisposeAccTable );
+        //End Added
+        pFrm->Cut();
+        //Solution:Set acc table dispose state to default value
+        pFrm->SetAccTableDispose( sal_True );
+        //-----IAccessibility2 Implementation 2009
+        delete pFrm;
+    }
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );

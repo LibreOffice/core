@@ -35,7 +35,15 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+/*
 #include <cppuhelper/compbase8.hxx>
+*/
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE9_HXX_
+#include <cppuhelper/compbase9.hxx>
+#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
@@ -59,7 +67,7 @@ namespace accessibility
 //........................................................................
 
 // class AccessibleListBoxEntry ------------------------------------------
-
+/*
     typedef ::cppu::WeakAggComponentImplHelper8< ::com::sun::star::accessibility::XAccessible
                                                 , ::com::sun::star::accessibility::XAccessibleContext
                                                 , ::com::sun::star::accessibility::XAccessibleComponent
@@ -67,6 +75,16 @@ namespace accessibility
                                                 , ::com::sun::star::accessibility::XAccessibleAction
                                                 , ::com::sun::star::accessibility::XAccessibleSelection
                                                 , ::com::sun::star::accessibility::XAccessibleText
+                                                , ::com::sun::star::lang::XServiceInfo > AccessibleListBoxEntry_BASE;
+*/
+    typedef ::cppu::WeakAggComponentImplHelper9< ::com::sun::star::accessibility::XAccessible
+                                                , ::com::sun::star::accessibility::XAccessibleContext
+                                                , ::com::sun::star::accessibility::XAccessibleComponent
+                                                , ::com::sun::star::accessibility::XAccessibleEventBroadcaster
+                                                , ::com::sun::star::accessibility::XAccessibleAction
+                                                , ::com::sun::star::accessibility::XAccessibleSelection
+                                                , ::com::sun::star::accessibility::XAccessibleText
+                                                , ::com::sun::star::accessibility::XAccessibleValue
                                                 , ::com::sun::star::lang::XServiceInfo > AccessibleListBoxEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
@@ -81,6 +99,8 @@ namespace accessibility
         /** The treelistbox control */
         SvTreeListBox*                      m_pListBox;
         ::std::deque< sal_Int32 >           m_aEntryPath;
+        SvLBoxEntry*                        m_pSvLBoxEntry; // IA2 CWS. Needed for focused item...
+
 
     protected:
         /// client id in the AccessibleEventNotifier queue
@@ -98,6 +118,8 @@ namespace accessibility
         Rectangle               GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
         Rectangle               GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
         void                    EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
+
+        void    NotifyAccessibleEvent( sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _aOldValue, const ::com::sun::star::uno::Any& _aNewValue );
 
     protected:
         virtual ~AccessibleListBoxEntry();
@@ -126,6 +148,9 @@ namespace accessibility
         AccessibleListBoxEntry( SvTreeListBox& _rListBox, SvLBoxEntry* _pEntry,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::accessibility::XAccessible >& _xParent );
+
+        SvLBoxEntry* GetSvLBoxEntry() const { return m_pSvLBoxEntry; }
+
 
     protected:
         // XTypeProvider
@@ -206,9 +231,15 @@ namespace accessibility
         sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-
+        virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL setCurrentValue( const ::com::sun::star::uno::Any& aNumber ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  ) throw (::com::sun::star::uno::RuntimeException);
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > implGetParentAccessible( ) const;
+        SvLBoxEntry* GetRealChild(sal_Int32 nIndex);
+    public:
+        sal_Int32 SAL_CALL getRoleType();
     };
 
 //........................................................................

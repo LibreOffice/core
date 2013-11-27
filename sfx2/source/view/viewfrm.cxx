@@ -676,7 +676,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( pSalvageItem )
                 {
                     aURL = pSalvageItem->GetValue();
-                    pNewSet->ClearItem( SID_DOC_SALVAGE );
+                    // IAccessibility2 implementation 2009. ------
+                    if (pNewSet)
+                    {
+                        pNewSet->ClearItem( SID_ORIGURL );
+                        pNewSet->ClearItem( SID_DOC_SALVAGE );
+                    }
+                    // ------ IAccessibility2 implementation 2009.
                 }
 
                 // TODO/LATER: Temporary solution, the SfxMedium must know the original URL as aLogicName
@@ -3373,13 +3379,17 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     sal_Bool bShow = sal_False;
     sal_Bool bHasChild = HasChildWindow(nSID);
     bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
+    // IAccessibility2 implementation 2009. ------
+    GetDispatcher()->Update_Impl( sal_True );
 
     // ausf"uhren
     if ( !pShowItem || bShow != bHasChild )
         ToggleChildWindow( nSID );
 
     GetBindings().Invalidate( nSID );
-    GetDispatcher()->Update_Impl( sal_True );
+    // Move to the before show()
+    //GetDispatcher()->Update_Impl( sal_True );
+    // ------ IAccessibility2 implementation 2009.
 
     // ggf. recorden
     if ( nSID == SID_HYPERLINK_DIALOG || nSID == SID_SEARCH_DLG )

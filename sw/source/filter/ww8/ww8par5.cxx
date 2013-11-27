@@ -1227,8 +1227,8 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
     if( !aDef.Len() )
         aDef = GetFieldResult( pF );
 
-    SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-                        aDef, aQ, INP_TXT, 0 ); // sichtbar ( geht z.Zt. nicht anders )
+    SwInputField aFld( static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
+                        aDef, aQ, INP_TXT, 0, false );
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
     return FLD_OK;
@@ -2668,8 +2668,8 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
                         sCombinedCharacters = sPart.Copy( nBegin+1, nEnd-nBegin-1 );
                         if ( sCombinedCharacters.Len() )
                         {
-                            SwInputField aFld( (SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
-                                sCombinedCharacters, sCombinedCharacters, INP_TXT, 0 );
+                            SwInputField aFld( static_cast<SwInputFieldType*>(rDoc.GetSysFldType( RES_INPUTFLD )),
+                                sCombinedCharacters, sCombinedCharacters, INP_TXT, 0, false );
                             rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 ); // insert input field
                         }
                     }

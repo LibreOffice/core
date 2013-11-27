@@ -1,0 +1,23 @@
+HKCR
+{
+	UAccCOM.AccFont.1 = s 'AccFont Class'
+	{
+		CLSID = s '{185B9AD9-5D31-4793-888F-A21846BBAEDD}'
+	}
+	UAccCOM.AccFont = s 'AccFont Class'
+	{
+		CLSID = s '{185B9AD9-5D31-4793-888F-A21846BBAEDD}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {185B9AD9-5D31-4793-888F-A21846BBAEDD} = s 'AccFont Class'
+		{
+			ProgID = s 'UAccCOM.AccFont.1'
+			VersionIndependentProgID = s 'UAccCOM.AccFont'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

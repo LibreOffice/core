@@ -273,6 +273,13 @@ void SwListShell::GetState(SfxItemSet &rSet)
                 if(nCurrentNumLevel == (MAXLEVEL - 1))
                     rSet.DisableItem(nWhich);
             break;
+
+            case FN_NUM_BULLET_NONUM:
+                if ( rSh.CrsrInsideInputFld() )
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                break;
         }
         nWhich = aIter.NextWhich();
     }

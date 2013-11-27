@@ -168,24 +168,6 @@ if ( true )
     URL1 = http://archive.apache.org/dist/apr/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if ( USE_SYSTEM_STL != YES )
-    MD5 = c441926f3a552ed3e5b274b62e86af16
-    name = STLport-4.0.tar.gz
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://sourceforge.net/projects/stlport/files/STLport%20archive/STLport%204/STLport-4.0.tar.gz/download
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if ( USE_SYSTEM_STL != YES )
-    MD5 = 18f577b374d60b3c760a3a3350407632
-    name = STLport-4.5.tar.gz
-    URL1 = http://sourceforge.net/projects/stlport/files/STLport%20archive/STLport%204/STLport-4.5.tar.gz/download
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if ( USE_SYSTEM_STL != YES )
-    MD5 = 7376930b0d3f3d77a685d94c4a3acda8
-    name = STLport-4.5-0119.tar.gz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-
 if (SYSTEM_LIBXML != YES)
     MD5 = 8127a65e8c3b08856093099b52599c86
     name = libxml2-2.7.8.tar.gz
@@ -305,9 +287,10 @@ if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && ENABLE_NSS_MODULE==YES)
-    MD5 = b92261a5679276c400555004937af965
-    name = nss-3.12.6-with-nspr-4.8.4.tar.gz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
+    MD5 = 067a04150b1d8b64f7da3019688a7547
+    name = nss-3.14.4-with-nspr-4.9.5.tar.gz
+    URL1 = ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_4_RTM/src/nss-3.14.4-with-nspr-4.9.5.tar.gz
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_SAXON!=YES && DISABLE_SAXON!=YES && SOLAR_JAVA==TRUE)
     MD5 = 24be19595acad0a2cae931af77a0148a

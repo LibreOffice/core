@@ -563,11 +563,10 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
-    String const fieldStr( pFld->ExpandField(true) );
+    const String fieldStr( pFld->ExpandField(true) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static sal_uInt8 aArr2[] = {
-        0x03, 0x6a, 0x00, 0x00, 0x00, 0x00, // sprmCPicLocation
         0x55, 0x08, 0x01,  // sprmCFSpec
         0x75, 0x08, 0x01       // ???
     };
@@ -2105,7 +2104,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
             {
                 const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
 
-                const sal_uInt16 nCstScale = 635;        // unit scale between SODC and MS Word
+                const sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
                 const sal_uInt32 nShadowType = 131074;    // shadow type of ms word. need to set the default value.
 
                 sal_uInt32  nColor = (sal_uInt32)(pSI->GetColor().GetColor()) ;

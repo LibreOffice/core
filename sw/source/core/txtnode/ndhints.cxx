@@ -52,8 +52,8 @@ void DumpHints( const SwpHtStart &rHtStart,
         ((((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
             << ']' << '\t').WriteNumber( long( pHt ) )
                   << '\t').WriteNumber( *pHt->GetStart() );
-        if( pHt->GetEnd() )
-            (aDbstream << " -> " ).WriteNumber( *pHt->GetEnd() );
+        if( pHt->End() )
+            (aDbstream << " -> " ).WriteNumber( *pHt->End() );
         aDbstream << endl;
     }
     (aDbstream << "\tEnds:").WriteNumber( rHtEnd.Count() )<< endl;
@@ -62,8 +62,8 @@ void DumpHints( const SwpHtStart &rHtStart,
         const SwTxtAttr *pHt = rHtEnd[i];
         (((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
             << ']' << '\t' ).WriteNumber( long( pHt ) );
-        if( pHt->GetEnd() )
-            (aDbstream << '\t').WriteNumber( *pHt->GetEnd() )<< " <- ";
+        if( pHt->End() )
+            (aDbstream << '\t').WriteNumber( *pHt->End() )<< " <- ";
         aDbstream.WriteNumber( *pHt->GetStart() )<< endl;
     }
     aDbstream << endl;
@@ -370,11 +370,11 @@ bool SwpHintsArray::Check() const
         CHECK_ERR( 0 == i ||
                     ( RES_TXTATR_CHARFMT != pHtLast->Which() && RES_TXTATR_AUTOFMT != pHtLast->Which() ) ||
                     ( RES_TXTATR_CHARFMT != pHtThis->Which() && RES_TXTATR_AUTOFMT != pHtThis->Which() ) ||
-                    ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
+                    ( *pHtThis->GetStart() >= *pHtLast->End() ) ||
                     (   (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
-                            &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
+                            &&  (*pHtThis->End()   == *pHtLast->End())
                             ) // same range
-                        ||  (*pHtThis->GetStart() == *pHtThis->GetEnd())
+                        ||  (*pHtThis->GetStart() == *pHtThis->End())
                         )
                     &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
                         ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
@@ -392,8 +392,8 @@ bool SwpHintsArray::Check() const
                 if ( pOther->IsNesting() &&  (i != j) )
                 {
                     SwComparePosition cmp = ComparePosition(
-                        *pHtThis->GetStart(), *pHtThis->GetEnd(),
-                        *pOther->GetStart(), *pOther->GetEnd());
+                        *pHtThis->GetStart(), *pHtThis->End(),
+                        *pOther->GetStart(), *pOther->End());
                     CHECK_ERR( (POS_OVERLAP_BEFORE != cmp) &&
                                (POS_OVERLAP_BEHIND != cmp),
                         "HintsCheck: overlapping nesting hints!!!" );

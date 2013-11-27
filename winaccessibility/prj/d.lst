@@ -1,0 +1,9 @@
+mkdir: %_DEST%\inc%_EXT%\winaccessibility
+mkdir: %_DEST%\inc%_EXT%\winaccessibility\UAccCOM
+
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\misc\winaccessibility.component %_DEST%\xml%_EXT%\winaccessibility.component
+
+#..\%__SRC%\inc\*.hxx %_DEST%\inc%_EXT%\winaccessibility\*.hxx
+#..\%__SRC%\inc\UAccCOM\*.h %_DEST%\inc%_EXT%\winaccessibility\UAccCOM\*.h
+#..\%__SRC%\inc\UAccCOM\*.c %_DEST%\inc%_EXT%\winaccessibility\UAccCOM\*.c

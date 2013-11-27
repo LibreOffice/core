@@ -421,6 +421,66 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     }
     return bRet;
 }
+//IAccessibility2 Implementation 2009-----
+void SwCrsrShell::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FirePageChangeEvent( nOldPage, nNewPage );
+#endif
+}
+
+void SwCrsrShell::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn)
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FireColumnChangeEvent( nOldColumn,  nNewColumn);
+#endif
+}
+
+
+void SwCrsrShell::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection)
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FireSectionChangeEvent( nOldSection, nNewSection );
+#endif
+}
+bool SwCrsrShell::bColumnChange()
+{
+
+    sal_uInt16 nCurrCol = 0;
+    SwFrm* pCurrFrm = GetCurrFrm(sal_False);
+
+    if (pCurrFrm == NULL)
+    {
+        return sal_False;
+    }
+
+    SwFrm* pCurrCol=((SwFrm*)pCurrFrm)->FindColFrm();
+
+    while(pCurrCol== NULL && pCurrFrm!=NULL )
+    {
+        SwLayoutFrm* pParent = pCurrFrm->GetUpper();
+        if(pParent!=NULL)
+        {
+            pCurrCol=((SwFrm*)pParent)->FindColFrm();
+            pCurrFrm = (SwFrm*)pParent;
+        }
+        else
+        {
+            break;
+        }
+    }
+    if(oldColFrm == pCurrCol)
+        return sal_False;
+    else
+    {
+        oldColFrm = pCurrCol;
+        return sal_True;
+    }
+}
+//-----IAccessibility2 Implementation 2009
 
 // --> OD 2008-04-02 #refactorlists#
 void SwCrsrShell::MarkListLevel( const String& sListId,
@@ -899,8 +959,10 @@ void SwCrsrShell::SwapPam()
 // Ansonsten wird er auf die gewaehlte SSelection gesetzt.
 
 
-sal_Bool SwCrsrShell::ChgCurrPam( const Point & rPt,
-                              sal_Bool bTstOnly, sal_Bool bTstHit )
+sal_Bool SwCrsrShell::ChgCurrPam(
+    const Point & rPt,
+    sal_Bool bTstOnly,
+    sal_Bool bTstHit )
 {
     SET_CURR_SHELL( this );
 
@@ -1351,9 +1413,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         return;             // wenn nicht, dann kein Update !!
     }
 
-    // --> OD 2005-12-14 #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
-    // <--
 
     if ( bIgnoreReadonly )
     {
@@ -2086,6 +2146,7 @@ void SwCrsrShell::ShowCrsr()
     if( !bBasicHideCrsr )
     {
         bSVCrsrVis = sal_True;
+        pCurCrsr->SetShowTxtInputFldOverlay( true );
         UpdateCrsr();
     }
 }
@@ -2098,6 +2159,7 @@ void SwCrsrShell::HideCrsr()
         bSVCrsrVis = sal_False;
         // evt. die sel. Bereiche aufheben !!
         SET_CURR_SHELL( this );
+        pCurCrsr->SetShowTxtInputFldOverlay( false );
         pVisCrsr->Hide();
     }
 }
@@ -2599,6 +2661,9 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
+    //IAccessibility2 Implementation 2009-----
+    oldColFrm = NULL;
+    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -2936,38 +3001,34 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 }
 
 
-void SwCrsrShell::NewCoreSelection()
-{
-}
-
-
 sal_Bool SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
-         // --> FME 2004-06-29 #114856# Formular view
-         GetViewOptions()->IsFormView() )
-         // <--
+         GetViewOptions()->IsFormView() ) // Formular view
     {
         SwFrm *pFrm = GetCurrFrm( sal_False );
         const SwFlyFrm* pFly;
         const SwSection* pSection;
 
         if( pFrm && pFrm->IsInFly() &&
-             (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
-             pFly->Lower() &&
-             !pFly->Lower()->IsNoTxtFrm() &&
-             !GetDrawView()->areSdrObjectsSelected() )
+            (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
+            pFly->Lower() &&
+            !pFly->Lower()->IsNoTxtFrm() &&
+            !GetDrawView()->areSdrObjectsSelected() )
         {
             return sal_False;
         }
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // edit in readonly sections
         else if ( pFrm && pFrm->IsInSct() &&
-                  0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
-                  pSection->IsEditInReadonlyFlag() )
+            0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
+            pSection->IsEditInReadonlyFlag() )
         {
             return sal_False;
         }
-        // <--
+        else if ( !IsMultiSelection() && CrsrInsideInputFld() )
+        {
+            return sal_False;
+        }
 
         return sal_True;
     }

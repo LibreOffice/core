@@ -22,14 +22,11 @@
 
 #ifndef DPTABLECACHE_HXX
 #define DPTABLECACHE_HXX
-// Wang Xu Ming -- 12/21/2008
 // Add Data Cache Support.
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-//Added by PengYunQuan for SODC_16015
 #include <svl/zforlist.hxx>
-//end
 #include <vector>
 #include "dpglobal.hxx"
 

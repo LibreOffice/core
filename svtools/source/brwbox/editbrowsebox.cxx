@@ -1072,7 +1072,10 @@ namespace svt
                 {
                     commitTableEvent(
                         ACTIVE_DESCENDANT_CHANGED,
-                        makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol ) ) ),
+//IAccessibility2 Implementation 2009-----
+                        //makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol ) ) ),
+                        makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
+//-----IAccessibility2 Implementation 2009
                         Any()
                     );
                 }

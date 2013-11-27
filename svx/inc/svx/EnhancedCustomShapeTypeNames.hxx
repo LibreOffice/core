@@ -30,6 +30,9 @@ namespace EnhancedCustomShapeTypeNames
 {
     SVX_DLLPUBLIC MSO_SPT Get( const rtl::OUString& );
     SVX_DLLPUBLIC rtl::OUString Get( const MSO_SPT );
+
+    //IAccessibility2 Implementation 2009
+    rtl::OUString GetAccName( const rtl::OUString& );
 }
 
 #endif

@@ -1,0 +1,23 @@
+HKCR
+{
+	UAccCOM.AccImage.1 = s 'AccImage Class'
+	{
+		CLSID = s '{73A45800-7A62-432C-A1A6-BF8852994331}'
+	}
+	UAccCOM.AccImage = s 'AccImage Class'
+	{
+		CLSID = s '{73A45800-7A62-432C-A1A6-BF8852994331}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {73A45800-7A62-432C-A1A6-BF8852994331} = s 'AccImage Class'
+		{
+			ProgID = s 'UAccCOM.AccImage.1'
+			VersionIndependentProgID = s 'UAccCOM.AccImage'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -269,7 +269,6 @@ sub create_unique_directorynames
             if ( $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION alread set: \"$installer::globals::installlocationdirectory\".", "create_unique_directorynames"); }
             $installer::globals::installlocationdirectory = $uniquename;
             $installer::globals::installlocationdirectoryset = 1;
-            if ( $installer::globals::installlocationdirectory =~ /oracle_/i ) { $installer::globals::sundirexists = 1; }
         }
 
         # setting the sundirectory
@@ -358,8 +357,7 @@ sub create_defaultdir_directorynames
     my ($directoryref, $shortdirnamehashref) = @_;
 
     my @shortnames = ();
-    if ( $installer::globals::updatedatabase ) { @shortnames = values(%{$shortdirnamehashref}); }
-    elsif ( $installer::globals::prepare_winpatch ) { @shortnames = values(%installer::globals::saved83dirmapping); }
+    if ( $installer::globals::prepare_winpatch ) { @shortnames = values(%installer::globals::saved83dirmapping); }
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
@@ -371,11 +369,7 @@ sub create_defaultdir_directorynames
         # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
         my $uniquename = $onedir->{'uniquename'};
         my $shortstring;
-        if (( $installer::globals::updatedatabase ) && ( exists($shortdirnamehashref->{$uniquename}) ))
-        {
-            $shortstring = $shortdirnamehashref->{$uniquename};
-        }
-        elsif (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::saved83dirmapping{$uniquename}) ))
+        if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::saved83dirmapping{$uniquename}) ))
         {
             $shortstring = $installer::globals::saved83dirmapping{$uniquename};
         }
@@ -472,11 +466,6 @@ sub add_root_directories
         {
             $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'};
             $realproductkey = $realproductkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'};
-        }
-        if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} )
-        {
-            $productkey = $productname;
-            $realproductkey = $realproductname;
         }
         if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} )
         {

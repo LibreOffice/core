@@ -160,7 +160,7 @@ public:
     const SvNumberNatNum& GetNatNum() const { return aNatNum; }
 
     // check, if the format code contains a subformat for text
-    const bool HasTextFormatCode() const;
+    bool HasTextFormatCode() const;
 
 private:
     ImpSvNumberformatInfo aI;           // Hilfsstruct fuer die restlichen Infos
@@ -336,7 +336,7 @@ public:
     sal_Bool HasNewCurrency() const;
 
     // check, if the format code contains a subformat for text
-    const bool HasTextFormatCode() const;
+    bool HasTextFormatCode() const;
 
     // Build string from NewCurrency for saving it SO50 compatible
     void Build50Formatstring( String& rStr ) const;

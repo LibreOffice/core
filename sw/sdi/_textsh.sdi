@@ -36,6 +36,7 @@ interface BaseText
     FN_INSERT_GLOSSARY // status(final|play|record)
     [
         ExecMethod = ExecGlossary ;
+        StateMethod = GetState ;
     ]
 
     FN_TXTATR_INET // status()
@@ -138,7 +139,7 @@ interface BaseText
     SID_INSERTDOC // status(final|play|rec)
     [
         ExecMethod = Execute ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_INSERT_BOOKMARK // status(final|play)
@@ -242,13 +243,13 @@ interface BaseText
     FN_INSERT_BREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_INSERT_PAGEBREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_INSERT_LINEBREAK  // status(final|play)
@@ -260,19 +261,19 @@ interface BaseText
     FN_INSERT_COLUMN_BREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_INSERT_BREAK_DLG // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_INSERT_AVMEDIA // status(final|play)
     [
         ExecMethod = ExecInsert;
-        StateMethod = NoState ;
+        StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_INSERT_HRULER // status()
@@ -340,6 +341,7 @@ interface BaseText
     FN_INSERT_HYPERLINK // status()
     [
         ExecMethod = Execute ;
+        StateMethod = GetState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_HYPERLINK_DIALOG
@@ -931,6 +933,7 @@ interface BaseText
     FN_EXPAND_GLOSSARY // status(final|play)
     [
         ExecMethod = ExecGlossary ;
+        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_POSTIT // status(final|play)

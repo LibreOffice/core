@@ -745,6 +745,10 @@ void SfxTabDialog::Start( sal_Bool bShow )
 
     if ( bShow )
         Show();
+
+// IAccessibility2 implementation 2009
+    if ( IsVisible() && ( !HasChildPathFocus() || HasFocus() ) )
+        GrabFocusToFirstControl();
 }
 
 // -----------------------------------------------------------------------

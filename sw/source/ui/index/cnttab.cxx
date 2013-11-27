@@ -1860,7 +1860,15 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
             bNextControl = sal_False;
             bCall = sal_True;
         }
-
+//IAccessibility2 Impplementaton 2009-----
+        else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
+        {
+            if ( m_pParent )
+            {
+                m_pParent->SetFocus2theAllBtn();
+            }
+        }
+//-----IAccessibility2 Impplementaton 2009
         if(bCall && aPrevNextControlLink.IsSet())
             aPrevNextControlLink.Call(this);
 
@@ -1996,6 +2004,15 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
         //this is invalid here
         return;
     }
+//IAccessibility2 Impplementaton 2009-----
+    else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
+    {
+        if ( m_pParent )
+        {
+            m_pParent->SetFocus2theAllBtn();
+        }
+    }
+//-----IAccessibility2 Impplementaton 2009
     if(bCall && aPrevNextControlLink.IsSet())
             aPrevNextControlLink.Call(this);
     else
@@ -2644,6 +2661,30 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
     aAuthFieldsLB.SetEntryData(nPos, (void*)(nData));
 }
+//IAccessibility2 Impplementaton 2009-----
+void SwTOXEntryTabPage::SetFocus2theAllBtn()
+{
+    aAllLevelsPB.GrabFocus();
+}
+long SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
+        KeyCode aCode = rKEvt.GetKeyCode();
+        if ( (aCode.GetCode() == KEY_F4) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
+        {
+            if ( aTokenWIN.GetActiveControl() )
+            {
+                aTokenWIN.GetActiveControl()->GrabFocus();
+            }
+        }
+
+    }
+
+    return SfxTabPage::Notify( rNEvt );
+}
+//-----IAccessibility2 Impplementaton 2009
 /*-- 16.06.99 10:47:35---------------------------------------------------
 
 This function inizializes the default value in the Token
@@ -3137,7 +3178,12 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
             nHelpId = STR_TOKEN_HELP_ENTRY;
         aButtonHelpTexts[i] = String(ResId(nHelpId, *rResId.GetResMgr()));
     }
-
+//IAccessibility2 Impplementaton 2009-----
+    accessibleName = String(SW_RES(STR_STRUCTURE));
+    sAdditionalAccnameString1 = String(SW_RES(STR_ADDITIONAL_ACCNAME_STRING1));
+    sAdditionalAccnameString2 = String(SW_RES(STR_ADDITIONAL_ACCNAME_STRING2));
+    sAdditionalAccnameString3 = String(SW_RES(STR_ADDITIONAL_ACCNAME_STRING3));
+//-----IAccessibility2 Impplementaton 2009
     FreeResource();
 
     Link aLink(LINK(this, SwTokenWindow, ScrollHdl));
@@ -3295,6 +3341,32 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         pEdit->SetPosPixel(aControlPos);
         aControlList.Insert(pEdit, aControlList.Count());
         pEdit->SetText(rText);
+//IAccessibility2 Impplementaton 2009-----
+        sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT, pEdit );
+        String s1 = String::CreateFromAscii(" (");
+        String s2 = String::CreateFromAscii(")");
+        String s3 = String::CreateFromAscii(", ");
+        String strName(accessibleName);
+        strName += String::CreateFromInt32(nIndex);
+        if ( nIndex == 1 )
+        {
+            /*Press left or right arrow to choose the structure controls*/
+            strName += s1;
+            strName += sAdditionalAccnameString2;
+            strName += s3;
+            /*Press Ctrl+Alt+A to move focus for more operations*/
+            strName += sAdditionalAccnameString1;
+            strName += s3;
+            /*Press Ctrl+Alt+B to move focus back to the current structure control*/
+            strName += sAdditionalAccnameString3;
+            strName += s2;
+            pEdit->SetAccessibleName(strName);
+        }
+        else
+        {
+            pEdit->SetAccessibleName(strName);
+        }
+//-----IAccessibility2 Impplementaton 2009
          Size aEditSize(aControlSize);
         aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
         pEdit->SetSizePixel(aEditSize);
@@ -3325,6 +3397,17 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
                         (ToxAuthorityField)rToken.nAuthorityField));
             pButton->SetText(sTmp.Copy(0, 2));
         }
+//IAccessibility2 Impplementaton 2009-----
+        String sSpace = String::CreateFromAscii(" ");
+        sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType, pButton );
+        String sAccName = aButtonHelpTexts[rToken.eTokenType];
+        if ( nIndex )
+        {
+            sAccName += sSpace;
+            sAccName += String::CreateFromInt32(nIndex);
+        }
+        pButton->SetAccessibleName( sAccName );
+//-----IAccessibility2 Impplementaton 2009
         pButton->Show();
         pRet = pButton;
     }
@@ -3466,6 +3549,32 @@ void    SwTokenWindow::InsertAtSelection(
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
         aControlList.Insert(pEdit, nActivePos + 1);
         pEdit->SetText(sRight);
+//IAccessibility2 Impplementaton 2009-----
+        sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT, pEdit );
+        String s1 = String::CreateFromAscii(" (");
+        String s2 = String::CreateFromAscii(")");
+        String s3 = String::CreateFromAscii(", ");
+        String strName(accessibleName);
+        strName += String::CreateFromInt32(nIndex);
+        if ( nIndex == 1)
+        {
+            /*Press left or right arrow to choose the structure controls*/
+            strName += s1;
+            strName += sAdditionalAccnameString2;
+            strName += s3;
+            /*Press Ctrl+Alt+A to move focus for more operations*/
+            strName += sAdditionalAccnameString1;
+            strName += s3;
+            /*Press Ctrl+Alt+B to move focus back to the current structure control*/
+            strName += sAdditionalAccnameString3;
+            strName += s2;
+            pEdit->SetAccessibleName(strName);
+        }
+        else
+        {
+            pEdit->SetAccessibleName(strName);
+        }
+//-----IAccessibility2 Impplementaton 2009
         pEdit->SetSizePixel(aControlSize);
         pEdit->AdjustSize();
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
@@ -3495,6 +3604,17 @@ void    SwTokenWindow::InsertAtSelection(
         pButton->SetText(sTmp.Copy(0, 2));
     }
 
+//IAccessibility2 Impplementaton 2009-----
+    String sSpace = String::CreateFromAscii(" ");
+    sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType, pButton );
+    String sAccName = aButtonHelpTexts[rToken.eTokenType];
+    if ( nIndex )
+    {
+        sAccName += sSpace;
+        sAccName += String::CreateFromInt32(nIndex);
+    }
+    pButton->SetAccessibleName( sAccName );
+//-----IAccessibility2 Impplementaton 2009
     Size aEditSize(GetOutputSizePixel());
     aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
     pButton->SetSizePixel(aEditSize);
@@ -3922,6 +4042,41 @@ void SwTokenWindow::GetFocus()
        }
     }
 }
+//IAccessibility2 Impplementaton 2009-----
+void SwTokenWindow::SetFocus2theAllBtn()
+{
+    if (m_pParent)
+    {
+        m_pParent->SetFocus2theAllBtn();
+    }
+}
+sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType, const Control* pCurControl) const
+{
+    //there are only one entry-text button and only one page-number button,
+    //so we need not add index for these two buttons.
+    if ( eType == TOKEN_ENTRY_TEXT || eType == TOKEN_PAGE_NUMS )
+    {
+        return 0;
+    }
+
+    sal_uInt32 nIndex = 0;
+    const Control* pControl = ((SwTokenWindow*)this)->aControlList.First();
+    while(pControl)
+    {
+        const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
+            ? ((SwTOXEdit*)pControl)->GetFormToken()
+            : ((SwTOXButton*)pControl)->GetFormToken();
+
+        if(eType == rNewToken.eTokenType)
+        {
+            nIndex++;
+        }
+        pControl = ((SwTokenWindow*)this)->aControlList.Next();
+    }
+
+    return nIndex;
+}
+//-----IAccessibility2 Impplementaton 2009
 /* -----------------25.03.99 15:17-------------------
  *
  * --------------------------------------------------*/

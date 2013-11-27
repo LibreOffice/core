@@ -300,7 +300,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                     pCollSet->Put( aTmpBrush );
                 }
                 aOutputSet.ClearItem( RES_BACKGROUND );
-                //pColl->SetAttr( aTmpSet );
                 pCollSet->Put(aOutputSet);
             }
             delete pDlg;
@@ -354,7 +353,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 }
                 if( pOutputSet->Count() )
                 {
-                    //pColl->SetAttr( *pOutputSet );
                     pCollSet->Put(*pOutputSet);
                 }
             }

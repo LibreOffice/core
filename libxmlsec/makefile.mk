@@ -31,9 +31,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(WITH_MOZILLA)" == "NO"
+.IF "$(ENABLE_NSS_MODULE)" == "NO"
 @all:
-    @echo "Mozilla disabled -> no nss -> no libxmlsec...."
+    @echo "No nss -> no libxmlsec...."
 .ENDIF
 
 # --- Files --------------------------------------------------------
@@ -95,9 +95,9 @@ xmlsec_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --enable-mscrypto --disable-crypto-dl --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --enable-mscrypto --disable-crypto-dl --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
 
-.IF "$(SYSTEM_MOZILLA)" != "YES"
+.IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
@@ -148,7 +148,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
-# system-mozilla needs pkgconfig to get the information about nss
+# system-nss needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....
 # (and that pkg-config is allowed to fail...)
@@ -157,7 +157,7 @@ CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=n
 # --with-nss or parse -pkg-config --libs / cflags mozilla-nss since
 # the lib may a) be in /usr/lib (Debian) and be not in $with_nss/include
 # $with_nss/lib.
-.IF "$(SYSTEM_MOZILLA)" != "YES"
+.IF "$(SYSTEM_NSS)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)

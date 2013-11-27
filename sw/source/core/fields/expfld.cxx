@@ -976,177 +976,87 @@ void SwSetExpField::SetPar2(const String& rStr)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Eingabefeld Type
- ---------------------------------------------------------------------*/
 
-SwInputFieldType::SwInputFieldType( SwDoc* pD )
-    : SwFieldType( RES_INPUTFLD ), pDoc( pD )
+sal_Bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-}
-
-SwFieldType* SwInputFieldType::Copy() const
-{
-    SwInputFieldType* pType = new SwInputFieldType( pDoc );
-    return pType;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Eingabefeld
- --------------------------------------------------------------------*/
-
-SwInputField::SwInputField(SwInputFieldType* pTyp, const String& rContent,
-                           const String& rPrompt, sal_uInt16 nSub, sal_uLong nFmt) :
-    SwField(pTyp, nFmt), aContent(rContent), aPText(rPrompt), nSubType(nSub)
-{
-}
-
-String SwInputField::GetFieldName() const
-{
-    String aStr(SwField::GetFieldName());
-    if ((nSubType & 0x00ff) == INP_USR)
-    {
-        aStr += GetTyp()->GetName();
-        aStr += ' ';
-        aStr += aContent;
-    }
-    return aStr;
-}
-
-SwField* SwInputField::Copy() const
-{
-    SwInputField* pFld = new SwInputField((SwInputFieldType*)GetTyp(), aContent,
-                                          aPText, GetSubType(), GetFormat());
-
-    pFld->SetHelp(aHelp);
-    pFld->SetToolTip(aToolTip);
-
-    pFld->SetAutomaticLanguage(IsAutomaticLanguage());
-    return pFld;
-}
-
-String SwInputField::Expand() const
-{
-    String sRet;
-    if((nSubType & 0x00ff) == INP_TXT)
-        sRet = aContent;
-
-    else if( (nSubType & 0x00ff) == INP_USR )
-    {
-        SwUserFieldType* pUserTyp = (SwUserFieldType*)
-                            ((SwInputFieldType*)GetTyp())->GetDoc()->
-                            GetFldType( RES_USERFLD, aContent, false );
-        if( pUserTyp )
-            sRet = pUserTyp->GetContent();
-    }
-    return sRet;
-}
-
-sal_Bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
-{
+    sal_Int32 nTmp32 = 0;
+    sal_Int16 nTmp16 = 0;
+    String sTmp;
     switch( nWhichId )
     {
+    case FIELD_PROP_BOOL2:
+        if(*(sal_Bool*)rAny.getValue())
+            nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+        else
+            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+        break;
+    case FIELD_PROP_FORMAT:
+        rAny >>= nTmp32;
+        SetFormat(nTmp32);
+        break;
+    case FIELD_PROP_USHORT2:
+        {
+            rAny >>= nTmp16;
+            if(nTmp16 <= SVX_NUMBER_NONE )
+                SetFormat(nTmp16);
+            else {
+                //exception(wrong_value)
+                ;
+            }
+        }
+        break;
+    case FIELD_PROP_USHORT1:
+        rAny >>= nTmp16;
+        nSeqNo = nTmp16;
+        break;
     case FIELD_PROP_PAR1:
-         rAny <<= OUString( aContent );
+        SetPar1( SwStyleNameMapper::GetUIName(
+                            ::GetString( rAny, sTmp ), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= OUString( aPText );
+        {
+            OUString uTmp;
+            rAny >>= uTmp;
+            //I18N - if the formula contains only "TypeName+1"
+            //and it's one of the initially created sequence fields
+            //then the localized names has to be replaced by a programmatic name
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False);
+            SetFormula( sMyFormula );
+        }
+        break;
+    case FIELD_PROP_DOUBLE:
+        {
+            double fVal = 0.0;
+            rAny >>= fVal;
+            SetValue(fVal);
+        }
+        break;
+    case FIELD_PROP_SUBTYPE:
+        nTmp32 = lcl_APIToSubType(rAny);
+        if(nTmp32 >= 0)
+            SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= OUString( aHelp );
-        break;
-    case FIELD_PROP_PAR4:
-        rAny <<= OUString( aToolTip );
-        break;
-    default:
-        DBG_ERROR("illegal property");
-    }
-    return sal_True;
-}
-
-sal_Bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
-{
-    switch( nWhichId )
-    {
-    case FIELD_PROP_PAR1:
-         ::GetString( rAny, aContent );
-        break;
-    case FIELD_PROP_PAR2:
         ::GetString( rAny, aPText );
         break;
-    case FIELD_PROP_PAR3:
-        ::GetString( rAny, aHelp );
+    case FIELD_PROP_BOOL3:
+        if(*(sal_Bool*) rAny.getValue())
+            nSubType |= nsSwExtendedSubType::SUB_CMD;
+        else
+            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
+        break;
+    case FIELD_PROP_BOOL1:
+        SetInputFlag(*(sal_Bool*) rAny.getValue());
         break;
     case FIELD_PROP_PAR4:
-        ::GetString( rAny, aToolTip );
+        ChgExpStr( ::GetString( rAny, sTmp ));
         break;
     default:
-        DBG_ERROR("illegal property");
+        return SwField::PutValue(rAny, nWhichId);
     }
     return sal_True;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: Bedingung setzen
- --------------------------------------------------------------------*/
 
-void SwInputField::SetPar1(const String& rStr)
-{
-    aContent = rStr;
-}
-
-const String& SwInputField::GetPar1() const
-{
-    return aContent;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: True/False Text
- --------------------------------------------------------------------*/
-
-void SwInputField::SetPar2(const String& rStr)
-{
-    aPText = rStr;
-}
-
-String SwInputField::GetPar2() const
-{
-    return aPText;
-}
-
-void SwInputField::SetHelp(const String & rStr)
-{
-    aHelp = rStr;
-}
-
-String SwInputField::GetHelp() const
-{
-    return aHelp;
-}
-
-void SwInputField::SetToolTip(const String & rStr)
-{
-    aToolTip = rStr;
-}
-
-String SwInputField::GetToolTip() const
-{
-    return aToolTip;
-}
-
-sal_Bool SwInputField::isFormField() const
-{
-    return aHelp.Len() > 0 || aToolTip.Len() > 0;
-}
-
-sal_uInt16 SwInputField::GetSubType() const
-{
-    return nSubType;
-}
-
-void SwInputField::SetSubType(sal_uInt16 nSub)
-{
-    nSubType = nSub;
-}
 
 sal_Bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
@@ -1213,85 +1123,232 @@ sal_Bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-sal_Bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: Eingabefeld Type
+ ---------------------------------------------------------------------*/
+
+SwInputFieldType::SwInputFieldType( SwDoc* pD )
+    : SwFieldType( RES_INPUTFLD )
+    , pDoc( pD )
 {
-    sal_Int32 nTmp32 = 0;
-    sal_Int16 nTmp16 = 0;
-    String sTmp;
+}
+
+SwFieldType* SwInputFieldType::Copy() const
+{
+    SwInputFieldType* pType = new SwInputFieldType( pDoc );
+    return pType;
+}
+
+/*--------------------------------------------------------------------
+    Beschreibung: Eingabefeld
+ --------------------------------------------------------------------*/
+
+SwInputField::SwInputField( SwInputFieldType* pFieldType,
+                            const String& rContent,
+                            const String& rPrompt,
+                            sal_uInt16 nSub,
+                            sal_uLong nFmt,
+                            bool bIsFormField )
+    : SwField( pFieldType, nFmt, LANGUAGE_SYSTEM, false )
+    , aContent(rContent)
+    , aPText(rPrompt)
+    , nSubType(nSub)
+    , mpFmtFld( NULL )
+    , mbIsFormField( bIsFormField )
+{
+}
+
+SwInputField::~SwInputField()
+{
+}
+
+
+void SwInputField::SetFmtFld( SwFmtFld& rFmtFld )
+{
+    mpFmtFld = &rFmtFld;
+}
+
+SwFmtFld* SwInputField::GetFmtFld()
+{
+    return mpFmtFld;
+}
+
+
+const String& SwInputField::getContent() const
+{
+    return aContent;
+}
+
+void SwInputField::applyFieldContent( const String& rNewFieldContent )
+{
+    if ( (nSubType & 0x00ff) == INP_TXT )
+    {
+        aContent = rNewFieldContent;
+    }
+    else if( (nSubType & 0x00ff) == INP_USR )
+    {
+        SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->GetFldType( RES_USERFLD, getContent(), false ) );
+        if( pUserTyp )
+        {
+            pUserTyp->SetContent( rNewFieldContent );
+        }
+    }
+}
+
+String SwInputField::GetFieldName() const
+{
+    String aStr(SwField::GetFieldName());
+    if ((nSubType & 0x00ff) == INP_USR)
+    {
+        aStr += GetTyp()->GetName();
+        aStr += ' ';
+        aStr += getContent();
+    }
+    return aStr;
+}
+
+SwField* SwInputField::Copy() const
+{
+    SwInputField* pFld =
+        new SwInputField(
+            static_cast<SwInputFieldType*>(GetTyp()),
+            getContent(),
+            aPText,
+            GetSubType(),
+            GetFormat(),
+            mbIsFormField );
+
+    pFld->SetHelp( aHelp );
+    pFld->SetToolTip( aToolTip );
+
+    pFld->SetAutomaticLanguage(IsAutomaticLanguage());
+    return pFld;
+}
+
+String SwInputField::Expand() const
+{
+    String sRet;
+    if ( (nSubType & 0x00ff) == INP_TXT )
+    {
+        sRet = getContent();
+    }
+    else if( (nSubType & 0x00ff) == INP_USR )
+    {
+        SwUserFieldType* pUserTyp = static_cast<SwUserFieldType*>(
+            static_cast<SwInputFieldType*>(GetTyp())->GetDoc()->GetFldType( RES_USERFLD, getContent(), false ) );
+        if( pUserTyp )
+            sRet = pUserTyp->GetContent();
+    }
+    return sRet;
+}
+
+
+bool SwInputField::isFormField() const
+{
+    return mbIsFormField
+           || aHelp.Len() > 0
+           || aToolTip.Len() > 0;
+}
+
+
+sal_Bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+{
     switch( nWhichId )
     {
-    case FIELD_PROP_BOOL2:
-        if(*(sal_Bool*)rAny.getValue())
-            nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
-        else
-            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-        break;
-    case FIELD_PROP_FORMAT:
-        rAny >>= nTmp32;
-        SetFormat(nTmp32);
-        break;
-    case FIELD_PROP_USHORT2:
-        {
-            rAny >>= nTmp16;
-            if(nTmp16 <= SVX_NUMBER_NONE )
-                SetFormat(nTmp16);
-            else {
-                //exception(wrong_value)
-                ;
-            }
-        }
-        break;
-    case FIELD_PROP_USHORT1:
-        rAny >>= nTmp16;
-        nSeqNo = nTmp16;
-        break;
     case FIELD_PROP_PAR1:
-        SetPar1( SwStyleNameMapper::GetUIName(
-                            ::GetString( rAny, sTmp ), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
+        rAny <<= OUString( getContent() );
         break;
     case FIELD_PROP_PAR2:
-        {
-            OUString uTmp;
-            rAny >>= uTmp;
-            //I18N - if the formula contains only "TypeName+1"
-            //and it's one of the initially created sequence fields
-            //then the localized names has to be replaced by a programmatic name
-            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False);
-            SetFormula( sMyFormula );
-        }
-        break;
-    case FIELD_PROP_DOUBLE:
-        {
-             double fVal = 0.0;
-             rAny >>= fVal;
-             SetValue(fVal);
-        }
-        break;
-    case FIELD_PROP_SUBTYPE:
-        nTmp32 = lcl_APIToSubType(rAny);
-        if(nTmp32 >= 0)
-            SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
+        rAny <<= OUString( aPText );
         break;
     case FIELD_PROP_PAR3:
-        ::GetString( rAny, aPText );
-        break;
-    case FIELD_PROP_BOOL3:
-        if(*(sal_Bool*) rAny.getValue())
-            nSubType |= nsSwExtendedSubType::SUB_CMD;
-        else
-            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
-        break;
-    case FIELD_PROP_BOOL1:
-        SetInputFlag(*(sal_Bool*) rAny.getValue());
+        rAny <<= OUString( aHelp );
         break;
     case FIELD_PROP_PAR4:
-        ChgExpStr( ::GetString( rAny, sTmp ));
+        rAny <<= OUString( aToolTip );
         break;
     default:
-        return SwField::PutValue(rAny, nWhichId);
+        DBG_ERROR("illegal property");
+    }
+    return sal_True;
+}
+
+sal_Bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+{
+    switch( nWhichId )
+    {
+    case FIELD_PROP_PAR1:
+        {
+            ::GetString( rAny, aContent );
+        }
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, aPText );
+        break;
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aHelp );
+        break;
+    case FIELD_PROP_PAR4:
+        ::GetString( rAny, aToolTip );
+        break;
+    default:
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
 
 
+void SwInputField::SetPar1(const String& rStr)
+{
+    aContent = rStr;
+}
+
+const String& SwInputField::GetPar1() const
+{
+    return getContent();
+}
+
+
+void SwInputField::SetPar2(const String& rStr)
+{
+    aPText = rStr;
+}
+
+String SwInputField::GetPar2() const
+{
+    return aPText;
+}
+
+void SwInputField::SetHelp(const String & rStr)
+{
+    aHelp = rStr;
+}
+
+String SwInputField::GetHelp() const
+{
+    return aHelp;
+}
+
+void SwInputField::SetToolTip(const String & rStr)
+{
+    aToolTip = rStr;
+}
+
+String SwInputField::GetToolTip() const
+{
+    return aToolTip;
+}
+
+sal_uInt16 SwInputField::GetSubType() const
+{
+    return nSubType;
+}
+
+void SwInputField::SetSubType(sal_uInt16 nSub)
+{
+    nSubType = nSub;
+}
 

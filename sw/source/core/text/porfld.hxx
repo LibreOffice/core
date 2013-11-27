@@ -65,6 +65,9 @@ public:
     SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0, sal_Bool bPlaceHolder = sal_False );
     ~SwFldPortion();
 
+    //IAccessibility2 Implementation 2009-----
+    sal_uInt16 m_nAttrFldType;
+    //-----IAccessibility2 Implementation 2009
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
     inline sal_Bool HasFont() const { return 0 != pFnt; }
@@ -174,7 +177,6 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwBulletPortion( const xub_Unicode cCh,
                      const XubString& rBulletFollowedBy,
                      SwFont *pFnt,
@@ -182,7 +184,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     OUTPUT_OPERATOR
 };
 
@@ -198,7 +199,6 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwGrfNumPortion( SwFrm *pFrm,
                      const XubString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
@@ -208,7 +208,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

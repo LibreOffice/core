@@ -303,7 +303,13 @@ public:
     // read by the binary filter:
     virtual void UpdateLinks();
     // <--
+    //IAccessibility2 Implementation 2009-----
+    virtual void setDocAccTitle( const String& rTitle );
+    virtual const String getDocAccTitle() const;
 
+    void setDocReadOnly( sal_Bool bReadOnly);
+    sal_Bool getDocReadOnly() const;
+    //-----IAccessibility2 Implementation 2009
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
 

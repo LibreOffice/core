@@ -2111,16 +2111,13 @@ CHECKTABLE(pTblNd->GetTable())
                     // evt. noch ueberflussige Attribute loeschen
                     SwIndex aTmpIdx( pTxtNd, nDelPos );
                     if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
-                        pTxtNd->RstAttr( aTmpIdx, pTxtNd->GetTxt().Len() -
-                                                            nDelPos + 1 );
+                        pTxtNd->RstTxtAttr( aTmpIdx, pTxtNd->GetTxt().Len() - nDelPos + 1 );
                     // das Trennzeichen loeschen
                     pTxtNd->EraseText( aTmpIdx, 1 );
                 }
-//              delete pUndo;
 DUMPDOC( &rDoc, String( "d:\\tmp\\tab_") + String( aNewSttNds.Count() - i ) +
                 String(".db") )
             }
-//          pMoves->Remove( 0, pMoves->Count() );
             nIdx = pBox->GetSttIdx();
         }
         else

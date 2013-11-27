@@ -373,6 +373,13 @@ namespace accessibility
         /// Check whether 0<=nStart<=n and 0<=nEnd<=n
         void CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
 
+//IAccessibility2 Implementation 2009-----
+        void _correctValues( const sal_Int32 nIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues );
+        sal_Int32 SkipField(sal_Int32 nIndex, sal_Bool bForward);
+     // get overlapped field, extend return string. Only extend forward for now
+        sal_Bool ExtendByField( ::com::sun::star::accessibility::TextSegment& Segment );
+        String GetFieldTypeNameAtIndex(sal_Int32 nIndex);
+//-----IAccessibility2 Implementation 2009
         // the paragraph index in the edit engine (guarded by solar mutex)
         sal_Int32   mnParagraphIndex;
 
@@ -400,6 +407,14 @@ namespace accessibility
 
         /// Our listeners (guarded by maMutex)
         int mnNotifierClientId;
+    //IAccessibility2 Implementation 2009-----
+public:
+        void SetParagraphBackColorAccessible(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > & ref)
+        { m_xAccInfo = ref ;}
+private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccInfo;
+        //virtual sal_Bool IsShapeParaFocusable( );
+    //-----IAccessibility2 Implementation 2009
 
         // --> OD 2006-01-11 #i27138#
         // the paragraph manager, which created this instance - is NULL, if

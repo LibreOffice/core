@@ -58,8 +58,14 @@ FuEditGluePoints::FuEditGluePoints (
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
-    meLastSdrViewEditMode(SDREDITMODE_EDIT)
+:   FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+    meLastSdrViewEditMode(SDREDITMODE_EDIT),
+//IAccessibility2 Implementation 2009-----
+    //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+    //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    maOldPoint(0, 0),
+    mbBeginInsertPoint(false)
+//-----IAccessibility2 Implementation 2009
 {
 }
 
@@ -315,11 +321,113 @@ bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
     mpView->SetActualOutDev( mpWindow );
 
+//IAccessibility2 Implementation 2009-----
+    //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+    //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    //sal_Bool bReturn = FuDraw::KeyInput(rKEvt);
+
     bool bReturn = FuDraw::KeyInput(rKEvt);
 
+    switch (rKEvt.GetKeyCode().GetCode())
+    {
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            if(rKEvt.GetKeyCode().IsShift()&& mpView->IsInsGluePointMode() ){
+                long nX = 0;
+                long nY = 0;
+                sal_uInt16  nCode = rKEvt.GetKeyCode().GetCode();
+                if (nCode == KEY_UP)
+                {
+                    // Scroll nach oben
+                    nX = 0;
+                    nY =-1;
+                }
+                else if (nCode == KEY_DOWN)
+                {
+                    // Scroll nach unten
+                    nX = 0;
+                    nY = 1;
+                }
+                else if (nCode == KEY_LEFT)
+                {
+                    // Scroll nach links
+                    nX =-1;
+                    nY = 0;
+                }
+                else if (nCode == KEY_RIGHT)
+                {
+                    // Scroll nach rechts
+                    nX = 1;
+                    nY = 0;
+                }
+
+                const basegfx::B2DPoint aSelectCenterPixel(
+                    mpWindow->GetViewTransformation() * mpView->getMarkedObjectSnapRange().getCenter());
+                const Point aPoint(mbBeginInsertPoint
+                    ? maOldPoint
+                    : Point(basegfx::fround(aSelectCenterPixel.getX()), basegfx::fround(aSelectCenterPixel.getY())));
+                const Point ePoint(aPoint + Point(nX, nY));
+
+                mpWindow->SetPointerPosPixel(ePoint);
+
+                //simulate mouse move action
+                MouseEvent eMevt(ePoint, 1, 2, MOUSE_LEFT, 0);
+                MouseMove(eMevt);
+
+                // ??? Point aPix(eMevt.GetPosPixel());
+                maOldPoint = ePoint;
+                mbBeginInsertPoint = true;
+                bReturn = true;
+            }
+        }
+        break;
+        case KEY_RETURN:
+            if(rKEvt.GetKeyCode().IsShift() && mpView->IsInsGluePointMode() )
+            {
+                if(mbBeginInsertPoint)
+                {
+                    mpWindow->SetPointerPosPixel(maOldPoint);
+                    //simulate mouse button down action
+                    MouseEvent aMevt(maOldPoint, 1, 3, MOUSE_LEFT, KEY_SHIFT);
+                    // MT IA2: Not used?
+                    // sal_uInt16 ubuttons = aMevt.GetButtons();
+                    // sal_uInt16 uMod      = aMevt.GetModifier();
+                    MouseButtonDown(aMevt);
+                    mpWindow->CaptureMouse();
+                    //simulate mouse button up action
+                    MouseEvent rMEvt(maOldPoint, 1, 17, MOUSE_LEFT, KEY_SHIFT);
+                    MouseButtonUp(rMEvt);
+                    bReturn= sal_True;
+                }
+            }
+            break;
+    }
+    if(!bReturn)
+        bReturn = FuDraw::KeyInput(rKEvt);
+//-----IAccessibility2 Implementation 2009
     return bReturn;
 }
 
+//IAccessibility2 Implementation 2009-----
+ //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+ //and SHIFT+ENTER key to decide the postion and draw the new insert point
+void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
+{
+    if(mbBeginInsertPoint && pMEvt)
+    {
+        MouseEvent aMEvt(pMEvt->GetPosPixel(), pMEvt->GetClicks(),
+            pMEvt->GetMode(), pMEvt->GetButtons(), pMEvt->GetModifier() & ~KEY_SHIFT);
+        FuDraw::ForcePointer(&aMEvt);
+    }
+    else
+    {
+        FuDraw::ForcePointer(pMEvt);
+    }
+}
+//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* Command-event

@@ -1,34 +1,11 @@
-diff -uNrp misc/nss-3.12.6/mozilla/security/coreconf/config.mk misc/build/nss-3.12.6/mozilla/security/coreconf/config.mk
---- misc/nss-3.12.6/mozilla/security/coreconf/config.mk	2009-08-25 19:35:11.000000000 -0300
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/config.mk	2011-12-14 14:07:30.979358265 -0300
-@@ -63,7 +63,7 @@ endif
- #######################################################################
+--- misc/nss-3.14.4/mozilla/security/coreconf/Linux.mk	2013-11-01 14:39:28.195966851 +0100
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/Linux.mk	2013-11-01 14:39:10.246610849 +0100
+@@ -131,7 +131,7 @@
+ # -ansi on platforms like Android where the system headers are C99 and do
+ # not build with -ansi.
+ STANDARDS_CFLAGS	= -D_POSIX_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE
+-OS_CFLAGS		= $(STANDARDS_CFLAGS) $(DSO_CFLAGS) $(OS_REL_CFLAGS) $(ARCHFLAG) -Wall -Werror-implicit-function-declaration -Wno-switch -pipe -DLINUX -Dlinux -DHAVE_STRERROR
++OS_CFLAGS		= $(STANDARDS_CFLAGS) $(DSO_CFLAGS) $(OS_REL_CFLAGS) $(ARCHFLAG) -Wall -Werror-implicit-function-declaration -Wno-switch -pipe -DLINUX -Dlinux -DHAVE_STRERROR -DHAVE_UNISTD_H
+ OS_LIBS			= $(OS_PTHREAD) -ldl -lc
  
- TARGET_OSES = FreeBSD BSD_OS NetBSD OpenUNIX OS2 QNX Darwin BeOS OpenBSD \
--              AIX RISCOS WINNT WIN95 WINCE
-+              AIX RISCOS WINNT WIN95 WINCE Linux
- 
- ifeq (,$(filter-out $(TARGET_OSES),$(OS_TARGET)))
- include $(CORE_DEPTH)/coreconf/$(OS_TARGET).mk
-diff -uNrp misc/nss-3.12.6/mozilla/security/coreconf/Linux.mk misc/build/nss-3.12.6/mozilla/security/coreconf/Linux.mk
---- misc/nss-3.12.6/mozilla/security/coreconf/Linux.mk	2011-12-14 14:06:50.112354384 -0300
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/Linux.mk	2011-12-14 14:07:30.978358265 -0300
-@@ -179,3 +179,18 @@ RPATH = -Wl,-rpath,'$$ORIGIN:/opt/sun/pr
- endif
- endif
- 
-+OS_REL_CFLAGS   += -DLINUX2_1
-+MKSHLIB         = $(CC) $(DSO_LDOPTS) -Wl,-soname -Wl,$(@:$(OBJDIR)/%.so=%.so) $(RPATH)
-+
-+ifdef MAPFILE
-+	MKSHLIB += -Wl,--version-script,$(MAPFILE)
-+endif
-+PROCESS_MAP_FILE = grep -v ';-' $< | \
-+        sed -e 's,;+,,' -e 's; DATA ;;' -e 's,;;,,' -e 's,;.*,;,' > $@
-+
-+ifeq ($(OS_RELEASE),2.4)
-+# Softoken 3.13 uses NO_FORK_CHECK only.
-+# Softoken 3.12 uses NO_FORK_CHECK and NO_CHECK_FORK.
-+# Don't use NO_CHECK_FORK in new code.
-+DEFINES += -DNO_FORK_CHECK -DNO_CHECK_FORK
-+endif
+ ifdef USE_PTHREADS

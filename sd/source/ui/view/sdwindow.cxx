@@ -45,6 +45,10 @@
 #include "AccessibleDrawDocumentView.hxx"
 #include "WindowUpdater.hxx"
 
+//IAccessibility2 Implementation 2009-----
+#include <vcl/svapp.hxx>
+//-----IAccessibility2 Implementation 2009
+
 namespace sd {
 
 #define SCROLL_LINE_FACT   0.05     // Faktor fuer Zeilenscrolling
@@ -1170,14 +1174,47 @@ void Window::DropScroll(const basegfx::B2DPoint& rMousePos)
     ::com::sun::star::accessibility::XAccessible>
     Window::CreateAccessible (void)
 {
+//IAccessibility2 Implementation 2009-----
+    // If current viewshell is PresentationViewShell, just return empty because the correct ShowWin will be created later.
+    if (mpViewShell && dynamic_cast< PresentationViewShell* >(mpViewShell))
+    {
+        return ::Window::CreateAccessible ();
+    }
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(sal_False);
+    if (xAcc.get())
+    {
+        return xAcc;
+    }
     if (mpViewShell != NULL)
-        return mpViewShell->CreateAccessibleDocumentView (this);
+    //return mpViewShell->CreateAccessibleDocumentView (this);
+    {
+        xAcc = mpViewShell->CreateAccessibleDocumentView (this);
+        SetAccessible(xAcc);
+        return xAcc;
+    }
+//-----IAccessibility2 Implementation 2009
     else
     {
         OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
         return ::Window::CreateAccessible ();
     }
 }
+
+//IAccessibility2 Implementation 2009-----
+// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
+// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
+void Window::SwitchView()
+{
+    if (!Application::IsAccessibilityEnabled())
+    {
+        return ;
+    }
+    if (mpViewShell)
+    {
+        mpViewShell->SwitchViewFireFocus(GetAccessible(sal_False));
+    }
+}
+//-----IAccessibility2 Implementation 2009
 
 XubString Window::GetSurroundingText() const
 {

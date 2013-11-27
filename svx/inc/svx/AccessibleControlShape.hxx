@@ -63,6 +63,10 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleControlShape( );
 
+    //IAccessibility2 Implementation 2009-----
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL  GetControlModel( ) { return m_xControlModel;} ;
+    AccessibleControlShape* SAL_CALL GetLabeledByControlShape();
+    //-----IAccessibility2 Implementation 2009
 protected:
     //---  XAccessible  ----------------------------------------
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext( ) throw(::com::sun::star::uno::RuntimeException);

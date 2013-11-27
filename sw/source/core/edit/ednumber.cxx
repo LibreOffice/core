@@ -209,7 +209,7 @@ sal_Bool SwEditShell::SelectionHasNumber() const
 
     return bResult;
 }
-//Sym3_879 add a new function to determine number on/off status
+//add a new function to determine number on/off status
 sal_Bool SwEditShell::SelectionHasBullet() const
 {
     sal_Bool bResult = HasBullet();
@@ -731,7 +731,6 @@ sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
     return bResult;
 }
 
-// --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
 sal_uInt8 SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
@@ -741,22 +740,18 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
-    // --> FME 2005-09-12 #124972# Made code robust:
     ASSERT( pTxtNd, "GetNumLevel() without text node" )
     if ( !pTxtNd )
         return nLevel;
-    // <--
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)
     {
-        // --> OD 2008-05-09 #refactorlists#
         const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
         if ( nListLevelOfTxtNode >= 0 )
         {
             nLevel = static_cast<sal_uInt8>( nListLevelOfTxtNode );
         }
-        // <--
     }
 
     return nLevel;
@@ -784,21 +779,16 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
-          {
+        {
             aRangeArr.SetPam( n, aPam );
-            // --> OD 2008-02-08 #newlistlevelattrs#
-            // --> OD 2008-03-17 #refactorlists#
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
                                   sal_True, bResetIndentAttrs );
-            // <--
             GetDoc()->SetCounted( aPam, true );
-          }
+        }
     }
     else
     {
-        // --> OD 2008-02-08 #newlistlevelattrs#
-        // --> OD 2008-03-17 #refactorlists#
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
                               sal_True, bResetIndentAttrs );

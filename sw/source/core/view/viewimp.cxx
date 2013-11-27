@@ -446,6 +446,24 @@ void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
     } while ( pTmp != pVSh );
 }
 
+//IAccessibility2 Implementation 2009-----
+void SwViewImp::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
+{
+    if( IsAccessible() )
+        GetAccessibleMap().FirePageChangeEvent( nOldPage, nNewPage);
+}
+
+void SwViewImp::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection)
+{
+    if( IsAccessible() )
+        GetAccessibleMap().FireSectionChangeEvent(nOldSection, nNewSection);
+}
+void SwViewImp::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn)
+{
+    if( IsAccessible() )
+        GetAccessibleMap().FireColumnChangeEvent(nOldColumn,  nNewColumn);
+}
+//-----IAccessibility2 Implementation 2009
 void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
 {
     ASSERT( pFrm->IsAccessibleFrm(), "frame is not accessible" );

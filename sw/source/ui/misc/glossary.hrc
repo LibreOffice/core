@@ -84,4 +84,6 @@
 #define   FL_NN              9
 #define   BT_CANCEL         10
 #define   BT_OKNEW          11
-
+//IAccessibility2 Implementation 2009-----
+#define STR_SW_CATEGORY 12
+//-----IAccessibility2 Implementation 2009

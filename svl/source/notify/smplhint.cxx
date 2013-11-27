@@ -19,22 +19,17 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#ifndef GCC
-#endif
 
 #include <svl/smplhint.hxx>
 
 //====================================================================
 
 // creates a SimpleHint with the type nId
-
 SfxSimpleHint::SfxSimpleHint( sal_uLong nIdP )
 {
-    nId = nIdP;
+    mnId = nIdP;
 }
 
-
+// eof

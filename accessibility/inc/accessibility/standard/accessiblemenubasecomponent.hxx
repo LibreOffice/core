@@ -109,6 +109,8 @@ protected:
     virtual sal_Bool        IsHighlighted();
     sal_Bool                IsChildHighlighted();
 
+    virtual sal_Bool        IsMenuHideDisabledEntries();
+
     void                    SelectChild( sal_Int32 i );
     void                    DeSelectAll();
     sal_Bool                IsChildSelected( sal_Int32 i );

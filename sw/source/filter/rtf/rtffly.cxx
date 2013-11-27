@@ -272,7 +272,7 @@ void SwRTFParser::SetFlysInDoc()
                     aDropCap.GetChars() = 1;
 
                     SwIndex aIdx( pEndNd );
-                    pNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
+                    pNd->RstTxtAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
                     pNd->SetAttr( aDropCap );
                 }
                 delete pFlySave;

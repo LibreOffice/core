@@ -1,13 +1,13 @@
 Relation between nss, moz, moz_prebuilt
 ---------------------------------------
-nss containes the security libraries which are also part of moz. However nss is
-meant to be more current, that is it to be updated more often. This should be
-easier than doing this with moz. 
+nss contains the security libraries which are also part of moz. However nss is
+meant to be more current, that is, it to be updated more often. This 
+should be easier than updating moz.
 
-If nss is build depends on an environment variable (ENABLE_NSS_MODULE=YES) which
-is per default set to YES. In this case nss is build before moz. The nss
+When nss is build, it depends on an environment variable (ENABLE_NSS_MODULE)
+which is by default set to YES. In this case nss is build before moz. The nss
 libraries/lib files/headers built in moz are then not delivered. Otherwise they
-would overwrite those from nss. That is, the nss libraries build in moz are
+would overwrite those from nss. The nss libraries build in moz are then
 removed from mozruntime.zip (build in moz/solver/bin), they are removed from the
 lib directory (for example moz/unxlngi6.pro/lib), and the nss and nspr headers
 are also removed (inc/nss and inc/nspr).  The nss libraries from the nss module
@@ -27,7 +27,7 @@ checksums for the cryptographic module are not delivered into solver and will
 not be part of the OOo installation sets.
 
 Signing has been turned off because 
-- we change the rpath (install names)  after signing which breaks the signatures
+- we change the rpath (install names) after signing which breaks the signatures
 (Mac)
 - sqlite conflicts with the system sqlite when signing which breaks the build
 

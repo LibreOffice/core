@@ -214,6 +214,27 @@ published constants AccessibleStateType
         partly in the visible area of its parent.</p>
     */
     const short VISIBLE = 30;
+
+    // The following constants have been introduced with the IA2 CWS:
+
+    // MOVEABLE only exists in MSAA/IA2, but not in ATK/JAA/NSAccessibility.
+    /** Indicates the position of the object is not fixed.
+    */
+    const short MOVEABLE = 31;
+
+    // DEFAULT exists in MSAA/IA2, and now also in ATK and NSAccessibility.
+    /** Indicates the object is the default button in a window
+    */
+    const short DEFAULT = 32;
+
+    // OFFSCREEN only exists in MSAA/IA2, but not in ATK/JAA/NSAccessibility.
+    // MT: Shouldn't this be the same like !SHOWING in UAA/ATK?
+    const short OFFSCREEN = 33;
+
+    // COLLAPSED exists in MSAA/IA2, and now also in JAA, but not in ATK/NSAccessibility. In NSAccessibility, there is a notification for collapse.
+    // In opposite to MSAA, UAA has EXPANDABLE, so EXPANDABLE && !EXPANDED should be the same like COLLAPSED.
+    const short COLLAPSE = 34;
+
 };
 
 }; }; }; };

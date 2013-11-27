@@ -785,6 +785,9 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         aTbxCmd.Select(IID_ZOOMOUT);
         aTbxCmd.RemoveItem(aTbxCmd.GetItemPos(IID_ZOOMOUT));
     }
+    //IAccessibility2 Implementation 2009-----
+    aLbEntries.SetNavigatorDlgFlag(sal_True);
+    //-----IAccessibility2 Implementation 2009
 }
 
 //------------------------------------------------------------------------
@@ -985,7 +988,13 @@ void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 case FID_ANYDATACHANGED:
                     aContentTimer.Start();      // Notizen nicht sofort suchen
                     break;
-
+                //IAccessibility2 Implementation 2009-----
+                case FID_KILLEDITVIEW:
+                    aLbEntries.ObjectFresh( SC_CONTENT_OLEOBJECT );
+                    aLbEntries.ObjectFresh( SC_CONTENT_DRAWING );
+                    aLbEntries.ObjectFresh( SC_CONTENT_GRAPHIC );
+                      break;
+                //-----IAccessibility2 Implementation 2009
                 default:
                     break;
             }

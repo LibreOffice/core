@@ -29,6 +29,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/QueryFolderName.hxx,sv
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/acceleratorexecute.hxx,svtools/acceleratorexecute.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessibilityoptions.hxx,svtools/accessibilityoptions.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessiblefactory.hxx,svtools/accessiblefactory.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessibleruler.hxx,svtools/accessibleruler.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessibletable.hxx,svtools/accessibletable.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/accessibletableprovider.hxx,svtools/accessibletableprovider.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/addresstemplate.hxx,svtools/addresstemplate.hxx))

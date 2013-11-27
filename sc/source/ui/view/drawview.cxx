@@ -703,6 +703,89 @@ void __EXPORT ScDrawView::UpdateUserViewOptions()
 #pragma optimize ( "", on )
 #endif
 
+//IAccessibility2 Implementation 2009-----
+SdrObject* ScDrawView::GetObjectByName(const String& rName)
+{
+    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    if (pShell)
+    {
+        SdrModel& rDrawLayer = getSdrModelFromSdrView();
+        sal_uInt16 nTabCount = pDoc->GetTableCount();
+        for (sal_uInt16 i=0; i<nTabCount; i++)
+        {
+            SdrPage* pPage = rDrawLayer.GetPage(i);
+            DBG_ASSERT(pPage,"Page ?");
+            if (pPage)
+            {
+                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObject* pObject = aIter.Next();
+                while (pObject)
+                {
+                    if ( ScDrawLayer::GetVisibleName( pObject ) == rName )
+                    {
+                        return pObject;
+                    }
+                    pObject = aIter.Next();
+                }
+            }
+        }
+    }
+    return 0;
+}
+//Solution: realize multi-selection of objects
+//==================================================
+sal_Bool ScDrawView::SelectCurrentViewObject( const String& rName )
+{
+    sal_uInt16 nObjectTab = 0;
+    SdrObject* pFound = NULL;
+       sal_Bool bUnMark=sal_False;
+    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    if (pShell)
+    {
+        SdrModel& rDrawLayer = getSdrModelFromSdrView();
+        sal_uInt16 nTabCount = pDoc->GetTableCount();
+        for (sal_uInt16 i=0; i<nTabCount && !pFound; i++)
+        {
+            SdrPage* pPage = rDrawLayer.GetPage(i);
+            DBG_ASSERT(pPage,"Page ?");
+            if (pPage)
+            {
+                SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+                SdrObject* pObject = aIter.Next();
+                while (pObject && !pFound)
+                {
+                    if ( ScDrawLayer::GetVisibleName( pObject ) == rName )
+                    {
+                        pFound = pObject;
+                        nObjectTab = i;
+                    }
+                    pObject = aIter.Next();
+                }
+            }
+        }
+    }
+    if ( pFound )
+    {
+        ScTabView* pView = pViewData->GetView();
+        if ( nObjectTab != nTab )                               // Tabelle umschalten
+            pView->SetTabNo( nObjectTab );
+        DBG_ASSERT( nTab == nObjectTab, "Tabellen umschalten hat nicht geklappt" );
+        pView->ScrollToObject( pFound );
+        if ( pFound->GetLayer() == SC_LAYER_BACK &&
+                !pViewData->GetViewShell()->IsDrawSelMode() &&
+                !pDoc->IsTabProtected( nTab ) &&
+                !pViewData->GetSfxDocShell()->IsReadOnly() )
+        {
+            SdrLayer* pLayer = getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
+            if (pLayer)
+                SetLayerLocked( pLayer->GetName(), sal_False );
+        }
+        bUnMark = isSdrObjectSelected(*pFound);
+        MarkObj(*pFound, bUnMark);
+    }
+    return ( bUnMark );
+}
+//-----IAccessibility2 Implementation 2009
 sal_Bool ScDrawView::SelectObject( const String& rName )
 {
     UnmarkAll();
@@ -760,6 +843,23 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
 
     return ( pFound != NULL );
 }
+
+//UNUSED2008-05  String ScDrawView::GetSelectedChartName() const
+//UNUSED2008-05  {
+//UNUSED2008-05      //  used for modifying a chart's data area - PersistName must always be used
+//UNUSED2008-05      //  (as in ScDocument::FindChartData and UpdateChartArea)
+//UNUSED2008-05
+//UNUSED2008-05      const SdrMarkList& rMarkList = GetMarkedObjectList();
+//UNUSED2008-05      if (rMarkList.GetMarkCount() == 1)
+//UNUSED2008-05      {
+//UNUSED2008-05          SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+//UNUSED2008-05          if (pObj->GetObjIdentifier() == OBJ_OLE2)
+//UNUSED2008-05              if ( pDoc->IsChart(pObj) )
+//UNUSED2008-05                  return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
+//UNUSED2008-05      }
+//UNUSED2008-05
+//UNUSED2008-05      return EMPTY_STRING;        // nichts gefunden
+//UNUSED2008-05  }
 
 bool ScDrawView::InsertObjectSafe(SdrObject& rObj, sal_uLong nOptions)
 {
@@ -820,7 +920,7 @@ void ScDrawView::DeleteMarked()
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : 0;
         ::svl::IUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : 0;
-        bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
+        bool bUndo = pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
         ScPostIt* pNote = pDoc->ReleaseNote( pCaptData->maStart );

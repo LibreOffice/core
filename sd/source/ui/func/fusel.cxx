@@ -96,15 +96,22 @@ FuSelection::FuSelection (
     ::sd::View* pView,
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
-    : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
-      bTempRotation(false),
-      bSelectionChanged(false),
-      bHideAndAnimate(false),
-      pHdl(NULL),
-      bSuppressChangesOfSelection(false),
-      bMirrorSide0(false),
-      nEditMode(SID_BEZIER_MOVE),
-      pWaterCanCandidate(NULL)
+:   FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+    bTempRotation(false),
+    bSelectionChanged(false),
+    bHideAndAnimate(false),
+    pHdl(NULL),
+    bSuppressChangesOfSelection(false),
+    bMirrorSide0(false),
+    nEditMode(SID_BEZIER_MOVE),
+    pWaterCanCandidate(NULL),
+//IAccessibility2 Implementation 2009-----
+  //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+  //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    maOldPoint(0, 0),
+    mbBeginInsertPoint(false),
+    mbMovedToCenterPoint(false)
+//-----IAccessibility2 Implementation 2009
 {
 }
 
@@ -965,8 +972,85 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
             bReturn = FuSelection::cancel();
         }
         break;
+//IAccessibility2 Implementation 2009-----
+  //Solution: add keyboard operation for insert points in drawing curve
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            if(rKEvt.GetKeyCode().IsShift()&&(nEditMode == SID_BEZIER_INSERT))
+            {
+                long nX = 0;
+                long nY = 0;
+                sal_uInt16  nCode = rKEvt.GetKeyCode().GetCode();
+                if (nCode == KEY_UP)
+                {
+                    // Scroll nach oben
+                    nX = 0;
+                    nY =-1;
     }
+                else if (nCode == KEY_DOWN)
+                {
+                    // Scroll nach unten
+                    nX = 0;
+                    nY = 1;
+                }
+                else if (nCode == KEY_LEFT)
+                {
+                    // Scroll nach links
+                    nX =-1;
+                    nY = 0;
+                }
+                else if (nCode == KEY_RIGHT)
+                {
+                    // Scroll nach rechts
+                    nX = 1;
+                    nY = 0;
+                }
 
+                const basegfx::B2DPoint aSelectCenterPixel(
+                    mpWindow->GetViewTransformation() * mpView->getMarkedObjectSnapRange().getCenter());
+                const Point aPoint(mbMovedToCenterPoint
+                    ? maOldPoint
+                    : Point(basegfx::fround(aSelectCenterPixel.getX()), basegfx::fround(aSelectCenterPixel.getY())));
+                const Point ePoint(aPoint + Point(nX, nY));
+
+                mpWindow->SetPointerPosPixel(ePoint);
+
+                //simulate mouse move action
+                MouseEvent eMevt(ePoint, 1, 2, MOUSE_LEFT, 0);
+                MouseMove(eMevt);
+
+                maOldPoint = ePoint;
+                mbMovedToCenterPoint = true;
+                bReturn = true;
+            }
+        }
+        break;
+        case KEY_RETURN:
+            if(rKEvt.GetKeyCode().IsShift()&&(nEditMode == SID_BEZIER_INSERT))
+            {
+                if(!mbBeginInsertPoint)
+                {
+                    //simulate mouse button down action
+                    MouseEvent aMevt(maOldPoint, 1, 3, MOUSE_LEFT, KEY_SHIFT);
+                    MouseButtonDown(aMevt);
+                    mpWindow->CaptureMouse();
+                    mbBeginInsertPoint = true;
+                }
+                else
+                {
+                    //simulate mouse button up action
+                    MouseEvent rMEvt(maOldPoint, 1, 17, MOUSE_LEFT, KEY_SHIFT);
+                    MouseButtonUp(rMEvt);
+                    mbBeginInsertPoint = false;
+                }
+                bReturn= sal_True;
+            }
+            break;
+    }
+//-----IAccessibility2 Implementation 2009
     if (!bReturn)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
@@ -984,6 +1068,21 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 }
 
 
+//IAccessibility2 Implementation 2009-----
+void FuSelection::ForcePointer(const MouseEvent* pMEvt)
+{
+    if(mbMovedToCenterPoint && !mbBeginInsertPoint && pMEvt)
+    {
+        MouseEvent aMEvt(pMEvt->GetPosPixel(), pMEvt->GetClicks(),
+            pMEvt->GetMode(), pMEvt->GetButtons(), pMEvt->GetModifier() & ~KEY_SHIFT);
+        FuDraw::ForcePointer(&aMEvt);
+    }
+    else
+    {
+        FuDraw::ForcePointer(pMEvt);
+    }
+}
+//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* Function aktivieren

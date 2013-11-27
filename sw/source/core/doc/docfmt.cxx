@@ -183,14 +183,14 @@ sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
             // fuers Undo alle Attribute sichern
             SwRegHistory aRHst( *pTxtNode, pPara->pHistory );
             pTxtNode->GetpSwpHints()->Register( &aRHst );
-            pTxtNode->RstAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
-                                pPara->pDelSet, pPara->bInclRefToxMark );
+            pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
+                                  pPara->pDelSet, pPara->bInclRefToxMark );
             if( pTxtNode->GetpSwpHints() )
                 pTxtNode->GetpSwpHints()->DeRegister();
         }
         else
-            pTxtNode->RstAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
-                                pPara->pDelSet, pPara->bInclRefToxMark );
+            pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
+                                  pPara->pDelSet, pPara->bInclRefToxMark );
     }
     return sal_True;
 }
@@ -399,7 +399,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
         {
             nMkPos = *pURLAttr->GetStart();
-            nPtPos = *pURLAttr->GetEnd();
+            nPtPos = *pURLAttr->End();
         }
         else
         {
@@ -549,11 +549,15 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 // Einfuegen der Hints nach Inhaltsformen;
 // wird in SwDoc::Insert(..., SwFmtHint &rHt) benutzt
 
-static bool
-lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
-//Modify here for #119405, by easyfan, 2012-05-24
-            const SetAttrMode nFlags, SwUndoAttr *const pUndo,bool bExpandCharToPara=false)
-//End of modification, by easyfan
+static bool lcl_InsAttr(
+    SwDoc *const pDoc,
+    const SwPaM &rRg,
+    const SfxItemSet& rChgSet,
+    const SetAttrMode nFlags,
+    SwUndoAttr *const pUndo,
+    //Modify here for #119405, by easyfan, 2012-05-24
+    const bool bExpandCharToPara=false)
+    //End of modification, by easyfan
 {
     // teil die Sets auf (fuer Selektion in Nodes)
     const SfxItemSet* pCharSet = 0;
@@ -609,9 +613,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
                                     RES_PARATR_BEGIN, RES_PARATR_END-1,
-                                    // --> OD 2008-02-25 #refactorlists#
                                     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-                                    // <--
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
                                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -639,7 +641,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SwTxtNode * pTxtNd = pNode->GetTxtNode();
             SwNumRule * pNumRule = pTxtNd->GetNumRule();
 
-            // --> OD 2005-10-24 #126346# - make code robust:
             if ( !pNumRule )
             {
                 ASSERT( false,
@@ -647,7 +648,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 DELETECHARSETS
                 return false;
             }
-            // <--
 
             SwNumFmt aNumFmt = pNumRule->Get(static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()));
             SwCharFmt * pCharFmt =
@@ -665,7 +665,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             DELETECHARSETS
             return true;
         }
-        // <- #i27615#
 
         const SwIndex& rSt = pStt->nContent;
 
@@ -708,6 +707,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
                                 RES_TXTATR_META, RES_TXTATR_METAFIELD,
                                 RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                                RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD,
                                 0 );
 
             aTxtSet.Put( rChgSet );
@@ -860,7 +860,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
             {
                 nMkPos = *pURLAttr->GetStart();
-                nPtPos = *pURLAttr->GetEnd();
+                nPtPos = *pURLAttr->End();
             }
             else
             {
@@ -894,12 +894,12 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     // fuers Undo alle Attribute sichern
                     SwRegHistory aRHst( *pTxtNd, pHistory );
                     pTxtNd->GetpSwpHints()->Register( &aRHst );
-                    pTxtNd->RstAttr( aSt, nPtPos, 0, pCharSet );
+                    pTxtNd->RstTxtAttr( aSt, nPtPos, 0, pCharSet );
                     if( pTxtNd->GetpSwpHints() )
                         pTxtNd->GetpSwpHints()->DeRegister();
                 }
                 else
-                    pTxtNd->RstAttr( aSt, nPtPos, 0, pCharSet );
+                    pTxtNd->RstTxtAttr( aSt, nPtPos, 0, pCharSet );
             }
 
             // the SwRegHistory inserts the attribute into the TxtNode!
@@ -981,7 +981,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                 if (pCurrentNd)
                 {
-                     pCurrentNd->TryCharSetExpandToNum(*pCharSet);
+                    pCurrentNd->TryCharSetExpandToNum(*pCharSet);
 
                 }
             }
@@ -1089,7 +1089,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         ++nNodes;
     }
 
-    //Modify here for #119405, by easyfan, 2012-05-24
     //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
     //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
     //current setting attribute set is a character range properties set and comes from a MS word
@@ -1111,23 +1110,22 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
             if (pCurrentNd)
             {
-                 pCurrentNd->TryCharSetExpandToNum(*pCharSet);
+                pCurrentNd->TryCharSetExpandToNum(*pCharSet);
 
             }
 
         }
     }
-    //End of modification, by easyfan
 
     DELETECHARSETS
     return (nNodes != 0) || bRet;
 }
 
-//Modify here for #119405, by chengjh, 2012-08-16
-//Add a para for the char attribute exp...
-bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
-                            const SetAttrMode nFlags, bool bExpandCharToPara)
-//End
+bool SwDoc::InsertPoolItem(
+    const SwPaM &rRg,
+    const SfxPoolItem &rHt,
+    const SetAttrMode nFlags,
+    const bool bExpandCharToPara)
 {
     SwDataChanged aTmp( rRg, 0 );
     SwUndoAttr* pUndoAttr = 0;
@@ -1139,9 +1137,7 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
 
     SfxItemSet aSet( GetAttrPool(), rHt.Which(), rHt.Which() );
     aSet.Put( rHt );
-    //Modify here for #119405, by easyfan, 2012-05-24
-        bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr,bExpandCharToPara );
-        //End of modification, by easyfan
+    const bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr,bExpandCharToPara );
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1149,7 +1145,9 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
     }
 
     if( bRet )
+    {
         SetModified();
+    }
     return bRet;
 }
 

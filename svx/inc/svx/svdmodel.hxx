@@ -81,6 +81,13 @@ namespace comphelper { class IEmbeddedHelper; }
 namespace sfx2 { class LinkManager; }
 class SdrView;
 
+//IAccessibility2 Implementation 2009-----
+class ImageMap;
+//-----IAccessibility2 Implementation 2009
+
+namespace sfx2{
+    class LinkManager;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SDR_SWAPGRAPHICSMODE_NONE       0x00000000
@@ -559,6 +566,11 @@ public:
     bool IsInDestruction() const { return mbInDestruction; }
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+
+    //IAccessibility2 Implementation 2009-----
+    virtual ImageMap* GetImageMapForObject(SdrObject*){return NULL;};
+    virtual sal_Int32 GetHyperlinkCount(SdrObject*){return 0;}
+    //-----IAccessibility2 Implementation 2009
 
     /** enables (true) or disables (false) recording of undo actions
         If undo actions are added while undo is disabled, they are deleted.

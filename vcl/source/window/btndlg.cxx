@@ -289,6 +289,15 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_INITSHOW )
     {
         ImplPosControls();
+//IAccessibility2 Implementation 2009-----
+        ImplBtnDlgItem* pItem = mpItemList->First();
+        while ( pItem )
+        {
+            if ( pItem->mpPushButton && pItem->mbOwnButton )
+                pItem->mpPushButton->SetZOrder(0, WINDOW_ZORDER_LAST);
+            pItem = mpItemList->Next();
+        }
+//-----IAccessibility2 Implementation 2009
 
         // Focus evt. auf den entsprechenden Button setzen
         if ( mnFocusButtonId != BUTTONDIALOG_BUTTON_NOTFOUND )

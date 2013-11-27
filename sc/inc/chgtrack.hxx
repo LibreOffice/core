@@ -44,8 +44,25 @@
 #endif
 
 #define DEBUG_CHANGETRACK 0
+//IAccessibility2 Implementation 2009-----
+class ScChangeAction;
+class ScAppOptions;
+class ScActionColorChanger
+{
+private:
+    const ScAppOptions&     rOpt;
+    const ScStrCollection&  rUsers;
+    String                  aLastUserName;
+    sal_uInt16                  nLastUserIndex;
+    ColorData               nColor;
 
-
+public:
+                ScActionColorChanger( const ScChangeTrack& rTrack );
+                ~ScActionColorChanger() {}
+                void        Update( const ScChangeAction& rAction );
+                ColorData   GetColor() const    { return nColor; }
+};
+//-----IAccessibility2 Implementation 2009
 class ScBaseCell;
 class ScDocument;
 

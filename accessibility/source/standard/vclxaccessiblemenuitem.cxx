@@ -191,8 +191,19 @@ Sequence< ::rtl::OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() t
 sal_Int16 VCLXAccessibleMenuItem::getAccessibleRole(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-
-    return AccessibleRole::MENU_ITEM;
+    // IA2 CWS. MT: We had the aditional roles in UAA for ever, but never used them anywhere.
+    // Looks reasonable, but need to verify in Orca and VoiceOver.
+    sal_Int16 nRole = AccessibleRole::MENU_ITEM;
+    if ( m_pParent )
+    {
+        sal_uInt16 nItemId = m_pParent->GetItemId( m_nItemPos );
+        MenuItemBits nItemBits = m_pParent->GetItemBits(nItemId);
+        if(  nItemBits & MIB_RADIOCHECK)
+            nRole = AccessibleRole::RADIO_MENU_ITEM;
+        else if( nItemBits & MIB_CHECKABLE)
+            nRole = AccessibleRole::CHECK_MENU_ITEM;
+    }
+    return nRole;
 }
 
 // -----------------------------------------------------------------------------
@@ -454,8 +465,9 @@ sal_Bool VCLXAccessibleMenuItem::doAccessibleAction ( sal_Int32 nIndex ) throw (
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
-
-    return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    //IAccessibility2 Impplementaton 2009-----
+    return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_SELECT ) );
+    //-----IAccessibility2 Impplementaton 2009
 }
 
 // -----------------------------------------------------------------------------

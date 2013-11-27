@@ -42,12 +42,13 @@
 #include <viewimp.hxx>
 #include <dview.hxx>
 #include <rootfrm.hxx>
-#include <txtfrm.hxx>   // SwTxtFrm
+#include <txtfrm.hxx>
 #include <docary.hxx>
 #include <extinput.hxx>
 #include <ndtxt.hxx>
+#include <txtfld.hxx>
 #include <scriptinfo.hxx>
-#include <mdiexp.hxx>           // GetSearchDialog
+#include <mdiexp.hxx>
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
 #endif
@@ -56,6 +57,9 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
+#include <overlayrangesoutline.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
@@ -510,9 +514,11 @@ void SwVisCrsr::_SetPosAndShow()
 //////////////////////////////////////////////////////////////////////////////
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
-:   SwRects( 0 ),
-    pCShell( &rCSh ),
-    mpCursorOverlay(0)
+    : SwRects( 0 )
+    , pCShell( &rCSh )
+    , mpCursorOverlay( 0 )
+    , mbShowTxtInputFldOverlay( true )
+    , mpTxtInputFldOverlay( NULL )
 {
 }
 
@@ -536,6 +542,14 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
     sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
     setCursorOverlay(rSwap.getCursorOverlay());
     rSwap.setCursorOverlay(pTempOverlay);
+
+    const bool bTempShowTxtInputFldOverlay = mbShowTxtInputFldOverlay;
+    mbShowTxtInputFldOverlay = rSwap.mbShowTxtInputFldOverlay;
+    rSwap.mbShowTxtInputFldOverlay = bTempShowTxtInputFldOverlay;
+
+    sw::overlay::OverlayRangesOutline* pTempTxtInputFldOverlay = mpTxtInputFldOverlay;
+    mpTxtInputFldOverlay = rSwap.mpTxtInputFldOverlay;
+    rSwap.mpTxtInputFldOverlay = pTempTxtInputFldOverlay;
 }
 
 void SwSelPaintRects::Hide()
@@ -544,6 +558,12 @@ void SwSelPaintRects::Hide()
     {
         delete mpCursorOverlay;
         mpCursorOverlay = 0;
+    }
+
+    if ( mpTxtInputFldOverlay != NULL )
+    {
+        delete mpTxtInputFldOverlay;
+        mpTxtInputFldOverlay = NULL;
     }
 
     SwRects::Remove( 0, Count() );
@@ -605,8 +625,77 @@ void SwSelPaintRects::Show()
                 pTargetOverlay->add(*mpCursorOverlay);
             }
         }
+
+        HighlightInputFld();
     }
 }
+
+
+void SwSelPaintRects::HighlightInputFld()
+{
+    std::vector< basegfx::B2DRange > aInputFldRanges;
+
+    if ( mbShowTxtInputFldOverlay )
+    {
+        SwTxtInputFld* pCurTxtInputFldAtCrsr =
+            dynamic_cast<SwTxtInputFld*>(GetShell()->GetTxtFldAtPos( GetShell()->GetCrsr()->Start(), false ));
+        if ( pCurTxtInputFldAtCrsr != NULL )
+        {
+            SwTxtNode* pTxtNode = pCurTxtInputFldAtCrsr->GetpTxtNode();
+            ::boost::scoped_ptr<SwShellCrsr> pCrsrForInputTxtFld(
+                new SwShellCrsr( *GetShell(), SwPosition( *pTxtNode, *(pCurTxtInputFldAtCrsr->GetStart()) ) ) );
+            pCrsrForInputTxtFld->SetMark();
+            pCrsrForInputTxtFld->GetMark()->nNode = *pTxtNode;
+            pCrsrForInputTxtFld->GetMark()->nContent.Assign( pTxtNode, *(pCurTxtInputFldAtCrsr->End()) );
+
+            pCrsrForInputTxtFld->FillRects();
+
+            for( sal_uInt16 a(0); a < pCrsrForInputTxtFld->Count(); ++a )
+            {
+                const SwRect aNextRect((*pCrsrForInputTxtFld)[a]);
+                const Rectangle aPntRect(aNextRect.SVRect());
+
+                aInputFldRanges.push_back(basegfx::B2DRange(
+                    aPntRect.Left(), aPntRect.Top(),
+                    aPntRect.Right() + 1, aPntRect.Bottom() + 1));
+            }
+        }
+    }
+
+    if ( aInputFldRanges.size() > 0 )
+    {
+        if ( mpTxtInputFldOverlay != NULL )
+        {
+            mpTxtInputFldOverlay->setRanges( aInputFldRanges );
+        }
+        else
+        {
+            SdrView* pView = (SdrView*)GetShell()->GetDrawView();
+            SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
+            sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+
+            if(pTargetOverlay)
+            {
+                // use system's hilight color with decreased luminance as highlight color
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+                aHighlight.DecreaseLuminance( 128 );
+
+                mpTxtInputFldOverlay = new sw::overlay::OverlayRangesOutline( aHighlight, aInputFldRanges );
+                pTargetOverlay->add( *mpTxtInputFldOverlay );
+            }
+        }
+    }
+    else
+    {
+        if ( mpTxtInputFldOverlay != NULL )
+        {
+            delete mpTxtInputFldOverlay;
+            mpTxtInputFldOverlay = NULL;
+        }
+    }
+}
+
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
@@ -675,24 +764,38 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
 
 /*  */
 
-SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
-    : SwCursor(rPos,0,false), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
+SwShellCrsr::SwShellCrsr(
+    const SwCrsrShell& rCShell,
+    const SwPosition &rPos )
+    : SwCursor(rPos,0,false)
+    , SwSelPaintRects(rCShell)
+    , pPt(SwPaM::GetPoint())
 {}
 
 
-SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
-                            const Point& rPtPos, SwPaM* pRing )
-    : SwCursor(rPos, pRing, false), SwSelPaintRects(rCShell), aMkPt(rPtPos),
-    aPtPt(rPtPos), pPt(SwPaM::GetPoint())
+SwShellCrsr::SwShellCrsr(
+    const SwCrsrShell& rCShell,
+    const SwPosition &rPos,
+    const Point& rPtPos,
+    SwPaM* pRing )
+    : SwCursor(rPos, pRing, false)
+    , SwSelPaintRects(rCShell)
+    , aMkPt(rPtPos)
+    , aPtPt(rPtPos)
+    , pPt(SwPaM::GetPoint())
 {}
 
 
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
-    : SwCursor(rICrsr), SwSelPaintRects(*rICrsr.GetShell()),
-    aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
+    : SwCursor(rICrsr)
+    , SwSelPaintRects(*rICrsr.GetShell())
+    , aMkPt(rICrsr.GetMkPos())
+    , aPtPt(rICrsr.GetPtPos())
+    , pPt(SwPaM::GetPoint())
 {}
 
-SwShellCrsr::~SwShellCrsr() {}
+SwShellCrsr::~SwShellCrsr()
+{}
 
 
 bool SwShellCrsr::IsReadOnlyAvailable() const
@@ -717,7 +820,7 @@ void SwShellCrsr::FillRects()
         GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
         (GetMark()->nNode == GetPoint()->nNode ||
         (GetMark()->nNode.GetNode().IsCntntNode() &&
-         GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
+        GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )    ))
         GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );  //swmod 071107//swmod 071225
 }
 

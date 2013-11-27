@@ -727,4 +727,28 @@ void ShowWindow::AddWindowToPaintView()
         GetChild( nChild )->Show( true );
 }
 
+//IAccessibility2 Implementation 2009-----
+// Overload the sd::Window's CreateAccessible to create a different accessible object
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible>
+    ShowWindow::CreateAccessible (void)
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(sal_False);
+    if (xAcc.get())
+    {
+        return xAcc;
+    }
+    if (mpViewShell != NULL)
+    {
+        xAcc = mpViewShell->CreateAccessibleDocumentView (this);
+        SetAccessible(xAcc);
+        return xAcc;
+    }
+    else
+    {
+        OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
+    return ::Window::CreateAccessible ();
+    }
+}
+//-----IAccessibility2 Implementation 2009
 } // end of namespace sd

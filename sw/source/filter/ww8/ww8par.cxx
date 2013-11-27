@@ -1091,6 +1091,8 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 {
     ASSERT(RES_TXTATR_FIELD != rAttr.Which(), "probably don't want to put"
         "fields into the control stack");
+    ASSERT(RES_TXTATR_INPUTFIELD != rAttr.Which(), "probably don't want to put"
+        "input fields into the control stack");
     ASSERT(RES_FLTR_REDLINE != rAttr.Which(), "probably don't want to put"
         "redlines into the control stack");
     SwFltControlStack::NewAttr(rPos, rAttr);
@@ -1332,6 +1334,12 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             ASSERT(!this, "What is a field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
+
+        case RES_TXTATR_INPUTFIELD:
+            ASSERT(!this, "What is a input field doing in the control stack,"
+                "probably should have been in the endstack");
+            break;
+
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
@@ -1451,6 +1459,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         do normal (?) strange stuff
         */
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_INPUTFIELD:
         {
             SwNodeIndex aIdx(pEntry->nMkNode, 1);
             SwPaM aPaM(aIdx, pEntry->nMkCntnt);
@@ -1788,10 +1797,13 @@ void SwWW8ImplReader::ImportDop()
 
     mpDocShell->SetModifyPasswordHash(pWDop->lKeyProtDoc);
 
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
-    if (bUseEnhFields) {
-    rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
+    {
+        const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+        const sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+        if (bUseEnhFields)
+        {
+            rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
+        }
     }
 
     maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
@@ -3886,26 +3898,6 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
         rSection.mpTitlePage->WriteUseOn(
             (UseOnPage) (eUseBase | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE));
     }
-
-    if( nsUseOnPage::PD_MIRROR != (UseOnPage)(eUse & nsUseOnPage::PD_MIRROR) )
-    {
-        if( rSection.maSep.bkc == 3 )
-        {
-            if( rSection.mpPage )
-                rSection.mpPage->SetUseOn( nsUseOnPage::PD_LEFT );
-            if( rSection.mpTitlePage )
-                rSection.mpTitlePage->SetUseOn( nsUseOnPage::PD_LEFT );
-        }
-        else if( rSection.maSep.bkc == 4 )
-        {
-            if( rSection.mpPage )
-                rSection.mpPage->SetUseOn( nsUseOnPage::PD_RIGHT );
-            if( rSection.mpTitlePage )
-                rSection.mpTitlePage->SetUseOn( nsUseOnPage::PD_RIGHT );
-        }
-
-    }
-
 }
 
 //Set the page descriptor on this node, handle the different cases for a text
@@ -4044,7 +4036,8 @@ void wwSectionManager::InsertSegments()
         bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
-        if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected()) {
+        if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected())
+        {
             // here we have the special case that the whole document is protected, with the execption of this section.
             // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
             mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );

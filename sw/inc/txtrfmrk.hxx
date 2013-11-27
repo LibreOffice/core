@@ -40,7 +40,6 @@ public:
             xub_StrLen const nStart, xub_StrLen const*const pEnd = 0);
 
     virtual xub_StrLen * GetEnd();       // SwTxtAttr
-    inline const xub_StrLen * GetEnd() const { return m_pEnd; }
 
     // get and set TxtNode pointer
     inline const SwTxtNode& GetTxtNode() const;

@@ -37,6 +37,18 @@
 #include <vcl/region.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
+// IAccessibility2 implementation 2009. ------
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#include "svxpixelctlaccessiblecontext.hxx"
+// ------ IAccessibility2 implementation 2009.
 #include <svtools/colorcfg.hxx>
 #include <svxrectctaccessiblecontext.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -564,6 +576,15 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
 void SvxRectCtl::GetFocus()
 {
     SetFocusRect();
+    // IAccessibility2 implementation 2009. ------
+    //Solution: Send the accessible focused event
+    Control::GetFocus();
+    // Send accessibility event.
+    if(pAccContext)
+    {
+        pAccContext->FireChildFocus(GetActualRP());
+    }
+    // ------ IAccessibility2 implementation 2009.
 }
 
 
@@ -657,9 +678,10 @@ RECT_POINT SvxRectCtl::GetActualRP() const
 |*  Gibt den aktuell ausgewaehlten RECT_POINT zur�ck
 |*
 \************************************************************************/
-
-void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
+// IAccessibility2 implementation 2009. ------
+void SvxRectCtl::SetActualRP( RECT_POINT eNewRP /* MT: , sal_Bool bFireFocus */ )
 {
+    // MT: bFireFox as API parameter is ugly...
     Point aPtLast( SetActualRPWithoutInvalidate( eNewRP ) );
 
     Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ), aPtLast + Point( nRadius, nRadius ) ) );
@@ -667,9 +689,9 @@ void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
 
     // notify accessibility object about change
     if( pAccContext )
-        pAccContext->selectChild( eNewRP );
+        pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
 }
-
+// ------ IAccessibility2 implementation 2009.
 void SvxRectCtl::SetState( CTL_STATE nState )
 {
     m_nState = nState;
@@ -864,11 +886,74 @@ void SvxAngleCtl::Paint( const Rectangle& )
 |*  Control zum Editieren von Bitmaps
 |*
 \************************************************************************/
+// IAccessibility2 implementation 2009. ------
 
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
+{
+    if(!m_xAccess.is())
+    {
+        m_xAccess = m_pAccess =  new SvxPixelCtlAccessible(*this);
+    }
+    return m_xAccess;
+}
+
+//Logic Pixel
+long SvxPixelCtl::PointToIndex(const Point &aPt) const
+{
+    sal_uInt16  nX, nY;
+
+    nX = (sal_uInt16) ( aPt.X() * nLines / aRectSize.Width() );
+    nY = (sal_uInt16) ( aPt.Y() * nLines / aRectSize.Height() );
+
+    return nX + nY * nLines ;
+}
+Point SvxPixelCtl::IndexToPoint(long nIndex) const
+{
+    DBG_ASSERT(nIndex >= 0 && nIndex < nSquares ," Check Index");
+
+    sal_uInt16 nXIndex = nIndex % nLines ;
+    sal_uInt16 nYIndex = sal_uInt16(nIndex / nLines) ;
+
+    Point aPtTl;
+    aPtTl.Y() = aRectSize.Height() * nYIndex / nLines + 1;
+    aPtTl.X() = aRectSize.Width() * nXIndex / nLines + 1;
+
+    return aPtTl;
+}
+long SvxPixelCtl::GetFoucsPosIndex() const
+{
+    return aFocusPosition.getX() + aFocusPosition.getY() * nLines ;
+}
+long SvxPixelCtl::ShowPosition( const Point &pt)
+{
+    Point aPt = PixelToLogic( pt );
+
+    sal_uInt16  nX, nY;
+    nX = (sal_uInt16) ( aPt.X() * nLines / aRectSize.Width() );
+    nY = (sal_uInt16) ( aPt.Y() * nLines / aRectSize.Height() );
+
+    ChangePixel( nX + nY * nLines );
+
+    //Solution:Set new focus position and repaint
+    //Invalidate( Rectangle( aPtTl, aPtBr ) );
+    aFocusPosition.setX(nX);
+    aFocusPosition.setY(nY);
+    Invalidate(Rectangle(Point(0,0),aRectSize));
+
+    if( WINDOW_TABPAGE == GetParent()->GetType() )
+        ( (SvxTabPage*) GetParent() )->PointChanged( this, RP_MM ); // RectPoint ist dummy
+
+    return GetFoucsPosIndex();
+
+}
+// ------ IAccessibility2 implementation 2009.
 SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumber ) :
                         Control     ( pParent, rResId ),
                         nLines      ( nNumber ),
                         bPaintable  ( sal_True )
+                        // IAccessibility2 implementation 2009. ------
+                        //Solution:Initialize it's value to Point(0,0)
+                        ,aFocusPosition(0,0)
 {
     // SetMapMode( MAP_100TH_MM );
     aRectSize = GetOutputSize();
@@ -880,6 +965,8 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumb
     nSquares = nLines * nLines;
     pPixel = new sal_uInt16[ nSquares ];
     rtl_zeroMemory(pPixel, nSquares * sizeof(sal_uInt16));
+    // IAccessibility2 implementation 2009. ------
+    m_pAccess=NULL;
 }
 
 /*************************************************************************
@@ -915,24 +1002,37 @@ void SvxPixelCtl::ChangePixel( sal_uInt16 nPixel )
 
 void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
-    Point aPtTl, aPtBr;
-    sal_uInt16  nX, nY;
+    // IAccessibility2 implementation 2009. ------
+    //Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
+    //Point aPtTl, aPtBr;
+    //sal_uInt16    nX, nY;
 
-    nX = (sal_uInt16) ( aPt.X() * nLines / aRectSize.Width() );
-    nY = (sal_uInt16) ( aPt.Y() * nLines / aRectSize.Height() );
+    //nX = (sal_uInt16) ( aPt.X() * nLines / aRectSize.Width() );
+    //nY = (sal_uInt16) ( aPt.Y() * nLines / aRectSize.Height() );
 
-    ChangePixel( nX + nY * nLines );
+    //ChangePixel( nX + nY * nLines );
 
-    aPtTl.X() = aRectSize.Width() * nX / nLines + 1;
-    aPtBr.X() = aRectSize.Width() * (nX + 1) / nLines - 1;
-    aPtTl.Y() = aRectSize.Height() * nY / nLines + 1;
-    aPtBr.Y() = aRectSize.Height() * (nY + 1) / nLines - 1;
+    //aPtTl.X() = aRectSize.Width() * nX / nLines + 1;
+    //aPtBr.X() = aRectSize.Width() * (nX + 1) / nLines - 1;
+    //aPtTl.Y() = aRectSize.Height() * nY / nLines + 1;
+    //aPtBr.Y() = aRectSize.Height() * (nY + 1) / nLines - 1;
 
-    Invalidate( Rectangle( aPtTl, aPtBr ) );
+    //Invalidate( Rectangle( aPtTl, aPtBr ) );
 
-    if( WINDOW_TABPAGE == GetParent()->GetType() )
-        ( (SvxTabPage*) GetParent() )->PointChanged( this, RP_MM ); // RectPoint ist dummy
+    //if( WINDOW_TABPAGE == GetParent()->GetType() )
+    //  ( (SvxTabPage*) GetParent() )->PointChanged( this, RP_MM ); // RectPoint ist dummy
+    //Solution:Grab focus when click in window
+    if( !HasFocus() )
+    {
+        GrabFocus();
+    }
+    long nIndex = ShowPosition(rMEvt.GetPosPixel());
+
+    if(m_pAccess)
+    {
+        m_pAccess->NotifyChild(nIndex,sal_True,sal_True);
+    }
+    // ------ IAccessibility2 implementation 2009.
 }
 
 /*************************************************************************
@@ -983,6 +1083,13 @@ void SvxPixelCtl::Paint( const Rectangle& )
                 DrawRect( Rectangle( aPtTl, aPtBr ) );
             }
         }
+        // IAccessibility2 implementation 2009. ------
+        //Solution:Draw visual focus when has focus
+        if( HasFocus() )
+        {
+            ShowFocus(implCalFocusRect(aFocusPosition));
+        }
+        // ------ IAccessibility2 implementation 2009.
     } // bPaintable
     else
     {
@@ -992,6 +1099,130 @@ void SvxPixelCtl::Paint( const Rectangle& )
         DrawLine( Point( 0, aRectSize.Height() ), Point( aRectSize.Width(), 0 ) );
     }
 }
+// IAccessibility2 implementation 2009. ------
+//Solution:Caculate visual focus rectangle via focus position
+Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
+{
+    long nLeft,nTop,nRight,nBottom;
+    long i,j;
+    i = aPosition.Y();
+    j = aPosition.X();
+    nLeft = aRectSize.Width() * j / nLines + 1;
+    nRight = aRectSize.Width() * (j + 1) / nLines - 1;
+    nTop = aRectSize.Height() * i / nLines + 1;
+    nBottom = aRectSize.Height() * (i + 1) / nLines - 1;
+    return Rectangle(nLeft,nTop,nRight,nBottom);
+}
+
+//Solution:Keyboard fucntion
+void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
+{
+    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
+    sal_Bool bIsMod = aKeyCode.IsShift() || aKeyCode.IsMod1() || aKeyCode.IsMod2();
+
+    if( !bIsMod )
+    {
+        Point pRepaintPoint( aRectSize.Width() *( aFocusPosition.getX() - 1)/ nLines - 1,
+                             aRectSize.Height() *( aFocusPosition.getY() - 1)/ nLines -1
+                            );
+        Size  mRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
+        Rectangle mRepaintRect( pRepaintPoint, mRepaintSize );
+        sal_Bool bFocusPosChanged=sal_False;
+        switch(nCode)
+        {
+            case KEY_LEFT:
+                if((aFocusPosition.getX() >= 1))
+                {
+                    aFocusPosition.setX( aFocusPosition.getX() - 1 );
+                    Invalidate(mRepaintRect);
+                    bFocusPosChanged=sal_True;
+                }
+                break;
+            case KEY_RIGHT:
+                if( aFocusPosition.getX() < (nLines - 1) )
+                {
+                    aFocusPosition.setX( aFocusPosition.getX() + 1 );
+                    Invalidate(mRepaintRect);
+                    bFocusPosChanged=sal_True;
+                }
+                break;
+            case KEY_UP:
+                if((aFocusPosition.getY() >= 1))
+                {
+                    aFocusPosition.setY( aFocusPosition.getY() - 1 );
+                    Invalidate(mRepaintRect);
+                    bFocusPosChanged=sal_True;
+                }
+                break;
+            case KEY_DOWN:
+                if( aFocusPosition.getY() < ( nLines - 1 ) )
+                {
+                    aFocusPosition.setY( aFocusPosition.getY() + 1 );
+                    Invalidate(mRepaintRect);
+                    bFocusPosChanged=sal_True;
+                }
+                break;
+            case KEY_SPACE:
+                ChangePixel( sal_uInt16(aFocusPosition.getX() + aFocusPosition.getY() * nLines) );
+                Invalidate( implCalFocusRect(aFocusPosition) );
+                break;
+            default:
+                Control::KeyInput( rKEvt );
+                return;
+        }
+        if(m_xAccess.is())
+        {
+            long nIndex = GetFoucsPosIndex();
+            switch(nCode)
+            {
+            case KEY_LEFT:
+            case KEY_RIGHT:
+            case KEY_UP:
+            case KEY_DOWN:
+                if (bFocusPosChanged)
+                {
+                    m_pAccess->NotifyChild(nIndex,sal_False,sal_False);
+                }
+                break;
+            case KEY_SPACE:
+                m_pAccess->NotifyChild(nIndex,sal_False,sal_True);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    else
+    {
+        Control::KeyInput( rKEvt );
+    }
+}
+
+//Draw focus when get focus
+void SvxPixelCtl::GetFocus()
+{
+    Invalidate(implCalFocusRect(aFocusPosition));
+
+    if(m_pAccess)
+    {
+        m_pAccess->NotifyChild(GetFoucsPosIndex(),sal_True,sal_False);
+    }
+
+    Control::GetFocus();
+}
+
+//Hide focus when lose focus
+void SvxPixelCtl::LoseFocus()
+{
+    HideFocus();
+    if (m_pAccess)
+    {
+        m_pAccess->LoseFocus();
+    }
+    Control::LoseFocus();
+}
+// ------ IAccessibility2 implementation 2009.
 
 /*************************************************************************
 |*

@@ -1,0 +1,25 @@
+HKCR
+{
+	UAccCOM.AccRelation.1 = s 'AccRelation Class'
+	{
+		CLSID = s '{8745CF0C-3104-4BAE-B7D0-D7B1717C006E}'
+	}
+	UAccCOM.AccRelation = s 'AccRelation Class'
+	{
+		CLSID = s '{8745CF0C-3104-4BAE-B7D0-D7B1717C006E}'
+		CurVer = s 'UAccCOM.AccRelation.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {8745CF0C-3104-4BAE-B7D0-D7B1717C006E} = s 'AccRelation Class'
+		{
+			ProgID = s 'UAccCOM.AccRelation.1'
+			VersionIndependentProgID = s 'UAccCOM.AccRelation'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{19ECB1B0-9376-4FF9-B580-223FC9C200B8}'
+		}
+	}
+}

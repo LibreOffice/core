@@ -1100,13 +1100,14 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
-        case FN_REPLY:
-        case FN_POSTIT:
-        case FN_DELETE_COMMENT:
-            if ( pPostItMgr->HasActiveSidebarWin() )
-                pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
-            break;
-        case FN_DELETE_ALL_NOTES:
+    case FN_REPLY:
+    case FN_POSTIT:
+    case FN_DELETE_COMMENT:
+        if ( pPostItMgr->HasActiveSidebarWin() )
+            pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
+        break;
+
+    case FN_DELETE_ALL_NOTES:
             pPostItMgr->Delete();
             break;
         case FN_DELETE_NOTE_AUTHOR:
@@ -1149,22 +1150,23 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
         sal_uInt16 nSlotId = GetPool().GetSlotId( nWhich );
         switch( nSlotId )
         {
-            case FN_POSTIT:
-            case FN_DELETE_NOTE_AUTHOR:
-            case FN_DELETE_ALL_NOTES:
-            case FN_HIDE_NOTE:
-            case FN_HIDE_NOTE_AUTHOR:
-            case FN_HIDE_ALL_NOTES:
-            case FN_DELETE_COMMENT:
+        case FN_POSTIT:
+        case FN_DELETE_NOTE_AUTHOR:
+        case FN_DELETE_ALL_NOTES:
+        case FN_HIDE_NOTE:
+        case FN_HIDE_NOTE_AUTHOR:
+        case FN_HIDE_ALL_NOTES:
+        case FN_DELETE_COMMENT:
             {
-                if ( !pPostItMgr ||
-                     !pPostItMgr->HasActiveAnnotationWin() )
+                if( !pPostItMgr
+                    || !pPostItMgr->HasActiveAnnotationWin() )
                 {
                     rSet.DisableItem(nWhich);
                 }
                 break;
             }
-            case FN_REPLY:
+
+        case FN_REPLY:
             {
                 if ( !pPostItMgr ||
                      !pPostItMgr->HasActiveAnnotationWin() )

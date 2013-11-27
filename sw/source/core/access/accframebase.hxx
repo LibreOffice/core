@@ -23,6 +23,12 @@
 #ifndef _ACCFRAMEBASE_HXX
 #define _ACCFRAMEBASE_HXX
 
+//IAccessibility2 Implementation 2009-----
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+//-----IAccessibility2 Implementation 2009
+
 #include <acccontext.hxx>
 
 #include <calbck.hxx>
@@ -42,6 +48,11 @@ protected:
     // This drived class additionaly sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    //IAccessibility2 Implementation 2009-----
+    SwFlyFrm* getFlyFrm() const;
+    sal_Bool GetSelectedState( );
+    SwPaM* GetCrsr();
+    //-----IAccessibility2 Implementation 2009
 
     virtual void _InvalidateCursorPos();
     virtual void _InvalidateFocus();
@@ -61,6 +72,8 @@ public:
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
+    virtual sal_Bool SetSelectedState( sal_Bool bSeleted );
+    //-----IAccessibility2 Implementation 2009
 };
 
 

@@ -534,7 +534,7 @@ sub add_bundled_extension_blobs
     {
         # Add the default extensions for the current language set.
         # http:// extensions are taken from ext_sources/.
-        for my $name (ExtensionsLst::GetExtensionList("http|https", @installer::globals::languageproducts))
+        for my $name (ExtensionsLst::GetExtensionList("http|https", ($installer::globals::languageproduct)))
         {
             push @bundle_files, $bundlehttpsrc . $name;
         }
@@ -542,11 +542,10 @@ sub add_bundled_extension_blobs
     }
 
     $installer::logger::Info->printf(
-        "preparing %d extension blob%s for language%s %s:\n",
+        "preparing %d extension blob%s for language %s:\n",
         $#bundle_files + 1,
         $#bundle_files!=0 ? "s" : "",
-        $#installer::globals::languageproducts!=0 ? "s" : "",
-        join(" ", @installer::globals::languageproducts));
+        $installer::globals::languageproduct);
 
     foreach my $filename ( @bundle_files)
     {
@@ -602,18 +601,17 @@ sub add_bundled_prereg_extensions
     else
     {
         # Add extensions from file:// URLs.
-        for my $name (ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts))
+        for my $name (ExtensionsLst::GetExtensionList("file", ($installer::globals::languageproduct)))
         {
             push @bundle_files, $name;
         }
     }
 
     $installer::logger::Info->printf(
-        "preparing %d bundled extension%s for language%s %s:\n",
+        "preparing %d bundled extension%s for language %s:\n",
         $#bundle_files + 1,
         $#bundle_files!=0 ? "s" : "",
-        $#installer::globals::languageproducts!=0 ? "s" : "",
-        join(" ", @installer::globals::languageproducts));
+        $installer::globals::languageproduct);
     foreach my $filename (@bundle_files)
     {
         $installer::logger::Info->printf("    %s\n", $filename);
@@ -716,12 +714,6 @@ sub set_global_directory_hostnames
             $installer::globals::officedirhostname = $onedir->{'HostName'};
             $installer::globals::officedirgid = $onedir->{'gid'};
             $allvariables->{'OFFICEDIRECTORYHOSTNAME'} = $installer::globals::officedirhostname;
-        }
-        if ( $styles =~ /\bSUNDIRECTORY\b/ )
-        {
-            $installer::globals::sundirhostname = $onedir->{'HostName'};
-            $installer::globals::sundirgid = $onedir->{'gid'};
-            $allvariables->{'SUNDIRECTORYHOSTNAME'} = $installer::globals::sundirhostname;
         }
     }
 }

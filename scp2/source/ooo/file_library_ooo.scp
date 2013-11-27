@@ -22,6 +22,21 @@
 
 #include "macros.inc"
 
+// IAccessible2 implementation
+#if defined(WNT) && !defined(DISABLE_ATL)
+File gid_File_Lib_Winaccessibility
+	TXT_FILE_BODY;
+	Styles	= (PACKED);
+	Dir	= SCP2_OOO_BIN_DIR;
+	Name	= "winaccessibility.dll";
+End
+File gid_File_Lib_UAccCOM
+	BIN_FILE_BODY;
+	Styles	= (PACKED);
+	Dir	= SCP2_OOO_BIN_DIR;
+	Name	= "UAccCOM.dll";
+End
+#endif
 #ifdef WNT
 File gid_File_Lib_Accessbridge
     BIN_FILE_BODY;

@@ -36,6 +36,16 @@
 
 #include "unotools/fontcfg.hxx"
 
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#endif
+//-----IAccessible2 Implementation 2009
 #include "vos/mutex.hxx"
 
 #include "cppuhelper/implbase1.hxx"
@@ -67,6 +77,13 @@
 #include "com/sun/star/java/JavaDisabledException.hpp"
 
 #include <stdio.h>
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+#include <unotools/processfactory.hxx>
+#include <com/sun/star/accessibility/XMSAAService.hpp>
+#include <win/g_msaasvc.h>
+#endif
+//-----IAccessible2 Implementation 2009
 
 namespace {
 
@@ -132,6 +149,12 @@ void ImplInitSVData()
             break;
         }
     }
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+    //Default enable the acc bridge interface
+    pImplSVData->maAppData.m_bEnableAccessInterface =true;
+#endif
+//-----IAccessible2 Implementation 2009
 
     // mark default layout border as unitialized
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
@@ -339,7 +362,89 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     }
     return ret;
 }
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+void AccessBridgehandleExistingWindow(Window * pWindow, bool bShow)
+{
+    if ( pWindow )
+    {
+        css::uno::Reference< css::accessibility::XAccessible > xAccessible;
 
+        // Test for combo box - drop down floating windows first
+        Window * pParentWindow = pWindow->GetParent();
+
+        if ( pParentWindow )
+        {
+            try
+            {
+                // The parent window of a combo box floating window should have the role COMBO_BOX
+                css::uno::Reference< css::accessibility::XAccessible > xParentAccessible(pParentWindow->GetAccessible());
+                if ( xParentAccessible.is() )
+                {
+                    css::uno::Reference< css::accessibility::XAccessibleContext > xParentAC( xParentAccessible->getAccessibleContext() );
+                    if ( xParentAC.is() && (css::accessibility::AccessibleRole::COMBO_BOX == xParentAC->getAccessibleRole()) )
+                    {
+                        // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
+                        // Let's not rely on a specific child order, just search for the child with the role LIST
+                        sal_Int32 nCount = xParentAC->getAccessibleChildCount();
+                        for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
+                        {
+                            css::uno::Reference< css::accessibility::XAccessible > xChild = xParentAC->getAccessibleChild(n);
+                            if ( xChild.is() )
+                            {
+                                css::uno::Reference< css::accessibility::XAccessibleContext > xChildAC = xChild->getAccessibleContext();
+                                if ( xChildAC.is() && (css::accessibility::AccessibleRole::LIST == xChildAC->getAccessibleRole()) )
+                                {
+                                    xAccessible = xChild;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (::com::sun::star::uno::RuntimeException e)
+            {
+                // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
+                // but keep revoking these windows in hide(s).
+                if (bShow)
+                    return;
+            }
+        }
+
+        // We have to rely on the fact that Window::GetAccessible()->getAccessibleContext() returns a valid XAccessibleContext
+        // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the
+        // context object to this menu floater. This makes the call to Window->IsMenuFloatingWindow() obsolete.
+        if ( ! xAccessible.is() )
+            xAccessible = pWindow->GetAccessible();
+
+        if ( xAccessible.is() && g_acc_manager1 )
+        {
+            g_acc_manager1->handleWindowOpened( (long)(xAccessible.get()));
+        }
+    }
+}
+
+void AccessBridgeupdateOldTopWindows()
+{
+    sal_uInt16 nTopWindowCount = (sal_uInt16)Application::GetTopWindowCount();
+    for (sal_uInt16 i = 0; i < nTopWindowCount; i++)
+    {
+        Window* pTopWindow = Application::GetTopWindow( i );
+        css::uno::Reference< css::accessibility::XAccessible > xAccessible = pTopWindow->GetAccessible();
+        if ( xAccessible.is() )
+        {
+            css::uno::Reference< css::accessibility::XAccessibleContext > xAC(xAccessible->getAccessibleContext());
+            if ( xAC.is())
+            {
+                short role = xAC->getAccessibleRole();
+                if(xAC->getAccessibleName().getLength() > 0)
+                    AccessBridgehandleExistingWindow(pTopWindow, true);
+            }
+        }
+    }
+}
+#endif
+//-----IAccessible2 Implementation 2009
 
 bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 {
@@ -371,6 +476,22 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             if( xFactory.is() )
             {
+//IAccessible2 Implementation 2009-----
+#ifdef WNT
+                pSVData->mxAccessBridge = xFactory->createInstance(
+                           OUString::createFromAscii( "com.sun.star.accessibility.MSAAService" ) );
+                if( pSVData->mxAccessBridge.is() )
+                {
+                    css::uno::Reference< css::uno::XInterface > pRManager= pSVData->mxAccessBridge;
+                    g_acc_manager1 = (css::accessibility::XMSAAService*)(pRManager.get());
+                    AccessBridgeupdateOldTopWindows();
+                }
+
+                if( !pSVData->mxAccessBridge.is() )
+                    bSuccess = false;
+                return bSuccess;
+#endif
+//-----IAccessible2 Implementation 2009
                 css::uno::Reference< XExtendedToolkit > xToolkit =
                     css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 

@@ -268,8 +268,9 @@ public:
     // next page border
     const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = 0, bool bExtend = false ) const;
 
-    //Der Crsr moechte die zu selektierenden Bereiche wissen.
-    void CalcFrmRects( SwShellCrsr&, sal_Bool bIsTblSel );
+    void CalcFrmRects(
+        SwShellCrsr&,
+        const sal_Bool bIsTblSel );
 
     // Calculates the cells included from the current selection
     // false: There was no result because of an invalid layout

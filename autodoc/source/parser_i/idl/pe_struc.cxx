@@ -82,7 +82,7 @@ PE_Struct::TransferData()
 {
     if (NOT Work().bIsPreDeclaration)
     {
-        csv_assert(Work().sData_Name.size() > 0);
+        csv_assert(! Work().sData_Name.empty());
         csv_assert(Work().nCurStruct.IsValid());
     }
     Stati().pCurStatus = &Stati().aNone;

@@ -64,6 +64,10 @@
 #include "navicfg.hxx"
 #include "navsett.hxx"
 #include "postit.hxx"
+//IAccessibility2 Implementation 2009-----
+#include "tabvwsh.hxx"
+#include "drawview.hxx"
+//-----IAccessibility2 Implementation 2009
 #include "clipparam.hxx"
 
 using namespace com::sun::star;
@@ -125,7 +129,10 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     aHCEntryImages  ( ScResId( RID_IMAGELIST_H_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( sal_False ),
-    pHiddenDocument ( NULL )
+    pHiddenDocument ( NULL ),
+//IAccessibility2 Implementation 2009-----
+    bisInNavigatoeDlg  ( sal_False )
+//-----IAccessibility2 Implementation 2009
 {
     sal_uInt16 i;
     for (i=0; i<SC_CONTENT_COUNT; i++)
@@ -141,12 +148,80 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
 
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
 
+    //IAccessibility2 Implementation 2009-----
+    pTmpEntry= NULL;
+    m_bFirstPaint=true;
+    //-----IAccessibility2 Implementation 2009
+
     SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 ScContentTree::~ScContentTree()
 {
 }
+//IAccessibility2 Implementation 2009-----
+// helper function for  GetEntryAltText and GetEntryLongDescription
+String ScContentTree::getAltLongDescText( SvLBoxEntry* pEntry , sal_Bool isAltText) const
+{
+    SdrObject* pFound = NULL;
+
+    sal_uInt16 nType;
+    sal_uLong nChild;
+    GetEntryIndexes( nType, nChild, pEntry );
+    switch( nType )
+    {
+    case SC_CONTENT_OLEOBJECT:
+    case SC_CONTENT_GRAPHIC:
+    case SC_CONTENT_DRAWING:
+        {
+            ScDocument* pDoc = ( const_cast< ScContentTree* >(this) )->GetSourceDocument();
+            SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            SfxObjectShell* pShell = pDoc->GetDocumentShell();
+            if (pDrawLayer && pShell)
+            {
+                sal_uInt16 nTabCount = pDoc->GetTableCount();
+                for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
+                {
+                    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+                    DBG_ASSERT(pPage,"Page ?");
+                    if (pPage)
+                    {
+                        SdrObjListIter aIter( *pPage, eIter );
+                        SdrObject* pObject = aIter.Next();
+                        while (pObject)
+                        {
+                            if( ScDrawLayer::GetVisibleName( pObject ) == GetEntryText( pEntry ) )
+                            {
+                                pFound = pObject;
+                                break;
+                            }
+                            pObject = aIter.Next();
+                        }
+                    }
+                }
+            }
+             if( pFound )
+             {
+                if( isAltText )
+                    return pFound->GetTitle();
+                else
+                    return pFound->GetDescription();
+             }
+        }
+        break;
+    }
+    return String();
+}
+String  ScContentTree::GetEntryAltText( SvLBoxEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_True );
+}
+String ScContentTree::GetEntryLongDescription( SvLBoxEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_False);
+}
+//-----IAccessibility2 Implementation 2009
 
 void ScContentTree::InitRoot( sal_uInt16 nType )
 {
@@ -174,7 +249,17 @@ void ScContentTree::InitRoot( sal_uInt16 nType )
 
 void ScContentTree::ClearAll()
 {
+//IAccessibility2 Implementation 2009-----
+    //There are one method in Control::SetUpdateMode(), and one override method SvTreeListBox::SetUpdateMode(). Here although
+    //SvTreeListBox::SetUpdateMode() is called in refresh method, it only call SvTreeListBox::SetUpdateMode(), not Control::SetUpdateMode().
+    //In SvTreeList::Clear(), Broadcast( LISTACTION_CLEARED ) will be called and finally, it will be trapped into the event yield() loop. And
+    //the InitRoot() method won't be called. Then if a user click or press key to update the navigator tree, crash happens.
+    //So the solution is to disable the UpdateMode of Control, then call Clear(), then recover the update mode
+    sal_Bool bOldUpdate = Control::IsUpdateMode();
+    Control::SetUpdateMode(sal_False);
     Clear();
+    Control::SetUpdateMode(bOldUpdate);
+//-----IAccessibility2 Implementation 2009
     for (sal_uInt16 i=1; i<SC_CONTENT_COUNT; i++)
         InitRoot(i);
 }
@@ -402,10 +487,90 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
             break;
         }
     }
-    StoreSettings();
+//IAccessibility2 Implementation 2009-----
+    //Solution: Make KEY_SPACE has same function as DoubleClick
+    if ( bisInNavigatoeDlg )
+    {
+        if(aCode.GetCode() == KEY_SPACE )
+        {
+            bUsed = sal_True;
+            sal_uInt16 nType;
+            sal_uLong nChild;
+            SvLBoxEntry* pEntry = GetCurEntry();
+            GetEntryIndexes( nType, nChild, pEntry );
+            if( pEntry && (nType != SC_CONTENT_ROOT) && (nChild != SC_CONTENT_NOCHILD) )
+            {
+                if ( bHiddenDoc )
+                    return ;                //! spaeter...
+                      String aText( GetEntryText( pEntry ) );
+                sKeyString = aText;
+                if ( aManualDoc.Len() )
+                    pParentWindow->SetCurrentDoc( aManualDoc );
+                switch( nType )
+                {
+                    case SC_CONTENT_OLEOBJECT:
+                    case SC_CONTENT_GRAPHIC:
+                    case SC_CONTENT_DRAWING:
+                    {
+                        Window* pWindow=(Window*)GetParent(pEntry);
+                        ScNavigatorDlg* pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
+                        ScTabViewShell* pScTabViewShell = NULL;
+                        ScDrawView* pScDrawView = NULL;
+                        if (pScNavigatorDlg!=NULL)
+                              pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
+                        if(pScTabViewShell !=NULL)
+                              pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
+                        if(pScDrawView!=NULL)
+                         {
+                            pScDrawView->SelectCurrentViewObject(aText );
+                            bool bHasMakredObject(false);
+                            SvLBoxEntry* pParent = pRootNodes[nType];
+                            SvLBoxEntry* pBeginEntry = NULL;
+                            if( pParent )
+                                pBeginEntry = FirstChild(pParent);
+
+                            while( pBeginEntry )
+                            {
+                                const String aTempText(GetEntryText(pBeginEntry));
+                                const SdrObject* pCandidate = pScDrawView->GetObjectByName(aTempText);
+
+                                if(pCandidate && pScDrawView->isSdrObjectSelected(*pCandidate))
+                                {
+                                    bHasMakredObject = true;
+                                    break;
+                                }
+
+                                pBeginEntry =  Next( pBeginEntry );
+                            }
+
+                            if(  !bHasMakredObject && pScTabViewShell)
+                                pScTabViewShell->SetDrawShell(sal_False);
+                            ObjectFresh( nType,pEntry );
+                        }
+                    }
+                    break;
+                 }
+            }
+           }
+       }
+    //StoreSettings();
+    //-----IAccessibility2 Implementation 2009
 
     if( !bUsed )
+    //IAccessibility2 Implementation 2009-----
+    {
+        if(aCode.GetCode() == KEY_F5 )
+        {
+            StoreSettings();
         SvTreeListBox::KeyInput(rKEvt);
+        }
+        else
+        {
+            SvTreeListBox::KeyInput(rKEvt);
+            StoreSettings();
+        }
+    }
+    //-----IAccessibility2 Implementation 2009
 }
 
 //sal_Bool __EXPORT ScContentTree::Drop( const DropEvent& rEvt )
@@ -606,6 +771,56 @@ ScDocument* ScContentTree::GetSourceDocument()
     return NULL;
 }
 
+//IAccessibility2 Implementation 2009-----
+//Solution: move along and draw "*" sign .
+void ScContentTree::ObjectFresh( sal_uInt16 nType,SvLBoxEntry* pEntry )
+{
+    if ( bHiddenDoc && !pHiddenDocument )
+        return;     // anderes Dokument angezeigt
+      if(nType ==SC_CONTENT_GRAPHIC||nType ==SC_CONTENT_OLEOBJECT||nType ==SC_CONTENT_DRAWING)
+        {
+        SetUpdateMode(sal_False);
+        ClearType( nType );
+        /*sal_uInt16 nId = OBJ_GRAF;
+        switch( nType )
+        {
+            case SC_CONTENT_OLEOBJECT:
+                nId = OBJ_OLE2;
+                break;
+            case SC_CONTENT_DRAWING:
+                nId = OBJ_GRUP;
+                break;
+        }*/
+        GetDrawNames( nType/*, nId*/ );
+        if( !pEntry )
+            ApplySettings();
+        SetUpdateMode(sal_True);
+        if( pEntry )
+        {
+            SvLBoxEntry* pParent = pRootNodes[nType];
+            SvLBoxEntry* pBeginEntry = NULL;
+            SvLBoxEntry* pOldEntry = NULL;
+            if( pParent )
+                pBeginEntry = FirstChild(pParent);
+            while( pBeginEntry )
+            {
+                String aTempText( GetEntryText( pBeginEntry ) );
+                 if( aTempText ==  sKeyString )
+                 {
+                    pOldEntry = pBeginEntry;
+                    break;
+                  }
+                pBeginEntry =  Next( pBeginEntry );
+            }
+            if( pOldEntry )
+            {
+                Expand(pParent);
+                Select( pOldEntry,sal_True);
+            }
+        }
+        }
+}
+//-----IAccessibility2 Implementation 2009
 void ScContentTree::Refresh( sal_uInt16 nType )
 {
     if ( bHiddenDoc && !pHiddenDocument )
@@ -792,9 +1007,46 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                     {
                         String aName = ScDrawLayer::GetVisibleName( pObject );
                         if (aName.Len())
-                            InsertContent( nType, aName );
+                        {
+                            //IAccessibility2 Implementation 2009-----
+                            //InsertContent( nType, aName );
+                            if( bisInNavigatoeDlg )
+                            {
+                                if (nType >= SC_CONTENT_COUNT)
+                                {
+                                    DBG_ERROR("ScContentTree::InsertContent mit falschem Typ");
+                                    return;
                     }
+                                SvLBoxEntry* pParent = pRootNodes[nType];
+                                if (pParent)
+                                {
+                                    SvLBoxEntry* pChild=InsertEntry( aName, pParent );
+                                    if(pChild)
+                                            pChild->SetMarked( sal_False);
+                                    Window* pWindow=NULL;
+                                    ScTabViewShell* pScTabViewShell=NULL;
+                                    ScDrawView* pScDrawView=NULL;
+                                    ScNavigatorDlg* pScNavigatorDlg=NULL;
+                                    if(pChild)
+                                         pWindow=(Window*)GetParent(pChild);
+                                    if(pWindow)
+                                            pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
+                                    if (pScNavigatorDlg!=NULL)
+                                          pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
+                                    if(pScTabViewShell !=NULL)
+                                          pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
 
+                                    if(pScDrawView)
+                                    {
+                                         pChild->SetMarked(pScDrawView->isSdrObjectSelected(*pObject));
+                                    }
+                                }//end if parent
+                                else
+                                    DBG_ERROR("InsertContent ohne Parent");
+                            }
+                        }
+                    }
+                    //-----IAccessibility2 Implementation 2009
                     pObject = aIter.Next();
                 }
             }
@@ -1517,7 +1769,50 @@ void ScContentTree::StoreSettings() const
     }
 }
 
+//IAccessibility2 Implementation 2009-----
+class ScContentLBoxString : public SvLBoxString
+{
+public:
+    ScContentLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
+        const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+        SvLBoxEntry* pEntry);
+};
+void ScContentTree::InitEntry(SvLBoxEntry* pEntry,
+        const XubString& rStr ,const Image& rImg1,const Image& rImg2, SvLBoxButtonKind eButtonKind)
+{
+    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
+    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    ScContentLBoxString* pStr = new ScContentLBoxString( pEntry, 0, pCol->GetText() );
+    pEntry->ReplaceItem( pStr, nColToHilite );
+}
+void ScContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    SvLBoxEntry* pEntry )
+{
+    // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
+    /*
+    if (pEntry->IsMarked())
+    {
+            rDev.DrawText( rPos, GetText() );
+            XubString str;
+            str = XubString::CreateFromAscii("*");
+            Point rPosStar(rPos.X()-6,rPos.Y());
+            Font aOldFont( rDev.GetFont());
+            Font aFont(aOldFont);
+            Color aCol( aOldFont.GetColor() );
+            aCol.DecreaseLuminance( 200 );
+            aFont.SetColor( aCol );
+            rDev.SetFont( aFont );
+            rDev.DrawText( rPosStar, str);
+            rDev.SetFont( aOldFont );
+    }
+    else
+    */
+        SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
+}
+//-----IAccessibility2 Implementation 2009
 //
 //------------------------------------------------------------------------
 //

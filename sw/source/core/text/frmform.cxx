@@ -57,6 +57,11 @@
 #include <frmfmt.hxx>       // SwFrmFmt
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+//IAccessibility2 Implementation 2009-----
+#include <portab.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
+//-----IAccessibility2 Implementation 2009
 
 class FormatLevel
 {
@@ -556,6 +561,47 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
     UNDO_SWAP( this )
 }
 
+//IAccessibility2 Implementation 2009-----
+com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTxtFrm::GetTabStopInfo( SwTwips CurrentPos )
+{
+    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs(1);
+    ::com::sun::star::style::TabStop ts;
+
+    SwTxtFormatInfo     aInf( this );
+    SwTxtFormatter      aLine( this, &aInf );
+    SwTxtCursor         TxtCursor( this, &aInf );
+    const Point aCharPos( TxtCursor.GetTopLeft() );
+
+
+    SwTwips nRight = aLine.Right();
+    CurrentPos -= aCharPos.X();
+
+    // get current tab stop information stored in the Frm
+    const SvxTabStop *pTS = aLine.GetLineInfo().GetTabStop( CurrentPos, nRight );
+
+    if( !pTS )
+    {
+        return com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >();
+    }
+
+    // copy tab stop information into a Sequence, which only contains one element.
+    ts.Position = pTS->GetTabPos();
+    ts.DecimalChar = pTS->GetDecimal();
+    ts.FillChar = pTS->GetFill();
+    switch( pTS->GetAdjustment() )
+    {
+    case SVX_TAB_ADJUST_LEFT   : ts.Alignment = ::com::sun::star::style::TabAlign_LEFT; break;
+    case SVX_TAB_ADJUST_CENTER : ts.Alignment = ::com::sun::star::style::TabAlign_CENTER; break;
+    case SVX_TAB_ADJUST_RIGHT  : ts.Alignment = ::com::sun::star::style::TabAlign_RIGHT; break;
+    case SVX_TAB_ADJUST_DECIMAL: ts.Alignment = ::com::sun::star::style::TabAlign_DECIMAL; break;
+    case SVX_TAB_ADJUST_DEFAULT: ts.Alignment = ::com::sun::star::style::TabAlign_DEFAULT; break;
+    default: break; // prevent warning
+    }
+
+    tabs[0] = ts;
+    return tabs;
+}
+//-----IAccessibility2 Implementation 2009
 /*************************************************************************
  *                      SwTxtFrm::AdjustFollow()
  *************************************************************************/

@@ -115,6 +115,9 @@ public:
     void                    SetStyle(const sal_uInt16 nSt)  { nStyle = nSt;     }
 
     String                  GetText() const;
+//IAccessibility2 Impplementaton 2009-----
+    void                    SetText( const XubString& rStr );
+    void                    SetText( const XubString& rStr, const Selection& rNewSelection ) { ComboBox::SetText( rStr, rNewSelection ); };
 };
 
 #endif /* _SWLBOX_HXX */

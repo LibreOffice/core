@@ -471,7 +471,7 @@ public:
                                 sal_Bool bCols = sal_False, sal_Bool bRows = sal_False, sal_Bool bCellSelection = sal_False );
     void            InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                     sal_Bool bTestNeg = sal_False,
-                                    sal_Bool bCols = sal_False, sal_Bool bRows = sal_False );
+                                    sal_Bool bCols = sal_False, sal_Bool bRows = sal_False, sal_Bool bForceNeg = sal_False );
     void            InitOwnBlockMode();
     void            DoneBlockMode( sal_Bool bContinue = sal_False );
 

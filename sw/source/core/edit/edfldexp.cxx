@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <ndtxt.hxx>        // GetCurFld
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <edimp.hxx>

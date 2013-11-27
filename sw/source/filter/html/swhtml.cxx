@@ -2265,11 +2265,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
         if( GetNumInfo().GetDepth() )
         {
             sal_uInt8 nLvl = GetNumInfo().GetLevel();
-            // --> OD 2008-04-02 #refactorlists#
-//            SetNoNum (&nLvl, sal_True);
-//            SetNodeNum( nLvl);
             SetNodeNum( nLvl, false );
-            // <--
         }
         else
             pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
@@ -2777,6 +2773,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     }
                     break;
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_INPUTFIELD:
                     {
                         sal_uInt16 nFldWhich =
                             pPostIts

@@ -451,7 +451,7 @@ private:
     sal_uInt16          nEndPortion;
     sal_uInt16          nHeight;    // Gesamthoehe der Zeile
     sal_uInt16          nTxtHeight; // Reine Texthoehe
-    sal_uInt16          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu gro�.
+    sal_uInt16          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu gro?.
     sal_uInt16          nMaxAscent;
     sal_Bool            bHangingPunctuation;
     sal_Bool            bInvalid;   // fuer geschickte Formatierung

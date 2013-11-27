@@ -34,14 +34,9 @@ LINKOUTPUT_FILTER=
 # Definitions that we may need on the compile line.
 # -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
 #  compiling STLport sources too, either internally or externally.
-CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1
-.IF "$(GUIBASE)"=="unx" && "$(USE_SYSTEM_STL)"!="YES"
-CDEFS+=-DX_LOCALE
-.ENDIF
-.IF "$(GUIBASE)"=="aqua"
-# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
-# build can assume functions/libraries of that version to be available
-# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -D_USE_NAMESPACE=1
+
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build result
 # (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
 # http://developer.apple.com/technotes/tn2002/tn2064.html
 # done in setsolar/configure now. left here for documentation
@@ -49,7 +44,6 @@ CDEFS+=-DX_LOCALE
 #.EXPORT: MACOSX_DEPLOYMENT_TARGET
 CDEFS+=-DQUARTZ 
 EXTRA_CDEFS*=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
-.ENDIF
 
 # Name of library where static data members are initialized
 # STATICLIBNAME=static$(DLLPOSTFIX)

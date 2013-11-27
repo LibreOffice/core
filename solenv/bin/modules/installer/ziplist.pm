@@ -30,6 +30,121 @@ use installer::logger;
 use installer::parameter;
 use installer::remover;
 use installer::systemactions;
+use strict;
+
+=head2 read_openoffice_lst_file (#loggingdir)
+    Read the settings and variables from the settings file (typically 'openoffice.lst').
+=cut
+sub read_openoffice_lst_file ($$;$)
+{
+    my ($filename, $product_name, $loggingdir) = @_;
+
+    # Read all lines from the settings file.
+    my $ziplistref = installer::files::read_file($filename);
+
+    # Extract the lines of the settings block for the current product.
+    my ($productblockref, $parent) = installer::ziplist::getproductblock(
+        $ziplistref, $product_name, 1);
+    my ($settingsblockref, undef) = installer::ziplist::getproductblock($productblockref, "Settings", 0);
+    $settingsblockref = installer::ziplist::analyze_settings_block($settingsblockref);
+
+    # Split into settings and variables.
+    my $allsettingsarrayref = installer::ziplist::get_settings_from_ziplist($settingsblockref);
+    my $allvariablesarrayref = installer::ziplist::get_variables_from_ziplist($settingsblockref);
+
+    # global product block from zip.lst
+    my ($globalproductblockref, undef) = installer::ziplist::getproductblock(
+        $ziplistref, $installer::globals::globalblock, 0);
+
+    if ($installer::globals::globallogging && defined $loggingdir)
+    {
+        installer::files::save_file($loggingdir . "productblock.log", $productblockref);
+        installer::files::save_file($loggingdir . "settingsblock.log", $settingsblockref);
+        installer::files::save_file($loggingdir . "allsettings1.log", $allsettingsarrayref);
+        installer::files::save_file($loggingdir . "allvariables1.log", $allvariablesarrayref);
+        installer::files::save_file($loggingdir . "globalproductblock.log", $globalproductblockref);
+    }
+
+    # Integrate parent values.
+    while (defined $parent)
+    {
+        my $parentproductblockref;
+        ($parentproductblockref, $parent) = installer::ziplist::getproductblock($ziplistref, $parent, 1);
+        my ($parentsettingsblockref, undef) = installer::ziplist::getproductblock(
+            $parentproductblockref, "Settings", 0);
+        $parentsettingsblockref = installer::ziplist::analyze_settings_block($parentsettingsblockref);
+        my $allparentsettingsarrayref = installer::ziplist::get_settings_from_ziplist($parentsettingsblockref);
+        my $allparentvariablesarrayref = installer::ziplist::get_variables_from_ziplist($parentsettingsblockref);
+        if (scalar @$allparentsettingsarrayref > 0)
+        {
+            $allsettingsarrayref = installer::converter::combine_arrays_from_references_first_win(
+                $allsettingsarrayref,
+                $allparentsettingsarrayref)
+        }
+        if (scalar @$allparentvariablesarrayref)
+        {
+            $allvariablesarrayref = installer::converter::combine_arrays_from_references_first_win(
+                $allvariablesarrayref,
+                $allparentvariablesarrayref)
+        }
+    }
+
+    # Integrate global values.
+    if (scalar @$globalproductblockref)
+    {
+        # settings block from zip.lst
+        my ($globalsettingsblockref, undef) = installer::ziplist::getproductblock(
+            $globalproductblockref, "Settings", 0);
+
+        # select data from settings block in zip.lst
+        $globalsettingsblockref = installer::ziplist::analyze_settings_block($globalsettingsblockref);
+
+        my $allglobalsettingsarrayref = installer::ziplist::get_settings_from_ziplist($globalsettingsblockref);
+        my $allglobalvariablesarrayref = installer::ziplist::get_variables_from_ziplist($globalsettingsblockref);
+
+        if ($installer::globals::globallogging && defined $loggingdir)
+        {
+            installer::files::save_file($loggingdir . "globalsettingsblock1.log", $globalsettingsblockref);
+            installer::files::save_file($loggingdir . "globalsettingsblock2.log", $globalsettingsblockref);
+            installer::files::save_file($loggingdir . "allglobalsettings1.log", $allglobalsettingsarrayref);
+            installer::files::save_file($loggingdir . "allglobalvariables1.log", $allglobalvariablesarrayref);
+        }
+
+        if (scalar @$allglobalsettingsarrayref > 0)
+        {
+            $allsettingsarrayref = installer::converter::combine_arrays_from_references_first_win(
+                $allsettingsarrayref, $allglobalsettingsarrayref);
+        }
+        if (scalar @$allglobalvariablesarrayref > 0)
+        {
+            $allvariablesarrayref = installer::converter::combine_arrays_from_references_first_win(
+                $allvariablesarrayref, $allglobalvariablesarrayref);
+        }
+    }
+
+    # Remove multiples (and the trailing ##%##).
+    $allsettingsarrayref = installer::ziplist::remove_multiples_from_ziplist($allsettingsarrayref);
+    $allvariablesarrayref = installer::ziplist::remove_multiples_from_ziplist($allvariablesarrayref);
+    installer::ziplist::replace_variables_in_ziplist_variables($allvariablesarrayref);
+
+    # Transform array into hash.
+    my $allvariableshashref = installer::converter::convert_array_to_hash($allvariablesarrayref);
+
+    # Postprocess the variables.
+    installer::ziplist::set_default_productversion_if_required($allvariableshashref);
+    installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
+    installer::ziplist::overwrite_ooovendor($allvariableshashref);
+
+    if ($installer::globals::globallogging && defined $loggingdir)
+    {
+        installer::files::save_file($loggingdir . "allsettings2.log" ,$allsettingsarrayref);
+        installer::files::save_file($loggingdir . "allvariables2.log" ,$allvariablesarrayref);
+    }
+
+    # Eventually we should fix this so that we don't have to return the raw arrays, only the resulting hashes.
+    return ($allvariableshashref, $allsettingsarrayref);
+}
+
 
 #################################################
 # Getting data from path file and zip list file
@@ -571,7 +686,7 @@ sub replace_languages_in_pathes
                 my $language = ${$languagesref}[$j];
                 $line =~ s/\$\(LANG\)/$language/g;
                 push(@patharray ,$line);
-                $newdir = $line;
+                my $newdir = $line;
                 $line = $originalline;
 
                 installer::remover::remove_leading_and_ending_whitespaces(\$newline);
@@ -627,8 +742,6 @@ sub list_all_files_from_include_path
     }
 
     $installer::logger::Lang->print("\n");
-
-    return \@filesarray;
 }
 
 #####################################################
@@ -780,9 +893,18 @@ sub add_variables_to_allvariableshashref
         $variableshashref->{'LCPRODUCTEXTENSION'} = "";
     }
 
-    if ( $installer::globals::patch ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::patchaddon; }
-    elsif ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
-    else { $variableshashref->{'PRODUCTADDON'} = ""; }
+    if ($installer::globals::patch)
+    {
+        $variableshashref->{'PRODUCTADDON'} = $installer::globals::patchaddon;
+    }
+    elsif ($installer::globals::languagepack)
+    {
+        $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon;
+    }
+    else
+    {
+        $variableshashref->{'PRODUCTADDON'} = "";
+    }
 
     my $localbuild = $installer::globals::build;
     if ( $localbuild =~ /^\s*(\w+?)(\d+)\s*$/ ) { $localbuild = $2; }   # using "680" instead of "src680"

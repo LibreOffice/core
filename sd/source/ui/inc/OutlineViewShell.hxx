@@ -137,6 +137,9 @@ public:
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
+//IAccessibility2 Implementation 2009-----
+    String m_StrOldPageName;
+//-----IAccessibility2 Implementation 2009
     /** Update the preview to show the specified page.
     */
     virtual void UpdatePreview (SdPage* pPage, bool bInit = false);

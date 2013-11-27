@@ -692,7 +692,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.AutoUpdatePara( pColl, aTmp );
             }
             else
-                rSh.SetAttr( aTabStops );
+                rSh.SetAttrItem( aTabStops );
             break;
         }
 
@@ -750,7 +750,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.AutoUpdatePara( pColl, aSet);
             }
             else
-                rSh.SetAttr( aParaMargin );
+                rSh.SetAttrItem( aParaMargin );
 
             if ( aParaMargin.GetTxtFirstLineOfst() < 0 )
             {
@@ -789,7 +789,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                         rSh.AutoUpdatePara( pColl, aSetTmp );
                     }
                     else
-                        rSh.SetAttr( aTabStops );
+                        rSh.SetAttrItem( aTabStops );
                 }
             }
         }
@@ -814,7 +814,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             rSh.AutoUpdatePara( pColl, aSet);
         }
         else
-            rSh.SetAttr( aParaMargin );
+            rSh.SetAttrItem( aParaMargin );
     }
     break;
 
@@ -1076,7 +1076,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                     RES_LR_SPACE,        RES_UL_SPACE, 0 );
     // get also the list level indent values merged as LR-SPACE item, if needed.
     rSh.GetCurAttr( aCoreSet, true );
-    SelectionType nSelType = rSh.GetSelectionType();
+    const SelectionType nSelType = rSh.GetSelectionType();
 
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();

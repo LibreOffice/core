@@ -136,13 +136,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_SMARTTAG |
 #ifdef DBG_UTIL
                                     SwContentAtPos::SW_TABLEBOXVALUE |
-                        ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
+                                    ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
                                     SwContentAtPos::SW_TABLEBOXFML );
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
         {
-             switch( aCntntAtPos.eCntntAtPos )
+            switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
@@ -150,98 +150,92 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
 #ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
-            {
-                sTxt = UniString(
-                            ByteString::CreateFromDouble(
-                                ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()  )
-                            , gsl_getSystemTextEncoding());
-            }
-            break;
+                {
+                    sTxt = UniString(
+                        ByteString::CreateFromDouble(
+                        ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()  )
+                        , gsl_getSystemTextEncoding());
+                }
+                break;
             case SwContentAtPos::SW_CURR_ATTRS:
                 sTxt = aCntntAtPos.sStr;
                 break;
 #endif
 
             case SwContentAtPos::SW_INETATTR:
-            {
-                sTxt = ((SfxStringItem*)aCntntAtPos.aFnd.pAttr)->GetValue();
-                sTxt = URIHelper::removePassword( sTxt,
-                                        INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_UNAMBIGUOUS);
-                //#i63832# remove the link target type
-                xub_StrLen nFound = sTxt.Search(cMarkSeperator);
-                if( nFound != STRING_NOTFOUND && (++nFound) < sTxt.Len() )
                 {
-                    String sSuffix( sTxt.Copy(nFound) );
-                    if( sSuffix.EqualsAscii( pMarkToTable ) ||
-                        sSuffix.EqualsAscii( pMarkToFrame ) ||
-                        sSuffix.EqualsAscii( pMarkToRegion ) ||
-                        sSuffix.EqualsAscii( pMarkToOutline ) ||
-                        sSuffix.EqualsAscii( pMarkToText ) ||
-                        sSuffix.EqualsAscii( pMarkToGraphic ) ||
-                        sSuffix.EqualsAscii( pMarkToOLE ))
-                    sTxt = sTxt.Copy( 0, nFound - 1);
-                }
-                // --> OD 2009-08-18 #i104300#
-                // special handling if target is a cross-reference bookmark
-                {
-                    String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
-                    IDocumentMarkAccess* const pMarkAccess =
-                                                rSh.getIDocumentMarkAccess();
-                    IDocumentMarkAccess::const_iterator_t ppBkmk =
-                                    pMarkAccess->findBookmark( sTmpSearchStr );
-                    if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
-                         IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
-                            == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK )
+                    sTxt = ((SfxStringItem*)aCntntAtPos.aFnd.pAttr)->GetValue();
+                    sTxt = URIHelper::removePassword( sTxt,
+                        INetURLObject::WAS_ENCODED,
+                        INetURLObject::DECODE_UNAMBIGUOUS);
+                    //#i63832# remove the link target type
+                    xub_StrLen nFound = sTxt.Search(cMarkSeperator);
+                    if( nFound != STRING_NOTFOUND && (++nFound) < sTxt.Len() )
                     {
-                        SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
-                        if ( pTxtNode )
+                        String sSuffix( sTxt.Copy(nFound) );
+                        if( sSuffix.EqualsAscii( pMarkToTable ) ||
+                            sSuffix.EqualsAscii( pMarkToFrame ) ||
+                            sSuffix.EqualsAscii( pMarkToRegion ) ||
+                            sSuffix.EqualsAscii( pMarkToOutline ) ||
+                            sSuffix.EqualsAscii( pMarkToText ) ||
+                            sSuffix.EqualsAscii( pMarkToGraphic ) ||
+                            sSuffix.EqualsAscii( pMarkToOLE ))
+                            sTxt = sTxt.Copy( 0, nFound - 1);
+                    }
+                    // special handling if target is a cross-reference bookmark
+                    {
+                        String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
+                        IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+                        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark( sTmpSearchStr );
+                        if ( ppBkmk != pMarkAccess->getBookmarksEnd()
+                             && IDocumentMarkAccess::GetType( *(ppBkmk->get()) ) == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK )
                         {
-                            sTxt = pTxtNode->GetExpandTxt( 0, pTxtNode->Len(), true, true );
-
-                            if( sTxt.Len() )
+                            SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
+                            if ( pTxtNode )
                             {
-                                sTxt.EraseAllChars( 0xad );
-                                for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                                sTxt = pTxtNode->GetExpandTxt( 0, pTxtNode->Len(), true, true );
+
+                                if( sTxt.Len() )
                                 {
-                                    if( *p < 0x20 )
-                                        *p = 0x20;
-                                    else if(*p == 0x2011)
-                                        *p = '-';
+                                    sTxt.EraseAllChars( 0xad );
+                                    for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                                    {
+                                        if( *p < 0x20 )
+                                            *p = 0x20;
+                                        else if(*p == 0x2011)
+                                            *p = '-';
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                // <--
-                // --> OD 2007-07-26 #i80029#
-                sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
-                if ( !bExecHyperlinks )
-                {
-                    SvtSecurityOptions aSecOpts;
-                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
+                    sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                     if ( !bExecHyperlinks )
                     {
-                        sTxt.InsertAscii( ": ", 0 );
-                        sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
-                    }
-                }
-                // <--
-                break;
-            }
-            case SwContentAtPos::SW_SMARTTAG:
-            {
-                sTxt = SW_RESSTR(STR_SMARTTAG_CLICK);
+                        SvtSecurityOptions aSecOpts;
+                        bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
-                KeyCode aCode( KEY_SPACE );
-                KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
-                String aModStr( aModifiedCode.GetName() );
-                aModStr.SearchAndReplace( aCode.GetName(), String() );
-                aModStr.SearchAndReplaceAllAscii( "+", String() );
-                sTxt.SearchAndReplaceAllAscii( "%s", aModStr );
-            }
-            break;
+                        if ( !bExecHyperlinks )
+                        {
+                            sTxt.InsertAscii( ": ", 0 );
+                            sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                        }
+                    }
+                    break;
+                }
+            case SwContentAtPos::SW_SMARTTAG:
+                {
+                    sTxt = SW_RESSTR(STR_SMARTTAG_CLICK);
+
+                    KeyCode aCode( KEY_SPACE );
+                    KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
+                    String aModStr( aModifiedCode.GetName() );
+                    aModStr.SearchAndReplace( aCode.GetName(), String() );
+                    aModStr.SearchAndReplaceAllAscii( "+", String() );
+                    sTxt.SearchAndReplaceAllAscii( "%s", aModStr );
+                }
+                break;
 
             case SwContentAtPos::SW_FTN:
                 if( aCntntAtPos.pFndTxtAttr && aCntntAtPos.aFnd.pAttr )
@@ -249,7 +243,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     const SwFmtFtn* pFtn = (SwFmtFtn*)aCntntAtPos.aFnd.pAttr;
                     pFtn->GetFtnText( sTxt );
                     sTxt.Insert( SW_RESSTR( pFtn->IsEndNote()
-                                    ? STR_ENDNOTE : STR_FTNNOTE ), 0 );
+                        ? STR_ENDNOTE : STR_FTNNOTE ), 0 );
                     if( aCntntAtPos.IsInRTLText() )
                         nStyle |= QUICKHELP_BIDI_RTL;
                 }
@@ -264,7 +258,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if( sTxt.Len() && aCntntAtPos.pFndTxtAttr )
                 {
                     const SwTOXType* pTType = aCntntAtPos.pFndTxtAttr->
-                                        GetTOXMark().GetTOXType();
+                        GetTOXMark().GetTOXType();
                     if( pTType && pTType->GetTypeName().Len() )
                     {
                         sTxt.InsertAscii( ": ", 0 );
@@ -272,6 +266,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     }
                 }
                 break;
+
             case SwContentAtPos::SW_REFMARK:
                 if(aCntntAtPos.aFnd.pAttr)
                 {
@@ -279,7 +274,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": "));
                     sTxt += ((const SwFmtRefMark*)aCntntAtPos.aFnd.pAttr)->GetRefName();
                 }
-            break;
+                break;
 
             default:
                 {
@@ -292,34 +287,16 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case RES_SETEXPFLD:
                         case RES_TABLEFLD:
                         case RES_GETEXPFLD:
-                        {
-                            sal_uInt16 nOldSubType = pFld->GetSubType();
-                            ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sTxt = pFld->ExpandField(true);
-                            ((SwField*)pFld)->SetSubType(nOldSubType);
-                        }
-                        break;
+                            {
+                                sal_uInt16 nOldSubType = pFld->GetSubType();
+                                ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                                sTxt = pFld->ExpandField(true);
+                                ((SwField*)pFld)->SetSubType(nOldSubType);
+                            }
+                            break;
 
                         case RES_POSTITFLD:
                             {
-                                /*
-                                SwPostItMgr* pMgr = rView.GetPostItMgr();
-                                if (pMgr->ShowNotes())
-                                {
-                                    SwFmtFld* pSwFmtFld = 0;
-                                    if (pMgr->ShowPreview(pFld,pSwFmtFld))
-                                    {
-                                        SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr,PB_Preview);
-                                        pPostIt->InitControls();
-                                        pPostIt->SetReadonly(true);
-                                        pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
-                                        pPostIt->SetVirtualPosSize(rEvt.GetMousePosPixel(),Size(180,70));
-                                        pPostIt->ShowNote();
-                                        SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
-                                    }
-                                    return;
-                                }
-                                */
                                 break;
                             }
                         case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
@@ -346,33 +323,31 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             break;
 
                         case RES_GETREFFLD:
-                        {
-                            // --> OD 2008-01-09 #i85090#
-                            const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
-                            ASSERT( pRefFld,
-                                    "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
-                            if ( pRefFld )
                             {
-                                if ( pRefFld->IsRefToHeadingCrossRefBookmark() ||
-                                     pRefFld->IsRefToNumItemCrossRefBookmark() )
+                                const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
+                                ASSERT( pRefFld,
+                                    "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
+                                if ( pRefFld )
                                 {
-                                    sTxt = pRefFld->GetExpandedTxtOfReferencedTxtNode();
-                                    if ( sTxt.Len() > 80  )
+                                    if ( pRefFld->IsRefToHeadingCrossRefBookmark() ||
+                                        pRefFld->IsRefToNumItemCrossRefBookmark() )
                                     {
-                                        sTxt.Erase( 80 );
-                                        sTxt += '.';
-                                        sTxt += '.';
-                                        sTxt += '.';
+                                        sTxt = pRefFld->GetExpandedTxtOfReferencedTxtNode();
+                                        if ( sTxt.Len() > 80  )
+                                        {
+                                            sTxt.Erase( 80 );
+                                            sTxt += '.';
+                                            sTxt += '.';
+                                            sTxt += '.';
+                                        }
+                                    }
+                                    else
+                                    {
+                                        sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
                                     }
                                 }
-                                else
-                                {
-                                    sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
-                                }
                             }
-                            // <--
-                        }
-                        break;
+                            break;
                         }
                     }
 
@@ -380,8 +355,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     {
                         aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
                         if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
-                            lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl,
-                                                    sTxt, bBalloon );
+                            lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl, sTxt, bBalloon );
                     }
                 }
             }
@@ -419,7 +393,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABROW_VERT:
                     nTabRes = STR_TABLE_ROW_ADJUST;
                     break;
-                // --> FME 2004-07-30 #i32329# Enhanced table selection
                 case SW_TABSEL_HORI:
                 case SW_TABSEL_HORI_RTL:
                 case SW_TABSEL_VERT:
@@ -434,7 +407,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABCOLSEL_VERT:
                     nTabRes = STR_TABLE_SELECT_COL;
                     break;
-                // <--
             }
             if(nTabRes)
             {

@@ -727,8 +727,8 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
             SwDoc* pDoc( pFirstTextFrmOnNewPage->GetTxtNode()->GetDoc() );
             IDocumentContentOperations* pIDCO = pFirstTextFrmOnNewPage->GetTxtNode()->getIDocumentContentOperations();
             const SwPaM aTmpPaM( *(pFirstTextFrmOnNewPage->GetTxtNode()) );
-            pIDCO->InsertPoolItem( aTmpPaM,
-                SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0 );
+            pIDCO->InsertPoolItem(
+                aTmpPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0 );
             pFirstTextFrmOnNewPage->GetTxtNode()->UnlockModify();
 
             uno::Reference< document::XDocumentInfoSupplier > xDoc(

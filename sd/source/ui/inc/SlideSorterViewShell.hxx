@@ -173,6 +173,10 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
+    //IAccessibility2 Implementation 2009-----
+    // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
+    virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc );
+    //-----IAccessibility2 Implementation 2009
 
     SlideSorter& GetSlideSorter (void) const;
 

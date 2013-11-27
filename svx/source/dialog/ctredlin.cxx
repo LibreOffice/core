@@ -1339,6 +1339,29 @@ void SvxTPFilter::Disable( bool bChild)
     Enable( false, bChild );
 }
 
+//IAccessibility2 Implementation 2009-----
+void SvxTPFilter::SetAccessibleRelationMemberOf( Window* pWin )
+{
+    aCbDate.SetAccessibleRelationMemberOf(pWin);
+    aLbDate.SetAccessibleRelationMemberOf(pWin);
+    aDfDate.SetAccessibleRelationMemberOf(pWin);
+    aTfDate.SetAccessibleRelationMemberOf(pWin);
+    aIbClock.SetAccessibleRelationMemberOf(pWin);
+    aFtDate2.SetAccessibleRelationMemberOf(pWin);
+    aDfDate2.SetAccessibleRelationMemberOf(pWin);
+    aTfDate2.SetAccessibleRelationMemberOf(pWin);
+    aIbClock2.SetAccessibleRelationMemberOf(pWin);
+    aCbAuthor.SetAccessibleRelationMemberOf(pWin);
+    aLbAuthor.SetAccessibleRelationMemberOf(pWin);
+    aCbRange.SetAccessibleRelationMemberOf(pWin);
+    aEdRange.SetAccessibleRelationMemberOf(pWin);
+    aBtnRange.SetAccessibleRelationMemberOf(pWin);
+    aLbAction.SetAccessibleRelationMemberOf(pWin);
+    aCbComment.SetAccessibleRelationMemberOf(pWin);
+    aEdComment.SetAccessibleRelationMemberOf(pWin);
+}
+//-----IAccessibility2 Implementation 2009
+
 IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
 {
 

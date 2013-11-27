@@ -252,6 +252,7 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
+,   bisInSdNavigatorWin  ( sal_False )
 ,   mpParent            ( pParentWin )
 ,   mpDoc               ( NULL )
 ,   mpBookmarkDoc       ( NULL )
@@ -265,7 +266,6 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 ,   mpDropNavWin        ( NULL )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
-
 {
     // Tree-ListBox mit Linien versehen
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -300,6 +300,184 @@ SdPageObjsTLB::~SdPageObjsTLB()
         delete mpMedium;
 }
 
+//IAccessibility2 Implementation 2009-----
+// helper function for  GetEntryAltText and GetEntryLongDescription
+String SdPageObjsTLB::getAltLongDescText( SvLBoxEntry* pEntry , sal_Bool isAltText) const
+{
+    sal_uInt16 maxPages = mpDoc->GetPageCount();
+    sal_uInt16 pageNo;
+    SdrObject*   pObj = NULL;
+    SdPage* pPage = NULL;
+
+
+    String ParentName = GetEntryText( GetRootLevelParent( pEntry ) );
+
+    for( pageNo = 0;  pageNo < maxPages; pageNo++ )
+    {
+        pPage = (SdPage*) mpDoc->GetPage( pageNo );
+        if( pPage->GetPageKind() != PK_STANDARD ) continue;
+        if( pPage->GetName() !=  ParentName ) continue;
+        SdrObjListIter aIter( *pPage, IM_FLAT );
+        while( aIter.IsMore() )
+        {
+            pObj = aIter.Next();
+            if( GetEntryText(pEntry) ==  GetObjectName( pObj )  )
+            {
+                if( isAltText )
+                    return pObj->GetTitle();
+                else
+                    return pObj->GetDescription();
+            }
+        }
+    }
+    return String();
+
+}
+
+String SdPageObjsTLB::GetEntryAltText( SvLBoxEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_True );
+}
+
+String SdPageObjsTLB::GetEntryLongDescription( SvLBoxEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_False);
+}
+
+void  SdPageObjsTLB::MarkCurEntry( const String& rName )
+{
+
+    if( rName.Len() )
+    {
+        SvLBoxEntry* pCurEntry =GetCurEntry();
+        SvLBoxEntry* pEntry =NULL;
+        String aTmp1;
+        String aTmp2;
+
+           if( GetParent(pCurEntry)==NULL )
+           {
+                  aTmp1 = GetEntryText( pCurEntry );
+               for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
+            {
+                   if(GetParent( pEntry )==NULL)
+                            continue;
+                aTmp2 = GetEntryText( GetParent( pEntry ));
+                if( aTmp1 != aTmp2)
+                {
+                    // IA2 CWS. MT: Removed in SvLBoxEntry for now - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
+                    pEntry->SetMarked(sal_False);
+                }
+            }
+
+           }
+              else
+              {
+                  for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
+            {
+                aTmp2 = GetEntryText( pEntry );
+                if( aTmp2 == rName)
+                {
+                    pEntry->SetMarked(sal_True);
+                }
+                else
+                {
+                        pEntry->SetMarked(sal_False);
+                }
+            }
+              }
+    }
+    Invalidate();
+}
+
+void  SdPageObjsTLB:: FreshCurEntry()
+{
+       SvLBoxEntry* pEntry =NULL;
+       for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
+    {
+                pEntry->SetMarked(sal_False);
+    }
+    Invalidate();
+}
+
+class SdContentLBoxString : public SvLBoxString
+{
+public:
+    SdContentLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
+        const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
+
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+        SvLBoxEntry* pEntry);
+};
+
+void SdPageObjsTLB::InitEntry(SvLBoxEntry* pEntry,
+        const XubString& rStr ,const Image& rImg1,const Image& rImg2,SvLBoxButtonKind eButtonKind)
+{
+    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
+    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SdContentLBoxString* pStr = new SdContentLBoxString( pEntry, 0, pCol->GetText() );
+    pEntry->ReplaceItem( pStr, nColToHilite );
+}
+
+void SdContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    SvLBoxEntry* pEntry )
+{
+    // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
+    /*
+    if (pEntry->IsMarked())
+    {
+            rDev.DrawText( rPos, GetText() );
+            XubString str;
+            str = XubString::CreateFromAscii("*");
+            Point rPosStar(rPos.X()-6,rPos.Y());
+            Font aOldFont( rDev.GetFont());
+            Font aFont(aOldFont);
+            Color aCol( aOldFont.GetColor() );
+            aCol.DecreaseLuminance( 200 );
+            aFont.SetColor( aCol );
+            rDev.SetFont( aFont );
+            rDev.DrawText( rPosStar, str);
+            rDev.SetFont( aOldFont );
+    }
+    else
+    */
+        SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
+
+}
+
+void SdPageObjsTLB::SaveExpandedTreeItemState(SvLBoxEntry* pEntry, vector<String>& vectTreeItem)
+{
+    if (pEntry)
+    {
+        SvLBoxEntry* pListEntry = pEntry;
+        while (pListEntry)
+        {
+            if (pListEntry->HasChilds())
+            {
+                if (IsExpanded(pListEntry))
+                    vectTreeItem.push_back(GetEntryText(pListEntry));
+                SvLBoxEntry* pChildEntry = FirstChild(pListEntry);
+                SaveExpandedTreeItemState(pChildEntry, vectTreeItem);
+            }
+            pListEntry = NextSibling(pListEntry);
+        }
+    }
+}
+void SdPageObjsTLB::Clear()
+{
+    //Save the expanded tree item
+    if (mbSaveTreeItemState)
+    {
+        maSelectionEntryText = String();
+        maTreeItem.clear();
+        if (GetCurEntry())
+            maSelectionEntryText = GetSelectEntry();
+        SvLBoxEntry* pEntry = FirstChild(NULL);
+        SaveExpandedTreeItemState(pEntry, maTreeItem);
+    }
+    return SvTreeListBox::Clear();
+}
+//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* return name of object
@@ -458,6 +636,10 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages, const St
     }
     if( aSelection.Len() )
         SelectEntry( aSelection );
+    else if (mbSaveTreeItemState && maSelectionEntryText.Len())
+    {
+        SelectEntry(maSelectionEntryText);
+    }
 }
 
 /*************************************************************************
@@ -537,6 +719,30 @@ void SdPageObjsTLB::AddShapeList (
         IM_FLAT,
         false /*not reverse*/);
 
+    //IAccessibility2 Implementation 2009-----
+    sal_Bool  bMarked=sal_False;
+    if(bisInSdNavigatorWin)
+    {
+        Window* pWindow=NULL;
+        SdNavigatorWin* pSdNavigatorWin=NULL;
+        sd::DrawDocShell* pSdDrawDocShell = NULL;
+        if(pEntry)
+            pWindow=(Window*)GetParent(pEntry);
+        if(pWindow)
+            pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+        if( pSdNavigatorWin )
+            pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+        if(pSdDrawDocShell)
+            bMarked=pSdDrawDocShell->IsMarked(pShape);
+        if(pEntry)
+        {
+            if(bMarked)
+                pEntry->SetMarked(sal_True);
+            else
+                pEntry->SetMarked( sal_False );
+        }
+    }
+    //-----IAccessibility2 Implementation 2009
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
@@ -551,7 +757,29 @@ void SdPageObjsTLB::AddShapeList (
             {
                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgOle, maImgOle, pEntry,
                     false, LIST_APPEND, pObj);
-
+                //IAccessibility2 Implementation 2009-----
+                if(bisInSdNavigatorWin)
+                {
+                    Window* pWindow=NULL;
+                    SdNavigatorWin* pSdNavigatorWin=NULL;
+                    sd::DrawDocShell* pSdDrawDocShell = NULL;
+                    if(pNewEntry)
+                        pWindow=(Window*)GetParent(pNewEntry);
+                    if(pWindow)
+                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                    if( pSdNavigatorWin )
+                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                    if(pSdDrawDocShell)
+                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                    if(pNewEntry)
+                    {
+                        if(bMarked)
+                            pNewEntry->SetMarked(sal_True);
+                        else
+                            pNewEntry->SetMarked( sal_False );
+                    }
+                }
+                //-----IAccessibility2 Implementation 2009
                 SetExpandedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
                 SetCollapsedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
             }
@@ -559,7 +787,33 @@ void SdPageObjsTLB::AddShapeList (
             {
                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgGraphic, maImgGraphic, pEntry,
                     false, LIST_APPEND, pObj );
-
+                //IAccessibility2 Implementation 2009-----
+                if(bisInSdNavigatorWin)
+                {
+                    Window* pWindow=NULL;
+                    SdNavigatorWin* pSdNavigatorWin=NULL;
+                    sd::DrawDocShell* pSdDrawDocShell = NULL;
+                    if(pNewEntry)
+                        pWindow=(Window*)GetParent(pNewEntry);
+                    if(pWindow)
+                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                    if( pSdNavigatorWin )
+                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                    if(pSdDrawDocShell)
+                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                    if(pNewEntry)
+                    {
+                        if(bMarked)
+                        {
+                            pNewEntry->SetMarked(sal_True);
+                        }
+                        else
+                        {
+                            pNewEntry->SetMarked( sal_False );
+                        }
+                    }
+                }
+                //-----IAccessibility2 Implementation 2009
                 SetExpandedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                 SetCollapsedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
             }
@@ -577,7 +831,33 @@ void SdPageObjsTLB::AddShapeList (
             {
                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, rIconProvider.maImgObjects, rIconProvider.maImgObjects, pEntry,
                     false, LIST_APPEND, pObj );
-
+                //IAccessibility2 Implementation 2009-----
+                if(bisInSdNavigatorWin)
+                {
+                    Window* pWindow=NULL;
+                    SdNavigatorWin* pSdNavigatorWin=NULL;
+                    sd::DrawDocShell* pSdDrawDocShell = NULL;
+                    if(pNewEntry)
+                        pWindow=(Window*)GetParent(pNewEntry);
+                    if(pWindow)
+                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                    if( pSdNavigatorWin )
+                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                    if(pSdDrawDocShell)
+                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                    if(pNewEntry)
+                    {
+                        if(bMarked)
+                        {
+                            pNewEntry->SetMarked(sal_True);
+                        }
+                        else
+                        {
+                            pNewEntry->SetMarked( sal_False );
+                        }
+                    }
+                }
+                //-----IAccessibility2 Implementation 2009
                 SetExpandedEntryBmp( pNewEntry, rIconProvider.maImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                 SetCollapsedEntryBmp( pNewEntry, rIconProvider.maImgObjectsH, BMP_COLOR_HIGHCONTRAST );
             }
@@ -600,6 +880,24 @@ void SdPageObjsTLB::AddShapeList (
             pEntry,
             bIsExcluded ? rIconProvider.maImgPageObjsExclH : rIconProvider.maImgPageObjsH,
             BMP_COLOR_HIGHCONTRAST);
+        //IAccessibility2 Implementation 2009-----
+        if (mbSaveTreeItemState)
+        {
+            vector<String>:: iterator iteStart = maTreeItem.begin();
+            while (iteStart != maTreeItem.end())
+            {
+                String strEntry = GetEntryText(pEntry);
+                if (*iteStart == strEntry)
+                {
+                    Expand( pEntry );
+                    break;
+                }
+                ++iteStart;
+            }
+        }
+        else
+            Expand( pEntry );
+        //-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -976,6 +1274,62 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
 
         DoubleClickHdl();
     }
+//IAccessibility2 Implementation 2009-----
+    else if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE)
+    {
+       if(bisInSdNavigatorWin)
+       {
+           sal_Bool bMarked=sal_False;
+           SvLBoxEntry* pNewEntry = GetCurEntry();
+           if( GetParent(pNewEntry) == NULL )
+               return;
+           String  aStr=GetSelectEntry();
+           Window* pWindow=NULL;
+           SdNavigatorWin* pSdNavigatorWin=NULL;
+           sd::DrawDocShell* pSdDrawDocShell = NULL;
+           if(pNewEntry)
+               pWindow=(Window*)GetParent(pNewEntry);
+           if(pWindow)
+               pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+           if( pSdNavigatorWin )
+               pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+           if(pSdDrawDocShell)
+           {
+               pSdDrawDocShell->GotoTreeBookmark(aStr);
+               bMarked=pSdDrawDocShell->GetObjectIsmarked(aStr);
+           }
+           //Removed by yanjun for sym2_6385
+           //The symphony2.0 can support morn than one level tree list, also support to select tow or more items in different level.
+           /*
+           SvLBoxEntry* pBeginEntry = First();
+           if( pBeginEntry )
+           {
+               if( GetParent(pBeginEntry) !=  GetParent(pNewEntry) )
+                   pBeginEntry->SetMarked( sal_False );
+               SvLBoxEntry* pNextEntry = Next( pBeginEntry );
+               while( pNextEntry )
+               {
+                   if( GetParent(pNextEntry) !=  GetParent(pNewEntry) )
+                       pNextEntry->SetMarked( sal_False );
+                   pNextEntry =  Next( pNextEntry );
+               }
+           }
+           End*/
+           if(pNewEntry)
+           {
+               if(bMarked)
+               {
+                   pNewEntry->SetMarked(sal_True);
+               }
+               else
+               {
+                   pNewEntry->SetMarked( sal_False );
+               }
+           }
+           Invalidate();
+       }
+    }
+//-----IAccessibility2 Implementation 2009
     else
         SvTreeListBox::KeyInput( rKEvt );
 }

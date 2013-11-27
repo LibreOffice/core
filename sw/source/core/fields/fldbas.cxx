@@ -180,13 +180,19 @@ sal_Bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
                     Felder sind n-mal vorhanden, Feldtypen nur einmal
  --------------------------------------------------------------------*/
 
-SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, sal_uInt16 nLng) :
-    nLang(nLng),
-    bIsAutomaticLanguage(sal_True),
-    nFormat(nFmt)
+SwField::SwField(
+    SwFieldType* pTyp,
+    sal_uInt32 nFmt,
+    sal_uInt16 nLng,
+    bool bUseFieldValueCache )
+    : m_Cache()
+    , m_bUseFieldValueCache( bUseFieldValueCache )
+    , nLang( nLng )
+    , bIsAutomaticLanguage( sal_True )
+    , nFormat( nFmt )
+    , pType( pTyp )
 {
     ASSERT( pTyp, "SwField: ungueltiger SwFieldType" );
-    pType = pTyp;
 }
 
 SwField::~SwField()
@@ -425,11 +431,16 @@ sal_Bool SwField::IsFixed() const
 
 String SwField::ExpandField(bool const bCached) const
 {
-    if (!bCached) // #i85766# do not expand fields in clipboard documents
+    if ( m_bUseFieldValueCache )
     {
-        m_Cache = Expand();
+        if (!bCached) // #i85766# do not expand fields in clipboard documents
+        {
+            m_Cache = Expand();
+        }
+        return m_Cache;
     }
-    return m_Cache;
+
+    return Expand();
 }
 
 SwField * SwField::CopyField() const
@@ -438,6 +449,8 @@ SwField * SwField::CopyField() const
     // #i85766# cache expansion of source (for clipboard)
     // use this->cache, not this->Expand(): only text formatting calls Expand()
     pNew->m_Cache = m_Cache;
+    pNew->m_bUseFieldValueCache = m_bUseFieldValueCache;
+
     return pNew;
 }
 

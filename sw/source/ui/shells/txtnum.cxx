@@ -354,7 +354,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                          numfunc::GetDefaultPositionAndSpaceMode() );
 
                     SvxNumRule aTempRule = aTmpRule.MakeSvxNumRule();
-                    //Sym3_2508, set unit attribute to NB Manager
+                    // set unit attribute to NB Manager
                     SfxItemSet aSet(GetPool(),
                             SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                             0 );
@@ -407,7 +407,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                          numfunc::GetDefaultPositionAndSpaceMode() );
 
                     SvxNumRule aTempRule = aTmpRule.MakeSvxNumRule();
-                    //Sym3_2508, set unit attribute to NB Manager
+                    // set unit attribute to NB Manager
                     SfxItemSet aSet(GetPool(),
                             SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                             0 );

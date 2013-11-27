@@ -64,6 +64,10 @@
 
 using namespace ::com::sun::star;
 
+//IAccessibility2 Implementation 2009-----
+//#include "accnote.hxx"
+//-----IAccessibility2 Implementation 2009
+
 using rtl::OUString;
 using rtl::OUStringBuffer;
 using i18n::Boundary;
@@ -140,6 +144,13 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType)
 
     bLastIsSpecial = sal_False;
 }
+//IAccessibility2 Implementation 2009-----
+void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFldType )
+{
+    aAttrFieldType.push_back(nAttrFldType);
+    return;
+}
+//-----IAccessibility2 Implementation 2009
 
 void SwAccessiblePortionData::Special(
     sal_uInt16 nLength, const String& rText, sal_uInt16 nType)
@@ -156,10 +167,45 @@ void SwAccessiblePortionData::Special(
     switch( nType )
     {
         case POR_POSTITS:
-        case POR_FLYCNT:
-        case POR_GRFNUM:
+            //IAccessibility2 Implementation 2009-----
             sDisplay = String(sal_Unicode(0xfffc));
 
+            break;
+        case POR_FLYCNT:
+            sDisplay = String(sal_Unicode(0xfffc));
+            break;
+        case POR_GRFNUM:
+        case POR_BULLET:
+                break;
+        case POR_FLD:
+        //Added by yanjun for 6854
+        case POR_HIDDEN:
+        case POR_COMBINED:
+        case POR_ISOREF:
+        //End
+            {
+                //When the filed content is empty, input a special character.
+                if (rText.Len() == 0)
+                    sDisplay = String(sal_Unicode(0xfffc));
+                else
+                    sDisplay = rText;
+                aFieldPosition.push_back(aBuffer.getLength());
+                aFieldPosition.push_back(aBuffer.getLength() + rText.Len());
+                break;
+            }
+        case POR_FTNNUM:
+            {
+                break;
+            }
+        case POR_FTN:
+            {
+                sDisplay = rText;
+                sal_Int32 nStart=aBuffer.getLength();
+                sal_Int32 nEnd=nStart + rText.Len();
+                m_vecPairPos.push_back(std::make_pair(nStart,nEnd));
+                break;
+            }
+            //-----IAccessibility2 Implementation 2009
             break;
         case POR_NUMBER:
         {
@@ -280,6 +326,7 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
         case POR_NUMBER:
         case POR_FLD:
         case POR_URL:
+        case POR_INPUTFLD:
         case POR_ISOTOX:
         case POR_TOX:
         case POR_HIDDEN:
@@ -675,6 +722,37 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
     return static_cast<sal_uInt16>( nModelPos );
 }
 
+//IAccessibility2 Implementation 2009-----
+sal_uInt16 SwAccessiblePortionData::GetAttrFldType( sal_Int32 nPos )
+{
+    if( aFieldPosition.size() < 2 ) return sal_False;
+    sal_Int32 nFieldIndex = 0;
+    for( size_t i = 0; i < aFieldPosition.size() - 1; i += 2 )
+    {
+        if( nPos < aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
+        {
+            return aAttrFieldType[nFieldIndex];
+        }
+        nFieldIndex++ ;
+    }
+    return 0;
+}
+
+sal_Bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
+{
+    if( aFieldPosition.size() < 2 ) return sal_False;
+    for( size_t i = 0; i < aFieldPosition.size() - 1; i += 2 )
+    {
+        if( nPos < aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
+        {
+            rBound.startPos = aFieldPosition[i];
+            rBound.endPos =  aFieldPosition[i + 1];
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+//-----IAccessibility2 Implementation 2009
 void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32 nPos,
     size_t& nPortionNo,
@@ -738,6 +816,50 @@ sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_uInt16 nPos ) const
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
 
+//IAccessibility2 Implementation 2009-----
+sal_Bool SwAccessiblePortionData::IsZeroCorePositionData()
+{
+    if( aModelPositions.size() < 1  ) return sal_True;
+    return aModelPositions[0] == 0 &&  aModelPositions[aModelPositions.size()-1] == 0;
+}
+
+sal_Bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
+{
+    VEC_PAIR_POS::iterator vi =m_vecPairPos.begin();
+    for (;vi != m_vecPairPos.end() ; ++vi)
+    {
+        const PAIR_POS &pairPos = *vi;
+        if(nIndex >= pairPos.first && nIndex < pairPos.second )
+        {
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
+sal_Bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
+{
+//    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
+    return IsPortionAttrSet( FindBreak( aAccessiblePositions, nPos ),
+                             PORATTR_GRAY );
+}
+
+sal_Int32 SwAccessiblePortionData::GetFieldIndex(sal_Int32 nPos)
+{
+    sal_Int32 nIndex = -1;
+    if( aFieldPosition.size() >= 2 )
+    {
+        for( sal_Int32 i = 0; i < aFieldPosition.size() - 1; i += 2 )
+        {
+            if( nPos <= aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
+            {
+                nIndex = i/2;
+                break;
+            }
+        }
+    }
+    return nIndex;
+}
 sal_uInt16 SwAccessiblePortionData::GetFirstValidCorePosition() const
 {
     return static_cast<sal_uInt16>( aModelPositions[0] );

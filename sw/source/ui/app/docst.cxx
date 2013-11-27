@@ -878,7 +878,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
         case SFX_STYLE_FAMILY_CHAR:
         {
             SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-            pSh->SetAttr( aFmt, (nMode & KEY_SHIFT) ?
+            pSh->SetAttrItem( aFmt, (nMode & KEY_SHIFT) ?
                 nsSetAttrMode::SETATTR_DONTREPLACE : nsSetAttrMode::SETATTR_DEFAULT );
             break;
         }
@@ -1184,7 +1184,7 @@ sal_uInt16 SwDocShell::MakeByExample( const String &rName, sal_uInt16 nFamily,
                 pCurrWrtShell->FillByEx( pChar );
                 pChar->SetDerivedFrom( pCurrWrtShell->GetCurCharFmt() );
                 SwFmtCharFmt aFmt( pChar );
-                pCurrWrtShell->SetAttr( aFmt );
+                pCurrWrtShell->SetAttrItem( aFmt );
                 pCurrWrtShell->EndAllAction();
             }
         }

@@ -885,9 +885,9 @@ oncemore:
         }
         case 39: // fillin command
             pField = new SwInputField(
-                (SwInputFieldType*)rOut.GetSysFldType( RES_INPUTFLD ),
+                static_cast<SwInputFieldType*>(rOut.GetSysFldType( RES_INPUTFLD )),
                 aEmptyStr, sFormel,
-                INP_TXT, 0 );       // sichtbar ( geht z.Zt. nicht anders )
+                INP_TXT, 0, false );
         break;
         case 51: // macro button
         {

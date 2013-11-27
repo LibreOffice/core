@@ -2604,4 +2604,88 @@ IMPL_LINK( SvxTableController, UpdateHdl, void *, EMPTYARG )
     return 0;
 }
 
+//IAccessibility2 Implementation 2009-----
+sal_Bool SvxTableController::selectRow( sal_Int32 row )
+{
+    if( !mxTable.is() )
+        return sal_False;
+    CellPos aStart( 0, row ), aEnd( mxTable->getColumnCount() - 1, row );
+    StartSelection( aEnd );
+    gotoCell( aStart, true, 0 );
+    return sal_True;
+}
+sal_Bool SvxTableController::selectColumn( sal_Int32 column )
+{
+    if( !mxTable.is() )
+        return sal_False;
+    CellPos aStart( column, 0 ), aEnd( column, mxTable->getRowCount() - 1 );
+    StartSelection( aEnd );
+    gotoCell( aStart, true, 0 );
+    return sal_True;
+}
+sal_Bool SvxTableController::deselectRow( sal_Int32 row )
+{
+    if( !mxTable.is() )
+        return sal_False;
+    CellPos aStart( 0, row ), aEnd( mxTable->getColumnCount() - 1, row );
+    StartSelection( aEnd );
+    gotoCell( aStart, false, 0 );
+    return sal_True;
+}
+sal_Bool SvxTableController::deselectColumn( sal_Int32 column )
+{
+    if( !mxTable.is() )
+        return sal_False;
+    CellPos aStart( column, 0 ), aEnd( column, mxTable->getRowCount() - 1 );
+    StartSelection( aEnd );
+    gotoCell( aStart, false, 0 );
+    return sal_True;
+}
+sal_Bool SvxTableController::isRowSelected( sal_Int32 nRow )
+{
+    if( hasSelectedCells() )
+    {
+        CellPos aFirstPos, aLastPos;
+        getSelectedCells( aFirstPos, aLastPos );
+        if( (aFirstPos.mnCol == 0) && (nRow >= aFirstPos.mnRow && nRow <= aLastPos.mnRow) && (mxTable->getColumnCount() - 1 == aLastPos.mnCol) )
+            return sal_True;
+    }
+    return sal_False;
+}
+sal_Bool SvxTableController::isColumnSelected( sal_Int32 nColumn )
+{
+    if( hasSelectedCells() )
+    {
+        CellPos aFirstPos, aLastPos;
+        getSelectedCells( aFirstPos, aLastPos );
+        if( (aFirstPos.mnRow == 0) && (nColumn >= aFirstPos.mnCol && nColumn <= aLastPos.mnCol) && (mxTable->getRowCount() - 1 == aLastPos.mnRow) )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool SvxTableController::isRowHeader()
+{
+    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+
+    if( !pTableObj )
+        return sal_False;
+
+    TableStyleSettings aSettings( pTableObj->getTableStyleSettings() );
+
+    return aSettings.mbUseFirstRow;
+}
+
+sal_Bool SvxTableController::isColumnHeader()
+{
+    SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
+
+    if( !pTableObj )
+        return sal_False;
+
+    TableStyleSettings aSettings( pTableObj->getTableStyleSettings() );
+
+    return aSettings.mbUseFirstColumn;
+}
+//-----IAccessibility2 Implementation 2009
 } }

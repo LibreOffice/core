@@ -34,7 +34,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _CPPUHELPER_IMPLBASE4_HXX
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
 #include <comphelper/accessibletexthelper.hxx>

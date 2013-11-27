@@ -155,7 +155,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
         if( ( nSttIdx = *pHt->GetStart() ) < nAktPos )
         {
             // pruefe Ende mit ab
-            if( 0 == ( pEndIdx = pHt->GetEnd() ) ||
+            if( 0 == ( pEndIdx = pHt->End() ) ||
                 *pEndIdx <= nAktPos )
                 continue;       // weiter suchen
         }
@@ -260,7 +260,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     const SwTOXMark* pTOXMark;
     const SwCntntFrm* pCFrm;
     Point aPt;
-    for( sal_Int32 nMark=0; nMark<aMarks.Count(); nMark++ )
+    for( sal_uInt16 nMark=0; nMark<aMarks.Count(); nMark++ )
     {
         pTOXMark = aMarks[nMark];
         if( pTOXMark != &rCurTOXMark &&
@@ -2105,7 +2105,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         for(sal_uInt16 nHintIdx = 0; nHintIdx < pHints->GetStartCount(); nHintIdx++)
         {
             SwTxtAttr* pAttr = pHints->GetStart(nHintIdx);
-            xub_StrLen nTmpEnd = pAttr->GetEnd() ? *pAttr->GetEnd() : 0;
+            const xub_StrLen nTmpEnd = pAttr->End() ? *pAttr->End() : 0;
             if( nStartPos >= *pAttr->GetStart() &&
                 (nStartPos + 2) <= nTmpEnd &&
                 pAttr->Which() == RES_TXTATR_CHARFMT)

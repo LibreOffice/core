@@ -180,6 +180,11 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         aBtnDoSize, aBtnKeepFmt, aBtnStripData, theCurArea );
     Init();
     FreeResource();
+    //IAccessibility2 Implementation 2009-----
+    SynFocusTimer.SetTimeout(150);
+    SynFocusTimer.SetTimeoutHdl(LINK( this, ScDbNameDlg, FocusToComoboxHdl));
+    SynFocusTimer.Start();
+    //-----IAccessibility2 Implementation 2009
     aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
@@ -716,8 +721,37 @@ IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
     String aText = aEdAssign.GetText();
     if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
         theCurArea = aTmpRange;
-
+//IAccessibility2 Implementation 2009-----
+    if( aText.Len() > 0 && aEdName.GetText().Len() > 0 )
+    {
+        aBtnAdd.Enable();
+        aBtnHeader.Enable();
+        aBtnDoSize.Enable();
+        aBtnKeepFmt.Enable();
+        aBtnStripData.Enable();
+        aFTSource.Enable();
+        aFTOperations.Enable();
+    }
+    else
+    {
+        aBtnAdd.Disable();
+        aBtnHeader.Disable();
+        aBtnDoSize.Disable();
+        aBtnKeepFmt.Disable();
+        aBtnStripData.Disable();
+        aFTSource.Disable();
+        aFTOperations.Disable();
+    }
+//-----IAccessibility2 Implementation 2009
     return 0;
 }
 
-
+//IAccessibility2 Implementation 2009-----
+IMPL_LINK( ScDbNameDlg, FocusToComoboxHdl, Timer*, pTi)
+{
+    (void)pTi;
+    // CallEventListeners is still protected - figure out if we need to make it public, or if the focus stuff can be handled better in VCL directly. First see what AT is expecting...
+    // aEdName.CallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
+    return 0;
+}
+//-----IAccessibility2 Implementation 2009

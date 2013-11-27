@@ -34,7 +34,6 @@
 # PRODUCT
 # SOLARINC
 # SOLARLIB
-# STLPORT_VER
 # UPD
 
 # GXX_INCLUDE_PATH (Linux)
@@ -162,11 +161,6 @@ gb_GLOBALDEFS := \
 	$(gb_OSDEFS) \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
-
-ifneq ($(USE_SYSTEM_STL),YES)
-gb_GLOBALDEFS += \
-	-DSTLPORT_VERSION=$(STLPORT_VER)
-endif
 
 ifeq ($(gb_PRODUCT),$(true))
 gb_GLOBALDEFS += \

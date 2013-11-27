@@ -751,8 +751,10 @@ void SwDoc::SetNewFldLst(bool bFlag)
 // der StartIndex kann optional mit angegeben werden (z.B. wenn dieser
 // zuvor schon mal erfragt wurde - ist sonst eine virtuelle Methode !!)
 
-_SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
-                            const SwIndex* pIdx )
+_SetGetExpFld::_SetGetExpFld(
+    const SwNodeIndex& rNdIdx,
+    const SwTxtFld* pFld,
+    const SwIndex* pIdx )
 {
     eSetGetExpFldType = TEXTFIELD;
     CNTNT.pTxtFld = pFld;
@@ -900,6 +902,15 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         nNode = aPos.nNode.GetIndex();
         nCntnt = aPos.nContent.GetIndex();
     }
+}
+
+sal_Bool _SetGetExpFld::operator==( const _SetGetExpFld& rFld ) const
+{
+    return nNode == rFld.nNode
+           && nCntnt == rFld.nCntnt
+           && ( !CNTNT.pTxtFld
+                || !rFld.CNTNT.pTxtFld
+                || CNTNT.pTxtFld == rFld.CNTNT.pTxtFld );
 }
 
 sal_Bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
@@ -2712,17 +2723,12 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             SwPosition aPosition( pDstTxtFld->GetTxtNode() );
             aPosition.nContent = *pDstTxtFld->GetStart();
 
-            SwUndo *const pUndo( new SwUndoFieldFromDoc(
-                        aPosition, *pDstFld, rSrcFld, pMsgHnt, bUpdateFlds) );
+            SwUndo *const pUndo( new SwUndoFieldFromDoc( aPosition, *pDstFld, rSrcFld, pMsgHnt, bUpdateFlds) );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
-        // Das gefundene Feld wird angepasst ...
-        //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
-        //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
-
         SwField * pNewFld = rSrcFld.CopyField();
-        pDstFmtFld->SetFld(pNewFld);
+        pDstFmtFld->SetField(pNewFld);
 
         switch( nFldWhich )
         {
@@ -2798,7 +2804,7 @@ bool SwDoc::PutValueToField(const SwPosition & rPos,
                             const Any& rVal, sal_uInt16 nWhich)
 {
     Any aOldVal;
-    SwField * pField = GetField(rPos);
+    SwField * pField = GetFieldAtPos(rPos);
 
 
     if (GetIDocumentUndoRedo().DoesUndo() &&

@@ -43,6 +43,8 @@ void SAL_CALL sal_detail_deinitialize();
 #define INCL_LOADEXCEPTQ
 #include <exceptq.h>
 
+#include <osl/process.h>
+
 #define sal_detail_initialize(a,b) \
     EXCEPTIONREGISTRATIONRECORD exRegRec = {0}; \
     LoadExceptq(&exRegRec, NULL, NULL); \

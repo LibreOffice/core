@@ -1766,14 +1766,14 @@ namespace
         {
             if ( m_aSet.empty() )
                 return m_xSource->hasElements();
-            return ::std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
+            return (::std::find(m_aSet.begin(),m_aSet.end(),false) != m_aSet.end());
         }
         // ::com::sun::star::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException)
         {
             if ( m_aSet.empty() )
                 return m_xSource->getCount();
-            return ::std::count(m_aSet.begin(),m_aSet.end(),false);
+            return std_bitset_count(m_aSet.begin(),m_aSet.end(),false);
         }
         virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
         {
@@ -1818,7 +1818,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
     ::std::bit_vector aNewParameterSet( _aParametersSet );
-    if ( nParamCount || ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
+    if ( nParamCount || std_bitset_count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
     {
         static const ::rtl::OUString PROPERTY_NAME(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME));
         aNewParameterSet.resize(nParamCount ,false);

@@ -875,6 +875,9 @@ TabPage RID_SVXPAGE_BITMAP
         Pos = MAP_APPFONT ( 12 , 25  ) ;
         Size = MAP_APPFONT ( 72 , 72 ) ;
         TabStop = TRUE ;
+        //IAccessibility2 Implementation 2009-----
+        Text [ en-US ] = "Pattern Editor";
+        //-----IAccessibility2 Implementation 2009
     };
     FixedText FT_COLOR
     {
@@ -1316,12 +1319,18 @@ TabPage RID_SVXPAGE_COLOR
         Border = TRUE;
         Pos = MAP_APPFONT ( 157 , 14  ) ;
         Size = MAP_APPFONT ( 34 , 25 ) ;
+        // IAccessibility2 implementation 2009. ------
+        Text [ en-US ] = "Old Color" ;
+        // ------ IAccessibility2 implementation 2009.
     };
     Control CTL_PREVIEW_NEW
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 157, 39  ) ;
         Size = MAP_APPFONT ( 34 , 25 ) ;
+        // IAccessibility2 implementation 2009. ------
+        Text [ en-US ] = "New Color" ;
+        // ------ IAccessibility2 implementation 2009.
     };
     ListBox LB_COLORMODEL
     {

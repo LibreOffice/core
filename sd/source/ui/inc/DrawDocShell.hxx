@@ -135,6 +135,12 @@ public:
 
     bool                    GotoBookmark(const String& rBookmark);
 
+//IAccessibility2 Implementation 2009-----
+    //Solution: realize multi-selection of objects
+    sal_Bool                    GotoTreeBookmark(const String& rBookmark);
+    sal_Bool                    IsMarked(  SdrObject* pObject  );
+    sal_Bool                    GetObjectIsmarked(const String& rBookmark);
+//-----IAccessibility2 Implementation 2009
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
     /** checks, if the given name is a valid new name for a slide
@@ -224,6 +230,13 @@ protected:
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);
     virtual void            InPlaceActivate( sal_Bool bActive );
+//IAccessibility2 Implementation 2009-----
+public:
+    virtual void setDocAccTitle( const String& rTitle );
+    virtual const String getDocAccTitle() const;
+    virtual void setDocReadOnly( sal_Bool bReadOnly);
+    virtual sal_Bool getDocReadOnly() const;
+//-----IAccessibility2 Implementation 2009
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED

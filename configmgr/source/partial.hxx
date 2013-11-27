@@ -50,7 +50,7 @@ public:
 
 private:
     struct Node {
-        typedef boost::unordered_map< rtl::OUString, Node > Children;
+        typedef boost::unordered_map< rtl::OUString, Node, rtl::OUStringHash > Children;
 
         Node(): startInclude(false) {}
         void clear() { startInclude=false; children.clear(); }

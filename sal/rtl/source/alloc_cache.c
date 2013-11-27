@@ -39,6 +39,10 @@
 #ifdef OS2
 #undef OSL_TRACE
 #define OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
+
+#define INCL_DOS
+#include <os2.h>
+
 #endif
 
 /* ================================================================= *
@@ -55,9 +59,12 @@ struct rtl_cache_list_st
     rtl_memory_lock_type m_lock;
     rtl_cache_type       m_cache_head;
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
     pthread_t            m_update_thread;
     pthread_cond_t       m_update_cond;
+#elif defined(SAL_OS2)
+    TID                  m_update_thread;
+    HEV                  m_update_cond;
 #elif defined(SAL_W32)
     HANDLE               m_update_thread;
     HANDLE               m_update_cond;
@@ -1376,7 +1383,7 @@ rtl_cache_wsupdate_fini (void);
 
 /* ================================================================= */
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 
 #include <sys/time.h>
 
@@ -1427,6 +1434,62 @@ rtl_cache_wsupdate_fini (void)
 
     if (g_cache_list.m_update_thread != (pthread_t)(0))
         pthread_join (g_cache_list.m_update_thread, NULL);
+}
+
+/* ================================================================= */
+
+#elif defined(SAL_OS2)
+
+static void
+rtl_cache_wsupdate_all (void * arg);
+
+static void rtl_cache_fini (void);
+
+static void
+rtl_cache_wsupdate_init (void)
+{
+    ULONG ulThreadId;
+    APIRET rc;
+
+    RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
+    g_cache_list.m_update_done = 0;
+
+    // we use atexit() because this allows CRT exit to process handler before
+    // threads are killed. Otherwise with __attribute__(destructor) this
+    // function is called when DosExit starts processing DLL destruction
+    // which happens after ALL threads have been killed...
+    atexit( rtl_cache_fini);
+
+    //g_cache_list.m_update_cond = CreateEvent (0, TRUE, FALSE, 0);
+    /* Warp3 FP29 or Warp4 FP4 or better required */
+    rc = DosCreateEventSem( NULL, &g_cache_list.m_update_cond, 0x0800, 0);
+
+    g_cache_list.m_update_thread = (ULONG) _beginthread( rtl_cache_wsupdate_all, NULL,
+                    65*1024, (void*) 10);
+    RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
+}
+
+static void
+rtl_cache_wsupdate_wait (unsigned int seconds)
+{
+    APIRET rc;
+    if (seconds > 0)
+    {
+        RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
+        rc = DosWaitEventSem(g_cache_list.m_update_cond, seconds*1000);
+        RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
+    }
+}
+
+static void
+rtl_cache_wsupdate_fini (void)
+{
+    APIRET rc;
+    RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
+    g_cache_list.m_update_done = 1;
+    rc = DosPostEventSem(g_cache_list.m_update_cond);
+    RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
+    rc = DosWaitThread(&g_cache_list.m_update_thread, DCWW_WAIT);
 }
 
 /* ================================================================= */
@@ -1542,8 +1605,10 @@ rtl_cache_wsupdate (
 /** rtl_cache_wsupdate_all()
  *
  */
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 static void *
+#elif defined(SAL_OS2)
+static void
 #elif defined(SAL_W32)
 static DWORD WINAPI
 #endif /* SAL_UNX || SAL_W32 */
@@ -1570,7 +1635,9 @@ rtl_cache_wsupdate_all (void * arg)
     }
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
+#if !defined(SAL_OS2)
     return (0);
+#endif
 }
 
 /* ================================================================= *
@@ -1699,7 +1766,7 @@ rtl_cache_init (void)
   Delegated the call to "rtl_cache_fini()" into a dummy C++ object,
   see alloc_fini.cxx .
 */
-#if defined(__GNUC__) && !defined(MACOSX)
+#if defined(__GNUC__) && !defined(MACOSX) && !defined(SAL_OS2)
 static void rtl_cache_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_cache_fini)

@@ -143,7 +143,7 @@ void Color::Invert()
 
 sal_Bool Color::IsDark() const
 {
-    return GetLuminance() <= 38;
+    return GetLuminance() <= 55;
 }
 
 // -----------------------------------------------------------------------

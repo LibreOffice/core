@@ -61,7 +61,9 @@ using namespace sw::access;
 {
     sal_Int32 nCount = 0;
 
-    const SwAccessibleChildSList aVisList( rVisArea, *pFrm, rAccMap );
+    // const SwAccessibleChildSList aVisList( rVisArea, *pFrm, rAccMap );
+    const SwAccessibleChildSList aVisList( pFrm->PaintArea(), *pFrm, rAccMap );
+
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
     {
@@ -163,7 +165,10 @@ using namespace sw::access;
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
         // We need a sorted list here
-        const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
+        //IAccessibility2 Implementation 2009-----
+        // const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
+        const SwAccessibleChildMap aVisMap( rFrm.PaintArea(), rFrm, rAccMap );
+        //-----IAccessibility2 Implementation 2009
         SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
         while( aIter != aVisMap.end() && !bFound )
         {
@@ -189,7 +194,12 @@ using namespace sw::access;
     {
         // The unsorted list is sorted enough, because it return lower
         // frames in the correct order.
-        const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
+
+        //IAccessibility2 Implementation 2009-----
+        // const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
+        const SwAccessibleChildSList aVisList( rFrm.PaintArea(), rFrm, rAccMap );
+        //-----IAccessibility2 Implementation 2009
+
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
         while( aIter != aVisList.end() && !bFound )
         {
@@ -425,7 +435,8 @@ SwAccessibleFrame::SwAccessibleFrame( const SwRect& rVisArea,
                                       sal_Bool bIsPagePreview ) :
     maVisArea( rVisArea ),
     mpFrm( pF ),
-    mbIsInPagePreview( bIsPagePreview )
+    mbIsInPagePreview( bIsPagePreview ),
+    bIsAccDocUse( sal_False )
 {
 }
 

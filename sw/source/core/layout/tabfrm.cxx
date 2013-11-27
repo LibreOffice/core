@@ -95,10 +95,9 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     bComplete = bCalcLowers = bONECalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
     bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
-    // --> OD 2004-10-04 #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    // <--
+    mbInRecalcLowerRow = false;
     bFixSize = sal_False;     //Nicht nochmal auf die Importfilter hereinfallen.
     nType = FRMC_TAB;
 
@@ -128,10 +127,9 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     bLockJoin = bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
     bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
-    // --> OD 2004-10-04 #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    // <--
+    mbInRecalcLowerRow = false;
     bFixSize = sal_False;     //Nicht nochmal auf die Importfilter hereinfallen.
     nType = FRMC_TAB;
 
@@ -2076,7 +2074,7 @@ void SwTabFrm::MakeAll()
             }
             SwFrm *pPre;
             if ( bKeep || (0 != (pPre = FindPrev()) &&
-                           pPre->GetAttrSet()->GetKeep().GetValue()) )
+                pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
                 bCalcLowers = sal_True;
             }
@@ -2102,13 +2100,12 @@ void SwTabFrm::MakeAll()
 
             SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
             if ( pLayout &&
-                 ((Prt().*fnRect->fnGetWidth)() != nOldPrtWidth ||
-                  (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
+                ((Prt().*fnRect->fnGetWidth)() != nOldPrtWidth ||
+                (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
             {
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
-                        pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
-//                  GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() ? sal_False : sal_True );
+                    pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
@@ -2161,8 +2158,7 @@ void SwTabFrm::MakeAll()
                                 pHTMLLayout->GetBrowseWidthByTabFrm( *this ),
                                 sal_False );
 
-                            pAccess= new SwBorderAttrAccess(
-                                        SwFrm::GetCache(), this );
+                            pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
                         }
 
@@ -2173,27 +2169,10 @@ void SwTabFrm::MakeAll()
                     bLowersFormatted = sal_True;
                     if ( bKeep && KEEPTAB )
                     {
-                        // --> OD 2005-09-28 #b6329202#
-                        // Consider case that table is inside another table,
-                        // because it has to be avoided, that superior table
-                        // is formatted.
-                        // Thus, find next content, table or section
-                        // and, if a section is found, get its first
-                        // content.
-//                        SwFrm *pNxt = FindNextCnt();
-//                        if( pNxt && pNxt->IsInTab() )
-//                            pNxt = pNxt->FindTabFrm();
-//                        if ( pNxt )
-//                        {
-//                            pNxt->Calc();
-//                            if ( !GetNext() )
-//                                bValidPos = sal_False;
-//                        }
                         if ( 0 != lcl_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
                             bValidPos = sal_False;
                         }
-                        // <--
                     }
                 }
             }
@@ -2205,17 +2184,14 @@ void SwTabFrm::MakeAll()
 
         // check, if calculation of table frame is ready.
 
-        /// OD 23.10.2002 #103517# - Local variable <nDistanceToUpperPrtBottom>
-        ///     Introduce local variable and init it with the distance from the
-        ///     table frame bottom to the bottom of the upper printing area.
-        /// Note: negative values denotes the situation that table frame doesn't
-        ///     fit in its upper.
-
+        // Local variable <nDistanceToUpperPrtBottom>
+        //     Introduce local variable and init it with the distance from the
+        //     table frame bottom to the bottom of the upper printing area.
+        // Note: negative values denotes the situation that table frame doesn't fit in its upper.
         SwTwips nDistanceToUpperPrtBottom =
                 (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
 
-        /// OD 23.10.2002 #103517# - In online layout try to grow upper of table
-        /// frame, if table frame doesn't fit in its upper.
+        // In online layout try to grow upper of table frame, if table frame doesn't fit in its upper.
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         if ( nDistanceToUpperPrtBottom < 0 && bBrowseMode )
@@ -2223,8 +2199,7 @@ void SwTabFrm::MakeAll()
             if ( GetUpper()->Grow( -nDistanceToUpperPrtBottom ) )
             {
                 // upper is grown --> recalculate <nDistanceToUpperPrtBottom>
-                nDistanceToUpperPrtBottom =
-                    (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
+                nDistanceToUpperPrtBottom = (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
             }
         }
 
@@ -2234,7 +2209,6 @@ void SwTabFrm::MakeAll()
         // the table to be split! Only skip this if condition once.
         if( nDistanceToUpperPrtBottom >= 0 && !bLastRowHasToMoveToFollow )
         {
-            // OD 23.10.2002 - translate german commentary
             // If there is space left in the upper printing area, join as for trial
             // at least one further row of an existing follow.
             if ( !bSplit && GetFollow() )
@@ -2279,8 +2253,8 @@ void SwTabFrm::MakeAll()
                         //
                         SwRowFrm *pRow = GetFollow()->GetFirstNonHeadlineRow();
 
-                          //Der Follow wird leer und damit ueberfluessig.
-                           if ( !pRow )
+                        //Der Follow wird leer und damit ueberfluessig.
+                        if ( !pRow )
                         {
                             Join();
                             continue;
@@ -2301,8 +2275,10 @@ void SwTabFrm::MakeAll()
                             SwFrm* pNextRow = pRowToMove->GetNext();
 
                             if ( !pNextRow )
+                            {
                                 //Der Follow wird leer und damit ueberfluessig.
                                 Join();
+                            }
                             else
                             {
                                 pRowToMove->Cut();
@@ -2311,8 +2287,7 @@ void SwTabFrm::MakeAll()
 
                             //Die Fussnoten verschieben!
                             if ( bMoveFtns )
-                                if ( ((SwLayoutFrm*)pRowToMove)->MoveLowerFtns(
-                                     0, pOldBoss, FindFtnBossFrm( sal_True ), sal_True ) )
+                                if ( ((SwLayoutFrm*)pRowToMove)->MoveLowerFtns( 0, pOldBoss, FindFtnBossFrm( sal_True ), sal_True ) )
                                     GetUpper()->Calc();
 
                             pRowToMove = pNextRow;
@@ -2472,7 +2447,11 @@ void SwTabFrm::MakeAll()
                     nDeadLine = (*fnRect->fnYInc)( nDeadLine,
                                         GetUpper()->Grow( LONG_MAX, sal_True ) );
 
-                ::lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), nDeadLine );
+                {
+                    SetInRecalcLowerRow( true );
+                    ::lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), nDeadLine );
+                    SetInRecalcLowerRow( false );
+                }
                 bLowersFormatted = sal_True;
                 aNotify.SetLowersComplete( sal_True );
 
@@ -2630,10 +2609,8 @@ void SwTabFrm::MakeAll()
                                 SwFrm* pNxt = ((SwFrm*)GetFollow())->FindNext();
                                 if ( pNxt )
                                 {
-                                    // OD 26.08.2003 #i18103# - no formatting
-                                    // of found next frame, if its a follow
-                                    // section of the 'ColLocked' section,
-                                    // the follow table is in.
+                                    // no formatting of found next frame, if its a follow
+                                    // section of the 'ColLocked' section, the follow table is in.
                                     bool bCalcNxt = true;
                                     if ( GetFollow()->IsInSct() && pNxt->IsSctFrm() )
                                     {
@@ -2679,19 +2656,19 @@ void SwTabFrm::MakeAll()
         if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
             bMakePage = sal_False;
 
-        // --> FME 2004-06-09 #i29771# Reset bSplitError flag on change of upper
+        // Reset bSplitError flag on change of upper
         if ( GetUpper() != pOldUpper )
         {
             bTryToSplit = true;
             nUnSplitted = 5;
         }
-        // <--
 
         SWREFRESHFN( this )
         bMovedFwd = bCalcLowers = sal_True;
         aNotify.SetLowersComplete( sal_False );
         if ( IsFollow() )
-        {   //Um Oszillationen zu vermeiden sollte kein ungueltiger Master
+        {
+            //Um Oszillationen zu vermeiden sollte kein ungueltiger Master
             //zurueckbleiben.
             SwTabFrm *pTab = FindMaster();
             if ( pTab->GetUpper() )
@@ -2711,16 +2688,17 @@ void SwTabFrm::MakeAll()
         }
 
         if ( bMovedBwd && GetUpper() )
+        {
             //Beim zurueckfliessen wurde der Upper angeregt sich vollstaendig
             //zu Painten, dass koennen wir uns jetzt nach dem hin und her
             //fliessen sparen.
             GetUpper()->ResetCompletePaint();
+        }
 
         if ( bCalcLowers && IsValid() )
         {
-            // --> OD 2005-05-11 #i44910# - format of lower frames unnecessary
-            // and can cause layout loops, if table doesn't fit and isn't
-            // allowed to split.
+            // format of lower frames unnecessary and can cause layout loops,
+            // if table doesn't fit and isn't  allowed to split.
             SwTwips nDistToUpperPrtBottom =
                 (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
             if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
@@ -2735,7 +2713,6 @@ void SwTabFrm::MakeAll()
                 ASSERT( false, "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
             }
 #endif
-            // <--
         }
 
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
@@ -4829,8 +4806,10 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             SetCompletePaint();
 
             SwTabFrm *pTab = FindTabFrm();
-            if ( !pTab->IsRebuildLastLine() && pTab->IsFollow() &&
-                 this == pTab->GetFirstNonHeadlineRow() )
+            if ( !pTab->IsRebuildLastLine()
+                 && pTab->IsFollow()
+                 && this == pTab->GetFirstNonHeadlineRow()
+                 && !pTab->IsInRecalcLowerRow() )
             {
                 SwTabFrm* pMasterTab = const_cast< SwTabFrm* >( pTab->FindMaster() );
                 pMasterTab->InvalidatePos();

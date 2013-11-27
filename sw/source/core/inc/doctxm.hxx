@@ -101,6 +101,9 @@ public:
     void Update( const SfxItemSet* pAttr = 0,
                  const bool        _bNewTOX = false ); // Formatieren
     void UpdatePageNum();               // Seitennummern einfuegen
+//IAccessibility2 Implementation 2009-----
+    SwTOXSortTabBases* GetTOXSortTabBases() { return &aSortArr; }
+//-----IAccessibility2 Implementation 2009
 
     sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
 };
