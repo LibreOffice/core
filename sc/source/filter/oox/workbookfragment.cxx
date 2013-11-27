@@ -26,7 +26,6 @@
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/olestorage.hxx"
-#include "vcl/msgbox.hxx"
 
 #include "biffinputstream.hxx"
 #include "chartsheetfragment.hxx"
@@ -46,11 +45,17 @@
 
 #include "document.hxx"
 #include "docsh.hxx"
-#include "globstr.hrc"
 #include "calcconfig.hxx"
 
-#include <comphelper/processfactory.hxx>
-#include <officecfg/Office/Calc.hxx>
+#include <oox/core/fastparser.hxx>
+#include <salhelper/thread.hxx>
+#include <osl/conditn.hxx>
+
+#include <queue>
+#include <boost/scoped_ptr.hpp>
+
+#define MULTI_THREAD_SHEET_PARSING 0
+
 #include "oox/ole/vbaproject.hxx"
 
 namespace oox {
@@ -335,48 +340,6 @@ void WorkbookFragment::finalizeImport()
 
     // final conversions, e.g. calculation settings and view settings
     finalizeWorkbookImport();
-
-    // Recalculate formula cells.
-    ScDocument& rDoc = getScDocument();
-    rDoc.RebuildFormulaGroups();
-    ScDocShell& rDocSh = getDocShell();
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-    ScRecalcOptions nRecalcMode =
-        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
-    bool bHardRecalc = false;
-    if (nRecalcMode == RECALC_ASK)
-    {
-        if (rDoc.IsUserInteractionEnabled())
-        {
-            // Ask the user if full re-calculation is desired.
-            QueryBox aBox(
-                rDocSh.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-            aBox.SetCheckBoxText(ScGlobal::GetRscString(STR_ALWAYS_PERFORM_SELECTED));
-
-            sal_Int32 nRet = aBox.Execute();
-            bHardRecalc = nRet == RET_YES;
-
-            if (aBox.GetCheckBoxState())
-            {
-                // Always perform selected action in the future.
-                boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
-                officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
-                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
-                aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
-                SC_MOD()->SetFormulaOptions(aOpt);
-
-                batch->commit();
-            }
-        }
-    }
-    else if (nRecalcMode == RECALC_ALWAYS)
-        bHardRecalc = true;
-
-    if (bHardRecalc)
-        rDocSh.DoHardRecalc(false);
-    else
-        rDoc.CalcFormulaTree(false, true, false);
 }
 
 // private --------------------------------------------------------------------
