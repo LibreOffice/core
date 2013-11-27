@@ -238,12 +238,10 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     {
         synchronous = forceSynchronous;
     } else {
-        if (forceSynchronous) {
-            throw css::uno::RuntimeException(
-                ("URP: synchronous request message with non-oneway function ID"
-                 " received"),
-                css::uno::Reference< css::uno::XInterface >());
-        }
+        SAL_INFO_IF(
+            forceSynchronous, "binaryurp",
+            ("superfluous MUSTREPLY/SYNCHRONOUS ignored in request message with"
+             " non-oneway function ID"));
         synchronous = true;
     }
     bool setter = false;
