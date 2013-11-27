@@ -20,14 +20,4 @@
 #define MID_FILEVIEW_DELETE     1
 #define MID_FILEVIEW_RENAME     2
 
-// DLG_SFX_QUERYDELETE ********************************************************
-
-#define TXT_ENTRY                                               1
-#define TXT_ENTRYNAME                                           2
-#define TXT_QUERYMSG                                            3
-#define BTN_YES                                                 4
-#define BTN_NO                                                  5
-#define BTN_ALL                                                 6
-#define BTN_CANCEL                                              7
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

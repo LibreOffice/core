@@ -27,8 +27,6 @@
 //.............................................................................
 // various unsorted stuff
 
-#define DLG_SVT_QUERYDELETE             (RID_SVTOOLS_START+6)
-
 #define STR_SVT_AUTOMATIC_COLOR         (RID_SVTOOLS_START+16)
 
 #define STR_SVT_FILEVIEW_COLUMN_TITLE   (RID_SVTOOLS_START + 20)

@@ -59,7 +59,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <rtl/math.hxx>
 #include <tools/config.hxx>
 #include <osl/mutex.hxx>
@@ -536,7 +536,7 @@ protected:
 
 protected:
     // IEnumerationResultHandler overridables
-    virtual void        enumerationDone( ::svt::EnumerationResult _eResult );
+    virtual void        enumerationDone( ::svt::EnumerationResult eResult );
             void        implEnumerationSuccess();
 
     // ITimeoutHandler
@@ -900,7 +900,7 @@ void ViewTabListBox_Impl::ClearAll()
 // -----------------------------------------------------------------------
 void ViewTabListBox_Impl::DeleteEntries()
 {
-    svtools::QueryDeleteResult_Impl eResult = svtools::QUERYDELETE_YES;
+    short eResult = svtools::QUERYDELETE_YES;
     SvTreeListEntry* pEntry = FirstSelected();
     OUString aURL;
 
@@ -946,10 +946,7 @@ void ViewTabListBox_Impl::DeleteEntries()
             if ( GetSelectionCount() > 1 )
                 aDlg.EnableAllButton();
 
-            if ( aDlg.Execute() == RET_OK )
-                eResult = aDlg.GetResult();
-            else
-                eResult = svtools::QUERYDELETE_CANCEL;
+            eResult = aDlg.Execute();
 
             sDialogPosition = aDlg.GetWindowState( );
         }
@@ -2060,7 +2057,7 @@ void SvtFileView_Impl::onTimeout( CallbackTimer* )
 }
 
 //-----------------------------------------------------------------------
-void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
+void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
@@ -2074,12 +2071,12 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
         // this is to prevent race conditions
         return;
 
-    m_eAsyncActionResult = _eResult;
+    m_eAsyncActionResult = eResult;
     m_bRunningAsyncAction = false;
 
     m_aAsyncActionFinished.set();
 
-    if ( svt::SUCCESS == _eResult )
+    if ( svt::SUCCESS == eResult )
         implEnumerationSuccess();
 
     if ( m_aCurrentAsyncActionHandler.IsSet() )
@@ -2541,53 +2538,34 @@ namespace svtools {
 // QueryDeleteDlg_Impl
 // -----------------------------------------------------------------------
 
-QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
-(
-    Window* pParent,
-    const OUString& rName      // entry name
-) :
-
-    ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),
-
-    _aEntryLabel  ( this, SvtResId( TXT_ENTRY ) ),
-    _aEntry       ( this, SvtResId( TXT_ENTRYNAME ) ),
-    _aQueryMsg    ( this, SvtResId( TXT_QUERYMSG ) ),
-    _aYesButton   ( this, SvtResId( BTN_YES ) ),
-    _aAllButton   ( this, SvtResId( BTN_ALL ) ),
-    _aNoButton    ( this, SvtResId( BTN_NO ) ),
-    _aCancelButton( this, SvtResId( BTN_CANCEL ) ),
-
-    _eResult( QUERYDELETE_YES )
-
+QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(Window* pParent, const OUString& rName)
+    : MessageDialog(pParent, "QueryDeleteDialog", "svt/ui/querydeletedialog.ui")
+    , m_eResult( QUERYDELETE_YES )
 {
-    FreeResource();
+    get(m_pNoButton, "no");
+    get(m_pAllButton, "all");
+    get(m_pYesButton, "yes");
 
     // Handler
     Link aLink( STATIC_LINK( this, QueryDeleteDlg_Impl, ClickLink ) );
-    _aYesButton.SetClickHdl( aLink );
-    _aAllButton.SetClickHdl( aLink );
-    _aNoButton.SetClickHdl( aLink );
+    m_pYesButton->SetClickHdl( aLink );
+    m_pAllButton->SetClickHdl( aLink );
+    m_pNoButton->SetClickHdl( aLink );
 
     // display specified texts
-
-    WinBits nTmpStyle = _aEntry.GetStyle();
-    nTmpStyle |= WB_PATHELLIPSIS;
-    _aEntry.SetStyle( nTmpStyle );
-    _aEntry.SetText( rName );
+    set_secondary_text(get_secondary_text().replaceFirst("%s", rName));
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton*, pBtn )
 {
-    if ( pBtn == &pThis->_aYesButton )
-        pThis->_eResult = QUERYDELETE_YES;
-    else if ( pBtn == &pThis->_aNoButton )
-        pThis->_eResult = QUERYDELETE_NO;
-    else if ( pBtn == &pThis->_aAllButton )
-        pThis->_eResult = QUERYDELETE_ALL;
-    else if ( pBtn == &pThis->_aCancelButton )
-        pThis->_eResult = QUERYDELETE_CANCEL;
+    if (pBtn == pThis->m_pYesButton)
+        pThis->m_eResult = QUERYDELETE_YES;
+    else if ( pBtn == pThis->m_pNoButton )
+        pThis->m_eResult = QUERYDELETE_NO;
+    else if (pBtn == pThis->m_pAllButton)
+        pThis->m_eResult = QUERYDELETE_ALL;
 
     pThis->EndDialog( RET_OK );
 

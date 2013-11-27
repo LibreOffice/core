@@ -25,8 +25,9 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <rtl/ustring.hxx>
 
 // class SvtFileView -----------------------------------------------------
@@ -216,24 +217,19 @@ namespace svtools {
 
 enum QueryDeleteResult_Impl
 {
-    QUERYDELETE_YES = 0,
-    QUERYDELETE_NO,
-    QUERYDELETE_ALL,
-    QUERYDELETE_CANCEL
+    QUERYDELETE_CANCEL = RET_CANCEL,
+    QUERYDELETE_YES = RET_YES,
+    QUERYDELETE_NO = RET_NO,
+    QUERYDELETE_ALL = -1
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public ModalDialog
+class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
 {
-    FixedText               _aEntryLabel;
-    FixedText               _aEntry;
-    FixedText               _aQueryMsg;
+    PushButton*             m_pYesButton;
+    PushButton*             m_pAllButton;
+    PushButton*             m_pNoButton;
 
-    PushButton              _aYesButton;
-    PushButton              _aAllButton;
-    PushButton              _aNoButton;
-    CancelButton            _aCancelButton;
-
-    QueryDeleteResult_Impl  _eResult;
+    QueryDeleteResult_Impl  m_eResult;
 
 private:
 
@@ -244,8 +240,7 @@ public:
                             QueryDeleteDlg_Impl( Window* pParent,
                                                  const OUString& rName );
 
-    void                    EnableAllButton() { _aAllButton.Enable( sal_True ); }
-    QueryDeleteResult_Impl  GetResult() const { return _eResult; }
+    void                    EnableAllButton() { m_pAllButton->Enable(true); }
 };
 
 }
