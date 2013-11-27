@@ -708,10 +708,6 @@ ToolBox RID_MODULE_TOOLBOX
     Scroll = TRUE ;
 };
 
-String STR_ROTATE_TO_STANDARD_ORIENTATION
-{
-    Text [ en-US ] = "This image is rotated. Would you like to rotate it into standard orientation?";
-};
 
 String STR_CAPTION_TABLE
 {
