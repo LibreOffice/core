@@ -1319,13 +1319,12 @@ namespace cppcanvas
             }
         }
 
-
-        void ImplRenderer::EMFPPlusDrawLineCap(const ::basegfx::B2DPolygon& rPolygon, double fPolyLength,
+        double ImplRenderer::EMFPPlusDrawLineCap(const ::basegfx::B2DPolygon& rPolygon, double fPolyLength,
                 const ::basegfx::B2DPolyPolygon& rLineCap, bool bStart, const rendering::StrokeAttributes& rAttributes,
                 const ActionFactoryParameters& rParms, OutDevState& rState)
         {
             if (!rLineCap.count())
-                return;
+                return 0.0;
 
             // it seems the line caps in EMF+ are 4*larger than what
             // LibreOffice expects, and the mapping in
@@ -1337,7 +1336,7 @@ namespace cppcanvas
 
             basegfx::B2DPolyPolygon aArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
                         rPolygon, rLineCap, bStart,
-                        fWidth, fPolyLength, 0.0, NULL));
+                        fWidth, fPolyLength, 0, NULL, rAttributes.StrokeWidth));
 
             // createAreaGeometryForLineStartEnd from some reason always sets
             // the path as closed, correct it
@@ -1349,6 +1348,8 @@ namespace cppcanvas
                 maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
                 rParms.mrCurrActionIndex += pAction->getActionCount()-1;
             }
+
+            return rAttributes.StrokeWidth;
         }
 
         void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
@@ -1378,49 +1379,59 @@ namespace cppcanvas
                 rendering::StrokeAttributes aPolygonAttributes(aCommonAttributes);
                 pen->SetStrokeDashing(aPolygonAttributes);
 
-                // render the polygon
-                ActionSharedPtr pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
+                basegfx::B2DPolyPolygon aFinalPolyPolygon;
+
+                // render line starts & ends if present
+                if (!pen->customStartCap && !pen->customEndCap)
+                    aFinalPolyPolygon = aPolyPolygon;
+                else
+                {
+                    for (sal_uInt32 i = 0; i < aPolyPolygon.count(); ++i)
+                    {
+                        basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(i));
+
+                        if (!aPolygon.isClosed())
+                        {
+                            double fStart = 0.0;
+                            double fEnd = 0.0;
+                            double fPolyLength = basegfx::tools::getLength(aPolygon);
+
+                            // line start
+                            if (pen->customStartCap)
+                            {
+                                rendering::StrokeAttributes aAttributes(aCommonAttributes);
+                                pen->customStartCap->SetAttributes(aAttributes);
+
+                                fStart = EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customStartCap->polygon,
+                                        true, aAttributes, rParms, rState);
+                            }
+
+                            // line end
+                            if (pen->customEndCap)
+                            {
+                                rendering::StrokeAttributes aAttributes(aCommonAttributes);
+                                pen->customEndCap->SetAttributes(aAttributes);
+
+                                fEnd = EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customEndCap->polygon,
+                                        false, aAttributes, rParms, rState);
+                            }
+
+                            // build new poly, consume something from the old poly
+                            if (fStart != 0.0 || fEnd != 0.0)
+                                aPolygon = basegfx::tools::getSnippetAbsolute(aPolygon, fStart, fPolyLength - fEnd, fPolyLength);
+                        }
+
+                        aFinalPolyPolygon.append(aPolygon);
+                    }
+                }
+
+                // finally render the polygon
+                ActionSharedPtr pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aFinalPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
                 if( pPolyAction )
                 {
                     maActions.push_back(MtfAction(pPolyAction, rParms.mrCurrActionIndex));
                     rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
                 }
-
-                // render line starts & ends
-                if (pen->customStartCap || pen->customEndCap)
-                {
-                    for (sal_uInt32 i = 0; i < aPolyPolygon.count(); ++i)
-                    {
-                        // break the polypolygon into polygons
-                        basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(i));
-
-                        if (aPolygon.isClosed())
-                            continue;
-
-                        double fPolyLength = basegfx::tools::getLength(aPolygon);
-
-                        // line start
-                        if (pen->customStartCap)
-                        {
-                            rendering::StrokeAttributes aAttributes(aCommonAttributes);
-                            pen->customStartCap->SetAttributes(aAttributes);
-
-                            EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customStartCap->polygon,
-                                    true, aAttributes, rParms, rState);
-                        }
-
-                        // line end
-                        if (pen->customEndCap)
-                        {
-                            rendering::StrokeAttributes aAttributes(aCommonAttributes);
-                            pen->customEndCap->SetAttributes(aAttributes);
-
-                            EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customEndCap->polygon,
-                                    false, aAttributes, rParms, rState);
-                        }
-                    }
-                }
-
             }
         }
 

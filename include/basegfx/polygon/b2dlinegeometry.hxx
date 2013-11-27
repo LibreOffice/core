@@ -63,6 +63,10 @@ namespace basegfx
             again calculating the length (which may be expensive with beziers). If 0.0 is
             given, the length is calculated on demand.
 
+            @param fShift
+            When it is necessary to count with the thickness of the line, it
+            makes sense to move the start position slightly - so define the shift.
+
             @return
             The Line start and end polygon, correctly rotated and scaled
         */
@@ -73,7 +77,8 @@ namespace basegfx
             double fWidth,
             double fCandidateLength = 0.0, // 0.0 -> calculate self
             double fDockingPosition = 0.5, // 0->top, 1->bottom
-            double* pConsumedLength = 0L);
+            double* pConsumedLength = 0L,
+            double fShift = 0.0);
 
         /** create filled polygon geometry for lines with a line width
 
