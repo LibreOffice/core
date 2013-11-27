@@ -72,6 +72,7 @@ sprm                    http://sprm
 mce                     http://schemas.openxmlformats.org/markup-compatibility/2006
 mceTest                 http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2
 wps                     http://schemas.microsoft.com/office/word/2010/wordprocessingShape
+wpg                     http://schemas.microsoft.com/office/word/2010/wordprocessingGroup
 
 # extlst namespaces
 

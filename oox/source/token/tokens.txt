@@ -5607,6 +5607,7 @@ wedgeEllipseCallout
 wedgeRectCallout
 wedgeRoundRectCallout
 weight
+wgp
 wheat
 wheel
 whenNotActive
