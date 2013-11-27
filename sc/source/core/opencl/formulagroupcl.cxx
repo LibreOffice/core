@@ -72,8 +72,6 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        if (pDVR->GetArrays()[mnIndex].mpNumericArray == NULL)
-            throw Unhandled();
         pHostBuffer = const_cast<double*>(
                 pDVR->GetArrays()[mnIndex].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
@@ -84,12 +82,35 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
     cl_int err;
-    mpClmem = clCreateBuffer(kEnv.mpkContext,
-        (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
-        szHostBuffer,
-        pHostBuffer, &err);
-    if (CL_SUCCESS != err)
-        throw OpenCLError(err);
+    if (pHostBuffer)
+    {
+        mpClmem = clCreateBuffer(kEnv.mpkContext,
+                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
+                szHostBuffer,
+                pHostBuffer, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+    }
+    else
+    {
+        if (szHostBuffer == 0)
+            szHostBuffer = sizeof(double); // a dummy small value
+        // Marshal as a buffer of NANs
+        mpClmem = clCreateBuffer(kEnv.mpkContext,
+                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
+                szHostBuffer, NULL, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+        double *pNanBuffer = (double*)clEnqueueMapBuffer(
+                kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
+                szHostBuffer, 0, NULL, NULL, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
+        for (size_t i = 0; i < szHostBuffer/sizeof(double); i++)
+            pNanBuffer[i] = NAN;
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
+                pNanBuffer, 0, NULL, NULL);
+    }
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     if (CL_SUCCESS != err)
@@ -1414,9 +1435,9 @@ public:
             KernelEnv kEnv;
             OpenclDevice::setKernelEnv(&kEnv);
             cl_int err;
+            DynamicKernelArgument *Arg = mvSubArguments[0].get();
             DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
-                dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *>
-                (mvSubArguments[0].get());
+                dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *> (Arg);
             cl_mem mpClmem2;
 
             if (OpSumCodeGen->NeedReductionKernel())
@@ -1590,6 +1611,8 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
     //Black lists ineligible classes here ..
     // SUMIFS does not perform parallel reduction at DoubleVectorRef level
     if (dynamic_cast<OpSumIfs*>(pCodeGen.get())) {
+        if (index == 0) // the first argument of OpSumIfs cannot be strings anyway
+            return new DynamicKernelSlidingArgument<VectorRef>(s, ft, pCodeGen, index);
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
     // AVERAGE is not supported yet
@@ -1650,7 +1673,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     assert(pDVR);
                     for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
                     {
-                        if (pDVR->GetArrays()[j].mpNumericArray)
+                        if (pDVR->GetArrays()[j].mpNumericArray ||
+                            (pDVR->GetArrays()[j].mpNumericArray == NULL &&
+                            pDVR->GetArrays()[j].mpStringArray == NULL ))
                             mvSubArguments.push_back(
                                     SubArgument(VectorRefFactory<VectorRef>(
                                             ts, ft->Children[i], mpCodeGen, j)));
@@ -1687,9 +1712,17 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                                 SubArgument(new DynamicKernelStringArgument(
                                         ts, ft->Children[i])));
                     }
+                    else if (pSVR->GetArray().mpStringArray == NULL &&
+                        pSVR->GetArray().mpNumericArray == NULL)
+                    {
+                        // Push as an array of NANs
+                        mvSubArguments.push_back(
+                                SubArgument(new VectorRef(ts,
+                                        ft->Children[i])));
+                    }
                     else
                         throw UnhandledToken(pChild,
-                                "Got unhandled case here");
+                                "Got unhandled case here", __FILE__, __LINE__);
                 } else if (pChild->GetType() == formula::svDouble) {
                     mvSubArguments.push_back(
                             SubArgument(new DynamicKernelConstantArgument(ts,
@@ -2736,7 +2769,8 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
     }
     catch (const UnhandledToken &ut) {
         std::cerr << "\nDynamic formual compiler: unhandled token: ";
-        std::cerr << ut.mMessage << "\n";
+        std::cerr << ut.mMessage << " at ";
+        std::cerr << ut.mFile << ":" << ut.mLineNumber << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
 #else
@@ -2833,6 +2867,17 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     catch (const OpenCLError &oce) {
         std::cerr << "Dynamic formula compiler: OpenCL error: ";
         std::cerr << oce.mError << "\n";
+#ifdef NO_FALLBACK_TO_SWINTERP
+        assert(false);
+        return true;
+#else
+        return false;
+#endif
+    }
+    catch (const Unhandled &uh) {
+        std::cerr << "Dynamic formula compiler: unhandled case:";
+        std::cerr <<" at ";
+        std::cerr << uh.mFile << ":" << uh.mLineNumber << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
         return true;
