@@ -1548,6 +1548,13 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2805), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testWpgOnly, "wpg-only.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Check position, it was nearly 0. This is a shape, so use getPosition(), not a property.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(548005)), xShape->getPosition().X);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
 {
     // The document contains a rotated bitmap

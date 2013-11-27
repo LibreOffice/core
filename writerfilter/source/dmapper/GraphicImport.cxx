@@ -1029,6 +1029,11 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             // For non-textframes, this is handled already in oox::drawingml::Shape::createAndInsert().
                             m_pImpl->applyPosition(xShapeProps);
                         }
+                        else if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+                        {
+                            // Position of the groupshape should be set after children have been added.
+                            m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+                        }
 
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
