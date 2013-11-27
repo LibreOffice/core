@@ -391,12 +391,9 @@ namespace frm
         }
         else if ( isFontRelatedProperty( _nHandle ) )
         {
-            FontDescriptor aOldFont( getFont() );
-
-            FontControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
-
-            if ( isFontAggregateProperty( _nHandle ) )
-                firePropertyChange( PROPERTY_ID_FONT, makeAny( getFont() ), makeAny( aOldFont ) );
+            FontControlModel::setFastPropertyValue_NoBroadcast_impl(
+                    *this, &ORichTextModel::setDependentFastPropertyValue,
+                    _nHandle, _rValue);
         }
         else
         {
