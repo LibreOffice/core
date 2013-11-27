@@ -707,12 +707,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         default:
             if ( isFontRelatedProperty( nHandle ) )
             {
-                FontDescriptor aOldFont( getFont() );
-
-                FontControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-
-                if ( isFontAggregateProperty( nHandle ) )
-                    firePropertyChange( PROPERTY_ID_FONT, makeAny( getFont() ), makeAny( aOldFont ) );
+                FontControlModel::setFastPropertyValue_NoBroadcast_impl(
+                    *this, &OGridControlModel::setDependentFastPropertyValue,
+                    nHandle, rValue);
             }
             else
                 OControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );

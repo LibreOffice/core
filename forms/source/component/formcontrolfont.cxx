@@ -20,6 +20,7 @@
 #include "formcontrolfont.hxx"
 #include "property.hrc"
 #include "property.hxx"
+#include <cppuhelper/propshlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <tools/color.hxx>
@@ -351,104 +352,139 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void FontControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
+    static void setFastPropertyValue_NoBroadcast_implimpl(
+            FontDescriptor & rFont,
+            sal_Int32 nHandle, const Any& rValue) throw (Exception)
     {
-        switch( _nHandle )
+        switch (nHandle)
         {
-        case PROPERTY_ID_TEXTCOLOR:
-            m_aTextColor = _rValue;
-            break;
-
-        case PROPERTY_ID_TEXTLINECOLOR:
-            m_aTextLineColor = _rValue;
-            break;
-
-        case PROPERTY_ID_FONTEMPHASISMARK:
-            _rValue >>= m_nFontEmphasis;
-            break;
-
-        case PROPERTY_ID_FONTRELIEF:
-            _rValue >>= m_nFontRelief;
-            break;
-
-        case PROPERTY_ID_FONT:
-            _rValue >>= m_aFont;
-            break;
-
         case PROPERTY_ID_FONT_NAME:
-            _rValue >>= m_aFont.Name;
+            rValue >>= rFont.Name;
             break;
 
         case PROPERTY_ID_FONT_STYLENAME:
-            _rValue >>= m_aFont.StyleName;
+            rValue >>= rFont.StyleName;
             break;
 
         case PROPERTY_ID_FONT_FAMILY:
-            _rValue >>= m_aFont.Family;
+            rValue >>= rFont.Family;
             break;
 
         case PROPERTY_ID_FONT_CHARSET:
-            _rValue >>= m_aFont.CharSet;
+            rValue >>= rFont.CharSet;
             break;
 
         case PROPERTY_ID_FONT_CHARWIDTH:
-            _rValue >>= m_aFont.CharacterWidth;
+            rValue >>= rFont.CharacterWidth;
             break;
 
         case PROPERTY_ID_FONT_KERNING:
-            _rValue >>= m_aFont.Kerning;
+            rValue >>= rFont.Kerning;
             break;
 
         case PROPERTY_ID_FONT_ORIENTATION:
-            _rValue >>= m_aFont.Orientation;
+            rValue >>= rFont.Orientation;
             break;
 
         case PROPERTY_ID_FONT_PITCH:
-            _rValue >>= m_aFont.Pitch;
+            rValue >>= rFont.Pitch;
             break;
 
         case PROPERTY_ID_FONT_TYPE:
-            _rValue >>= m_aFont.Type;
+            rValue >>= rFont.Type;
             break;
 
         case PROPERTY_ID_FONT_WIDTH:
-            _rValue >>= m_aFont.Width;
+            rValue >>= rFont.Width;
             break;
 
         case PROPERTY_ID_FONT_HEIGHT:
         {
             float nHeight = 0;
-            _rValue >>= nHeight;
-            m_aFont.Height = (sal_Int16)nHeight;
+            rValue >>= nHeight;
+            rFont.Height = (sal_Int16)nHeight;
         }
         break;
 
         case PROPERTY_ID_FONT_WEIGHT:
-            _rValue >>= m_aFont.Weight;
+            rValue >>= rFont.Weight;
             break;
 
         case PROPERTY_ID_FONT_SLANT:
-            _rValue >>= m_aFont.Slant;
+            rValue >>= rFont.Slant;
             break;
 
         case PROPERTY_ID_FONT_UNDERLINE:
-            _rValue >>= m_aFont.Underline;
+            rValue >>= rFont.Underline;
             break;
 
         case PROPERTY_ID_FONT_STRIKEOUT:
-            _rValue >>= m_aFont.Strikeout;
+            rValue >>= rFont.Strikeout;
             break;
 
         case PROPERTY_ID_FONT_WORDLINEMODE:
         {
             sal_Bool bWordLineMode = sal_False;
-            _rValue >>= bWordLineMode;
-            m_aFont.WordLineMode = bWordLineMode;
+            rValue >>= bWordLineMode;
+            rFont.WordLineMode = bWordLineMode;
         }
         break;
 
         default:
-            OSL_FAIL( "FontControlModel::setFastPropertyValue_NoBroadcast: invalid property!" );
+            assert(false); // isFontAggregateProperty
+        }
+    }
+
+    void FontControlModel::setFastPropertyValue_NoBroadcast_impl(
+            ::cppu::OPropertySetHelper & rBase,
+            void (::cppu::OPropertySetHelper::*pSet)(sal_Int32, Any const&),
+            sal_Int32 nHandle, const Any& rValue) throw (Exception)
+    {
+        if (isFontAggregateProperty(nHandle))
+        {
+            // need to fire a event for PROPERTY_ID_FONT too apparently, so:
+            FontDescriptor font(getFont());
+
+            // first set new value on backup copy
+            setFastPropertyValue_NoBroadcast_implimpl(font, nHandle, rValue);
+
+            // then set that as the actual property - will eventually call
+            // this method recursively again...
+            (rBase.*pSet)(PROPERTY_ID_FONT, makeAny(font));
+#ifndef NDEBUG
+            // verify that the nHandle property has the new value
+            Any tmp;
+            getFastPropertyValue(tmp, nHandle);
+            assert(tmp == rValue || PROPERTY_ID_FONT_HEIGHT == nHandle /*rounded*/);
+#endif
+        }
+        else
+        {
+            switch (nHandle)
+            {
+            case PROPERTY_ID_TEXTCOLOR:
+                m_aTextColor = rValue;
+                break;
+
+            case PROPERTY_ID_TEXTLINECOLOR:
+                m_aTextLineColor = rValue;
+                break;
+
+            case PROPERTY_ID_FONTEMPHASISMARK:
+                rValue >>= m_nFontEmphasis;
+                break;
+
+            case PROPERTY_ID_FONTRELIEF:
+                rValue >>= m_nFontRelief;
+                break;
+
+            case PROPERTY_ID_FONT:
+                rValue >>= m_aFont;
+                break;
+
+            default:
+                SAL_WARN("forms.component", "invalid property: " << nHandle);
+            }
         }
     }
 

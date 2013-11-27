@@ -25,6 +25,10 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+namespace cppu {
+    class OPropertySetHelper;
+}
+
 //.........................................................................
 namespace frm
 {
@@ -74,7 +78,12 @@ namespace frm
 
         void     getFastPropertyValue            ( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const;
         sal_Bool convertFastPropertyValue        ( ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw( ::com::sun::star::lang::IllegalArgumentException );
-        void     setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw ( ::com::sun::star::uno::Exception );
+        void     setFastPropertyValue_NoBroadcast_impl(
+                ::cppu::OPropertySetHelper & rBase,
+                void (::cppu::OPropertySetHelper::*pSet)(
+                    sal_Int32, css::uno::Any const&),
+                sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue)
+            throw ( ::com::sun::star::uno::Exception );
         ::com::sun::star::uno::Any
                  getPropertyDefaultByHandle      ( sal_Int32 _nHandle ) const;
 
