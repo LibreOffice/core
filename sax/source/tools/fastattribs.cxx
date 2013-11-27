@@ -28,7 +28,7 @@ namespace sax_fastparser
 {
 
 // wasteage to keep MSVC happy vs. an in-line {}
-FastTokenHandlerBase::FastTokenHandlerBase()
+FastTokenHandlerBase::~FastTokenHandlerBase()
 {
 }
 
