@@ -6226,6 +6226,18 @@ void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
     }
 }
 
+void ScDocument::GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const
+{
+    for( size_t i = 0; i < rRange.size(); ++i)
+    {
+        const ScRange* pRange = rRange[i];
+        for( SCTAB nTab = pRange->aStart.Tab(); nTab < pRange->aEnd.Tab(); ++nTab )
+        {
+            maTabs[nTab]->GetNotesInRange( *pRange, rNotes );
+        }
+    }
+}
+
 bool ScDocument::ContainsNotesInRange( const ScRangeList& rRange ) const
 {
     for( size_t i = 0; i < rRange.size(); ++i)

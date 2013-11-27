@@ -506,6 +506,7 @@ public:
     size_t GetNoteCount() const;
     SCROW GetNotePosition( size_t nIndex ) const;
     void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
+    void GetNotesInRange( SCROW nStartRow, SCROW nEndRow, std::vector<sc::NoteEntry>& rNotes ) const;
 
     SCROW GetCellNotesMaxRow() const;
     SCROW GetCellNotesMinRow() const;

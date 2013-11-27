@@ -935,34 +935,22 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         ScRangeListRef aRangesRef;
                         pData->GetMultiArea(aRangesRef);
                         ScRangeList aRanges = *aRangesRef;
-                        size_t nRangeSize = aRanges.size();
-
-                        for ( size_t i = 0; i < nRangeSize && !bEnable; ++i )
+                        std::vector<sc::NoteEntry> aNotes;
+                        pDoc->GetNotesInRange(aRanges, aNotes);
+                        for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
+                                itrEnd = aNotes.end(); itr != itrEnd; ++itr)
                         {
-                            const ScRange * pRange = aRanges[i];
-                            const SCROW nRow0 = pRange->aStart.Row();
-                            const SCROW nRow1 = pRange->aEnd.Row();
-                            const SCCOL nCol0 = pRange->aStart.Col();
-                            const SCCOL nCol1 = pRange->aEnd.Col();
-                            const SCTAB nRangeTab = pRange->aStart.Tab();
-                            // Check by each cell
-                            // nCellNumber < pDoc->CountNotes() with const size_t nCellNumber = ( nRow1 - nRow0 ) * ( nCol1 - nCol0 );
-                            for ( SCROW nRow = nRow0; nRow <= nRow1 && !bEnable; ++nRow )
+                            const ScAddress& rAdr = itr->maPos;
+                            if( pDoc->IsBlockEditable( rAdr.Tab(), rAdr.Col(), rAdr.Row(), rAdr.Col(), rAdr.Row() ))
                             {
-                                for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
+                                if (itr->mpNote->IsCaptionShown() != bSearchForHidden)
                                 {
-                                    const ScPostIt* pNote = pDoc->GetNote(nCol, nRow, nRangeTab);
-                                    if ( pNote && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
-                                    {
-                                        if ( pNote->IsCaptionShown() != bSearchForHidden)
-                                        {
-                                            bEnable = true;
-                                            break;
-                                        }
-                                    }
+                                    bEnable = true;
+                                    break;
                                 }
                             }
                         }
+
                     }
                     if ( !bEnable )
                         rSet.DisableItem( nWhich );
