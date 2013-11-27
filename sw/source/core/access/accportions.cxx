@@ -849,7 +849,7 @@ sal_Int32 SwAccessiblePortionData::GetFieldIndex(sal_Int32 nPos)
     sal_Int32 nIndex = -1;
     if( aFieldPosition.size() >= 2 )
     {
-        for( sal_Int32 i = 0; i < aFieldPosition.size() - 1; i += 2 )
+        for( sal_uInt32 i = 0; i < aFieldPosition.size() - 1; i += 2 )
         {
             if( nPos <= aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
             {
