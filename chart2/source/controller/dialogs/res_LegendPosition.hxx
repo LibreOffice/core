@@ -19,10 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_LEGENDPOSITION_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_LEGENDPOSITION_HXX
 
-// header for class CheckBox
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-// header for class SfxItemSet
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -35,11 +34,55 @@ class LegendPositionResources
 
 public:
     //constructor without Display checkbox
-    LegendPositionResources( Window* pParent );
+    LegendPositionResources(VclBuilderContainer& rParent);
     //constructor inclusive Display checkbox
-    LegendPositionResources( Window* pParent, const ::com::sun::star::uno::Reference<
+    LegendPositionResources(VclBuilderContainer& rParent, const ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext>& xCC );
     virtual ~LegendPositionResources();
+
+    void writeToResources( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xChartModel );
+    void writeToModel( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xChartModel ) const;
+
+    void initFromItemSet( const SfxItemSet& rInAttrs );
+    void writeToItemSet( SfxItemSet& rOutAttrs ) const;
+
+    void SetChangeHdl( const Link& rLink );
+
+    DECL_LINK( PositionEnableHdl, void* );
+    DECL_LINK( PositionChangeHdl, RadioButton* );
+
+    void SetAccessibleRelationMemberOf(Window* pMemberOf);
+
+private:
+    void impl_setRadioButtonToggleHdl();
+
+private:
+    ::com::sun::star::uno::Reference<
+                       ::com::sun::star::uno::XComponentContext>    m_xCC;
+
+    CheckBox*       m_pCbxShow;
+
+    RadioButton*    m_pRbtLeft;
+    RadioButton*    m_pRbtRight;
+    RadioButton*    m_pRbtTop;
+    RadioButton*    m_pRbtBottom;
+
+    Link            m_aChangeLink;
+};
+
+
+class oldLegendPositionResources
+{
+
+public:
+    //constructor without Display checkbox
+    oldLegendPositionResources( Window* pParent );
+    //constructor inclusive Display checkbox
+    oldLegendPositionResources( Window* pParent, const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::uno::XComponentContext>& xCC );
+    virtual ~oldLegendPositionResources();
 
     void writeToResources( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::frame::XModel >& xChartModel );
@@ -72,6 +115,7 @@ private:
 
     Link            m_aChangeLink;
 };
+
 
 } //namespace chart
 

@@ -42,7 +42,7 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
         , m_aFT_TitleDescription( this, SchResId( FT_TITLEDESCRIPTION ) )
         , m_aFL_Vertical( this, SchResId( FL_VERTICAL ) )
         , m_apTitleResources( new TitleResources(this,false) )
-        , m_apLegendPositionResources( new LegendPositionResources(this,xContext) )
+        , m_apLegendPositionResources( new oldLegendPositionResources(this,xContext) )
         , m_aFL_Grids( this, SchResId( FL_GRIDS ) )
         , m_aCB_Grid_X( this, SchResId( CB_X_SECONDARY ) )
         , m_aCB_Grid_Y( this, SchResId( CB_Y_SECONDARY ) )

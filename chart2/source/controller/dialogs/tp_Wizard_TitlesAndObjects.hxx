@@ -36,7 +36,7 @@ namespace chart
 /**
 */
 class TitleResources;
-class LegendPositionResources;
+class oldLegendPositionResources;
 class TitlesAndObjectsTabPage : public svt::OWizardPage
 {
 public:
@@ -60,7 +60,7 @@ protected:
     FixedLine           m_aFL_Vertical;
 
     boost::scoped_ptr< TitleResources >            m_apTitleResources;
-    boost::scoped_ptr< LegendPositionResources >   m_apLegendPositionResources;
+    boost::scoped_ptr< oldLegendPositionResources >   m_apLegendPositionResources;
 
     FixedLine           m_aFL_Grids;
     CheckBox            m_aCB_Grid_X;

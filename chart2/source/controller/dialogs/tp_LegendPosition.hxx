@@ -19,30 +19,24 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_LEGENDPOSITION_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_LEGENDPOSITION_HXX
 
-// header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
-// header for FixedText
 #include <vcl/fixed.hxx>
 
+#include "res_LegendPosition.hxx"
 #include "TextDirectionListBox.hxx"
 
 namespace chart
 {
 
-class LegendPositionResources;
 class SchLegendPosTabPage : public SfxTabPage
 {
 private:
 
-//     boost::scoped_ptr< LegendPositionResources >   m_apLegendPositionResources;
-    LegendPositionResources* m_pLegendPositionResources;
-    VclBox*                  m_pBxPosition;
-
+    LegendPositionResources  m_aLegendPositionResources;
     TextDirectionListBox*    m_pLbTextDirection;
 
 public:
     SchLegendPosTabPage(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual ~SchLegendPosTabPage();
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
     virtual sal_Bool FillItemSet(SfxItemSet& rOutAttrs);

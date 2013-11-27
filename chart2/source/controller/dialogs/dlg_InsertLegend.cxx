@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 SchLegendDlg::SchLegendDlg(Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC )
     : ModalDialog(pWindow, SchResId(DLG_LEGEND))
-    , m_apLegendPositionResources( new LegendPositionResources(this,xCC) )
+    , m_apLegendPositionResources( new oldLegendPositionResources(this,xCC) )
     , aBtnOK(this, SchResId(BTN_OK))
     , aBtnCancel(this, SchResId(BTN_CANCEL))
     , aBtnHelp(this, SchResId(BTN_HELP))

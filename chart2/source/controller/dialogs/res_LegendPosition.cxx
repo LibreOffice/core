@@ -42,7 +42,219 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-LegendPositionResources::LegendPositionResources( Window* pWindow )
+LegendPositionResources::LegendPositionResources(VclBuilderContainer& rParent)
+    : m_xCC() //unused in this scenario
+    , m_pCbxShow( NULL ) //unused in this scenario, assumed to be visible
+{
+    rParent.get(m_pRbtLeft, "left");
+    rParent.get(m_pRbtRight, "right");
+    rParent.get(m_pRbtTop, "top");
+    rParent.get(m_pRbtBottom, "bottom");
+    impl_setRadioButtonToggleHdl();
+}
+
+LegendPositionResources::LegendPositionResources(VclBuilderContainer& rParent,
+    const uno::Reference< uno::XComponentContext >& xCC)
+    : m_xCC(xCC)
+{
+    rParent.get(m_pCbxShow, "show");
+    rParent.get(m_pRbtLeft, "left");
+    rParent.get(m_pRbtRight, "right");
+    rParent.get(m_pRbtTop, "top");
+    rParent.get(m_pRbtBottom, "bottom");
+
+    m_pCbxShow->SetToggleHdl( LINK( this, LegendPositionResources, PositionEnableHdl ) );
+    impl_setRadioButtonToggleHdl();
+}
+
+void LegendPositionResources::impl_setRadioButtonToggleHdl()
+{
+    m_pRbtLeft->SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+    m_pRbtTop->SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+    m_pRbtRight->SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+    m_pRbtBottom->SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+}
+
+LegendPositionResources::~LegendPositionResources()
+{
+}
+
+void LegendPositionResources::writeToResources( const uno::Reference< frame::XModel >& xChartModel )
+{
+    try
+    {
+        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+        uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            //show
+            sal_Bool bShowLegend = sal_False;
+            xProp->getPropertyValue( "Show" ) >>= bShowLegend;
+            if (m_pCbxShow)
+                m_pCbxShow->Check( bShowLegend );
+            PositionEnableHdl(0);
+
+            //position
+            chart2::LegendPosition ePos;
+            xProp->getPropertyValue( "AnchorPosition" )  >>= ePos;
+            switch( ePos )
+            {
+                case chart2::LegendPosition_LINE_START:
+                    m_pRbtLeft->Check();
+                    break;
+                case chart2::LegendPosition_LINE_END:
+                    m_pRbtRight->Check();
+                    break;
+                case chart2::LegendPosition_PAGE_START:
+                    m_pRbtTop->Check();
+                    break;
+                case chart2::LegendPosition_PAGE_END:
+                    m_pRbtBottom->Check();
+                    break;
+
+                case chart2::LegendPosition_CUSTOM:
+                default:
+                    m_pRbtRight->Check();
+                    break;
+            }
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Reference< frame::XModel >& xChartModel ) const
+{
+    try
+    {
+        sal_Bool bShowLegend = m_pCbxShow ? m_pCbxShow->IsChecked() : false;
+        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+        uno::Reference< beans::XPropertySet > xProp( LegendHelper::getLegend( *pModel,m_xCC,bShowLegend ), uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            //show
+            xProp->setPropertyValue( "Show" , uno::makeAny( bShowLegend ));
+
+            //position
+            chart2::LegendPosition eNewPos;
+            ::com::sun::star::chart::ChartLegendExpansion eExp = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
+
+            if( m_pRbtLeft->IsChecked() )
+                eNewPos = chart2::LegendPosition_LINE_START;
+            else if( m_pRbtRight->IsChecked() )
+            {
+                eNewPos = chart2::LegendPosition_LINE_END;
+            }
+            else if( m_pRbtTop->IsChecked() )
+            {
+                eNewPos = chart2::LegendPosition_PAGE_START;
+                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+            }
+            else if( m_pRbtBottom->IsChecked() )
+            {
+                eNewPos = chart2::LegendPosition_PAGE_END;
+                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
+            }
+
+            xProp->setPropertyValue( "AnchorPosition" , uno::makeAny( eNewPos ));
+            xProp->setPropertyValue( "Expansion" , uno::makeAny( eExp ));
+            xProp->setPropertyValue( "RelativePosition" , uno::Any());
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
+{
+    bool bEnable = m_pCbxShow ? m_pCbxShow->IsChecked() : true;
+
+    m_pRbtLeft->Enable( bEnable );
+    m_pRbtTop->Enable( bEnable );
+    m_pRbtRight->Enable( bEnable );
+    m_pRbtBottom->Enable( bEnable );
+
+    m_aChangeLink.Call(NULL);
+
+    return 0;
+}
+
+void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
+{
+    const SfxPoolItem* pPoolItem = NULL;
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        sal_Int32 nLegendPosition = ((const SfxInt32Item*)pPoolItem)->GetValue();
+        switch( nLegendPosition )
+        {
+            case chart2::LegendPosition_LINE_START:
+                m_pRbtLeft->Check(sal_True);
+                break;
+            case chart2::LegendPosition_PAGE_START:
+                m_pRbtTop->Check(sal_True);
+                break;
+            case chart2::LegendPosition_LINE_END:
+                m_pRbtRight->Check(sal_True);
+                break;
+            case chart2::LegendPosition_PAGE_END:
+                m_pRbtBottom->Check(sal_True);
+                break;
+            default:
+                break;
+        }
+    }
+
+    if( m_pCbxShow && rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        m_pCbxShow->Check(bShow);
+    }
+}
+
+void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
+{
+    sal_Int32 nLegendPosition = chart2::LegendPosition_CUSTOM;
+    if( m_pRbtLeft->IsChecked() )
+        nLegendPosition = chart2::LegendPosition_LINE_START;
+    else if( m_pRbtTop->IsChecked() )
+        nLegendPosition = chart2::LegendPosition_PAGE_START;
+    else if( m_pRbtRight->IsChecked() )
+        nLegendPosition = chart2::LegendPosition_LINE_END;
+    else if( m_pRbtBottom->IsChecked() )
+        nLegendPosition = chart2::LegendPosition_PAGE_END;
+    rOutAttrs.Put(SfxInt32Item(SCHATTR_LEGEND_POS, nLegendPosition ));
+
+    rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_pCbxShow ? m_pCbxShow->IsChecked() : true) );
+}
+
+IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
+{
+    //for each radio click ther are coming two change events
+    //first uncheck of previous button -> ignore that call
+    //the second call gives the check of the new button
+    if( pRadio && pRadio->IsChecked() )
+        m_aChangeLink.Call(NULL);
+    return 0;
+}
+
+void LegendPositionResources::SetChangeHdl( const Link& rLink )
+{
+    m_aChangeLink = rLink;
+}
+
+void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
+{
+    m_pRbtLeft->SetAccessibleRelationMemberOf(pMemberOf);
+    m_pRbtRight->SetAccessibleRelationMemberOf(pMemberOf);
+    m_pRbtTop->SetAccessibleRelationMemberOf(pMemberOf);
+    m_pRbtBottom->SetAccessibleRelationMemberOf(pMemberOf);
+}
+
+oldLegendPositionResources::oldLegendPositionResources( Window* pWindow )
     : m_xCC() //unused in this scenario
     , m_aCbxShow( pWindow ) //unused in this scenario
     , m_aRbtLeft( pWindow, SchResId(RBT_LEFT) )
@@ -54,7 +266,7 @@ LegendPositionResources::LegendPositionResources( Window* pWindow )
     impl_setRadioButtonToggleHdl();
 }
 
-LegendPositionResources::LegendPositionResources( Window* pWindow, const uno::Reference< uno::XComponentContext >& xCC )
+oldLegendPositionResources::oldLegendPositionResources( Window* pWindow, const uno::Reference< uno::XComponentContext >& xCC )
     : m_xCC( xCC )
     , m_aCbxShow( pWindow, SchResId(CBX_SHOWLEGEND) )
     , m_aRbtLeft( pWindow, SchResId(RBT_LEFT) )
@@ -62,7 +274,7 @@ LegendPositionResources::LegendPositionResources( Window* pWindow, const uno::Re
     , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
     , m_aRbtBottom( pWindow, SchResId(RBT_BOTTOM) )
 {
-    m_aCbxShow.SetToggleHdl( LINK( this, LegendPositionResources, PositionEnableHdl ) );
+    m_aCbxShow.SetToggleHdl( LINK( this, oldLegendPositionResources, PositionEnableHdl ) );
     impl_setRadioButtonToggleHdl();
     m_aCbxShow.SetAccessibleRelationMemberOf(&m_aCbxShow);
     m_aRbtLeft.SetAccessibleRelationMemberOf(&m_aCbxShow);
@@ -71,19 +283,19 @@ LegendPositionResources::LegendPositionResources( Window* pWindow, const uno::Re
     m_aRbtBottom.SetAccessibleRelationMemberOf(&m_aCbxShow);
 }
 
-void LegendPositionResources::impl_setRadioButtonToggleHdl()
+void oldLegendPositionResources::impl_setRadioButtonToggleHdl()
 {
-    m_aRbtLeft.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
-    m_aRbtTop.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
-    m_aRbtRight.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
-    m_aRbtBottom.SetToggleHdl( LINK( this, LegendPositionResources, PositionChangeHdl ) );
+    m_aRbtLeft.SetToggleHdl( LINK( this, oldLegendPositionResources, PositionChangeHdl ) );
+    m_aRbtTop.SetToggleHdl( LINK( this, oldLegendPositionResources, PositionChangeHdl ) );
+    m_aRbtRight.SetToggleHdl( LINK( this, oldLegendPositionResources, PositionChangeHdl ) );
+    m_aRbtBottom.SetToggleHdl( LINK( this, oldLegendPositionResources, PositionChangeHdl ) );
 }
 
-LegendPositionResources::~LegendPositionResources()
+oldLegendPositionResources::~oldLegendPositionResources()
 {
 }
 
-void LegendPositionResources::writeToResources( const uno::Reference< frame::XModel >& xChartModel )
+void oldLegendPositionResources::writeToResources( const uno::Reference< frame::XModel >& xChartModel )
 {
     try
     {
@@ -128,7 +340,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
     }
 }
 
-void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Reference< frame::XModel >& xChartModel ) const
+void oldLegendPositionResources::writeToModel( const ::com::sun::star::uno::Reference< frame::XModel >& xChartModel ) const
 {
     try
     {
@@ -172,7 +384,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
     }
 }
 
-IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
+IMPL_LINK_NOARG(oldLegendPositionResources, PositionEnableHdl)
 {
     sal_Bool bEnable = m_aCbxShow.IsChecked();
 
@@ -186,7 +398,7 @@ IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
     return 0;
 }
 
-void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
+void oldLegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem* pPoolItem = NULL;
     if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, sal_True, &pPoolItem ) == SFX_ITEM_SET )
@@ -218,7 +430,7 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
     }
 }
 
-void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
+void oldLegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
 {
     sal_Int32 nLegendPosition = chart2::LegendPosition_CUSTOM;
     if( m_aRbtLeft.IsChecked() )
@@ -234,7 +446,7 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
     rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_aCbxShow.IsChecked()) );
 }
 
-IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
+IMPL_LINK( oldLegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
 {
     //for each radio click ther are coming two change events
     //first uncheck of previous button -> ignore that call
@@ -244,18 +456,19 @@ IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
     return 0;
 }
 
-void LegendPositionResources::SetChangeHdl( const Link& rLink )
+void oldLegendPositionResources::SetChangeHdl( const Link& rLink )
 {
     m_aChangeLink = rLink;
 }
 
-void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
+void oldLegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
 {
     m_aRbtLeft.SetAccessibleRelationMemberOf(pMemberOf);
     m_aRbtRight.SetAccessibleRelationMemberOf(pMemberOf);
     m_aRbtTop.SetAccessibleRelationMemberOf(pMemberOf);
     m_aRbtBottom.SetAccessibleRelationMemberOf(pMemberOf);
 }
+
 
 } //namespace chart
 

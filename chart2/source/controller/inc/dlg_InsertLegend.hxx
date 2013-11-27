@@ -31,11 +31,11 @@
 namespace chart
 {
 
-class LegendPositionResources;
+class oldLegendPositionResources;
 class SchLegendDlg : public ModalDialog
 {
 private:
-    ::std::auto_ptr< LegendPositionResources >    m_apLegendPositionResources;
+    ::std::auto_ptr< oldLegendPositionResources >    m_apLegendPositionResources;
 
     OKButton        aBtnOK;
     CancelButton    aBtnCancel;

@@ -34,18 +34,11 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow, const SfxItemSet& rInA
                  ,"tp_LegendPosition"
                  ,"modules/schart/ui/tp_LegendPosition.ui"
                  , rInAttrs )
+    , m_aLegendPositionResources(*this)
 {
     get(m_pLbTextDirection,"LB_LEGEND_TEXTDIR");
 
     m_pLbTextDirection->SetDropDownLineCount(3);
-
-    get(m_pBxPosition,"boxPOSITION");
-    m_pLegendPositionResources = new LegendPositionResources(m_pBxPosition);
-}
-
-SchLegendPosTabPage::~SchLegendPosTabPage()
-{
-    delete m_pLegendPositionResources;
 }
 
 SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet& rOutAttrs)
@@ -55,7 +48,7 @@ SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet& rOutA
 
 sal_Bool SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    m_pLegendPositionResources->writeToItemSet(rOutAttrs);
+    m_aLegendPositionResources.writeToItemSet(rOutAttrs);
 
     if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
         rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
@@ -65,7 +58,7 @@ sal_Bool SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
 void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    m_pLegendPositionResources->initFromItemSet(rInAttrs);
+    m_aLegendPositionResources.initFromItemSet(rInAttrs);
 
     const SfxPoolItem* pPoolItem = 0;
     if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, sal_True, &pPoolItem ) == SFX_ITEM_SET )
