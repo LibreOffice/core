@@ -754,10 +754,10 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
     {
         if (mpParent->mrParent.IsEnabled())
         {
-            pStateSet->AddState( accessibility::AccessibleStateType::ENABLED );
+            pStateSet->AddState( css::accessibility::AccessibleStateType::ENABLED );
             // SELECTABLE
-            pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
-            pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
+            pStateSet->AddState( css::accessibility::AccessibleStateType::SELECTABLE );
+            pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSABLE );
         }
 
         // SELECTED
