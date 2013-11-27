@@ -4053,7 +4053,7 @@ void SwTokenWindow::SetFocus2theAllBtn()
         m_pParent->SetFocus2theAllBtn();
     }
 }
-sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType, const Control* pCurControl) const
+sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType, const Control* /* pCurControl */) const
 {
     //there are only one entry-text button and only one page-number button,
     //so we need not add index for these two buttons.
