@@ -452,9 +452,6 @@ protected:
     SdrObjUserCall*             pUserCall;
     SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, Konnektoren, ... (Das ist der Bitsack)
 
-//IAccessibility2 Implementation 2009-----
-    SdrObject*  pCaptionObj;
-//-----IAccessibility2 Implementation 2009
     sal_uInt32                  nOrdNum;      // Rangnummer des Obj in der Liste
 
     /** Position in the navigation order.  SAL_MAX_UINT32 when not used.
@@ -1131,9 +1128,6 @@ public:
     // #121917#
     virtual bool HasText() const;
 
-//IAccessibility2 Implementation 2009-----
-    const SdrObject* GetCaptionObj() const;
-//-----IAccessibility2 Implementation 2009
 protected:
     void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
 
