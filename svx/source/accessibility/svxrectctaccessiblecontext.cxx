@@ -366,7 +366,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
 {
     //return Reference< XAccessibleRelationSet >();
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
     Window* pWindow = mpRepr;
     if ( pWindow )
     {
@@ -376,14 +376,14 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pLabeledBy->GetAccessible();
-            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+            pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
         Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pMemberOf->GetAccessible();
-            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+            pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
         }
     }
     return xSet;
@@ -978,12 +978,12 @@ OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName( void ) th
 Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException )
 {
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
     if( mxParent.is() )
       {
         uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
         aSequence[0] = mxParent;
-        pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
 
     }
 
