@@ -211,6 +211,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/tablebuffer \
 	sc/source/filter/oox/tablefragment \
 	sc/source/filter/oox/themebuffer \
+	sc/source/filter/oox/threadpool \
 	sc/source/filter/oox/unitconverter \
 	sc/source/filter/oox/viewsettings \
 	sc/source/filter/oox/workbookfragment \

@@ -42,10 +42,15 @@
 #include "workbooksettings.hxx"
 #include "worksheetbuffer.hxx"
 #include "worksheetfragment.hxx"
+#include "sheetdatacontext.hxx"
+#include "threadpool.hxx"
+#include "officecfg/Office/Common.hxx"
 
 #include "document.hxx"
 #include "docsh.hxx"
 #include "calcconfig.hxx"
+
+#include <vcl/svapp.hxx>
 
 #include <oox/core/fastparser.hxx>
 #include <salhelper/thread.hxx>
@@ -53,8 +58,6 @@
 
 #include <queue>
 #include <boost/scoped_ptr.hpp>
-
-#define MULTI_THREAD_SHEET_PARSING 0
 
 #include "oox/ole/vbaproject.hxx"
 
@@ -204,188 +207,77 @@ namespace {
 typedef std::pair<WorksheetGlobalsRef, FragmentHandlerRef> SheetFragmentHandler;
 typedef std::vector<SheetFragmentHandler> SheetFragmentVector;
 
-#if MULTI_THREAD_SHEET_PARSING
-
-class WorkerThread;
-typedef rtl::Reference<WorkerThread> WorkerThreadRef;
-
-struct WorkerThreadData
-{
-    osl::Mutex maMtx;
-    std::vector<WorkerThreadRef> maThreads;
-};
-
-struct IdleWorkerThreadData
-{
-    osl::Mutex maMtx;
-    osl::Condition maCondAdded;
-    std::queue<WorkerThread*> maThreads;
-};
-
-struct
-{
-    boost::scoped_ptr<WorkerThreadData> mpWorkerThreads;
-    boost::scoped_ptr<IdleWorkerThreadData> mpIdleThreads;
-
-} aThreadGlobals;
-
-enum WorkerAction
-{
-    None = 0,
-    TerminateThread,
-    Work
-};
-
-class WorkerThread : public salhelper::Thread
+class WorkerThread : public ThreadTask
 {
     WorkbookFragment& mrWorkbookHandler;
-    size_t mnID;
-    FragmentHandlerRef mxHandler;
-    boost::scoped_ptr<oox::core::FastParser> mxParser;
-    osl::Mutex maMtxAction;
-    osl::Condition maCondActionChanged;
-    WorkerAction meAction;
+    rtl::Reference<FragmentHandler> mxHandler;
+
 public:
-    WorkerThread( WorkbookFragment& rWorkbookHandler, size_t nID ) :
-        salhelper::Thread("sheet-import-worker-thread"),
-        mrWorkbookHandler(rWorkbookHandler),
-        mnID(nID),
-        mxParser(rWorkbookHandler.getOoxFilter().createParser()),
-        meAction(None) {}
-
-    virtual void execute()
+    WorkerThread( WorkbookFragment& rWorkbookHandler,
+                  const rtl::Reference<FragmentHandler>& xHandler ) :
+        mrWorkbookHandler( rWorkbookHandler ),
+        mxHandler( xHandler )
     {
-        announceIdle();
-
-        // Keep looping until the terminate request is set.
-        for (maCondActionChanged.wait(); true; maCondActionChanged.wait())
-        {
-            osl::MutexGuard aGuard(maMtxAction);
-            if (!maCondActionChanged.check())
-                // Wait again.
-                continue;
-
-            maCondActionChanged.reset();
-
-            if (meAction == TerminateThread)
-                // End the thread.
-                return;
-
-            if (meAction != Work)
-                continue;
-
-#if 0
-            // TODO : This still deadlocks in the fast parser code.
-            mrWorkbookHandler.importOoxFragment(mxHandler, *mxParser);
-#else
-            double val = rand() / static_cast<double>(RAND_MAX);
-            val *= 1000000; // normalize to 1 second.
-            val *= 1.5; // inflate it a bit.
-            usleep(val); // pretend to be working while asleep.
-#endif
-            announceIdle();
-        }
     }
 
-    void announceIdle()
+    virtual void doWork()
     {
-        // Set itself idle to receive a new task from the main thread.
-        osl::MutexGuard aGuard(aThreadGlobals.mpIdleThreads->maMtx);
-        aThreadGlobals.mpIdleThreads->maThreads.push(this);
-        aThreadGlobals.mpIdleThreads->maCondAdded.set();
-    }
+        // We hold the solar mutex in all threads except for
+        // the small safe section of the inner loop in
+        // sheetdatacontext.cxx
+        SAL_INFO( "sc.filter",  "start wait on solar\n" );
+        SolarMutexGuard maGuard;
+        SAL_INFO( "sc.filter",  "got solar\n" );
 
-    void terminate()
-    {
-        osl::MutexGuard aGuard(maMtxAction);
-        meAction = TerminateThread;
-        maCondActionChanged.set();
-    }
+        boost::scoped_ptr<oox::core::FastParser> xParser(
+                mrWorkbookHandler.getOoxFilter().createParser() );
 
-    void assign( const FragmentHandlerRef& rHandler )
-    {
-        osl::MutexGuard aGuard(maMtxAction);
-        mxHandler = rHandler;
-        meAction = Work;
-        maCondActionChanged.set();
+        SAL_INFO( "sc.filter",  "start import\n" );
+        mrWorkbookHandler.importOoxFragment( mxHandler, *xParser );
+        SAL_INFO( "sc.filter",  "end import, release solar\n" );
     }
 };
-
-#endif
 
 void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
-#if MULTI_THREAD_SHEET_PARSING // threaded version
-    size_t nThreadCount = 3;
-    if (nThreadCount > rSheets.size())
-        nThreadCount = rSheets.size();
+    sal_Int32 nThreads = std::min( rSheets.size(), (size_t) 4 /* FIXME: ncpus/2 */ );
 
-    // Create new thread globals.
-    aThreadGlobals.mpWorkerThreads.reset(new WorkerThreadData);
-    aThreadGlobals.mpIdleThreads.reset(new IdleWorkerThreadData);
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-    SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
+    // Force threading off unless experimental mode or env. var is set.
+    if( !officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) )
+        nThreads = 0;
 
+    const char *pEnv;
+    if( ( pEnv = getenv( "SC_IMPORT_THREADS" ) ) )
+        nThreads = rtl_str_toInt32( pEnv, 10 );
+
+    if( nThreads != 0 )
     {
-        // Initialize worker threads.
-        osl::MutexGuard aGuard(aThreadGlobals.mpWorkerThreads->maMtx);
-        for (size_t i = 0; i < nThreadCount; ++i)
+        // test sequential read in this mode
+        if( nThreads < 0)
+            nThreads = 0;
+        ThreadPool aPool( nThreads );
+
+        SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
+        for( ; it != itEnd; ++it )
+            aPool.pushTask( new WorkerThread( rWorkbookHandler, it->second ) )
+                ;
+
         {
-            WorkerThreadRef pThread(new WorkerThread(rWorkbookHandler, i));
-            aThreadGlobals.mpWorkerThreads->maThreads.push_back(pThread);
-            pThread->launch();
+            // Ideally no-one else but our worker threads can re-acquire that.
+            // potentially if that causes a problem we might want to extend
+            // the SolarMutex functionality to allow passing it around.
+            SolarMutexReleaser aReleaser;
+            aPool.waitUntilWorkersDone();
         }
     }
-
-    for (aThreadGlobals.mpIdleThreads->maCondAdded.wait(); true; aThreadGlobals.mpIdleThreads->maCondAdded.wait())
+    else
     {
-        osl::MutexGuard aGuard(aThreadGlobals.mpIdleThreads->maMtx);
-        if (!aThreadGlobals.mpIdleThreads->maCondAdded.check())
-            // Wait again.
-            continue;
-
-        aThreadGlobals.mpIdleThreads->maCondAdded.reset();
-
-        // Assign work to all idle threads.
-        while (!aThreadGlobals.mpIdleThreads->maThreads.empty())
-        {
-            if (it == itEnd)
-                break;
-
-            WorkerThread* p = aThreadGlobals.mpIdleThreads->maThreads.front();
-            aThreadGlobals.mpIdleThreads->maThreads.pop();
-            p->assign(it->second);
-            ++it;
-        }
-
-        if (it == itEnd)
-            // Finished!  Exit the loop.
-            break;
+        SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
+        for( ; it != itEnd; ++it )
+            rWorkbookHandler.importOoxFragment( it->second );
     }
-
-    {
-        // Terminate all worker threads.
-        osl::MutexGuard aGuard(aThreadGlobals.mpWorkerThreads->maMtx);
-        for (size_t i = 0, n = aThreadGlobals.mpWorkerThreads->maThreads.size(); i < n; ++i)
-        {
-            WorkerThreadRef pWorker = aThreadGlobals.mpWorkerThreads->maThreads[i];
-            pWorker->terminate();
-            if (pWorker.is())
-                pWorker->join();
-        }
-    }
-
-    // Delete all thread globals.
-    aThreadGlobals.mpWorkerThreads.reset();
-    aThreadGlobals.mpIdleThreads.reset();
-
-#else // non-threaded version
-    for( SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end(); it != itEnd; ++it)
-    {
-        // import the sheet fragment
-        rWorkbookHandler.importOoxFragment(it->second);
-    }
-#endif
 }
 
 }
