@@ -2115,6 +2115,14 @@ DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGlossary, "testGlossary.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/glossary/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

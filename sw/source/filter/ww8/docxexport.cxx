@@ -64,7 +64,7 @@
 
 #include "ww8par.hxx"
 #include "ww8scan.hxx"
-
+#include <oox/token/properties.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
@@ -360,6 +360,8 @@ void DocxExport::ExportDocument_Impl()
     WriteSettings();
 
     WriteTheme();
+
+    WriteGlossary();
 
     WriteCustomXml();
 
@@ -829,6 +831,78 @@ void DocxExport::WriteTheme()
         "application/vnd.openxmlformats-officedocument.theme+xml" ) );
     serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
         uno::Sequence< beans::StringPair >() );
+}
+
+void DocxExport::WriteGlossary()
+{
+    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+        return;
+
+    uno::Reference<xml::dom::XDocument> glossaryDocDom;
+    uno::Sequence< uno::Sequence< uno::Any> > glossaryDomList;
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    sal_Int32 collectedProperties = 0;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXGlossary" )
+        {
+             propList[nProp].Value >>= glossaryDocDom;
+             collectedProperties++;
+        }
+        if (propName == "OOXGlossaryDom")
+        {
+            propList[nProp].Value >>= glossaryDomList;
+            collectedProperties++;
+        }
+        if (collectedProperties == 2)
+            break;
+    }
+
+    // no glossary dom to write
+    if ( !glossaryDocDom.is() )
+        return;
+
+    m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument",
+            "glossary/document.xml" );
+
+    uno::Reference< io::XOutputStream > xOutputStream = GetFilter().openFragmentStream( "word/glossary/document.xml",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.glossary+xml" );
+
+    uno::Reference< xml::sax::XSAXSerializable > serializer( glossaryDocDom, uno::UNO_QUERY );
+    uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
+    writer->setOutputStream( xOutputStream );
+    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+        uno::Sequence< beans::StringPair >() );
+
+
+    sal_Int32 length = glossaryDomList.getLength();
+    for ( int i =0; i < length; i++)
+    {
+        uno::Sequence< uno::Any> glossaryElement = glossaryDomList[i];
+        OUString gTarget, gType, gId, contentType;
+        uno::Reference<xml::dom::XDocument> xDom;
+        glossaryElement[0] >>= xDom;
+        glossaryElement[1] >>= gId;
+        glossaryElement[2] >>= gType;
+        glossaryElement[3] >>= gTarget;
+        glossaryElement[4] >>= contentType;
+        gId = gId.copy(3); //"rId" only save the numeric value
+
+        PropertySet aProps(xOutputStream);
+        aProps.setAnyProperty( PROP_RelId, uno::makeAny( sal_Int32( gId.toInt32() )));
+        m_pFilter->addRelation( xOutputStream, gType, gTarget);
+        uno::Reference< xml::sax::XSAXSerializable > gserializer( xDom, uno::UNO_QUERY );
+        writer->setOutputStream(GetFilter().openFragmentStream( "word/glossary/" + gTarget, contentType ) );
+        gserializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+               uno::Sequence< beans::StringPair >() );
+    }
 }
 
 void DocxExport::WriteCustomXml()

@@ -120,7 +120,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->resolve(*pStream);
 
         // Adding some properties to the document's grab bag for interoperability purposes:
-        uno::Sequence<beans::PropertyValue> aGrabBagProperties(6);
+        uno::Sequence<beans::PropertyValue> aGrabBagProperties(8);
 
         // Adding the saved Theme DOM
         aGrabBagProperties[0].Name = "OOXTheme";
@@ -141,6 +141,12 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         // Adding the saved w:themeFontLang setting
         aGrabBagProperties[5].Name = "ThemeFontLangProps";
         aGrabBagProperties[5].Value = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
+
+        // Adding the saved Glossary Documnet DOM to the document's grab bag
+        aGrabBagProperties[6].Name = "OOXGlossary";
+        aGrabBagProperties[6].Value = uno::makeAny( pDocument->getGlossaryDocDom() );
+        aGrabBagProperties[7].Name = "OOXGlossaryDom";
+        aGrabBagProperties[7].Value = uno::makeAny( pDocument->getGlossaryDomList() );
 
         putPropertiesToDocumentGrabBag( aGrabBagProperties );
 

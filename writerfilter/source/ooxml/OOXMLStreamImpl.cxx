@@ -114,6 +114,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sCustomPropsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps");
     static OUString sActiveXType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
     static OUString sActiveXBinType("http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary");
+    static OUString sGlossaryType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument");
+    static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
@@ -166,6 +168,12 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
         case SETTINGS:
             sStreamType = sSettingsType;
             break;
+        case GLOSSARY:
+            sStreamType = sGlossaryType;
+            break;
+        case WEBSETTINGS:
+            sStreamType = sWebSettings;
+          break;
         default:
             break;
     }

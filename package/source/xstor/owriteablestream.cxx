@@ -3104,6 +3104,10 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
            && ( aPropertyName == "IsEncrypted" || aPropertyName == "Encrypted" ) )
         throw beans::PropertyVetoException(); // TODO
+    else if ( aPropertyName == "RelId" )
+    {
+        aValue >>= m_pImpl->m_nRelId;
+    }
     else
         throw beans::UnknownPropertyException(); // TODO
 
