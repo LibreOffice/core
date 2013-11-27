@@ -1381,11 +1381,7 @@ namespace accessibility
         EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( static_cast< sal_uInt16 >(GetParagraphIndex()) );
         if (aBulletInfo.bVisible)
             nIndex += aBulletInfo.aText.getLength();
-        if (nIndex != 0 && nIndex >= getCharacterCount())
-            nIndex = getCharacterCount()-1;
-        //
-        if (nIndex != 0)
-            CheckIndex(nIndex); // may throw IndexOutOfBoundsException
+        CheckIndex(nIndex); // may throw IndexOutOfBoundsException
 
         bool bSupplementalMode = false;
         uno::Sequence< OUString > aPropertyNames = rRequestedAttributes;
@@ -1533,9 +1529,6 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         SolarMutexGuard aGuard;
-
-        if ((rPoint.X <= 0) && (rPoint.Y <= 0))
-            return 0;
 
         sal_Int32 nPara;
         sal_uInt16 nIndex;
