@@ -116,9 +116,9 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                     // returned array equals or greater than the requested
                     // length.
 
-                    formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(aRefPos, nLen);
-                    if (!aArray.isValid())
-                        return false;
+                    formula::VectorRefArray aArray;
+                    if (nLen)
+                        aArray = mrDoc.FetchVectorRefArray(aRefPos, nLen);
 
                     formula::SingleVectorRefToken aTok(aArray, nLen);
                     mrGroupTokens.AddToken(aTok);
@@ -184,9 +184,9 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                 for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
                 {
                     aRefPos.SetCol(i);
-                    formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(aRefPos, nArrayLength);
-                    if (!aArray.isValid())
-                        return false;
+                    formula::VectorRefArray aArray;
+                    if (nArrayLength)
+                        aArray = mrDoc.FetchVectorRefArray(aRefPos, nArrayLength);
 
                     aArrays.push_back(aArray);
                 }
