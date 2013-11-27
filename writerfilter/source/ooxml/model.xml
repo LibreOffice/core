@@ -28,6 +28,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" alias="wps" id="wps"/>
+  <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" alias="wpg" id="wpg"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart" id="dmlChart"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
@@ -5173,6 +5174,7 @@
           <ref name="lockedCanvas"/>
           <ref name="chart"/>
           <ref name="wsp"/>
+          <ref name="wgp"/>
           <element>
             <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
@@ -5202,6 +5204,7 @@
       <element name="lockedCanvas" tokenid="ooxml:CT_GraphicalObjectData_lockedCanvas"/>
       <element name="chart" tokenid="ooxml:CT_GraphicalObjectData_chart"/>
       <element name="wsp" tokenid="ooxml:CT_GraphicalObjectData_wsp"/>
+      <element name="wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
     <resource name="CT_GraphicalObject" resource="Properties" tag="shape">
@@ -8501,6 +8504,19 @@
           <ref name="CT_WordprocessingShape"/>
         </element>
       </define>
+      <define name="CT_WordprocessingGroup">
+        <element name="cNvGrpSpPr">
+          <ref name="CT_NonVisualGroupDrawingShapeProps"/>
+        </element>
+        <element name="grpSpPr">
+          <ref name="CT_WordprocessingGroup"/>
+        </element>
+      </define>
+      <define name="wgp">
+        <element xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="wpg:wgp">
+          <ref name="CT_WordprocessingGroup"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_PictureNonVisual" resource="Properties" tag="shape">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
@@ -8542,6 +8558,13 @@
     </resource>
     <resource name="wsp" resource="Shape" tag="shape">
       <element xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="wps:wsp" tokenid="ooxml:wps_wsp"/>
+    </resource>
+    <resource xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="CT_WordprocessingGroup" resource="Shape" tag="shape">
+      <element name="wpg:cNvGrpSpPr" tokenid="ooxml:CT_WordprocessingGroup_cNvGrpSpPr"/>
+      <element name="wpg:grpSpPr" tokenid="ooxml:CT_WordprocessingGroup_grpSpPr"/>
+    </resource>
+    <resource name="wgp" resource="Shape" tag="shape">
+      <element xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
     </resource>
 
   </namespace>
