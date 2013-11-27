@@ -16,18 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_accessibility_XAccessibleAttribute_idl__
-#define __com_sun_star_accessibility_XAccessibleAttribute_idl__
+#ifndef __com_sun_star_accessibility_XAccessibleGetAccFlowTo_idl_
+#define __com_sun_star_accessibility_XAccessibleGetAccFlowTo_idl_
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleExtendedAttributes : ::com::sun::star::uno::XInterface
+// !!!
+// MT: When integrating this, interface and method names should be renamed somehow. Of course, file name also need to change then...
+// !!!
+interface XAccessibleGetAccFlowTo : ::com::sun::star::uno::XInterface
 {
-    /* Returns the attribute of this object' formula */ // MT: I guess it's not formula only?
-    any getExtendedAttributes() raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    sequence<any> get_AccFlowTo([in] any aXShape, [in] long nType);
 };
 
 }; }; }; };
