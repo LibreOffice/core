@@ -30,9 +30,12 @@ class UnhandledToken
 {
 public:
     UnhandledToken(formula::FormulaToken *t,
-            const char *const m): mToken(t), mMessage(m) {}
+            const char *const m, std::string fn="", int ln=0):
+            mToken(t), mMessage(m), mFile(fn), mLineNumber(ln) {}
     formula::FormulaToken *mToken;
     std::string mMessage;
+    std::string mFile;
+    int mLineNumber;
 };
 
 /// Failed in marshaling
@@ -47,7 +50,10 @@ public:
 class Unhandled
 {
 public:
-    Unhandled() {}
+    Unhandled(std::string fn="", int ln=0):
+            mFile(fn), mLineNumber(ln) {}
+    std::string mFile;
+    int mLineNumber;
 };
 
 typedef boost::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
