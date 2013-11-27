@@ -54,7 +54,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/tp_DataLabel.src \
     chart2/source/controller/dialogs/tp_DataSource.src \
     chart2/source/controller/dialogs/tp_ErrorBars.src \
-    chart2/source/controller/dialogs/tp_LegendPosition.src \
     chart2/source/controller/dialogs/tp_PointGeometry.src \
     chart2/source/controller/dialogs/tp_PolarOptions.src \
     chart2/source/controller/dialogs/tp_RangeChooser.src \

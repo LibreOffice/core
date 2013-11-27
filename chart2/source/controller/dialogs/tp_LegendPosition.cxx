@@ -29,46 +29,47 @@
 namespace chart
 {
 
-SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
-                                         const SfxItemSet& rInAttrs)
-    : SfxTabPage( pWindow, SchResId(TP_LEGEND_POS), rInAttrs )
-    , aGrpLegend( this, SchResId(GRP_LEGEND) )
-    , m_apLegendPositionResources( new LegendPositionResources(this) )
-    , m_aFlTextOrient( this, SchResId( FL_LEGEND_TEXTORIENT ) )
-    , m_aFtTextDirection( this, SchResId( FT_LEGEND_TEXTDIR ) )
-    , m_aLbTextDirection( this, SchResId( LB_LEGEND_TEXTDIR ), &m_aFlTextOrient, &m_aFtTextDirection )
+SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow, const SfxItemSet& rInAttrs)
+    : SfxTabPage( pWindow
+                 ,"tp_LegendPosition"
+                 ,"modules/schart/ui/tp_LegendPosition.ui"
+                 , rInAttrs )
 {
-    m_apLegendPositionResources->SetAccessibleRelationMemberOf(&aGrpLegend);
-    FreeResource();
+    get(m_pLbTextDirection,"LB_LEGEND_TEXTDIR");
+
+    m_pLbTextDirection->SetDropDownLineCount(3);
+
+    get(m_pBxPosition,"boxPOSITION");
+    m_pLegendPositionResources = new LegendPositionResources(m_pBxPosition);
 }
 
 SchLegendPosTabPage::~SchLegendPosTabPage()
 {
+    delete m_pLegendPositionResources;
 }
 
-SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow,
-                                        const SfxItemSet& rOutAttrs)
+SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet& rOutAttrs)
 {
     return new SchLegendPosTabPage(pWindow, rOutAttrs);
 }
 
 sal_Bool SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    m_apLegendPositionResources->writeToItemSet(rOutAttrs);
+    m_pLegendPositionResources->writeToItemSet(rOutAttrs);
 
-    if( m_aLbTextDirection.GetSelectEntryCount() > 0 )
-        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLbTextDirection.GetSelectEntryValue() ) );
+    if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
+        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
 
     return sal_True;
 }
 
 void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    m_apLegendPositionResources->initFromItemSet(rInAttrs);
+    m_pLegendPositionResources->initFromItemSet(rInAttrs);
 
     const SfxPoolItem* pPoolItem = 0;
     if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-        m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
+        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 }
 
 } //namespace chart
