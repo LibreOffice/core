@@ -53,7 +53,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/scstring.src \
     sc/source/ui/src/sortdlg.src \
     sc/source/ui/src/filter.src \
-    sc/source/ui/src/colorformat.src \
     sc/source/ui/src/condformatdlg.src \
     sc/source/ui/src/condformatmgr.src \
     sc/source/ui/src/xmlsourcedlg.src \

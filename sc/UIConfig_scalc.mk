@@ -29,6 +29,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/basicshapes \
 	sc/uiconfig/scalc/toolbar/calloutshapes \
 	sc/uiconfig/scalc/toolbar/colorbar \
+	sc/uiconfig/scalc/toolbar/databaroptions \
 	sc/uiconfig/scalc/toolbar/datastreams \
 	sc/uiconfig/scalc/toolbar/drawbar \
 	sc/uiconfig/scalc/toolbar/drawobjectbar \
