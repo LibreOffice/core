@@ -72,7 +72,7 @@ typedef ::std::set < sal_Int32, Int32Less_Impl > Int32Set_Impl;
 typedef ::std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
 typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
 
-const int SELECTION_WITH_NUM =10;
+const unsigned int SELECTION_WITH_NUM = 10;
 
 class SwAccTableSelHander_Impl
 {
