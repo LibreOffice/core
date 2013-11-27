@@ -251,7 +251,7 @@ void NBOTypeMgrBase::StoreMapUnit_impl() {
         {
             eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
         } else {
-            //Sym3_2508 sd use different sid for numbering rule
+            //sd use different sid for numbering rule
             eState = pSet->GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem);
             if(eState == SFX_ITEM_SET)
             {

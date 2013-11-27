@@ -25,8 +25,12 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/svdstr.hrc"
 
+#include <svx/unoshape.hxx>
+#include <svx/svdoashp.hxx>
+#include "svx/unoapi.hxx"
+
+#include "svx/svdstr.hrc"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -292,6 +296,36 @@ OUString
         case DRAWING_RECTANGLE:
             nResourceId = STR_ObjNameSingulRECT;
             break;
+        case DRAWING_CUSTOM:
+            {
+                nResourceId = STR_ObjNameSingulCUSTOMSHAPE;
+
+                SvxShape* pShape = SvxShape::getImplementation( rxShape );
+                if (pShape)
+                {
+                    SdrObject *pSdrObj = pShape->GetSdrObject();
+                    if (pSdrObj)
+                    {
+                        OUString aTmp(pSdrObj->TakeObjNameSingul());
+
+                        if(pSdrObj->ISA(SdrObjCustomShape))
+                        {
+                            SdrObjCustomShape* pCustomShape = (SdrObjCustomShape*)pSdrObj;
+                            if(pCustomShape)
+                            {
+                                if (pCustomShape->IsTextPath())
+                                    nResourceId = STR_ObjNameSingulFONTWORK;
+                                else
+                                {
+                                    nResourceId = -1;
+                                    sName = pCustomShape->GetCustomShapeName();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            }
         case DRAWING_TEXT:
             nResourceId = STR_ObjNameSingulTEXT;
             break;

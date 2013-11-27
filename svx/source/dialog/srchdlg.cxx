@@ -55,6 +55,7 @@
 #include <svx/svxitems.hrc>
 
 #include <svl/srchitem.hxx>
+#include <svx/AccessibleSvxFindReplaceDialog.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
@@ -64,6 +65,8 @@
 #include <svx/svxdlg.hxx>
 
 using namespace com::sun::star::i18n;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace comphelper;
 
@@ -252,6 +255,8 @@ void SearchAttrItemList::Remove(size_t nPos, size_t nLen)
 SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind )
     : SfxModelessDialog(&rBind, pChildWin, pParent, "FindReplaceDialog",
         "svx/ui/findreplacedialog.ui")
+    , mpDocWin(NULL)
+    , mbSuccess(false)
     , rBindings(rBind)
     , bWriter(false)
     , bSearch(true)
@@ -2261,6 +2266,21 @@ void SvxSearchDialog::SaveToModule_Impl()
     nModifyFlag = 0;
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SFX_CALLMODE_SLOT, ppArgs );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+        SvxSearchDialog::GetComponentInterface( sal_Bool bCreate )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer
+        (Window::GetComponentInterface(false));
+    if ( !xPeer.is() && bCreate )
+    {
+        ::com::sun::star::awt::XWindowPeer* mxPeer = new VCLXSvxFindReplaceDialog(this);
+        SetComponentInterface(mxPeer);
+        return mxPeer;
+    }
+    else
+        return xPeer;
 }
 
 // class SvxSearchDialogWrapper ------------------------------------------

@@ -91,7 +91,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
-
+// ====== XAccessibleExtendedAttributes =====================================
+    virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes() throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString

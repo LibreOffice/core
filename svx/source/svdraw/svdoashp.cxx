@@ -3224,4 +3224,20 @@ void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& 
     mxCustomShapeEngine.set(0);
 }
 
+OUString SdrObjCustomShape::GetCustomShapeName()
+{
+    OUString sShapeName;
+    OUString aEngine( ( (SdrCustomShapeEngineItem&)( *this ).GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
+    if ( aEngine.isEmpty() || aEngine.equalsAscii( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) )
+    {
+        OUString sShapeType;
+        const OUString sType("Type");
+        SdrCustomShapeGeometryItem& rGeometryItem( (SdrCustomShapeGeometryItem&)( *this ).GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+        Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+        if ( pAny && ( *pAny >>= sShapeType ) )
+            sShapeName = EnhancedCustomShapeTypeNames::GetAccName( sShapeType );
+    }
+    return sShapeName;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

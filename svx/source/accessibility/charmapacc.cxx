@@ -158,23 +158,22 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
 // -----------------------------------------------------------------------------
 ::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
 {
-    const Point   aOutPos( mpParent->GetPosPixel() );
-    Size          aOutSize( mpParent->GetOutputSizePixel() );
-    if ( mpParent->getScrollBar()->IsVisible() )
+    ::com::sun::star::awt::Rectangle aBounds ( 0, 0, 0, 0 );
+    Window* pWindow = mpParent;
+    if ( pWindow )
     {
-        const Size aScrollBar = mpParent->getScrollBar()->GetOutputSizePixel();
-        aOutSize.Width() -= aScrollBar.Width();
-        aOutSize.Height() -= aScrollBar.Height();
+        Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
+        aBounds = AWTRectangle( aRect );
+        Window* pParent = pWindow->GetAccessibleParentWindow();
+        if ( pParent )
+        {
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
+            ::com::sun::star::awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
+            aBounds.X -= aParentScreenLoc.X;
+            aBounds.Y -= aParentScreenLoc.Y;
+        }
     }
-
-    awt::Rectangle aRet;
-
-    aRet.X = aOutPos.X();
-    aRet.Y = aOutPos.Y();
-    aRet.Width = aOutSize.Width();
-    aRet.Height = aOutSize.Height();
-
-    return aRet;
+    return aBounds;
 }
 // -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRole(  ) throw (RuntimeException)
@@ -338,13 +337,12 @@ void SvxShowCharSetAcc::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bS
 // -----------------------------------------------------------------------------
 ::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetAcc::implGetBounds(  ) throw (RuntimeException)
 {
-    const Point   aOutPos( m_pParent->getCharSetControl()->GetPosPixel() );
+    const Point   aOutPos;//( m_pParent->getCharSetControl()->GetPosPixel() );
     Size          aOutSize( m_pParent->getCharSetControl()->GetOutputSizePixel());
     if ( m_pParent->getCharSetControl()->getScrollBar()->IsVisible() )
     {
         const Size aScrollBar = m_pParent->getCharSetControl()->getScrollBar()->GetOutputSizePixel();
         aOutSize.Width() -= aScrollBar.Width();
-        aOutSize.Height() -= aScrollBar.Height();
     }
 
     awt::Rectangle aRet;
@@ -686,7 +684,7 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc
 sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
-    return css::accessibility::AccessibleRole::LABEL;
+    return css::accessibility::AccessibleRole::TABLE_CELL;
 }
 
 // -----------------------------------------------------------------------------
@@ -754,9 +752,13 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
 
     if( mpParent )
     {
-        // SELECTABLE
-        pStateSet->AddState( css::accessibility::AccessibleStateType::SELECTABLE );
-        pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSABLE );
+        if (mpParent->mrParent.IsEnabled())
+        {
+            pStateSet->AddState( accessibility::AccessibleStateType::ENABLED );
+            // SELECTABLE
+            pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
+            pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
+        }
 
         // SELECTED
         if( mpParent->mrParent.GetSelectIndexId() == mpParent->mnId )
@@ -765,7 +767,10 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
                pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSED );
         }
         if ( mpParent->mnId >= mpParent->mrParent.FirstInView() && mpParent->mnId <= mpParent->mrParent.LastInView() )
+        {
             pStateSet->AddState( AccessibleStateType::VISIBLE );
+            pStateSet->AddState( AccessibleStateType::SHOWING );
+        }
         pStateSet->AddState( AccessibleStateType::TRANSIENT );
     }
 

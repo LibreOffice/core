@@ -38,7 +38,8 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <unotools/accessiblerelationsethelper.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -46,6 +47,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
+using namespace ::com::sun::star::lang;
 
 #define MAX_NUM_OF_CHILDREN   9
 #define NOCHILDSELECTED     -1
@@ -348,7 +350,7 @@ sal_Int16 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRole( void ) throw(
 OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    return msDescription;
+    return msDescription + " Please use arrow key to selection.";
 }
 
 OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
@@ -362,7 +364,36 @@ OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName( void ) throw( 
 */
 Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException )
 {
-    return Reference< XAccessibleRelationSet >();
+    //return Reference< XAccessibleRelationSet >();
+    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    Window* pWindow = mpRepr;
+    if ( pWindow )
+    {
+        // Window *pLabeledBy = pWindow->GetAccRelationLabeledBy();
+        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        if ( pLabeledBy && pLabeledBy != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pLabeledBy->GetAccessible();
+            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+        }
+        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        if ( pMemberOf && pMemberOf != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pMemberOf->GetAccessible();
+            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        }
+    }
+    return xSet;
+}
+
+//Add the event handling method
+void SvxRectCtlAccessibleContext::FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew)
+{
+    const Reference< XInterface >   xSource( *this );
+    CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
 }
 
 Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleStateSet( void ) throw( RuntimeException )
@@ -372,6 +403,7 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccess
 
     if( IsAlive() )
     {
+        pStateSetHelper->AddState( AccessibleStateType::ENABLED );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         if( mpRepr->HasFocus() )
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
@@ -607,7 +639,37 @@ void SvxRectCtlAccessibleContext::checkChildIndexOnSelection( long nIndex ) thro
         throw lang::IndexOutOfBoundsException();
 }
 
-void SvxRectCtlAccessibleContext::selectChild( long nNew )
+void SvxRectCtlAccessibleContext::FireChildFocus( RECT_POINT eButton )
+{
+    ::osl::MutexGuard   aGuard( m_aMutex );
+    long nNew = PointToIndex( eButton, mbAngleMode );
+    long nNumOfChildren = getAccessibleChildCount();
+    if( nNew < nNumOfChildren )
+    {
+        // select new child
+        SvxRectCtlChildAccessibleContext*   pChild;
+        mnSelectedChild = nNew;
+        if( nNew != NOCHILDSELECTED )
+        {
+            pChild = mpChildren[ nNew ];
+            if( pChild )
+            {
+                pChild->FireFocusEvent();
+            }
+        }
+        else
+        {
+            const Reference< XInterface >   xSource( *this );
+            Any                             aOld;
+            Any                             aNew;
+            aNew <<= AccessibleStateType::FOCUSED;
+            CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
+        }
+    }
+    else
+        mnSelectedChild = NOCHILDSELECTED;
+}
+void SvxRectCtlAccessibleContext::selectChild( long nNew, sal_Bool bFireFocus )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     if( nNew != mnSelectedChild )
@@ -620,7 +682,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
             {   // deselect old selected child if one is selected
                 pChild = mpChildren[ mnSelectedChild ];
                 if( pChild )
-                    pChild->setStateChecked( false );
+                    pChild->setStateChecked( false, bFireFocus );
             }
 
             // select new child
@@ -630,7 +692,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
             {
                 pChild = mpChildren[ nNew ];
                 if( pChild )
-                    pChild->setStateChecked( true );
+                    pChild->setStateChecked( true, bFireFocus );
             }
         }
         else
@@ -638,10 +700,10 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
     }
 }
 
-void SvxRectCtlAccessibleContext::selectChild( RECT_POINT eButton )
+void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton, sal_Bool bFireFocus )
 {
     // no guard -> is done in next selectChild
-    selectChild( PointToIndex( eButton, mbAngleMode ) );
+    selectChild(PointToIndex( eButton, mbAngleMode ), bFireFocus);
 }
 
 void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
@@ -915,7 +977,17 @@ OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName( void ) th
 */
 Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException )
 {
-    return Reference< XAccessibleRelationSet >();
+    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    if( mxParent.is() )
+      {
+        uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+        aSequence[0] = mxParent;
+        pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+
+    }
+
+    return xSet;
 }
 
 Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleStateSet( void ) throw( RuntimeException )
@@ -1024,6 +1096,57 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
     return aRet;
 }
 
+// -----------------------------------------------------------------------------
+// XAccessibleAction
+// -----------------------------------------------------------------------------
+
+sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (RuntimeException)
+{
+    ::osl::MutexGuard   aGuard( maMutex );
+
+    return 1;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::MutexGuard   aGuard( maMutex );
+
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+        throw IndexOutOfBoundsException();
+
+    Reference<XAccessibleSelection> xSelection( mxParent, UNO_QUERY);
+
+    xSelection->selectAccessibleChild(mnIndexInParent);
+
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------------
+
+OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::MutexGuard   aGuard( maMutex );
+
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+        throw IndexOutOfBoundsException();
+
+    return OUString("select");
+}
+
+// -----------------------------------------------------------------------------
+
+Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::MutexGuard   aGuard( maMutex );
+
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+        throw IndexOutOfBoundsException();
+
+    return Reference< XAccessibleKeyBinding >();
+}
+
 //=====  XServiceInfo  ========================================================
 OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
@@ -1108,7 +1231,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox( void ) throw( Runtim
     return *mpBoundingBox;
 }
 
-void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )
+void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked, bool bFireFocus )
 {
     if( mbIsChecked != bChecked )
     {
@@ -1120,10 +1243,25 @@ void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )
         Any                             aNew;
         Any&                            rMod = bChecked? aNew : aOld;
 
+        if( bFireFocus )
+        {
+            //Send the STATE_CHANGED(Focused) event to accessible
+            rMod <<= AccessibleStateType::FOCUSED;
+            CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
+        }
         rMod <<= AccessibleStateType::CHECKED;
 
         CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
     }
+}
+
+void SvxRectCtlChildAccessibleContext::FireFocusEvent()
+{
+    const Reference< XInterface >   xSource( *this );
+    Any                             aOld;
+    Any                             aNew;
+    aNew <<= AccessibleStateType::FOCUSED;
+    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

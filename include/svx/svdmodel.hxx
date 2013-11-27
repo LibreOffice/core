@@ -75,6 +75,7 @@ class SotStorage;
 class SdrOutlinerCache;
 class SotStorageRef;
 class SdrUndoFactory;
+class ImageMap;
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -664,6 +665,9 @@ public:
     bool IsInDestruction() const;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+
+    virtual ImageMap* GetImageMapForObject(SdrObject*){return NULL;};
+    virtual sal_Int32 GetHyperlinkCount(SdrObject*){return 0;}
 
     /** enables (true) or disables (false) recording of undo actions
         If undo actions are added while undo is disabled, they are deleted.

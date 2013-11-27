@@ -120,6 +120,9 @@ public:
     */
     long GetChildCount (void) const throw ();
 
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape> GetChildShape(long nIndex)
+        throw (::com::sun::star::uno::RuntimeException);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
@@ -293,7 +296,15 @@ public:
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException);
 
-
+    // Add the impl method for IAccessibleParent interface
+    virtual AccessibleControlShape* GetAccControlShapeFromModel
+        (::com::sun::star::beans::XPropertySet* pSet)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>
+        GetAccessibleCaption (const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape>& xShape)
+        throw (::com::sun::star::uno::RuntimeException);
 protected:
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.

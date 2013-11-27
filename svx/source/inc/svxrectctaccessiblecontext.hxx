@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -39,8 +40,10 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase7.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase7.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 
@@ -238,7 +241,7 @@ protected:
         @param nIndexOfChild
             Index of the new child which should be selected.
     */
-    void selectChild( long nIndexOfChild );
+    void selectChild( long nIndexOfChild, sal_Bool bFireFocus = sal_True);
 
 public:
     /** Selects a new child by point.
@@ -249,7 +252,10 @@ public:
         @param eButton
             Button which belongs to the child which should be selected.
     */
-    void selectChild( RECT_POINT ePoint );
+    void selectChild( RECT_POINT ePoint, sal_Bool bFireFocus = sal_True );
+    void FireChildFocus( RECT_POINT eButton );
+    //Add the event handling method
+    void FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew);
 
 private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
@@ -315,16 +321,15 @@ inline bool SvxRectCtlAccessibleContext::IsNotAlive( void ) const
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
-
-typedef ::cppu::WeakAggComponentImplHelper6<
+typedef ::cppu::WeakAggComponentImplHelper7<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
             ::com::sun::star::accessibility::XAccessibleContext,
             ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
             ::com::sun::star::accessibility::XAccessibleValue,
+            ::com::sun::star::accessibility::XAccessibleAction,
             ::com::sun::star::lang::XServiceInfo >
             SvxRectCtlChildAccessibleContext_Base;
-
 
 class SvxRectCtlChildAccessibleContext : public SvxRectCtlChildAccessibleContext_Base
 {
@@ -450,6 +455,11 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL
         getMinimumValue() throw( ::com::sun::star::uno::RuntimeException );
 
+    // XAccessibleAction
+    virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
@@ -470,7 +480,8 @@ public:
     //===== internal ==========================================================
 
     /// Sets the checked status
-    void setStateChecked( bool bChecked );
+    void setStateChecked(bool bChecked, bool bFireFocus = true);
+    void FireFocusEvent();
 
 protected:
     virtual Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );

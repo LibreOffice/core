@@ -185,7 +185,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
     private:
         const SfxItemSet*   pSet;
         SfxMapUnit      eCoreUnit;
-        //Sym3_2508    store the attributes passed from pSet
+        // store the attributes passed from pSet
         OUString        aNumCharFmtName;
         void            StoreBulCharFmtName_impl();
         void            StoreMapUnit_impl();
@@ -222,7 +222,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex)=0;
         sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
         const SfxItemSet* GetItems() { return pSet;}
-        //Sym3_2508    store the attributes passed from pSet
+        // store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
     protected:
         OUString GetBulCharFmtName();

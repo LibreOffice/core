@@ -44,6 +44,8 @@
 #include <editeng/unotext.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <svx/svdotable.hxx>
+#include "../table/cell.hxx"
 #include <svx/sdrpaintwindow.hxx>
 
 using namespace ::osl;
@@ -374,6 +376,29 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case HINT_BEGEDIT:
                 if( mpObject == pSdrHint->GetObject() )
                 {
+                    // Once HINT_BEGEDIT is broadcast, each EditSource of
+                    // AccessibleCell will handle it here and call below:
+                    // mpView->GetTextEditOutliner()->SetNotifyHdl(), which
+                    // will replace the Notifer for current editable cell. It
+                    // is totally wrong. So add check here to avoid the
+                    // incorrect replacement of notifer.
+                    //
+                    // Currently it only happens on the editsource of
+                    // AccessibleCell
+                    if (mpObject && mpText)
+                    {
+                        sdr::table::SdrTableObj* pTableObj = PTR_CAST( sdr::table::SdrTableObj, mpObject );
+                        if(pTableObj)
+                        {
+                            sdr::table::CellRef xCell = pTableObj->getActiveCell();
+                            if (xCell.is())
+                            {
+                                sdr::table::Cell* pCellObj = dynamic_cast< sdr::table::Cell* >( mpText );
+                                if (pCellObj && xCell.get() != pCellObj)
+                                    break;
+                            }
+                        }
+                    }
                     // invalidate old forwarder
                     if( !mbForwarderIsEditMode )
                     {

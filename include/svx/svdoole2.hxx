@@ -80,6 +80,7 @@ protected:
     void Init();
 
 public:
+    OUString GetStyleString();
     TYPEINFO();
 
     SdrOle2Obj(bool bFrame_ = false);
