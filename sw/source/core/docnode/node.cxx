@@ -1374,7 +1374,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 //Solution:Add a input param to identify if the acc table should be disposed.
 //add a flag(bNeedDel) to indicate whether to del corresponding frm even in doc loading process,
 //void SwCntntNode::DelFrms()
-void SwCntntNode::DelFrms( sal_Bool bNeedDel, sal_Bool bIsDisposeAccTable )
+void SwCntntNode::DelFrms( sal_Bool /* bNeedDel */, sal_Bool bIsDisposeAccTable )
 //-----IAccessibility2 Implementation 2009
 {
     if( !GetDepends() )
