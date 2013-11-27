@@ -172,7 +172,7 @@ uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRel
     IsValid();
     Window* pWindow = (Window*)pPixelCtl;
     utl::AccessibleRelationSetHelper* rRelationSet = new utl::AccessibleRelationSetHelper;
-    uno::Reference< accessibility::XAccessibleRelationSet > rSet = rRelationSet;
+    uno::Reference< css::accessibility::XAccessibleRelationSet > rSet = rRelationSet;
     if ( pWindow )
     {
         Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
@@ -180,7 +180,7 @@ uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRel
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pLabeledBy->GetAccessible();
-            rRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+            rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
 
         Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
@@ -188,7 +188,7 @@ uno::Reference< XAccessibleRelationSet > SvxPixelCtlAccessible::getAccessibleRel
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
             aSequence[0] = pMemberOf->GetAccessible();
-            rRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+            rRelationSet->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
         }
         return rSet;
     }
