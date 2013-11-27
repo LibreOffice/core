@@ -338,6 +338,7 @@ void WorkbookFragment::finalizeImport()
 
     // Recalculate formula cells.
     ScDocument& rDoc = getScDocument();
+    rDoc.RebuildFormulaGroups();
     ScDocShell& rDocSh = getDocShell();
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     ScRecalcOptions nRecalcMode =
