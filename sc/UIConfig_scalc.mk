@@ -29,7 +29,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/basicshapes \
 	sc/uiconfig/scalc/toolbar/calloutshapes \
 	sc/uiconfig/scalc/toolbar/colorbar \
-	sc/uiconfig/scalc/toolbar/databaroptions \
 	sc/uiconfig/scalc/toolbar/datastreams \
 	sc/uiconfig/scalc/toolbar/drawbar \
 	sc/uiconfig/scalc/toolbar/drawobjectbar \
@@ -69,6 +68,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/correlationdialog \
 	sc/uiconfig/scalc/ui/covariancedialog \
 	sc/uiconfig/scalc/ui/createnamesdialog \
+	sc/uiconfig/scalc/ui/databaroptions \
 	sc/uiconfig/scalc/ui/dataform \
 	sc/uiconfig/scalc/ui/datastreams \
 	sc/uiconfig/scalc/ui/definedatabaserangedialog \
