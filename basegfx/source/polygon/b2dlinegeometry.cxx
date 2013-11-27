@@ -44,7 +44,8 @@ namespace basegfx
             double fWidth,
             double fCandidateLength,
             double fDockingPosition, // 0->top, 1->bottom
-            double* pConsumedLength)
+            double* pConsumedLength,
+            double fShift)
         {
             B2DPolyPolygon aRetval;
             OSL_ENSURE(rCandidate.count() > 1L, "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
@@ -89,7 +90,7 @@ namespace basegfx
                 const double fArrowYLength(B2DVector(aUpperCenter).getLength());
 
                 // move arrow to have docking position centered
-                aArrowTransform.translate(0.0, -fArrowYLength * fDockingPosition);
+                aArrowTransform.translate(0.0, -fArrowYLength * fDockingPosition + fShift);
 
                 // prepare polygon length
                 if(fTools::equalZero(fCandidateLength))
@@ -98,7 +99,7 @@ namespace basegfx
                 }
 
                 // get the polygon vector we want to plant this arrow on
-                const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition));
+                const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition) - fShift);
                 const B2DVector aHead(rCandidate.getB2DPoint((bStart) ? 0L : rCandidate.count() - 1L));
                 const B2DVector aTail(getPositionAbsolute(rCandidate,
                     (bStart) ? fConsumedLength : fCandidateLength - fConsumedLength, fCandidateLength));
