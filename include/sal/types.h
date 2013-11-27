@@ -121,9 +121,23 @@ typedef unsigned char       sal_uInt8;
     #error "Please define the 64-bit types for your architecture/compiler in sal/inc/sal/types.h"
 #endif
 
-typedef char                     sal_Char;
-typedef signed char              sal_sChar;
-typedef unsigned char            sal_uChar;
+/** A legacy synonym for `char`.
+
+    @deprecated use plain `char` instead.
+*/
+typedef char sal_Char;
+
+/** A legacy synonym for `signed char`.
+
+    @deprecated use plain `signed char` instead.
+*/
+typedef signed char sal_sChar;
+
+/** A legacy synonym for `unsigned char`.
+
+    @deprecated use plain `unsigned char` instead.
+*/
+typedef unsigned char sal_uChar;
 
 #if ( defined(SAL_W32) && !defined(__MINGW32__) )
     // http://msdn.microsoft.com/en-us/library/s3f49ktz%28v=vs.80%29.aspx
