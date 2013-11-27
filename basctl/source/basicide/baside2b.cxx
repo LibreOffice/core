@@ -2102,7 +2102,7 @@ EditorWindow::GetComponentInterface(sal_Bool bCreate)
         if (!pEditEngine)
             CreateEditEngine();
 
-        xPeer = new ::svt::TextWindowPeer(*GetEditView());
+        xPeer = svt::createTextWindowPeer(*GetEditView());
         SetComponentInterface(xPeer);
     }
     return xPeer;

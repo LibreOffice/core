@@ -20,45 +20,24 @@
 #ifndef INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
 #define INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 #include <svtools/svtdllapi.h>
-#include <toolkit/awt/vclxwindow.hxx>
 
-#include <memory>
-
-class TextEngine;
+namespace com { namespace sun { namespace star { namespace awt {
+    class XWindowPeer;
+} } } }
 class TextView;
 
-namespace svt
-{
-    class AccessibleFactoryAccess ;
+namespace svt {
 
-class TextWindowPeer: public ::VCLXWindow
-{
-public:
-    SVT_DLLPUBLIC TextWindowPeer(::TextView & rView);
-
-    virtual ~TextWindowPeer();
-
-private:
-    // VCLXWindow inherits funny copy constructor and assignment operator from
-    // ::cppu::OWeakObject, so override them here:
-
-    TextWindowPeer(TextWindowPeer &); // not implemented
-
-    void operator =(TextWindowPeer); // not implemented
-
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleContext >
-    CreateAccessibleContext();
-
-    ::TextEngine & m_rEngine;
-    ::TextView & m_rView;
-
-    ::std::auto_ptr< ::svt::AccessibleFactoryAccess  >  m_pFactoryAccess;
-};
+css::uno::Reference<css::awt::XWindowPeer> SVT_DLLPUBLIC createTextWindowPeer(
+    TextView & view);
 
 }
 
-#endif // INCLUDED_SVTOOLS_TEXTWINDOWPEER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
