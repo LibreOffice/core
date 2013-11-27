@@ -32,6 +32,7 @@ class DataStream : boost::noncopyable, public sfx2::SvBaseLink, ScRefreshTimer
 {
     OString ConsumeLine();
     void MoveData();
+    void Text2Doc();
     DECL_LINK( RefreshHdl, void* );
 
 public:
