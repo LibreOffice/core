@@ -53,7 +53,7 @@ typedef std::vector< UnknownAttribute > UnknownAttributeList;
 class SAX_DLLPUBLIC FastTokenHandlerBase
 {
     public:
-        virtual ~FastTokenHandlerBase() {}
+        virtual ~FastTokenHandlerBase();
         virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const = 0;
 };
 
