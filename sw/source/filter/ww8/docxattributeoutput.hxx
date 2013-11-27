@@ -609,6 +609,9 @@ protected:
     /// Sfx item RES_PARATR_GRABBAG
     virtual void ParaGrabBag( const SfxGrabBagItem& );
 
+    /// Sfx item RES_CHRATR_GRABBAG
+    virtual void CharGrabBag( const SfxGrabBagItem& );
+
     // Sfx item RES_PARATR_OUTLINELEVEL
     virtual void ParaOutlineLevel( const SfxUInt16Item& );
 

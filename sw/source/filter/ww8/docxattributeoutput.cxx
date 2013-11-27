@@ -6235,6 +6235,73 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
     }
 }
 
+void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
+{
+    const std::map< OUString, com::sun::star::uno::Any >& rMap = rItem.GetGrabBag();
+
+    // get original font names and check if they have changed during the edition
+    sal_Bool bWriteCSTheme = sal_True;
+    sal_Bool bWriteAsciiTheme = sal_True;
+    if ( m_pFontsAttrList )
+    {
+        OUString sFontName;
+        for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
+        {
+            if ( i->first == "CharThemeFontNameCs" )
+            {
+                if ( i->second >>= sFontName )
+                    bWriteCSTheme =
+                            ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_cs ) ) == sFontName );
+            }
+            else if ( i->first == "CharThemeFontNameAscii" )
+            {
+                if ( i->second >>= sFontName )
+                    bWriteAsciiTheme =
+                            ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sFontName );
+            }
+        }
+    }
+
+    // save theme attributes back to the run properties
+    OUString str;
+    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
+    {
+        if ( i->first == "CharThemeNameAscii" && bWriteAsciiTheme )
+        {
+            i->second >>= str;
+            if (!m_pFontsAttrList)
+                m_pFontsAttrList = m_pSerializer->createAttrList();
+            m_pFontsAttrList->add( FSNS( XML_w, XML_asciiTheme ),
+                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+        }
+        else if ( i->first == "CharThemeNameCs" && bWriteCSTheme )
+        {
+            i->second >>= str;
+            if (!m_pFontsAttrList)
+                m_pFontsAttrList = m_pSerializer->createAttrList();
+            m_pFontsAttrList->add( FSNS( XML_w, XML_cstheme ),
+                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+        }
+        else if ( i->first == "CharThemeNameHAnsi" && bWriteAsciiTheme )
+        // this is not a mistake: in LibO we don't directly support the hAnsi family
+        // of attributes so we save the same value from ascii attributes instead
+        {
+            i->second >>= str;
+            if (!m_pFontsAttrList)
+                m_pFontsAttrList = m_pSerializer->createAttrList();
+            m_pFontsAttrList->add( FSNS( XML_w, XML_hAnsiTheme ),
+                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+        }
+        else if( i->first == "CharThemeFontNameCs"   ||
+                i->first == "CharThemeFontNameAscii" )
+        {
+            // just skip these, they were processed before
+        }
+        else
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << i->first);
+    }
+}
+
 DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML )
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),

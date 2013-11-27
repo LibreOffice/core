@@ -393,6 +393,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     const SvxFontItem &rParentFont = ItemGet<SvxFontItem>(
         (const SwTxtFmtColl&)rNd.GetAnyFmtColl(), nFontId);
     const SvxFontItem *pFont = &rParentFont;
+    const SfxPoolItem *aGrabBag;
 
     SfxItemSet aExportSet(*rNd.GetSwAttrSet().GetPool(),
         RES_CHRATR_BEGIN, RES_TXTATR_END - 1);
@@ -436,6 +437,8 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
                         {
                             if (nWhichId == nFontId)
                                 pFont = &(item_cast<SvxFontItem>(*pItem));
+                            else if (nWhichId == RES_CHRATR_GRABBAG)
+                                aGrabBag = pItem;
                             else
                                 aRangeItems[nWhichId] = pItem;
                         }
@@ -510,6 +513,9 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
         if ( rParentFont != aFont )
             m_rExport.AttrOutput().OutputItem( aFont );
     }
+
+    // Output grab bag attributes
+    m_rExport.AttrOutput().OutputItem( *aGrabBag );
 }
 
 void SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)

@@ -3132,6 +3132,10 @@ void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
 {
 }
 
+void RtfAttributeOutput::CharGrabBag(const SfxGrabBagItem& /*rItem*/)
+{
+}
+
 void RtfAttributeOutput::ParaOutlineLevel(const SfxUInt16Item& /*rItem*/)
 {
 }

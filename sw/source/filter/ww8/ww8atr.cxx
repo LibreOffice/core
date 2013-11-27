@@ -4733,6 +4733,10 @@ void WW8AttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
 {
 }
 
+void WW8AttributeOutput::CharGrabBag(const SfxGrabBagItem& /*rItem*/)
+{
+}
+
 void WW8AttributeOutput::ParaOutlineLevel(const SfxUInt16Item& /*rItem*/)
 {
 }
@@ -5283,6 +5287,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_PARATR_OUTLINELEVEL:
             ParaOutlineLevel(static_cast<const SfxUInt16Item&>(rHt));
+            break;
+        case RES_CHRATR_GRABBAG:
+            CharGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
             break;
 
         default:
