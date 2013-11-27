@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_COLORFORMAT_HXX
+#define SC_COLORFORMAT_HXX
+
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -20,19 +23,29 @@ class ScDocument;
 class ScDataBarSettingsDlg : public ModalDialog
 {
 private:
-    OKButton* mpBtnOk;
-    CancelButton* mpBtnCancel;
+    OKButton maBtnOk;
+    CancelButton maBtnCancel;
+    FixedLine maFlBarColors;
+    FixedLine maFlAxes;
+    FixedLine maFlValues;
 
-    ColorListBox* mpLbPos;
-    ColorListBox* mpLbNeg;
-    ColorListBox* mpLbAxisCol;
+    FixedText maFtMin;
+    FixedText maFtMax;
+    FixedText maFtPositive;
+    FixedText maFtNegative;
+    FixedText maFtPosition;
+    FixedText maFtAxisColor;
 
-    ListBox* mpLbTypeMin;
-    ListBox* mpLbTypeMax;
-    ListBox* mpLbAxisPos;
+    ColorListBox maLbPos;
+    ColorListBox maLbNeg;
+    ColorListBox maLbAxisCol;
 
-    Edit* mpEdMin;
-    Edit* mpEdMax;
+    ListBox maLbTypeMin;
+    ListBox maLbTypeMax;
+    ListBox maLbAxisPos;
+
+    Edit maEdMin;
+    Edit maEdMax;
 
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
@@ -50,5 +63,7 @@ public:
 
     ScDataBarFormatData* GetData();
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

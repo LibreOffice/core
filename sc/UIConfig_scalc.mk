@@ -29,6 +29,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/basicshapes \
 	sc/uiconfig/scalc/toolbar/calloutshapes \
 	sc/uiconfig/scalc/toolbar/colorbar \
+	sc/uiconfig/scalc/toolbar/datastreams \
 	sc/uiconfig/scalc/toolbar/drawbar \
 	sc/uiconfig/scalc/toolbar/drawobjectbar \
 	sc/uiconfig/scalc/toolbar/extrusionobjectbar \
@@ -64,16 +65,20 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/analysisofvariancedialog \
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/consolidatedialog \
+	sc/uiconfig/scalc/ui/correlationdialog \
+	sc/uiconfig/scalc/ui/covariancedialog \
 	sc/uiconfig/scalc/ui/createnamesdialog \
 	sc/uiconfig/scalc/ui/dataform \
-	sc/uiconfig/scalc/ui/databaroptions \
+	sc/uiconfig/scalc/ui/datastreams \
 	sc/uiconfig/scalc/ui/definedatabaserangedialog \
 	sc/uiconfig/scalc/ui/definename \
 	sc/uiconfig/scalc/ui/deletecells \
 	sc/uiconfig/scalc/ui/deletecontents \
 	sc/uiconfig/scalc/ui/descriptivestatisticsdialog \
+	sc/uiconfig/scalc/ui/doubledialog \
 	sc/uiconfig/scalc/ui/erroralerttabpage \
 	sc/uiconfig/scalc/ui/externaldata \
+	sc/uiconfig/scalc/ui/exponentialsmoothingdialog \
 	sc/uiconfig/scalc/ui/filldlg \
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
@@ -83,9 +88,11 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/headerdialog \
 	sc/uiconfig/scalc/ui/headerfootercontent \
 	sc/uiconfig/scalc/ui/headerfooterdialog \
+	sc/uiconfig/scalc/ui/inputstringdialog \
 	sc/uiconfig/scalc/ui/insertcells \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
+	sc/uiconfig/scalc/ui/integerdialog \
 	sc/uiconfig/scalc/ui/leftfooterdialog \
 	sc/uiconfig/scalc/ui/leftheaderdialog \
 	sc/uiconfig/scalc/ui/namerangesdialog \
@@ -108,6 +115,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/samplingdialog \
 	sc/uiconfig/scalc/ui/standardfilterdialog \
 	sc/uiconfig/scalc/ui/scgeneralpage \
+	sc/uiconfig/scalc/ui/searchresults \
 	sc/uiconfig/scalc/ui/selectrange \
 	sc/uiconfig/scalc/ui/selectsource \
 	sc/uiconfig/scalc/ui/sheetprintpage \
@@ -130,6 +138,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/ungroupdialog \
 	sc/uiconfig/scalc/ui/validationhelptabpage \
 	sc/uiconfig/scalc/ui/movecopysheet \
+	sc/uiconfig/scalc/ui/movingaveragedialog \
 ))
 
 # vim: set noet sw=4 ts=4:
