@@ -25,10 +25,6 @@
 
 //see attrib.hrc in old chart
 
-#define GRP_LEGEND                  1
-#define FL_LEGEND_TEXTORIENT        2
-#define FT_LEGEND_TEXTDIR           3
-#define LB_LEGEND_TEXTDIR           4
 
 //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
 // ID's for title rotation tabpage

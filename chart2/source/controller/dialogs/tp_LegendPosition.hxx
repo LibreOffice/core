@@ -33,13 +33,12 @@ class LegendPositionResources;
 class SchLegendPosTabPage : public SfxTabPage
 {
 private:
-    FixedLine   aGrpLegend;
 
-    boost::scoped_ptr< LegendPositionResources >   m_apLegendPositionResources;
+//     boost::scoped_ptr< LegendPositionResources >   m_apLegendPositionResources;
+    LegendPositionResources* m_pLegendPositionResources;
+    VclBox*                  m_pBxPosition;
 
-    FixedLine           m_aFlTextOrient;
-    FixedText               m_aFtTextDirection;
-    TextDirectionListBox    m_aLbTextDirection;
+    TextDirectionListBox*    m_pLbTextDirection;
 
 public:
     SchLegendPosTabPage(Window* pParent, const SfxItemSet& rInAttrs);
