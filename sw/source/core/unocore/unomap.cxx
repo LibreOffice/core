@@ -511,6 +511,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry aCharAndParaMap_Impl[] =
                 {
                     COMPLETE_TEXT_CURSOR_MAP
+                    { SW_PROP_NMID(UNO_NAME_CHAR_INTEROP_GRAB_BAG), RES_CHRATR_GRABBAG, CPPU_E2T(CPPUTYPE_PROPERTYVALUE), PROPERTY_NONE, 0 }, \
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;

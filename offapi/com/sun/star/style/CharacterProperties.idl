@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/table/BorderLine2.idl>
 #include <com/sun/star/table/ShadowFormat.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
 
 
  module com {  module sun {  module star {  module style {
@@ -440,6 +441,16 @@ published service CharacterProperties
      *  @since LibreOffice 4.2
     **/
     [optional, property] com::sun::star::util::Color CharHighlight;
+
+    /** Grab bag of character properties, used as a string-any map for interim interop purposes.
+
+        @since LibreOffice 4.2
+
+        <p>This property is intentionally not handled by the ODF filter. Any
+        member that should be handled there should be first moved out from this grab
+        bag to a separate property.</p>
+    */
+    [optional, property] sequence<com::sun::star::beans::PropertyValue> CharInteropGrabBag;
 
 };
 

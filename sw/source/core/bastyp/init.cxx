@@ -293,6 +293,7 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY3
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_GRABBAG
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -501,6 +502,8 @@ void _InitCore()
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY2 );
     aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
+
+    aAttrTab[ RES_CHRATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_CHRATR_GRABBAG );
 
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( aEmptyOUStr );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;

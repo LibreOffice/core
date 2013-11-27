@@ -807,6 +807,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0775 UNO_NAME_FRAME_INTEROP_GRAB_BAG */             {MAP_CHAR_LEN("FrameInteropGrabBag")},
 /* 0776 UNO_NAME_CHAR_HIGHLIGHT */                     {MAP_CHAR_LEN("CharHighlight")},
 /* 0777 UNO_NAME_STYLE_INTEROP_GRAB_BAG */             {MAP_CHAR_LEN("StyleInteropGrabBag")},
+/* 0778 UNO_NAME_CHAR_INTEROP_GRAB_BAG */              {MAP_CHAR_LEN("CharInteropGrabBag")},
 
 // new items in this array must match enum SwPropNameIds
 };
