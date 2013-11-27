@@ -226,7 +226,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                QueryBox aQueryBox(GetWindow(), WB_YES_NO | WB_DEF_YES, SW_RES(STR_ROTATE_TO_STANDARD_ORIENTATION) );
+                MessageDialog aQueryBox( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui");
                 if (aQueryBox.Execute() == RET_YES)
                 {
                     GraphicNativeTransform aTransform( aGraphic );
