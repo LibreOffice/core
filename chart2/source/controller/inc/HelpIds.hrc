@@ -19,7 +19,6 @@
 #ifndef CHART_HELPIDS_HRC
 #define CHART_HELPIDS_HRC
 
-#define HID_SCH_LEGEND_POS                                  "CHART2_HID_SCH_LEGEND_POS"
 #define HID_SCH_DATA_DESCR                                  "CHART2_HID_SCH_DATA_DESCR"
 
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
