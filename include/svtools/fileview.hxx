@@ -240,6 +240,7 @@ public:
                             QueryDeleteDlg_Impl( Window* pParent,
                                                  const OUString& rName );
 
+    QueryDeleteResult_Impl  GetQueryDeleteResult() const { return m_eResult; }
     void                    EnableAllButton() { m_pAllButton->Enable(true); }
 };
 

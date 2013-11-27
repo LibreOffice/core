@@ -219,7 +219,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     aDlg.EnableAllButton();
 
                 if ( aDlg.Execute() == RET_OK )
-                    eResult = aDlg.GetResult();
+                    eResult = aDlg.GetQueryDeleteResult();
                 else
                     return;
 
