@@ -2279,7 +2279,9 @@ void DocxAttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t p
 
     const SwFmtRowSplit& rSplittable = pLineFmt->GetRowSplit( );
     const char* pCantSplit = ( !rSplittable.GetValue( ) ) ? "true" : "false";
-
+    // if rSplittable is true then no need to write <w:cantSplit w:val="false"/>
+    // as default row prop is allow row to break across page.
+    if( !rSplittable.GetValue( ) )
     m_pSerializer->singleElementNS( XML_w, XML_cantSplit,
            FSNS( XML_w, XML_val ), pCantSplit,
            FSEND );
