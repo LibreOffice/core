@@ -42,6 +42,7 @@ struct ScQueryParamBase
     bool            bCaseSens;
     bool            bRegExp;
     bool            bDuplicate;
+    bool            mbRangeLookup;      ///< for spreadsheet functions like MATCH, LOOKUP, HLOOKUP, VLOOKUP
 
     virtual ~ScQueryParamBase();
 
