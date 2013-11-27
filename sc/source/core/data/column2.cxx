@@ -2752,9 +2752,9 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
                 const double* pNum = NULL;
                 rtl_uString** pStr = NULL;
                 if (pColArray->mpNumArray)
-                    pNum = &(*pColArray->mpNumArray)[0];
+                    pNum = &(*pColArray->mpNumArray)[nRow1];
                 if (pColArray->mpStrArray)
-                    pStr = &(*pColArray->mpStrArray)[0];
+                    pStr = &(*pColArray->mpStrArray)[nRow1];
 
                 return formula::VectorRefArray(pNum, pStr);
             }
@@ -2772,9 +2772,9 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             const double* pNum = NULL;
             rtl_uString** pStr = NULL;
             if (pColArray->mpNumArray)
-                pNum = &(*pColArray->mpNumArray)[0];
+                pNum = &(*pColArray->mpNumArray)[nRow1];
             if (pColArray->mpStrArray)
-                pStr = &(*pColArray->mpStrArray)[0];
+                pStr = &(*pColArray->mpStrArray)[nRow1];
 
             return formula::VectorRefArray(pNum, pStr);
         }
@@ -2790,7 +2790,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
                 return formula::VectorRefArray();
 
             if (static_cast<size_t>(nRow2) < itBlk->size)
-                return formula::VectorRefArray(&(*pColArray->mpNumArray)[0]);
+                return formula::VectorRefArray(&(*pColArray->mpNumArray)[nRow1]);
 
             // Fill the remaining array with values from the following blocks.
             size_t nPos = itBlk->size;
