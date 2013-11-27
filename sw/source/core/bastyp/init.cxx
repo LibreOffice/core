@@ -291,7 +291,7 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BOX
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_SHADOW
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_GRABBAG
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY3
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
@@ -497,10 +497,11 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_BOX - POOLATTR_BEGIN ] =           new SvxBoxItem( RES_CHRATR_BOX );
     aAttrTab[ RES_CHRATR_SHADOW - POOLATTR_BEGIN ] =        new SvxShadowItem( RES_CHRATR_SHADOW );
     aAttrTab[ RES_CHRATR_HIGHLIGHT - POOLATTR_BEGIN ] =     new SvxBrushItem( RES_CHRATR_HIGHLIGHT );
+    aAttrTab[ RES_CHRATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_CHRATR_GRABBAG );
 
 // CharakterAttr - Dummies
-    aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY2 );
     aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
+
 
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( aEmptyOUStr );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;

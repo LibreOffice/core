@@ -95,7 +95,7 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
     RES_CHRATR_BOX,                         // 40
     RES_CHRATR_SHADOW,                      // 41
     RES_CHRATR_HIGHLIGHT,                   // 42
-    RES_CHRATR_DUMMY2,                      // 43
+    RES_CHRATR_GRABBAG,                     // 43
     RES_CHRATR_DUMMY3,                      // 44
 RES_CHRATR_END
 };
