@@ -86,6 +86,15 @@ void AccessibleShapeTreeInfo::SetDocumentWindow (
 
 
 
+uno::Reference<XAccessibleComponent>
+    AccessibleShapeTreeInfo::GetDocumentWindow (void) const
+{
+    return mxDocumentWindow;
+}
+
+
+
+
 void AccessibleShapeTreeInfo::SetControllerBroadcaster (
     const uno::Reference<document::XEventBroadcaster>& rxControllerBroadcaster)
 {

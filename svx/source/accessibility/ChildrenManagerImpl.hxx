@@ -155,6 +155,24 @@ public:
         GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Return the requested accessible child given a shape.  This method
+        searches the list of descriptors for the one that holds the
+        association of the given shape to the requested accessible object
+        and returns that.  If no such descriptor is found that is
+        interpreted so that the specified shape is not visible at the moment.
+        @param xShape
+            The shape for which to return the associated accessible object.
+        @return
+            Returns a reference to the requested accessible child.  The
+            reference is empty if there is no shape descriptor that
+            associates the shape with an accessible object.
+    */
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>
+        GetChild (const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape>& xShape)
+        throw (::com::sun::star::uno::RuntimeException);
+
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
         process with respect separate updates of a modified children list

@@ -198,6 +198,7 @@ public:
     Color   GetPixelColor() const { return aPixelColor; }
     Color   GetBackgroundColor() const { return aBackgroundColor; }
 
+    sal_uInt16  GetBitmapPixel( const sal_uInt16 nPixelNumber );
     sal_uInt16* GetBitmapPixelPtr() { return pPixel; }
 
     void    SetPaintable( sal_Bool bTmp ) { bPaintable = bTmp; }

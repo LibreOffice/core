@@ -923,6 +923,13 @@ void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
     }
 }
 
+// Returns a specific pixel
+
+sal_uInt16 SvxPixelCtl::GetBitmapPixel( const sal_uInt16 nPixel )
+{
+    return( *( pPixel + nPixel ) );
+}
+
 // Resets to the original state of the control
 
 void SvxPixelCtl::Reset()

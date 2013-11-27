@@ -261,6 +261,9 @@ protected:
     /// @Return the object's current bounding box relative to the parent object.
     virtual Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
 
+    /// Calls all Listener to tell they the change.
+    void CommitChange( const com::sun::star::accessibility::AccessibleEventObject& rEvent );
+
     virtual void SAL_CALL disposing();
 
     /// @returns true if it's disposed or in disposing
