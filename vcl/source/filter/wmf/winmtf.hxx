@@ -679,7 +679,6 @@ public:
 
     sal_uInt32          GetMapMode() const { return mnMapMode; };
     void                SetMapMode( sal_uInt32 mnMapMode );
-    void                SetUnitsPerInch( sal_uInt16 nUnitsPerInch );
     void                SetWorldTransform( const XForm& rXForm );
     void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
 
