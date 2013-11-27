@@ -1519,6 +1519,41 @@ public:
 
         return std::pair<bool,bool>(bOk, bTestEqual);
     }
+
+    // To be called only if both isQueryByValue() and isQueryByString()
+    // returned false and range lookup is wanted! In range lookup comparison
+    // numbers are less than strings. Nothing else is compared.
+    std::pair<bool,bool> compareByRangeLookup(
+        ScBaseCell* pCell, SCCOL nCol, SCROW nRow,
+        const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem)
+    {
+        bool bTestEqual = false;
+
+        if (rItem.meType == ScQueryEntry::ByString && rEntry.eOp != SC_LESS && rEntry.eOp != SC_LESS_EQUAL)
+            return std::pair<bool,bool>(false, bTestEqual);
+
+        if (rItem.meType != ScQueryEntry::ByString && rEntry.eOp != SC_GREATER && rEntry.eOp != SC_GREATER_EQUAL)
+            return std::pair<bool,bool>(false, bTestEqual);
+
+        if (pCell)
+        {
+            if (rItem.meType == ScQueryEntry::ByString)
+            {
+                if (pCell->GetCellType() == CELLTYPE_FORMULA && static_cast<ScFormulaCell*>(pCell)->GetErrCode())
+                    // Error values are compared as string.
+                    return std::pair<bool,bool>(false, bTestEqual);
+
+                return std::pair<bool,bool>(pCell->HasValueData(), bTestEqual);
+            }
+
+            return std::pair<bool,bool>(!pCell->HasValueData(), bTestEqual);
+        }
+
+        if (rItem.meType == ScQueryEntry::ByString)
+            return std::pair<bool,bool>(mrTab.HasValueData(nCol, nRow), bTestEqual);
+
+        return std::pair<bool,bool>(!mrTab.HasValueData(nCol, nRow), bTestEqual);
+    }
 };
 
 }
@@ -1579,6 +1614,13 @@ bool ScTable::ValidQuery(
                 {
                     std::pair<bool,bool> aThisRes =
                         aEval.compareByString(pCell, nRow, rEntry, *itr);
+                    aRes.first |= aThisRes.first;
+                    aRes.second |= aThisRes.second;
+                }
+                else if (rParam.mbRangeLookup)
+                {
+                    std::pair<bool,bool> aThisRes =
+                        aEval.compareByRangeLookup(pCell, nCol, nRow, rEntry, *itr);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
