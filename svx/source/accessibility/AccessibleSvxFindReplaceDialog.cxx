@@ -47,12 +47,12 @@ void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::Accessi
         {
             return;
         }
-        Reference < accessibility::XAccessible > xDocAcc = pDocWin->GetAccessible();
+        Reference < css::accessibility::XAccessible > xDocAcc = pDocWin->GetAccessible();
         if ( !xDocAcc.is() )
         {
             return;
         }
-        Reference< accessibility::XAccessibleGetAccFlowTo > xGetAccFlowTo( xDocAcc, UNO_QUERY );
+        Reference< css::accessibility::XAccessibleGetAccFlowTo > xGetAccFlowTo( xDocAcc, UNO_QUERY );
         if ( !xGetAccFlowTo.is() )
         {
             return;
@@ -69,11 +69,11 @@ void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::Accessi
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence( nLen );
             for ( sal_Int32 i = 0; i < nLen; i++ )
             {
-                uno::Reference < accessibility::XAccessible > xAcc;
+                uno::Reference < css::accessibility::XAccessible > xAcc;
                 aAnySeq[i] >>= xAcc;
                 aSequence[i] = xAcc;
             }
-            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence ) );
+            rRelationSet.AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence ) );
         }
     }
 }
