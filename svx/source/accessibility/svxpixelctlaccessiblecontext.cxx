@@ -94,7 +94,7 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int
     ::osl::MutexGuard   aGuard( m_aMutex );
     IsValid();
     if ( i < 0 || i >= getAccessibleChildCount())
-    throw lang::IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
     uno::Reference <XAccessible> xAcc;
     if(pPixelCtl)
     {
