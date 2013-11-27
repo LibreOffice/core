@@ -23,6 +23,7 @@
 #include "ShapeDrawingFragmentHandler.hxx"
 #include "LockedCanvasContext.hxx"
 #include "WpsContext.hxx"
+#include "WpgContext.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
@@ -136,6 +137,26 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext
     return mxWpsContext;
 }
 
+uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpgContext(sal_Int32 nElement)
+{
+    if (!mxWpgContext.is())
+    {
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        ShapePtr pMasterShape;
+
+        switch (getBaseToken(nElement))
+        {
+            case XML_wgp:
+                mxWpgContext.set(new WpgContext(*rFragmentHandler));
+                break;
+            default:
+                break;
+        }
+    }
+
+    return mxWpgContext;
+}
+
 uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
@@ -216,6 +237,9 @@ ShapeContextHandler::getContextHandler()
         case NMSP_wps:
             xResult.set(getWpsContext(mnStartToken));
             break;
+        case NMSP_wpg:
+            xResult.set(getWpgContext(mnStartToken));
+            break;
         default:
             xResult.set(getGraphicShapeContext(mnStartToken));
             break;
@@ -240,7 +264,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
 
     mpThemePtr.reset(new Theme());
 
-    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) || Element == WPS_TOKEN(wsp))
+    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) || Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp))
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!msRelationFragmentPath.isEmpty())
@@ -430,6 +454,18 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                 pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxWpsContext.clear();
+            }
+        }
+        else if (mxWpgContext.is())
+        {
+            ShapePtr pShape = dynamic_cast<WpgContext*>(mxWpgContext.get())->getShape();
+            if (pShape)
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                pShape->setPosition(maPosition);
+                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                xResult = pShape->getXShape();
+                mxWpgContext.clear();
             }
         }
         else if (mpShape.get() != NULL)

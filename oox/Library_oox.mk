@@ -277,6 +277,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/shape/ShapeContextHandler \
     oox/source/shape/ShapeDrawingFragmentHandler \
     oox/source/shape/ShapeFilterBase \
+    oox/source/shape/WpgContext \
     oox/source/shape/WpsContext \
     oox/source/token/namespacemap \
     oox/source/token/propertynames \
