@@ -306,8 +306,6 @@ OUString
                     SdrObject *pSdrObj = pShape->GetSdrObject();
                     if (pSdrObj)
                     {
-                        OUString aTmp(pSdrObj->TakeObjNameSingul());
-
                         if(pSdrObj->ISA(SdrObjCustomShape))
                         {
                             SdrObjCustomShape* pCustomShape = (SdrObjCustomShape*)pSdrObj;
