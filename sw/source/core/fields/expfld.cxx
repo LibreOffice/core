@@ -1155,8 +1155,8 @@ SwInputField::SwInputField( SwInputFieldType* pFieldType,
     , aContent(rContent)
     , aPText(rPrompt)
     , nSubType(nSub)
-    , mpFmtFld( NULL )
     , mbIsFormField( bIsFormField )
+    , mpFmtFld( NULL )
 {
 }
 
