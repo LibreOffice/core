@@ -2031,6 +2031,13 @@ DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGlossary, "testGlossary.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/glossary/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

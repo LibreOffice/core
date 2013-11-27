@@ -207,6 +207,8 @@ private:
     /// Write word/theme/theme1.xml
     void WriteTheme();
 
+    void WriteGlossary();
+
     /// Write customXml/item[n].xml and customXml/itemProps[n].xml
     void WriteCustomXml();
 

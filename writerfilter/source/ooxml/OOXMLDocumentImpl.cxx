@@ -438,6 +438,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         mxThemeDom = importSubStream(OOXMLStream::THEME);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
+        mxGlossaryDocDom = importSubStream(OOXMLStream::GLOSSARY);
+        if (mxGlossaryDocDom.is())
+            resolveGlossaryStream(rStream);
         // Custom xml's are handled as part of grab bag.
         resolveCustomXmlStream(rStream);
 
@@ -523,6 +526,109 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
     }
 }
 
+void OOXMLDocumentImpl::resolveGlossaryStream(Stream & rStream)
+{
+    static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
+    static OUString sStylesWithEffects("http://schemas.microsoft.com/office/2007/relationships/stylesWithEffects");
+    static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
+    static OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
+    static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
+
+    OOXMLStream::Pointer_t pStream;
+    try
+    {
+        pStream = OOXMLDocumentFactory::createStream(mpStream, OOXMLStream::GLOSSARY);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_INFO("writerfilter", "resolveGlossaryStream: exception while "
+                 "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e.Message);
+        return;
+    }
+    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
+    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (mxRelationshipAccess.is())
+    {
+
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
+                mxRelationshipAccess->getAllRelationships();
+        uno::Sequence<uno::Sequence< uno::Any> > mxGlossaryDomListTemp(aSeqs.getLength());
+         sal_Int32 counter = 0;
+         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+         {
+              OOXMLStream::Pointer_t gStream;
+              uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
+              //Follows following aSeq[0] is Id, aSeq[1] is Type, aSeq[2] is Target
+              OUString gId(aSeq[0].Second);
+              OUString gType(aSeq[1].Second);
+              OUString gTarget(aSeq[2].Second);
+              OUString contentType;
+
+              OOXMLStream::StreamType_t nType;
+              bool bFound = true;
+              if(gType.compareTo(sSettingsType) == 0)
+              {
+                  nType = OOXMLStream::SETTINGS;
+                  contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
+              }
+              else if(gType.compareTo(sStylesType) == 0)
+              {
+                  nType = OOXMLStream::STYLES;
+                  contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
+              }
+              else if(gType.compareTo(sWebSettings) == 0)
+              {
+                  nType = OOXMLStream::WEBSETTINGS;
+                  contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
+              }
+              else if(gType.compareTo(sFonttableType) == 0)
+              {
+              nType = OOXMLStream::FONTTABLE;
+              contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
+              }
+              else
+              {
+                  bFound = false;
+                  //"Unhandled content-type while grab bagging Glossary Folder");
+              }
+
+              if (bFound)
+              {
+                  uno::Reference<xml::dom::XDocument> xDom;
+                  try
+                  {
+                      gStream = OOXMLDocumentFactory::createStream(pStream, nType);
+                      uno::Reference<io::XInputStream> xInputStream = gStream->getDocumentStream();
+                      uno::Reference<uno::XComponentContext> xContext(pStream->getContext());
+                      uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
+                      xDom = xDomBuilder->parse(xInputStream);
+                  }
+                  catch (uno::Exception const& e)
+                  {
+                      SAL_INFO("writerfilter glossary grab bag", "importSubStream: exception while "
+                      "parsing stream of Type" << nType << " : " << e.Message);
+                      return;
+                  }
+
+                  if (xDom.is())
+                  {
+                      uno::Sequence< uno::Any > glossaryTuple (5);
+                      glossaryTuple[0] = uno::makeAny(xDom);
+                      glossaryTuple[1] = uno::makeAny(gId);
+                      glossaryTuple[2] = uno::makeAny(gType);
+                      glossaryTuple[3] = uno::makeAny(gTarget);
+                      glossaryTuple[4] = uno::makeAny(contentType);
+                      mxGlossaryDomListTemp[counter] = glossaryTuple;
+                      counter++;
+                  }
+              }
+          }
+          mxGlossaryDomListTemp.realloc(counter);
+          mxGlossaryDomList = mxGlossaryDomListTemp;
+      }
+}
+
+
 void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
 {
     // Resolving all ActiveX[n].xml files from ActiveX folder.
@@ -577,6 +683,16 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
         mxActiveXDomList = mxActiveXDomListTemp;
         mxActiveXBinList = mxActiveXBinListTemp;
     }
+}
+
+uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getGlossaryDocDom( )
+{
+    return mxGlossaryDocDom;
+}
+
+uno::Sequence<uno::Sequence< uno::Any> > OOXMLDocumentImpl::getGlossaryDomList()
+{
+    return mxGlossaryDomList;
 }
 
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OUString & rId)

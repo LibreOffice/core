@@ -40,6 +40,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
 
     uno::Reference<frame::XModel> mxModel;
     uno::Reference<drawing::XDrawPage> mxDrawPage;
+    uno::Reference<xml::dom::XDocument> mxGlossaryDocDom;
+    uno::Sequence < uno::Sequence< uno::Any > > mxGlossaryDomList;
     uno::Reference<xml::sax::XFastShapeContextHandler> mxShapeContext;
     uno::Reference<xml::dom::XDocument> mxThemeDom;
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxCustomXmlDomList;
@@ -73,7 +75,7 @@ protected:
     void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
     void resolveCustomXmlStream(Stream & rStream);
     void resolveActiveXStream(Stream & rStream);
-
+    void resolveGlossaryStream(Stream & rStream);
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLDocumentImpl();
@@ -123,6 +125,8 @@ public:
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getCustomXmlDomPropsList();
     virtual uno::Sequence<uno::Reference<xml::dom::XDocument> > getActiveXDomList();
     virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList();
+    virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom();
+    virtual uno::Sequence<uno::Sequence< uno::Any> >  getGlossaryDomList();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX
