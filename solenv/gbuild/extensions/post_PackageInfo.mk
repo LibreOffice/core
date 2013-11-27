@@ -59,11 +59,17 @@ define gb_PackageInfo_emit_l10n_for_one_uifile
 
 endef
 
+define gb_PackageInfo_emit_l10n_for_one_configfile
+echo "$(LIBO_SHARE_FOLDER)/registry/$(2)$(1).xcd" >> $(gb_PackageInfo_get_target)/l10n-$(1).files
+
+endef 
+
 define gb_PackageInfo_emit_l10n_for_one_lang
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/l10n-$(1).$(suf))
 $(if $(filter-out qtz en-US,$(1)),$(foreach packagedir,$(patsubst %/,%,$(gb_AllLangPackage_ALLDIRS)),$(call gb_PackageInfo_emit_l10n_for_one_alllangpackage,$(packagedir),$(1))))
 $(if $(filter $(gb_AllLangResTarget_LANGS),$(1)),$(foreach target,$(gb_AllLangResTarget_ALLTARGETS),$(call gb_PackageInfo_emit_l10n_for_one_ressource,$(target),$(1))))
 $(foreach uifile,$(gb_UIConfig_ALLFILES),$(call gb_PackageInfo_emit_l10n_for_one_uifile,$(1),$(firstword $(subst :,$(WHITESPACE),$(uifile))),$(lastword $(subst :,$(WHITESPACE),$(uifile)))))
+$(if $(filter $(gb_Configuration_LANGS),$(1)),$(foreach configfile,Langpack- res/fcfg_langpack_ res/registry_,$(call gb_PackageInfo_emit_l10n_for_one_configfile,$(1),$(configfile))))
 
 endef
 
