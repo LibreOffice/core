@@ -11,6 +11,7 @@
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/strbuf.hxx>
 #include <salhelper/thread.hxx>
@@ -237,14 +238,6 @@ void DataStream::Decode(const OUString& rURL, const OUString& rRange,
     mnSettings = nSettings;
     mpEndRange.reset( NULL );
 
-    SvStream *pStream = 0;
-    if (mnSettings & SCRIPT_STREAM)
-        pStream = new SvScriptStream(msURL);
-    else
-        pStream = new SvFileStream(msURL, STREAM_READ);
-    mxReaderThread = new datastreams::ReaderThread( pStream );
-    mxReaderThread->launch();
-
     mbValuesInLine = mnSettings & VALUES_IN_LINE;
 
     if (msMove == "NO_MOVE")
@@ -271,6 +264,16 @@ void DataStream::StartImport()
         return;
     mbIsUndoEnabled = mpScDocument->IsUndoEnabled();
     mpScDocument->EnableUndo(false);
+    if (!mxReaderThread.is())
+    {
+        SvStream *pStream = 0;
+        if (mnSettings & SCRIPT_STREAM)
+            pStream = new SvScriptStream(msURL);
+        else
+            pStream = new SvFileStream(msURL, STREAM_READ);
+        mxReaderThread = new datastreams::ReaderThread( pStream );
+        mxReaderThread->launch();
+    }
     mbRunning = true;
     AutoTimer::Start();
 }
@@ -378,7 +381,18 @@ sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
         const OUString& , const css::uno::Any& )
 {
     MakeToolbarVisible();
-    StartImport();
+    StopImport();
+    bool bStart = true;
+    if (mnSettings & SCRIPT_STREAM && !mxReaderThread.is() &&
+        officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::get() >= 1)
+    {
+        MessageDialog aQBox( NULL, "QueryRunStreamScriptDialog", "modules/scalc/ui/queryrunstreamscriptdialog.ui");
+        aQBox.set_primary_text( aQBox.get_primary_text().replaceFirst("%URL", msURL) );
+        if (RET_YES != aQBox.Execute())
+            bStart = false;
+    }
+    if (bStart)
+        StartImport();
     return SUCCESS;
 }
 
