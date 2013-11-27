@@ -1325,6 +1325,17 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         SCROW& nFoundRow, bool bSearchForEqualAfterMismatch,
         bool bIgnoreMismatchOnLeadingStringsP )
 {
+    // Set and automatically reset mpParam->mbRangeLookup when returning. We
+    // could use comphelper::FlagRestorationGuard, but really, that one is
+    // overengineered for this simple purpose here.
+    struct BoolResetter
+    {
+        bool& mr;
+        bool  mb;
+        BoolResetter( bool& r, bool b ) : mr(r), mb(r) { r = b; }
+        ~BoolResetter() { mr = mb; }
+    } aRangeLookupResetter( mpParam->mbRangeLookup, true);
+
     nFoundCol = MAXCOL+1;
     nFoundRow = MAXROW+1;
     SetStopOnMismatch( true ); // assume sorted keys
@@ -1333,7 +1344,22 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     bool bRegExp = mpParam->bRegExp && mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
     bool bBinary = !bRegExp && mpParam->bByRow && (mpParam->GetEntry(0).eOp ==
             SC_LESS_EQUAL || mpParam->GetEntry(0).eOp == SC_GREATER_EQUAL);
-    if (bBinary ? (BinarySearch() ? GetThis() : 0) : GetFirst())
+    bool bFound = false;
+    if (bBinary)
+    {
+        if (BinarySearch())
+        {
+            // BinarySearch() already positions correctly and only needs real
+            // query comparisons afterwards, skip the verification check below.
+            mpParam->mbRangeLookup = false;
+            bFound = GetThis();
+        }
+    }
+    else
+    {
+        bFound = GetFirst();
+    }
+    if (bFound)
     {
         // First equal entry or last smaller than (greater than) entry.
         SCSIZE nColRowSave;
@@ -1351,9 +1377,43 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         {
             // Step back to last in range and adjust position markers for
             // GetNumberFormat() or similar.
+            SCCOL nColDiff = nCol - nFoundCol;
             nCol = nFoundCol;
             nRow = nFoundRow;
             nColRow = nColRowSave;
+            if (mpParam->mbRangeLookup)
+            {
+                // Verify that the found entry does not only fulfill the range
+                // lookup but also the real query, i.e. not numeric was found
+                // if query is ByString and vice versa.
+                mpParam->mbRangeLookup = false;
+                // Step back the last field advance if GetNext() did one.
+                if (bAdvanceQuery && nColDiff)
+                {
+                    SCSIZE nEntries = mpParam->GetEntryCount();
+                    for (SCSIZE j=0; j < nEntries; ++j)
+                    {
+                        ScQueryEntry& rEntry = mpParam->GetEntry( j );
+                        if (rEntry.bDoQuery)
+                        {
+                            if (rEntry.nField - nColDiff >= 0)
+                                rEntry.nField -= nColDiff;
+                            else
+                            {
+                                assert(!"FindEqualOrSortedLastInRange: rEntry.nField -= nColDiff < 0");
+                            }
+                        }
+                        else
+                            break;  // for
+                    }
+                }
+                // Check it.
+                if (!GetThis())
+                {
+                    nFoundCol = MAXCOL+1;
+                    nFoundRow = MAXROW+1;
+                }
+            }
         }
     }
     if ( IsEqualConditionFulfilled() )

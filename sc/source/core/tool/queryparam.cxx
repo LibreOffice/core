@@ -61,7 +61,8 @@ ScQueryParamBase::ScQueryParamBase() :
     bInplace(true),
     bCaseSens(false),
     bRegExp(false),
-    bDuplicate(false)
+    bDuplicate(false),
+    mbRangeLookup(false)
 {
     for (size_t i = 0; i < MAXQUERY; ++i)
         maEntries.push_back(new ScQueryEntry);
@@ -69,7 +70,7 @@ ScQueryParamBase::ScQueryParamBase() :
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
     bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens),
-    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate),
+    bRegExp(r.bRegExp), bDuplicate(r.bDuplicate), mbRangeLookup(r.mbRangeLookup),
     maEntries(r.maEntries)
 {
 }
