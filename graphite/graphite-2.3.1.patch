@@ -2360,6 +2360,17 @@
  	{
  	}
  
+--- misc/silgraphite-2.3.1/engine/include/graphite/Segment.h	2009-01-29 09:33:19.000000000 +0100
++++ misc/build/silgraphite-2.3.1/engine/include/graphite/Segment.h	2013-08-14 15:10:53.363864046 +0200
+@@ -64,7 +64,7 @@
+ 	virtual ~Segment();
+ 
+ 	// Basic copy constructor:
+-	Segment(Segment & seg);
++	Segment( const Segment&);
+ 
+ 	// For making modified copies of segments:
+ 	static Segment * LineContextSegment(Segment & seg, bool fStartLine, bool fEndLine);
 --- misc/build/silgraphite-2.3.1/engine/src/segment/Segment.cpp.bak	2010-06-23 19:59:54.611660400 +0700
 +++ misc/build/silgraphite-2.3.1/engine/src/segment/Segment.cpp	2010-06-23 21:30:16.335460400 +0700
 @@ -246,6 +246,8 @@
@@ -2371,6 +2382,15 @@
  
  //	m_psstrm = NULL;
  	m_prgslout = NULL;
+@@ -435,7 +435,7 @@
+ /*----------------------------------------------------------------------------------------------
+ 	Basic copy method.
+ ----------------------------------------------------------------------------------------------*/
+-Segment::Segment(Segment & seg)
++Segment::Segment( const Segment& seg)
+ {
+ 	int islout;
+
 @@ -2988,9 +2988,10 @@
  	return kresOk;
  }
