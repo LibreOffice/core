@@ -21,24 +21,16 @@
 #define INCLUDED_SVX_LINKWARN_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <vcl/layout.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxLinkWarningDialog : public SfxModalDialog
+class SVX_DLLPUBLIC SvxLinkWarningDialog : public MessageDialog
 {
 private:
-    FixedImage              m_aQueryImage;
-    FixedText               m_aInfoText;
-    OKButton                m_aLinkGraphicBtn;
-    CancelButton            m_aEmbedGraphicBtn;
-    FixedLine               m_aOptionLine;
-    CheckBox                m_aWarningOnBox;
-
-    void                    InitSize();
+    CheckBox* m_pWarningOnBox;
 
 public:
-             SvxLinkWarningDialog( Window* pParent, const OUString& _rFileName );
+    SvxLinkWarningDialog(Window* pParent, const OUString& _rFileName);
     virtual ~SvxLinkWarningDialog();
 };
 

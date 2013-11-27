@@ -48,7 +48,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/imapdlg.src \
     svx/source/dialog/langbox.src \
     svx/source/dialog/language.src \
-    svx/source/dialog/linkwarn.src \
     svx/source/dialog/passwd.src \
     svx/source/dialog/prtqry.src \
     svx/source/dialog/ruler.src \
