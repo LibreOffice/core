@@ -295,7 +295,7 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.println("getCharacterAttributes(chCount)");
+            log.println("getCharacterAttributes(chCount = " + chCount + ")");
             oObj.getCharacterAttributes(chCount, attr);
             log.println("Exception was expected");
             res &= false;
@@ -305,7 +305,8 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.println("getCharacterAttributes(chCount-1)");
+            log.println(
+                "getCharacterAttributes(chCount-1 = " + (chCount - 1) + ")");
 
             PropertyValue[] props = oObj.getCharacterAttributes(chCount - 1,
                                                                 attr);
