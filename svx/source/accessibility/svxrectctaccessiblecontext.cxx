@@ -706,6 +706,12 @@ void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton, sal_Bool bFire
     selectChild(PointToIndex( eButton, mbAngleMode ), bFireFocus);
 }
 
+void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
+{
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
+}
+
 void SAL_CALL SvxRectCtlAccessibleContext::disposing()
 {
     if( !rBHelper.bDisposed )

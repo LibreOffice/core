@@ -70,6 +70,12 @@ public:
     void SetDocumentWindow (const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleComponent>& rxViewWindow);
 
+    /** Deprecated.  Don't use this method.
+    */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessibleComponent>
+        GetDocumentWindow (void) const;
+
     /** Deprecated.   Use the correctly named SetModelBroadcaster method
         instead.
     */
