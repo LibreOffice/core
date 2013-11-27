@@ -452,7 +452,6 @@ void SwCrsrShell::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNew
 bool SwCrsrShell::bColumnChange()
 {
 
-    sal_uInt16 nCurrCol = 0;
     SwFrm* pCurrFrm = GetCurrFrm(sal_False);
 
     if (pCurrFrm == NULL)
