@@ -1262,9 +1262,13 @@ class NoteEntryCollector
     std::vector<sc::NoteEntry>& mrNotes;
     SCTAB mnTab;
     SCCOL mnCol;
+    SCROW mnStartRow;
+    SCROW mnEndRow;
 public:
-    NoteEntryCollector( std::vector<sc::NoteEntry>& rNotes, SCTAB nTab, SCCOL nCol ) :
-        mrNotes(rNotes), mnTab(nTab), mnCol(nCol) {}
+    NoteEntryCollector( std::vector<sc::NoteEntry>& rNotes, SCTAB nTab, SCCOL nCol,
+            SCROW nStartRow = 0, SCROW nEndRow = MAXROW) :
+        mrNotes(rNotes), mnTab(nTab), mnCol(nCol),
+        mnStartRow(nStartRow), mnEndRow(nEndRow) {}
 
     void operator() (const sc::CellNoteStoreType::value_type& node) const
     {
@@ -1275,7 +1279,14 @@ public:
         sc::cellnote_block::const_iterator it = sc::cellnote_block::begin(*node.data);
         sc::cellnote_block::const_iterator itEnd = sc::cellnote_block::end(*node.data);
         size_t nOffset = 0;
-        for (; it != itEnd; ++it, ++nOffset)
+        if(nTopRow < size_t(mnStartRow))
+        {
+            std::advance(it, mnStartRow - nTopRow);
+            nOffset = mnStartRow - nTopRow;
+        }
+
+        for (; it != itEnd && nTopRow + nOffset <= size_t(mnEndRow);
+                ++it, ++nOffset)
         {
             ScAddress aPos(mnCol, nTopRow + nOffset, mnTab);
             mrNotes.push_back(sc::NoteEntry(aPos, *it));
@@ -1288,6 +1299,22 @@ public:
 void ScColumn::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
     std::for_each(maCellNotes.begin(), maCellNotes.end(), NoteEntryCollector(rNotes, nTab, nCol));
+}
+
+void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
+        std::vector<sc::NoteEntry>& rNotes ) const
+{
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maCellNotes.position(nStartRow);
+    sc::CellNoteStoreType::const_iterator it = aPos.first;
+    if (it == maCellNotes.end())
+        // Invalid row number.
+        return;
+
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aEndPos =
+        maCellNotes.position(nEndRow);
+    sc::CellNoteStoreType::const_iterator itEnd = aEndPos.first;
+
+    std::for_each(it, itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
