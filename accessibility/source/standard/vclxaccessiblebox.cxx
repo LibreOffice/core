@@ -409,7 +409,7 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount (void)
 
     // There is one action for drop down boxes (toggle popup) and none for
     // the other boxes.
-    return m_bIsDropDownBox ? 0 : 1;
+    return m_bIsDropDownBox ? 1 : 0;
 }
 
 sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
