@@ -424,6 +424,8 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                     'rootObject':self.rootObjectId }
         return project
 
+    # For some reverse-engineered documentation on the project.pbxproj format,
+    # see http://www.monobjc.net/xcode-project-file-format.html .
     def write_xcodeproj(self, moduledir, modulename):
         xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % modulename)
         try:
