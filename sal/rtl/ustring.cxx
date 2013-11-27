@@ -555,14 +555,14 @@ void SAL_CALL rtl_uString_newFromCodePoints(
 static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen )
 {
     int             n;
-    sal_uChar       c;
+    unsigned char       c;
     const sal_Char* pEndStr;
 
     n = 0;
     pEndStr  = pStr+nLen;
     while ( pStr < pEndStr )
     {
-        c = (sal_uChar)*pStr;
+        c = (unsigned char)*pStr;
 
         if ( !(c & 0x80) )
             pStr++;

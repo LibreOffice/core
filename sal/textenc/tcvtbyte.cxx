@@ -32,7 +32,7 @@ sal_Size ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
                               SAL_UNUSED_PARAMETER sal_uInt32,
                               sal_uInt32* pInfo, sal_Size* pSrcCvtBytes )
 {
-    sal_uChar               c;
+    unsigned char               c;
     sal_Unicode*            pEndDestBuf;
     const char*         pEndSrcBuf;
 
@@ -48,7 +48,7 @@ sal_Size ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
         }
 
         /* 0-31 (all Control-Character get the same Unicode value) */
-        c = (sal_uChar)*pSrcBuf;
+        c = (unsigned char)*pSrcBuf;
         if ( c <= 0x1F )
             *pDestBuf = (sal_Unicode)c;
         else
@@ -127,7 +127,7 @@ sal_Size ImplUpperCharToUnicode( const void* pData,
                             SAL_UNUSED_PARAMETER sal_uInt32, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
 {
-    sal_uChar                   c;
+    unsigned char                   c;
     sal_Unicode                 cConv;
     const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
@@ -144,7 +144,7 @@ sal_Size ImplUpperCharToUnicode( const void* pData,
     }
     while ( pSrcBuf < pEndSrcBuf )
     {
-        c = (sal_uChar)*pSrcBuf;
+        c = (unsigned char)*pSrcBuf;
         if (c < 0x80)
             cConv = c;
         else

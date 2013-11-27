@@ -64,7 +64,7 @@ static sal_uInt16 const aImplIBM737ToUniTab[IBM737UNI_END - IBM737UNI_START + 1]
 
 #define IBM737CHAR_START                0x0386
 #define IBM737CHAR_END                  0x03CE
-static sal_uChar const aImplIBM737ToCharTab[IBM737CHAR_END - IBM737CHAR_START + 1] =
+static unsigned char const aImplIBM737ToCharTab[IBM737CHAR_END - IBM737CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -635,7 +635,7 @@ static sal_uInt16 const aImplIBM855ToUniTab[IBM855UNI_END - IBM855UNI_START + 1]
 
 #define IBM855CHAR_START                0x0401
 #define IBM855CHAR_END                  0x045F
-static sal_uChar const aImplIBM855ToCharTab[IBM855CHAR_END - IBM855CHAR_START + 1] =
+static unsigned char const aImplIBM855ToCharTab[IBM855CHAR_END - IBM855CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -771,7 +771,7 @@ static sal_uInt16 const aImplIBM857ToUniTab[IBM857UNI_END - IBM857UNI_START + 1]
 
 #define IBM857CHAR_START                0x00A0
 #define IBM857CHAR_END                  0x00FF
-static sal_uChar const aImplIBM857ToCharTab[IBM857CHAR_END - IBM857CHAR_START + 1] =
+static unsigned char const aImplIBM857ToCharTab[IBM857CHAR_END - IBM857CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -906,7 +906,7 @@ static sal_uInt16 const aImplIBM866ToUniTab[IBM866UNI_END - IBM866UNI_START + 1]
 
 #define IBM866CHAR_START                0x0401
 #define IBM866CHAR_END                  0x045E
-static sal_uChar const aImplIBM866ToCharTab[IBM866CHAR_END - IBM866CHAR_START + 1] =
+static unsigned char const aImplIBM866ToCharTab[IBM866CHAR_END - IBM866CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1062,7 +1062,7 @@ static sal_uInt16 const aImplIBM869ToUniTab[IBM869UNI_END - IBM869UNI_START + 1]
 
 #define IBM869CHAR_START                0x0384
 #define IBM869CHAR_END                  0x03CE
-static sal_uChar const aImplIBM869ToCharTab[IBM869CHAR_END - IBM869CHAR_START + 1] =
+static unsigned char const aImplIBM869ToCharTab[IBM869CHAR_END - IBM869CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1409,7 +1409,7 @@ static sal_uInt16 const aImplMS1251ToUniTab[MS1251UNI_END - MS1251UNI_START + 1]
 
 #define MS1251CHAR_START                0x0401
 #define MS1251CHAR_END                  0x045F
-static sal_uChar const aImplMS1251ToCharTab[MS1251CHAR_END - MS1251CHAR_START + 1] =
+static unsigned char const aImplMS1251ToCharTab[MS1251CHAR_END - MS1251CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1544,7 +1544,7 @@ static sal_uInt16 const aImplMS1253ToUniTab[MS1253UNI_END - MS1253UNI_START + 1]
 
 #define MS1253CHAR_START                0x0384
 #define MS1253CHAR_END                  0x03CE
-static sal_uChar const aImplMS1253ToCharTab[MS1253CHAR_END - MS1253CHAR_START + 1] =
+static unsigned char const aImplMS1253ToCharTab[MS1253CHAR_END - MS1253CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1682,7 +1682,7 @@ static sal_uInt16 const aImplMS1254ToUniTab[MS1254UNI_END - MS1254UNI_START + 1]
 
 #define MS1254CHAR_START                0x00A0
 #define MS1254CHAR_END                  0x00FF
-static sal_uChar const aImplMS1254ToCharTab[MS1254CHAR_END - MS1254CHAR_START + 1] =
+static unsigned char const aImplMS1254ToCharTab[MS1254CHAR_END - MS1254CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -1813,7 +1813,7 @@ static sal_uInt16 const aImplMS1257ToUniTab[MS1257UNI_END - MS1257UNI_START + 1]
 
 #define MS1257CHAR_START                0x00A0
 #define MS1257CHAR_END                  0x017E
-static sal_uChar const aImplMS1257ToCharTab[MS1257CHAR_END - MS1257CHAR_START + 1] =
+static unsigned char const aImplMS1257ToCharTab[MS1257CHAR_END - MS1257CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -2440,7 +2440,7 @@ static sal_uInt16 const aImplISO88595ToUniTab[ISO88595UNI_END - ISO88595UNI_STAR
 
 #define ISO88595CHAR_START              0x0401
 #define ISO88595CHAR_END                0x045F
-static sal_uChar const aImplISO88595ToCharTab[ISO88595CHAR_END - ISO88595CHAR_START + 1] =
+static unsigned char const aImplISO88595ToCharTab[ISO88595CHAR_END - ISO88595CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -2538,7 +2538,7 @@ static sal_uInt16 const aImplISO88597ToUniTab[ISO88597UNI_END - ISO88597UNI_STAR
 
 #define ISO88597CHAR_START              0x0384
 #define ISO88597CHAR_END                0x03CE
-static sal_uChar const aImplISO88597ToCharTab[ISO88597CHAR_END - ISO88597CHAR_START + 1] =
+static unsigned char const aImplISO88597ToCharTab[ISO88597CHAR_END - ISO88597CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -2649,7 +2649,7 @@ static sal_uInt16 const aImplISO88599ToUniTab[ISO88599UNI_END - ISO88599UNI_STAR
 
 #define ISO88599CHAR_START              0x00A0
 #define ISO88599CHAR_END                0x00FF
-static sal_uChar const aImplISO88599ToCharTab[ISO88599CHAR_END - ISO88599CHAR_START + 1] =
+static unsigned char const aImplISO88599ToCharTab[ISO88599CHAR_END - ISO88599CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -2749,7 +2749,7 @@ static sal_uInt16 const aImplISO885910ToUniTab[ISO885910UNI_END - ISO885910UNI_S
 
 #define ISO885910CHAR_START             0x00C1
 #define ISO885910CHAR_END               0x00FE
-static sal_uChar const aImplISO885910ToCharTab[ISO885910CHAR_END - ISO885910CHAR_START + 1] =
+static unsigned char const aImplISO885910ToCharTab[ISO885910CHAR_END - ISO885910CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -3268,7 +3268,7 @@ static sal_uInt16 const aImplAPPLECROATIANToUniTab[APPLECROATIANUNI_END - APPLEC
 
 #define APPLECROATIANCHAR_START         0x00A0
 #define APPLECROATIANCHAR_END           0x00FC
-static sal_uChar const aImplAPPLECROATIANToCharTab[APPLECROATIANCHAR_END - APPLECROATIANCHAR_START + 1] =
+static unsigned char const aImplAPPLECROATIANToCharTab[APPLECROATIANCHAR_END - APPLECROATIANCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -3416,7 +3416,7 @@ static sal_uInt16 const aImplAPPLECYRILLICToUniTab[APPLECYRILLICUNI_END - APPLEC
 
 #define APPLECYRILLICCHAR_START         0x0401
 #define APPLECYRILLICCHAR_END           0x045F
-static sal_uChar const aImplAPPLECYRILLICToCharTab[APPLECYRILLICCHAR_END - APPLECYRILLICCHAR_START + 1] =
+static unsigned char const aImplAPPLECYRILLICToCharTab[APPLECYRILLICCHAR_END - APPLECYRILLICCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -3551,7 +3551,7 @@ static sal_uInt16 const aImplAPPLEGREEKToUniTab[APPLEGREEKUNI_END - APPLEGREEKUN
 
 #define APPLEGREEKCHAR_START            0x0384
 #define APPLEGREEKCHAR_END              0x03CE
-static sal_uChar const aImplAPPLEGREEKToCharTab[APPLEGREEKCHAR_END - APPLEGREEKCHAR_START + 1] =
+static unsigned char const aImplAPPLEGREEKToCharTab[APPLEGREEKCHAR_END - APPLEGREEKCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -3709,7 +3709,7 @@ static sal_uInt16 const aImplAPPLEROMANIANToUniTab[APPLEROMANIANUNI_END - APPLER
 
 #define APPLEROMANIANCHAR_START         0x00A0
 #define APPLEROMANIANCHAR_END           0x00FF
-static sal_uChar const aImplAPPLEROMANIANToCharTab[APPLEROMANIANCHAR_END - APPLEROMANIANCHAR_START + 1] =
+static unsigned char const aImplAPPLEROMANIANToCharTab[APPLEROMANIANCHAR_END - APPLEROMANIANCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -3859,7 +3859,7 @@ static sal_uInt16 const aImplAPPLETURKISHToUniTab[APPLETURKISHUNI_END - APPLETUR
 
 #define APPLETURKISHCHAR_START          0x00A0
 #define APPLETURKISHCHAR_END            0x00FF
-static sal_uChar const aImplAPPLETURKISHToCharTab[APPLETURKISHCHAR_END - APPLETURKISHCHAR_START + 1] =
+static unsigned char const aImplAPPLETURKISHToCharTab[APPLETURKISHCHAR_END - APPLETURKISHCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -4006,7 +4006,7 @@ static sal_uInt16 const aImplAPPLEUKRAINIANToUniTab[APPLEUKRAINIANUNI_END - APPL
 
 #define APPLEUKRAINIANCHAR_START        0x0401
 #define APPLEUKRAINIANCHAR_END          0x045F
-static sal_uChar const aImplAPPLEUKRAINIANToCharTab[APPLEUKRAINIANCHAR_END - APPLEUKRAINIANCHAR_START + 1] =
+static unsigned char const aImplAPPLEUKRAINIANToCharTab[APPLEUKRAINIANCHAR_END - APPLEUKRAINIANCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -4141,7 +4141,7 @@ static sal_uInt16 const aImplKOI8RToUniTab[KOI8RUNI_END - KOI8RUNI_START + 1] =
 
 #define KOI8RCHAR_START                 0x0410
 #define KOI8RCHAR_END                   0x044F
-static sal_uChar const aImplKOI8RToCharTab[KOI8RCHAR_END - KOI8RCHAR_START + 1] =
+static unsigned char const aImplKOI8RToCharTab[KOI8RCHAR_END - KOI8RCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -4296,7 +4296,7 @@ static sal_uInt16 const aImplKOI8UToUniTab[KOI8UUNI_END - KOI8UUNI_START + 1] =
 
 #define KOI8UCHAR_START 0x0410
 #define KOI8UCHAR_END 0x044F
-static sal_uChar const
+static unsigned char const
 aImplKOI8UToCharTab[KOI8UCHAR_END - KOI8UCHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
@@ -4457,7 +4457,7 @@ static sal_uInt16 const aImplPT154ToUniTab[PT154UNI_END - PT154UNI_START + 1] =
 
 #define PT154CHAR_START                 0x0410
 #define PT154CHAR_END                   0x044F
-static sal_uChar const aImplPT154ToCharTab[PT154CHAR_END - PT154CHAR_START + 1] =
+static unsigned char const aImplPT154ToCharTab[PT154CHAR_END - PT154CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */

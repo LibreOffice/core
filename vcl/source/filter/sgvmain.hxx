@@ -110,7 +110,7 @@ public:
     sal_uInt16       LnFeed;   // 1..32767% vom max. Schriftgrad der Zeile
     sal_uInt16       Slant;    // Kursivwinkel 0.00..89.99"u default 15.00"u          doppelt Breit angesehen)
     sal_uInt8         ZAbst;    // Zeichenabstand 0..255% (0=auf der Stelle; 100=normal; 200=Zeichen wird als
-    sal_sChar         ChrVPos;  // Zeichen V-Position default 0= on Baseline, 10= 5Pt drunter (-64..63"u)
+    signed char         ChrVPos;  // Zeichen V-Position default 0= on Baseline, 10= 5Pt drunter (-64..63"u)
     ObjLineType  ShdL;     // Schatten-Outline (neu 2.0)
     ObjAreaType  ShdF;     // Schatten-innen   (neu 2.0)
     PointType    ShdVers;  // Schattenversatz Max.300.00%

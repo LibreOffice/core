@@ -96,7 +96,7 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         bool bUndefined = true;
-        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
+        sal_uInt32 nChar = *(unsigned char const *) pSrcBuf++;
         switch (eState)
         {
         case IMPL_GB_18030_TO_UNICODE_STATE_0:

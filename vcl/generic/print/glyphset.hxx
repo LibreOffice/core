@@ -65,23 +65,23 @@ private:
                                            sal_Int32 nGlyphSetID);
 
     sal_Bool        GetCharID (sal_Unicode nChar,
-                                sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+                                unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     sal_Bool        LookupCharID (sal_Unicode nChar,
-                                   sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+                                   unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     sal_Bool        AddCharID (sal_Unicode nChar,
-                                sal_uChar* nOutGlyphID,
+                                unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
     sal_Bool        GetGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
-                                sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+                                unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     sal_Bool        LookupGlyphID (sal_uInt32 nGlyph,
-                                   sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+                                   unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
     sal_Bool        AddGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
-                                sal_uChar* nOutGlyphID,
+                                unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
     void            AddNotdef (char_map_t &rCharMap);
     void            AddNotdef (glyph_map_t &rGlyphMap);
-    sal_uChar       GetAnsiMapping (sal_Unicode nUnicodeChar);
-    sal_uChar       GetSymbolMapping (sal_Unicode nUnicodeChar);
+    unsigned char       GetAnsiMapping (sal_Unicode nUnicodeChar);
+    unsigned char       GetSymbolMapping (sal_Unicode nUnicodeChar);
 
     void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
                                   const sal_Unicode* pStr, sal_Int16 nLen);

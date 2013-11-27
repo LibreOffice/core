@@ -58,7 +58,7 @@ sal::detail::textenc::handleBadInputTextToUnicodeConversion(
         if (*pDestBufPtr != pDestBufEnd)
         {
             *(*pDestBufPtr)++ = RTL_TEXTCVT_BYTE_PRIVATE_START
-                | ((sal_uChar) cByte);
+                | ((unsigned char) cByte);
             return BAD_INPUT_CONTINUE;
         }
         else

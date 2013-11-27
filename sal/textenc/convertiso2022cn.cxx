@@ -137,7 +137,7 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         bool bUndefined = true;
-        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
+        sal_uInt32 nChar = *(unsigned char const *) pSrcBuf++;
         sal_uInt32 nPlane;
         switch (eState)
         {

@@ -111,7 +111,7 @@ sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         bool bUndefined = true;
-        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
+        sal_uInt32 nChar = *(unsigned char const *) pSrcBuf++;
         switch (eState)
         {
         case IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII:

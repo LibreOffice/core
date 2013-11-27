@@ -45,7 +45,7 @@ static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
 
 #define SAME8090CHAR_START 0x0080
 #define SAME8090CHAR_END 0x009F
-static sal_uChar const aImpl8090SameToCharTab[SAME8090CHAR_END
+static unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
                                                   - SAME8090CHAR_START
                                                   + 1]
     = { 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, /* 0x0080 */

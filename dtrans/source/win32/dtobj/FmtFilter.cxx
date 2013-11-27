@@ -142,7 +142,7 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
     {
         aRet.realloc( nSize );
 
-        if( GetEnhMetaFileBits( hEnhMetaFile, nSize, (sal_uChar*) aRet.getArray() ) != nSize )
+        if( GetEnhMetaFileBits( hEnhMetaFile, nSize, (unsigned char*) aRet.getArray() ) != nSize )
             aRet.realloc( 0 );
     }
 
@@ -156,7 +156,7 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
 HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
     HMETAFILEPICT   hPict = NULL;
-    HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), (sal_uChar*) aOOMetaFilePict.getConstArray() );
+    HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), (unsigned char*) aOOMetaFilePict.getConstArray() );
 
     if( hMtf )
     {
@@ -179,7 +179,7 @@ HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePic
 
 HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
-    HENHMETAFILE hEnhMtf = SetEnhMetaFileBits( aOOMetaFilePict.getLength(), (sal_uChar*) aOOMetaFilePict.getConstArray() );
+    HENHMETAFILE hEnhMtf = SetEnhMetaFileBits( aOOMetaFilePict.getLength(), (unsigned char*) aOOMetaFilePict.getConstArray() );
 
     return hEnhMtf;
 }

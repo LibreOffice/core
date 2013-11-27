@@ -1875,14 +1875,14 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     bool bUCS2B = false;
     if( bSwitchToUCS2 )
     {
-        if( 0xfeU == (sal_uChar)pHeader[0] &&
-            0xffU == (sal_uChar)pHeader[1] )
+        if( 0xfeU == (unsigned char)pHeader[0] &&
+            0xffU == (unsigned char)pHeader[1] )
         {
             eEnc = RTL_TEXTENCODING_UCS2;
             bUCS2B = true;
         }
-        else if( 0xffU == (sal_uChar)pHeader[0] &&
-                 0xfeU == (sal_uChar)pHeader[1] )
+        else if( 0xffU == (unsigned char)pHeader[0] &&
+                 0xfeU == (unsigned char)pHeader[1] )
         {
             eEnc = RTL_TEXTENCODING_UCS2;
         }
@@ -1891,12 +1891,12 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
        (
         RTL_TEXTENCODING_UCS2 == eEnc &&
         (
-         (0xfe == (sal_uChar)pHeader[0] && 0xff == (sal_uChar)pHeader[1]) ||
-         (0xff == (sal_uChar)pHeader[0] && 0xfe == (sal_uChar)pHeader[1])
+         (0xfe == (unsigned char)pHeader[0] && 0xff == (unsigned char)pHeader[1]) ||
+         (0xff == (unsigned char)pHeader[0] && 0xfe == (unsigned char)pHeader[1])
         )
        )
     {
-        if( 0xfe == (sal_uChar)pHeader[0] )
+        if( 0xfe == (unsigned char)pHeader[0] )
             bUCS2B = true;
 
         sal_Int32 nLen = 2;

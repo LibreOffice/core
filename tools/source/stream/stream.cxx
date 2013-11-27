@@ -854,7 +854,7 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     }
     if (bTryUtf8)
     {
-        sal_uChar nChar;
+        unsigned char nChar;
         nBack += sizeof(nChar);
         *this >> nChar;
         if (nChar == 0xbf)

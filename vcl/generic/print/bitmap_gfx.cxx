@@ -495,7 +495,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     {
         for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
-            sal_uChar nByte = rBitmap.GetPixelGray (nRow, nColumn);
+            unsigned char nByte = rBitmap.GetPixelGray (nRow, nColumn);
             pEncoder->EncodeByte (nByte);
         }
     }
@@ -604,7 +604,7 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     {
         for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
-            sal_uChar nByte = rBitmap.GetPixelGray (nRow, nColumn);
+            unsigned char nByte = rBitmap.GetPixelGray (nRow, nColumn);
             pEncoder->EncodeByte (nByte);
         }
     }
@@ -624,8 +624,8 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
         long      nBitPos = 0;
-        sal_uChar nBit    = 0;
-        sal_uChar nByte   = 0;
+        unsigned char nBit    = 0;
+        unsigned char nByte   = 0;
 
         for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
@@ -660,7 +660,7 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rAr
     {
         for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
-            sal_uChar nByte = rBitmap.GetPixelIdx (nRow, nColumn);
+            unsigned char nByte = rBitmap.GetPixelIdx (nRow, nColumn);
             pEncoder->EncodeByte (nByte);
         }
     }

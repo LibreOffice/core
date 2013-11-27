@@ -60,7 +60,7 @@ static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END
 
 #define SAME8090CHAR_START 0x0080
 #define SAME8090CHAR_END 0x009F
-static sal_uChar const aImpl8090SameToCharTab[SAME8090CHAR_END
+static unsigned char const aImpl8090SameToCharTab[SAME8090CHAR_END
                                                   - SAME8090CHAR_START
                                                   + 1]
     = { 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, /* 0x0080 */
@@ -70,7 +70,7 @@ static sal_uChar const aImpl8090SameToCharTab[SAME8090CHAR_END
 
 #define SAMEA0FFCHAR_START 0x00A0
 #define SAMEA0FFCHAR_END 0x00FF
-static sal_uChar const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
+static unsigned char const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
                                                   - SAMEA0FFCHAR_START
                                                   + 1]
     = { 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, /* 0x00A0 */

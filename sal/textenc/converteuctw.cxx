@@ -104,7 +104,7 @@ sal_Size ImplConvertEucTwToUnicode(void const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         bool bUndefined = true;
-        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
+        sal_uInt32 nChar = *(unsigned char const *) pSrcBuf++;
         switch (eState)
         {
         case IMPL_EUC_TW_TO_UNICODE_STATE_0:

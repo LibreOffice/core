@@ -290,9 +290,9 @@ public:
     void            PSScale (double fScaleX, double fScaleY);
     void            PSLineTo(const Point& rPoint );
     void            PSPointOp (const Point& rPoint, const sal_Char* pOperator);
-    void            PSHexString (const sal_uChar* pString, sal_Int16 nLen);
+    void            PSHexString (const unsigned char* pString, sal_Int16 nLen);
     void            PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries);
-    void            PSShowText (const sal_uChar* pString,
+    void            PSShowText (const unsigned char* pString,
                                 sal_Int16 nGlyphs, sal_Int16 nBytes,
                                 const sal_Int32* pDeltaArray = NULL);
     void            PSComment (const sal_Char* pComment );

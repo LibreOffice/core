@@ -301,8 +301,8 @@ bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 {
     sal_Unicode const * p = *pBegin;
 
-    sal_uChar const * q = reinterpret_cast< sal_uChar const * >(pString);
-    sal_uChar const * qEnd = q + nStringLength;
+    unsigned char const * q = reinterpret_cast< unsigned char const * >(pString);
+    unsigned char const * qEnd = q + nStringLength;
 
     if (pEnd - p < qEnd - q)
         return false;

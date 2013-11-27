@@ -64,7 +64,7 @@ static sal_uInt16 const aImplMS874ToUniTab[MS874UNI_END - MS874UNI_START + 1] =
 
 #define MS874CHAR_START                 0x0E01
 #define MS874CHAR_END                   0x0E5B
-static sal_uChar const aImplMS874ToCharTab[MS874CHAR_END - MS874CHAR_START + 1] =
+static unsigned char const aImplMS874ToCharTab[MS874CHAR_END - MS874CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */
@@ -225,7 +225,7 @@ static sal_uInt16 const aImplMS1258ToUniTab[MS1258UNI_END - MS1258UNI_START + 1]
 
 #define MS1258CHAR_START                0x00A0
 #define MS1258CHAR_END                  0x00FF
-static sal_uChar const aImplMS1258ToCharTab[MS1258CHAR_END - MS1258CHAR_START + 1] =
+static unsigned char const aImplMS1258ToCharTab[MS1258CHAR_END - MS1258CHAR_START + 1] =
 {
 /*     0     1     2     3     4     5     6     7 */
 /*     8     9     A     B     C     D     E     F */

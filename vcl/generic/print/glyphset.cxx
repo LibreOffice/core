@@ -82,7 +82,7 @@ GlyphSet::IsVertical ()
 sal_Bool
 GlyphSet::GetCharID (
                      sal_Unicode nChar,
-                     sal_uChar* nOutGlyphID,
+                     unsigned char* nOutGlyphID,
                      sal_Int32* nOutGlyphSetID
                      )
 {
@@ -94,7 +94,7 @@ sal_Bool
 GlyphSet::GetGlyphID (
                       sal_uInt32 nGlyph,
                       sal_Unicode nUnicode,
-                      sal_uChar* nOutGlyphID,
+                      unsigned char* nOutGlyphID,
                       sal_Int32* nOutGlyphSetID
                      )
 {
@@ -105,7 +105,7 @@ GlyphSet::GetGlyphID (
 sal_Bool
 GlyphSet::LookupCharID (
                         sal_Unicode nChar,
-                        sal_uChar* nOutGlyphID,
+                        unsigned char* nOutGlyphID,
                         sal_Int32* nOutGlyphSetID
                         )
 {
@@ -136,7 +136,7 @@ GlyphSet::LookupCharID (
 sal_Bool
 GlyphSet::LookupGlyphID (
                         sal_uInt32 nGlyph,
-                        sal_uChar* nOutGlyphID,
+                        unsigned char* nOutGlyphID,
                         sal_Int32* nOutGlyphSetID
                         )
 {
@@ -164,7 +164,7 @@ GlyphSet::LookupGlyphID (
     return sal_False;
 }
 
-sal_uChar
+unsigned char
 GlyphSet::GetAnsiMapping (sal_Unicode nUnicodeChar)
 {
     static rtl_UnicodeToTextConverter aConverter =
@@ -182,16 +182,16 @@ GlyphSet::GetAnsiMapping (sal_Unicode nUnicodeChar)
                 &nUnicodeChar, 1, &nAnsiChar, 1,
                 nCvtFlags, &nCvtInfo, &nCvtChars );
 
-    return nSize == 1 ? (sal_uChar)nAnsiChar : (sal_uChar)0;
+    return nSize == 1 ? (unsigned char)nAnsiChar : (unsigned char)0;
 }
 
-sal_uChar
+unsigned char
 GlyphSet::GetSymbolMapping (sal_Unicode nUnicodeChar)
 {
     if (0x0000 < nUnicodeChar && nUnicodeChar < 0x0100)
-        return (sal_uChar)nUnicodeChar;
+        return (unsigned char)nUnicodeChar;
     if (0xf000 < nUnicodeChar && nUnicodeChar < 0xf100)
-        return (sal_uChar)nUnicodeChar;
+        return (unsigned char)nUnicodeChar;
 
     return 0;
 }
@@ -212,11 +212,11 @@ GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
 sal_Bool
 GlyphSet::AddCharID (
                      sal_Unicode nChar,
-                     sal_uChar* nOutGlyphID,
+                     unsigned char* nOutGlyphID,
                      sal_Int32* nOutGlyphSetID
                      )
 {
-    sal_uChar nMappedChar;
+    unsigned char nMappedChar;
 
     // XXX important: avoid to reencode type1 symbol fonts
     if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
@@ -271,11 +271,11 @@ sal_Bool
 GlyphSet::AddGlyphID (
                      sal_uInt32 nGlyph,
                      sal_Unicode nUnicode,
-                     sal_uChar* nOutGlyphID,
+                     unsigned char* nOutGlyphID,
                      sal_Int32* nOutGlyphSetID
                      )
 {
-    sal_uChar nMappedChar = 0;
+    unsigned char nMappedChar = 0;
 
     // XXX important: avoid to reencode type1 symbol fonts
     if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
@@ -469,7 +469,7 @@ void GlyphSet::DrawGlyphs(
                           const sal_Int32* pDeltaArray,
                           const sal_Bool bUseGlyphs)
 {
-    sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
+    unsigned char *pGlyphID    = (unsigned char*)alloca (nLen * sizeof(unsigned char));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
     std::set< sal_Int32 > aGlyphSet;
 
@@ -486,7 +486,7 @@ void GlyphSet::DrawGlyphs(
     // loop over all glyph sets to detect substrings that can be xshown together
     // without changing the postscript font
     sal_Int32 *pDeltaSubset = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
-    sal_uChar *pGlyphSubset = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
+    unsigned char *pGlyphSubset = (unsigned char*)alloca (nLen * sizeof(unsigned char));
 
     std::set< sal_Int32 >::iterator aSet;
     for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); ++aSet)
@@ -566,7 +566,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     }
 
     int nChar;
-    sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
+    unsigned char *pGlyphID    = (unsigned char*)alloca (nLen * sizeof(unsigned char));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
 
     // convert unicode to glyph id and char set (font subset)
@@ -703,7 +703,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
 struct EncEntry
 {
-    sal_uChar  aEnc;
+    unsigned char  aEnc;
     long       aGID;
 
     EncEntry() : aEnc( 0 ), aGID( 0 ) {}
@@ -714,7 +714,7 @@ struct EncEntry
 
 static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     const char* pGlyphSetName, int nGlyphCount,
-    /*const*/ sal_uInt16* pRequestedGlyphs, /*const*/ sal_uChar* pEncoding,
+    /*const*/ sal_uInt16* pRequestedGlyphs, /*const*/ unsigned char* pEncoding,
     bool bAllowType42, bool /*bAllowCID*/ )
 {
     // match the font-subset to the printer capabilities
@@ -732,7 +732,7 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
 
     std::stable_sort( aSorted.begin(), aSorted.end() );
 
-    std::vector< sal_uChar > aEncoding( nGlyphCount );
+    std::vector< unsigned char > aEncoding( nGlyphCount );
     std::vector< long > aRequestedGlyphs( nGlyphCount );
 
     for( int i = 0; i < nGlyphCount; i++ )
@@ -771,7 +771,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
 
     // encoding vector maps character encoding to the ordinal number
     // of the glyph in the output file
-    sal_uChar  pEncoding[256];
+    unsigned char  pEncoding[256];
     sal_uInt16 pTTGlyphMapping[256];
     const bool bAllowCID = false; // TODO: nPSLanguageLevel>=3
 
@@ -840,7 +840,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     rewind(pTmpFile);
     fflush(pTmpFile);
 
-    sal_uChar  pBuffer[0x2000];
+    unsigned char  pBuffer[0x2000];
     sal_uInt64 nIn;
     sal_uInt64 nOut;
     do

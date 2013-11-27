@@ -1456,7 +1456,7 @@ void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
     sal_uInt16 nBytes = 0x0867;
     rStrm << nBytes;
 
-    sal_uChar nZero = 0x00;
+    unsigned char nZero = 0x00;
     for (int i = 0; i < 9; ++i)
         rStrm << nZero;
 

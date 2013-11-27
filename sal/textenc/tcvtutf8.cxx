@@ -80,8 +80,8 @@ sal_Size ImplConvertUtf8ToUnicode(
     int nShift = -1;
     bool bCheckBom = true;
     sal_uInt32 nInfo = 0;
-    sal_uChar const * pSrcBufPtr = (sal_uChar const *) pSrcBuf;
-    sal_uChar const * pSrcBufEnd = pSrcBufPtr + nSrcBytes;
+    unsigned char const * pSrcBufPtr = (unsigned char const *) pSrcBuf;
+    unsigned char const * pSrcBufEnd = pSrcBufPtr + nSrcBytes;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBufPtr + nDestChars;
 

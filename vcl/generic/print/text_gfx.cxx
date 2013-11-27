@@ -543,7 +543,7 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
     PSSetFont (aFontName, RTL_TEXTENCODING_ISO_8859_1);
 
     sal_Size  nSize    = 4 * nLen;
-    sal_uChar* pBuffer = (sal_uChar*)alloca (nSize* sizeof(sal_uChar));
+    unsigned char* pBuffer = (unsigned char*)alloca (nSize* sizeof(unsigned char));
 
     ConverterFactory &rCvt = GetConverterFactory ();
     nSize = rCvt.Convert (pStr, nLen, pBuffer, nSize, RTL_TEXTENCODING_ISO_8859_1);

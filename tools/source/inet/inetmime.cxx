@@ -181,7 +181,7 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
     sal_Int32 nLength = pEnd - pBegin;
     sal_Unicode * pBuffer = new sal_Unicode[nLength];
     for (sal_Unicode * p = pBuffer; pBegin != pEnd;)
-        *p++ = sal_uChar(*pBegin++);
+        *p++ = static_cast<unsigned char>(*pBegin++);
     rText += OUString(pBuffer, nLength);
     delete[] pBuffer;
 }
@@ -321,13 +321,13 @@ bool parseParameters(ParameterList const & rInput,
                         for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
                             aValue += OUString(sal_Unicode(
                                 sal_Unicode(
-                                    sal_uChar(pNext->m_aValue[i]))
+                                    static_cast<unsigned char>(pNext->m_aValue[i]))
                                 | 0xF800));
                     }
                     else
                     {
                         for (sal_Int32 i = 0; i < pNext->m_aValue.getLength(); ++i)
-                            aValue += OUString( sal_Unicode(sal_uChar(pNext->m_aValue[i])) );
+                            aValue += OUString( sal_Unicode(static_cast<unsigned char>(pNext->m_aValue[i])) );
                     }
                     pNext = pNext->m_pNext;
                     if (!pNext || pNext->m_nSection == 0)
@@ -912,7 +912,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                             bInvalid = true;
                             break;
                         }
-                        nChar = sal_uChar(*p++);
+                        nChar = static_cast<unsigned char>(*p++);
                     }
                     else if (nChar == '\\')
                     {
@@ -3275,7 +3275,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 
                     nSize = nTargetSize;
                     for (sal_Size k = 0; k < nTargetSize; ++k)
-                        if (needsEncodedWordEscape(sal_uChar(
+                        if (needsEncodedWordEscape(static_cast<unsigned char>(
                                                        pTargetBuffer[k])))
                             nSize += 2;
                 }
@@ -3428,7 +3428,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 {
                     for (sal_Size k = 0; k < nTargetSize; ++k)
                     {
-                        sal_uInt32 nUCS4 = sal_uChar(pTargetBuffer[k]);
+                        sal_uInt32 nUCS4 = static_cast<unsigned char>(pTargetBuffer[k]);
                         bool bEscape = needsEncodedWordEscape(nUCS4);
                         if (k > 0
                             && m_rSink.getColumn() + (bEscape ? 5 : 3)

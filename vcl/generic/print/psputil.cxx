@@ -213,7 +213,7 @@ ConverterFactory::Get (rtl_TextEncoding nEncoding)
 // textconversion in drawtext
 sal_Size
 ConverterFactory::Convert (const sal_Unicode *pText, int nTextLen,
-                           sal_uChar *pBuffer, sal_Size nBufferSize, rtl_TextEncoding nEncoding)
+                           unsigned char *pBuffer, sal_Size nBufferSize, rtl_TextEncoding nEncoding)
 {
     const sal_uInt32 nCvtFlags =  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
         | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK ;

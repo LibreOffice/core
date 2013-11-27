@@ -105,7 +105,7 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         bool bUndefined = true;
-        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
+        sal_uInt32 nChar = *(unsigned char const *) pSrcBuf++;
         switch (eState)
         {
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII:

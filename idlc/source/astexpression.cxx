@@ -628,37 +628,37 @@ coerce_value(AstExprValue *ev, ExprType t)
                 case ET_short:
                     if (ev->u.sval < SAL_MIN_INT8 || ev->u.sval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar)ev->u.sval;
+                    ev->u.byval = (unsigned char)ev->u.sval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_ushort:
                     if (ev->u.usval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar)ev->u.usval;
+                    ev->u.byval = (unsigned char)ev->u.usval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_long:
                     if (ev->u.lval < SAL_MIN_INT8 || ev->u.lval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar) ev->u.lval;
+                    ev->u.byval = (unsigned char) ev->u.lval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_ulong:
                     if (ev->u.ulval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar) ev->u.ulval;
+                    ev->u.byval = (unsigned char) ev->u.ulval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_hyper:
                     if (ev->u.hval < SAL_MIN_INT8 || ev->u.hval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar) ev->u.hval;
+                    ev->u.byval = (unsigned char) ev->u.hval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_uhyper:
                     if (ev->u.uhval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar) ev->u.uhval;
+                    ev->u.byval = (unsigned char) ev->u.uhval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_boolean:
@@ -668,13 +668,13 @@ coerce_value(AstExprValue *ev, ExprType t)
                 case ET_float:
                     if (ev->u.fval < SAL_MIN_INT8 || ev->u.fval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar) ev->u.fval;
+                    ev->u.byval = (unsigned char) ev->u.fval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_double:
                     if (ev->u.dval < SAL_MIN_INT8 || ev->u.dval > SAL_MAX_UINT8)
                         return NULL;
-                    ev->u.byval = (sal_uChar) ev->u.dval;
+                    ev->u.byval = (unsigned char) ev->u.dval;
                     ev->et = ET_byte;
                     return ev;
                 case ET_byte:

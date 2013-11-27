@@ -106,8 +106,8 @@ struct ImplTextEncodingData
 struct ImplUniCharTabData
 {
     sal_uInt16                      mnUniChar;
-    sal_uChar                       mnChar;
-    sal_uChar                       mnChar2;
+    unsigned char                       mnChar;
+    unsigned char                       mnChar2;
         // to cater for mappings like MS1258 with 1--2 bytes per Unicode char,
         // 0 if unused
 };
@@ -116,12 +116,12 @@ struct ImplByteConvertData
 {
     const sal_uInt16*               mpToUniTab1;
     const sal_uInt16*               mpToUniTab2;
-    sal_uChar                       mnToUniStart1;
-    sal_uChar                       mnToUniEnd1;
-    sal_uChar                       mnToUniStart2;
-    sal_uChar                       mnToUniEnd2;
-    const sal_uChar*                mpToCharTab1;
-    const sal_uChar*                mpToCharTab2;
+    unsigned char                       mnToUniStart1;
+    unsigned char                       mnToUniEnd1;
+    unsigned char                       mnToUniStart2;
+    unsigned char                       mnToUniEnd2;
+    const unsigned char*                mpToCharTab1;
+    const unsigned char*                mpToCharTab2;
     const ImplUniCharTabData*       mpToCharExTab;
     sal_uInt16                      mnToCharStart1;
     sal_uInt16                      mnToCharEnd1;
@@ -136,15 +136,15 @@ struct ImplByteConvertData
 
 struct ImplDBCSEUDCData
 {
-    sal_uChar                       mnLeadStart;
-    sal_uChar                       mnLeadEnd;
-    sal_uChar                       mnTrail1Start;
-    sal_uChar                       mnTrail1End;
-    sal_uChar                       mnTrail2Start;
-    sal_uChar                       mnTrail2End;
-    sal_uChar                       mnTrail3Start;
-    sal_uChar                       mnTrail3End;
-    sal_uChar                       mnTrailCount;
+    unsigned char                       mnLeadStart;
+    unsigned char                       mnLeadEnd;
+    unsigned char                       mnTrail1Start;
+    unsigned char                       mnTrail1End;
+    unsigned char                       mnTrail2Start;
+    unsigned char                       mnTrail2End;
+    unsigned char                       mnTrail3Start;
+    unsigned char                       mnTrail3End;
+    unsigned char                       mnTrailCount;
     sal_uInt16                      mnTrailRangeCount;
     sal_uInt16                      mnUniStart;
     sal_uInt16                      mnUniEnd;
@@ -169,10 +169,10 @@ struct ImplDBCSConvertData
 {
     const ImplDBCSToUniLeadTab*     mpToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
-    sal_uChar                       mnLeadStart;
-    sal_uChar                       mnLeadEnd;
-    sal_uChar                       mnTrailStart;
-    sal_uChar                       mnTrailEnd;
+    unsigned char                       mnLeadStart;
+    unsigned char                       mnLeadEnd;
+    unsigned char                       mnTrailStart;
+    unsigned char                       mnTrailEnd;
     const ImplDBCSEUDCData*         mpEUDCTab;
     sal_uInt16                      mnEUDCCount;
 };
@@ -194,7 +194,7 @@ struct ImplEUCJPConvertData
 /* --------------------------------- */
 
 inline sal_Unicode ImplGetUndefinedUnicodeChar(
-    sal_uChar cChar, sal_uInt32 nFlags)
+    unsigned char cChar, sal_uInt32 nFlags)
 {
     return ((nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK)
                    == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE) ?

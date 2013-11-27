@@ -56,7 +56,7 @@ namespace psp
 {
 
 sal_Bool
-AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
+AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
           sal_uInt32 nBlockSize = nBLOCKSIZE)
 {
     if ((pDst == NULL) || (pSrc == NULL))
@@ -68,7 +68,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
     if (nBlockSize == 0)
         nBlockSize = nBLOCKSIZE;
     if (pBuffer == NULL)
-        pBuffer = (sal_uChar*)alloca (nBlockSize);
+        pBuffer = (unsigned char*)alloca (nBlockSize);
 
     sal_uInt64 nIn = 0;
     sal_uInt64 nOut = 0;
@@ -484,7 +484,7 @@ PrinterJob::EndJob ()
 
     /* spool the document parts to the destination */
 
-    sal_uChar pBuffer[ nBLOCKSIZE ];
+    unsigned char pBuffer[ nBLOCKSIZE ];
 
     AppendPS (pDestFILE, mpJobHeader, pBuffer);
     mpJobHeader->close();

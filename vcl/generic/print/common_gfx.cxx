@@ -1025,7 +1025,7 @@ PrinterGfx::PSScale (double fScaleX, double fScaleY)
 
 /* psshowtext helper routines: draw an hex string for show/xshow */
 void
-PrinterGfx::PSHexString (const sal_uChar* pString, sal_Int16 nLen)
+PrinterGfx::PSHexString (const unsigned char* pString, sal_Int16 nLen)
 {
     sal_Char pHexString [128];
     sal_Int32 nChar = 0;
@@ -1077,7 +1077,7 @@ PrinterGfx::PSDeltaArray (const sal_Int32 *pArray, sal_Int16 nEntries)
  * fonts in general nBytes and nGlyphs is the same. For printer resident Composite
  * fonts it may be different (these fonts may be SJIS encoded for example) */
 void
-PrinterGfx::PSShowText (const sal_uChar* pStr, sal_Int16 nGlyphs, sal_Int16 nBytes,
+PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 nBytes,
                         const sal_Int32* pDeltaArray)
 {
     PSSetColor (maTextColor);

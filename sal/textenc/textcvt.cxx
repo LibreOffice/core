@@ -54,7 +54,7 @@ static sal_Size ImplDummyToUnicode( const char* pSrcBuf, sal_Size nSrcBytes,
             break;
         }
 
-        *pDestBuf = (sal_Unicode)(sal_uChar)*pSrcBuf;
+        *pDestBuf = (sal_Unicode)(unsigned char)*pSrcBuf;
         pDestBuf++;
         pSrcBuf++;
     }
@@ -91,7 +91,7 @@ static sal_Size ImplUnicodeToDummy( const sal_Unicode* pSrcBuf, sal_Size nSrcCha
             break;
         }
 
-        *pDestBuf = (char)(sal_uChar)(*pSrcBuf & 0x00FF);
+        *pDestBuf = (char)(unsigned char)(*pSrcBuf & 0x00FF);
         pDestBuf++;
         pSrcBuf++;
     }

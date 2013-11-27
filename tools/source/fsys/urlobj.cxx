@@ -2212,16 +2212,16 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
         if (p >= pEnd)
             break;
         sal_uInt32 nChar = rtl::toAsciiLowerCase(*p++);
-        while (pFirst <= pLast && sal_uChar(pFirst->m_pPrefix[i]) < nChar)
+        while (pFirst <= pLast && static_cast<unsigned char>(pFirst->m_pPrefix[i]) < nChar)
             ++pFirst;
-        while (pFirst <= pLast && sal_uChar(pLast->m_pPrefix[i]) > nChar)
+        while (pFirst <= pLast && static_cast<unsigned char>(pLast->m_pPrefix[i]) > nChar)
             --pLast;
     }
     if (pFirst == pLast)
     {
         sal_Char const * q = pFirst->m_pPrefix + i;
         while (p < pEnd && *q != '\0'
-               && rtl::toAsciiLowerCase(*p) == sal_uChar(*q))
+               && rtl::toAsciiLowerCase(*p) == static_cast<unsigned char>(*q))
         {
             ++p;
             ++q;
@@ -5051,7 +5051,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == sal_uChar(cEscapePrefix) && rBegin + 1 < pEnd
+            if (nUTF32 == static_cast<unsigned char>(cEscapePrefix) && rBegin + 1 < pEnd
                 && (nWeight1 = INetMIME::getHexWeight(rBegin[0])) >= 0
                 && (nWeight2 = INetMIME::getHexWeight(rBegin[1])) >= 0)
             {
@@ -5149,7 +5149,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == sal_uChar(cEscapePrefix) && rBegin + 1 < pEnd
+            if (nUTF32 == static_cast<unsigned char>(cEscapePrefix) && rBegin + 1 < pEnd
                 && ((nWeight1 = INetMIME::getHexWeight(rBegin[0])) >= 0)
                 && ((nWeight2 = INetMIME::getHexWeight(rBegin[1])) >= 0))
             {

@@ -148,7 +148,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                 if ( nLength > 22 )
                 {
                     HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,
-                                    ( reinterpret_cast< const sal_uChar*>( pStream->GetData() ) ) + 22 );
+                                    ( reinterpret_cast< const unsigned char*>( pStream->GetData() ) ) + 22 );
 
                     if ( hMeta )
                     {

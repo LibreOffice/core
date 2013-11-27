@@ -146,7 +146,7 @@ sal_Unicode SvParser::GetNextChar()
     sal_Bool bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
-        sal_uChar c1, c2;
+        unsigned char c1, c2;
         sal_Bool bSeekBack = sal_True;
 
         rInput >> c1;
@@ -185,7 +185,7 @@ sal_Unicode SvParser::GetNextChar()
     if( RTL_TEXTENCODING_UCS2 == eSrcEnc )
     {
         sal_Unicode cUC = USHRT_MAX;
-        sal_uChar c1, c2;
+        unsigned char c1, c2;
 
         rInput >> c1 >> c2;
         if( 2 == rInput.Tell() &&

@@ -456,7 +456,7 @@ struct ExceptionType
     sal_uInt32  _pCopyCtor;     // copyctor
 
     inline ExceptionType(
-        sal_uChar * pCode,
+        unsigned char * pCode,
         sal_uInt64 pCodeBase,
         typelib_TypeDescription * pTD ) throw ()
         : _n0( 0 )
@@ -506,7 +506,7 @@ struct RaiseInfo
 
     // Additional fields
     typelib_TypeDescription * _pTD;
-    sal_uChar *        _code;
+    unsigned char *        _code;
     sal_uInt64         _codeBase;
 
     RaiseInfo( typelib_TypeDescription * pTD ) throw ();
@@ -533,7 +533,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
         codeSize += codeSnippetSize;
     }
 
-    sal_uChar * pCode = _code = (sal_uChar *)::rtl_allocateMemory( codeSize );
+    unsigned char * pCode = _code = (unsigned char *)::rtl_allocateMemory( codeSize );
 
     _codeBase = (sal_uInt64)pCode & ~(ExceptionInfos::allocationGranularity-1);
 

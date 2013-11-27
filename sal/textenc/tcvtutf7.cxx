@@ -26,7 +26,7 @@
 
 /* ======================================================================= */
 
-static sal_uChar const aImplBase64Tab[64] =
+static unsigned char const aImplBase64Tab[64] =
 {
     /* A-Z */
           0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47,
@@ -44,7 +44,7 @@ static sal_uChar const aImplBase64Tab[64] =
 };
 
 /* Index in Base64Tab or 0xFF, when is a invalid character */
-static sal_uChar const aImplBase64IndexTab[128] =
+static unsigned char const aImplBase64IndexTab[128] =
 {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,     /* 0x00-0x07 */
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,     /* 0x08-0x0F */
@@ -64,7 +64,7 @@ static sal_uChar const aImplBase64IndexTab[128] =
       49,   50,   51, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF      /* 0x78-0x7F xyz{|}~ */
 };
 
-static sal_uChar const aImplMustShiftTab[128] =
+static unsigned char const aImplMustShiftTab[128] =
 {
     1, 1, 1, 1, 1, 1, 1, 1,     /* 0x00-0x07 */
     1, 0, 0, 1, 0, 1, 1, 1,     /* 0x08-0x0F 0x09 == HTAB, 0x0A == LF 0x0C == CR */
@@ -141,8 +141,8 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                             sal_Size* pSrcCvtBytes )
 {
     ImplUTF7ToUCContextData*    pContextData = (ImplUTF7ToUCContextData*)pContext;
-    sal_uChar                   c ='\0';
-    sal_uChar                   nBase64Value = 0;
+    unsigned char                   c ='\0';
+    unsigned char                   nBase64Value = 0;
     int                         bEnd = sal_False;
     int                         bShifted;
     int                         bFirst;
@@ -180,7 +180,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
     {
         if ( pSrcBuf < pEndSrcBuf )
         {
-            c = (sal_uChar)*pSrcBuf;
+            c = (unsigned char)*pSrcBuf;
 
             /* End, when not a base64 character */
             bBase64End = sal_False;
@@ -235,7 +235,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
                         /* Skip character */
                         pSrcBuf++;
                         if ( pSrcBuf < pEndSrcBuf )
-                            c = (sal_uChar)*pSrcBuf;
+                            c = (unsigned char)*pSrcBuf;
                         else
                             bEnd = sal_True;
                     }

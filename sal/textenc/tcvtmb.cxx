@@ -40,8 +40,8 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
 {
-    sal_uChar                   cLead;
-    sal_uChar                   cTrail;
+    unsigned char                   cLead;
+    unsigned char                   cTrail;
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
     const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
@@ -54,7 +54,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
     while ( pSrcBuf < pEndSrcBuf )
     {
-        cLead = (sal_uChar)*pSrcBuf;
+        cLead = (unsigned char)*pSrcBuf;
 
         /* get entry for the lead byte */
         pLeadEntry = pLeadTab+cLead;
@@ -92,7 +92,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
             }
 
             pSrcBuf++;
-            cTrail = (sal_uChar)*pSrcBuf;
+            cTrail = (unsigned char)*pSrcBuf;
             if ( (cTrail >= pLeadEntry->mnTrailStart) && (cTrail <= pLeadEntry->mnTrailEnd) )
                 cConv = pLeadEntry->mpToUniTrailTab[cTrail-pLeadEntry->mnTrailStart];
             else
@@ -221,8 +221,8 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
 {
     sal_uInt16                  cConv;
     sal_Unicode                 c;
-    sal_uChar                   nHighChar;
-    sal_uChar                   nLowChar;
+    unsigned char                   nHighChar;
+    unsigned char                   nLowChar;
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
     const ImplUniToDBCSHighTab* pHighTab = pConvertData->mpToDBCSHighTab;
@@ -241,8 +241,8 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
     while ( pSrcBuf < pEndSrcBuf )
     {
         c = *pSrcBuf;
-        nHighChar = (sal_uChar)((c >> 8) & 0xFF);
-        nLowChar = (sal_uChar)(c & 0xFF);
+        nHighChar = (unsigned char)((c >> 8) & 0xFF);
+        nLowChar = (unsigned char)(c & 0xFF);
 
         /* get entry for the high byte */
         pHighEntry = pHighTab+nHighChar;
@@ -382,9 +382,9 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtBytes )
 {
-    sal_uChar                   c;
-    sal_uChar                   cLead = '\0';
-    sal_uChar                   cTrail = '\0';
+    unsigned char                   c;
+    unsigned char                   cLead = '\0';
+    unsigned char                   cTrail = '\0';
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
     const ImplDBCSToUniLeadTab* pLeadTab;
@@ -397,7 +397,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
     while ( pSrcBuf < pEndSrcBuf )
     {
-        c = (sal_uChar)*pSrcBuf;
+        c = (unsigned char)*pSrcBuf;
 
         /* ASCII */
         if ( c <= 0x7F )
@@ -416,7 +416,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                 }
 
                 pSrcBuf++;
-                c = (sal_uChar)*pSrcBuf;
+                c = (unsigned char)*pSrcBuf;
                 if ( (c >= 0xA1) && (c <= 0xDF) )
                     cConv = 0xFF61+(c-0xA1);
                 else
@@ -440,9 +440,9 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                     }
 
                     pSrcBuf++;
-                    cLead = (sal_uChar)*pSrcBuf;
+                    cLead = (unsigned char)*pSrcBuf;
                     pSrcBuf++;
-                    cTrail = (sal_uChar)*pSrcBuf;
+                    cTrail = (unsigned char)*pSrcBuf;
                     pLeadTab = pConvertData->mpJIS0212ToUniLeadTab;
                 }
                 /* CodeSet 2 JIS 0208-1997 */
@@ -458,7 +458,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
 
                     cLead = c;
                     pSrcBuf++;
-                    cTrail = (sal_uChar)*pSrcBuf;
+                    cTrail = (unsigned char)*pSrcBuf;
                     pLeadTab = pConvertData->mpJIS0208ToUniLeadTab;
                 }
 
@@ -546,8 +546,8 @@ sal_Size ImplUnicodeToEUCJP( const void* pData,
 {
     sal_uInt32                  cConv;
     sal_Unicode                 c;
-    sal_uChar                   nHighChar;
-    sal_uChar                   nLowChar;
+    unsigned char                   nHighChar;
+    unsigned char                   nLowChar;
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplUniToDBCSHighTab* pHighTab;
     const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
@@ -569,8 +569,8 @@ sal_Size ImplUnicodeToEUCJP( const void* pData,
             cConv = 0x8E00+0xA1+(c-0xFF61);
         else
         {
-            nHighChar = (sal_uChar)((c >> 8) & 0xFF);
-            nLowChar = (sal_uChar)(c & 0xFF);
+            nHighChar = (unsigned char)((c >> 8) & 0xFF);
+            nLowChar = (unsigned char)(c & 0xFF);
 
             /* JIS 0208 */
             pHighTab = pConvertData->mpUniToJIS0208HighTab;
