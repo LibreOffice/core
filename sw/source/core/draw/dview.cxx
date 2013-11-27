@@ -47,9 +47,6 @@
 #include <IDocumentUndoRedo.hxx>
 
 // #i7672#
-#include <editeng/outliner.hxx>
-
-#include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <vector>

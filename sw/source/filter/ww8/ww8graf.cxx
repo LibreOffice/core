@@ -92,7 +92,6 @@
 #include <fmturl.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>
-#include "ww8par2.hxx"
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

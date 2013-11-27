@@ -50,7 +50,6 @@
 #include <crsskip.hxx>
 #include <switerator.hxx>
 #include <docufld.hxx>
-#include <fmtfld.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/string.hxx>

@@ -68,14 +68,11 @@
 #include <helpid.h>
 #include <utlui.hrc>
 #include <index.hrc>
-#include <cnttab.hxx>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <toxwrap.hxx>
 #include <chpfld.hxx>
-
-#include "utlui.hrc"
 
 #include <sfx2/app.hxx>
 

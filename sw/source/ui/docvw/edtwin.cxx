@@ -134,7 +134,6 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
-#include <txatbase.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>

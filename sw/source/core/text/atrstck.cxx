@@ -53,7 +53,6 @@
 #include <txtinet.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <viewsh.hxx>
-#include <viewopt.hxx>
 
 #define STACK_INCREMENT 4
 

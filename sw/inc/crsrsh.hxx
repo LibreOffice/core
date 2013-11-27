@@ -36,7 +36,6 @@
 #include <tblsel.hxx>
 #include <viscrs.hxx>
 #include <node.hxx>
-#include <tblsel.hxx>
 #include <IDocumentMarkAccess.hxx>
 
 class KeyCode;

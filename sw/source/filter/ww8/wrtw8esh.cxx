@@ -92,9 +92,6 @@
 #include <oox/ole/olehelper.hxx>
 #include <fstream>
 #include <unotools/streamwrap.hxx>
-#include <editeng/shaditem.hxx>
-#include <svx/unoapi.hxx>
-#include <escher.hxx>
 #include <fmtinfmt.hxx>
 #include <fmturl.hxx>
 #include "sfx2/sfxsids.hrc"

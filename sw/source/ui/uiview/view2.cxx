@@ -127,7 +127,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include "globals.hrc"
 #include <envelp.hrc>
 #include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>

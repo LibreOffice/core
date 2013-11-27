@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;

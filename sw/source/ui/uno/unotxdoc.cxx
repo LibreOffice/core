@@ -113,7 +113,6 @@
 #include <format.hxx>
 #include <charfmt.hxx>
 #include <fmtcol.hxx>
-#include <unostyle.hxx>
 #include <istyleaccess.hxx>
 
 #include <svl/stylepool.hxx>

@@ -63,7 +63,6 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <wrtsh.hxx>
-#include <vcl/alpha.hxx>
 
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>

@@ -40,7 +40,6 @@
 #include <edtwin.hxx>
 
 #include "viewimp.hxx"
-#include "viewopt.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"

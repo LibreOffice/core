@@ -33,7 +33,6 @@
 #include <doc.hxx>
 #include "rootfrm.hxx"
 #include <pagefrm.hxx>
-#include <rootfrm.hxx>
 #include <viewsh.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>

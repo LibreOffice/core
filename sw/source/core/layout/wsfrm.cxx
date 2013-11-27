@@ -64,7 +64,6 @@
 #include <editeng/frmdiritem.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-#include <viewopt.hxx>
 
 
 using namespace ::com::sun::star;

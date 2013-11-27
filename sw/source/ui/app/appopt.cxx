@@ -23,7 +23,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <hintids.hxx>
-#include <cmdid.h>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
