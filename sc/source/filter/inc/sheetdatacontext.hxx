@@ -23,6 +23,9 @@
 #include "excelhandlers.hxx"
 #include "richstring.hxx"
 #include "sheetdatabuffer.hxx"
+#include <vcl/svapp.hxx>
+
+#define MULTI_THREAD_SHEET_PARSING 1
 
 namespace oox {
 namespace xls {
@@ -54,8 +57,16 @@ struct SheetDataContextBase
  */
 class SheetDataContext : public WorksheetContextBase, private SheetDataContextBase
 {
+    // If we are doing threaded parsing, this SheetDataContext
+    // forms the inner loop for bulk data parsing, and for the
+    // duration of this we can drop the solar mutex.
+#if MULTI_THREAD_SHEET_PARSING
+    SolarMutexReleaser aReleaser;
+#endif
+
 public:
     explicit            SheetDataContext( WorksheetFragmentBase& rFragment );
+    virtual            ~SheetDataContext();
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
