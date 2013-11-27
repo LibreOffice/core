@@ -315,22 +315,87 @@ IMPL_LINK_NOARG(DataStream, RefreshHdl)
     return 0;
 }
 
+//  lcl_ScanString and Text2Doc is simplified version
+//  of code from sc/source/ui/docshell/impex.cxx
+const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString, sal_Unicode cStr)
+{
+    const sal_Unicode* p0 = p;
+    for( ;; )
+    {
+        if (!*p)
+            break;
+        if (*p == cStr)
+        {
+            if (*++p != cStr)
+                break;
+            p++;
+        }
+        else
+            p++;
+    }
+    if (p0 < p)
+        if (rString.getLength() + (p - p0) <= STRING_MAXLEN)
+            rString += OUString( p0, sal::static_int_cast<sal_Int32>( p - p0 ) );
+    return p;
+}
+
+void DataStream::Text2Doc()
+{
+    sal_Unicode cSep(',');
+    sal_Unicode cStr('"');
+    SCCOL nStartCol = maRange.aStart.Col();
+    SCROW nStartRow = maRange.aStart.Row();
+    SCCOL nEndCol = maRange.aEnd.Col();
+    SCROW nEndRow = maRange.aEnd.Row();
+    OUString aCell;
+    SCROW nRow = nStartRow;
+    ScDocumentImport aDocImport(*mpScDocument);
+    while (nRow <= nEndRow)
+    {
+        SCCOL nCol = nStartCol;
+        OUString sLine( OStringToOUString(ConsumeLine(), RTL_TEXTENCODING_UTF8) );
+        const sal_Unicode* p = sLine.getStr();
+        while (*p)
+        {
+            aCell = "";
+            const sal_Unicode* q = p;
+            while (*p && *p != cSep)
+            {
+                // Always look for a pairing quote and ignore separator in between.
+                while (*p && *p == cStr)
+                    q = p = lcl_ScanString(p, aCell, cStr);
+                // All until next separator or quote.
+                while (*p && *p != cSep && *p != cStr)
+                    ++p;
+                if (aCell.getLength() + (p - q) <= STRING_MAXLEN)
+                    aCell += OUString( q, sal::static_int_cast<sal_Int32>( p - q ) );
+                q = p;
+            }
+            if (*p)
+                ++p;
+            if (nCol <= nEndCol && nRow <= nEndRow)
+            {
+                ScAddress aAddress(nCol, nRow, maRange.aStart.Tab());
+                if (aCell == "0" || ( aCell.indexOf(':') == -1 && aCell.toDouble() ))
+                    aDocImport.setNumericCell(aAddress, aCell.toDouble());
+                else
+                    aDocImport.setStringCell(aAddress, aCell);
+            }
+            ++nCol;
+        }
+        ++nRow;
+    }
+    aDocImport.finalize();
+    mpScDocShell->PostPaint( maRange, PAINT_GRID );
+}
+
 bool DataStream::ImportData()
 {
     MoveData();
     if (mbValuesInLine)
     {
-        SCROW nHeight = maRange.aEnd.Row() - maRange.aStart.Row() + 1;
-        OStringBuffer aBuf;
-        while (nHeight--)
-        {
-            aBuf.append(ConsumeLine());
-            aBuf.append('\n');
-        }
-        SvMemoryStream aMemoryStream((void *)aBuf.getStr(), aBuf.getLength(), STREAM_READ);
-        ScImportExport aImport(mpScDocument, maRange);
-        aImport.SetSeparator(',');
-        aImport.ImportStream(aMemoryStream, OUString(), FORMAT_STRING);
+        // do CSV import
+        Text2Doc();
     }
     else
     {
@@ -359,8 +424,6 @@ bool DataStream::ImportData()
         aDocImport.finalize();
         mpScDocShell->PostPaint( aRangeList, PAINT_GRID );
     }
-    // ImportStream calls PostPaint for relevant area,
-    // we need to call it explicitly only when moving rows.
     if (meMove == NO_MOVE)
         return mbRunning;
 
