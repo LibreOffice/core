@@ -9,6 +9,9 @@
 
 #include "threadpool.hxx"
 
+#include <algorithm>
+
+
 class ThreadPool::ThreadWorker : public salhelper::Thread
 {
     ThreadPool    *mpPool;
@@ -102,7 +105,8 @@ void ThreadPool::waitUntilWorkersDone()
     {
         rtl::Reference< ThreadWorker > xWorker = maWorkers.back();
         maWorkers.pop_back();
-        assert( maWorkers.find( xWorker ) == maWorkers.end() );
+        assert(std::find(maWorkers.begin(), maWorkers.end(), xWorker)
+                == maWorkers.end());
         xWorker->signalNewWork();
         aGuard.clear();
         { // unlocked
