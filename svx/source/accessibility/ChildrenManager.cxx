@@ -77,8 +77,20 @@ long ChildrenManager::GetChildCount (void) const throw ()
     return mpImpl->GetChild (nIndex);
 }
 
+Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShape>& xShape)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    return mpImpl->GetChild (xShape);
+}
 
-
+::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape> ChildrenManager::GetChildShape(long nIndex)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    return mpImpl->GetChildShape(nIndex);
+}
 
 void ChildrenManager::Update (bool bCreateNewObjectsOnDemand)
 {

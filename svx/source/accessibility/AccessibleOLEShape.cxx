@@ -21,6 +21,7 @@
 
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
+#include <svx/svdoole2.hxx>
 
 using namespace accessibility;
 using namespace ::com::sun::star;
@@ -171,8 +172,22 @@ uno::Sequence<uno::Type> SAL_CALL
     return aTypeList;
 }
 
-
-
+//=====  XAccessibleExtendedAttributes  ========================================================
+uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Any strRet;
+    ::rtl::OUString style;
+    if( m_pShape )
+    {
+        //style = ::rtl::OUString::createFromAscii("style=");
+        style = ::rtl::OUString::createFromAscii("style:");
+        style += ((SdrOle2Obj*)m_pShape)->GetStyleString();
+    }
+    style += ::rtl::OUString::createFromAscii(";");
+    strRet <<= style;
+    return strRet;
+}
 
 /// Set this object's name if is different to the current name.
 OUString

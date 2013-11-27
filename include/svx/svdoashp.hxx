@@ -256,6 +256,8 @@ public:
     static bool doConstructOrthogonal(const OUString& rName);
 
     using SdrTextObj::NbcSetOutlinerParaObject;
+
+    OUString GetCustomShapeName();
 };
 
 #endif // INCLUDED_SVX_SVDOASHP_HXX

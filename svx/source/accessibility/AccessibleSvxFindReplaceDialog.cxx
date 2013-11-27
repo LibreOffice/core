@@ -1,0 +1,96 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#include <svx/AccessibleSvxFindReplaceDialog.hxx>
+#include <svx/srchdlg.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
+#include <unotools/accessiblerelationsethelper.hxx>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+VCLXAccessibleSvxFindReplaceDialog::VCLXAccessibleSvxFindReplaceDialog(VCLXWindow* pVCLXindow)
+    :VCLXAccessibleComponent( pVCLXindow )
+{
+
+}
+
+VCLXAccessibleSvxFindReplaceDialog::~VCLXAccessibleSvxFindReplaceDialog()
+{
+}
+
+void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
+{
+    VCLXAccessibleComponent::FillAccessibleRelationSet( rRelationSet );
+    Window* pDlg = GetWindow();
+    if ( pDlg )
+    {
+        SvxSearchDialog* pSrchDlg = static_cast<SvxSearchDialog*>( pDlg );
+        Window* pDocWin = pSrchDlg->GetDocWin();
+        if ( !pDocWin )
+        {
+            return;
+        }
+        Reference < accessibility::XAccessible > xDocAcc = pDocWin->GetAccessible();
+        if ( !xDocAcc.is() )
+        {
+            return;
+        }
+        Reference< accessibility::XAccessibleGetAccFlowTo > xGetAccFlowTo( xDocAcc, UNO_QUERY );
+        if ( !xGetAccFlowTo.is() )
+        {
+            return;
+        }
+        Any aAny;
+        aAny <<= ( pSrchDlg->GetSrchFlag() );
+
+        const sal_Int32 FORFINDREPLACEFLOWTO = 2;
+        uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->get_AccFlowTo( aAny,  FORFINDREPLACEFLOWTO );
+
+        sal_Int32 nLen = aAnySeq.getLength();
+        if ( nLen )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence( nLen );
+            for ( sal_Int32 i = 0; i < nLen; i++ )
+            {
+                uno::Reference < accessibility::XAccessible > xAcc;
+                aAnySeq[i] >>= xAcc;
+                aSequence[i] = xAcc;
+            }
+            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence ) );
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+// XServiceInfo
+// -----------------------------------------------------------------------------
+
+OUString VCLXAccessibleSvxFindReplaceDialog::getImplementationName() throw (RuntimeException)
+{
+    return OUString( "VCLXAccessibleSvxFindReplaceDialog" );
+}
+
+// -----------------------------------------------------------------------------
+
+Sequence< OUString > VCLXAccessibleSvxFindReplaceDialog::getSupportedServiceNames() throw (RuntimeException)
+{
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString( "VCLXAccessibleSvxFindReplaceDialog" );
+    return aNames;
+}

@@ -106,15 +106,12 @@ public:
 
     void    Invalidate();
     void    NotifyFocusListeners(sal_Bool bGetFocus);
+    void    NotifyAccessibleEvent( const sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue );
 
 protected:
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
-    void    NotifyAccessibleEvent( const sal_Int16 _nEventId,
-                                   const ::com::sun::star::uno::Any& _rOldValue,
-                                   const ::com::sun::star::uno::Any& _rNewValue );
 
 private:
     void                IsValid() throw (::com::sun::star::uno::RuntimeException);

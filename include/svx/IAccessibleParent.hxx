@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <sal/types.h>
-
+#include "AccessibleControlShape.hxx"
 namespace accessibility {
 
 class AccessibleShape;
@@ -80,6 +80,16 @@ public:
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException) = 0;
+    //Add this method to support Form Controls
+    virtual AccessibleControlShape* GetAccControlShapeFromModel
+        (::com::sun::star::beans::XPropertySet*)
+        throw (::com::sun::star::uno::RuntimeException){return NULL;};
+    virtual  ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>
+        GetAccessibleCaption (const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape>&)
+            throw (::com::sun::star::uno::RuntimeException){return NULL;};
+    virtual sal_Bool IsDocumentSelAll(){ return sal_False; }
 };
 
 } // end of namespace accessibility

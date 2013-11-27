@@ -357,6 +357,7 @@ protected:
     SdrObjUserCall*             pUserCall;
     SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, Konnektoren, ... (Das ist der Bitsack)
 
+    SdrObject*  pCaptionObj;
     sal_uInt32                  nOrdNum;      // Rangnummer des Obj in der Liste
 
     SfxGrabBagItem*             pGrabBagItem; // Holds the GrabBagItem property
@@ -1035,6 +1036,7 @@ public:
     // #i121917#
     virtual bool HasText() const;
 
+    const SdrObject* GetCaptionObj() const;
 protected:
     /** Sets a new UNO shape
       *

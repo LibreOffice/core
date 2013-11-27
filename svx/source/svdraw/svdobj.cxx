@@ -3128,6 +3128,11 @@ void SdrObject::notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty
         return pSvxShape->getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty );
 }
 
+const SdrObject* SdrObject::GetCaptionObj() const
+{
+    return pCaptionObj;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // transformation interface for StarOfficeAPI. This implements support for
