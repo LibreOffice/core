@@ -239,7 +239,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="norightspaces">
-                    <property name="label" translatable="yes">Ig_nore _~ and ` at the end of the line</property>
+                    <property name="label" translatable="yes">Ig_nore ~ and ` at the end of the line</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
