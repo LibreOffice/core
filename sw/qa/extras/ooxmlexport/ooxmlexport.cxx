@@ -2043,6 +2043,18 @@ DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")
+{
+    // if Split table value is true for a table then during export do not write <w:cantSplit w:val="false"/>
+    // in table row property,As default row prop is allow row to break across page.
+    // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit",0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val","true");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
