@@ -10,8 +10,8 @@
 #include "colorformat.hxx"
 #include "colorscale.hxx"
 
-#include "colorformat.hrc"
 #include "document.hxx"
+#include "sc.hrc"
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
@@ -61,55 +61,47 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 }
 
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
-    ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
-    maBtnOk( this, ScResId( BTN_OK ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maFlBarColors( this, ScResId( FL_BAR_COLORS ) ),
-    maFlAxes( this, ScResId( FL_AXIS ) ),
-    maFlValues( this, ScResId( FL_VALUES ) ),
-    maFtMin( this, ScResId( FT_MINIMUM ) ),
-    maFtMax( this, ScResId( FT_MAXIMUM ) ),
-    maFtPositive( this, ScResId( FT_POSITIVE ) ),
-    maFtNegative( this, ScResId( FT_NEGATIVE ) ),
-    maFtPosition( this, ScResId( FT_POSITION ) ),
-    maFtAxisColor( this, ScResId( FT_COLOR_AXIS ) ),
-    maLbPos( this, ScResId( LB_POS ) ),
-    maLbNeg( this, ScResId( LB_NEG ) ),
-    maLbAxisCol( this, ScResId( LB_COL_AXIS ) ),
-    maLbTypeMin( this, ScResId( LB_TYPE ) ),
-    maLbTypeMax( this, ScResId( LB_TYPE ) ),
-    maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
-    maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) ),
-    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) ),
+    ModalDialog( pWindow, "DataBarOptions", "modules/scalc/ui/databaroptions.ui" ),
     mpNumberFormatter( pDoc->GetFormatTable() ),
     mpDoc(pDoc),
     maPos(rPos)
 {
-    Init();
-    FreeResource();
+    get( mpBtnOk, "ok");
+    get( mpBtnCancel, "cancel" );
+    get( mpLbPos, "positive_colour" );
+    get( mpLbNeg, "negative_colour" );
+    get( mpLbTypeMin, "min" );
+    get( mpLbTypeMax, "max" );
+    get( mpLbAxisPos, "axis_pos" );
+    get( mpLbAxisCol, "axis_colour" );
+    get( mpEdMin, "min_value" );
+    get( mpEdMax, "max_value" );
 
-    maLbPos.SelectEntry( rData.maPositiveColor );
+    maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
+
+    Init();
+
+    mpLbPos->SelectEntry( rData.maPositiveColor );
     if(rData.mpNegativeColor)
-        maLbNeg.SelectEntry( *rData.mpNegativeColor );
+        mpLbNeg->SelectEntry( *rData.mpNegativeColor );
 
     switch (rData.meAxisPosition)
     {
         case databar::NONE:
-            maLbAxisPos.SelectEntryPos(2);
+            mpLbAxisPos->SelectEntryPos(2);
             break;
         case databar::AUTOMATIC:
-            maLbAxisPos.SelectEntryPos(0);
+            mpLbAxisPos->SelectEntryPos(0);
             break;
         case databar::MIDDLE:
-            maLbAxisPos.SelectEntryPos(1);
+            mpLbAxisPos->SelectEntryPos(1);
             break;
     }
-    ::SetType(rData.mpLowerLimit.get(), maLbTypeMin);
-    ::SetType(rData.mpUpperLimit.get(), maLbTypeMax);
-    SetValue(rData.mpLowerLimit.get(), maEdMin);
-    SetValue(rData.mpUpperLimit.get(), maEdMax);
-    maLbAxisCol.SelectEntry(rData.maAxisColor);
+    ::SetType(rData.mpLowerLimit.get(), *mpLbTypeMin);
+    ::SetType(rData.mpUpperLimit.get(), *mpLbTypeMax);
+    SetValue(rData.mpLowerLimit.get(), *mpEdMin);
+    SetValue(rData.mpUpperLimit.get(), *mpEdMax);
+    mpLbAxisCol->SelectEntry(rData.maAxisColor);
 
     TypeSelectHdl(NULL);
 }
@@ -130,43 +122,43 @@ void ScDataBarSettingsDlg::Init()
     if ( pColorTable.is() )
     {
         // filling the line color box
-        maLbPos.SetUpdateMode( false );
-        maLbNeg.SetUpdateMode( false );
-        maLbAxisCol.SetUpdateMode( false );
+        mpLbPos->SetUpdateMode( false );
+        mpLbNeg->SetUpdateMode( false );
+        mpLbAxisCol->SetUpdateMode( false );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
             XColorEntry* pEntry = pColorTable->GetColor(i);
-            maLbPos.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbNeg.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-            maLbAxisCol.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            mpLbPos->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            mpLbNeg->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            mpLbAxisCol->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
 
             if(pEntry->GetColor() == Color(COL_LIGHTRED))
-                maLbNeg.SelectEntryPos(i);
+                mpLbNeg->SelectEntryPos(i);
             if(pEntry->GetColor() == Color(COL_BLACK))
-                maLbAxisCol.SelectEntryPos(i);
+                mpLbAxisCol->SelectEntryPos(i);
             if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
-                maLbPos.SelectEntryPos(i);
+                mpLbPos->SelectEntryPos(i);
         }
-        maLbPos.SetUpdateMode( sal_True );
-        maLbNeg.SetUpdateMode( sal_True );
-        maLbAxisCol.SetUpdateMode( sal_True );
+        mpLbPos->SetUpdateMode( sal_True );
+        mpLbNeg->SetUpdateMode( sal_True );
+        mpLbAxisCol->SetUpdateMode( sal_True );
     }
-    maBtnOk.SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
+    mpBtnOk->SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
-    Point aPoint(maLbTypeMax.GetPosPixel().X(), maFtMax.GetPosPixel().Y());
-    maLbTypeMax.SetPosPixel(aPoint);
+    /*Point aPoint(mpLbTypeMax.GetPosPixel().X(), maFtMax.GetPosPixel().Y());
+    mpLbTypeMax.SetPosPixel(aPoint);*/
 
-    maLbTypeMin.SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
-    maLbTypeMax.SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mpLbTypeMin->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    mpLbTypeMax->SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
 
 }
 
 namespace {
 
-void GetAxesPosition(ScDataBarFormatData* pData, const ListBox& rLbox)
+void GetAxesPosition(ScDataBarFormatData* pData, const ListBox* rLbox)
 {
-    switch(rLbox.GetSelectEntryPos())
+    switch(rLbox->GetSelectEntryPos())
     {
         case 0:
             pData->meAxisPosition = databar::AUTOMATIC;
@@ -185,16 +177,16 @@ void GetAxesPosition(ScDataBarFormatData* pData, const ListBox& rLbox)
 ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
 {
     ScDataBarFormatData* pData = new ScDataBarFormatData();
-    pData->maPositiveColor = maLbPos.GetSelectEntryColor();
-    pData->mpNegativeColor.reset(new Color(maLbNeg.GetSelectEntryColor()));
+    pData->maPositiveColor = mpLbPos->GetSelectEntryColor();
+    pData->mpNegativeColor.reset(new Color(mpLbNeg->GetSelectEntryColor()));
     pData->mbGradient = true; //FIXME
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
-    pData->maAxisColor = maLbAxisCol.GetSelectEntryColor();
+    pData->maAxisColor = mpLbAxisCol->GetSelectEntryColor();
 
-    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
-    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
-    GetAxesPosition(pData, maLbAxisPos);
+    ::GetType(*mpLbTypeMin, *mpEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    ::GetType(*mpLbTypeMax, *mpEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    GetAxesPosition(pData, mpLbAxisPos);
 
     return pData;
 }
@@ -203,20 +195,20 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 {
     //check that min < max
     bool bWarn = false;
-    sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
+    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
     if( nSelectMin == COLORSCALE_MAX )
         bWarn = true;
-    sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
+    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectEntryPos();
     if( nSelectMax == COLORSCALE_MIN )
         bWarn = true;
 
-    if(!bWarn && maLbTypeMin.GetSelectEntryPos() == maLbTypeMax.GetSelectEntryPos())
+    if(!bWarn && mpLbTypeMin->GetSelectEntryPos() == mpLbTypeMax->GetSelectEntryPos())
     {
 
         if(nSelectMax != COLORSCALE_FORMULA && nSelectMax != COLORSCALE_AUTO)
         {
-            OUString aMinString = maEdMin.GetText();
-            OUString aMaxString = maEdMax.GetText();
+            OUString aMinString = mpEdMin->GetText();
+            OUString aMaxString = mpEdMax->GetText();
             double nMinValue = 0;
             sal_uInt32 nIndex = 0;
             mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
@@ -243,33 +235,33 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
 {
-    sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
+    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
     if( nSelectMin <= COLORSCALE_MAX)
-        maEdMin.Disable();
+        mpEdMin->Disable();
     else
     {
-        maEdMin.Enable();
-        if(maEdMin.GetText().isEmpty())
+        mpEdMin->Enable();
+        if(mpEdMin->GetText().isEmpty())
         {
             if(nSelectMin == COLORSCALE_PERCENTILE || nSelectMin == COLORSCALE_PERCENT)
-                maEdMin.SetText(OUString::number(50));
+                mpEdMin->SetText(OUString::number(50));
             else
-                maEdMin.SetText(OUString::number(0));
+                mpEdMin->SetText(OUString::number(0));
         }
     }
 
-    sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
+    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectEntryPos();
     if(nSelectMax <= COLORSCALE_MAX)
-        maEdMax.Disable();
+        mpEdMax->Disable();
     else
     {
-        maEdMax.Enable();
-        if(maEdMax.GetText().isEmpty())
+        mpEdMax->Enable();
+        if(mpEdMax->GetText().isEmpty())
         {
             if(nSelectMax == COLORSCALE_PERCENTILE || nSelectMax == COLORSCALE_PERCENT)
-                maEdMax.SetText(OUString::number(50));
+                mpEdMax->SetText(OUString::number(50));
             else
-                maEdMax.SetText(OUString::number(0));
+                mpEdMax->SetText(OUString::number(0));
         }
     }
     return 0;
