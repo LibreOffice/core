@@ -1230,7 +1230,7 @@ namespace cairocanvas
             {
                 double* pDashArray = new double[ strokeAttributes.DashArray.getLength() ];
                 for( sal_Int32 i=0; i<strokeAttributes.DashArray.getLength(); i++ )
-                    pDashArray[i]=strokeAttributes.DashArray[i];
+                    pDashArray[i] = strokeAttributes.DashArray[i] * w;
                 cairo_set_dash( mpCairo.get(), pDashArray, strokeAttributes.DashArray.getLength(), 0 );
                 delete[] pDashArray;
             }
