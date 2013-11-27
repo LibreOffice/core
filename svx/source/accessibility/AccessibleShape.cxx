@@ -421,36 +421,27 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    ::utl::AccessibleRelationSetHelper* pRelationSet =
-        new utl::AccessibleRelationSetHelper;
-    SdrObject* pCaptionSdr = const_cast < SdrObject* > ( m_pShape->GetCaptionObj() )  ;
-    if(pCaptionSdr!=NULL)
+    ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
+    uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+    aSequence[0] = mpParent->GetAccessibleCaption(mxShape);
+
+    //this mxshape is the captioned shape, only for sw
+    if(aSequence[0].get())
     {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            uno::Reference<drawing::XShape> xCaptionShape ( pCaptionSdr->getUnoShape(),uno::UNO_QUERY);
-            if(xCaptionShape.is())
-            {
-                aSequence[0] = mpParent->GetAccessibleCaption(xCaptionShape);
-                pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
-        }
+        pRelationSet->AddRelation(
+            AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
     }
-    else
-    {
-        //this mxshape is the captioned shape, only for sw
-        if(mpParent->GetAccessibleCaption(mxShape).get())
-        {
-            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
-            aSequence[0] = mpParent->GetAccessibleCaption(mxShape);
-            pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
-        }
-    }
-   if (pRelationSet != NULL)
+
+    if (pRelationSet != NULL)
     {
         return uno::Reference<XAccessibleRelationSet> (
             new ::utl::AccessibleRelationSetHelper (*pRelationSet));
     }
     else
+    {
         return uno::Reference<XAccessibleRelationSet>(NULL);
+    }
+
     return uno::Reference<XAccessibleRelationSet>();
 }
 
