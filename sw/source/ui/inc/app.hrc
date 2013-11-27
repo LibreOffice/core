@@ -101,7 +101,6 @@
 #define STR_SIMPLE                      (RC_APP_BEGIN + 129)
 #define STR_AUTHMRK_EDIT                (RC_APP_BEGIN + 130)
 #define STR_AUTHMRK_INSERT              (RC_APP_BEGIN + 131)
-#define STR_ROTATE_TO_STANDARD_ORIENTATION  (RC_APP_BEGIN + 132)
 #define STR_CAPTION_TABLE               (RC_APP_BEGIN + 133)
 #define STR_CAPTION_FRAME               (RC_APP_BEGIN + 134)
 #define STR_CAPTION_GRAPHIC             (RC_APP_BEGIN + 135)
