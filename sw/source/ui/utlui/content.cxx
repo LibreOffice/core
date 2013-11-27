@@ -2714,7 +2714,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
                 SwContent* pCnt = (SwContent*)pEntry->GetUserData();
 
-                sal_Bool bSel = sal_False;
                 sal_uInt16 nJumpType = pCnt->GetParent()->GetType();
                 switch(nJumpType)
                 {
