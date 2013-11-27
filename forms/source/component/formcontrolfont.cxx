@@ -301,7 +301,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_KERNING:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Int16)m_aFont.Kerning );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Kerning );
             break;
 
         case PROPERTY_ID_FONT_ORIENTATION:
