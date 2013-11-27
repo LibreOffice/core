@@ -174,7 +174,7 @@ bool coerce(
 {
     assert(lhs != 0);
     assert(rhs != 0);
-    bool ok;
+    bool ok = bool(); // avoid warnings
     switch (lhs->type) {
     case unoidl::detail::SourceProviderExpr::TYPE_BOOL:
         ok = rhs->type != unoidl::detail::SourceProviderExpr::TYPE_BOOL;
@@ -431,7 +431,10 @@ Found findEntity(
                                              + argName));
                                         return FOUND_ERROR;
                                     } else {
-                                        unoidl::detail::SourceProviderType::Type argT;
+                                        unoidl::detail::SourceProviderType::Type
+                                            argT
+                                            = unoidl::detail::SourceProviderType::Type();
+                                            // avoid warnings
                                         switch (argEnt->kind) {
                                         case unoidl::detail::SourceProviderEntity::KIND_LOCAL:
                                             if (e->pad.is()) {
