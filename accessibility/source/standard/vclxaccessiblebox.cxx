@@ -422,7 +422,11 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if (nIndex<0 || nIndex>=getAccessibleActionCount())
-            throw ::com::sun::star::lang::IndexOutOfBoundsException();
+            throw ::com::sun::star::lang::IndexOutOfBoundsException(
+                ("VCLXAccessibleBox::doAccessibleAction: index "
+                 + OUString::number(nIndex) + " not among 0.."
+                 + OUString::number(getAccessibleActionCount())),
+                static_cast<OWeakObject*>(this));
 
         if (m_aBoxType == COMBOBOX)
         {
