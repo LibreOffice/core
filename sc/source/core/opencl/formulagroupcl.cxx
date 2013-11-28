@@ -31,6 +31,14 @@
 #define REDUCE_THRESHOLD 4  // set to 4 for correctness testing. priority 1
 #define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 #include "formulagroupcl_public.hxx"
+#ifdef WIN32
+#ifndef NAN
+namespace {
+static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
+}
+#define NAN (*(const float *) __nan)
+#endif
+#endif
 
 #include <list>
 #include <map>
