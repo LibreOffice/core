@@ -182,6 +182,7 @@ void ScUndoDeleteContents::Undo()
     DoChange( sal_True );
     EndUndo();
 
+    BroadcastChanges(aRange);
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 
@@ -191,6 +192,7 @@ void ScUndoDeleteContents::Redo()
     DoChange( false );
     EndRedo();
 
+    BroadcastChanges(aRange);
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 

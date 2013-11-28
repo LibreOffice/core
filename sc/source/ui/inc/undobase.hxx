@@ -57,6 +57,8 @@ protected:
     void            BeginRedo();
     void            EndRedo();
 
+    void BroadcastChanges( const ScRange& rRange );
+
     static void     ShowTable( SCTAB nTab );
     static void     ShowTable( const ScRange& rRange );
 };
