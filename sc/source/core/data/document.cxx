@@ -3583,6 +3583,8 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
     if (!GetAutoCalc())
         return;
 
+    mpFormulaGroupCxt.reset();
+
     for (size_t nPos=0, nRangeCount = rRanges.size(); nPos < nRangeCount; nPos++)
     {
         const ScRange& rRange = *rRanges[nPos];
@@ -3596,6 +3598,8 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
                 rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
         }
     }
+
+    mpFormulaGroupCxt.reset();
 }
 
 
