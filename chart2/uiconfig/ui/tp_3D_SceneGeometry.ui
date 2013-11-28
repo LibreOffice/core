@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustmentPERSPECTIVE">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentROTATION">
+    <property name="lower">-180</property>
+    <property name="upper">180</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkGrid" id="tp_3DSceneGeometry">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
+    <child>
+      <object class="GtkCheckButton" id="CBX_RIGHT_ANGLED_AXES">
+        <property name="label" translatable="yes">_Right-angled axes</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="FT_X_ROTATION">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">_X rotation</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">MTR_FLD_X_ROTATION:0degrees</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="FT_Y_ROTATION">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">_Y rotation</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">MTR_FLD_Y_ROTATION:0degrees</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="FT_Z_ROTATION">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">_Z rotation</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">MTR_FLD_Z_ROTATION:0degrees</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="CBX_PERSPECTIVE">
+        <property name="label" translatable="yes">_Perspective</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="MTR_FLD_PERSPECTIVE:0%">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="invisible_char">•</property>
+        <property name="adjustment">adjustmentPERSPECTIVE</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">4</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="MTR_FLD_Z_ROTATION:0degrees">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="invisible_char">•</property>
+        <property name="input_purpose">alpha</property>
+        <property name="adjustment">adjustmentROTATION</property>
+        <property name="update_policy">if-valid</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="MTR_FLD_Y_ROTATION:0degrees">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="invisible_char">•</property>
+        <property name="adjustment">adjustmentROTATION</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSpinButton" id="MTR_FLD_X_ROTATION:0degrees">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="invisible_char">•</property>
+        <property name="adjustment">adjustmentROTATION</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>
