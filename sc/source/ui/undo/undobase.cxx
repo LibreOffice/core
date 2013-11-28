@@ -142,6 +142,28 @@ void ScSimpleUndo::EndRedo()
     pDocShell->SetInUndo( false );
 }
 
+void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    pDoc->CellContentModified();
+
+    ScHint aHint(SC_HINT_DATACHANGED, ScAddress());
+    ScAddress& rPos = aHint.GetAddress();
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        rPos.SetTab(nTab);
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        {
+            rPos.SetCol(nCol);
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                rPos.SetRow(nRow);
+                pDoc->Broadcast(aHint);
+            }
+        }
+    }
+}
+
 void ScSimpleUndo::ShowTable( SCTAB nTab )
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
