@@ -93,14 +93,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
                     else
                     {
                         Any a( xHierarchicalNameAccess->getByHierarchicalName( aNode ) );
-                        try
-                        {
-                            a >>= xReadAccess;
-                        }
-                        catch ( ::com::sun::star::uno::Exception& )
-                        {
-                            bAvailable = false;
-                        }
+                        bAvailable = (a >>= xReadAccess);
                     }
                 }
             }
