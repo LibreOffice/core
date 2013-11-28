@@ -500,6 +500,25 @@ void SdrMarkView::BrkMarkGluePoints()
     }
 }
 
+sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
+{
+    sal_uIntPtr nCount=0;
+    SdrPageView* pPV = GetSdrPageView();
+
+    if(pPV)
+    {
+        SdrObjList* pOL=pPV->GetObjList();
+        sal_uIntPtr nObjAnz=pOL->GetObjCount();
+        for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
+            SdrObject* pObj=pOL->GetObj(nObjNum);
+            if (IsObjMarkable(pObj,pPV)) {
+                nCount++;
+            }
+        }
+    }
+    return nCount;
+}
+
 void SdrMarkView::hideMarkHandles()
 {
     if(!mbMarkHandlesHidden)

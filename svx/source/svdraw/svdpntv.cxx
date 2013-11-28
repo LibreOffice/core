@@ -1257,6 +1257,11 @@ void SdrPaintView::VisAreaChanged(const SdrPageWindow& /*rWindow*/)
     Broadcast(SvxViewHint(SvxViewHint::SVX_HINT_VIEWCHANGED));
 }
 
+const svtools::ColorConfig& SdrPaintView::getColorConfig() const
+{
+    return maColorConfig;
+}
+
 void SdrPaintView::onChangeColorConfig()
 {
     SetGridColor( Color( maColorConfig.GetColorValue( svtools::DRAWGRID ).nColor ) );

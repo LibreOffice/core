@@ -206,6 +206,8 @@ public:
     void SetFrameHandles(sal_Bool bOn);
     sal_Bool IsFrameHandles() const { return bForceFrameHandles; }
 
+    sal_uIntPtr GetMarkableObjCount() const;
+
     // Limit. Exceeding the limit causes an implicite switch to FrameHandles. default=50.
     void SetFrameHandlesLimit(sal_uInt16 nAnz) { nFrameHandlesLimit=nAnz; }
     sal_uInt16 GetFrameHandlesLimit() const { return nFrameHandlesLimit; }
