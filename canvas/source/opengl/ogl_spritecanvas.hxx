@@ -88,6 +88,19 @@ namespace oglcanvas
         virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL switchBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XBitmapCanvas
+        virtual void SAL_CALL copyRect(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >&  /*sourceCanvas*/,
+                const ::com::sun::star::geometry::RealRectangle2D& /*sourceRect*/,
+                const ::com::sun::star::rendering::ViewState& /*sourceViewState*/,
+                const ::com::sun::star::rendering::RenderState& /*sourceRenderState*/,
+                const ::com::sun::star::geometry::RealRectangle2D& /*destRect*/,
+                const ::com::sun::star::rendering::ViewState& /*destViewState*/,
+                const ::com::sun::star::rendering::RenderState& /*destRenderState*/)
+            throw (::com::sun::star::lang::IllegalArgumentException,
+                   ::com::sun::star::uno::RuntimeException)
+            { assert(false); }
+
         // XSpriteCanvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > >& animationBitmaps, ::sal_Int8 interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException);
