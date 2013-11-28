@@ -1,0 +1,30 @@
+From 30021c75542a008ccf8814fa70d519f00bc69776 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Thu, 28 Nov 2013 09:50:00 +0000
+Subject: [PATCH] Fix crash on abi2010-1.doc example
+
+---
+ src/lib/FB2Parser.cpp | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/FB2Parser.cpp b/src/lib/FB2Parser.cpp
+index d258c09..3cd3e3c 100644
+--- a/src/lib/FB2Parser.cpp
++++ b/src/lib/FB2Parser.cpp
+@@ -357,8 +357,11 @@ FB2XMLParserContext *processNode(FB2XMLParserContext *const context, const xmlTe
+   {
+   case XML_READER_TYPE_ELEMENT :
+   {
+-    const EBOOKToken *name = getFB2Token(xmlTextReaderConstLocalName(reader));
+-    const EBOOKToken *ns = getFB2Token(xmlTextReaderConstNamespaceUri(reader));
++    const xmlChar *name_str = xmlTextReaderConstLocalName(reader);
++    const xmlChar *ns_str = xmlTextReaderConstNamespaceUri(reader);
++
++    const EBOOKToken *name = name_str ? getFB2Token(name_str) : 0;
++    const EBOOKToken *ns = ns_str ? getFB2Token(ns_str) : 0;
+ 
+     if (!name || !ns)
+       // TODO: unknown elements should not be skipped entirely, but
+-- 
+1.8.3.1
+
