@@ -25,8 +25,8 @@
 #include "opencl_device.hxx"
 
 
-#define INPUTSIZE  256*40
-#define OUTPUTSIZE 256*40
+#define INPUTSIZE  15360
+#define OUTPUTSIZE 15360
 
 #define STRINGIFY(...) #__VA_ARGS__"\n"
 #define LOG_PRINTF(x) (std::cout << x << std::endl)
