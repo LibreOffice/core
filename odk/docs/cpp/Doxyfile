@@ -32,8 +32,9 @@ ALIASES = "derive=\par Derive: \n"
 
 MACRO_EXPANSION = YES
 EXPAND_ONLY_PREDEF = YES
-PREDEFINED = __cplusplus \
-	SAL_CALL= \
-	SAL_DEPRECATED_INTERNAL(x)= \
-	SAL_DEPRECATED(x)= \
-	"SAL_THROW(x)=throw x"
+PREDEFINED = \
+    __cplusplus \
+    SAL_CALL= \
+    SAL_DEPRECATED_INTERNAL(x)= \
+    SAL_DEPRECATED(x)= \
+    "SAL_THROW(x)=throw x"
