@@ -533,6 +533,8 @@ public:
     sal_Bool IsPrintPreview() const { return bPrintPreview; }
     void SetPrintPreview(bool bOn = true) { bPrintPreview=bOn; }
 
+    const svtools::ColorConfig& getColorConfig() const;
+
     virtual void onChangeColorConfig();
 
     // #103834# Set background color for svx at SdrPageViews
