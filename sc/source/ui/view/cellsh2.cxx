@@ -29,6 +29,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
+#include <svtools/miscopt.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -1167,7 +1168,15 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                 }
                 break;
-
+            case SID_DATA_STREAMS:
+            case SID_DATA_STREAMS_PLAY:
+            case SID_DATA_STREAMS_STOP:
+                {
+                    SvtMiscOptions aMiscOptions;
+                    if ( !aMiscOptions.IsExperimentalMode() )
+                        rSet.DisableItem( nWhich );
+                }
+                break;
             case SID_TEXT_TO_COLUMNS:
                 {
                     ScRange aRange;
