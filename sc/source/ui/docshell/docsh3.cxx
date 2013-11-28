@@ -87,6 +87,7 @@ void ScDocShell::PostDataChanged()
 {
     Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
     SFX_APP()->Broadcast(SfxSimpleHint( FID_ANYDATACHANGED ));      // Navigator
+    aDocument.CellContentModified();
     //! Navigator direkt benachrichtigen!
 }
 
