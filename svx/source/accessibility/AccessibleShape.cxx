@@ -441,8 +441,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     {
         return uno::Reference<XAccessibleRelationSet>(NULL);
     }
-
-    return uno::Reference<XAccessibleRelationSet>();
 }
 
 /** Return a copy of the state set.
