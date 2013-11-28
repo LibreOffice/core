@@ -2313,6 +2313,11 @@ ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
     mpDoc->pFormatExchangeList = NULL;
 }
 
+void ScDocument::CellContentModified()
+{
+    mpFormulaGroupCxt.reset();
+}
+
 SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos )
 {
     ScTable* pTab = FetchTable(rPos.Tab());
