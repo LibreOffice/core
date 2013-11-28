@@ -35,10 +35,10 @@ void CLBuildKernelThread::execute()
     while (!done)
     {
         SAL_INFO("sc.opencl.thread", "waiting for condition");
-        maCondition.wait();
+        maQueueCondition.wait();
         SAL_INFO("sc.opencl.thread", "got condition");
-        osl::ResettableMutexGuard aGuard(maMutex);
-        maCondition.reset();
+        osl::ResettableMutexGuard aGuard(maQueueMutex);
+        maQueueCondition.reset();
         while (!maQueue.empty())
         {
             CLBuildKernelWorkItem aWorkItem = maQueue.front();
@@ -57,7 +57,7 @@ void CLBuildKernelThread::execute()
                                                                                     *aWorkItem.mxGroup->mpCode);
                 aWorkItem.mxGroup->meCalcState = sc::GroupCalcOpenCLKernelBinaryCreated;
                 SAL_INFO("sc.opencl.thread", "group " << aWorkItem.mxGroup << " compilation done");
-                aWorkItem.mxGroup->maCompilationDone.set();
+                maCompilationDoneCondition.set();
                 break;
             case CLBuildKernelWorkItem::FINISH:
                 SAL_INFO("sc.opencl.thread", "told to finish");
@@ -72,9 +72,9 @@ void CLBuildKernelThread::execute()
 
 void CLBuildKernelThread::push(CLBuildKernelWorkItem item)
 {
-    osl::MutexGuard guard(maMutex);
+    osl::MutexGuard guard(maQueueMutex);
     maQueue.push(item);
-    maCondition.set();
+    maQueueCondition.set();
 }
 
 void CLBuildKernelThread::produce()

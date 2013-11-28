@@ -401,8 +401,8 @@ static osl::Mutex& getOpenCLCompilationThreadMutex()
     return *pMutex;
 }
 
-int ScFormulaCellGroup::mnCount = 0;
-rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::mxCLKernelThread;
+int ScFormulaCellGroup::snCount = 0;
+rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::sxCompilationThread;
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
@@ -421,11 +421,11 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
         if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
         {
             osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-            if (mnCount++ == 0)
+            if (snCount++ == 0)
             {
-                assert(!mxCLKernelThread.is());
-                mxCLKernelThread.set(new sc::CLBuildKernelThread);
-                mxCLKernelThread->launch();
+                assert(!sxCompilationThread.is());
+                sxCompilationThread.set(new sc::CLBuildKernelThread);
+                sxCompilationThread->launch();
             }
         }
     }
@@ -436,13 +436,13 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
     if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-        if (--mnCount == 0 && mxCLKernelThread.is())
+        if (--snCount == 0 && sxCompilationThread.is())
             {
-                assert(mxCLKernelThread.is());
-                mxCLKernelThread->finish();
-                mxCLKernelThread->join();
+                assert(sxCompilationThread.is());
+                sxCompilationThread->finish();
+                sxCompilationThread->join();
                 SAL_INFO("sc.opencl", "OpenCL kernel compilation thread has finished");
-                mxCLKernelThread.clear();
+                sxCompilationThread.clear();
             }
     }
     delete mpCode;
@@ -450,13 +450,11 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 
 void ScFormulaCellGroup::scheduleCompilation()
 {
-    osl::ResettableMutexGuard aGuard(maMutex);
     meCalcState = sc::GroupCalcOpenCLKernelCompilationScheduled;
     sc::CLBuildKernelWorkItem aWorkItem;
     aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
     aWorkItem.mxGroup = this;
-    aGuard.clear();
-    mxCLKernelThread->push(aWorkItem);
+    sxCompilationThread->push(aWorkItem);
 }
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
@@ -1933,6 +1931,9 @@ bool ScFormulaCell::IsMultilineResult()
 
 void ScFormulaCell::MaybeInterpret()
 {
+    if (mxGroup && mxGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+        return;
+
     if (!IsDirtyOrInTableOpDirty())
         return;
 
@@ -3341,7 +3342,7 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
-    if (mxGroup->mxCLKernelThread.is())
+    if (mxGroup->sxCompilationThread.is())
         mxGroup->scheduleCompilation();
     return mxGroup;
 }
