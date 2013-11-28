@@ -5484,7 +5484,8 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 
 // -----------------------------------------------------------------------
 
-static bool ImplHandleGetObject( HWND hWnd, LPARAM lParam, WPARAM wParam, long &nRet )
+static bool
+ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
 {
     // IA2 should be enabled automatically
     AllSettings aSettings = Application::GetSettings();
@@ -5514,7 +5515,8 @@ static bool ImplHandleGetObject( HWND hWnd, LPARAM lParam, WPARAM wParam, long &
         // mhOnSetTitleWnd not set to reasonable value anywhere...
         if ( lParam == OBJID_CLIENT )
         {
-            nRet = xMSAA->getAccObjectPtr( (long)hWnd, lParam, wParam );
+            nRet = xMSAA->getAccObjectPtr(
+                    reinterpret_cast<sal_Int64>(hWnd), lParam, wParam);
             if( nRet != 0 )
                 return true;
         }
@@ -6053,12 +6055,12 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_GETOBJECT:
-            long nRet;
+            ImplSalYieldMutexAcquireWithWait();
             if ( ImplHandleGetObject( hWnd, lParam, wParam, nRet ) )
             {
                 rDef = false;
-                return (HRESULT) nRet;
             }
+            ImplSalYieldMutexRelease();
             break;
 
         case WM_APPCOMMAND:
