@@ -397,7 +397,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                                 fillMatrix(*pMat, nCol, pStrs, nRowSize);
                             }
                         }
-                        else
+                        else if (rArray.mpNumericArray)
                         {
                             // Numeric cells only.
                             const double* pNums = rArray.mpNumericArray;
