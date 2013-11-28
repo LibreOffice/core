@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
-			--disable-debug \
+			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
 			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side),$(BOOST_CPPFLAGS))" \
