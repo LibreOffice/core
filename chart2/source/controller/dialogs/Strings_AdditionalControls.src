@@ -18,19 +18,6 @@
  */
 #include "Strings.hrc"
 
-String STR_3DSCHEME_SIMPLE
-{
-    Text [ en-US ] = "Simple";
-};
-String STR_3DSCHEME_REALISTIC
-{
-    Text [ en-US ] = "Realistic";
-};
-String STR_3DSCHEME_CUSTOM
-{
-    Text [ en-US ] = "Custom";
-};
-
 String STR_BAR_GEOMETRY
 {
     Text [ en-US ] = "Shape";

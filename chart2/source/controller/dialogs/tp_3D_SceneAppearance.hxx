@@ -21,8 +21,6 @@
 
 // header for class TabPage
 #include <vcl/tabpage.hxx>
-// header for class FixedLine
-#include <vcl/fixed.hxx>
 // header for class MetricField
 #include <vcl/field.hxx>
 // header for class CheckBox
@@ -65,17 +63,15 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         m_xChartModel;
 
-    FixedText       m_aFT_Scheme;
-    ListBox         m_aLB_Scheme;
+    ListBox*         m_pLB_Scheme;
 
-    FixedLine       m_aFL_Separator;
-
-    CheckBox        m_aCB_Shading;
-    CheckBox        m_aCB_ObjectLines;
-    CheckBox        m_aCB_RoundedEdge;
+    CheckBox*        m_pCB_Shading;
+    CheckBox*        m_pCB_ObjectLines;
+    CheckBox*        m_pCB_RoundedEdge;
 
     bool            m_bUpdateOtherControls;
     bool            m_bCommitToModel;
+    OUString        m_aCustom;
 
     ControllerLockHelper & m_rControllerLockHelper;
 };
