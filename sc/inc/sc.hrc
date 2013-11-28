@@ -1111,7 +1111,6 @@
 
 #define RID_POPUP_FILTER                (SC_DIALOGS_START + 153)
 #define RID_SCDLG_TAB_BG_COLOR          (SC_DIALOGS_START + 154)
-#define RID_SCDLG_DATABAR               (SC_DIALOGS_START + 155)
 #define RID_COND_ENTRY                  (SC_DIALOGS_START + 156)
 
 #define RID_ICON_SET_ENTRY              (SC_DIALOGS_START + 158)
