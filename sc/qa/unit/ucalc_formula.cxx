@@ -2158,13 +2158,53 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
     }
 }
 
+template<size_t _DataSize, size_t _FormulaSize, int _Type>
+void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aChecks[_FormulaSize])
+{
+    size_t nDataSize = _DataSize;
+    for (size_t i = 0; i < nDataSize; ++i)
+        pDoc->SetString(i, 0, 0, OUString::createFromAscii(aData[i]));
+
+    for (size_t i = 0; i < _FormulaSize; ++i)
+    {
+        pDoc->SetString(i, 1, 0, OUString::createFromAscii(aChecks[i].pVal));
+
+        // Assume we don't have more than 26 data columns..
+        OUStringBuffer aBuf;
+        aBuf.appendAscii("=MATCH(");
+        aBuf.append(static_cast<sal_Unicode>('A'+i));
+        aBuf.appendAscii("2;A1:");
+        aBuf.append(static_cast<sal_Unicode>('A'+nDataSize));
+        aBuf.appendAscii("1;");
+        aBuf.append(static_cast<sal_Int32>(_Type));
+        aBuf.appendAscii(")");
+        OUString aFormula = aBuf.makeStringAndClear();
+        pDoc->SetString(i, 2, 0, aFormula);
+    }
+
+    pDoc->CalcAll();
+    Test::printRange(pDoc, ScRange(0, 0, 0, _FormulaSize-1, 2, 0), "MATCH");
+
+    // verify the results.
+    for (size_t i = 0; i < _FormulaSize; ++i)
+    {
+        OUString aStr = pDoc->GetString(i, 2, 0);
+        if (!aStr.equalsAscii(aChecks[i].pRes))
+        {
+            cerr << "column " << char('A'+i) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr << "'"
+                << " criterion='" << aChecks[i].pVal << "'" << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for horizontal MATCH", false);
+        }
+    }
+}
+
 void Test::testFuncMATCH()
 {
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    clearRange(m_pDoc, ScRange(0, 0, 0, 4, 40, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 40, 40, 0));
     {
         // Ascending in-exact match
 
@@ -2204,6 +2244,9 @@ void Test::testFuncMATCH()
         };
 
         runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(m_pDoc, aData, aChecks);
+        clearRange(m_pDoc, ScRange(0, 0, 0, 4, 40, 0));
+        runTestHorizontalMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(m_pDoc, aData, aChecks);
+        clearRange(m_pDoc, ScRange(0, 0, 0, 40, 4, 0));
     }
 
     {
@@ -2246,6 +2289,9 @@ void Test::testFuncMATCH()
         };
 
         runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(m_pDoc, aData, aChecks);
+        clearRange(m_pDoc, ScRange(0, 0, 0, 4, 40, 0));
+        runTestHorizontalMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(m_pDoc, aData, aChecks);
+        clearRange(m_pDoc, ScRange(0, 0, 0, 40, 4, 0));
     }
 
     m_pDoc->DeleteTab(0);
