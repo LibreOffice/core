@@ -46,14 +46,8 @@ class AquaSalFrame;
 class ImplDevFontAttributes;
 class ImplMacTextStyle;
 
-struct CGRect;
-
 typedef sal_uInt32 sal_GlyphId;
 typedef std::vector<unsigned char> ByteVector;
-
-#ifndef CGFLOAT_TYPE
-typedef float CGFloat;
-#endif
 
 // mac specific physically available font face
 class ImplMacFontData : public PhysicalFontFace
