@@ -36,29 +36,6 @@
 
 // =======================================================================
 
-class CTFontList
-:   public SystemFontList
-{
-public:
-    explicit    CTFontList( void );
-    virtual     ~CTFontList( void );
-
-    bool        Init( void );
-    void        AddFont( CoreTextFontData* );
-
-    virtual void    AnnounceFonts( ImplDevFontList& ) const;
-    virtual CoreTextFontData* GetFontDataFromId( sal_IntPtr ) const;
-
-private:
-    CTFontCollectionRef mpCTFontCollection;
-    CFArrayRef mpCTFontArray;
-
-    typedef boost::unordered_map<sal_IntPtr,CoreTextFontData*> CTFontContainer;
-    CTFontContainer maFontContainer;
-};
-
-// =======================================================================
-
 inline double toRadian(int nDegree)
 {
     return nDegree * (M_PI / 1800.0);
@@ -411,21 +388,21 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     {
         const sal_IntPtr nFontId = (sal_IntPtr)pValue;
         CoreTextFontData* pFontData = new CoreTextFontData( rDFA, nFontId );
-        CTFontList* pFontList = (CTFontList*)pContext;
+        SystemFontList* pFontList = (SystemFontList*)pContext;
         pFontList->AddFont( pFontData );
     }
 }
 
 // =======================================================================
 
-CTFontList::CTFontList()
+SystemFontList::SystemFontList()
 :   mpCTFontCollection( NULL )
 ,   mpCTFontArray( NULL )
 {}
 
 // -----------------------------------------------------------------------
 
-CTFontList::~CTFontList()
+SystemFontList::~SystemFontList()
 {
     CTFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
@@ -440,7 +417,7 @@ CTFontList::~CTFontList()
 
 // -----------------------------------------------------------------------
 
-void CTFontList::AddFont( CoreTextFontData* pFontData )
+void SystemFontList::AddFont( CoreTextFontData* pFontData )
 {
     sal_IntPtr nFontId = pFontData->GetFontId();
     maFontContainer[ nFontId ] = pFontData;
@@ -448,7 +425,7 @@ void CTFontList::AddFont( CoreTextFontData* pFontData )
 
 // -----------------------------------------------------------------------
 
-void CTFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
+void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 {
     CTFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
@@ -457,7 +434,7 @@ void CTFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 
 // -----------------------------------------------------------------------
 
-CoreTextFontData* CTFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
+CoreTextFontData* SystemFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 {
     CTFontContainer::const_iterator it = maFontContainer.find( nFontId );
     if( it == maFontContainer.end() )
@@ -467,7 +444,7 @@ CoreTextFontData* CTFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 
 // -----------------------------------------------------------------------
 
-bool CTFontList::Init( void )
+bool SystemFontList::Init( void )
 {
     // enumerate available system fonts
     static const int nMaxDictEntries = 8;
@@ -489,7 +466,7 @@ bool CTFontList::Init( void )
 
 SystemFontList* GetCoretextFontList( void )
 {
-    CTFontList* pList = new CTFontList();
+    SystemFontList* pList = new SystemFontList();
     if( !pList->Init() ) {
         delete pList;
         return NULL;

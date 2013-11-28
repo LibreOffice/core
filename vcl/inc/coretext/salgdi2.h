@@ -119,10 +119,21 @@ private:
 class SystemFontList
 {
 public:
-    virtual ~SystemFontList( void );
+    SystemFontList( void );
+    ~SystemFontList( void );
 
-    virtual void    AnnounceFonts( ImplDevFontList& ) const = 0;
-    virtual CoreTextFontData* GetFontDataFromId( sal_IntPtr nFontId ) const = 0;
+    bool        Init( void );
+    void        AddFont( CoreTextFontData* );
+
+    void    AnnounceFonts( ImplDevFontList& ) const;
+    CoreTextFontData* GetFontDataFromId( sal_IntPtr nFontId ) const;
+
+private:
+    CTFontCollectionRef mpCTFontCollection;
+    CFArrayRef mpCTFontArray;
+
+    typedef boost::unordered_map<sal_IntPtr,CoreTextFontData*> CTFontContainer;
+    CTFontContainer maFontContainer;
 };
 
 #ifdef MACOSX

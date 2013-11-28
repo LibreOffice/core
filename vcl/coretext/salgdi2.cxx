@@ -61,12 +61,6 @@ using namespace vcl;
 
 // =======================================================================
 
-SystemFontList::~SystemFontList( void )
-{}
-
-
-// =======================================================================
-
 CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
 :   PhysicalFontFace( rSrc )
 ,   mnFontId( rSrc.mnFontId )
