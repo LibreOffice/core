@@ -201,6 +201,7 @@ DataStream::~DataStream()
         StopImport();
     if (mxReaderThread.is())
         mxReaderThread->endThread();
+    delete mpLines;
 }
 
 OString DataStream::ConsumeLine()
