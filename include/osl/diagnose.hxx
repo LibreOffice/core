@@ -19,6 +19,8 @@
 #ifndef INCLUDED_OSL_DIAGNOSE_HXX
 #define INCLUDED_OSL_DIAGNOSE_HXX
 
+/// @cond INTERNAL
+
 #include <sal/config.h>
 
 #include <functional>
@@ -38,8 +40,6 @@
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-
-/// @cond INTERNAL
 
 namespace osl {
 namespace detail {
