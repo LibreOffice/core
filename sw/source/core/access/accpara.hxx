@@ -45,7 +45,8 @@ class SwTxtNode;
 class SwPaM;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
-class SwRedline;class SwXTextPortion;
+class SwRedline;
+class SwXTextPortion;
 // --> OD 2010-02-19 #i108125#
 class SwParaChangeTrackingInfo;
 // <--

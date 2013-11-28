@@ -1295,7 +1295,8 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
 SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
-    pViewWin( new SwPagePreViewWin(&(GetViewFrame())->GetWindow(), *this ) ),    nNewPage(USHRT_MAX),
+    pViewWin( new SwPagePreViewWin(&(GetViewFrame())->GetWindow(), *this ) ),
+    nNewPage(USHRT_MAX),
     pHScrollbar(0),
     pVScrollbar(0),
     pPageUpBtn(0),

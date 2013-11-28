@@ -1703,7 +1703,8 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mnFootnote( 1 ),
     mnEndnote( 1 ),
     mbShapeSelected( sal_False ),
-    mpSeletedFrmMap(NULL){
+    mpSeletedFrmMap(NULL)
+{
     pSh->GetLayout()->AddAccessibleShell();
 }
 
@@ -1823,7 +1824,8 @@ SwAccessibleMap::~SwAccessibleMap()
         mpEvents = 0;
     }
     mpVSh->GetLayout()->RemoveAccessibleShell();
-    delete mpSeletedFrmMap;}
+    delete mpSeletedFrmMap;
+}
 
 uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
     sal_Bool bPagePreview )
@@ -2434,7 +2436,8 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
     {
         ::vos::ORef< SwAccessibleContext > xAccImpl;
         ::vos::ORef< SwAccessibleContext > xParentAccImpl;
-        const SwFrm *pParent =NULL;     {
+        const SwFrm *pParent =NULL;
+        {
             vos::OGuard aGuard( maMutex );
 
             if( mpFrmMap )
@@ -2456,7 +2459,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                 {
                     // Otherwise we look if the parent is accessible.
                     // If not, there is nothing to do.
-                    pParent =                       SwAccessibleFrame::GetParent( aFrmOrObj,
+                    pParent = SwAccessibleFrame::GetParent( aFrmOrObj,
                                                       GetShell()->IsPreView());
 
                     if( pParent )

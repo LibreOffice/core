@@ -1816,7 +1816,8 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
     const ::rtl::OUString& rText = GetString();
 
-    if( ! IsValidChar( nIndex, rText.getLength()+1 ) )        throw lang::IndexOutOfBoundsException();
+    if( ! IsValidChar( nIndex, rText.getLength()+1 ) )
+        throw lang::IndexOutOfBoundsException();
 
     bool bSupplementalMode = false;
     uno::Sequence< ::rtl::OUString > aNames = aRequestedAttributes;

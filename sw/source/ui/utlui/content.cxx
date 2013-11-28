@@ -897,7 +897,8 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         bIsOutlineMoveable(sal_True),
         bViewHasChanged(sal_False),
         bIsImageListInitialized(sal_False),
-        bIsKeySpace(sal_False){
+        bIsKeySpace(sal_False)
+{
     sal_uInt16 i;
 
     SetHelpId(HID_NAVIGATOR_TREELIST);
