@@ -45,7 +45,7 @@ public:
 
     DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
             sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
-    virtual ~DataStream() SAL_OVERRIDE;
+    virtual ~DataStream();
     // sfx2::SvBaseLink
     virtual sfx2::SvBaseLink::UpdateResult DataChanged(
             const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
