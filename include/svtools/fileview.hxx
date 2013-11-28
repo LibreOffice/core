@@ -225,23 +225,13 @@ enum QueryDeleteResult_Impl
 
 class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
 {
-    PushButton*             m_pYesButton;
-    PushButton*             m_pAllButton;
-    PushButton*             m_pNoButton;
-
-    QueryDeleteResult_Impl  m_eResult;
-
 private:
-
-    DECL_DLLPRIVATE_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton* );
-
+    PushButton* m_pAllButton;
 public:
 
-                            QueryDeleteDlg_Impl( Window* pParent,
-                                                 const OUString& rName );
+    QueryDeleteDlg_Impl(Window* pParent, const OUString& rName);
 
-    QueryDeleteResult_Impl  GetQueryDeleteResult() const { return m_eResult; }
-    void                    EnableAllButton() { m_pAllButton->Enable(true); }
+    void EnableAllButton() { m_pAllButton->Enable(true); }
 };
 
 }

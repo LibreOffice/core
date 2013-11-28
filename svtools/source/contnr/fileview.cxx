@@ -2534,42 +2534,13 @@ void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 
 namespace svtools {
 
-// -----------------------------------------------------------------------
-// QueryDeleteDlg_Impl
-// -----------------------------------------------------------------------
-
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(Window* pParent, const OUString& rName)
     : MessageDialog(pParent, "QueryDeleteDialog", "svt/ui/querydeletedialog.ui")
-    , m_eResult( QUERYDELETE_YES )
 {
-    get(m_pNoButton, "no");
     get(m_pAllButton, "all");
-    get(m_pYesButton, "yes");
-
-    // Handler
-    Link aLink( STATIC_LINK( this, QueryDeleteDlg_Impl, ClickLink ) );
-    m_pYesButton->SetClickHdl( aLink );
-    m_pAllButton->SetClickHdl( aLink );
-    m_pNoButton->SetClickHdl( aLink );
 
     // display specified texts
     set_secondary_text(get_secondary_text().replaceFirst("%s", rName));
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton*, pBtn )
-{
-    if (pBtn == pThis->m_pYesButton)
-        pThis->m_eResult = QUERYDELETE_YES;
-    else if ( pBtn == pThis->m_pNoButton )
-        pThis->m_eResult = QUERYDELETE_NO;
-    else if (pBtn == pThis->m_pAllButton)
-        pThis->m_eResult = QUERYDELETE_ALL;
-
-    pThis->EndDialog( RET_OK );
-
-    return 0;
 }
 
 }

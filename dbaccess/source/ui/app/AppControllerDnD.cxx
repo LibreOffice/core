@@ -188,7 +188,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
     if ( xNames.is() )
     {
         OString sDialogPosition;
-        svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
+        short eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
 
         // The list of elements to delete is allowed to contain related elements: A given element may
         // be the ancestor or child of another element from the list.
@@ -218,9 +218,8 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                 if ( nObjectsLeft > 1 )
                     aDlg.EnableAllButton();
 
-                if ( aDlg.Execute() == RET_OK )
-                    eResult = aDlg.GetQueryDeleteResult();
-                else
+                eResult = aDlg.Execute();
+                if (eResult == svtools::QUERYDELETE_CANCEL)
                     return;
 
                 sDialogPosition = aDlg.GetWindowState( );
