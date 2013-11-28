@@ -36,5 +36,4 @@ PREDEFINED = \
     __cplusplus \
     SAL_CALL= \
     SAL_DEPRECATED_INTERNAL(x)= \
-    SAL_DEPRECATED(x)= \
-    "SAL_THROW(x)=throw x"
+    SAL_DEPRECATED(x)=

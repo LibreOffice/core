@@ -355,26 +355,36 @@ typedef struct _sal_Sequence
 #pragma pack(pop)
 #endif
 
-/** Definition of function throw clause macros.  These have been introduced
-    to reduce code size by balancing out compiler bugs.
+#if defined __cplusplus
 
-    These macros are ONLY for function declarations,
-    use common C++ throw statement for throwing exceptions, e.g.
-    throw RuntimeException();
+/** Exception specification documentation.
 
-    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW(())
-    SAL_THROW_EXTERN_C() should be used for all C functions
+    The original intent of this macro was to control whether or not actual
+    exception specifications are emitted, based on how much they impact code
+    size etc. in a specific scenario.  But it ended up always being disabled
+    (except for MSVC, which effectively ignored it even though being enabled),
+    and used in ways that would make enabling it illegal (e.g., in the
+    cppu::ComponentFactoryFunc typedef, or with necessarily incomplete
+    com::sun::star::uno::RuntimeException in com/sun/star/uno/Reference.h), so
+    has officially been demoted to pure documentation now.
+
+    @deprecated do not use in new code.
 */
-#ifdef __cplusplus
-#if defined(__GNUC__) || defined(__SUNPRO_CC) || defined(__sgi)
-#define SAL_THROW( exc )
-#else /* MSVC, all other */
-#define SAL_THROW( exc ) throw exc
-#endif /* __GNUC__, __SUNPRO_CC */
+#define SAL_THROW(x)
+
+/** Nothrow specification for C functions.
+
+    This is a macro so it can expand to nothing in C code.
+*/
 #define SAL_THROW_EXTERN_C() throw ()
-#else /* ! __cplusplus */
-/* SAL_THROW() must not be used in C headers, only SAL_THROW_EXTERN_C() is defined */
+
+#else
+
+/* SAL_THROW() must not be used in C code, only SAL_THROW_EXTERN_C() is defined
+   there:
+*/
 #define SAL_THROW_EXTERN_C()
+
 #endif
 
 #ifdef __cplusplus
