@@ -89,7 +89,7 @@ protected:
     double                               mfFakeDPIScale;
 
     // Device Font settings
-    const ImplMacFontData*                  mpMacFontData;
+    const CoreTextFontData*                 mpFontData;
     CoreTextStyle*                          mpTextStyle;
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing

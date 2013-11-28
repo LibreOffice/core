@@ -67,7 +67,7 @@ SystemFontList::~SystemFontList( void )
 
 // =======================================================================
 
-ImplMacFontData::ImplMacFontData( const ImplMacFontData& rSrc )
+CoreTextFontData::CoreTextFontData( const CoreTextFontData& rSrc )
 :   PhysicalFontFace( rSrc )
 ,   mnFontId( rSrc.mnFontId )
 ,   mpCharMap( rSrc.mpCharMap )
@@ -81,7 +81,7 @@ ImplMacFontData::ImplMacFontData( const ImplMacFontData& rSrc )
 
 // -----------------------------------------------------------------------
 
-ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
+CoreTextFontData::CoreTextFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
 :   PhysicalFontFace( rDFA, 0 )
 ,   mnFontId( nFontId )
 ,   mpCharMap( NULL )
@@ -89,11 +89,12 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr 
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
 ,   mbFontCapabilitiesRead( false )
-{}
+{
+}
 
 // -----------------------------------------------------------------------
 
-ImplMacFontData::~ImplMacFontData()
+CoreTextFontData::~CoreTextFontData()
 {
     if( mpCharMap )
         mpCharMap->DeReference();
@@ -101,23 +102,16 @@ ImplMacFontData::~ImplMacFontData()
 
 // -----------------------------------------------------------------------
 
-sal_IntPtr ImplMacFontData::GetFontId() const
+sal_IntPtr CoreTextFontData::GetFontId() const
 {
     return (sal_IntPtr)mnFontId;
 }
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplMacFontData::CreateFontInstance(FontSelectPattern& rFSD) const
-{
-    return new ImplFontEntry(rFSD);
-}
-
-// -----------------------------------------------------------------------
-
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
-const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
+const ImplFontCharMap* CoreTextFontData::GetImplFontCharMap() const
 {
     // return the cached charmap
     if( mpCharMap )
@@ -130,17 +124,17 @@ const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
     const int nBufSize = GetFontTable( "cmap", NULL );
-    DBG_ASSERT( (nBufSize > 0), "ImplMacFontData::GetImplFontCharMap : GetFontTable1 failed!\n");
+    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetImplFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return mpCharMap;
 
     // get the CMAP raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "ImplMacFontData::GetImplFontCharMap : GetFontTable2 failed!\n");
+    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::GetImplFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return mpCharMap;
-    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::GetImplFontCharMap : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::GetImplFontCharMap : ByteCount mismatch!\n");
 
     // parse the CMAP
     CmapResult aCmapResult;
@@ -155,7 +149,7 @@ const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     return mpCharMap;
 }
 
-bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool CoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     // read this only once per font
     if( mbFontCapabilitiesRead )
@@ -202,7 +196,7 @@ bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
 
 // -----------------------------------------------------------------------
 
-void ImplMacFontData::ReadOs2Table( void ) const
+void CoreTextFontData::ReadOs2Table( void ) const
 {
     // read this only once per font
     if( mbOs2Read )
@@ -212,24 +206,24 @@ void ImplMacFontData::ReadOs2Table( void ) const
 
     // prepare to get the OS/2 table raw data
     const int nBufSize = GetFontTable( "OS/2", NULL );
-    DBG_ASSERT( (nBufSize > 0), "ImplMacFontData::ReadOs2Table : GetFontTable1 failed!\n");
+    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::ReadOs2Table : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return;
 
     // get the OS/2 raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "ImplMacFontData::ReadOs2Table : GetFontTable2 failed!\n");
+    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::ReadOs2Table : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return;
-    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::ReadOs2Table : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::ReadOs2Table : ByteCount mismatch!\n");
     mbHasOs2Table = true;
 
     // parse the OS/2 raw data
     // TODO: also analyze panose info, etc.
 }
 
-void ImplMacFontData::ReadMacCmapEncoding( void ) const
+void CoreTextFontData::ReadMacCmapEncoding( void ) const
 {
     // read this only once per font
     if( mbCmapEncodingRead )
@@ -245,7 +239,7 @@ void ImplMacFontData::ReadMacCmapEncoding( void ) const
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     if( nRawLength < 24 )
         return;
-    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::ReadMacCmapEncoding : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::ReadMacCmapEncoding : ByteCount mismatch!\n");
 
     const unsigned char* pCmap = &aBuffer[0];
     if( GetUShort( pCmap ) != 0x0000 )
@@ -270,7 +264,7 @@ AquaSalGraphics::AquaSalGraphics()
     , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
-    , mpMacFontData( NULL )
+    , mpFontData( NULL )
     , mpTextStyle( NULL )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
@@ -280,7 +274,7 @@ AquaSalGraphics::AquaSalGraphics()
 #else
     : mrContext( NULL )
     , mfFakeDPIScale( 1.0 )
-    , mpMacFontData( NULL )
+    , mpFontData( NULL )
     , mpTextStyle( NULL )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
@@ -458,20 +452,20 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     // handle NULL request meaning: release-font-resources request
     if( !pReqFont )
     {
-        mpMacFontData = NULL;
+        mpFontData = NULL;
         return 0;
     }
 
     // update the text style
-    mpMacFontData = static_cast<const ImplMacFontData*>( pReqFont->mpFontData );
-    mpTextStyle = mpMacFontData->CreateTextStyle( *pReqFont );
+    mpFontData = static_cast<const CoreTextFontData*>( pReqFont->mpFontData );
+    mpTextStyle = mpFontData->CreateTextStyle( *pReqFont );
     mpTextStyle->SetTextColor( maTextColor );
 
     SAL_INFO("vcl.coretext",
             "SetFont"
-            << " to "     << mpMacFontData->GetFamilyName()
-            << ", "       << mpMacFontData->GetStyleName()
-            << " fontid=" << mpMacFontData->GetFontId()
+            << " to "     << mpFontData->GetFamilyName()
+            << ", "       << mpFontData->GetStyleName()
+            << " fontid=" << mpFontData->GetFontId()
             << " for "    << pReqFont->GetFamilyName()
             << ", "       << pReqFont->GetStyleName()
             << " weight=" << pReqFont->GetWeight()
@@ -495,18 +489,18 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFal
 
 const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
-    if( !mpMacFontData )
+    if( !mpFontData )
         return ImplFontCharMap::GetDefaultMap();
 
-    return mpMacFontData->GetImplFontCharMap();
+    return mpFontData->GetImplFontCharMap();
 }
 
 bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if( !mpMacFontData )
+    if( !mpFontData )
         return false;
 
-    return mpMacFontData->GetImplFontCapabilities(rFontCapabilities);
+    return mpFontData->GetImplFontCapabilities(rFontCapabilities);
 }
 
 // -----------------------------------------------------------------------
@@ -543,7 +537,7 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
 bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
                                       ByteVector& rBuffer, bool* pJustCFF )
 {
-    const ImplMacFontData* pMacFont = static_cast<const ImplMacFontData*>(pFontData);
+    const CoreTextFontData* pMacFont = static_cast<const CoreTextFontData*>(pFontData);
 
     // short circuit for CFF-only fonts
     const int nCffSize = pMacFont->GetFontTable( "CFF ", NULL);
@@ -734,7 +728,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                 free( (void*)pGlyphMetrics );
             }
 
-            const ImplFontCharMap* pMap = mpMacFontData->GetImplFontCharMap();
+            const ImplFontCharMap* pMap = mpFontData->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
             pMap->AddReference(); // TODO: add and use RAII object instead
 

@@ -49,20 +49,20 @@ class CoreTextStyle;
 typedef sal_uInt32 sal_GlyphId;
 typedef std::vector<unsigned char> ByteVector;
 
-// mac specific physically available font face
-class ImplMacFontData : public PhysicalFontFace
+// CoreText-specific physically available font face
+class CoreTextFontData : public PhysicalFontFace
 {
 public:
-    ImplMacFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
+    CoreTextFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
 
-    virtual ~ImplMacFontData();
+    ~CoreTextFontData();
 
-    virtual PhysicalFontFace*   Clone() const = 0;
-    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
-    virtual sal_IntPtr      GetFontId() const;
+    PhysicalFontFace*   Clone() const;
+    ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
+    sal_IntPtr      GetFontId() const;
 
-    virtual CoreTextStyle*  CreateTextStyle( const FontSelectPattern& ) const = 0;
-    virtual int             GetFontTable( const char pTagName[5], unsigned char* ) const = 0;
+    CoreTextStyle*  CreateTextStyle( const FontSelectPattern& ) const;
+    int             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
     bool                    GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
@@ -72,7 +72,8 @@ public:
     void                    ReadMacCmapEncoding() const;
 
 protected:
-    ImplMacFontData( const ImplMacFontData&);
+    CoreTextFontData( const CoreTextFontData&);
+
 private:
     const sal_IntPtr            mnFontId;
     mutable const ImplFontCharMap*  mpCharMap;
@@ -97,7 +98,7 @@ public:
 
     void       SetTextColor( const RGBAColor& );
 
-    const ImplMacFontData*  mpFontData;
+    const CoreTextFontData*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
     /// text rotation in radian
@@ -121,7 +122,7 @@ public:
     virtual ~SystemFontList( void );
 
     virtual void    AnnounceFonts( ImplDevFontList& ) const = 0;
-    virtual ImplMacFontData* GetFontDataFromId( sal_IntPtr nFontId ) const = 0;
+    virtual CoreTextFontData* GetFontDataFromId( sal_IntPtr nFontId ) const = 0;
 };
 
 #ifdef MACOSX
@@ -160,8 +161,8 @@ protected:
     RGBAColor                               maFillColor;
 
     // Device Font settings
-     const ImplMacFontData*                  mpMacFontData;
-    CoreTextStyle*                           mpTextStyle;
+    const CoreTextFontData*                 mpFontData;
+    CoreTextStyle*                          mpTextStyle;
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;

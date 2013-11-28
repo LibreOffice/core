@@ -44,16 +44,16 @@ public:
     virtual     ~CTFontList( void );
 
     bool        Init( void );
-    void        AddFont( CTFontData* );
+    void        AddFont( CoreTextFontData* );
 
     virtual void    AnnounceFonts( ImplDevFontList& ) const;
-    virtual ImplMacFontData* GetFontDataFromId( sal_IntPtr ) const;
+    virtual CoreTextFontData* GetFontDataFromId( sal_IntPtr ) const;
 
 private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
 
-    typedef boost::unordered_map<sal_IntPtr,CTFontData*> CTFontContainer;
+    typedef boost::unordered_map<sal_IntPtr,CoreTextFontData*> CTFontContainer;
     CTFontContainer maFontContainer;
 };
 
@@ -65,12 +65,12 @@ inline double toRadian(int nDegree)
 }
 
 CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
-:   mpFontData( (ImplMacFontData*)rFSD.mpFontData )
+:   mpFontData( (CoreTextFontData*)rFSD.mpFontData )
 ,   mfFontStretch( 1.0 )
 ,   mfFontRotation( 0.0 )
 ,   mpStyleDict( NULL )
 {
-    mpFontData = (CTFontData*)rFSD.mpFontData;
+    mpFontData = (CoreTextFontData*)rFSD.mpFontData;
     const FontSelectPattern* const pReqFont = &rFSD;
 
     double fScaledFontHeight = pReqFont->mfExactHeight;
@@ -249,43 +249,30 @@ void CoreTextStyle::SetTextColor( const RGBAColor& rColor )
 
 // =======================================================================
 
-CTFontData::CTFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
-:   ImplMacFontData( rDFA, nFontId )
-{}
-
-// -----------------------------------------------------------------------
-
-CTFontData::~CTFontData( void )
+PhysicalFontFace* CoreTextFontData::Clone( void ) const
 {
-    // TODO: any resources to release?
+    return new CoreTextFontData( *this);
 }
 
 // -----------------------------------------------------------------------
 
-PhysicalFontFace* CTFontData::Clone( void ) const
-{
-    return new CTFontData( *this);
-}
-
-// -----------------------------------------------------------------------
-
-CoreTextStyle* CTFontData::CreateTextStyle( const FontSelectPattern& rFSD ) const
+CoreTextStyle* CoreTextFontData::CreateTextStyle( const FontSelectPattern& rFSD ) const
 {
     return new CoreTextStyle( rFSD);
 }
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* CTFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
+ImplFontEntry* CoreTextFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
 {
     return new ImplFontEntry( rFSD);
 }
 
 // -----------------------------------------------------------------------
 
-int CTFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
+int CoreTextFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
 {
-    DBG_ASSERT( pTagName[4]=='\0', "CTFontData::GetFontTable with invalid tagname!\n" );
+    DBG_ASSERT( pTagName[4]=='\0', "CoreTextFontData::GetFontTable with invalid tagname!\n" );
 
     const CTFontTableTag nTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
 
@@ -423,7 +410,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     if( bFontEnabled)
     {
         const sal_IntPtr nFontId = (sal_IntPtr)pValue;
-        CTFontData* pFontData = new CTFontData( rDFA, nFontId );
+        CoreTextFontData* pFontData = new CoreTextFontData( rDFA, nFontId );
         CTFontList* pFontList = (CTFontList*)pContext;
         pFontList->AddFont( pFontData );
     }
@@ -453,7 +440,7 @@ CTFontList::~CTFontList()
 
 // -----------------------------------------------------------------------
 
-void CTFontList::AddFont( CTFontData* pFontData )
+void CTFontList::AddFont( CoreTextFontData* pFontData )
 {
     sal_IntPtr nFontId = pFontData->GetFontId();
     maFontContainer[ nFontId ] = pFontData;
@@ -470,7 +457,7 @@ void CTFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 
 // -----------------------------------------------------------------------
 
-ImplMacFontData* CTFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
+CoreTextFontData* CTFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 {
     CTFontContainer::const_iterator it = maFontContainer.find( nFontId );
     if( it == maFontContainer.end() )

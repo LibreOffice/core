@@ -316,7 +316,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
             if ( !CFEqual( pRunFont,  pFont ) ) {
                 CTFontDescriptorRef pFontDesc = CTFontCopyFontDescriptor( pRunFont );
                 ImplDevFontAttributes rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
-                pFallbackFont = new CTFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
+                pFallbackFont = new CoreTextFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
             }
         }
 

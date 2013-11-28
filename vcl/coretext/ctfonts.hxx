@@ -23,21 +23,6 @@
 #endif
 #include "sallayout.hxx"
 
-// CoreText specific physically available font face
-class CTFontData
-:   public ImplMacFontData
-{
-public:
-    explicit                CTFontData( const ImplDevFontAttributes&, sal_IntPtr nFontId );
-    explicit                CTFontData( CTFontDescriptorRef pFontDesc );
-    virtual                 ~CTFontData( void );
-    virtual PhysicalFontFace*   Clone( void ) const;
-
-    virtual CoreTextStyle*      CreateTextStyle( const FontSelectPattern& ) const;
-    virtual ImplFontEntry*      CreateFontInstance( /*const*/ FontSelectPattern& ) const;
-    virtual int                 GetFontTable( const char pTagName[5], unsigned char* ) const;
-};
-
 SystemFontList* GetCoretextFontList(void);
 ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef, bool* );
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
