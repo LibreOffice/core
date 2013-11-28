@@ -140,6 +140,34 @@ uno::Reference<XAccessible> SAL_CALL
     return maTextHelper.GetChild(nIndex);
 }
 
+#include <drawdoc.hxx>
+
+OUString SAL_CALL
+    AccessibleOutlineView::getAccessibleName(void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString sName = SdResId(SID_SD_A11Y_D_PRESENTATION);
+    ::sd::View* pSdView = static_cast< ::sd::View* >( maShapeTreeInfo.GetSdrView() );
+    if ( pSdView )
+    {
+        SdDrawDocument& rDoc = pSdView->GetDoc();
+        rtl::OUString sFileName = rDoc.getDocAccTitle();
+        if (sFileName.isEmpty())
+        {
+            ::sd::DrawDocShell* pDocSh = pSdView->GetDocSh();
+            if ( pDocSh )
+            {
+                sFileName = pDocSh->GetTitle( SFX_TITLE_APINAME );
+            }
+        }
+        if (!sFileName.isEmpty())
+        {
+            sName = sFileName + " - " + sName;
+        }
+    }
+    return sName;
+}
+
 //=====  XAccessibleEventBroadcaster  ========================================
 
 void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -147,6 +175,7 @@ void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Refe
     // delegate listener handling to children manager.
     if ( ! IsDisposed())
         maTextHelper.AddEventListener(xListener);
+    AccessibleContextBase::addEventListener(xListener);
 }
 
 void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -154,6 +183,7 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
     // forward
     if ( ! IsDisposed())
         maTextHelper.RemoveEventListener(xListener);
+    AccessibleContextBase::removeEventListener(xListener);
 }
 
 //=====  XServiceInfo  ========================================================
@@ -218,12 +248,15 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleOutlineView::propertyChange");
-    if ( rEventObject.PropertyName == "CurrentPage" )
+    //add page switch event for slide show mode
+    if (rEventObject.PropertyName == "CurrentPage" ||
+        rEventObject.PropertyName == "PageChange")
     {
         OSL_TRACE ("    current page changed");
 
         // The current page changed. Update the children accordingly.
         UpdateChildren();
+        CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue, rEventObject.OldValue);
     }
     else if ( rEventObject.PropertyName == "VisibleArea" )
     {

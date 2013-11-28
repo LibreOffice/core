@@ -259,6 +259,9 @@ void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDesc
     if (rpDescriptor.get() != NULL)
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, false);
+
+        // Hide focus should also fire the focus event, Currently, only accessibility add the focus listener
+        NotifyFocusChangeListeners();
     }
 }
 

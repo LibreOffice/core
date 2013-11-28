@@ -83,4 +83,194 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text [ en-US ] = "This is where you decide on the layout for handouts.";
 };
 
+String SID_SD_A11Y_P_TITLE_N
+{
+    Text [ en-US ] = "PresentationTitle";
+};
+
+String SID_SD_A11Y_P_OUTLINER_N
+{
+    Text [ en-US ] = "PresentationOutliner";
+};
+
+String SID_SD_A11Y_P_SUBTITLE_N
+{
+    Text [ en-US ] = "PresentationSubtitle";
+};
+
+String SID_SD_A11Y_P_PAGE_N
+{
+    Text [ en-US ] = "PresentationPage";
+};
+
+String SID_SD_A11Y_P_NOTES_N
+{
+    Text [ en-US ] = "PresentationNotes";
+};
+
+String SID_SD_A11Y_P_HANDOUT_N
+{
+    Text [ en-US ] = "Handout";
+};
+
+String SID_SD_A11Y_P_UNKNOWN_N
+{
+    Text [ en-US ] = "UnknownAccessiblePresentationShape";
+};
+
+String SID_SD_A11Y_P_TITLE_D
+{
+    Text [ en-US ] = "PresentationTitleShape";
+};
+
+String SID_SD_A11Y_P_OUTLINER_D
+{
+    Text [ en-US ] = "PresentationOutlinerShape";
+};
+
+String SID_SD_A11Y_P_SUBTITLE_D
+{
+    Text [ en-US ] = "PresentationSubtitleShape";
+};
+
+String SID_SD_A11Y_P_PAGE_D
+{
+    Text [ en-US ] = "PresentationPageShape";
+};
+
+String SID_SD_A11Y_P_NOTES_D
+{
+    Text [ en-US ] = "PresentationNotesShape";
+};
+
+String SID_SD_A11Y_P_HANDOUT_D
+{
+    Text [ en-US ] = "PresentationHandoutShape";
+};
+
+String SID_SD_A11Y_P_UNKNOWN_D
+{
+    Text [ en-US ] = "Unknown accessible presentation shape";
+};
+
+String SID_SD_A11Y_P_FOOTER_N
+{
+    Text [ en-US ] = "PresentationFooter";
+};
+
+String SID_SD_A11Y_P_FOOTER_D
+{
+    Text [ en-US ] = "PresentationFooterShape";
+};
+
+String SID_SD_A11Y_P_HEADER_N
+{
+    Text [ en-US ] = "PresentationHeader";
+};
+
+String SID_SD_A11Y_P_HEADER_D
+{
+    Text [ en-US ] = "PresentationHeaderShape";
+};
+
+String SID_SD_A11Y_P_DATE_N
+{
+    Text [ en-US ] = "PresentationDateAndTime";
+};
+
+String SID_SD_A11Y_P_DATE_D
+{
+    Text [ en-US ] = "PresentationDateAndTimeShape";
+};
+
+String SID_SD_A11Y_P_NUMBER_N
+{
+    Text [ en-US ] = "PresentationPageNumber";
+};
+
+String SID_SD_A11Y_P_NUMBER_D
+{
+    Text [ en-US ] = "PresentationPageNumberShape";
+};
+
+String SID_SD_A11Y_D_PRESENTATION
+{
+    Text [ en-US ] = "%PRODUCTNAME Presentation";
+};
+
+String SID_SD_A11Y_P_TITLE_N_STYLE
+{
+    Text [ en-US ] = "Title";
+};
+
+String  SID_SD_A11Y_P_OUTLINER_N_STYLE
+{
+    Text [ en-US ] = "Outliner";
+};
+
+String  SID_SD_A11Y_P_SUBTITLE_N_STYLE
+{
+    Text [ en-US ] = "Sub Title";
+};
+
+String  SID_SD_A11Y_P_PAGE_N_STYLE
+{
+    Text [ en-US ] = "Page";
+};
+
+String  SID_SD_A11Y_P_NOTES_N_STYLE
+{
+    Text [ en-US ] = "Notes";
+};
+
+String  SID_SD_A11Y_P_HANDOUT_N_STYLE
+{
+    Text [ en-US ] = "Handout";
+};
+
+String  SID_SD_A11Y_P_UNKNOWN_N_STYLE
+{
+    Text [ en-US ] = "Unknown Accessible Presentation Shape";
+};
+
+String  SID_SD_A11Y_P_FOOTER_N_STYLE
+{
+    Text [ en-US ] = "Footer";
+};
+
+String  SID_SD_A11Y_P_HEADER_N_STYLE
+{
+    Text [ en-US ] = "Header";
+};
+
+String  SID_SD_A11Y_P_DATE_N_STYLE
+{
+    Text [ en-US ] = "Date";
+};
+
+String  SID_SD_A11Y_P_NUMBER_N_STYLE
+{
+    Text [ en-US ] = "Number";
+};
+
+String  SID_SD_A11Y_I_PREVIEW_N
+{
+    Text [ en-US ] = "Preview View";
+};
+
+String  SID_SD_A11Y_I_PREVIEW_D
+{
+    Text [ en-US ] = "This is where you print preview pages.";
+};
+
+String  SID_SD_A11Y_I_PREVIEW_SUFFIX
+{
+    Text [ en-US ] = "(Preview mode)";
+};
+
+String SID_SD_A11Y_D_PRESENTATION_READONLY
+{
+    Text [ en-US ] = "(read-only)";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

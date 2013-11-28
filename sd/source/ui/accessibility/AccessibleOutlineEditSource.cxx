@@ -40,7 +40,8 @@ namespace accessibility
           mViewForwarder( rOutlView )
     {
         // register as listener - need to broadcast state change messages
-        rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
+        // Moved to ::GetTextForwarder()
+        //rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
         StartListening(rOutliner);
     }
 
@@ -53,14 +54,19 @@ namespace accessibility
 
     SvxEditSource* AccessibleOutlineEditSource::Clone() const
     {
-        return NULL;
+        return new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, mrWindow);
     }
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()
     {
         // TODO: maybe suboptimal
         if( IsValid() )
+        {
+            // Moved here to make sure that
+            // the NotifyHandler was set on the current object.
+            mpOutliner->SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
             return &mTextForwarder;
+        }
         else
             return NULL;
     }

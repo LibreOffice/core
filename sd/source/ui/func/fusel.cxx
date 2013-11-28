@@ -91,6 +91,11 @@ FuSelection::FuSelection (
       bMirrorSide0(sal_False),
       nEditMode(SID_BEZIER_MOVE),
       pWaterCanCandidate(NULL)
+     //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+     //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    ,bBeginInsertPoint(sal_False),
+      oldPoint(0,0)
+  ,bMovedToCenterPoint(sal_False)
 {
 }
 
@@ -907,8 +912,78 @@ sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
             bReturn = FuSelection::cancel();
         }
         break;
-    }
+        //add keyboard operation for insert points in drawing curve
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            if(rKEvt.GetKeyCode().IsShift()&&(nEditMode == SID_BEZIER_INSERT)){
+                long nX = 0;
+                long nY = 0;
+                sal_uInt16  nCode = rKEvt.GetKeyCode().GetCode();
+                if (nCode == KEY_UP)
+                {
+                    // Scroll nach oben
+                    nX = 0;
+                    nY =-1;
+                }
+                else if (nCode == KEY_DOWN)
+                {
+                    // Scroll nach unten
+                    nX = 0;
+                    nY = 1;
+                }
+                else if (nCode == KEY_LEFT)
+                {
+                    // Scroll nach links
+                    nX =-1;
+                    nY = 0;
+                }
+                else if (nCode == KEY_RIGHT)
+                {
+                    // Scroll nach rechts
+                    nX = 1;
+                    nY = 0;
+                }
 
+                Point centerPoint;
+                Rectangle rect = mpView->GetMarkedObjRect();
+                centerPoint = mpWindow->LogicToPixel(rect.Center());
+                Point aPoint = bMovedToCenterPoint? oldPoint:centerPoint;
+                Point ePoint = aPoint + Point(nX,nY);
+                mpWindow->SetPointerPosPixel(ePoint);
+                //simulate mouse move action
+                MouseEvent eMevt(ePoint,1,2, MOUSE_LEFT, 0);
+                MouseMove(eMevt);
+                oldPoint = ePoint;
+                bMovedToCenterPoint = sal_True;
+                bReturn = sal_True;
+            }
+        }
+        break;
+        case KEY_RETURN:
+            if(rKEvt.GetKeyCode().IsShift()&&(nEditMode == SID_BEZIER_INSERT))
+            {
+                if(!bBeginInsertPoint)
+                {
+                    //simulate mouse button down action
+                    MouseEvent aMevt(oldPoint,1,3, MOUSE_LEFT, KEY_SHIFT);
+                    MouseButtonDown(aMevt);
+                    mpWindow->CaptureMouse();
+                    bBeginInsertPoint = sal_True;
+                }
+                else
+                {
+                    //simulate mouse button up action
+                    MouseEvent rMEvt(oldPoint,1,17, MOUSE_LEFT, KEY_SHIFT);
+                    MouseButtonUp(rMEvt);
+                    bBeginInsertPoint = sal_False;
+                }
+                bReturn= sal_True;
+            }
+            break;
+    }
     if (!bReturn)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
@@ -1425,6 +1500,21 @@ SdrObject* FuSelection::pickObject (const Point& rTestPoint)
     mpView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SDRSEARCH_PICKMARKABLE);
     return pObject;
 }
+
+void FuSelection::ForcePointer(const MouseEvent* pMEvt)
+{
+    if(bMovedToCenterPoint && !bBeginInsertPoint && pMEvt)
+    {
+        MouseEvent aMEvt(pMEvt->GetPosPixel(), pMEvt->GetClicks(),
+            pMEvt->GetMode(), pMEvt->GetButtons(), pMEvt->GetModifier() & ~KEY_SHIFT);
+        FuDraw::ForcePointer(&aMEvt);
+    }
+    else
+    {
+        FuDraw::ForcePointer(pMEvt);
+    }
+}
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,6 +75,9 @@
 #include "sdhtmlfilter.hxx"
 #include "framework/FrameworkHelper.hxx"
 
+#include <sfx2/viewfrm.hxx>
+#include "SdUnoDrawView.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
@@ -519,6 +522,20 @@ sal_Bool DrawDocShell::Save()
  */
 sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
+    mpDoc->setDocAccTitle(OUString());
+    SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
+    if (pFrame1)
+    {
+        ::Window* pWindow = &pFrame1->GetWindow();
+        if ( pWindow )
+        {
+            ::Window* pSysWin = pWindow->GetSystemWindow();
+            if ( pSysWin )
+            {
+                pSysWin->SetAccessibleName(OUString());
+            }
+        }
+    }
     mpDoc->StopWorkStartupDelay();
 
     //TODO/LATER: why this?!
@@ -829,6 +846,238 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
     return (bFound);
 }
 
+//If  object  is marked , return true , else return false .
+sal_Bool DrawDocShell::IsMarked(  SdrObject* pObject  )
+{
+       sal_Bool bisMarked =sal_False;
+
+     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    {
+        DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
+        if (pObject )
+        {
+              bisMarked = pDrViewSh->GetView()->IsObjMarked(pObject);
+        }
+     }
+    return  bisMarked;
+}
+//If  object  is marked , return true , else return false .
+sal_Bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
+{
+    OSL_TRACE("GotoBookmark %s",
+        OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
+     sal_Bool bUnMark = sal_False;
+
+    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    {
+        DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
+
+        OUString aBookmark( rBookmark );
+
+        if( !rBookmark.isEmpty() && rBookmark[0] == sal_Unicode('#') )
+            aBookmark = rBookmark.copy( 1 );
+
+        // Ist das Bookmark eine Seite?
+        sal_Bool        bIsMasterPage;
+        sal_uInt16      nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        SdrObject*  pObj = NULL;
+
+        if (nPgNum == SDRPAGE_NOTFOUND)
+        {
+            // Ist das Bookmark ein Objekt?
+            pObj = mpDoc->GetObj(aBookmark);
+
+            if (pObj)
+            {
+                nPgNum = pObj->GetPage()->GetPageNum();
+            }
+        }
+
+        if (nPgNum != SDRPAGE_NOTFOUND)
+        {
+            /**********************************************************
+            * Zur Seite springen
+            **********************************************************/
+
+            SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
+
+            PageKind eNewPageKind = pPage->GetPageKind();
+
+            if (eNewPageKind != pDrViewSh->GetPageKind())
+            {
+                // Arbeitsbereich wechseln
+                GetFrameView()->SetPageKind(eNewPageKind);
+                ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
+                  mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
+                  GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+
+                // Die aktuelle ViewShell hat sich geaendert!
+                pDrViewSh = (DrawViewShell*) mpViewShell;
+            }
+
+            EditMode eNewEditMode = EM_PAGE;
+
+            if( bIsMasterPage )
+            {
+                eNewEditMode = EM_MASTERPAGE;
+            }
+
+            if (eNewEditMode != pDrViewSh->GetEditMode())
+            {
+                // EditMode setzen
+                pDrViewSh->ChangeEditMode(eNewEditMode, sal_False);
+            }
+
+            // Jump to the page.  This is done by using the API because this
+            // takes care of all the little things to be done.  Especially
+            // writing the view data to the frame view (see bug #107803#).
+            sal_uInt16 nSdPgNum = (nPgNum - 1) / 2;
+            SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
+                *pDrViewSh,
+                *pDrViewSh->GetView());
+            if (pUnoDrawView != NULL)
+            {
+                ::com::sun::star::uno::Reference<
+                      ::com::sun::star::drawing::XDrawPage> xDrawPage (
+                          pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+                pUnoDrawView->setCurrentPage (xDrawPage);
+            }
+            else
+            {
+                // As a fall back switch to the page via the core.
+                DBG_ASSERT (pUnoDrawView!=NULL,
+                    "SdDrawDocShell::GotoBookmark: can't switch page via API");
+                pDrViewSh->SwitchPage(nSdPgNum);
+            }
+            delete pUnoDrawView;
+
+
+            if (pObj)
+            {
+                // Objekt einblenden und selektieren
+                pDrViewSh->MakeVisible(pObj->GetLogicRect(),
+                                       *pDrViewSh->GetActiveWindow());
+
+                 bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
+
+
+            }
+        }
+    }
+
+    return ( bUnMark);
+}
+//realize multi-selection of objects
+sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
+{
+    OSL_TRACE("GotoBookmark %s",
+        OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
+    sal_Bool bFound = sal_False;
+
+    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    {
+        DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
+
+        OUString aBookmark( rBookmark );
+
+        if( !rBookmark.isEmpty() && rBookmark[0] == sal_Unicode('#') )
+            aBookmark = rBookmark.copy( 1 );
+
+        // Ist das Bookmark eine Seite?
+        sal_Bool        bIsMasterPage;
+        sal_uInt16      nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        SdrObject*  pObj = NULL;
+
+        if (nPgNum == SDRPAGE_NOTFOUND)
+        {
+            // Ist das Bookmark ein Objekt?
+            pObj = mpDoc->GetObj(aBookmark);
+
+            if (pObj)
+            {
+                nPgNum = pObj->GetPage()->GetPageNum();
+            }
+        }
+
+        if (nPgNum != SDRPAGE_NOTFOUND)
+        {
+            /**********************************************************
+            * Zur Seite springen
+            **********************************************************/
+            bFound = sal_True;
+            SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
+
+            PageKind eNewPageKind = pPage->GetPageKind();
+
+            if (eNewPageKind != pDrViewSh->GetPageKind())
+            {
+                // Arbeitsbereich wechseln
+                GetFrameView()->SetPageKind(eNewPageKind);
+                ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
+                  mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
+                  GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+
+                // Die aktuelle ViewShell hat sich geaendert!
+                pDrViewSh = (DrawViewShell*) mpViewShell;
+            }
+
+            EditMode eNewEditMode = EM_PAGE;
+
+            if( bIsMasterPage )
+            {
+                eNewEditMode = EM_MASTERPAGE;
+            }
+
+            if (eNewEditMode != pDrViewSh->GetEditMode())
+            {
+                // EditMode setzen
+                pDrViewSh->ChangeEditMode(eNewEditMode, sal_False);
+            }
+
+            // Jump to the page.  This is done by using the API because this
+            // takes care of all the little things to be done.  Especially
+            // writing the view data to the frame view (see bug #107803#).
+            sal_uInt16 nSdPgNum = (nPgNum - 1) / 2;
+            SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
+                *pDrViewSh,
+                *pDrViewSh->GetView());
+            if (pUnoDrawView != NULL)
+            {
+                ::com::sun::star::uno::Reference<
+                      ::com::sun::star::drawing::XDrawPage> xDrawPage (
+                          pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+                pUnoDrawView->setCurrentPage (xDrawPage);
+            }
+            else
+            {
+                // As a fall back switch to the page via the core.
+                DBG_ASSERT (pUnoDrawView!=NULL,
+                    "SdDrawDocShell::GotoBookmark: can't switch page via API");
+                pDrViewSh->SwitchPage(nSdPgNum);
+            }
+            delete pUnoDrawView;
+
+
+            if (pObj)
+            {
+                // Objekt einblenden und selektieren
+                pDrViewSh->MakeVisible(pObj->GetLogicRect(),
+                                       *pDrViewSh->GetActiveWindow());
+                      sal_Bool bUnMark = pDrViewSh->GetView()->IsObjMarked(pObj);
+                pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetSdrPageView(), bUnMark);
+            }
+        }
+
+        SfxBindings& rBindings = ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
+                                 mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
+
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, sal_True, sal_False);
+        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
+    }
+
+    return (bFound);
+}
+
 /**
  * If it should become a document template.
  */
@@ -955,6 +1204,42 @@ SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( ::Window *pParent
     return pDlg;
 }
 
+void DrawDocShell::setDocAccTitle( const OUString& rTitle )
+{
+    if (mpDoc )
+    {
+        mpDoc->setDocAccTitle( rTitle );
+    }
+}
+
+const OUString DrawDocShell::getDocAccTitle() const
+{
+    OUString sRet;
+    if (mpDoc)
+    {
+        sRet =  mpDoc->getDocAccTitle();
+    }
+
+    return sRet;
+}
+
+void DrawDocShell::setDocReadOnly( sal_Bool bReadOnly)
+{
+    if (mpDoc )
+    {
+        mpDoc->setDocReadOnly( bReadOnly );
+    }
+}
+
+sal_Bool DrawDocShell::getDocReadOnly() const
+{
+    if  (mpDoc)
+    {
+        return mpDoc->getDocReadOnly();
+    }
+
+    return sal_False;
+}
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

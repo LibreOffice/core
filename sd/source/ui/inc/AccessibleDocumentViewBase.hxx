@@ -34,6 +34,15 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <tools/link.hxx>
 
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#include "DrawViewShell.hxx"
+#include "sdpage.hxx"
+#include "drawdoc.hxx"
+#include "FrameView.hxx"
+#include "PresentationViewShell.hxx"
+#include <editeng/outlobj.hxx>
+#include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
+class SdViewShell;
 namespace sd {
 class ViewShell;
 class Window;
@@ -82,6 +91,8 @@ class AccessibleDocumentViewBase
         public ::com::sun::star::beans::XPropertyChangeListener,
         public ::com::sun::star::awt::XWindowListener,
         public ::com::sun::star::awt::XFocusListener
+        ,public ::com::sun::star::accessibility::XAccessibleExtendedAttributes
+        ,public com::sun::star::accessibility::XAccessibleGetAccFlowTo
 {
 public:
     //=====  internal  ========================================================
@@ -246,7 +257,10 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL focusLost (const ::com::sun::star::awt::FocusEvent& e)
         throw (::com::sun::star::uno::RuntimeException);
-
+    //----------------------------xAttribute----------------------------
+    virtual com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+     ::sd::ViewShell* mpViewShell;
 private:
 
     // return the member maMutex;
@@ -355,7 +369,18 @@ protected:
     virtual void SetAccessibleOLEObject (
         const ::com::sun::star::uno::Reference <
         ::com::sun::star::accessibility::XAccessible>& xOLEObject);
+    //=====  XAccessibleGetAccFromXShape  ============================================
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
+        throw ( ::com::sun::star::uno::RuntimeException );
 
+public:
+    virtual void SwitchViewActivated (void) { Activated(); }
+     virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException);
     virtual void impl_dispose (void);
 };
 

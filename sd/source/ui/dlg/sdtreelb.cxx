@@ -50,7 +50,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <svtools/embedtransfer.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
@@ -222,6 +223,7 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
+,   bisInSdNavigatorWin  ( sal_False )
 ,   mpParent            ( pParentWin )
 ,   mpDoc               ( NULL )
 ,   mpBookmarkDoc       ( NULL )
@@ -233,7 +235,6 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 ,   mpDropNavWin        ( NULL )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
-
 {
     // add lines to Tree-ListBox
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -286,6 +287,146 @@ SdPageObjsTLB::~SdPageObjsTLB()
     else
         // no document was created from mpMedium, so this object is still the owner of it
         delete mpMedium;
+}
+
+// helper function for  GetEntryAltText and GetEntryLongDescription
+OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , sal_Bool isAltText) const
+{
+    sal_uInt16 maxPages = mpDoc->GetPageCount();
+    sal_uInt16 pageNo;
+    SdrObject*   pObj = NULL;
+    SdPage* pPage = NULL;
+
+
+    OUString ParentName = GetEntryText( GetRootLevelParent( pEntry ) );
+
+    for( pageNo = 0;  pageNo < maxPages; pageNo++ )
+    {
+        pPage = (SdPage*) mpDoc->GetPage( pageNo );
+        if( pPage->GetPageKind() != PK_STANDARD ) continue;
+        if( pPage->GetName() !=  ParentName ) continue;
+        SdrObjListIter aIter( *pPage, IM_FLAT );
+        while( aIter.IsMore() )
+        {
+            pObj = aIter.Next();
+            if( GetEntryText(pEntry) ==  GetObjectName( pObj )  )
+            {
+                if( isAltText )
+                    return pObj->GetTitle();
+                else
+                    return pObj->GetDescription();
+            }
+        }
+    }
+    return OUString();
+
+}
+
+OUString SdPageObjsTLB::GetEntryAltText( SvTreeListEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_True );
+}
+
+OUString SdPageObjsTLB::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_False);
+}
+
+void  SdPageObjsTLB::MarkCurEntry( const OUString& rName )
+{
+
+    if (!rName.isEmpty())
+    {
+        SvTreeListEntry* pCurEntry =GetCurEntry();
+        SvTreeListEntry* pEntry =NULL;
+        OUString aTmp1;
+        OUString aTmp2;
+
+        if( GetParent(pCurEntry)==NULL )
+        {
+            aTmp1 = GetEntryText( pCurEntry );
+            for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
+            {
+               if(GetParent( pEntry )==NULL)
+                   continue;
+                aTmp2 = GetEntryText( GetParent( pEntry ));
+                if( aTmp1 != aTmp2)
+                {
+                    // IA2 CWS. MT: Removed in SvTreeListEntry for now - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
+                    pEntry->SetMarked(sal_False);
+                }
+            }
+        }
+        else
+        {
+            for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
+            {
+                aTmp2 = GetEntryText( pEntry );
+                if( aTmp2 == rName)
+                {
+                    pEntry->SetMarked(sal_True);
+                }
+                else
+                {
+                    pEntry->SetMarked(sal_False);
+                }
+            }
+        }
+    }
+    Invalidate();
+}
+
+void  SdPageObjsTLB:: FreshCurEntry()
+{
+    SvTreeListEntry* pEntry =NULL;
+    for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
+    {
+                pEntry->SetMarked(sal_False);
+    }
+    Invalidate();
+}
+
+void SdPageObjsTLB::InitEntry(SvTreeListEntry* pEntry,
+    const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
+{
+    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
+    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SvLBoxString* pStr = new SvLBoxString( pEntry, 0, pCol->GetText() );
+    pEntry->ReplaceItem( pStr, nColToHilite );
+}
+
+void SdPageObjsTLB::SaveExpandedTreeItemState(SvTreeListEntry* pEntry, vector<OUString>& vectTreeItem)
+{
+    if (pEntry)
+    {
+        SvTreeListEntry* pListEntry = pEntry;
+        while (pListEntry)
+        {
+            if (pListEntry->HasChildren())
+            {
+                if (IsExpanded(pListEntry))
+                    vectTreeItem.push_back(GetEntryText(pListEntry));
+                SvTreeListEntry* pChildEntry = FirstChild(pListEntry);
+                SaveExpandedTreeItemState(pChildEntry, vectTreeItem);
+            }
+            pListEntry = NextSibling(pListEntry);
+        }
+    }
+}
+void SdPageObjsTLB::Clear()
+{
+    //Save the expanded tree item
+    if (mbSaveTreeItemState)
+    {
+        maSelectionEntryText = OUString();
+        maTreeItem.clear();
+        if (GetCurEntry())
+            maSelectionEntryText = GetSelectEntry();
+        SvTreeListEntry* pEntry = FirstChild(NULL);
+        SaveExpandedTreeItemState(pEntry, maTreeItem);
+    }
+    return SvTreeListBox::Clear();
 }
 
 OUString SdPageObjsTLB::GetObjectName(
@@ -426,6 +567,10 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
     }
     if( !aSelection.isEmpty() )
         SelectEntry( aSelection );
+    else if (mbSaveTreeItemState && !maSelectionEntryText.isEmpty())
+    {
+        SelectEntry(maSelectionEntryText);
+    }
 }
 
 /**
@@ -485,6 +630,28 @@ void SdPageObjsTLB::AddShapeList (
         IM_FLAT,
         sal_False /*not reverse*/);
 
+    sal_Bool  bMarked=sal_False;
+    if(bisInSdNavigatorWin)
+    {
+        Window* pWindow=NULL;
+        SdNavigatorWin* pSdNavigatorWin=NULL;
+        sd::DrawDocShell* pSdDrawDocShell = NULL;
+        if(pEntry)
+            pWindow=(Window*)GetParent(pEntry);
+        if(pWindow)
+            pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+        if( pSdNavigatorWin )
+            pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+        if(pSdDrawDocShell)
+            bMarked=pSdDrawDocShell->IsMarked(pShape);
+        if(pEntry)
+        {
+            if(bMarked)
+                pEntry->SetMarked(sal_True);
+            else
+                pEntry->SetMarked( sal_False );
+        }
+    }
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
@@ -497,7 +664,7 @@ void SdPageObjsTLB::AddShapeList (
         {
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
-                InsertEntry(
+                SvTreeListEntry *pNewEntry = InsertEntry(
                     aStr,
                     maImgOle,
                     maImgOle,
@@ -506,10 +673,32 @@ void SdPageObjsTLB::AddShapeList (
                     LIST_APPEND,
                     pObj
                 );
+
+                if(bisInSdNavigatorWin)
+                {
+                    Window* pWindow=NULL;
+                    SdNavigatorWin* pSdNavigatorWin=NULL;
+                    sd::DrawDocShell* pSdDrawDocShell = NULL;
+                    if(pNewEntry)
+                        pWindow=(Window*)GetParent(pNewEntry);
+                    if(pWindow)
+                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                    if( pSdNavigatorWin )
+                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                    if(pSdDrawDocShell)
+                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                    if(pNewEntry)
+                    {
+                        if(bMarked)
+                            pNewEntry->SetMarked(sal_True);
+                        else
+                            pNewEntry->SetMarked( sal_False );
+                    }
+                }
             }
             else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
             {
-                InsertEntry(
+                SvTreeListEntry *pNewEntry = InsertEntry(
                     aStr,
                     maImgGraphic,
                     maImgGraphic,
@@ -518,6 +707,32 @@ void SdPageObjsTLB::AddShapeList (
                     LIST_APPEND,
                     pObj
                 );
+
+                if(bisInSdNavigatorWin)
+                {
+                    Window* pWindow=NULL;
+                    SdNavigatorWin* pSdNavigatorWin=NULL;
+                    sd::DrawDocShell* pSdDrawDocShell = NULL;
+                    if(pNewEntry)
+                        pWindow=(Window*)GetParent(pNewEntry);
+                    if(pWindow)
+                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                    if( pSdNavigatorWin )
+                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                    if(pSdDrawDocShell)
+                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                    if(pNewEntry)
+                    {
+                        if(bMarked)
+                        {
+                            pNewEntry->SetMarked(sal_True);
+                        }
+                        else
+                        {
+                            pNewEntry->SetMarked( sal_False );
+                        }
+                    }
+                }
             }
             else if (pObj->IsGroupObject())
             {
@@ -532,7 +747,7 @@ void SdPageObjsTLB::AddShapeList (
             }
             else
             {
-                InsertEntry(
+                SvTreeListEntry *pNewEntry = InsertEntry(
                     aStr,
                     rIconProvider.maImgObjects,
                     rIconProvider.maImgObjects,
@@ -541,6 +756,32 @@ void SdPageObjsTLB::AddShapeList (
                     LIST_APPEND,
                     pObj
                 );
+
+                if(bisInSdNavigatorWin)
+                {
+                    Window* pWindow=NULL;
+                    SdNavigatorWin* pSdNavigatorWin=NULL;
+                    sd::DrawDocShell* pSdDrawDocShell = NULL;
+                    if(pNewEntry)
+                        pWindow=(Window*)GetParent(pNewEntry);
+                    if(pWindow)
+                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                    if( pSdNavigatorWin )
+                        pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+                    if(pSdDrawDocShell)
+                        bMarked=pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                    if(pNewEntry)
+                    {
+                        if(bMarked)
+                        {
+                            pNewEntry->SetMarked(sal_True);
+                        }
+                        else
+                        {
+                            pNewEntry->SetMarked( sal_False );
+                        }
+                    }
+                }
             }
         }
     }
@@ -553,6 +794,22 @@ void SdPageObjsTLB::AddShapeList (
         SetCollapsedEntryBmp(
             pEntry,
             bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
+        if (mbSaveTreeItemState)
+        {
+            vector<OUString>::iterator iteStart = maTreeItem.begin();
+            while (iteStart != maTreeItem.end())
+            {
+                OUString strEntry = GetEntryText(pEntry);
+                if (*iteStart == strEntry)
+                {
+                    Expand( pEntry );
+                    break;
+                }
+                ++iteStart;
+            }
+        }
+        else
+            Expand( pEntry );
     }
 }
 
@@ -875,6 +1132,60 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
         }
 
         DoubleClickHdl();
+    }
+    else if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE)
+    {
+       if(bisInSdNavigatorWin)
+       {
+           sal_Bool bMarked=sal_False;
+           SvTreeListEntry* pNewEntry = GetCurEntry();
+           if( GetParent(pNewEntry) == NULL )
+               return;
+           OUString  aStr=GetSelectEntry();
+           Window* pWindow=NULL;
+           SdNavigatorWin* pSdNavigatorWin=NULL;
+           sd::DrawDocShell* pSdDrawDocShell = NULL;
+           if(pNewEntry)
+               pWindow=(Window*)GetParent(pNewEntry);
+           if(pWindow)
+               pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+           if( pSdNavigatorWin )
+               pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
+           if(pSdDrawDocShell)
+           {
+               pSdDrawDocShell->GotoTreeBookmark(aStr);
+               bMarked=pSdDrawDocShell->GetObjectIsmarked(aStr);
+           }
+           //Removed by yanjun for sym2_6385
+           //The symphony2.0 can support morn than one level tree list, also support to select tow or more items in different level.
+           /*
+           SvTreeListEntry* pBeginEntry = First();
+           if( pBeginEntry )
+           {
+               if( GetParent(pBeginEntry) !=  GetParent(pNewEntry) )
+                   pBeginEntry->SetMarked( sal_False );
+               SvTreeListEntry* pNextEntry = Next( pBeginEntry );
+               while( pNextEntry )
+               {
+                   if( GetParent(pNextEntry) !=  GetParent(pNewEntry) )
+                       pNextEntry->SetMarked( sal_False );
+                   pNextEntry =  Next( pNextEntry );
+               }
+           }
+           End*/
+           if(pNewEntry)
+           {
+               if(bMarked)
+               {
+                   pNewEntry->SetMarked(sal_True);
+               }
+               else
+               {
+                   pNewEntry->SetMarked( sal_False );
+               }
+           }
+           Invalidate();
+       }
     }
     else
         SvTreeListBox::KeyInput( rKEvt );

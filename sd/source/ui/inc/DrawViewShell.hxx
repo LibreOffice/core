@@ -243,10 +243,15 @@ public:
 
     void            ResetActualPage();
     void            ResetActualLayer();
-    sal_Bool            SwitchPage(sal_uInt16 nPage);
-    sal_Bool            IsSwitchPageAllowed() const;
+    sal_Bool        SwitchPage(sal_uInt16 nPage);
+    sal_Bool        IsSwitchPageAllowed() const;
 
-    sal_Bool            GotoBookmark(const OUString& rBookmark);
+    sal_Bool        GotoBookmark(const OUString& rBookmark);
+    //Realize multi-selection of objects, If object is marked, the
+    //corresponding entry is set true, else the corresponding entry is set
+    //false.
+    void            FreshNavigatrEntry();
+    void            FreshNavigatrTree();
     void            MakeVisible(const Rectangle& rRect, ::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView);
@@ -361,8 +366,10 @@ public:
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
-    ::rtl::OUString GetSidebarContextName (void) const;
+    OUString GetSidebarContextName (void) const;
 
+    //move this method to ViewShell.
+    //void  NotifyAccUpdate();
 protected:
     DrawView*       mpDrawView;
     SdPage*         mpActualPage;

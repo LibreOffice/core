@@ -191,6 +191,7 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void);
+    virtual void SwitchView();
 
     OUString GetSurroundingText() const;
     Selection GetSurroundingTextSelection() const;

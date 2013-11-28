@@ -1049,7 +1049,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 pBindings->Invalidate( SID_REHEARSE_TIMINGS );
             }
 
-            mpShowWindow->GrabFocus();
+            // Defer the sd::ShowWindow's GrabFocus to SlideShow::activate. so that the accessible event can be fired correctly.
+            //mpShowWindow->GrabFocus();
 
             std::vector<beans::PropertyValue> aProperties;
             aProperties.reserve( 4 );
@@ -1415,6 +1416,13 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
             pBindings->Invalidate( SID_NAVIGATOR_STATE );
             pBindings->Invalidate( SID_NAVIGATOR_PAGENAME );
         }
+    }
+    // send out page change event and notity to update all acc info for current page
+    if (mpViewShell)
+    {
+        sal_Int32 currentPageIndex = getCurrentSlideIndex();
+        mpViewShell->fireSwitchCurrentPage(currentPageIndex);
+        mpViewShell->NotifyAccUpdate();
     }
 }
 

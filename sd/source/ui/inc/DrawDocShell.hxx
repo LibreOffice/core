@@ -127,8 +127,12 @@ public:
     void                    Disconnect(sd::ViewShell* pViewSh);
     void                    UpdateTablePointers();
 
-    sal_Bool                    GotoBookmark(const OUString& rBookmark);
+    sal_Bool                GotoBookmark(const OUString& rBookmark);
 
+    //realize multi-selection of objects
+    sal_Bool                GotoTreeBookmark(const OUString& rBookmark);
+    sal_Bool                IsMarked(  SdrObject* pObject  );
+    sal_Bool                GetObjectIsmarked(const OUString& rBookmark);
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
     /** checks, if the given name is a valid new name for a slide
@@ -218,6 +222,11 @@ protected:
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);
     virtual void            InPlaceActivate( sal_Bool bActive );
+public:
+    virtual void setDocAccTitle( const OUString& rTitle );
+    virtual const OUString getDocAccTitle() const;
+    virtual void setDocReadOnly( sal_Bool bReadOnly);
+    virtual sal_Bool getDocReadOnly() const;
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED

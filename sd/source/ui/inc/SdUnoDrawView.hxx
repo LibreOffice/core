@@ -102,14 +102,14 @@ protected:
     void setMasterPageMode(sal_Bool MasterPageMode_) throw();
     sal_Bool getLayerMode(void) const throw();
     void setLayerMode(sal_Bool LayerMode_) throw();
-
+public:
     /** Return a reference to the active layer object.
         @return
             The returned value may be empty when the internal state of this
             view is not valid (like during destruction.)
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> getActiveLayer (void) throw ();
-
+protected:
     /** Make the specified object the active layer.
         @param rxLayer
             The new layer object.
