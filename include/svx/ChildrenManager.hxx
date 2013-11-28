@@ -24,13 +24,11 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <memory>
 #include <svx/svxdllapi.h>
 
 namespace accessibility {
 
 class AccessibleContextBase;
-class AccessibleShape;
 class ChildrenManagerImpl;
 
 /** The AccessibleChildrenManager class acts as a cache of the
@@ -154,10 +152,9 @@ public:
         be created by the shape factory.  This gives the caller full control
         over object creation.
 
-        @param pShape
-            This class <em>does</em> take ownership of the argument.
+        @param shape must be non-null
     */
-    void AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape);
+    void AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape);
 
     /** Clear the list of accessible shapes which have been added by
         previous calls to <member>AddAccessibleShape</member>.

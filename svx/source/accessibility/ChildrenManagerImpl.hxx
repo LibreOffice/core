@@ -26,7 +26,6 @@
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>
 #include <vector>
-#include <memory>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -204,10 +203,11 @@ public:
         or the list of visible shapes.  Accessible shapes are, at the
         moment, not tested against the visible area but are always appended
         to the list of visible children.
-        @param pShape
-            The new shape that is added to the list of accessible shapes.
+        @param shape
+            The new shape that is added to the list of accessible shapes; must
+            be non-null.
     */
-    void AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape);
+    void AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape);
 
     /** Clear the lists of accessible shapes and that of visible accessible
         shapes.  The list of UNO shapes is not modified.

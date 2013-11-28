@@ -158,7 +158,7 @@ protected:
 
     /** Create a shape the represents the page as seen on the screen.
     */
-    AccessiblePageShape* CreateDrawPageShape (void);
+    rtl::Reference<AccessiblePageShape> CreateDrawPageShape (void);
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString

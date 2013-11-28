@@ -111,10 +111,10 @@ void ChildrenManager::SetShapeList (const ::com::sun::star::uno::Reference<
 
 
 
-void ChildrenManager::AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape)
+void ChildrenManager::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
 {
     OSL_ASSERT (mpImpl != NULL);
-    mpImpl->AddAccessibleShape (pShape);
+    mpImpl->AddAccessibleShape (shape);
 }
 
 

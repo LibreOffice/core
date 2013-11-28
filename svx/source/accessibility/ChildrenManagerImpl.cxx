@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include "ChildrenManagerImpl.hxx"
 #include <svx/ShapeTypeHandler.hxx>
@@ -536,10 +539,10 @@ void ChildrenManagerImpl::SetShapeList (const ::com::sun::star::uno::Reference<
 
 
 
-void ChildrenManagerImpl::AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape)
+void ChildrenManagerImpl::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
 {
-    if (pShape.get() != NULL)
-        maAccessibleShapes.push_back (pShape.release());
+    assert(shape.is());
+    maAccessibleShapes.push_back (shape);
 }
 
 
