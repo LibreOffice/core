@@ -531,6 +531,11 @@ static const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
     return tag ? tag->maVariants.mpList : NULL;
 }
 
+static const char *lt_lang_get_suppress_script(const lt_lang_t * /*lang*/)
+{
+    return NULL;
+}
+
 static const char *lt_lang_get_tag(const lt_lang_t *lang)
 {
     return lang ? lang->mpStr : NULL;

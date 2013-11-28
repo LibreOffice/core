@@ -265,6 +265,7 @@ private:
     mutable OUString                        maBcp47;
     mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
     mutable OUString                        maCachedScript;     ///< cache getScript()
+    mutable OUString                        maCachedDefScript;  ///< cache getDefaultScript()
     mutable OUString                        maCachedCountry;    ///< cache getCountry()
     mutable OUString                        maCachedVariants;   ///< cache getVariants()
     mutable lt_tag_t*                       mpImplLangtag;      ///< liblangtag pointer
@@ -279,12 +280,14 @@ private:
     mutable bool                            mbInitializedLangID : 1;
     mutable bool                            mbCachedLanguage    : 1;
     mutable bool                            mbCachedScript      : 1;
+    mutable bool                            mbCachedDefScript   : 1;
     mutable bool                            mbCachedCountry     : 1;
     mutable bool                            mbCachedVariants    : 1;
 
     const OUString &    getBcp47() const;
     OUString            getLanguage() const;
     OUString            getScript() const;
+    OUString            getDefaultScript() const;
     OUString            getCountry() const;
     OUString            getRegion() const;
     OUString            getVariants() const;
@@ -312,6 +315,7 @@ private:
 
     OUString            getLanguageFromLangtag();
     OUString            getScriptFromLangtag();
+    OUString            getDefaultScriptFromLangtag();
     OUString            getRegionFromLangtag();
     OUString            getVariantsFromLangtag();
 
@@ -384,6 +388,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTag & rLanguageTag )
         mbInitializedLangID( rLanguageTag.mbInitializedLangID),
         mbCachedLanguage( false),
         mbCachedScript( false),
+        mbCachedDefScript( false),
         mbCachedCountry( false),
         mbCachedVariants( false)
 {
@@ -396,6 +401,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         maBcp47( rLanguageTagImpl.maBcp47),
         maCachedLanguage( rLanguageTagImpl.maCachedLanguage),
         maCachedScript( rLanguageTagImpl.maCachedScript),
+        maCachedDefScript( rLanguageTagImpl.maCachedDefScript),
         maCachedCountry( rLanguageTagImpl.maCachedCountry),
         maCachedVariants( rLanguageTagImpl.maCachedVariants),
         mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
@@ -411,6 +417,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         mbInitializedLangID( rLanguageTagImpl.mbInitializedLangID),
         mbCachedLanguage( rLanguageTagImpl.mbCachedLanguage),
         mbCachedScript( rLanguageTagImpl.mbCachedScript),
+        mbCachedDefScript( rLanguageTagImpl.mbCachedDefScript),
         mbCachedCountry( rLanguageTagImpl.mbCachedCountry),
         mbCachedVariants( rLanguageTagImpl.mbCachedVariants)
 {
@@ -428,6 +435,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     maBcp47             = rLanguageTagImpl.maBcp47;
     maCachedLanguage    = rLanguageTagImpl.maCachedLanguage;
     maCachedScript      = rLanguageTagImpl.maCachedScript;
+    maCachedDefScript   = rLanguageTagImpl.maCachedDefScript;
     maCachedCountry     = rLanguageTagImpl.maCachedCountry;
     maCachedVariants    = rLanguageTagImpl.maCachedVariants;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
@@ -443,6 +451,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     mbInitializedLangID = rLanguageTagImpl.mbInitializedLangID;
     mbCachedLanguage    = rLanguageTagImpl.mbCachedLanguage;
     mbCachedScript      = rLanguageTagImpl.mbCachedScript;
+    mbCachedDefScript   = rLanguageTagImpl.mbCachedDefScript;
     mbCachedCountry     = rLanguageTagImpl.mbCachedCountry;
     mbCachedVariants    = rLanguageTagImpl.mbCachedVariants;
     if (mpImplLangtag)
@@ -1607,6 +1616,31 @@ OUString LanguageTagImpl::getScriptFromLangtag()
 }
 
 
+OUString LanguageTagImpl::getDefaultScriptFromLangtag()
+{
+    OUString aScript;
+    meIsLiblangtagNeeded = DECISION_YES; // Force using liblangtag
+    synCanonicalize();
+    if (maBcp47.isEmpty())
+        return aScript;
+    if (mpImplLangtag)
+    {
+        const lt_lang_t* pLangT = lt_tag_get_language( mpImplLangtag);
+        if (!pLangT)
+            return aScript;
+        const char* pScript = lt_lang_get_suppress_script( pLangT);
+        if (pScript)
+            aScript = OUString::createFromAscii( pScript);
+    }
+    else
+    {
+        if (mbCachedDefScript)
+            aScript = maCachedDefScript;
+    }
+    return aScript;
+}
+
+
 OUString LanguageTagImpl::getRegionFromLangtag()
 {
     OUString aRegion;
@@ -1840,6 +1874,37 @@ OUString LanguageTag::getScript() const
         return pImpl->maCachedScript;
     OUString aRet( pImpl->getScript());
     const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
+}
+
+
+OUString LanguageTagImpl::getDefaultScript() const
+{
+    if (!mbCachedDefScript)
+    {
+        maCachedDefScript = const_cast<LanguageTagImpl*>(this)->getDefaultScriptFromLangtag();
+        mbCachedDefScript = true;
+    }
+    return maCachedDefScript;
+}
+
+
+OUString LanguageTag::getDefaultScript() const
+{
+    ImplPtr pImpl = getImpl();
+    if (pImpl->mbCachedDefScript)
+        return pImpl->maCachedDefScript;
+    OUString aRet( pImpl->getDefaultScript());
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
+}
+
+
+OUString LanguageTag::getScriptOrDefaultScript() const
+{
+    OUString aRet( getScript());
+    if (aRet.isEmpty())
+        aRet = getDefaultScript();
     return aRet;
 }
 

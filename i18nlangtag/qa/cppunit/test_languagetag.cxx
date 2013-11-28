@@ -67,6 +67,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
         CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
         CPPUNIT_ASSERT( de_DE.getScript() == "" );
+        CPPUNIT_ASSERT( de_DE.getDefaultScript() == "Latn" );
         CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de" );
 #else
         // The simple replacement code doesn't do any fancy stuff.
@@ -78,6 +79,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
         CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
         CPPUNIT_ASSERT( de_DE.getScript() == "Latn" );
+        CPPUNIT_ASSERT( de_DE.getDefaultScript() == "" );
         CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de-Latn" );
 #endif
         CPPUNIT_ASSERT( de_DE.makeFallback().getBcp47() == "de-DE");

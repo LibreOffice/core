@@ -165,6 +165,22 @@ public:
      */
     OUString                        getScript() const;
 
+    /** Get ISO 15924 script code, for the default script according to
+        BCP 47. If there is no default script an empty string is returned.
+
+        @see getScript()
+
+        Always resolves an empty tag to the system locale.
+     */
+    OUString                        getDefaultScript() const;
+
+    /** Get script or, if empty, the default script.
+
+        @see getScript()
+        @see getDefaultScript()
+     */
+    OUString                        getScriptOrDefaultScript() const;
+
     /** Get combined language and script code, separated by '-' if
         non-default script, if default script only language.
 
