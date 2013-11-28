@@ -96,7 +96,6 @@ String STR_ACCESS_ANNOTATION_BUTTON_DESC
     Text [ en-US ] = "Activate this button to open a list of actions which can be performed on this comment and other comments";
 };
 
-//IAccessibility2 Implementation 2009-----
 String STR_ACCESS_PREVIEW_DOC_NAME
 {
     Text [ en-US ] = "Document preview";
@@ -113,5 +112,4 @@ String STR_ACCESS_DOC_WORDPROCESSING_READONLY
 {
     Text [ en-US ] = "(read-only)";
 };
-//-----IAccessibility2 Implementation 2009
 

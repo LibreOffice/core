@@ -100,10 +100,8 @@ private:
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;
     List            aRemoveList;
-    //IAccessibility2 Implementation 2009-----
     Timer       SynFocusTimer;
     DECL_LINK( FocusToComoboxHdl, Timer* );
-    //-----IAccessibility2 Implementation 2009
 
 #ifdef _DBNAMDLG_CXX
 private:

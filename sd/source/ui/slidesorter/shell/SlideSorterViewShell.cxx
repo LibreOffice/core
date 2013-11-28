@@ -215,12 +215,10 @@ void SlideSorterViewShell::Init (bool bIsMainViewShell)
 {
     ViewShell::Init(bIsMainViewShell);
 
-//IAccessibility2 Implementation 2009-----
     // since the updatePageList will show focus, the window.show() must be called ahead. This show is deferred from Init()
     ::sd::Window* pActiveWindow = GetActiveWindow();
     if (pActiveWindow)
         pActiveWindow->Show();
-//-----IAccessibility2 Implementation 2009
     mpSlideSorter->GetModel().UpdatePageList();
 
     if (mpContentWindow.get() != NULL)
@@ -302,7 +300,6 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
         pWindow);
 }
 
-//IAccessibility2 Implementation 2009-----
 void SlideSorterViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc )
 {
     if (xAcc.get())
@@ -314,7 +311,6 @@ void SlideSorterViewShell::SwitchViewFireFocus(::com::sun::star::uno::Reference<
         }
     }
 }
-//-----IAccessibility2 Implementation 2009
 
 
 SlideSorter& SlideSorterViewShell::GetSlideSorter (void) const

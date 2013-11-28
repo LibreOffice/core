@@ -215,9 +215,7 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 
 // Object data and state ------------------------------------------------------
 
-//IAccessibility2 Implementation 2009-----
 OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
-//-----IAccessibility2 Implementation 2009
 {
     OUString aRetText;
     switch( eObjType )
@@ -235,7 +233,6 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-//IAccessibility2 Implementation 2009-----
             if( ColCount() !=0 && GetRowCount()!=0)
             {
 
@@ -245,7 +242,6 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
                 aRetText += OUString::valueOf(rowId);
             }
             else
-//-----IAccessibility2 Implementation 2009
                 aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell" ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );

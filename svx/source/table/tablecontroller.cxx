@@ -2612,7 +2612,6 @@ IMPL_LINK( SvxTableController, UpdateHdl, void *, EMPTYARG )
     return 0;
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_Bool SvxTableController::selectRow( sal_Int32 row )
 {
     if( !mxTable.is() )
@@ -2697,5 +2696,4 @@ sal_Bool SvxTableController::isColumnHeader()
 
     return aSettings.mbUseFirstColumn;
 }
-//-----IAccessibility2 Implementation 2009
 } }

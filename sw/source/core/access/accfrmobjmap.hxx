@@ -53,18 +53,15 @@ public:
         , nPosNum( 0, 0 )
     {}
 
-//IAccessibility2 Implementation 2009-----
     inline SwAccessibleChildMapKey( LayerId eId, sal_uInt32 nOrd, Point nPos )
         : eLayerId( eId )
         , nOrdNum( nOrd )
         , nPosNum( nPos )
     {}
-//-----IAccessibility2 Implementation 2009
 
     inline bool operator()( const SwAccessibleChildMapKey& r1,
                             const SwAccessibleChildMapKey& r2 ) const
     {
-//IAccessibility2 Implementation 2009-----
 //        return (r1.eLayerId == r2.eLayerId)
 //               ? (r1.nOrdNum < r2.nOrdNum)
 //               : (r1.eLayerId < r2.eLayerId);
@@ -73,11 +70,9 @@ public:
            (r1.nPosNum.getY() == r2.nPosNum.getY()? r1.nPosNum.getX() < r2.nPosNum.getX() :
             r1.nPosNum.getY() < r2.nPosNum.getY()) ) :
            (r1.eLayerId < r2.eLayerId);
-//-----IAccessibility2 Implementation 2009
     }
 
     /* MT: Need to get this position parameter stuff in dev300 somehow...
-    //IAccessibility2 Implementation 2009-----
     //This methods are used to insert an object to the map, adding a position parameter.
     ::std::pair< iterator, bool > insert( sal_uInt32 nOrd, Point nPos,
                                           const SwFrmOrObj& rLower );
@@ -85,7 +80,6 @@ public:
                                           const SwFrmOrObj& rLower,
                                           const SwDoc *pDoc,
                                           Point nPos);
-    //-----IAccessibility2 Implementation 2009
     */
 
 private:
@@ -93,9 +87,7 @@ private:
     LayerId eLayerId;
     sal_uInt32 nOrdNum;
 
-    //IAccessibility2 Implementation 2009-----
     Point nPosNum;
-    //-----IAccessibility2 Implementation 2009
 
 };
 

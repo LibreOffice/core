@@ -85,14 +85,12 @@
 #include <numrule.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
-//IAccessibility2 Implementation 2009-----
 //#include <ndgrf.hxx>
 #include <fmtcntnt.hxx>
 #include <PostItMgr.hxx>
 //#include <../../core/inc/flyfrm.hxx>
 //#include <../../core/inc/cntfrm.hxx>
 //#include <ndnotxt.hxx>
-//-----IAccessibility2 Implementation 2009
 //#include <postit.hxx>
 #include <postithelper.hxx>
 #include <redline.hxx>
@@ -899,8 +897,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         bIsOutlineMoveable(sal_True),
         bViewHasChanged(sal_False),
         bIsImageListInitialized(sal_False),
-        bIsKeySpace(sal_False) //IAccessibility2 Implementation 2009
-{
+        bIsKeySpace(sal_False){
     sal_uInt16 i;
 
     SetHelpId(HID_NAVIGATOR_TREELIST);
@@ -936,7 +933,6 @@ SwContentTree::~SwContentTree()
     bIsInDrag = sal_False;
 }
 
-//IAccessibility2 Implementation 2009-----
 String SwContentTree::GetEntryAltText( SvLBoxEntry* pEntry ) const
 {
     if( pEntry == NULL)
@@ -1108,7 +1104,6 @@ String SwContentTree::GetEntryLongDescription( SvLBoxEntry* pEntry ) const
     return String();
 }
 
-//-----IAccessibility2 Implementation 2009
 /***************************************************************************
     Drag&Drop methods
 ***************************************************************************/
@@ -1394,7 +1389,6 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
                         sEntry = sSpace;
                     SvLBoxEntry* pChild = InsertEntry(sEntry, pParent,
                             sal_False, LIST_APPEND, (void*)pCnt);
-                    //IAccessibility2 Implementation 2009-----
                     //Solution: If object is marked , the corresponding entry is set true ,
                     //else the corresponding entry is set false .
                     //==================================================
@@ -1416,7 +1410,6 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
 
                         }
                     }
-                    //-----IAccessibility2 Implementation 2009
                 }
             }
         }
@@ -1426,7 +1419,6 @@ void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
     Beschreibung:   Expand - Zustand fuer Inhaltstypen merken
 ***************************************************************************/
 
-//IAccessibility2 Implementation 2009-----
 //Solution: Get drawing Objects by content .
 SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 {
@@ -1460,7 +1452,6 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
     }
     return pRetObj;
 }
-//-----IAccessibility2 Implementation 2009
 
 sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 {
@@ -2460,7 +2451,6 @@ IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
         {
             FindActiveTypeAndRemoveUserData();
             Display(sal_True);
-            //IAccessibility2 Implementation 2009-----
             //Solution: Set focus
             if( bIsKeySpace )
             {
@@ -2468,7 +2458,6 @@ IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
                 ShowFocus( oldRectangle);
                 bIsKeySpace = sal_False;
             }
-            //-----IAccessibility2 Implementation 2009
         }
     }
     else if(!pView && bIsActive && !bIsIdleClear)
@@ -2691,7 +2680,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
             GrabFocus();
         }
     }
-    //IAccessibility2 Implementation 2009-----
     //Solution: Make KEY_SPACE has same function as DoubleClick ,
     //and realize multi-selection .
     else if(aCode.GetCode() == KEY_SPACE && 0 == aCode.GetModifier())
@@ -2774,7 +2762,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                         break;
                                     default:
                                         nCmpId = pTemp->GetObjIdentifier();
-                                        //IAccessibility2 Implementation 2009-----
                                         if ( bMark )
                                         {
                                             SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
@@ -2783,7 +2770,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                                 pDrawView->MarkObj(pTemp, pPV, sal_True);
                                             }
                                         }
-                                        //-----IAccessibility2 Implementation 2009
                                 }
                                 //mod end
                             }
@@ -2811,7 +2797,6 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
         }
 
     }
-    //-----IAccessibility2 Implementation 2009
     else
         SvTreeListBox::KeyInput(rEvent);
 
@@ -3574,7 +3559,6 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
         rDev.DrawText( rPos, GetText() );
         rDev.SetFont( aOldFont );
     }
-    //IAccessibility2 Implementation 2009-----
     // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
     /*
     else if (pEntry->IsMarked())
@@ -3592,7 +3576,6 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
             rDev.DrawText( rPosStar, str);
             rDev.SetFont( aOldFont );
     }
-    //-----IAccessibility2 Implementation 2009
     */
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
@@ -3614,7 +3597,6 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-//IAccessibility2 Implementation 2009-----
 sal_Int32  SwContentTree::GetEntryRealChildsNum( SvLBoxEntry* pParent ) const
 {
     // ist es ein Inhaltstyp?
@@ -3628,4 +3610,3 @@ sal_Int32  SwContentTree::GetEntryRealChildsNum( SvLBoxEntry* pParent ) const
     }
     return 0;
 }
-//-----IAccessibility2 Implementation 2009

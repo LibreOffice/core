@@ -52,14 +52,12 @@
 
 #include "ViewShell.hxx"
 #include "View.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "DrawDocShell.hxx"
 #include <drawdoc.hxx>
 #include <algorithm>
 #include "sdpage.hxx"
 #include "slideshow.hxx"
 #include "anminfo.hxx"
-//-----IAccessibility2 Implementation 2009
 #include <memory>
 
 #include "accessibility.hrc"
@@ -78,7 +76,6 @@ class SfxViewFrame;
 namespace accessibility {
 
 
-//IAccessibility2 Implementation 2009-----
 struct XShapePosCompareHelper
 {
     bool operator() ( const uno::Reference<drawing::XShape>& xshape1,
@@ -93,7 +90,6 @@ struct XShapePosCompareHelper
             return 0;
     }
 };
-//-----IAccessibility2 Implementation 2009
 //=====  internal  ============================================================
 
 AccessibleDrawDocumentView::AccessibleDrawDocumentView (
@@ -285,7 +281,6 @@ uno::Reference<XAccessible> SAL_CALL
             static_cast<uno::XWeak*>(this));
 }
 
-//IAccessibility2 Implementation 2009-----
 OUString SAL_CALL
     AccessibleDrawDocumentView::getAccessibleName(void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -322,7 +317,6 @@ OUString SAL_CALL
 
     return sName;
 }
-//-----IAccessibility2 Implementation 2009
 //=====  XEventListener  ======================================================
 
 void SAL_CALL
@@ -391,9 +385,7 @@ void SAL_CALL
         }
         else
             OSL_TRACE ("View invalid");
-//IAccessibility2 Implementation 2009-----
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
-//-----IAccessibility2 Implementation 2009
     }
     else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
     {
@@ -403,7 +395,6 @@ void SAL_CALL
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
                 &maViewForwarder);
     }
-//IAccessibility2 Implementation 2009-----
     else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("ActiveLayer")))
     {
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
@@ -455,7 +446,6 @@ void SAL_CALL
             }
     }
     }
-//-----IAccessibility2 Implementation 2009
     else
     {
         OSL_TRACE ("  unhandled");
@@ -497,7 +487,6 @@ void SAL_CALL
     return aServiceNames;
 }
 
-//IAccessibility2 Implementation 2009-----
 //=====  XInterface  ==========================================================
 
 uno::Any SAL_CALL
@@ -627,7 +616,6 @@ uno::Sequence< sal_Int32 > SAL_CALL
     }
     return aRet;
 }
-//-----IAccessibility2 Implementation 2009
 /// Create a name for this view.
 ::rtl::OUString
     AccessibleDrawDocumentView::CreateAccessibleName (void)
@@ -883,10 +871,8 @@ void AccessibleDrawDocumentView::Activated (void)
 {
     if (mpChildrenManager != NULL)
     {
-//IAccessibility2 Implementation 2009-----
         //mpChildrenManager->UpdateSelection();
     sal_Bool bChange = sal_False;
-//-----IAccessibility2 Implementation 2009
         // When none of the children has the focus then claim it for the
         // view.
         if ( ! mpChildrenManager->HasFocus())
@@ -896,12 +882,10 @@ void AccessibleDrawDocumentView::Activated (void)
     }
         else
             ResetState (AccessibleStateType::FOCUSED);
-//IAccessibility2 Implementation 2009-----
     mpChildrenManager->UpdateSelection();
     // if the child gets focus in UpdateSelection(), needs to reset the focus on document.
     if (mpChildrenManager->HasFocus() && bChange)
         ResetState (AccessibleStateType::FOCUSED);
-//-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -948,7 +932,6 @@ void SAL_CALL AccessibleDrawDocumentView::disposing (void)
     AccessibleDocumentViewBase::disposing ();
 }
 
-//IAccessibility2 Implementation 2009-----
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL AccessibleDrawDocumentView::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
         throw ( ::com::sun::star::uno::RuntimeException )
@@ -1099,7 +1082,6 @@ uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable(
 
     return xRet;
 }
-//-----IAccessibility2 Implementation 2009
 
 void AccessibleDrawDocumentView::UpdateAccessibleName (void)
 {

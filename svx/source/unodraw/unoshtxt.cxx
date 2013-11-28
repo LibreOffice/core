@@ -52,10 +52,8 @@
 #include <comphelper/processfactory.hxx>
 #include <vos/mutex.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <svx/svdotable.hxx>
 #include <../table/cell.hxx>
-//-----IAccessibility2 Implementation 2009
 
 #include <svx/sdrpaintwindow.hxx>
 
@@ -413,7 +411,6 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                         }
                     }
-                    //-----IAccessibility2 Implementation 2009
                     // invalidate old forwarder
                     if( !mbForwarderIsEditMode )
                     {

@@ -213,7 +213,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 if( bRet )
                     Scroll(pWrtShell->GetCharRect().SVRect());
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
-                //IAccessibility2 Implementation 2009-----
                 if ( Application::IsAccessibilityEnabled() )
                 {
                     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
@@ -225,7 +224,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         pSrchDlg->SetSrchFlag();
                     }
                 }
-                //-----IAccessibility2 Implementation 2009
             }
             break;
             case SVX_SEARCHCMD_FIND_ALL:
@@ -241,7 +239,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     bFound = sal_False;
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
-                //IAccessibility2 Implementation 2009-----
                 if ( Application::IsAccessibilityEnabled() )
                 {
                     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
@@ -254,7 +251,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         pSrchDlg->SetSrchFlag();
                     }
                 }
-                //-----IAccessibility2 Implementation 2009
             }
             break;
             case SVX_SEARCHCMD_REPLACE:
@@ -306,7 +302,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     pSrchItem->SetCommand( nOldCmd );
                     rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
                 }
-                //IAccessibility2 Implementation 2009-----
                 {
                     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
                     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
@@ -318,7 +313,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         pSrchDlg->SetSrchFlag();
                     }
                 }
-                //-----IAccessibility2 Implementation 2009
                 break;
 
             case SVX_SEARCHCMD_REPLACE_ALL:
@@ -368,7 +362,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         InfoBox( pParentWindow, aText ).Execute();
                     }
                 }
-                //IAccessibility2 Implementation 2009-----
                 const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
                 SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
 
@@ -378,7 +371,6 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     pSrchDlg->SetDocWin( (Window*)pEditWin );
                     pSrchDlg->SetSrchFlag();
                 }
-                //-----IAccessibility2 Implementation 2009
                 break;
             }
 

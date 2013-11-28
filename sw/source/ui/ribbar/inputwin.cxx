@@ -91,7 +91,6 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     pWrtShell = pView ? pView->GetWrtShellPtr() : 0;
 
     InsertWindow( ED_POS, &aPos, 0, 0);
-    //IAccessibility2 Implementation 2009-----
     SetItemText(ED_POS, String(SW_RES(STR_ACCESS_FORMULA_TYPE)));
     aPos.SetAccessibleName(String(SW_RES(STR_ACCESS_FORMULA_TYPE)));
     SetAccessibleName(String(SW_RES(STR_ACCESS_FORMULA_TOOLBAR)));
@@ -100,7 +99,6 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     InsertWindow( ED_FORMULA, &aEdit);
     SetItemText(ED_FORMULA, String(SW_RES(STR_ACCESS_FORMULA_TEXT)));
     aEdit.SetAccessibleName(String(SW_RES(STR_ACCESS_FORMULA_TEXT)));
-    //-----IAccessibility2 Implementation 2009
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
     sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();

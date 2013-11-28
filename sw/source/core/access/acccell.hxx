@@ -26,7 +26,6 @@
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
-//IAccessibility2 Implementation 2009-----
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XAccessibleExtendedAttributes_HPP_
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #endif
@@ -34,7 +33,6 @@
 #ifndef _ACCSELECTIONHELPER_HXX_
 #include <accselectionhelper.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 
 class SwCellFrm;
 class SwAccessibleTable;
@@ -125,10 +123,8 @@ public:
     //=====  XAccessibleValue  ================================================
 
     //=====  XAccessibleExtendedAttributes ================================================
-    //IAccessibility2 Implementation 2009-----
     ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
-    //-----IAccessibility2 Implementation 2009
 private:
     SwFrmFmt* GetTblBoxFormat() const;
 
@@ -145,7 +141,6 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
         throw (::com::sun::star::uno::RuntimeException);
-    //IAccessibility2 Implementation 2009-----
     //=====  XAccessibleComponent  ============================================
     sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException);
@@ -179,7 +174,6 @@ public:
     SwAccessibleTable *GetTable();
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTableReference;
     SwAccessibleTable *m_pAccTable;
-    //-----IAccessibility2 Implementation 2009
 };
 
 

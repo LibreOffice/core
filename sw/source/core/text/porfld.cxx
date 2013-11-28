@@ -88,9 +88,7 @@ SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, sal_Bool bP
     , m_bNoLength( sal_False )
 {
     SetWhichPor( POR_FLD );
-    //IAccessibility2 Implementation 2009-----
     m_nAttrFldType = 0;
-    //-----IAccessibility2 Implementation 2009
 }
 
 SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
@@ -471,12 +469,10 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) c
 void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Special( GetLen(), aExpand, GetWhichPor() );
-    //IAccessibility2 Implementation 2009-----
     if( GetWhichPor() == POR_FLD )
     {
         rPH.SetAttrFieldType(m_nAttrFldType);
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 /*************************************************************************

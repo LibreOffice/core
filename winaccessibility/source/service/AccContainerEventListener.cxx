@@ -548,7 +548,6 @@ void AccContainerEventListener::handleColumnChangedEvent(const Any& /*oldValue*/
     pAgent->NotifyAccEvent(UM_EVENT_COLUMN_CHANGED, pAccessible);
 }
 
-//IAccessibility2 Implementation 2009-----
 void  AccContainerEventListener::handleNameChangedEvent( Any name )
 {
     if (getRole() == AccessibleRole::COMBO_BOX)
@@ -570,4 +569,3 @@ void  AccContainerEventListener::handleNameChangedEvent( Any name )
     }
     AccEventListener::handleNameChangedEvent(name);
 }
-//-----IAccessibility2 Implementation 2009

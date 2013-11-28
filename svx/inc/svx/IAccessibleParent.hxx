@@ -27,11 +27,9 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <sal/types.h>
-//IAccessibility2 Implementation 2009-----
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_MANAGER_HXX
 #include "AccessibleControlShape.hxx"
 #endif
-//-----IAccessibility2 Implementation 2009
 namespace accessibility {
 
 class AccessibleShape;
@@ -88,7 +86,6 @@ public:
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException) = 0;
-    //IAccessibility2 Implementation 2009-----
     //Add this method to support Form Controls
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet*)
@@ -99,7 +96,6 @@ public:
             ::com::sun::star::drawing::XShape>&)
             throw (::com::sun::star::uno::RuntimeException){return NULL;};
     virtual sal_Bool IsDocumentSelAll(){ return sal_False; }
-    //-----IAccessibility2 Implementation 2009
 };
 
 } // end of namespace accessibility

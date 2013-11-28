@@ -31,11 +31,9 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-//IAccessibility2 Implementation 2009-----
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_STATE_TYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
@@ -66,7 +64,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/svdview.hxx>
 #include "AccessibleEmptyEditSource.hxx"
-//IAccessibility2 Implementation 2009-----
 #include <svx/svdpage.hxx>
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -74,20 +71,15 @@
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-//IAccessibility2 Implementation 2009-----
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
-//-----IAccessibility2 Implementation 2009
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
-//IAccessibility2 Implementation 2009-----
 #include <algorithm>
 
 // #include <Accessiblehyperlink.hxx>
-//-----IAccessibility2 Implementation 2009
 namespace accessibility {
 
 namespace {
@@ -128,9 +120,7 @@ OUString GetOptionalProperty (
 AccessibleShape::AccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    //IAccessibility2 Implementation 2009-----
     : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
-    //-----IAccessibility2 Implementation 2009
       mpChildrenManager(NULL),
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
@@ -142,7 +132,6 @@ AccessibleShape::AccessibleShape (
     m_pShape = GetSdrObjectFromXShape(mxShape);
     UpdateNameAndDescription();
 }
-//IAccessibility2 Implementation 2009-----
 AccessibleShape::AccessibleShape (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& rxShape,
@@ -161,7 +150,6 @@ AccessibleShape::AccessibleShape (
 {
     m_pShape = GetSdrObjectFromXShape(mxShape);
 }
-//-----IAccessibility2 Implementation 2009
 AccessibleShape::~AccessibleShape (void)
 {
     if (mpChildrenManager != NULL)
@@ -297,13 +285,11 @@ void AccessibleShape::UpdateStates (void)
     else
         pStateSet->RemoveState (AccessibleStateType::SELECTED);
 }
-//IAccessibility2 Implementation 2009-----
     ::rtl::OUString AccessibleShape::GetStyle()
     {
         return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
     }
 
-//-----IAccessibility2 Implementation 2009
 bool AccessibleShape::operator== (const AccessibleShape& rShape)
 {
     return this==&rShape;
@@ -365,7 +351,6 @@ sal_Bool AccessibleShape::GetState (sal_Int16 aState)
     else
         return AccessibleContextBase::GetState (aState);
 }
-//IAccessibility2 Implementation 2009-----
 // Solution: OverWrite the parent's getAccessibleName method
 ::rtl::OUString SAL_CALL AccessibleShape::getAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -386,7 +371,6 @@ sal_Bool AccessibleShape::GetState (sal_Int16 aState)
     else
         return OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
 }
-//-----IAccessibility2 Implementation 2009
 //=====  XAccessibleContext  ==================================================
 
 /** The children of this shape come from two sources: The children from
@@ -446,7 +430,6 @@ uno::Reference<XAccessible> SAL_CALL
     return xChild;
 }
 
-//IAccessibility2 Implementation 2009-----
 uno::Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleShape::getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException)
@@ -475,7 +458,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
     return uno::Reference<XAccessibleRelationSet>();
 }
-//-----IAccessibility2 Implementation 2009
 
 /** Return a copy of the state set.
     Possible states are:
@@ -492,7 +474,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     if (rBHelper.bDisposed || mpText == NULL)
         // Return a minimal state set that only contains the DEFUNC state.
-    //IAccessibility2 Implementation 2009-----
     //xStateSet = AccessibleContextBase::getAccessibleStateSet ();
     {
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
@@ -525,7 +506,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             }
             xStateSet = Reference<XAccessibleStateSet>(
                 new ::utl::AccessibleStateSetHelper (*pStateSet));
-            //-----IAccessibility2 Implementation 2009
     }else
     {
         ::utl::AccessibleStateSetHelper* pStateSet =
@@ -541,7 +521,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                 else
                     pStateSet->RemoveState (AccessibleStateType::FOCUSED);
             }
-            //IAccessibility2 Implementation 2009-----
             //Solution:Just when the document is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
             ::com::sun::star::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
             if( xTempAcc.is() )
@@ -568,16 +547,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                     }
                 }
             }
-            //-----IAccessibility2 Implementation 2009
             // Create a copy of the state set that may be modified by the
             // caller without affecting the current state set.
             xStateSet = Reference<XAccessibleStateSet>(
                 new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
     }
-//IAccessibility2 Implementation 2009-----
     UpdateDocumentAllSelState(xStateSet);
-//-----IAccessibility2 Implementation 2009
     return xStateSet;
 }
 
@@ -855,7 +831,6 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
             uno::Any aColor;
             aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillColor"));
             aColor >>= nColor;
-            //IAccessibility2 Implementation 2009-----
             aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillTransparence"));
             short nTrans=0;
             aColor >>= nTrans;
@@ -870,7 +845,6 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
                 crBk.SetTransparency(sal_uInt8(nTrans));
             }
             nColor = crBk.GetColor();
-            //-----IAccessibility2 Implementation 2009
         }
     }
     catch (::com::sun::star::beans::UnknownPropertyException)
@@ -929,18 +903,14 @@ com::sun::star::uno::Any SAL_CALL
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleComponent*>(this),
             static_cast<XAccessibleExtendedComponent*>(this),
-        //IAccessibility2 Implementation 2009-----
             static_cast< ::com::sun::star::accessibility::XAccessibleSelection* >(this),
 
          static_cast< ::com::sun::star::accessibility::XAccessibleExtendedAttributes* >(this),
-         //-----IAccessibility2 Implementation 2009
             static_cast<lang::XEventListener*>(this),
             static_cast<document::XEventListener*>(this),
             static_cast<lang::XUnoTunnel*>(this),
-    //IAccessibility2 Implementation 2009-----
             static_cast<XAccessibleGroupPosition*>(this),
             static_cast<XAccessibleHypertext*>(this)
-    //-----IAccessibility2 Implementation 2009
             );
     return aReturn;
 }
@@ -964,7 +934,6 @@ void SAL_CALL
 {
     AccessibleContextBase::release ();
 }
-//IAccessibility2 Implementation 2009-----
 //
 //=====  XAccessibleSelection  ============================================
 //
@@ -1084,7 +1053,6 @@ uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
     strRet <<= style;
     return strRet;
 }
-//-----IAccessibility2 Implementation 2009
 //=====  XServiceInfo  ========================================================
 
 ::rtl::OUString SAL_CALL
@@ -1319,7 +1287,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     throw (::com::sun::star::uno::RuntimeException)
 {
     //OUString sName (CreateAccessibleBaseName());
-//IAccessibility2 Implementation 2009-----
     OUString sName;
     sName = GetFullAccessibleName(this);
     return sName;
@@ -1414,7 +1381,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     aAccName = sName;
     return sName;
 }
-//-----IAccessibility2 Implementation 2009
 ::rtl::OUString
     AccessibleShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -1586,7 +1552,6 @@ void AccessibleShape::UpdateNameAndDescription (void)
     {
     }
 }
-//IAccessibility2 Implementation 2009-----
 //  Return this object's role.
 sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException)
@@ -1703,10 +1668,8 @@ throw (uno::RuntimeException)
         for(sal_Int32 i = 0 ; i < nObj ; ++i)
         {
             SdrObject *pSubObj = pGrpList->GetObj(i);
-            //IAccessibility2 Implementation 2009-----
             if (pSubObj &&
                 xParentContext->getAccessibleChild(i)->getAccessibleContext()->getAccessibleRole() != AccessibleRole::GROUP_BOX)
-            //-----IAccessibility2 Implementation 2009
             {
                 vXShapes.push_back( GetXShapeForSdrObject(pSubObj) );
             }
@@ -1831,5 +1794,4 @@ sal_Bool SAL_CALL AccessibleShape::setSelection( sal_Int32, sal_Int32 ) throw (:
 }
 sal_Bool SAL_CALL AccessibleShape::copyText( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return sal_True;}
 
-//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

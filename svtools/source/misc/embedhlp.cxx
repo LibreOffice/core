@@ -34,14 +34,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
-//-----IAccessibility2 Implementation 2009
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -944,7 +942,6 @@ sal_Bool EmbeddedObjectRef::IsChart() const
     return sal_False;
 }
 
-//IAccessibility2 Implementation 2009-----
 // MT: Only used for getting accessible attributes, which are not localized
 rtl::OUString EmbeddedObjectRef::GetChartType()
 {
@@ -1038,7 +1035,6 @@ rtl::OUString EmbeddedObjectRef::GetChartType()
     }
     return Style;
 }
-//-----IAccessibility2 Implementation 2009
 
 // #i104867#
 sal_uInt32 EmbeddedObjectRef::getGraphicVersion() const

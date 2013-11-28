@@ -352,7 +352,6 @@ TabPage RID_SFXPAGE_LINGU
     {
         Text [ en-US ] = "Edit Options";
     };
-    // ------ IAccessibility2 implementation 2009.
 };
 // end: TabPage RID_SFXPAGE_LINGU
 

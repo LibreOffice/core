@@ -1041,9 +1041,7 @@ SwCntntNode::~SwCntntNode()
     // der Abhaengikeitsliste raus!
     // Daher muessen alle Frames in der Abhaengigkeitsliste geloescht werden.
     if( GetDepends() )
-        //IAccessibility2 Implementation 2009-----
         DelFrms(sal_True, sal_False);
-        //-----IAccessibility2 Implementation 2009
 
     if( pCondColl )
         delete pCondColl;
@@ -1370,12 +1368,10 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
  */
 
 
-//IAccessibility2 Implementation 2009-----
 //Solution:Add a input param to identify if the acc table should be disposed.
 //add a flag(bNeedDel) to indicate whether to del corresponding frm even in doc loading process,
 //void SwCntntNode::DelFrms()
 void SwCntntNode::DelFrms( sal_Bool /* bNeedDel */, sal_Bool bIsDisposeAccTable )
-//-----IAccessibility2 Implementation 2009
 {
     if( !GetDepends() )
         return;
@@ -1431,14 +1427,12 @@ void SwCntntNode::DelFrms( sal_Bool /* bNeedDel */, sal_Bool bIsDisposeAccTable 
                 ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
             }
         }
-        //IAccessibility2 Implementation 2009-----
         //Solution:Set acc table dispose state
         pFrm->SetAccTableDispose( bIsDisposeAccTable );
         //End Added
         pFrm->Cut();
         //Solution:Set acc table dispose state to default value
         pFrm->SetAccTableDispose( sal_True );
-        //-----IAccessibility2 Implementation 2009
         delete pFrm;
     }
     if( IsTxtNode() )

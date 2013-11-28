@@ -42,10 +42,8 @@ class TabControl
       public DragSourceHelper,
       public DropTargetHelper
 {
-//IAccessibility2 Implementation 2009-----
     //Solution: declare bIsMarked variable
     sal_uInt16    RrePageID;
-//-----IAccessibility2 Implementation 2009
 public:
     TabControl (DrawViewShell* pDrViewSh, ::Window* pParent);
     virtual ~TabControl (void);

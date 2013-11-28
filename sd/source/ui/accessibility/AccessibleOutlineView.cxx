@@ -150,7 +150,6 @@ uno::Reference<XAccessible> SAL_CALL
     return maTextHelper.GetChild(nIndex);
 }
 
-//IAccessibility2 Implementation 2009-----
 #include <drawdoc.hxx>
 ::rtl::OUString SAL_CALL
     AccessibleOutlineView::getAccessibleName(void)
@@ -180,7 +179,6 @@ uno::Reference<XAccessible> SAL_CALL
     }
     return sName;
 }
-//-----IAccessibility2 Implementation 2009
 //=====  XAccessibleEventBroadcaster  ========================================
 
 void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -188,9 +186,7 @@ void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAc
     // delegate listener handling to children manager.
     if ( ! IsDisposed())
         maTextHelper.AddEventListener(xListener);
-//IAccessibility2 Implementation 2009-----
     AccessibleContextBase::addEventListener(xListener);
-//-----IAccessibility2 Implementation 2009
 }
 
 void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -198,9 +194,7 @@ void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< 
     // forward
     if ( ! IsDisposed())
         maTextHelper.RemoveEventListener(xListener);
-//IAccessibility2 Implementation 2009-----
     AccessibleContextBase::removeEventListener(xListener);
-//-----IAccessibility2 Implementation 2009
 }
 
 //=====  XServiceInfo  ========================================================
@@ -273,9 +267,7 @@ void SAL_CALL
 
         // The current page changed. Update the children accordingly.
         UpdateChildren();
-//IAccessibility2 Implementation 2009-----
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
-//-----IAccessibility2 Implementation 2009
     }
     else if (rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
     {

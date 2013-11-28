@@ -80,7 +80,6 @@ static ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
 //  Hilfsklasse, fuer die Farbzuordnung,
 //  um nicht mehrfach hintereinander denselben User aus der Liste zu suchen
 
-//IAccessibility2 Implementation 2009-----
 //Move this class declare to Chgtrack.hxx
 /*
 class ScActionColorChanger
@@ -100,7 +99,6 @@ public:
     ColorData   GetColor() const    { return nColor; }
 };
 */
-//-----IAccessibility2 Implementation 2009
 
 //------------------------------------------------------------------
 

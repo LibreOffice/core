@@ -34,7 +34,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -42,7 +41,6 @@
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 
 // ----------------
@@ -339,7 +337,6 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-//IAccessibility2 Implementation 2009-----
     uno::Reference< accessibility::XAccessibleRelationSet > xRelSet;
     Window* pWindow = (Window*)mpParent;
     if ( pWindow )
@@ -364,7 +361,6 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
         }
     }
     return xRelSet;
-//-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------------
@@ -792,10 +788,8 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
             nIndex -= 1;
     }
     if (pItem == NULL)
-//IAccessibility2 Implementation 2009-----
         //pItem = mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
     pItem = mpParent->ImplGetItem (static_cast<sal_uInt16>(nIndex));
-//-----IAccessibility2 Implementation 2009
 
     return pItem;
 }
@@ -979,10 +973,8 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the mean time.
             try
             {
-//IAccessibility2 Implementation 2009-----
                 //pItem = mpParent->mrParent.ImplGetVisibleItem (i);
                 pItem = mpParent->mrParent.ImplGetItem(i);
-//-----IAccessibility2 Implementation 2009
             }
             catch (lang::IndexOutOfBoundsException aException)
             {
@@ -999,7 +991,6 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
         }
     }
 
-//IAccessibility2 Implementation 2009-----
     //if this valueset contain a none field(common value is default), then we should increase the real index and set the noitem index value equal 0.
     if ( mpParent && ( (mpParent->mrParent.GetStyle() & WB_NONEFIELD) != 0 ) )
     {
@@ -1009,7 +1000,6 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
         else
             nIndexInParent++;
     }
-//-----IAccessibility2 Implementation 2009
     return nIndexInParent;
 }
 

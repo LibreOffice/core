@@ -132,11 +132,9 @@ private:
 class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
-//IAccessibility2 Implementation 2009-----
     // Solution: Add a para to indicate whether the object is cloned
                         //ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin);
                         ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, sal_Bool isClone=sal_False);
-//-----IAccessibility2 Implementation 2009
     virtual             ~ScAccessibleEditObjectTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -159,9 +157,7 @@ protected:
     EditEngine* mpEditEngine;
     SvxEditEngineForwarder* mpForwarder;
     Window* mpWindow;
-//IAccessibility2 Implementation 2009-----
     sal_Bool mbIsCloned;
-//-----IAccessibility2 Implementation 2009
 };
 
 

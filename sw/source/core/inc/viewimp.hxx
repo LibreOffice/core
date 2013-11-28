@@ -286,11 +286,9 @@ public:
 
     inline void AddAccessibleObj( const SdrObject *pObj );
 
-    //IAccessibility2 Implementation 2009-----
     void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
     void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
-    //-----IAccessibility2 Implementation 2009
 
     // Invalidate accessible frame's frame's content
     void InvalidateAccessibleFrmContent( const SwFrm *pFrm );

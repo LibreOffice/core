@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-//IAccessibility2 Implementation 2009-----
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
@@ -400,4 +399,3 @@ Reference< awt::XFont > VCLXAccessibleHeaderBarItem::getFont() throw (RuntimeExc
 
     return sText;
 }
-//-----IAccessibility2 Implementation 2009

@@ -1345,7 +1345,6 @@ void SvxTPFilter::Disable( bool bChild)
     Enable( false, bChild );
 }
 
-//IAccessibility2 Implementation 2009-----
 void SvxTPFilter::SetAccessibleRelationMemberOf( Window* pWin )
 {
     aCbDate.SetAccessibleRelationMemberOf(pWin);
@@ -1366,7 +1365,6 @@ void SvxTPFilter::SetAccessibleRelationMemberOf( Window* pWin )
     aCbComment.SetAccessibleRelationMemberOf(pWin);
     aEdComment.SetAccessibleRelationMemberOf(pWin);
 }
-//-----IAccessibility2 Implementation 2009
 
 IMPL_LINK( SvxTPFilter, ModifyDate, void*,pTF)
 {

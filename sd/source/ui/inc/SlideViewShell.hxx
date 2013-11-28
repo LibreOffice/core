@@ -140,10 +140,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> CreateAccessibleDocumentView( ::sd::Window* pWindow );
 
     void            SelectionHasChanged();
-//IAccessibility2 Implementation 2009-----
     //Notify the SELECTION_CHANGE, SELECTION_ADD, SELECTION_REMOVE events
     void            SelectionHasChanged(sal_uInt16 nPage, sal_Bool bSelect);
-//-----IAccessibility2 Implementation 2009
     void            PageLayoutHasChanged();
     void            FocusHasChanged( sal_uInt16 nOldFocusPage, sal_uInt16 nNewFocusPage );
     void            PageVisibilityHasChanged( sal_uInt16 nPage, sal_Bool bVisible );
@@ -152,9 +150,7 @@ public:
     */
     virtual void Activate (sal_Bool IsMDIActivate);
 
-//IAccessibility2 Implementation 2009-----
     void SwitchViewFireFocus(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc );
-//-----IAccessibility2 Implementation 2009
 protected:
     virtual Size    GetOptimalSizePixel() const;
     virtual long    VirtHScrollHdl(ScrollBar* pHScroll);

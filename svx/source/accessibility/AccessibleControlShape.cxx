@@ -44,7 +44,6 @@
 #include <svx/svdpagv.hxx>
 #include "svx/svdstr.hrc"
 #include <algorithm>
-//IAccessibility2 Implementation 2009-----
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -60,7 +59,6 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::comphelper;
 using namespace ::accessibility;
 using namespace ::com::sun::star::accessibility;
@@ -94,14 +92,12 @@ namespace
         static ::rtl::OUString s_sLabelPropertyLabel( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
         return s_sLabelPropertyLabel;
     }
-    //IAccessibility2 Implementation 2009-----
     //................................................................
     const ::rtl::OUString& lcl_getLabelControlPropertyName( )
     {
         static ::rtl::OUString s_sLabelControlPropertyLabel( RTL_CONSTASCII_USTRINGPARAM( "LabelControl" ) );
         return s_sLabelControlPropertyLabel;
     }
-    //-----IAccessibility2 Implementation 2009
     //................................................................
     // return the property which should be used as AccessibleName
     const ::rtl::OUString& lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
@@ -661,7 +657,6 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
 {
     // TODO
     // return AccessibleShape::getAccessibleRelationSet( );
-    //IAccessibility2 Implementation 2009-----
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     ensureControlModelAccess();
     AccessibleControlShape* pCtlAccShape = GetLabeledByControlShape();
@@ -682,14 +677,12 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     }
     Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
     return xSet;
-    //-----IAccessibility2 Implementation 2009
 }
 
 //--------------------------------------------------------------------
 ::rtl::OUString AccessibleControlShape::CreateAccessibleName (void) throw (RuntimeException)
 {
     ensureControlModelAccess();
-    //IAccessibility2 Implementation 2009-----
     ::rtl::OUString sName;
     if ( getAccessibleRole() != AccessibleRole::SHAPE
         && getAccessibleRole() != AccessibleRole::RADIO_BUTTON  )
@@ -710,7 +703,6 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
             sName = AccessibleShape::CreateAccessibleName();
         }
     }
-    //-----IAccessibility2 Implementation 2009
     // now that somebody first asked us for our name, ensure that we are listening to name changes on the model
     m_bListeningForName = ensureListeningState( m_bListeningForName, sal_True, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
 
@@ -972,7 +964,6 @@ void SAL_CALL AccessibleControlShape::elementReplaced( const ::com::sun::star::c
 {
     // not interested in
 }
-//IAccessibility2 Implementation 2009-----
 AccessibleControlShape* SAL_CALL AccessibleControlShape::GetLabeledByControlShape( )
 {
     if(m_xControlModel.is())
@@ -993,4 +984,3 @@ AccessibleControlShape* SAL_CALL AccessibleControlShape::GetLabeledByControlShap
     }
     return NULL;
 }
-//-----IAccessibility2 Implementation 2009

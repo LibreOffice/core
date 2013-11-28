@@ -60,11 +60,9 @@
 #include <acccontext.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-//IAccessibility2 Implementation 2009-----
 #ifndef _ACCPARA_HXX
 #include "accpara.hxx"
 #endif
-//-----IAccessibility2 Implementation 2009
 #include <PostItMgr.hxx>
 
 using namespace sw::access;
@@ -230,11 +228,9 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                             "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
                     const SwFrm* pLower( rLower.GetSwFrm() );
                     ::vos::ORef< SwAccessibleContext > xAccImpl =
-                        //IAccessibility2 Implementation 2009-----
                         //O is: GetMap()->GetContextImpl( pLower, SCROLLED_OUT == eAction ||
                         //                      SCROLLED_IN == eAction );
                         GetMap()->GetContextImpl( pLower, sal_True );
-                        //-----IAccessibility2 Implementation 2009
                     if( xAccImpl.isValid() )
                     {
                         switch( eAction )
@@ -265,7 +261,6 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                     ASSERT( !rLower.AlwaysIncludeAsChild(),
                             "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
                     ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
-                        //IAccessibility2 Implementation 2009-----
                         //O is: GetMap()->GetContextImpl( rLower.GetSdrObject(),
                         //                        this,
                         //                        SCROLLED_OUT == eAction ||
@@ -273,7 +268,6 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         GetMap()->GetContextImpl( rLower.GetDrawObject(),
                                                   this,
                                                   sal_True );
-                        //-----IAccessibility2 Implementation 2009
                     if( xAccImpl.isValid() )
                     {
                         switch( eAction )
@@ -293,11 +287,9 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                                 xAccImpl->ViewForwarderChanged(
                                     ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                     GetMap() );
-                                //IAccessibility2 Implementation 2009-----
                                 //Remove
                                 //DisposeShape( rLower.GetDrawObject(),
                                 //            xAccImpl.getBodyPtr() );
-                                //-----IAccessibility2 Implementation 2009
                             }
                             break;
                         case NONE:
@@ -406,11 +398,9 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
     // the child event. In this case no listener will exist.
     FireStateChangedEvent( AccessibleStateType::SHOWING, sal_False );
 
-    //IAccessibility2 Implementation 2009-----
     //Remove Dispose When scrolledout
     // We now dispose the frame
     //  Dispose( sal_True );
-    //-----IAccessibility2 Implementation 2009
 }
 
 // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
@@ -546,14 +536,12 @@ void SwAccessibleContext::GetStates(
 
     // EDITABLE
     if( bIsEditableState )
-    //IAccessibility2 Implementation 2009-----
     //Solution:Set editable state to graphic and other object when the document is editable
     {
         rStateSet.AddState( AccessibleStateType::EDITABLE );
         rStateSet.AddState( AccessibleStateType::RESIZABLE );
         rStateSet.AddState( AccessibleStateType::MOVEABLE );
     }
-    //-----IAccessibility2 Implementation 2009
     // ENABLED
     rStateSet.AddState( AccessibleStateType::ENABLED );
 
@@ -589,12 +577,10 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     , nRole( nR )
     , bDisposing( sal_False )
     , bRegisteredAtAccessibleMap( true )
-    //IAccessibility2 Implementation 2009-----
     //Solution:Initialize the begin document load and IfAsynLoad to true
     , bBeginDocumentLoad( sal_True )
     , isIfAsynLoad( sal_True )
     , bIsSeletedInDoc( sal_False)
-    //-----IAccessibility2 Implementation 2009
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -622,11 +608,9 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
-    //IAccessibility2 Implementation 2009-----
     //Solution:Notify the frame is a document
     if( nRole == AccessibleRole::DOCUMENT )
         bIsAccDocUse = sal_True;
-    //-----IAccessibility2 Implementation 2009
 
     return bDisposing ? 0 : GetChildCount( *(GetMap()) );
 }
@@ -639,11 +623,9 @@ uno::Reference< XAccessible> SAL_CALL
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    //IAccessibility2 Implementation 2009-----
     //Solution:Notify the frame is a document
     if( nRole == AccessibleRole::DOCUMENT )
         bIsAccDocUse = sal_True;
-    //-----IAccessibility2 Implementation 2009
 
     const SwAccessibleChild aChild( GetChild( *(GetMap()), nIndex ) );
     if( !aChild.IsValid() )
@@ -660,7 +642,6 @@ uno::Reference< XAccessible> SAL_CALL
     {
         ::vos::ORef < SwAccessibleContext > xChildImpl(
                 GetMap()->GetContextImpl( aChild.GetSwFrm(), !bDisposing )  );
-        //IAccessibility2 Implementation 2009-----
         //Solution:Send out accessible event when begin load.
         if( bBeginDocumentLoad && nRole == AccessibleRole::DOCUMENT )
         {
@@ -679,7 +660,6 @@ uno::Reference< XAccessible> SAL_CALL
             }
             bBeginDocumentLoad = sal_False;
         }
-        //-----IAccessibility2 Implementation 2009
         if( xChildImpl.isValid() )
         {
             xChildImpl->SetParent( this );
@@ -789,10 +769,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ::utl::AccessibleStateSetHelper *pStateSet =
         new ::utl::AccessibleStateSetHelper;
 
-    //IAccessibility2 Implementation 2009-----
     if( bIsSeletedInDoc )
         pStateSet->AddState( AccessibleStateType::SELECTED );
-    //-----IAccessibility2 Implementation 2009
 
     uno::Reference<XAccessibleStateSet> xStateSet( pStateSet );
     GetStates( *pStateSet );
@@ -1065,9 +1043,7 @@ uno::Any SAL_CALL SwAccessibleContext::getAccessibleKeyBinding()
 sal_Int32 SAL_CALL SwAccessibleContext::getForeground()
         throw (uno::RuntimeException)
 {
-    //IAccessibility2 Implementation 2009-----
     return COL_BLACK;
-    //-----IAccessibility2 Implementation 2009
 }
 
 sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
@@ -1120,12 +1096,10 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
                                 ::accessibility::AccessibleShape *pAccImpl )
 {
-    //IAccessibility2 Implementation 2009-----
     if(NULL == pAccImpl)
     {
         return ;
     }
-    //-----IAccessibility2 Implementation 2009
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
     uno::Reference< XAccessible > xAcc( pAccImpl );
@@ -1269,10 +1243,8 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
         SwAccessibleChild( GetParent() ).IsVisibleChildrenOnly() )
     {
         // The frame is now invisible -> dispose it
-        //IAccessibility2 Implementation 2009-----
         //Remove
         //Dispose( sal_True );
-        //-----IAccessibility2 Implementation 2009
     }
     else
     {
@@ -1676,7 +1648,6 @@ void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
     aStrm.Flush();
 }
 #endif
-//IAccessibility2 Implementation 2009-----
 sal_Bool SwAccessibleContext::SetSelectedState(sal_Bool bSeleted)
 {
     if(bIsSeletedInDoc != bSeleted)
@@ -1687,4 +1658,3 @@ sal_Bool SwAccessibleContext::SetSelectedState(sal_Bool bSeleted)
     }
     return sal_False;
 };
-//-----IAccessibility2 Implementation 2009

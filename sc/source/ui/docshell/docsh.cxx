@@ -121,9 +121,7 @@
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
-//IAccessibility2 Implementation 2009-----
 #include <sfx2/viewfrm.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -1590,7 +1588,6 @@ sal_Bool __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 
     PrepareSaveGuard aPrepareGuard( *this);
 
-//IAccessibility2 Implementation 2009-----
     aDocument.setDocAccTitle(String());
     // SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame));
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
@@ -1606,7 +1603,6 @@ sal_Bool __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
             }
         }
     }
-//-----IAccessibility2 Implementation 2009
     //  wait cursor is handled with progress bar
     sal_Bool bRet = SfxObjectShell::SaveAs( rMedium );
     if( bRet )

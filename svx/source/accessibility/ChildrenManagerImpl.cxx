@@ -37,7 +37,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
-//IAccessibility2 Implementation 2009-----
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include <svx/SvxShapeTypes.hxx>
 #endif
@@ -48,7 +47,6 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -128,7 +126,6 @@ long ChildrenManagerImpl::GetChildCount (void) const throw ()
 }
 
 
-//IAccessibility2 Implementation 2009-----
 ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape> ChildrenManagerImpl::GetChildShape(long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
@@ -142,7 +139,6 @@ long ChildrenManagerImpl::GetChildCount (void) const throw ()
     }
     return uno::Reference< drawing::XShape > ();
 }
-//-----IAccessibility2 Implementation 2009
 
 /** Return the requested accessible child object.  Create it if it is not
     yet in the cache.
@@ -896,7 +892,6 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
 
     return bResult;
 }
-//IAccessibility2 Implementation 2009-----
 // Add the impl method for IAccessibleParent interface
 AccessibleControlShape * ChildrenManagerImpl::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -925,7 +920,6 @@ uno::Reference<XAccessible>
     }
     return uno::Reference<XAccessible> ();
 }
-//-----IAccessibility2 Implementation 2009
 
 /** Update the <const>SELECTED</const> and the <const>FOCUSED</const> state
     of all visible children.  Maybe this should be changed to all children.
@@ -958,21 +952,18 @@ void ChildrenManagerImpl::UpdateSelection (void)
     // Remember the current and new focused shape.
     AccessibleShape* pCurrentlyFocusedShape = NULL;
     AccessibleShape* pNewFocusedShape = NULL;
-//IAccessibility2 Implementation 2009-----
     typedef std::pair< AccessibleShape* , sal_Bool > PAIR_SHAPE;//sal_Bool Selected,UnSelected.
     typedef std::vector< PAIR_SHAPE > VEC_SHAPE;
     VEC_SHAPE vecSelect;
     int nAddSelect=0;
     int nRemoveSelect=0;
     sal_Bool bHasSelectedShape=sal_False;
-//-----IAccessibility2 Implementation 2009
     ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
     for (I=maVisibleChildren.begin(); I != aEnd; ++I)
     {
         AccessibleShape* pAccessibleShape = I->GetAccessibleShape();
         if (I->mxAccessibleShape.is() && I->mxShape.is() && pAccessibleShape!=NULL)
         {
-    //IAccessibility2 Implementation 2009-----
             short nRole = pAccessibleShape->getAccessibleRole();
             bool bDrawShape = (
                 nRole == AccessibleRole::GRAPHIC ||
@@ -981,7 +972,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
                 nRole == AccessibleRole::IMAGE_MAP ||
                 nRole == AccessibleRole::TABLE_CELL ||
                 nRole == AccessibleRole::TABLE );
-//-----IAccessibility2 Implementation 2009
             bool bShapeIsSelected = false;
 
             // Look up the shape in the (single or multi-) selection.
@@ -1008,7 +998,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
 
             // Set or reset the SELECTED state.
             if (bShapeIsSelected)
-        //IAccessibility2 Implementation 2009-----
                 //pAccessibleShape->SetState (AccessibleStateType::SELECTED);
             {
                 if (pAccessibleShape->SetState (AccessibleStateType::SELECTED))
@@ -1036,13 +1025,11 @@ void ChildrenManagerImpl::UpdateSelection (void)
                     }
                 }
             }
-//-----IAccessibility2 Implementation 2009
             // Does the shape have the current selection?
             if (pAccessibleShape->GetState (AccessibleStateType::FOCUSED))
                 pCurrentlyFocusedShape = pAccessibleShape;
         }
     }
-//IAccessibility2 Implementation 2009-----
     /*
     // Check if the frame we are in is currently active.  If not then make
     // sure to not send a FOCUSED state change.
@@ -1062,19 +1049,15 @@ void ChildrenManagerImpl::UpdateSelection (void)
     {
         bShapeActive =true;
     }
-//-----IAccessibility2 Implementation 2009
     // Move focus from current to newly focused shape.
     if (pCurrentlyFocusedShape != pNewFocusedShape)
     {
         if (pCurrentlyFocusedShape != NULL)
             pCurrentlyFocusedShape->ResetState (AccessibleStateType::FOCUSED);
-        //IAccessibility2 Implementation 2009-----
         //if (pNewFocusedShape != NULL)
-    //-----IAccessibility2 Implementation 2009
     if (pNewFocusedShape != NULL && bShapeActive)
             pNewFocusedShape->SetState (AccessibleStateType::FOCUSED);
     }
-//IAccessibility2 Implementation 2009-----
 
     if (nAddSelect >= 10 )//fire selection  within
     {
@@ -1119,7 +1102,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
             mrContext.CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE,anyShape,uno::Any());
         }
     }
-//-----IAccessibility2 Implementation 2009
 
     // Remember whether there is a shape that now has the focus.
     mpFocusedShape = pNewFocusedShape;

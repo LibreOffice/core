@@ -240,11 +240,9 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
 
 SwPagePreViewWin::~SwPagePreViewWin()
 {
-    //IAccessibility2 Implementation 2009-----
     // Remove to the deconstruction of SwPagePreView.
     //if( mpViewShell)
     //  delete mpViewShell;
-    //-----IAccessibility2 Implementation 2009
 }
 
 /*--------------------------------------------------------------------
@@ -1297,8 +1295,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
 SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
-    pViewWin( new SwPagePreViewWin(&(GetViewFrame())->GetWindow(), *this ) ),//IAccessibility2 Implementation 2009
-    nNewPage(USHRT_MAX),
+    pViewWin( new SwPagePreViewWin(&(GetViewFrame())->GetWindow(), *this ) ),    nNewPage(USHRT_MAX),
     pHScrollbar(0),
     pVScrollbar(0),
     pPageUpBtn(0),
@@ -1381,7 +1378,6 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
  SwPagePreView::~SwPagePreView()
 {
     SetWindow( 0 );
-    //IAccessibility2 Implementation 2009-----
     ViewShell* pVShell =  pViewWin->GetViewShell();
     pVShell->SetWin(0);
     //pViewWin->Hide();
@@ -1389,7 +1385,6 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         delete pVShell;
     delete pViewWin;
     //pViewWin->Hide();
-    //-----IAccessibility2 Implementation 2009
 
     delete pScrollFill;
     delete pHScrollbar;
@@ -2106,7 +2101,6 @@ sal_Bool SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
     //IAccessibility2 Implementation 2009-----, only the Preference shouldn't control the Zoom, it is better to detect AT tools running. So the bridge can be used here
         //if(!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
     if ( !Application::IsAccessibilityEnabled() )
-    //-----IAccessibility2 Implementation 2009
         {
             sal_uInt16 nFactor = GetViewShell()->GetViewOptions()->GetZoom();
             const sal_uInt16 nOffset = 10;
@@ -2139,7 +2133,6 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                                         // happend already!!!
 
     DBG_ASSERT( GetViewShell() != NULL, "We need a view shell" );
-    //IAccessibility2 Implementation 2009-----
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible( sal_False );
     if (xAcc.is())
     {
@@ -2151,9 +2144,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
         SetAccessible(xAccPreview);
     }
     return GetAccessible( sal_False );
-    //-----IAccessibility2 Implementation 2009
 }
-//IAccessibility2 Implementation 2009-----
 // MT: Removed Windows::SwitchView() introduced with IA2 CWS.
 // There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
 void SwPagePreViewWin::SwitchView()
@@ -2169,7 +2160,6 @@ void SwPagePreViewWin::SwitchView()
     }
 #endif
 }
-//-----IAccessibility2 Implementation 2009
 
 /* -----------------------------06.05.2002 13:18------------------------------
 

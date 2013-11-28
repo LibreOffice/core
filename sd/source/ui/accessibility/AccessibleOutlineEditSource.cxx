@@ -62,10 +62,8 @@ namespace accessibility
 
     SvxEditSource* AccessibleOutlineEditSource::Clone() const
     {
-        //IAccessibility2 Implementation 2009-----
         /*return NULL;*/
         return new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, mrWindow);
-        //-----IAccessibility2 Implementation 2009
     }
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()

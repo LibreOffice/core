@@ -369,9 +369,7 @@ sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Boo
             }
 
             pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
-//IAccessibility2 Implementation 2009-----
             pView->SelectionChanged();
-//-----IAccessibility2 Implementation 2009
         }
     }
     else if (pViewData->IsFillMode() ||

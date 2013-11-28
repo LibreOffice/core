@@ -24,7 +24,6 @@
 #define _ACCNOTEXTFRAME_HXX
 #include "accframebase.hxx"
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
-//IAccessibility2 Implementation 2009-----
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEHYPERTEXT_HPP_
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #endif
@@ -37,17 +36,14 @@ namespace com { namespace star {
 class SwFlyFrm;
 class SwNoTxtNode;
 class SwAccessibleNoTextHyperlink;
-//-----IAccessibility2 Implementation 2009
 
 class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public ::com::sun::star::accessibility::XAccessibleImage,
                                 public ::com::sun::star::accessibility::XAccessibleHypertext//Added by yangzhh for HyperLink
 {
-    //IAccessibility2 Implementation 2009-----
     friend class SwAccessibleNoTextHyperlink;
     //HyperLinksMap alinksMap;
     com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > alink;
-    //-----IAccessibility2 Implementation 2009
     SwDepend        aDepend;
     // --> OD 2009-07-14 #i73249#
     ::rtl::OUString msTitle;
@@ -118,7 +114,6 @@ public:
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 
-    //IAccessibility2 Implementation 2009-----
     virtual sal_Int32 SAL_CALL getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);//Shen Zhen Jie changed sal_Unicode to sal_uInt32
@@ -161,7 +156,6 @@ public:
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
-    //-----IAccessibility2 Implementation 2009
 };
 
 

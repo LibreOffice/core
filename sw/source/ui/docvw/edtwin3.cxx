@@ -142,7 +142,6 @@ sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
 // <--
-//IAccessibility2 Impplementaton 2009-----
 void AccessibilityScrollMDI(ViewShell* pVwSh, const SwRect& rRect , sal_uInt16 nRangeX, sal_uInt16 nRangeY, sal_Bool isLeftTop)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -169,7 +168,6 @@ void AccessibilityScrollMDI(ViewShell* pVwSh, const SwRect& rRect , sal_uInt16 n
     }
 
 }
-//-----IAccessibility2 Impplementaton 2009
 
 LAYOUT_NS Dialog* GetSearchDialog()
 {

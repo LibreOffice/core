@@ -158,9 +158,7 @@ public:
     static void StaticInvalidate();
 
     FmFormView* GetDrawView() { return pDrawView; }
-//IAccessibility2 Implementation 2009-----
     virtual void SwitchView();
-//-----IAccessibility2 Implementation 2009
 };
 
 

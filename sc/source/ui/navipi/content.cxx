@@ -64,10 +64,8 @@
 #include "navicfg.hxx"
 #include "navsett.hxx"
 #include "postit.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
-//-----IAccessibility2 Implementation 2009
 #include "clipparam.hxx"
 
 using namespace com::sun::star;
@@ -131,9 +129,7 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( sal_False ),
     pHiddenDocument ( NULL ),
-//IAccessibility2 Implementation 2009-----
     bisInNavigatoeDlg  ( sal_False )
-//-----IAccessibility2 Implementation 2009
 {
     sal_uInt16 i;
     for (i=0; i<SC_CONTENT_COUNT; i++)
@@ -149,10 +145,8 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
 
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
 
-    //IAccessibility2 Implementation 2009-----
     pTmpEntry= NULL;
     m_bFirstPaint=true;
-    //-----IAccessibility2 Implementation 2009
 
     SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
@@ -160,7 +154,6 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
 ScContentTree::~ScContentTree()
 {
 }
-//IAccessibility2 Implementation 2009-----
 // helper function for  GetEntryAltText and GetEntryLongDescription
 String ScContentTree::getAltLongDescText( SvLBoxEntry* pEntry , sal_Bool isAltText) const
 {
@@ -222,7 +215,6 @@ String ScContentTree::GetEntryLongDescription( SvLBoxEntry* pEntry ) const
 {
     return getAltLongDescText( pEntry, sal_False);
 }
-//-----IAccessibility2 Implementation 2009
 
 void ScContentTree::InitRoot( sal_uInt16 nType )
 {
@@ -250,7 +242,6 @@ void ScContentTree::InitRoot( sal_uInt16 nType )
 
 void ScContentTree::ClearAll()
 {
-//IAccessibility2 Implementation 2009-----
     //There are one method in Control::SetUpdateMode(), and one override method SvTreeListBox::SetUpdateMode(). Here although
     //SvTreeListBox::SetUpdateMode() is called in refresh method, it only call SvTreeListBox::SetUpdateMode(), not Control::SetUpdateMode().
     //In SvTreeList::Clear(), Broadcast( LISTACTION_CLEARED ) will be called and finally, it will be trapped into the event yield() loop. And
@@ -260,7 +251,6 @@ void ScContentTree::ClearAll()
     Control::SetUpdateMode(sal_False);
     Clear();
     Control::SetUpdateMode(bOldUpdate);
-//-----IAccessibility2 Implementation 2009
     for (sal_uInt16 i=1; i<SC_CONTENT_COUNT; i++)
         InitRoot(i);
 }
@@ -488,7 +478,6 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
             break;
         }
     }
-//IAccessibility2 Implementation 2009-----
     //Solution: Make KEY_SPACE has same function as DoubleClick
     if ( bisInNavigatoeDlg )
     {
@@ -550,10 +539,8 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
            }
        }
     //StoreSettings();
-    //-----IAccessibility2 Implementation 2009
 
     if( !bUsed )
-    //IAccessibility2 Implementation 2009-----
     {
         if(aCode.GetCode() == KEY_F5 )
         {
@@ -566,7 +553,6 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
             StoreSettings();
         }
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 //sal_Bool __EXPORT ScContentTree::Drop( const DropEvent& rEvt )
@@ -767,7 +753,6 @@ ScDocument* ScContentTree::GetSourceDocument()
     return NULL;
 }
 
-//IAccessibility2 Implementation 2009-----
 //Solution: move along and draw "*" sign .
 void ScContentTree::ObjectFresh( sal_uInt16 nType,SvLBoxEntry* pEntry )
 {
@@ -816,7 +801,6 @@ void ScContentTree::ObjectFresh( sal_uInt16 nType,SvLBoxEntry* pEntry )
         }
         }
 }
-//-----IAccessibility2 Implementation 2009
 void ScContentTree::Refresh( sal_uInt16 nType )
 {
     if ( bHiddenDoc && !pHiddenDocument )
@@ -1004,7 +988,6 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                         String aName = ScDrawLayer::GetVisibleName( pObject );
                         if (aName.Len())
                         {
-                            //IAccessibility2 Implementation 2009-----
                             //InsertContent( nType, aName );
                             if( bisInNavigatoeDlg )
                             {
@@ -1042,7 +1025,6 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                             }
                         }
                     }
-                    //-----IAccessibility2 Implementation 2009
                     pObject = aIter.Next();
                 }
             }
@@ -1762,7 +1744,6 @@ void ScContentTree::StoreSettings() const
     }
 }
 
-//IAccessibility2 Implementation 2009-----
 class ScContentLBoxString : public SvLBoxString
 {
 public:
@@ -1805,7 +1786,6 @@ void ScContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
     */
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
 }
-//-----IAccessibility2 Implementation 2009
 //
 //------------------------------------------------------------------------
 //

@@ -87,11 +87,9 @@
 #include "recursionhelper.hxx"
 #include "lookupcache.hxx"
 #include "externalrefmgr.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "appoptio.hxx"
 #include "scmod.hxx"
 #include "../../ui/inc/viewutil.hxx"
-//-----IAccessibility2 Implementation 2009
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
@@ -222,9 +220,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbStreamValidLocked( false ),
         mbIsTemporary(false), // #118840#
         mnNamedRangesLockCount( 0 ),
-//IAccessibility2 Implementation 2009-----
         bReadOnly(sal_False)
-//-----IAccessibility2 Implementation 2009
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
@@ -1303,7 +1299,6 @@ void ScDocument::ClearLookupCaches()
     if( pLookupCacheMapImpl )
         pLookupCacheMapImpl->clear();
 }
-//IAccessibility2 Implementation 2009-----
 sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
 {
     ScChangeTrack* pTrack = GetChangeTrack();
@@ -1457,4 +1452,3 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos,String &aTrac
         }
     }
 }
-//-----IAccessibility2 Implementation 2009

@@ -155,8 +155,7 @@ void MoreButton::Click()
 
     // Hier den Click-Handler rufen, damit vorher die Controls initialisiert
     // werden koennen
-    //PushButton::Click(); // IAccessibility2 Implementation 2009
-
+    //PushButton::Click();
     // Je nach Status die Fenster updaten
     if ( mbState )
     {
@@ -197,9 +196,7 @@ void MoreButton::Click()
             pWindow = mpMBData->mpItemList->Next();
         }
     }
-//IAccessibility2 Implementation 2009-----
     PushButton::Click();
-//-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------

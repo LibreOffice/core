@@ -31,14 +31,12 @@
 #include <rtl/uuid.h>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "cntfrm.hxx"
 #include "ndole.hxx"
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <../../ui/inc/wrtsh.hxx>
 #include <../../ui/inc/view.hxx>
-//-----IAccessibility2 Implementation 2009
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -59,7 +57,6 @@ SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 {
 }
 
-//IAccessibility2 Implementation 2009-----
 //=====  XInterface  ==========================================================
 com::sun::star::uno::Any SAL_CALL
     SwAccessibleEmbeddedObject::queryInterface (const com::sun::star::uno::Type & rType)
@@ -85,7 +82,6 @@ void SAL_CALL
 {
     SwAccessibleNoTextFrame::release ();
 }
-//-----IAccessibility2 Implementation 2009
 
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
         throw( uno::RuntimeException )
@@ -127,7 +123,6 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
     }
     return aId;
 }
-//IAccessibility2 Implementation 2009-----
 //=====  XAccessibleExtendedAttributes  ========================================================
 ::com::sun::star::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
@@ -154,4 +149,3 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
     strRet <<= style;
     return strRet;
 }
-//-----IAccessibility2 Implementation 2009

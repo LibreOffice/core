@@ -250,10 +250,8 @@ private:
     Link            maDoubleClickHdl;
     Link            maUserDrawHdl;
     Link            maMRUChangedHdl;
-//IAccessibility2 Implementation 2009-----
     Link            maFocusHdl;
     Link            maListItemSelectHdl;
-//-----IAccessibility2 Implementation 2009
 
     ::vcl::QuickSelectionEngine maQuickSelectionEngine;
 
@@ -267,10 +265,8 @@ protected:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    //IAccessibility2 Implementation 2009-----
     //sal_Bool          SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, sal_Bool bShift = sal_False, sal_Bool bCtrl = sal_False );
     sal_Bool            SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, sal_Bool bShift = sal_False, sal_Bool bCtrl = sal_False, sal_Bool bSelectPosChange = sal_False );
-    //-----IAccessibility2 Implementation 2009
     void            ImplPaint( sal_uInt16 nPos, sal_Bool bErase = sal_False, bool bLayout = false );
     void            ImplDoPaint( const Rectangle& rRect, bool bLayout = false );
     void            ImplCalcMetrics();
@@ -367,13 +363,11 @@ public:
     const Link&     GetUserDrawHdl() const              { return maUserDrawHdl; }
     void            SetMRUChangedHdl( const Link& rLink )   { maMRUChangedHdl = rLink; }
     const Link&     GetMRUChangedHdl() const                { return maMRUChangedHdl; }
-//IAccessibility2 Implementation 2009-----
     void            SetFocusHdl( const Link& rLink )    { maFocusHdl = rLink ; }
     const Link&     GetFocusHdl() const             { return maFocusHdl; }
 
     void            SetListItemSelectHdl( const Link& rLink )   { maListItemSelectHdl = rLink ; }
     const Link&     GetListItemSelectHdl() const                { return maListItemSelectHdl; }
-//-----IAccessibility2 Implementation 2009
     bool            IsSelectionChanged() const { return mbSelectionChanged; }
     sal_uInt16          GetSelectModifier() const { return mnSelectModifier; }
 
@@ -510,12 +504,10 @@ public:
     void            SetUserDrawHdl( const Link& rLink ) { maLBWindow.SetUserDrawHdl( rLink ); }
     const Link&     GetUserDrawHdl() const              { return maLBWindow.GetUserDrawHdl(); }
 
-//IAccessibility2 Implementation 2009-----
     void            SetFocusHdl( const Link& rLink )    { maLBWindow.SetFocusHdl( rLink ); }
     const Link&     GetFocusHdl() const             { return maLBWindow.GetFocusHdl(); }
     void            SetListItemSelectHdl( const Link& rLink )   { maLBWindow.SetListItemSelectHdl( rLink ); }
     const Link&     GetListItemSelectHdl() const    { return maLBWindow.GetListItemSelectHdl(); }
-//-----IAccessibility2 Implementation 2009
     void            SetSelectionChangedHdl( const Link& rLnk )  { maLBWindow.GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( sal_Bool bCall )    { maLBWindow.GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     sal_Bool            IsSelectionChanged() const                  { return maLBWindow.IsSelectionChanged(); }

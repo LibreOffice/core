@@ -482,7 +482,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_USED),      FIELD_PROP_IS_FIELD_USED,      CPPU_E2T(CPPUTYPE_FLOAT), PropertyAttribute::READONLY, 0},\
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_DISPLAYED), FIELD_PROP_IS_FIELD_DISPLAYED, CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::READONLY, 0},\
 
-//IAccessibility2 Implementation 2009-----
 #define COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE \
                     { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        }, \
                     { SW_PROP_NMID(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE, 0},  \
@@ -507,7 +506,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { SW_PROP_NMID(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   CPPU_E2T(CPPUTYPE_SEQTABSTOP),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
 
-//-----IAccessibility2 Implementation 2009
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
@@ -526,7 +524,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;
             }
             break;
-            //IAccessibility2 Implementation 2009-----
             case PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE:
             {
                 static SfxItemPropertyMapEntry aAccessibilityTextAttrMap_Impl[] =
@@ -537,7 +534,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aAccessibilityTextAttrMap_Impl;
             }
             break;
-            //-----IAccessibility2 Implementation 2009
             case PROPERTY_MAP_PARAGRAPH:
             {
                 static SfxItemPropertyMapEntry aParagraphMap_Impl[] =

@@ -88,10 +88,8 @@ using namespace ::com::sun::star;
 
 SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
-    //IAccessibility2 Implementation 2009-----
     //Solution:Add a member to identify if the acc table should dispose
     bIfAccTableShouldDisposing( sal_False ),
-    //-----IAccessibility2 Implementation 2009
     // --> OD 2006-05-10 #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
     // <--

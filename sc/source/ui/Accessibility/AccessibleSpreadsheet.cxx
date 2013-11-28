@@ -50,16 +50,13 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svtools/colorcfg.hxx>
-//IAccessibility2 Implementation 2009-----
 #include "scresid.hxx"
 #include "sc.hrc"
-//-----IAccessibility2 Implementation 2009
 #include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//IAccessibility2 Implementation 2009-----
 bool CompMinCol(const std::pair<sal_uInt16,sal_uInt16> & pc1,const std::pair<sal_uInt16,sal_uInt16>  &pc2)
 {
     return pc1.first < pc2.first;
@@ -255,7 +252,6 @@ sal_Bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 //=====  internal  ============================================================
 
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
@@ -267,12 +263,10 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     ScAccessibleTableBase (pAccDoc, GetDocument(pViewShell),
         ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))),
     mbIsSpreadsheet( sal_True ),
-//IAccessibility2 Implementation 2009-----
     m_bFormulaMode(sal_False),
     m_bFormulaLastMode(sal_False),
     m_pAccFormulaCell(NULL),
     m_nMinX(0),m_nMaxX(0),m_nMinY(0),m_nMaxY(0)
-//-----IAccessibility2 Implementation 2009
 {
     ConstructScAccessibleSpreadsheet( pAccDoc, pViewShell, nTab, eSplitPos );
 }
@@ -289,10 +283,8 @@ ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
 {
     if (mpMarkedRanges)
         delete mpMarkedRanges;
-//IAccessibility2 Implementation 2009-----
     //if (mpSortedMarkedCells)
     //  delete mpSortedMarkedCells;
-//-----IAccessibility2 Implementation 2009
     if (mpViewShell)
         mpViewShell->RemoveAccessibilityObject(*this);
 }
@@ -326,13 +318,11 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
         mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
         mpAccCell->acquire();
         mpAccCell->Init();
-        //IAccessibility2 Implementation 2009-----
         ScDocument* pScDoc= GetDocument(mpViewShell);
         if (pScDoc)
         {
             pScDoc->GetName( maActiveCell.Tab(), m_strOldTabName );
         }
-        //-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -355,18 +345,14 @@ void SAL_CALL ScAccessibleSpreadsheet::disposing()
 
 void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
 {
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return ;
     }
-//-----IAccessibility2 Implementation 2009
     if (mpMarkedRanges)
         DELETEZ(mpMarkedRanges);
-//IAccessibility2 Implementation 2009-----
     //if (mpSortedMarkedCells)
     //  DELETEZ(mpSortedMarkedCells);
-//-----IAccessibility2 Implementation 2009
     mbHasSelection = bNewState;
 
     AccessibleEventObject aEvent;
@@ -395,13 +381,10 @@ void ScAccessibleSpreadsheet::LostFocus()
 
 void ScAccessibleSpreadsheet::GotFocus()
 {
-//IAccessibility2 Implementation 2009-----
     //CommitFocusGained();
-//-----IAccessibility2 Implementation 2009
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-//IAccessibility2 Implementation 2009-----
     //uno::Reference< XAccessible > xNew = mpAccCell;
     uno::Reference< XAccessible > xNew;
     if (IsFormulaMode())
@@ -434,7 +417,6 @@ void ScAccessibleSpreadsheet::GotFocus()
             return ;
         }
     }
-//-----IAccessibility2 Implementation 2009
     aEvent.NewValue <<= xNew;
 
     CommitChange(aEvent);
@@ -466,7 +448,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-//IAccessibility2 Implementation 2009-----
         //if ((rRef.GetId() == SC_HINT_ACC_CURSORCHANGED))
         //{
         //  if (mpViewShell)
@@ -749,7 +730,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
             }
         }
-//-----IAccessibility2 Implementation 2009
         // no longer needed, because the document calls the VisAreaChanged method
 /*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
@@ -850,7 +830,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
     ScAccessibleTableBase::Notify(rBC, rHint);
 }
-//IAccessibility2 Implementation 2009-----
 void ScAccessibleSpreadsheet::RemoveSelection(ScMarkData &refScMarkData)
 {
     AccessibleEventObject aEvent;
@@ -905,7 +884,6 @@ sal_Bool ScAccessibleSpreadsheet::IsSameMarkCell()
 {
     return m_LastMarkedRanges == *mpMarkedRanges;
 }
-//-----IAccessibility2 Implementation 2009
     //=====  XAccessibleTable  ================================================
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleRowHeaders(  )
@@ -952,12 +930,10 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
     ScUnoGuard aGuard;
     IsObjectValid();
     uno::Sequence<sal_Int32> aSequence;
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return aSequence;
     }
-//-----IAccessibility2 Implementation 2009
     if (mpViewShell && mpViewShell->GetViewData())
     {
         aSequence.realloc(maRange.aEnd.Row() - maRange.aStart.Row() + 1);
@@ -985,12 +961,10 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
     ScUnoGuard aGuard;
     IsObjectValid();
     uno::Sequence<sal_Int32> aSequence;
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return aSequence;
     }
-//-----IAccessibility2 Implementation 2009
     if (mpViewShell && mpViewShell->GetViewData())
     {
         aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -1017,12 +991,10 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return sal_False;
     }
-//-----IAccessibility2 Implementation 2009
 
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
@@ -1042,12 +1014,10 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
     ScUnoGuard aGuard;
     IsObjectValid();
 
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return sal_False;
     }
-//-----IAccessibility2 Implementation 2009
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
 
@@ -1063,7 +1033,6 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
 ScAccessibleCell* ScAccessibleSpreadsheet::GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn)
 {
     ScAccessibleCell* pAccessibleCell = NULL;
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         ScAddress aCellAddress(static_cast<SCCOL>(nColumn), nRow, mpViewShell->GetViewData()->GetTabNo());
@@ -1076,7 +1045,6 @@ ScAccessibleCell* ScAccessibleSpreadsheet::GetAccessibleCellAt(sal_Int32 nRow, s
     }
     else
     {
-//-----IAccessibility2 Implementation 2009
     ScAddress aCellAddress(static_cast<SCCOL>(maRange.aStart.Col() + nColumn),
         static_cast<SCROW>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
     if ((aCellAddress == maActiveCell) && mpAccCell)
@@ -1095,7 +1063,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-//IAccessibility2 Implementation 2009-----
     if (!IsFormulaMode())
     {
     if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
@@ -1104,7 +1071,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
         nColumn < 0)
         throw lang::IndexOutOfBoundsException();
     }
-//-----IAccessibility2 Implementation 2009
     uno::Reference<XAccessible> xAccessible;
     ScAccessibleCell* pAccessibleCell = GetAccessibleCellAt(nRow, nColumn);
     xAccessible = pAccessibleCell;
@@ -1118,13 +1084,11 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
     ScUnoGuard aGuard;
     IsObjectValid();
 
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         ScAddress addr(static_cast<SCCOL>(nColumn), nRow, 0);
         return IsScAddrFormulaSel(addr);
     }
-//-----IAccessibility2 Implementation 2009
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
@@ -1154,7 +1118,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
             SCsCOL nX;
             SCsROW nY;
             mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY);
-//IAccessibility2 Implementation 2009-----
             try{
             xAccessible = getAccessibleCellAt(nY, nX);
             }
@@ -1162,7 +1125,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
             {
                 return NULL;
             }
-//-----IAccessibility2 Implementation 2009
         }
     }
     return xAccessible;
@@ -1270,9 +1232,7 @@ void SAL_CALL
     IsObjectValid();
     if (mpViewShell)
     {
-//IAccessibility2 Implementation 2009-----
         if (!IsFormulaMode())
-//-----IAccessibility2 Implementation 2009
         mpViewShell->Unmark();
     }
 }
@@ -1285,7 +1245,6 @@ void SAL_CALL
     IsObjectValid();
     if (mpViewShell)
     {
-//IAccessibility2 Implementation 2009-----
         if (IsFormulaMode())
         {
             ScViewData *pViewData = mpViewShell->GetViewData();
@@ -1295,7 +1254,6 @@ void SAL_CALL
             mpViewShell->UpdateRef(MAXCOL, MAXROW, pViewData->GetTabNo());
         }
         else
-//-----IAccessibility2 Implementation 2009
         mpViewShell->SelectAll();
     }
 }
@@ -1309,21 +1267,17 @@ sal_Int32 SAL_CALL
     sal_Int32 nResult(0);
     if (mpViewShell)
     {
-//IAccessibility2 Implementation 2009-----
         if (IsFormulaMode())
         {
             nResult =  GetRowAll() * GetColAll() ;
         }
         else
         {
-//-----IAccessibility2 Implementation 2009
         if (!mpMarkedRanges)
         {
             mpMarkedRanges = new ScRangeList();
             ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
-//IAccessibility2 Implementation 2009-----
             //aMarkData.MarkToMulti();
-//-----IAccessibility2 Implementation 2009
             aMarkData.FillRangeListWithMarks(mpMarkedRanges, sal_False);
         }
         // is possible, because there shouldn't be overlapped ranges in it
@@ -1341,7 +1295,6 @@ uno::Reference<XAccessible > SAL_CALL
     ScUnoGuard aGuard;
     IsObjectValid();
     uno::Reference < XAccessible > xAccessible;
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         if(CheckChildIndex(nSelectedChildIndex))
@@ -1351,7 +1304,6 @@ uno::Reference<XAccessible > SAL_CALL
         }
         return xAccessible;
     }
-//-----IAccessibility2 Implementation 2009
     if (mpViewShell)
     {
         if (!mpMarkedRanges)
@@ -1361,7 +1313,6 @@ uno::Reference<XAccessible > SAL_CALL
         }
         if (mpMarkedRanges)
         {
-//IAccessibility2 Implementation 2009-----
             //if (!mpSortedMarkedCells)
             //  CreateSortedMarkedCells();
             //if (mpSortedMarkedCells)
@@ -1381,7 +1332,6 @@ uno::Reference<XAccessible > SAL_CALL
                 xAccessible = m_mapSelectionSend[addr];
             else
                 xAccessible = getAccessibleCellAt(addr.Row(), addr.Col());
-//-----IAccessibility2 Implementation 2009
         }
     }
     return xAccessible;
@@ -1402,7 +1352,6 @@ void SAL_CALL
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
         sal_Int32 nRow(getAccessibleRow(nChildIndex));
 
-//IAccessibility2 Implementation 2009-----
         if (IsFormulaMode())
         {
             if(IsScAddrFormulaSel(
@@ -1413,7 +1362,6 @@ void SAL_CALL
             }
             return ;
         }
-//-----IAccessibility2 Implementation 2009
         if (mpViewShell->GetViewData()->GetMarkData().IsCellMarked(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)))
             SelectCell(nRow, nCol, sal_True);
     }
@@ -1421,7 +1369,6 @@ void SAL_CALL
 
 void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Bool bDeselect)
 {
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         if (bDeselect)
@@ -1437,7 +1384,6 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Boo
         }
         return ;
     }
-//-----IAccessibility2 Implementation 2009
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
 
     mpViewShell->DoneBlockMode( sal_True ); // continue selecting
@@ -1445,7 +1391,6 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Boo
 
     mpViewShell->SelectionChanged();
 }
-//IAccessibility2 Implementation 2009-----
 //void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
 //{
 //  mpSortedMarkedCells = new std::vector<ScMyAddress>();
@@ -1490,7 +1435,6 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Boo
         }
     }
 }*/
-//-----IAccessibility2 Implementation 2009
 
     //=====  XServiceInfo  ====================================================
 
@@ -1540,7 +1484,6 @@ void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAc
     IsObjectValid();
     ScAccessibleTableBase::addEventListener(xListener);
 
-//IAccessibility2 Implementation 2009-----
 /*    if (!mbIsFocusSend)
     {
         mbIsFocusSend = sal_True;
@@ -1554,7 +1497,6 @@ void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAc
         CommitChange(aEvent);
     }
 */
-//-----IAccessibility2 Implementation 2009
 }
 
     //====  internal  =========================================================
@@ -1596,12 +1538,10 @@ sal_Bool ScAccessibleSpreadsheet::IsDefunc(
 sal_Bool ScAccessibleSpreadsheet::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return sal_False;
     }
-//-----IAccessibility2 Implementation 2009
     sal_Bool bProtected(sal_False);
     if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
         bProtected = sal_True;
@@ -1621,12 +1561,10 @@ sal_Bool ScAccessibleSpreadsheet::IsFocused()
 
 sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
 {
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return sal_False;
     }
-//-----IAccessibility2 Implementation 2009
     sal_Bool bResult(sal_False);
     if(mpViewShell)
     {
@@ -1677,7 +1615,6 @@ Rectangle ScAccessibleSpreadsheet::GetVisCells(const Rectangle& rVisArea)
     else
         return Rectangle();
 }
-//IAccessibility2 Implementation 2009-----
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::selectRow( sal_Int32 row )
 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
@@ -1950,4 +1887,3 @@ uno::Reference < XAccessible > ScAccessibleSpreadsheet::GetActiveCell()
         else
             return getAccessibleCellAt(maActiveCell.Row(), maActiveCell .Col());
 }
-//-----IAccessibility2 Implementation 2009

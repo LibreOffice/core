@@ -2100,7 +2100,6 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aDblStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
     aSglStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
 
-    //IAccessibility2 Implementation 2009-----
     // Move down from the position before FreeResource()
     // For lost help ID issue
     aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );

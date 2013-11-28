@@ -43,14 +43,12 @@
 #include <vos/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
-//IAccessibility2 Implementation 2009-----
 #ifndef _CPPUHELPER_COMPBASE7_HXX_
 #include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_ACTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -255,10 +253,8 @@ protected:
         @param nIndexOfChild
             Index of the new child which should be selected.
     */
-    // IAccessibility2 implementation 2009. ------
     //void selectChild( long nIndexOfChild );
     void selectChild( long nIndexOfChild, sal_Bool bFireFocus = sal_True);
-    // ------ IAccessibility2 implementation 2009.
 
 public:
     /** Selects a new child by point.
@@ -270,12 +266,10 @@ public:
             Button which belongs to the child which should be selected.
     */
     //void selectChild( RECT_POINT ePoint );
-    // IAccessibility2 implementation 2009. ------
     void selectChild( RECT_POINT ePoint, sal_Bool bFireFocus = sal_True );
     void FireChildFocus( RECT_POINT eButton );
     //Solution: Add the event handling method
     void FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew);
-    // ------ IAccessibility2 implementation 2009.
     /// Sets the name
     void setName( const ::rtl::OUString& rName );
 
@@ -345,7 +339,6 @@ inline sal_Bool SvxRectCtlAccessibleContext::IsNotAlive( void ) const
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
-//IAccessibility2 Implementation 2009-----
 typedef ::cppu::WeakAggComponentImplHelper7<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
@@ -355,7 +348,6 @@ typedef ::cppu::WeakAggComponentImplHelper7<
             ::com::sun::star::accessibility::XAccessibleAction,
             ::com::sun::star::lang::XServiceInfo >
             SvxRectCtlChildAccessibleContext_Base;
-//-----IAccessibility2 Implementation 2009
 
 
 class SvxRectCtlChildAccessibleContext : public SvxRectCtlChildAccessibleContext_Base
@@ -487,13 +479,11 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL
         getMinimumValue() throw( ::com::sun::star::uno::RuntimeException );
 
-//IAccessibility2 Implementation 2009-----
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-//-----IAccessibility2 Implementation 2009
     //=====  XServiceInfo  ====================================================
 
     virtual ::rtl::OUString SAL_CALL
@@ -515,10 +505,8 @@ public:
 
     /// Sets the checked status
     //void setStateChecked( sal_Bool bChecked );
-    // IAccessibility2 implementation 2009. ------
     void setStateChecked( sal_Bool bChecked, sal_Bool bFireFocus = sal_True);
     void FireFocusEvent();
-    // ------ IAccessibility2 implementation 2009.
 protected:
     virtual Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
 

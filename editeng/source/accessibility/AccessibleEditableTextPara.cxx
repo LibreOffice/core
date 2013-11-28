@@ -76,13 +76,11 @@
 #include "AccessibleHyperlink.hxx"
 
 #include <svtools/colorcfg.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <algorithm>
 using namespace std;
 #include "editeng.hrc"
 #include <editeng/eerdll.hxx>
 #include <editeng/numitem.hxx>
-//-----IAccessibility2 Implementation 2009
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -97,7 +95,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-//IAccessibility2 Implementation 2009-----
 
     const SvxItemPropertySet* ImplGetSvxCharAndParaPropertiesSet()
     {
@@ -224,12 +221,10 @@ namespace accessibility
         DBG_WARNING( "AccessibleEditableTextPara::implGetParagraphBoundary: only a base implementation, ignoring the index" );
 
         rBoundary.startPos = 0;
-    //IAccessibility2 Implementation 2009-----
         //rBoundary.endPos = GetTextLen();
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
         rBoundary.endPos = nLength;
-    //-----IAccessibility2 Implementation 2009
     }
 
     void AccessibleEditableTextPara::implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex )
@@ -387,9 +382,7 @@ namespace accessibility
 
             Dispose();
         }
-//IAccessibility2 Implementation 2009-----
         mpEditSource = pEditSource;
-//-----IAccessibility2 Implementation 2009
         // #108900# Init last text content
         try
         {
@@ -765,11 +758,9 @@ namespace accessibility
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
-//IAccessibility2 Implementation 2009-----
         // MT: Removed method IsShapeParaFocusable which was introduced with IA2 - basically it was only about figuring out wether or not the window has the focus, should be solved differently
         // if(IsShapeParaFocusable())
             GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
-//-----IAccessibility2 Implementation 2009
         }
     }
 
@@ -824,10 +815,8 @@ namespace accessibility
         // must provide XAccesibleText by hand, since it comes publicly inherited by XAccessibleEditableText
         if ( rType == ::getCppuType((uno::Reference< XAccessibleText > *)0) )
         {
-    //IAccessibility2 Implementation 2009-----
             //  uno::Reference< XAccessibleText > aAccText = this;
             uno::Reference< XAccessibleText > aAccText = static_cast< XAccessibleEditableText * >(this);
-    //-----IAccessibility2 Implementation 2009
             aRet <<= aAccText;
         }
         else if ( rType == ::getCppuType((uno::Reference< XAccessibleEditableText > *)0) )
@@ -835,13 +824,11 @@ namespace accessibility
             uno::Reference< XAccessibleEditableText > aAccEditText = this;
             aRet <<= aAccEditText;
         }
-    //IAccessibility2 Implementation 2009-----
     else if ( rType == ::getCppuType((uno::Reference< XAccessibleHypertext > *)0) )
         {
             uno::Reference< XAccessibleHypertext > aAccHyperText = this;
             aRet <<= aAccHyperText;
         }
-    //-----IAccessibility2 Implementation 2009
         else
         {
             aRet = AccessibleTextParaInterfaceBase::queryInterface(rType);
@@ -939,7 +926,6 @@ namespace accessibility
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getAccessibleDescription() throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-    //IAccessibility2 Implementation 2009-----
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // append first 40 characters from text, or first line, if shorter
@@ -981,7 +967,6 @@ namespace accessibility
         }
 
         return ::rtl::OUString( sStr ) + aLine;
-    //-----IAccessibility2 Implementation 2009
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName() throw (uno::RuntimeException)
@@ -1058,7 +1043,6 @@ namespace accessibility
 
         if( !pStateSet )
             return uno::Reference<XAccessibleStateSet>();
-//IAccessibility2 Implementation 2009-----
         uno::Reference<XAccessibleStateSet> xParentStates;
         if (getAccessibleParent().is())
         {
@@ -1069,7 +1053,6 @@ namespace accessibility
         {
             pStateSet->AddState(AccessibleStateType::EDITABLE);
         }
-//-----IAccessibility2 Implementation 2009
         return uno::Reference<XAccessibleStateSet>( new ::utl::AccessibleStateSetHelper (*pStateSet) );
     }
 
@@ -1291,7 +1274,6 @@ namespace accessibility
             GetParagraphIndex() == aSelection.nEndPara )
         {
             // caret is always nEndPara,nEndPos
-            //IAccessibility2 Implementation 2009-----
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo( static_cast< sal_uInt16 >(GetParagraphIndex()) );
             if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
                 aBulletInfo.bVisible &&
@@ -1301,7 +1283,6 @@ namespace accessibility
                 if( aSelection.nEndPos - nBulletLen >= 0 )
                     return aSelection.nEndPos - nBulletLen;
             }
-            //-----IAccessibility2 Implementation 2009
             return aSelection.nEndPos;
         }
 
@@ -1327,7 +1308,6 @@ namespace accessibility
 
         return OCommonAccessibleText::getCharacter( nIndex );
     }
-    //IAccessibility2 Implementation 2009-----
     static uno::Sequence< ::rtl::OUString > getAttributeNames()
     {
         static uno::Sequence< ::rtl::OUString >* pNames = NULL;
@@ -1368,7 +1348,6 @@ namespace accessibility
         }
         return *pNames;
     }
-//-----IAccessibility2 Implementation 2009
     struct IndexCompare
     {
         const PropertyValue* pValues;
@@ -1468,7 +1447,6 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        //IAccessibility2 Implementation 2009-----
         //Skip the bullet range to ingnore the bullet text
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( static_cast< sal_uInt16 >(GetParagraphIndex()) );
@@ -1492,7 +1470,6 @@ namespace accessibility
 
         // ... and override them with the direct attributes from the specific position
         uno::Sequence< beans::PropertyValue > aRunAttribs( getRunAttributes( nIndex, aPropertyNames ) );
-        //-----IAccessibility2 Implementation 2009
         sal_Int32 nRunAttribs = aRunAttribs.getLength();
         const beans::PropertyValue *pRunAttrib = aRunAttribs.getConstArray();
         for (sal_Int32 k = 0;  k < nRunAttribs;  ++k)
@@ -1540,7 +1517,6 @@ namespace accessibility
             rRes.Handle = -1;
             rRes.State  = bIsDirectVal ? PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
         }
-        //IAccessibility2 Implementation 2009-----
         if( bSupplementalMode )
         {
             _correctValues( nIndex, aRes );
@@ -1556,7 +1532,6 @@ namespace accessibility
             rRes.Value <<= numStr;
             rRes.Handle = -1;
             rRes.State = PropertyState_DIRECT_VALUE;
-            //-----IAccessibility2 Implementation 2009
             //For field object.
             String strFieldType = GetFieldTypeNameAtIndex(nIndex);
             if (strFieldType.Len() > 0)
@@ -1646,10 +1621,8 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    //IAccessibility2 Implementation 2009-----
     if ((rPoint.X <= 0) && (rPoint.Y <= 0))
         return 0;
-    //-----IAccessibility2 Implementation 2009
         sal_uInt16 nPara, nIndex;
 
         // offset from surrounding cell/shape
@@ -1781,7 +1754,6 @@ namespace accessibility
 
         return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
     }
-//IAccessibility2 Implementation 2009-----
     void AccessibleEditableTextPara::_correctValues( const sal_Int32 /* nIndex */,
                                            uno::Sequence< PropertyValue >& rValues)
     {
@@ -2051,7 +2023,6 @@ namespace accessibility
         }
         return bExtend;
     }
-//-----IAccessibility2 Implementation 2009
     ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
@@ -2067,7 +2038,6 @@ namespace accessibility
 
         switch( aTextType )
         {
-    //IAccessibility2 Implementation 2009-----
         case AccessibleTextType::CHARACTER:
         case AccessibleTextType::WORD:
         {
@@ -2075,7 +2045,6 @@ namespace accessibility
             ExtendByField( aResult );
             break;
                 }
-    //-----IAccessibility2 Implementation 2009
             // Not yet handled by OCommonAccessibleText. Missing
             // implGetAttributeRunBoundary() method there
             case AccessibleTextType::ATTRIBUTE_RUN:
@@ -2113,7 +2082,6 @@ namespace accessibility
         }
                 break;
             }
-//IAccessibility2 Implementation 2009-----
             case AccessibleTextType::LINE:
             {
                 SvxTextForwarder&   rCacheTF = GetTextForwarder();
@@ -2169,7 +2137,6 @@ namespace accessibility
                 }
                 break;
             }
-//-----IAccessibility2 Implementation 2009
             default:
                 aResult = OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
                 break;
@@ -2190,9 +2157,7 @@ namespace accessibility
         ::com::sun::star::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
-//IAccessibility2 Implementation 2009-----
         i18n::Boundary aBoundary;
-//-----IAccessibility2 Implementation 2009
         switch( aTextType )
         {
             // Not yet handled by OCommonAccessibleText. Missing
@@ -2230,7 +2195,6 @@ namespace accessibility
                 }
                 break;
             }
-        //IAccessibility2 Implementation 2009-----
             case AccessibleTextType::LINE:
             {
                 SvxTextForwarder&   rCacheTF = GetTextForwarder();
@@ -2341,7 +2305,6 @@ namespace accessibility
                 ExtendByField( aResult );
                 break;
             }
-            //-----IAccessibility2 Implementation 2009
             default:
                 aResult = OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
                 break;
@@ -2362,9 +2325,7 @@ namespace accessibility
         ::com::sun::star::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
-//IAccessibility2 Implementation 2009-----
         i18n::Boundary aBoundary;
-//-----IAccessibility2 Implementation 2009
         switch( aTextType )
         {
             case AccessibleTextType::ATTRIBUTE_RUN:
@@ -2387,7 +2348,6 @@ namespace accessibility
                 break;
             }
 
-//IAccessibility2 Implementation 2009-----
             case AccessibleTextType::LINE:
             {
                 SvxTextForwarder&   rCacheTF = GetTextForwarder();
@@ -2473,7 +2433,6 @@ namespace accessibility
                 ExtendByField( aResult );
                 break;
             }
-            //-----IAccessibility2 Implementation 2009
             default:
                 aResult = OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
                 break;

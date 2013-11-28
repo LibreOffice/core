@@ -45,7 +45,6 @@
 #endif
 #include <pagefrm.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <editeng/brshitem.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>
@@ -69,7 +68,6 @@
 #include <dview.hxx>
 #include <dcontact.hxx>
 #include <svx/svdmark.hxx>
-//-----IAccessibility2 Implementation 2009
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentView";
 
@@ -203,7 +201,6 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
 
     for( sal_Int32 i=0; i < nCount; i++ )
     {
-        //IAccessibility2 Implementation 2009-----
         try
         {
             if( xAcc->getAccessibleChild( i ) == xThis )
@@ -213,7 +210,6 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
         {
             return -1L;
         }
-        //-----IAccessibility2 Implementation 2009
     }
     return -1L;
 }
@@ -224,7 +220,6 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void)
     return GetResource( STR_ACCESS_DOC_DESC );
 }
 
-//IAccessibility2 Implementation 2009-----
 OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -255,12 +250,10 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName (void)
 
     return sAccName;
 }
-//-----IAccessibility2 Implementation 2009
 
 awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         throw (uno::RuntimeException)
 {
-    //IAccessibility2 Implementation 2009-----
     try
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
@@ -279,7 +272,6 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
     {
         return awt::Rectangle();
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -379,9 +371,7 @@ void SwAccessibleDocument::GetStates(
 
     // MULTISELECTABLE
     rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
-    //IAccessibility2 Implementation 2009-----
     rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
-    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -502,7 +492,6 @@ uno::Any SwAccessibleDocument::queryInterface(
         uno::Reference<XAccessibleSelection> aSelect = this;
         aRet <<= aSelect;
     }
-    //IAccessibility2 Implementation 2009-----
     //Solution:Add XEventListener interface support.
     else if ( (rType == ::getCppuType((uno::Reference<com::sun::star::document::XEventListener> *)NULL)) )
     {
@@ -519,7 +508,6 @@ uno::Any SwAccessibleDocument::queryInterface(
         uno::Reference<XAccessibleGetAccFlowTo> AccFlowTo = this;
         aRet <<= AccFlowTo;
     }
-    //-----IAccessibility2 Implementation 2009
     else
         aRet = SwAccessibleContext::queryInterface( rType );
     return aRet;
@@ -532,7 +520,6 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     uno::Sequence< uno::Type > aTypes( SwAccessibleDocumentBase::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
-    //IAccessibility2 Implementation 2009-----
     //Solution:Reset types memory alloc
     //aTypes.realloc( nIndex + 1 );
     aTypes.realloc( nIndex + 2 );
@@ -541,7 +528,6 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
     //Solution:Add XEventListener interface support.
     pTypes[nIndex + 1 ] = ::getCppuType( static_cast< uno::Reference< com::sun::star::document::XEventListener > * >( 0 ) );
-    //-----IAccessibility2 Implementation 2009
     return aTypes;
 }
 
@@ -611,7 +597,6 @@ void SwAccessibleDocument::deselectAccessibleChild(
 {
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
-//IAccessibility2 Implementation 2009-----
 //Solution:Implement XEventListener interfaces
 void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::document::EventObject& Event )
             throw (::com::sun::star::uno::RuntimeException)
@@ -687,7 +672,6 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         SwCntntFrm* pCurrFrm = pCrsrShell->GetCurrFrm();
         SwPageFrm* pCurrPage=((SwFrm*)pCurrFrm)->FindPageFrm();
         sal_uLong nLineNum = 0;
-        //IAccessibility2 Implementation 2009-----
         SwTxtFrm* pTxtFrm = NULL;
         SwTxtFrm* pCurrTxtFrm = NULL;
         pTxtFrm = static_cast< SwTxtFrm* >(static_cast< SwPageFrm* > (pCurrPage)->ContainsCntnt());
@@ -777,7 +761,6 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                     ++nLineNum;
             }
         }
-        //-----IAccessibility2 Implementation 2009
 
         sValue += sAttrName;
         sValue += String::CreateFromInt32( nLineNum ) ;
@@ -891,10 +874,8 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
         throw (::com::sun::star::uno::RuntimeException)
 {
-    //IAccessibility2 Implementation 2009-----
     vos::OGuard aGuard(Application::GetSolarMutex());
     return SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
-    //-----IAccessibility2 Implementation 2009
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
@@ -1022,4 +1003,3 @@ Rt:
     uno::Sequence< uno::Any > aEmpty;
     return aEmpty;
 }
-//-----IAccessibility2 Implementation 2009

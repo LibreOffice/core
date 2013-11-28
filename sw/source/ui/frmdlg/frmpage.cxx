@@ -639,7 +639,6 @@ sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 
 namespace
 {
-    //IAccessibility2 Implementation 2009-----
     void HandleAutoCB( sal_Bool _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto, PercentField& _rPF_Edit)
     {
         _rFT_man.Show( !_bChecked );
@@ -647,7 +646,6 @@ namespace
         String accName = _bChecked ? _rFT_auto.GetText() : _rFT_man.GetText();
         _rPF_Edit.SetAccessibleName(accName);
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -2095,18 +2093,14 @@ IMPL_LINK_INLINE_END( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
 IMPL_LINK( SwFrmPage, AutoWidthClickHdl, void*, EMPTYARG )
 {
     if( !IsInGraficMode() )
-        //IAccessibility2 Implementation 2009-----
         HandleAutoCB( aAutoWidthCB.IsChecked(), aWidthFT, aWidthAutoFT, aWidthED );
-        //-----IAccessibility2 Implementation 2009
     return 0;
 }
 
 IMPL_LINK( SwFrmPage, AutoHeightClickHdl, void*, EMPTYARG )
 {
     if( !IsInGraficMode() )
-        //IAccessibility2 Implementation 2009-----
         HandleAutoCB( aAutoHeightCB.IsChecked(), aHeightFT, aHeightAutoFT, aWidthED );
-        //-----IAccessibility2 Implementation 2009
     return 0;
 }
 
@@ -2255,18 +2249,14 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
         SwFrmSize eSize = rSize.GetHeightSizeType();
         sal_Bool bCheck = eSize != ATT_FIX_SIZE;
         aAutoHeightCB.Check( bCheck );
-        //IAccessibility2 Implementation 2009-----
         HandleAutoCB( bCheck, aHeightFT, aHeightAutoFT, aWidthED );
-        //-----IAccessibility2 Implementation 2009
         if( eSize == ATT_VAR_SIZE )
             aHeightED.SetValue( aHeightED.GetMin(), FUNIT_NONE );
 
         eSize = rSize.GetWidthSizeType();
         bCheck = eSize != ATT_FIX_SIZE;
         aAutoWidthCB.Check( bCheck );
-        //IAccessibility2 Implementation 2009-----
         HandleAutoCB( bCheck, aWidthFT, aWidthAutoFT, aWidthED );
-        //-----IAccessibility2 Implementation 2009
         if( eSize == ATT_VAR_SIZE )
             aWidthED.SetValue( aWidthED.GetMin(), FUNIT_NONE );
 

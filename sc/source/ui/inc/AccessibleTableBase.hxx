@@ -30,9 +30,7 @@
 #include "address.hxx"
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
-//-----IAccessibility2 Implementation 2009
 #include <cppuhelper/implbase2.hxx>
 
 class ScTabViewShell;
@@ -48,9 +46,7 @@ typedef cppu::ImplHelper2< ::com::sun::star::accessibility::XAccessibleTable,
 
 class ScAccessibleTableBase :
             public ScAccessibleContextBase,
-//IAccessibility2 Implementation 2009-----
             public   ::com::sun::star::accessibility::XAccessibleTableSelection,
-//-----IAccessibility2 Implementation 2009
             public ScAccessibleTableBaseImpl
 {
 public:
@@ -205,7 +201,6 @@ public:
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
-//IAccessibility2 Implementation 2009-----
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column )
@@ -214,7 +209,6 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
-//-----IAccessibility2 Implementation 2009
 
 protected:
     /// Return this object's description.

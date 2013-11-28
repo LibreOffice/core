@@ -44,7 +44,6 @@
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <editeng/editview.hxx>
@@ -60,7 +59,6 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -81,7 +79,6 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     CreateTextHelper();
     SetName(rName);
     SetDescription(rDescription);
-//IAccessibility2 Implementation 2009-----
     if( meObjectType == CellInEditMode)
     {
         const ScAccessibleDocument *pAccDoc = const_cast<ScAccessibleDocument*>(static_cast<ScAccessibleDocument*>(rxParent.get())) ;
@@ -97,7 +94,6 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     }
     else
         m_pScDoc=NULL;
-//-----IAccessibility2 Implementation 2009
 }
 
 ScAccessibleEditObject::~ScAccessibleEditObject()
@@ -136,7 +132,6 @@ void ScAccessibleEditObject::GotFocus()
         mpTextHelper->SetFocus(sal_True);
 }
 
-//IAccessibility2 Implementation 2009-----
 //=====  XInterface  ==========================================================
 
 com::sun::star::uno::Any SAL_CALL
@@ -162,7 +157,6 @@ void SAL_CALL
 {
     ScAccessibleContextBase::release ();
 }
-//-----IAccessibility2 Implementation 2009
     //=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPoint(
@@ -408,7 +402,6 @@ void ScAccessibleEditObject::CreateTextHelper()
         }
     }
 }
-//IAccessibility2 Implementation 2009-----
 sal_Int32 SAL_CALL ScAccessibleEditObject::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -556,5 +549,4 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
     }
     return uno::Reference< XAccessibleRelationSet >();
 }
-//-----IAccessibility2 Implementation 2009
 

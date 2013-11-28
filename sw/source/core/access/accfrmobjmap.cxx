@@ -165,9 +165,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
 
 /* MT: The two insert methods had been introduced in the IA2 CWS (OOO310m11), but meanwhile we also have some in DEV300m80 (above)
        Not sure if they have something which needs to be update in above methods.
-       Also, since there is no SwFrmOrObjMap CTOR anymore, the updated code in DEV300 might need some of the changes flagged with //IAccessibility2 Implementation 2009-----
-
-//IAccessibility2 Implementation 2009-----
+       Also, since there is no SwFrmOrObjMap CTOR anymore, the updated code in DEV300 might need some of the changes flagged with
 ::std::pair< SwFrmOrObjMap::iterator, bool > SwFrmOrObjMap::insert(
         sal_uInt32 nOrd,  Point nPos, const SwFrmOrObj& rLower )
 {
@@ -195,7 +193,6 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     value_type aEntry( aKey, rLower );
     return _SwFrmOrObjMap::insert( aEntry );
 }
-//-----IAccessibility2 Implementation 2009
 
 SwFrmOrObjMap::SwFrmOrObjMap(
         const SwRect& rVisArea, const SwFrm *pFrm ) :
@@ -208,10 +205,8 @@ SwFrmOrObjMap::SwFrmOrObjMap(
     SwFrmOrObj aLower( pFrm->GetLower() );
     while( aLower.GetSwFrm() )
     {
-        //IAccessibility2 Implementation 2009-----
         if( !bVisibleOnly || aLower.GetBox().IsOver( rVisArea ) )
             insert( nPos++, aLower.GetBounds().Pos(), aLower );
-        //-----IAccessibility2 Implementation 2009
         aLower = aLower.GetSwFrm()->GetNext();
     }
 
@@ -227,10 +222,8 @@ SwFrmOrObjMap::SwFrmOrObjMap(
             for( sal_uInt16 i=0; i<pObjs->Count(); i++ )
             {
                 aLower = (*pObjs)[i]->GetDrawObj();
-                //IAccessibility2 Implementation 2009-----
                 if( aLower.GetBox().IsOver( rVisArea ) )
                     insert( aLower.GetSdrObject(), aLower, pDoc , aLower.GetBounds().Pos() );
-                //-----IAccessibility2 Implementation 2009
             }
         }
     }
@@ -244,11 +237,9 @@ SwFrmOrObjMap::SwFrmOrObjMap(
             for( sal_uInt16 i=0; i<pObjs->Count(); i++ )
             {
                 aLower = (*pObjs)[i]->GetDrawObj();
-                //IAccessibility2 Implementation 2009-----
                 if( aLower.IsBoundAsChar() &&
                     (!bVisibleOnly || aLower.GetBox().IsOver( rVisArea )) )
                     insert( aLower.GetSdrObject(), aLower, pDoc , Point(aLower.GetAnchorPosition(),0) );
-                //-----IAccessibility2 Implementation 2009
             }
         }
     }

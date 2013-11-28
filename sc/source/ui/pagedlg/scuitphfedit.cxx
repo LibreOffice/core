@@ -166,7 +166,6 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     aWndCenter. SetFont( aPatAttr );
     aWndRight.  SetFont( aPatAttr );
 
-    //IAccessibility2 Implementation 2009-----
     aWndLeft.SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     aWndCenter.SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     aWndRight.SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
@@ -177,7 +176,6 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     aBtnLastPage.SetAccessibleRelationMemberOf( &maFtCustomHF );
     aBtnDate.SetAccessibleRelationMemberOf( &maFtCustomHF );
     aBtnTime.SetAccessibleRelationMemberOf( &maFtCustomHF );
-    //-----IAccessibility2 Implementation 2009
     FillCmdArr();
 
     aWndLeft.GrabFocus();
@@ -186,14 +184,12 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
 
     FreeResource();
 }
-    //IAccessibility2 Implementation 2009-----
     IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
     {
         (void)pEdit;
         aBtnText.GrabFocus();
         return NULL;
     }
-    //-----IAccessibility2 Implementation 2009
 
 // -----------------------------------------------------------------------
 

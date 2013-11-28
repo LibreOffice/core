@@ -353,9 +353,7 @@ public:
     OutputDevice& GetRefDev() const;
     inline Window* GetWin()    const { return pWin; }
     inline OutputDevice* GetOut()     const { return pOut; }
-    //IAccessibility2 Implementation 2009-----
     void SetWin(Window* win) { pWin = win; }
-   //-----IAccessibility2 Implementation 2009
     static inline sal_Bool IsLstEndAction() { return ViewShell::bLstAct; }
 
     //Andern alle PageDescriptoren

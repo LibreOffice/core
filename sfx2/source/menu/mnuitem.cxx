@@ -291,10 +291,8 @@ void SfxMenuControl::StateChanged
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((const SfxBoolItem*)pState)->GetValue();
-        // IAccessibility2 implementation 2009. ------
         Menu* pMenu = pOwnMenu->GetSVMenu();
         pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MIB_CHECKABLE);
-        // ------ IAccessibility2 implementation 2009.
     }
     else if ( pState->ISA(SfxEnumItemInterface) &&
               ((SfxEnumItemInterface *)pState)->HasBoolValue() )
@@ -303,10 +301,8 @@ void SfxMenuControl::StateChanged
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
-        // IAccessibility2 implementation 2009. ------
         Menu* pMenu = pOwnMenu->GetSVMenu();
         pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MIB_CHECKABLE);
-        // ------ IAccessibility2 implementation 2009.
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {

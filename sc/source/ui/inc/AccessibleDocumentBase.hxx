@@ -37,9 +37,7 @@ public:
     ScAccessibleDocumentBase(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent);
-//IAccessibility2 Implementation 2009-----
     virtual void SwitchViewFireFocus();
-//-----IAccessibility2 Implementation 2009
 protected:
     virtual ~ScAccessibleDocumentBase   (void);
 };

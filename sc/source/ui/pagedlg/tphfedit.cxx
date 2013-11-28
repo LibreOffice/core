@@ -553,10 +553,8 @@ void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
     Control::Paint( rRec );
 
     pEdView->Paint( rRec );
-    //IAccessibility2 Implementation 2009-----
     if( HasFocus() )
         pEdView->ShowCursor(sal_True,sal_True);
-    //-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------
@@ -598,14 +596,12 @@ void __EXPORT ScEditWindow::KeyInput( const KeyEvent& rKEvt )
     {
         Control::KeyInput( rKEvt );
     }
-    //IAccessibility2 Implementation 2009-----
     else if ( !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsShift() &&
                 rKEvt.GetKeyCode().IsMod2() && rKEvt.GetKeyCode().GetCode() == KEY_DOWN )
     {
         if (aObjectSelectLink.IsSet() )
             aObjectSelectLink.Call(this);
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------
@@ -619,9 +615,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 
 void __EXPORT ScEditWindow::GetFocus()
 {
-    //IAccessibility2 Implementation 2009-----
     pEdView->ShowCursor(sal_True,sal_True);
-    //-----IAccessibility2 Implementation 2009
     pActiveEdWnd = this;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;

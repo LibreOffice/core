@@ -39,7 +39,6 @@
 #include <hints.hxx>
 // <--
 #include "accnotextframe.hxx"
-//IAccessibility2 Implementation 2009-----
 #include <fmturl.hxx>
 #include <accnotexthyperlink.hxx>
 #include <svtools/imap.hxx>
@@ -52,7 +51,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
 using utl::AccessibleRelationSetHelper;
-//-----IAccessibility2 Implementation 2009
 
 const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
 {
@@ -62,13 +60,11 @@ const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
     {
         const SwCntntFrm *pCntFrm =
             static_cast<const SwCntntFrm *>( pFlyFrm->Lower() );
-        //IAccessibility2 Implementation 2009-----
         const SwCntntNode* pSwCntntNode = pCntFrm->GetNode();
         if(pSwCntntNode != NULL)
         {
             pNd = pSwCntntNode->GetNoTxtNode();
         }
-        //-----IAccessibility2 Implementation 2009
     }
 
     return pNd;
@@ -219,12 +215,10 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
-    //IAccessibility2 Implementation 2009-----
     // OUString longDesc;
     // const SwFlyFrmFmt* pFlyFmt = GetShell()->GetDoc()->FindFlyByName( GetName(), 0);
     // longDesc = OUString( pFlyFmt->GetLongDescription() );
     // return  longDesc; MT: Do not return longDesc, which still is empty - why was the line above commented out?
-    //-----IAccessibility2 Implementation 2009
 
     return msDesc;
 }
@@ -246,7 +240,6 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
         aAny <<= xImage;
         return aAny;
     }
-    //IAccessibility2 Implementation 2009-----
     else if ( aType == ::getCppuType((uno::Reference<XAccessibleHypertext> *)0) )
     {
         uno::Reference<XAccessibleHypertext> aAccHypertext = this;
@@ -254,7 +247,6 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
         aAny <<= aAccHypertext;
         return aAny;
     }
-    //-----IAccessibility2 Implementation 2009
     else
         return SwAccessibleContext::queryInterface( aType );
 }
@@ -300,7 +292,6 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
 {
     return getSize().Width;
 }
-//IAccessibility2 Implementation 2009-----
 //=====  XAccesibleText  ==================================================
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
 sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
@@ -433,4 +424,3 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleNoTextFrame::getAcce
 
     return pHelper;
 }
-//-----IAccessibility2 Implementation 2009

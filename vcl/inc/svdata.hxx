@@ -182,9 +182,7 @@ struct ImplSVAppData
      */
     ImeStatusWindowMode meShowImeStatusWindow;
 
-//IAccessibility2 Implementation 2009-----
     long m_bEnableAccessInterface;
-//-----IAccessibility2 Implementation 2009
                             DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
 
 };

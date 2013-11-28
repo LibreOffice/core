@@ -78,8 +78,7 @@ typedef sal_uInt16 CTL_STATE;
 #define CS_NOVERT   2       // no vertikal input information is used
 
 class SvxRectCtlAccessibleContext;
-class SvxPixelCtlAccessible; // IAccessibility2 implementation 2009
-
+class SvxPixelCtlAccessible;
 class SVX_DLLPUBLIC SvxRectCtl : public Control
 {
 private:
@@ -215,11 +214,9 @@ protected:
     Size        aRectSize;
     sal_uInt16*     pPixel;
     sal_Bool        bPaintable;
-    // IAccessibility2 implementation 2009. ------
     //Solution:Add member identifying position
     Point       aFocusPosition;
     Rectangle   implCalFocusRect( const Point& aPosition );
-    // ------ IAccessibility2 implementation 2009.
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
@@ -245,7 +242,6 @@ public:
 
     void    SetPaintable( sal_Bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
-    // IAccessibility2 implementation 2009. ------
     SvxPixelCtlAccessible*  m_pAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >        m_xAccess;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -263,7 +259,6 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        GetFocus();
     virtual void        LoseFocus();
-    // ------ IAccessibility2 implementation 2009.
 };
 
 /*************************************************************************

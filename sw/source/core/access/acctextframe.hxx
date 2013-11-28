@@ -24,9 +24,7 @@
 #define _ACCTEXTFRAME_HXX
 #include "accframebase.hxx"
 
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-//-----IAccessibility2 Implementation 2009
 
 class SwFlyFrm;
 namespace utl { class AccessibleRelationSetHelper; }
@@ -53,7 +51,6 @@ public:
 
     SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
 
-    //IAccessibility2 Implementation 2009-----
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
         throw (::com::sun::star::uno::RuntimeException);
@@ -88,7 +85,6 @@ public:
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException );
-    //-----IAccessibility2 Implementation 2009
 
     //=====  XAccessibleContext  ==============================================
 

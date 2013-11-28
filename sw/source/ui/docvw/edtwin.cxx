@@ -5759,7 +5759,6 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         return Selection( nPos - nStartPos, nPos - nStartPos );
     }
 }
-//IAccessibility2 Implementation 2009-----
 // MT: Removed Windows::SwitchView() introduced with IA2 CWS.
 // There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
 void SwEditWin::SwitchView()
@@ -5772,4 +5771,3 @@ void SwEditWin::SwitchView()
     rView.GetWrtShell().InvalidateAccessibleFocus();
 #endif
 }
-//-----IAccessibility2 Implementation 2009

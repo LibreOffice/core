@@ -1179,7 +1179,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
     ASSERT( nWhich, "leeres Set");
-    //IAccessibility2 Implementation 2009-----
     if (Application::IsAccessibilityEnabled())
     {
         //get section chang event
@@ -1204,7 +1203,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             rShell.FireColumnChangeEvent(2, 1);
         }
     }
-    //-----IAccessibility2 Implementation 2009
 
     while( nWhich )
     {
@@ -1229,7 +1227,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 rShell.GetPageNumber( -1, rShell.IsCrsrVisible(), nPage, nLogPage, sDisplay );
                 rSet.Put( SfxStringItem( FN_STAT_PAGE,
                             GetPageStr( nPage, nLogPage, sDisplay) ));
-                //IAccessibility2 Implementation 2009-----
                 //if existing page number is not equal to old page number, send out this event.
                 if (nOldPageNum != nLogPage )
                 {
@@ -1237,7 +1234,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         rShell.FirePageChangeEvent(nOldPageNum, nLogPage);
                     nOldPageNum = nLogPage;
                 }
-                //-----IAccessibility2 Implementation 2009
                 sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
                 if (nPageCnt != nCnt)   // Basic benachrichtigen
                 {

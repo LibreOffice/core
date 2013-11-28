@@ -103,9 +103,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <sfx2/viewfrm.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -404,7 +402,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
 
-    //IAccessibility2 Implementation 2009-----
     pDoc->setDocAccTitle(String());
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
@@ -419,7 +416,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             }
         }
     }
-    //-----IAccessibility2 Implementation 2009
     SwWait aWait( *this, sal_True );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
@@ -1285,7 +1281,6 @@ uno::Reference< frame::XController >
 /* -----------------------------12.02.01 12:08--------------------------------
 
  ---------------------------------------------------------------------------*/
-//IAccessibility2 Implementation 2009-----
 void SwDocShell::setDocAccTitle( const String& rTitle )
 {
     if (pDoc )
@@ -1320,7 +1315,6 @@ sal_Bool SwDocShell::getDocReadOnly() const
 
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 
 static const char* s_EventNames[] =
 {

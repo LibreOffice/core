@@ -40,9 +40,7 @@
 #include <fmtanchr.hxx>
 #include <dcontact.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <pam.hxx>
-//-----IAccessibility2 Implementation 2009
 
 #include <vcl/window.hxx>
 
@@ -178,7 +176,6 @@ bool SwAccessibleChild::IsBoundAsChar() const
     return bRet;
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_uInt32 SwAccessibleChild::GetAnchorPosition() const
 {
     if( mpDrawObj )
@@ -195,7 +192,6 @@ sal_uInt32 SwAccessibleChild::GetAnchorPosition() const
     }
     return 0;
 }
-//-----IAccessibility2 Implementation 2009
 
 SwAccessibleChild::SwAccessibleChild( const SwAccessibleChild& r )
     : mpFrm( r.mpFrm )

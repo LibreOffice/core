@@ -64,9 +64,7 @@
 
 using namespace ::com::sun::star;
 
-//IAccessibility2 Implementation 2009-----
 //#include "accnote.hxx"
-//-----IAccessibility2 Implementation 2009
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
@@ -144,13 +142,11 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType)
 
     bLastIsSpecial = sal_False;
 }
-//IAccessibility2 Implementation 2009-----
 void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFldType )
 {
     aAttrFieldType.push_back(nAttrFldType);
     return;
 }
-//-----IAccessibility2 Implementation 2009
 
 void SwAccessiblePortionData::Special(
     sal_uInt16 nLength, const String& rText, sal_uInt16 nType)
@@ -167,7 +163,6 @@ void SwAccessiblePortionData::Special(
     switch( nType )
     {
         case POR_POSTITS:
-            //IAccessibility2 Implementation 2009-----
             sDisplay = String(sal_Unicode(0xfffc));
 
             break;
@@ -205,7 +200,6 @@ void SwAccessiblePortionData::Special(
                 m_vecPairPos.push_back(std::make_pair(nStart,nEnd));
                 break;
             }
-            //-----IAccessibility2 Implementation 2009
             break;
         case POR_NUMBER:
         {
@@ -722,7 +716,6 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
     return static_cast<sal_uInt16>( nModelPos );
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_uInt16 SwAccessiblePortionData::GetAttrFldType( sal_Int32 nPos )
 {
     if( aFieldPosition.size() < 2 ) return sal_False;
@@ -752,7 +745,6 @@ sal_Bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n:
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32 nPos,
     size_t& nPortionNo,
@@ -816,7 +808,6 @@ sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_uInt16 nPos ) const
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_Bool SwAccessiblePortionData::IsZeroCorePositionData()
 {
     if( aModelPositions.size() < 1  ) return sal_True;

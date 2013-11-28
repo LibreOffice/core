@@ -170,10 +170,8 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
     mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
-//IAccessibility2 Implementation 2009-----
     mpImplLB->SetFocusHdl( LINK( this, ListBox, ImplFocusHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ListBox, ImplListItemSelectHdl ) );
-//-----IAccessibility2 Implementation 2009
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->SetEdgeBlending(GetEdgeBlending());
     mpImplLB->Show();
@@ -253,7 +251,6 @@ IMPL_LINK( ListBox, ImplSelectHdl, void*, EMPTYARG )
 
     return 1;
 }
-//IAccessibility2 Implementation 2009-----
 IMPL_LINK( ListBox, ImplFocusHdl, void *, nPos )
 {
     ImplCallEventListeners( VCLEVENT_LISTBOX_FOCUS , nPos);
@@ -264,7 +261,6 @@ IMPL_LINK( ListBox, ImplListItemSelectHdl, void*, EMPTYARG )
     ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT );
     return 1;
 }
-//-----IAccessibility2 Implementation 2009
 
 // -----------------------------------------------------------------------
 
@@ -1076,7 +1072,6 @@ void ListBox::SetNoSelection()
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();
     }
-    // IAccessible2 implementation 2009
     NotifyVCLEvent( VCLEVENT_LISTBOX_STATEUPDATE);
 }
 
@@ -1223,7 +1218,6 @@ void ListBox::SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect )
 {
     if ( nPos < mpImplLB->GetEntryList()->GetEntryCount() )
     {
-        // IAccessible2 implementation 2009
         sal_uInt16 oldSelectCount = GetSelectEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
         newSelectCount = GetSelectEntryCount();
@@ -1637,12 +1631,10 @@ sal_uInt16 ListBox::GetMaxMRUCount() const
 {
     return mpImplLB->GetMaxMRUCount();
 }
-//IAccessibility2 Implementation 2009-----
 sal_uInt16 ListBox::GetMRUCount() const
 {
     return mpImplLB->GetEntryList()->GetMRUCount();
 }
-//-----IAccessibility2 Implementation 2009
 
 // -----------------------------------------------------------------------
 

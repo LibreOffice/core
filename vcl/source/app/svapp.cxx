@@ -2049,13 +2049,11 @@ void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 
 sal_Bool Application::IsAccessibilityEnabled()
 {
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
     return IsWNTInitAccessBridge();
 #else
     return sal_False;
 #endif
-//-----IAccessible2 Implementation 2009
 }
 
 sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
@@ -2091,7 +2089,6 @@ sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
     return bRet;
 }
 
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
 sal_Bool HasAtHook()
 {
@@ -2112,7 +2109,6 @@ sal_Bool HasAtHook()
     return sal_False;
 }
 #endif
-//-----IAccessible2 Implementation 2009
 // MT: AppProperty, AppEvent was in oldsv.cxx, but is still needed...
 // ------------------------------------------------------------------------
 
@@ -2134,7 +2130,6 @@ void Application::SetPropertyHandler( PropertyHandler* p )
         delete pHandler;
     pHandler = p;
 }
-//IAccessible2 Implementation 2009-----
 bool Application::EnableAccessInterface(bool bEnable)
 {
 #ifdef WNT
@@ -2148,7 +2143,6 @@ bool Application::IsEnableAccessInterface()
 {
     return ImplGetSVData()->maAppData.m_bEnableAccessInterface;
 }
-//-----IAccessibility2 Implementation 2009
 
 
 

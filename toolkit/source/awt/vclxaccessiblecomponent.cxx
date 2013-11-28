@@ -37,10 +37,8 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/window.hxx>
-//IAccessibility2 Implementation 2009-----
 //Solution:Need methods in Edit.
 #include <vcl/edit.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <tools/debug.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -445,9 +443,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-//IAccessibility2 Implementation 2009-----
         Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
-//-----IAccessibility2 Implementation 2009
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -462,7 +458,6 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             aSequence[0] = pLabelFor->GetAccessible();
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
         }
-//IAccessibility2 Implementation 2009-----
         Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
@@ -475,7 +470,6 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
         {
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aFlowToSequence ) );
         }
-//-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -524,19 +518,16 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
         if ( pWindow->GetStyle() & WB_SIZEABLE )
             rStateSet.AddState( accessibility::AccessibleStateType::RESIZABLE );
-//IAccessibility2 Implementation 2009-----
         // 6. frame doesn't have MOVABLE state
         // 10. for password text, where is the sensitive state?
         if( ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||getAccessibleRole() == accessibility::AccessibleRole::DIALOG )&& pWindow->GetStyle() & WB_MOVEABLE )
             rStateSet.AddState( accessibility::AccessibleStateType::MOVEABLE );
-//-----IAccessibility2 Implementation 2009
         if( pWindow->IsDialog() )
         {
             Dialog *pDlg = static_cast< Dialog* >( pWindow );
             if( pDlg->IsInExecute() )
                 rStateSet.AddState( accessibility::AccessibleStateType::MODAL );
         }
-//IAccessibility2 Implementation 2009-----
         //Solution:If a combobox or list's edit child isn't read-only,EDITABLE state
         //         should be set.
         if( pWindow && pWindow->GetType() == WINDOW_COMBOBOX )
@@ -567,7 +558,6 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
             }
             pChild = pChild->GetWindow( WINDOW_NEXT );
         }
-//-----IAccessibility2 Implementation 2009
     }
     else
     {
@@ -903,11 +893,9 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
             else
                 aFont = pWindow->GetFont();
             nColor = aFont.GetColor().GetColor();
-//IAccessibility2 Implementation 2009-----
 // COL_AUTO is not very meaningful for AT
             if ( nColor == (sal_Int32)COL_AUTO)
                 nColor = pWindow->GetTextColor().GetColor();
-//-----IAccessibility2 Implementation 2009
         }
     }
 

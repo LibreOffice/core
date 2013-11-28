@@ -2498,10 +2498,8 @@ void Edit::Modify()
             return;
 
         // #i13677# notify edit listeners about caret position change
-//IAccessibility2 Implementation 2009-----
         //ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
         ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
-//-----IAccessibility2 Implementation 2009
         // FIXME: this is currently only on aqua
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
@@ -2656,15 +2654,12 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
             if ( aNew != maSelection )
             {
                 ImplClearLayoutData();
-//IAccessibility2 Implementation 2009-----
                 Selection aTemp = maSelection;
-//-----IAccessibility2 Implementation 2009
                 maSelection = aNew;
 
                 if ( bPaint && ( aOld.Len() || aNew.Len() || IsPaintTransparent() ) )
                     ImplInvalidateOrRepaint( 0, maText.Len() );
                 ImplShowCursor();
-//IAccessibility2 Implementation 2009-----
                 sal_Bool bCaret = sal_False, bSelection = sal_False;
                 long nB=aNew.Max(), nA=aNew.Min(),oB=aTemp.Max(), oA=aTemp.Min();
                 long nGap = nB-nA, oGap = oB-oA;
@@ -2686,7 +2681,6 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
                     else
                         ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
                 }
-//-----IAccessibility2 Implementation 2009
                 // #103511# notify combobox listeners of deselection
                 if( !maSelection && GetParent() && GetParent()->GetType() == WINDOW_COMBOBOX )
                     ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_COMBOBOX_DESELECT );

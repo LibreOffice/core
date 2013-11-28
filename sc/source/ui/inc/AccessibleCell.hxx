@@ -32,11 +32,9 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
-//IAccessibility2 Implementation 2009-----
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XAccessibleExtendedAttributes_HPP_
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 
 class ScTabViewShell;
 class ScAccessibleDocument;
@@ -51,9 +49,7 @@ typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleExtendedA
 class ScAccessibleCell
     :   public  ScAccessibleCellBase,
         public  accessibility::AccessibleStaticTextBase,
-//IAccessibility2 Implementation 2009-----
         public  ScAccessibleCellAttributeImpl
-//-----IAccessibility2 Implementation 2009
 {
 public:
     //=====  internal  ========================================================
@@ -145,14 +141,12 @@ public:
         getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-//IAccessibility2 Implementation 2009-----
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
 
     // Override this method to handle cell's ParaIndent attribute specially.
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-//-----IAccessibility2 Implementation 2009
 private:
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccDoc;
@@ -182,10 +176,8 @@ private:
     void AddRelation(const ScRange& rRange,
         const sal_uInt16 aRelationType,
         ::utl::AccessibleRelationSetHelper* pRelationSet);
-//IAccessibility2 Implementation 2009-----
     sal_Bool IsFormulaMode();
     sal_Bool IsDropdown();
-//-----IAccessibility2 Implementation 2009
 };
 
 

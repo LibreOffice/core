@@ -1119,7 +1119,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
-//IAccessibility2 Implementation 2009-----
             //According to the requirement, modified the behavior when user
             //using the indent button on the toolbar. Now if we increase/decrease indent for a
             //paragraph which has bullet style it will increase/decrease the bullet level.
@@ -1147,7 +1146,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             //rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot,
             //                      rReq.GetModifier() != KEY_MOD1 );
-//-----IAccessibility2 Implementation 2009
             rReq.Done();
             break;
         case FN_DEC_INDENT_OFFSET:
@@ -1558,7 +1556,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
             {
-//IAccessibility2 Implementation 2009-----
                 //if the paragrah has bullet we'll do the following things:
                 //1: if the bullet level is the first level, disable the decrease-indent button
                 //2: if the bullet level is the last level, disable the increase-indent button
@@ -1587,7 +1584,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 //  SID_INC_INDENT == nWhich, TRUE ))
                 //  rSet.DisableItem( nWhich );
                 //old code ends
-//-----IAccessibility2 Implementation 2009
             }
             break;
 

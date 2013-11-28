@@ -34,9 +34,7 @@
 #include "ControlHelper.hxx"
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"
-// IAccessibility2 implementation 2009. ------
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
-// ------ IAccessibility2 implementation 2009.
 
 
 namespace formula
@@ -476,7 +474,6 @@ void ArgInput::Show()
         pRefBtn->Show();
     }
 }
-//IAccessibility2 Implementation 2009-----
 void ArgInput::UpdateAccessibleNames()
 {
     String aArgName = String::CreateFromAscii(":");

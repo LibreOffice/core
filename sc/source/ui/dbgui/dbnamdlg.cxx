@@ -180,11 +180,9 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         aBtnDoSize, aBtnKeepFmt, aBtnStripData, theCurArea );
     Init();
     FreeResource();
-    //IAccessibility2 Implementation 2009-----
     SynFocusTimer.SetTimeout(150);
     SynFocusTimer.SetTimeoutHdl(LINK( this, ScDbNameDlg, FocusToComoboxHdl));
     SynFocusTimer.Start();
-    //-----IAccessibility2 Implementation 2009
     aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
@@ -721,7 +719,6 @@ IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
     String aText = aEdAssign.GetText();
     if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
         theCurArea = aTmpRange;
-//IAccessibility2 Implementation 2009-----
     if( aText.Len() > 0 && aEdName.GetText().Len() > 0 )
     {
         aBtnAdd.Enable();
@@ -742,11 +739,9 @@ IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
         aFTSource.Disable();
         aFTOperations.Disable();
     }
-//-----IAccessibility2 Implementation 2009
     return 0;
 }
 
-//IAccessibility2 Implementation 2009-----
 IMPL_LINK( ScDbNameDlg, FocusToComoboxHdl, Timer*, pTi)
 {
     (void)pTi;
@@ -754,4 +749,3 @@ IMPL_LINK( ScDbNameDlg, FocusToComoboxHdl, Timer*, pTi)
     // aEdName.CallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
     return 0;
 }
-//-----IAccessibility2 Implementation 2009

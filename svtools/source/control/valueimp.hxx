@@ -87,9 +87,7 @@ struct ValueSetItem
     XubString           maText;
     void*               mpData;
     Rectangle           maRect;
-    //IAccessibility2 Implementation 2009-----
     sal_Bool                bSelected:1;
-    //-----IAccessibility2 Implementation 2009
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ValueSetItem( ValueSet& rParent );

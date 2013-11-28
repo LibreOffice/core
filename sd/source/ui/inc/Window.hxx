@@ -202,9 +202,7 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void);
-//IAccessibility2 Implementation 2009-----
     virtual void SwitchView();
-//-----IAccessibility2 Implementation 2009
 
     XubString GetSurroundingText() const;
     Selection GetSurroundingTextSelection() const;

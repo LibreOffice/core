@@ -481,9 +481,7 @@ private:
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
-    //IAccessibility2 Implementation 2009-----
     sal_Bool    bIsPrepareSelAll        :1;
-    //-----IAccessibility2 Implementation 2009
 
 #ifdef DBG_UTIL
     bool mbXMLExport : 1;                // sal_True: during XML export
@@ -704,7 +702,6 @@ private:
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, sal_Bool, sal_Bool );
 
-//IAccessibility2 Implementation 2009-----
 private:
     sal_Bool bReadOnly;
     String msDocAccTitle;
@@ -722,7 +719,6 @@ public:
     virtual sal_Bool getDocReadOnly() const { return bReadOnly; }
     virtual void setDocAccTitle( const String& rTitle ) { msDocAccTitle = rTitle; }
     virtual const String getDocAccTitle() const { return msDocAccTitle; }
-    //-----IAccessibility2 Implementation 2009
 
     enum DocumentType {
         DOCTYPE_NATIVE,
@@ -1063,14 +1059,12 @@ public:
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
-    //-----IAccessibility2 Implementation 2009
     void SetSelAll( sal_Bool bSel )
     {
         bIsPrepareSelAll = bSel;
     }
     sal_Bool IsPrepareSelAll()  { return bIsPrepareSelAll; }
     void SetPrepareSelAll() { bIsPrepareSelAll = sal_True; }
-    //IAccessibility2 Implementation 2009-----
 
     void SetContainsAtPageObjWithContentAnchor( const bool bFlag )
     {

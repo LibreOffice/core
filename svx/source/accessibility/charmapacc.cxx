@@ -166,7 +166,6 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
 // -----------------------------------------------------------------------------
 ::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
 {
-//IAccessibility2 Implementation 2009-----
 /*  const Point   aOutPos( mpParent->GetPosPixel() );
     Size          aOutSize( mpParent->GetOutputSizePixel() );
     if ( mpParent->getScrollBar()->IsVisible() )
@@ -201,7 +200,6 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
         }
     }
     return aBounds;
-    //-----IAccessibility2 Implementation 2009
 }
 // -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRole(  ) throw (RuntimeException)
@@ -365,7 +363,6 @@ void SvxShowCharSetAcc::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bS
 // -----------------------------------------------------------------------------
 ::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetAcc::implGetBounds(  ) throw (RuntimeException)
 {
-//IAccessibility2 Implementation 2009-----
     const Point   aOutPos;//( m_pParent->getCharSetControl()->GetPosPixel() );
     Size          aOutSize( m_pParent->getCharSetControl()->GetOutputSizePixel());
     if ( m_pParent->getCharSetControl()->getScrollBar()->IsVisible() )
@@ -373,7 +370,6 @@ void SvxShowCharSetAcc::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bS
         const Size aScrollBar = m_pParent->getCharSetControl()->getScrollBar()->GetOutputSizePixel();
         aOutSize.Width() -= aScrollBar.Width();
         //aOutSize.Height() -= aScrollBar.Height();
-        //-----IAccessibility2 Implementation 2009
     }
 
     awt::Rectangle aRet;
@@ -716,9 +712,7 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     //return accessibility::AccessibleRole::LABEL;
-//IAccessibility2 Implementation 2009-----
     return accessibility::AccessibleRole::TABLE_CELL;
-//-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------------
@@ -733,7 +727,6 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     sal_Unicode c = mpParent->maText.GetChar(0);
     char buf[16] = "0x0000";
     sal_Unicode c_Shifted = c;
-//IAccessibility2 Implementation 2009-----
 /*
     for( int i = 0; i < 4; ++i )
     {
@@ -751,12 +744,9 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
         buf[tmp_len+1-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         c_Shifted >>= 4;
     }
-//-----IAccessibility2 Implementation 2009
     if( c < 256 )
         snprintf( buf+6, 10, " (%d)", c );
-    //IAccessibility2 Implementation 2009-----
     sDescription.AppendAscii(" ");
-    //-----IAccessibility2 Implementation 2009
     sDescription.AppendAscii(buf);
 
     return sDescription;
@@ -802,7 +792,6 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetItem
 
     if( mpParent )
     {
-    //IAccessibility2 Implementation 2009-----
         if(mpParent->mrParent.IsEnabled())
         {
             pStateSet->AddState( accessibility::AccessibleStateType::ENABLED );
@@ -810,7 +799,6 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetItem
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
             pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
         }
-        //-----IAccessibility2 Implementation 2009
 
         // SELECTED
         if( mpParent->mrParent.GetSelectIndexId() == mpParent->mnId )
@@ -819,12 +807,10 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetItem
                pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
         }
         if ( mpParent->mnId >= mpParent->mrParent.FirstInView() && mpParent->mnId <= mpParent->mrParent.LastInView() )
-        //IAccessibility2 Implementation 2009-----
         {
             pStateSet->AddState( AccessibleStateType::VISIBLE );
             pStateSet->AddState( AccessibleStateType::SHOWING );
         }
-        //-----IAccessibility2 Implementation 2009
         pStateSet->AddState( AccessibleStateType::TRANSIENT );
     }
 

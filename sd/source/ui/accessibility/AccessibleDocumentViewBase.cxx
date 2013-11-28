@@ -37,10 +37,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.h>
 #include<sfx2/viewfrm.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <sfx2/objsh.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <svx/AccessibleShape.hxx>
 
 #include <svx/svdobj.hxx>
@@ -49,7 +47,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "Window.hxx"
 #include <vcl/svapp.hxx>
-//IAccessibility2 Implementation 2009-----
 #include "OutlineViewShell.hxx"
 
 #include "SlideViewShell.hxx"
@@ -58,7 +55,6 @@
 #include <editeng/editobj.hxx>
 #include "LayerTabBar.hxx"
 #include <svtools/colorcfg.hxx>
-//-----IAccessibility2 Implementation 2009
 #include "ViewShell.hxx"
 #include "View.hxx"
 #include <memory>
@@ -99,9 +95,7 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
 
     mxWindow = ::VCLUnoHelper::GetInterface (pSdWindow);
-//IAccessibility2 Implementation 2009-----
     mpViewShell = pViewShell;
-//-----IAccessibility2 Implementation 2009
 }
 
 
@@ -173,11 +167,9 @@ void AccessibleDocumentViewBase::Init (void)
             }
         }
     }
-//IAccessibility2 Implementation 2009-----
     SfxObjectShell* pObjShell = mpViewShell->GetViewFrame()->GetObjectShell();
     if(!pObjShell->IsReadOnly())
         SetState(AccessibleStateType::EDITABLE);
-//-----IAccessibility2 Implementation 2009
 }
 
 
@@ -453,10 +445,8 @@ uno::Any SAL_CALL
             static_cast<beans::XPropertyChangeListener*>(this),
             static_cast<awt::XWindowListener*>(this),
             static_cast<awt::XFocusListener*>(this)
-//IAccessibility2 Implementation 2009-----
            ,static_cast<XAccessibleExtendedAttributes*>(this)
            ,static_cast<XAccessibleGetAccFlowTo*>(this)
-//-----IAccessibility2 Implementation 2009
             );
     return aReturn;
 }
@@ -858,7 +848,6 @@ void
 {
 }
 
-//IAccessibility2 Implementation 2009-----
 uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
@@ -1003,5 +992,4 @@ sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
     ::osl::MutexGuard aGuard (maMutex);
     return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
-//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

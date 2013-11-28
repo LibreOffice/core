@@ -138,7 +138,6 @@ enum SwFldTypesEnum
     TYP_DROPDOWN,
     TYP_END
 };
-//IAccessibility2 Implementation 2009-----
 enum SwAttrFieldTYpe
 {
     ATTR_NONE,
@@ -149,7 +148,6 @@ enum SwAttrFieldTYpe
     ATTR_BOOKMARKFLD,
     ATTR_SETREFATTRFLD
 };
-//-----IAccessibility2 Implementation 2009
 enum SwFileNameFormat
 {
     FF_BEGIN,

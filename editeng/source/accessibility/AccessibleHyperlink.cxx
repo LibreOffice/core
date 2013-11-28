@@ -141,7 +141,6 @@ namespace accessibility
 // MT IA2: Accessiblehyperlink.hxx from IA2 CWS - meanwhile we also introduced one in DEV300 (above)
 // Keeping this for reference - we probably should get support for image maps in our implementation...
 
-//IAccessibility2 Implementation 2009-----
 
 /*
 
@@ -441,6 +440,5 @@ sal_Bool SAL_CALL SvxAccessibleHyperlink::isValid(  )
 
 */
 
-//-----IAccessibility2 Implementation 2009
 
 

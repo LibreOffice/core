@@ -1123,9 +1123,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SvxPixelCtlAccessibleChild::getAc
             {
                 pStateSetHelper->AddState( AccessibleStateType::SELECTED );
             }
-            //IAccessibility2 Implementation 2009-----
             if (mrParentWindow->GetBitmapPixel(sal_uInt16(mnIndexInParent)))
-            //-----IAccessibility2 Implementation 2009
             {
                 pStateSetHelper->AddState( AccessibleStateType::CHECKED );
             }

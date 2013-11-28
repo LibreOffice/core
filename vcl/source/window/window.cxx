@@ -5397,7 +5397,6 @@ long Window::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// IAccessible2 implementation, 2009
 void Window::NotifyVCLEvent( sal_uLong nEvent ,void* pData /*= NULL*/)
 {
     ImplCallEventListeners( nEvent ,pData);
@@ -9125,7 +9124,6 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
 
             case WINDOW_PATTERNFIELD:
-//IAccessibility2 Impplementaton 2009-----
             // Need to set the role of those window control to spinbox
             /*
             case WINDOW_NUMERICFIELD:
@@ -9133,7 +9131,6 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_CURRENCYFIELD:
             case WINDOW_LONGCURRENCYFIELD:
             */
-//-----IAccessibility2 Impplementaton 2009
             case WINDOW_EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORD_TEXT) : (accessibility::AccessibleRole::TEXT); break;
 
             case WINDOW_PATTERNBOX:
@@ -9151,7 +9148,6 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
             case WINDOW_FIXEDBORDER:
                 nRole = accessibility::AccessibleRole::SEPARATOR; break;
-        //IAccessibility2 Impplementaton 2009-----
             case WINDOW_FIXEDLINE:
                 {   if( GetText().Len() > 0 )
                         nRole = accessibility::AccessibleRole::LABEL;
@@ -9160,7 +9156,6 @@ sal_uInt16 Window::GetAccessibleRole() const
                     break;
                 }
             //case WINDOW_FIXEDLINE: nRole = accessibility::AccessibleRole::SEPARATOR; break;
-        //-----IAccessibility2 Impplementaton 2009
             case WINDOW_FIXEDBITMAP:
             case WINDOW_FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
             case WINDOW_GROUPBOX: nRole = accessibility::AccessibleRole::GROUP_BOX; break;
@@ -9175,13 +9170,11 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_DATEFIELD:
             case WINDOW_TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
 
-//IAccessibility2 Impplementaton 2009-----
             // Need to set the role of those window control to spinbox
             case WINDOW_NUMERICFIELD:
             case WINDOW_METRICFIELD:
             case WINDOW_CURRENCYFIELD:
             case WINDOW_LONGCURRENCYFIELD:
-//-----IAccessibility2 Impplementaton 2009
             case WINDOW_SPINFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
 
             case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
@@ -9233,12 +9226,10 @@ void Window::SetAccessibleName( const String& rName )
    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
-//IAccessibility2 Implementation 2009-----
     String oldName = GetAccessibleName();
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( rName );
     ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldName );
-//-----IAccessibility2 Implementation 2009
 }
 
 String Window::GetAccessibleName() const
@@ -9283,12 +9274,10 @@ String Window::GetAccessibleName() const
                 if ( pLabel && pLabel != this )
                     aAccessibleName = pLabel->GetText();
             }
-        //IAccessibility2 Implementation 2009-----
         if ( !aAccessibleName.Len() )
             {
                 aAccessibleName = GetQuickHelpText();
             }
-        //-----IAccessibility2 Implementation 2009
             break;
 
             case WINDOW_IMAGEBUTTON:
@@ -9302,7 +9291,6 @@ String Window::GetAccessibleName() const
                 }
             break;
 
-//IAccessibility2 Implementation 2009-----
             case WINDOW_TOOLBOX:
                 aAccessibleName = GetText();
                 if( aAccessibleName.Len() == 0 )
@@ -9311,7 +9299,6 @@ String Window::GetAccessibleName() const
             case WINDOW_MOREBUTTON:
                 aAccessibleName = mpWindowImpl->maText;
                 break;
-//-----IAccessibility2 Implementation 2009
             default:
                 aAccessibleName = GetText();
                 break;

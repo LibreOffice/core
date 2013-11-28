@@ -39,5 +39,4 @@
 #define FT_TYPE 8
 #define LB_TYPE 1
 #define CTL_PREVIEW 1
-//IAccessibility2 Implementation 2009-----
 #define STR_EXAMPLE 1

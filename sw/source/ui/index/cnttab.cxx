@@ -1860,7 +1860,6 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
             bNextControl = sal_False;
             bCall = sal_True;
         }
-//IAccessibility2 Impplementaton 2009-----
         else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
         {
             if ( m_pParent )
@@ -1868,7 +1867,6 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
                 m_pParent->SetFocus2theAllBtn();
             }
         }
-//-----IAccessibility2 Impplementaton 2009
         if(bCall && aPrevNextControlLink.IsSet())
             aPrevNextControlLink.Call(this);
 
@@ -2004,7 +2002,6 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
         //this is invalid here
         return;
     }
-//IAccessibility2 Impplementaton 2009-----
     else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
     {
         if ( m_pParent )
@@ -2012,7 +2009,6 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
             m_pParent->SetFocus2theAllBtn();
         }
     }
-//-----IAccessibility2 Impplementaton 2009
     if(bCall && aPrevNextControlLink.IsSet())
             aPrevNextControlLink.Call(this);
     else
@@ -2661,7 +2657,6 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
     aAuthFieldsLB.SetEntryData(nPos, (void*)(nData));
 }
-//IAccessibility2 Impplementaton 2009-----
 void SwTOXEntryTabPage::SetFocus2theAllBtn()
 {
     aAllLevelsPB.GrabFocus();
@@ -2684,7 +2679,6 @@ long SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
 
     return SfxTabPage::Notify( rNEvt );
 }
-//-----IAccessibility2 Impplementaton 2009
 /*-- 16.06.99 10:47:35---------------------------------------------------
 
 This function inizializes the default value in the Token
@@ -3178,12 +3172,10 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
             nHelpId = STR_TOKEN_HELP_ENTRY;
         aButtonHelpTexts[i] = String(ResId(nHelpId, *rResId.GetResMgr()));
     }
-//IAccessibility2 Impplementaton 2009-----
     accessibleName = String(SW_RES(STR_STRUCTURE));
     sAdditionalAccnameString1 = String(SW_RES(STR_ADDITIONAL_ACCNAME_STRING1));
     sAdditionalAccnameString2 = String(SW_RES(STR_ADDITIONAL_ACCNAME_STRING2));
     sAdditionalAccnameString3 = String(SW_RES(STR_ADDITIONAL_ACCNAME_STRING3));
-//-----IAccessibility2 Impplementaton 2009
     FreeResource();
 
     Link aLink(LINK(this, SwTokenWindow, ScrollHdl));
@@ -3341,7 +3333,6 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         pEdit->SetPosPixel(aControlPos);
         aControlList.Insert(pEdit, aControlList.Count());
         pEdit->SetText(rText);
-//IAccessibility2 Impplementaton 2009-----
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT, pEdit );
         String s1 = String::CreateFromAscii(" (");
         String s2 = String::CreateFromAscii(")");
@@ -3366,7 +3357,6 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         {
             pEdit->SetAccessibleName(strName);
         }
-//-----IAccessibility2 Impplementaton 2009
          Size aEditSize(aControlSize);
         aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
         pEdit->SetSizePixel(aEditSize);
@@ -3397,7 +3387,6 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
                         (ToxAuthorityField)rToken.nAuthorityField));
             pButton->SetText(sTmp.Copy(0, 2));
         }
-//IAccessibility2 Impplementaton 2009-----
         String sSpace = String::CreateFromAscii(" ");
         sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType, pButton );
         String sAccName = aButtonHelpTexts[rToken.eTokenType];
@@ -3407,7 +3396,6 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
             sAccName += String::CreateFromInt32(nIndex);
         }
         pButton->SetAccessibleName( sAccName );
-//-----IAccessibility2 Impplementaton 2009
         pButton->Show();
         pRet = pButton;
     }
@@ -3549,7 +3537,6 @@ void    SwTokenWindow::InsertAtSelection(
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
         aControlList.Insert(pEdit, nActivePos + 1);
         pEdit->SetText(sRight);
-//IAccessibility2 Impplementaton 2009-----
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT, pEdit );
         String s1 = String::CreateFromAscii(" (");
         String s2 = String::CreateFromAscii(")");
@@ -3574,7 +3561,6 @@ void    SwTokenWindow::InsertAtSelection(
         {
             pEdit->SetAccessibleName(strName);
         }
-//-----IAccessibility2 Impplementaton 2009
         pEdit->SetSizePixel(aControlSize);
         pEdit->AdjustSize();
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
@@ -3604,7 +3590,6 @@ void    SwTokenWindow::InsertAtSelection(
         pButton->SetText(sTmp.Copy(0, 2));
     }
 
-//IAccessibility2 Impplementaton 2009-----
     String sSpace = String::CreateFromAscii(" ");
     sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType, pButton );
     String sAccName = aButtonHelpTexts[rToken.eTokenType];
@@ -3614,7 +3599,6 @@ void    SwTokenWindow::InsertAtSelection(
         sAccName += String::CreateFromInt32(nIndex);
     }
     pButton->SetAccessibleName( sAccName );
-//-----IAccessibility2 Impplementaton 2009
  Size aEditSize(GetOutputSizePixel());
     aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
     pButton->SetSizePixel(aEditSize);
@@ -4045,7 +4029,6 @@ void SwTokenWindow::GetFocus()
        }
     }
 }
-//IAccessibility2 Impplementaton 2009-----
 void SwTokenWindow::SetFocus2theAllBtn()
 {
     if (m_pParent)
@@ -4079,7 +4062,6 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType, const Control* /*
 
     return nIndex;
 }
-//-----IAccessibility2 Impplementaton 2009
 /* -----------------25.03.99 15:17-------------------
  *
  * --------------------------------------------------*/

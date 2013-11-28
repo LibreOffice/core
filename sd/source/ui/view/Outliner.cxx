@@ -535,7 +535,6 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             else
                 mnStartPageIndex = (sal_uInt16)-1;
         }
-//IAccessibility2 Implementation 2009-----
     if ( Application::IsAccessibilityEnabled() )
     {
         SvxSearchDialog* pSearchDlg =
@@ -544,7 +543,6 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         pSearchDlg->SetDocWin( pViewShell->GetActiveWindow() );
         pSearchDlg->SetSrchFlag();
     }
-//-----IAccessibility2 Implementation 2009
         }
     else
         mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );

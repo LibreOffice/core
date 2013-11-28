@@ -440,7 +440,6 @@ private:
 
     sal_Int16           mnNamedRangesLockCount;
 
-//IAccessibility2 Implementation 2009-----
     String msDocAccTitle;
 public:
     // SC_DLLPUBLIC sal_Bool RowHidden( SCROW nRow, SCTAB nTab );
@@ -456,7 +455,6 @@ public:
     virtual sal_Bool getDocReadOnly() const { return bReadOnly; }
     sal_Bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
     void GetCellChangeTrackNote( const ScAddress &cell,String &strTrackText,sal_Bool &pbLeftEdge);
-//-----IAccessibility2 Implementation 2009
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // alle Zellen
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
     sal_uLong           GetWeightedCount() const;   // Formeln und Edit staerker gewichtet
@@ -482,9 +480,7 @@ public:
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
     XColorListSharedPtr GetColorTable();
 
-//IAccessibility2 Implementation 2009-----
     ScTable*      GetTableByIndex(sal_Int32 nIndex);
-//-----IAccessibility2 Implementation 2009
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
     SC_DLLPUBLIC const ScDocOptions&        GetDocOptions() const;

@@ -539,7 +539,6 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         }
     }
 }
-//IAccessibility2 Implementation 2009-----
 void DrawController::NotifyAccUpdate()
 {
     sal_Int32 nHandle = PROPERTY_UPDATEACC;
@@ -577,7 +576,6 @@ void DrawController::fireSwitchCurrentPage(sal_Int32 pageIndex ) throw()
         sal_Int32 nHandles = PROPERTY_PAGE_CHANGE;
         fire( &nHandles, &aNewValue, &aOldValue, 1, sal_False );
 }
-//-----IAccessibility2 Implementation 2009
 
 void DrawController::FirePropertyChange (
     sal_Int32 nHandle,
@@ -786,7 +784,6 @@ void DrawController::FillPropertyTable (
             PROPERTY_DRAWVIEWMODE,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
-        //IAccessibility2 Implementation 2009-----
     // add new property to update current page's acc information
     rProperties.push_back(
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("UpdateAcc") ),
@@ -798,7 +795,6 @@ void DrawController::FillPropertyTable (
             PROPERTY_PAGE_CHANGE,
             ::getCppuType((const sal_Int16*)0),
             beans::PropertyAttribute::BOUND ));
-        //-----IAccessibility2 Implementation 2009
 }
 
 

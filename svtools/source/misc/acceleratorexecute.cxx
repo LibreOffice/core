@@ -72,9 +72,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <comphelper/uieventslogger.hxx>
-//-----IAccessibility2 Implementation 2009
 
 //===============================================
 // namespace
@@ -252,7 +250,6 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     sal_Bool bRet = xDispatch.is();
     if ( bRet )
     {
-//IAccessibility2 Implementation 2009-----
         if(::comphelper::UiEventsLogger::isEnabled() && m_xSMGR.is() && m_xDispatcher.is()) //#i88653#
         {
             try
@@ -269,7 +266,6 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
             catch(const css::uno::Exception&)
                 { }
         }
-//-----IAccessibility2 Implementation 2009
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xDispatch, aURL);
         pExec->execAsync();

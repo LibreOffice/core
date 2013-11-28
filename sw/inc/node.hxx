@@ -442,12 +442,10 @@ public:
      * Dokument. Die Contentframes werden aus dem entsprechenden
      * Layout ausgehaengt.
      */
-    //IAccessibility2 Implementation 2009-----
     //Solution:Add an input param to identify if acc table should be disposed
     //void DelFrms();
     void DelFrms( sal_Bool bNeedDel = sal_False, sal_Bool bIsAccTableDispose = sal_True );
     //void DelFrms(sal_Bool bNeedDel = sal_False);//added by zlcdl for al
-    //-----IAccessibility2 Implementation 2009
 
     /*
      * liefert die Anzahl der Elemente des Inhalts des Nodes;

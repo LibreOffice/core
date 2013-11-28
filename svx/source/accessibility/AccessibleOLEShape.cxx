@@ -29,9 +29,7 @@
 
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <svx/svdoole2.hxx>
-//-----IAccessibility2 Implementation 2009
 using namespace accessibility;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -181,7 +179,6 @@ uno::Sequence<uno::Type> SAL_CALL
 
     return aTypeList;
 }
-//IAccessibility2 Implementation 2009-----
 //=====  XAccessibleExtendedAttributes  ========================================================
 uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
@@ -198,7 +195,6 @@ uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
     strRet <<= style;
     return strRet;
 }
-//-----IAccessibility2 Implementation 2009
 
 
 /// Set this object's name if is different to the current name.

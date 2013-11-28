@@ -257,9 +257,7 @@ SwFmt::~SwFmt()
         }
         else
         {
-            //IAccessibility2 Implementation 2009-----
             while( GetDepends() && pParentFmt)
-            //-----IAccessibility2 Implementation 2009
             {
                 SwFmtChg aOldFmt(this);
                 SwFmtChg aNewFmt(pParentFmt);

@@ -151,9 +151,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
             xCurrentLayer = pManager->GetLayer (pLayer);
     }
     while (false);
-//IAccessibility2 Implementation 2009-----
     mrController.mpCurrentLayer = &(xCurrentLayer) ;
-//-----IAccessibility2 Implementation 2009
 
     return xCurrentLayer;
 }

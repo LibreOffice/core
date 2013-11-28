@@ -25,12 +25,10 @@
 #include <accessibility/helper/accessiblestrings.hrc>
 #endif
 
-//IAccessibility2 Impplementaton 2009-----
 String RID_STR_ACC_ACTION_CLICK
 {
     Text = "press";
 };
-//-----IAccessibility2 Impplementaton 2009
 
 String RID_STR_ACC_ACTION_TOGGLEPOPUP
 {

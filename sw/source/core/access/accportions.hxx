@@ -61,9 +61,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t aLineBreaks;        /// position of line breaks
     Positions_t aModelPositions;    /// position of portion breaks in the model
     Positions_t aAccessiblePositions;   /// portion breaks in sAccessibleString
-    //IAccessibility2 Implementation 2009-----
     Positions_t aFieldPosition;
-    //-----IAccessibility2 Implementation 2009
     Positions_t aAttrFieldType;
 
     typedef std::vector<sal_uInt8> PortionAttrs_t;
@@ -108,13 +106,11 @@ public:
     virtual void Skip(sal_uInt16 nLength);
     virtual void Finish();
 
-    //IAccessibility2 Implementation 2009-----
     virtual void SetAttrFieldType( sal_uInt16 nAttrFldType );
     sal_Bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
     sal_Bool IsIndexInFootnode(sal_Int32 nIndex);
     sal_Bool IsInGrayPortion( sal_Int32 nPos );
     sal_Int32 GetFieldIndex(sal_Int32 nPos);
-    //-----IAccessibility2 Implementation 2009
 
     sal_Bool IsZeroCorePositionData();
     // access to the portion data
@@ -177,12 +173,10 @@ public:
     sal_Bool IsValidCorePosition( sal_uInt16 nPos ) const;
     sal_uInt16 GetFirstValidCorePosition() const;
     sal_uInt16 GetLastValidCorePosition() const;
-    //IAccessibility2 Implementation 2009-----
 private:
     typedef std::pair<sal_Int32,sal_Int32> PAIR_POS;
     typedef std::vector<PAIR_POS> VEC_PAIR_POS;
     VEC_PAIR_POS m_vecPairPos;
-    //-----IAccessibility2 Implementation 2009
 };
 
 

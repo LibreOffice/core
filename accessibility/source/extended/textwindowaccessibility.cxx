@@ -1540,7 +1540,6 @@ void Document::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             // #107179# if our parent is a compound control (e.g. MultiLineEdit),
             // suppress the window focus events here
-// IAccessible2 implementation 2009
             //if ( !m_bCompoundControlChild )
                 VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
         }

@@ -3538,7 +3538,6 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
     mpLastShadowGeometry = 0L;
 }
 
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString SdrObjCustomShape::GetCustomShapeName()
 {
     rtl::OUString sShapeName;
@@ -3554,5 +3553,4 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
     }
     return sShapeName;
 }
-//-----IAccessibility2 Implementation 2009
 // eof

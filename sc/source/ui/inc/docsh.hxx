@@ -407,12 +407,10 @@ public:
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
 
-//IAccessibility2 Implementation 2009-----
     virtual void setDocAccTitle( const String& rTitle ) { aDocument.setDocAccTitle( rTitle ); }
     virtual const String getDocAccTitle() const { return aDocument.getDocAccTitle(); }
     void setDocReadOnly( sal_Bool b){ aDocument.setDocReadOnly(b);}
     sal_Bool getDocReadOnly() const { return aDocument.getDocReadOnly(); }
-//-----IAccessibility2 Implementation 2009
 
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     sal_Bool        AcceptStateUpdate() const;

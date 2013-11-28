@@ -38,10 +38,8 @@
 #include "sc.hrc"
 #endif
 #include "unonames.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "detfunc.hxx"
 #include "chgtrack.hxx"
-//-----IAccessibility2 Implementation 2009
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
@@ -55,11 +53,9 @@
 #include <rtl/uuid.h>
 #include <comphelper/sequence.hxx>
 #include <sfx2/objsh.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
-//-----IAccessibility2 Implementation 2009
 
 #include <float.h>
 
@@ -234,7 +230,6 @@ sal_Int32
     ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-//IAccessibility2 Implementation 2009-----
     //String sName( ScResId(STR_ACC_CELL_NAME) );
     String sAddress;
     // Document not needed, because only the cell address, but not the tablename is needed
@@ -247,7 +242,6 @@ sal_Int32
     //sName.Append( ' ' );
     //return rtl::OUString(sName);
     return rtl::OUString(sAddress);
-//-----IAccessibility2 Implementation 2009
 }
 
     //=====  XAccessibleValue  ================================================
@@ -260,14 +254,12 @@ uno::Any SAL_CALL
     IsObjectValid();
     uno::Any aAny;
     if (mpDoc)
-//IAccessibility2 Implementation 2009-----
         //aAny <<= mpDoc->GetValue(maCellAddress);
     {
         String valStr;
         mpDoc->GetString(maCellAddress.Col(),maCellAddress.Row(),maCellAddress.Tab(), valStr);
         aAny <<= rtl::OUString(valStr);
     }
-//-----IAccessibility2 Implementation 2009
     return aAny;
 }
 
@@ -356,7 +348,6 @@ sal_Bool ScAccessibleCellBase::IsEditable(
         bEditable = sal_True;
     return bEditable;
 }
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString SAL_CALL ScAccessibleCellBase::GetNote(void)
                                 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -657,4 +648,3 @@ sal_Bool ScAccessibleCellBase::IsEditable(
     strNote += GetNote();
     return strNote;
 }
-//-----IAccessibility2 Implementation 2009

@@ -1020,7 +1020,6 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
                     ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_Bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
 {
     if (pObj)
@@ -1040,7 +1039,6 @@ sal_Bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |*  SwFEShell::EndTextEdit()

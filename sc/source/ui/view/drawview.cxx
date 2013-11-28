@@ -689,7 +689,6 @@ void __EXPORT ScDrawView::UpdateUserViewOptions()
 #pragma optimize ( "", on )
 #endif
 
-//IAccessibility2 Implementation 2009-----
 SdrObject* ScDrawView::GetObjectByName(const String& rName)
 {
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
@@ -772,7 +771,6 @@ sal_Bool ScDrawView::SelectCurrentViewObject( const String& rName )
     }
     return ( bUnMark );
 }
-//-----IAccessibility2 Implementation 2009
 sal_Bool ScDrawView::SelectObject( const String& rName )
 {
     UnmarkAll();
@@ -834,7 +832,6 @@ sal_Bool ScDrawView::SelectObject( const String& rName )
     return ( pFound != NULL );
 }
 
-//IAccessibility2 Implementation 2009-----
 //Solution: If  object  is marked , return true , else return false .
 //==================================================
 sal_Bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
@@ -846,7 +843,6 @@ sal_Bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
     }
     return  bisMarked;
 }
-//-----IAccessibility2 Implementation 2009
 //UNUSED2008-05  String ScDrawView::GetSelectedChartName() const
 //UNUSED2008-05  {
 //UNUSED2008-05      //  used for modifying a chart's data area - PersistName must always be used

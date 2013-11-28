@@ -52,7 +52,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 
-// IAccessible2 implementation, 2009
 #ifndef _SVTOOLS_HRC
 #include "svtools/svtools.hrc"
 #endif
@@ -594,7 +593,6 @@ private:
     virtual ::css::uno::Reference< ::css::accessibility::XAccessible >
     SAL_CALL getAccessibleAtPoint(::css::awt::Point const & rPoint)
         throw (::css::uno::RuntimeException);
-// IAccessible2 implementation, 2009
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
    virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
     // ??? Will be called with both the external (Solar) and internal mutex
@@ -648,7 +646,6 @@ private:
     void handleSelectionChangeNotification();
 
     void notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast );
-// IAccessible2 implementation, 2009
     ::sal_Int32 getSelectionType(::sal_Int32 nNewFirstPara, ::sal_Int32 nNewFirstPos, ::sal_Int32 nNewLastPara, ::sal_Int32 nNewLastPos);
     void sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId);
 

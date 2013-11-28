@@ -42,7 +42,6 @@
 #include "accmap.hxx"
 #include "accframebase.hxx"
 
-//IAccessibility2 Implementation 2009-----
 #ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
 #endif
@@ -61,7 +60,6 @@
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
@@ -113,10 +111,8 @@ void SwAccessibleFrameBase::GetStates(
         if( pWin && pWin->HasFocus() )
             rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
-    //IAccessibility2 Implementation 2009-----
     if( GetSelectedState() )
         rStateSet.AddState( AccessibleStateType::SELECTED );
-    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -190,7 +186,6 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
         Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() && bNewSelected )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
-        //IAccessibility2 Implementation 2009-----
         //FireStateChangedEvent( AccessibleStateType::SELECTED, bNewSelected );
         if( pWin && pWin->HasFocus() && !bNewSelected )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
@@ -209,7 +204,6 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
                 pAcc->FireAccessibleEvent( aEvent );
             }
         }
-        //-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -303,7 +297,6 @@ void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
 
     SwAccessibleContext::Dispose( bRecursive );
 }
-//IAccessibility2 Implementation 2009-----
 //Get the selection cursor of the document.
 SwPaM* SwAccessibleFrameBase::GetCrsr()
 {
@@ -331,12 +324,10 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    //IAccessibility2 Implementation 2009-----
     if(GetMap()->IsDocumentSelAll())
     {
         return sal_True;
     }
-    //-----IAccessibility2 Implementation 2009
 
     // SELETED.
     SwFlyFrm* pFlyFrm = getFlyFrm();
@@ -370,11 +361,9 @@ sal_Bool SwAccessibleFrameBase::GetSelectedState( )
                     {
                         if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                         {
-                            //IAccessibility2 Implementation 2009-----
                             if( (nHere == nStartIndex) && (pIndex >= pStart->nContent.GetIndex()) || (nHere > nStartIndex) )
                                 if( (nHere == nEndIndex) && (pIndex < pEnd->nContent.GetIndex()) || (nHere < nEndIndex) )
                                 return sal_True;
-                            //-----IAccessibility2 Implementation 2009
                         }
                         else if( pAnchor.GetAnchorId() == FLY_AT_PARA )
                         {
@@ -423,4 +412,3 @@ sal_Bool SwAccessibleFrameBase::SetSelectedState( sal_Bool )
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009

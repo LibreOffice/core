@@ -154,10 +154,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_ITEM_COLLAPSED             1175
 // <--
 #define VCLEVENT_DROPDOWN_PRE_OPEN          1176
-//IAccessibility2 Implementation 2009-----
 #define VCLEVENT_LISTBOX_FOCUSITEMCHANGED   1180
 // #define VCLEVENT_EDIT_CARETCHANGED       xxxx    // IA2 CWS. MT: VCL only has selection API - difference for selection_changed vs. caret_changed is handled in accessibility wrapper since OOo 3.2
-//-----IAccessibility2 Implementation 2009
 
 // VclMenuEvent
 #define VCLEVENT_MENU_ACTIVATE              1200
@@ -176,16 +174,13 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_MENU_ITEMCHECKED           1213
 #define VCLEVENT_MENU_ITEMUNCHECKED         1214
 #define VCLEVENT_MENU_ACCESSIBLENAMECHANGED 1215
-//IAccessibility2 Implementation 2009-----
 #define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
 #define VCLEVENT_TOOLBOX_ITEMUPDATED  1217
-//-----IAccessibility2 Implementation 2009
 
 #define VCLEVENT_MENU_SHOW                  1250
 #define VCLEVENT_MENU_HIDE                  1251
 
 #define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
-//IAccessibility2 Implementation 2009-----
 #define VCLEVENT_LISTBOX_TREEEXPAND             1218
 #define VCLEVENT_LISTBOX_TREECOLLAPSE           1219
 #define VCLEVENT_LISTBOX_TREEFOCUS              1220
@@ -195,7 +190,6 @@ namespace com { namespace sun { namespace star {
 
 #define VCLEVENT_LISTBOX_FOCUS             1224
 #define VCLEVENT_LISTBOX_CLEAR             1225
-//-----IAccessibility2 Implementation 2009
 // DockingWindow
 #define VCLEVENT_WINDOW_STARTDOCKING            1227    // pData = DockingData
 #define VCLEVENT_WINDOW_DOCKING                 1228
@@ -207,7 +201,6 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1233    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1234    // pData = struct(Entry, Column, oldText)
 #define VCLEVENT_TABLEROW_SELECT                1235
-// IAccessible2 implementation 2009
 #define VCLEVENT_LISTBOX_STATEUPDATE            1236
 class VCL_DLLPUBLIC VclSimpleEvent
 {

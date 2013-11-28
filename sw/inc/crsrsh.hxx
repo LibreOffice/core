@@ -868,13 +868,11 @@ public:
     // is cursor or the point in/over a right to left formatted text?
     sal_Bool IsInRightToLeftText( const Point* pPt = 0 ) const;
 
-    //IAccessibility2 Implementation 2009-----
     void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     SwFrm* oldColFrm;
     bool   bColumnChange();
     void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
     void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
-    //-----IAccessibility2 Implementation 2009
     // If the current cursor position is inside a hidden range, the hidden range
     // is selected and true is returned:
     bool SelectHiddenRange();

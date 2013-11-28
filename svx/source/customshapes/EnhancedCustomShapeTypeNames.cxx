@@ -314,7 +314,6 @@ rtl::OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
         ? rtl::OUString::createFromAscii( pNameTypeTableArray[ eShapeType ].pS )
         : rtl::OUString();
 }
-//IAccessibility2 Implementation 2009-----
 typedef std::hash_map< const char*, const char*, std::hash<const char*>, TCheck> TypeACCNameHashMap;
 static TypeACCNameHashMap* pACCHashMap = NULL;
 struct ACCNameTypeTable
@@ -560,4 +559,3 @@ rtl::OUString EnhancedCustomShapeTypeNames::GetAccName( const rtl::OUString& rSh
         sRetValue = rtl::OUString::createFromAscii( (*aHashIter).second );
     return sRetValue;
 }
-//-----IAccessibility2 Implementation 2009

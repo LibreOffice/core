@@ -105,13 +105,11 @@ void NoSpaceEdit::Modify()
         SetText(sTemp);
         SetSelection(aSel);
     }
-//IAccessibility2 Impplementaton 2009-----
     Edit::Modify();
     /*
     if(GetModifyHdl().IsSet())
         GetModifyHdl().Call(this);
         */
-//-----IAccessibility2 Impplementaton 2009
 }
 /* -----------------25.06.2003 15:57-----------------
 

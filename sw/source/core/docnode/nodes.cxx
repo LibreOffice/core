@@ -897,7 +897,6 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_TEXTNODE:
-            //IAccessibility2 Implementation 2009-----
             //Solution:Add special function to text node.
             {
                 if( bNewFrms && pAktNode->GetCntntNode() )
@@ -907,7 +906,6 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 aRg.aEnd--;
             }
             break;
-            //-----IAccessibility2 Implementation 2009
         case ND_GRFNODE:
         case ND_OLENODE:
             {

@@ -377,7 +377,6 @@ published constants AccessibleEventId
     */
     const short LISTBOX_ENTRY_COLLAPSED = 33;
 
-    //IAccessibility2 Implementation 2009-----
     const short ACTIVE_DESCENDANT_CHANGED_NOFOCUS = 34;
     const short SELECTION_CHANGED_ADD =35;
     const short SELECTION_CHANGED_REMOVE =36;
@@ -385,7 +384,6 @@ published constants AccessibleEventId
     const short PAGE_CHANGED =38;
     const short SECTION_CHANGED =39;
     const short COLUMN_CHANGED =40;
-    //-----IAccessibility2 Implementation 2009
 
 };
 

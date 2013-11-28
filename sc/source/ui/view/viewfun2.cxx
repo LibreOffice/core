@@ -1616,11 +1616,9 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, sal_Bool bRecord )
 //----------------------------------------------------------------------------
 //  Suchen & Ersetzen
 
-//IAccessibility2 Implementation 2009-----
 //void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         sal_Bool bAddUndo, sal_Bool bIsApi )
-//-----IAccessibility2 Implementation 2009
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -1672,10 +1670,8 @@ sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 if ( pOldSelectedTables )
                     delete [] pOldSelectedTables;
                 ErrorMessage(STR_PROTECTIONERR);
-                //IAccessibility2 Implementation 2009-----
                 //return;
                 return sal_False;
-                //-----IAccessibility2 Implementation 2009
             }
         }
     }
@@ -1849,9 +1845,7 @@ sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     delete pUndoDoc;            // loeschen wenn nicht benutzt
     delete pUndoMark;           // kann immer geloescht werden
-//IAccessibility2 Implementation 2009-----
     return bFound;
-//-----IAccessibility2 Implementation 2009
 }
 
 

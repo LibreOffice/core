@@ -309,11 +309,9 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aRefBtn.Hide();
 
     pMEdit = aMEFormula.GetEdit();
-    //IAccessibility2 Implementation 2009-----
     aMEFormula.SetAccessibleName(aFtFormula.GetText());
     if (pMEdit)
         pMEdit->SetAccessibleName(aFtFormula.GetText());
-    //-----IAccessibility2 Implementation 2009
     m_aEditHelpId = pMEdit->GetHelpId();
     pMEdit->SetUniqueId( m_aEditHelpId );
 

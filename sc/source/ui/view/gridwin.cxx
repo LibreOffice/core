@@ -866,7 +866,6 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     CaptureMouse();
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_Bool ScGridWindow::HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRange& rScenRange )
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -904,7 +903,6 @@ sal_Bool ScGridWindow::HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRang
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, sal_Bool bDataSelect )
 {
     delete pFilterBox;
@@ -2273,9 +2271,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
             pViewData->GetView()->InvalidateAttribs();
         }
-//IAccessibility2 Implementation 2009-----
         pViewData->GetViewShell()->SelectionChanged();
-//-----IAccessibility2 Implementation 2009
         return;
     }
 }
@@ -3110,9 +3106,7 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
             SC_MOD()->EndReference();
-//IAccessibility2 Implementation 2009-----
             //return;
-//-----IAccessibility2 Implementation 2009
         }
         else if( pViewData->GetViewShell()->MoveCursorKeyInput( rKEvt ) )
         {
@@ -3120,14 +3114,10 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                 pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
             SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
-//IAccessibility2 Implementation 2009-----
             //return;
-//-----IAccessibility2 Implementation 2009
         }
-//IAccessibility2 Implementation 2009-----
         pViewData->GetViewShell()->SelectionChanged();
         return ;
-//-----IAccessibility2 Implementation 2009
     }
     // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
     else if( !pViewData->IsAnyFillMode() )

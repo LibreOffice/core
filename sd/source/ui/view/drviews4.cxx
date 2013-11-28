@@ -79,9 +79,7 @@
 // #97016# IV
 #include <svx/svditer.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <navigatr.hxx>
-//-----IAccessibility2 Implementation 2009
 namespace sd {
 
 #define PIPETTE_RANGE 0
@@ -230,14 +228,12 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
         else
         {
             bRet = ViewShell::KeyInput(rKEvt, pWin);
-//IAccessibility2 Implementation 2009-----
             //Solution: If object is marked , the corresponding entry is set true ,
             //else the corresponding entry is set false .
             if(KEY_TAB == rKEvt.GetKeyCode().GetCode())
             {
                FreshNavigatrTree();
             }
-//-----IAccessibility2 Implementation 2009
         }
     }
 
@@ -282,7 +278,6 @@ void DrawViewShell::StartRulerDrag (
         mbIsRulerDrag = sal_True;
     }
 }
-//IAccessibility2 Implementation 2009-----
 //Solution: If object is marked , the corresponding entry is set true ,
 //else the corresponding entry is set false .
 void DrawViewShell::FreshNavigatrEntry()
@@ -308,7 +303,6 @@ void DrawViewShell::FreshNavigatrTree()
                 pNavWin->FreshTree( GetDoc() );
         }
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* MouseButtonDown event
@@ -335,11 +329,9 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     {
         ViewShell::MouseButtonDown(rMEvt, pWin);
 
-//IAccessibility2 Implementation 2009-----
         //Solution: If object is marked , the corresponding entry is set true ,
         //else the corresponding entry is set false .
               FreshNavigatrTree();
-//-----IAccessibility2 Implementation 2009
         if ( mbPipette )
             ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->PipetteClicked();
     }
@@ -509,11 +501,9 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         }
         else
             ViewShell::MouseButtonUp(rMEvt, pWin);
-//IAccessibility2 Implementation 2009-----
         //Solution: If object is marked , the corresponding entry is set true ,
         //else the corresponding entry is set false .
         FreshNavigatrTree();
-//-----IAccessibility2 Implementation 2009
     }
 }
 

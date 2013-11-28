@@ -426,7 +426,6 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
         case VCLEVENT_COMBOBOX_SCROLLED:
             UpdateEntryRange_Impl();
             break;
-        // IAccessible2 implementation, 2009
         /*
         case VCLEVENT_LISTBOX_SELECT:
             if ( !m_bDisableProcessEvent )
@@ -564,7 +563,6 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         // check if position is empty and can be used else we have to adjust all entries behind this
         if ( xChild.is() )
         {
-            // IAccessible2 implementation, 2009
             /*
             ListItems::iterator aIter = m_aAccessibleChildren.begin() + nPos;
             ::std::mem_fun_t<bool, VCLXAccessibleListItem> aTemp(&VCLXAccessibleListItem::IncrementIndexInParent);
@@ -584,7 +582,6 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         sal_Bool bNowSelected = sal_False;
         if ( m_pListBoxHelper )
             bNowSelected = m_pListBoxHelper->IsEntryPosSelected ((sal_uInt16)i);
-        // IAccessible2 implementation 2009
         if (bNowSelected)
             m_nCurSelectedPos = sal_uInt16(i);
         VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
@@ -605,7 +602,6 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
 
 void VCLXAccessibleList::HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex)
 {
-    // IAccessible2 implementation 2009
     /*
     if ( !bItemInserted )
     {
@@ -1074,7 +1070,6 @@ awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
             if ( pBox )
             {
                 Size aSize = pBox->GetSubEdit()->GetSizePixel();
-                // IAccessible2 implementation, 2009
                 //aBounds.X += aSize.Height();
                 //aBounds.Y += aSize.Width();
                 aBounds.Y += aSize.Height();

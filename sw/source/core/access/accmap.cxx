@@ -61,7 +61,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <vcl/svapp.hxx>
-//IAccessibility2 Implementation 2009-----
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
 #endif
@@ -294,9 +293,7 @@ SwAccessibleObjShape_Impl
         {
             const SdrObject *pObj = (*aIter).first;
             uno::Reference < XAccessible > xAcc( (*aIter).second );
-            //IAccessibility2 Implementation 2009-----
             if( nSelShapes && pFESh &&pFESh->IsObjSelected( *pObj ) )
-            //-----IAccessibility2 Implementation 2009
             {
                 // selected objects are inserted from the back
                 --pSelShape;
@@ -352,14 +349,12 @@ private:
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
 public:
-    //IAccessibility2 Implementation 2009-----
     const SwFrm* mpParentFrm;   // The object that fires the event
     sal_Bool IsNoXaccParentFrm() const
     {
         return CHILD_POS_CHANGED == meType && mpParentFrm != 0;
     }
     uno::WeakReference < XAccessible > GetxAcc() const { return mxAcc;}
-    //-----IAccessibility2 Implementation 2009
 public:
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
@@ -422,7 +417,6 @@ public:
                 "wrong event constructor, CARET_OR_STATES only" );
     }
 
-    //IAccessibility2 Implementation 2009-----
     SwAccessibleEvent_Impl( EventType eT,
                                 const SwFrm *pParentFrm,
                 const SwAccessibleChild& rFrmOrObj,
@@ -436,7 +430,6 @@ public:
         OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType,
             "wrong event constructor, CHILD_POS_CHANGED only" );
     }
-    //-----IAccessibility2 Implementation 2009
     // <SetType(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
     inline void SetType( EventType eT )
     {
@@ -540,7 +533,6 @@ public:
     {
         return mbFiring;
     }
-    //IAccessibility2 Implementation 2009-----
     struct XAccisNULL
     {
         bool operator()(const SwAccessibleEvent_Impl& e)
@@ -549,10 +541,8 @@ public:
         }
     };
     void MoveInvalidXAccToEnd();
-    //-----IAccessibility2 Implementation 2009
 };
 
-//IAccessibility2 Implementation 2009-----
 void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
 {
     int nSize = size();
@@ -580,7 +570,6 @@ void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
     insert(end(),lstEvent.begin(),lstEvent.end());
     OSL_ENSURE(size() == nSize ,"");
 }
-//-----IAccessibility2 Implementation 2009
 //------------------------------------------------------------------------------
 // The shape list is filled if an accessible shape is destroyed. It
 // simply keeps a reference to the accessible shape's XShape. These
@@ -911,7 +900,6 @@ static sal_Bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
 void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 {
     ::vos::ORef < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
-    //IAccessibility2 Implementation 2009-----
     if (!xAccImpl.isValid() && rEvent.mpParentFrm != 0 )
     {
         SwAccessibleContextMap_Impl::iterator aIter =
@@ -929,7 +917,6 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             }
         }
     }
-    //-----IAccessibility2 Implementation 2009
     if( SwAccessibleEvent_Impl::SHAPE_SELECTION == rEvent.GetType() )
     {
         DoInvalidateShapeSelection();
@@ -1147,7 +1134,6 @@ void SwAccessibleMap::InvalidateShapeSelection()
         DoInvalidateShapeSelection();
     }
 }
-//IAccessibility2 Implementation 2009-----
 //This method should implement the following functions:
 //1.find the shape objects and set the selected state.
 //2.find the Swframe objects and set the selected state.
@@ -1161,8 +1147,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     const ViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
                             static_cast< const SwFEShell * >( pVSh ) : 0;
-    SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( sal_False /* ??? */ ) : NULL;//IAccessibility2 Implementation 2009
-
+    SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( sal_False /* ??? */ ) : NULL;
     //sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     {
@@ -1546,7 +1531,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
                     else
                         pShape->second->ResetState( AccessibleStateType::FOCUSED );
 
-                    // IA2 CWS:
                     if(pShape->second->SetState( AccessibleStateType::SELECTED ))
                     {
                         vecxShapeAdd.push_back(pShape->second);
@@ -1703,7 +1687,6 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
     }
 }
 */
-//-----IAccessibility2 Implementation 2009
 
 SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mpFrmMap( 0  ),
@@ -1720,8 +1703,7 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mnFootnote( 1 ),
     mnEndnote( 1 ),
     mbShapeSelected( sal_False ),
-    mpSeletedFrmMap(NULL)//IAccessibility2 Implementation 2009
-{
+    mpSeletedFrmMap(NULL){
     pSh->GetLayout()->AddAccessibleShell();
 }
 
@@ -1741,7 +1723,6 @@ SwAccessibleMap::~SwAccessibleMap()
         }
     }
 
-    //IAccessibility2 Implementation 2009-----
     if(xAcc.is())
     {
     SwAccessibleDocument *pAcc =
@@ -1762,7 +1743,6 @@ SwAccessibleMap::~SwAccessibleMap()
             ++aIter;
         }
     }
-    //-----IAccessibility2 Implementation 2009
     {
         vos::OGuard aGuard( maMutex );
 #ifdef DBG_UTIL
@@ -1843,8 +1823,7 @@ SwAccessibleMap::~SwAccessibleMap()
         mpEvents = 0;
     }
     mpVSh->GetLayout()->RemoveAccessibleShell();
-    delete mpSeletedFrmMap;//IAccessibility2 Implementation 2009
-}
+    delete mpSeletedFrmMap;}
 
 uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
     sal_Bool bPagePreview )
@@ -2130,10 +2109,8 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                     }
                     // TODO: focus!!!
                 }
-                //IAccessibility2 Implementation 2009-----
                 if (xAcc.is())
                     AddGroupContext(pObj, xAcc);
-                //-----IAccessibility2 Implementation 2009
             }
         }
     }
@@ -2144,7 +2121,6 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
 
     return xAcc;
 }
-//IAccessibility2 Implementation 2009-----
 sal_Bool SwAccessibleMap::IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh)
 {
     if (pFESh)
@@ -2242,7 +2218,6 @@ void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Referenc
         }
     }
 }
-//-----IAccessibility2 Implementation 2009
 
 ::vos::ORef < ::accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
             const SdrObject *pObj,
@@ -2305,7 +2280,6 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
             mpShapeMap->find( pObj );
         if( aIter != mpShapeMap->end() )
         {
-            //IAccessible2 Implementation 2009 ----
             uno::Reference < XAccessible > xAcc( (*aIter).second );
             mpShapeMap->erase( aIter );
             RemoveGroupContext(pObj, xAcc);
@@ -2314,7 +2288,6 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
             // that is selected.
 
             if( mpShapeMap && mpShapeMap->empty() )
-            //---- IAccessible2 Implementation 2009
             {
                 delete mpShapeMap;
                 mpShapeMap = 0;
@@ -2461,8 +2434,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
     {
         ::vos::ORef< SwAccessibleContext > xAccImpl;
         ::vos::ORef< SwAccessibleContext > xParentAccImpl;
-        const SwFrm *pParent =NULL; //IAccessibility2 Implementation 2009
-        {
+        const SwFrm *pParent =NULL;     {
             vos::OGuard aGuard( maMutex );
 
             if( mpFrmMap )
@@ -2484,8 +2456,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                 {
                     // Otherwise we look if the parent is accessible.
                     // If not, there is nothing to do.
-                    pParent = //IAccessibility2 Implementation 2009
-                        SwAccessibleFrame::GetParent( aFrmOrObj,
+                    pParent =                       SwAccessibleFrame::GetParent( aFrmOrObj,
                                                       GetShell()->IsPreView());
 
                     if( pParent )
@@ -2534,7 +2505,6 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                                                           rOldBox );
             }
         }
-        //IAccessibility2 Implementation 2009-----
         else if(pParent)
         {
 /*
@@ -2581,7 +2551,6 @@ so run here: save the parent's SwFrm not the accessible object parent,
             }
         }
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
@@ -2716,7 +2685,6 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                 mpFrmMap->find( aFrmOrObj.GetSwFrm() );
             if( aIter != mpFrmMap->end() )
                 xAcc = (*aIter).second;
-            //IAccessibility2 Implementation 2009-----
             else
             {
                 SwRect rcEmpty;
@@ -2738,7 +2706,6 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                     xAcc = (*aIter).second;
                 }
             }
-            //-----IAccessibility2 Implementation 2009
 
             // For cells, some extra thoughts are necessary,
             // because invalidating the cursor for one cell
@@ -2767,7 +2734,6 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                     xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
             }
         }
-        //IAccessibility2 Implementation 2009-----
         else if (bShapeSelected)
         {
             const SwFEShell *pFESh = pVSh ? static_cast< const SwFEShell * >( pVSh ) : NULL ;
@@ -2885,10 +2851,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             pAccPara->FireAccessibleEvent( aEvent );
         }
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
-//IAccessibility2 Implementation 2009-----
 //Notify the page change event to bridge.
 void SwAccessibleMap::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
 {
@@ -2944,11 +2908,9 @@ void SwAccessibleMap::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nN
         }
         }
 }
-//-----IAccessibility2 Implementation 2009
 
 void SwAccessibleMap::InvalidateFocus()
 {
-    //IAccessibility2 Implementation 2009-----
     if(GetShell()->IsPreView())
     {
         uno::Reference<XAccessible> xAcc = _GetDocumentView( sal_True );
@@ -2962,7 +2924,6 @@ void SwAccessibleMap::InvalidateFocus()
             }
         }
     }
-    //-----IAccessibility2 Implementation 2009
     uno::Reference < XAccessible > xAcc;
     sal_Bool bShapeSelected;
     {
@@ -2978,12 +2939,10 @@ void SwAccessibleMap::InvalidateFocus()
             static_cast< SwAccessibleContext *>( xAcc.get() );
         pAccImpl->InvalidateFocus();
     }
-    //IAccessibility2 Implementation 2009-----
     else
     {
         DoInvalidateShapeSelection(sal_True);
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 void SwAccessibleMap::SetCursorContext(
@@ -3266,9 +3225,7 @@ void SwAccessibleMap::FireEvents()
         if( mpEvents )
         {
             mpEvents->SetFiring();
-            //IAccessibility2 Implementation 2009-----
             mpEvents->MoveInvalidXAccToEnd();
-            //-----IAccessibility2 Implementation 2009
             SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
             while( aIter != mpEvents->end() )
             {
@@ -3459,7 +3416,6 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     return sal_True;
 }
 
-//IAccessibility2 Implementation 2009-----
 //Get the accessible control shape from the model object, here model object is with XPropertySet type
 ::accessibility::AccessibleControlShape * SwAccessibleMap::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -3544,7 +3500,6 @@ sal_Bool SwAccessibleMap::ReplaceChild (
             return NULL;
 
 }
-//-----IAccessibility2 Implementation 2009
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
 {
     Point aPoint;
@@ -3870,10 +3825,8 @@ const SwRect& SwAccessibleMap::GetVisArea() const
            : GetShell()->VisArea();
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_Bool SwAccessibleMap::IsDocumentSelAll()
 {
     return GetShell()->GetDoc()->IsPrepareSelAll();
 }
-//-----IAccessibility2 Implementation 2009
 

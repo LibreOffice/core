@@ -27,11 +27,9 @@
 
 #include "SdShapeTypes.hxx"
 
-//IAccessibility2 Implementation 2009-----
 #include "accessibility.hrc"
 #include "sdresid.hxx"
 #include <tools/string.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
 
@@ -82,7 +80,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-    //IAccessibility2 Implementation 2009-----
         case PRESENTATION_TITLE:
             //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressTitle"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_TITLE_N)));
@@ -126,7 +123,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
         default:
             //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleImpressShape"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_UNKNOWN_N)));
-    //-----IAccessibility2 Implementation 2009
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
@@ -149,7 +145,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-    //IAccessibility2 Implementation 2009-----
         case PRESENTATION_TITLE:
             //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationTitleShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_TITLE_D)) );
@@ -204,7 +199,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
             //aDG.Initialize (::rtl::OUString::createFromAscii ("Unknown accessible presentation shape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_UNKNOWN_D)) );
         aDG.Initialize (sDescription);              //Unknown accessible presentation shape
-        //-----IAccessibility2 Implementation 2009
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -215,7 +209,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
     return aDG();
 }
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString AccessiblePresentationShape::GetStyle()
 {
     ::rtl::OUString sName;
@@ -264,5 +257,4 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     return sName;
 
 }
-//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

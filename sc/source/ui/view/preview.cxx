@@ -1474,27 +1474,20 @@ void ScPreview::LoseFocus()
 
 com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
 {
-//IAccessibility2 Implementation 2009-----
     com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> xAcc= GetAccessible(sal_False);
     if (xAcc.is())
     {
         return xAcc;
     }
-//-----IAccessibility2 Implementation 2009
     ScAccessibleDocumentPagePreview* pAccessible =
         new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
-//IAccessibility2 Implementation 2009-----
     //com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xAccessible = pAccessible;
     xAcc = pAccessible;
     SetAccessible(xAcc);
-//-----IAccessibility2 Implementation 2009
     pAccessible->Init();
-//IAccessibility2 Implementation 2009-----
     //return xAccessible;
     return xAcc;
-//-----IAccessibility2 Implementation 2009
 }
-//IAccessibility2 Implementation 2009-----
 // MT: Removed Windows::SwitchView() introduced with IA2 CWS.
 // There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
 void ScPreview::SwitchView()
@@ -1509,7 +1502,6 @@ void ScPreview::SwitchView()
         pAccDoc->SwitchViewFireFocus();
     }
 }
-//-----IAccessibility2 Implementation 2009
 //Issue51656 Add resizeable margin on page preview from maoyg
 void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
 {

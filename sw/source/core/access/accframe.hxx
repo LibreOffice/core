@@ -106,10 +106,8 @@ protected:
                        sal_Bool bIsPagePreview );
     virtual ~SwAccessibleFrame();
 
-    //IAccessibility2 Implementation 2009-----
     // MT: Move to private area?
     sal_Bool bIsAccDocUse;
-    //-----IAccessibility2 Implementation 2009
 
 
 public:

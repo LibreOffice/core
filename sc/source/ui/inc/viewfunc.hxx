@@ -251,11 +251,9 @@ public:
     ScAutoFormatData* CreateAutoFormatData();
     void            AutoFormat( sal_uInt16 nFormatNo, sal_Bool bRecord = sal_True );
 
-//IAccessibility2 Implementation 2009-----
 //  void            SearchAndReplace( const SvxSearchItem* pSearchItem,
     sal_Bool            SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         sal_Bool bAddUndo, sal_Bool bIsApi );
-//-----IAccessibility2 Implementation 2009
 
     void            Solve( const ScSolveParam& rParam );
     void            TabOp( const ScTabOpParam& rParam,  sal_Bool bRecord = sal_True );

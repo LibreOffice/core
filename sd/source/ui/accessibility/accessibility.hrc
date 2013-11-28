@@ -44,7 +44,6 @@
 #define SID_SD_A11Y_I_HANDOUTVIEW_N     (SID_SD_A11Y_START + 10)
 #define SID_SD_A11Y_I_HANDOUTVIEW_D     (SID_SD_A11Y_START + 11)
 
-//IAccessibility2 Implementation 2009-----
 #define SID_SD_A11Y_P_TITLE_N           (SID_SD_A11Y_START + 12)
 #define SID_SD_A11Y_P_TITLE_D           (SID_SD_A11Y_START + 13)
 #define SID_SD_A11Y_P_OUTLINER_N        (SID_SD_A11Y_START + 14)
@@ -84,6 +83,5 @@
 #define   SID_SD_A11Y_I_PREVIEW_D (SID_SD_A11Y_START + 47)
 #define   SID_SD_A11Y_I_PREVIEW_SUFFIX (SID_SD_A11Y_START + 48)
 #define   SID_SD_A11Y_D_PRESENTATION_READONLY (SID_SD_A11Y_START + 49)
-//-----IAccessibility2 Implementation 2009
 #endif /* _SD_ACCESSIBILITY_HRC */
 

@@ -25,10 +25,8 @@
 #define SD_ACCESSIBILITY_ACCESSIBLE_SLIDE_VIEW_HXX
 
 #include <cppuhelper/implbase6.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <cppuhelper/implbase9.hxx>
 //#include <cppuhelper/implbase7.hxx>
-//-----IAccessibility2 Implementation 2009
 #include "SlideView.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -38,9 +36,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-//-----IAccessibility2 Implementation 2009
 #include <vector>
 
 class SdDrawDocument;
@@ -170,10 +166,8 @@ class AccessibleSlideView : public ::cppu::WeakImplHelper9<
     ::com::sun::star::accessibility::XAccessibleComponent,
     ::com::sun::star::accessibility::XAccessibleSelection,
     ::com::sun::star::lang::XServiceInfo
-//IAccessibility2 Implementation 2009-----
     ,::com::sun::star::accessibility::XAccessibleExtendedAttributes
     ,::com::sun::star::awt::XFocusListener >
-//-----IAccessibility2 Implementation 2009
 {
 public:
 
@@ -199,7 +193,6 @@ public:
     void                        SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
     void                        Reset();
     void                        FocusHasChanged( sal_uInt16 nOldFocusPage, sal_uInt16 nNewFocusPage );
-//IAccessibility2 Implementation 2009-----
     void            SelectionHasChanged (sal_uInt16 nPage, sal_Bool bSelect );
     //=====  XFocusListener  =================================================
     virtual void SAL_CALL focusGained (const ::com::sun::star::awt::FocusEvent& e)
@@ -210,7 +203,6 @@ public:
     virtual void SAL_CALL disposing (const struct com::sun::star::lang::EventObject &) throw (::com::sun::star::uno::RuntimeException);
     // This method is called from the component helper base class while disposing.
     virtual void SAL_CALL disposing (void);
-//-----IAccessibility2 Implementation 2009
 private:
     ::osl::Mutex maMutex;
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > >               maSlidePageObjects;
@@ -219,10 +211,8 @@ private:
     ::sd::Window* mpParentWindow;
      /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;
-//IAccessibility2 Implementation 2009-----
     sal_uInt32  nFocusPageIndex;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>           mxWindow;
-//-----IAccessibility2 Implementation 2009
 
     // internal
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&                                   getUnoTunnelId();
@@ -277,11 +267,9 @@ private:
 
     //=====  XServiceInfo  ====================================================
 
-//IAccessibility2 Implementation 2009-----
     //----------------------------xAttribute----------------------------
     virtual com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
-//-----IAccessibility2 Implementation 2009
     /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL

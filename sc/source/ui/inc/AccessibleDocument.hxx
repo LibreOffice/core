@@ -29,12 +29,10 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-//IAccessibility2 Implementation 2009-----
 //#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
-//-----IAccessibility2 Implementation 2009
 #include <svx/IAccessibleViewForwarder.hxx>
 
 class ScTabViewShell;
@@ -56,19 +54,15 @@ namespace utl
         <code>AccessibleContext</code> service.
 */
 
-//IAccessibility2 Implementation 2009-----
 typedef cppu::ImplHelper3< ::com::sun::star::accessibility::XAccessibleSelection,
                             ::com::sun::star::accessibility::XAccessibleExtendedAttributes,
-//-----IAccessibility2 Implementation 2009
                             ::com::sun::star::view::XSelectionChangeListener >
                     ScAccessibleDocumentImpl;
 
 class ScAccessibleDocument
     :   public ScAccessibleDocumentBase,
         public ScAccessibleDocumentImpl,
-//IAccessibility2 Implementation 2009-----
            public com::sun::star::accessibility::XAccessibleGetAccFlowTo,
-//-----IAccessibility2 Implementation 2009
         public accessibility::IAccessibleViewForwarder
 {
 public:
@@ -135,14 +129,12 @@ public:
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-//IAccessibility2 Implementation 2009-----
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
-//-----IAccessibility2 Implementation 2009
     ///=====  XAccessibleSelection  ===========================================
 
     virtual void SAL_CALL
@@ -337,7 +329,6 @@ private:
     rtl::OUString GetCurrentCellDescription() const;
 
     Rectangle GetVisibleArea_Impl() const;
-//IAccessibility2 Implementation 2009-----
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > GetScAccFlowToSequence();
 public:
     ScDocument *GetDocument() const ;
@@ -354,7 +345,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 protected:
     void SwitchViewFireFocus();
-//-----IAccessibility2 Implementation 2009
 };
 
 

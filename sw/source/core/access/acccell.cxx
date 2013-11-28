@@ -50,13 +50,11 @@
 
 #include <limits.h>
 
-//IAccessibility2 Implementation 2009-----
 #include <ndtxt.hxx>
 #include <editeng/brshitem.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>
 #include "acctable.hxx"
-//-----IAccessibility2 Implementation 2009
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -98,10 +96,8 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     DBG_ASSERT( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
-    //IAccessibility2 Implementation 2009-----
     //Solution:Add resizable state to table cell.
     rStateSet.AddState( AccessibleStateType::RESIZABLE );
-    //-----IAccessibility2 Implementation 2009
 
     // SELECTED
     if( IsSelected() )
@@ -125,12 +121,10 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
 
     bIsSelected = IsSelected();
 
-    //IAccessibility2 Implementation 2009-----
     //Need not assign the pointer of accessible table object to m_pAccTable,
     //for it already done in SwAccessibleCell::GetTable(); Former codes:
     //m_pAccTable= GetTable();
     GetTable();
-    //-----IAccessibility2 Implementation 2009
 }
 
 sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
@@ -151,7 +145,6 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     }
 
     sal_Bool bChanged = bOld != bNew;
-    //IAccessibility2 Implementation 2009-----
     if( bChanged )
     {
         FireStateChangedEvent( AccessibleStateType::SELECTED, bNew );
@@ -160,7 +153,6 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
             m_pAccTable->AddSelectionCell(this,bNew);
         }
     }
-    //-----IAccessibility2 Implementation 2009
     return bChanged;
 }
 
@@ -184,10 +176,8 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                 {
                     ASSERT( xAccImpl->GetFrm()->IsCellFrm(),
                              "table child is not a cell frame" )
-                    //IAccessibility2 Implementation 2009-----
                     bChanged = static_cast< SwAccessibleCell *>(
                             xAccImpl.getBodyPtr() )->_InvalidateMyCursorPos();
-                    //-----IAccessibility2 Implementation 2009
                 }
                 else
                     bChanged = sal_True; // If the context is not know we
@@ -208,7 +198,6 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 
 void SwAccessibleCell::_InvalidateCursorPos()
 {
-    //IAccessibility2 Implementation 2009-----
     if (IsSelected())
     {
         const SwAccessibleChild aChild( GetChild( *(GetMap()), 0 ) );
@@ -254,7 +243,6 @@ void SwAccessibleCell::_InvalidateCursorPos()
     {
         m_pAccTable->FireSelectionEvent();
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 sal_Bool SwAccessibleCell::HasCursor()
@@ -325,7 +313,6 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException )
 {
-    //IAccessibility2 Implementation 2009-----
     if (rType == ::getCppuType((const uno::Reference<XAccessibleExtendedAttributes>*)0))
     {
         uno::Any aR;
@@ -339,7 +326,6 @@ uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
         aR <<= uno::Reference<XAccessibleSelection>(this);
         return aR;
     }
-    //-----IAccessibility2 Implementation 2009
     if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleValue > * >( 0 ) ) )
     {
         uno::Reference<XAccessibleValue> xValue = this;
@@ -393,7 +379,6 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
     return pCellFrm->GetTabBox()->GetFrmFmt();
 }
 
-//IAccessibility2 Implementation 2009-----
 //Implement TableCell currentValue
 uno::Any SwAccessibleCell::getCurrentValue( )
     throw( uno::RuntimeException )
@@ -428,7 +413,6 @@ uno::Any SwAccessibleCell::getCurrentValue( )
     }
     return aAny;
 }
-//-----IAccessibility2 Implementation 2009
 
 sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     throw( uno::RuntimeException )
@@ -462,7 +446,6 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
     return aAny;
 }
 
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString ReplaceOneChar(::rtl::OUString oldOUString, ::rtl::OUString replacedChar, ::rtl::OUString replaceStr)
 {
     int iReplace = -1;
@@ -590,4 +573,3 @@ SwAccessibleTable *SwAccessibleCell::GetTable()
     }
     return m_pAccTable;
 }
-//-----IAccessibility2 Implementation 2009

@@ -115,7 +115,6 @@ namespace accessibility
         }
     }
 
-    // IA2 CWS
     void AccessibleListBoxEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
                                                    const ::com::sun::star::uno::Any& _aOldValue,
                                                    const ::com::sun::star::uno::Any& _aNewValue )
@@ -214,10 +213,8 @@ namespace accessibility
     {
         ::rtl::OUString sRet;
         SvLBoxEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
-        //IAccessibility2 Implementation 2009-----
         if ( pEntry )
             sRet = getListBox()->SearchEntryTextWithHeadTitle( pEntry );
-        //-----IAccessibility2 Implementation 2009
         return sRet;
     }
     // -----------------------------------------------------------------------------
@@ -390,10 +387,8 @@ namespace accessibility
                 SvLBoxEntry* pParentEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
                 DBG_ASSERT( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
 
-                //IAccessibility2 Implementation 2009-----
                 if ( pParentEntry )
                     pParentEntry = getListBox()->GetParent(pParentEntry);
-                //-----IAccessibility2 Implementation 2009
                 if ( pParentEntry )
                     xParent = new AccessibleListBoxEntry( *getListBox(), pParentEntry, NULL );
                     // note that we pass NULL here as parent-accessible:
@@ -885,9 +880,7 @@ namespace accessibility
             }
         }else if( (nIndex == 1 && (treeFlag & TREEFLAG_CHKBTN)) || nIndex == 0 )
         {
-            //IAccessibility2 Implementation 2009-----
             if( pEntry->HasChilds() || pEntry->HasChildsOnDemand() )
-            //-----IAccessibility2 Implementation 2009
                 return getListBox()->IsExpanded( pEntry ) ? \
                 ::rtl::OUString(TK_RES_STRING(STR_SVT_ACC_ACTION_COLLAPSE)) :
                 ::rtl::OUString(TK_RES_STRING(STR_SVT_ACC_ACTION_EXPAND));
@@ -915,7 +908,6 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
-// IAccessible2 implementation, 2009
 //      SvLBoxEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
 //      SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, nChildIndex );
 

@@ -129,10 +129,8 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         SCTAB nTab = aViewData.GetTabNo();
 
         //  Teil von Markierung aufheben?
-//IAccessibility2 Implementation 2009-----
         if (bForceNeg)
             bBlockNeg = sal_True;
-//-----IAccessibility2 Implementation 2009
         else if (bTestNeg)
         {
             if ( bCols )

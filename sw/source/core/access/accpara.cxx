@@ -75,7 +75,6 @@
 #include <acchypertextdata.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-//IAccessibility2 Implementation 2009-----
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <comphelper/accessibletexthelper.hxx>
@@ -98,7 +97,6 @@
 #include <unosett.hxx>
 #include <paratr.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
-//-----IAccessibility2 Implementation 2009
 // --> OD 2006-07-12 #i63870#
 #include <unomap.hxx>
 #include <unoprnms.hxx>
@@ -183,7 +181,6 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
             // same node? Then check whether it's also within 'our' part
             // of the paragraph
             sal_uInt16 nIndex = pPoint->nContent.GetIndex();
-            //IAccessibility2 Implementation 2009-----
             if(!GetPortionData().IsValidCorePosition( nIndex ) ||
                 ( GetPortionData().IsZeroCorePositionData() && nIndex== 0) )
             {
@@ -195,7 +192,6 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
                     UpdatePortionData();
                 }
             }
-            //-----IAccessibility2 Implementation 2009
             if( GetPortionData().IsValidCorePosition( nIndex ) )
             {
                 // Yes, it's us!
@@ -440,7 +436,6 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
             aEvent.OldValue, aEvent.NewValue );
 
         FireAccessibleEvent( aEvent );
-        //IAccessibility2 Implementation 2009-----
         uno::Reference< XAccessible > xparent = getAccessibleParent();
         uno::Reference< XAccessibleContext > xAccContext(xparent,uno::UNO_QUERY);
         if (xAccContext.is() && xAccContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
@@ -453,7 +448,6 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
                 pPara->FireAccessibleEvent(aParaEvent);
             }
         }
-        //-----IAccessibility2 Implementation 2009
     }
     else if( !bVisibleDataFired )
     {
@@ -461,10 +455,8 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
     }
 
     sal_Bool bNewIsHeading = IsHeading();
-    //IAccessibility2 Implementation 2009-----
     //Get the real heading level, Heading1 ~ Heading10
     nHeadingLevel = GetRealHeadingLevel();
-    //-----IAccessibility2 Implementation 2009
     sal_Bool bOldIsHeading;
     {
         vos::OGuard aGuard( aMutex );
@@ -533,7 +525,6 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
 
         if( pWin && pWin->HasFocus() && -1 == nNew )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_False );
-        //IAccessibility2 Implementation 2009-----
         //To send TEXT_SELECTION_CHANGED event
         sal_Int32 nStart=0;
         sal_Int32 nEnd  =0;
@@ -546,7 +537,6 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
             FireAccessibleEvent(aEvent);
         }
         m_bLastHasSelection =bCurSelection;
-        //-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -579,35 +569,27 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , pHyperTextData( NULL )
     , nOldCaretPos( -1 )
     , bIsHeading( sal_False )
-    //IAccessibility2 Implementation 2009-----
     //Get the real heading level, Heading1 ~ Heading10
     , nHeadingLevel (-1)
-    //-----IAccessibility2 Implementation 2009
     , aSelectionHelper( *this )
     // --> OD 2010-02-19 #i108125#
     , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTxtFrm ) )
     // <--
-    //IAccessibility2 Implementation 2009-----
     , m_bLastHasSelection(false)  //To add TEXT_SELECTION_CHANGED event
-    //-----IAccessibility2 Implementation 2009
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     bIsHeading = IsHeading();
-    //IAccessibility2 Implementation 2009-----
     //Get the real heading level, Heading1 ~ Heading10
     nHeadingLevel = GetRealHeadingLevel();
-    //-----IAccessibility2 Implementation 2009
     // --> OD 2004-09-27 #117970# - set an empty accessibility name for paragraphs
     SetName( ::rtl::OUString() );
     // <--
 
     // If this object has the focus, then it is remembered by the map itself.
-    //IAccessibility2 Implementation 2009-----
     // not necessary to remember this pos here. Generally, the pos will be updated in invalidateXXX method, which may fire the
     //Focus event based on the difference of new & old caret pos.
     //nOldCaretPos = GetCaretPos();
-    //-----IAccessibility2 Implementation 2009
 }
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
@@ -731,7 +713,6 @@ sal_Bool SwAccessibleParagraph::IsValidRange(
 {
     return IsValidPosition(nBegin, nLength) && IsValidPosition(nEnd, nLength);
 }
-//IAccessibility2 Implementation 2009-----
 SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
 {
     const SwTxtNode* pTxtNd = GetTxtNode();
@@ -800,7 +781,6 @@ const SwRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
 
     return pRedline;
 }
-//-----IAccessibility2 Implementation 2009
 
 //
 // text boundaries
@@ -812,10 +792,8 @@ sal_Bool SwAccessibleParagraph::GetCharBoundary(
     const ::rtl::OUString&,
     sal_Int32 nPos )
 {
-    //IAccessibility2 Implementation 2009-----
     if( GetPortionData().FillBoundaryIFDateField( rBound,  nPos) )
         return sal_True;
-    //-----IAccessibility2 Implementation 2009
 
     rBound.startPos = nPos;
     rBound.endPos = nPos+1;
@@ -876,11 +854,9 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
                 nEndPos++;
             rBound.endPos = nEndPos;
         }
-        //IAccessibility2 Implementation 2009-----
         tabCharInWord( nPos, rBound);
         if( GetPortionData().FillBoundaryIFDateField( rBound,  rBound.startPos) )
             return sal_True;
-        //-----IAccessibility2 Implementation 2009
         return sal_True; // MT: So why do we need the return TRUE above???
 */
         // get word boundary, as the Break-Iterator sees fit.
@@ -906,14 +882,12 @@ sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
     const ::rtl::OUString& rText,
     sal_Int32 nPos )
 {
-    //IAccessibility2 Implementation 2009-----
     const sal_Unicode* pStr = rText.getStr();
     if (pStr)
     {
         while( pStr[nPos] == sal_Unicode(' ') && nPos < rText.getLength())
             nPos++;
     }
-    //-----IAccessibility2 Implementation 2009
     GetPortionData().GetSentenceBoundary( rBound, nPos );
     return sal_True;
 }
@@ -1027,18 +1001,15 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
             break;
 
         case AccessibleTextType::LINE:
-            //IAccessibility2 Implementation 2009-----
             //Solve the problem of returning wrong LINE and PARAGRAPH
             if((nPos == rText.getLength()) && nPos > 0)
                 bRet = GetLineBoundary( rBound, rText, nPos - 1);
             else
                 bRet = GetLineBoundary( rBound, rText, nPos );
-            //-----IAccessibility2 Implementation 2009
             break;
 
         case AccessibleTextType::ATTRIBUTE_RUN:
             bRet = GetAttributeBoundary( rBound, rText, nPos );
-            //IAccessibility2 Implementation 2009-----
             if(bRet)
             {
                 SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -1100,7 +1071,6 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                     }
                 }
             }
-            //-----IAccessibility2 Implementation 2009
             break;
 
         case AccessibleTextType::GLYPH:
@@ -1319,7 +1289,6 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwAccessibleParagraph::getSupportedSer
     return aRet;
 }
 
-//IAccessibility2 Implementation 2009-----
 uno::Sequence< ::rtl::OUString > getAttributeNames()
 {
     static uno::Sequence< ::rtl::OUString >* pNames = NULL;
@@ -1388,7 +1357,6 @@ uno::Sequence< ::rtl::OUString > getSupplementalAttributeNames()
     }
     return *pNames;
 }
-//-----IAccessibility2 Implementation 2009
 //
 //=====  XInterface  =======================================================
 //
@@ -1439,7 +1407,6 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
         aRet <<= aAccMultiLineText;
     }
     // <--
-    //IAccessibility2 Implementation 2009-----
     //MSAA Extension Implementation in app  module
     else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextSelection> *)NULL) )
     {
@@ -1451,7 +1418,6 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
         uno::Reference<XAccessibleExtendedAttributes> xAttr = this;
         aRet <<= xAttr;
     }
-    //-----IAccessibility2 Implementation 2009
     else
     {
         aRet = SwAccessibleContext::queryInterface(rType);
@@ -1576,7 +1542,6 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-//IAccessibility2 Implementation 2009-----
 com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessibleParagraph::GetCurrentTabStop( sal_Int32 nIndex  )
 {
 vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1625,7 +1590,6 @@ vos::OGuard aGuard(Application::GetSolarMutex());
 
     // already get the caret postion
 
-    //IAccessibility2 Implementation 2009-----
     /*SwFrm* pTFrm = const_cast<SwFrm*>(GetFrm());
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs =
         pTFrm->GetTabStopInfo(aCoreRect.Left());*/
@@ -1637,7 +1601,6 @@ vos::OGuard aGuard(Application::GetSolarMutex());
         SwFrm* pTFrm = const_cast<SwFrm*>(GetFrm());
         tabs = pTFrm->GetTabStopInfo(aCoreRect.Left());
     }
-    //-----IAccessibility2 Implementation 2009
 
     if( tabs.hasElements() )
     {
@@ -1668,7 +1631,6 @@ struct IndexCompare
         return (pValues[a].Name < pValues[b].Name) ? true : false;
     }
 };
-//-----IAccessibility2 Implementation 2009
 
 String SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
 {
@@ -1854,10 +1816,8 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
     const ::rtl::OUString& rText = GetString();
 
-    if( ! IsValidChar( nIndex, rText.getLength()+1 ) )//IAccessibility2 Implementation 2009
-        throw lang::IndexOutOfBoundsException();
+    if( ! IsValidChar( nIndex, rText.getLength()+1 ) )        throw lang::IndexOutOfBoundsException();
 
-    //IAccessibility2 Implementation 2009-----
     bool bSupplementalMode = false;
     uno::Sequence< ::rtl::OUString > aNames = aRequestedAttributes;
     if (aNames.getLength() == 0)
@@ -2375,7 +2335,6 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
     return aValues;
 }
 // <--
-// IAccessibility2 Implementation 2009----
 void SwAccessibleParagraph::_getSupplementalAttributesImpl(
         const sal_Int32,
         const uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
@@ -2676,7 +2635,6 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
     }
 }
-//-----IAccessibility2 Implementation 2009
 
 awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     sal_Int32 nIndex )
@@ -2979,12 +2937,10 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
-    //IAccessibility2 Implementation 2009-----
     //If nIndex = 0, then nobefore text so return -1 directly.
     if( nIndex == 0 )
             return aResult;
     //Tab will be return when call WORDTYPE
-    //-----IAccessibility2 Implementation 2009
 
     // get starting pos
     i18n::Boundary aBound;
@@ -2999,7 +2955,6 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     }
 
     // now skip to previous word
-    //IAccessibility2 Implementation 2009-----
     if (nTextType==2 || nTextType == 3)
     {
         i18n::Boundary preBound = aBound;
@@ -3039,7 +2994,6 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
             aResult.SegmentEnd = aBound.endPos;
         }
     }
-    //-----IAccessibility2 Implementation 2009
     return aResult;
 }
 
@@ -3082,7 +3036,6 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     }
 
 /*
-        //IAccessibility2 Implementation 2009-----
         sal_Bool bWord = sal_False;
     bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
@@ -3138,7 +3091,6 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
             aResult.SegmentEnd = aBound.endPos;
         }
     }
-    //-----IAccessibility2 Implementation 2009
 */
     return aResult;
 }
@@ -3457,7 +3409,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
             nCount++;
     }
 
-    //IAccessibility2 Implementation 2009-----
     /* Can't fin the function "GetTOCFirstWordEndIndex" declaration in sym2.0 (Added by yanjun)
     if( GetTOXSortTabBase()  )
     {
@@ -3466,7 +3417,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
             nCount++;
     }
     */
-    //-----IAccessibility2 Implementation 2009
     return nCount;
 }
 
@@ -3714,7 +3664,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
         if( pHt )
             nRet = nPos;
     }
-    //IAccessibility2 Implementation 2009-----
     /* Added by yanjun for acc miagration
     if( nRet == -1 && GetTOXSortTabBase() )
     {
@@ -3729,7 +3678,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
     else
         return nRet;
     //return nRet;
-    //-----IAccessibility2 Implementation 2009
 }
 
 // --> OD 2008-05-26 #i71360#
@@ -3758,7 +3706,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
 
     return pTextMarkupHelper->getTextMarkupCount( nTextMarkupType );
 }
-//IAccessibility2 Implementation 2009-----
 //MSAA Extension Implementation in app  module
 sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const ::com::sun::star::awt::Point&, sal_Bool )
     throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
@@ -3954,7 +3901,6 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
 
     return bRet;
 }
-//-----IAccessibility2 Implementation 2009
 
 /*accessibility::*/TextSegment SAL_CALL
         SwAccessibleParagraph::getTextMarkup( sal_Int32 nTextMarkupIndex,
@@ -4137,7 +4083,6 @@ void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
 }
 // <--
 
-//IAccessibility2 Implementation 2009-----
 sal_Bool SwAccessibleParagraph::GetSelectionAtIndex(
     sal_Int32& nIndex, sal_Int32& nStart, sal_Int32& nEnd)
 {
@@ -4399,4 +4344,3 @@ sal_Bool SwAccessibleParagraph::tabCharInWord( sal_Int32 nIndex, i18n::Boundary&
     }
     return bFind;
 }
-//-----IAccessibility2 Implementation 2009

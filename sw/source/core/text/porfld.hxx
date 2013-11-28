@@ -65,9 +65,7 @@ public:
     SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0, sal_Bool bPlaceHolder = sal_False );
     ~SwFldPortion();
 
-    //IAccessibility2 Implementation 2009-----
     sal_uInt16 m_nAttrFldType;
-    //-----IAccessibility2 Implementation 2009
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
     inline sal_Bool HasFont() const { return 0 != pFnt; }

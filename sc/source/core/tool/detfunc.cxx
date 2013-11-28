@@ -1706,10 +1706,8 @@ sal_Bool ScDetectiveFunc::IsColorsInitialized()
     return bColorsInitialized;
 }
 
-//IAccessibility2 Implementation 2009-----
 void ScDetectiveFunc::AppendChangTrackNoteSeparator(String &aDisplay)
 {
     aDisplay.AppendAscii( RTL_CONSTASCII_STRINGPARAM("\n--------\n") );
 }
-//-----IAccessibility2 Implementation 2009
 

@@ -482,10 +482,8 @@ public:
     sal_uInt16 IsObjSelected() const;   //Liefert gleich die Anzahl der Objekte,
                                     //zaehlt aber nicht die Objekte in Gruppen.
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
-    //IAccessibility2 Implementation 2009-----
     sal_Bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
     const SdrMarkList* GetMarkList() const{ return _GetMarkList(); };
-    //-----IAccessibility2 Implementation 2009
 
     void EndTextEdit();             //Loescht ggf. das Objekt.
 

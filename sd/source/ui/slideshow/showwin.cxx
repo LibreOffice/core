@@ -738,7 +738,6 @@ void ShowWindow::AddWindowToPaintView()
         GetChild( nChild )->Show( sal_True );
 }
 
-//IAccessibility2 Implementation 2009-----
 // Overload the sd::Window's CreateAccessible to create a different accessible object
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
@@ -761,5 +760,4 @@ void ShowWindow::AddWindowToPaintView()
     return ::Window::CreateAccessible ();
     }
 }
-//-----IAccessibility2 Implementation 2009
 } // end of namespace sd

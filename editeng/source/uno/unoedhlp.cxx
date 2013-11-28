@@ -28,10 +28,8 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <svl/itemset.hxx>
 
-//-----IAccessibility2 Implementation 2009
 //------------------------------------------------------------------------
 
 TYPEINIT1( SvxEditSourceHint, TextHint );
@@ -79,9 +77,7 @@ void SvxEditSourceHint::SetEndValue( sal_uLong n )
 {
     mnEnd = n;
 }
-//IAccessibility2 Implementation 2009-----
 TYPEINIT1( SvxEditSourceHintEndPara , SvxEditSourceHint );
-//-----IAccessibility2 Implementation 2009
 //------------------------------------------------------------------------
 
 ::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
@@ -122,10 +118,8 @@ TYPEINIT1( SvxEditSourceHintEndPara , SvxEditSourceHint );
 
             case EE_NOTIFY_INPUT_END:
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_END, 0 ) );
-    //IAccessibility2 Implementation 2009-----
             case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA:
                 return ::std::auto_ptr<SfxHint>( new SvxEditSourceHintEndPara( EDITSOURCE_HINT_SELECTIONCHANGED ) );
-    //-----IAccessibility2 Implementation 2009
             default:
                 DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
                 break;
@@ -140,8 +134,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt
     // Need to verify implementation with AT (IA2 and ATK)
     // Old implementation at the end of the method for reference...
 
-#if 1 // IA2 CWS
-
+#if 1
     //added dummy attributes for the default text
     EECharAttribArray aCharAttribs, aTempCharAttribs;
     rEE.GetCharAttribs( nPara, aTempCharAttribs );

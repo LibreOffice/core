@@ -108,9 +108,7 @@ const sal_uInt8 EditEngineAttribs_OnlyHard = 2;     /// returns only attributes 
 #define GETATTRIBS_CHARATTRIBS  (sal_uInt8)0x04
 #define GETATTRIBS_ALL          (sal_uInt8)0xFF
 
-//IAccessibility2 Implementation 2009-----
 class SdrObject;
-//-----IAccessibility2 Implementation 2009
 class EDITENG_DLLPUBLIC EditEngine
 {
     friend class EditView;
@@ -475,9 +473,7 @@ public:
     static void     ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLevel, const SvxBulletItem* pOldBullet, const SvxLRSpaceItem* pOldLRSpace );
     static sal_Bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static sal_Bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
-    //IAccessibility2 Implementation 2009-----
     virtual SdrObject* GetCurTextObj() { return NULL; }
-    //-----IAccessibility2 Implementation 2009
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link& rLink );
     Link            GetBeginDropHdl() const;

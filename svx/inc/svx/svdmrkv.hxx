@@ -511,9 +511,7 @@ public:
     // Endpunkt der Spiegelachse
     const Point& GetRef2() const { return aRef1; }
     void SetRef2(const Point& rPt);
-//IAccessibility2 Implementation 2009-----
     void UnmarkObj(SdrObject* pObj);
-//-----IAccessibility2 Implementation 2009
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

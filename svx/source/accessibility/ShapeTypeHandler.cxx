@@ -32,11 +32,9 @@
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <svx/unoshape.hxx>
 #include <svx/svdoashp.hxx>
 #include "svx/unoapi.hxx"
-//-----IAccessibility2 Implementation 2009
 
 #include "svx/svdstr.hrc"
 
@@ -315,7 +313,6 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
         case DRAWING_RECTANGLE:
             nResourceId = STR_ObjNameSingulRECT;
             break;
-        //IAccessibility2 Implementation 2009-----
         case DRAWING_CUSTOM:
             {
                 nResourceId = STR_ObjNameSingulCUSTOMSHAPE;
@@ -345,7 +342,6 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
                 }
                 break;
             }
-        //-----IAccessibility2 Implementation 2009
         case DRAWING_TEXT:
             nResourceId = STR_ObjNameSingulTEXT;
             break;

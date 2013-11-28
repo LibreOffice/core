@@ -674,7 +674,6 @@ TabPage TP_TOX_ENTRY
         {
             Text [ en-US ] = "Character Style: ";
         };
-//IAccessibility2 Impplementaton 2009-----
         String STR_STRUCTURE
         {
             Text [ en-US ] = "Structure text";
@@ -691,7 +690,6 @@ TabPage TP_TOX_ENTRY
         {
             Text [ en-US ] = "Press Ctrl+Alt+B to move focus back to the current structure control";
         };
-//-----IAccessibility2 Impplementaton 2009
     };
     PushButton PB_ALL_LEVELS
     {
@@ -1232,9 +1230,7 @@ ModalDialog DLG_ADD_IDX_STYLES
             };
             MaskColor = IMAGE_MASK_COLOR ;
         };
-        //IAccessibility2 Implementation 2009-----
         QuickHelpText [ en-US ] = "Left" ;
-        //-----IAccessibility2 Implementation 2009
     };
     ImageButton PB_RIGHT
     {
@@ -1250,9 +1246,7 @@ ModalDialog DLG_ADD_IDX_STYLES
             };
             MaskColor = IMAGE_MASK_COLOR ;
         };
-        //IAccessibility2 Implementation 2009-----
         QuickHelpText [ en-US ] = "Right" ;
-        //-----IAccessibility2 Implementation 2009
     };
     FixedLine FL_STYLES
     {

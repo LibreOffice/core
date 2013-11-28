@@ -346,7 +346,6 @@ String SvTreeListBox::GetEntryText(SvLBoxEntry* pEntry) const
     return pItem->GetText();
 }
 
-//IAccessibility2 Implementation 2009-----
 String  SvTreeListBox::GetEntryAltText( SvLBoxEntry* ) const
 {
     String tmp;
@@ -428,7 +427,6 @@ String SvTreeListBox::SearchEntryTextWithHeadTitle( SvLBoxEntry* pEntry )
         sRet = sRet.Erase(sRet.Len() - 1);
     return sRet;
 }
-//-----IAccessibility2 Implementation 2009
 String SvTreeListBox::SearchEntryText( SvLBoxEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -890,18 +888,15 @@ void SvTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
 void SvTreeListBox::GetFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    //IAccessibility2 Implementation 2009-----
     //Solution:If there is no item in the tree,draw focus.
     if( !SvLBox::First())
     {
         Invalidate();
     }
-    //-----IAccessibility2 Implementation 2009
     pImp->GetFocus();
     SvLBox::GetFocus();
 
     SvLBoxEntry* pEntry = FirstSelected();
-    //IAccessibility2 Implementation 2009-----
     if ( !pEntry )
     {
         pEntry = pImp->GetCurrentEntry();
@@ -911,24 +906,20 @@ void SvTreeListBox::GetFocus()
         if (pEntry != pImp->pCursor)
             pEntry = pImp->pCursor;
     }
-    //IAccessibility2 Implementation 2009-----
     if ( pEntry )
         //pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
         pImp->CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pEntry );
-    //-----IAccessibility2 Implementation 2009
 
 }
 
 void SvTreeListBox::LoseFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    //IAccessibility2 Implementation 2009-----
     //Solution:If there is no item in the tree,delete visual focus.
     if( !SvLBox::First())
     {
         Invalidate();
     }
-    //-----IAccessibility2 Implementation 2009
     pImp->LoseFocus();
     SvLBox::LoseFocus();
 }
@@ -1175,7 +1166,6 @@ sal_Bool SvTreeListBox::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
         if( bSelect )
         {
             SelectHdl();
-            // IA2 CWS
             // pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
             CallEventListeners( VCLEVENT_LISTBOX_TREESELECT, pEntry);
         }
@@ -1298,7 +1288,6 @@ void SvTreeListBox::Paint( const Rectangle& rRect )
     if( nTreeFlags & TREEFLAG_RECALCTABS )
         SetTabs();
     pImp->Paint( rRect );
-    //IAccessibility2 Implementation 2009-----
     //Solution:Add visual focus draw
     if( !SvLBox::First() )
     {
@@ -1315,7 +1304,6 @@ void SvTreeListBox::Paint( const Rectangle& rRect )
             HideFocus();
         }
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 void SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
@@ -2775,7 +2763,6 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
         rStateSet.AddState( AccessibleStateType::EXPANDABLE );
         if ( IsExpanded( pEntry ) )
             rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
-        // IA2 CWS
         /*
         else
         {
@@ -2791,7 +2778,6 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
         rStateSet.AddState( AccessibleStateType::VISIBLE );
     if ( IsSelected( pEntry ) )
         rStateSet.AddState( AccessibleStateType::SELECTED );
-    //IAccessibility2 Implementation 2009-----
     if ( IsEnabled() )
     {
         rStateSet.AddState( AccessibleStateType::ENABLED );
@@ -2805,7 +2791,6 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
         }
     }
-    //-----IAccessibility2 Implementation 2009
 }
 
 Rectangle SvTreeListBox::GetBoundingRect( SvLBoxEntry* pEntry )

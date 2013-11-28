@@ -727,9 +727,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
     aPageStr( SW_RES( STR_PAGE )),
     nNewPage(USHRT_MAX),
-    //IAccessibility2 Implementation 2009-----
     nOldPageNum(0),
-    //-----IAccessibility2 Implementation 2009
     pNumRuleNodeFromDoc(0), // #i23726#
     pEditWin( new SwEditWin( &_pFrame->GetWindow(), *this ) ),
     pWrtShell(0),

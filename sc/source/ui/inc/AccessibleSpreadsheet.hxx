@@ -30,10 +30,8 @@
 
 #include <vector>
 
-//IAccessibility2 Implementation 2009-----
 #include "rangelst.hxx"
 #include <map>
-//-----IAccessibility2 Implementation 2009
 class ScMyAddress : public ScAddress
 {
 public:
@@ -243,7 +241,6 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
-//IAccessibility2 Implementation 2009-----
     //=====  XAccessibleTableSelection  ============================================
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
@@ -253,7 +250,6 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
-//-----IAccessibility2 Implementation 2009
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
@@ -294,7 +290,6 @@ private:
     ScDocument* GetDocument(ScTabViewShell* pViewShell);
     Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
     Rectangle   GetVisCells(const Rectangle& rVisArea);
-//IAccessibility2 Implementation 2009-----
     //void CreateSortedMarkedCells();
     //void AddMarkedRange(const ScRange& rRange);
     typedef std::vector<ScMyAddress> VEC_MYADDR;
@@ -342,7 +337,6 @@ public:
     sal_Bool CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
     sal_Bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
     String m_strOldTabName;
-//-----IAccessibility2 Implementation 2009
 };
 
 

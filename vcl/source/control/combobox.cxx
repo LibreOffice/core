@@ -215,9 +215,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetDoubleClickHdl( LINK( this, ComboBox, ImplDoubleClickHdl ) );
     mpImplLB->SetUserDrawHdl( LINK( this, ComboBox, ImplUserDrawHdl ) );
     mpImplLB->SetSelectionChangedHdl( LINK( this, ComboBox, ImplSelectionChangedHdl ) );
-//IAccessibility2 Implementation 2009-----
     mpImplLB->SetListItemSelectHdl( LINK( this, ComboBox, ImplListItemSelectHdl ) );
-//-----IAccessibility2 Implementation 2009
     mpImplLB->Show();
 
     if ( mpFloatWin )
@@ -276,13 +274,11 @@ sal_Bool ComboBox::IsAutocompleteEnabled() const
 {
     return mpSubEdit->GetAutocompleteHdl().IsSet();
 }
-//IAccessibility2 Implementation 2009-----
 void  ComboBox::SetMpSubEditAccessibleName(String &aName)
 {
     if(mpSubEdit!=NULL)
         mpSubEdit->SetAccessibleName(aName);
 }
-//-----IAccessibility2 Implementation 2009
 // -----------------------------------------------------------------------
 
 IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
@@ -477,13 +473,11 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
 
     return 0;
 }
-//IAccessibility2 Implementation 2009-----
 IMPL_LINK( ComboBox, ImplListItemSelectHdl,  void*, EMPTYARG )
 {
     ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT );
     return 1;
 }
-//-----IAccessibility2 Implementation 2009
 // -----------------------------------------------------------------------
 
 IMPL_LINK( ComboBox, ImplCancelHdl, void*, EMPTYARG )
@@ -1435,12 +1429,10 @@ sal_uInt16 ComboBox::GetMaxMRUCount() const
     return mpImplLB->GetMaxMRUCount();
 }
 
-//IAccessibility2 Implementation 2009-----
 sal_uInt16 ComboBox::GetMRUCount() const
 {
     return mpImplLB->GetEntryList()->GetMRUCount();
 }
-//-----IAccessibility2 Implementation 2009
 // -----------------------------------------------------------------------
 
 sal_uInt16 ComboBox::GetDisplayLineCount() const

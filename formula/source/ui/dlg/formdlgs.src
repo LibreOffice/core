@@ -225,17 +225,13 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
         Right = TRUE ;
         Text [ en-US ] = "Function result" ;
     };
-//IAccessibility2 Implementation 2009-----
     //Window WND_RESULT
     FixedText WND_RESULT
-//-----IAccessibility2 Implementation 2009
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 255 , 4 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
-//IAccessibility2 Implementation 2009-----
         Text [ en-US ] = "Function result" ;
-//-----IAccessibility2 Implementation 2009
     };
     FixedText FT_FORMULA_RESULT
     {

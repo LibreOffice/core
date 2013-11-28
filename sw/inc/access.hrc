@@ -48,7 +48,6 @@
 #define STR_ACCESS_ANNOTATION_BUTTON_NAME       (RC_ACCESS_BEGIN + 20)
 #define STR_ACCESS_ANNOTATION_BUTTON_DESC       (RC_ACCESS_BEGIN + 21)
 
-//IAccessibility2 Implementation 2009-----
 #define STR_ACCESS_PREVIEW_DOC_NAME             (RC_ACCESS_BEGIN + 22)
 //#define STR_ACCESS_PREVIEW_DOC_DESC           (RC_ACCESS_BEGIN + 23)
 #define STR_ACCESS_PREVIEW_DOC_SUFFIX           (RC_ACCESS_BEGIN + 24)
@@ -62,7 +61,6 @@
 #define STR_ACCESS_FORMULA_TYPE                 (RC_ACCESS_BEGIN + 32)
 #define STR_ACCESS_FORMULA_TEXT                 (RC_ACCESS_BEGIN + 33)
 #define STR_ACCESS_FORMULA_TOOLBAR              (RC_ACCESS_BEGIN + 34)
-//-----IAccessibility2 Implementation 2009
 
 #define ACCESS_ACT_END STR_ACCESS_FORMULA_TOOLBAR
 

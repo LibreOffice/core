@@ -165,10 +165,8 @@ using namespace sw::access;
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
         // We need a sorted list here
-        //IAccessibility2 Implementation 2009-----
         // const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
         const SwAccessibleChildMap aVisMap( rFrm.PaintArea(), rFrm, rAccMap );
-        //-----IAccessibility2 Implementation 2009
         SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
         while( aIter != aVisMap.end() && !bFound )
         {
@@ -195,10 +193,8 @@ using namespace sw::access;
         // The unsorted list is sorted enough, because it return lower
         // frames in the correct order.
 
-        //IAccessibility2 Implementation 2009-----
         // const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
         const SwAccessibleChildSList aVisList( rFrm.PaintArea(), rFrm, rAccMap );
-        //-----IAccessibility2 Implementation 2009
 
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
         while( aIter != aVisList.end() && !bFound )

@@ -60,11 +60,9 @@
 #define ED_POS              2
 #define ED_FORMULA          3
 
-//IAccessibility2 Impplementaton 2009-----
 #define STR_ED_POS          1
 #define STR_ED_FORMULA      2
 #define STR_TOOLBAR_FORMULA 35
-//-----IAccessibility2 Impplementaton 2009
 #endif
 
 

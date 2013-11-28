@@ -835,7 +835,6 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                 if ( nStyle & WB_GROUP )
                     break;
 
-//IAccessibility2 Implementation 2009-----
                 //Solution:Pure window shouldn't get window after controls such as buttons.
                 //if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
                 if ( pWindow->IsVisible() && pWindow->IsEnabled() &&
@@ -846,7 +845,6 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                                     pWindow->GetType() != WINDOW_CONTROL
                                    )
        )
-//-----IAccessibility2 Implementation 2009
                 {
                     pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
                     return sal_True;
@@ -1309,7 +1307,6 @@ Window* Window::GetAccessibleRelationMemberOf() const
     }
     return pWindow;
 }
-//-----IAccessibility2 Implementation 2009
 
 // -----------------------------------------------------------------------
 
