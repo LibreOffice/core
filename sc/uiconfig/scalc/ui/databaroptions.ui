@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="DataBarOptions">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes">Data Bar</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -19,6 +21,8 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -55,6 +59,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
@@ -65,23 +70,24 @@
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="top_padding">6</property>
-                        <property name="row_spacing">12</property>
-                        <property name="column_spacing">6</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="row_spacing">12</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Minimum:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">min</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -96,6 +102,8 @@
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Maximum:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">max</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -105,14 +113,18 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="min">
+                          <object class="GtkComboBoxText" id="min">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes">Automatic</item>
-                              <item translatable="yes">Middle</item>
-                              <item translatable="yes">None</item>
+                              <item translatable="yes">Minimum</item>
+                              <item translatable="yes">Maximum</item>
+                              <item translatable="yes">Percentile</item>
+                              <item translatable="yes">Value</item>
+                              <item translatable="yes">Percent</item>
+                              <item translatable="yes">Formula</item>
                             </items>
                           </object>
                           <packing>
@@ -123,14 +135,18 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="max">
+                          <object class="GtkComboBoxText" id="max">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes">Automatic</item>
-                              <item translatable="yes">Middle</item>
-                              <item translatable="yes">None</item>
+                              <item translatable="yes">Minimum</item>
+                              <item translatable="yes">Maximum</item>
+                              <item translatable="yes">Percentile</item>
+                              <item translatable="yes">Value</item>
+                              <item translatable="yes">Percent</item>
+                              <item translatable="yes">Formula</item>
                             </items>
                           </object>
                           <packing>
@@ -197,23 +213,24 @@
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">12</property>
-                        <property name="column_spacing">6</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="row_spacing">12</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="">False</property>
                             <property name="label" translatable="yes">Positive:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">positive_colour</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -228,6 +245,8 @@
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Negative:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">negative_colour</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -293,22 +312,24 @@
                   <object class="GtkAlignment" id="alignment3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="left_padding">12</property>
                     <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">12</property>
-                        <property name="column_spacing">6</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <property name="row_spacing">12</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Position of vertical axis:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">axis_pos</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -323,6 +344,8 @@
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Color of vertical axis:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">axis_colour</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -332,18 +355,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="axis_pos">
+                          <object class="GtkComboBoxText" id="axis_pos">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes">Automatic</item>
-                              <item translatable="yes">Minimum</item>
-                              <item translatable="yes">Maximum</item>
-                              <item translatable="yes">Percentile</item>
-                              <item translatable="yes">Value</item>
-                              <item translatable="yes">Percent</item>
-                              <item translatable="yes">Formula</item>
+                              <item translatable="yes">Middle</item>
+                              <item translatable="yes">None</item>
                             </items>
                           </object>
                           <packing>
@@ -390,7 +409,6 @@
             <child>
               <object class="GtkLabel" id="str_same_value">
                 <property name="can_focus">False</property>
-                <property name="no_show_all">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Min value must be smaller than max value!</property>
               </object>
@@ -413,5 +431,13 @@
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="label4"/>
+      <widget name="label5"/>
+      <widget name="label6"/>
+      <widget name="label7"/>
+    </widgets>
   </object>
 </interface>
