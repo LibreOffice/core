@@ -313,6 +313,7 @@ namespace writerfilter {
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
                 void setSuperstream(RTFDocumentImpl *pSuperstream);
+                void setStreamType(Id nId);
                 void setAuthor(OUString& rAuthor);
                 void setAuthorInitials(OUString& rAuthorInitials);
                 void setIgnoreFirst(OUString& rIgnoreFirst);
@@ -413,6 +414,8 @@ namespace writerfilter {
                 bool m_bHasFootnote;
                 /// Superstream of this substream.
                 RTFDocumentImpl *m_pSuperstream;
+                /// Type of the stream: header, footer, footnote, etc.
+                Id m_nStreamType;
                 std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.

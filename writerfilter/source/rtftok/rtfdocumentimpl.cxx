@@ -253,6 +253,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aSuperBuffer(),
     m_bHasFootnote(false),
     m_pSuperstream(0),
+    m_nStreamType(0),
     m_nHeaderFooterPositions(),
     m_nGroupStartPos(0),
     m_aBookmarks(),
@@ -314,6 +315,11 @@ void RTFDocumentImpl::setSuperstream(RTFDocumentImpl *pSuperstream)
     m_pSuperstream = pSuperstream;
 }
 
+void RTFDocumentImpl::setStreamType(Id nId)
+{
+    m_nStreamType = nId;
+}
+
 void RTFDocumentImpl::setAuthor(OUString& rAuthor)
 {
     m_aAuthor = rAuthor;
@@ -350,6 +356,7 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     // Seek to header position, parse, then seek back.
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
     pImpl->setSuperstream(this);
+    pImpl->setStreamType(nId);
     pImpl->setIgnoreFirst(rIgnoreFirst);
     if (!m_aAuthor.isEmpty())
     {
@@ -4510,7 +4517,9 @@ int RTFDocumentImpl::popState()
     // This is the end of the doc, see if we need to close the last section.
     if (m_pTokenizer->getGroup() == 1 && !m_bFirstRun)
     {
-        if (m_bNeedCr && !isSubstream())
+        // \par means an empty paragraph at the end of footnotes/endnotes, but
+        // not in case of other substreams, like headers.
+        if (m_bNeedCr && !(m_nStreamType == NS_rtf::LN_footnote || m_nStreamType == NS_rtf::LN_endnote))
             dispatchSymbol(RTF_PAR);
         sectBreak(true);
     }
