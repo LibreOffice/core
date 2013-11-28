@@ -28127,9 +28127,6 @@
         <!--Class FRD-->
         <!--Class ATRD-->
         <UML:Class xmi.id="ATRD" name="ATRD">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>28</UML:TaggedValue.dataValue>
