@@ -162,14 +162,6 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
     DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
-
-    try
-    {
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
 }
 
 // ____ XChartTypeTemplate ____
@@ -177,46 +169,6 @@ sal_Bool SAL_CALL BubbleChartTypeTemplate::supportsCategories()
     throw (uno::RuntimeException)
 {
     return false;
-}
-
-sal_Bool SAL_CALL BubbleChartTypeTemplate::matchesTemplate(
-    const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
-    throw (uno::RuntimeException)
-{
-    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
-
-    if( bResult )
-    {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-                 aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
-        {
-            try
-            {
-            }
-            catch( uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-        }
-    }
-
-    // adapt curve style, spline order and resolution
-    if( bResult && bAdaptProperties )
-    {
-        try
-        {
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    return bResult;
 }
 
 Reference< chart2::XChartType > BubbleChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )

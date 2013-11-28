@@ -61,11 +61,6 @@ protected:
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL supportsCategories()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL matchesTemplate(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram >& xDiagram,
-        sal_Bool bAdaptProperties )
-        throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > SAL_CALL
         getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
