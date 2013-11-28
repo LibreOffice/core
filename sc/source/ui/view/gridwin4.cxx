@@ -882,6 +882,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     // Flag drawn formula cells "unchanged".
     pDoc->ResetChanged(ScRange(nX1,nY1,nTab,nX2,nY2,nTab));
+    pDoc->CellContentModified();
 }
 
 void ScGridWindow::CheckNeedsRepaint()
