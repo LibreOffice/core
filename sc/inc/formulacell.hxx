@@ -57,8 +57,6 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     mutable size_t mnRefCount;
 
     ScTokenArray* mpCode;
-    osl::Mutex maMutex;
-    osl::Condition maCompilationDone;
     sc::CompiledFormula* mpCompiledFormula;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
@@ -76,8 +74,8 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
 
-    static int mnCount;
-    static rtl::Reference<sc::CLBuildKernelThread> mxCLKernelThread;
+    static int snCount;
+    static rtl::Reference<sc::CLBuildKernelThread> sxCompilationThread;
 };
 
 inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)

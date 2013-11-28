@@ -412,6 +412,11 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 {
                     sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
                     pValues[nProp] >>= bVal;
+#if 0 // Don't remove please unless the SC_BACKGROUND_COMPILATION env var thing goes away.
+      // The intent here is that tml when running CppunitTest_sc_opencl_test turns this on.
+                    if (getenv("SC_BACKGROUND_COMPILATION") != NULL)
+                        bVal = sal_True;
+#endif
                     GetCalcConfig().mbOpenCLEnabled = bVal;
                 }
                 break;

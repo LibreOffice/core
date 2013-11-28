@@ -8,6 +8,7 @@
  */
 
 #include "formulagroup.hxx"
+#include "clkernelthread.hxx"
 #include "grouptokenconverter.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
@@ -3210,8 +3211,9 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
 {
     ScTokenArray *pCode = new ScTokenArray();
     ScGroupTokenConverter aConverter(*pCode, rDoc, *xGroup->mpTopCell, rTopPos);
-    if (!aConverter.convert(rCode))
+    if (!aConverter.convert(rCode) || pCode->GetLen() == 0)
     {
+        delete pCode;
         return NULL;
     }
 
@@ -3227,19 +3229,13 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 {
     DynamicKernel *pKernel;
 
-    osl::ResettableMutexGuard aGuard(xGroup->maMutex);
     if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled ||
         xGroup->meCalcState == sc::GroupCalcOpenCLKernelBinaryCreated)
     {
         if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
         {
-            aGuard.clear();
-            xGroup->maCompilationDone.wait();
-            xGroup->maCompilationDone.reset();
-        }
-        else
-        {
-            aGuard.clear();
+            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.wait();
+            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.reset();
         }
 
         pKernel = static_cast<DynamicKernel*>(xGroup->mpCompiledFormula);
@@ -3247,7 +3243,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     else
     {
         assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        aGuard.clear();
         pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, xGroup, rCode));
     }
 

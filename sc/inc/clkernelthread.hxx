@@ -7,11 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SC_INC_CLKERNELTHREAD_HXX
+#define INCLUDED_SC_INC_CLKERNELTHREAD_HXX
+
 #include <queue>
 
 #include <osl/conditn.hxx>
 #include <salhelper/thread.hxx>
 
+#include <boost/noncopyable.hpp>
+
+#include "scdllapi.h"
 #include "formulacell.hxx"
 
 namespace sc {
@@ -22,7 +28,7 @@ struct CLBuildKernelWorkItem
     ScFormulaCellGroupRef mxGroup;
 };
 
-class CLBuildKernelThread : public salhelper::Thread
+class SC_DLLPUBLIC CLBuildKernelThread : public salhelper::Thread, boost::noncopyable
 {
 public:
     CLBuildKernelThread();
@@ -32,17 +38,21 @@ public:
 
     void push(CLBuildKernelWorkItem item);
 
+    osl::Condition maCompilationDoneCondition;
+
 protected:
     virtual void execute();
 
 private:
-    osl::Mutex maMutex;
-    osl::Condition maCondition;
+    osl::Mutex maQueueMutex;
+    osl::Condition maQueueCondition;
     std::queue<CLBuildKernelWorkItem> maQueue;
     void produce();
     void consume();
 };
 
 }
+
+#endif // INCLUDED_SC_INC_CLKERNELTHREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
