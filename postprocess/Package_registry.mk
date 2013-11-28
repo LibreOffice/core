@@ -16,6 +16,18 @@ $(eval $(call gb_Package_add_files,postprocess_registry,$(LIBO_SHARE_FOLDER)/reg
 	) \
 ))
 
+$(eval $(foreach lang,$(gb_CJK_LANGS),\
+	$(call gb_Package_add_file,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry/cjk_$(lang).xcd,cjk.xcd) \
+))
+
+$(eval $(foreach lang,$(gb_CTL_LANGS),\
+	$(call gb_Package_add_file,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry/ctl_$(lang).xcd,ctl.xcd) \
+))
+
+$(eval $(foreach lang,$(gb_CTLSEQCHECK_LANGS),\
+	$(call gb_Package_add_file,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry/ctlseqcheck_$(lang).xcd,ctlseqcheck.xcd) \
+))
+
 $(eval $(call gb_Package_add_files,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry/res,\
 	$(foreach lang,$(gb_Configuration_LANGS), \
 		fcfg_langpack_$(lang).xcd \
