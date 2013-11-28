@@ -137,14 +137,14 @@ namespace svx
 
                 if( maBmpSize.Width() <= 16 )
                     maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
-                else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
+                else if( 12 == maBmpSize.Height() ) // Area & Line Sidebar panels
                 {
                     maUpdRect.Left() = 22;
                     maUpdRect.Top() = 2;
                     maUpdRect.Right() = 73;
                     maUpdRect.Bottom() = 9;
                 }
-                else if(maBmpSize.Width() >= (2 * maBmpSize.Height() - 2) && maBmpSize.Height() >= 16)
+                else if( 16 == maBmpSize.Height() ) // Paragraph & Cell Appearance Sidebar panels
                 {
                     maUpdRect.Left() = maBmpSize.Height() + 2;
                     maUpdRect.Top() = 2;
@@ -152,16 +152,7 @@ namespace svx
                     maUpdRect.Bottom() = maBmpSize.Height() - 3;
                 }
                 else
-                {
-                    maUpdRect = Rectangle( Point( 0, 0 ), Size( maBmpSize.Width(), maBmpSize.Height() ) );
-
-                    // Now, fit the selected color inside the toolbox color-rectangle such that
-                    // the distinct boundaries of the rectangle of toolbox are also clearly visible.
-                    maUpdRect.Left() += 21;
-                    maUpdRect.Top() += 1;
-                    maUpdRect.Bottom() -= 1;
-                    maUpdRect.Right() -= 4;
-                }
+                    maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
 
                 pBmpAcc->DrawRect( maUpdRect );
 
