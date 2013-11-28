@@ -86,6 +86,7 @@
 #include "editeng/langitem.hxx"
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
+#include <svtools/miscopt.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -1001,7 +1002,8 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
             OUString sSourceStr( pCellRangeSource->sSourceStr );
             OUString sRangeStr;
             ScRangeStringConverter::GetStringFromRange( sRangeStr, aDestRange, pDoc, formula::FormulaGrammar::CONV_OOO );
-            if (pCellRangeSource->sFilterOptions == "DataStream")
+            SvtMiscOptions aMiscOptions;
+            if (aMiscOptions.IsExperimentalMode() && pCellRangeSource->sFilterOptions == "DataStream")
             {
                 DataStream::Set( dynamic_cast<ScDocShell*>(pDoc->GetDocumentShell())
                         , pCellRangeSource->sURL // rURL
