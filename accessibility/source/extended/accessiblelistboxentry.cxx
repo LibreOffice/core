@@ -93,7 +93,6 @@ namespace accessibility
         }
     }
 
-    // IA2 CWS
     void AccessibleListBoxEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
                                                    const ::com::sun::star::uno::Any& _aOldValue,
                                                    const ::com::sun::star::uno::Any& _aNewValue )
