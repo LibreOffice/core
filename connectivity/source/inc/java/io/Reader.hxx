@@ -46,6 +46,8 @@ namespace connectivity
         virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+        virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
     };
 }
 #endif // _CONNECTIVITY_JAVA_IO_READER_HXX_

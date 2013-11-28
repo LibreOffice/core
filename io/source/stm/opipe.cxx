@@ -108,6 +108,10 @@ public: // XServiceInfo
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(  );
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
 private:
 
     Reference < XConnectable >  m_succ;

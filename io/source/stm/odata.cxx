@@ -111,6 +111,10 @@ public: // XServiceInfo
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
 protected:
 
     Reference < XConnectable >  m_pred;
@@ -528,6 +532,8 @@ public: // XOutputStream
         throw ( NotConnectedException,
                 BufferSizeExceededException,
                 RuntimeException);
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
 public: // XDataOutputStream
     virtual void SAL_CALL writeBoolean(sal_Bool Value) throw (IOException, RuntimeException);
@@ -992,6 +998,12 @@ public: // XServiceInfo
     Sequence< OUString >       SAL_CALL   getSupportedServiceNames(void) throw ();
     sal_Bool                   SAL_CALL   supportsService(const OUString& ServiceName) throw ();
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+        { return ODataOutputStream::getMediaType(); }
+    virtual void SAL_CALL setMediaType( const OUString& _mediatype ) throw (::css::uno::RuntimeException)
+        { ODataOutputStream::setMediaType(_mediatype); }
+
 private:
     void connectToMarkable();
 private:
@@ -1267,6 +1279,12 @@ public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
+
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+        { return ODataInputStream::getMediaType(); }
+    virtual void SAL_CALL setMediaType( const OUString& s) throw (::css::uno::RuntimeException)
+        { ODataInputStream::setMediaType(s); }
 
 private:
     void connectToMarkable();

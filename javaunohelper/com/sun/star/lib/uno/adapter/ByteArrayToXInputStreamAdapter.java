@@ -139,6 +139,10 @@ public class ByteArrayToXInputStreamAdapter
         }else throw new com.sun.star.io.IOException("no bytes");
     }
 
+    public void setMediaType(String s) {}
+
+    public String getMediaType() { return ""; }
+
     public void finalize() throws Throwable{
         // System.err.println("finalizer called for ByteArrayXInputStream!");
         super.finalize();

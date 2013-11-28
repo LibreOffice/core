@@ -1564,7 +1564,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
         xSeek->seek(0);
 
     Reference< XPropertySet > xStreamProp( xOutputStream, UNO_QUERY_THROW );
-    xStreamProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString( "text/xml" ) ) );
+    xOutputStream->setMediaType( "text/xml" );
     xStreamProp->setPropertyValue( "Compressed", makeAny( (sal_Bool)sal_True ) );
 
     // write the stuff
@@ -1646,8 +1646,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
-    Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
-    xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( (OUString)MIMETYPE_OASIS_OPENDOCUMENT_DATABASE ) );
+    _rxTargetStorage->setMediaType( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE );
 
     Reference< XComponent > xComponent( *const_cast< ODatabaseDocument* >( this ), UNO_QUERY_THROW );
 
@@ -1703,14 +1702,9 @@ Reference< XUIConfigurationManager2 > ODatabaseDocument::getUIConfigurationManag
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
-            OUString aUIConfigMediaType( "application/vnd.sun.xml.ui.configuration" );
-            OUString aMediaType;
-            Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
-            Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
-            if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
+            if ( xConfigStorage->getMediaType().isEmpty() )
             {
-                a <<= aUIConfigMediaType;
-                xPropSet->setPropertyValue( INFO_MEDIATYPE, a );
+                xConfigStorage->setMediaType( "application/vnd.sun.xml.ui.configuration" );
             }
         }
         else

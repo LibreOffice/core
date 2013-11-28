@@ -368,6 +368,9 @@ public:
 
     virtual sal_Int64 SAL_CALL getLength( void ) throw( IOException,RuntimeException );
 
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
     void addToBuffer( const char* buffer,int len );
 
     sal_Int8* getData() const { return (sal_Int8*) buffer; }

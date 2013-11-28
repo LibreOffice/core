@@ -423,13 +423,13 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         xStorage->openStreamElement(filename,
             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE),
         uno::UNO_SET_THROW);
+    xStream->setMediaType(
+        //FIXME how to detect real media type?
+        //but currently xmloff has this one hardcoded anyway...
+        "application/vnd.sun.star.media");
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
-        xStreamProps->setPropertyValue("MediaType", uno::makeAny(OUString(
-            //FIXME how to detect real media type?
-            //but currently xmloff has this one hardcoded anyway...
-            "application/vnd.sun.star.media")));
         xStreamProps->setPropertyValue( // turn off compression
             "Compressed", uno::makeAny(sal_False));
     }

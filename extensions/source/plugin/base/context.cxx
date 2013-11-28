@@ -79,6 +79,8 @@ public:
     virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw();
     virtual void SAL_CALL flush() throw();
     virtual void SAL_CALL closeOutput() throw();
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 };
 
 }

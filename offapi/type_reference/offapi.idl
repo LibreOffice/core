@@ -5902,6 +5902,7 @@ module com {
     published interface XStorage {
      interface ::com::sun::star::container::XNameAccess;
      interface ::com::sun::star::lang::XComponent;
+     [attribute] string MediaType;
      void copyToStorage([in] ::com::sun::star::embed::XStorage xDest) raises (::com::sun::star::embed::InvalidStorageException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::embed::StorageWrappedTargetException);
      ::com::sun::star::io::XStream openStreamElement([in] string sStreamName, [in] long nOpenMode) raises (::com::sun::star::embed::InvalidStorageException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::packages::WrongPasswordException, ::com::sun::star::io::IOException, ::com::sun::star::embed::StorageWrappedTargetException);
      ::com::sun::star::io::XStream openEncryptedStreamElement([in] string sStreamName, [in] long nOpenMode, [in] string sPassword) raises (::com::sun::star::embed::InvalidStorageException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::packages::NoEncryptionException, ::com::sun::star::packages::WrongPasswordException, ::com::sun::star::io::IOException, ::com::sun::star::embed::StorageWrappedTargetException);

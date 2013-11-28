@@ -108,17 +108,18 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         if ( !xSourceInStream.is() )
             throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-        // TODO: headers of encripted streams should be copied also
+        // TODO: headers of encrypted streams should be copied also
         ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
+
+        xDest->setMediaType( xSource->getMediaType() );
 
         uno::Sequence< OUString > aPropNames( 1 );
         aPropNames[0] = "Compressed";
 
         if ( nStorageType == embed::StorageFormats::PACKAGE )
         {
-            aPropNames.realloc( 3 );
-            aPropNames[1] = "MediaType";
-            aPropNames[2] = "UseCommonStoragePasswordEncryption";
+            aPropNames.realloc( 2 );
+            aPropNames[1] = "UseCommonStoragePasswordEncryption";
         }
         else if ( nStorageType == embed::StorageFormats::OFOPXML )
         {
@@ -126,9 +127,6 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
             uno::Reference< embed::XRelationshipAccess > xRelAccess( xDest, uno::UNO_QUERY_THROW );
             xRelAccess->clearRelationships();
             xRelAccess->insertRelationships( aRelInfo, sal_False );
-
-            aPropNames.realloc( 2 );
-            aPropNames[1] = "MediaType";
         }
 
         for ( int ind = 0; ind < aPropNames.getLength(); ind++ )
@@ -704,9 +702,8 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     // move storage properties to the destination one ( means changeable properties )
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        OUString aMediaTypeString = "MediaType";
+        xDest->setMediaType(  m_aMediaType );
         OUString aVersionString = "Version";
-        xPropSet->setPropertyValue( aMediaTypeString, uno::makeAny( m_aMediaType ) );
         xPropSet->setPropertyValue( aVersionString, uno::makeAny( m_aVersion ) );
     }
 
@@ -1800,10 +1797,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                     ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aRelInfo, m_xContext );
 
                     // set the mediatype
-                    uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                    xPropSet->setPropertyValue(
-                        "MediaType",
-                        uno::makeAny( OUString( "application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                    xRelsStream->setMediaType( "application/vnd.openxmlformats-package.relationships+xml" );
 
                     m_nRelInfoStatus = RELINFO_READ;
                 }
@@ -1828,10 +1822,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                 ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
 
                 // set the mediatype
-                uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                xPropSet->setPropertyValue(
-                    "MediaType",
-                    uno::makeAny( OUString( "application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                xRelsStream->setMediaType( "application/vnd.openxmlformats-package.relationships+xml" );
 
                 m_xNewRelInfoStream = uno::Reference< io::XInputStream >();
                   if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
@@ -4824,11 +4815,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
     {
         if ( aPropertyName == "MediaType" )
         {
-            aValue >>= m_pImpl->m_aMediaType;
-            m_pImpl->m_bControlMediaType = sal_True;
-
-            m_pImpl->m_bBroadcastModified = sal_True;
-            m_pImpl->m_bIsModified = sal_True;
+            setMediaType( aValue.get<OUString>() );
         }
         else if ( aPropertyName == "Version" )
         {
@@ -4895,6 +4882,30 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
             throw beans::PropertyVetoException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
         else
             throw beans::UnknownPropertyException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+    }
+    else
+        throw beans::UnknownPropertyException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+
+    BroadcastModifiedIfNecessary();
+}
+
+void SAL_CALL OStorage::setMediaType( const OUString& _mediatype )
+         throw (::css::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
+        throw lang::DisposedException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+    }
+
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
+    {
+            m_pImpl->m_aMediaType = _mediatype;
+            m_pImpl->m_bControlMediaType = sal_True;
+            m_pImpl->m_bBroadcastModified = sal_True;
+            m_pImpl->m_bIsModified = sal_True;
     }
     else
         throw beans::UnknownPropertyException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );

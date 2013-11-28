@@ -149,7 +149,7 @@ struct OStorage_Impl
     OStorage_Impl* m_pParent;
 
     sal_Bool        m_bControlMediaType;
-    OUString m_aMediaType;
+    OUString        m_aMediaType;
     sal_Bool        m_bMTFallbackUsed;
 
     sal_Bool        m_bControlVersion;
@@ -461,6 +461,11 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
+
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+        { return m_pImpl->m_aMediaType; }
+
+    virtual void SAL_CALL setMediaType( const OUString& _mediatype ) throw (::css::uno::RuntimeException);
 
     //  XStorage2
 
@@ -792,6 +797,7 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
+
 };
 
 #endif

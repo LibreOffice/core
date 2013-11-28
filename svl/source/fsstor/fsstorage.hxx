@@ -206,6 +206,9 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
     //  XNameAccess
 
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )

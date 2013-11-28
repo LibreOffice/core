@@ -60,6 +60,12 @@ public:
     // ::com::sun::star::io::XSequenceOutputStream:
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) throw ( io::NotConnectedException, io::IOException, uno::RuntimeException);
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+        { return m_xOutputStream->getMediaType(); }
+    virtual void SAL_CALL setMediaType( const OUString& s ) throw (::css::uno::RuntimeException)
+        { m_xOutputStream->setMediaType(s); }
+
 private:
     SequenceOutputStreamService( SequenceOutputStreamService & ); //not defined
     void operator =( SequenceOutputStreamService & ); //not defined

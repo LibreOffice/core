@@ -76,6 +76,8 @@ private:
     virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
     virtual sal_Int32   SAL_CALL    available() throw(NotConnectedException, RuntimeException);
     virtual void        SAL_CALL    closeInput() throw(NotConnectedException, RuntimeException);
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
 private:
 
@@ -205,6 +207,8 @@ private:
     virtual void SAL_CALL           writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
     virtual void SAL_CALL           flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
     virtual void SAL_CALL           closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
+    virtual OUString SAL_CALL       getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL           setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
 private:
 
@@ -525,8 +529,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
             // set stream properties (MediaType/Compression)
             if( !aMimeType.isEmpty() )
             {
-                aAny <<= aMimeType;
-                xProps->setPropertyValue( "MediaType", aAny );
+                aStream.xStream->setMediaType( aMimeType );
             }
 
             const sal_Bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff";

@@ -429,4 +429,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 
         return nLen;
     }
+
+
+    public void setMediaType(String s) {}
+    public String getMediaType() { return ""; }
 }

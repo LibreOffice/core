@@ -39,6 +39,11 @@ module com {  module sun {  module star {  module packages {
  */
 interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
 {
+    /**
+        Something like "application/vnd.sun.xml.ui.configuration"
+    */
+    [attribute] string MediaType;
+
     /** Allows to get access to the data of the PackageStream.
     <p>
         In case stream is encrypted one and the key for the stream is not set,

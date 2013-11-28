@@ -102,4 +102,8 @@ public class XOutputStreamToByteArrayAdapter
         position += values.length;
     }
 
+    public void setMediaType(String s) {}
+
+    public String getMediaType() { return ""; }
+
 }

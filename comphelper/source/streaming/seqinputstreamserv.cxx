@@ -73,6 +73,12 @@ public:
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize( const uno::Sequence< ::com::sun::star::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception );
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+         { return m_xInputStream->getMediaType(); }
+    virtual void SAL_CALL setMediaType( const OUString& s ) throw (::css::uno::RuntimeException)
+         { m_xInputStream->setMediaType(s); }
+
 private:
     SequenceInputStreamService( SequenceInputStreamService & ); // not defined
     void operator =( SequenceInputStreamService & ); // not defined

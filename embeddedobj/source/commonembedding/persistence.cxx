@@ -171,22 +171,6 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 }
 
 //------------------------------------------------------
-static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSource, const uno::Reference< embed::XStorage >& i_rTarget )
-{
-    try
-    {
-        const uno::Reference< beans::XPropertySet > xSourceProps( i_rSource, uno::UNO_QUERY_THROW );
-        const uno::Reference< beans::XPropertySet > xTargetProps( i_rTarget, uno::UNO_QUERY_THROW );
-        const OUString sMediaTypePropName( "MediaType" );
-        xTargetProps->setPropertyValue( sMediaTypePropName, xSourceProps->getPropertyValue( sMediaTypePropName ) );
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-}
-
-//------------------------------------------------------
 static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< uno::XComponentContext >& _rxContext,
     const OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
@@ -1093,7 +1077,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         else if ( nEntryConnectionMode == embed::EntryInitModes::TRUNCATE_INIT )
         {
             if ( m_xRecoveryStorage.is() )
-                TransferMediaType( m_xRecoveryStorage, m_xObjectStorage );
+                m_xObjectStorage->setMediaType( m_xRecoveryStorage->getMediaType() );
 
             // TODO:
             m_pDocHolder->SetComponent( InitNewDocument_Impl(), m_bReadOnly );

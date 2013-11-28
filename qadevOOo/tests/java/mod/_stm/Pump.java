@@ -160,6 +160,9 @@ public class Pump extends TestCase {
 
             return str.length();
         }
+
+        public void setMediaType(String s) {}
+        public String getMediaType() { return ""; }
     }
 
     /**
@@ -174,6 +177,9 @@ public class Pump extends TestCase {
 
         public void closeOutput() {
         }
+
+        public void setMediaType(String s) {}
+        public String getMediaType() { return ""; }
     }
 }
 

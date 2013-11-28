@@ -166,7 +166,6 @@ OUString OReportEngineJFree::getNewOutputName()
         if ( !m_xReport.is() || !m_xActiveConnection.is() )
             throw lang::IllegalArgumentException();
 
-        static const OUString s_sMediaType("MediaType");
         try
         {
             MimeConfigurationHelper aConfighelper(m_xContext);
@@ -179,11 +178,7 @@ OUString OReportEngineJFree::getNewOutputName()
             uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/ m_xContext);
             utl::DisposableComponent aTemp(xTemp);
             uno::Sequence< beans::PropertyValue > aEmpty;
-            uno::Reference< beans::XPropertySet> xStorageProp(xTemp,uno::UNO_QUERY);
-            if ( xStorageProp.is() )
-            {
-                xStorageProp->setPropertyValue( s_sMediaType, uno::makeAny(sMimeType));
-            }
+            xTemp->setMediaType( sMimeType );
             m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which isn't in the database yet.
 
             uno::Sequence< beans::NamedValue > aConvertedProperties(8);
@@ -209,12 +204,8 @@ OUString OReportEngineJFree::getNewOutputName()
             }
 
             uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(sFileURL,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE, m_xContext);
+            xOut->setMediaType(sMimeType);
             utl::DisposableComponent aOut(xOut);
-            xStorageProp.set(xOut,uno::UNO_QUERY);
-            if ( xStorageProp.is() )
-            {
-                xStorageProp->setPropertyValue( s_sMediaType, uno::makeAny(sMimeType));
-            }
 
             aConvertedProperties[nPos++].Value <<= xOut;
 
@@ -246,10 +237,7 @@ OUString OReportEngineJFree::getNewOutputName()
             if ( !m_xReport->getCommand().isEmpty() )
             {
                 xJob->execute(aConvertedProperties);
-                if ( xStorageProp.is() )
-                {
-                    sOutputName = sFileURL;
-                }
+                sOutputName = sFileURL;
             }
 
             uno::Reference<embed::XTransactedObject> xTransact(xOut,uno::UNO_QUERY);

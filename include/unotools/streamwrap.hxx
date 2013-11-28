@@ -66,6 +66,8 @@ public:
     virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
     virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
+    virtual OUString    SAL_CALL    getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void        SAL_CALL    setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
 protected:
     /// throws a NotConnectedException if the object is not connected anymore
@@ -113,6 +115,8 @@ protected:
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
     /// throws an exception according to the error flag of m_pSvStream
     void checkError() const;
@@ -164,6 +168,8 @@ public:
     virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 };
 
 }

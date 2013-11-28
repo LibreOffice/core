@@ -36,6 +36,8 @@ module com {  module sun {  module star {  module io {
  */
 published interface XInputStream: com::sun::star::uno::XInterface
 {
+    [ attribute ] string MediaType;
+
     /** reads the specified number of bytes in the given sequence.
 
         <p>The return value specifies the number of bytes which have been

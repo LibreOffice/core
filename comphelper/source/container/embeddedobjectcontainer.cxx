@@ -584,8 +584,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
             // it is correct so for now, but what if somebody introduces a new stream based embedded object?
             // Probably introducing of such an object must be restricted ( a storage must be used! ).
             uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue("MediaType",
-                    uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
+            xNewStream->setMediaType( "application/vnd.sun.star.oleobject" );
         }
         catch (uno::Exception const& e)
         {
@@ -1047,17 +1046,11 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                     {
                         // TODO/LATER: in future probably the temporary container will have two storages ( of two formats )
                         //             the media type will be provided with object insertion
-                        OUString aOrigStorMediaType;
-                        uno::Reference< beans::XPropertySet > xStorProps( pImpl->mxStorage, uno::UNO_QUERY_THROW );
-                        static const OUString s_sMediaType("MediaType");
-                        xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
+                        OUString aOrigStorMediaType = pImpl->mxStorage->getMediaType();
 
                         SAL_WARN_IF( aOrigStorMediaType.isEmpty(), "comphelper.container", "No valuable media type in the storage!\n" );
 
-                        uno::Reference< beans::XPropertySet > xTargetStorProps(
-                                                                    pImpl->mpTempObjectContainer->pImpl->mxStorage,
-                                                                    uno::UNO_QUERY_THROW );
-                        xTargetStorProps->setPropertyValue( s_sMediaType,uno::makeAny( aOrigStorMediaType ) );
+                        pImpl->mpTempObjectContainer->pImpl->mxStorage->setMediaType( aOrigStorMediaType );
                     }
                     catch (const uno::Exception&)
                     {
@@ -1182,12 +1175,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
             xStream = xGraphicStream->getInputStream();
             if ( pMediaType )
             {
-                uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-                if ( xSet.is() )
-                {
-                    uno::Any aAny = xSet->getPropertyValue("MediaType");
-                    aAny >>= *pMediaType;
-                }
+                *pMediaType = xStream->getMediaType();
             }
         }
         catch (const uno::Exception&)
@@ -1242,9 +1230,8 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
 
         xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                     uno::makeAny( (sal_Bool)sal_True ) );
-        uno::Any aAny;
-        aAny <<= rMediaType;
-        xPropSet->setPropertyValue("MediaType", aAny );
+
+        xGraphicStream->setMediaType( rMediaType );
 
         xPropSet->setPropertyValue("Compressed",
                                     uno::makeAny( (sal_Bool)sal_True ) );

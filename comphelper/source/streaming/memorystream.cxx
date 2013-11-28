@@ -74,6 +74,10 @@ public:
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static Reference< XInterface > SAL_CALL Create( const Reference< ::com::sun::star::uno::XComponentContext >& );
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
 private:
     std::vector< sal_Int8 > maData;
     sal_Int32 mnCursor;

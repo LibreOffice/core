@@ -68,6 +68,12 @@ public:
     virtual sal_Int64 SAL_CALL getPosition() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getLength() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+         { return m_xOriginalStream->getMediaType(); }
+    virtual void SAL_CALL setMediaType( const OUString& s ) throw (::css::uno::RuntimeException)
+         { m_xOriginalStream->setMediaType(s); }
+
 };
 
 }   // namespace comphelper

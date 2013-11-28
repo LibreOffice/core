@@ -626,16 +626,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             // set MediaType on target storage
             // (MediaType will be queried during SaveAs)
-            try
-            {
-                // TODO/MBA: testing
-                uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
-                if ( xSet.is() )
-                    xSet->setPropertyValue("MediaType", uno::makeAny( OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
-            }
-            catch (const uno::Exception&)
-            {
-            }
+            rMedium.GetStorage()->setMediaType( SotExchange::GetFormatMimeType( nSaveClipId ) );
         }
 
         // Now normally save the Document

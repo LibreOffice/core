@@ -65,6 +65,10 @@ published interface XStorage
      */
     interface ::com::sun::star::lang::XComponent;
 
+    /**
+        Something like "application/vnd.sun.xml.ui.configuration"
+    */
+    [attribute] string MediaType;
 
     // METHODS
     /** allows to copy current storage to another one

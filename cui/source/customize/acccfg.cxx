@@ -84,9 +84,6 @@ static OUString CMDPROP_UINAME                   ("Name"                        
 
 static OUString FOLDERNAME_UICONFIG              ("Configurations2"                         );
 
-static OUString MEDIATYPE_PROPNAME               ("MediaType"                               );
-static OUString MEDIATYPE_UICONFIG               ("application/vnd.sun.xml.ui.configuration");
-
 //-----------------------------------------------
 static const sal_uInt16 KEYCODE_ARRAY[] =
 {
@@ -1325,15 +1322,11 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
             css::uno::Reference< css::embed::XStorage > xUIConfig(
                                 xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, css::embed::ElementModes::WRITE),
                                 css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< css::beans::XPropertySet > xUIConfigProps(
-                                xUIConfig,
-                                css::uno::UNO_QUERY_THROW);
 
             // set the correct media type if the storage was new created
-            OUString sMediaType;
-            xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
-            if (sMediaType.isEmpty())
-                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
+            if (xUIConfig->getMediaType().isEmpty())
+                xUIConfig->setMediaType("application/vnd.sun.xml.ui.configuration");
+
 
             css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( m_xContext );
             xCfgMgr2->setStorage(xUIConfig);

@@ -99,6 +99,8 @@ public:
     virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException);
     virtual sal_Int32 SAL_CALL available() throw( NotConnectedException, RuntimeException );
     virtual void      SAL_CALL closeInput() throw( NotConnectedException, RuntimeException );
+    virtual OUString  SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void      SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
 protected:
     void checkConnected();

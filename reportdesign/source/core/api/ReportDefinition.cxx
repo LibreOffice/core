@@ -750,14 +750,9 @@ void OReportDefinition::init()
         if ( !m_pImpl->m_xStorage.is() )
             m_pImpl->m_xStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
 
-        uno::Reference<beans::XPropertySet> xStorProps(m_pImpl->m_xStorage,uno::UNO_QUERY);
-        if ( xStorProps.is())
-        {
-            OUString sMediaType;
-            xStorProps->getPropertyValue("MediaType") >>= sMediaType;
-            if ( sMediaType.isEmpty() )
-                xStorProps->setPropertyValue("MediaType",uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT));
-        }
+        if ( m_pImpl->m_xStorage->getMediaType().isEmpty() )
+            m_pImpl->m_xStorage->setMediaType( MIMETYPE_OASIS_OPENDOCUMENT_REPORT );
+
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
     }
     catch (const uno::Exception&)
@@ -1453,15 +1448,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     sal_Bool bWarn = sal_False, bErr = sal_False;
     OUString sWarnFile, sErrFile;
 
-    uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
-    if ( xProp.is() )
-    {
-        static const OUString sPropName("MediaType");
-        OUString sOldMediaType;
-        xProp->getPropertyValue(sPropName) >>= sOldMediaType;
-        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
-            xProp->setPropertyValue( sPropName, uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
-    }
+    if ( _xStorageToSaveTo->getMediaType() != MIMETYPE_OASIS_OPENDOCUMENT_REPORT )
+        _xStorageToSaveTo->setMediaType( MIMETYPE_OASIS_OPENDOCUMENT_REPORT );
 
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
@@ -1673,20 +1661,16 @@ sal_Bool OReportDefinition::WriteThroughComponent(
             return sal_False;
 
         uno::Reference<beans::XPropertySet> xStreamProp(xOutputStream,uno::UNO_QUERY);
-        OSL_ENSURE(xStreamProp.is(),"No valid preoperty set for the output stream!");
+        OSL_ENSURE(xStreamProp.is(),"No valid property set for the output stream!");
 
-        uno::Reference<io::XSeekable> xSeek(xStreamProp,uno::UNO_QUERY);
+        uno::Reference<io::XSeekable> xSeek(xOutputStream,uno::UNO_QUERY);
         if ( xSeek.is() )
         {
             OSL_TRACE("Length of stream %i",(int)xSeek->getPosition());
             xSeek->seek(0);
         }
 
-        OUString aPropName("MediaType");
-        OUString aMime("text/xml");
-        uno::Any aAny;
-        aAny <<= aMime;
-        xStreamProp->setPropertyValue( aPropName, aAny );
+        xOutputStream->setMediaType( "text/xml" );
 
         // encrypt all streams
         xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",

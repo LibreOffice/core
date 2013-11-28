@@ -1443,7 +1443,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                                                     embed::ElementModes::READWRITE );
                 //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
 
-                OUString aMime( "text/xml" );
+                xElementStream->setMediaType("text/xml" );
 
                 uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
                 SAL_WARN_IF(
@@ -1453,7 +1453,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if ( xProps.is() )
                 {
-                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
                     xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
@@ -1591,10 +1590,10 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
             //    throw uno::RuntimeException(); // TODO
 
+            xInfoStream->setMediaType( "text/xml" );
+
             if ( xProps.is() )
             {
-                OUString aMime("text/xml");
-                xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
                 xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
@@ -2069,8 +2068,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             {
                 throw uno::RuntimeException();
             }
-            OUString aMime( "text/xml" );
-            xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
+            xInfoStream->setMediaType( "text/xml" );
 
             // #87671 Allow encryption
             xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );

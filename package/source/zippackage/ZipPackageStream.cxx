@@ -299,7 +299,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
             throw RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
         // copy all the properties of this stream to the new stream
-        xNewPSProps->setPropertyValue("MediaType", makeAny( sMediaType ) );
+        xNewPackStream->setMediaType( sMediaType );
         xNewPSProps->setPropertyValue("Compressed", makeAny( bToBeCompressed ) );
         if ( bToBeEncrypted )
         {
@@ -702,25 +702,12 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 {
     if ( aPropertyName == "MediaType" )
     {
-        if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
-            throw beans::PropertyVetoException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
-
-        if ( aValue >>= sMediaType )
-        {
-            if ( !sMediaType.isEmpty() )
-            {
-                if ( sMediaType.indexOf ( "text" ) != -1
-                 || sMediaType == "application/vnd.sun.star.oleobject" )
-                    bToBeCompressed = sal_True;
-                else if ( !m_bCompressedIsSetFromOutside )
-                    bToBeCompressed = sal_False;
-            }
-        }
-        else
+        OUString sTmp;
+        if ( !(aValue >>= sTmp) )
             throw IllegalArgumentException(OSL_LOG_PREFIX "MediaType must be a string!\n",
-                                            uno::Reference< XInterface >(),
-                                            2 );
-
+                                           uno::Reference< XInterface >(),
+                                           2 );
+        internalSetMediaType(sTmp);
     }
     else if ( aPropertyName == "Size" )
     {
@@ -853,6 +840,24 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     }
     else
         throw beans::UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+}
+
+void ZipPackageStream::internalSetMediaType( const OUString& rMediaType )
+        throw( beans::PropertyVetoException )
+{
+    if ( rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
+        throw beans::PropertyVetoException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
+
+    if ( !rMediaType.isEmpty() )
+    {
+        if ( rMediaType.indexOf ( "text" ) != -1
+          || rMediaType == "application/vnd.sun.star.oleobject" )
+             bToBeCompressed = sal_True;
+        else if ( !m_bCompressedIsSetFromOutside )
+             bToBeCompressed = sal_False;
+    }
+
+    sMediaType = rMediaType;
 }
 
 Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )

@@ -355,11 +355,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
     uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( aStreamName,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
-    uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-    OUString aMime ( "text/xml" );
-    Any aAny;
-    aAny <<= aMime;
-    xSet->setPropertyValue("MediaType", aAny );
+    xDocStream->setMediaType( "text/xml" );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -471,28 +467,23 @@ void SwXMLTextBlocks::WriteInfo( void )
 
         try
         {
-        uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( sDocName,
+            uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( sDocName,
                     embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
+            xDocStream->setMediaType( "text/xml" );
+            uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
+            uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
+            xSrc->setOutputStream(xOut);
 
-        uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-        OUString aMime ( "text/xml" );
-        Any aAny;
-        aAny <<= aMime;
-        xSet->setPropertyValue("MediaType", aAny );
-        uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
-        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-        xSrc->setOutputStream(xOut);
+            uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
+            SwXMLBlockListExport aExp( xContext, *this, OUString(XMLN_BLOCKLIST), xHandler);
 
-        SwXMLBlockListExport aExp( xContext, *this, OUString(XMLN_BLOCKLIST), xHandler);
+            aExp.exportDoc( XML_BLOCK_LIST );
 
-        aExp.exportDoc( XML_BLOCK_LIST );
-
-        uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
-        if ( xTrans.is() )
-            xTrans->commit();
-        }
+            uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+            if ( xTrans.is() )
+                xTrans->commit();
+            }
         catch ( uno::Exception& )
         {
         }
@@ -543,12 +534,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( sStreamName,
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
-
-            uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-            OUString aMime( "text/xml" );
-            Any aAny;
-            aAny <<= aMime;
-            xSet->setPropertyValue("MediaType", aAny );
+            xDocStream->setMediaType( "text/xml" );
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer

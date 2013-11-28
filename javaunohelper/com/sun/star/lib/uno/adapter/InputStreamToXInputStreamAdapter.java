@@ -153,5 +153,9 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
             }
         } while (tmpLongVal > 0);
     }
+
+    public void setMediaType(String s) {}
+
+    public String getMediaType() { return ""; }
 }
 

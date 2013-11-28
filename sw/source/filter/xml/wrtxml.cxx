@@ -400,11 +400,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStm );
             if( !pStream->GetError() )
             {
-                uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
-                OUString aMime("application/binary");
-                uno::Any aAny2;
-                aAny2 <<= aMime;
-                xSet->setPropertyValue("MediaType", aAny2 );
+                xStm->setMediaType( "application/binary" );
                 pDoc->WriteLayoutCache( *pStream );
             }
 
@@ -510,17 +506,12 @@ bool SwXMLWriter::WriteThroughComponent(
         if( !xSet.is() )
             return false;
 
-        OUString aMime("text/xml");
-        uno::Any aAny;
-        aAny <<= aMime;
-        xSet->setPropertyValue("MediaType", aAny );
+        xStream->setMediaType( "text/xml" );
 
         OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
         // even plain stream should be encrypted in encrypted documents
-        sal_Bool bTrue = sal_True;
-        aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xSet->setPropertyValue( aUseCommonPassPropName, aAny );
+        xSet->setPropertyValue( aUseCommonPassPropName, makeAny(sal_True) );
 
         // set buffer and create outputstream
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();

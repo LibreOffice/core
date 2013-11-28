@@ -662,10 +662,11 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XCompon
         // would not all be over written by the new content and the xml file
         // would not be valid.
         xStream = xStorage->openStreamElement( sName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        xStream->setMediaType(sMediaType);
         uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if (xSet.is())
         {
-            xSet->setPropertyValue("MediaType", uno::makeAny(sMediaType));
+
             OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
             // advise storage impl to use common encryption

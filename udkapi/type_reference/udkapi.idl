@@ -698,6 +698,7 @@ module com {
     };
     published interface XInputStream {
      interface ::com::sun::star::uno::XInterface;
+     [attribute] string MediaType;
      long readBytes([out] sequence< byte > aData, [in] long nBytesToRead) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      long readSomeBytes([out] sequence< byte > aData, [in] long nMaxBytesToRead) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      void skipBytes([in] long nBytesToSkip) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
@@ -729,6 +730,7 @@ module com {
     };
     published interface XOutputStream {
      interface ::com::sun::star::uno::XInterface;
+     [attribute] string MediaType;
      void writeBytes([in] sequence< byte > aData) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      void flush() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
      void closeOutput() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
@@ -830,6 +832,7 @@ module com {
     };
     published interface XStream {
      interface ::com::sun::star::uno::XInterface;
+     [attribute] string MediaType;
      ::com::sun::star::io::XInputStream getInputStream();
      ::com::sun::star::io::XOutputStream getOutputStream();
     };

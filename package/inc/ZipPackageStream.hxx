@@ -75,6 +75,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
 
+    void internalSetMediaType( const OUString& rMediaType ) throw( css::beans::PropertyVetoException );
+
 public:
     sal_Bool HasOwnKey () const  { return bHaveOwnKey;}
     sal_Bool IsToBeCompressed () const { return bToBeCompressed;}
@@ -185,6 +187,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getPlainRawStream()
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+        { return sMediaType; }
+    virtual void SAL_CALL setMediaType( const OUString& s ) throw (::css::uno::RuntimeException)
+        { internalSetMediaType(s); }
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )

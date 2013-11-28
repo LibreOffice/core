@@ -107,4 +107,7 @@ public class XInputStreamImpl implements XInputStream
         }
     }
 
+    public void setMediaType(String s) {}
+    public String getMediaType() { return ""; }
+
 }

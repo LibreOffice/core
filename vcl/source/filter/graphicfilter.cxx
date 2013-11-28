@@ -99,6 +99,8 @@ protected:
         throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException)
         { mrStm.Flush(); }
     virtual void SAL_CALL   closeOutput() throw() {}
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
 public:
 

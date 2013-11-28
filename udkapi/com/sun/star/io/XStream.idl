@@ -31,6 +31,11 @@ module com {  module sun {  module star {  module io {
  */
 published interface XStream: com::sun::star::uno::XInterface
 {
+    /**
+        Something like "application/vnd.sun.xml.ui.configuration"
+    */
+    [attribute] string MediaType;
+
     /** @returns
             the XInputStream part of the stream.  Closing the returned
             XInputStream also closes any XOutputStream part.

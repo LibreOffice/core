@@ -131,13 +131,9 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
         }
 
         // set correct media type at storage
-        uno::Reference<beans::XPropertySet> xProp(xStorage,uno::UNO_QUERY);
-        OUString aMediaType;
-        if ( ! xProp.is() ||
-             ! ( xProp->getPropertyValue( "MediaType") >>= aMediaType ) ||
-             ( aMediaType.isEmpty() ))
+        if ( xStorage->getMediaType().isEmpty() )
         {
-            xProp->setPropertyValue( "MediaType", uno::makeAny( _sMediaType ));
+            xStorage->setMediaType(  _sMediaType );
         }
     }
     catch (const uno::Exception& ex)
@@ -716,10 +712,10 @@ sal_Int32 XMLFilter::impl_ExportStream(
         if ( !xOutputStream.is() )
             return ERRCODE_SFX_GENERAL;
 
+        xOutputStream->setMediaType( "text/xml" );
         uno::Reference< beans::XPropertySet > xStreamProp( xOutputStream, uno::UNO_QUERY );
         if(xStreamProp.is()) try
         {
-            xStreamProp->setPropertyValue( "MediaType", uno::makeAny( OUString("text/xml") ) );
             xStreamProp->setPropertyValue( "Compressed", uno::makeAny( sal_True ) );//@todo?
             xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
         }

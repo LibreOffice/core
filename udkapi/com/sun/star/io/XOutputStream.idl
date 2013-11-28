@@ -36,6 +36,11 @@ module com {  module sun {  module star {  module io {
  */
 published interface XOutputStream: com::sun::star::uno::XInterface
 {
+    /**
+        Something like "application/vnd.sun.xml.ui.configuration"
+    */
+    [attribute] string MediaType;
+
     /** writes the whole sequence to the stream. (blocking call)
      */
     void writeBytes( [in] sequence<byte> aData )

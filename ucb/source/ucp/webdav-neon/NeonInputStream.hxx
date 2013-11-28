@@ -104,6 +104,9 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
                           ::com::sun::star::io::IOException,
                           ::com::sun::star::uno::RuntimeException );
 
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,

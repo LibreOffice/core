@@ -271,6 +271,8 @@ public:
                 com::sun::star::io::IOException,
                 com::sun::star::embed::StorageWrappedTargetException,
                 com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
     // XTransactedObject
     virtual void SAL_CALL commit()
@@ -358,6 +360,8 @@ public:
                 com::sun::star::io::BufferSizeExceededException,
                 com::sun::star::io::IOException,
                 com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
     // XComponent
     // Note: We need to intercept this one.
@@ -452,6 +456,9 @@ public:
         throw( com::sun::star::io::NotConnectedException,
                com::sun::star::io::IOException,
                com::sun::star::uno::RuntimeException );
+
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
 
     // XTruncate
     virtual void SAL_CALL

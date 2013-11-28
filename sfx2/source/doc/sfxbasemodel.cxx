@@ -3588,16 +3588,9 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
-            OUString aMediaTypeProp( "MediaType" );
-            OUString aUIConfigMediaType(
-                    "application/vnd.sun.xml.ui.configuration"  );
-            OUString aMediaType;
-            Reference< beans::XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
-            Any a = xPropSet->getPropertyValue( aMediaTypeProp );
-            if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
+            if ( xConfigStorage->getMediaType().isEmpty() )
             {
-                a <<= aUIConfigMediaType;
-                xPropSet->setPropertyValue( aMediaTypeProp, a );
+                xConfigStorage->setMediaType( "application/vnd.sun.xml.ui.configuration" );
             }
         }
         else

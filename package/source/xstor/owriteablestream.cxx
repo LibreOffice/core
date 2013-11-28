@@ -745,7 +745,6 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     sal_Bool bCompressedIsSet = sal_False;
     sal_Bool bCompressed = sal_False;
     OUString aComprPropName( "Compressed" );
-    OUString aMedTypePropName( "MediaType" );
     for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
     {
         if ( aProps[nInd].Name.equals( aComprPropName ) )
@@ -754,9 +753,9 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             aProps[nInd].Value >>= bCompressed;
         }
         else if ( ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
-               && aProps[nInd].Name.equals( aMedTypePropName ) )
+               && aProps[nInd].Name == "MediaType" )
         {
-            xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
+            m_xPackageStream->setMediaType( aProps[nInd].Value.get<OUString>() );
         }
         else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name == "UseCommonStoragePasswordEncryption" )
             aProps[nInd].Value >>= m_bUseCommonEncryption;
@@ -764,7 +763,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             throw lang::IllegalArgumentException();
 
         // if there are cached properties update them
-        if ( aProps[nInd].Name.equals( aMedTypePropName ) || aProps[nInd].Name.equals( aComprPropName ) )
+        if ( aProps[nInd].Name == "MediaType" || aProps[nInd].Name.equals( aComprPropName ) )
             for ( sal_Int32 nMemInd = 0; nMemInd < m_aProps.getLength(); nMemInd++ )
             {
                 if ( aProps[nInd].Name.equals( m_aProps[nMemInd].Name ) )
@@ -1627,10 +1626,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                     ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xContext );
 
                     // set the mediatype
-                    uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                    xPropSet->setPropertyValue(
-                        "MediaType",
-                        uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                    xRelsStream->setMediaType( "application/vnd.openxmlformats-package.relationships+xml" );
 
                     m_nRelInfoStatus = RELINFO_READ;
                 }
@@ -1652,9 +1648,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 xSeek->seek( 0 );
 
                 // set the mediatype
-                uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                xPropSet->setPropertyValue("MediaType",
-                    uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                xRelsStream->setMediaType( "application/vnd.openxmlformats-package.relationships+xml" );
 
                   if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                     m_nRelInfoStatus = RELINFO_NO_INIT;
@@ -1846,8 +1840,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        aPropName = "MediaType";
-        xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
+        xDest->setMediaType( getMediaType() );
 
         if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
         {
@@ -3004,30 +2997,13 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     }
 
     m_pImpl->GetStreamProperties();
-    OUString aCompressedString( "Compressed" );
-    OUString aMediaTypeString( "MediaType" );
-    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equals( aMediaTypeString ) )
+    if ( aPropertyName == "MediaType" )
     {
-        // if the "Compressed" property is not set explicitly, the MediaType can change the default value
-        sal_Bool bCompressedValueFromType = sal_True;
         OUString aType;
         aValue >>= aType;
-
-        if ( !m_pImpl->m_bCompressedSetExplicit )
-        {
-            if ( aType == "image/jpeg" || aType == "image/png" || aType == "image/gif" )
-                bCompressedValueFromType = sal_False;
-        }
-
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
-        {
-            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
-                m_pImpl->m_aProps[nInd].Value = aValue;
-            else if ( !m_pImpl->m_bCompressedSetExplicit && aCompressedString.equals( m_pImpl->m_aProps[nInd].Name ) )
-                m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
-        }
+        setMediaType(aType);
     }
-    else if ( aPropertyName.equals( aCompressedString ) )
+    else if ( aPropertyName == "Compressed" )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         m_pImpl->m_bCompressedSetExplicit = sal_True;
@@ -3061,14 +3037,6 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
         }
         else
             throw lang::IllegalArgumentException(); //TODO
-    }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equals( aMediaTypeString ) )
-    {
-        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
-        {
-            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
-                m_pImpl->m_aProps[nInd].Value = aValue;
-        }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfoStream" )
     {
@@ -3111,6 +3079,79 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 
+
+void SAL_CALL OWriteStream::setMediaType( const OUString& _mediatype )
+         throw (::css::uno::RuntimeException)
+{
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( "Disposed!" );
+        throw lang::DisposedException();
+    }
+
+    m_pImpl->GetStreamProperties();
+
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
+    {
+        // if the "Compressed" property is not set explicitly, the MediaType can change the default value
+        sal_Bool bCompressedValueFromType = sal_True;
+
+        if ( !m_pImpl->m_bCompressedSetExplicit )
+        {
+            if ( _mediatype == "image/jpeg" || _mediatype == "image/png" || _mediatype == "image/gif" )
+                bCompressedValueFromType = sal_False;
+        }
+
+        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        {
+            if ( "MediaType" == m_pImpl->m_aProps[nInd].Name )
+                m_pImpl->m_aProps[nInd].Value <<= _mediatype;
+            else if ( !m_pImpl->m_bCompressedSetExplicit && "Compressed" == m_pImpl->m_aProps[nInd].Name )
+                m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
+        }
+    }
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
+    {
+        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        {
+            if ( "MediaType" == m_pImpl->m_aProps[nInd].Name )
+                m_pImpl->m_aProps[nInd].Value <<= _mediatype;
+        }
+    }
+    else
+        throw beans::UnknownPropertyException(); // TODO
+
+    m_pImpl->m_bHasDataToFlush = sal_True;
+    ModifyParentUnlockMutex_Impl( aGuard );
+}
+
+OUString SAL_CALL OWriteStream::getMediaType()
+         throw (::css::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        ::package::StaticAddLog( "Disposed!" );
+        throw lang::DisposedException();
+    }
+
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML)
+    {
+        m_pImpl->GetStreamProperties();
+
+        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        {
+            if ( "MediaType" == m_pImpl->m_aProps[nInd].Name )
+                return m_pImpl->m_aProps[nInd].Value.get<OUString>();
+        }
+    }
+
+    throw beans::UnknownPropertyException(); // TODO
+}
+
 uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -3135,9 +3176,11 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
     else
         aPropertyName = aProp;
 
-    if ( ( ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
-            && aPropertyName == "MediaType" )
-      || ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName == "Encrypted" )
+    if ( aPropertyName == "MediaType" )
+    {
+        return uno::makeAny( getMediaType() );
+    }
+    else if ( ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName == "Encrypted" )
       || aPropertyName == "Compressed" )
     {
         m_pImpl->GetStreamProperties();

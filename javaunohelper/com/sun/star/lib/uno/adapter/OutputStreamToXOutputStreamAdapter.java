@@ -75,4 +75,7 @@ public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
             }
     }
 
+    public void setMediaType(String s) {}
+
+    public String getMediaType() { return ""; }
 }

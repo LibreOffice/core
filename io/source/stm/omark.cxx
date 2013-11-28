@@ -127,6 +127,10 @@ public: // XServiceInfo
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+    virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
 private:
     // helper methods
     void checkMarksAndFlush() throw( NotConnectedException, BufferSizeExceededException);
@@ -550,7 +554,13 @@ public: // XConnectable
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
-    sal_Bool                         SAL_CALL  supportsService(const OUString& ServiceName) throw ();
+    sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
+
+    // attributes
+    virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException)
+        { return m_input->getMediaType(); }
+    virtual void SAL_CALL setMediaType( const OUString& s) throw (::css::uno::RuntimeException)
+        { m_input->setMediaType(s); }
 
 private:
     void checkMarksAndFlush();

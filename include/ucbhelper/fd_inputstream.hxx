@@ -89,6 +89,9 @@ namespace ucbhelper
                   css::uno::RuntimeException);
 
 
+        virtual OUString SAL_CALL getMediaType() throw (::css::uno::RuntimeException) { return OUString(); }
+        virtual void SAL_CALL setMediaType( const OUString& ) throw (::css::uno::RuntimeException) {}
+
         /** XSeekable
          */
 

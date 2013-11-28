@@ -362,7 +362,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             {
                 try
                 {
-                    xProps->setPropertyValue("MediaType", uno::makeAny( aDataFlavor.MimeType ) );
+                    xStorage->setMediaType( aDataFlavor.MimeType );
                 }
                 catch( uno::Exception& )
                 {
@@ -442,10 +442,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
         pImp->m_xDocStorage = xStorage;
 
         try {
-            uno::Reference < beans::XPropertySet > xPropSet( xStorage, uno::UNO_QUERY_THROW );
-            Any a = xPropSet->getPropertyValue("MediaType");
-            OUString aMediaType;
-            if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
+            if ( xStorage->getMediaType().isEmpty() )
             {
                 if ( bTypeMustBeSetAlready )
                 {
@@ -1342,13 +1339,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
                 try
                 {
-                    uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY );
-                    DBG_ASSERT( xProps.is(), "The storage implementation must implement XPropertySet!" );
-                    if ( !xProps.is() )
-                        throw uno::RuntimeException();
-
-                    xProps->setPropertyValue("MediaType",
-                                            uno::makeAny( aDataFlavor.MimeType ) );
+                    rMedium.GetStorage()->setMediaType( aDataFlavor.MimeType );
                 }
                 catch( uno::Exception& )
                 {
@@ -1894,9 +1885,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
     if ( !xPropSet.is() )
         return sal_False;
 
-    Any a = xPropSet->getPropertyValue("MediaType");
-    OUString aMediaType;
-    if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
+    if ( xNewStor->getMediaType().isEmpty() )
     {
         SAL_WARN( "sfx.doc", "The mediatype must be set already!" );
         SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
@@ -3554,10 +3543,8 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
             uno::Reference< io::XTruncate > xTruncate( xStream->getOutputStream(), uno::UNO_QUERY_THROW );
             xTruncate->truncate();
 
-            uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-            if ( xSet.is() )
-                xSet->setPropertyValue("MediaType",
-                                        uno::makeAny( OUString("image/png") ) );
+            xStream->setMediaType( "image/png" );
+
             if ( bEncrypted )
             {
                 sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(

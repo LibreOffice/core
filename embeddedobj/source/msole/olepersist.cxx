@@ -182,15 +182,6 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStora
     return aResult;
 }
 
-//------------------------------------------------------
-void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const OUString& aMediaType )
-{
-    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
-    if ( !xPropSet.is() )
-        throw uno::RuntimeException(); // TODO: all the storage streams must support XPropertySet
-
-    xPropSet->setPropertyValue("MediaType", uno::makeAny( aMediaType ) );
-}
 #endif
 //------------------------------------------------------
 void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
@@ -1164,7 +1155,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( !xTargetStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( xTargetStream, OUString( "application/vnd.sun.star.oleobject" ));
+        xTargetStream->setMediaType( "application/vnd.sun.star.oleobject" );
         uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
@@ -1774,7 +1765,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         if ( !m_xObjectStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( m_xObjectStream, OUString( "application/vnd.sun.star.oleobject" ));
+        m_xObjectStream->setMediaType( "application/vnd.sun.star.oleobject" );
         uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
