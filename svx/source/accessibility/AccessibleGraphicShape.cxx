@@ -207,12 +207,10 @@ OUString AccessibleGraphicShape::CreateAccessibleDescription (void)
 sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    sal_Int16 nAccessibleRole =  AccessibleRole::SHAPE;
     if( m_pShape->GetModel()->GetImageMapForObject(m_pShape) != NULL )
         return AccessibleRole::IMAGE_MAP;
     else
         return AccessibleShape::getAccessibleRole();
-    return nAccessibleRole;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
