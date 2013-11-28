@@ -54,8 +54,6 @@
 #include <queue>
 #include <boost/scoped_ptr.hpp>
 
-#define MULTI_THREAD_SHEET_PARSING 0
-
 #include "oox/ole/vbaproject.hxx"
 
 namespace oox {
