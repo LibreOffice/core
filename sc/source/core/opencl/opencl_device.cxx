@@ -391,19 +391,26 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
 
     for (unsigned int d = 0; d < profile->numDevices; d++)
     {
-        ds_device device =  profile->devices[d];
-        LibreOfficeDeviceScore score = *(LibreOfficeDeviceScore*)device.score;
+        ds_device device = profile->devices[d];
+        LibreOfficeDeviceScore *pScore = (LibreOfficeDeviceScore*)device.score;
+
+        float fScore = -1;
+        if (pScore)
+            fScore = pScore->fTime;
+        else
+            LOG_PRINTF("Unusual null score");
+
         if (DS_DEVICE_OPENCL_DEVICE == device.type)
         {
-            LOG_PRINTF("[DS] Device[" << d << "] " << device.oclDeviceName << " (OpenCL) score is " << score.fTime);
+            LOG_PRINTF("[DS] Device[" << d << "] " << device.oclDeviceName << " (OpenCL) score is " << fScore);
         }
         else
         {
-            LOG_PRINTF("[DS] Device[" << d << "] CPU (Native) score is " << score.fTime);
+            LOG_PRINTF("[DS] Device[" << d << "] CPU (Native) score is " << fScore);
         }
-        if (score.fTime < bestScore)
+        if (fScore < bestScore)
         {
-            bestScore = score.fTime;
+            bestScore = fScore;
             *bestDeviceIdx = d;
         }
     }
