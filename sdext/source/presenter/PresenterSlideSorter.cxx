@@ -180,7 +180,7 @@ private:
         const OUString& rsText) const;
     OUString GetFittingText (const OUString& rsText, const double nMaximalWidth) const;
     void PaintButtonBackground (
-        const Reference<rendering::XBitmapCanvas>& rxCanvas,
+        const Reference<rendering::XCanvas>& rxCanvas,
         const geometry::IntegerSize2D& rSize) const;
 };
 
@@ -1742,7 +1742,7 @@ geometry::IntegerSize2D PresenterSlideSorter::MouseOverManager::CalculateLabelSi
 }
 
 void PresenterSlideSorter::MouseOverManager::PaintButtonBackground (
-    const Reference<rendering::XBitmapCanvas>& rxCanvas,
+    const Reference<rendering::XCanvas>& rxCanvas,
     const geometry::IntegerSize2D& rSize) const
 {
     // Get the bitmaps for painting the label background.

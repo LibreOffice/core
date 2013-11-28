@@ -25,7 +25,6 @@
 #include "sdpage.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -189,9 +188,8 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     ThrowIfDisposed();
     OSL_ASSERT(mpCacheContext.get()!=NULL);
 
-    cppcanvas::BitmapCanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::getInstance().createCanvas(
-            Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));
+    cppcanvas::CanvasSharedPtr pCanvas (
+        cppcanvas::VCLFactory::getInstance().createCanvas(rxCanvas));
 
     const SdrPage* pPage = mpCacheContext->GetPage(nSlideIndex);
     if (pPage == NULL)
