@@ -33,8 +33,6 @@
 #include <hb-icu.h>
 #include <hb-ot.h>
 
-#include <unicode/uscript.h>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <comphelper/processfactory.hxx>
@@ -325,7 +323,7 @@ static hb_unicode_funcs_t* getUnicodeFuncs(void)
 class HbLayoutEngine : public ServerFontLayoutEngine
 {
 private:
-    UScriptCode             meScriptCode;
+    hb_script_t             maHbScript;
     hb_face_t*              mpHbFace;
     int                     fUnitsPerEM;
 
@@ -337,7 +335,7 @@ public:
 };
 
 HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
-:   meScriptCode(USCRIPT_INVALID_CODE),
+:   maHbScript(HB_SCRIPT_INVALID),
     mpHbFace(NULL),
     fUnitsPerEM(0)
 {
@@ -386,26 +384,32 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
         int nRunLen = nEndRunPos - nMinRunPos;
 
-        // find matching script
-        // TODO: use ICU's UScriptRun API to properly resolves "common" and
-        // "inherited" script codes, probably use it in GetNextRun() and return
-        // the script there
-        UScriptCode eScriptCode = USCRIPT_INVALID_CODE;
-        for (int i = nMinRunPos; i < nEndRunPos; ++i)
+        maHbScript = HB_SCRIPT_INVALID;
+        // First try to get the script from the language tag.
+        OUString aScript(rArgs.maLanguageTag.getScriptOrDefaultScript());
+        if (!aScript.isEmpty())
         {
-            UErrorCode rcI18n = U_ZERO_ERROR;
-            UScriptCode eNextScriptCode = uscript_getScript(rArgs.mpStr[i], &rcI18n);
-            if ((eNextScriptCode > USCRIPT_INHERITED))
-            {
-                eScriptCode = eNextScriptCode;
-                if (eNextScriptCode != USCRIPT_LATIN)
-                    break;
-            }
+            OString sScript = OUStringToOString(aScript, RTL_TEXTENCODING_UTF8);
+            maHbScript = hb_script_from_string(sScript.getStr(), -1);
         }
-        if (eScriptCode < 0)   // TODO: handle errors better
-            eScriptCode = USCRIPT_LATIN;
+        else
+        {
+            // Else, try to guess it from the text.
+            for (int i = nMinRunPos; i < nEndRunPos; ++i)
+            {
+                UErrorCode rcI18n = U_ZERO_ERROR;
+                UScriptCode eScriptCode = uscript_getScript(rArgs.mpStr[i], &rcI18n);
+                if (eScriptCode > USCRIPT_INHERITED)
+                {
+                    maHbScript = hb_icu_script_to_script(eScriptCode);
+                    break;
+                }
+            }
 
-        meScriptCode = eScriptCode;
+            // If no script is found, HB_SCRIPT_INVALID will cause HarfBuzz to
+            // use the OpenType DFLT script, which is better than forcing a
+            // arbitrary script like Latin.
+        }
 
         OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
@@ -415,7 +419,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         hb_buffer_t *pHbBuffer = hb_buffer_create();
         hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
         hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
-        hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(eScriptCode));
+        hb_buffer_set_script(pHbBuffer, maHbScript);
         hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
         hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
         hb_shape(pHbFont, pHbBuffer, NULL, 0);
@@ -518,7 +522,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     // determine need for kashida justification
     if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
-    && ((meScriptCode == USCRIPT_ARABIC) || (meScriptCode == USCRIPT_SYRIAC)))
+    && ((maHbScript == HB_SCRIPT_ARABIC) || (maHbScript == HB_SCRIPT_SYRIAC)))
         rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
 
     return true;
