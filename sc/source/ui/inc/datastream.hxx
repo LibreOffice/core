@@ -72,7 +72,6 @@ private:
     sal_uInt32 mnSettings;
     MoveEnum meMove;
     bool mbRunning;
-    bool mbIsUndoEnabled;
     bool mbValuesInLine;
     LinesList *mpLines;
     size_t mnLinesCount;

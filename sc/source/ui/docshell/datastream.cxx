@@ -262,8 +262,6 @@ void DataStream::StartImport()
 {
     if (mbRunning)
         return;
-    mbIsUndoEnabled = mpScDocument->IsUndoEnabled();
-    mpScDocument->EnableUndo(false);
     if (!mxReaderThread.is())
     {
         SvStream *pStream = 0;
@@ -284,7 +282,6 @@ void DataStream::StopImport()
         return;
     mbRunning = false;
     AutoTimer::Stop();
-    mpScDocument->EnableUndo(mbIsUndoEnabled);
 }
 
 void DataStream::MoveData()
