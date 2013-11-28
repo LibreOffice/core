@@ -274,7 +274,7 @@ struct GetPPDAttribs
     {
         // This CUPS method is not at all thread-safe we need
         // to dup the pointer to a static buffer it returns ASAP
-        OString aResult = m_pFunction( m_aParameter );
+        OString aResult = m_pFunction( m_aParameter.getStr() );
         MutexGuard aGuard( *m_pSyncMutex );
         m_aResult = aResult;
         m_aCondition.set();
@@ -289,9 +289,7 @@ struct GetPPDAttribs
             )
         {
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "cupsGetPPD %s timed out\n",
-            (const sal_Char *) m_aParameter
-            );
+            fprintf( stderr, "cupsGetPPD %s timed out\n", m_aParameter.getStr() );
             #endif
         }
         m_pSyncMutex->acquire();

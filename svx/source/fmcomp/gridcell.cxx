@@ -1539,7 +1539,7 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
         {
             // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
             // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
-            aText = (const sal_Unicode*)_rxField->getString();
+            aText = _rxField->getString().getStr();
             if (_rxField->wasNull())
                 return aText;
             ((FormattedField*)m_pPainter)->SetTextFormatted(aText);
@@ -2957,7 +2957,7 @@ sal_Bool DbFilterField::commitControl()
             {
                 sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow)->GetSelectEntryPos();
                 if ( ( nPos >= 0 ) && ( nPos < m_aValueList.getLength() ) )
-                    aText = (const sal_Unicode*)m_aValueList.getConstArray()[nPos];
+                    aText = m_aValueList.getConstArray()[nPos];
             }
 
             if (m_aText != aText)

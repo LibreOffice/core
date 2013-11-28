@@ -112,7 +112,7 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
     sal_uInt32 nRet = GetLangId( aL );
     if( nRet == 0 )
     {
-        pTypCont->AddLanguage( aL );
+        pTypCont->AddLanguage( aL.getStr() );
         nRet = GetLangId( aL );
     }
     if( rVariant.getLength() )

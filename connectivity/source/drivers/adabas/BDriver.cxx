@@ -44,6 +44,9 @@
 #include <memory>
 #include <sys/stat.h>
 
+inline SvStream& operator<<( SvStream& s, const rtl::OString r) { return (s << r.getStr()); }
+inline SvStream& operator<<( SvStream& s, const rtl::OUString r) { return (s << ::rtl::OUStringToOString(r,gsl_getSystemTextEncoding())); }
+
 #if defined(UNX)
 const char sNewLine = '\012';
 #else
@@ -959,7 +962,7 @@ void ODriver::createDb( const TDatabaseStruct& _aInfo)
         {
             ::std::auto_ptr<SvStream> pFileStream( UcbStreamHelper::CreateStream(aInitFile.GetURL(),STREAM_WRITE) );
             (*pFileStream)  << "ALTER USER \""
-                            << ::rtl::OString(_aInfo.sSysUser,_aInfo.sSysUser.getLength(),gsl_getSystemTextEncoding())
+                            << _aInfo.sSysUser
                             << "\" NOT EXCLUSIVE "
                             << sNewLine;
             pFileStream->Flush();
@@ -989,13 +992,13 @@ int ODriver::X_PARAM(const ::rtl::OUString& _DBNAME,
                         << ".exe"
 #endif
                         << " -d "
-                        << ::rtl::OString(_DBNAME,_DBNAME.getLength(),gsl_getSystemTextEncoding())
+                        << _DBNAME
                         << " -u "
-                        << ::rtl::OString(_USR,_USR.getLength(),gsl_getSystemTextEncoding())
+                        << _USR
                         << ","
-                        << ::rtl::OString(_PWD,_PWD.getLength(),gsl_getSystemTextEncoding())
+                        << _PWD
                         << " "
-                        << ::rtl::OString(_CMD,_CMD.getLength(),gsl_getSystemTextEncoding())
+                        << _CMD
 #if defined(WNT)
 #if (OSL_DEBUG_LEVEL > 1) || defined(DBG_UTIL)
                         << " >> %DBWORK%\\create.log 2>&1"
@@ -1197,15 +1200,15 @@ void ODriver::XUTIL(const ::rtl::OUString& _rParam,
                             "utility"
 #endif
                         << " -u "
-                        << ::rtl::OString(_USRNAME,_USRNAME.getLength(),gsl_getSystemTextEncoding())
+                        << _USRNAME
                         << ","
-                        << ::rtl::OString(_USRPWD,_USRPWD.getLength(),gsl_getSystemTextEncoding())
+                        << _USRPWD
                         << " -d "
-                        << ::rtl::OString(_DBNAME,_DBNAME.getLength(),gsl_getSystemTextEncoding())
+                        << _DBNAME
                         << " "
-                        << ::rtl::OString(_rParam,_rParam.getLength(),gsl_getSystemTextEncoding())
+                        << _rParam
                         << " > "
-                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sPhysicalPath
                         << " 2>&1"
                         << sNewLine;
         pFileStream->Flush();
@@ -1248,20 +1251,20 @@ void ODriver::LoadBatch(const ::rtl::OUString& sDBName,
                         << ".exe"
 #endif
                         << " -d "
-                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << sDBName
                         << " -u "
-                        << ::rtl::OString(_rUSR,_rUSR.getLength(),gsl_getSystemTextEncoding())
+                        << _rUSR
                         << ","
-                        << ::rtl::OString(_rPWD,_rPWD.getLength(),gsl_getSystemTextEncoding());
+                        << _rPWD;
 
         if ( !isKernelVersion(CURRENT_DB_VERSION) )
             (*pFileStream) << " -S adabas -b ";
         else
             (*pFileStream) << " -S NATIVE -b ";
 
-        (*pFileStream)  << ::rtl::OString(_rBatch,_rBatch.getLength(),gsl_getSystemTextEncoding())
+        (*pFileStream)  << _rBatch
                         << " > "
-                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sPhysicalPath
                         << " 2>&1"
                         << sNewLine;
 
@@ -1378,7 +1381,7 @@ void ODriver::fillEnvironmentVariables()
         {
             String sTemp;
             LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sSysDevSpace,sTemp);
-            (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+            (*pFileStream) << sTemp;
         }
         (*pFileStream) << "\n* log devspace size:\n";
         (*pFileStream) << ::rtl::OString::valueOf(_aDBInfo.nLogSize);
@@ -1386,7 +1389,7 @@ void ODriver::fillEnvironmentVariables()
         {
             String sTemp;
             LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sTransLogName,sTemp);
-            (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+            (*pFileStream) << sTemp;
         }
         (*pFileStream) << "\n* data devspace size:\n";
         (*pFileStream) << ::rtl::OString::valueOf(_aDBInfo.nDataSize);
@@ -1394,7 +1397,7 @@ void ODriver::fillEnvironmentVariables()
         {
             String sTemp;
             LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sDataDevName,sTemp);
-            (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+            (*pFileStream) << sTemp;
         }
 
         (*pFileStream) << "\n* END INIT CONFIG\n";
@@ -1405,7 +1408,7 @@ void ODriver::fillEnvironmentVariables()
             {
                 String sTemp;
                 LocalFileHelper::ConvertURLToPhysicalName(_aDBInfo.sBackupFile,sTemp);
-                (*pFileStream) << ::rtl::OString(sTemp.GetBuffer(),sTemp.Len(),gsl_getSystemTextEncoding());
+                (*pFileStream) << sTemp;
             }
             (*pFileStream) << "' BLOCKSIZE 8\n";
             (*pFileStream) << "if $rc <> 0 then stop\n";
@@ -1415,9 +1418,9 @@ void ODriver::fillEnvironmentVariables()
         else
         {
             (*pFileStream) << "ACTIVATE SERVERDB SYSDBA \"";
-            (*pFileStream) << ::rtl::OString(_aDBInfo.sSysUser,_aDBInfo.sSysUser.getLength(),gsl_getSystemTextEncoding());
+            (*pFileStream) << _aDBInfo.sSysUser;
             (*pFileStream) << "\" PASSWORD \"";
-            (*pFileStream) << ::rtl::OString(_aDBInfo.sSysPassword,_aDBInfo.sSysPassword.getLength(),gsl_getSystemTextEncoding());
+            (*pFileStream) << _aDBInfo.sSysPassword;
             (*pFileStream) << "\"\n";
         }
         (*pFileStream) << "if $rc <> 0 then stop\n";
@@ -1441,11 +1444,11 @@ void ODriver::X_CONS(const ::rtl::OUString& sDBName,const ::rtl::OString& _ACTIO
                         << ".exe"
 #endif
                         << " "
-                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << sDBName
                         << " SHOW "
                         << _ACTION
                         << " > "
-                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sPhysicalPath
                         << sNewLine;
         pFileStream->Flush();
     }
@@ -1524,9 +1527,9 @@ sal_Bool ODriver::isVersion(const ::rtl::OUString& sDBName, const char* _pVersio
                         << ".exe"
 #endif
                         << " "
-                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << sDBName
                         << " KERNELVERSION > "
-                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sPhysicalPath
                         << sNewLine;
     }
 
@@ -1574,9 +1577,9 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
                         << ".exe"
 #endif
                         << " "
-                        << ::rtl::OString(sDBName,sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << sDBName
                         << " DATA_CACHE_PAGES > "
-                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sPhysicalPath
                         << sNewLine;
     }
 
@@ -1621,7 +1624,7 @@ sal_Bool ODriver::isKernelVersion(const char* _pVersion)
 
         (*pFileStream)  << "dbversion"
                         << " > "
-                        << ::rtl::OString(sPhysicalPath.GetBuffer(),sPhysicalPath.Len(),gsl_getSystemTextEncoding())
+                        << sPhysicalPath
                         << sNewLine;
     }
 
@@ -1731,13 +1734,13 @@ void ODriver::installSystemTables(  const TDatabaseStruct& _aInfo)
         pFileStream->Seek(STREAM_SEEK_TO_END);
         (*pFileStream)  << "x_dbinst"
                         << " -d "
-                        << ::rtl::OString(_aInfo.sDBName,_aInfo.sDBName.getLength(),gsl_getSystemTextEncoding())
+                        << _aInfo.sDBName
                         << " -u "
-                        << ::rtl::OString(_aInfo.sSysUser,_aInfo.sSysUser.getLength(),gsl_getSystemTextEncoding())
+                        << _aInfo.sSysUser
                         << ","
-                        << ::rtl::OString(_aInfo.sSysPassword,_aInfo.sSysPassword.getLength(),gsl_getSystemTextEncoding())
+                        << _aInfo.sSysPassword
                         << " -w "
-                        << ::rtl::OString(_aInfo.sDomainPassword,_aInfo.sDomainPassword.getLength(),gsl_getSystemTextEncoding())
+                        << _aInfo.sDomainPassword
                         << " -b ";
 
         if ( isKernelVersion(ADABAS_KERNEL_11) )

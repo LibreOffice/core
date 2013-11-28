@@ -176,7 +176,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
     GtkWidget *pImage = gtk_image_new_from_pixbuf( pPixbuf );
     g_object_unref( G_OBJECT( pPixbuf ) );
 
-    GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label( aLabel );
+    GtkWidget* pMenuItem = gtk_image_menu_item_new_with_label( aLabel.getStr() );
     gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( pMenuItem ), pImage );
     g_signal_connect_data( pMenuItem, "activate", pFnCallback, pURL,
                            oustring_delete, GConnectFlags(0));
@@ -224,11 +224,9 @@ add_image_menu_item( GtkMenuShell *pMenuShell,
 {
     OString aUtfLabel = rtl::OUStringToOString (aLabel, RTL_TEXTENCODING_UTF8 );
 
-    GtkWidget *pImage;
-    pImage = gtk_image_new_from_stock( stock_id, GTK_ICON_SIZE_MENU );
+    GtkWidget* pImage = gtk_image_new_from_stock( stock_id, GTK_ICON_SIZE_MENU );
 
-    GtkWidget *pMenuItem;
-    pMenuItem = gtk_image_menu_item_new_with_label( aUtfLabel );
+    GtkWidget* pMenuItem = gtk_image_menu_item_new_with_label( aUtfLabel.getStr() );
     gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM( pMenuItem ), pImage );
 
     gtk_menu_shell_append( pMenuShell, pMenuItem );

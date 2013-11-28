@@ -39,7 +39,7 @@ OModule::OModule()
 
 OModule::OModule(const rtl::OUString& ustrModuleName, sal_Int32 nRtldMode) : m_Module(0)
 {
-    if (ustrModuleName)
+    if( !ustrModuleName.isEmpty())
         load(ustrModuleName, nRtldMode);
 }
 
@@ -51,7 +51,7 @@ OModule::~OModule()
 
 sal_Bool OModule::load(const rtl::OUString& ustrModuleName, sal_Int32 nRtldMode)
 {
-    VOS_ASSERT(ustrModuleName);
+    VOS_ASSERT( !ustrModuleName.isEmpty());
 
     unload();
 
@@ -76,7 +76,7 @@ sal_Bool OModule::isLoaded()
 
 void *OModule::getSymbol(const rtl::OUString& strSymbolName)
 {
-    VOS_ASSERT(strSymbolName);
+    VOS_ASSERT( !strSymbolName.isEmpty());
     VOS_ASSERT(m_Module);
     return ( osl_getSymbol( m_Module, strSymbolName.pData ) );
 }

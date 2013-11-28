@@ -1500,7 +1500,7 @@ namespace
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
     aURL.Complete += _sModuleName;
     aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-    aURL.Complete += ::rtl::OUString(sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8);
+    aURL.Complete += ::rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8);
 
     ::rtl::OUString sAnchor;
     ::rtl::OUString sTempURL = aURL.Complete;

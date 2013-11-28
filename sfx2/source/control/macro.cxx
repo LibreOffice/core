@@ -334,7 +334,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
         aStatement += '.';
 
     // der Name des Slots ist der Name der Methode / des Properties
-    aStatement += String::CreateFromAscii(rSlot.pName);
+    aStatement += String( rtl::OStringToOUString( rSlot.pName, RTL_TEXTENCODING_UTF8));
     if ( rSlot.IsMode(SFX_SLOT_METHOD) )
         aStatement += DEFINE_CONST_UNICODE("( ");
     else

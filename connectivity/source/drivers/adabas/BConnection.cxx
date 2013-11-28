@@ -108,8 +108,8 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     }
     m_sUser = aUID;
 
-    if ( sHostName.getLength() )
-        aDSN = sHostName + ':' + aDSN;
+    if( !sHostName.isEmpty() )
+        aDSN = sHostName + ::rtl::OUString::createFromAscii(":") + aDSN;
     SQLRETURN nSQLRETURN = openConnectionWithAuth(aDSN,nTimeout, aUID,aPWD);
 
     return nSQLRETURN;

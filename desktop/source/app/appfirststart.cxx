@@ -71,7 +71,7 @@ OUString Desktop::GetLicensePath()
 
     AllSettings aSettings(Application::GetSettings());
     aLocale = aSettings.GetUILocale();
-    ResMgr* pLocalResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
+    ResMgr* pLocalResMgr = ResMgr::SearchCreateResMgr( aMgrName.getStr(), aLocale);
 
     aLangString = aLocale.Language;
     if ( aLocale.Country.getLength() != 0 )

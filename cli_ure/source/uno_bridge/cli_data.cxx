@@ -598,7 +598,7 @@ System::String* mapPolymorphicName(System::String* unoName, bool bCliToUno)
             index = cur;
             if (bCliToUno)
             {
-                builder->Append(mapCliTypeName(sParam));
+                builder->Append( mapCliTypeName(sParam).getStr());
             }
             else
             {

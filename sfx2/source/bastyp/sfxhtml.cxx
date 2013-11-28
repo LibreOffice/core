@@ -325,7 +325,7 @@ sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
         sal_Char* pBuffer = sBuffer.AllocBuffer(nLen);
         aStream.Seek( 0 );
         aStream.Read((void*)pBuffer, nLen);
-        rStr = String( S2U(pBuffer) );
+        rStr = String( pBuffer, RTL_TEXTENCODING_UTF8);
     }
 
     delete pDLMedium;

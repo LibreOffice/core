@@ -56,6 +56,9 @@
     #define PYSTR_CHECK                 PyBytes_Check
 #endif
 
+#include <rtl/string.hxx>
+inline void PyErr_SetString( PyObject* pyObj, const rtl::OString& rName) { PyErr_SetString( pyObj, rName.getStr());}
+
 namespace pyuno
 {
 

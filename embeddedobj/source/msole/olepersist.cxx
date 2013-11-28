@@ -1118,7 +1118,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
         m_pOleComponent->StoreOwnTmpIfNecessary();
 
     // now all the changes should be in temporary location
-    if ( !m_aTempURL )
+    if( m_aTempURL.isEmpty() )
         throw uno::RuntimeException();
 
     // open temporary file for reading
@@ -2087,7 +2087,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         catch ( uno::Exception& )
         {
             delete pNewOleComponent;
-            if ( m_aTempURL )
+            if( !m_aTempURL.isEmpty() )
                    KillFile_Impl( m_aTempURL, m_xFactory );
             m_aTempURL = aOldTempURL;
             throw;
@@ -2099,7 +2099,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         catch( uno::Exception& )
         {
             delete pNewOleComponent;
-            if ( m_aTempURL )
+            if( !m_aTempURL.isEmpty() )
                    KillFile_Impl( m_aTempURL, m_xFactory );
             m_aTempURL = aOldTempURL;
             throw;

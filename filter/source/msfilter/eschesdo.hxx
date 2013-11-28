@@ -61,6 +61,9 @@ public:
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, sal_uInt32 nDef = 0 )
     { return ImplGetPropertyValue( pStr ) ? *(sal_Int32*)mAny.getValue() : nDef; }
 
+    sal_Bool ImplGetPropertyValue( const rtl::OUString& rStr ) { return ImplGetPropertyValue( rStr.getStr() ); }
+    sal_Bool ImplGetInt32PropertyValue( const rtl::OUString& rStr ) { return ImplGetInt32PropertyValue( rStr.getStr() ); }
+
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
     const ::com::sun::star::uno::Any&       GetUsrAny() const       { return mAny; }
     const String&       GetType() const         { return mType; }

@@ -228,7 +228,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
     rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
 
-    ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+    ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ).getStr() );
     ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 

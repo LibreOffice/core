@@ -78,7 +78,7 @@ namespace sax_fastparser {
     OUString FastSaxSerializer::escapeXml( const OUString& s )
     {
         ::rtl::OUStringBuffer sBuf( s.getLength() );
-        const sal_Unicode* pStr = s;
+        const sal_Unicode* pStr = s.getStr();
         sal_Int32 nLen = s.getLength();
         for( sal_Int32 i = 0; i < nLen; ++i)
         {

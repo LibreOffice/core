@@ -274,14 +274,26 @@ public:
     */
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
 
+private:
     /**
       Returns a pointer to the Unicode character buffer from this string.
+
+      NOTE: the implicit cast to a UTF-16 pointer is obsolete
+            because it is too dangerous #i123068#
 
       It isn't necessarily NULL terminated.
 
       @return   a pointer to the Unicode characters buffer from this object.
     */
     operator const sal_Unicode *() const SAL_THROW(()) { return pData->buffer; }
+public:
+    /** Returns a reference to a UTF-16 element of this string. */
+    sal_Unicode& operator[]( int n ) { return pData->buffer[n]; }
+    /** Returns a const reference to a UTF-16 element of this string. */
+    const sal_Unicode& operator[]( int n ) const { return pData->buffer[n]; }
+    /** Returns a bool indicating whether this string is empty. */
+    bool isEmpty() const { return (pData->length == 0); }
+
 
     /**
       Returns a pointer to the Unicode character buffer from this string.

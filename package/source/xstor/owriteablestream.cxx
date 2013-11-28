@@ -565,7 +565,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         ::rtl::OUString aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
         try {
-            if ( aTempURL && xStream.is() )
+            if ( !aTempURL.isEmpty() && xStream.is() )
             {
                 uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                                 GetServiceFactory()->createInstance (

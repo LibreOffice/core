@@ -254,7 +254,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 #if OSL_DEBUG_LEVEL > 0
         String sDebugMessage;
         sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched a DatabaseException (");
-        sDebugMessage += (const sal_Unicode*)e.SQLState;
+        sDebugMessage += e.SQLState.getStr();
         sDebugMessage.AppendAscii(") !");
         DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #endif
@@ -265,7 +265,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 #if OSL_DEBUG_LEVEL > 0
         UniString sDebugMessage;
         sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched an Exception (");
-        sDebugMessage += (const sal_Unicode*)e.Message;
+        sDebugMessage += e.Message.getStr();
         sDebugMessage.AppendAscii(") !");
         DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #endif

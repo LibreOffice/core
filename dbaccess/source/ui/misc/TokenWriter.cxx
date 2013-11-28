@@ -76,6 +76,8 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XModel;
 
+inline SvStream& operator<<( SvStream& s, const rtl::OString r) { return (s << r.getStr()); }
+
 #if defined(UNX)
 const char __FAR_DATA ODatabaseImportExport::sNewLine = '\012';
 #else
@@ -819,7 +821,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     (*m_pStream) << sMyBegComment; OUT_LF();
-    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body << " { " << sFontFamily << '\"' << ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding()) << '\"';
+    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body << " { " << sFontFamily << '\"' << ::rtl::OUStringToOString( m_aFont.Name, gsl_getSystemTextEncoding()) << '\"';
         // TODO : think about the encoding of the font name
     (*m_pStream) << "; " << sFontSize;
     m_pStream->WriteNumber(m_aFont.Height);
@@ -895,14 +897,14 @@ void OHTMLImportExport::WriteTables()
     aStrOut = aStrOut + "=1";
 
     IncIndent(1);
-    TAG_ON( aStrOut );
+    TAG_ON( aStrOut.getStr() );
 
     FontOn();
 
     TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
-    (*m_pStream)    << ::rtl::OString(m_sName,m_sName.getLength(), gsl_getSystemTextEncoding());
+    (*m_pStream)    << ::rtl::OUStringToOString( m_sName, gsl_getSystemTextEncoding());
         // TODO : think about the encoding of the name
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
@@ -1072,7 +1074,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
         }
     }
 
-    TAG_ON( aStrTD );
+    TAG_ON( aStrTD.getStr() );
 
     FontOn();
 
@@ -1116,7 +1118,7 @@ void OHTMLImportExport::FontOn()
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_face;
     aStrOut  = aStrOut + "=";
     aStrOut  = aStrOut + "\"";
-    aStrOut  = aStrOut + ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(),gsl_getSystemTextEncoding());
+    aStrOut  = aStrOut + ::rtl::OUStringToOString( m_aFont.Name, gsl_getSystemTextEncoding());
         // TODO : think about the encoding of the font name
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + " ";

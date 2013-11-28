@@ -46,6 +46,9 @@ class SwGrfNode;
 class SwOLENode;
 class SwSectionNode;
 class SwNumRuleTbl;
+class SvStream;
+
+inline SvStream& operator<<( SvStream& s, const rtl::OString r) { return (s << r.getStr()); }
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }

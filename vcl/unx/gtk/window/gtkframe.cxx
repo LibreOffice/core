@@ -984,7 +984,7 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         }
         else
             gtk_window_set_wmclass( GTK_WINDOW(m_pWindow),
-                                    X11SalData::getFrameResName( m_nExtStyle ),
+                                    X11SalData::getFrameResName( m_nExtStyle).getStr(),
                                     X11SalData::getFrameClassName() );
     }
 }
@@ -3785,7 +3785,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
         if (!sAllText.getLength())
             return sal_False;
     rtl::OString sUTF = rtl::OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
-    rtl::OUString sCursorText(sAllText, nPosition);
+    rtl::OUString sCursorText( sAllText.getStr(), nPosition);
     gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
         rtl::OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
     return sal_True;

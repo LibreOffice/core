@@ -426,7 +426,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                     aCmd += pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( GetWin(), rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
+                            pFact->CreateInsertObjectDialog( GetWin(), rtl::OStringToOUString( aCmd, RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
                     if ( pDlg )
                     {
                         pDlg->Execute();

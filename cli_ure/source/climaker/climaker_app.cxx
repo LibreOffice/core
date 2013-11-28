@@ -567,7 +567,7 @@ SAL_IMPLEMENT_MAIN()
         // setup assembly info: xxx todo set more? e.g. avoid strong versioning
         AssemblyName * assembly_name = new AssemblyName();
         assembly_name->set_CodeBase( output_dir );
-        assembly_name->set_Name( name );
+        assembly_name->set_Name( name.getStr() );
         if (kp != NULL)
             assembly_name->set_KeyPair(kp);
 

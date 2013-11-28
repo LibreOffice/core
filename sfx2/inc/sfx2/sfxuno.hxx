@@ -105,11 +105,6 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 
 #define FrameSearchFlags            sal_Int32
 
-// Macros to convert string -> unicode and unicode -> string.
-// We use UTF8 everytime. Its the best way to do this!
-#define S2U(STRING)                             ::rtl::OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
-#define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
-
 // Macro to define const unicode a'la "..."
 // It's better then "OUString::createFromAscii(...)" !!!
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))

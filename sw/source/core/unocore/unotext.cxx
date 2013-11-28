@@ -2874,7 +2874,7 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException)
     if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
     {
         uno::RuntimeException aExcept;
-        aExcept.Message = S2U("no text available");
+        aExcept.Message = C2U("no text available");
         throw aExcept;
     }
     xRet = static_cast<text::XWordCursor*>(pXCursor);

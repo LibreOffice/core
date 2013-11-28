@@ -2582,7 +2582,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
         if(!pNewStartNode || pNewStartNode != pOwnStartNode)
         {
             uno::RuntimeException aExcept;
-            aExcept.Message = S2U("no text available");
+            aExcept.Message = C2U("no text available");
             throw aExcept;
         }
 

@@ -561,7 +561,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
                 systemName = regName;
 
             OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
-            if (unlink(name) != 0)
+            if( unlink( name.getStr()) != 0)
             {
                 return REG_DESTROY_REGISTRY_FAILED;
             }
@@ -819,7 +819,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
         if (sFullKeyName.getLength() > 1)
             sFullKeyName += keyName;
         else
-            sFullKeyName += (keyName+1);
+            sFullKeyName += keyName.getStr() + 1;
 
         sFullPath = sFullKeyName.copy(0, keyName.lastIndexOf('/') + 1);
     } else

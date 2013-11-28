@@ -27,6 +27,8 @@
 #include <tools/solar.h>
 #endif
 
+#include <rtl/string.hxx>
+
 /****************** D E F I N I T I O N S ********************************/
 /******************* R e t u r n   E r r o r s         *******************/
 #define ERR_OK              0xFFFFFFFF
@@ -153,6 +155,8 @@ public:
     // das Programm wird mit exit() verlassen
     virtual void    FatalError( const ERRTYPE& rError, const RscId &aId,
                                 const char * pMessage = NULL );
+    void Error( const ERRTYPE& rError, RscTop* pClass, const RscId& rId, const rtl::OString& rStr ) { this->Error( rError, pClass, rId, rStr.getStr()); }
+    void FatalError( const ERRTYPE& rError, const RscId& rId, const rtl::OString& rStr ) { this->FatalError( rError,rId, rStr.getStr()); }
 };
 
 #endif // _RSCERROR_H

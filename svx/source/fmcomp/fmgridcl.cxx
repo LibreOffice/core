@@ -1648,7 +1648,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
         Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
 
-        aName  = (const sal_Unicode*)::comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL));
+        aName  = ::comphelper::getString( xCol->getPropertyValue(FM_PROP_LABEL)).getStr();
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
         sal_Int32 nWidth = 0;

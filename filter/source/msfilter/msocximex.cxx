@@ -131,7 +131,7 @@ bool storePictureInFileSystem( OUString& location, sal_uInt8* data, sal_uInt32 d
         uno::Reference<lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(),
                                                       uno::UNO_QUERY_THROW );
         uno::Reference< com::sun::star::ucb::XSimpleFileAccess> xSFA( xMSF->createInstance(
-                                                       S2U("com.sun.star.ucb.SimpleFileAccess" ) ),
+                                                       OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess") ),
                                                        uno::UNO_QUERY_THROW );
         OUString ext;
         sal_Int32 index = 0;

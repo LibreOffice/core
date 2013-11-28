@@ -879,7 +879,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
 
 
     const char  *pCOL = NULL;
@@ -981,8 +981,8 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr(),
-                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr(),
+                *pCOL = (aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLColumnPrivileges(m_aStatementHandle,
@@ -1014,8 +1014,8 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr(),
-                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr(),
+                *pCOL = (aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLColumns(m_aStatementHandle,
@@ -1081,8 +1081,8 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr(),
-                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding)).getStr(),
+                *pCOL = (aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLProcedureColumns(m_aStatementHandle,
@@ -1115,7 +1115,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLProcedures(m_aStatementHandle,
@@ -1145,7 +1145,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLSpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,

@@ -954,7 +954,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
                     ++nChgPos;
 
                 xub_StrLen nChgLen = static_cast< xub_StrLen >( nTmpLen - nChgPos );
-                String aChgText( aTmpText.copy( nChgPos ), nChgLen );
+                String aChgText( aTmpText.copy( nChgPos ).getStr(), nChgLen );
 
                 // remove text from first pos to be changed to current pos
                 maText.Erase( static_cast< xub_StrLen >( nChgPos ), static_cast< xub_StrLen >( nTmpPos - nChgPos ) );

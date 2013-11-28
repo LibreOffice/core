@@ -231,7 +231,7 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     }
 #if GTK_CHECK_VERSION(2,10,0)
     GtkRecentManager *manager = gtk_recent_manager_get_default ();
-    gtk_recent_manager_add_item (manager, sGtkURL);
+    gtk_recent_manager_add_item( manager, sGtkURL.getStr());
     (void)rMimeType;
 #else
     static getDefaultFnc sym_gtk_recent_manager_get_default =

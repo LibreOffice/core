@@ -152,7 +152,7 @@ PeerHandle Context::GetPeerHandle( const char *id, sal_uInt32 nId ) const
     if ( nId != 0 )
     {
         rtl::OString aStr = rtl::OString::valueOf( (sal_Int32) nId );
-        xHandle = GetPeerHandle( aStr, 0 );
+        xHandle = GetPeerHandle( aStr.getStr(), 0 );
     }
     return xHandle;
 }
@@ -955,7 +955,7 @@ void MessageBox::init (OUString const& message, OUString const& yes, OUString co
         else
             noButton.Hide ();
     }
-    if (help_id)
+    if( !help_id.isEmpty())
         SetHelpId (help_id);
     else
         helpButton.Hide ();

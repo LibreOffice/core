@@ -105,7 +105,7 @@ shrinkFilterName( const rtl::OUString aFilterName, bool bAllowNoStar = false )
     int nBracketLen = -1;
     int nBracketEnd = -1;
     rtl::OUString rFilterName = aFilterName;
-    const sal_Unicode *pStr = rFilterName;
+    const sal_Unicode* pStr = rFilterName.getStr();
     rtl::OUString aRealName = rFilterName;
 
     for( i = aRealName.getLength() - 1; i > 0; i-- )

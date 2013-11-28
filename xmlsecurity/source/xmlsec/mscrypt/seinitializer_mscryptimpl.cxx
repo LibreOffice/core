@@ -62,7 +62,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     //Initialize the crypto engine
     if( sCertDB.getLength() > 0 )
     {
-        rtl::OString sCertDir(sCertDB, sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
+        rtl::OString sCertDir( OUStringToOString( sCertDB, RTL_TEXTENCODING_ASCII_US));
         n_pCertStore = sCertDir.getStr();
         n_hStoreHandle = CertOpenSystemStore( NULL, n_pCertStore ) ;
         if( n_hStoreHandle == NULL )

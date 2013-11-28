@@ -1187,7 +1187,7 @@ void ToolbarLayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbx
         uno::Reference< ui::XUIElement > xUIElement;
         implts_createToolBar( aTbxResName, bNotify, xUIElement );
 
-        if ( aTitle && xUIElement.is() )
+        if ( !aTitle.isEmpty() && xUIElement.is() )
         {
             vos::OGuard aGuard( Application::GetSolarMutex() );
 

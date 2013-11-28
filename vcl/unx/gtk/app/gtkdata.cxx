@@ -638,7 +638,7 @@ void GtkXLib::Init()
     if( aAppName.getLength() > 0 )
     {
         rtl::OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
-        g_set_prgname(aPrgName);
+        g_set_prgname( aPrgName.getStr());
     }
 
     // init gtk/gdk

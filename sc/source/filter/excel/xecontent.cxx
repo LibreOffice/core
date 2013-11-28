@@ -526,7 +526,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
     OUString sId = rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget,
-            XclXmlUtils::ToOUString( "External" ) );
+            true );
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
             FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
