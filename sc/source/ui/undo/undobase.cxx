@@ -162,6 +162,8 @@ void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
             }
         }
     }
+
+    pDoc->BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
 }
 
 void ScSimpleUndo::ShowTable( SCTAB nTab )
