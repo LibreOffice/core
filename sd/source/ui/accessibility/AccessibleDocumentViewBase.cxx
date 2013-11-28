@@ -31,7 +31,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.h>
 #include<sfx2/viewfrm.hxx>
-
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <sfx2/objsh.hxx>
 #include <svx/AccessibleShape.hxx>
 
 #include <svx/svdobj.hxx>
@@ -40,8 +41,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "Window.hxx"
 #include <vcl/svapp.hxx>
+#include "OutlineViewShell.hxx"
 
-
+#include <svx/svdlayer.hxx>
+#include <editeng/editobj.hxx>
+#include "LayerTabBar.hxx"
+#include <svtools/colorcfg.hxx>
 #include "ViewShell.hxx"
 #include "View.hxx"
 #include <memory>
@@ -79,6 +84,7 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
 
     mxWindow = ::VCLUnoHelper::GetInterface (pSdWindow);
+    mpViewShell = pViewShell;
 }
 
 
@@ -150,6 +156,9 @@ void AccessibleDocumentViewBase::Init (void)
             }
         }
     }
+    SfxObjectShell* pObjShell = mpViewShell->GetViewFrame()->GetObjectShell();
+    if(!pObjShell->IsReadOnly())
+        SetState(AccessibleStateType::EDITABLE);
 }
 
 
@@ -422,6 +431,8 @@ uno::Any SAL_CALL
             static_cast<beans::XPropertyChangeListener*>(this),
             static_cast<awt::XWindowListener*>(this),
             static_cast<awt::XFocusListener*>(this)
+           ,static_cast<XAccessibleExtendedAttributes*>(this)
+           ,static_cast<XAccessibleGetAccFlowTo*>(this)
             );
     return aReturn;
 }
@@ -818,6 +829,150 @@ void
 {
 }
 
+uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Any anyAtrribute;
+    OUString sValue;
+    if (mpViewShell && mpViewShell->ISA(::sd::DrawViewShell))
+    {
+        ::sd::DrawViewShell* pDrViewSh = (::sd::DrawViewShell*) mpViewShell;
+        OUString sDisplay;
+        OUString sName = "page-name:";
+        // MT IA2: Not used...
+        // SdPage*  pCurrPge = pDrViewSh->getCurrentPage();
+        SdDrawDocument* pDoc = pDrViewSh->GetDoc();
+        sDisplay = pDrViewSh->getCurrentPage()->GetName();
+        sDisplay = sDisplay.replaceFirst( "\\", "\\\\" );
+        sDisplay = sDisplay.replaceFirst( "=", "\\=" );
+        sDisplay = sDisplay.replaceFirst( ";", "\\;" );
+        sDisplay = sDisplay.replaceFirst( ",", "\\," );
+        sDisplay = sDisplay.replaceFirst( ":", "\\:" );
+        sValue = sName + sDisplay ;
+        sName = ";page-number:";
+        sValue += sName;
+        sValue += OUString::number((sal_Int16)((sal_uInt16)((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) ;
+        sName = ";total-pages:";
+        sValue += sName;
+        sValue += OUString::number(pDrViewSh->GetPageTabControl()->GetPageCount()) ;
+        sValue += ";";
+        if(pDrViewSh->IsLayerModeActive() )
+        {
+            sName = "page-name:";
+            sValue = sName;
+            sDisplay = pDrViewSh->GetLayerTabControl()->GetPageText(pDrViewSh->GetLayerTabControl()->GetCurPageId());
+            if( pDoc )
+            {
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                SdrLayer* aSdrLayer = rLayerAdmin.GetLayer(sDisplay, sal_False);
+                if( aSdrLayer )
+                {
+                    OUString layerAltText = aSdrLayer->GetTitle();
+                    if (!layerAltText.isEmpty())
+                    {
+                        sName = " ";
+                        sDisplay = sDisplay + sName;
+                        sDisplay += layerAltText;
+                    }
+                }
+            }
+            sDisplay = sDisplay.replaceFirst( "\\", "\\\\" );
+            sDisplay = sDisplay.replaceFirst( "=", "\\=" );
+            sDisplay = sDisplay.replaceFirst( ";", "\\;" );
+            sDisplay = sDisplay.replaceFirst( ",", "\\," );
+            sDisplay = sDisplay.replaceFirst( ":", "\\:" );
+            sValue +=  sDisplay;
+            sName = ";page-number:";
+            sValue += sName;
+            sValue += OUString::number(pDrViewSh->GetActiveTabLayerIndex()+1) ;
+            sName = ";total-pages:";
+            sValue += sName;
+            sValue += OUString::number(pDrViewSh->GetLayerTabControl()->GetPageCount()) ;
+            sValue += ";";
+        }
+    }
+    if (mpViewShell && mpViewShell->ISA(::sd::PresentationViewShell))
+    {
+        ::sd::PresentationViewShell* pPresViewSh = (::sd::PresentationViewShell*) mpViewShell;
+        SdPage* pCurrPge = pPresViewSh->getCurrentPage();
+        SdDrawDocument* pDoc = pPresViewSh->GetDoc();
+        SdPage* pNotesPge = (SdPage*)pDoc->GetSdPage((pCurrPge->GetPageNum()-1)>>1, PK_NOTES);
+        if (pNotesPge)
+        {
+            SdrObject* pNotesObj = pNotesPge->GetPresObj(PRESOBJ_NOTES);
+            if (pNotesObj)
+            {
+                OutlinerParaObject* pPara = pNotesObj->GetOutlinerParaObject();
+                if (pPara)
+                {
+                    sValue += "note:";
+                    const EditTextObject& rEdit = pPara->GetTextObject();
+                    for (sal_uInt16 i=0;i<rEdit.GetParagraphCount();i++)
+                    {
+                        OUString strNote = rEdit.GetText(i);
+                        strNote = strNote.replaceFirst( "\\", "\\\\" );
+                        strNote = strNote.replaceFirst( "=", "\\=" );
+                        strNote = strNote.replaceFirst( ";", "\\;" );
+                        strNote = strNote.replaceFirst( ",", "\\," );
+                        strNote = strNote.replaceFirst( ":", "\\:" );
+                        sValue += strNote;
+                        sValue += ";";//to divide each paragraph
+                    }
+                }
+            }
+        }
+    }
+    if (mpViewShell && mpViewShell->ISA(::sd::OutlineViewShell) )
+    {
+        OUString sName;
+        OUString sDisplay;
+        SdPage* pCurrPge = mpViewShell->GetActualPage();
+        SdDrawDocument* pDoc = mpViewShell->GetDoc();
+        if(pCurrPge && pDoc)
+        {
+            sName = "page-name:";
+            sDisplay = pCurrPge->GetName();
+            sDisplay = sDisplay.replaceFirst( "=", "\\=" );
+            sDisplay = sDisplay.replaceFirst( ";", "\\;" );
+            sDisplay = sDisplay.replaceFirst( ",", "\\," );
+            sDisplay = sDisplay.replaceFirst( ":", "\\:" );
+            sValue = sName + sDisplay ;
+            sName = ";page-number:";
+            sValue += sName;
+            sValue += OUString::number((sal_Int16)((sal_uInt16)((pCurrPge->GetPageNum()-1)>>1) + 1)) ;
+            sName = ";total-pages:";
+            sValue += sName;
+            sValue += OUString::number(pDoc->GetSdPageCount(PK_STANDARD)) ;
+            sValue += ";";
+        }
+    }
+    if (sValue.getLength())
+        anyAtrribute <<= sValue;
+    return anyAtrribute;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL AccessibleDocumentViewBase::get_AccFlowTo(const ::com::sun::star::uno::Any&, sal_Int32 )
+        throw ( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Sequence< uno::Any> aRet;
+
+    return aRet;
+}
+
+sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
+        throw (uno::RuntimeException)
+{
+    return COL_BLACK;
+}
+
+sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
+        throw (uno::RuntimeException)
+{
+     ThrowIfDisposed ();
+    ::osl::MutexGuard aGuard (maMutex);
+    return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+}
 } // end of namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

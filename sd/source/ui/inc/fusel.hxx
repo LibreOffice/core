@@ -63,6 +63,8 @@ public:
     */
     virtual bool cancel();
 
+    //let mouse cursor move
+    virtual void ForcePointer(const MouseEvent* pMEvt = NULL);
 protected:
     FuSelection (ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -95,6 +97,12 @@ private:
             position then NULL is returned.
     */
     SdrObject* pickObject (const Point& rTestPoint);
+    //Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
+    //and SHIFT+ENTER key to decide the postion and draw the new insert point
+    sal_Bool   bBeginInsertPoint;
+    Point    oldPoint;
+    //let mouse cursor move
+    sal_Bool   bMovedToCenterPoint;
 };
 
 } // end of namespace sd

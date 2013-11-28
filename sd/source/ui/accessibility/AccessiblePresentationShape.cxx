@@ -21,6 +21,9 @@
 
 #include "SdShapeTypes.hxx"
 
+#include "accessibility.hrc"
+#include "sdresid.hxx"
+#include <tools/string.hxx>
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
 
@@ -62,8 +65,7 @@ OUString SAL_CALL
 
 
 /// Set this object's name if is different to the current name.
-OUString
-    AccessiblePresentationShape::CreateAccessibleBaseName (void)
+OUString AccessiblePresentationShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     OUString sName;
@@ -72,37 +74,37 @@ OUString
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
-            sName = "ImpressTitle";
+            sName = SdResId(SID_SD_A11Y_P_TITLE_N);
             break;
         case PRESENTATION_OUTLINER:
-            sName = "ImpressOutliner";
+            sName = SdResId(SID_SD_A11Y_P_OUTLINER_N);
             break;
         case PRESENTATION_SUBTITLE:
-            sName = "ImpressSubtitle";
+            sName = SdResId(SID_SD_A11Y_P_SUBTITLE_N);
             break;
         case PRESENTATION_PAGE:
-            sName = "ImpressPage";
+            sName = SdResId(SID_SD_A11Y_P_PAGE_N);
             break;
         case PRESENTATION_NOTES:
-            sName = "ImpressNotes";
+            sName = SdResId(SID_SD_A11Y_P_NOTES_N);
             break;
         case PRESENTATION_HANDOUT:
-            sName = "ImpressHandout";
+            sName = SdResId(SID_SD_A11Y_P_HANDOUT_N);
             break;
         case PRESENTATION_HEADER:
-            sName = "ImpressHeader";
+            sName = SdResId(SID_SD_A11Y_P_HEADER_N);
             break;
         case PRESENTATION_FOOTER:
-            sName = "ImpressFooter";
+            sName = SdResId(SID_SD_A11Y_P_FOOTER_N);
             break;
         case PRESENTATION_DATETIME:
-            sName = "ImpressDateAndTime";
+            sName = SdResId(SID_SD_A11Y_P_DATE_N);
             break;
         case PRESENTATION_PAGENUMBER:
-            sName = "ImpressPageNumber";
+            sName = SdResId(SID_SD_A11Y_P_NUMBER_N);
             break;
         default:
-            sName = "UnknownAccessibleImpressShape";
+            sName = SdResId(SID_SD_A11Y_P_UNKNOWN_N);
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ": " + xDescriptor->getShapeType();
@@ -124,37 +126,37 @@ OUString
     switch (nShapeType)
     {
         case PRESENTATION_TITLE:
-            aDG.Initialize ("PresentationTitleShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_TITLE_D));
             break;
         case PRESENTATION_OUTLINER:
-            aDG.Initialize ("PresentationOutlinerShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_OUTLINER_D));
             break;
         case PRESENTATION_SUBTITLE:
-            aDG.Initialize ("PresentationSubtitleShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_SUBTITLE_D));
             break;
         case PRESENTATION_PAGE:
-            aDG.Initialize ("PresentationPageShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_PAGE_D));
             break;
         case PRESENTATION_NOTES:
-            aDG.Initialize ("PresentationNotesShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_NOTES_D));
             break;
         case PRESENTATION_HANDOUT:
-            aDG.Initialize ("PresentationHandoutShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_HANDOUT_D));
             break;
         case PRESENTATION_HEADER:
-            aDG.Initialize ("PresentationHeaderShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_HEADER_D));
             break;
         case PRESENTATION_FOOTER:
-            aDG.Initialize ("PresentationFooterShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_FOOTER_D));
             break;
         case PRESENTATION_DATETIME:
-            aDG.Initialize ("PresentationDateAndTimeShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_DATE_D));
             break;
         case PRESENTATION_PAGENUMBER:
-            aDG.Initialize ("PresentationPageNumberShape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_NUMBER_D));
             break;
         default:
-            aDG.Initialize ("Unknown accessible presentation shape");
+            aDG.Initialize (SdResId(SID_SD_A11Y_P_UNKNOWN_D));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -166,6 +168,53 @@ OUString
     return aDG();
 }
 
+OUString AccessiblePresentationShape::GetStyle()
+{
+    OUString sName;
+
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
+    switch (nShapeType)
+    {
+        case PRESENTATION_TITLE:
+            sName = SdResId(SID_SD_A11Y_P_TITLE_N_STYLE);
+            break;
+        case PRESENTATION_OUTLINER:
+            sName = SdResId(SID_SD_A11Y_P_OUTLINER_N_STYLE);
+            break;
+        case PRESENTATION_SUBTITLE:
+            sName = SdResId(SID_SD_A11Y_P_SUBTITLE_N_STYLE);
+            break;
+        case PRESENTATION_PAGE:
+            sName = SdResId(SID_SD_A11Y_P_PAGE_N_STYLE);
+            break;
+        case PRESENTATION_NOTES:
+            sName = SdResId(SID_SD_A11Y_P_NOTES_N_STYLE);
+            break;
+        case PRESENTATION_HANDOUT:
+            sName = SdResId(SID_SD_A11Y_P_HANDOUT_N_STYLE);
+            break;
+        case PRESENTATION_FOOTER:
+            sName = SdResId(SID_SD_A11Y_P_FOOTER_N_STYLE);
+            break;
+        case PRESENTATION_HEADER:
+            sName = SdResId(SID_SD_A11Y_P_HEADER_N_STYLE);
+            break;
+        case PRESENTATION_DATETIME:
+            sName = SdResId(SID_SD_A11Y_P_DATE_N_STYLE);
+            break;
+        case PRESENTATION_PAGENUMBER:
+            sName = SdResId(SID_SD_A11Y_P_NUMBER_N_STYLE);
+            break;
+        default:
+            sName = SdResId(SID_SD_A11Y_P_UNKNOWN_N_STYLE);
+            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
+            if (xDescriptor.is())
+                sName += ": " + xDescriptor->getShapeType();
+    }
+
+    return sName;
+
+}
 } // end of namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

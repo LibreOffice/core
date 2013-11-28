@@ -118,6 +118,13 @@ OUString
     return aDG();
 }
 
+//  Return this object's role.
+sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole ()
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return  AccessibleRole::EMBEDDED_OBJECT ;
+}
+
 } // end of namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

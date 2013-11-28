@@ -156,6 +156,11 @@ private:
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
     void                        SetDragImage();
     void                        ApplyImageList();
+public:
+    //when object is marked , fresh the corresponding entry tree .
+    sd::DrawDocShell*             GetDrawDocShell(const SdDrawDocument*);
+    void                        FreshTree ( const  SdDrawDocument* pDoc );
+    void                        FreshEntry( );
 };
 
 

@@ -141,6 +141,16 @@ namespace sd
 class SdDrawDocument : public FmFormModel
 {
 private:
+    OUString msDocAccTitle;
+public:
+    virtual void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
+    virtual const OUString getDocAccTitle() const { return msDocAccTitle; }
+private:
+    sal_Bool bReadOnly;
+public:
+    virtual void setDocReadOnly( sal_Bool b){ bReadOnly = b; }
+    virtual sal_Bool getDocReadOnly() const { return bReadOnly; }
+private:
     ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode
     ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;
@@ -654,6 +664,7 @@ private:
 
     virtual void PageListChanged();
     virtual void MasterPageListChanged();
+    virtual ImageMap* GetImageMapForObject(SdrObject* pObj);
 };
 
 namespace sd

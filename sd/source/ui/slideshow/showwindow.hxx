@@ -78,6 +78,10 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
     virtual void    Paint(const Rectangle& rRect);
     virtual long    Notify(NotifyEvent& rNEvt);
+    //Overload the sd::Window's CreateAccessible to create a different accessible object
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>
+        CreateAccessible (void);
 
     void            TerminateShow();
     void            RestartShow();

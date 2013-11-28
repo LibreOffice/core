@@ -55,6 +55,7 @@ public:
     virtual OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
+    OUString GetStyle();
 
 private:
     /** Don't use the default constructor.  Use the public constructor that

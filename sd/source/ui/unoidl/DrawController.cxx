@@ -526,8 +526,43 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
     }
 }
 
+void DrawController::NotifyAccUpdate()
+{
+    sal_Int32 nHandle = PROPERTY_UPDATEACC;
+    Any aNewValue, aOldValue;
+    fire (&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+}
 
+void DrawController::fireChangeLayer( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>* pCurrentLayer ) throw()
+{
+    if( pCurrentLayer != mpCurrentLayer )
+    {
+        sal_Int32 nHandle = PROPERTY_ACTIVE_LAYER;
 
+        Any aNewValue (makeAny( *pCurrentLayer) );
+
+        Any aOldValue ;
+
+        fire (&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+
+        mpCurrentLayer = pCurrentLayer;
+    }
+}
+
+// This method is only called in slide show and outline view
+//void DrawController::fireSwitchCurrentPage(String pageName ) throw()
+void DrawController::fireSwitchCurrentPage(sal_Int32 pageIndex ) throw()
+{
+        Any aNewValue;
+        Any aOldValue;
+        //OUString aPageName(  pageName );
+        //aNewValue <<= aPageName ;
+        aNewValue <<= pageIndex;
+
+        // Use new property to handle page change event
+        sal_Int32 nHandles = PROPERTY_PAGE_CHANGE;
+        fire( &nHandles, &aNewValue, &aOldValue, 1, sal_False );
+}
 
 void DrawController::FirePropertyChange (
     sal_Int32 nHandle,
@@ -729,6 +764,17 @@ void DrawController::FillPropertyTable (
             PROPERTY_DRAWVIEWMODE,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
+    // add new property to update current page's acc information
+    rProperties.push_back(
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("UpdateAcc") ),
+            PROPERTY_UPDATEACC,
+            ::getCppuType((const sal_Int16*)0),
+            beans::PropertyAttribute::BOUND ));
+    rProperties.push_back(
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("PageChange") ),
+            PROPERTY_PAGE_CHANGE,
+            ::getCppuType((const sal_Int16*)0),
+            beans::PropertyAttribute::BOUND ));
 }
 
 

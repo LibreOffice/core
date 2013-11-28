@@ -290,7 +290,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
+    virtual void SwitchViewActivated (void);
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;

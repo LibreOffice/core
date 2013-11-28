@@ -1037,14 +1037,22 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
     return pIMapObj;
 }
 
+ImageMap* SdDrawDocument::GetImageMapForObject(SdrObject* pObj)
+{
+    SdIMapInfo* pIMapInfo = GetIMapInfo( pObj );
+    if ( pIMapInfo )
+    {
+        return const_cast<ImageMap*>( &(pIMapInfo->GetImageMap()) );
+    }
+    return NULL;
+}
+
 /** this method enforces that the masterpages are in the currect order,
     that is at position 1 is a PK_STANDARD masterpage followed by a
     PK_NOTES masterpage and so on. #
 */
 void SdDrawDocument::CheckMasterPages()
 {
-//  RemoveMasterPage(2); // code to test the creation of notes pages
-
     sal_uInt16 nMaxPages = GetMasterPageCount();
 
     // we need at least a handout master and one master page

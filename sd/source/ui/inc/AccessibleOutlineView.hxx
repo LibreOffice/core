@@ -71,7 +71,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException);
-
+    virtual OUString SAL_CALL
+        getAccessibleName(void)
+        throw (::com::sun::star::uno::RuntimeException);
     //=====  XAccessibleEventBroadcaster  ========================================
 
     virtual void SAL_CALL

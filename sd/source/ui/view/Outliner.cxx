@@ -515,6 +515,17 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
                 RestoreStartPosition ();
             mnStartPageIndex = (sal_uInt16)-1;
         }
+
+        SfxChildWindow *pChildWin =
+            SfxViewFrame::Current()->GetChildWindow(
+            SvxSearchDialogWrapper::GetChildWindowId());
+        if (pChildWin)
+        {
+            SvxSearchDialog* pSearchDlg =
+            ((SvxSearchDialog*)(pChildWin->GetWindow()));
+            pSearchDlg->SetDocWin( pViewShell->GetActiveWindow() );
+            pSearchDlg->SetSrchFlag();
+        }
     }
     else
         mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );

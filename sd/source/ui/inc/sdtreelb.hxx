@@ -29,6 +29,8 @@
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
+#include <vector>
+using namespace std;
 #include <boost/scoped_ptr.hpp>
 #include <boost/function.hpp>
 
@@ -60,6 +62,8 @@ private:
 
     static sal_Bool  SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
+    // set contenttree in SdNavigatorWin
+    sal_Bool                           bisInSdNavigatorWin;
 public:
 
     // nested class to implement the TransferableHelper
@@ -132,6 +136,9 @@ protected:
     ::sd::DrawDocShell*     mpDropDocSh;
     SdNavigatorWin*         mpDropNavWin;
     SfxViewFrame*           mpFrame;
+    vector<OUString>        maTreeItem;
+    sal_Bool                mbSaveTreeItemState;
+    OUString                maSelectionEntryText;
 
     // DragSourceHelper
     virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
@@ -176,6 +183,7 @@ protected:
 
     using Window::GetDropTarget;
     virtual SvTreeListEntry* GetDropTarget (const Point& rLocation);
+    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&,SvLBoxButtonKind);
 
 public:
 
@@ -183,6 +191,10 @@ public:
     SdPageObjsTLB( Window* pParent, WinBits nStyle );
                             ~SdPageObjsTLB();
 
+   // helper function for   GetEntryAltText and GetEntryLongDescription
+    OUString          getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool isAltText) const;
+    OUString          GetEntryAltText( SvTreeListEntry* pEntry ) const;
+    OUString          GetEntryLongDescription( SvTreeListEntry* pEntry ) const;
     virtual void            SelectHdl();
     virtual void            KeyInput( const KeyEvent& rKEvt );
 
@@ -193,10 +205,19 @@ public:
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
-    sal_Bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    sal_Bool                    HasSelectedChildren( const OUString& rName );
-    sal_Bool                    SelectEntry( const OUString& rName );
+    sal_Bool                IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    sal_Bool                HasSelectedChildren( const OUString& rName );
+    sal_Bool                SelectEntry( const OUString& rName );
     OUString                GetSelectEntry();
+
+    //Mark Current Entry
+    void                    MarkCurEntry( const OUString& rName );
+    void                    SetSdNavigatorWinFlag(sal_Bool isInSdNavigatorWin){bisInSdNavigatorWin =isInSdNavigatorWin;};
+    void                    FreshCurEntry();
+
+    void                    Clear();
+    void                    SetSaveTreeItemStateFlag(sal_Bool bState){mbSaveTreeItemState = bState;}
+    void                    SaveExpandedTreeItemState(SvTreeListEntry* pEntry, vector<OUString>& vectTreeItem);
 
     /** return selected entries
           nDepth == 0 -> pages
@@ -205,7 +226,7 @@ public:
     std::vector<OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
 
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
-    ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
+    ::sd::DrawDocShell*     GetDropDocSh() { return(mpDropDocSh); }
 
     sal_Bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 

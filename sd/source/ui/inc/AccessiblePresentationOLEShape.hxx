@@ -23,6 +23,7 @@
 
 #include <svx/AccessibleOLEShape.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 namespace accessibility {
 
 /** This class makes Impress shapes accessible.
@@ -56,6 +57,8 @@ public:
     virtual OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
+    /// Return this object's role.
+    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (::com::sun::star::uno::RuntimeException);
 };
 
 } // end of namespace accessibility

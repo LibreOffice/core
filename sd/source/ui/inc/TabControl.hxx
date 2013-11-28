@@ -36,6 +36,8 @@ class TabControl
       public DragSourceHelper,
       public DropTargetHelper
 {
+    //declare bIsMarked variable
+    sal_uInt16    RrePageID;
 public:
     TabControl (DrawViewShell* pDrViewSh, ::Window* pParent);
     virtual ~TabControl (void);

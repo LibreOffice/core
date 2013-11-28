@@ -821,6 +821,10 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     }
                 }
             }
+            //Fire the acc focus event when focus is switched back. The above method mpCurrentViewShellBase->GetWindow()->GrabFocus() will
+            //set focus to WorkWindow instead of the sd::window, so here call Shell's method to fire the focus event
+            if (pViewShell)
+                pViewShell->SwitchActiveViewFireFocus();
         }
         mpCurrentViewShellBase = 0;
     }
@@ -1048,6 +1052,8 @@ void SlideShow::activate( ViewShellBase& rBase )
             if( mxController->startShow(mxCurrentSettings.get()) )
             {
                 pShell->Resize();
+                // Defer the sd::ShowWindow's GrabFocus to here. so that the accessible event can be fired correctly.
+                pShell->GetActiveWindow()->GrabFocus();
             }
             else
             {
@@ -1223,6 +1229,11 @@ void SlideShow::StartInPlacePresentation()
 
         if( !bSuccess )
             end();
+        else
+        {
+            if(mpCurrentViewShellBase)
+                mpCurrentViewShellBase->GetWindow()->GrabFocus();
+        }
     }
 }
 
