@@ -30,7 +30,7 @@ interface XSprite;
 interface XAnimatedSprite;
 interface XCustomSprite;
 
-/** Specialization of a XCanvas, where moving, animated objects
+/** Specialization of a XBitmapCanvas, where moving, animated objects
     (called sprites) are supported.<p>
 
     @attention The screen output of canvas drawing operations is
@@ -44,9 +44,9 @@ interface XCustomSprite;
     (because there's a defined moment in time where content display
     can happen, namely the XBufferController::showBuffer()) call. If
     you don't need sprite functionality, and don't want the
-    updateScreen hassle, simply use the XCanvas.
+    updateScreen hassle, simply use the XBitmapCanvas.
  */
-interface XSpriteCanvas : XCanvas
+interface XSpriteCanvas : XBitmapCanvas
 {
     /** Create a sprite object from the specified animation
         sequence. A sprite is a back-buffered object with its own,
@@ -98,8 +98,9 @@ interface XSpriteCanvas : XCanvas
         object.
 
         The cloned sprite always shows the same content as its
-        original, but of course the sprite position, visibility, alpha
-        etc. can be modified independently.
+        original. Furthermore, cloned copies of a hidden original are
+        never visible, although cloned copies of a visible original
+        can of course be invisible.
 
         @param original
         The original sprite to copy the content from. This sprite must

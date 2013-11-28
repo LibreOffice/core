@@ -29,14 +29,14 @@
 
 #include <cppcanvas/spritecanvas.hxx>
 
-#include <implcanvas.hxx>
+#include <implbitmapcanvas.hxx>
 
 
 namespace cppcanvas
 {
     namespace internal
     {
-        class ImplSpriteCanvas : public virtual SpriteCanvas, protected virtual ImplCanvas
+        class ImplSpriteCanvas : public virtual SpriteCanvas, protected virtual ImplBitmapCanvas
         {
         public:
             ImplSpriteCanvas( const ::com::sun::star::uno::Reference<
