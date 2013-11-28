@@ -18,9 +18,6 @@
  */
 
 #include "tp_3D_SceneAppearance.hxx"
-#include "tp_3D_SceneAppearance.hrc"
-#include "ResId.hxx"
-#include "Strings.hrc"
 #include "ChartModelHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include "macros.hxx"
@@ -91,32 +88,33 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
       Window* pWindow
     , const uno::Reference< frame::XModel > & xChartModel
     , ControllerLockHelper & rControllerLockHelper )
-                : TabPage           ( pWindow, SchResId( TP_3D_SCENEAPPEARANCE ) )
+                : TabPage ( pWindow
+                           , "tp_3D_SceneAppearance"
+                           , "modules/schart/ui/tp_3D_SceneAppearance.ui")
                 , m_xChartModel     ( xChartModel )
-                , m_aFT_Scheme      ( this, SchResId( FT_SCHEME ) )
-                , m_aLB_Scheme      ( this, SchResId( LB_SCHEME ) )
-                , m_aFL_Separator   ( this, SchResId( FL_SEPARATOR ) )
-                , m_aCB_Shading     ( this, SchResId( CB_SHADING ) )
-                , m_aCB_ObjectLines ( this, SchResId( CB_OBJECTLINES ) )
-                , m_aCB_RoundedEdge ( this, SchResId( CB_ROUNDEDEDGE ) )
                 , m_bUpdateOtherControls( true )
                 , m_bCommitToModel( true )
                 , m_rControllerLockHelper( rControllerLockHelper )
 {
-    FreeResource();
-    m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_SIMPLE),POS_3DSCHEME_SIMPLE);
-    m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_REALISTIC),POS_3DSCHEME_REALISTIC);
-    m_aLB_Scheme.SetDropDownLineCount(2);
 
-    m_aLB_Scheme.SetSelectHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectSchemeHdl ) );
+    get(m_pLB_Scheme, "LB_SCHEME");
+    get(m_pCB_Shading, "CB_SHADING");
+    get(m_pCB_ObjectLines, "CB_OBJECTLINES");
+    get(m_pCB_RoundedEdge, "CB_ROUNDEDEDGE");
 
-    m_aCB_RoundedEdge.SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines ) );
-    m_aCB_Shading.SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectShading ) );
-    m_aCB_ObjectLines.SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines ) );
+    m_aCustom = m_pLB_Scheme->GetEntry(POS_3DSCHEME_CUSTOM);
+    m_pLB_Scheme->RemoveEntry(POS_3DSCHEME_CUSTOM);
+    m_pLB_Scheme->SetDropDownLineCount(2);
 
-    m_aCB_RoundedEdge.EnableTriState( sal_True );
-    m_aCB_Shading.EnableTriState( sal_True );
-    m_aCB_ObjectLines.EnableTriState( sal_True );
+    m_pLB_Scheme->SetSelectHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectSchemeHdl ) );
+
+    m_pCB_RoundedEdge->SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines ) );
+    m_pCB_Shading->SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectShading ) );
+    m_pCB_ObjectLines->SetToggleHdl( LINK( this, ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines ) );
+
+    m_pCB_RoundedEdge->EnableTriState( sal_True );
+    m_pCB_Shading->EnableTriState( sal_True );
+    m_pCB_ObjectLines->EnableTriState( sal_True );
 
     initControlsFromModel();
 }
@@ -140,7 +138,7 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
 
     sal_Int32 nObjectLines = -1;
 
-    switch( m_aCB_ObjectLines.GetState())
+    switch( m_pCB_ObjectLines->GetState())
     {
         case STATE_NOCHECK:
             nObjectLines = 0;
@@ -154,7 +152,7 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
     }
 
     sal_Int32 nCurrentRoundedEdges = -1;
-    switch( m_aCB_RoundedEdge.GetState() )
+    switch( m_pCB_RoundedEdge->GetState() )
     {
         case STATE_NOCHECK:
             nCurrentRoundedEdges = 0;
@@ -180,7 +178,7 @@ void ThreeD_SceneAppearance_TabPage::applyShadeModeToModel()
 
     drawing::ShadeMode aShadeMode = drawing::ShadeMode_PHONG;
 
-    switch( m_aCB_Shading.GetState())
+    switch( m_pCB_Shading->GetState())
     {
         case STATE_NOCHECK:
             aShadeMode = drawing::ShadeMode_FLAT;
@@ -205,52 +203,52 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
 
     if(aProps.m_aShadeMode == drawing::ShadeMode_FLAT)
     {
-        m_aCB_Shading.EnableTriState( sal_False );
-        m_aCB_Shading.Check(sal_False);
+        m_pCB_Shading->EnableTriState( sal_False );
+        m_pCB_Shading->Check(sal_False);
     }
     else if(aProps.m_aShadeMode == drawing::ShadeMode_SMOOTH)
     {
-        m_aCB_Shading.EnableTriState( sal_False );
-        m_aCB_Shading.Check(sal_True);
+        m_pCB_Shading->EnableTriState( sal_False );
+        m_pCB_Shading->Check(sal_True);
     }
     else
     {
-        m_aCB_Shading.EnableTriState( sal_True );
-        m_aCB_Shading.SetState( STATE_DONTKNOW );
+        m_pCB_Shading->EnableTriState( sal_True );
+        m_pCB_Shading->SetState( STATE_DONTKNOW );
     }
 
     if(aProps.m_nObjectLines == 0)
     {
-        m_aCB_ObjectLines.EnableTriState( sal_False );
-        m_aCB_ObjectLines.Check(sal_False);
+        m_pCB_ObjectLines->EnableTriState( sal_False );
+        m_pCB_ObjectLines->Check(sal_False);
     }
     else if(aProps.m_nObjectLines==1)
     {
-        m_aCB_ObjectLines.EnableTriState( sal_False );
-        m_aCB_ObjectLines.Check(sal_True);
+        m_pCB_ObjectLines->EnableTriState( sal_False );
+        m_pCB_ObjectLines->Check(sal_True);
     }
     else
     {
-        m_aCB_ObjectLines.EnableTriState( sal_True );
-        m_aCB_ObjectLines.SetState( STATE_DONTKNOW );
+        m_pCB_ObjectLines->EnableTriState( sal_True );
+        m_pCB_ObjectLines->SetState( STATE_DONTKNOW );
     }
 
     if(aProps.m_nRoundedEdges >= 5)
     {
-        m_aCB_RoundedEdge.EnableTriState( sal_False );
-        m_aCB_RoundedEdge.Check(sal_True);
+        m_pCB_RoundedEdge->EnableTriState( sal_False );
+        m_pCB_RoundedEdge->Check(sal_True);
     }
     else if(aProps.m_nRoundedEdges<0)
     {
-        m_aCB_RoundedEdge.EnableTriState( sal_False );
-        m_aCB_RoundedEdge.SetState( STATE_DONTKNOW );
+        m_pCB_RoundedEdge->EnableTriState( sal_False );
+        m_pCB_RoundedEdge->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_aCB_RoundedEdge.EnableTriState( sal_True );
-        m_aCB_RoundedEdge.Check(sal_False);
+        m_pCB_RoundedEdge->EnableTriState( sal_True );
+        m_pCB_RoundedEdge->Check(sal_False);
     }
-    m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
+    m_pCB_RoundedEdge->Enable( !m_pCB_ObjectLines->IsChecked() );
 
     updateScheme();
 
@@ -262,24 +260,24 @@ void ThreeD_SceneAppearance_TabPage::updateScheme()
 {
     lcl_ModelProperties aProps( lcl_getPropertiesFromModel( m_xChartModel ));
 
-    if( m_aLB_Scheme.GetEntryCount() == (POS_3DSCHEME_CUSTOM+1) )
+    if( m_pLB_Scheme->GetEntryCount() == (POS_3DSCHEME_CUSTOM+1) )
     {
-        m_aLB_Scheme.RemoveEntry(POS_3DSCHEME_CUSTOM);
-        m_aLB_Scheme.SetDropDownLineCount(2);
+        m_pLB_Scheme->RemoveEntry(POS_3DSCHEME_CUSTOM);
+        m_pLB_Scheme->SetDropDownLineCount(2);
     }
     switch( aProps.m_eScheme )
     {
         case ThreeDLookScheme_Simple:
-            m_aLB_Scheme.SelectEntryPos( POS_3DSCHEME_SIMPLE );
+            m_pLB_Scheme->SelectEntryPos( POS_3DSCHEME_SIMPLE );
             break;
         case ThreeDLookScheme_Realistic:
-            m_aLB_Scheme.SelectEntryPos( POS_3DSCHEME_REALISTIC );
+            m_pLB_Scheme->SelectEntryPos( POS_3DSCHEME_REALISTIC );
             break;
         case ThreeDLookScheme_Unknown:
             {
-                m_aLB_Scheme.InsertEntry(SCH_RESSTR(STR_3DSCHEME_CUSTOM),POS_3DSCHEME_CUSTOM);
-                m_aLB_Scheme.SelectEntryPos( POS_3DSCHEME_CUSTOM );
-                m_aLB_Scheme.SetDropDownLineCount(3);
+                m_pLB_Scheme->InsertEntry(m_aCustom,POS_3DSCHEME_CUSTOM);
+                m_pLB_Scheme->SelectEntryPos( POS_3DSCHEME_CUSTOM );
+                m_pLB_Scheme->SetDropDownLineCount(3);
             }
             break;
     }
@@ -296,9 +294,9 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
 
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
 
-        if( m_aLB_Scheme.GetSelectEntryPos() == POS_3DSCHEME_REALISTIC )
+        if( m_pLB_Scheme->GetSelectEntryPos() == POS_3DSCHEME_REALISTIC )
             ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
-        else if( m_aLB_Scheme.GetSelectEntryPos() == POS_3DSCHEME_SIMPLE )
+        else if( m_pLB_Scheme->GetSelectEntryPos() == POS_3DSCHEME_SIMPLE )
             ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
         else
         {
@@ -316,7 +314,7 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading)
     if( !m_bUpdateOtherControls )
         return 0;
 
-    m_aCB_Shading.EnableTriState( sal_False );
+    m_pCB_Shading->EnableTriState( sal_False );
     applyShadeModeToModel();
     updateScheme();
     return 0;
@@ -326,17 +324,17 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
     if( !m_bUpdateOtherControls )
         return 0;
 
-    if( pCheckBox == &m_aCB_ObjectLines )
+    if( pCheckBox == m_pCB_ObjectLines )
     {
-        m_aCB_ObjectLines.EnableTriState( sal_False );
+        m_pCB_ObjectLines->EnableTriState( sal_False );
         m_bUpdateOtherControls = false;
-        m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
-        if(!m_aCB_RoundedEdge.IsEnabled())
-            m_aCB_RoundedEdge.Check(sal_False);
+        m_pCB_RoundedEdge->Enable( !m_pCB_ObjectLines->IsChecked() );
+        if(!m_pCB_RoundedEdge->IsEnabled())
+            m_pCB_RoundedEdge->Check(sal_False);
         m_bUpdateOtherControls = true;
     }
     else
-        m_aCB_RoundedEdge.EnableTriState( sal_False );
+        m_pCB_RoundedEdge->EnableTriState( sal_False );
     applyRoundedEdgeAndObjectLinesToModel();
     updateScheme();
     return 0;
