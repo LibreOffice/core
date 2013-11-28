@@ -330,17 +330,30 @@ bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* p
         return false;
 
     SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
-    if (!pTxtNode->HasHints())
-        return false;
 
-    SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrAt(0, RES_TXTATR_AUTOFMT);
-
-    if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
-        return false;
-
-    boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
     const SfxPoolItem* pItem;
-    if (pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET)
+    bool bItemSet = false;
+    if (pTxtNode->HasSwAttrSet())
+    {
+        const SwAttrSet& rAttrSet = pTxtNode->GetSwAttrSet();
+        bItemSet = rAttrSet.GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
+    }
+
+    if (!bItemSet)
+    {
+        if (!pTxtNode->HasHints())
+            return false;
+
+        SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrAt(0, RES_TXTATR_AUTOFMT);
+
+        if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
+            return false;
+
+        boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
+        bItemSet = pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
+    }
+
+    if (bItemSet)
     {
         const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
         if (rCharRotate.GetValue() == 900)
