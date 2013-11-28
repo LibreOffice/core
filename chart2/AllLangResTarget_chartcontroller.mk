@@ -47,7 +47,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/Strings.src \
     chart2/source/controller/dialogs/Strings_Statistic.src \
     chart2/source/controller/dialogs/tp_3D_SceneAppearance.src \
-    chart2/source/controller/dialogs/tp_3D_SceneGeometry.src \
     chart2/source/controller/dialogs/tp_3D_SceneIllumination.src \
     chart2/source/controller/dialogs/tp_AxisLabel.src \
     chart2/source/controller/dialogs/tp_ChartType.src \

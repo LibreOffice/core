@@ -68,19 +68,17 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
 
-    CheckBox        m_aCbxRightAngledAxes;
+    CheckBox*        m_pCbxRightAngledAxes;
 
-    FixedText       m_aFtXRotation;
-    MetricField     m_aMFXRotation;
+    MetricField*     m_pMFXRotation;
 
-    FixedText       m_aFtYRotation;
-    MetricField     m_aMFYRotation;
+    MetricField*     m_pMFYRotation;
 
-    FixedText       m_aFtZRotation;
-    MetricField     m_aMFZRotation;
+    FixedText*       m_pFtZRotation;
+    MetricField*     m_pMFZRotation;
 
-    CheckBox        m_aCbxPerspective;
-    MetricField     m_aMFPerspective;
+    CheckBox*        m_pCbxPerspective;
+    MetricField*     m_pMFPerspective;
 
     //to keep old values when switching to right angled axes
     sal_Int64       m_nXRotation;
