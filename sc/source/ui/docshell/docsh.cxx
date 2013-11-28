@@ -3047,6 +3047,7 @@ ScDocShellModificator::~ScDocShellModificator()
 void ScDocShellModificator::SetDocumentModified()
 {
     ScDocument* pDoc = rDocShell.GetDocument();
+    pDoc->CellContentModified();
     if ( !pDoc->IsImportingXML() )
     {
         // AutoCalcShellDisabled temporaer restaurieren

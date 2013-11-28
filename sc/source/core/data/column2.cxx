@@ -2862,6 +2862,13 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
         rCell.ResetDirty();
         rCell.SetChanged(true);
     }
+
+    std::vector<SCROW> aRows;
+    aRows.reserve(nLen);
+    for (size_t i = 0; i < nLen; ++i)
+        aRows.push_back(nRow+i);
+
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
 void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen )
@@ -2888,6 +2895,13 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pR
         rCell.ResetDirty();
         rCell.SetChanged(true);
     }
+
+    std::vector<SCROW> aRows;
+    aRows.reserve(nLen);
+    for (size_t i = 0; i < nLen; ++i)
+        aRows.push_back(nRow+i);
+
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
 void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )

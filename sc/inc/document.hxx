@@ -2018,6 +2018,11 @@ public:
 
     formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
 
+    /**
+     * Called whenever the value of a cell inside the document is modified.
+     */
+    void CellContentModified();
+
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
