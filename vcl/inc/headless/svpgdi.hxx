@@ -90,7 +90,7 @@ protected:
 
     // Device Font settings
     const ImplMacFontData*                  mpMacFontData;
-    ImplMacTextStyle*                       mpMacTextStyle;
+    CoreTextStyle*                          mpTextStyle;
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;

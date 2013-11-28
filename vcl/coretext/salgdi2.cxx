@@ -67,19 +67,6 @@ SystemFontList::~SystemFontList( void )
 
 // =======================================================================
 
-ImplMacTextStyle::ImplMacTextStyle( const FontSelectPattern& rReqFont )
-:   mpFontData( (ImplMacFontData*)rReqFont.mpFontData )
-,   mfFontStretch( 1.0 )
-,   mfFontRotation( 0.0 )
-{}
-
-// -----------------------------------------------------------------------
-
-ImplMacTextStyle::~ImplMacTextStyle( void )
-{}
-
-// =======================================================================
-
 ImplMacFontData::ImplMacFontData( const ImplMacFontData& rSrc )
 :   PhysicalFontFace( rSrc )
 ,   mnFontId( rSrc.mnFontId )
@@ -284,7 +271,7 @@ AquaSalGraphics::AquaSalGraphics()
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
     , mpMacFontData( NULL )
-    , mpMacTextStyle( NULL )
+    , mpTextStyle( NULL )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
@@ -294,7 +281,7 @@ AquaSalGraphics::AquaSalGraphics()
     : mrContext( NULL )
     , mfFakeDPIScale( 1.0 )
     , mpMacFontData( NULL )
-    , mpMacTextStyle( NULL )
+    , mpTextStyle( NULL )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
 #endif
@@ -306,7 +293,7 @@ AquaSalGraphics::~AquaSalGraphics()
 {
 #ifdef MACOSX
     CGPathRelease( mxClipPath );
-    delete mpMacTextStyle;
+    delete mpTextStyle;
 
     if( mpXorEmulation )
         delete mpXorEmulation;
@@ -328,15 +315,15 @@ AquaSalGraphics::~AquaSalGraphics()
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
     maTextColor = RGBAColor( nSalColor );
-    if( mpMacTextStyle)
-        mpMacTextStyle->SetTextColor( maTextColor );
+    if( mpTextStyle)
+        mpTextStyle->SetTextColor( maTextColor );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int /*nFallbackLevel*/ )
 {
-    mpMacTextStyle->GetFontMetric( mfFakeDPIScale, *pMetric );
+    mpTextStyle->GetFontMetric( mfFakeDPIScale, *pMetric );
 }
 
 // -----------------------------------------------------------------------
@@ -435,7 +422,7 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    const bool bRC = mpMacTextStyle->GetGlyphOutline( nGlyphId, rPolyPoly );
+    const bool bRC = mpTextStyle->GetGlyphOutline( nGlyphId, rPolyPoly );
     return bRC;
 }
 
@@ -443,7 +430,7 @@ sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPol
 
 sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect )
 {
-    const bool bRC = mpMacTextStyle->GetGlyphBoundRect( nGlyphId, rRect );
+    const bool bRC = mpTextStyle->GetGlyphBoundRect( nGlyphId, rRect );
     return bRC;
 }
 
@@ -465,8 +452,8 @@ void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
     // release the text style
-    delete mpMacTextStyle;
-    mpMacTextStyle = NULL;
+    delete mpTextStyle;
+    mpTextStyle = NULL;
 
     // handle NULL request meaning: release-font-resources request
     if( !pReqFont )
@@ -477,8 +464,8 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 
     // update the text style
     mpMacFontData = static_cast<const ImplMacFontData*>( pReqFont->mpFontData );
-    mpMacTextStyle = mpMacFontData->CreateMacTextStyle( *pReqFont );
-    mpMacTextStyle->SetTextColor( maTextColor );
+    mpTextStyle = mpMacFontData->CreateTextStyle( *pReqFont );
+    mpTextStyle->SetTextColor( maTextColor );
 
     SAL_INFO("vcl.coretext",
             "SetFont"
@@ -500,7 +487,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 
 SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFallbackLevel*/ )
 {
-    SalLayout* pSalLayout = mpMacTextStyle->GetTextLayout();
+    SalLayout* pSalLayout = mpTextStyle->GetTextLayout();
     return pSalLayout;
 }
 

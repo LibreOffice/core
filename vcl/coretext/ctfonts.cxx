@@ -64,8 +64,10 @@ inline double toRadian(int nDegree)
     return nDegree * (M_PI / 1800.0);
 }
 
-CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
-:   ImplMacTextStyle( rFSD )
+CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
+:   mpFontData( (ImplMacFontData*)rFSD.mpFontData )
+,   mfFontStretch( 1.0 )
+,   mfFontRotation( 0.0 )
 ,   mpStyleDict( NULL )
 {
     mpFontData = (CTFontData*)rFSD.mpFontData;
@@ -125,7 +127,7 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
 
 // -----------------------------------------------------------------------
 
-CTTextStyle::~CTTextStyle( void )
+CoreTextStyle::~CoreTextStyle( void )
 {
     if( mpStyleDict )
         CFRelease( mpStyleDict );
@@ -133,7 +135,7 @@ CTTextStyle::~CTTextStyle( void )
 
 // -----------------------------------------------------------------------
 
-void CTTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric ) const
+void CoreTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -155,7 +157,7 @@ void CTTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric )
 
 // -----------------------------------------------------------------------
 
-bool CTTextStyle::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect ) const
+bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect ) const
 {
     CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK;
     // XXX: this is broken if the glyph came from fallback font
@@ -213,7 +215,7 @@ static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
     }
 }
 
-bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rResult ) const
+bool CoreTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rResult ) const
 {
     rResult.clear();
 
@@ -235,7 +237,7 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon
 
 // -----------------------------------------------------------------------
 
-void CTTextStyle::SetTextColor( const RGBAColor& rColor )
+void CoreTextStyle::SetTextColor( const RGBAColor& rColor )
 {
     CGFloat aColor[] = { rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() };
     CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
@@ -267,9 +269,9 @@ PhysicalFontFace* CTFontData::Clone( void ) const
 
 // -----------------------------------------------------------------------
 
-ImplMacTextStyle* CTFontData::CreateMacTextStyle( const FontSelectPattern& rFSD ) const
+CoreTextStyle* CTFontData::CreateTextStyle( const FontSelectPattern& rFSD ) const
 {
-    return new CTTextStyle( rFSD);
+    return new CoreTextStyle( rFSD);
 }
 
 // -----------------------------------------------------------------------

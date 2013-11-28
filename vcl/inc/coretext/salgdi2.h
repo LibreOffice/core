@@ -44,7 +44,7 @@
 
 class AquaSalFrame;
 class ImplDevFontAttributes;
-class ImplMacTextStyle;
+class CoreTextStyle;
 
 typedef sal_uInt32 sal_GlyphId;
 typedef std::vector<unsigned char> ByteVector;
@@ -61,7 +61,7 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr      GetFontId() const;
 
-    virtual ImplMacTextStyle* CreateMacTextStyle( const FontSelectPattern& ) const = 0;
+    virtual CoreTextStyle*  CreateTextStyle( const FontSelectPattern& ) const = 0;
     virtual int             GetFontTable( const char pTagName[5], unsigned char* ) const = 0;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
@@ -83,29 +83,32 @@ private:
     mutable bool                mbFontCapabilitiesRead;
 };
 
-// --------------------
-// - ImplMacTextStyle -
-// --------------------
-class ImplMacTextStyle
+class CoreTextStyle
 {
 public:
-    explicit        ImplMacTextStyle( const FontSelectPattern& );
-    virtual         ~ImplMacTextStyle( void );
+    CoreTextStyle( const FontSelectPattern& );
+    ~CoreTextStyle( void );
 
-    virtual SalLayout* GetTextLayout( void ) const = 0;
+    SalLayout* GetTextLayout( void ) const;
 
-    virtual void    GetFontMetric( float fPDIY, ImplFontMetricData& ) const = 0;
-    virtual bool    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const = 0;
-    virtual bool    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const = 0;
+    void       GetFontMetric( float fPDIY, ImplFontMetricData& ) const;
+    bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
+    bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
-    virtual void    SetTextColor( const RGBAColor& ) = 0;
+    void       SetTextColor( const RGBAColor& );
 
-//###protected:
     const ImplMacFontData*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
     /// text rotation in radian
     float               mfFontRotation;
+
+private:
+    /// CoreText text style object
+    CFMutableDictionaryRef  mpStyleDict;
+
+    friend class CTLayout;
+    CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
 };
 
 // ------------------
@@ -158,7 +161,7 @@ protected:
 
     // Device Font settings
      const ImplMacFontData*                  mpMacFontData;
-    ImplMacTextStyle*                       mpMacTextStyle;
+    CoreTextStyle*                           mpTextStyle;
     RGBAColor                               maTextColor;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;

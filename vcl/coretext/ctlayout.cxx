@@ -25,7 +25,7 @@ class CTLayout
 :   public SalLayout
 {
 public:
-    explicit        CTLayout( const CTTextStyle* );
+    explicit        CTLayout( const CoreTextStyle* );
     virtual         ~CTLayout( void );
 
     virtual bool    LayoutText( ImplLayoutArgs& );
@@ -52,7 +52,7 @@ private:
     CGPoint         GetTextDrawPosition(void) const;
     double          GetWidth(void) const;
 
-    const CTTextStyle* const    mpTextStyle;
+    const CoreTextStyle* const    mpTextStyle;
 
     // CoreText specific objects
     CFAttributedStringRef mpAttrString;
@@ -69,7 +69,7 @@ private:
     mutable double  mfBaseAdv;
 };
 
-CTLayout::CTLayout( const CTTextStyle* pTextStyle )
+CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
 :   mpTextStyle( pTextStyle )
 ,   mpAttrString( NULL )
 ,   mpCTLine( NULL )
@@ -493,7 +493,7 @@ void CTLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void CTLayout::DropGlyph( int /*nStart*/ ) {}
 void CTLayout::Simplify( bool /*bIsBase*/ ) {}
 
-SalLayout* CTTextStyle::GetTextLayout( void ) const
+SalLayout* CoreTextStyle::GetTextLayout( void ) const
 {
     return new CTLayout( this);
 }

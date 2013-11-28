@@ -23,29 +23,6 @@
 #endif
 #include "sallayout.hxx"
 
-class CTTextStyle
-:   public ImplMacTextStyle
-{
-public:
-    explicit    CTTextStyle( const FontSelectPattern& );
-    virtual     ~CTTextStyle( void );
-
-    virtual SalLayout* GetTextLayout( void ) const;
-
-    virtual void    GetFontMetric( float fDPIY, ImplFontMetricData& ) const;
-    virtual bool    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
-    virtual bool    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
-
-    virtual void    SetTextColor( const RGBAColor& );
-
-private:
-    /// CoreText text style object
-    CFMutableDictionaryRef  mpStyleDict;
-
-    friend class CTLayout;
-    CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
-};
-
 // CoreText specific physically available font face
 class CTFontData
 :   public ImplMacFontData
@@ -56,7 +33,7 @@ public:
     virtual                 ~CTFontData( void );
     virtual PhysicalFontFace*   Clone( void ) const;
 
-    virtual ImplMacTextStyle*   CreateMacTextStyle( const FontSelectPattern& ) const;
+    virtual CoreTextStyle*      CreateTextStyle( const FontSelectPattern& ) const;
     virtual ImplFontEntry*      CreateFontInstance( /*const*/ FontSelectPattern& ) const;
     virtual int                 GetFontTable( const char pTagName[5], unsigned char* ) const;
 };
