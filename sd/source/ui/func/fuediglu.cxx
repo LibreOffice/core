@@ -318,7 +318,6 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 //simulate mouse move action
                 MouseEvent eMevt(ePoint,1,2,MOUSE_LEFT, 0);
                 MouseMove(eMevt);
-                         Point aPix(eMevt.GetPosPixel());
                 oldPoint = ePoint;
                 bBeginInsertPoint = sal_True;
                 bReturn = sal_True;
