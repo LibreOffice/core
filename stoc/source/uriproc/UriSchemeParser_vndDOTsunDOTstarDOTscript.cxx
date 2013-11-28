@@ -42,7 +42,6 @@
 #include "sal/types.h"
 
 #include <exception>
-#include <new>
 
 namespace {
 
@@ -446,12 +445,7 @@ css::uno::Reference< css::uno::XInterface > create(
     SAL_THROW((css::uno::Exception))
 {
     //TODO: single instance
-    try {
-        return static_cast< cppu::OWeakObject * >(new Parser);
-    } catch (std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            OUString("std::bad_alloc"), 0);
-    }
+    return static_cast< cppu::OWeakObject * >(new Parser);
 }
 
 OUString getImplementationName() {

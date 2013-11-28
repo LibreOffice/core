@@ -22,7 +22,6 @@
 #include "stocservices.hxx"
 
 #include <exception>
-#include <new>
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -222,13 +221,7 @@ css::uno::Reference< css::uno::XInterface > create(
     SAL_THROW((css::uno::Exception))
 {
     //TODO: single instance
-    try {
-        return static_cast< ::cppu::OWeakObject * >(new Parser);
-    } catch (::std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            OUString("std::bad_alloc"),
-            css::uno::Reference< css::uno::XInterface >());
-    }
+    return static_cast< ::cppu::OWeakObject * >(new Parser);
 }
 
 OUString getImplementationName() {

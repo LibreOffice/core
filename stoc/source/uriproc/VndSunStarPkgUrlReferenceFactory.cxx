@@ -42,8 +42,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include <new>
-
 namespace {
 
 class Factory: public cppu::WeakImplHelper2<
@@ -130,12 +128,7 @@ css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
     SAL_THROW((css::uno::Exception))
 {
-    try {
-        return static_cast< cppu::OWeakObject * >(new Factory(context));
-    } catch (std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            OUString("std::bad_alloc"), 0);
-    }
+    return static_cast< cppu::OWeakObject * >(new Factory(context));
 }
 
 OUString getImplementationName() {

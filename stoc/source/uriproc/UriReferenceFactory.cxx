@@ -23,7 +23,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <exception>
-#include <new>
 #include <vector>
 
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
@@ -641,11 +640,7 @@ css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
     SAL_THROW((css::uno::Exception))
 {
-    try {
-        return static_cast< cppu::OWeakObject * >(new Factory(context));
-    } catch (std::bad_alloc &) {
-        throw css::uno::RuntimeException("std::bad_alloc", 0);
-    }
+    return static_cast< cppu::OWeakObject * >(new Factory(context));
 }
 
 OUString getImplementationName() {
