@@ -10,13 +10,15 @@
 #include "WpsContext.hxx"
 #include <oox/drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapestylecontext.hxx>
+#include <com/sun/star/beans/XPropertyState.hpp>
 
 using namespace com::sun::star;
 
 namespace oox { namespace shape {
 
-WpsContext::WpsContext(ContextHandler2Helper& rParent)
-: ContextHandler2(rParent)
+WpsContext::WpsContext(ContextHandler2Helper& rParent, uno::Reference<drawing::XShape> xShape)
+    : ContextHandler2(rParent),
+    mxShape(xShape)
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
     mpShape->setWps(true);
@@ -31,7 +33,7 @@ oox::drawingml::ShapePtr WpsContext::getShape()
     return mpShape;
 }
 
-oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& /*rAttribs*/)
+oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs)
 {
     switch (getBaseToken(nElementToken))
     {
@@ -48,6 +50,25 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             return new oox::drawingml::ShapeStyleContext(*this, *mpShape);
             break;
         case XML_bodyPr:
+            if (mxShape.is())
+            {
+                OptValue<OUString> oVert = rAttribs.getString(XML_vert);
+                if (oVert.has() && oVert.get() == "vert270")
+                {
+                    // No support for this in core, work around by char rotation, as we do so for table cells already.
+                    uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
+                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                    xTextCursor->gotoStart(false);
+                    xTextCursor->gotoEnd(true);
+                    uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor, uno::UNO_QUERY);
+                    beans::PropertyState aState = xPropertyState->getPropertyState("CharRotation");
+                    if (aState == beans::PropertyState_DEFAULT_VALUE)
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(xTextCursor, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("CharRotation", uno::makeAny(sal_Int16(900)));
+                    }
+                }
+            }
             break;
         case XML_txbx:
             mpShape->setServiceName("com.sun.star.text.TextFrame");

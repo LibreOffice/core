@@ -155,6 +155,7 @@ private:
     css::uno::Reference<XFastContextHandler> mxDiagramShapeContext;
     css::uno::Reference<XFastContextHandler> mxLockedCanvasContext;
     css::uno::Reference<XFastContextHandler> mxWpsContext;
+    css::uno::Reference<css::drawing::XShape> mxSavedShape;
     css::uno::Reference<XFastContextHandler> mxWpgContext;
     css::uno::Reference<XFastContextHandler> mxChartShapeContext;
 
@@ -169,9 +170,9 @@ private:
     css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
     css::uno::Reference<XFastContextHandler> getDiagramShapeContext();
     css::uno::Reference<XFastContextHandler> getLockedCanvasContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getWpgContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getContextHandler();
+    css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
 };
 
 }}

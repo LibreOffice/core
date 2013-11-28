@@ -117,17 +117,23 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getChartShape
     return mxChartShapeContext;
 }
 
-uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext(sal_Int32 nElement)
+uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement)
 {
     if (!mxWpsContext.is())
     {
         FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
 
-        switch (getBaseToken(nElement))
+        uno::Reference<drawing::XShape> xShape;
+        // No element happens in case of pretty-printed XML, bodyPr is the case when we are called again after <wps:txbx>.
+        if (!nElement || nElement == WPS_TOKEN(bodyPr))
+            // Assume that this is just a continuation of the previous shape.
+            xShape = mxSavedShape;
+
+        switch (getBaseToken(nStartElement))
         {
             case XML_wsp:
-                mxWpsContext.set(new WpsContext(*rFragmentHandler));
+                mxWpsContext.set(new WpsContext(*rFragmentHandler, xShape));
                 break;
             default:
                 break;
@@ -215,7 +221,7 @@ ShapeContextHandler::getDiagramShapeContext()
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
-ShapeContextHandler::getContextHandler()
+ShapeContextHandler::getContextHandler(sal_Int32 nElement)
 {
     uno::Reference<xml::sax::XFastContextHandler> xResult;
 
@@ -235,7 +241,7 @@ ShapeContextHandler::getContextHandler()
             xResult.set(getChartShapeContext(mnStartToken));
             break;
         case NMSP_wps:
-            xResult.set(getWpsContext(mnStartToken));
+            xResult.set(getWpsContext(mnStartToken, nElement));
             break;
         case NMSP_wpg:
             xResult.set(getWpgContext(mnStartToken));
@@ -336,7 +342,7 @@ ShapeContextHandler::createFastChildContext
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
-    uno::Reference< xml::sax::XFastContextHandler > xContextHandler(getContextHandler());
+    uno::Reference< xml::sax::XFastContextHandler > xContextHandler(getContextHandler(Element));
 
     if (xContextHandler.is())
         xResult.set(xContextHandler->createFastChildContext
@@ -453,6 +459,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                 pShape->setPosition(maPosition);
                 pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
+                mxSavedShape = xResult;
                 mxWpsContext.clear();
             }
         }

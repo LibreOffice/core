@@ -19,7 +19,7 @@ namespace oox { namespace shape {
 class WpsContext : public oox::core::ContextHandler2
 {
 public:
-    WpsContext(oox::core::ContextHandler2Helper& rParent);
+    WpsContext(oox::core::ContextHandler2Helper& rParent, css::uno::Reference<css::drawing::XShape> xShape);
     virtual ~WpsContext();
 
     virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) SAL_OVERRIDE;
@@ -28,6 +28,7 @@ public:
 
 protected:
     oox::drawingml::ShapePtr mpShape;
+    css::uno::Reference<css::drawing::XShape> mxShape;
 };
 
 
