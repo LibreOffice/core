@@ -230,20 +230,16 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             *static_cast< uno_Interface ** >(
                 unmarshal.readValue(t).getValue(t)));
     }
-    bool synchronous;
-    if (memberTd.get()->eTypeClass == typelib_TypeClass_INTERFACE_METHOD &&
+    bool oneWay =
+        memberTd.get()->eTypeClass == typelib_TypeClass_INTERFACE_METHOD &&
         (reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
             memberTd.get())->
-         bOneWay))
-    {
-        synchronous = forceSynchronous;
-    } else {
-        SAL_INFO_IF(
-            forceSynchronous, "binaryurp",
-            ("superfluous MUSTREPLY/SYNCHRONOUS ignored in request message with"
-             " non-oneway function ID"));
-        synchronous = true;
-    }
+         bOneWay);
+    SAL_INFO_IF(
+        !oneWay && forceSynchronous, "binaryurp",
+        ("superfluous MUSTREPLY/SYNCHRONOUS ignored in request message with"
+         " non-oneway function ID"));
+    bool synchronous = !oneWay || forceSynchronous;
     bool setter = false;
     std::vector< BinaryAny > inArgs;
     switch (memberTd.get()->eTypeClass) {
