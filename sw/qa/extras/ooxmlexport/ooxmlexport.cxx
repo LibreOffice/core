@@ -2041,6 +2041,13 @@ DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
         return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
+
+DECLARE_OOXMLEXPORT_TEST(testFDO71834, "FDO71834.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (pXmlDoc)
+        assertXPath(pXmlDoc, "/w:document/w:body");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
