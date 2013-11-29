@@ -376,9 +376,17 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             testData->output[j] = fAverage + (fMin * fSoP);
         }
 
+        // InterpretTail - the S/W fallback is nothing like as efficient
+        // as any good openCL implementation: no SIMD, tons of branching
+        // in the inner loops etc. Generously characterise it as only 10x
+        // slower than the above.
+        float fInterpretTailFactor = 10.0;
+
         device->score = (void*)new LibreOfficeDeviceScore;
         ((LibreOfficeDeviceScore*)device->score)->fTime = timerCurrent(&kernelTime);
         ((LibreOfficeDeviceScore*)device->score)->bNoCLErrors = true;
+
+        ((LibreOfficeDeviceScore*)device->score)->fTime *= fInterpretTailFactor;
     }
     return DS_SUCCESS;
 }
