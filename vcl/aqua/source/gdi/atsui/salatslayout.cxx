@@ -48,7 +48,8 @@ public:
     virtual void    DrawText( SalGraphics& ) const;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
+                        sal_Int32* pGlyphAdvances, int* pCharIndexes,
+                        const PhysicalFontFace** pFallbackFonts = NULL) const;
 
     virtual long    GetTextWidth() const;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;

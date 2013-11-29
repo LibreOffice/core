@@ -315,8 +315,8 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 {
                     // even if a family name is not the one we are looking for
                     // it is still useful as a font name alternative
-                    if( rDFA.maMapNames.Len() )
-                        rDFA.maMapNames += ';';
+                    if( rDFA.maMapNames.getLength() )
+                        rDFA.maMapNames += ";";
                     rDFA.maMapNames += (nBestNameValue < nNameValue) ? rDFA.GetFamilyName() : aUtf16Name;
                 }
                 if( nBestNameValue < nNameValue )
