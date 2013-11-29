@@ -237,21 +237,6 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
     }
 }
 
-static bool HasAtHook()
-{
-    sal_Int32 bIsRuning=0;
-    // BOOL WINAPI SystemParametersInfo(
-    //    __in     UINT uiAction,
-    //    __in     UINT uiParam,
-    //    __inout  PVOID pvParam,
-    //    __in     UINT fWinIni
-    //  );
-    // pvParam must be BOOL (defined in MFC as int)
-    // End
-    return SystemParametersInfo( SPI_GETSCREENREADER, 0,
-                                 &bIsRuning, 0) && bIsRuning;
-}
-
 /**
  * Static method that can create an entity of our MSAA Service
  * @param xContext No use here.
@@ -259,17 +244,6 @@ static bool HasAtHook()
  */
 Reference< XInterface > SAL_CALL create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ ) SAL_THROW( () )
 {
-    bool bRunWithoutAt = getenv("SAL_FORCE_IACCESSIBLE2");
-
-    if ( !HasAtHook() )
-    {
-        if ( !bRunWithoutAt )
-        {
-            SAL_INFO("iacc2", "Apparently no running AT -> not enabling IAccessible2 integration");
-            return Reference< XMSAAService >();
-        }
-    }
-
     Reference< XMSAAService > xAccMgr( new MSAAServiceImpl() );
 
     AccessBridgeUpdateOldTopWindows( xAccMgr );

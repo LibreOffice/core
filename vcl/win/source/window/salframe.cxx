@@ -6257,4 +6257,14 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
 
 // -----------------------------------------------------------------------
 
+#ifdef _WIN32
+bool HasAtHook()
+{
+    BOOL bIsRunning = FALSE;
+    // pvParam must be BOOL
+    return SystemParametersInfo(SPI_GETSCREENREADER, 0, &bIsRunning, 0)
+        && bIsRunning;
+}
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
