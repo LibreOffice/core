@@ -34,7 +34,7 @@ class ToolBox;
 class SwGlblDocContents;
 class SwGlblDocContent;
 class SfxObjectShell;
-
+class SdrObject;
 
 #define EDIT_MODE_EDIT          0
 #define EDIT_MODE_UPD_IDX       1
@@ -91,6 +91,9 @@ class SwContentTree : public SvTreeListBox
 
     static bool         bIsInDrag;
 
+    bool                bIsKeySpace;
+    Rectangle           oldRectangle;
+
     void                FindActiveTypeAndRemoveUserData();
 
     using SvTreeListBox::ExecuteDrop;
@@ -144,6 +147,9 @@ protected:
 public:
     SwContentTree(Window* pParent, const ResId& rResId);
     ~SwContentTree();
+    OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const;
+    OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const;
+    SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
     bool            ToggleToRoot();
     bool            IsRoot() const {return bIsRoot;}
@@ -195,6 +201,7 @@ public:
     virtual void    KeyInput(const KeyEvent& rKEvt);
 
     virtual sal_Bool    Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual sal_Int32  GetEntryRealChildrenNum( SvTreeListEntry* pEntry ) const;
 };
 
 

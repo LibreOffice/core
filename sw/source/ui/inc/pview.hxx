@@ -140,6 +140,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
                     CreateAccessible();
+    virtual void SwitchView();
 };
 
 /**
@@ -149,7 +150,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
 {
     // ViewWindow and handle to core
     // current dispatcher shell
-    SwPagePreviewWin        aViewWin;
+    SwPagePreviewWin*        pViewWin;
     //viewdata of the previous SwView and the new crsrposition
     OUString                sSwViewData;
     //and the new cursor position if the user double click in the PagePreview
@@ -221,11 +222,11 @@ public:
     TYPEINFO();
 
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
-    inline SwViewShell*       GetViewShell() const { return aViewWin.GetViewShell(); }
+    inline SwViewShell*       GetViewShell() const { return pViewWin->GetViewShell(); }
     inline const Rectangle& GetVisArea() const { return aVisArea; }
-    inline void             GrabFocusViewWin() { aViewWin.GrabFocus(); }
+    inline void             GrabFocusViewWin() { pViewWin->GrabFocus(); }
     inline void             RepaintCoreRect( const SwRect& rRect )
-                                { aViewWin.RepaintCoreRect( rRect ); }
+                                { pViewWin->RepaintCoreRect( rRect ); }
 
     void            DocSzChgd(const Size& rNewSize);
     const Size&     GetDocSz() const { return aDocSz; }
@@ -241,8 +242,8 @@ public:
     void            EnableHScrollbar(bool bEnable);
     void            EnableVScrollbar(bool bEnable);
 
-    sal_uInt16          GetPageCount() const        { return mnPageCount; }
-    sal_uInt16      GetSelectedPage() const {return aViewWin.SelectedPage();}
+    sal_uInt16      GetPageCount() const        { return mnPageCount; }
+    sal_uInt16      GetSelectedPage() const {return pViewWin->SelectedPage();}
 
     sal_Bool            HandleWheelCommands( const CommandEvent& );
 

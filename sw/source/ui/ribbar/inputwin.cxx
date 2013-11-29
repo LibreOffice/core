@@ -42,6 +42,7 @@
 #include "cellatr.hxx"
 #include "edtwin.hxx"
 #include "helpid.h"
+#include "access.hrc"
 
 // Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
 #include "pam.hxx"
@@ -82,9 +83,14 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     pWrtShell = pView ? pView->GetWrtShellPtr() : 0;
 
     InsertWindow( ED_POS, &aPos, 0, 0);
+    SetItemText(ED_POS, SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
+    aPos.SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
+    SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TOOLBAR));
     InsertSeparator ( 1 );
     InsertSeparator ();
     InsertWindow( ED_FORMULA, &aEdit);
+    SetItemText(ED_FORMULA, SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
+    aEdit.SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
     SetItemImage( FN_FORMULA_CALC,   pManager->GetImage(FN_FORMULA_CALC   ));

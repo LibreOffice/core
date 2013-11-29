@@ -106,12 +106,15 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
             break;
     }
 
-    const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
-    for( size_t i = 0; i < rFilterList.size(); ++i )
+    if (pFamilyItem)
     {
-        m_pFilterLB->InsertEntry( rFilterList[ i ]->aName);
-        sal_uInt16* pFilter = new sal_uInt16(rFilterList[i]->nFlags);
-        m_pFilterLB->SetEntryData(i, pFilter);
+        const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
+        for( size_t i = 0; i < rFilterList.size(); ++i )
+        {
+            m_pFilterLB->InsertEntry( rFilterList[ i ]->aName);
+            sal_uInt16* pFilter = new sal_uInt16(rFilterList[i]->nFlags);
+            m_pFilterLB->SetEntryData(i, pFilter);
+        }
     }
     m_pFilterLB->SelectEntryPos(1);
 

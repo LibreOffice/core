@@ -999,6 +999,26 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
                     ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
 }
 
+sal_Bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
+{
+    if (pObj)
+    {
+        const SdrMarkList& aMarkList = Imp()->GetDrawView()->GetMarkedObjectList();
+        if (aMarkList.GetMarkCount() == 0)
+        {
+            return sal_True;
+        }
+        SdrMark* pM=aMarkList.GetMark(0);
+        if (pM)
+        {
+            SdrObject* pMarkObj = pM->GetMarkedSdrObj();
+            if (pMarkObj && pMarkObj->GetUpGroup() == pObj->GetUpGroup())
+                return sal_True;
+        }
+    }
+    return sal_False;
+}
+
 /*************************************************************************
 |*
 |*  SwFEShell::EndTextEdit()

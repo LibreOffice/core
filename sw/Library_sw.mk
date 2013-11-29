@@ -93,6 +93,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/access/accdoc \
     sw/source/core/access/accembedded \
     sw/source/core/access/accfootnote \
+    sw/source/core/access/accfield \
     sw/source/core/access/accframe \
     sw/source/core/access/accframebase\
     sw/source/core/access/accfrmobj \
@@ -104,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/access/acchypertextdata \
     sw/source/core/access/accmap \
     sw/source/core/access/accnotextframe \
+    sw/source/core/access/accnotexthyperlink \
     sw/source/core/access/accpage \
     sw/source/core/access/accpara \
     sw/source/core/access/accportions \

@@ -178,7 +178,8 @@ public:
 
     void SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable );
     void SetTableLines( const SwTable &rTable );
-    void DelFrms ( SwTable &rTable );
+    //Add an input param to identify if acc table should be disposed
+    void DelFrms ( SwTable &rTable,sal_Bool bAccTableDispose = sal_False );
     void MakeFrms( SwTable &rTable );
     void MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                                        const sal_Bool bBehind );

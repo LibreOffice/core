@@ -37,6 +37,7 @@
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
+#include <doc.hxx>
 #include <wordcountdialog.hxx>
 
 
@@ -168,6 +169,12 @@ long SwWrtShell::SelAll()
                 TblCrsrToCursor();
             // Do the extended select all on m_pCurCrsr.
             ExtendedSelectAll(/*bFootnotes =*/ false);
+        }
+
+        SwDoc *pDoc = GetDoc();
+        if ( pDoc )
+        {
+            pDoc->SetPrepareSelAll();
         }
 
         if( pStartPos )

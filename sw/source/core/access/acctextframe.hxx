@@ -22,13 +22,16 @@
 
 #include "accframebase.hxx"
 
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+
 class SwFlyFrm;
 namespace utl { class AccessibleRelationSetHelper; }
 namespace com { namespace star {
     namespace accessibility { struct AccessibleRelation; }
 } }
 
-class SwAccessibleTextFrame : public SwAccessibleFrameBase
+class SwAccessibleTextFrame : public SwAccessibleFrameBase,
+        public ::com::sun::star::accessibility::XAccessibleSelection
 {
 private:
     // #i73249#
@@ -41,6 +44,41 @@ protected:
 
 public:
     SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+    //=====  XAccessibleSelection  ============================================
+    virtual void SAL_CALL selectAccessibleChild(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL clearAccessibleSelection(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL selectAllAccessibleChildren(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL deselectAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException );
 
     //=====  XAccessibleContext  ==============================================
 

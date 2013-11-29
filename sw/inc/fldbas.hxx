@@ -126,8 +126,16 @@ enum SwFldTypesEnum
     TYP_DROPDOWN,
     TYP_END
 };
-
-
+enum SwAttrFieldTYpe
+{
+    ATTR_NONE,
+    ATTR_DATEFLD,
+    ATTR_TIMEFLD,
+    ATTR_PAGENUMBERFLD,
+    ATTR_PAGECOOUNTFLD,
+    ATTR_BOOKMARKFLD,
+    ATTR_SETREFATTRFLD
+};
 enum SwFileNameFormat
 {
     FF_BEGIN,

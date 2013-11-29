@@ -61,6 +61,7 @@ public:
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     OUString GetCurrentPersistName() const { return aName; }
+    OUString GetStyleString();
     sal_Bool IsOleRef() const;  ///< To avoid unneccessary loading of object.
 };
 

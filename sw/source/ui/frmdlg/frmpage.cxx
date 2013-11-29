@@ -598,10 +598,12 @@ static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
  --------------------------------------------------------------------*/
 namespace
 {
-    void HandleAutoCB( sal_Bool _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto )
+    void HandleAutoCB( sal_Bool _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto, MetricField& _rPF_Edit)
     {
         _rFT_man.Show( !_bChecked );
         _rFT_auto.Show( _bChecked );
+        OUString accName = _bChecked ? _rFT_auto.GetText() : _rFT_man.GetText();
+        _rPF_Edit.SetAccessibleName(accName);
     }
 }
 
@@ -2048,14 +2050,14 @@ IMPL_LINK_NOARG_INLINE_END(SwFrmPage, RealSizeHdl)
 IMPL_LINK_NOARG(SwFrmPage, AutoWidthClickHdl)
 {
     if( !IsInGraficMode() )
-        HandleAutoCB( m_pAutoWidthCB->IsChecked(), *m_pWidthFT, *m_pWidthAutoFT );
+        HandleAutoCB( m_pAutoWidthCB->IsChecked(), *m_pWidthFT, *m_pWidthAutoFT, *m_aWidthED.get() );
     return 0;
 }
 
 IMPL_LINK_NOARG(SwFrmPage, AutoHeightClickHdl)
 {
     if( !IsInGraficMode() )
-        HandleAutoCB( m_pAutoHeightCB->IsChecked(), *m_pHeightFT, *m_pHeightAutoFT );
+        HandleAutoCB( m_pAutoHeightCB->IsChecked(), *m_pHeightFT, *m_pHeightAutoFT, *m_aWidthED.get() );
     return 0;
 }
 
@@ -2200,14 +2202,14 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
         SwFrmSize eSize = rSize.GetHeightSizeType();
         sal_Bool bCheck = eSize != ATT_FIX_SIZE;
         m_pAutoHeightCB->Check( bCheck );
-        HandleAutoCB( bCheck, *m_pHeightFT, *m_pHeightAutoFT );
+        HandleAutoCB( bCheck, *m_pHeightFT, *m_pHeightAutoFT, *m_aWidthED.get() );
         if( eSize == ATT_VAR_SIZE )
             m_aHeightED.SetValue( m_aHeightED.GetMin(), FUNIT_NONE );
 
         eSize = rSize.GetWidthSizeType();
         bCheck = eSize != ATT_FIX_SIZE;
         m_pAutoWidthCB->Check( bCheck );
-        HandleAutoCB( bCheck, *m_pWidthFT, *m_pWidthAutoFT );
+        HandleAutoCB( bCheck, *m_pWidthFT, *m_pWidthAutoFT, *m_aWidthED.get() );
         if( eSize == ATT_VAR_SIZE )
             m_aWidthED.SetValue( m_aWidthED.GetMin(), FUNIT_NONE );
 

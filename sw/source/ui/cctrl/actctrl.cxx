@@ -89,8 +89,7 @@ void NoSpaceEdit::Modify()
         SetText(sTemp);
         SetSelection(aSel);
     }
-    if(GetModifyHdl().IsSet())
-        GetModifyHdl().Call(this);
+    Edit::Modify();
 }
 
 ReturnActionEdit::ReturnActionEdit(Window* pParent, const ResId& rResId)

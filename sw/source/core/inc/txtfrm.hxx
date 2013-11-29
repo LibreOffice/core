@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTFRM_HXX
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <tools/mempool.hxx>
 #include "cntfrm.hxx"
 #include "ndtxt.hxx"
@@ -214,6 +215,7 @@ protected:
 
 public:
 
+    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos );
     //public, weil der eine oder andere die Methode rufen darf um das
     //Prepare zu sparen - mit Vorsicht zu geniessen!
     void Init();

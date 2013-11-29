@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <flyfrm.hxx>
+#include <fmturl.hxx>
 #include "accgraphic.hxx"
 
 using namespace ::com::sun::star;
@@ -78,6 +79,17 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
         throw(RuntimeException)
 {
     return theSwAccessibleGraphicImplementationId::get().getSeq();
+}
+
+//  Return this object's role.
+sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole (void)
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
+
+    if (aURL.GetMap())
+        return AccessibleRole::IMAGE_MAP ;
+    return AccessibleRole::GRAPHIC ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

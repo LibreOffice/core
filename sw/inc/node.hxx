@@ -422,8 +422,12 @@ public:
     void MakeFrms( SwCntntNode& rNode );
 
     /** Method deletes all views of document for the node. The content-
-       frames are removed from the respective layout. */
-    void DelFrms();
+        frames are removed from the respective layout.
+
+        Add an input param to identify if acc table should be disposed
+    */
+    void DelFrms( sal_Bool bNeedDel = sal_False, sal_Bool bIsAccTableDispose = sal_True );
+
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */

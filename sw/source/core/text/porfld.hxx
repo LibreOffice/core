@@ -61,6 +61,7 @@ public:
     SwFldPortion( const OUString &rExpand, SwFont *pFnt = 0, bool bPlaceHolder = false );
     ~SwFldPortion();
 
+    sal_uInt16 m_nAttrFldType;
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
     inline bool HasFont() const { return 0 != pFnt; }

@@ -60,6 +60,10 @@ public:
 
     //====== XTypeProvider ====================================================
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    OUString SAL_CALL getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual void _InvalidateFocus();
 };
 
 #endif

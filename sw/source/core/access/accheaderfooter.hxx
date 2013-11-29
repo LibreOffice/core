@@ -63,6 +63,9 @@ public:
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+    //=====  XAccessibleComponent  ============================================
+    sal_Int32 SAL_CALL getBackground()
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

@@ -23,6 +23,12 @@
 #include <comphelper/servicehelper.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
+#include "cntfrm.hxx"
+#include "ndole.hxx"
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <../../ui/inc/wrtsh.hxx>
+#include <../../ui/inc/view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -40,6 +46,32 @@ SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
 
 SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 {
+}
+
+//=====  XInterface  ==========================================================
+com::sun::star::uno::Any SAL_CALL
+    SwAccessibleEmbeddedObject::queryInterface (const com::sun::star::uno::Type & rType)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aReturn = SwAccessibleNoTextFrame::queryInterface (rType);
+    if ( ! aReturn.hasValue())
+        aReturn = ::cppu::queryInterface (rType,
+         static_cast< ::com::sun::star::accessibility::XAccessibleExtendedAttributes* >(this) );
+    return aReturn;
+}
+
+void SAL_CALL
+    SwAccessibleEmbeddedObject::acquire (void)
+    throw ()
+{
+    SwAccessibleNoTextFrame::acquire ();
+}
+
+void SAL_CALL
+    SwAccessibleEmbeddedObject::release (void)
+    throw ()
+{
+    SwAccessibleNoTextFrame::release ();
 }
 
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
@@ -77,6 +109,33 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
         throw(uno::RuntimeException)
 {
     return theSwAccessibleEmbeddedObjectImplementationId::get().getSeq();
+}
+
+// XAccessibleExtendedAttributes
+::com::sun::star::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any strRet;
+    OUString style;
+    SwFlyFrm* pFFrm = getFlyFrm();
+
+    if( pFFrm )
+    {
+        style = "style:";
+        SwCntntFrm* pCFrm;
+        pCFrm = pFFrm->ContainsCntnt();
+        if( pCFrm )
+        {
+            SwCntntNode* pCNode = pCFrm->GetNode();
+            if( pCNode )
+            {
+                style += ((SwOLENode*)pCNode)->GetOLEObj().GetStyleString();
+            }
+        }
+        style += ";";
+    }
+    strRet <<= style;
+    return strRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

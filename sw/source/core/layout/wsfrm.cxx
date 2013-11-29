@@ -78,6 +78,7 @@ using namespace ::com::sun::star;
 
 SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
+    mbIfAccTableShouldDisposing( false ), //A member to identify if the acc table should dispose
     // #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
     mpRoot( pSib ? pSib->getRootFrm() : 0 ),

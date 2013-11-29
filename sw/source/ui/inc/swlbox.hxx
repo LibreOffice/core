@@ -79,7 +79,6 @@ public:
 
     sal_uInt16                  GetRemovedCount() const;
     const SwBoxEntry&       GetRemovedEntry(sal_uInt16 nPos) const;
-
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_INC_SWLBOX_HXX

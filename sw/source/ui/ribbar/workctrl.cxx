@@ -474,6 +474,13 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
             sText = SW_RESSTR(nResStr);
             nTbxBits = TIB_CHECKABLE;
         }
+        else
+        {
+            if (nNaviId == NID_PREV)
+                sText = SW_RESSTR(STR_IMGBTN_PGE_UP);
+            else if (nNaviId == NID_NEXT)
+                sText = SW_RESSTR(STR_IMGBTN_PGE_DOWN);
+        }
         aToolBox.InsertItem(nNaviId, sText, nTbxBits);
         aToolBox.SetHelpId( nNaviId, aNavigationHelpIds[i] );
     }

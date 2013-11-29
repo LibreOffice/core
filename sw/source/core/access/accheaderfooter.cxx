@@ -126,4 +126,19 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
     return theSwAccessibleHeaderFooterImplementationId::get().getSeq();
 }
 
+sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XAccessible > xParent =  getAccessibleParent();
+    if (xParent.is())
+    {
+        Reference< XAccessibleComponent > xAccContext (xParent,UNO_QUERY);
+        if(xAccContext.is())
+        {
+            return xAccContext->getBackground();
+        }
+    }
+    return SwAccessibleContext::getBackground();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

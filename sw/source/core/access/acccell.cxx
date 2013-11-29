@@ -39,6 +39,12 @@
 #include <cfloat>
 #include <limits.h>
 
+#include <ndtxt.hxx>
+#include <editeng/brushitem.hxx>
+#include <swatrset.hxx>
+#include <frmatr.hxx>
+#include "acctable.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace sw::access;
@@ -79,6 +85,8 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
+    //Add resizable state to table cell.
+    rStateSet.AddState( AccessibleStateType::RESIZABLE );
 
     // SELECTED
     if( IsSelected() )
@@ -93,6 +101,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
                                     const SwCellFrm *pCellFrm )
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
+    , aSelectionHelper( *this )
     , bIsSelected( sal_False )
 {
     SolarMutexGuard aGuard;
@@ -100,6 +109,11 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     SetName( sBoxName );
 
     bIsSelected = IsSelected();
+
+    //Need not assign the pointer of accessible table object to m_pAccTable,
+    //for it already done in SwAccessibleCell::GetTable(); Former codes:
+    //m_pAccTable= GetTable();
+    GetTable();
 }
 
 sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
@@ -121,8 +135,13 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
 
     sal_Bool bChanged = bOld != bNew;
     if( bChanged )
+    {
         FireStateChangedEvent( AccessibleStateType::SELECTED, bNew );
-
+        if (m_pAccTable)
+        {
+            m_pAccTable->AddSelectionCell(this,bNew);
+        }
+    }
     return bChanged;
 }
 
@@ -146,7 +165,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                 {
                     OSL_ENSURE( xAccImpl->GetFrm()->IsCellFrm(),
                              "table child is not a cell frame" );
-                    bChanged |= static_cast< SwAccessibleCell *>(
+                    bChanged = static_cast< SwAccessibleCell *>(
                             xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
                 else
@@ -168,6 +187,21 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 
 void SwAccessibleCell::_InvalidateCursorPos()
 {
+    if (IsSelected())
+    {
+        const SwAccessibleChild aChild( GetChild( *(GetMap()), 0 ) );
+        if( aChild.IsValid()  && aChild.GetSwFrm() )
+        {
+            ::rtl::Reference < SwAccessibleContext > xChildImpl( GetMap()->GetContextImpl( aChild.GetSwFrm())  );
+            if (xChildImpl.is())
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::STATE_CHANGED;
+                aEvent.NewValue <<= AccessibleStateType::FOCUSED;
+                xChildImpl->FireAccessibleEvent( aEvent );
+            }
+        }
+    }
 
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
     OSL_ENSURE( pParent->IsTabFrm(), "parent is not a tab frame" );
@@ -177,20 +211,12 @@ void SwAccessibleCell::_InvalidateCursorPos()
 
     while( pTabFrm )
     {
-        sal_Bool bChanged = _InvalidateChildrenCursorPos( pTabFrm );
-        if( bChanged )
-        {
-            ::rtl::Reference< SwAccessibleContext > xAccImpl(
-                GetMap()->GetContextImpl( pTabFrm, sal_False ) );
-            if( xAccImpl.is() )
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-                xAccImpl->FireAccessibleEvent( aEvent );
-            }
-        }
-
+        _InvalidateChildrenCursorPos( pTabFrm );
         pTabFrm = pTabFrm->GetFollow();
+    }
+    if (m_pAccTable)
+    {
+        m_pAccTable->FireSelectionEvent();
     }
 }
 
@@ -261,6 +287,19 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException )
 {
+    if (rType == ::getCppuType((const uno::Reference<XAccessibleExtendedAttributes>*)0))
+    {
+        uno::Any aR;
+        aR <<= uno::Reference<XAccessibleExtendedAttributes>(this);
+        return aR;
+    }
+
+    if (rType == ::getCppuType((const uno::Reference<XAccessibleSelection>*)0))
+    {
+        uno::Any aR;
+        aR <<= uno::Reference<XAccessibleSelection>(this);
+        return aR;
+    }
     if ( rType == ::getCppuType( static_cast< uno::Reference< XAccessibleValue > * >( 0 ) ) )
     {
         uno::Reference<XAccessibleValue> xValue = this;
@@ -311,7 +350,7 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
     return pCellFrm->GetTabBox()->GetFrmFmt();
 }
 
-
+//Implement TableCell currentValue
 uno::Any SwAccessibleCell::getCurrentValue( )
     throw( uno::RuntimeException )
 {
@@ -319,7 +358,30 @@ uno::Any SwAccessibleCell::getCurrentValue( )
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     uno::Any aAny;
-    aAny <<= GetTblBoxFormat()->GetTblBoxValue().GetValue();
+
+    const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
+    const SwStartNode *pSttNd = pCellFrm->GetTabBox()->GetSttNd();
+    if( pSttNd )
+    {
+        OUString strRet;
+        SwNodeIndex aCntntIdx( *pSttNd, 0 );
+        SwCntntNode* pCNd=NULL;
+        for(int nIndex = 0 ;
+            0 != ( pCNd = pSttNd->GetNodes().GoNext( &aCntntIdx ) ) &&
+            aCntntIdx.GetIndex() < pSttNd->EndOfSectionIndex();
+            ++nIndex )
+        {
+            if(pCNd && pCNd->IsTxtNode())
+            {
+                if (0 != nIndex)
+                {
+                    strRet += " ";
+                }
+                strRet +=((SwTxtNode*)pCNd)->GetTxt();
+            }
+        }
+        aAny <<= strRet;
+    }
     return aAny;
 }
 
@@ -353,6 +415,134 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
     uno::Any aAny;
     aAny <<= -DBL_MAX;
     return aAny;
+}
+
+OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
+{
+    int iReplace = -1;
+    iReplace = oldOUString.lastIndexOf(replacedChar);
+    if (iReplace > -1)
+    {
+        for(;iReplace>-1;)
+        {
+            oldOUString = oldOUString.replaceAt(iReplace,1, replaceStr);
+            iReplace=oldOUString.lastIndexOf(replacedChar,iReplace);
+        }
+    }
+    return oldOUString;
+}
+OUString ReplaceFourChar(OUString oldOUString)
+{
+    oldOUString = ReplaceOneChar(oldOUString,OUString("\\"),OUString("\\\\"));
+    oldOUString = ReplaceOneChar(oldOUString,OUString(";"),OUString("\\;"));
+    oldOUString = ReplaceOneChar(oldOUString,OUString("="),OUString("\\="));
+    oldOUString = ReplaceOneChar(oldOUString,OUString(","),OUString("\\,"));
+    oldOUString = ReplaceOneChar(oldOUString,OUString(":"),OUString("\\:"));
+    return oldOUString;
+}
+
+::com::sun::star::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any strRet;
+    SwFrmFmt *pFrmFmt = GetTblBoxFormat();
+    DBG_ASSERT(pFrmFmt,"Must be Valid");
+
+    const SwTblBoxFormula& tbl_formula = pFrmFmt->GetTblBoxFormula();
+
+    OUString strFormula = ReplaceFourChar(tbl_formula.GetFormula());
+    OUString strFor("Formula:");
+    strFor += strFormula;
+    strFor += ";" ;
+    strRet <<= strFor;
+
+    return strRet;
+}
+
+sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
+    sal_uInt32 crBack = rBack.GetColor().GetColor();
+
+    if (COL_AUTO == crBack)
+    {
+        uno::Reference<XAccessible> xAccDoc = getAccessibleParent();
+        if (xAccDoc.is())
+        {
+            uno::Reference<XAccessibleComponent> xCompoentDoc(xAccDoc, uno::UNO_QUERY);
+            if (xCompoentDoc.is())
+            {
+                crBack = (sal_uInt32)xCompoentDoc->getBackground();
+            }
+        }
+    }
+    return crBack;
+}
+
+//=====  XAccessibleSelection  ============================================
+void SwAccessibleCell::selectAccessibleChild(
+    sal_Int32 nChildIndex )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
+{
+    aSelectionHelper.selectAccessibleChild(nChildIndex);
+}
+
+sal_Bool SwAccessibleCell::isAccessibleChildSelected(
+    sal_Int32 nChildIndex )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
+{
+    return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
+}
+
+void SwAccessibleCell::clearAccessibleSelection(  )
+    throw ( uno::RuntimeException )
+{
+    aSelectionHelper.clearAccessibleSelection();
+}
+
+void SwAccessibleCell::selectAllAccessibleChildren(  )
+    throw ( uno::RuntimeException )
+{
+    aSelectionHelper.selectAllAccessibleChildren();
+}
+
+sal_Int32 SwAccessibleCell::getSelectedAccessibleChildCount(  )
+    throw ( uno::RuntimeException )
+{
+    return aSelectionHelper.getSelectedAccessibleChildCount();
+}
+
+uno::Reference<XAccessible> SwAccessibleCell::getSelectedAccessibleChild(
+    sal_Int32 nSelectedChildIndex )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
+}
+
+void SwAccessibleCell::deselectAccessibleChild(
+    sal_Int32 nSelectedChildIndex )
+    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
+{
+    aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
+}
+
+SwAccessibleTable *SwAccessibleCell::GetTable()
+{
+    if (!m_pAccTable)
+    {
+        if (!xTableReference.is())
+        {
+            xTableReference = getAccessibleParent();
+        #ifdef OSL_DEBUG_LEVEL
+            uno::Reference<XAccessibleContext> xContextTable(xTableReference, uno::UNO_QUERY);
+            OSL_ASSERT(xContextTable.is() && xContextTable->getAccessibleRole() == AccessibleRole::TABLE);
+        #endif
+            //SwAccessibleTable aTable = *(static_cast<SwAccessibleTable *>(xTable.get()));
+        }
+        m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
+    }
+    return m_pAccTable;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

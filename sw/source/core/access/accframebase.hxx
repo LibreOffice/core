@@ -22,6 +22,7 @@
 
 #include <acccontext.hxx>
 #include <calbck.hxx>
+#include <pam.hxx>
 
 class SwFlyFrm;
 
@@ -36,6 +37,9 @@ protected:
     // This drived class additionaly sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    SwFlyFrm* getFlyFrm() const;
+    sal_Bool GetSelectedState( );
+    SwPaM* GetCrsr();
 
     virtual void _InvalidateCursorPos();
     virtual void _InvalidateFocus();
@@ -54,6 +58,7 @@ public:
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
+    virtual sal_Bool SetSelectedState( sal_Bool bSeleted );
 };
 
 #endif

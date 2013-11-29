@@ -994,7 +994,8 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     // Delete the Frames
     aFndBox.SetTableLines( *this );
-    aFndBox.DelFrms( *this );
+    //Not dispose accessible table
+    aFndBox.DelFrms( *this,sal_False );
 
     if( 1 == rCpyTbl.GetTabSortBoxes().size() )
     {

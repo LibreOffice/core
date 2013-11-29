@@ -297,6 +297,7 @@ public:
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();
+    virtual void SwitchView();
 };
 
 #endif

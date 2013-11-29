@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/servicehelper.hxx>
 #include "access.hrc"
 #include <accpreview.hxx>
@@ -34,7 +35,7 @@ using ::com::sun::star::uno::Sequence;
 SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
     SwAccessibleDocumentBase( pMp )
 {
-    SetName( GetResource( STR_ACCESS_DOC_NAME ) );
+    SetName( GetResource( STR_ACCESS_PREVIEW_DOC_NAME ) );
 }
 
 SwAccessiblePreview::~SwAccessiblePreview()
@@ -71,6 +72,24 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
         throw(RuntimeException)
 {
     return theSwAccessiblePreviewImplementationId::get().getSeq();
+}
+
+OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
+{
+    return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );
+}
+
+OUString SAL_CALL SwAccessiblePreview::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString sLclName = SwAccessibleDocumentBase::getAccessibleName();
+    sLclName += " ";
+    sLclName += GetResource( STR_ACCESS_PREVIEW_DOC_SUFFIX );
+    return sLclName;
+}
+
+void SwAccessiblePreview::_InvalidateFocus()
+{
+    FireStateChangedEvent( ::com::sun::star::accessibility::AccessibleStateType::FOCUSED, sal_True );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
