@@ -129,11 +129,11 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                             aShorter = rOrigWord;
                             aLonger  = aText;
                         }
-                        xub_StrLen nS = sal::static_int_cast< xub_StrLen >( aShorter.getLength() );
-                        xub_StrLen nL = sal::static_int_cast< xub_StrLen >( aLonger.getLength() );
+                        sal_Int32 nS = aShorter.getLength();
+                        sal_Int32 nL = aLonger.getLength();
                         if (nS > 0 && nL > 0)
                         {
-                            DBG_ASSERT( (nS + 1 == nL) && aLonger[nL-1] == (sal_Unicode) '.',
+                            DBG_ASSERT( (nS + 1 == nL) && aLonger[nL-1] == '.',
                                 "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
                         }
                     }

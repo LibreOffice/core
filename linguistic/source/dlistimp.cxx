@@ -781,7 +781,7 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
 
 
 static sal_Int32 lcl_GetToken( OUString &rToken,
-            const OUString &rText, xub_StrLen nPos, const OUString &rDelim )
+            const OUString &rText, sal_Int32 nPos, const OUString &rDelim )
 {
     sal_Int32 nRes = -1;
 
@@ -796,7 +796,7 @@ static sal_Int32 lcl_GetToken( OUString &rToken,
     else
     {
         sal_Int32 i;
-        for (i = nPos;  i < rText.getLength();  ++i)
+        for (i = nPos; i < rText.getLength(); ++i)
         {
             if (-1 != rDelim.indexOf( rText[i] ))
                 break;
@@ -805,7 +805,7 @@ static sal_Int32 lcl_GetToken( OUString &rToken,
         if (i >= rText.getLength())   // delimeter not found
             rToken  = rText.copy( nPos );
         else
-            rToken  = rText.copy( nPos, (sal_Int32) i - nPos );
+            rToken  = rText.copy( nPos, i - nPos );
         nRes    = i + 1;    // continue after found delimeter
     }
 
