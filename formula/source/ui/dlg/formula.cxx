@@ -127,7 +127,7 @@ namespace formula
         sal_Bool            UpdateParaWin(Selection& _rSelection);
         void            UpdateParaWin(const Selection& _rSelection,const OUString& _sRefStr);
 
-        void            SetData(xub_StrLen nFStart,xub_StrLen nNextFStart,xub_StrLen nNextFEnd,xub_StrLen& PrivStart,xub_StrLen& PrivEnd);
+        void            SetData(sal_Int32 nFStart, xub_StrLen nNextFStart, xub_StrLen nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd);
         void            PreNotify( NotifyEvent& rNEvt );
 
         RefEdit*        GetCurrRefEdit();
@@ -848,7 +848,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
                 pMEdit->SetHelpId(aHelpId);
         }
 
-        xub_StrLen nOldStart, nOldEnd;
+        sal_Int32 nOldStart, nOldEnd;
         m_pHelper->getSelection( nOldStart, nOldEnd );
         if ( nOldStart != nNextFStart || nOldEnd != nNextFEnd )
         {
@@ -859,7 +859,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
 
         if(!bEditFlag)
             pMEdit->SetText(m_pHelper->getCurrentFormula());
-        xub_StrLen PrivStart, PrivEnd;
+        sal_Int32 PrivStart, PrivEnd;
         m_pHelper->getSelection( PrivStart, PrivEnd);
         if(!bEditFlag)
             pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
@@ -1061,9 +1061,9 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 //  --------------------------------------------------------------------------
 //                          Functions for right Page
 //  --------------------------------------------------------------------------
-void FormulaDlg_Impl::SetData(xub_StrLen nFStart,xub_StrLen nNextFStart,xub_StrLen nNextFEnd,xub_StrLen& PrivStart,xub_StrLen& PrivEnd)
+void FormulaDlg_Impl::SetData(sal_Int32 nFStart, xub_StrLen nNextFStart, xub_StrLen nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd)
 {
-    xub_StrLen nFEnd;
+    sal_Int32 nFEnd;
 
     // Notice and set new selection
     m_pHelper->getSelection( nFStart, nFEnd );
@@ -1111,8 +1111,8 @@ void FormulaDlg_Impl::EditThisFunc(xub_StrLen nFStart)
     bFound = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nNextFStart, &nNextFEnd);
     if ( bFound )
     {
-        xub_StrLen PrivStart, PrivEnd;
-        SetData(nFStart,nNextFStart,nNextFEnd,PrivStart, PrivEnd);
+        sal_Int32 PrivStart, PrivEnd;
+        SetData(nFStart, nNextFStart, nNextFEnd, PrivStart, PrivEnd);
         m_pHelper->showReference(aFormula.copy(PrivStart, PrivEnd-PrivStart));
     }
     else
@@ -1155,8 +1155,8 @@ void FormulaDlg_Impl::EditNextFunc( sal_Bool bForward, xub_StrLen nFStart )
 
     if ( bFound )
     {
-        xub_StrLen PrivStart, PrivEnd;
-        SetData(nFStart,nNextFStart,nNextFEnd,PrivStart, PrivEnd);
+        sal_Int32 PrivStart, PrivEnd;
+        SetData(nFStart, nNextFStart, nNextFEnd, PrivStart, PrivEnd);
     }
 }
 
@@ -1374,10 +1374,10 @@ void FormulaDlg_Impl::UpdateSelection()
     m_pHelper->setSelection((xub_StrLen)aFuncSel.Min(),(xub_StrLen)aFuncSel.Max());
     m_pHelper->setCurrentFormula( pFuncDesc->getFormula( m_aArguments ) );
     pMEdit->SetText(m_pHelper->getCurrentFormula());
-    xub_StrLen PrivStart, PrivEnd;
+    sal_Int32 PrivStart, PrivEnd;
     m_pHelper->getSelection( PrivStart, PrivEnd);
-    aFuncSel.Min()=PrivStart;
-    aFuncSel.Max()=PrivEnd;
+    aFuncSel.Min() = PrivStart;
+    aFuncSel.Max() = PrivEnd;
 
     nArgs = pFuncDesc->getSuppressedArgumentCount();
 

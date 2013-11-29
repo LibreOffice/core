@@ -48,8 +48,8 @@ class FormulaDialog : public formula::FormulaModalDialog,
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     formula::RefEdit*           m_pEdit;
     OUString                    m_sFormula;
-    xub_StrLen                  m_nStart;
-    xub_StrLen                  m_nEnd;
+    sal_Int32                   m_nStart;
+    sal_Int32                   m_nEnd;
 
     DECL_LINK( OnClickHdl, OAddFieldWindow*);
 public:
@@ -75,8 +75,8 @@ public:
     virtual void switchBack();
     virtual formula::FormEditData* getFormEditData() const;
     virtual void setCurrentFormula(const OUString& _sReplacement);
-    virtual void setSelection(xub_StrLen _nStart,xub_StrLen _nEnd);
-    virtual void getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const;
+    virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd);
+    virtual void getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const;
     virtual OUString getCurrentFormula() const;
 
     virtual formula::IFunctionManager* getFunctionManager();

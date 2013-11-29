@@ -135,8 +135,8 @@ namespace formula
         virtual OUString getCurrentFormula() const = 0;
         virtual void     setCurrentFormula(const OUString& _sReplacement) = 0;
 
-        virtual void getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const = 0;
-        virtual void setSelection(xub_StrLen _nStart,xub_StrLen _nEnd) = 0;
+        virtual void getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const = 0;
+        virtual void setSelection(sal_Int32 _nStart, sal_Int32 _nEnd) = 0;
 
         virtual FormEditData* getFormEditData() const = 0;
         virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult) = 0;

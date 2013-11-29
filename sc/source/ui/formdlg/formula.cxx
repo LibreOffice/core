@@ -627,15 +627,18 @@ void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
     }
     pScMod->InputReplaceSelection(_sReplacement);
 }
-void ScFormulaDlg::setSelection(xub_StrLen _nStart,xub_StrLen _nEnd)
+void ScFormulaDlg::setSelection(sal_Int32 _nStart, sal_Int32 _nEnd)
 {
     ScModule* pScMod = SC_MOD();
     pScMod->InputSetSelection( _nStart, _nEnd );
 }
-void ScFormulaDlg::getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const
+void ScFormulaDlg::getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const
 {
     ScModule* pScMod = SC_MOD();
-    pScMod->InputGetSelection( _nStart, _nEnd );
+    sal_uInt16 nStart1 = _nStart, nEnd1 = _nEnd;
+    pScMod->InputGetSelection( nStart1, nEnd1 );
+    _nStart = nStart1;
+    _nEnd = nEnd1;
 }
 OUString ScFormulaDlg::getCurrentFormula() const
 {

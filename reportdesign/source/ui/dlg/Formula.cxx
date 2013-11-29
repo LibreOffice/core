@@ -138,7 +138,7 @@ FormEditData* FormulaDialog::getFormEditData() const
 }
 void FormulaDialog::setCurrentFormula(const OUString& _sReplacement)
 {
-    const xub_StrLen nOldLen = m_nEnd - m_nStart;
+    const sal_Int32 nOldLen = m_nEnd - m_nStart;
     const sal_Int32 nNewLen = _sReplacement.getLength();
     if (nOldLen)
         m_sFormula = m_sFormula.replaceAt( m_nStart, nOldLen, "" );
@@ -146,7 +146,7 @@ void FormulaDialog::setCurrentFormula(const OUString& _sReplacement)
         m_sFormula = m_sFormula.replaceAt( m_nStart, 0, _sReplacement );
     m_nEnd = m_nStart + nNewLen;
 }
-void FormulaDialog::setSelection(xub_StrLen _nStart,xub_StrLen _nEnd)
+void FormulaDialog::setSelection(sal_Int32 _nStart, sal_Int32 _nEnd)
 {
     if ( _nStart <= _nEnd )
     {
@@ -159,7 +159,7 @@ void FormulaDialog::setSelection(xub_StrLen _nStart,xub_StrLen _nEnd)
         m_nStart = _nEnd;
     }
 }
-void FormulaDialog::getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const
+void FormulaDialog::getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const
 {
     _nStart = m_nStart;
     _nEnd = m_nEnd;
