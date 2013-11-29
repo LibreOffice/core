@@ -43,6 +43,7 @@ class Animation;
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
+    class  XCanvas;
     class  XBitmapCanvas;
     class  XSpriteCanvas;
 } } } }
@@ -64,7 +65,9 @@ namespace cppcanvas
     public:
         static VCLFactory& getInstance();
 
-        BitmapCanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
+        CanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
+                                                          ::com::sun::star::rendering::XCanvas >& xCanvas );
+        BitmapCanvasSharedPtr   createBitmapCanvas( const ::com::sun::star::uno::Reference<
                                                           ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::Window& rVCLWindow ) const;

@@ -23,7 +23,7 @@ void MtfRenderer::draw (double fScaleX, double fScaleY) throw (uno::RuntimeExcep
 {
     if (mpMetafile && mxCanvas.get()) {
         cppcanvas::VCLFactory& factory = cppcanvas::VCLFactory::getInstance();
-        cppcanvas::BitmapCanvasSharedPtr canvas = factory.createCanvas (mxCanvas);
+        cppcanvas::BitmapCanvasSharedPtr canvas = factory.createBitmapCanvas (mxCanvas);
         cppcanvas::RendererSharedPtr renderer = factory.createRenderer (canvas, *mpMetafile, cppcanvas::Renderer::Parameters ());
         ::basegfx::B2DHomMatrix aMatrix;
         aMatrix.scale( fScaleX, fScaleY );

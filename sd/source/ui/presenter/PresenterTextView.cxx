@@ -167,7 +167,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     {
         try
         {
-            Reference<rendering::XBitmapCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
+            Reference<rendering::XCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
             if (xCanvas.is())
             {
                 mpImplementation->SetCanvas(

@@ -452,7 +452,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 
     const cppcanvas::CanvasSharedPtr pCanvas (
         cppcanvas::VCLFactory::getInstance().createCanvas(
-            Reference<css::rendering::XBitmapCanvas>(rxCanvas,UNO_QUERY)));
+            Reference<css::rendering::XCanvas>(rxCanvas,UNO_QUERY)));
 
     if (pCanvas.get() != NULL)
     {
