@@ -2042,6 +2042,12 @@ DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
+{
+    // crashtest
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
