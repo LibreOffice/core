@@ -143,7 +143,6 @@ private:
 // -------------------
 class AquaSalGraphics : public SalGraphics
 {
-    friend class ATSLayout;
     friend class CTLayout;
 protected:
     AquaSalFrame*                           mpFrame;
