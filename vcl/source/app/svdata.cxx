@@ -297,6 +297,9 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const OUStr
     return ret;
 }
 
+#ifdef _WIN32
+bool HasAtHook();
+#endif
 
 bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
 {
@@ -324,25 +327,35 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         {
             css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
 
+#ifdef _WIN32
             bool bTryIAcc2 = ( officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&
                                !getenv ("SAL_DISABLE_IACCESSIBLE2") );
 
             if ( bTryIAcc2 ) // Windows only really
             {
-                try {
-                    pSVData->mxAccessBridge
-                        = css::accessibility::MSAAService::create(xContext);
-                    SAL_INFO("vcl", "got IAccessible2 bridge");
-                    return true;
-                } catch (css::uno::DeploymentException & e) {
-                    SAL_INFO(
-                        "vcl",
-                        "got no IAccessible2 bridge, \"" << e.Message
-                            << "\", falling back to java");
+                if (!HasAtHook() && !getenv("SAL_FORCE_IACCESSIBLE2"))
+                {
+                    SAL_INFO("vcl", "Apparently no running AT -> "
+                            "not enabling IAccessible2 integration");
+                }
+                else
+                {
+                    try {
+                        pSVData->mxAccessBridge
+                            = css::accessibility::MSAAService::create(xContext);
+                        SAL_INFO("vcl", "got IAccessible2 bridge");
+                        return true;
+                    } catch (css::uno::DeploymentException & e) {
+                        SAL_INFO(
+                            "vcl",
+                            "got no IAccessible2 bridge, \"" << e.Message
+                                << "\", falling back to java");
+                    }
                 }
             }
             else
                 SAL_INFO( "vcl", "IAccessible2 disabled, falling back to java" );
+#endif
 
             css::uno::Reference< XExtendedToolkit > xToolkit =
                 css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
