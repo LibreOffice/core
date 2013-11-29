@@ -406,7 +406,9 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
         if (pScore)
             fScore = pScore->fTime;
         else
+        {
             LOG_PRINTF("Unusual null score");
+        }
 
         if (DS_DEVICE_OPENCL_DEVICE == device.type)
         {
