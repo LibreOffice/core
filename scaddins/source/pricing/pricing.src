@@ -200,7 +200,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 11 // description of parameter 5
         {
-            Text [ en-US ] = "Fime to maturity of the option in years";
+            Text [ en-US ] = "Time to maturity of the option in years";
         };
 
         String 12 // name of parameter 6
