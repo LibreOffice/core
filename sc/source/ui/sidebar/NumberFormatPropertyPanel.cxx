@@ -71,7 +71,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     get(mpEdDecimals,   "decimalplaces");
     get(mpEdLeadZeroes, "leadingzeroes");
     get(mpBtnNegRed,    "negativenumbersred");
-    get(mpBtnThousand,  "thousandseperator");
+    get(mpBtnThousand,  "thousandseparator");
 
     Initialize();
 }
