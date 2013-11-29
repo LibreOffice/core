@@ -1428,7 +1428,7 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::su
 sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
         const OUString& rSource, const sal_Bool bCreateFillBitmap, const sal_Bool bCreateCroppingAttributes,
-            const sal_Bool bFillBitmapModeAllowed )
+            const sal_Bool bFillBitmapModeAllowed, const sal_Bool bOOxmlExport )
 {
     sal_Bool        bRetValue = sal_False;
     sal_Bool        bCreateFillStyles = sal_False;
@@ -1742,7 +1742,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     SvMemoryStream aMemStrm;
                     Rectangle aRect;
 
-                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr ) )
+                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr, bOOxmlExport ) )
                     {
                         // grab BLIP from stream and insert directly as complex property
                         // ownership of stream memory goes to complex property
@@ -4217,7 +4217,8 @@ sal_Bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPr
 }
 
 sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OString& rId,
-                                            const Rectangle& /* rBoundRect */, const com::sun::star::awt::Rectangle* pVisArea, const GraphicAttr* pGraphicAttr )
+                                            const Rectangle& /* rBoundRect */, const com::sun::star::awt::Rectangle* pVisArea,
+                                            const GraphicAttr* pGraphicAttr, const sal_Bool bOOxmlExport )
 {
     sal_uInt32          nBlibId = 0;
     GraphicObject       aGraphicObject( rId );
@@ -4353,7 +4354,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 else if ( eBlibType == PEG )
                     rPicOutStrm << (sal_uInt16)0x0505;
             }
-            if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) )
+            // #69607 do not compress WMF files if we are in OOXML export
+            if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) || ( ( eBlibType == WMF ) && bOOxmlExport ) )
             {
                 nExtra = 17;
                 p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
