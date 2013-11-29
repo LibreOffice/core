@@ -402,7 +402,7 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
         ds_device device = profile->devices[d];
         LibreOfficeDeviceScore *pScore = (LibreOfficeDeviceScore*)device.score;
 
-        float fScore = DBL_MAX;
+        double fScore = DBL_MAX;
         if (pScore)
             fScore = pScore->fTime;
         else
@@ -480,7 +480,10 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         }
         if (DS_SUCCESS != status)
         {
-            if (!bForceSelection) LOG_PRINTF("[DS] Profile file not available (" << fileName << "); performing profiling.");
+            if (!bForceSelection)
+            {
+                LOG_PRINTF("[DS] Profile file not available (" << fileName << "); performing profiling.");
+            }
 
             /* Populate input data for micro-benchmark */
             boost::scoped_ptr<LibreOfficeDeviceEvaluationIO> testData(new LibreOfficeDeviceEvaluationIO);
