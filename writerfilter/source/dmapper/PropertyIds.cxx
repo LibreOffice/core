@@ -345,6 +345,12 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_SHADOW_FORMAT: sName = "ParaShadowFormat"; break;
             case PROP_FOOTNOTE_LINE_RELATIVE_WIDTH: sName = "FootnoteLineRelativeWidth"; break;
             case PROP_TBL_HEADER: sName = "TblHeader"; break;
+            case PROP_CHAR_THEME_NAME_ASCII         :   sName = "CharThemeNameAscii"; break;
+            case PROP_CHAR_THEME_NAME_CS            :   sName = "CharThemeNameCs"; break;
+            case PROP_CHAR_THEME_NAME_H_ANSI        :   sName = "CharThemeNameHAnsi"; break;
+            case PROP_CHAR_THEME_FONT_NAME_ASCII    :   sName = "CharThemeFontNameAscii"; break;
+            case PROP_CHAR_THEME_FONT_NAME_CS       :   sName = "CharThemeFontNameCs"; break;
+            case PROP_CHAR_THEME_FONT_NAME_H_ANSI   :   sName = "CharThemeFontNameHAnsi"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
