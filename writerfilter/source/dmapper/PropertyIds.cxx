@@ -348,9 +348,11 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_THEME_NAME_ASCII         :   sName = "CharThemeNameAscii"; break;
             case PROP_CHAR_THEME_NAME_CS            :   sName = "CharThemeNameCs"; break;
             case PROP_CHAR_THEME_NAME_H_ANSI        :   sName = "CharThemeNameHAnsi"; break;
+            case PROP_CHAR_THEME_NAME_EAST_ASIA     :   sName = "CharThemeNameEastAsia"; break;
             case PROP_CHAR_THEME_FONT_NAME_ASCII    :   sName = "CharThemeFontNameAscii"; break;
             case PROP_CHAR_THEME_FONT_NAME_CS       :   sName = "CharThemeFontNameCs"; break;
             case PROP_CHAR_THEME_FONT_NAME_H_ANSI   :   sName = "CharThemeFontNameHAnsi"; break;
+            case PROP_CHAR_THEME_FONT_NAME_EAST_ASIA:   sName = "CharThemeFontNameEastAsia"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

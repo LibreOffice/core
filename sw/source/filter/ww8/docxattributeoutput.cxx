@@ -6242,6 +6242,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     // get original font names and check if they have changed during the edition
     sal_Bool bWriteCSTheme = sal_True;
     sal_Bool bWriteAsciiTheme = sal_True;
+    sal_Bool bWriteEastAsiaTheme = sal_True;
     if ( m_pFontsAttrList )
     {
         OUString sFontName;
@@ -6258,6 +6259,12 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 if ( i->second >>= sFontName )
                     bWriteAsciiTheme =
                             ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sFontName );
+            }
+            else if ( i->first == "CharThemeFontNameEastAsia" )
+            {
+                if ( i->second >>= sFontName )
+                    bWriteEastAsiaTheme =
+                            ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sFontName );
             }
         }
     }
@@ -6282,6 +6289,14 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             m_pFontsAttrList->add( FSNS( XML_w, XML_cstheme ),
                                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
         }
+        else if ( i->first == "CharThemeNameEastAsia" && bWriteEastAsiaTheme )
+        {
+            i->second >>= str;
+            if (!m_pFontsAttrList)
+                m_pFontsAttrList = m_pSerializer->createAttrList();
+            m_pFontsAttrList->add( FSNS( XML_w, XML_eastAsiaTheme ),
+                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+        }
         else if ( i->first == "CharThemeNameHAnsi" && bWriteAsciiTheme )
         // this is not a mistake: in LibO we don't directly support the hAnsi family
         // of attributes so we save the same value from ascii attributes instead
@@ -6293,7 +6308,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
         }
         else if( i->first == "CharThemeFontNameCs"   ||
-                i->first == "CharThemeFontNameAscii" )
+                i->first == "CharThemeFontNameAscii" ||
+                i->first == "CharThemeFontNameEastAsia" )
         {
             // just skip these, they were processed before
         }
