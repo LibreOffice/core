@@ -441,7 +441,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->endElementNS( XML_w, XML_p );
 
     // Check for end of cell, rows, tables here
-    FinishTableRowCell( pTextNodeInfoInner );
+    if (m_pTableWrt)
+        FinishTableRowCell( pTextNodeInfoInner );
 
     m_bParagraphOpened = false;
 
