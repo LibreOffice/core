@@ -2123,6 +2123,11 @@ DECLARE_OOXMLEXPORT_TEST(testGlossary, "testGlossary.docx")
     assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
+{
+    // crashtest
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
