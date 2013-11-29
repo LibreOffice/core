@@ -6099,4 +6099,17 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
+// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
+// There are other notifications for this when the active view has changed, so please update the code to use that event mechanism
+void SwEditWin::SwitchView()
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if (!Application::IsAccessibilityEnabled())
+    {
+        return ;
+    }
+    rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

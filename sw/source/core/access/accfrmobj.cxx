@@ -33,6 +33,8 @@
 #include <fmtanchr.hxx>
 #include <dcontact.hxx>
 
+#include <pam.hxx>
+
 #include <vcl/window.hxx>
 
 namespace sw { namespace access {
@@ -162,6 +164,23 @@ bool SwAccessibleChild::IsBoundAsChar() const
     }
 
     return bRet;
+}
+
+sal_uInt32 SwAccessibleChild::GetAnchorPosition() const
+{
+    if( mpDrawObj )
+    {
+            const SwFrmFmt *pFrmFmt = ::FindFrmFmt( mpDrawObj );
+            if ( pFrmFmt )
+            {
+        const SwPosition *pPos = pFrmFmt->GetAnchor().GetCntntAnchor();
+                if ( pPos )
+                {
+            return pPos->nContent.GetIndex();
+                }
+            }
+    }
+    return 0;
 }
 
 SwAccessibleChild::SwAccessibleChild( const SwAccessibleChild& r )

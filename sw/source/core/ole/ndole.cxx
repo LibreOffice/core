@@ -772,6 +772,14 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     }
 }
 
+OUString SwOLEObj::GetStyleString()
+{
+    OUString strStyle;
+    if (xOLERef.is() && xOLERef.IsChart())
+        strStyle = xOLERef.GetChartType();
+    return strStyle;
+}
+
 sal_Bool SwOLEObj::IsOleRef() const
 {
     return xOLERef.is();

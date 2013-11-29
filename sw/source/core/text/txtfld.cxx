@@ -48,7 +48,8 @@
 #include "pagedesc.hxx"
 #include <pormulti.hxx>
 #include "fmtmeta.hxx"
-
+#include "reffld.hxx"
+#include "flddat.hxx"
 
 /*************************************************************************
  *                      SwTxtFormatter::NewFldPortion()
@@ -80,6 +81,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 
     SwCharFmt* pChFmt = 0;
     bool bNewFlyPor = false;
+    sal_uInt16 subType = 0;
 
     // set language
     ((SwTxtFormatter*)this)->SeekAndChg( rInf );
@@ -146,6 +148,8 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion( aStr );
             }
+            if(pRet)
+                ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
             break;
 
         case RES_PAGENUMBERFLD:
@@ -173,6 +177,8 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion( aStr );
             }
+            if(pRet)
+                ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
             break;
         }
         case RES_GETEXPFLD:
@@ -234,7 +240,38 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             bNewFlyPor = true;
             bPlaceHolder = true;
             break;
-
+        case RES_GETREFFLD:
+            subType = ((SwGetRefField*)pFld)->GetSubType();
+            {
+                OUString const str( (bName)
+                        ? pFld->GetFieldName()
+                        : pFld->ExpandField(bInClipboard) );
+                pRet = new SwFldPortion(str);
+            }
+            if(pRet)
+            {
+                if( subType == REF_BOOKMARK  )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
+                else if( subType == REF_SETREFATTR )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
+                break;
+            }
+        case RES_DATETIMEFLD:
+            subType = ((SwDateTimeField*)pFld)->GetSubType();
+            {
+                OUString const str( (bName)
+                        ? pFld->GetFieldName()
+                        : pFld->ExpandField(bInClipboard) );
+                pRet = new SwFldPortion(str);
+            }
+            if(pRet)
+            {
+                if( subType & DATEFLD  )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_DATEFLD;
+                else if( subType & TIMEFLD )
+                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_TIMEFLD;
+                break;
+            }
         default:
             {
                 OUString const aStr( (bName)

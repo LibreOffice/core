@@ -466,6 +466,7 @@ private:
     bool mbClipBoard             : 1;    ///< TRUE: this document represents the clipboard
     bool mbColumnSelection       : 1;    /**< TRUE: this content has bee created by a column selection
                                                 (clipboard docs only) */
+    bool mbIsPrepareSelAll       : 1;
 
 #ifdef DBG_UTIL
     bool mbXMLExport : 1;                ///< sal_True: during XML export
@@ -683,17 +684,21 @@ private:
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
-     SwFmt *_MakeCharFmt(const OUString &, SwFmt *, bool, bool );
-     SwFmt *_MakeFrmFmt(const OUString &, SwFmt *, bool, bool );
-     SwFmt *_MakeTxtFmtColl(const OUString &, SwFmt *, bool, bool );
+    SwFmt *_MakeCharFmt(const OUString &, SwFmt *, bool, bool );
+    SwFmt *_MakeFrmFmt(const OUString &, SwFmt *, bool, bool );
+    SwFmt *_MakeTxtFmtColl(const OUString &, SwFmt *, bool, bool );
 
-     void InitTOXTypes();
-     void   Paste( const SwDoc& );
-     bool DeleteAndJoinImpl(SwPaM&, const bool);
-     bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
-     bool DeleteRangeImpl(SwPaM&, const bool unused = false);
-     bool DeleteRangeImplImpl(SwPaM &);
-     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
+private:
+    sal_Bool mbReadOnly;
+    OUString msDocAccTitle;
+
+    void InitTOXTypes();
+    void Paste( const SwDoc& );
+    bool DeleteAndJoinImpl(SwPaM&, const bool);
+    bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
+    bool DeleteRangeImpl(SwPaM&, const bool unused = false);
+    bool DeleteRangeImplImpl(SwPaM &);
+    bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
 
 public:
 
@@ -702,7 +707,7 @@ public:
     SwDoc();
     ~SwDoc();
 
-    inline bool IsInDtor() const { return mbDtor; }
+    bool IsInDtor() const { return mbDtor; }
 
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
@@ -1015,6 +1020,11 @@ public:
                                  ::sw::tExternalDataPointer pPayload);
     virtual ::sw::tExternalDataPointer getExternalData(::sw::tExternalDataType eType);
 
+    virtual void setDocReadOnly( sal_Bool b) { mbReadOnly = b; }
+    virtual sal_Bool getDocReadOnly() const { return mbReadOnly; }
+    virtual void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
+    virtual const OUString getDocAccTitle() const { return msDocAccTitle; }
+
     /** INextInterface here
     */
 
@@ -1031,6 +1041,12 @@ public:
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
+    void SetSelAll( bool bSel )
+    {
+        mbIsPrepareSelAll = bSel;
+    }
+    bool IsPrepareSelAll() const { return mbIsPrepareSelAll; }
+    void SetPrepareSelAll() { mbIsPrepareSelAll = true; }
 
     void SetContainsAtPageObjWithContentAnchor( const bool bFlag )
     {

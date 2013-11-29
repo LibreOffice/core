@@ -65,6 +65,7 @@ TblChgMode GetTblChgDefaultMode();
 
 bool JumpToSwMark( SwViewShell* pVwSh, const OUString& rMark );
 
+extern void AccessibilityScrollMDI(SwViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY, sal_Bool isLeftTop);
 
 #endif
 

@@ -380,6 +380,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     m_pTree->SetSelectionMode( MULTIPLE_SELECTION );
     m_pTree->SetStyle(m_pTree->GetStyle()|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
     m_pTree->SetSpaceBetweenEntries(0);
+    m_pTree->SetAllEntriesAccessibleRoleType(TREEBOX_ALLITEM_ACCROLE_TYPE_TREE);
 
     if(bWeb)
     {

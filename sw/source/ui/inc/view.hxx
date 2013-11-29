@@ -182,6 +182,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16              m_nNewPage;
 
+    sal_uInt16          m_nOldPageNum;
+    OUString            m_sOldSectionName;
+
     Point               m_aTabColFromDocPos;  // moving table colmns out of the document
     SwTxtNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 

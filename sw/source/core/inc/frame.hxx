@@ -30,6 +30,9 @@
 #include <svl/brdcst.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 
+#include <com/sun/star/style/TabStop.hpp>
+
+using namespace ::com::sun::star;
 class SwLayoutFrm;
 class SwRootFrm;
 class SwPageFrm;
@@ -252,6 +255,8 @@ class SwFrm: public SwClient, public SfxBroadcaster
     // cache for (border) attributes
     static SwCache *mpCache;
 
+    bool mbIfAccTableShouldDisposing;
+
     // #i65250#
     // frame ID is now in general available - used for layout loop control
     static sal_uInt32 mnLastFrmId;
@@ -429,6 +434,11 @@ protected:
     virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
 
 public:
+    virtual uno::Sequence< style::TabStop > GetTabStopInfo( SwTwips )
+    {
+        return uno::Sequence< style::TabStop >();
+    }
+
     TYPEINFO(); // already in base class
 
     sal_uInt16 GetType() const { return 0x1 << mnType; }
@@ -698,6 +708,8 @@ public:
     virtual Size ChgSize( const Size& aNewSize );
 
     virtual void Cut() = 0;
+    //Add a method to change the acc table dispose state.
+    void SetAccTableDispose(bool bDispose) { mbIfAccTableShouldDisposing = bDispose;}
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) = 0;
 
     void ValidateLineNum() { mbValidLineNum = sal_True; }

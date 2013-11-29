@@ -73,7 +73,10 @@ class SwOLENames : public Resource
 public:
     SwOLENames(const ResId& rResId) :
         Resource(rResId),
-        aNamesAry(ResId(1,*rResId.GetResMgr())){FreeResource();}
+        aNamesAry(ResId(1,*rResId.GetResMgr()))
+    {
+        FreeResource();
+    }
 
     ResStringArray&     GetNames() { return aNamesAry;}
 

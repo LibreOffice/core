@@ -460,6 +460,8 @@ public:
 
     sal_uInt16 IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
+    sal_Bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
+    const SdrMarkList* GetMarkList() const{ return _GetMarkList(); };
 
     void EndTextEdit();             ///< Deletes object if required.
 

@@ -86,6 +86,8 @@ public:
     void UpdatePageNum();               // insert page numbering
     TYPEINFO();                         // for rtti
 
+    SwTOXSortTabBases* GetTOXSortTabBases() { return &aSortArr; }
+
     bool SetPosAtStartEnd( SwPosition& rPos, bool bAtStart = true ) const;
 };
 

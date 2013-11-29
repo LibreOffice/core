@@ -81,6 +81,7 @@ SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceH
     , m_bNoLength( sal_False )
 {
     SetWhichPor( POR_FLD );
+    m_nAttrFldType = 0;
 }
 
 SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
@@ -468,6 +469,10 @@ void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
     if (pFnt)
         nH = pFnt->GetSize(pFnt->GetActual()).Height();
     rPH.Special( GetLen(), aExpand, GetWhichPor(), nH );
+    if( GetWhichPor() == POR_FLD )
+    {
+        rPH.SetAttrFieldType(m_nAttrFldType);
+    }
 }
 
 /*************************************************************************

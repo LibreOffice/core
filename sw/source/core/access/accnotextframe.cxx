@@ -29,9 +29,17 @@
 #include <cntfrm.hxx>
 #include <hints.hxx>
 #include "accnotextframe.hxx"
+#include <fmturl.hxx>
+#include <accnotexthyperlink.hxx>
+#include <svtools/imap.hxx>
+#include <unotools/accessiblerelationsethelper.hxx>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <doc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using utl::AccessibleRelationSetHelper;
 
 const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
 {
@@ -41,7 +49,11 @@ const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
     {
         const SwCntntFrm *pCntFrm =
             static_cast<const SwCntntFrm *>( pFlyFrm->Lower() );
-        pNd = pCntFrm->GetNode()->GetNoTxtNode();
+        const SwCntntNode* pSwCntntNode = pCntFrm->GetNode();
+        if(pSwCntntNode != NULL)
+        {
+            pNd = pSwCntntNode->GetNoTxtNode();
+        }
     }
 
     return pNd;
@@ -193,6 +205,13 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
         aAny <<= xImage;
         return aAny;
     }
+    else if ( aType == ::getCppuType((uno::Reference<XAccessibleHypertext> *)0) )
+    {
+        uno::Reference<XAccessibleHypertext> aAccHypertext = this;
+        uno::Any aAny;
+        aAny <<= aAccHypertext;
+        return aAny;
+    }
     else
         return SwAccessibleContext::queryInterface( aType );
 }
@@ -233,6 +252,139 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
     throw ( uno::RuntimeException )
 {
     return getSize().Width;
+}
+
+//=====  XAccesibleText  ==================================================
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
+sal_Unicode SAL_CALL SwAccessibleNoTextFrame::getCharacter( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SwAccessibleNoTextFrame::getCharacterAttributes( sal_Int32 , const ::com::sun::star::uno::Sequence< OUString >& ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Sequence<beans::PropertyValue> aValues(0);
+    return aValues;
+}
+::com::sun::star::awt::Rectangle SAL_CALL SwAccessibleNoTextFrame::getCharacterBounds( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+    return com::sun::star::awt::Rectangle(0, 0, 0, 0 );
+}
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCharacterCount(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getIndexAtPoint( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException){return 0;}
+OUString SAL_CALL SwAccessibleNoTextFrame::getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException){return OUString();}
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getSelectionStart(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getSelectionEnd(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::setSelection( sal_Int32 , sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return sal_True;}
+OUString SAL_CALL SwAccessibleNoTextFrame::getText(  ) throw (::com::sun::star::uno::RuntimeException){return OUString();}
+OUString SAL_CALL SwAccessibleNoTextFrame::getTextRange( sal_Int32 , sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return OUString();}
+::com::sun::star::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextAtIndex( sal_Int32 , sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::accessibility::TextSegment aResult;
+    return aResult;
+}
+::com::sun::star::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextBeforeIndex( sal_Int32, sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::accessibility::TextSegment aResult;
+    return aResult;
+}
+::com::sun::star::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextBehindIndex( sal_Int32 , sal_Int16 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::accessibility::TextSegment aResult;
+    return aResult;
+}
+
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return sal_True;}
+
+
+//
+//  XAccessibleHyperText
+//
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkCount()
+throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    sal_Int32 nCount = 0;
+    SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
+
+    if(aURL.GetMap() || !aURL.GetURL().isEmpty())
+        nCount = 1;
+
+    return nCount;
+}
+
+uno::Reference< XAccessibleHyperlink > SAL_CALL
+    SwAccessibleNoTextFrame::getHyperLink( sal_Int32 nLinkIndex )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    uno::Reference< XAccessibleHyperlink > xRet;
+
+    SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
+
+    if( nLinkIndex > 0 )
+        throw lang::IndexOutOfBoundsException();
+
+    if( aURL.GetMap() || !aURL.GetURL().isEmpty() )
+    {
+        if ( !alink.is() )
+        {
+            alink = new SwAccessibleNoTextHyperlink( this, GetFrm() );
+        }
+
+        return alink;
+    }
+
+    return NULL;
+}
+
+sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkIndex( sal_Int32 )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    sal_Int32 nRet = 0;
+
+    return nRet;
+}
+
+AccessibleRelation SwAccessibleNoTextFrame::makeRelation( sal_Int16 nType, const SwFlyFrm* pFrm )
+{
+    uno::Sequence<uno::Reference<XInterface> > aSequence(1);
+    aSequence[0] = GetMap()->GetContext( pFrm );
+    return AccessibleRelation( nType, aSequence );
+}
+
+
+uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleNoTextFrame::getAccessibleRelationSet( )
+    throw ( uno::RuntimeException )
+{
+    SolarMutexGuard aGuard;
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    // get the caption frame, and insert label relations into helper
+
+    AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
+
+    SwFlyFrm* pFlyFrm = getFlyFrm();
+    DBG_ASSERT( pFlyFrm != NULL, "fly frame expected" );
+
+    SwFlyFrm* pCaptionFrm = NULL;
+    const SwFrmFmt* pFrm = pFlyFrm ->GetFmt()->GetCaptionFmt();
+    if (pFrm)
+    {
+        SwClientIter aIter (*(SwModify*)pFrm);
+        pCaptionFrm = (SwFlyFrm*)aIter.First( TYPE ( SwFlyFrm ));
+    }
+    if(pCaptionFrm!=NULL)
+    {
+        pHelper->AddRelation( makeRelation( AccessibleRelationType::DESCRIBED_BY, pCaptionFrm ) );
+    }
+
+    return pHelper;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

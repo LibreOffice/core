@@ -93,6 +93,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -221,6 +222,20 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
       return sal_False; // #129881# return if no reader is found
     SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
+    pDoc->setDocAccTitle(OUString());
+    SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
+    if (pFrame1)
+    {
+        Window* pWindow = &pFrame1->GetWindow();
+        if ( pWindow )
+        {
+            Window* pSysWin = pWindow->GetSystemWindow();
+            if ( pSysWin )
+            {
+                pSysWin->SetAccessibleName(OUString());
+            }
+        }
+    }
     SwWait aWait( *this, sal_True );
 
         // Suppress SfxProgress, when we are Embedded
@@ -1171,6 +1186,43 @@ uno::Reference< frame::XController >
     if ( GetView() )
         aRet = GetView()->GetController();
     return aRet;
+}
+
+void SwDocShell::setDocAccTitle( const OUString& rTitle )
+{
+    if (pDoc)
+    {
+        pDoc->setDocAccTitle( rTitle );
+    }
+}
+
+const OUString SwDocShell::getDocAccTitle() const
+{
+    OUString sRet;
+    if (pDoc)
+    {
+        sRet = pDoc->getDocAccTitle();
+    }
+
+    return sRet;
+}
+
+void SwDocShell::setDocReadOnly(bool bReadOnly)
+{
+    if (pDoc)
+    {
+        pDoc->setDocReadOnly( bReadOnly );
+    }
+}
+
+bool SwDocShell::getDocReadOnly() const
+{
+    if (pDoc)
+    {
+        return pDoc->getDocReadOnly();
+    }
+
+    return sal_False;
 }
 
 static const char* s_EventNames[] =

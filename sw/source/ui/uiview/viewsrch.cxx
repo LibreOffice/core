@@ -211,6 +211,16 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 if( bRet )
                     Scroll(m_pWrtShell->GetCharRect().SVRect());
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+                {
+                    const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
+                    SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
+                    if ( pDlgWrp )
+                    {
+                        m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
+                        m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                        m_pSrchDlg->SetSrchFlag();
+                    }
+                }
             }
             break;
             case SVX_SEARCHCMD_FIND_ALL:
@@ -225,6 +235,17 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     m_bFound = sal_False;
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+                {
+                    const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
+                    SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
+
+                    if ( pDlgWrp )
+                    {
+                        m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
+                        m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                        m_pSrchDlg->SetSrchFlag();
+                    }
+                }
             }
             break;
             case SVX_SEARCHCMD_REPLACE:
@@ -272,6 +293,17 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         Scroll( m_pWrtShell->GetCharRect().SVRect());
                     m_pSrchItem->SetCommand( nOldCmd );
                     rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+                }
+                {
+                    const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
+                    SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
+
+                    if ( pDlgWrp )
+                    {
+                        m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
+                        m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                        m_pSrchDlg->SetSrchFlag();
+                    }
                 }
                 break;
 
@@ -329,6 +361,15 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         Window* pParentWindow = GetParentWindow( m_pSrchDlg );
                         InfoBox( pParentWindow, aText ).Execute();
                     }
+                }
+                const sal_uInt16 nChildId = SvxSearchDialogWrapper::GetChildWindowId();
+                SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nChildId);
+
+                if ( pDlgWrp )
+                {
+                    m_pSrchDlg = (SvxSearchDialog*)(pDlgWrp->GetWindow());
+                    m_pSrchDlg->SetDocWin( (Window*)m_pEditWin);
+                    m_pSrchDlg->SetSrchFlag();
                 }
                 break;
             }
@@ -477,8 +518,8 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         m_bExtra = !m_bExtra;
 
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-    SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
-    m_pSrchDlg = pWrp ? static_cast <SvxSearchDialog*> (pWrp->getDialog ()) : 0;
+    SvxSearchDialogWrapper *pDlgWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
+    m_pSrchDlg = pDlgWrp ? static_cast <SvxSearchDialog*> (pDlgWrp->getDialog ()) : 0;
 
         // If starting position is at the end or beginning of the document.
     if (aOpts.bDontWrap)

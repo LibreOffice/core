@@ -352,6 +352,7 @@ public:
     inline Window* GetWin()    const { return mpWin; }
     inline OutputDevice* GetOut()     const { return mpOut; }
 
+    void SetWin(Window* win) { mpWin = win; }
     static inline sal_Bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.

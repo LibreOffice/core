@@ -3196,4 +3196,21 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
     return 0;
 }
 
+sal_Bool SwFrmFmt::HasCaption() const
+{
+    if(pCaptionFmt != NULL && pCaptionFmt->GetDepends())
+        return sal_True;
+    return sal_False;
+}
+
+void SwFrmFmt::SetCaptionFmt(SwFrmFmt * pFmt)
+{
+    pCaptionFmt = pFmt;
+}
+
+SwFrmFmt* SwFrmFmt::GetCaptionFmt() const
+{
+    return pCaptionFmt;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

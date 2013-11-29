@@ -1235,6 +1235,28 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     OSL_ENSURE( nWhich, "empty set");
 
+    //get section change event
+    const SwSection* CurrSect = rShell.GetCurrSection();
+    if( CurrSect )
+    {
+        OUString sCurrentSectionName = CurrSect->GetSectionName();
+        if(sCurrentSectionName != m_sOldSectionName)
+        {
+            rShell.FireSectionChangeEvent(2, 1);
+        }
+        m_sOldSectionName = sCurrentSectionName;
+    }
+    else if (!m_sOldSectionName.isEmpty())
+    {
+        rShell.FireSectionChangeEvent(2, 1);
+        m_sOldSectionName= OUString();
+    }
+    //get column change event
+    if(rShell.bColumnChange())
+    {
+        rShell.FireColumnChangeEvent(2, 1);
+    }
+
     while( nWhich )
     {
         switch( nWhich )
@@ -1246,7 +1268,13 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 rShell.GetPageNumber( -1, rShell.IsCrsrVisible(), nPage, nLogPage, sDisplay );
                 rSet.Put( SfxStringItem( FN_STAT_PAGE,
                             GetPageStr( nPage, nLogPage, sDisplay) ));
-
+                //if existing page number is not equal to old page number, send out this event.
+                if (m_nOldPageNum != nLogPage )
+                {
+                    if (m_nOldPageNum != 0)
+                        rShell.FirePageChangeEvent(m_nOldPageNum, nLogPage);
+                    m_nOldPageNum = nLogPage;
+                }
                 sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
                 if (m_nPageCnt != nCnt)   // notify Basic
                 {

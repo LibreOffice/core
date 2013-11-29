@@ -913,7 +913,7 @@ SwCntntNode::~SwCntntNode()
     // The base class SwClient of SwFrm excludes itself from the dependency list!
     // Thus, we need to delete all Frames in the dependency list.
     if( GetDepends() )
-        DelFrms();
+        DelFrms(sal_True, sal_False);
 
     delete pCondColl;
 
@@ -1222,13 +1222,70 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 /**
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
+ *
+ * An input param to identify if the acc table should be disposed.  and a
+ * flag(bNeedDel) to indicate whether to del corresponding frm even in doc
+ * loading process,
  */
-void SwCntntNode::DelFrms()
+void SwCntntNode::DelFrms( sal_Bool /*bNeedDel*/, sal_Bool bIsDisposeAccTable )
 {
     if( !GetDepends() )
         return;
 
-    SwCntntFrm::DelFrms(*this);
+    SwIterator<SwCntntFrm,SwCntntNode> aIter( *this );
+    for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    {
+        // #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        if ( pFrm->IsTxtFrm() )
+        {
+            SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+            }
+        }
+
+        if( pFrm->IsFollow() )
+        {
+            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            pMaster->SetFollow( pFrm->GetFollow() );
+        }
+        pFrm->SetFollow( 0 );//So it doesn't get funny ideas.
+                                //Otherwise it could be possible that a follow
+                                //gets destroyed before its master. Following
+                                //the now invalid pointer will then lead to an
+                                //illegal memory access. The chain can be
+                                //crushed here because we'll destroy all of it
+                                //anyway.
+
+        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
+            !pFrm->GetIndPrev() )
+        {
+            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
+            SwCntntFrm* pCFrm;
+            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
+                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
+            {
+                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
+            }
+        }
+        //Set acc table dispose state
+        pFrm->SetAccTableDispose( bIsDisposeAccTable );
+        pFrm->Cut();
+        //Set acc table dispose state to default value
+        pFrm->SetAccTableDispose( sal_True );
+        delete pFrm;
+    }
+
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );

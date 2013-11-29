@@ -58,6 +58,8 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t aLineBreaks;        /// position of line breaks
     Positions_t aModelPositions;    /// position of portion breaks in the model
     Positions_t aAccessiblePositions;   /// portion breaks in sAccessibleString
+    Positions_t aFieldPosition;
+    Positions_t aAttrFieldType;
 
     typedef std::vector<sal_uInt8> PortionAttrs_t;
     PortionAttrs_t aPortionAttrs;   /// additional portion attributes
@@ -101,6 +103,14 @@ public:
     virtual void Skip(sal_uInt16 nLength);
     virtual void Finish();
 
+    virtual void SetAttrFieldType( sal_uInt16 nAttrFldType );
+    sal_Bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
+    sal_Bool IsIndexInFootnode(sal_Int32 nIndex);
+    sal_Bool IsInGrayPortion( sal_Int32 nPos );
+    sal_Int32 GetFieldIndex(sal_Int32 nPos);
+
+    sal_Bool IsZeroCorePositionData();
+
     // access to the portion data
 
     /// get the text string, as presented by the layout
@@ -113,6 +123,18 @@ public:
     // get start and end position of the last line
     void GetLastLineBoundary( com::sun::star::i18n::Boundary& rBound ) const;
 
+    /// Determine whether this core position is valid for these portions.
+    /// (A paragraph may be split into several frames, e.g. at page
+    ///  boundaries. In this case, only part of a paragraph is represented
+    ///  through this object. This method determines whether one particular
+    ///  position is valid for this object or not.)
+    sal_Bool IsValidCorePosition( sal_Int32 nPos ) const;
+    sal_Int32 GetFirstValidCorePosition() const;
+    sal_Int32 GetLastValidCorePosition() const;
+
+    /// get the position in the accessibility string for a given model position
+    sal_Int32 GetAccessiblePosition( sal_Int32 nPos ) const;
+
     // #i89175#
     sal_Int32 GetLineCount() const;
     sal_Int32 GetLineNo( const sal_Int32 nPos ) const;
@@ -122,9 +144,6 @@ public:
     /// get the position in the model string for a given
     /// (accessibility) position
     sal_Int32 GetModelPosition( sal_Int32 nPos ) const;
-
-    /// get the position in the accessibility string for a given model position
-    sal_Int32 GetAccessiblePosition( sal_Int32 nPos ) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTxtFrm->GetCharRect
@@ -143,21 +162,17 @@ public:
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
                                sal_Int32 nPos ) const;
 
+    sal_uInt16 GetAttrFldType( sal_Int32 nPos );
     /// Convert start and end positions into core positions.
     /// @returns true if 'special' portions are included either completely
     ///          or not at all. This can be used to test whether editing
     ///          that range would be legal
     sal_Bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
                                sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const;
-
-    /// Determine whether this core position is valid for these portions.
-    /// (A paragraph may be split into several frames, e.g. at page
-    ///  boundaries. In this case, only part of a paragraph is represented
-    ///  through this object. This method determines whether one particular
-    ///  position is valid for this object or not.)
-    sal_Bool IsValidCorePosition( sal_Int32 nPos ) const;
-    sal_Int32 GetFirstValidCorePosition() const;
-    sal_Int32 GetLastValidCorePosition() const;
+private:
+    typedef std::pair<sal_Int32,sal_Int32> PAIR_POS;
+    typedef std::vector<PAIR_POS> VEC_PAIR_POS;
+    VEC_PAIR_POS m_vecPairPos;
 };
 
 #endif

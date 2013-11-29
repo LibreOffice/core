@@ -793,6 +793,15 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_TEXTNODE:
+            //Add special function to text node.
+            {
+                if( bNewFrms && pAktNode->GetCntntNode() )
+                    ((SwCntntNode*)pAktNode)->DelFrms( sal_False );
+                pAktNode->pStartOfSection = aSttNdStack[ nLevel ];
+                nInsPos++;
+                aRg.aEnd--;
+            }
+            break;
         case ND_GRFNODE:
         case ND_OLENODE:
             {

@@ -259,6 +259,10 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     Link            aButtonSelectedHdl;
     Control*        pActiveCtrl;
     Link            aModifyHdl;
+    OUString        accessibleName;
+    OUString        sAdditionalAccnameString1;
+    OUString        sAdditionalAccnameString2;
+    OUString        sAdditionalAccnameString3;
 
     SwTOXEntryTabPage*  m_pParent;
 
@@ -312,6 +316,9 @@ public:
 
     virtual void    GetFocus();
     virtual void    setAllocation(const Size &rAllocation);
+    void SetFocus2theAllBtn();
+private:
+    sal_uInt32 GetControlIndex(FormTokenType eType) const;
 };
 
 class SwTOXEntryTabPage;
@@ -440,6 +447,8 @@ public:
     OUString            GetLevelHelp(sal_uInt16 nLevel) const;
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
+    void SetFocus2theAllBtn();
+    virtual long Notify( NotifyEvent& rNEvt );
 };
 
 class SwTOXStylesTabPage : public SfxTabPage

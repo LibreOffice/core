@@ -451,7 +451,31 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     m_pDefaultVS->SetColCount( 5 );
 
     for (int i = 0; i < 5; ++i)
-        m_pDefaultVS->InsertItem( i + 1, i );
+    //Set accessible name one by one
+    {
+        OUString aItemText;
+        switch( i )
+        {
+            case 0:
+                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM0 ) ;
+                break;
+            case 1:
+                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM1 ) ;
+                break;
+            case 2:
+                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM2 ) ;
+                break;
+            case 3:
+                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM3 );
+                break;
+            case 4:
+                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM4 );
+                break;
+            default:
+                break;
+        }
+        m_pDefaultVS->InsertItem( i + 1, aItemText, i );
+    }
 
     m_pDefaultVS->SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 

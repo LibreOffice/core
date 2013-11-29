@@ -432,6 +432,74 @@ void SwCrsrShell::UpdateMarkedListLevel()
     }
 }
 
+void SwCrsrShell::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FirePageChangeEvent( nOldPage, nNewPage );
+#else
+    (void)nOldPage;
+    (void)nNewPage;
+#endif
+}
+
+void SwCrsrShell::FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn)
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FireColumnChangeEvent( nOldColumn,  nNewColumn);
+#else
+    (void)nOldColumn;
+    (void)nNewColumn;
+#endif
+}
+
+
+void SwCrsrShell::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection)
+{
+#ifdef ACCESSIBLE_LAYOUT
+    if( Imp()->IsAccessible() )
+        Imp()->FireSectionChangeEvent( nOldSection, nNewSection );
+#else
+    (void)nOldSection;
+    (void)nNewSection;
+#endif
+}
+
+bool SwCrsrShell::bColumnChange()
+{
+    SwFrm* pCurrFrm = GetCurrFrm(sal_False);
+
+    if (pCurrFrm == NULL)
+    {
+        return sal_False;
+    }
+
+    SwFrm* pCurrCol=((SwFrm*)pCurrFrm)->FindColFrm();
+
+    while(pCurrCol== NULL && pCurrFrm!=NULL )
+    {
+        SwLayoutFrm* pParent = pCurrFrm->GetUpper();
+        if(pParent!=NULL)
+        {
+            pCurrCol=((SwFrm*)pParent)->FindColFrm();
+            pCurrFrm = (SwFrm*)pParent;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if(oldColFrm == pCurrCol)
+        return sal_False;
+    else
+    {
+        oldColFrm = pCurrCol;
+        return sal_True;
+    }
+}
+
 sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
 {
     SET_CURR_SHELL( this );
@@ -2528,6 +2596,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     m_bSetCrsrInReadOnly = sal_True;
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
+    oldColFrm = NULL;
 
 #if defined(ANDROID) || defined(IOS)
     HideCrsr();

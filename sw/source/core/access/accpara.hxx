@@ -25,22 +25,28 @@
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextSelection.hpp>
+#include <txmsrt.hxx>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <boost/unordered_map.hpp>
 #include <accselectionhelper.hxx>
 #include <calbck.hxx>
 
+class SwField;
 class SwTxtFrm;
 class SwTxtNode;
 class SwPaM;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
+class SwRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
 
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
     namespace accessibility { class XAccessibleHyperlink; }
+    namespace style { class TabStop; }
 } } }
 
 typedef ::boost::unordered_map< OUString,
@@ -56,7 +62,9 @@ class SwAccessibleParagraph :
         public com::sun::star::accessibility::XAccessibleHypertext,
         public com::sun::star::accessibility::XAccessibleTextMarkup,
         public com::sun::star::accessibility::XAccessibleMultiLineText,
-        public ::com::sun::star::accessibility::XAccessibleTextAttributes
+        public ::com::sun::star::accessibility::XAccessibleTextAttributes,
+        public com::sun::star::accessibility::XAccessibleTextSelection,
+        public  com::sun::star::accessibility::XAccessibleExtendedAttributes
 {
     friend class SwAccessibleHyperlink;
 
@@ -75,6 +83,7 @@ class SwAccessibleParagraph :
                             // mutex)
 
     sal_Bool bIsHeading;    // protected by base classes mutex
+    sal_Int32 nHeadingLevel;
 
     // implementation for XAccessibleSelection
     SwAccessibleSelectionHelper aSelectionHelper;
@@ -122,13 +131,16 @@ class SwAccessibleParagraph :
     sal_Bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
 
     // Ensure ordered range (i.e. nBegin is smaller then nEnd)
-    inline void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
+    void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
     {
         if( nBegin > nEnd )
         {
             sal_Int32 nTmp = nBegin; nBegin = nEnd; nEnd = nTmp;
         }
     }
+
+    const SwRedline* GetRedlineAtIndex( sal_Int32 nPos );
+    OUString GetFieldTypeNameAtIndex(sal_Int32 nIndex);
 
     // #i63870#
     void _getDefaultAttributesImpl(
@@ -140,7 +152,18 @@ class SwAccessibleParagraph :
             const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rRunAttrSeq );
 
+    void _getSupplementalAttributesImpl(
+            const sal_Int32 nIndex,
+            const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes,
+            tAccParaPropValMap& rSupplementalAttrSeq );
+
+    void _correctValues(
+            const sal_Int32 nIndex,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues );
+
 public:
+    SwTOXSortTabBase* GetTOXSortTabBase();
+    short GetTOCLevel();
 
     sal_Bool IsHeading() const;
 
@@ -224,6 +247,9 @@ public:
     inline operator ::com::sun::star::accessibility::XAccessibleText *();
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
+
+    com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > GetCurrentTabStop( sal_Int32 nIndex  );
+    virtual sal_Int16 SAL_CALL getAccessibleRole (void)     throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext
 
@@ -379,6 +405,28 @@ public:
             throw (::com::sun::star::lang::IndexOutOfBoundsException,
                    ::com::sun::star::lang::IllegalArgumentException,
                    ::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleTextSelection
+    virtual sal_Bool SAL_CALL scrollToPosition( const ::com::sun::star::awt::Point& aPoint, sal_Bool isLeftTop )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSelectedPortionCount(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSeletedPositionStart( sal_Int32 nSelectedPortionIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSeletedPositionEnd( sal_Int32 nSelectedPortionIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL removeSelection( sal_Int32 selectionIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL  addSelection( sal_Int32 selectionIndex, sal_Int32 startOffset, sal_Int32 endOffset)
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    // XAccessibleExtendedAttributes
+    virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
+    sal_Bool GetSelectionAtIndex(sal_Int32& nIndex, sal_Int32& nStart, sal_Int32& nEnd);
+    sal_Int32 GetRealHeadingLevel();
+    // XAccessibleComponent
+    sal_Bool m_bLastHasSelection;
+    sal_Bool tabCharInWord(sal_Int32 nIndex, com::sun::star::i18n::Boundary&  aBound);
 
     // #i89175#
     // XAccessibleMultiLineText

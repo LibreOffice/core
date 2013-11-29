@@ -1549,7 +1549,13 @@ void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
             bNextControl = false;
             bCall = true;
         }
-
+        else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
+        {
+            if ( m_pParent )
+            {
+                m_pParent->SetFocus2theAllBtn();
+            }
+        }
         if(bCall && aPrevNextControlLink.IsSet())
             aPrevNextControlLink.Call(this);
 
@@ -1677,6 +1683,13 @@ void SwTOXButton::KeyInput( const KeyEvent& rKEvt )
         m_pParent->RemoveControl(this, sal_True);
         //this is invalid here
         return;
+    }
+    else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
+    {
+        if ( m_pParent )
+        {
+            m_pParent->SetFocus2theAllBtn();
+        }
     }
     if(bCall && aPrevNextControlLink.IsSet())
             aPrevNextControlLink.Call(this);
@@ -2159,6 +2172,30 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
 
+void SwTOXEntryTabPage::SetFocus2theAllBtn()
+{
+    m_pAllLevelsPB->GrabFocus();
+}
+
+long SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
+        KeyCode aCode = rKEvt.GetKeyCode();
+        if ( (aCode.GetCode() == KEY_F4) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
+        {
+            if ( m_pTokenWIN->GetActiveControl() )
+            {
+                m_pTokenWIN->GetActiveControl()->GrabFocus();
+            }
+        }
+
+    }
+
+    return SfxTabPage::Notify( rNEvt );
+}
+
 // This function initializes the default value in the Token
 // put here the UI dependent initializations
 IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
@@ -2592,6 +2629,11 @@ SwTokenWindow::SwTokenWindow(Window* pParent)
         aButtonHelpTexts[i] = SW_RESSTR(nHelpId);
     }
 
+    accessibleName = SW_RESSTR(STR_STRUCTURE);
+    sAdditionalAccnameString1 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING1);
+    sAdditionalAccnameString2 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING2);
+    sAdditionalAccnameString3 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING3);
+
     Link aLink(LINK(this, SwTokenWindow, ScrollHdl));
     m_pLeftScrollWin->SetClickHdl(aLink);
     m_pRightScrollWin->SetClickHdl(aLink);
@@ -2756,6 +2798,30 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         aControlList.push_back(pEdit);
 
         pEdit->SetText(rText);
+        sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
+        OUString s1 = " (";
+        OUString s2 = ")";
+        OUString s3 = ", ";
+        OUString strName(accessibleName);
+        strName += OUString::number(nIndex);
+        if ( nIndex == 1 )
+        {
+            /*Press left or right arrow to choose the structure controls*/
+            strName += s1;
+            strName += sAdditionalAccnameString2;
+            strName += s3;
+            /*Press Ctrl+Alt+A to move focus for more operations*/
+            strName += sAdditionalAccnameString1;
+            strName += s3;
+            /*Press Ctrl+Alt+B to move focus back to the current structure control*/
+            strName += sAdditionalAccnameString3;
+            strName += s2;
+            pEdit->SetAccessibleName(strName);
+        }
+        else
+        {
+            pEdit->SetAccessibleName(strName);
+        }
         Size aEditSize(aControlSize);
         aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
         pEdit->SetSizePixel(aEditSize);
@@ -2787,6 +2853,16 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
                         (ToxAuthorityField)rToken.nAuthorityField));
             pButton->SetText(sTmp.copy(0, 2));
         }
+
+        OUString sSpace = " ";
+        sal_uInt32 nIndex = GetControlIndex( rToken.eTokenType );
+        OUString sAccName = aButtonHelpTexts[rToken.eTokenType];
+        if ( nIndex )
+        {
+            sAccName += sSpace;
+            sAccName += OUString::number(nIndex);
+        }
+        pButton->SetAccessibleName( sAccName );
 
         pButton->Show();
         pRet = pButton;
@@ -2939,6 +3015,30 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         iterActive = aControlList.insert(iterActive, pEdit);
 
         pEdit->SetText(sRight);
+        sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
+        OUString s1 = " (";
+        OUString s2 = ")";
+        OUString s3 = ", ";
+        OUString strName(accessibleName);
+        strName += OUString::number(nIndex);
+        if ( nIndex == 1)
+        {
+            /*Press left or right arrow to choose the structure controls*/
+            strName += s1;
+            strName += sAdditionalAccnameString2;
+            strName += s3;
+            /*Press Ctrl+Alt+A to move focus for more operations*/
+            strName += sAdditionalAccnameString1;
+            strName += s3;
+            /*Press Ctrl+Alt+B to move focus back to the current structure control*/
+            strName += sAdditionalAccnameString3;
+            strName += s2;
+            pEdit->SetAccessibleName(strName);
+        }
+        else
+        {
+            pEdit->SetAccessibleName(strName);
+        }
         pEdit->SetSizePixel(aControlSize);
         pEdit->AdjustSize();
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
@@ -3417,6 +3517,40 @@ void SwTokenWindow::GetFocus()
             }
         }
     }
+}
+
+void SwTokenWindow::SetFocus2theAllBtn()
+{
+    if (m_pParent)
+    {
+        m_pParent->SetFocus2theAllBtn();
+    }
+}
+
+sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
+{
+    //there are only one entry-text button and only one page-number button,
+    //so we need not add index for these two buttons.
+    if ( eType == TOKEN_ENTRY_TEXT || eType == TOKEN_PAGE_NUMS )
+    {
+        return 0;
+    }
+
+    sal_uInt32 nIndex = 0;
+    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    {
+        const Control* pControl = *it;
+        const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
+            ? ((SwTOXEdit*)pControl)->GetFormToken()
+            : ((SwTOXButton*)pControl)->GetFormToken();
+
+        if(eType == rNewToken.eTokenType)
+        {
+            ++nIndex;
+        }
+    }
+
+    return nIndex;
 }
 
 SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet )
