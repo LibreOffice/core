@@ -1422,7 +1422,14 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "fsop"; }
 };
-
+namespace {
+struct SumIfsArgs {
+    SumIfsArgs(cl_mem x): mCLMem(x), mConst(0.0) {}
+    SumIfsArgs(double x): mCLMem(NULL), mConst(x) {}
+    cl_mem mCLMem;
+    double mConst;
+};
+}
 /// Helper functions that have multiple buffers
 class DynamicKernelSoPArguments: public DynamicKernelArgument
 {
@@ -1455,12 +1462,6 @@ public:
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
-                struct SumIfsArgs {
-                    SumIfsArgs(cl_mem x): mCLMem(x), mConst(0.0) {}
-                    SumIfsArgs(double x): mCLMem(NULL), mConst(x) {}
-                    cl_mem mCLMem;
-                    double mConst;
-                };
                 assert(slidingArgPtr);
                 size_t nInput = slidingArgPtr -> GetArrayLength();
                 size_t nCurWindowSize = slidingArgPtr -> GetWindowSize();
@@ -1470,13 +1471,13 @@ public:
                         e= mvSubArguments.end(); it!=e; ++it)
                 {
                     if (VectorRef *VR = dynamic_cast<VectorRef *>(it->get()))
-                        vclmem.push_back(VR->GetCLBuffer());
+                        vclmem.push_back(SumIfsArgs(VR->GetCLBuffer()));
                     else if (DynamicKernelConstantArgument *CA =
                             dynamic_cast<
                             DynamicKernelConstantArgument *>(it->get()))
-                        vclmem.push_back(CA->GetDouble());
+                        vclmem.push_back(SumIfsArgs(CA->GetDouble()));
                     else
-                        vclmem.push_back((cl_mem)NULL);
+                        vclmem.push_back(SumIfsArgs((cl_mem)NULL));
                 }
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                         sizeof(double)*nVectorWidth, NULL, &err);
