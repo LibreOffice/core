@@ -127,7 +127,7 @@ void DataStreamDlg::StartStream(DataStream *pStream)
                 ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN")
             , nSettings
             );
-    DataStream::MakeToolbarVisible( mpDocShell );
+    DataStream::MakeToolbarVisible();
     pStream->StartImport();
 }
 

@@ -110,11 +110,10 @@ private:
 
 }
 
-void DataStream::MakeToolbarVisible(ScDocShell *pShell)
+void DataStream::MakeToolbarVisible()
 {
-    (void) pShell; // Mysterious MSVC 2012 claim pShell is unreferenced...
     css::uno::Reference< css::frame::XFrame > xFrame =
-        pShell->GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
+        ScDocShell::GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
     if (!xFrame.is())
         return;
 
@@ -442,7 +441,7 @@ bool DataStream::ImportData()
 sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
         const OUString& , const css::uno::Any& )
 {
-    MakeToolbarVisible(mpScDocShell);
+    MakeToolbarVisible();
     StopImport();
     bool bStart = true;
     if (mnSettings & SCRIPT_STREAM && !mxReaderThread.is() &&

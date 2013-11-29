@@ -39,7 +39,7 @@ public:
     enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
     enum { SCRIPT_STREAM = 1, VALUES_IN_LINE = 2 };
 
-    static void MakeToolbarVisible(ScDocShell *pShell);
+    static void MakeToolbarVisible();
     static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
             sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
 
