@@ -293,7 +293,6 @@ gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
 # Helper class
 
-# need windows path with backslashes here
-gb_Helper_set_ld_path := PATH="$(PATH);$(shell cygpath -w $(INSTDIR)/$(LIBO_URE_LIB_FOLDER));$(shell cygpath -w $(INSTDIR)/$(LIBO_BIN_FOLDER))"
+gb_Helper_set_ld_path := PATH="$$PATH:$(shell cygpath -u $(INSTDIR)/$(LIBO_URE_LIB_FOLDER)):$(shell cygpath -u $(INSTDIR)/$(LIBO_BIN_FOLDER))"
 
 # vim: set noet sw=4:
