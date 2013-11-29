@@ -822,8 +822,7 @@ void ScInputHandler::ShowTipCursor()
                 return;
             xub_StrLen nPos = aSel.nEndPos;
             OUString  aSelText = aFormula.copy( 0, nPos );
-            xub_StrLen  nNextFStart = 0;
-            xub_StrLen  nNextFEnd = 0;
+            sal_Int32   nNextFStart = 0;
             xub_StrLen  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
             ::std::vector< OUString> aArgs;
@@ -841,7 +840,7 @@ void ScInputHandler::ShowTipCursor()
                     if( !(comphelper::string::isalphaAscii(c)) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, true);
-                    if( aHelper.GetNextFunc( aSelText, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
+                    if( aHelper.GetNextFunc( aSelText, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
                     {
                         if( !ppFDesc->getFunctionName().isEmpty() )
                         {
@@ -1059,8 +1058,7 @@ void ScInputHandler::UseFormulaData()
             xub_StrLen nPos = aSel.nEndPos;
             OUString  aFormula = aTotal.copy( 0, nPos );;
             sal_Int32   nLeftParentPos = 0;
-            xub_StrLen  nNextFStart = 0;
-            xub_StrLen  nNextFEnd = 0;
+            sal_Int32   nNextFStart = 0;
             xub_StrLen  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
             ::std::vector< OUString> aArgs;
@@ -1093,7 +1091,7 @@ void ScInputHandler::UseFormulaData()
                 if( !(comphelper::string::isalphaAscii(c)) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, true);
-                if( aHelper.GetNextFunc( aFormula, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
+                if( aHelper.GetNextFunc( aFormula, false, nNextFStart, NULL, &ppFDesc, &aArgs ) )
                 {
                     if( !ppFDesc->getFunctionName().isEmpty() )
                     {

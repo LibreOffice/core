@@ -46,12 +46,12 @@ namespace formula
 
         inline const CharClass* GetCharClass() const { return m_pCharClass; }
 
-        sal_Bool                GetNextFunc( const OUString&  rFormula,
-                                                 sal_Bool           bBack,
-                                                 xub_StrLen&    rFStart, // Ein- und Ausgabe
-                                                 xub_StrLen*    pFEnd = NULL,
-                                                 const IFunctionDescription** ppFDesc = NULL,
-                                                 ::std::vector< OUString>*      pArgs = NULL ) const;
+        sal_Bool                GetNextFunc( const OUString&     rFormula,
+                                                   sal_Bool      bBack,
+                                                   sal_Int32&    rFStart, // Ein- und Ausgabe
+                                                   sal_Int32*    pFEnd = NULL,
+                                             const IFunctionDescription** ppFDesc = NULL,
+                                                   ::std::vector< OUString>*      pArgs = NULL ) const;
 
         xub_StrLen          GetFunctionStart( const OUString& rFormula, xub_StrLen nStart,
                                                         sal_Bool bBack, OUString* pFuncName = NULL ) const;

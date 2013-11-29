@@ -150,8 +150,8 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         {
             bMatrix = CheckMatrix(aFormula);
 
-            xub_StrLen nFStart = 0;
-            xub_StrLen nFEnd   = 0;
+            sal_Int32 nFStart = 0;
+            sal_Int32 nFEnd   = 0;
             if ( GetFormulaHelper().GetNextFunc( aFormula, false, nFStart, &nFEnd) )
             {
                 pScMod->InputReplaceSelection( aFormula );

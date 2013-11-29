@@ -822,9 +822,9 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     //  2. Page or Edit: show selected function
 
     xub_StrLen nFStart     = pData->GetFStart();
-    OUString aFormula      = m_pHelper->getCurrentFormula() + " )";
-    xub_StrLen nNextFStart = nFStart;
-    xub_StrLen nNextFEnd   = 0;
+    OUString   aFormula    = m_pHelper->getCurrentFormula() + " )";
+    sal_Int32  nNextFStart = nFStart;
+    sal_Int32  nNextFEnd   = 0;
 
     DeleteArgs();
     const IFunctionDescription* pOldFuncDesc = pFuncDesc;
@@ -904,9 +904,9 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     }
         //  Test, ob vorne/hinten noch mehr Funktionen sind
 
-    xub_StrLen nTempStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
+    sal_Int32 nTempStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
     rbNext = m_aFormulaHelper.GetNextFunc( aFormula, sal_False, nTempStart );
-    nTempStart=(xub_StrLen)pMEdit->GetSelection().Min();
+    nTempStart = pMEdit->GetSelection().Min();
     pData->SetFStart(nTempStart);
     rbPrev = m_aFormulaHelper.GetNextFunc( aFormula, sal_True, nTempStart );
 }
@@ -1103,8 +1103,8 @@ void FormulaDlg_Impl::EditThisFunc(xub_StrLen nFStart)
         pData->SetFStart(nFStart);
     }
 
-    xub_StrLen nNextFStart  = nFStart;
-    xub_StrLen nNextFEnd    = 0;
+    sal_Int32 nNextFStart  = nFStart;
+    sal_Int32 nNextFEnd    = 0;
 
     sal_Bool bFound;
 
@@ -1138,8 +1138,8 @@ void FormulaDlg_Impl::EditNextFunc( sal_Bool bForward, xub_StrLen nFStart )
         pData->SetFStart(nFStart);
     }
 
-    xub_StrLen nNextFStart  = 0;
-    xub_StrLen nNextFEnd    = 0;
+    sal_Int32 nNextFStart  = 0;
+    sal_Int32 nNextFEnd    = 0;
 
     sal_Bool bFound;
     if ( bForward )

@@ -67,14 +67,14 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
 }
 
 sal_Bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
-                                 sal_Bool           bBack,
-                                 xub_StrLen&    rFStart,   // Input and output
-                                 xub_StrLen*    pFEnd,     // = NULL
-                                 const IFunctionDescription**   ppFDesc,   // = NULL
-                                 ::std::vector< OUString>*   pArgs )  const // = NULL
+                                     sal_Bool         bBack,
+                                     sal_Int32&       rFStart,   // Input and output
+                                     sal_Int32*       pFEnd,     // = NULL
+                                     const IFunctionDescription**   ppFDesc,   // = NULL
+                                     ::std::vector< OUString>*   pArgs )  const // = NULL
 {
-    xub_StrLen  nOldStart = rFStart;
-    OUString      aFname;
+    sal_Int32  nOldStart = rFStart;
+    OUString   aFname;
 
     rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
     sal_Bool bFound  = ( rFStart != FUNC_NOTFOUND );
