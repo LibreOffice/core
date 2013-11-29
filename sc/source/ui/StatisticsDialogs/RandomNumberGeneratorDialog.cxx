@@ -30,7 +30,6 @@
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/cauchy_distribution.hpp>
 #include <boost/random/bernoulli_distribution.hpp>
-#include <boost/random/binomial_distribution.hpp>
 #include <boost/random/chi_squared_distribution.hpp>
 #include <boost/random/geometric_distribution.hpp>
 #include <boost/random/negative_binomial_distribution.hpp>

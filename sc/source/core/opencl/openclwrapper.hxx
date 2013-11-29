@@ -82,7 +82,6 @@ if( status != CL_SUCCESS )    \
 #endif
 
 #include <cstdio>
-#include <vector>
 
 typedef struct _KernelEnv
 {

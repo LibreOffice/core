@@ -20,7 +20,6 @@
 #include <stdio.h>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>

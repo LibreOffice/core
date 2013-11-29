@@ -30,7 +30,6 @@
 
 #include "sharedocdlg.hxx"
 #include "scresid.hxx"
-#include "docsh.hxx"
 #include "viewdata.hxx"
 
 

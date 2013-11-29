@@ -47,7 +47,6 @@
 #include "tokenarray.hxx"
 #include "scopetools.hxx"
 #include "dociter.hxx"
-#include "docsh.hxx"
 #include "queryparam.hxx"
 #include "edittextiterator.hxx"
 #include "editutil.hxx"

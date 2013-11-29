@@ -35,7 +35,6 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/outlobj.hxx>
