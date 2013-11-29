@@ -112,6 +112,7 @@ private:
 
 void DataStream::MakeToolbarVisible(ScDocShell *pShell)
 {
+    (void) pShell; // Mysterious MSVC 2012 claim pShell is unreferenced...
     css::uno::Reference< css::frame::XFrame > xFrame =
         pShell->GetViewData()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
     if (!xFrame.is())
