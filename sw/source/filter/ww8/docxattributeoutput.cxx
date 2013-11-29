@@ -3490,7 +3490,7 @@ void DocxAttributeOutput::WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmF
    m_rExport.VMLExporter().AddSdrObject( *(sdrObj),
         rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
         rHoriOri.GetRelationOrient(),
-        rVertOri.GetRelationOrient(), (&rNdTopLeft) );
+        rVertOri.GetRelationOrient(), (&rNdTopLeft), true );
    m_pSerializer->endElementNS( XML_w, XML_pict );
 
    if ( bSwapInPage )

@@ -1095,7 +1095,8 @@ public:
                     const OString& rGraphicId,
                     const Rectangle& rBoundRect,
                     const com::sun::star::awt::Rectangle* pVisArea = NULL,
-                    const GraphicAttr* pGrafikAttr = NULL
+                    const GraphicAttr* pGrafikAttr = NULL,
+                    const sal_Bool ooxmlExport = false
                 );
     sal_Bool    HasGraphics() const { return mnBlibEntrys != 0; };
 
@@ -1259,7 +1260,8 @@ public:
                     const OUString& rSource,
                     const sal_Bool bCreateFillBitmap,
                     const sal_Bool bCreateCroppingAttributes = sal_False,
-                    const sal_Bool bFillBitmapModeAllowed = sal_True
+                    const sal_Bool bFillBitmapModeAllowed = sal_True,
+                    const sal_Bool bOOxmlExport = false
                 );
 
     sal_Bool   CreateBlipPropertiesforOLEControl( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape);
@@ -1682,7 +1684,7 @@ public:
     void    AddUnoShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
                 /// returns the ShapeID
-    sal_uInt32  AddSdrObject( const SdrObject& rObj );
+    sal_uInt32  AddSdrObject( const SdrObject& rObj, bool ooxmlExport = false );
 
                 /// If objects are written through AddSdrObject the
                 /// SolverContainer has to be written, and maybe some

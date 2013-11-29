@@ -173,7 +173,7 @@ void ImplEESdrWriter::MapRect(ImplEESdrObject& /* rObj */ )
 
 sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 EscherSolverContainer& rSolverContainer,
-                                ImplEESdrPageType ePageType )
+                                ImplEESdrPageType ePageType, const sal_Bool bOOxmlExport )
 {
     sal_uInt32 nShapeID = 0;
     sal_uInt16 nShapeType = 0;
@@ -209,7 +209,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     ImplEESdrObject aObj( *this, *(Reference< XShape >*)
                                     xXIndexAccess->getByIndex( n ).getValue() );
                     if( aObj.IsValid() )
-                        ImplWriteShape( aObj, rSolverContainer, ePageType );
+                        ImplWriteShape( aObj, rSolverContainer, ePageType, bOOxmlExport );
                 }
                 mpEscherEx->LeaveGroup();
             }
@@ -551,7 +551,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 else
                 {
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", sal_False, sal_True ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", sal_False, sal_True, sal_True, bOOxmlExport ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
@@ -934,10 +934,10 @@ void ImplEscherExSdr::ImplWriteCurrentPage()
 }
 
 
-sal_uInt32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj )
+sal_uInt32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj , bool ooxmlExport )
 {
     DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteShape: no SolverContainer" );
-    return ImplWriteShape( rObj, *mpSolverContainer, NORMAL );
+    return ImplWriteShape( rObj, *mpSolverContainer, NORMAL, ooxmlExport );
 }
 
 
@@ -953,11 +953,11 @@ void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
         mpImplEscherExSdr->ImplWriteCurrentPage();
 }
 
-sal_uInt32 EscherEx::AddSdrObject( const SdrObject& rObj )
+sal_uInt32 EscherEx::AddSdrObject( const SdrObject& rObj, bool ooxmlExport )
 {
     ImplEESdrObject aObj( *mpImplEscherExSdr, rObj, mbOOXML );
     if( aObj.IsValid() )
-        return mpImplEscherExSdr->ImplWriteTheShape( aObj );
+        return mpImplEscherExSdr->ImplWriteTheShape( aObj, ooxmlExport );
     return 0;
 }
 
