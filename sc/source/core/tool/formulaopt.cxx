@@ -447,6 +447,7 @@ void ScFormulaCfg::Commit()
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
+    bool bSetOpenCL = false;
 
     for (int nProp = 0; nProp < aNames.getLength(); ++nProp)
     {
@@ -540,28 +541,31 @@ void ScFormulaCfg::Commit()
             {
                 sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
                 pValues[nProp] <<= bVal;
+                bSetOpenCL = bVal;
             }
             break;
             case SCFORMULAOPT_OPENCL_AUTOSELECT:
             {
                 sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
                 pValues[nProp] <<= bVal;
-                sc::FormulaGroupInterpreter::switchOpenCLDevice(
-                        GetCalcConfig().maOpenCLDevice, bVal);
+                bSetOpenCL = true;
             }
             break;
             case SCFORMULAOPT_OPENCL_DEVICE:
             {
                 OUString aOpenCLDevice = GetCalcConfig().maOpenCLDevice;
                 pValues[nProp] <<= aOpenCLDevice;
-                sc::FormulaGroupInterpreter::switchOpenCLDevice(
-                        aOpenCLDevice, GetCalcConfig().mbOpenCLAutoSelect);
+                bSetOpenCL = true;
             }
             break;
             default:
                 ;
         }
     }
+    if(bSetOpenCL)
+        sc::FormulaGroupInterpreter::switchOpenCLDevice(
+                GetCalcConfig().maOpenCLDevice, GetCalcConfig().mbOpenCLAutoSelect);
+
     PutProperties(aNames, aValues);
 }
 
