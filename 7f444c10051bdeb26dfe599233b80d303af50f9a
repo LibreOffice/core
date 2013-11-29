@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///dA\u003d",
+        "filename": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-29T20:10:24Z",
+      "side": 1,
+      "message": "Please revert this part, removing the modeline is an obvious problem.",
+      "revId": "7f444c10051bdeb26dfe599233b80d303af50f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///c8\u003d",
+        "filename": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-11-29T20:10:24Z",
+      "side": 1,
+      "message": "Please follow the style of the surrounding code, { should be placed at the beginning of the new line.",
+      "revId": "7f444c10051bdeb26dfe599233b80d303af50f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
