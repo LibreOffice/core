@@ -265,8 +265,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="thousandseperator">
-            <property name="label" translatable="yes">_Thousands seperator</property>
+          <object class="GtkCheckButton" id="thousandseparator">
+            <property name="label" translatable="yes">_Thousands separator</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

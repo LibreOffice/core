@@ -2119,7 +2119,7 @@ void ToolBox::UpdateCustomMenu()
             }
         }
 
-        // add a seperator below the inserted clipped-items
+        // add a separator below the inserted clipped-items
         pMenu->InsertSeparator( OString(), nSepPos );
 
         // now append the items that are explicitly disabled
