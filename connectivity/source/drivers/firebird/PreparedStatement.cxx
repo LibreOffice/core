@@ -432,6 +432,8 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime&
 }
 // -------------------------------------------------------------------------
 
+// void OPreaparedStatement::set
+
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
 {
     (void) parameterIndex;
@@ -440,16 +442,14 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
+                                          const Reference< XBlob >& xBlob)
+    throw (SQLException, RuntimeException)
 {
-    (void) parameterIndex;
-    (void) x;
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
+    setBytes(nParameterIndex, xBlob->getBytes(0, xBlob->length()));
 }
+
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException)
@@ -503,15 +503,65 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
+                                           const Sequence< sal_Int8 >& xBytes)
+    throw (SQLException, RuntimeException)
 {
-    (void) parameterIndex;
-    (void) x;
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    isc_blob_handle aBlobHandle = 0;
+    ISC_QUAD aBlobId;
+    ISC_STATUS aErr;
+
+    aErr = isc_create_blob2(m_statusVector,
+                            &m_pConnection->getDBHandle(),
+                            &m_pConnection->getTransaction(),
+                            &aBlobHandle,
+                            &aBlobId,
+                            0, // Blob parameter buffer length
+                            0); // Blob parameter buffer handle
+
+    if (aErr)
+    {
+        evaluateStatusVector(m_statusVector,
+                             "setBlob failed on " + m_sSqlStatement,
+                             *this);
+        assert(false);
+    }
+
+    // Max segment size is 2^16 == SAL_MAX_UINT16
+    sal_uInt64 nDataWritten = 0;
+    while (xBytes.getLength() - nDataWritten > 0)
+    {
+        sal_uInt64 nDataRemaining = xBytes.getLength() - nDataWritten;
+        sal_uInt16 nWriteSize = (nDataRemaining > SAL_MAX_UINT16) ? SAL_MAX_UINT16 : nDataRemaining;
+        aErr = isc_put_segment(m_statusVector,
+                               &aBlobHandle,
+                               nWriteSize,
+                               (const char*) xBytes.getConstArray() + nDataWritten);
+        nDataWritten += nWriteSize;
+        if (aErr)
+        {
+            evaluateStatusVector(m_statusVector,
+                                 "isc_put_segment failed",
+                                 *this);
+            assert(false);
+        }
+    }
+
+    aErr = isc_close_blob(m_statusVector,
+                          &aBlobHandle);
+    if (aErr)
+    {
+        evaluateStatusVector(m_statusVector,
+                             "isc_close_blob failed",
+                             *this);
+        assert(false);
+    }
+
+    setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
 // -------------------------------------------------------------------------
 
