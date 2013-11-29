@@ -29,29 +29,35 @@ use installer::logger;
 use installer::pathanalyzer;
 use installer::systemactions;
 
+use strict;
+
 ########################################################################################
 # Replacing all zip list variables in setup script and files with flag scpzip_replace
 ########################################################################################
 
-sub replace_all_ziplistvariables_in_file
+sub replace_all_ziplistvariables_in_file ($$)
 {
-    my ( $fileref, $variableshashref ) = @_;
+    my ($lines, $variables) = @_;
 
-    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
+    my $count = scalar @$lines;
+    for (my $lineno=0; $lineno<$count; ++$lineno)
     {
-        my $line = ${$fileref}[$i];
-
-        if ( $line =~ /^.*\$\{\w+\}.*$/ )   # only occurence of ${abc}
+        my $line = $lines->[$lineno];
+        if ($line =~ /\$\{/)  # early rejection of lines that don't need replacements
         {
-            my $key;
-
-            foreach $key (keys %{$variableshashref})
+            while (my ($key,$value) = each %$variables)
             {
-                my $value = $variableshashref->{$key};
-                $key = '${' . $key . '}';
-                $line =~ s/\Q$key\E/$value/g;
-                ${$fileref}[$i] = $line;
+                my $pattern = '${' . $key . '}';
+                my $replacement_count = ($line =~ s/\Q$pattern\E/$value/g);
+                if ($key eq "PRODUCTADDON" && $replacement_count>0)
+                {
+                    $installer::logger::Lang->printf(
+                        "replaced PRODUCTADDON %d times in line %d\n",
+                        $replacement_count,
+                        $lineno);
+                }
             }
+            $lines->[$lineno] = $line;
         }
     }
 }
@@ -63,7 +69,7 @@ sub replace_all_ziplistvariables_in_file
 
 sub replace_all_ziplistvariables_in_rtffile ($$)
 {
-    my ($lines, $variablesref) = @_;
+    my ($lines, $variables) = @_;
 
     my $line_count = scalar @$lines;
     for (my $i=0; $i<=$line_count; ++$i)

@@ -1929,7 +1929,9 @@ for (;1;last)
 
         if ( $installer::globals::patch_user_dir )
         {
-            installer::scriptitems::replace_userdir_variable($profileitemsinproductlanguageresolvedarrayref);
+            installer::scriptitems::replace_userdir_variable(
+                $profileitemsinproductlanguageresolvedarrayref,
+                $allvariableshashref);
         }
 
         installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($profilesinproductlanguageresolvedarrayref, $dirsinproductarrayref);

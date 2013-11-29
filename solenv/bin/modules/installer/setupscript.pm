@@ -31,6 +31,8 @@ use installer::remover;
 use installer::scriptitems;
 use installer::ziplist;
 
+use strict;
+
 #######################################################
 # Set setup script name, if not defined as parameter
 #######################################################
@@ -74,9 +76,9 @@ sub set_setupscript_name
 # Reading script variables from installation object of script file
 #####################################################################
 
-sub get_all_scriptvariables_from_installation_object
+sub get_all_scriptvariables_from_installation_object ($$)
 {
-    my ($scriptref) = @_;
+    my ($scriptref, $script_filename) = @_;
 
     my @installobjectvariables;
 
@@ -521,13 +523,9 @@ sub replace_preset_properties
     my @presetproperties = ();
     push(@presetproperties, "SOLARISBRANDPACKAGENAME");
     push(@presetproperties, "SYSTEMINTUNIXPACKAGENAME");
-    # push(@presetproperties, "UNIXPACKAGENAME");
-    # push(@presetproperties, "WITHOUTDOTUNIXPACKAGENAME");
-    # push(@presetproperties, "UNIXPRODUCTNAME");
-    # push(@presetproperties, "WITHOUTDOTUNIXPRODUCTNAME");
 
 
-    foreach $property ( @presetproperties )
+    foreach my $property (@presetproperties)
     {
         my $presetproperty = "PRESET" . $property;
         if (( exists($allvariables->{$presetproperty}) ) && ( $allvariables->{$presetproperty} ne "" ))

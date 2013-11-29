@@ -46,6 +46,14 @@ sub get_path_from_fullqualifiedname
     }
 }
 
+
+
+
+=head2
+
+    Despite its name, this function seems just to return the basename of the given filename.
+
+=cut
 sub make_absolute_filename_to_relative_filename
 {
     my ($longfilenameref) = @_;

@@ -28,6 +28,8 @@ use installer::globals;
 use installer::worker;
 use installer::windows::idtglobal;
 
+use strict;
+
 ##############################################################
 # Returning the first module of a file from the
 # comma separated list of modules.
@@ -224,9 +226,9 @@ sub create_msiassembly_table
 # Returning the name for the table MsiAssemblyName
 ####################################################################################
 
-sub get_msiassemblyname_name
+sub get_msiassemblyname_name ($)
 {
-    ( $number ) = @_;
+    my ($number) = @_;
 
     my $name = "";
 
@@ -315,12 +317,9 @@ sub add_assembly_condition_into_component_table
     my $componenttablename = $basedir . $installer::globals::separator . "Componen.idt";
     my $componenttable = installer::files::read_file($componenttablename);
     my $changed = 0;
-    my $infoline = "";
 
-    for ( my $i = 0; $i <= $#{$installer::globals::msiassemblyfiles}; $i++ )
+    foreach my $onefile (@$installer::globals::msiassemblyfiles)
     {
-        my $onefile = ${$installer::globals::msiassemblyfiles}[$i];
-
         my $filecomponent = get_msiassembly_component($onefile);
 
         for ( my $j = 0; $j <= $#{$componenttable}; $j++ )
@@ -342,13 +341,17 @@ sub add_assembly_condition_into_component_table
 
                     # $condition = "MsiNetAssemblySupport";
                     $condition = "DOTNET_SUFFICIENT=1";
-                    $oneline = $component . "\t" . $componentid . "\t" . $directory . "\t" . $attributes . "\t" . $condition . "\t" . $keypath . "\n";
+                    $oneline = join("\t",
+                        $component,
+                        $componentid,
+                        $directory,
+                        $attributes,
+                        $condition,
+                        $keypath) . "\n";
                     ${$componenttable}[$j] = $oneline;
                     $changed = 1;
-                    $infoline = "Changing $componenttablename :\n";
-                    $installer::logger::Lang->print($infoline);
-                    $infoline = $oneline;
-                    $installer::logger::Lang->print($infoline);
+                    $installer::logger::Lang->print("Changing %s :\n", $componenttablename);
+                    $installer::logger::Lang->print($oneline);
                     last;
                 }
             }
@@ -359,8 +362,7 @@ sub add_assembly_condition_into_component_table
     {
         # Saving the file
         installer::files::save_file($componenttablename ,$componenttable);
-        $infoline = "Saved idt file: $componenttablename\n";
-        $installer::logger::Lang->print($infoline);
+        $installer::logger::Lang->print("Saved idt file: %s\n", $componenttablename);
     }
 }
 

@@ -100,30 +100,9 @@ sub replace_productname_in_file
 
     change_length_of_string(\$unicode_productname, $replacestring);
 
-    my $found1 = $onefile =~ s/$replacestring/$unicode_productname/sg;
-
-    my $found2 = 0;
-
-    if ( $styles =~ /\bPATCH_SO_NAME_Z\b/ )
-    {
-        # searching for "z"
-
-        $onestring = "z" . chr(0);
-        $replacestring = "";
-        for ( my $i = 1; $i <= 80; $i++ ) { $replacestring .= $onestring; }
-
-        my $productname2 = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTVERSION'};
-        if ( exists($onefilehash->{'FileDescriptionZ'}) ) { $productname2 = $onefilehash->{'FileDescriptionZ'}; }
-        my $unicode_productname2 = convert_to_unicode($productname2);
-
-        change_length_of_string_with_letter(\$unicode_productname2, $replacestring, $onestring);
-
-        $found2 = $onefile =~ s/$replacestring/$unicode_productname2/sg;
-    }
+    my $found = $onefile =~ s/$replacestring/$unicode_productname/sg;
 
     installer::files::save_binary_file($onefile, $destpath);
-
-    my $found = $found1 + $found2;
 
     return $found;
 }
