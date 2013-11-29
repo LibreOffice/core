@@ -1430,7 +1430,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    xub_StrLen nChar = ImplGetCharPos( rMEvt.GetPosPixel() );
+    sal_Int32 nCharPos = ImplGetCharPos( rMEvt.GetPosPixel() );
     Selection aSelection( maSelection );
     aSelection.Justify();
 
@@ -1451,10 +1451,10 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
             ImplCopyToSelectionClipboard();
         }
-        else if ( !rMEvt.IsShift() && HasFocus() && aSelection.IsInside( nChar ) )
+        else if ( !rMEvt.IsShift() && HasFocus() && aSelection.IsInside( nCharPos ) )
             mbClickedInSelection = sal_True;
         else if ( rMEvt.IsLeft() )
-            ImplSetCursorPos( nChar, rMEvt.IsShift() );
+            ImplSetCursorPos( nCharPos, rMEvt.IsShift() );
 
         if ( !mbClickedInSelection && rMEvt.IsLeft() && ( rMEvt.GetClicks() == 1 ) )
             StartTracking( STARTTRACK_SCROLLREPEAT );
@@ -1471,8 +1471,8 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( mbClickedInSelection && rMEvt.IsLeft() )
     {
-        xub_StrLen nChar = ImplGetCharPos( rMEvt.GetPosPixel() );
-        ImplSetCursorPos( nChar, sal_False );
+        sal_Int32 nCharPos = ImplGetCharPos( rMEvt.GetPosPixel() );
+        ImplSetCursorPos( nCharPos, sal_False );
         mbClickedInSelection = sal_False;
     }
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
@@ -1492,8 +1492,8 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
     {
         if ( mbClickedInSelection )
         {
-            xub_StrLen nChar = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
-            ImplSetCursorPos( nChar, sal_False );
+            sal_Int32 nCharPos = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
+            ImplSetCursorPos( nCharPos, sal_False );
             mbClickedInSelection = sal_False;
         }
         else if ( rTEvt.GetMouseEvent().IsLeft() )
@@ -1505,8 +1505,8 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
     {
         if( !mbClickedInSelection )
         {
-            xub_StrLen nChar = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
-            ImplSetCursorPos( nChar, sal_True );
+            sal_Int32 nCharPos = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
+            ImplSetCursorPos( nCharPos, sal_True );
         }
     }
 
@@ -2967,7 +2967,7 @@ xub_StrLen Edit::GetMaxVisChars() const
 
 // -----------------------------------------------------------------------
 
-xub_StrLen Edit::GetCharPos( const Point& rWindowPos ) const
+sal_Int32 Edit::GetCharPos( const Point& rWindowPos ) const
 {
     return ImplGetCharPos( rWindowPos );
 }
@@ -3033,8 +3033,8 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
 
         // Nur wenn Maus in der Selektion...
         Point aMousePos( rDGE.DragOriginX, rDGE.DragOriginY );
-        xub_StrLen nChar = ImplGetCharPos( aMousePos );
-        if ( (nChar >= aSel.Min()) && (nChar < aSel.Max()) )
+        sal_Int32 nCharPos = ImplGetCharPos( aMousePos );
+        if ( (nCharPos >= aSel.Min()) && (nCharPos < aSel.Max()) )
         {
             if ( !mpDDInfo )
                 mpDDInfo = new DDInfo;

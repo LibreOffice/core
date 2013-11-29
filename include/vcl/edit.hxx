@@ -236,7 +236,7 @@ public:
     virtual Size        CalcSize( sal_uInt16 nChars ) const;
     virtual xub_StrLen  GetMaxVisChars() const;
 
-    xub_StrLen          GetCharPos( const Point& rWindowPos ) const;
+    sal_Int32           GetCharPos( const Point& rWindowPos ) const;
 
     // shows a warning box saying "text too long, truncated"
     static void         ShowTruncationWarning( Window* pParent );
