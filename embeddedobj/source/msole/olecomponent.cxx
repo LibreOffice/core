@@ -988,16 +988,7 @@ void OleComponent::RunObject()
 
     if ( !OleIsRunning( m_pNativeImpl->m_pOleObject ) )
     {
-        HRESULT hr = S_OK;
-        try
-        {
-            hr = OleRun( m_pNativeImpl->m_pObj );
-        }
-        catch( ... )
-        {
-            int i = 0;
-            i++;
-        }
+        HRESULT hr = OleRun( m_pNativeImpl->m_pObj );
 
         if ( FAILED( hr ) )
         {
