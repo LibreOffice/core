@@ -242,23 +242,17 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
         aFormula.append( *pFuncName );
 
         aFormula.appendAscii( "(" );
-        ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
-        ::std::vector< OUString >::const_iterator aEnd = _aArguments.end();
-
-        if ( nArgCount > 0 && aIter != aEnd )
+        if ( nArgCount > 0 && !_aArguments.empty() && !_aArguments[0].isEmpty())
         {
-            bool bLastArg = aIter->isEmpty();
+            ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
+            ::std::vector< OUString >::const_iterator aEnd = _aArguments.end();
 
-            while( aIter != aEnd && !bLastArg )
+            aFormula.append( *aIter );
+            ++aIter;
+            while( aIter != aEnd && !aIter->isEmpty() )
             {
-                aFormula.append( *(aIter) );
-                if ( aIter != (aEnd-1) )
-                {
-                    bLastArg = (aIter+1)->isEmpty();
-                    if ( !bLastArg )
-                        aFormula.append( sep );
-                }
-
+                aFormula.append( sep );
+                aFormula.append( *aIter );
                 ++aIter;
             }
         }
