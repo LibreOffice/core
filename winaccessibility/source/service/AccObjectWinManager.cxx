@@ -53,23 +53,6 @@ using namespace com::sun::star::accessibility::AccessibleRole;
 using namespace com::sun::star::accessibility::AccessibleStateType;
 using namespace com::sun::star::uno;
 
-AccObjectWinManager* g_acc_manager = NULL;
-
-/**
-   * Implementation of interface XMSAAService's method getAccObjectPtr() that return the
-   * corresponding com interface with the MS event.
-   *
-   * @param
-   * @return  Com interface.
-   */
-sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
-{
-    if (!g_acc_manager)
-        return 0;
-    return static_cast<sal_Int64>(g_acc_manager->Get_ToATInterface(
-            static_cast<HWND>(reinterpret_cast<void*>(hWnd)), lParam, wParam));
-}
-
 /**
    * constructor
    * @param   Agent The agent kept in all listeners,it's the sole interface by which
@@ -87,22 +70,6 @@ AccObjectWinManager::AccObjectWinManager( AccObjectManagerAgent* Agent ):
         oldFocus( NULL )
 {
 }
-
-/**
-   * Public method to produce manager
-   * @param   Agent The agent kept in all listeners,it's the sole interface by which
-   *          listener communicate with windows manager.
-   * @return
-   */
-AccObjectWinManager* AccObjectWinManager::CreateAccObjectWinManagerInstance( AccObjectManagerAgent* Agent )
-{
-    if (!g_acc_manager)
-    {
-        g_acc_manager = new AccObjectWinManager( Agent );
-    }
-    return g_acc_manager;
-}
-
 
 /**
    * Destructor,clear all resource.

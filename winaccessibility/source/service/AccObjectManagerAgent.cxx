@@ -30,19 +30,13 @@ using namespace com::sun::star::accessibility;
    * @param
    * @return
    */
-AccObjectManagerAgent::AccObjectManagerAgent():
-        pWinManager(NULL)
+AccObjectManagerAgent::AccObjectManagerAgent()
+    : pWinManager(new AccObjectWinManager(this))
 {
-    if( pWinManager == NULL )
-    {
-        pWinManager = AccObjectWinManager::CreateAccObjectWinManagerInstance(this);
-    }
 }
 
 AccObjectManagerAgent::~AccObjectManagerAgent()
 {
-    delete pWinManager;
-    pWinManager = NULL;
 }
 
 /**
@@ -386,6 +380,18 @@ bool AccObjectManagerAgent::IsStateManageDescendant(XAccessible* pXAcc)
         return pWinManager->IsStateManageDescendant( pXAcc );
 
     return false;
+}
+
+/**
+ *  Implementation of interface XMSAAService's method getAccObjectPtr()
+ *  that returns the corresponding COM interface with the MS event.
+ *  @return  Com interface.
+ */
+sal_Int64 AccObjectManagerAgent::Get_ToATInterface(
+        sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
+{
+    return static_cast<sal_Int64>(pWinManager->Get_ToATInterface(
+            static_cast<HWND>(reinterpret_cast<void*>(hWnd)), lParam, wParam));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

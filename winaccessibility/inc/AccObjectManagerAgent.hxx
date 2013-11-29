@@ -20,9 +20,9 @@
 #ifndef __ACCOBJECTMANAGERAGENT_HXX
 #define __ACCOBJECTMANAGERAGENT_HXX
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <boost/scoped_ptr.hpp>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 
 struct IMAccessible;
 struct IAccessible;
@@ -37,7 +37,7 @@ class AccObjectManagerAgent
 {
 private:
 
-    AccObjectWinManager* pWinManager;
+    boost::scoped_ptr<AccObjectWinManager> pWinManager;
 
 public:
 
@@ -96,6 +96,9 @@ public:
     bool IsTopWinAcc( com::sun::star::accessibility::XAccessible* pXAcc );
 
     bool IsStateManageDescendant(com::sun::star::accessibility::XAccessible* pXAcc);
+
+    sal_Int64 Get_ToATInterface(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
+
 };
 
 #endif

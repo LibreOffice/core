@@ -59,6 +59,8 @@ public:
     virtual void AddAllListeners(com::sun::star::accessibility::XAccessible* pAccessible,com::sun::star::accessibility::XAccessible* pParentXAcc,HWND pWND );
     //for On-Demand load.
     virtual void HandleWindowOpened( com::sun::star::accessibility::XAccessible* pAccessible );
+
+    sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 };
 
 #endif
