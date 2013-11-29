@@ -200,10 +200,7 @@ public:
     }
     virtual void GenDeclRef(std::stringstream &ss) const
     {
-        FormulaToken *Tok = GetFormulaToken();
-        if (Tok->GetType() != formula::svDouble)
-            throw Unhandled();
-        ss << Tok->GetDouble();
+        ss << mSymName;
     }
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
@@ -219,10 +216,17 @@ public:
     {
         return 1;
     }
+    double GetDouble(void) const
+    {
+        FormulaToken *Tok = GetFormulaToken();
+        if (Tok->GetType() != formula::svDouble)
+            throw Unhandled();
+        return Tok->GetDouble();
+    }
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
-        double tmp = 0.0;
+        double tmp = GetDouble();
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
@@ -1450,18 +1454,28 @@ public:
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
+                struct SumIfsArgs {
+                    SumIfsArgs(cl_mem x): mCLMem(x), mConst(0.0) {}
+                    SumIfsArgs(double x): mCLMem(NULL), mConst(x) {}
+                    cl_mem mCLMem;
+                    double mConst;
+                };
                 assert(slidingArgPtr);
                 size_t nInput = slidingArgPtr -> GetArrayLength();
                 size_t nCurWindowSize = slidingArgPtr -> GetWindowSize();
-                std::vector<cl_mem> vclmem;
+                std::vector<SumIfsArgs> vclmem;
 
                 for (SubArgumentsType::iterator it = mvSubArguments.begin(),
                         e= mvSubArguments.end(); it!=e; ++it)
                 {
                     if (VectorRef *VR = dynamic_cast<VectorRef *>(it->get()))
                         vclmem.push_back(VR->GetCLBuffer());
+                    else if (DynamicKernelConstantArgument *CA =
+                            dynamic_cast<
+                            DynamicKernelConstantArgument *>(it->get()))
+                        vclmem.push_back(CA->GetDouble());
                     else
-                        vclmem.push_back(NULL);
+                        vclmem.push_back((cl_mem)NULL);
                 }
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                         sizeof(double)*nVectorWidth, NULL, &err);
@@ -1476,8 +1490,9 @@ public:
                     // set kernel arg of reduction kernel
                 for (size_t j=0; j< vclmem.size(); j++){
                     err = clSetKernelArg(redKernel, j,
-                            vclmem[j]?sizeof(cl_mem):sizeof(double),
-                            (void *)&vclmem[j]);
+                            vclmem[j].mCLMem?sizeof(cl_mem):sizeof(double),
+                            vclmem[j].mCLMem?(void *)&vclmem[j].mCLMem:
+                            (void*)&vclmem[j].mConst);
                     if (CL_SUCCESS != err)
                         throw OpenCLError(err);
                 }
