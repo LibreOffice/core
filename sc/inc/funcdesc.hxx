@@ -153,7 +153,7 @@ public:
       @return    number of non-suppressed arguments
     */
     sal_uInt16  GetSuppressedArgCount() const;
-    virtual xub_StrLen getSuppressedArgumentCount() const ;
+    virtual sal_Int32 getSuppressedArgumentCount() const ;
 
     /**
       Requests function data from AddInCollection

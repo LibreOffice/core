@@ -36,7 +36,7 @@ namespace formula
             virtual OUString getFunctionName() const { return OUString(); }
             virtual const IFunctionCategory* getCategory() const { return NULL; }
             virtual OUString getDescription() const { return OUString(); }
-            virtual xub_StrLen getSuppressedArgumentCount() const { return 0; }
+            virtual sal_Int32 getSuppressedArgumentCount() const { return 0; }
             virtual OUString getFormula(const ::std::vector< OUString >& ) const { return OUString(); }
             virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& ) const {}
             virtual void initArgumentInfo()  const {}

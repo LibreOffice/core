@@ -1032,10 +1032,10 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             if ( bSuccess )
             {
                 OUString sFormula = aDlg.getCurrentFormula();
-                xub_StrLen nIndex = 0;
                 if ( sFormula[0] == '=' )
-                    nIndex = 1;
-                _in_out_rFormula = "rpt:" + sFormula.copy(nIndex);
+                    _in_out_rFormula = "rpt:" + sFormula.copy(1);
+                 else
+                    _in_out_rFormula = "rpt:" + sFormula;
             }
         }
     }

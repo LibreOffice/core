@@ -82,7 +82,7 @@ namespace formula
         virtual const IFunctionCategory* getCategory() const = 0;
         virtual OUString getDescription() const = 0;
         // GetSuppressedArgCount
-        virtual xub_StrLen getSuppressedArgumentCount() const = 0;
+        virtual sal_Int32 getSuppressedArgumentCount() const = 0;
         // GetFormulaString
         virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const = 0;
         // GetVisibleArgMapping

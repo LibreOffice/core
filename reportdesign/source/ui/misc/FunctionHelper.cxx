@@ -168,9 +168,9 @@ OUString FunctionDescription::getDescription() const
     return m_xFunctionDescription->getDescription();
 }
 // -----------------------------------------------------------------------------
-xub_StrLen FunctionDescription::getSuppressedArgumentCount() const
+sal_Int32 FunctionDescription::getSuppressedArgumentCount() const
 {
-    return static_cast<xub_StrLen>(m_aParameter.getLength());
+    return m_aParameter.getLength();
 }
 // -----------------------------------------------------------------------------
 OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArguments) const

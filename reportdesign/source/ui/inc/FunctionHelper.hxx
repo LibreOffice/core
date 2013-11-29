@@ -67,7 +67,7 @@ public:
     virtual OUString getFunctionName() const ;
     virtual const formula::IFunctionCategory* getCategory() const ;
     virtual OUString getDescription() const ;
-    virtual xub_StrLen getSuppressedArgumentCount() const ;
+    virtual sal_Int32 getSuppressedArgumentCount() const ;
     virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const ;
     virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const ;
     virtual void initArgumentInfo()  const;

@@ -312,7 +312,7 @@ OUString ScFuncDesc::getDescription() const
     return sRet;
 }
 
-xub_StrLen ScFuncDesc::getSuppressedArgumentCount() const
+sal_Int32 ScFuncDesc::getSuppressedArgumentCount() const
 {
     return GetSuppressedArgCount();
 }
