@@ -1522,14 +1522,14 @@ ScInputHandler* ScModule::GetRefInputHdl()
 //------------------------------------------------------------------------
 //  Olk's Krempel:
 
-void ScModule::InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd )
+void ScModule::InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->InputGetSelection( rStart, rEnd );
 }
 
-void ScModule::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
+void ScModule::InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)

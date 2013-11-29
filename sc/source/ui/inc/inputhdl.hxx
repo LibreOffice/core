@@ -69,19 +69,19 @@ private:
     ScTypedCaseStrSet::const_iterator miAutoPosFormula;
 
     Window*                 pTipVisibleParent;
-    sal_uLong                   nTipVisible;
+    sal_uLong               nTipVisible;
     Window*                 pTipVisibleSecParent;
-    sal_uLong                   nTipVisibleSec;
-    OUString           aManualTip;
-    OUString           aAutoSearch;
+    sal_uLong               nTipVisibleSec;
+    OUString                aManualTip;
+    OUString                aAutoSearch;
 
-    OUString           aCurrentText;
+    OUString                aCurrentText;
 
-    OUString           aFormText;                  // for autopilot function
-    xub_StrLen              nFormSelStart;              // Selection for autopilot function
-    xub_StrLen              nFormSelEnd;
+    OUString                aFormText;                  // for autopilot function
+    sal_Int32               nFormSelStart;              // Selection for autopilot function
+    sal_Int32               nFormSelEnd;
 
-    sal_uInt16                  nAutoPar;                   // autom.parentheses than can be overwritten
+    sal_uInt16              nAutoPar;                   // autom.parentheses than can be overwritten
 
     ScAddress               aCursorPos;
     ScInputMode             eMode;
@@ -230,8 +230,8 @@ public:
     void            UpdateRange( sal_uInt16 nIndex, const ScRange& rNew );
 
     // Communication with the autopilot function
-    void            InputGetSelection       ( xub_StrLen& rStart, xub_StrLen& rEnd );
-    void            InputSetSelection       ( xub_StrLen nStart, xub_StrLen nEnd );
+    void            InputGetSelection       ( sal_Int32& rStart, sal_Int32& rEnd );
+    void            InputSetSelection       ( sal_Int32 nStart, sal_Int32 nEnd );
     void            InputReplaceSelection   ( const OUString& rStr );
 
     bool            IsFormulaMode() const                   { return bFormulaMode; }

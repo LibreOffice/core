@@ -3817,7 +3817,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
 // InputGetSelection, InputSetSelection, InputReplaceSelection, InputGetFormulaStr
 //------------------------------------------------------------------------
 
-void ScInputHandler::InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd )
+void ScInputHandler::InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd )
 {
     rStart = nFormSelStart;
     rEnd = nFormSelEnd;
@@ -3853,7 +3853,7 @@ EditView* ScInputHandler::GetFuncEditView()
 
 //------------------------------------------------------------------------
 
-void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
+void ScInputHandler::InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd )
 {
     if ( nStart <= nEnd )
     {

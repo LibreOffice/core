@@ -156,7 +156,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             {
                 pScMod->InputReplaceSelection( aFormula );
                 pScMod->InputSetSelection( nFStart, nFEnd );
-                xub_StrLen PrivStart, PrivEnd;
+                sal_Int32 PrivStart, PrivEnd;
                 pScMod->InputGetSelection( PrivStart, PrivEnd);
 
                 eMode = SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,sal_True,sal_True);
@@ -174,7 +174,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
             pScMod->InputReplaceSelection( aNewFormula );
             pScMod->InputSetSelection( 1, aNewFormula.getLength()+1 );
-            xub_StrLen PrivStart, PrivEnd;
+            sal_Int32 PrivStart, PrivEnd;
             pScMod->InputGetSelection( PrivStart, PrivEnd);
             SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,false,false);
 
@@ -635,10 +635,7 @@ void ScFormulaDlg::setSelection(sal_Int32 _nStart, sal_Int32 _nEnd)
 void ScFormulaDlg::getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const
 {
     ScModule* pScMod = SC_MOD();
-    sal_uInt16 nStart1 = _nStart, nEnd1 = _nEnd;
-    pScMod->InputGetSelection( nStart1, nEnd1 );
-    _nStart = nStart1;
-    _nEnd = nEnd1;
+    pScMod->InputGetSelection( _nStart, _nEnd );
 }
 OUString ScFormulaDlg::getCurrentFormula() const
 {
