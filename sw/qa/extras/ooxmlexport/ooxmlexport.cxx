@@ -96,7 +96,8 @@ protected:
             "ImageCrop.docx",
             "test_GIF_ImageCrop.docx",
             "test_PNG_ImageCrop.docx",
-            "testCrashWhileSave.docx"
+            "testCrashWhileSave.docx",
+            "FDO71834.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -2026,6 +2027,14 @@ DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testCrashOnSaveAs, "FDO71834.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        CPPUNIT_ASSERT_EQUAL(true, false);
+/*Checking if Proper RT is done or not*/
 }
 #endif
 
