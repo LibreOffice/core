@@ -29,8 +29,8 @@
 #define OUTPUTSIZE 15360
 
 #define STRINGIFY(...) #__VA_ARGS__"\n"
-#define LOG_PRINTF(x) (std::cout << x << std::endl)
-//#define LOG_PRINTF(x)
+//#define LOG_PRINTF(x) (std::cout << x << std::endl)
+#define LOG_PRINTF(x)
 
 #define DS_CHECK_STATUS(status, name) \
     if (CL_SUCCESS != status) \
