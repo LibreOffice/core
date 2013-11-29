@@ -965,9 +965,11 @@ struct CStringHash
 
 } /* Namespace */
 
-/* Helper method to support OString messages in OSL_ENSURE */
+/* Helper methods to support OString messages in OSL_ENSURE, DBG_ERROR, DBG_WARN, DBG_TRACE, etc. */
 inline sal_Bool SAL_CALL osl_assertFailedLine( const sal_Char* pszFileName, sal_Int32 nLine, const ::rtl::OString& rMessage)
-{ return osl_assertFailedLine( pszFileName, nLine, rMessage.getStr()); }
+    { return osl_assertFailedLine( pszFileName, nLine, rMessage.getStr()); }
+inline void DbgOut( const rtl::OString& rMessage, sal_uInt16 nOutType, const sal_Char* pFileName, sal_uInt16 nLineNum )
+    { DbgOut( rMessage.getStr(), nOutType, pFileName, nLineNum); }
 
 #endif /* __cplusplus */
 
