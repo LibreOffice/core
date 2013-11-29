@@ -88,7 +88,7 @@ public:
     /// Call this when you need to export the object as VML.
     sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
-            sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0 );
+            sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const sal_Bool bOOxmlExport = false );
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.
