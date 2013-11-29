@@ -225,7 +225,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
 }
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::AddFormat( OUString& rFormat, xub_StrLen& rErrPos,
+bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
                                       std::vector<OUString>& rFmtEntries )
 {
@@ -247,13 +247,11 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, xub_StrLen& rErrPos,
     }
     else // neues Format
     {
-        OUString sTemp(rFormat);
         sal_Int32 nPos;
-        bInserted = pFormatter->PutEntry( sTemp, nPos,
+        bInserted = pFormatter->PutEntry( rFormat, nPos,
                                           nCurCategory, nAddKey,
                                           eCurLanguage );
-        rErrPos = (nPos >= 0) ? (xub_StrLen)nPos : 0xFFFF;
-        rFormat = sTemp;
+        rErrPos = (nPos >= 0) ? nPos : -1;
 
         if (bInserted)
         {
@@ -342,15 +340,15 @@ void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
 {
     if( aCurrencyFormatList.size() > static_cast<size_t>(nCurrencyPos) )
     {
-        xub_StrLen rErrPos=0;
+        sal_Int32 rErrPos=0;
         std::vector<OUString> aFmtEList;
 
         sal_uInt32 nFound = pFormatter->TestNewString( aCurrencyFormatList[nCurrencyPos], eCurLanguage );
 
         if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
-            sal_uInt16 rCatLbSelPos=0;
-            short  rFmtSelPos=0;
+            sal_uInt16 rCatLbSelPos =0;
+            short      rFmtSelPos = 0;
             AddFormat( aCurrencyFormatList[nCurrencyPos],rErrPos,rCatLbSelPos,
                     rFmtSelPos,aFmtEList);
         }

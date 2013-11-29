@@ -104,7 +104,7 @@ public:
                                        Color*&     rpFontColor );
 
     bool                AddFormat( OUString&             rFormat,
-                                   xub_StrLen&           rErrPos,
+                                   sal_Int32&            rErrPos,
                                    sal_uInt16&           rCatLbSelPos,
                                    short&                rFmtSelPos,
                                    std::vector<OUString>& rFmtEntries );

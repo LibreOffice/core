@@ -1272,7 +1272,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
         std::vector<OUString> a2EntryList;
         sal_uInt16           nCatLbSelPos = 0;
         short                nFmtLbSelPos = SELPOS_NONE;
-        xub_StrLen           nErrPos=0;
+        sal_Int32            nErrPos=0;
 
         pNumFmtShell->SetCurCurrencyEntry(NULL);
         bAdded = pNumFmtShell->AddFormat( aFormat, nErrPos,
@@ -1309,7 +1309,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
                                                a2EntryList);
                 if(bDeleted) a2EntryList.clear();
                 m_pEdFormat->GrabFocus();
-                m_pEdFormat->SetSelection( Selection( (short)nErrPos, SELECTION_MAX ) );
+                m_pEdFormat->SetSelection( Selection( 0, SELECTION_MAX ) );
                 nReturn |= nReturnOneArea;
             }
             else
@@ -1345,7 +1345,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
         else // syntax error
         {
             m_pEdFormat->GrabFocus();
-            m_pEdFormat->SetSelection( Selection( (short)nErrPos, SELECTION_MAX ) );
+            m_pEdFormat->SetSelection( Selection( nErrPos == -1 ? SELECTION_MAX : nErrPos, SELECTION_MAX ) );
         }
         EditHdl_Impl(m_pEdFormat);
         nReturn = ((nReturn & nReturnOneArea) ? 0 : (nReturn & nReturnChanged));
