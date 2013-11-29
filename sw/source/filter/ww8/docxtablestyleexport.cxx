@@ -1,5 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+    /*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -340,7 +339,8 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
 
     m_pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor;
+    uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor, aSpacingSequence;
+    bool bSequenceFlag = false ;
     OUString aB, aBCs, aI, aSz, aSzCs, aCaps, aSmallCaps, aSpacing;
     for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
     {
@@ -365,7 +365,15 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
         else if (rRPr[i].Name == "smallCaps")
             aSmallCaps = rRPr[i].Value.get<OUString>();
         else if (rRPr[i].Name == "spacing")
-            aSpacing = rRPr[i].Value.get<OUString>();
+            {
+            if (rRPr[i].Value.has<OUString>()) {
+                aSpacing = rRPr[i].Value.get<OUString>();
+                }
+            else {
+                aSpacingSequence = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >() ;
+                bSequenceFlag = true ; // set the uno::Sequence flag.
+                }
+            }
     }
     tableStyleRRFonts(aRFonts);
     tableStyleRLang(aLang);
@@ -375,6 +383,12 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     handleBoolean(aCaps, XML_caps);
     handleBoolean(aSmallCaps, XML_smallCaps);
     tableStyleRColor(aColor);
+    if(bSequenceFlag)
+    {
+           m_pSerializer->singleElementNS(XML_w, XML_spacing,
+                FSNS(XML_w, XML_val),OUStringToOString(aSpacingSequence[0].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
+                   FSEND);
+    }
     if (!aSpacing.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_spacing,
                 FSNS(XML_w, XML_val), OUStringToOString(aSpacing, RTL_TEXTENCODING_UTF8).getStr(),
