@@ -89,6 +89,40 @@ our $Info = installer::logger->new("info",
     'is_show_log_id' => 0
     );
 
+
+
+=head2 SetupSimpleLogging ($filename)
+
+    Setup logging so that $Global, $Lang and $Info all print to the console AND to the log file.
+
+=cut
+sub SetupSimpleLogging ($)
+{
+    my ($log_filename) = @_;
+
+    $Info = installer::logger->new("info",
+        'is_print_to_console' => 1,
+        'is_show_relative_time' => 1,
+        );
+    $Global = installer::logger->new("glob",
+        'is_print_to_console' => 0,
+        'is_show_relative_time' => 1,
+        'forward' => [$Info]
+        );
+    $Lang = installer::logger->new("lang",
+        'is_print_to_console' => 0,
+        'is_show_relative_time' => 1,
+        'forward' => [$Info]
+        );
+    $Info->set_filename($log_filename);
+    $Info->{'is_print_to_console'} = 1;
+    $installer::globals::quiet = 0;
+    starttime();
+}
+
+
+
+
 =head2 new($class, $id, @arguments)
 
     Create a new instance of the logger class.
@@ -119,7 +153,9 @@ sub new ($$@)
         # Show log id (mostly for debugging the logger)
         'is_show_log_id' => 0,
         # Show the process id, useful on the console when doing a multiprocessor build.
-        'is_show_process_id' => 0
+        'is_show_process_id' => 0,
+        # Current indentation
+        'indentation' => "",
     };
     while (scalar @arguments >= 2)
     {
@@ -219,6 +255,7 @@ sub process_line ($$$$$$)
     {
         $line .= $pid . " : ";
     }
+    $line .= $self->{'indentation'};
     $line .= $message;
 
     # Print the line to a file or to the console or store it for later use.
@@ -354,6 +391,24 @@ sub set_forward ($$)
     {
         $self->{'forward'} = [];
     }
+}
+
+
+
+
+sub increase_indentation ($)
+{
+    my ($self) = @_;
+    $self->{'indentation'} .= "    ";
+}
+
+
+
+
+sub decrease_indentation ($)
+{
+    my ($self) = @_;
+    $self->{'indentation'} = substr($self->{'indentation'}, 4);
 }
 
 
@@ -637,6 +692,9 @@ sub print_error
 {
     my $message = shift;
     chomp $message;
+
+    PrintError($message);
+
     print STDERR "\n";
     print STDERR "**************************************************\n";
     print STDERR "ERROR: $message";
@@ -644,6 +702,18 @@ sub print_error
     print STDERR "**************************************************\n";
     return;
 }
+
+
+
+
+sub PrintError ($@)
+{
+    my ($format, @arguments) = @_;
+
+    $Info->printf("Error: ".$format, @arguments);
+}
+
+
 
 
 =head2 PrintStackTrace()
