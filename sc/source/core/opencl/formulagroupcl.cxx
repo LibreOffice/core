@@ -2654,10 +2654,7 @@ DynamicKernel::~DynamicKernel()
         std::cerr<<"Freeing kernel "<< GetMD5() << " kernel\n";
         clReleaseKernel(mpKernel);
     }
-    if (mpProgram) {
-        std::cerr<<"Freeing kernel "<< GetMD5() << " program\n";
-        clReleaseProgram(mpProgram);
-    }
+    // mpProgram is not going to be released here -- it's cached.
     if (mpCode)
         delete mpCode;
 }
@@ -2671,23 +2668,41 @@ void DynamicKernel::CreateKernel(void)
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
     const char *src = mFullProgramSrc.c_str();
-    if (OpenclDevice::buildProgramFromBinary("",
-        &OpenclDevice::gpuEnv,
-        (mKernelSignature+GetMD5()).c_str(), 0)) {
-        mpProgram = OpenclDevice::gpuEnv.mpArryPrograms[0];
-        OpenclDevice::gpuEnv.mpArryPrograms[0] = NULL;
-    } else {
-        mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
-                &src, NULL, &err);
-        if (err != CL_SUCCESS)
-            throw OpenCLError(err);
-        err = clBuildProgram(mpProgram, 1,
-                OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
-        if (err != CL_SUCCESS)
-            throw OpenCLError(err);
-        // Generate binary out of compiled kernel.
-        OpenclDevice::generatBinFromKernelSource(mpProgram,
-                (mKernelSignature+GetMD5()).c_str());
+    static std::string lastKernelHash = "";
+    static cl_program lastProgram = NULL;
+    std::string KernelHash = mKernelSignature+GetMD5();
+    if (lastKernelHash == KernelHash && lastProgram)
+    {
+        std::cerr<<"cl_program cache hit: "<< KernelHash << "\n";
+        mpProgram = lastProgram;
+    }
+    else
+    {   // doesn't match the last compiled formula.
+
+        if (lastProgram) {
+            std::cerr<<"Freeing last program: "<< GetMD5() << "\n";
+            clReleaseProgram(lastProgram);
+            lastProgram = NULL;
+        }
+        if (OpenclDevice::buildProgramFromBinary("",
+                    &OpenclDevice::gpuEnv, KernelHash.c_str(), 0)) {
+            mpProgram = OpenclDevice::gpuEnv.mpArryPrograms[0];
+            OpenclDevice::gpuEnv.mpArryPrograms[0] = NULL;
+        } else {
+            mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
+                    &src, NULL, &err);
+            if (err != CL_SUCCESS)
+                throw OpenCLError(err);
+            err = clBuildProgram(mpProgram, 1,
+                    OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
+            if (err != CL_SUCCESS)
+                throw OpenCLError(err);
+            // Generate binary out of compiled kernel.
+            OpenclDevice::generatBinFromKernelSource(mpProgram,
+                    (mKernelSignature+GetMD5()).c_str());
+        }
+        lastKernelHash = KernelHash;
+        lastProgram = mpProgram;
     }
     mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
     if (err != CL_SUCCESS)
