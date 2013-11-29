@@ -1197,7 +1197,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ),true,true );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ),true, PARA_GRAB_BAG );
             }
         }
         break;
@@ -1212,7 +1212,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ) );
             if  (nIntValue) // If auto spacing is set, then only store set value in InteropGrabBag
             {
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ),true,true );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, uno::makeAny( ConversionHelper::convertTwipToMM100(default_spacing) ),true, PARA_GRAB_BAG );
             }
         }
         break;
@@ -3475,7 +3475,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert(PROP_PARA_CONTEXT_MARGIN, uno::makeAny( sal_Bool( nIntValue ) ));
     break;
     case 0x2470: // mirrorIndents
-        rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny(sal_Bool(nIntValue)), true, true);
+        rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny(sal_Bool(nIntValue)), true, PARA_GRAB_BAG);
     break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
     case NS_ooxml::LN_EG_SectPrContents_vAlign:

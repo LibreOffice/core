@@ -64,19 +64,28 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
 {
     if(!m_aValues.getLength() && size())
     {
-        size_t nGrabBag = 0;
+        size_t nCharGrabBag = 0;
+        size_t nParaGrabBag = 0;
         for (PropertyMap::iterator i = begin(); i != end(); ++i)
-            if (i->second.hasGrabBag())
-                nGrabBag++;
+        {
+            if ( i->second.getGrabBagType() == CHAR_GRAB_BAG )
+                nCharGrabBag++;
+            else if ( i->second.getGrabBagType() == PARA_GRAB_BAG )
+                nParaGrabBag++;
+        }
         // If there are any grab bag properties, we need one slot for them.
-        m_aValues.realloc( size() - nGrabBag + (nGrabBag ? 1 : 0));
+        m_aValues.realloc( size() - nCharGrabBag + (nCharGrabBag ? 1 : 0)
+                                  - nParaGrabBag + (nParaGrabBag ? 1 : 0));
         ::com::sun::star::beans::PropertyValue* pValues = m_aValues.getArray();
-        uno::Sequence<beans::PropertyValue> aGrabBagValues(nGrabBag);
-        beans::PropertyValue* pGrabBagValues = aGrabBagValues.getArray();
+        uno::Sequence<beans::PropertyValue> aCharGrabBagValues(nCharGrabBag);
+        uno::Sequence<beans::PropertyValue> aParaGrabBagValues(nParaGrabBag);
+        beans::PropertyValue* pCharGrabBagValues = aCharGrabBagValues.getArray();
+        beans::PropertyValue* pParaGrabBagValues = aParaGrabBagValues.getArray();
         //style names have to be the first elements within the property sequence
         //otherwise they will overwrite 'hard' attributes
         sal_Int32 nValue = 0;
-        sal_Int32 nGrabBagValue = 0;
+        sal_Int32 nParaGrabBagValue = 0;
+        sal_Int32 nCharGrabBagValue = 0;
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         PropertyMap::iterator aParaStyleIter = find(PROP_PARA_STYLE_NAME);
         if( aParaStyleIter != end())
@@ -105,24 +114,36 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
         {
             if( aMapIter != aParaStyleIter && aMapIter != aCharStyleIter && aMapIter != aNumRuleIter )
             {
-                if (!aMapIter->second.hasGrabBag())
+                if ( aMapIter->second.getGrabBagType() == CHAR_GRAB_BAG )
+                {
+                    pCharGrabBagValues[nCharGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
+                    pCharGrabBagValues[nCharGrabBagValue].Value = aMapIter->second.getValue();
+                    ++nCharGrabBagValue;
+                }
+                else if ( aMapIter->second.getGrabBagType() == PARA_GRAB_BAG )
+                {
+                    pParaGrabBagValues[nParaGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
+                    pParaGrabBagValues[nParaGrabBagValue].Value = aMapIter->second.getValue();
+                    ++nParaGrabBagValue;
+                }
+                else
                 {
                     pValues[nValue].Name = rPropNameSupplier.GetName( aMapIter->first );
                     pValues[nValue].Value = aMapIter->second.getValue();
                     ++nValue;
                 }
-                else
-                {
-                    pGrabBagValues[nGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
-                    pGrabBagValues[nGrabBagValue].Value = aMapIter->second.getValue();
-                    ++nGrabBagValue;
-                }
             }
         }
-        if (nGrabBag)
+        if (nCharGrabBag)
+        {
+            pValues[nValue].Name = "CharInteropGrabBag";
+            pValues[nValue].Value = uno::makeAny(aCharGrabBagValues);
+            ++nValue;
+        }
+        if (nParaGrabBag)
         {
             pValues[nValue].Name = "ParaInteropGrabBag";
-            pValues[nValue].Value = uno::makeAny(aGrabBagValues);
+            pValues[nValue].Value = uno::makeAny(aParaGrabBagValues);
             ++nValue;
         }
     }
@@ -154,7 +175,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 }
 #endif
 
-void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, bool bGrabBag )
+void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType rGrabBagType )
 {
 #ifdef DEBUG_DMAPPER_PROPERTY_MAP
     const OUString& rInsert = PropertyNameSupplier::
@@ -170,11 +191,11 @@ void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite
     if (aElement != end())
     {
         if (bOverwrite)
-            aElement->second = PropValue(rAny, bGrabBag);
+            aElement->second = PropValue(rAny, rGrabBagType);
 
         return;
     }
-    _PropertyMap::insert(_PropertyMap::value_type(eId, PropValue(rAny, bGrabBag)));
+    _PropertyMap::insert(_PropertyMap::value_type(eId, PropValue(rAny, rGrabBagType)));
 
     Invalidate();
 }

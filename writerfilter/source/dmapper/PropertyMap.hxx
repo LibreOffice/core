@@ -64,21 +64,29 @@ enum BorderPosition
     BORDER_BOTTOM
 };
 
+enum GrabBagType
+{
+    NO_GRAB_BAG,
+    PARA_GRAB_BAG,
+    CHAR_GRAB_BAG
+};
+
 class PropValue
 {
     uno::Any m_aValue;
-    bool m_bGrabBag;
+    GrabBagType m_rGrabBagType;
 
 public:
-    PropValue(const uno::Any& rValue, bool bGrabBag = false) :
-        m_aValue(rValue), m_bGrabBag(bGrabBag) {}
+    PropValue(const uno::Any& rValue, GrabBagType rGrabBagType = NO_GRAB_BAG) :
+        m_aValue(rValue), m_rGrabBagType(rGrabBagType) {}
 
-    PropValue() : m_aValue(), m_bGrabBag() {}
+    PropValue() : m_aValue(), m_rGrabBagType(NO_GRAB_BAG) {}
 
-    PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_bGrabBag = rProp.m_bGrabBag; return *this; }
+    PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_rGrabBagType = rProp.m_rGrabBagType; return *this; }
 
     const uno::Any& getValue() const { return m_aValue; }
-    bool hasGrabBag() const { return m_bGrabBag; }
+    bool hasGrabBag() const { return m_rGrabBagType != NO_GRAB_BAG; }
+    GrabBagType getGrabBagType() const { return m_rGrabBagType; }
 };
 typedef std::map< PropertyIds, PropValue > _PropertyMap;
 
@@ -108,7 +116,7 @@ public:
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
-    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, bool bGrabBag = false );
+    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType rGrabBagType = NO_GRAB_BAG );
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
