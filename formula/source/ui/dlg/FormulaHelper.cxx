@@ -123,12 +123,12 @@ sal_Bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
 //------------------------------------------------------------------------
 
 void FormulaHelper::FillArgStrings( const OUString&   rFormula,
-                                    xub_StrLen      nFuncPos,
-                                    sal_uInt16          nArgs,
+                                    sal_Int32         nFuncPos,
+                                    sal_uInt16        nArgs,
                                     ::std::vector< OUString >& _rArgs ) const
 {
-    xub_StrLen  nStart  = 0;
-    xub_StrLen  nEnd    = 0;
+    sal_Int32       nStart  = 0;
+    sal_Int32       nEnd    = 0;
     sal_uInt16      i;
     sal_Bool        bLast   = sal_False;
 
@@ -164,7 +164,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
 
 void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
                                    const OUString& rFormula,
-                                   xub_StrLen nFuncPos,
+                                   sal_Int32 nFuncPos,
                                    sal_uInt16 nArgs ) const
 {
     if (nArgs)
@@ -175,7 +175,7 @@ void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
 
 //------------------------------------------------------------------------
 
-inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, xub_StrLen nPos )
+inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
 {
     if( _pCharClass->isLetterNumeric( rStr, nPos ) )
         return sal_True;
@@ -188,8 +188,8 @@ inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr
 
 }
 
-xub_StrLen FormulaHelper::GetFunctionStart( const OUString&   rFormula,
-                                            xub_StrLen        nStart,
+sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
+                                            sal_Int32         nStart,
                                             sal_Bool          bBack,
                                             OUString*         pFuncName ) const
 {
@@ -198,8 +198,8 @@ xub_StrLen FormulaHelper::GetFunctionStart( const OUString&   rFormula,
     if ( nStrLen < nStart )
         return nStart;
 
-    xub_StrLen  nFStart = FUNC_NOTFOUND;
-    xub_StrLen  nParPos = nStart;
+    sal_Int32  nFStart = FUNC_NOTFOUND;
+    sal_Int32  nParPos = nStart;
 
     sal_Bool bRepeat, bFound;
     do
@@ -282,7 +282,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const OUString&   rFormula,
 
 //------------------------------------------------------------------------
 
-xub_StrLen  FormulaHelper::GetFunctionEnd( const OUString& rStr, xub_StrLen nStart ) const
+sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart ) const
 {
     sal_Int32 nStrLen = rStr.getLength();
 
@@ -340,7 +340,7 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const OUString& rStr, xub_StrLen nSta
 
 //------------------------------------------------------------------
 
-xub_StrLen FormulaHelper::GetArgStart( const OUString& rStr, xub_StrLen nStart, sal_uInt16 nArg ) const
+sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sal_uInt16 nArg ) const
 {
     sal_Int32 nStrLen = rStr.getLength();
 

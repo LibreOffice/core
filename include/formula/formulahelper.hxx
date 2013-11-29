@@ -53,21 +53,21 @@ namespace formula
                                              const IFunctionDescription** ppFDesc = NULL,
                                                    ::std::vector< OUString>*      pArgs = NULL ) const;
 
-        xub_StrLen          GetFunctionStart( const OUString& rFormula, xub_StrLen nStart,
+        sal_Int32           GetFunctionStart( const OUString& rFormula, sal_Int32 nStart,
                                                         sal_Bool bBack, OUString* pFuncName = NULL ) const;
 
-        xub_StrLen          GetFunctionEnd  ( const OUString& rFormula, xub_StrLen nStart ) const;
+        sal_Int32           GetFunctionEnd  ( const OUString& rFormula, sal_Int32 nStart ) const;
 
-        xub_StrLen          GetArgStart     ( const OUString& rFormula, xub_StrLen nStart,
+        sal_Int32           GetArgStart     ( const OUString& rFormula, sal_Int32 nStart,
                                                       sal_uInt16 nArg ) const;
 
         void                GetArgStrings   ( ::std::vector< OUString >& _rArgs,
-                                                      const OUString& rFormula,
-                                                      xub_StrLen    nFuncPos,
+                                                      const OUString&   rFormula,
+                                                      sal_Int32         nFuncPos,
                                                       sal_uInt16        nArgs ) const;
 
         void                FillArgStrings  ( const OUString& rFormula,
-                                                      xub_StrLen    nFuncPos,
+                                                      sal_Int32         nFuncPos,
                                                       sal_uInt16        nArgs,
                                                       ::std::vector< OUString >&      _rArgs ) const;
     };
