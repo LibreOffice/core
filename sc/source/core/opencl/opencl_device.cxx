@@ -394,7 +394,7 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
         ds_device device = profile->devices[d];
         LibreOfficeDeviceScore *pScore = (LibreOfficeDeviceScore*)device.score;
 
-        float fScore = -1;
+        float fScore = DBL_MAX;
         if (pScore)
             fScore = pScore->fTime;
         else
