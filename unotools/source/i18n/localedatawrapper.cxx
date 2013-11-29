@@ -1209,7 +1209,7 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
 }
 
 
-inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, xub_StrLen nLen )
+inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, sal_Int32 nLen )
 {
     memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
     return pBuf + nLen;
@@ -1560,7 +1560,7 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
     // convert number
     sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
         bUseThousandSep, sal_True );
-    xub_StrLen nNumLen = (xub_StrLen)(sal_uLong)(pEndNumBuf-pNumBuffer);
+    sal_Int32 nNumLen = (sal_Int32)(sal_uLong)(pEndNumBuf-pNumBuffer);
 
     // replace zeros with zero character
     if ( (cZeroChar != '0') && nDecimals /* && IsNumTrailingZeros() */ )
