@@ -1533,20 +1533,7 @@ Document::retrieveParagraphRelationSet( ParagraphImpl const * pParagraph )
 
 void Document::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    switch ( rVclWindowEvent.GetId() )
-    {
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
-        {
-            // #107179# if our parent is a compound control (e.g. MultiLineEdit),
-            // suppress the window focus events here
-            //if ( !m_bCompoundControlChild )
-                VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-        }
-        break;
-        default:
-            VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-    }
+    VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
 // virtual

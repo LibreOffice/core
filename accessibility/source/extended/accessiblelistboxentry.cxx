@@ -908,10 +908,7 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         EnsureIsAlive();
-//      SvLBoxEntry* pParent = getListBox()->GetEntryFromPath( m_aEntryPath );
-//      SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, nChildIndex );
-
-        SvLBoxEntry* pEntry =GetRealChild(nChildIndex);
+        SvLBoxEntry* pEntry = GetRealChild(nChildIndex);
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 

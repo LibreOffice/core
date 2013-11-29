@@ -474,7 +474,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     if (rBHelper.bDisposed || mpText == NULL)
         // Return a minimal state set that only contains the DEFUNC state.
-    //xStateSet = AccessibleContextBase::getAccessibleStateSet ();
     {
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
         ::utl::AccessibleStateSetHelper* pStateSet =

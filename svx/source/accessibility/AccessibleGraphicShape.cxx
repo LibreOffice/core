@@ -209,7 +209,6 @@ uno::Sequence<uno::Type> SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     //Solution: Don't use the same information for accessible name and accessible description.
-        //return CreateAccessibleName ();
      ::rtl::OUString sDesc;
         if(m_pShape)
         sDesc =  m_pShape->GetTitle();
@@ -225,7 +224,6 @@ sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole (void)
     if( m_pShape->GetModel()->GetImageMapForObject(m_pShape) != NULL )
         return AccessibleRole::IMAGE_MAP;
     else
-        //return AccessibleRole::SHAPE;
         return AccessibleShape::getAccessibleRole();
     return nAccessibleRole;
 }

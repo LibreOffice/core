@@ -225,7 +225,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
         Right = TRUE ;
         Text [ en-US ] = "Function result" ;
     };
-    //Window WND_RESULT
     FixedText WND_RESULT
     {
         Border = TRUE ;

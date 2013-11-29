@@ -1220,7 +1220,6 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
         ValueSetItem* pItem = mpImpl->mpItemList->GetObject( n );
 
         //IAccessible2 implementation - also count empty rectangles as visible...
-        // if( pItem->meType != VALUESETITEM_SPACE && !pItem->maRect.IsEmpty() )
         if( pItem->meType != VALUESETITEM_SPACE )
             nRet++;
     }

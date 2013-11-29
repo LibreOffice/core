@@ -327,7 +327,6 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 
     //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
     //and SHIFT+ENTER key to decide the postion and draw the new insert point
-    //sal_Bool bReturn = FuDraw::KeyInput(rKEvt);
 
     sal_Bool bReturn = sal_False;
 

@@ -508,22 +508,6 @@ String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     EBulletInfo aBulletInfo1 = GetBulletInfo( static_cast< sal_uInt16 >(aStartIndex.GetParagraph()) );
     EBulletInfo aBulletInfo2 = GetBulletInfo( static_cast< sal_uInt16 >(aEndIndex.GetParagraph()) );
 
-    // MT: This was done in OOo, commented out in IA2 CWS...
-    /*
-    if( aStartIndex.InBullet() )
-    {
-        // prepend leading bullet
-        String sBullet = aBulletInfo1.aText;
-
-        DBG_ASSERT(aStartIndex.GetBulletOffset() >= 0 &&
-                   aStartIndex.GetBulletOffset() <= USHRT_MAX,
-                   "SvxAccessibleTextIndex::GetText: index value overflow");
-
-        sBullet.Erase(0, static_cast< sal_uInt16 > (aStartIndex.GetBulletOffset()) );
-
-        sBullet += sStr;
-        sStr = sBullet;
-    }*/
     if( aEndIndex.InBullet() )
     {
         // append trailing bullet

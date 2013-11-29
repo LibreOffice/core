@@ -166,24 +166,6 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
 // -----------------------------------------------------------------------------
 ::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
 {
-/*  const Point   aOutPos( mpParent->GetPosPixel() );
-    Size          aOutSize( mpParent->GetOutputSizePixel() );
-    if ( mpParent->getScrollBar()->IsVisible() )
-    {
-        const Size aScrollBar = mpParent->getScrollBar()->GetOutputSizePixel();
-        aOutSize.Width() -= aScrollBar.Width();
-        aOutSize.Height() -= aScrollBar.Height();
-    }
-
-    awt::Rectangle aRet;
-
-    aRet.X = aOutPos.X();
-    aRet.Y = aOutPos.Y();
-    aRet.Width = aOutSize.Width();
-    aRet.Height = aOutSize.Height();
-
-    return aRet;
-*/
     ::com::sun::star::awt::Rectangle aBounds ( 0, 0, 0, 0 );
     Window* pWindow = mpParent;
     if ( pWindow )
@@ -711,7 +693,6 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::get
 sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
-    //return accessibility::AccessibleRole::LABEL;
     return accessibility::AccessibleRole::TABLE_CELL;
 }
 
@@ -727,20 +708,11 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
     sal_Unicode c = mpParent->maText.GetChar(0);
     char buf[16] = "0x0000";
     sal_Unicode c_Shifted = c;
-/*
-    for( int i = 0; i < 4; ++i )
-    {
-        char h = (char)(c_Shifted & 0x0F);
-        buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
-        c_Shifted >>= 4;
-    }
-*/
     int tmp_len = 4;
     if(c_Shifted>0xFFFF) tmp_len = 8;
     for( int i = 0; i < tmp_len; ++i )
     {
         char h = c_Shifted & 0x0F;
-        //buf[9-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         buf[tmp_len+1-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         c_Shifted >>= 4;
     }

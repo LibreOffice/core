@@ -3390,8 +3390,6 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         ToggleChildWindow( nSID );
 
     GetBindings().Invalidate( nSID );
-    // Move to the before show()
-    //GetDispatcher()->Update_Impl( sal_True );
 
     // ggf. recorden
     if ( nSID == SID_HYPERLINK_DIALOG || nSID == SID_SEARCH_DLG )

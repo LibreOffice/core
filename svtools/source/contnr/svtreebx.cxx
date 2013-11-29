@@ -907,7 +907,6 @@ void SvTreeListBox::GetFocus()
             pEntry = pImp->pCursor;
     }
     if ( pEntry )
-        //pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
         pImp->CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pEntry );
 
 }
@@ -2763,13 +2762,6 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
         rStateSet.AddState( AccessibleStateType::EXPANDABLE );
         if ( IsExpanded( pEntry ) )
             rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
-        /*
-        else
-        {
-            // MT: COLLAPSE == EXPANDABLE & !EXPANDED
-            rStateSet.AddState( (sal_Int16)AccessibleStateType::COLLAPSE );
-        }
-        */
     }
 
     if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )

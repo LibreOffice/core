@@ -1481,11 +1481,9 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
     }
     ScAccessibleDocumentPagePreview* pAccessible =
         new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
-    //com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xAccessible = pAccessible;
     xAcc = pAccessible;
     SetAccessible(xAcc);
     pAccessible->Init();
-    //return xAccessible;
     return xAcc;
 }
 // MT: Removed Windows::SwitchView() introduced with IA2 CWS.

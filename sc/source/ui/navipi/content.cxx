@@ -988,7 +988,6 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                         String aName = ScDrawLayer::GetVisibleName( pObject );
                         if (aName.Len())
                         {
-                            //InsertContent( nType, aName );
                             if( bisInNavigatoeDlg )
                             {
                                 if (nType >= SC_CONTENT_COUNT)

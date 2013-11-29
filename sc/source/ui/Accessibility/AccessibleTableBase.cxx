@@ -170,12 +170,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
             ExtendMerge( static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow), nRow, nEndCol, nEndRow, sal_False, sal_False );
         if (nEndRow > nRow)
                nCount = nEndRow - nRow + 1;
-    //  if (mpDoc->ExtendMerge(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow),
-    //      nEndCol, nEndRow, maRange.aStart.Tab()))
-        //{
-    //      if (nEndRow > nRow)
-    //          nCount = nEndRow - nRow + 1;
-        //}
     }
 
     return nCount;
@@ -203,12 +197,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
             ExtendMerge( static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow), nRow, nEndCol, nEndRow, sal_False, sal_False );
         if (nEndCol > nColumn)
                 nCount = nEndCol - nColumn + 1;
-    //  if (mpDoc->ExtendMerge(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow),
-    //      nEndCol, nEndRow, maRange.aStart.Tab()))
-        //{
-    //      if (nEndCol > nColumn)
-    //          nCount = nEndCol - nColumn + 1;
-        //}
     }
 
     return nCount;

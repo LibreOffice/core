@@ -788,7 +788,6 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
             nIndex -= 1;
     }
     if (pItem == NULL)
-        //pItem = mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
     pItem = mpParent->ImplGetItem (static_cast<sal_uInt16>(nIndex));
 
     return pItem;
@@ -973,7 +972,6 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the mean time.
             try
             {
-                //pItem = mpParent->mrParent.ImplGetVisibleItem (i);
                 pItem = mpParent->mrParent.ImplGetItem(i);
             }
             catch (lang::IndexOutOfBoundsException aException)

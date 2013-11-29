@@ -998,7 +998,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
 
             // Set or reset the SELECTED state.
             if (bShapeIsSelected)
-                //pAccessibleShape->SetState (AccessibleStateType::SELECTED);
             {
                 if (pAccessibleShape->SetState (AccessibleStateType::SELECTED))
                 {
@@ -1014,7 +1013,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
                 }
             }
             else
-                //pAccessibleShape->ResetState (AccessibleStateType::SELECTED);
             {
                 if(pAccessibleShape->ResetState (AccessibleStateType::SELECTED))
                 {
@@ -1054,7 +1052,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
     {
         if (pCurrentlyFocusedShape != NULL)
             pCurrentlyFocusedShape->ResetState (AccessibleStateType::FOCUSED);
-        //if (pNewFocusedShape != NULL)
     if (pNewFocusedShape != NULL && bShapeActive)
             pNewFocusedShape->SetState (AccessibleStateType::FOCUSED);
     }

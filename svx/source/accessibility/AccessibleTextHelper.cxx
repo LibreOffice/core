@@ -917,10 +917,7 @@ namespace accessibility
 
                 // convert to screen coordinates
                 aParaBB = ::accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
-                /*
-                if( aParaBB.IsOver( aViewArea ) )
-                {
-                */
+
                     // at least partially visible
                     if( bFirstChild )
                     {
@@ -941,21 +938,6 @@ namespace accessibility
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
                                           AccessibleEventId::CHILD );
                     }
-                /*
-                }
-                else
-                {
-                    // not or no longer visible
-                    if( maParaManager.IsReferencable( nCurrPara ) )
-                    {
-                        if( bBroadcastEvents )
-                            LostPropertyEvent( uno::makeAny( maParaManager.GetChild( nCurrPara ).first.get().getRef() ),
-                                               AccessibleEventId::CHILD );
-
-                        // clear reference
-                        maParaManager.Release( nCurrPara );
-                    }
-                }*/
             }
         }
         catch( const uno::Exception& )

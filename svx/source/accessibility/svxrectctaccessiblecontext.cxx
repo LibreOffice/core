@@ -367,7 +367,6 @@ sal_Int16 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRole( void ) throw(
 ::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    //return msDescription;
     return msDescription +::rtl::OUString::createFromAscii(" Please use arrow key to selection.");
 }
 
@@ -382,7 +381,6 @@ sal_Int16 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRole( void ) throw(
 */
 Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException )
 {
-    //return Reference< XAccessibleRelationSet >();
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
     Window* pWindow = mpRepr;

@@ -1625,10 +1625,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, sal_True);
-                //if (mpAccessibleSpreadsheet)
                 if (mpAccessibleSpreadsheet && mpViewShell->IsActive())
                     mpAccessibleSpreadsheet->GotFocus();
-                //else
                 else if( mpViewShell->IsActive())
                     CommitFocusGained();
             }

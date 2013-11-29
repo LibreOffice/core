@@ -283,8 +283,6 @@ ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
 {
     if (mpMarkedRanges)
         delete mpMarkedRanges;
-    //if (mpSortedMarkedCells)
-    //  delete mpSortedMarkedCells;
     if (mpViewShell)
         mpViewShell->RemoveAccessibilityObject(*this);
 }
@@ -351,8 +349,6 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
     }
     if (mpMarkedRanges)
         DELETEZ(mpMarkedRanges);
-    //if (mpSortedMarkedCells)
-    //  DELETEZ(mpSortedMarkedCells);
     mbHasSelection = bNewState;
 
     AccessibleEventObject aEvent;
@@ -381,11 +377,9 @@ void ScAccessibleSpreadsheet::LostFocus()
 
 void ScAccessibleSpreadsheet::GotFocus()
 {
-    //CommitFocusGained();
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-    //uno::Reference< XAccessible > xNew = mpAccCell;
     uno::Reference< XAccessible > xNew;
     if (IsFormulaMode())
     {
@@ -447,68 +441,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     if (rHint.ISA( SfxSimpleHint ) )
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        // only notify if child exist, otherwise it is not necessary
-        //if ((rRef.GetId() == SC_HINT_ACC_CURSORCHANGED))
-        //{
-        //  if (mpViewShell)
-        //  {
-        //      ScAddress aNewCell = mpViewShell->GetViewData()->GetCurPos();
-        //      sal_Bool bNewMarked(mpViewShell->GetViewData()->GetMarkData().GetTableSelect(aNewCell.Tab()) &&
-        //          (mpViewShell->GetViewData()->GetMarkData().IsMarked() ||
-        //          mpViewShell->GetViewData()->GetMarkData().IsMultiMarked()));
-        //      sal_Bool bNewCellSelected(isAccessibleSelected(aNewCell.Row(), aNewCell.Col()));
-        //      if ((bNewMarked != mbHasSelection) ||
-        //          (!bNewCellSelected && bNewMarked) ||
-        //          (bNewCellSelected && mbHasSelection))
-        //      {
-        //          if (mpMarkedRanges)
-        //              DELETEZ(mpMarkedRanges);
-        //          if (mpSortedMarkedCells)
-        //              DELETEZ(mpSortedMarkedCells);
-        //          AccessibleEventObject aEvent;
-        //          aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-        //          aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-        //          mbHasSelection = bNewMarked;
-
-        //          CommitChange(aEvent);
-        //      }
-
-  //              // active descendant changed event (new cell selected)
-  //              bool bFireActiveDescChanged = (aNewCell != maActiveCell) &&
-  //                  (aNewCell.Tab() == maActiveCell.Tab()) && IsFocused();
-
-  //              /*  Remember old active cell and set new active cell.
-  //                  #i82409# always update the class members mpAccCell and
-  //                  maActiveCell, even if the sheet is not focused, e.g. when
-  //                  using the name box in the toolbar. */
-  //              uno::Reference< XAccessible > xOld = mpAccCell;
-  //              mpAccCell->release();
-  //              mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
-  //              mpAccCell->acquire();
-  //              mpAccCell->Init();
-  //              uno::Reference< XAccessible > xNew = mpAccCell;
-  //              maActiveCell = aNewCell;
-
-  //              // #i14108# fire event only if sheet is focused
-  //              if( bFireActiveDescChanged )
-  //              {
-  //                  AccessibleEventObject aEvent;
-  //                  aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-  //                  aEvent.Source = uno::Reference< XAccessibleContext >(this);
-  //                  aEvent.OldValue <<= xOld;
-  //                  aEvent.NewValue <<= xNew;
-        //          CommitChange(aEvent);
-  //              }
-        //  }
-        //}
-        //else if ((rRef.GetId() == SC_HINT_DATACHANGED))
-        //{
-        //  if (!mbDelIns)
-        //      CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
-        //  else
-        //      mbDelIns = sal_False;
-        //}
         if ((rRef.GetId() == SC_HINT_ACC_CURSORCHANGED))
         {
             if (mpViewShell)
@@ -1391,50 +1323,6 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Boo
 
     mpViewShell->SelectionChanged();
 }
-//void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
-//{
-//  mpSortedMarkedCells = new std::vector<ScMyAddress>();
-//  mpSortedMarkedCells->reserve(mpMarkedRanges->GetCellCount());
-//  ScRange* pRange = mpMarkedRanges->First();
-//  while (pRange)
-//  {
-//      if (pRange->aStart.Tab() != pRange->aEnd.Tab())
-//      {
-//          if ((maActiveCell.Tab() >= pRange->aStart.Tab()) ||
-//              maActiveCell.Tab() <= pRange->aEnd.Tab())
-//          {
-//              ScRange aRange(*pRange);
-//              aRange.aStart.SetTab(maActiveCell.Tab());
-//              aRange.aEnd.SetTab(maActiveCell.Tab());
-//              AddMarkedRange(aRange);
-//          }
-//          else
-//          {
-//              DBG_ERROR("Range of wrong table");
-//          }
-//      }
-//      else if(pRange->aStart.Tab() == maActiveCell.Tab())
-//          AddMarkedRange(*pRange);
-//      else
-//      {
-//          DBG_ERROR("Range of wrong table");
-//      }
-//      pRange = mpMarkedRanges->Next();
-//  }
-//  std::sort(mpSortedMarkedCells->begin(), mpSortedMarkedCells->end());
-//}
-
-/*void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
-{
-    for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
-    {
-        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-        {
-            ScMyAddress aCell(nCol, nRow, maActiveCell.Tab());
-            mpSortedMarkedCells->push_back(aCell);
-        }
-    }
-}*/
 
     //=====  XServiceInfo  ====================================================
 
@@ -1483,20 +1371,6 @@ void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAc
     ScUnoGuard aGuard;
     IsObjectValid();
     ScAccessibleTableBase::addEventListener(xListener);
-
-/*    if (!mbIsFocusSend)
-    {
-        mbIsFocusSend = sal_True;
-        CommitFocusGained();
-
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-        aEvent.NewValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
-
-        CommitChange(aEvent);
-    }
-*/
 }
 
     //====  internal  =========================================================

@@ -543,7 +543,6 @@ ScAccessibleDataPilotButton::ScAccessibleDataPilotButton(
         ScPivotFieldWindow* pFieldWindow,
         sal_Int32 nIndex)
 //change role frome PUSH_BUTTON to BUTTON_MENU
-    //: ScAccessibleContextBase(rxParent, AccessibleRole::PUSH_BUTTON),
     : ScAccessibleContextBase(rxParent, AccessibleRole::BUTTON_MENU),
     mpFieldWindow(pFieldWindow),
     mnIndex(nIndex)

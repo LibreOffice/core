@@ -29,7 +29,6 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-//#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>

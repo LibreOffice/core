@@ -871,7 +871,6 @@ void AccessibleDrawDocumentView::Activated (void)
 {
     if (mpChildrenManager != NULL)
     {
-        //mpChildrenManager->UpdateSelection();
     sal_Bool bChange = sal_False;
         // When none of the children has the focus then claim it for the
         // view.

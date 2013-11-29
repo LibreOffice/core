@@ -3106,7 +3106,6 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
             SC_MOD()->EndReference();
-            //return;
         }
         else if( pViewData->GetViewShell()->MoveCursorKeyInput( rKEvt ) )
         {
@@ -3114,7 +3113,6 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                 pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
             SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
-            //return;
         }
         pViewData->GetViewShell()->SelectionChanged();
         return ;

@@ -892,7 +892,6 @@ sal_Unicode cNewLine(0x0a);
         {
             //we don't return the string directly now for that we have to do some further process for "\n"
             aRes = mpImpl->GetParagraph( aStartIndex.nPara ).getTextRange( aStartIndex.nIndex, aEndIndex.nIndex );
-            //return mpImpl->GetParagraph( aStartIndex.nPara ).getTextRange( aStartIndex.nIndex, aEndIndex.nIndex );
         }
         else
         {

@@ -69,10 +69,6 @@ const OUString lcl_aLabelRole( RTL_CONSTASCII_USTRINGPARAM( "label" ));
 String lcl_GetRoleLBEntry(
     const OUString & rRole, const OUString & rRange )
 {
-    //String aEntry( rRole );
-    //aEntry += '\t';
-    //aEntry += String(
-    //    ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole ));
     String aEntry(::chart::DialogModel::ConvertRoleFromInternalToUI( rRole ));
     aEntry += '\t';
     aEntry += String( rRange );

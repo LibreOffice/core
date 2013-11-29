@@ -1058,7 +1058,6 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 
 
 // ============================================================================
-//ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin)
 ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, sal_Bool isClone)
     :
     mpViewForwarder(NULL),
@@ -1070,7 +1069,6 @@ ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditVi
 {
     // Solution: If the object is cloned, do NOT add notify hdl.
     mbIsCloned = isClone;
-    //if (mpEditEngine)
     if (mpEditEngine && !mbIsCloned)
         mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
 }
@@ -1078,7 +1076,6 @@ ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditVi
 ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 {
     // Solution: If the object is cloned, do NOT set notify hdl.
-    //if (mpEditEngine)
     if (mpEditEngine && !mbIsCloned)
         mpEditEngine->SetNotifyHdl(Link());
     if (mpViewForwarder)
@@ -1123,7 +1120,6 @@ SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
         if (!mpEditEngine)
             mpEditEngine = mpEditView->GetEditEngine();
             // Solution: If the object is cloned, do NOT add notify hdl.
-        //if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet())
     if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet()&&!mbIsCloned)
             mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
         if(!mpForwarder)

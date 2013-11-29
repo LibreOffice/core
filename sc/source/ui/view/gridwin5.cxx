@@ -432,12 +432,10 @@ com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
     ScAccessibleDocument* pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
             pViewData->GetViewShell(), eWhich);
-    //com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
     xAcc = pAccessibleDocument;
     SetAccessible(xAcc);
 
     pAccessibleDocument->Init();
-    //return xAccessible;
     return xAcc;
 }
 // MT: Removed Windows::SwitchView() introduced with IA2 CWS.

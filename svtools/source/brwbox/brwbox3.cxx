@@ -256,7 +256,6 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             sal_Int32 rowId = _nPosition + 1;
             aRetText = OUString::valueOf( rowId );
             }
-            //aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
@@ -266,7 +265,6 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            //aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderCell" ) );
             aRetText = OUString( GetColumnDescription( sal_Int16( _nPosition ) ) );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( " [" ) );

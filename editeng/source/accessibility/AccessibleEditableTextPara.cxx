@@ -815,7 +815,6 @@ namespace accessibility
         // must provide XAccesibleText by hand, since it comes publicly inherited by XAccessibleEditableText
         if ( rType == ::getCppuType((uno::Reference< XAccessibleText > *)0) )
         {
-            //  uno::Reference< XAccessibleText > aAccText = this;
             uno::Reference< XAccessibleText > aAccText = static_cast< XAccessibleEditableText * >(this);
             aRet <<= aAccText;
         }
@@ -2509,7 +2508,6 @@ namespace accessibility
             if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.Len();
             ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
-            //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
             if( !rCacheTF.IsEditable( aSelection ) )
                 return sal_False; // non-editable area selected
 

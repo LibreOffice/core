@@ -1173,7 +1173,6 @@ void Window::DropScroll(const Point& rMousePos)
         return xAcc;
     }
     if (mpViewShell != NULL)
-    //return mpViewShell->CreateAccessibleDocumentView (this);
     {
         xAcc = mpViewShell->CreateAccessibleDocumentView (this);
         SetAccessible(xAcc);

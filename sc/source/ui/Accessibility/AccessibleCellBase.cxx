@@ -230,7 +230,6 @@ sal_Int32
     ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    //String sName( ScResId(STR_ACC_CELL_NAME) );
     String sAddress;
     // Document not needed, because only the cell address, but not the tablename is needed
     // always us OOO notation
@@ -239,8 +238,6 @@ sal_Int32
     /*  #i65103# ZoomText merges cell address and contents, e.g. if value 2 is
         contained in cell A1, ZT reads "cell A twelve" instead of "cell A1 - 2".
         Simple solution: Append a space character to the cell address. */
-    //sName.Append( ' ' );
-    //return rtl::OUString(sName);
     return rtl::OUString(sAddress);
 }
 
@@ -254,7 +251,6 @@ uno::Any SAL_CALL
     IsObjectValid();
     uno::Any aAny;
     if (mpDoc)
-        //aAny <<= mpDoc->GetValue(maCellAddress);
     {
         String valStr;
         mpDoc->GetString(maCellAddress.Col(),maCellAddress.Row(),maCellAddress.Tab(), valStr);
