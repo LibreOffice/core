@@ -39,9 +39,9 @@ use installer::windows::language;
 # Sample for a guid: {B68FD953-3CEF-4489-8269-8726848056E8}
 ##############################################################
 
-sub get_component_guid
+sub get_component_guid ($)
 {
-    my ( $componentname, $componentidhashref ) = @_;
+    my ($componentname) = @_;
 
     # At this time only a template
     my $returnvalue = "\{COMPONENTGUID\}";
@@ -320,9 +320,9 @@ sub get_component_condition
 # real filename!
 ####################################################################
 
-sub get_component_keypath
+sub get_component_keypath ($$)
 {
-    my ($componentname, $itemsref, $componentidkeypathhashref) = @_;
+    my ($componentname, $itemsref) = @_;
 
     my $oneitem;
     my $found = 0;
@@ -347,19 +347,6 @@ sub get_component_keypath
 
     my $keypath = $oneitem->{'uniquename'}; # "uniquename", not "Name"
 
-    # Special handling for updates from existing databases, because KeyPath must not change
-    if (( $installer::globals::updatedatabase ) && ( exists($componentidkeypathhashref->{$componentname}) ))
-    {
-        $keypath = $componentidkeypathhashref->{$componentname};
-        # -> check, if this is a valid key path?!
-        if ( $keypath ne $oneitem->{'uniquename'} )
-        {
-            # Warning: This keypath was changed because of info from old database
-            $infoline = "WARNING: The KeyPath for component \"$componentname\" was changed from \"$oneitem->{'uniquename'}\" to \"$keypath\" because of information from update database";
-            $installer::logger::Lang->print($infoline);
-        }
-    }
-
     # Special handling for components in PREDEFINED_OSSHELLNEWDIR. These components
     # need as KeyPath a RegistryItem in HKCU
     if ( $oneitem->{'userregkeypath'} ) { $keypath = $oneitem->{'userregkeypath'}; }
@@ -376,9 +363,16 @@ sub get_component_keypath
 # Component ComponentId Directory_ Attributes Condition KeyPath
 ###################################################################
 
-sub create_component_table
+sub create_component_table ($$$$$$$)
 {
-    my ($filesref, $registryref, $dirref, $allfilecomponentsref, $allregistrycomponents, $basedir, $componentidhashref, $componentidkeypathhashref, $allvariables) = @_;
+    my ($filesref,
+        $registryref,
+        $dirref,
+        $allfilecomponentsref,
+        $allregistrycomponents,
+        $basedir,
+        $allvariables)
+        = @_;
 
     my @componenttable = ();
 
@@ -396,12 +390,12 @@ sub create_component_table
         my %onecomponent = ();
 
         $onecomponent{'name'} = ${$allfilecomponentsref}[$i];
-        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'}, $componentidhashref);
+        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'});
         $onecomponent{'directory'} = get_file_component_directory($onecomponent{'name'}, $filesref, $dirref);
         if ( $onecomponent{'directory'} eq "IGNORE_COMP" ) { next; }
         $onecomponent{'attributes'} = get_file_component_attributes($onecomponent{'name'}, $filesref, $allvariables);
         $onecomponent{'condition'} = get_file_component_condition($onecomponent{'name'}, $filesref);
-        $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $filesref, $componentidkeypathhashref);
+        $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $filesref);
 
         $oneline = $onecomponent{'name'} . "\t" . $onecomponent{'guid'} . "\t" . $onecomponent{'directory'} . "\t"
                 . $onecomponent{'attributes'} . "\t" . $onecomponent{'condition'} . "\t" . $onecomponent{'keypath'} . "\n";
@@ -416,11 +410,11 @@ sub create_component_table
         my %onecomponent = ();
 
         $onecomponent{'name'} = ${$allregistrycomponents}[$i];
-        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'}, $componentidhashref);
+        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'});
         $onecomponent{'directory'} = get_registry_component_directory();
         $onecomponent{'attributes'} = get_registry_component_attributes($onecomponent{'name'}, $allvariables);
         $onecomponent{'condition'} = get_component_condition($onecomponent{'name'});
-        $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $registryref, $componentidkeypathhashref);
+        $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $registryref);
 
         $oneline = $onecomponent{'name'} . "\t" . $onecomponent{'guid'} . "\t" . $onecomponent{'directory'} . "\t"
                 . $onecomponent{'attributes'} . "\t" . $onecomponent{'condition'} . "\t" . $onecomponent{'keypath'} . "\n";

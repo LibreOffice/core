@@ -352,9 +352,9 @@ sub get_last_directory_name
 # Creating the defaultdir for the file Director.idt
 #####################################################
 
-sub create_defaultdir_directorynames
+sub create_defaultdir_directorynames ($)
 {
-    my ($directoryref, $shortdirnamehashref) = @_;
+    my ($directoryref) = @_;
 
     my @shortnames = ();
     if ( $installer::globals::prepare_winpatch ) { @shortnames = values(%installer::globals::saved83dirmapping); }
@@ -540,9 +540,9 @@ sub add_root_directories
 # Creating the file Director.idt dynamically
 ###############################################
 
-sub create_directory_table
+sub create_directory_table ($$$$)
 {
-    my ($directoryref, $basedir, $allvariableshashref, $shortdirnamehashref, $loggingdir) = @_;
+    my ($directoryref, $basedir, $allvariableshashref, $loggingdir) = @_;
 
     # Structure of the directory table:
     # Directory Directory_Parent DefaultDir
@@ -561,7 +561,7 @@ sub create_directory_table
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_unique_directorynames($directoryref, $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1a.log", $directoryref); }
-    create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
+    create_defaultdir_directorynames($directoryref);    # only destdir!
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
     set_installlocation_directory($directoryref, $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }

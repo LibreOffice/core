@@ -1694,9 +1694,9 @@ sub execute_packaging
 # Setting the global variables ProductCode and the UpgradeCode
 ###############################################################
 
-sub set_global_code_variables
+sub set_global_code_variables ($$)
 {
-    my ( $languagesref, $languagestringref, $allvariableshashref, $alloldproperties ) = @_;
+    my ($languagesref, $allvariableshashref) = @_;
 
     # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
     # and the UpgradeCode for the product are defined.

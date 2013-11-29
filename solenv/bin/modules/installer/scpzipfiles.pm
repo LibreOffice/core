@@ -61,39 +61,26 @@ sub replace_all_ziplistvariables_in_file
 # the brackets are masked.
 ########################################################################################
 
-sub replace_all_ziplistvariables_in_rtffile
+sub replace_all_ziplistvariables_in_rtffile ($$)
 {
-    my ( $fileref, $variablesref, $onelanguage, $loggingdir ) = @_;
+    my ($lines, $variablesref) = @_;
 
-    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_before.rtf", $fileref);
-
-    for ( my $i = 0; $i <= $#{$fileref}; $i++ )
+    my $line_count = scalar @$lines;
+    for (my $i=0; $i<=$line_count; ++$i)
     {
-        my $line = ${$fileref}[$i];
+        my $line = $lines->[$i];
 
-        if ( $line =~ /^.*\$\\\{\w+\\\}.*$/ )   # only occurence of $\{abc\}
+        if ($line =~ /\$\\\{/) # early rejection of lines without variable references
         {
-            for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+            while (my ($key, $value) = each (%$variables))
             {
-                my $variableline = ${$variablesref}[$j];
-
-                my ($key, $value);
-
-                if ( $variableline =~ /^\s*([\w-]+?)\s+(.*?)\s*$/ )
-                {
-                    $key = $1;
-                    $value = $2;
-                    $key = '$\{' . $key . '\}';
-                }
-
+                my $pattern = '$\{' . $key . '\}';
                 $line =~ s/\Q$key\E/$value/g;
 
-                ${$fileref}[$i] = $line;
             }
+            $lines->[$i] = $line;
         }
     }
-
-    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_after.rtf", $fileref);
 }
 
 #########################################################

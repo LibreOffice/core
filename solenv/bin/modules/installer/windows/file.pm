@@ -360,9 +360,9 @@ sub get_component_from_assigned_file
 # In most cases this is simply the filename.
 ####################################################################
 
-sub generate_unique_filename_for_filetable
+sub generate_unique_filename_for_filetable ($$)
 {
-    my ($fileref, $component, $uniquefilenamehashref) = @_;
+    my ($fileref, $component) = @_;
 
     # This new filename has to be saved into $fileref, because this is needed to find the source.
     # The filename sbasic.idx/OFFSETS is changed to OFFSETS, but OFFSETS is not unique.
@@ -451,9 +451,9 @@ sub generate_unique_filename_for_filetable
 # The first part has to be 8.3 conform.
 ####################################################################
 
-sub generate_filename_for_filetable
+sub generate_filename_for_filetable ($$)
 {
-    my ($fileref, $shortnamesref, $uniquefilenamehashref) = @_;
+    my ($fileref, $shortnamesref) = @_;
 
     my $returnstring = "";
 
@@ -659,9 +659,9 @@ sub collect_shortnames_from_old_database
 # Creating the file File.idt dynamically
 ############################################
 
-sub create_files_table
+sub create_files_table ($$$$)
 {
-    my ($filesref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref) = @_;
+    my ($filesref, $allfilecomponentsref, $basedir, $allvariables) = @_;
 
     $installer::logger::Lang->add_timestamp("Performance Info: File Table start");
 
@@ -700,7 +700,7 @@ sub create_files_table
         if (( $styles =~ /\bJAVAFILE\b/ ) && ( ! ($allvariables->{'JAVAPRODUCT'} ))) { next; }
 
         $file{'Component_'} = get_file_component_name($onefile, $filesref);
-        $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'}, $uniquefilenamehashref);
+        $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'});
 
         $onefile->{'uniquename'} = $file{'File'};
         $onefile->{'componentname'} = $file{'Component_'};
@@ -710,7 +710,7 @@ sub create_files_table
 
         if ( ! exists($allfilecomponents{$file{'Component_'}}) ) { $allfilecomponents{$file{'Component_'}} = 1; }
 
-        $file{'FileName'} = generate_filename_for_filetable($onefile, \%shortnames, $uniquefilenamehashref);
+        $file{'FileName'} = generate_filename_for_filetable($onefile, \%shortnames);
 
         $file{'FileSize'} = get_filesize($onefile);
 
