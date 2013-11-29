@@ -82,6 +82,8 @@ private:
     virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(const OUString & aRangeRepresentation) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(const OUString & aRangeRepresentation) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getIncludeHiddenCells() throw (::css::uno::RuntimeException) { return sal_False; }
+    virtual void SAL_CALL setIncludeHiddenCells( sal_Bool ) throw (::css::uno::RuntimeException) {}
 
     // ::com::sun::star::chart2::data::XRangeXMLConversion:
     virtual OUString SAL_CALL convertRangeToXML(const OUString & aRangeRepresentation) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);

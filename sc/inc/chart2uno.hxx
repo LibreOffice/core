@@ -100,6 +100,12 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual ::sal_Bool SAL_CALL getIncludeHiddenCells() throw (::css::uno::RuntimeException)
+       { return m_bIncludeHiddenCells; }
+
+    virtual void SAL_CALL setIncludeHiddenCells( sal_Bool b ) throw (::css::uno::RuntimeException)
+       { m_bIncludeHiddenCells = b; }
+
     // XSheetDataProvider
     virtual sal_Bool SAL_CALL createDataSequenceByFormulaTokensPossible(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )

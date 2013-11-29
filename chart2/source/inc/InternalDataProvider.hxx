@@ -137,6 +137,8 @@ public:
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getIncludeHiddenCells() throw (::css::uno::RuntimeException) { return sal_False; }
+    virtual void SAL_CALL setIncludeHiddenCells( sal_Bool ) throw (::css::uno::RuntimeException) {}
 
     // ____ XRangeXMLConversion ____
     virtual OUString SAL_CALL convertRangeToXML(

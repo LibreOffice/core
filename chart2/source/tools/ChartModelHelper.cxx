@@ -247,16 +247,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
 
             uno::Any aNewValue = uno::makeAny(bIncludeHiddenCells);
 
-            try
-            {
-                uno::Reference< beans::XPropertySet > xDataProviderProperties( rModel.getDataProvider(), uno::UNO_QUERY );
-                if( xDataProviderProperties.is() )
-                    xDataProviderProperties->setPropertyValue("IncludeHiddenCells", aNewValue );
-            }
-            catch( const beans::UnknownPropertyException& )
-            {
-                //the property is optional!
-            }
+            rModel.getDataProvider()->setIncludeHiddenCells(bIncludeHiddenCells);
 
             try
             {

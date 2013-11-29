@@ -41,6 +41,8 @@ module data
  */
 interface XDataProvider  : ::com::sun::star::uno::XInterface
 {
+    [attribute] boolean IncludeHiddenCells;
+
     /** If `TRUE` is returned, a call to createDataSource with the
         same arguments must return a valid XDataSequence object.  If
         `FALSE` is returned, createDataSource throws an exception.
