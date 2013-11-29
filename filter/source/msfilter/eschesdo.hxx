@@ -150,7 +150,7 @@ protected:
 
             sal_uInt32              ImplWriteShape( ImplEESdrObject& rObj,
                                     EscherSolverContainer& rSolver,
-                                    ImplEESdrPageType ePageType );  // returns ShapeID
+                                    ImplEESdrPageType ePageType, const sal_Bool bOOxmlExport = false );  // returns ShapeID
 
             void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
             sal_Bool                ImplGetText( ImplEESdrObject& rObj );
@@ -189,7 +189,7 @@ public:
             bool                ImplInitUnoShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
             void                ImplWriteCurrentPage();
 
-            sal_uInt32              ImplWriteTheShape( ImplEESdrObject& rObj );
+            sal_uInt32              ImplWriteTheShape( ImplEESdrObject& rObj, bool ooxmlExport = false );
 
             void                ImplExitPage();
             void                ImplFlushSolverContainer();
