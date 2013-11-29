@@ -2560,14 +2560,15 @@ BOOL CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface**
 }
 
 template<typename T> HRESULT
-createAggInstance(CMAccessible &rOuter, REFIID iid, void ** ppvObject)
+createAggInstance(CMAccessible &rOuter, void ** ppvObject)
 {
-//    return CComCreator< CComAggObject<T> >::CreateInstance(
-//    XXX: do not use CComAggObject - the aggregation is hand-crafted!
-//         the SmartQI method must not call itself recursively -
-//         which it will do if CComAggObject redirects QueryInterface.
-    return CComCreator< CComObject<T> >::CreateInstance(
-            rOuter.GetControllingUnknown(), iid, ppvObject);
+    // Note: CComAggObject has special handling for IUnknown - must
+    // query for that when creating it! Otherwise we get a T member of it
+    // which will redirect QueryInterface back to CMAccessible infinitely.
+    // (CComAggObject has its own ref-count too which is not a problem
+    //  since it is inserted in m_containedObjects.)
+    return CComCreator< CComAggObject<T> >::CreateInstance(
+            rOuter.GetControllingUnknown(), IID_IUnknown, ppvObject);
 }
 
 HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
@@ -2606,31 +2607,31 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
                 switch (pMap->XIFIndex)
                 {
                     case XI_COMPONENT:
-                        hr = createAggInstance<CAccComponent>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccComponent>(*this, ppvObject);
                         break;
                     case XI_TEXT:
-                        hr = createAggInstance<CAccText>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccText>(*this, ppvObject);
                         break;
                     case XI_EDITABLETEXT:
-                        hr = createAggInstance<CAccEditableText>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccEditableText>(*this, ppvObject);
                         break;
                     case XI_IMAGE:
-                        hr = createAggInstance<CAccImage>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccImage>(*this, ppvObject);
                         break;
                     case XI_TABLE:
-                        hr = createAggInstance<CAccTable>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccTable>(*this, ppvObject);
                         break;
                     case XI_ACTION:
-                        hr = createAggInstance<CAccAction>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccAction>(*this, ppvObject);
                         break;
                     case XI_VALUE:
-                        hr = createAggInstance<CAccValue>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccValue>(*this, ppvObject);
                         break;
                     case XI_HYPERTEXT:
-                        hr = createAggInstance<CAccHypertext>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccHypertext>(*this, ppvObject);
                         break;
                     case XI_HYPERLINK:
-                        hr = createAggInstance<CAccHyperLink>(*this, iid, ppvObject);
+                        hr = createAggInstance<CAccHyperLink>(*this, ppvObject);
                         break;
                     default:
                         assert(false);
