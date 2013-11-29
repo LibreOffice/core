@@ -134,15 +134,9 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     cppcanvas::BitmapCanvasSharedPtr pCanvas (cppcanvas::VCLFactory::getInstance().createCanvas(
         Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));
     if (pCanvas.get() != NULL)
-    {
-        cppcanvas::BitmapSharedPtr xBitmap(
-            cppcanvas::VCLFactory::getInstance().createBitmap(
+        return cppcanvas::VCLFactory::getInstance().createBitmap(
             pCanvas,
-            CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor)));
-        if (xBitmap.get() == NULL)
-            return NULL;
-        return xBitmap->getUNOBitmap();
-    }
+            CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor))->getUNOBitmap();
     else
         return NULL;
 }
