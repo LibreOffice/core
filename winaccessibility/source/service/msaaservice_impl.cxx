@@ -267,14 +267,6 @@ Reference< XInterface > SAL_CALL create_MSAAServiceImpl( Reference< XComponentCo
         }
     }
 
-    // load UAccCOM library so its DllMain can register its COM components
-    static HMODULE h = LoadLibrary("UAccCOM.dll");
-    if (!h)
-    {
-        assert(false);
-        return 0;
-    }
-
     Reference< XMSAAService > xAccMgr( new MSAAServiceImpl() );
 
     AccessBridgeUpdateOldTopWindows( xAccMgr );

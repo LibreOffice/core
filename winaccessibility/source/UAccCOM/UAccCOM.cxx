@@ -67,14 +67,10 @@ extern "C"
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         _Module.Init(ObjectMap, hInstance, &LIBID_UACCCOMLib);
-        _Module.RegisterClassObjects(CLSCTX_INPROC_SERVER, REGCLS_MULTIPLEUSE);
         DisableThreadLibraryCalls(hInstance);
     }
     else if (dwReason == DLL_PROCESS_DETACH)
-    {
-        _Module.RevokeClassObjects();
         _Module.Term();
-    }
     return TRUE;    // ok
 }
 
