@@ -623,7 +623,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "COUPNCD",                "COUPNCD",              455,    NOID,   3,  4,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "COUPNUM",                "COUPNUM",              456,    NOID,   3,  4,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "COUPPCD",                "COUPPCD",              457,    NOID,   3,  4,  V, { RR }, FUNCFLAG_EXTERNAL },
-    { "DURATION",               "DURATION",             458,    NOID,   5,  6,  V, { RR }, FUNCFLAG_EXTERNAL | FUNCFLAG_INTERNAL }, // Calc: builtin and add-in
+    { "DURATION",               "DURATION",             458,    NOID,   5,  6,  V, { RR }, FUNCFLAG_EXTERNAL }, // Calc: builtin and add-in (but different!)
     { "MDURATION",              "MDURATION",            459,    NOID,   5,  6,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ODDLPRICE",              "ODDLPRICE",            460,    NOID,   7,  8,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ODDLYIELD",              "ODDLYIELD",            461,    NOID,   8,  9,  V, { RR }, FUNCFLAG_EXTERNAL },
