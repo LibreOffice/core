@@ -78,9 +78,9 @@ static const TypeGroupInfo spTypeInfos[] =
     { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,       VARPOINTMODE_SINGLE, csscd::TOP,           false, false, true,  false, false, true,  false, false, false, false, false },
     { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_FILLEDNET, VARPOINTMODE_NONE,   csscd::TOP,           false, false, true,  true,  false, true,  false, false, true,  false, false },
     { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false, false },
-    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  false, true,  false, false, false, false, false },
-    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false, false },
-    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, false, false, false, false, false, false },
+    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, false,  true,  true,  false, true,  false, false, false, false, false },
+    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, false,  true,  true,  true,  true,  false, false, false, false, false },
+    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  false,  false, false, false, false, false, false, false, false, false },
     { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, false, false, false, false, false, false },
     { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, true,  false, false, false, false, false }
 };
@@ -247,10 +247,14 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
     Reference< XCoordinateSystem > xCoordSystem;
     if( maTypeInfo.mbPolarCoordSystem )
     {
-        if( mb3dChart )
+        if (maTypeInfo.mbSupports3d) {
+            if( mb3dChart )
+                xCoordSystem = css::chart2::PolarCoordinateSystem3d::create(xContext);
+            else
+                xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
+        } else {
             xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
-        else
-            xCoordSystem = css::chart2::PolarCoordinateSystem3d::create(xContext);
+        }
     }
     else
     {

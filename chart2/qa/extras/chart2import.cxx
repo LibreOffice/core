@@ -33,6 +33,7 @@ public:
     void testPPTXChartSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
+    void testIs3dChart();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -44,6 +45,8 @@ public:
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
+    CPPUNIT_TEST(testIs3dChart);
+
 /*
  *  Disabling Impress Uts.
  *  ChartTest::tearDown() calls dispose of mxComponent
@@ -248,6 +251,24 @@ void Chart2ImportTest::testDOCXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), seriesList[2]);
+}
+
+void Chart2ImportTest::testIs3dChart()
+{
+    load("/chart2/qa/extras/data/docx/","3DpieChart.docx");
+    {
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xShape.is() );
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< chart2::XChartDocument > xChartDoc;
+    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xChartDoc.is() );
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
+    OUString aChartTypeName = xChartType->getChartType();
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.chart2.PieChartType"),aChartTypeName);
+    }
 }
 
 void Chart2ImportTest::testPPTChartSeries()
