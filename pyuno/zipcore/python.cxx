@@ -192,10 +192,12 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
-    wchar_t * value = new wchar_t[
-        (urepathEnd - urepath) + MY_LENGTH(L";") + (pathEnd - path) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
-    wsprintfW(value, L"%s;%s%s%s", urepath, path, n == 0 ? L"" : L";", orig);
+    std::size_t len = (urepathEnd - urepath) + MY_LENGTH(L";") +
+        (pathEnd - path) + (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1;
+        //TODO: overflow
+    wchar_t * value = new wchar_t[len];
+    _snwprintf(
+        value, len, L"%s;%s%s%s", urepath, path, n == 0 ? L"" : L";", orig);
     if (!SetEnvironmentVariableW(L"PATH", value)) {
         exit(EXIT_FAILURE);
     }
@@ -218,21 +220,21 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         }
     }
 #ifdef __MINGW32__
-    value = new wchar_t[
-        (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
+    len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath4End - pythonpath4) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
-    wsprintfW(
-        value, L"%s;%s;%s;%s%s%s", path, pythonpath2, pythonpath4, pythonpath3,
-        n == 0 ? L"" : L";", orig);
+        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
+    value = new wchar_t[len];
+    _snwprintf(
+        value, len, L"%s;%s;%s;%s%s%s", path, pythonpath2, pythonpath4,
+        pythonpath3, n == 0 ? L"" : L";", orig);
 #else
-    value = new wchar_t[
-        (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
+    len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1]; //TODO: overflow
-    wsprintfW(
-        value, L"%s;%s;%s%s%s", path, pythonpath2, pythonpath3,
+        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
+    value = new wchar_t[len];
+    _snwprintf(
+        value, len, L"%s;%s;%s%s%s", path, pythonpath2, pythonpath3,
         n == 0 ? L"" : L";", orig);
 #endif
     if (!SetEnvironmentVariableW(L"PYTHONPATH", value)) {
