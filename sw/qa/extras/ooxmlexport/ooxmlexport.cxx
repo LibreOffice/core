@@ -1811,9 +1811,15 @@ DECLARE_OOXML_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
 }
 
+DECLARE_OOXML_TEST(testFdo71785, "fdo71785.docx")
+{
+    // fdo#71785 Files hangs LO on saving
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // If document doesnt parse properly  then parseExport() returns NULL which will fail the test case.
+    CPPUNIT_ASSERT(pXmlDoc);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
