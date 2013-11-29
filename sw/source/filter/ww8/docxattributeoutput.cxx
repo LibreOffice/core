@@ -331,7 +331,7 @@ bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* p
 
     SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
 
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
     bool bItemSet = false;
     if (pTxtNode->HasSwAttrSet())
     {
