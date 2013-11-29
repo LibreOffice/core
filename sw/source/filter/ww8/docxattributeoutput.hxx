@@ -706,6 +706,9 @@ private:
     /// The current table helper
     SwWriteTable *m_pTableWrt;
 
+    /// Old table inner node for nested table
+    ww8::WW8TableNodeInfoInner::Pointer_t m_OldTablepInner;
+
     /// Remember if we are in an open cell, or not.
     bool m_bTableCellOpen;
 
