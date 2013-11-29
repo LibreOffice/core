@@ -404,7 +404,9 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
 
         double fScore = DBL_MAX;
         if (pScore)
+        {
             fScore = pScore->fTime;
+        }
         else
         {
             LOG_PRINTF("Unusual null score");
