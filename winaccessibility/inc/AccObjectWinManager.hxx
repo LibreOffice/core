@@ -97,8 +97,6 @@ public:
     void DeleteAccObj( com::sun::star::accessibility::XAccessible* pXAcc );
     void DeleteChildrenAccObj(com::sun::star::accessibility::XAccessible* pAccObj);
 
-    static  AccObjectWinManager* CreateAccObjectWinManagerInstance(AccObjectManagerAgent* Agent);
-
     sal_Bool NotifyAccEvent( com::sun::star::accessibility::XAccessible* pXAcc,short state = 0 );
 
     LPARAM Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam);

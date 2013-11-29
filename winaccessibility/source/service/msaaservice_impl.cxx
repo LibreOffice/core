@@ -42,7 +42,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::awt;
 
 #include "AccTopWindowListener.hxx"
-#include "g_msacc.hxx"
 
 namespace my_sc_impl
 {
@@ -96,7 +95,11 @@ throw (RuntimeException)
 {
     SolarMutexGuard g;
 
-    return GetMSComPtr( hWnd, lParam, wParam );
+    if (!m_pTopWindowListener.is())
+    {
+        return 0;
+    }
+    return m_pTopWindowListener->GetMSComPtr(hWnd, lParam, wParam);
 }
 
 /**

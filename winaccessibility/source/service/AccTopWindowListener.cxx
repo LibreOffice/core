@@ -255,4 +255,10 @@ void AccTopWindowListener::disposing( const ::com::sun::star::lang::EventObject&
 {
 }
 
+sal_Int64 AccTopWindowListener::GetMSComPtr(
+        sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
+{
+    return accManagerAgent.Get_ToATInterface(hWnd, lParam, wParam);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
