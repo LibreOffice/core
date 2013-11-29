@@ -326,7 +326,7 @@ static const sal_Unicode aDelimiterTable[] =
 };
 
 bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
-    // returns 'true' iff cChar is '\0' or a delimeter
+    // returns 'true' iff cChar is '\0' or a delimiter
 {
     OSL_ENSURE( nPos <= rTxt.getLength(), "index out of range" );
 
@@ -334,7 +334,7 @@ bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     if(!cChar)
         return true;
 
-    // check if 'cChar' is in the delimeter table
+    // check if 'cChar' is in the delimiter table
     const sal_Unicode *pDelim = &aDelimiterTable[0];
     for ( ;  *pDelim != 0;  pDelim++)
         if (*pDelim == cChar)

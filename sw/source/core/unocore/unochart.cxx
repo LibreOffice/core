@@ -1765,7 +1765,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     OUString aRes;
     OUString aRangeRepresentation( rRangeRepresentation );
 
-    // multiple ranges are delimeted by a ';' like in
+    // multiple ranges are delimited by a ';' like in
     // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
     sal_Int32 nNumRanges = comphelper::string::getTokenCount(aRangeRepresentation, ';');
     SwTable* pFirstFoundTable = 0;  // to check that only one table will be used
@@ -1815,7 +1815,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             aCellRange.aLowerRight.bIsEmpty  = false;
         }
         OUString aTmp( XMLRangeHelper::getXMLStringFromCellRange( aCellRange ) );
-        if (!aRes.isEmpty()) // in case of multiple ranges add delimeter
+        if (!aRes.isEmpty()) // in case of multiple ranges add delimiter
             aRes += " ";
         aRes += aTmp;
     }
@@ -1833,7 +1833,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
     OUString aRes;
     OUString aXMLRange( rXMLRange );
 
-    // multiple ranges are delimeted by a ' ' like in
+    // multiple ranges are delimited by a ' ' like in
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
     sal_Int32 nNumRanges = comphelper::string::getTokenCount(aXMLRange, ' ');
     OUString aFirstFoundTable; // to check that only one table will be used
@@ -1862,7 +1862,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
                                      aCellRange.aLowerRight.nRow );
         }
 
-        if (!aRes.isEmpty()) // in case of multiple ranges add delimeter
+        if (!aRes.isEmpty()) // in case of multiple ranges add delimiter
             aRes += ";";
         aRes += aTmp;
     }

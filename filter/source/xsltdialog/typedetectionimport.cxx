@@ -99,18 +99,18 @@ void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
         delete (*aIter++);
 }
 
-static OUString getSubdata( int index, sal_Unicode delimeter, const OUString& rData )
+static OUString getSubdata( int index, sal_Unicode delimiter, const OUString& rData )
 {
     sal_Int32 nLastIndex = 0;
 
-    sal_Int32 nNextIndex = rData.indexOf( delimeter );
+    sal_Int32 nNextIndex = rData.indexOf( delimiter );
 
     OUString aSubdata;
 
     while( index )
     {
         nLastIndex = nNextIndex + 1;
-        nNextIndex = rData.indexOf( delimeter, nLastIndex );
+        nNextIndex = rData.indexOf( delimiter, nLastIndex );
 
         index--;
 

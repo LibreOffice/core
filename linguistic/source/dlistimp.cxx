@@ -802,11 +802,11 @@ static sal_Int32 lcl_GetToken( OUString &rToken,
                 break;
         }
 
-        if (i >= rText.getLength())   // delimeter not found
+        if (i >= rText.getLength())   // delimiter not found
             rToken  = rText.copy( nPos );
         else
             rToken  = rText.copy( nPos, i - nPos );
-        nRes    = i + 1;    // continue after found delimeter
+        nRes    = i + 1;    // continue after found delimiter
     }
 
     return nRes;

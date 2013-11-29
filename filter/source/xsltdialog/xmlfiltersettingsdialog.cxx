@@ -280,7 +280,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
         // a non empty string has at least one extension
         nExtensions++;
 
-        // now count the delimeters ';'
+        // now count the delimiters ';'
         const sal_Unicode * pString = rExtensions.getStr();
         int i;
         for( i = 0; i < nLength; i++, pString++ )
