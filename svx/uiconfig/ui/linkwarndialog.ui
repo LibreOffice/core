@@ -39,7 +39,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">_Embed Graphic</property>
+                <property name="label" translatable="yes">_Embed Graphic</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

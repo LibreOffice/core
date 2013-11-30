@@ -40,7 +40,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">Use _ODF Format</property>
+                <property name="label" translatable="yes">Use _ODF Format</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
