@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///cY\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-11-30T08:07:51Z",
+      "side": 1,
+      "message": "Please also add bug number in the subject, in this case, fdo#71834",
+      "revId": "7683f8d022f15f1fdcd9677e879334b7f9a5945b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///cU\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-11-30T08:07:51Z",
+      "side": 1,
+      "message": "Don\u0027t add your filename here, as it\u0027s a blacklist.",
+      "revId": "7683f8d022f15f1fdcd9677e879334b7f9a5945b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///cM\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-11-30T08:07:51Z",
+      "side": 1,
+      "message": "To be consistency with surrounding code, test name should be testFdo71834, and filename should be in lowercase. :)",
+      "revId": "7683f8d022f15f1fdcd9677e879334b7f9a5945b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///cQ\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2036,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-11-30T08:07:51Z",
+      "side": 1,
+      "message": "You may use CPPUNIT_ASSERT(pXmlDoc); as in https://gerrit.libreoffice.org/6850 ; or use CPPUNIT_FAIL(message);",
+      "revId": "7683f8d022f15f1fdcd9677e879334b7f9a5945b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
