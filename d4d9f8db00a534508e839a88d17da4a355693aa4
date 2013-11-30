@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///bs\u003d",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-11-30T16:22:58Z",
+      "side": 1,
+      "message": "If the underlying firebird service cannot be seeked, could we at least be lazy? That is, request only as much data as is necessary to serve the \"getBytes\" requests (plus some buffering look-ahead OK: we could e.g. fetch in blocks of SAL_MAX_UINT16 even if only 1024 bytes are requested).",
+      "revId": "d4d9f8db00a534508e839a88d17da4a355693aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
