@@ -35,7 +35,27 @@ void FormulaTemplate::setTemplate(const char* aTemplate)
 
 OUString& FormulaTemplate::getTemplate()
 {
+    RangeReplacementMap::iterator itRange;
+    for (itRange = mRangeReplacementMap.begin(); itRange != mRangeReplacementMap.end(); ++itRange)
+    {
+        applyRange(itRange->first, itRange->second);
+    }
+    AddressReplacementMap::iterator itAddress;
+    for (itAddress = mAddressReplacementMap.begin(); itAddress != mAddressReplacementMap.end(); ++itAddress)
+    {
+        applyAddress(itAddress->first, itAddress->second);
+    }
     return mTemplate;
+}
+
+void FormulaTemplate::autoReplaceRange(OUString aVariable, ScRange aRange)
+{
+    mRangeReplacementMap.insert ( std::pair<OUString, ScRange>(aVariable, aRange) );
+}
+
+void FormulaTemplate::autoReplaceAddress(OUString aVariable, ScAddress aAddress)
+{
+    mAddressReplacementMap.insert ( std::pair<OUString, ScAddress>(aVariable, aAddress) );
 }
 
 void FormulaTemplate::applyRange(OUString aVariable, ScRange aRange)
@@ -141,6 +161,14 @@ AddressWalkerWriter::AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* 
 void AddressWalkerWriter::writeFormula(OUString aFormula)
 {
     mpDocShell->GetDocFunc().SetFormulaCell(mCurrentAddress, new ScFormulaCell(mpDocument, mCurrentAddress, aFormula), true);
+}
+
+void AddressWalkerWriter::writeMatrixFormula(OUString aFormula)
+{
+    ScRange aRange;
+    aRange.aStart = mCurrentAddress;
+    aRange.aEnd = mCurrentAddress;
+    mpDocShell->GetDocFunc().EnterMatrix(aRange, NULL, NULL, aFormula, false, false, OUString(), formula::FormulaGrammar::GRAM_DEFAULT );
 }
 
 void AddressWalkerWriter::writeString(OUString aString)

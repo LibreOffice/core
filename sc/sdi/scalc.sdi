@@ -3134,6 +3134,30 @@ SfxVoidItem MovingAverageDialog SID_MOVING_AVERAGE_DIALOG
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem TTestDialog SID_TTEST_DIALOG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
 ()

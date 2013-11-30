@@ -27,17 +27,28 @@ private:
     OUString            mTemplate;
     ScDocument*         mDocument;
     ScAddress::Details  mAddressDetails;
+
+    typedef std::map<OUString, ScRange>   RangeReplacementMap;
+    typedef std::map<OUString, ScAddress> AddressReplacementMap;
+
+    AddressReplacementMap mAddressReplacementMap;
+    RangeReplacementMap   mRangeReplacementMap;
+
 public:
     FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails);
 
-    void        setTemplate(OUString aTemplate);
-    void        setTemplate(const char* aTemplate);
-    OUString&   getTemplate();
-    void        applyRange(OUString aVariable, ScRange aRange);
-    void        applyRangeList(OUString aVariable, ScRangeList aRangeList);
-    void        applyAddress(OUString aVariable, ScAddress aAddress);
-    void        applyString(OUString aVariable, OUString aValue);
-    void        applyNumber(OUString aVariable, sal_Int32 aValue);
+    void      setTemplate(OUString aTemplate);
+    void      setTemplate(const char* aTemplate);
+    OUString& getTemplate();
+
+    void      autoReplaceRange(OUString aVariable, ScRange aRange);
+    void      autoReplaceAddress(OUString aVariable, ScAddress aAddress);
+
+    void      applyRange(OUString aVariable, ScRange aRange);
+    void      applyRangeList(OUString aVariable, ScRangeList aRangeList);
+    void      applyAddress(OUString aVariable, ScAddress aAddress);
+    void      applyString(OUString aVariable, OUString aValue);
+    void      applyNumber(OUString aVariable, sal_Int32 aValue);
 };
 
 class AddressWalker
@@ -71,6 +82,7 @@ public:
     AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument);
 
     void writeFormula(OUString aFormula);
+    void writeMatrixFormula(OUString aFormula);
     void writeString(OUString aString);
     void writeString(const char* aCharArray);
     void writeBoldString(OUString aString);

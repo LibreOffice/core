@@ -267,6 +267,7 @@
 #define SID_COVARIANCE_DIALOG               (SC_MESSAGE_START + 75)
 #define SID_EXPONENTIAL_SMOOTHING_DIALOG    (SC_MESSAGE_START + 76)
 #define SID_MOVING_AVERAGE_DIALOG           (SC_MESSAGE_START + 77)
+#define SID_TTEST_DIALOG                    (SC_MESSAGE_START + 78)
 
 // functions
 

@@ -974,6 +974,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
             }
             break;
+        case SID_TTEST_DIALOG:
+            {
+                sal_uInt16 nId  = ScTTestDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+
+            }
+            break;
 
         //
         //  disposal (Outlines)

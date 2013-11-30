@@ -192,6 +192,11 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "Sampling";
     };
+
+    String STR_TTEST_UNDO_NAME
+    {
+        Text [ en-US ] = "t-test";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

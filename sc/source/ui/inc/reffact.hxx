@@ -109,6 +109,12 @@ private:
     ScMovingAverageDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+class ScTTestDialogWrapper :
+    public ChildWindowWrapper<SID_TTEST_DIALOG>
+{
+private:
+    ScTTestDialogWrapper() SAL_DELETED_FUNCTION;
+};
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {

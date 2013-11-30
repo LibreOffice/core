@@ -53,5 +53,6 @@
 #define STR_COVARIANCE_UNDO_NAME                    37
 #define STR_EXPONENTIAL_SMOOTHING_UNDO_NAME         38
 #define STR_MOVING_AVERAGE_UNDO_NAME                39
+#define STR_TTEST_UNDO_NAME                         40
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

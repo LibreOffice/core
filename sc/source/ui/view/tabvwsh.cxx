@@ -89,6 +89,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(ScCovarianceDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScExponentialSmoothingDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScMovingAverageDialogWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScTTestDialogWrapper::GetChildWindowId());
 
 }
 
