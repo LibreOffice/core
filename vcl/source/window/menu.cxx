@@ -3696,7 +3696,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
             OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
                 0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
-            size_t nPos;
+            size_t nPos = 0;
             pData = pItemList->GetData( pData->nId, nPos );
             pData->bIsTemporary = true;
             ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, nPos);
