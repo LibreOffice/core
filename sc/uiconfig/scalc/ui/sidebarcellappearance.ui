@@ -48,7 +48,7 @@
                     <property name="halign">start</property>
                     <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:BackgroundColor</property>
-                    <property name="label" translatable="yes">toolbutton1</property>
+                    <property name="label" translatable="no">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -106,7 +106,7 @@
                     <property name="halign">start</property>
                     <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:SetBorderStyle</property>
-                    <property name="label" translatable="yes">toolbutton1</property>
+                    <property name="label" translatable="no">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -143,7 +143,7 @@
                         <property name="halign">end</property>
                         <property name="use_action_appearance">False</property>
                         <property name="action_name">.uno:LineStyle</property>
-                        <property name="label" translatable="yes">toolbutton2</property>
+                        <property name="label" translatable="no">toolbutton2</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -178,7 +178,7 @@
                         <property name="hexpand">True</property>
                         <property name="use_action_appearance">False</property>
                         <property name="action_name">.uno:FrameLineColor</property>
-                        <property name="label" translatable="yes">toolbutton1</property>
+                        <property name="label" translatable="no">toolbutton1</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>

@@ -193,7 +193,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">String 1</property>
+                                    <property name="label" translatable="no">String 1</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">spinbutton1:0.00cm</property>
                                   </object>
@@ -209,7 +209,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">String 2</property>
+                                    <property name="label" translatable="no">String 2</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">spinbutton2:0.00cm</property>
                                   </object>
@@ -225,7 +225,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">String 3</property>
+                                    <property name="label" translatable="no">String 3</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">spinbutton3:0.00cm</property>
                                   </object>
@@ -256,7 +256,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">String 4</property>
+                                    <property name="label" translatable="no">String 4</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">spinbutton4:0.00cm</property>
                                   </object>

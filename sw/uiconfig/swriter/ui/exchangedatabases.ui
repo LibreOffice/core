@@ -237,7 +237,7 @@ Use the browse button to select a database file.</property>
                   <object class="GtkLabel" id="dbnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">DataSource.Command</property>
+                    <property name="label" translatable="no">DataSource.Command</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

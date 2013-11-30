@@ -29,7 +29,7 @@
                 <property name="tooltip_text" translatable="yes">Orientation</property>
                 <property name="use_action_appearance">False</property>
                 <property name="action_name">.uno:Orientation</property>
-                <property name="label" translatable="yes">toolbutton1</property>
+                <property name="label" translatable="no">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -59,7 +59,7 @@
                 <property name="tooltip_text" translatable="yes">Size</property>
                 <property name="use_action_appearance">False</property>
                 <property name="action_name">.uno:Size</property>
-                <property name="label" translatable="yes">toolbutton3</property>
+                <property name="label" translatable="no">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -90,7 +90,7 @@
                 <property name="tooltip_text" translatable="yes">Columns</property>
                 <property name="use_action_appearance">False</property>
                 <property name="action_name">.uno:Column</property>
-                <property name="label" translatable="yes">toolbutton4</property>
+                <property name="label" translatable="no">toolbutton4</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -120,7 +120,7 @@
                 <property name="tooltip_text" translatable="yes">Margin</property>
                 <property name="use_action_appearance">False</property>
                 <property name="action_name">.uno:Margin</property>
-                <property name="label" translatable="yes">toolbutton2</property>
+                <property name="label" translatable="no">toolbutton2</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
