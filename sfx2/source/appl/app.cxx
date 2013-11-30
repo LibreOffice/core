@@ -361,7 +361,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
                     pProgress->SetState( pProgress->GetState() );
             }
 
-            if ( pAppData_Impl->pViewFrame->GetViewShell() )
+            if ( pAppData_Impl->pViewFrame->GetViewShell().is() )
             {
                 SfxDispatcher* pDisp = pAppData_Impl->pViewFrame->GetDispatcher();
                 pDisp->Flush();
@@ -375,7 +375,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
     // Otherwise, the CurrentComponent might not be correct, in case it has meanwhile
     // been reset to some other document, by some non-SFX component.
     // #i49133# / 2007-12-19 / frank.schoenheit@sun.com
-    if ( pFrame && pFrame->GetViewShell() )
+    if ( pFrame && pFrame->GetViewShell().is() )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 

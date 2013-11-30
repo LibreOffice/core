@@ -311,7 +311,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 //  XPrintable
 //________________________________________________________________________________________________________
 
-void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
+void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter, SfxPrinter*& pPrinter, sal_uInt16& nChangeFlags, rtl::Reference< SfxViewShell > &pViewSh)
 
 {
     // Get old Printer
@@ -452,12 +452,12 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
     // object already disposed?
     SolarMutexGuard aGuard;
 
-    SfxViewShell* pViewSh = NULL;
+    rtl::Reference< SfxViewShell > pViewSh(NULL);
     SfxPrinter* pPrinter = NULL;
     sal_uInt16 nChangeFlags = 0;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
     // set new printer
-    if ( pViewSh && pPrinter )
+    if ( pViewSh.is() && pPrinter )
         pViewSh->SetPrinter( pPrinter, nChangeFlags, false );
 }
 
@@ -594,8 +594,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     if ( !pViewFrm )
         return;
-    SfxViewShell* pView = pViewFrm->GetViewShell();
-    if ( !pView )
+    rtl::Reference< SfxViewShell > pView (pViewFrm->GetViewShell());
+    if ( !pView.is() )
         return;
     sal_Bool bMonitor = sal_False;
     // We need this information at the end of this method, if we start the vcl printer

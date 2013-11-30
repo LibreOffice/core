@@ -72,7 +72,7 @@ struct SfxShell_Impl: public SfxBroadcaster
 {
     OUString                 aObjectName;   // Name of Sbx-Objects
     SfxItemPtrMap            aItems;        // Data exchange on Item level
-    SfxViewShell*            pViewSh;       // SfxViewShell if Shell is
+    rtl::Reference< SfxViewShell > pViewSh; // SfxViewShell if Shell is
                                             // ViewFrame/ViewShell/SubShell list
     SfxViewFrame*            pFrame;        // Frame, if  <UI-active>
     SfxRepeatTarget*         pRepeatTarget; // SbxObjectRef xParent;
@@ -112,7 +112,8 @@ SfxShell::SfxShell()
     the application of a SfxShell instance is very cheap.
 */
 
-:   pImp(0),
+:   m_refCount(0),
+    pImp(0),
     pPool(0),
     pUndoMgr(0)
 {
@@ -129,7 +130,7 @@ SfxShell::SfxShell()
 
 //-------------------------------------------------------------------------
 
-SfxShell::SfxShell( SfxViewShell *pViewSh )
+SfxShell::SfxShell( rtl::Reference < SfxViewShell > pViewSh )
 
 /*  [Description]
 
@@ -138,7 +139,8 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     the application of a SfxShell instance is very cheap.
 */
 
-:   pImp(0),
+:   m_refCount(0),
+    pImp(0),
     pPool(0),
     pUndoMgr(0)
 {
@@ -154,7 +156,7 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
 
 //--------------------------------------------------------------------
 
-SfxShell::~SfxShell()
+void SfxShell::dispose()
 
 /*  [Description]
 
@@ -166,8 +168,12 @@ SfxShell::~SfxShell()
 {
     DBG_DTOR(SfxShell, 0);
 
+    FREEZ(pImp);
+}
 
-    delete pImp;
+SfxShell::~SfxShell()
+{
+    dispose();
 }
 
 //--------------------------------------------------------------------
@@ -217,7 +223,7 @@ SfxDispatcher* SfxShell::GetDispatcher() const
 
 //--------------------------------------------------------------------
 
-SfxViewShell* SfxShell::GetViewShell() const
+rtl::Reference< SfxViewShell > SfxShell::GetViewShell() const
 
 /*  [Description]
 
@@ -258,7 +264,7 @@ SfxViewFrame* SfxShell::GetFrame() const
 {
     if ( pImp->pFrame )
         return pImp->pFrame;
-    if ( pImp->pViewSh )
+    if ( pImp->pViewSh.is() )
         return pImp->pViewSh->GetViewFrame();
     return 0;
 }
@@ -487,7 +493,7 @@ void SfxShell::Invalidate
 */
 
 {
-    if ( !GetViewShell() )
+    if ( !GetViewShell().is() )
     {
         OSL_FAIL( "wrong Invalidate method called!" );
         return;
@@ -1034,8 +1040,8 @@ const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& S
 void SfxShell::VerbExec(SfxRequest& rReq)
 {
     sal_uInt16 nId = rReq.GetSlot();
-    SfxViewShell *pViewShell = GetViewShell();
-    if ( pViewShell )
+    rtl::Reference< SfxViewShell > pViewShell = GetViewShell();
+    if ( pViewShell.is() )
     {
         sal_Bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
         com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
@@ -1099,7 +1105,7 @@ sal_uIntPtr SfxShell::GetHelpId() const
 
 SfxObjectShell* SfxShell::GetObjectShell()
 {
-    if ( GetViewShell() )
+    if ( GetViewShell().is() )
         return GetViewShell()->GetViewFrame()->GetObjectShell();
     else
         return NULL;
@@ -1159,7 +1165,7 @@ void SfxShell::SetContextName (const ::rtl::OUString& rsContextName)
     pImp->maContextChangeBroadcaster.Initialize(rsContextName);
 }
 
-void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
+void SfxShell::SetViewShell_Impl( rtl::Reference< SfxViewShell > pView )
 {
     pImp->pViewSh = pView;
 }

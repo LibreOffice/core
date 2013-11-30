@@ -1120,9 +1120,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetArgs();
             if ( pArgs && pView )
             {
-                SfxViewShell* pViewShell = pView->GetViewShell();
+                rtl::Reference< SfxViewShell > pViewShell (pView->GetViewShell());
                 SfxObjectShell* pObjShell = pView->GetObjectShell();
-                if ( pViewShell && pObjShell )
+                if ( pViewShell.is() && pObjShell )
                 {
                     SfxRequest aReq( SID_BASICIDE_SHOWWINDOW, SFX_CALLMODE_SYNCHRON, pObjShell->GetPool() );
                     aReq.SetArgs( *pArgs );

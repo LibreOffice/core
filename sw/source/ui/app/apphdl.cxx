@@ -101,6 +101,9 @@
 
 using namespace ::com::sun::star;
 
+// TODO: move to rtl/ref.hxx
+#define REF_CAST( T, pObj ) \
+    ( pObj.is() && (pObj)->IsA( TYPE(T) ) ? (static_cast<T*>(pObj.get())) : 0 )
 
 // Slotmaps for the application's methods
 
@@ -127,8 +130,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 
-    SwView* pActView = ::GetActiveView();
-    sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+    rtl::Reference< SwView > pActView = ::GetActiveView();
+    sal_Bool bWebView = 0 != REF_CAST(SwWebView, pActView);
 
     while(nWhich)
     {
@@ -139,8 +142,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_ENVELOP:
             {
                 bool bDisable = false;
-                SfxViewShell* pCurrView = SfxViewShell::Current();
-                if( !pCurrView || (pCurrView && !pCurrView->ISA(SwView)) )
+                rtl::Reference< SfxViewShell > pCurrView = SfxViewShell::Current();
+                if( !pCurrView.is() || !pCurrView->ISA(SwView) )
                     bDisable = true;
                 SwDocShell *pDocSh = (SwDocShell*) SfxObjectShell::Current();
                 if ( bDisable ||
@@ -157,7 +160,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 {
                     SwWrtShell* pSh = 0;
                     int nSelection = 0;
-                    if( pActView )
+                    if( pActView.is() )
                         pSh = &pActView->GetWrtShell();
                     if( pSh )
                         nSelection = pSh->GetSelectionType();
@@ -181,9 +184,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
     }
 }
 
-static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
+static rtl::Reference< SwView > lcl_LoadDoc(rtl::Reference< SwView > pView, const OUString& rURL)
 {
-    SwView* pNewView = 0;
+    rtl::Reference< SwView > pNewView = 0;
     if(!rURL.isEmpty())
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
@@ -197,12 +200,12 @@ static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
 
         if(pShell)
         {
-            SfxViewShell* pViewShell = pShell->GetViewShell();
-            if(pViewShell)
+            rtl::Reference< SfxViewShell > pViewShell = pShell->GetViewShell();
+            if(pViewShell.is())
             {
                 if( pViewShell->ISA(SwView) )
                 {
-                    pNewView = PTR_CAST(SwView,pViewShell);
+                    pNewView = REF_CAST(SwView,pViewShell);
                     pNewView->GetViewFrame()->GetFrame().Appear();
                 }
                 else
@@ -220,7 +223,7 @@ static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
                                 SFX_CALLMODE_SYNCHRON, &aFactory, 0L);
         SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
         SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
-        pNewView = pFrame ? PTR_CAST(SwView, pFrame->GetViewShell()) : 0;
+        pNewView = pFrame ? REF_CAST(SwView, pFrame->GetViewShell()) : 0;
     }
 
     return pNewView;
@@ -234,8 +237,8 @@ namespace
 
 class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
-    SwView*                  m_pView;       // never owner
-    SwView*                  m_pView2Close; // never owner
+    rtl::Reference< SwView >                  m_pView;       // never owner
+    rtl::Reference< SwView >                  m_pView2Close; // never owner
     SwMailMergeConfigItem*   m_pMMConfig;   // sometimes owner
     AbstractMailMergeWizard* m_pWizard;     // always owner
 
@@ -271,15 +274,15 @@ SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
 {
-    if ( m_pView )
+    if ( m_pView.is() )
     {
         OSL_FAIL("SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
         return;
     }
 
     m_pView = ::GetActiveView(); // not owner!
-    OSL_ENSURE(m_pView, "no current view?");
-    if(m_pView)
+    OSL_ENSURE(m_pView.is(), "no current view?");
+    if(m_pView.is())
     {
         // keep self alive until done.
         acquire();
@@ -400,14 +403,14 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
     {
     case RET_LOAD_DOC:
         {
-            SwView* pNewView = lcl_LoadDoc(m_pView, m_pWizard->GetReloadDocument());
+            rtl::Reference< SwView > pNewView = lcl_LoadDoc(m_pView, m_pWizard->GetReloadDocument());
 
             // destroy wizard asynchronously
             Application::PostUserEvent(
                 LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            if(pNewView)
+            if(pNewView.is())
             {
                 m_pView = pNewView;
                 m_pMMConfig->DocumentReloaded();
@@ -427,11 +430,11 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         }
     case RET_TARGET_CREATED:
         {
-            SwView* pTargetView = m_pMMConfig->GetTargetView();
+            rtl::Reference< SwView > pTargetView = m_pMMConfig->GetTargetView();
             uno::Reference< frame::XFrame > xFrame =
                 m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
             xFrame->getContainerWindow()->setVisible(sal_False);
-            OSL_ENSURE(pTargetView, "No target view has been created");
+            OSL_ENSURE(pTargetView.is(), "No target view has been created");
             if(pTargetView)
             {
                 // destroy wizard asynchronously
@@ -458,7 +461,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
             //create a non-modal dialog that allows to return to the wizard
             //the ConfigItem ownership moves to this dialog
             bool bResult = nRet == RET_EDIT_RESULT_DOC && m_pMMConfig->GetTargetView();
-            SwView* pTempView = bResult ? m_pMMConfig->GetTargetView() : m_pMMConfig->GetSourceView();
+            rtl::Reference< SwView > pTempView = bResult ? m_pMMConfig->GetTargetView() : m_pMMConfig->GetSourceView();
             pTempView->SetMailMergeConfigItem(m_pMMConfig, m_pWizard->GetRestartPage(), !bResult);
             SfxViewFrame* pViewFrame = pTempView->GetViewFrame();
             pViewFrame->GetDispatcher()->Execute(
@@ -468,9 +471,9 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         }
     case RET_REMOVE_TARGET:
         {
-            SwView* pTargetView = m_pMMConfig->GetTargetView();
-            SwView* pSourceView = m_pMMConfig->GetSourceView();
-            OSL_ENSURE(pTargetView && pSourceView, "source or target view not available" );
+            rtl::Reference< SwView > pTargetView = m_pMMConfig->GetTargetView();
+            rtl::Reference< SwView > pSourceView = m_pMMConfig->GetSourceView();
+            OSL_ENSURE(pTargetView.is() && pSourceView.is(), "source or target view not available" );
             if(pTargetView && pSourceView)
             {
                 m_pView2Close = pTargetView;
@@ -507,7 +510,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         }
     default: // finish
         {
-            SwView* pSourceView = m_pMMConfig->GetSourceView();
+            rtl::Reference< SwView > pSourceView = m_pMMConfig->GetSourceView();
             if(pSourceView)
             {
                 SwDocShell* pDocShell = pSourceView->GetDocShell();
@@ -606,8 +609,8 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 case FUNIT_PICA:
                 case FUNIT_POINT:
                 {
-                    SwView* pActView = ::GetActiveView();
-                    sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+                    rtl::Reference< SwView > pActView = ::GetActiveView();
+                    sal_Bool bWebView = 0 != REF_CAST(SwWebView, pActView);
                     ::SetDfltMetric(eUnit, bWebView);
                 }
                 break;
@@ -618,7 +621,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
         case FN_SET_MODOPT_TBLNUMFMT:
             {
-                sal_Bool bWebView = 0 != PTR_CAST(SwWebView, ::GetActiveView() ),
+                sal_Bool bWebView = 0 != REF_CAST(SwWebView, ::GetActiveView() ),
                      bSet;
 
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(
@@ -763,8 +766,8 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         const TypeId aSwViewTypeId = TYPE(SwView);
         const TypeId aSwPreviewTypeId = TYPE(SwPagePreview);
         const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while(pViewShell)
+        rtl::Reference< SfxViewShell > pViewShell = SfxViewShell::GetFirst();
+        while(pViewShell.is())
         {
             if(pViewShell->GetWindow())
             {
@@ -775,9 +778,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
                     if(bAccessibility)
                     {
                         if(pViewShell->IsA(aSwViewTypeId))
-                            ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            ((SwView*)pViewShell.get())->ApplyAccessiblityOptions(*pAccessibilityOptions);
                         else if(pViewShell->IsA(aSwPreviewTypeId))
-                            ((SwPagePreview*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            ((SwPagePreview*)pViewShell.get())->ApplyAccessiblityOptions(*pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
                 }

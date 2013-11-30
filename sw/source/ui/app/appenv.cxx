@@ -144,7 +144,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     SwDocShell      *pMyDocSh;
     SfxViewFrame    *pFrame;
-    SwView          *pNewView;
+    rtl::Reference< SwView > pNewView;
     SwWrtShell      *pOldSh,
                     *pSh;
 
@@ -156,7 +156,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
-    pNewView = (SwView*) pFrame->GetViewShell();
+#if OSL_DEBUG_LEVEL > 0
+    pNewView = dynamic_cast<SwView*>(pFrame->GetViewShell().get());
+    assert( (  pNewView.is() &&  pFrame->GetViewShell().is() ) ||
+            ( !pNewView.is() && !pFrame->GetViewShell().is() ));
+#else
+    pNewView = static_cast<SwView*>(pFrame->GetViewShell().get());
+#endif
     pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 

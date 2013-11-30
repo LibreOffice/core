@@ -857,7 +857,7 @@ SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const com::
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )
     {
-        if( pFrame->GetViewShell() )
+        if( pFrame->GetViewShell().is() )
         {
             SfxInPlaceClient* pClient = pFrame->GetViewShell()->FindIPClient( xObject, NULL );
             if ( pClient )

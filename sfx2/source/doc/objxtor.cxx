@@ -588,8 +588,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
     for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
           pFrm; pFrm = SfxViewFrame::GetNext( *pFrm, this ) )
     {
-        DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
-        if ( pFrm->GetViewShell() )
+        DBG_ASSERT(pFrm->GetViewShell().is(),"No Shell");
+        if ( pFrm->GetViewShell().is() )
         {
             sal_uInt16 nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
             if ( nRet != sal_True )

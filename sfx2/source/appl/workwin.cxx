@@ -770,7 +770,7 @@ void SfxFrameWorkWin_Impl::ArrangeChildren_Impl( sal_Bool bForce )
 
     SfxInPlaceClient *pClient = 0;
     SfxViewFrame *pF = pFrame->GetCurrentViewFrame();
-    if ( pF && pF->GetViewShell() )
+    if ( pF && pF->GetViewShell().is() )
         pClient = pF->GetViewShell()->GetIPClient();
 
     if ( pClient )

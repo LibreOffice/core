@@ -102,14 +102,14 @@ class NotifyEvent;
 private: \
     static SfxViewFactory *pFactory; \
 public: \
-    static SfxViewShell  *CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView); \
+    static rtl::Reference< SfxViewShell >CreateInstance(SfxViewFrame *pFrame, rtl::Reference< SfxViewShell >pOldView); \
     static void           RegisterFactory( sal_uInt16 nPrio = USHRT_MAX ); \
     static SfxViewFactory&Factory() { return *pFactory; } \
     static void           InitFactory()
 
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
     SfxViewFactory* Class::pFactory; \
-    SfxViewShell* Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
+    rtl::Reference< SfxViewShell > Class::CreateInstance(SfxViewFrame *pFrame, rtl::Reference< SfxViewShell >pOldView) \
     { return new Class(pFrame, pOldView); } \
     void Class::RegisterFactory( sal_uInt16 nPrio ) \
     { \
@@ -154,12 +154,12 @@ protected:
 
 public:
     // Iteration
-    static SfxViewShell*        GetFirst( const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
-    static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
+    static rtl::Reference< SfxViewShell >        GetFirst( const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
+    static rtl::Reference< SfxViewShell >        GetNext( const SfxViewShell& rPrev,
                                          const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
-    static SfxViewShell*        Current();
+    static rtl::Reference< SfxViewShell >        Current();
 
-    static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
+    static rtl::Reference< SfxViewShell >        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
                                 TYPEINFO();

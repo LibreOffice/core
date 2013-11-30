@@ -37,7 +37,7 @@ public:
     SfxViewFactory( SfxViewCtor fnC,
                     sal_uInt16 nOrdinal, const sal_Char* asciiViewName );
 
-    SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
+    rtl::Reference< SfxViewShell >CreateInstance(SfxViewFrame *pViewFrame, rtl::Reference< SfxViewShell > pOldSh);
     sal_uInt16    GetOrdinal() const { return nOrd; }
 
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.

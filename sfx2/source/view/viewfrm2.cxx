@@ -157,7 +157,7 @@ void SfxViewFrame::UpdateTitle()
 void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 {
     // If presently the shells are replaced...
-    if ( !GetObjectShell() || !GetViewShell() )
+    if ( !GetObjectShell() || !GetViewShell().is() )
         return;
 
     switch ( rReq.GetSlot() )
@@ -321,7 +321,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_OBJECT:
-                if ( GetViewShell() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )
+                if ( GetViewShell().is() && GetViewShell()->GetVerbs().getLength() && !GetObjectShell()->IsInPlaceActive() )
                 {
                     uno::Any aAny;
                     aAny <<= GetViewShell()->GetVerbs();
@@ -393,7 +393,7 @@ void SfxViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY
 
 void SfxViewFrame::Activate( sal_Bool bMDI )
 {
-    DBG_ASSERT(GetViewShell(), "No Shell");
+    DBG_ASSERT(GetViewShell().is(), "No Shell");
     if ( bMDI )
         pImp->bActive = sal_True;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
@@ -401,7 +401,7 @@ void SfxViewFrame::Activate( sal_Bool bMDI )
 
 void SfxViewFrame::Deactivate( sal_Bool bMDI )
 {
-    DBG_ASSERT(GetViewShell(), "No Shell");
+    DBG_ASSERT(GetViewShell().is(), "No Shell");
     if ( bMDI )
         pImp->bActive = sal_False;
 //(mba): here maybe as in Beanframe NotifyEvent ?!

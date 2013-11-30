@@ -54,8 +54,8 @@ namespace
     bool QueryState( sal_uInt16 _nSlot, bool& _rValue )
     {
         bool bRet = false;
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if (pViewSh)
+        rtl::Reference< SfxViewShell > pViewSh = SfxViewShell::Current();
+        if (pViewSh.is())
         {
             const SfxPoolItem* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
@@ -256,8 +256,8 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
     {
         bool bIsHTMLDoc = false;
         bool bProtect = true, bUnProtect = false;
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if (pViewSh)
+        rtl::Reference< SfxViewShell > pViewSh = SfxViewShell::Current();
+        if (pViewSh.is())
         {
             const SfxPoolItem* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();

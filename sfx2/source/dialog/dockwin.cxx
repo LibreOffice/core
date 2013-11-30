@@ -1791,7 +1791,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions
-        if ( !DockingWindow::Notify( rEvt ) && SfxViewShell::Current() )
+        if ( !DockingWindow::Notify( rEvt ) && SfxViewShell::Current().is() )
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;

@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 struct  IMPL_PrintListener_DataContainer;
@@ -60,7 +61,7 @@ private:
 
     osl::Mutex m_aMutex;
     IMPL_PrintListener_DataContainer* m_pData ;
-    virtual void impl_setPrinter(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh);
+    virtual void impl_setPrinter(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,rtl::Reference< SfxViewShell >& pViewSh);
 } ;
 
 #endif

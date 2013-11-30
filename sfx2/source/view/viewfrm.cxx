@@ -955,7 +955,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
                 break;
         }
     }
-    else if ( GetViewShell() )
+    else if ( GetViewShell().is() )
     {
         // The SW has its own undo in the View
         const SfxPoolItem *pRet = GetViewShell()->ExecuteSlot( rReq );
@@ -981,8 +981,8 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     {
         // The SW has its own undo in the View
         SfxWhichIter aIter( rSet );
-        SfxViewShell *pViewSh = GetViewShell();
-        if( !pViewSh ) return;
+        rtl::Reference< SfxViewShell > pViewSh = GetViewShell();
+        if( !pViewSh.is() ) return;
         for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
             pViewSh->GetSlotState( nSID, 0, &rSet );
         return;
@@ -1075,13 +1075,13 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         GetWindow().GrabFocus();
     }
 
-    SfxViewShell *pDyingViewSh = GetViewShell();
-    if ( pDyingViewSh )
+    rtl::Reference< SfxViewShell > pDyingViewSh = GetViewShell();
+    if ( pDyingViewSh.is() )
     {
         PopShellAndSubShells_Impl( *pDyingViewSh );
         pDyingViewSh->DisconnectAllClients();
         SetViewShell_Impl(0);
-        delete pDyingViewSh;
+        pDyingViewSh->dispose();
     }
 #ifdef DBG_UTIL
     else
@@ -1126,7 +1126,7 @@ sal_Bool SfxViewFrame::Close()
 
     // If no saving have been made up until now, then embedded Objects should
     // not be saved automatically anymore.
-    if ( GetViewShell() )
+    if ( GetViewShell().is() )
         GetViewShell()->DiscardClients_Impl();
     Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
@@ -1186,19 +1186,19 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
 }
 
 //------------------------------------------------------------------------
-void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
+void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell *pSh )
 {
     if( pSh && !nAdjustPosPixelLock )
     {
-        if ( GetViewShell() && GetWindow().IsVisible() )
+        if ( GetViewShell().is() && GetWindow().IsVisible() )
         {
             if ( GetFrame().IsInPlace() )
             {
                 return;
             }
 
-            DoAdjustPosSizePixel( (SfxViewShell *) GetViewShell(), Point(),
-                                            GetWindow().GetOutputSizePixel() );
+            DoAdjustPosSizePixel( GetViewShell(), Point(),
+                                  GetWindow().GetOutputSizePixel() );
         }
     }
 }
@@ -1206,7 +1206,7 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
 //------------------------------------------------------------------------
 sal_Bool SfxViewFrame::SetBorderPixelImpl
 (
-    const SfxViewShell* pVSh,
+    const SfxViewShell *pVSh,
     const SvBorder&     rBorder
 )
 
@@ -1249,7 +1249,7 @@ sal_Bool SfxViewFrame::SetBorderPixelImpl
 //------------------------------------------------------------------------
 const SvBorder& SfxViewFrame::GetBorderPixelImpl
 (
-    const SfxViewShell* /*pSh*/
+    const SfxViewShell */*pSh*/
 )   const
 
 {
@@ -1590,7 +1590,7 @@ SfxProgress* SfxViewFrame::GetProgress() const
 //--------------------------------------------------------------------
 void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
 (
-    SfxViewShell*   pSh,
+    rtl::Reference< SfxViewShell > pSh,
     const Point&    rPos,
     const Size&     rSize
 )
@@ -1598,7 +1598,7 @@ void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
     DBG_CHKTHIS(SfxViewFrame, 0);
 
     // Components do not use this Method!
-    if( pSh && pSh->GetWindow() && !nAdjustPosPixelLock )
+    if( pSh.is() && pSh->GetWindow() && !nAdjustPosPixelLock )
     {
         nAdjustPosPixelLock++;
         if ( pImp->bResizeInToOut )
@@ -1629,7 +1629,7 @@ SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
+void SfxViewFrame::SetViewShell_Impl( rtl::Reference< SfxViewShell > pVSh )
 
 /*  [Description]
 
@@ -1641,7 +1641,7 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
     SfxShell::SetViewShell_Impl( pVSh );
 
     // Hack: InPlaceMode
-    if ( pVSh )
+    if ( pVSh.is() )
         pImp->bResizeInToOut = sal_False;
 }
 
@@ -1702,19 +1702,10 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
         }
 
         // cursor and focus
-        SfxViewShell* pViewSh = GetViewShell();
-        if ( bEnable )
-        {
-            // show cursor
-            if ( pViewSh )
-                pViewSh->ShowCursor();
-        }
-        else
-        {
-            // hide cursor
-            if ( pViewSh )
-                pViewSh->ShowCursor(sal_False);
-        }
+        rtl::Reference< SfxViewShell > pViewSh = GetViewShell();
+        // show/hide cursor
+        if ( pViewSh.is() )
+            pViewSh->ShowCursor(bEnable);
     }
 }
 
@@ -1773,51 +1764,45 @@ void SfxViewFrame::LockObjectShell_Impl( sal_Bool bLock )
 //--------------------------------------------------------------------
 void SfxViewFrame::MakeActive_Impl( sal_Bool bGrabFocus )
 {
-    if ( GetViewShell() && !GetFrame().IsClosing_Impl() )
+    if ( GetViewShell().is() && !GetFrame().IsClosing_Impl() && IsVisible() )
     {
-        if ( IsVisible() )
+        sal_Bool bPreview = sal_False;
+        if ( GetObjectShell()->IsPreview() )
         {
-            if ( GetViewShell() )
+            bPreview = sal_True;
+        }
+        else
+        {
+            SfxViewFrame* pParent = GetParentViewFrame();
+            if ( pParent )
+                pParent->SetActiveChildFrame_Impl( this );
+        }
+
+        SfxViewFrame* pCurrent = SfxViewFrame::Current();
+        css::uno::Reference< css::frame::XFrame > xFrame = GetFrame().GetFrameInterface();
+        if ( !bPreview )
+        {
+            SetViewFrame( this );
+            GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame >() );
+            uno::Reference< frame::XFramesSupplier > xSupp( xFrame, uno::UNO_QUERY );
+            if ( xSupp.is() )
+                xSupp->setActiveFrame( uno::Reference < frame::XFrame >() );
+
+            css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
+            Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+            if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
             {
-                sal_Bool bPreview = sal_False;
-                if ( GetObjectShell()->IsPreview() )
-                {
-                    bPreview = sal_True;
-                }
-                else
-                {
-                    SfxViewFrame* pParent = GetParentViewFrame();
-                    if ( pParent )
-                        pParent->SetActiveChildFrame_Impl( this );
-                }
-
-                SfxViewFrame* pCurrent = SfxViewFrame::Current();
-                css::uno::Reference< css::frame::XFrame > xFrame = GetFrame().GetFrameInterface();
-                if ( !bPreview )
-                {
-                    SetViewFrame( this );
-                    GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame >() );
-                    uno::Reference< frame::XFramesSupplier > xSupp( xFrame, uno::UNO_QUERY );
-                    if ( xSupp.is() )
-                        xSupp->setActiveFrame( uno::Reference < frame::XFrame >() );
-
-                    css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-                    Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
-                    if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
-                    {
-                        SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
-                        if ( ( !pCli || !pCli->IsObjectUIActive() ) &&
-                            ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) )
-                                GetFrame().GrabFocusOnComponent_Impl();
-                    }
-                }
-                else
-                {
-                    GetBindings().SetDispatcher( GetDispatcher() );
-                    GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
-                    GetDispatcher()->Update_Impl( sal_False );
-                }
+                SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
+                if ( ( !pCli || !pCli->IsObjectUIActive() ) &&
+                     ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) )
+                    GetFrame().GrabFocusOnComponent_Impl();
             }
+        }
+        else
+        {
+            GetBindings().SetDispatcher( GetDispatcher() );
+            GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
+            GetDispatcher()->Update_Impl( sal_False );
         }
     }
 }
@@ -1869,7 +1854,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 {
     Reference< XFrame > xFrame( i_rFrame );
     bool bOwnFrame = false;
-    SfxViewShell* pSuccessView = NULL;
+    rtl::Reference< SfxViewShell > pSuccessView = NULL;
     try
     {
         if ( !xFrame.is() )
@@ -1916,7 +1901,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( pSuccessView )
+    if ( pSuccessView.is() )
         return pSuccessView->GetViewFrame();
 
     if ( bOwnFrame )
@@ -1935,7 +1920,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
 }
 
 //--------------------------------------------------------------------
-SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
+rtl::Reference< SfxViewShell > SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rFrame,
                                            const Sequence< PropertyValue >& i_rLoadArgs, const sal_uInt16 i_nViewId,
                                            const bool i_bHidden )
 {
@@ -1958,8 +1943,8 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     xLoader->loadComponentFromURL( sURL, OUString("_self"), 0,
         aTransformLoadArgs.getPropertyValues() );
 
-    SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
-    ENSURE_OR_THROW( pViewShell,
+    rtl::Reference< SfxViewShell > pViewShell = SfxViewShell::Get( i_rFrame->getController() );
+    ENSURE_OR_THROW( pViewShell.is(),
         "SfxViewFrame::LoadViewIntoFrame_Impl: loading an SFX doc into a frame resulted in a non-SFX view - quite impossible" );
     return pViewShell;
 }
@@ -2044,7 +2029,7 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
 void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
 {
-    SfxViewShell* pCurrentShell = GetViewShell();
+    rtl::Reference< SfxViewShell > pCurrentShell = GetViewShell();
     ENSURE_OR_RETURN_VOID( pCurrentShell != NULL, "SfxViewFrame::SaveCurrentViewData_Impl: no current view shell -> no current view data!" );
 
     // determine the logical (API) view name
@@ -2148,9 +2133,9 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         ENSURE_OR_THROW( GetObjectShell() != NULL, "not possible without a document" );
 
         // if we already have a view shell, remove it
-        SfxViewShell* pOldSh = GetViewShell();
-        OSL_PRECOND( pOldSh, "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
-        if ( pOldSh )
+        rtl::Reference< SfxViewShell > pOldSh = GetViewShell();
+        OSL_PRECOND( pOldSh.is(), "SfxViewFrame::SwitchToViewShell_Impl: that's called *switch* (not for *initial-load*) for a reason" );
+        if ( pOldSh.is() )
         {
             // ask whether it can be closed
             if ( !pOldSh->PrepareClose( sal_True ) )
@@ -2171,7 +2156,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         SaveCurrentViewData_Impl( nViewId );
 
         // create and load new ViewShell
-        SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(
+        rtl::Reference< SfxViewShell > pNewSh = LoadViewIntoFrame_Impl(
             *GetObjectShell(),
             GetFrame().GetFrameInterface(),
             Sequence< PropertyValue >(),    // means "reuse existing model's args"
@@ -2186,7 +2171,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
             DoAdjustPosSizePixel( pNewSh, Point(), GetWindow().GetOutputSizePixel() );
 
         GetBindings().LEAVEREGISTRATIONS();
-        delete pOldSh;
+        pOldSh->dispose();
     }
     catch ( const com::sun::star::uno::Exception& )
     {
@@ -2228,7 +2213,7 @@ void SfxViewFrame::ExecView_Impl
     DBG_CHKTHIS(SfxViewFrame, 0);
 
     // If the Shells are just being replaced...
-    if ( !GetObjectShell() || !GetViewShell() )
+    if ( !GetObjectShell() || !GetViewShell().is() )
         return;
 
     switch ( rReq.GetSlot() )
@@ -2303,8 +2288,8 @@ void SfxViewFrame::ExecView_Impl
         {
             SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_OBJECT, sal_False );
 
-            SfxViewShell *pViewShell = GetViewShell();
-            if ( pViewShell && pItem )
+            rtl::Reference< SfxViewShell > pViewShell = GetViewShell();
+            if ( pViewShell.is() && pItem )
             {
                 pViewShell->DoVerb( pItem->GetValue() );
                 rReq.Done();
@@ -2512,8 +2497,8 @@ void SfxViewFrame::Resize( sal_Bool bForce )
     if ( bForce || aSize != pImp->aSize )
     {
         pImp->aSize = aSize;
-        SfxViewShell *pShell = GetViewShell();
-        if ( pShell )
+        rtl::Reference< SfxViewShell > pShell = GetViewShell();
+        if ( pShell.is() )
         {
             if ( GetFrame().IsInPlace() )
             {
@@ -2744,7 +2729,9 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // #i17355# update the Basic IDE
-        for ( SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell; pViewShell = SfxViewShell::GetNext( *pViewShell ) )
+        for ( rtl::Reference< SfxViewShell > pViewShell = SfxViewShell::GetFirst();
+              pViewShell.is();
+              pViewShell = SfxViewShell::GetNext( *pViewShell ) )
         {
             if ( pViewShell->GetName() == "BasicIDE" )
             {

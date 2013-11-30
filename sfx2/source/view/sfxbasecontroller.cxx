@@ -357,8 +357,8 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
     throw (RuntimeException, util::CloseVetoException)
 {
     SolarMutexGuard aGuard;
-    SfxViewShell* pShell = m_pController->GetViewShell_Impl();
-    if  ( m_pController !=  NULL &&  pShell )
+    rtl::Reference< SfxViewShell > pShell = m_pController->GetViewShell_Impl();
+    if  ( m_pController !=  NULL &&  pShell.is() )
     {
         sal_Bool bCanClose = (sal_Bool) pShell->PrepareClose( sal_False );
         if ( !bCanClose )
@@ -395,7 +395,7 @@ struct IMPL_SfxBaseController_DataContainer
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer    ;
     ::cppu::OInterfaceContainerHelper               m_aInterceptorContainer ;
     Reference< XStatusIndicator >           m_xIndicator            ;
-    SfxViewShell*                           m_pViewShell            ;
+    rtl::Reference< SfxViewShell >          m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     bool                                    m_bDisposing            ;
     sal_Bool                                m_bSuspendState         ;
@@ -403,7 +403,7 @@ struct IMPL_SfxBaseController_DataContainer
     Sequence< PropertyValue >               m_aCreationArgs         ;
 
     IMPL_SfxBaseController_DataContainer(   ::osl::Mutex&              aMutex      ,
-                                            SfxViewShell*       pViewShell  ,
+                                            rtl::Reference< SfxViewShell > pViewShell  ,
                                             SfxBaseController*  pController )
             :   m_xListener                     ( new IMPL_SfxBaseController_ListenerHelper( pController ) )
             ,   m_xCloseListener                ( new IMPL_SfxBaseController_CloseListenerHelper( pController ) )
@@ -439,10 +439,10 @@ IMPL_SfxBaseController_ListenerHelper::~IMPL_SfxBaseController_ListenerHelper()
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const frame::FrameActionEvent& aEvent ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
-    if  (
-            ( m_pController !=  NULL ) &&
-            ( aEvent.Frame  ==  m_pController->getFrame() ) &&
-            ( m_pController->GetViewShell_Impl() && m_pController->GetViewShell_Impl()->GetWindow() !=  NULL                                                    )
+    if  ( m_pController !=  NULL &&
+          aEvent.Frame  ==  m_pController->getFrame() &&
+          m_pController->GetViewShell_Impl().is() &&
+          m_pController->GetViewShell_Impl()->GetWindow() !=  NULL
         )
     {
         if ( aEvent.Action == frame::FrameAction_FRAME_UI_ACTIVATED )
@@ -472,7 +472,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const lang::Even
 //  SfxBaseController -> constructor
 //________________________________________________________________________________________________________
 DBG_NAME(sfx2_SfxBaseController)
-SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
+SfxBaseController::SfxBaseController( rtl::Reference< SfxViewShell > pViewShell )
     :   m_pData ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
 {
     DBG_CTOR(sfx2_SfxBaseController,NULL);
@@ -496,7 +496,7 @@ SfxBaseController::~SfxBaseController()
 Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( !m_pData->m_pViewShell )
+    if ( !m_pData->m_pViewShell.is() )
         throw DisposedException();
 
     return Reference< XWindow >( GetViewFrame_Impl().GetFrame().GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
@@ -505,7 +505,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
 OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
+    if ( !m_pData->m_pViewShell.is() || !m_pData->m_pViewShell->GetObjectShell() )
         throw DisposedException();
 
     const SfxObjectFactory& rDocFac( m_pData->m_pViewShell->GetObjectShell()->GetFactory() );
@@ -522,7 +522,7 @@ OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeExcep
 Sequence< PropertyValue > SAL_CALL SfxBaseController::getCreationArguments() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
+    if ( !m_pData->m_pViewShell.is() || !m_pData->m_pViewShell->GetObjectShell() )
         throw DisposedException();
 
     return m_pData->m_aCreationArgs;
@@ -536,7 +536,7 @@ void SfxBaseController::SetCreationArguments_Impl( const Sequence< PropertyValue
 
 SfxViewFrame& SfxBaseController::GetViewFrame_Impl() const
 {
-    ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
+    ENSURE_OR_THROW( m_pData->m_pViewShell.is(), "not to be called without a view shell" );
     SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame();
     ENSURE_OR_THROW( pActFrame, "a view shell without a view frame is pretty pathological" );
     return *pActFrame;
@@ -568,7 +568,7 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
         if ( xCloseable.is() )
             xCloseable->addCloseListener( m_pData->m_xCloseListener );
 
-        if ( m_pData->m_pViewShell )
+        if ( m_pData->m_pViewShell.is() )
         {
             ConnectSfxFrame_Impl( E_CONNECT );
             ShowInfoBars( );
@@ -586,7 +586,7 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
 
 sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel >& xModel ) throw( RuntimeException )
 {
-    if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
+    if ( m_pData->m_pViewShell.is() && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
     {
         // don't allow to reattach a model!
         OSL_FAIL("Can't reattach model!");
@@ -613,7 +613,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
 
     if ( bSuspend == sal_True )
     {
-        if ( !m_pData->m_pViewShell )
+        if ( !m_pData->m_pViewShell.is() )
         {
             m_pData->m_bSuspendState = sal_True;
             return sal_True;
@@ -647,7 +647,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
         if ( getFrame().is() )
             getFrame()->addFrameActionListener( m_pData->m_xListener ) ;
 
-        if ( m_pData->m_pViewShell )
+        if ( m_pData->m_pViewShell.is() )
         {
             ConnectSfxFrame_Impl( E_RECONNECT );
         }
@@ -666,7 +666,7 @@ uno::Any SfxBaseController::getViewData() throw( RuntimeException )
     uno::Any         aAny;
     OUString sData;
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         m_pData->m_pViewShell->WriteUserData( sData ) ;
         aAny <<= sData ;
@@ -682,7 +682,7 @@ uno::Any SfxBaseController::getViewData() throw( RuntimeException )
 void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         OUString sData;
         aValue >>= sData ;
@@ -707,7 +707,7 @@ Reference< frame::XFrame > SAL_CALL SfxBaseController::getFrame() throw( Runtime
 Reference< frame::XModel > SAL_CALL SfxBaseController::getModel() throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
-    return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : Reference < frame::XModel > () ;
+    return m_pData->m_pViewShell.is() ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : Reference < frame::XModel > () ;
 }
 
 //________________________________________________________________________________________________________
@@ -720,7 +720,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 {
     SolarMutexGuard aGuard;
     Reference< frame::XDispatch >  xDisp;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
         if ( !m_pData->m_bDisposing )
@@ -899,7 +899,7 @@ frame::BorderWidths SAL_CALL SfxBaseController::getBorder()
     frame::BorderWidths aResult;
 
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         SvBorder aBorder = m_pData->m_pViewShell->GetBorderPixel();
         aResult.Left = aBorder.Left();
@@ -929,7 +929,7 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
     throw ( RuntimeException )
 {
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         Rectangle aTmpRect = VCLRectangle( aPreliminaryRectangle );
         m_pData->m_pViewShell->QueryObjAreaPixel( aTmpRect );
@@ -980,7 +980,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
     if ( m_pData->m_pController && m_pData->m_pController->getFrame().is() )
         m_pData->m_pController->getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
 
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         SfxViewFrame* pFrame = m_pData->m_pViewShell->GetViewFrame() ;
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
@@ -1020,9 +1020,9 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
             attachFrame( aXFrame );
 
             m_pData->m_xListener->disposing( aObject );
-            SfxViewShell *pShell = m_pData->m_pViewShell;
-            m_pData->m_pViewShell = NULL;
-            if ( pFrame->GetViewShell() == pShell )
+            rtl::Reference< SfxViewShell > pShell = m_pData->m_pViewShell;
+            m_pData->m_pViewShell.clear();
+            if ( pFrame->GetViewShell().get() == pShell.get() )
             {
                 // Enter registrations only allowed if we are the owner!
                 if ( pFrame->GetFrame().OwnsBindings_Impl() )
@@ -1055,7 +1055,7 @@ void SAL_CALL SfxBaseController::removeEventListener( const Reference< lang::XEv
 void SfxBaseController::ReleaseShell_Impl()
 {
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
         Reference< frame::XModel > xModel = pDoc->GetModel();
@@ -1066,14 +1066,14 @@ void SfxBaseController::ReleaseShell_Impl()
             if ( xCloseable.is() )
                 xCloseable->removeCloseListener( m_pData->m_xCloseListener );
         }
-        m_pData->m_pViewShell = 0;
+        m_pData->m_pViewShell.clear();
 
         Reference < frame::XFrame > aXFrame;
         attachFrame( aXFrame );
     }
 }
 
-SfxViewShell* SfxBaseController::GetViewShell_Impl() const
+rtl::Reference< SfxViewShell > SfxBaseController::GetViewShell_Impl() const
 {
     return m_pData->m_pViewShell;
 }
@@ -1081,7 +1081,7 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 Reference< task::XStatusIndicator > SAL_CALL SfxBaseController::getStatusIndicator(  ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell && !m_pData->m_xIndicator.is() )
+    if ( m_pData->m_pViewShell.is() && !m_pData->m_xIndicator.is() )
         m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame().GetWorkWindow_Impl() );
     return m_pData->m_xIndicator;
 }
@@ -1092,7 +1092,7 @@ void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const Reference
     m_pData->m_aInterceptorContainer.addInterface( xInterceptor );
 
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
         m_pData->m_pViewShell->AddContextMenuInterceptor_Impl( xInterceptor );
 }
 
@@ -1102,7 +1102,7 @@ void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const Reference<
     m_pData->m_aInterceptorContainer.removeInterface( xInterceptor );
 
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
         m_pData->m_pViewShell->RemoveContextMenuInterceptor_Impl( xInterceptor );
 }
 
@@ -1170,7 +1170,7 @@ throw (RuntimeException)
     std::list< frame::DispatchInformation > aCmdList;
 
     SolarMutexGuard aGuard;
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
@@ -1229,7 +1229,7 @@ sal_Bool SfxBaseController::HasMouseClickListeners_Impl()
 
 void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 {
-    ENSURE_OR_THROW( m_pData->m_pViewShell, "not to be called without a view shell" );
+    ENSURE_OR_THROW( m_pData->m_pViewShell.is(), "not to be called without a view shell" );
     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
     ENSURE_OR_THROW( pViewFrame, "a view shell without a view frame is pretty pathological" );
 
@@ -1420,7 +1420,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
 void SfxBaseController::ShowInfoBars( )
 {
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
     {
         // CMIS verifications
         Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
@@ -1464,7 +1464,7 @@ void SfxBaseController::ShowInfoBars( )
 
 IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler )
 {
-    if ( m_pData->m_pViewShell )
+    if ( m_pData->m_pViewShell.is() )
         m_pData->m_pViewShell->GetObjectShell()->CheckOut( );
     return 0;
 }

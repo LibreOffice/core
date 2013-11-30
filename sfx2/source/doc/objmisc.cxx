@@ -1395,7 +1395,7 @@ void SfxObjectShell::PositionView_Impl()
     MarkData_Impl *pMark = Get_Impl()->pMarkData;
     if( pMark )
     {
-        SfxViewShell* pSh = pMark->pFrame->GetViewShell();
+        rtl::Reference< SfxViewShell > pSh = pMark->pFrame->GetViewShell();
         if( !pMark->aUserData.isEmpty() )
             pSh->ReadUserData( pMark->aUserData, sal_True );
         else if( !pMark->aMark.isEmpty() )

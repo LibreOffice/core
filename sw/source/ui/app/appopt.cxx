@@ -72,6 +72,10 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
+// TODO: move to rtl/ref.hxx
+#define REF_CAST( T, pObj ) \
+    ( pObj.is() && (pObj)->IsA( TYPE(T) ) ? (static_cast<T*>(pObj.get())) : 0 )
+
 SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 {
     bool bTextDialog = (nId == SID_SW_EDITOPTIONS);
@@ -80,13 +84,13 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
         SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
         // no MakeUsrPref, because only options from textdoks can be used here
-        SwView* pAppView = GetView();
-        if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
-            pAppView = 0;
-        if(pAppView)
+        rtl::Reference< SwView > pAppView = GetView();
+        if(pAppView.is() && pAppView->GetViewFrame() != SfxViewFrame::Current())
+            pAppView.clear();
+        if(pAppView.is())
         {
         // if Text then no WebView and vice versa
-            bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+            bool bWebView = 0 != REF_CAST(SwWebView, pAppView);
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
@@ -126,7 +130,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         pRet->Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
     }
 
-    if( pAppView )
+    if( pAppView.is() )
     {
         SwWrtShell& rWrtShell = pAppView->GetWrtShell();
 
@@ -169,26 +173,26 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
-    if( PTR_CAST( SwPagePreview, SfxViewShell::Current())!=0)
+    if( REF_CAST( SwPagePreview, SfxViewShell::Current())!=0)
     {
         SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, sal_True));
         pRet->Put(aBool);
     }
 
     FieldUnit eUnit = pPref->GetHScrollMetric();
-    if(pAppView)
+    if(pAppView.is())
         pAppView->GetHRulerMetric(eUnit);
     pRet->Put(SfxUInt16Item( FN_HSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit)));
 
     eUnit = pPref->GetVScrollMetric();
-    if(pAppView)
+    if(pAppView.is())
         pAppView->GetVRulerMetric(eUnit);
     pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit) ));
     pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(pPref->GetMetric()) ));
     pRet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, pPref->IsApplyCharUnit()));
     if(bTextDialog)
     {
-        if(pAppView)
+        if(pAppView.is())
         {
             const SvxTabStopItem& rDefTabs =
                     (const SvxTabStopItem&)pAppView->GetWrtShell().
@@ -216,7 +220,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     pRet->Put(aGridItem);
 
     // Options for PrintTabPage
-    const SwPrintData* pOpt = pAppView ?
+    const SwPrintData* pOpt = pAppView.is() ?
                         &pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
                         0;
 
@@ -240,13 +244,13 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
     bool bTextDialog = nId == SID_SW_EDITOPTIONS;
-    SwView* pAppView = GetView();
-    if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
+    rtl::Reference< SwView > pAppView = GetView();
+    if(pAppView.is() && pAppView->GetViewFrame() != SfxViewFrame::Current())
         pAppView = 0;
-    if(pAppView)
+    if(pAppView.is())
     {
         // the text dialog mustn't apply data to the web view and vice versa
-        bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+        bool bWebView = 0 != REF_CAST(SwWebView, pAppView);
         if(bWebView == bTextDialog)
             pAppView = 0;
     }
@@ -255,7 +259,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
 
     const SfxPoolItem* pItem;
-    SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
+    SfxBindings *pBindings = pAppView.is() ? &pAppView->GetViewFrame()->GetBindings()
                                  : NULL;
 
 
@@ -313,7 +317,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
         pPref->SetHScrollMetric(eUnit);
-        if(pAppView)
+        if(pAppView.is())
             pAppView->ChangeTabMetric(eUnit);
     }
 
@@ -322,7 +326,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
         pPref->SetVScrollMetric(eUnit);
-        if(pAppView)
+        if(pAppView.is())
             pAppView->ChangeVRulerMetric(eUnit);
     }
 
@@ -330,7 +334,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     {
         sal_uInt16 nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
         pPref->SetDefTab(nTabDist);
-        if(pAppView)
+        if(pAppView.is())
         {
             SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
             MakeDefTabs( nTabDist, aDefTabs );
@@ -382,7 +386,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
             const SwAddPrinterItem* pAddPrinterAttr = (const SwAddPrinterItem*)pItem;
             *pOpt = *pAddPrinterAttr;
 
-            if(pAppView)
+            if(pAppView.is())
                 pAppView->GetWrtShell().getIDocumentDeviceAccess()->setPrintData( *pOpt );
         }
 
@@ -395,7 +399,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
             pBindings->Invalidate(FN_SHADOWCURSOR);
     }
 
-    if( pAppView )
+    if( pAppView.is() )
     {
         SwWrtShell &rWrtSh = pAppView->GetWrtShell();
         const bool bAlignFormulas = rWrtSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
@@ -481,11 +485,11 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
                 if ( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }
-            SwView* pCurrView = GetView();
-            if(pCurrView)
+            rtl::Reference< SwView > pCurrView = GetView();
+            if(pCurrView.is())
             {
                 // if text then not WebView and vice versa
-                bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
+                bool bWebView = 0 != REF_CAST(SwWebView, pCurrView);
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {
@@ -512,8 +516,8 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             }
             if (pRet && (nId == RID_SW_TP_OPTSHDWCRSR || nId == RID_SW_TP_HTML_OPTSHDWCRSR))
             {
-                SwView* pCurrView = GetView();
-                if(pCurrView)
+                rtl::Reference< SwView > pCurrView = GetView();
+                if(pCurrView.is())
                 {
                     aSet.Put( SwWrtShellItem( SID_WRT_SHELL, pCurrView->GetWrtShellPtr() ) );
                     pRet->PageCreated(aSet);

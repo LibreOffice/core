@@ -213,9 +213,9 @@ public:
 
 class IdleTerminate : Timer
 {
-    Reference< XDesktop2 > m_xDesktop;
+    uno::Reference< XDesktop2 > m_xDesktop;
 public:
-    IdleTerminate (Reference< XDesktop2 > xDesktop)
+    IdleTerminate (uno::Reference< XDesktop2 > xDesktop)
     {
         m_xDesktop = xDesktop;
         Start();
@@ -257,7 +257,7 @@ void ShutdownIcon::deInitSystray()
 }
 
 
-ShutdownIcon::ShutdownIcon( const Reference< XComponentContext > & rxContext ) :
+ShutdownIcon::ShutdownIcon( const uno::Reference< XComponentContext > & rxContext ) :
     ShutdownIconServiceBase( m_aMutex ),
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
@@ -285,16 +285,16 @@ void ShutdownIcon::OpenURL( const OUString& aURL, const OUString& rTarget, const
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
-        Reference < XDispatchProvider > xDispatchProvider( getInstance()->m_xDesktop, UNO_QUERY );
+        uno::Reference < XDispatchProvider > xDispatchProvider( getInstance()->m_xDesktop, UNO_QUERY );
         if ( xDispatchProvider.is() )
         {
             com::sun::star::util::URL aDispatchURL;
             aDispatchURL.Complete = aURL;
 
-            Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+            uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
             try
             {
-                Reference< com::sun::star::frame::XDispatch > xDispatch;
+                uno::Reference< com::sun::star::frame::XDispatch > xDispatch;
 
                 xURLTransformer->parseStrict( aDispatchURL );
                 xDispatch = xDispatchProvider->queryDispatch( aDispatchURL, rTarget, 0 );
@@ -330,18 +330,18 @@ void ShutdownIcon::FromTemplate()
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
-        Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop ( getInstance()->m_xDesktop, UNO_QUERY);
-        Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+        uno::Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop ( getInstance()->m_xDesktop, UNO_QUERY);
+        uno::Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
         if ( !xFrame.is() )
-            xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+            xFrame = uno::Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
 
         URL aTargetURL;
         aTargetURL.Complete = "slot:5500";
-        Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+        uno::Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aTargetURL );
 
-        Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
-        Reference < ::com::sun::star::frame::XDispatch > xDisp;
+        uno::Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
+        uno::Reference < ::com::sun::star::frame::XDispatch > xDisp;
         if ( xProv.is() )
         {
             if (aTargetURL.Protocol == "slot:")
@@ -355,7 +355,7 @@ void ShutdownIcon::FromTemplate()
             PropertyValue* pArg = aArgs.getArray();
             pArg[0].Name = "Referer";
             pArg[0].Value <<= OUString("private:user");
-            Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
+            uno::Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
             {
                 EnterModalMode();
@@ -424,7 +424,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
     // use constructor for filling up filters automatically!
     if ( ERRCODE_NONE == pThis->m_pFileDlg->GetError() )
     {
-        Reference< XFilePicker >    xPicker = pThis->m_pFileDlg->GetFilePicker();
+        uno::Reference< XFilePicker >    xPicker = pThis->m_pFileDlg->GetFilePicker();
 
         try
         {
@@ -432,8 +432,8 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
             if ( xPicker.is() )
             {
 
-                Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
-                Reference < XFilterManager > xFilterManager ( xPicker, UNO_QUERY );
+                uno::Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
+                uno::Reference < XFilterManager > xFilterManager ( xPicker, UNO_QUERY );
 
                 Sequence< OUString >        sFiles = xPicker->getFiles();
                 int                         nFiles = sFiles.getLength();
@@ -441,7 +441,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 int                         nArgs=3;
                 Sequence< PropertyValue >   aArgs(3);
 
-                Reference < com::sun::star::task::XInteractionHandler2 > xInteraction(
+                uno::Reference < com::sun::star::task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
 
                 aArgs[0].Name = "InteractionHandler";
@@ -570,7 +570,7 @@ void ShutdownIcon::addTerminateListener()
     if (pInst->m_bListenForTermination)
         return;
 
-    Reference< XDesktop2 > xDesktop = pInst->m_xDesktop;
+    uno::Reference< XDesktop2 > xDesktop = pInst->m_xDesktop;
     if ( ! xDesktop.is())
         return;
 
@@ -586,7 +586,7 @@ void ShutdownIcon::terminateDesktop()
     if ( ! pInst)
         return;
 
-    Reference< XDesktop2 > xDesktop = pInst->m_xDesktop;
+    uno::Reference< XDesktop2 > xDesktop = pInst->m_xDesktop;
     if ( ! xDesktop.is())
         return;
 
@@ -595,7 +595,7 @@ void ShutdownIcon::terminateDesktop()
     xDesktop->removeTerminateListener( pInst );
 
     // terminate desktop only if no tasks exist
-    Reference< XIndexAccess > xTasks ( xDesktop->getFrames(), UNO_QUERY );
+    uno::Reference< XIndexAccess > xTasks ( xDesktop->getFrames(), UNO_QUERY );
     if( xTasks.is() && xTasks->getCount() < 1 )
         new IdleTerminate( xDesktop );
 
@@ -639,7 +639,7 @@ void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     m_pResMgr = pResMgr;
     aGuard.clear();
-    Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
+    uno::Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
     aGuard.reset();
     m_xDesktop = xDesktop;
 }

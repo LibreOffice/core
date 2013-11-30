@@ -118,7 +118,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     // DoDraw can only be called when no printing is done, otherwise
     // the printer may be turned off
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
-    if ( pFrame && pFrame->GetViewShell() &&
+    if ( pFrame && pFrame->GetViewShell().is() &&
          pFrame->GetViewShell()->GetPrinter() &&
          pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
          return ::boost::shared_ptr<GDIMetaFile>();

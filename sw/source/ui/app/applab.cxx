@@ -194,7 +194,13 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
         SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
-        SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
+#if OSL_DEBUG_LEVEL > 0
+        rtl::Reference< SwView > pNewView = dynamic_cast<SwView*>(pViewFrame->GetViewShell().get());
+        assert( (  pNewView.is() &&  pViewFrame->GetViewShell().is() ) ||
+                ( !pNewView.is() && !pViewFrame->GetViewShell().is() ));
+#else
+        rtl::Reference< SwView > pNewView = static_cast<SwView*>(pViewFrame->GetViewShell().get());
+#endif
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );// So that SelectShell is being called.
 
         // Set document title

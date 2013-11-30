@@ -1031,11 +1031,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
 
-SwView::~SwView()
+SwView::dispose()
 {
     GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
-    delete m_pPostItMgr;
-    m_pPostItMgr = 0;
+    FREEZ(m_pPostItMgr);
 
     m_bInDtor = sal_True;
     m_pEditWin->Hide(); // damit kein Paint Aerger machen kann!
@@ -1060,22 +1059,28 @@ SwView::~SwView()
     m_pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
-    delete m_pScrollFill;
-    delete m_pWrtShell;
+    FREEZ(m_pScrollFill);
+    FREEZ(m_pWrtShell);
     m_pWrtShell = 0;      // Set to 0, so that it is not accessable by the following dtors cannot.
-    m_pShell = 0;
-    delete m_pHScrollbar;
-    delete m_pVScrollbar;
-    delete m_pHRuler;
-    delete m_pVRuler;
-    delete m_pTogglePageBtn;
-    delete m_pPageUpBtn;
-    delete m_pNaviBtn;
-    delete m_pPageDownBtn;
-    delete m_pGlosHdl;
-    delete m_pViewImpl;
-    delete m_pEditWin;
-    delete m_pFormatClipboard;
+    m_pShell.clear();
+    m_pFormShell.clear();
+    FREEZ(m_pHScrollbar);
+    FREEZ(m_pVScrollbar);
+    FREEZ(m_pHRuler);
+    FREEZ(m_pVRuler);
+    FREEZ(m_pTogglePageBtn);
+    FREEZ(m_pPageUpBtn);
+    FREEZ(m_pNaviBtn);
+    FREEZ(m_pPageDownBtn);
+    FREEZ(m_pGlosHdl);
+    FREEZ(m_pViewImpl);
+    FREEZ(m_pEditWin);
+    FREEZ(m_pFormatClipboard);
+}
+
+SwView::~SwView()
+{
+    dispose();
 }
 
 SwDocShell* SwView::GetDocShell()

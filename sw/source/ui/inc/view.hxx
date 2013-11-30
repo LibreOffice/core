@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <svx/fmshell.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/editstat.hxx>
 #include "swdllapi.h"
@@ -192,8 +193,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwEditWin           *m_pEditWin;
     SwWrtShell          *m_pWrtShell;
 
-    SfxShell            *m_pShell;        // current SubShell at the dispatcher
-    FmFormShell         *m_pFormShell;    // DB-FormShell
+    rtl::Reference< SfxShell >    m_pShell;        // current SubShell at the dispatcher
+    rtl::Reference< FmFormShell > m_pFormShell;    // DB-FormShell
 
     SwView_Impl         *m_pViewImpl;     // Impl-data for UNO + Basic
 
@@ -373,8 +374,8 @@ protected:
     void            SetSelectionType(int nSet) { m_nSelectionType = nSet;}
 
     // for SwWebView
-    void            SetShell( SfxShell* pS )            { m_pShell = pS; }
-    void            SetFormShell( FmFormShell* pSh )    { m_pFormShell = pSh; }
+    void            SetShell( rtl::Reference< SfxShell > pS )            { m_pShell = pS; }
+    void            SetFormShell( rtl::Reference< FmFormShell > pSh )    { m_pFormShell = pSh; }
 
     virtual void    SelectShell();
 
@@ -589,11 +590,11 @@ public:
     OUString    GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
 
     // hand over Shell
-                 SfxShell       *GetCurShell()  { return m_pShell; }
+    rtl::Reference< SfxShell >   GetCurShell()  { return m_pShell; }
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
-    inline       FmFormShell    *GetFormShell() { return m_pFormShell; }
-    inline const FmFormShell    *GetFormShell() const { return m_pFormShell; }
+    inline       rtl::Reference< FmFormShell > GetFormShell() { return m_pFormShell; }
+    inline const rtl::Reference< FmFormShell > GetFormShell() const { return m_pFormShell; }
 
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = 0; }
@@ -628,7 +629,8 @@ public:
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
-    ~SwView();
+    virtual ~SwView();
+    virtual void dispose();
 
     void NotifyDBChanged();
 

@@ -1051,7 +1051,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(RuntimeE
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
         if ( pFrame )
         {
-            SvBorder aBorder = pFrame->GetBorderPixelImpl( pFrame->GetViewShell() );
+            SvBorder aBorder = pFrame->GetBorderPixelImpl( pFrame->GetViewShell().get() );
 
             Sequence< sal_Int32 > aBorderSeq(4);
             aBorderSeq[0] = aBorder.Left();
@@ -3247,7 +3247,7 @@ Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw
         if ( !pActFrame || pActFrame->GetObjectShell() != m_pData->m_pObjectShell )
             pActFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
 
-        if ( !pActFrame || !pActFrame->GetViewShell() )
+        if ( !pActFrame || !pActFrame->GetViewShell().is() )
             // currently no frame for this document at all or View is under construction
             return Reference < container::XIndexAccess >();
 
@@ -4311,8 +4311,8 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     {
         xPreviousController.clear();
     }
-    SfxViewShell* pOldViewShell = SfxViewShell::Get( xPreviousController );
-    OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell != NULL ),
+    rtl::Reference< SfxViewShell > pOldViewShell = SfxViewShell::Get( xPreviousController );
+    OSL_ENSURE( !xPreviousController.is() || ( pOldViewShell.is() ),
         "SfxBaseModel::createViewController: invalid old controller!" );
 
     // a guard which will clean up in case of failure
@@ -4324,9 +4324,9 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
 
     // delegate to SFX' view factory
     pViewFrame->GetBindings().ENTERREGISTRATIONS();
-    SfxViewShell* pViewShell = pViewFactory->CreateInstance( pViewFrame, pOldViewShell );
+    rtl::Reference< SfxViewShell > pViewShell = pViewFactory->CreateInstance( pViewFrame, pOldViewShell );
     pViewFrame->GetBindings().LEAVEREGISTRATIONS();
-    ENSURE_OR_THROW( pViewShell, "invalid view shell provided by factory" );
+    ENSURE_OR_THROW( pViewShell.is(), "invalid view shell provided by factory" );
 
     // by setting the ViewShell it is prevented that disposing the Controller will destroy this ViewFrame also
     pViewFrame->GetDispatcher()->SetDisableFlags( 0 );

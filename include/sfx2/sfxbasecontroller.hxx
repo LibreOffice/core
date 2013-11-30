@@ -97,7 +97,7 @@ public:
         @onerror    -
     */
 
-    SfxBaseController( SfxViewShell* pView ) ;
+    SfxBaseController( rtl::Reference< SfxViewShell > pView ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -352,7 +352,7 @@ public:
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
-    SfxViewShell* GetViewShell_Impl() const;
+    rtl::Reference< SfxViewShell > GetViewShell_Impl() const;
     SAL_DLLPRIVATE sal_Bool HandleEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE sal_Bool HasKeyListeners_Impl();
     SAL_DLLPRIVATE sal_Bool HasMouseClickListeners_Impl();

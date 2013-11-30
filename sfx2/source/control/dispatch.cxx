@@ -1948,8 +1948,8 @@ sal_Bool SfxDispatcher::_FindServer
             // excecuted on a container dispatcher without a IPClient.
             if ( !bIsServerShell )
             {
-                SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();
-                bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
+                rtl::Reference< SfxViewShell > pViewSh = pImp->pFrame->GetViewShell();
+                bIsServerShell = !pViewSh.is() || !pViewSh->GetUIActiveClient();
             }
 
             // Shell belongs to Container?

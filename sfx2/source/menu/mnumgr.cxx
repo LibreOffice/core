@@ -102,8 +102,8 @@ void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
 //-------------------------------------------------------------------------
 void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
 {
-    SfxViewShell *pView = pBindings->GetDispatcher()->GetFrame()->GetViewShell();
-    if ( pView && aVerbs.getLength() )
+    rtl::Reference< SfxViewShell > pView = pBindings->GetDispatcher()->GetFrame()->GetViewShell();
+    if ( pView.is() && aVerbs.getLength() )
     {
         SfxObjectShell* pDoc = pView->GetObjectShell();
         pMenu->InsertSeparator();

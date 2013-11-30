@@ -20,15 +20,16 @@
 #include <sfx2/app.hxx>
 #include "sfx2/viewfac.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <sfx2/viewsh.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxViewFactory)
 
-SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldSh )
+rtl::Reference< SfxViewShell > SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, rtl::Reference< SfxViewShell > pOldSh )
 {
     DBG_CHKTHIS(SfxViewFactory, 0);
-    return (*fnCreate)(pFrame, pOldSh);
+    return (*fnCreate)(pFrame, pOldSh.get());
 }
 
 OUString SfxViewFactory::GetLegacyViewName() const

@@ -128,7 +128,7 @@ public:
                             { nAdjustPosPixelLock++; }
     void                    UnlockAdjustPosSizePixel()
                             { nAdjustPosPixelLock--; }
-    void                    DoAdjustPosSizePixel( SfxViewShell * pSh,
+    void                    DoAdjustPosSizePixel( rtl::Reference< SfxViewShell > pSh,
                                         const Point &rPos, const Size &rSize );
     void                    Show();
     sal_Bool                    IsVisible() const;
@@ -196,7 +196,7 @@ public:
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE sal_Bool IsDowning_Impl() const;
-    SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );
+    SAL_DLLPRIVATE void SetViewShell_Impl( rtl::Reference< SfxViewShell > pVSh );
     SAL_DLLPRIVATE void ReleaseObjectShell_Impl();
 
     SAL_DLLPRIVATE void GetState_Impl( SfxItemSet &rSet );
@@ -255,7 +255,7 @@ private:
         @throws Exception
             if something goes wrong. The caller is responsible for handling this.
     */
-    SAL_DLLPRIVATE static SfxViewShell* LoadViewIntoFrame_Impl(
+    SAL_DLLPRIVATE static rtl::Reference< SfxViewShell > LoadViewIntoFrame_Impl(
                             const SfxObjectShell& i_rDoc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rLoadArgs,

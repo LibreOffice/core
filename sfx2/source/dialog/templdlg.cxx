@@ -2279,8 +2279,8 @@ void    SfxCommonTemplateDialog_Impl::ResetFocus()
     if(ISA(SfxTemplateDialog_Impl))
     {
         SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        SfxViewShell *pVu = pViewFrame->GetViewShell();
-        Window *pAppWin = pVu ? pVu->GetWindow(): 0;
+        rtl::Reference< SfxViewShell > pVu = pViewFrame->GetViewShell();
+        Window *pAppWin = pVu.is() ? pVu->GetWindow(): 0;
         if(pAppWin)
             pAppWin->GrabFocus();
     }

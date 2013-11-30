@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_SHELL_HXX
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
@@ -44,10 +45,8 @@ class SfxObjectShell;
 class SfxSlotPool;
 class SvGlobalName;
 
-class SfxShellObject;
 class SfxShell;
 struct SfxShell_Impl;
-class SfxShellObject;
 class SfxDispatcher;
 class SfxViewFrame;
 class SfxSlot;
@@ -60,6 +59,8 @@ namespace svl
 {
     class IUndoManager;
 }
+
+#define FREEZ(p) { delete (p); (p) = 0; }
 
 //====================================================================
 
@@ -148,26 +149,36 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 {
     friend class SfxObjectItem;
 
+    oslInterlockedCount         m_refCount;
     SfxShell_Impl*              pImp;
     SfxItemPool*                pPool;
     ::svl::IUndoManager*        pUndoMgr;
 
 private:
                                 SfxShell( const SfxShell & ); // internal
-    SfxShell&                                   operator = ( const SfxShell & ); // internal
+    SfxShell&                   operator = ( const SfxShell & ); // internal
 
 protected:
                                 SfxShell();
-                                SfxShell( SfxViewShell *pViewSh );
+                                SfxShell( rtl::Reference< SfxViewShell > pViewSh );
 
-    SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell* pView );
+    SAL_DLLPRIVATE void SetViewShell_Impl( rtl::Reference< SfxViewShell > pView );
     SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId );
-    SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
-    SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
 
 public:
                                 TYPEINFO();
     virtual                     ~SfxShell();
+    virtual void                dispose();
+
+    void acquire()
+    {
+        osl_atomic_increment( &m_refCount );
+    }
+    void release()
+    {
+        if (osl_atomic_decrement( &m_refCount ) == 0)
+            delete this;
+    }
 
     virtual SfxInterface*       GetInterface() const;
     static SfxInterface*        GetStaticInterface() { return 0; }
@@ -175,7 +186,7 @@ public:
     void                        SetName( const OUString &rName );
     const OUString&             GetName() const;
 
-    SfxViewShell*               GetViewShell() const;
+    rtl::Reference< SfxViewShell > GetViewShell() const;
 
     void                        CallExec( SfxExecFunc pFunc, SfxRequest &rReq )
                                 { (*pFunc)(this, rReq); }

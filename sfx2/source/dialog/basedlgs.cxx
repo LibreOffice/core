@@ -376,7 +376,7 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions ( TAB etc. )
-        if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
+        if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current().is() )
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;
@@ -467,7 +467,7 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions
-        if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
+        if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current().is() )
             // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;

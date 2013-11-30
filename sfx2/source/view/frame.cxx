@@ -358,7 +358,7 @@ void SfxFrame::GetViewData_Impl()
     // updateDescriptor) to save time.
 
     SfxViewFrame* pViewFrame = GetCurrentViewFrame();
-    if( pViewFrame && pViewFrame->GetViewShell() )
+    if( pViewFrame && pViewFrame->GetViewShell().is() )
     {
         const SfxMedium *pMed = GetCurrentDocument()->GetMedium();
         sal_Bool bReadOnly = pMed->GetOpenMode() == SFX_STREAM_READONLY;
@@ -475,7 +475,7 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();
-    if( pView && pView->GetViewShell() && pChildArr )
+    if( pView && pView->GetViewShell().is() && pChildArr )
     {
         sal_uInt16 nCount = pChildArr->size();
         for ( sal_uInt16 n=0; n<nCount; n++)
@@ -699,7 +699,7 @@ sal_Bool SfxFrame::HasComponent() const
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SfxFrame::GetController() const
 {
-    if ( pImp->pCurrentViewFrame && pImp->pCurrentViewFrame->GetViewShell() )
+    if ( pImp->pCurrentViewFrame && pImp->pCurrentViewFrame->GetViewShell().is() )
         return pImp->pCurrentViewFrame->GetViewShell()->GetController();
     else
         return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > ();
@@ -849,7 +849,8 @@ void SfxFrame::GrabFocusOnComponent_Impl()
     }
 
     Window* pFocusWindow = &GetWindow();
-    if ( GetCurrentViewFrame() && GetCurrentViewFrame()->GetViewShell() && GetCurrentViewFrame()->GetViewShell()->GetWindow() )
+    if ( GetCurrentViewFrame() && GetCurrentViewFrame()->GetViewShell().is() &&
+         GetCurrentViewFrame()->GetViewShell()->GetWindow() )
         pFocusWindow = GetCurrentViewFrame()->GetViewShell()->GetWindow();
 
     if( !pFocusWindow->HasChildPathFocus() )
@@ -886,7 +887,7 @@ void SfxFrame::Resize()
         {
             // check for IPClient that contains UIactive object or object that is currently UI activating
             SfxWorkWindow *pWork = GetWorkWindow_Impl();
-            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : 0;
+            SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell().is() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : 0;
             if ( pClient )
             {
                 uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );

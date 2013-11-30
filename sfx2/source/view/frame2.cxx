@@ -108,7 +108,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
+        if ( pView->GetViewShell().is() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
             OSL_TRACE("SfxFrame: GotFocus");
             pView->MakeActive_Impl( sal_False );
@@ -144,16 +144,16 @@ long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
     {
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
-        SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
-        if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
+        rtl::Reference< SfxViewShell > pShell = pView ? pView->GetViewShell() : NULL;
+        if ( pShell.is() && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
             return sal_True;
     }
     else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
     {
         Window* pWindow = rNEvt.GetWindow();
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
-        SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
-        if ( pShell )
+        rtl::Reference< SfxViewShell > pShell = pView ? pView->GetViewShell() : NULL;
+        if ( pShell.is() )
             if ( pWindow == pShell->GetWindow() || pShell->GetWindow()->IsChild( pWindow ) )
                 if ( pShell->HasMouseClickListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
                     return sal_True;
