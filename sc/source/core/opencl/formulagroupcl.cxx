@@ -2677,21 +2677,27 @@ void DynamicKernel::CreateKernel(void)
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
     const char *src = mFullProgramSrc.c_str();
-    static std::string lastKernelHash = "";
-    static cl_program lastProgram = NULL;
+    static std::string lastOneKernelHash = "";
+    static std::string lastSecondKernelHash = "";
+    static cl_program lastOneProgram = NULL;
+    static cl_program lastSecondProgram = NULL;
     std::string KernelHash = mKernelSignature+GetMD5();
-    if (lastKernelHash == KernelHash && lastProgram)
+    if (lastOneKernelHash == KernelHash && lastOneProgram)
     {
         std::cerr<<"cl_program cache hit: "<< KernelHash << "\n";
-        mpProgram = lastProgram;
+        mpProgram = lastOneProgram;
+    }
+    else if(lastSecondKernelHash == KernelHash && lastSecondProgram)
+    {
+        std::cerr<<"cl_program cache hit: "<< KernelHash << "\n";
+        mpProgram = lastSecondProgram;
     }
     else
     {   // doesn't match the last compiled formula.
 
-        if (lastProgram) {
-            std::cerr<<"Freeing last program: "<< GetMD5() << "\n";
-            clReleaseProgram(lastProgram);
-            lastProgram = NULL;
+        if (lastSecondProgram) {
+            std::cerr<<"Freeing lastsecond program: "<< GetMD5() << "\n";
+            clReleaseProgram(lastSecondProgram);
         }
         if (OpenclDevice::buildProgramFromBinary("",
                     &OpenclDevice::gpuEnv, KernelHash.c_str(), 0)) {
@@ -2710,8 +2716,10 @@ void DynamicKernel::CreateKernel(void)
             OpenclDevice::generatBinFromKernelSource(mpProgram,
                     (mKernelSignature+GetMD5()).c_str());
         }
-        lastKernelHash = KernelHash;
-        lastProgram = mpProgram;
+        lastSecondKernelHash = lastOneKernelHash;
+        lastSecondProgram = lastOneProgram;
+        lastOneKernelHash = KernelHash;
+        lastOneProgram = mpProgram;
     }
     mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
     if (err != CL_SUCCESS)
