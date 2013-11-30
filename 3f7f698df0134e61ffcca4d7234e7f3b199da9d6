@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///b0\u003d",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-11-30T16:18:08Z",
+      "side": 1,
+      "message": "IMHO the idea of setBlob is that it allows to \"treat\" big amounts of data without temporary copy of the whole data. As such, here I\u0027d rather make something like:\n\n  const size_t bufLen \u003d SAL_MAX_UINT16; // since that\u0027s the maximum supported anyway\n  boost::scoped_array\u003c char* \u003e buf (new char[bufLen]);\n  isc_create_blob2(..., );\n  while(nBytesWritten \u003c xBlob-\u003elength())\n  {\n      ...\n      isc_put_segment(m_statusVector,\n\t                               \u0026aBlobHandle,\n\t                               nWriteSize,\n\t                               xBlob.getBytes(nBytesWritten, nWriteSize).getConstArray());\n      ...\n  }",
+      "revId": "3f7f698df0134e61ffcca4d7234e7f3b199da9d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
