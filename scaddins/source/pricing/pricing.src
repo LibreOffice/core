@@ -308,7 +308,7 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
         };
         String 11 // description of parameter 5
         {
-            Text [ en-US ] = "Tower barrier (set to 0 for no lower barrier)";
+            Text [ en-US ] = "Lower barrier (set to 0 for no lower barrier)";
         };
 
         String 12 // name of parameter 6
