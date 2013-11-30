@@ -127,7 +127,6 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
-    OUString aColumnName;
     ::comphelper::UStringMixEqual aCase(bCase);
     vector<OUString> aColumnNames;
     vector<OUString> m_aTypeNames;
@@ -144,17 +143,13 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         {
             if ( nRowCount == 0)
             {
+                OUString aColumnName;
                 if ( bHasHeaderLine )
                 {
                     aColumnName = aHeaderLine.GetTokenSpecial(nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
-                    if ( !aColumnName.getLength() )
-                    {
-                        aColumnName = "C" + OUString::number(i+1);
-                    }
                 }
-                else
+                if ( aColumnName.isEmpty() )
                 {
-                    // no column name so ...
                     aColumnName = "C" + OUString::number(i+1);
                 }
                 aColumnNames.push_back(aColumnName);
