@@ -761,22 +761,13 @@ void OFlatTable::refreshHeader()
 // -----------------------------------------------------------------------------
 namespace
 {
-    template< typename Tp, typename Te> struct PairFirstLess
+    template< typename Tp, typename Te> struct RangeBefore
     {
         bool operator() (const Tp &p, const Te &e)
         {
-            return p.first < e;
+            assert(p.first <= p.second);
+            return p.second <= e;
         }
-#ifdef DBG_UTIL
-        bool operator() (const Te &e, const Tp &p)
-        {
-            return e < p.first;
-        }
-        bool operator() (const Tp &p1, const Tp &p2)
-        {
-            return p1.first < p2.first;
-        }
-#endif
     };
 }
 // -----------------------------------------------------------------------------
@@ -915,7 +906,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 vector< TRowPositionInFile >::const_iterator aFind = lower_bound(m_aRowPosToFilePos.begin(),
                                                                                  m_aRowPosToFilePos.end(),
                                                                                  nOffset,
-                                                                                 PairFirstLess< TRowPositionInFile, sal_Int32 >());
+                                                                                 RangeBefore< TRowPositionInFile, sal_Int32 >());
 
                 if(aFind == m_aRowPosToFilePos.end() || aFind->first != nOffset)
                     //invalid bookmark
