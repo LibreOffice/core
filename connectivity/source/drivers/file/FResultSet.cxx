@@ -1098,7 +1098,11 @@ sal_Bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 
                 else // Index must be further constructed
                 {
                     // set first on the last known row
-                    if (!m_pFileSet->get().empty())
+                    if (m_pFileSet->get().empty())
+                    {
+                        m_pTable->seekRow(IResultSetHelper::ABSOLUTE, 0, m_nFilePos);
+                    }
+                    else
                     {
                         m_aFileSetIter = m_pFileSet->get().end()-1;
                         m_pTable->seekRow(IResultSetHelper::BOOKMARK, *m_aFileSetIter, m_nFilePos);
