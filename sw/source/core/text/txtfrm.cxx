@@ -810,14 +810,6 @@ void SwTxtFrm::CalcLineSpace()
     }
 }
 
-//
-// SET_WRONG( nPos, nCnt, bMove )
-//
-#define SET_WRONG( nPos, nCnt, bMove ) \
-{ \
-    lcl_SetWrong( *this, nPos, nCnt, bMove ); \
-}
-
 static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, long nCnt, bool bMove )
 {
     if ( !rFrm.IsFollow() )
@@ -884,13 +876,6 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, long nCnt, bool bMove 
     }
 }
 
-//
-// SET_SCRIPT_INVAL( nPos )
-//
-
-#define SET_SCRIPT_INVAL( nPos )\
-    lcl_SetScriptInval( *this, nPos );
-
 static void lcl_SetScriptInval( SwTxtFrm& rFrm, sal_Int32 nPos )
 {
     if( rFrm.GetPara() )
@@ -933,7 +918,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             // Collection hat sich geaendert
             Prepare( PREP_CLEAR );
             _InvalidatePrt();
-            SET_WRONG( 0, STRING_LEN, false );
+            lcl_SetWrong( *this, 0, STRING_LEN, false );
             SetDerivedR2L( sal_False );
             CheckDirChange();
             // OD 09.12.2002 #105576# - Force complete paint due to existing
@@ -979,8 +964,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 else
                     _InvalidateRange( SwCharRange( nPos, nLen ), nLen );
             }
-            SET_WRONG( nPos, nLen, true )
-            SET_SCRIPT_INVAL( nPos )
+            lcl_SetWrong( *this, nPos, nLen, true );
+            lcl_SetScriptInval( *this, nPos );
             bSetFldsDirty = true;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, nLen );
@@ -990,8 +975,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             nPos = ((SwDelChr*)pNew)->nPos;
             InvalidateRange( SwCharRange( nPos, 1 ), -1 );
-            SET_WRONG( nPos, -1, true )
-            SET_SCRIPT_INVAL( nPos )
+            lcl_SetWrong( *this, nPos, -1, true );
+            lcl_SetScriptInval( *this, nPos );
             bSetFldsDirty = bRecalcFtnFlag = true;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, STRING_LEN );
@@ -1010,8 +995,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 else
                     InvalidateRange( SwCharRange( nPos, 1 ), m );
             }
-            SET_WRONG( nPos, m, true )
-            SET_SCRIPT_INVAL( nPos )
+            lcl_SetWrong( *this, nPos, m, true );
+            lcl_SetScriptInval( *this, nPos );
             bSetFldsDirty = bRecalcFtnFlag = true;
             if( HasFollow() )
                 lcl_ModifyOfst( this, nPos, nLen );
@@ -1038,8 +1023,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
-                    SET_WRONG( nPos, nPos + nLen, false )
-                    SET_SCRIPT_INVAL( nPos )
+                    lcl_SetWrong( *this, nPos, nPos + nLen, false );
+                    lcl_SetScriptInval( *this, nPos );
                 }
             }
 
@@ -1093,7 +1078,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             bSetFldsDirty = true;
             // ST2
             if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
-                SET_WRONG( nPos, nPos + 1, false )
+                lcl_SetWrong( *this, nPos, nPos + 1, false );
         }
         break;
         case RES_TXTATR_FTN :
@@ -1223,8 +1208,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if ( SFX_ITEM_SET ==
                  rNewSet.GetItemState( RES_TXTATR_CHARFMT, sal_False ) )
             {
-                SET_WRONG( 0, STRING_LEN, false )
-                SET_SCRIPT_INVAL( 0 )
+                lcl_SetWrong( *this, 0, STRING_LEN, false );
+                lcl_SetScriptInval( *this, 0 );
             }
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_LANGUAGE, sal_False ) ||
@@ -1232,14 +1217,14 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                       rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, sal_False ) ||
                       SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, sal_False ) )
-                SET_WRONG( 0, STRING_LEN, false )
+                lcl_SetWrong( *this, 0, STRING_LEN, false );
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_FONT, sal_False ) ||
                       SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_CJK_FONT, sal_False ) ||
                       SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_FONT, sal_False ) )
-                SET_SCRIPT_INVAL( 0 )
+                lcl_SetScriptInval( *this, 0 );
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_FRAMEDIR, sal_False ) )
             {
