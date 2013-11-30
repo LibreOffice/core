@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///cg\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-11-30T07:52:12Z",
+      "side": 1,
+      "message": "This is a blacklist, so don\u0027t add your test file here or it won\u0027t be tested.",
+      "revId": "1ebc3457ee03b1345ffde6b9124104fe22d8845b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
