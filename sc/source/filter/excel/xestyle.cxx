@@ -3021,18 +3021,18 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_dxf, FSEND );
 
-    if (mpAlign)
-        mpAlign->SaveXml(rStrm);
-    if (mpBorder)
-        mpBorder->SaveXml(rStrm);
     if (mpFont)
         mpFont->SaveXml(rStrm);
     if (mpNumberFmt)
         mpNumberFmt->SaveXml(rStrm);
-    if (mpProt)
-        mpProt->SaveXml(rStrm);
     if (mpColor)
         mpColor->SaveXml(rStrm);
+    if (mpAlign)
+        mpAlign->SaveXml(rStrm);
+    if (mpBorder)
+        mpBorder->SaveXml(rStrm);
+    if (mpProt)
+        mpProt->SaveXml(rStrm);
     rStyleSheet->endElement( XML_dxf );
 }
 
