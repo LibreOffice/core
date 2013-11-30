@@ -519,7 +519,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
             XML_sheet,  XclXmlUtils::ToPsz( true ),
-            XML_password, sHash.getStr(),
+            XML_password, sHash.isEmpty()? NULL : sHash.getStr(),
             XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? NULL : XclXmlUtils::ToPsz( true ),
             XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? NULL : XclXmlUtils::ToPsz( true ),
             XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? XclXmlUtils::ToPsz( false ) : NULL,
