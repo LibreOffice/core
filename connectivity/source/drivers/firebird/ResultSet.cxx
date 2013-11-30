@@ -24,6 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <connectivity/BlobHelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <propertyids.hxx>
 #include <rtl/string.hxx>
@@ -667,12 +668,101 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    // TODO: CLOB etc. should be valid here too, but we probably want some more
-    // cleverness around this.
     ISC_QUAD* pBlobID = safelyRetrieveValue< ISC_QUAD* >(columnIndex, SQL_BLOB);
-    if (!pBlobID)
+
+    if (pBlobID == 0)
         return 0;
-    return m_pConnection->createBlob(pBlobID);
+
+    // Ordinary blobs aren't seekable, hence we simply read all the data in at once.
+    // TODO: have a separate seekable StreamBlob implementation for streamable
+    // blobs, however that seems to be not very well documented currently.
+    // The StreamBlob could reuse the previous incomplete Blob implementation,
+    // and has to be created via Connection since it is associated with transactions
+    // rather than with specific result-sets (i.e. should be treated like a
+    // statement/result-set by Connection).
+//     return m_pConnection->createBlob(pBlobID);
+    // TODO: add the streamable blob detection here.
+    isc_blob_handle aBlobHandle = 0;
+
+    ISC_STATUS aErr;
+
+    aErr = isc_open_blob2(m_statusVector,
+                          &m_pConnection->getDBHandle(),
+                          &m_pConnection->getTransaction(),
+                          &aBlobHandle,
+                          pBlobID,
+                          0,
+                          NULL);
+    if (aErr)
+        evaluateStatusVector(m_statusVector, "isc_open_blob2", *this);
+
+
+    char aBlobItems[] = {
+        isc_info_blob_total_length
+    };
+    char aResultBuffer[20];
+
+    aErr = isc_blob_info(m_statusVector,
+                         &aBlobHandle,
+                         sizeof(aBlobItems),
+                         aBlobItems,
+                         sizeof(aResultBuffer),
+                         aResultBuffer);
+
+    if (aErr)
+        evaluateStatusVector(m_statusVector, "isc_blob_info", *this);
+
+    sal_uInt64 nTotalLength = 0;
+    if (*aResultBuffer == isc_info_blob_total_length)
+    {
+        short aResultLength = (short) isc_vax_integer(aResultBuffer+1, 2);
+        for (int i = 0; i < 20; i++)
+        nTotalLength = isc_vax_integer(aResultBuffer+3, aResultLength);
+    }
+
+    if (nTotalLength == 0)
+        return 0;
+
+
+    uno::Sequence< sal_Int8 > aData = uno::Sequence< sal_Int8 >(nTotalLength);
+
+    sal_uInt64 nBytesReadTotal = 0;
+
+    do
+    {
+        unsigned short nBytesRead = 0; // The amount read in an individual isc_get_segment call
+        sal_uInt64 nDataRemaining = nTotalLength - nBytesReadTotal;
+        sal_uInt16 nReadSize = (nDataRemaining > SAL_MAX_UINT16) ? SAL_MAX_UINT16 : nDataRemaining;
+        aErr = isc_get_segment(m_statusVector,
+                               &aBlobHandle,
+                               &nBytesRead,
+                               nReadSize,
+                               (char*) aData.getArray() + nBytesReadTotal);
+        nBytesReadTotal += nBytesRead;
+    }
+    while (aErr == 0 || m_statusVector[1] == isc_segment);
+    // aErr == 0 indicates entire segment read successfully
+    // m_statusVector[1] == isc_segment indicates part of segment read successfully
+    // (i.e. we can read again to get more of the current segment)
+    // However given that we read the max segment size (SAL_MAX_UINT16)
+    // this shouldn't happen to us.
+
+    // aErr == isc_segstr_eof indicates we successfully read the whole blob
+    if (aErr != isc_segstr_eof)
+    {
+        evaluateStatusVector(m_statusVector, "isc_get_segment", *this);
+        return 0;
+    }
+
+
+    aErr = isc_close_blob(m_statusVector,
+                          &aBlobHandle);
+    if (aErr)
+    {
+        evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
+    }
+
+    return new BlobHelper(aData);
 }
 // -------------------------------------------------------------------------
 
