@@ -757,9 +757,10 @@ void OFlatTable::refreshHeader()
 // -----------------------------------------------------------------------------
 namespace
 {
-    template< typename Tp, typename Te> bool pairFirstLess(const Tp &p, const Te &e)
+    template< typename Tp, typename Te> bool RangeBefore(const Tp &p, const Te &e)
     {
-        return p.first < e;
+        assert(p.first <= p.second);
+        return p.second <= e;
     }
 }
 // -----------------------------------------------------------------------------
@@ -898,7 +899,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 vector< TRowPositionInFile >::const_iterator aFind = lower_bound(m_aRowPosToFilePos.begin(),
                                                                                  m_aRowPosToFilePos.end(),
                                                                                  nOffset,
-                                                                                 pairFirstLess< TRowPositionInFile, sal_Int32 >);
+                                                                                 RangeBefore< TRowPositionInFile, sal_Int32 >);
 
                 if(aFind == m_aRowPosToFilePos.end() || aFind->first != nOffset)
                     //invalid bookmark
