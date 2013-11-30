@@ -1138,7 +1138,10 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
         {
             SvStream*   pStream = utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
             if( pStream )
+            {
                 GraphicConverter::Import( *pStream, aGraphic );
+                delete pStream;
+            }
         }
 
         return GraphicObject( aGraphic );
