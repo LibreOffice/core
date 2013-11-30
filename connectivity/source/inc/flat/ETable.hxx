@@ -65,7 +65,7 @@ namespace connectivity
                                              const sal_Unicode cDecimalDelimiter, const sal_Unicode cThousandDelimiter, const CharClass& aCharClass);
             OFlatConnection* getFlatConnection()
             {
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 0
                 OFlatConnection* pConnection = dynamic_cast<OFlatConnection*>(m_pConnection);
                 assert(pConnection);
 #else
