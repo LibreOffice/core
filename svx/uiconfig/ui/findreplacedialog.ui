@@ -443,7 +443,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkButton" id="component1">
-                            <property name="label">component button 1</property>
+                            <property name="label" translatable="no">component button 1</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="no_show_all">True</property>
@@ -457,7 +457,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="component2">
-                            <property name="label">component button 2</property>
+                            <property name="label" translatable="no">component button 2</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="no_show_all">True</property>
@@ -477,7 +477,7 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label">component label</property>
+                    <property name="label" translatable="no">component label</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>

@@ -115,7 +115,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="button1">
-                        <property name="label">layoutdetail-forheight</property>
+                        <property name="label" translatable="no">layoutdetail-forheight</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>

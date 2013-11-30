@@ -251,7 +251,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box0</property>
                                   </object>
@@ -282,7 +282,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box2</property>
                                   </object>
@@ -298,7 +298,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box4</property>
                                   </object>
@@ -314,7 +314,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box6</property>
                                   </object>
@@ -330,7 +330,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box8</property>
                                   </object>
@@ -422,7 +422,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box1</property>
                                   </object>
@@ -453,7 +453,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box3</property>
                                   </object>
@@ -469,7 +469,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box5</property>
                                   </object>
@@ -485,7 +485,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box7</property>
                                   </object>
@@ -501,7 +501,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label">label</property>
+                                    <property name="label" translatable="no">label</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">box9</property>
                                   </object>

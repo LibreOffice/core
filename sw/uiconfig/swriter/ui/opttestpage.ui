@@ -29,7 +29,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="unused">
-                    <property name="label">unused</property>
+                    <property name="label" translatable="no">unused</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -45,7 +45,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="dynamic">
-                    <property name="label">dynamic</property>
+                    <property name="label" translatable="no">dynamic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -61,7 +61,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="nocalm">
-                    <property name="label">No calm</property>
+                    <property name="label" translatable="no">No calm</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -77,7 +77,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="wysiwygdbg">
-                    <property name="label">WYSIWYG debug</property>
+                    <property name="label" translatable="no">WYSIWYG debug</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -93,7 +93,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="winformat">
-                    <property name="label">win format</property>
+                    <property name="label" translatable="no">win format</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -109,7 +109,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="noscreenadj">
-                    <property name="label">No screen adj</property>
+                    <property name="label" translatable="no">No screen adj</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -125,7 +125,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="noscroll">
-                    <property name="label">No Scroll</property>
+                    <property name="label" translatable="no">No Scroll</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -141,7 +141,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="AutoFormatByInput">
-                    <property name="label">AutoFormat by Input</property>
+                    <property name="label" translatable="no">AutoFormat by Input</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -157,7 +157,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="DrawingLayerNotLoading">
-                    <property name="label">DrawingLayerNotLoading</property>
+                    <property name="label" translatable="no">DrawingLayerNotLoading</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -173,7 +173,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="noidle">
-                    <property name="label">No idle format</property>
+                    <property name="label" translatable="no">No idle format</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -195,7 +195,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">Settings only for testpurposes</property>
+            <property name="label" translatable="no">Settings only for testpurposes</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
