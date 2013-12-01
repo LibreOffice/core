@@ -477,7 +477,7 @@ void NumericFormatter::ImplInit()
     mnFieldValue        = 0;
     mnLastValue         = 0;
     mnMin               = 0;
-    mnMax               = 0x7FFFFFFFFFFFFFFFLL;
+    mnMax               = SAL_MAX_INT64;
     mnCorrectedValue    = 0;
     mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
@@ -562,9 +562,9 @@ void NumericFormatter::SetMax( sal_Int64 nNewMax )
 
 // -----------------------------------------------------------------------
 
-void NumericFormatter::SetUseThousandSep( sal_Bool b )
+void NumericFormatter::SetUseThousandSep( sal_Bool bValue )
 {
-    mbThousandSep = b;
+    mbThousandSep = bValue;
     ReformatAll();
 }
 
@@ -686,13 +686,13 @@ sal_Int64 NumericFormatter::Denormalize( sal_Int64 nValue ) const
 
     if( nValue < 0 )
     {
-        sal_Int64 nHalf = nFactor/2;
-        return ((nValue-nHalf) / nFactor );
+        sal_Int64 nHalf = nFactor / 2;
+        return ((nValue - nHalf) / nFactor );
     }
     else
     {
-        sal_Int64 nHalf = nFactor/2;
-        return ((nValue+nHalf) / nFactor );
+        sal_Int64 nHalf = nFactor / 2;
+        return ((nValue + nHalf) / nFactor );
     }
 }
 
@@ -1458,15 +1458,15 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
-    // Zahlenwert holen
+    // Get value
     sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
         return false;
 
-    // Einheit rausfinden
+    // Determine unit
     FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
 
-    // Einheiten umrechnen
+    // Recalculate unit
     // caution: conversion to double loses precision
     rValue = MetricField::ConvertDoubleValue( (double)nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit );
 
