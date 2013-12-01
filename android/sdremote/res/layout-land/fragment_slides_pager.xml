@@ -16,11 +16,60 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<android.support.v4.view.ViewPager
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pager_slides"
-    android:layout_gravity="center"
-    android:paddingTop="@dimen/padding_slides_pager"
-    android:paddingBottom="@dimen/padding_slides_pager"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:gravity="center"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_slides"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/layout_notes"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_slides_pager"
+        android:paddingRight="@dimen/padding_slides_pager"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/SectionHeader"
+            android:text="@string/header_notes"
+            android:paddingTop="@dimen/padding_header"/>
+
+        <ScrollView
+            android:id="@+id/scroll_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextSwitcher
+                android:id="@+id/text_switcher_notes"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out"
+                android:measureAllChildren="false"
+                android:paddingTop="@dimen/padding_slide_notes"
+                android:paddingLeft="@dimen/padding_slide_notes"
+                android:paddingRight="@dimen/padding_slide_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </TextSwitcher>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>
