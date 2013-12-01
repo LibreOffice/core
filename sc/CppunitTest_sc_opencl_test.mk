@@ -37,7 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_opencl_test, \
     salhelper \
     sax \
     sc \
-    scopencl \
+    $(if $(ENABLE_OPENCL),scopencl) \
     scqahelper \
     sfx \
     sot \
