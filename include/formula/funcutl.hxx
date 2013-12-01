@@ -32,74 +32,82 @@ class IControlReferenceHandler;
 class FORMULA_DLLPUBLIC RefEdit : public Edit
 {
 private:
-    Timer               aTimer;
-    IControlReferenceHandler*      pAnyRefDlg;         // parent dialog
-    Window*             pLabelWidget;
+    Timer                     aTimer;
+    IControlReferenceHandler* pAnyRefDlg; // parent dialog
+    Window*                   pLabelWidget;
 
     DECL_LINK( UpdateHdl, void* );
 
 protected:
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
+    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void GetFocus();
+    virtual void LoseFocus();
 
 public:
-                        RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
-                            Window* pShrinkModeLabel, const ResId& rResId );
-                        RefEdit( Window* _pParent, Window* pShrinkModeLabel,
-                            WinBits nStyle = WB_BORDER );
-    virtual             ~RefEdit();
+    RefEdit( Window* _pParent,IControlReferenceHandler* pParent, Window* pShrinkModeLabel, const ResId& rResId );
+    RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
-    void                SetRefString( const OUString& rStr );
+    virtual ~RefEdit();
+
+    void SetRefString( const OUString& rStr );
 
     /**
      * Flag reference valid or invalid, which in turn changes the visual
      * appearance of the control accordingly.
      */
-    void                SetRefValid(bool bValid);
+    void SetRefValid(bool bValid);
 
     using Edit::SetText;
-    void                SetText( const OUString& rStr );
-    virtual void        Modify();
 
-    void                StartUpdateData();
+    void         SetText( const OUString& rStr );
+    virtual void Modify();
 
-    void                SetReferences( IControlReferenceHandler* pDlg, Window *pLabelWidget );
-    IControlReferenceHandler* GetRefDialog() { return pAnyRefDlg; }
-    Window*             GetLabelWidgetForShrinkMode() { return pLabelWidget; }
+    void         StartUpdateData();
+
+    void         SetReferences( IControlReferenceHandler* pDlg, Window *pLabelWidget );
+
+    IControlReferenceHandler* GetRefDialog()
+    {
+        return pAnyRefDlg;
+    }
+
+    Window*      GetLabelWidgetForShrinkMode()
+    {
+        return pLabelWidget;
+    }
 };
 
-
-//============================================================================
 
 class FORMULA_DLLPUBLIC RefButton : public ImageButton
 {
 private:
-    Image               aImgRefStart;   /// Start reference input
-    Image               aImgRefDone;    /// Stop reference input
-    OUString            aShrinkQuickHelp;
-    OUString            aExpandQuickHelp;
-    IControlReferenceHandler*      pAnyRefDlg;     // parent dialog
-    RefEdit*            pRefEdit;       // zugeordnetes Edit-Control
+    Image                     aImgRefStart; // Start reference input
+    Image                     aImgRefDone;  // Stop reference input
+    OUString                  aShrinkQuickHelp;
+    OUString                  aExpandQuickHelp;
+    IControlReferenceHandler* pAnyRefDlg;   // parent dialog
+    RefEdit*                  pRefEdit;     // zugeordnetes Edit-Control
 
 protected:
-    virtual void        Click();
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
+    virtual void Click();
+    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void GetFocus();
+    virtual void LoseFocus();
 
 public:
-                        RefButton(Window* _pParent, const ResId& rResId);
-                        RefButton(Window* _pParent, WinBits nStyle = 0);
-                        RefButton(Window* _pParent, const ResId& rResId,
-                                  RefEdit* pEdit, IControlReferenceHandler* pDlg);
+    RefButton(Window* _pParent, const ResId& rResId);
+    RefButton(Window* _pParent, WinBits nStyle = 0);
+    RefButton(Window* _pParent, const ResId& rResId,
+              RefEdit* pEdit,   IControlReferenceHandler* pDlg);
 
-    void                SetReferences( IControlReferenceHandler* pDlg,
-                                       RefEdit* pEdit );
+    void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
 
-    void                SetStartImage();
-    void                SetEndImage();
-    void                DoRef() { Click(); }
+    void SetStartImage();
+    void SetEndImage();
+    void DoRef()
+    {
+        Click();
+    }
 };
 
 } // formula
