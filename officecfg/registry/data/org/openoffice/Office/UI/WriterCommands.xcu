@@ -1576,7 +1576,7 @@
       </node>
       <node oor:name=".uno:ShiftBackspace" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Backspace</value>
+          <value xml:lang="en-US">Shift+Backspace</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectWord" oor:op="replace">
