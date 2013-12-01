@@ -2335,9 +2335,9 @@ Reference< XCoordinateSystem > XclImpChType::CreateCoordSystem( bool b3dChart ) 
     if( maTypeInfo.mbPolarCoordSystem )
     {
         if( b3dChart )
-            xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
-        else
             xCoordSystem = css::chart2::PolarCoordinateSystem3d::create(xContext);
+        else
+            xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
     }
     else
     {
