@@ -3942,6 +3942,7 @@ StackVar ScInterpreter::Interpret()
                 case ocPhi              : ScPhi();                      break;
                 case ocGauss            : ScGauss();                    break;
                 case ocStdNormDist      : ScStdNormDist();              break;
+                case ocStdNormDist_MS   : ScStdNormDist_MS();           break;
                 case ocFisher           : ScFisher();                   break;
                 case ocFisherInv        : ScFisherInv();                break;
                 case ocIsEmpty          : ScIsEmpty();                  break;
@@ -4098,7 +4099,8 @@ StackVar ScInterpreter::Interpret()
                 case ocMatTrans         : ScMatTrans();                 break;
                 case ocMatRef           : ScMatRef();                   break;
                 case ocB                : ScB();                        break;
-                case ocNormDist         : ScNormDist();                 break;
+                case ocNormDist         : ScNormDist( 3 );              break;
+                case ocNormDist_MS      : ScNormDist( 4 );              break;
                 case ocExpDist          :
                 case ocExpDist_MS       : ScExpDist();                  break;
                 case ocBinomDist        :
@@ -4111,7 +4113,8 @@ StackVar ScInterpreter::Interpret()
                 case ocVariationen2     : ScVariationen2();             break;
                 case ocHypGeomDist      : ScHypGeomDist();              break;
                 case ocHypGeomDist_MS   : ScHypGeomDist_MS();           break;
-                case ocLogNormDist      : ScLogNormDist();              break;
+                case ocLogNormDist      : ScLogNormDist( 3 );           break;
+                case ocLogNormDist_MS   : ScLogNormDist( 4 );           break;
                 case ocTDist            : ScTDist();                    break;
                 case ocFDist            :
                 case ocFDist_RT         : ScFDist();                    break;
@@ -4148,8 +4151,10 @@ StackVar ScInterpreter::Interpret()
                 case ocSmall            : ScSmall();                    break;
                 case ocFrequency        : ScFrequency();                break;
                 case ocQuartile         : ScQuartile();                 break;
-                case ocNormInv          : ScNormInv();                  break;
-                case ocSNormInv         : ScSNormInv();                 break;
+                case ocNormInv          :
+                case ocNormInv_MS       : ScNormInv();                  break;
+                case ocSNormInv         :
+                case ocSNormInv_MS      : ScSNormInv();                 break;
                 case ocConfidence       :
                 case ocConfidence_N     : ScConfidence();               break;
                 case ocConfidence_T     : ScConfidenceT();              break;
@@ -4186,7 +4191,8 @@ StackVar ScInterpreter::Interpret()
                 case ocFInv             :
                 case ocFInv_RT          : ScFInv();                     break;
                 case ocFInv_LT          : ScFInv_LT();                  break;
-                case ocLogInv           : ScLogNormInv();               break;
+                case ocLogInv           :
+                case ocLogInv_MS        : ScLogNormInv();               break;
                 case ocBetaDist         : ScBetaDist();                 break;
                 case ocBetaDist_MS      : ScBetaDist_MS();              break;
                 case ocBetaInv          :

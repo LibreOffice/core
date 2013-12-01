@@ -707,5 +707,11 @@
 #define HID_FUNC_GAMMADIST_MS                                   "SC_HID_FUNC_GAMMADIST_MS"
 #define HID_FUNC_GAMMAINV_MS                                    "SC_HID_FUNC_GAMMAINV_MS"
 #define HID_FUNC_GAMMALN_MS                                     "SC_HID_FUNC_GAMMALN_MS"
+#define HID_FUNC_LOGNORMDIST_MS                                 "SC_HID_FUNC_LOGNORMDIST_MS"
+#define HID_FUNC_LOGINV_MS                                      "SC_HID_FUNC_LOGINV_MS"
+#define HID_FUNC_NORMDIST_MS                                    "SC_HID_FUNC_NORMDIST_MS"
+#define HID_FUNC_NORMINV_MS                                     "SC_HID_FUNC_NORMINV_MS"
+#define HID_FUNC_STD_NORMDIST_MS                                "SC_HID_FUNC_STD_NORMDIST_MS"
+#define HID_FUNC_STD_NORMINV_MS                                 "SC_HID_FUNC_STD_NORMINV_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

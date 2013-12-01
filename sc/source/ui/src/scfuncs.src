@@ -6383,6 +6383,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
+     // -=*# Resource for function NORM.DIST #*=-
+    Resource SC_OPCODE_NORM_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the normal distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_NORMDIST_MS );
+            4;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the normal distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Mean" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The mean value. The mean value of the normal distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "STDEV" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Standard deviation. The standard deviation of the normal distribution." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "C" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
+        };
+    };
      // -=*# Resource for function NORMINV #*=-
     Resource SC_OPCODE_NORM_INV
     {
@@ -6395,6 +6443,46 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_NORMINV );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse normal distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "mean" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The mean value. The mean value of the normal distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "STDEV" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Standard deviation. The standard deviation of the normal distribution." ;
+        };
+    };
+     // -=*# Resource for function NORM.INV #*=-
+    Resource SC_OPCODE_NORM_INV_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse normal distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_NORMINV_MS );
             3;  0;  0;  0;
             0;
         };
@@ -6447,6 +6535,38 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The value for which the standard normal distribution is to be calculated." ;
         };
     };
+     // -=*# Resource for function NORM.S.DIST #*=-
+    Resource SC_OPCODE_STD_NORM_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "The values of the standard normal cumulative distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_STD_NORMDIST_MS );
+            2;  0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the standard normal distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "Cumulative" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
+        };
+    };
      // -=*# Resource for function STANDNORMINV #*=-
     Resource SC_OPCODE_S_NORM_INV
     {
@@ -6459,6 +6579,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_STANDNORMINV );
+            1;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse standard normal distribution is to be calculated." ;
+        };
+    };
+     // -=*# Resource for function NORM.S.INV #*=-
+    Resource SC_OPCODE_S_NORM_INV_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse standard normal distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_STD_NORMINV_MS );
             1;  0;
             0;
         };
@@ -6519,8 +6663,96 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
+     // -=*# Resource for function LOGNORM.DIST #*=-
+    Resource SC_OPCODE_LOG_NORM_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the log normal distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_LOGNORMDIST_MS );
+            4;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the log normal distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "mean" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The mean value of the log normal distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "STDEV" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The standard deviation of the log normal distribution." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US] = "Cumulative";
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
+        };
+    };
      // -=*# Resource for function LOGINV #*=-
     Resource SC_OPCODE_LOG_INV
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the inverse of the lognormal distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_LOGINV );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse log normal distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "mean" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Mean value. The mean value of the log normal distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "STDEV" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Standard deviation. The standard deviation of the log normal distribution." ;
+        };
+    };
+     // -=*# Resource for function LOGNORM.INV #*=-
+    Resource SC_OPCODE_LOG_INV_MS
     {
         String 1 // Description
         {

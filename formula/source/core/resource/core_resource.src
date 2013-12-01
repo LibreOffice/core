@@ -137,9 +137,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_EVEN { Text = "EVEN" ; };
     String SC_OPCODE_ODD { Text = "ODD" ; };
     String SC_OPCODE_STD_NORM_DIST { Text = "LEGACY.NORMSDIST" ; };
+    String SC_OPCODE_STD_NORM_DIST_MS { Text = "COM.MICROSOFT.NORM.S.DIST" ; };
     String SC_OPCODE_FISHER { Text = "FISHER" ; };
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "LEGACY.NORMSINV" ; };
+    String SC_OPCODE_S_NORM_INV_MS { Text = "COM.MICROSOFT.NORM.S.INV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "COM.MICROSOFT.GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ORG.OPENOFFICE.ERRORTYPE" ; };
@@ -195,6 +197,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ST_DEV_S { Text = "COM.MICROSOFT.STDEV.S" ; };
     String SC_OPCODE_B { Text = "BINOM.DIST.RANGE" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
+    String SC_OPCODE_NORM_DIST_MS { Text = "COM.MICROSOFT.NORM.DIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
     String SC_OPCODE_EXP_DIST_MS { Text = "COM.MICROSOFT.EXPON.DIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
@@ -286,6 +289,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
     String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "COM.MICROSOFT.HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
+    String SC_OPCODE_LOG_NORM_DIST_MS { Text = "COM.MICROSOFT.LOGNORM.DIST" ; };
     String SC_OPCODE_T_DIST { Text = "LEGACY.TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "LEGACY.FDIST" ; };
     String SC_OPCODE_F_DIST_LT { Text = "COM.MICROSOFT.F.DIST" ; };
@@ -317,6 +321,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
     String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
     String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
+    String SC_OPCODE_NORM_INV_MS { Text = "COM.MICROSOFT.NORM.INV" ; };
     String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
     String SC_OPCODE_CONFIDENCE_N { Text = "COM.MICROSOFT.CONFIDENCE.NORM" ; };
     String SC_OPCODE_CONFIDENCE_T { Text = "COM.MICROSOFT.CONFIDENCE.T" ; };
@@ -351,6 +356,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CHI_TEST { Text = "LEGACY.CHITEST" ; };
     String SC_OPCODE_CHI_TEST_MS { Text = "COM.MICROSOFT.CHISQ.TEST" ; };
     String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
+    String SC_OPCODE_LOG_INV_MS { Text = "COM.MICROSOFT.LOGNORM.INV" ; };
     String SC_OPCODE_TABLE_OP { Text = "MULTIPLE.OPERATIONS" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
     String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
@@ -512,9 +518,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_EVEN { Text = "EVEN" ; };
     String SC_OPCODE_ODD { Text = "ODD" ; };
     String SC_OPCODE_STD_NORM_DIST { Text = "NORMSDIST" ; };
+    String SC_OPCODE_STD_NORM_DIST_MS { Text = "_xlfn.NORM.S.DIST" ; };
     String SC_OPCODE_FISHER { Text = "FISHER" ; };
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "NORMSINV" ; };
+    String SC_OPCODE_S_NORM_INV_MS { Text = "_xlfn.NORM.S.INV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "_xlfn.GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
@@ -570,6 +578,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ST_DEV_S { Text = "_xlfn.STDEV.S" ; };
     String SC_OPCODE_B { Text = "B" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
+    String SC_OPCODE_NORM_DIST_MS { Text = "_xlfn.NORM.DIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
     String SC_OPCODE_EXP_DIST_MS { Text = "_xlfn.EXPON.DIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
@@ -661,6 +670,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
     String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "_xlfn.HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
+    String SC_OPCODE_LOG_NORM_DIST_MS { Text = "_xlfn.LOGNORM.DIST" ; };
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
     String SC_OPCODE_F_DIST_LT { Text = "_xlfn.F.DIST" ; };
@@ -692,6 +702,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
     String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
     String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
+    String SC_OPCODE_NORM_INV_MS { Text = "_xlfn.NORM.INV" ; };
     String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
     String SC_OPCODE_CONFIDENCE_N { Text = "_xlfn.CONFIDENCE.NORM" ; };
     String SC_OPCODE_CONFIDENCE_T { Text = "_xlfn.CONFIDENCE.T" ; };
@@ -726,6 +737,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CHI_TEST { Text = "CHITEST" ; };
     String SC_OPCODE_CHI_TEST_MS { Text = "_xlfn.CHISQ.TEST" ; };
     String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
+    String SC_OPCODE_LOG_INV_MS { Text = "_xlfn.LOGNORM.INV" ; };
     String SC_OPCODE_TABLE_OP { Text = "TABLE" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
     String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
@@ -889,9 +901,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_EVEN { Text = "EVEN" ; };
     String SC_OPCODE_ODD { Text = "ODD" ; };
     String SC_OPCODE_STD_NORM_DIST { Text = "NORMSDIST" ; };
+    String SC_OPCODE_STD_NORM_DIST_MS { Text = "NORM.S.DIST" ; };
     String SC_OPCODE_FISHER { Text = "FISHER" ; };
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "NORMSINV" ; };
+    String SC_OPCODE_S_NORM_INV_MS { Text = "NORM.S.INV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
@@ -947,6 +961,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ST_DEV_S { Text = "STDEV.S" ; };
     String SC_OPCODE_B { Text = "B" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
+    String SC_OPCODE_NORM_DIST_MS { Text = "NORM.DIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
     String SC_OPCODE_EXP_DIST_MS { Text = "EXPON.DIST" ; };
     String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
@@ -1038,6 +1053,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
     String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
+    String SC_OPCODE_LOG_NORM_DIST_MS { Text = "LOGNORM.DIST" ; };
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
     String SC_OPCODE_F_DIST_LT { Text = "F.DIST" ; };
@@ -1069,6 +1085,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
     String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
     String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
+    String SC_OPCODE_NORM_INV_MS { Text = "NORM.INV" ; };
     String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
     String SC_OPCODE_CONFIDENCE_N { Text = "CONFIDENCE.NORM" ; };
     String SC_OPCODE_CONFIDENCE_T { Text = "CONFIDENCE.T" ; };
@@ -1103,6 +1120,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CHI_TEST { Text = "CHITEST" ; };
     String SC_OPCODE_CHI_TEST_MS { Text = "CHISQ.TEST" ; };
     String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
+    String SC_OPCODE_LOG_INV_MS { Text = "LOGNORM.INV" ; };
     String SC_OPCODE_TABLE_OP { Text = "TABLE" ; };
     String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
     String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
@@ -1531,6 +1549,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "NORMSDIST" ;
     };
+    String SC_OPCODE_STD_NORM_DIST_MS
+    {
+        Text = "NORM.S.DIST" ;
+    };
     String SC_OPCODE_FISHER
     {
         Text [ en-US ] = "FISHER";
@@ -1542,6 +1564,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_S_NORM_INV
     {
         Text [ en-US ] = "NORMSINV" ;
+    };
+    String SC_OPCODE_S_NORM_INV_MS
+    {
+        Text = "NORM.S.INV" ;
     };
     String SC_OPCODE_GAMMA_LN
     {
@@ -1763,6 +1789,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_NORM_DIST
     {
         Text [ en-US ] = "NORMDIST" ;
+    };
+    String SC_OPCODE_NORM_DIST_MS
+    {
+        Text = "NORM.DIST" ;
     };
     String SC_OPCODE_EXP_DIST
     {
@@ -2129,6 +2159,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "LOGNORMDIST" ;
     };
+    String SC_OPCODE_LOG_NORM_DIST_MS
+    {
+        Text [ en-US ] = "LOGNORM.DIST" ;
+    };
     String SC_OPCODE_T_DIST
     {
         Text [ en-US ] = "TDIST" ;
@@ -2252,6 +2286,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_NORM_INV
     {
         Text [ en-US ] = "NORMINV" ;
+    };
+    String SC_OPCODE_NORM_INV_MS
+    {
+        Text = "NORM.INV" ;
     };
     String SC_OPCODE_CONFIDENCE
     {
@@ -2388,6 +2426,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_LOG_INV
     {
         Text [ en-US ] = "LOGINV" ;
+    };
+    String SC_OPCODE_LOG_INV_MS
+    {
+        Text = "LOGNORM.INV" ;
     };
     String SC_OPCODE_TABLE_OP
     {
