@@ -88,7 +88,7 @@
 #include <config_eot.h>
 
 #if ENABLE_EOT
-#include "libeot.h"
+#include <libeot/libeot.h>
 #endif
 
 using namespace vcl;
