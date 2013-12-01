@@ -31,7 +31,7 @@ extern "C"
 {
 namespace libeot
 {
-#include <libeot.h>
+#include <libeot/libeot.h>
 } // namespace libeot
 } // extern "C"
 #endif
@@ -114,8 +114,8 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
         unsigned char *nakedPointerToUncompressedFont = NULL;
         libeot::EOTMetadata eotMetadata;
         libeot::EOTError uncompressError =
-            libeot::eot2ttf_buffer( (const unsigned char *)&fontData[0], fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
-        boost::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::freeEOTBuffer );
+            libeot::EOT2ttf_buffer( (const unsigned char *)&fontData[0], fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
+        boost::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::EOTfreeBuffer );
         if( uncompressError != libeot::EOT_SUCCESS )
         {
             SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
@@ -134,7 +134,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
             }
             writtenTotal += written;
         }
-        sufficientFontRights = libeot::canLegallyEdit( &eotMetadata );
+        sufficientFontRights = libeot::EOTcanLegallyEdit( &eotMetadata );
         libeot::EOTfreeMetadata( &eotMetadata );
     }
 #endif

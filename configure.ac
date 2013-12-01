@@ -7707,28 +7707,12 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_eot" = "yes"; then
     AC_DEFINE([ENABLE_EOT])
     AC_MSG_RESULT([yes])
 
-    AC_MSG_CHECKING([which libeot to use])
-    if test "$with_system_libeot" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_LIBEOT=YES
-        AC_CHECK_HEADER([libeot.h], [],
-            [AC_MSG_ERROR([libeot.h not found. install libeot])], [])
-        AC_CHECK_LIB([libeot], [eot2ttf_file], [:],
-            [AC_MSG_RESULT([libeot library not found or functional.])], [])
-        libo_MINGW_CHECK_DLL([libeot])
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_LIBEOT=NO
-        BUILD_TYPE="$BUILD_TYPE LIBEOT"
-    fi
+    libo_CHECK_SYSTEM_MODULE([libeot],[LIBEOT],[libeot >= 0.01])
 else
     ENABLE_EOT=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST([ENABLE_EOT])
-AC_SUBST([SYSTEM_LIBEOT])
-AC_SUBST([LIBEOT_CFLAGS])
-AC_SUBST([LIBEOT_LIBS])
 
 dnl ===================================================================
 dnl Check for system libe-book

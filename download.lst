@@ -22,8 +22,8 @@ HARFBUZZ_MD5SUM := a4a9b548577e2ee22f0887937da5fd6c
 export HARFBUZZ_TARBALL := harfbuzz-0.9.23.tar.bz2
 LIBATOMIC_OPS_MD5SUM := c0b86562d5aa40761a87134f83e6adcf
 export LIBATOMIC_OPS_TARBALL := libatomic_ops-7_2d.zip
-LIBEOT_MD5SUM := 4c3fdbae53f3c155af94d6df0b6e12b6
-export LIBEOT_TARBALL := libeot.tar.bz2
+LIBEOT_MD5SUM := aa24f5dd2a2992f4a116aa72af817548
+export LIBEOT_TARBALL := libeot-0.01.tar.bz2
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
