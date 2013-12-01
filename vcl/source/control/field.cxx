@@ -43,13 +43,9 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-// -----------------------------------------------------------------------
-
 #define FORMAT_NUMERIC       1
 #define FORMAT_METRIC        2
 #define FORMAT_CURRENCY      3
-
-// -----------------------------------------------------------------------
 
 static sal_Int64 ImplPower10( sal_uInt16 n )
 {
@@ -61,8 +57,6 @@ static sal_Int64 ImplPower10( sal_uInt16 n )
 
     return nValue;
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                         bool bStrictFormat, bool bThousandSep,
@@ -86,8 +80,6 @@ static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
             return true;
     }
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
@@ -293,8 +285,6 @@ static void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rN
     }
 }
 
-// -----------------------------------------------------------------------
-
 FormatterBase::FormatterBase( Edit* pField )
 {
     mpField                     = pField;
@@ -306,14 +296,10 @@ FormatterBase::FormatterBase( Edit* pField )
     mbDefaultLocale             = sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 FormatterBase::~FormatterBase()
 {
     delete mpLocaleDataWrapper;
 }
-
-// -----------------------------------------------------------------------
 
 LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
@@ -329,20 +315,14 @@ const LocaleDataWrapper& FormatterBase::GetLocaleDataWrapper() const
     return ImplGetLocaleDataWrapper();
 }
 
-// -----------------------------------------------------------------------
-
 void FormatterBase::Reformat()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void FormatterBase::ReformatAll()
 {
     Reformat();
 };
-
-// -----------------------------------------------------------------------
 
 void FormatterBase::SetStrictFormat( sal_Bool bStrict )
 {
@@ -354,16 +334,12 @@ void FormatterBase::SetStrictFormat( sal_Bool bStrict )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void FormatterBase::SetLocale( const lang::Locale& rLocale )
 {
     ImplGetLocaleDataWrapper().setLanguageTag( LanguageTag( rLocale) );
     mbDefaultLocale = sal_False;
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 const lang::Locale& FormatterBase::GetLocale() const
 {
@@ -378,8 +354,6 @@ const lang::Locale& FormatterBase::GetLocale() const
     return mpLocaleDataWrapper->getLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------
-
 const LanguageTag& FormatterBase::GetLanguageTag() const
 {
     if ( !mpLocaleDataWrapper || mbDefaultLocale )
@@ -393,8 +367,6 @@ const LanguageTag& FormatterBase::GetLanguageTag() const
     return mpLocaleDataWrapper->getLanguageTag();
 }
 
-// -----------------------------------------------------------------------
-
 const AllSettings& FormatterBase::GetFieldSettings() const
 {
     if ( mpField )
@@ -402,8 +374,6 @@ const AllSettings& FormatterBase::GetFieldSettings() const
     else
         return Application::GetSettings();
 }
-
-// -----------------------------------------------------------------------
 
 void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection )
 {
@@ -422,8 +392,6 @@ void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection
     }
 }
 
-// -----------------------------------------------------------------------
-
 void FormatterBase::SetEmptyFieldValue()
 {
     if ( mpField )
@@ -431,14 +399,10 @@ void FormatterBase::SetEmptyFieldValue()
     mbEmptyFieldValue = sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool FormatterBase::IsEmptyFieldValue() const
 {
     return (!mpField || mpField->GetText().isEmpty());
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
                                                 OUString& rOutStr )
@@ -470,8 +434,6 @@ sal_Bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64&
     }
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::ImplInit()
 {
     mnFieldValue        = 0;
@@ -492,14 +454,10 @@ void NumericFormatter::ImplInit()
     SetDecimalDigits( 0 );
 }
 
-// -----------------------------------------------------------------------
-
 NumericFormatter::NumericFormatter()
 {
     ImplInit();
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::ImplLoadRes( const ResId& rResId )
 {
@@ -536,13 +494,9 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
-
 NumericFormatter::~NumericFormatter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::SetMin( sal_Int64 nNewMin )
 {
@@ -551,8 +505,6 @@ void NumericFormatter::SetMin( sal_Int64 nNewMin )
         ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::SetMax( sal_Int64 nNewMax )
 {
     mnMax = nNewMax;
@@ -560,23 +512,17 @@ void NumericFormatter::SetMax( sal_Int64 nNewMax )
         ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::SetUseThousandSep( sal_Bool bValue )
 {
     mbThousandSep = bValue;
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 {
     mnDecimalDigits = nDigits;
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::SetShowTrailingZeros( sal_Bool bShowTrailingZeros )
 {
@@ -587,14 +533,10 @@ void NumericFormatter::SetShowTrailingZeros( sal_Bool bShowTrailingZeros )
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 NumericFormatter::GetDecimalDigits() const
 {
     return mnDecimalDigits;
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::SetValue( sal_Int64 nNewValue )
 {
@@ -603,14 +545,10 @@ void NumericFormatter::SetValue( sal_Int64 nNewValue )
     SetEmptyFieldValueData( sal_False );
 }
 
-// -----------------------------------------------------------------------
-
 OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
     return OUString(ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() ));
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection )
 {
@@ -624,14 +562,10 @@ void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSel
         ImplSetText( CreateFieldText( nNewValue ), pNewSelection );
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::SetUserValue( sal_Int64 nNewValue )
 {
     ImplSetUserValue( nNewValue );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 NumericFormatter::GetValue() const
 {
@@ -653,8 +587,6 @@ sal_Int64 NumericFormatter::GetValue() const
         return mnLastValue;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool NumericFormatter::IsValueModified() const
 {
     if ( ImplGetEmptyFieldValue() )
@@ -665,14 +597,10 @@ sal_Bool NumericFormatter::IsValueModified() const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 NumericFormatter::Normalize( sal_Int64 nValue ) const
 {
     return (nValue * ImplPower10( GetDecimalDigits() ) );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 NumericFormatter::Denormalize( sal_Int64 nValue ) const
 {
@@ -696,8 +624,6 @@ sal_Int64 NumericFormatter::Denormalize( sal_Int64 nValue ) const
     }
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::Reformat()
 {
     if ( !GetField() )
@@ -719,8 +645,6 @@ void NumericFormatter::Reformat()
         SetValue( mnLastValue );
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::FieldUp()
 {
     sal_Int64 nValue = GetValue();
@@ -735,8 +659,6 @@ void NumericFormatter::FieldUp()
 
     ImplNewFieldValue( nValue );
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::FieldDown()
 {
@@ -753,21 +675,15 @@ void NumericFormatter::FieldDown()
     ImplNewFieldValue( nValue );
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::FieldFirst()
 {
     ImplNewFieldValue( mnFirst );
 }
 
-// -----------------------------------------------------------------------
-
 void NumericFormatter::FieldLast()
 {
     ImplNewFieldValue( mnLast );
 }
-
-// -----------------------------------------------------------------------
 
 void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 {
@@ -802,16 +718,12 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
     }
 }
 
-// -----------------------------------------------------------------------
-
 NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
     SetField( this );
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 NumericField::NumericField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_NUMERICFIELD )
@@ -836,8 +748,6 @@ bool NumericField::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 void NumericField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
@@ -855,13 +765,9 @@ void NumericField::ImplLoadRes( const ResId& rResId )
         mnSpinSize = ReadLongRes();
 }
 
-// -----------------------------------------------------------------------
-
 NumericField::~NumericField()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long NumericField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -873,8 +779,6 @@ long NumericField::PreNotify( NotifyEvent& rNEvt )
 
     return SpinField::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long NumericField::Notify( NotifyEvent& rNEvt )
 {
@@ -888,8 +792,6 @@ long NumericField::Notify( NotifyEvent& rNEvt )
 
     return SpinField::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -908,15 +810,11 @@ void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void NumericField::Modify()
 {
     MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void NumericField::Up()
 {
@@ -924,23 +822,17 @@ void NumericField::Up()
     SpinField::Up();
 }
 
-// -----------------------------------------------------------------------
-
 void NumericField::Down()
 {
     FieldDown();
     SpinField::Down();
 }
 
-// -----------------------------------------------------------------------
-
 void NumericField::First()
 {
     FieldFirst();
     SpinField::First();
 }
-
-// -----------------------------------------------------------------------
 
 void NumericField::Last()
 {
@@ -987,16 +879,12 @@ Size NumericField::CalcMinimumSize() const
     return calcMinimumSize(*this, *this);
 }
 
-// -----------------------------------------------------------------------
-
 NumericBox::NumericBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 NumericBox::NumericBox( Window* pParent, const ResId& rResId ) :
     ComboBox( WINDOW_NUMERICBOX )
@@ -1027,13 +915,9 @@ Size NumericBox::CalcMinimumSize() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
 NumericBox::~NumericBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long NumericBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1045,8 +929,6 @@ long NumericBox::PreNotify( NotifyEvent& rNEvt )
 
     return ComboBox::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long NumericBox::Notify( NotifyEvent& rNEvt )
 {
@@ -1060,8 +942,6 @@ long NumericBox::Notify( NotifyEvent& rNEvt )
 
     return ComboBox::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1080,15 +960,11 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void NumericBox::Modify()
 {
     MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void NumericBox::ReformatAll()
 {
@@ -1106,14 +982,10 @@ void NumericBox::ReformatAll()
     SetUpdateMode( sal_True );
 }
 
-// -----------------------------------------------------------------------
-
 void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 {
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                        bool, bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
@@ -1121,8 +993,6 @@ static bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     // no meaningfull strict format; therefore allow all characters
     return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rWrapper );
 }
-
-// -----------------------------------------------------------------------
 
 static OUString ImplMetricGetUnitText(const OUString& rStr)
 {
@@ -1141,8 +1011,6 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
     }
     return aStr.makeStringAndClear();
 }
-
-// -----------------------------------------------------------------------
 
 // #104355# support localized mesaurements
 
@@ -1179,8 +1047,6 @@ static FieldUnit ImplStringToMetric(const OUString &rMetricString)
 
     return FUNIT_NONE;
 }
-
-// -----------------------------------------------------------------------
 
 static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 {
@@ -1257,8 +1123,6 @@ static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
     return FUNIT_NONE;
 }
 
-// -----------------------------------------------------------------------
-
 static double nonValueDoubleToValueDouble( double nValue )
 {
     return rtl::math::isFinite( nValue ) ? nValue : 0.0;
@@ -1282,8 +1146,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sa
     return nLong;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
 {
@@ -1291,8 +1153,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
         nonValueDoubleToValueDouble(
             ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
 }
-
-// -----------------------------------------------------------------------
 
 double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                         FieldUnit eInUnit, FieldUnit eOutUnit )
@@ -1348,8 +1208,6 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
     return nValue;
 }
 
-// -----------------------------------------------------------------------
-
 double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         MapUnit eInUnit, FieldUnit eOutUnit )
 {
@@ -1401,8 +1259,6 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     return nValue;
 }
 
-// -----------------------------------------------------------------------
-
 double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         FieldUnit eInUnit, MapUnit eOutUnit )
 {
@@ -1453,8 +1309,6 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     return nValue;
 }
 
-// -----------------------------------------------------------------------
-
 static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
@@ -1472,8 +1326,6 @@ static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 
 
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )
 {
@@ -1505,8 +1357,6 @@ sal_Bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rVal
     }
 }
 
-// -----------------------------------------------------------------------
-
 inline void MetricFormatter::ImplInit()
 {
     mnBaseValue = 0;
@@ -1514,14 +1364,10 @@ inline void MetricFormatter::ImplInit()
     mnType = FORMAT_METRIC;
 }
 
-// -----------------------------------------------------------------------
-
 MetricFormatter::MetricFormatter()
 {
     ImplInit();
 }
-
-// -----------------------------------------------------------------------
 
 void MetricFormatter::ImplLoadRes( const ResId& rResId )
 {
@@ -1540,13 +1386,9 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
-
 MetricFormatter::~MetricFormatter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void MetricFormatter::SetUnit( FieldUnit eNewUnit )
 {
@@ -1560,23 +1402,17 @@ void MetricFormatter::SetUnit( FieldUnit eNewUnit )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void MetricFormatter::SetCustomUnitText( const OUString& rStr )
 {
     maCustomUnitText = rStr;
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void MetricFormatter::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     SetUserValue( nNewValue, eInUnit );
     mnFieldValue = mnLastValue;
 }
-
-// -----------------------------------------------------------------------
 
 OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
@@ -1590,16 +1426,12 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
     return aStr;
 }
 
-// -----------------------------------------------------------------------
-
 void MetricFormatter::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     // convert to previously configured units
     nNewValue = MetricField::ConvertValue( nNewValue, mnBaseValue, GetDecimalDigits(), eInUnit, meUnit );
     NumericFormatter::SetUserValue( nNewValue );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 MetricFormatter::GetValue( FieldUnit eOutUnit ) const
 {
@@ -1621,23 +1453,17 @@ sal_Int64 MetricFormatter::GetValue( FieldUnit eOutUnit ) const
     return MetricField::ConvertValue( (sal_Int64)nTempValue, mnBaseValue, GetDecimalDigits(), meUnit, eOutUnit );
 }
 
-// -----------------------------------------------------------------------
-
 void MetricFormatter::SetValue( sal_Int64 nValue )
 {
     // Implementation not inline, because it is a virtual Function
     SetValue( nValue, FUNIT_NONE );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricFormatter::GetValue() const
 {
     // Implementation not inline, because it is a virtual Function
     return GetValue( FUNIT_NONE );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
 {
@@ -1646,16 +1472,12 @@ void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
                                                          eInUnit, meUnit ) );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricFormatter::GetMin( FieldUnit eOutUnit ) const
 {
     // convert to requested units
     return MetricField::ConvertValue( NumericFormatter::GetMin(), mnBaseValue,
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricFormatter::SetMax( sal_Int64 nNewMax, FieldUnit eInUnit )
 {
@@ -1664,8 +1486,6 @@ void MetricFormatter::SetMax( sal_Int64 nNewMax, FieldUnit eInUnit )
                                                          eInUnit, meUnit ) );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
 {
     // convert to requested units
@@ -1673,15 +1493,11 @@ sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
 
-// -----------------------------------------------------------------------
-
 void MetricFormatter::SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit )
 {
     mnBaseValue = MetricField::ConvertValue( nNewBase, mnBaseValue, GetDecimalDigits(),
                                              eInUnit, meUnit );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 MetricFormatter::GetBaseValue( FieldUnit eOutUnit ) const
 {
@@ -1689,8 +1505,6 @@ sal_Int64 MetricFormatter::GetBaseValue( FieldUnit eOutUnit ) const
     return MetricField::ConvertValue( mnBaseValue, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricFormatter::Reformat()
 {
@@ -1721,16 +1535,12 @@ void MetricFormatter::Reformat()
     maCurUnitText = OUString();
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 {
     // convert to requested units
     return MetricField::ConvertValue( mnCorrectedValue, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
-
-// -----------------------------------------------------------------------
 
 MetricField::MetricField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
@@ -1790,8 +1600,6 @@ void MetricField::ImplLoadRes( const ResId& rResId )
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 MetricField::~MetricField()
 {
 }
@@ -1812,8 +1620,6 @@ void MetricField::SetUnit( FieldUnit nNewUnit )
     SetLast( Normalize( nLast ), nNewUnit );
 }
 
-// -----------------------------------------------------------------------
-
 void MetricField::SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit )
 {
     // convert
@@ -1822,16 +1628,12 @@ void MetricField::SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit )
     mnFirst = nNewFirst;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricField::GetFirst( FieldUnit eOutUnit ) const
 {
     // convert
     return MetricField::ConvertValue( mnFirst, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 {
@@ -1841,16 +1643,12 @@ void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
     mnLast = nNewLast;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 {
     // conver
     return MetricField::ConvertValue( mnLast, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
-
-// -----------------------------------------------------------------------
 
 long MetricField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1862,8 +1660,6 @@ long MetricField::PreNotify( NotifyEvent& rNEvt )
 
     return SpinField::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long MetricField::Notify( NotifyEvent& rNEvt )
 {
@@ -1877,8 +1673,6 @@ long MetricField::Notify( NotifyEvent& rNEvt )
 
     return SpinField::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1897,15 +1691,11 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void MetricField::Modify()
 {
     MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void MetricField::Up()
 {
@@ -1913,15 +1703,11 @@ void MetricField::Up()
     SpinField::Up();
 }
 
-// -----------------------------------------------------------------------
-
 void MetricField::Down()
 {
     FieldDown();
     SpinField::Down();
 }
-
-// -----------------------------------------------------------------------
 
 void MetricField::First()
 {
@@ -1929,22 +1715,16 @@ void MetricField::First()
     SpinField::First();
 }
 
-// -----------------------------------------------------------------------
-
 void MetricField::Last()
 {
     FieldLast();
     SpinField::Last();
 }
 
-// -----------------------------------------------------------------------
-
 void MetricField::CustomConvert()
 {
     maCustomConvertLink.Call( this );
 }
-
-// -----------------------------------------------------------------------
 
 MetricBox::MetricBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
@@ -1952,8 +1732,6 @@ MetricBox::MetricBox( Window* pParent, WinBits nWinStyle ) :
     SetField( this );
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 Size MetricBox::CalcMinimumSize() const
 {
@@ -1969,13 +1747,9 @@ Size MetricBox::CalcMinimumSize() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
 MetricBox::~MetricBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long MetricBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1987,8 +1761,6 @@ long MetricBox::PreNotify( NotifyEvent& rNEvt )
 
     return ComboBox::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long MetricBox::Notify( NotifyEvent& rNEvt )
 {
@@ -2002,8 +1774,6 @@ long MetricBox::Notify( NotifyEvent& rNEvt )
 
     return ComboBox::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2022,15 +1792,11 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void MetricBox::Modify()
 {
     MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void MetricBox::ReformatAll()
 {
@@ -2048,14 +1814,10 @@ void MetricBox::ReformatAll()
     SetUpdateMode( sal_True );
 }
 
-// -----------------------------------------------------------------------
-
 void MetricBox::CustomConvert()
 {
     maCustomConvertLink.Call( this );
 }
-
-// -----------------------------------------------------------------------
 
 void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPos )
 {
@@ -2064,8 +1826,6 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPo
                                         eInUnit, meUnit );
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
 {
@@ -2080,8 +1840,6 @@ sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
     return nRetValue;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
 {
     // convert to previously configured units
@@ -2090,23 +1848,17 @@ sal_uInt16 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricBox::GetValue( FieldUnit eOutUnit ) const
 {
     // Implementation not inline, because it is a virtual Function
     return MetricFormatter::GetValue( eOutUnit );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Int64 MetricBox::GetValue() const
 {
     // Implementation not inline, because it is a virtual Function
     return GetValue( FUNIT_NONE );
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                          bool, bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
@@ -2115,16 +1867,12 @@ static bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rWrapper );
 }
 
-// -----------------------------------------------------------------------
-
 inline bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // fetch number
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, true );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
 {
@@ -2156,34 +1904,24 @@ sal_Bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString
     }
 }
 
-// -----------------------------------------------------------------------
-
 inline void CurrencyFormatter::ImplInit()
 {
     mnType = FORMAT_CURRENCY;
 }
-
-// -----------------------------------------------------------------------
 
 CurrencyFormatter::CurrencyFormatter()
 {
     ImplInit();
 }
 
-// -----------------------------------------------------------------------
-
 CurrencyFormatter::~CurrencyFormatter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 OUString CurrencyFormatter::GetCurrencySymbol() const
 {
     return ImplGetLocaleDataWrapper().getCurrSymbol();
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 {
@@ -2192,14 +1930,10 @@ void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
     SetEmptyFieldValueData( sal_False );
 }
 
-// -----------------------------------------------------------------------
-
 OUString CurrencyFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
     return ImplGetLocaleDataWrapper().getCurr( nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 CurrencyFormatter::GetValue() const
 {
@@ -2218,8 +1952,6 @@ sal_Int64 CurrencyFormatter::GetValue() const
     else
         return mnLastValue;
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyFormatter::Reformat()
 {
@@ -2242,8 +1974,6 @@ void CurrencyFormatter::Reformat()
         SetValue( mnLastValue );
 }
 
-// -----------------------------------------------------------------------
-
 CurrencyField::CurrencyField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
@@ -2251,13 +1981,9 @@ CurrencyField::CurrencyField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 CurrencyField::~CurrencyField()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2269,8 +1995,6 @@ long CurrencyField::PreNotify( NotifyEvent& rNEvt )
 
     return SpinField::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long CurrencyField::Notify( NotifyEvent& rNEvt )
 {
@@ -2284,8 +2008,6 @@ long CurrencyField::Notify( NotifyEvent& rNEvt )
 
     return SpinField::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2304,15 +2026,11 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void CurrencyField::Modify()
 {
     MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyField::Up()
 {
@@ -2320,15 +2038,11 @@ void CurrencyField::Up()
     SpinField::Up();
 }
 
-// -----------------------------------------------------------------------
-
 void CurrencyField::Down()
 {
     FieldDown();
     SpinField::Down();
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyField::First()
 {
@@ -2336,15 +2050,11 @@ void CurrencyField::First()
     SpinField::First();
 }
 
-// -----------------------------------------------------------------------
-
 void CurrencyField::Last()
 {
     FieldLast();
     SpinField::Last();
 }
-
-// -----------------------------------------------------------------------
 
 CurrencyBox::CurrencyBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
@@ -2353,13 +2063,9 @@ CurrencyBox::CurrencyBox( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 CurrencyBox::~CurrencyBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2371,8 +2077,6 @@ long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 
     return ComboBox::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long CurrencyBox::Notify( NotifyEvent& rNEvt )
 {
@@ -2386,8 +2090,6 @@ long CurrencyBox::Notify( NotifyEvent& rNEvt )
 
     return ComboBox::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2406,15 +2108,11 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void CurrencyBox::Modify()
 {
     MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void CurrencyBox::ReformatAll()
 {
@@ -2430,8 +2128,6 @@ void CurrencyBox::ReformatAll()
     CurrencyFormatter::Reformat();
     SetUpdateMode( sal_True );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Int64 CurrencyBox::GetValue() const
 {

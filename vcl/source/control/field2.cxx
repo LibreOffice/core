@@ -47,8 +47,6 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-// =======================================================================
-
 #define EDITMASK_LITERAL       'L'
 #define EDITMASK_ALPHA         'a'
 #define EDITMASK_UPPERALPHA    'A'
@@ -68,8 +66,6 @@ uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
     return xCharClass;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 {
     if ( rStr.getLength() == 1 )
@@ -83,8 +79,6 @@ static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
     }
     return pBuf;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLen )
 {
@@ -121,8 +115,6 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
     return pBuf;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_uInt16 ImplGetNum( const sal_Unicode*& rpBuf, bool& rbError )
 {
     if ( !*rpBuf )
@@ -142,8 +134,6 @@ static sal_uInt16 ImplGetNum( const sal_Unicode*& rpBuf, bool& rbError )
     return nNumber;
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
 {
     while( ( *rpBuf == ',' ) || ( *rpBuf == '.' ) || ( *rpBuf == ';' ) ||
@@ -152,8 +142,6 @@ static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
         rpBuf++;
     }
 }
-
-// -----------------------------------------------------------------------
 
 static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
@@ -203,8 +191,6 @@ static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     if ( ImplIsPatternChar( cChar, cEditMask ) )
@@ -222,8 +208,6 @@ static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
         return 0;
 }
 
-// -----------------------------------------------------------------------
-
 static int ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 {
     if ( c1 == c2 )
@@ -234,8 +218,6 @@ static int ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
     else
         return sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 static OUString ImplPatternReformat( const OUString& rStr,
                                      const OString& rEditMask,
@@ -337,8 +319,6 @@ static OUString ImplPatternReformat( const OUString& rStr,
     return aOutStr.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
                                sal_uInt16 nFormatFlags, bool bSameMask,
                                sal_uInt16 nCursorPos, sal_Int32& rPos )
@@ -378,8 +358,6 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
     if ( rPos < nCursorPos )
         rPos = nCursorPos;
 }
-
-// -----------------------------------------------------------------------
 
 static void ImplPatternProcessStrictModify( Edit* pEdit,
                                             const OString& rEditMask,
@@ -431,8 +409,6 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
     }
 }
 
-// -----------------------------------------------------------------------
-
 static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
 {
     // search non-literal predecessor
@@ -449,8 +425,6 @@ static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursor
     }
     return nNewPos;
 }
-
-// -----------------------------------------------------------------------
 
 static xub_StrLen ImplPatternRightPos( const OUString& rStr, const OString& rEditMask,
                                        sal_uInt16 nFormatFlags, bool bSameMask,
@@ -471,8 +445,6 @@ static xub_StrLen ImplPatternRightPos( const OUString& rStr, const OString& rEdi
     ImplPatternMaxPos( rStr, rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
     return nNewPos;
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                         const OString& rEditMask,
@@ -743,8 +715,6 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLiteralMask)
 {
     m_aEditMask     = rEditMask;
@@ -797,8 +767,6 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
     }
 }
 
-// -----------------------------------------------------------------------
-
 PatternFormatter::PatternFormatter()
 {
     mnFormatFlags       = 0;
@@ -806,13 +774,9 @@ PatternFormatter::PatternFormatter()
     mbInPattKeyInput    = sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 PatternFormatter::~PatternFormatter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void PatternFormatter::SetMask( const OString& rEditMask,
                                 const OUString& rLiteralMask )
@@ -820,8 +784,6 @@ void PatternFormatter::SetMask( const OString& rEditMask,
     ImplSetMask( rEditMask, rLiteralMask );
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 void PatternFormatter::SetString( const OUString& rStr )
 {
@@ -833,8 +795,6 @@ void PatternFormatter::SetString( const OUString& rStr )
     }
 }
 
-// -----------------------------------------------------------------------
-
 OUString PatternFormatter::GetString() const
 {
     if ( !GetField() )
@@ -842,8 +802,6 @@ OUString PatternFormatter::GetString() const
     else
         return ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, mnFormatFlags );
 }
-
-// -----------------------------------------------------------------------
 
 void PatternFormatter::Reformat()
 {
@@ -855,8 +813,6 @@ void PatternFormatter::Reformat()
     }
 }
 
-// -----------------------------------------------------------------------
-
 PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
@@ -864,13 +820,9 @@ PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 PatternField::~PatternField()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long PatternField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -885,8 +837,6 @@ long PatternField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 long PatternField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
@@ -899,8 +849,6 @@ long PatternField::Notify( NotifyEvent& rNEvt )
 
     return SpinField::Notify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 void PatternField::Modify()
 {
@@ -915,8 +863,6 @@ void PatternField::Modify()
     SpinField::Modify();
 }
 
-// -----------------------------------------------------------------------
-
 PatternBox::PatternBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
@@ -924,13 +870,9 @@ PatternBox::PatternBox( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 PatternBox::~PatternBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long PatternBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -945,8 +887,6 @@ long PatternBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 long PatternBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
@@ -960,8 +900,6 @@ long PatternBox::Notify( NotifyEvent& rNEvt )
     return ComboBox::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void PatternBox::Modify()
 {
     if ( !ImplGetInPattKeyInput() )
@@ -974,8 +912,6 @@ void PatternBox::Modify()
 
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void PatternBox::ReformatAll()
 {
@@ -992,8 +928,6 @@ void PatternBox::ReformatAll()
     SetUpdateMode( sal_True );
 }
 
-// =======================================================================
-
 static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
 {
     switch( eOld )
@@ -1003,8 +937,6 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
         default:    return XTDATEF_SHORT_YYMMDD;
     }
 }
-
-// -----------------------------------------------------------------------
 
 static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
 {
@@ -1021,16 +953,12 @@ static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
     return nValue;
 }
 
-// -----------------------------------------------------------------------
-
 static bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName )
 {
     sal_Int32 index = 0;
     rStr = rStr.replaceFirst(_rLookupMonthName, OUString(), &index);
     return index >= 0;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper& rCalendarWrapper )
 {
@@ -1050,8 +978,6 @@ static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper&
 
     return ImplCutNumberFromString( rStr );
 }
-
-// -----------------------------------------------------------------------
 
 static OUString ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
 {
@@ -1074,8 +1000,6 @@ static bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldF
     else
         return true;
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
                               const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
@@ -1186,8 +1110,6 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     return false;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, const AllSettings& rSettings )
 {
     Date aDate( 0, 0, 0 );
@@ -1216,8 +1138,6 @@ sal_Bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutSt
 
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
 
 OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
                                            const AllSettings& ) const
@@ -1311,8 +1231,6 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     return OUString(aBuf, pBuf-aBuf);
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplDateIncrementDay( Date& rDate, sal_Bool bUp )
 {
     DateFormatter::ExpandCentury( rDate );
@@ -1328,8 +1246,6 @@ static void ImplDateIncrementDay( Date& rDate, sal_Bool bUp )
             rDate--;
     }
 }
-
-// -----------------------------------------------------------------------
 
 static void ImplDateIncrementMonth( Date& rDate, sal_Bool bUp )
 {
@@ -1369,8 +1285,6 @@ static void ImplDateIncrementMonth( Date& rDate, sal_Bool bUp )
         rDate.SetDay( nDaysInMonth );
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplDateIncrementYear( Date& rDate, sal_Bool bUp )
 {
     DateFormatter::ExpandCentury( rDate );
@@ -1403,13 +1317,10 @@ static void ImplDateIncrementYear( Date& rDate, sal_Bool bUp )
     }
 }
 
-// -----------------------------------------------------------------------
 sal_Bool DateFormatter::ImplAllowMalformedInput() const
 {
     return !IsEnforceValidValue();
 }
-
-// -----------------------------------------------------------------------
 
 void DateField::ImplDateSpinArea( sal_Bool bUp )
 {
@@ -1501,8 +1412,6 @@ void DateField::ImplDateSpinArea( sal_Bool bUp )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::ImplInit()
 {
     mbLongFormat        = sal_False;
@@ -1511,8 +1420,6 @@ void DateFormatter::ImplInit()
     mnDateFormat        = 0xFFFF;
     mnExtDateFormat     = XTDATEF_SYSTEM_SHORT;
 }
-
-// -----------------------------------------------------------------------
 
 DateFormatter::DateFormatter() :
     maFieldDate( 0 ),
@@ -1524,8 +1431,6 @@ DateFormatter::DateFormatter() :
 {
     ImplInit();
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::ImplLoadRes( const ResId& rResId )
 {
@@ -1563,15 +1468,11 @@ void DateFormatter::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
-
 DateFormatter::~DateFormatter()
 {
     delete mpCalendarWrapper;
     mpCalendarWrapper = NULL;
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
@@ -1579,9 +1480,6 @@ void DateFormatter::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
     mpCalendarWrapper = NULL;
     FormatterBase::SetLocale( rLocale );
 }
-
-
-// -----------------------------------------------------------------------
 
 CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
@@ -1594,15 +1492,11 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
     return *mpCalendarWrapper;
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::SetExtDateFormat( ExtDateFieldFormat eFormat )
 {
     mnExtDateFormat = eFormat;
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 ExtDateFieldFormat DateFormatter::GetExtDateFormat( sal_Bool bResolveSystemFormat ) const
 {
@@ -1625,14 +1519,10 @@ ExtDateFieldFormat DateFormatter::GetExtDateFormat( sal_Bool bResolveSystemForma
     return eDateFormat;
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::ReformatAll()
 {
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::SetMin( const Date& rNewMin )
 {
@@ -1641,16 +1531,12 @@ void DateFormatter::SetMin( const Date& rNewMin )
         ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::SetMax( const Date& rNewMax )
 {
     maMax = rNewMax;
     if ( !IsEmptyFieldValue() )
         ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::SetLongFormat( sal_Bool bLong )
 {
@@ -1669,8 +1555,6 @@ void DateFormatter::SetLongFormat( sal_Bool bLong )
 
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::SetShowDateCentury( sal_Bool bShowDateCentury )
 {
@@ -1719,8 +1603,6 @@ void DateFormatter::SetShowDateCentury( sal_Bool bShowDateCentury )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::SetDate( const Date& rNewDate )
 {
     SetUserDate( rNewDate );
@@ -1728,14 +1610,10 @@ void DateFormatter::SetDate( const Date& rNewDate )
     maLastDate = GetDate();
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::SetUserDate( const Date& rNewDate )
 {
     ImplSetUserDate( rNewDate );
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::ImplSetUserDate( const Date& rNewDate, Selection* pNewSelection )
 {
@@ -1749,8 +1627,6 @@ void DateFormatter::ImplSetUserDate( const Date& rNewDate, Selection* pNewSelect
     if ( GetField() )
         ImplSetText( ImplGetDateAsText( aNewDate, GetFieldSettings() ), pNewSelection );
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::ImplNewFieldValue( const Date& rDate )
 {
@@ -1780,8 +1656,6 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 Date DateFormatter::GetDate() const
 {
@@ -1816,14 +1690,10 @@ Date DateFormatter::GetDate() const
     return aDate;
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::SetEmptyDate()
 {
     FormatterBase::SetEmptyFieldValue();
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool DateFormatter::IsEmptyDate() const
 {
@@ -1843,8 +1713,6 @@ sal_Bool DateFormatter::IsEmptyDate() const
     }
     return bEmpty;
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::Reformat()
 {
@@ -1878,14 +1746,10 @@ void DateFormatter::Reformat()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void DateFormatter::ExpandCentury( Date& rDate )
 {
     ExpandCentury( rDate, utl::MiscCfg().GetYear2000() );
 }
-
-// -----------------------------------------------------------------------
 
 void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
 {
@@ -1899,8 +1763,6 @@ void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
     }
 }
 
-// -----------------------------------------------------------------------
-
 DateField::DateField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle ),
     maFirst( GetMin() ),
@@ -1911,8 +1773,6 @@ DateField::DateField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
     ResetLastDate();
 }
-
-// -----------------------------------------------------------------------
 
 DateField::DateField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_DATEFIELD ),
@@ -1931,8 +1791,6 @@ DateField::DateField( Window* pParent, const ResId& rResId ) :
 
     ResetLastDate();
 }
-
-// -----------------------------------------------------------------------
 
 void DateField::ImplLoadRes( const ResId& rResId )
 {
@@ -1959,13 +1817,9 @@ void DateField::ImplLoadRes( const ResId& rResId )
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 DateField::~DateField()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long DateField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1979,8 +1833,6 @@ long DateField::PreNotify( NotifyEvent& rNEvt )
 
     return SpinField::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long DateField::Notify( NotifyEvent& rNEvt )
 {
@@ -2018,8 +1870,6 @@ long DateField::Notify( NotifyEvent& rNEvt )
     return SpinField::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void DateField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
@@ -2032,15 +1882,11 @@ void DateField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void DateField::Modify()
 {
     MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void DateField::Up()
 {
@@ -2048,15 +1894,11 @@ void DateField::Up()
     SpinField::Up();
 }
 
-// -----------------------------------------------------------------------
-
 void DateField::Down()
 {
     ImplDateSpinArea( sal_False );
     SpinField::Down();
 }
-
-// -----------------------------------------------------------------------
 
 void DateField::First()
 {
@@ -2064,15 +1906,11 @@ void DateField::First()
     SpinField::First();
 }
 
-// -----------------------------------------------------------------------
-
 void DateField::Last()
 {
     ImplNewFieldValue( maLast );
     SpinField::Last();
 }
-
-// -----------------------------------------------------------------------
 
 DateBox::DateBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
@@ -2082,13 +1920,9 @@ DateBox::DateBox( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 DateBox::~DateBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long DateBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2103,8 +1937,6 @@ long DateBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
@@ -2116,8 +1948,6 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
         ReformatAll();
     }
 }
-
-// -----------------------------------------------------------------------
 
 long DateBox::Notify( NotifyEvent& rNEvt )
 {
@@ -2141,15 +1971,11 @@ long DateBox::Notify( NotifyEvent& rNEvt )
     return ComboBox::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void DateBox::Modify()
 {
     MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void DateBox::ReformatAll()
 {
@@ -2165,8 +1991,6 @@ void DateBox::ReformatAll()
     DateFormatter::Reformat();
     SetUpdateMode( sal_True );
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      sal_Bool bStrictFormat, sal_Bool bDuration,
@@ -2197,8 +2021,6 @@ static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     }
 }
 
-// -----------------------------------------------------------------------
-
 static bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
 {
     const sal_Unicode* _pChr = _rStr.getStr();
@@ -2210,8 +2032,6 @@ static bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 static bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUStringBuffer& _rStr )
 {
     if ( !_bSkipInvalidCharacters )
@@ -2221,8 +2041,6 @@ static bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUSt
     }
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
 {
@@ -2235,8 +2053,6 @@ static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, sal_B
     *_pPortion = (short)sPortion.toInt32();
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                               TimeFieldFormat eFormat, sal_Bool bDuration,
@@ -2434,8 +2250,6 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 {
     Time aTime( 0, 0, 0 );
@@ -2503,14 +2317,10 @@ sal_Bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutSt
 
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
 sal_Bool TimeFormatter::ImplAllowMalformedInput() const
 {
     return !IsEnforceValidValue();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeField::ImplTimeSpinArea( sal_Bool bUp )
 {
@@ -2585,16 +2395,12 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void TimeFormatter::ImplInit()
 {
     meFormat        = TIMEF_NONE;
     mbDuration      = sal_False;
     mnTimeFormat    = HOUR_24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
 }
-
-// -----------------------------------------------------------------------
 
 TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
@@ -2606,8 +2412,6 @@ TimeFormatter::TimeFormatter() :
 {
     ImplInit();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::ImplLoadRes( const ResId& rResId )
 {
@@ -2651,20 +2455,14 @@ void TimeFormatter::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
-
 TimeFormatter::~TimeFormatter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::ReformatAll()
 {
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::SetMin( const Time& rNewMin )
 {
@@ -2673,8 +2471,6 @@ void TimeFormatter::SetMin( const Time& rNewMin )
         ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void TimeFormatter::SetMax( const Time& rNewMax )
 {
     maMax = rNewMax;
@@ -2682,21 +2478,15 @@ void TimeFormatter::SetMax( const Time& rNewMax )
         ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void TimeFormatter::SetTimeFormat( TimeFormatter::TimeFormat eNewFormat )
 {
     mnTimeFormat = sal::static_int_cast<sal_uInt16>(eNewFormat);
 }
 
-// -----------------------------------------------------------------------
-
 TimeFormatter::TimeFormat TimeFormatter::GetTimeFormat() const
 {
     return (TimeFormat)mnTimeFormat;
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::SetFormat( TimeFieldFormat eNewFormat )
 {
@@ -2704,15 +2494,11 @@ void TimeFormatter::SetFormat( TimeFieldFormat eNewFormat )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void TimeFormatter::SetDuration( sal_Bool bNewDuration )
 {
     mbDuration = bNewDuration;
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::SetTime( const Time& rNewTime )
 {
@@ -2720,8 +2506,6 @@ void TimeFormatter::SetTime( const Time& rNewTime )
     maFieldTime = maLastTime;
     SetEmptyFieldValueData( sal_False );
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::ImplNewFieldValue( const Time& rTime )
 {
@@ -2751,8 +2535,6 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelection )
 {
@@ -2812,14 +2594,10 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
     }
 }
 
-// -----------------------------------------------------------------------
-
 void TimeFormatter::SetUserTime( const Time& rNewTime )
 {
     ImplSetUserTime( rNewTime );
 }
-
-// -----------------------------------------------------------------------
 
 Time TimeFormatter::GetTime() const
 {
@@ -2847,8 +2625,6 @@ Time TimeFormatter::GetTime() const
     return aTime;
 }
 
-// -----------------------------------------------------------------------
-
 void TimeFormatter::Reformat()
 {
     if ( !GetField() )
@@ -2871,8 +2647,6 @@ void TimeFormatter::Reformat()
         SetTime( maLastTime );
 }
 
-// -----------------------------------------------------------------------
-
 TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle ),
     maFirst( GetMin() ),
@@ -2882,8 +2656,6 @@ TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 TimeField::TimeField( Window* pParent, const ResId& rResId ) :
     SpinField( WINDOW_TIMEFIELD ),
@@ -2900,8 +2672,6 @@ TimeField::TimeField( Window* pParent, const ResId& rResId ) :
     if ( !(nStyle & WB_HIDE ) )
         Show();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeField::ImplLoadRes( const ResId& rResId )
 {
@@ -2928,13 +2698,9 @@ void TimeField::ImplLoadRes( const ResId& rResId )
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 TimeField::~TimeField()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long TimeField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2946,8 +2712,6 @@ long TimeField::PreNotify( NotifyEvent& rNEvt )
 
     return SpinField::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long TimeField::Notify( NotifyEvent& rNEvt )
 {
@@ -2973,8 +2737,6 @@ long TimeField::Notify( NotifyEvent& rNEvt )
     return SpinField::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
@@ -2987,15 +2749,11 @@ void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void TimeField::Modify()
 {
     MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeField::Up()
 {
@@ -3003,15 +2761,11 @@ void TimeField::Up()
     SpinField::Up();
 }
 
-// -----------------------------------------------------------------------
-
 void TimeField::Down()
 {
     ImplTimeSpinArea( sal_False );
     SpinField::Down();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeField::First()
 {
@@ -3019,15 +2773,11 @@ void TimeField::First()
     SpinField::First();
 }
 
-// -----------------------------------------------------------------------
-
 void TimeField::Last()
 {
     ImplNewFieldValue( maLast );
     SpinField::Last();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
 {
@@ -3081,8 +2831,6 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
@@ -3091,13 +2839,9 @@ TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 TimeBox::~TimeBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long TimeBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -3109,8 +2853,6 @@ long TimeBox::PreNotify( NotifyEvent& rNEvt )
 
     return ComboBox::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long TimeBox::Notify( NotifyEvent& rNEvt )
 {
@@ -3125,8 +2867,6 @@ long TimeBox::Notify( NotifyEvent& rNEvt )
     return ComboBox::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
@@ -3139,15 +2879,11 @@ void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void TimeBox::Modify()
 {
     MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void TimeBox::ReformatAll()
 {
