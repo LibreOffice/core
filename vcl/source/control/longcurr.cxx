@@ -35,6 +35,9 @@
 
 using namespace ::comphelper;
 
+namespace
+{
+
 #define FORMAT_LONGCURRENCY      4
 
 static BigInt ImplPower10( sal_uInt16 n )
@@ -247,6 +250,8 @@ static bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     // There's no StrictFormat that makes sense here, thus allow all chars
     return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rLocaleDataWrapper  );
 }
+
+} // namespace
 
 inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )

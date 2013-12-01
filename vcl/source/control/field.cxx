@@ -43,6 +43,9 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
+namespace
+{
+
 #define FORMAT_NUMERIC       1
 #define FORMAT_METRIC        2
 #define FORMAT_CURRENCY      3
@@ -284,6 +287,8 @@ static void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rN
             pEdit->SetUpdateMode( bUpdateMode );
     }
 }
+
+} // namespace
 
 FormatterBase::FormatterBase( Edit* pField )
 {
