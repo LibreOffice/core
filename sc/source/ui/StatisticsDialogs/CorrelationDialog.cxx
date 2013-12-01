@@ -10,12 +10,13 @@
 
 #include "docsh.hxx"
 #include "reffact.hxx"
+#include "strload.hxx"
+#include "StatisticsDialogs.hrc"
 
 #include "CorrelationDialog.hxx"
 
 namespace
 {
-    static const OUString strCorrelationLabel("Correlations");
     static const OUString strCorrelationTemplate("=CORREL(%VAR1%; %VAR2%)");
 }
 
@@ -32,12 +33,12 @@ sal_Bool ScCorrelationDialog::Close()
     return DoClose( ScCorrelationDialogWrapper::GetChildWindowId() );
 }
 
-const OUString& ScCorrelationDialog::getLabel()
+const OUString ScCorrelationDialog::getLabel()
 {
-    return strCorrelationLabel;
+    return SC_STRLOAD(RID_STATISTICS_DLGS, STR_CORRELATION_LABEL);
 }
 
-const OUString& ScCorrelationDialog::getTemplate()
+const OUString ScCorrelationDialog::getTemplate()
 {
     return strCorrelationTemplate;
 }

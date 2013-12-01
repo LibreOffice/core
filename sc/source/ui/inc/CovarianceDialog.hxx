@@ -23,8 +23,8 @@ public:
     virtual sal_Bool Close();
 
 protected:
-    virtual const OUString& getLabel();
-    virtual const OUString& getTemplate();
+    virtual const OUString getLabel();
+    virtual const OUString getTemplate();
 };
 
 #endif

@@ -33,8 +33,6 @@ namespace
     static const OUString strWildcard2("%VAR2%");
 
     static const OUString strWildcardNumber("%NUMBER%");
-    static const OUString strColumnLabelTemplate("Column %NUMBER%");
-    static const OUString strRowLabelTemplate("Row %NUMBER%");
 
     void lclWriteCorrelationFormulas(
             AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
@@ -95,13 +93,13 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     // write labels to columns
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aLabel;
         if (mGroupedBy == BY_COLUMN)
-            aLabel = strColumnLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aLabel = strRowLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
-        output.writeString(aLabel);
+        aTemplate.applyNumber(strWildcardNumber, i + 1);
+        output.writeString(aTemplate.getTemplate());
         output.nextColumn();
     }
 
@@ -110,13 +108,13 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     output.nextRow();
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aLabel;
         if (mGroupedBy == BY_COLUMN)
-            aLabel = strColumnLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aLabel = strRowLabelTemplate.replaceAll(strWildcardNumber, OUString::number(i + 1));
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
-        output.writeString(aLabel);
+        aTemplate.applyNumber(strWildcardNumber, i + 1);
+        output.writeString(aTemplate.getTemplate());
         output.nextRow();
     }
 

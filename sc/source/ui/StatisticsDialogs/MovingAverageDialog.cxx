@@ -70,9 +70,10 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
 
         // Write label
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate("Column %NUMBER%");
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate("Row %NUMBER%");
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+
         aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
         output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();
