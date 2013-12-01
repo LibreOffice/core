@@ -741,8 +741,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
     else
     {
         ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
-        const sal_Int32 nModelBeginPos = aModelBeginPos.mnPos;
-        aCurrLang = rNd.GetLang( nModelBeginPos );
+        aCurrLang = rNd.GetLang( aModelBeginPos.mnPos );
     }
 }
 
@@ -803,8 +802,7 @@ sal_Bool SwScanner::NextWord()
                 {
                     const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos = rConversionMap.ConvertToModelPosition( nBegin );
-                    const sal_Int32 nBeginModelPos = aModelBeginPos.mnPos;
-                    aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
+                    aCurrLang = rNode.GetLang( aModelBeginPos.mnPos, 1, nNextScriptType );
                 }
 
                 if ( nWordType != i18n::WordType::WORD_COUNT )
@@ -1480,8 +1478,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
             const com::sun::star::lang::Locale aLocale = g_pBreakIt->GetLocale( nLang );
             nLangEnd = std::min( nEnd, aIter.GetChgPos() );
 
-            const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );
-            const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nLangEnd );
+            const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );
+            const sal_Int32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nLangEnd );
 
             rSmartTagMgr.RecognizeString(aExpandText, xTextMarkup, xController, aLocale, nExpandBegin, nExpandEnd - nExpandBegin );
 
@@ -1983,8 +1981,8 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     OUString aExpandText = aConversionMap.getViewText();
 
     // map start and end points onto the ConversionMap
-    const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
-    const sal_uInt32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
+    const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
+    const sal_Int32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nEnd );
 
     if (aExpandText.isEmpty() && !bCountNumbering)
     {

@@ -1799,8 +1799,8 @@ static void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::Proofreading
         for( i = 0; i < rResult.aErrors.getLength(); ++i )
         {
             const linguistic2::SingleProofreadingError &rError = rResult.aErrors[i];
-            xub_StrLen nStart = (xub_StrLen)rConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos;
-            xub_StrLen nEnd = (xub_StrLen)rConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos;
+            const sal_Int32 nStart = rConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos;
+            const sal_Int32 nEnd = rConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos;
             if( i != j )
                 pArray[j] = pArray[i];
             if( pWrong->LookForEntry( nStart, nEnd ) )

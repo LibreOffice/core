@@ -74,7 +74,7 @@ class ModelToViewHelper
         position in the view string. The last entry in the conversion map
         denotes the lengths of the model resp. view string.
     */
-    typedef std::pair< sal_uInt32 , sal_uInt32 > ConversionMapEntry;
+    typedef std::pair< sal_Int32 , sal_Int32 > ConversionMapEntry;
     typedef std::vector< ConversionMapEntry > ConversionMap;
 
     ConversionMap m_aMap;
@@ -91,14 +91,14 @@ public:
     */
     struct ModelPosition
     {
-        sal_uInt32 mnPos;
-        sal_uInt32 mnSubPos;
+        sal_Int32 mnPos;
+        sal_Int32 mnSubPos;
         bool mbIsField;
 
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    ModelToViewHelper(const SwTxtNode &rNode, int eMode = EXPANDFIELDS);
+    ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode = EXPANDFIELDS);
     ModelToViewHelper() //pass through filter, view == model
     {
     }
@@ -116,7 +116,7 @@ public:
             nPos is behind the last entry in the conversion map) nPos will
             be returned.
     */
-    sal_uInt32 ConvertToViewPosition( sal_uInt32 nModelPos ) const;
+    sal_Int32 ConvertToViewPosition( sal_Int32 nModelPos ) const;
 
     /** Converts a view position into a model position
 
@@ -131,7 +131,7 @@ public:
             model position with mnPos = nPos and mnIsField = false will be
             returned.
     */
-    ModelPosition ConvertToModelPosition( sal_uInt32 nViewPos ) const;
+    ModelPosition ConvertToModelPosition( sal_Int32 nViewPos ) const;
 
     OUString getViewText() const { return m_aRetText; }
 };

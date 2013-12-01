@@ -225,8 +225,8 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_uInt32 nTmpStart = maConversionMap.ConvertToViewPosition( aStartPos.mnPos );
-            const sal_uInt32 nTmpLen = maConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
+            const sal_Int32 nTmpStart = maConversionMap.ConvertToViewPosition( aStartPos.mnPos );
+            const sal_Int32 nTmpLen = maConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
             {
@@ -251,7 +251,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_uInt32 nTmpLen = aEndPos.mnSubPos + 1;
+            const sal_Int32 nTmpLen = aEndPos.mnSubPos + 1;
             pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, static_cast< xub_StrLen >(nTmpLen) );
         }
         else
@@ -332,8 +332,8 @@ static void lcl_commitGrammarMarkUp(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_uInt32 nTmpStart = rConversionMap.ConvertToViewPosition( aStartPos.mnPos );
-            const sal_uInt32 nTmpLen = rConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
+            const sal_Int32 nTmpStart = rConversionMap.ConvertToViewPosition( aStartPos.mnPos );
+            const sal_Int32 nTmpLen = rConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
                 pSubList->Insert( rIdentifier, xMarkupInfoContainer,
@@ -350,7 +350,7 @@ static void lcl_commitGrammarMarkUp(
                 pSubList = new SwGrammarMarkUp();
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
-            const sal_uInt32 nTmpLen = aEndPos.mnSubPos + 1;
+            const sal_Int32 nTmpLen = aEndPos.mnSubPos + 1;
             pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, static_cast< xub_StrLen >(nTmpLen) );
         }
         else

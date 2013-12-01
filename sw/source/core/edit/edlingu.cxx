@@ -1427,8 +1427,8 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         {
             const ModelToViewHelper aConversionMap(*(SwTxtNode*)pCrsr->GetNode());
             OUString aExpandText = aConversionMap.getViewText();
-            sal_Int32 nSentenceEnd = static_cast<sal_Int32>(
-                aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition ));
+            sal_Int32 nSentenceEnd =
+                aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
             // remove trailing space
             if( aExpandText[nSentenceEnd - 1] == ' ' )
                 --nSentenceEnd;
