@@ -484,92 +484,6 @@ String RID_XNOTPRECEDESY_HELP { Text = "Not precedes" ; };
 String RID_XNOTSUCCEEDSY     { Text = "<?> nsucc <?> " ; };
 String RID_XNOTSUCCEEDSY_HELP { Text = "Not succeeds" ; };
 
-String RID_GRC_ALPHA                     { Text = "%alpha" ; };
-String RID_GRC_ALPHA_HELP                { Text = "Alpha" ; };
-String RID_GRC_BETA                      { Text = "%beta" ; };
-String RID_GRC_BETA_HELP                 { Text = "Beta" ; };
-String RID_GRC_CHI                       { Text = "%chi" ; };
-String RID_GRC_CHI_HELP                  { Text = "Chi" ; };
-String RID_GRC_DELTA                     { Text = "%delta" ; };
-String RID_GRC_DELTA_HELP                { Text = "Delta" ; };
-String RID_GRC_EPSILON                   { Text = "%epsilon" ; };
-String RID_GRC_EPSILON_HELP              { Text = "Epsilon" ; };
-String RID_GRC_ETA                       { Text = "%eta" ; };
-String RID_GRC_ETA_HELP                  { Text = "Eta" ; };
-String RID_GRC_GAMMA                     { Text = "%gamma" ; };
-String RID_GRC_GAMMA_HELP                { Text = "Gamma" ; };
-String RID_GRC_IOTA                      { Text = "%iota" ; };
-String RID_GRC_IOTA_HELP                 { Text = "Iota" ; };
-String RID_GRC_KAPPA                     { Text = "%kappa" ; };
-String RID_GRC_KAPPA_HELP                { Text = "Kappa" ; };
-String RID_GRC_LAMBDA                    { Text = "%lambda" ; };
-String RID_GRC_LAMBDA_HELP               { Text = "Lambda" ; };
-String RID_GRC_MU                        { Text = "%mu" ; };
-String RID_GRC_MU_HELP                   { Text = "Mu" ; };
-String RID_GRC_NU                        { Text = "%nu" ; };
-String RID_GRC_NU_HELP                   { Text = "Nu" ; };
-String RID_GRC_OMEGA                     { Text = "%omega" ; };
-String RID_GRC_OMEGA_HELP                { Text = "Omega" ; };
-String RID_GRC_OMICRON                   { Text = "%omicron" ; };
-String RID_GRC_OMICRON_HELP              { Text = "Omicron" ; };
-String RID_GRC_PHI                       { Text = "%phi" ; };
-String RID_GRC_PHI_HELP                  { Text = "Phi" ; };
-String RID_GRC_PI                        { Text = "%pi" ; };
-String RID_GRC_PI_HELP                   { Text = "Pi" ; };
-String RID_GRC_PSI                       { Text = "%psi" ; };
-String RID_GRC_PSI_HELP                  { Text = "Psi" ; };
-String RID_GRC_RHO                       { Text = "%rho" ; };
-String RID_GRC_RHO_HELP                  { Text = "Rho" ; };
-String RID_GRC_SIGMA                     { Text = "%sigma" ; };
-String RID_GRC_SIGMA_HELP                { Text = "Sigma" ; };
-String RID_GRC_TAU                       { Text = "%tau" ; };
-String RID_GRC_TAU_HELP                  { Text = "Tau" ; };
-String RID_GRC_THETA                     { Text = "%theta" ; };
-String RID_GRC_THETA_HELP                { Text = "Theta" ; };
-String RID_GRC_UPSILON                   { Text = "%upsilon" ; };
-String RID_GRC_UPSILON_HELP              { Text = "Upsilon" ; };
-String RID_GRC_XI                        { Text = "%xi" ; };
-String RID_GRC_XI_HELP                   { Text = "Xi" ; };
-String RID_GRC_ZETA                      { Text = "%zeta" ; };
-String RID_GRC_ZETA_HELP                 { Text = "Zeta" ; };
-
-String RID_SYM_VAREPSILON                { Text = "%varepsilon" ; };
-String RID_SYM_VAREPSILON_HELP           { Text = "Varepsilon" ; };
-String RID_SYM_VARTHETA                  { Text = "%vartheta" ; };
-String RID_SYM_VARTHETA_HELP             { Text = "Vartheta" ; };
-String RID_SYM_VARPI                     { Text = "%varpi" ; };
-String RID_SYM_VARPI_HELP                { Text = "Varpi" ; };
-String RID_SYM_VARRHO                    { Text = "%varrho" ; };
-String RID_SYM_VARRHO_HELP               { Text = "Varrho" ; };
-String RID_SYM_VARSIGMA                  { Text = "%varsigma" ; };
-String RID_SYM_VARSIGMA_HELP             { Text = "Varsigma" ; };
-String RID_SYM_VARPHI                    { Text = "%varphi" ; };
-String RID_SYM_VARPHI_HELP               { Text = "Varphi" ; };
-String RID_SYM_ELEMENT                   { Text = "%element" ; };
-String RID_SYM_ELEMENT_HELP              { Text = "Element" ; };
-String RID_SYM_NOELEMENT                 { Text = "%noelement" ; };
-String RID_SYM_NOELEMENT_HELP            { Text = "No element" ; };
-String RID_SYM_STRICTLYLESSTHAN          { Text = "%strictlylessthan" ; };
-String RID_SYM_STRICTLYLESSTHAN_HELP     { Text = "Strictly less than" ; };
-String RID_SYM_STRICTLYGREATERTHAN       { Text = "%strictlygreaterthan" ; };
-String RID_SYM_STRICTLYGREATERTHAN_HELP  { Text = "Strictly greater than" ; };
-String RID_SYM_NOTEQUAL                  { Text = "%notequal" ; };
-String RID_SYM_NOTEQUAL_HELP             { Text = "Not equal" ; };
-String RID_SYM_IDENTICAL                 { Text = "%identical" ; };
-String RID_SYM_IDENTICAL_HELP            { Text = "Identical" ; };
-String RID_SYM_TENDTO                    { Text = "%tendto" ; };
-String RID_SYM_TENDTO_HELP               { Text = "Tend to" ; };
-String RID_SYM_INFINITE                  { Text = "%infinite" ; };
-String RID_SYM_INFINITE_HELP             { Text = "Infinite" ; };
-String RID_SYM_ANGLE                     { Text = "%angle" ; };
-String RID_SYM_ANGLE_HELP                { Text = "Angle" ; };
-String RID_SYM_PERTHOUSAND               { Text = "%perthousand" ; };
-String RID_SYM_PERTHOUSAND_HELP          { Text = "Per thousand" ; };
-String RID_SYM_AND                       { Text = "%and" ; };
-String RID_SYM_AND_HELP                  { Text = "And" ; };
-String RID_SYM_OR                        { Text = "%or" ; };
-String RID_SYM_OR_HELP                   { Text = "Or" ; };
-
 String RID_CATEGORY_UNARY_BINARY_OPERATORS
 {
     Text [ en-US ] = "Unary/Binary Operators" ;
@@ -601,10 +515,6 @@ String RID_CATEGORY_BRACKETS
 String RID_CATEGORY_FORMATS
 {
     Text [ en-US ] = "Formats" ;
-};
-String RID_CATEGORY_SYMBOLS
-{
-    Text [ en-US ] = "Symbols" ;
 };
 String RID_CATEGORY_OTHERS
 {
