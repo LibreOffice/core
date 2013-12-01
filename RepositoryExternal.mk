@@ -2641,7 +2641,7 @@ endif
 
 ifeq ($(ENABLE_EOT),TRUE)
 
-ifeq ($(SYSTEM_LIBEOT),TRUE)
+ifeq ($(SYSTEM_LIBEOT),YES)
 
 define gb_LinkTarget__use_libeot
 $(call gb_LinkTarget_set_include,$(1),\
