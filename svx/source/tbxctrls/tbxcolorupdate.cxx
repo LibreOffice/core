@@ -126,7 +126,7 @@ namespace svx
 
                 mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
-                if( COL_TRANSPARENT != aColor.GetColor() )
+                if( ( COL_TRANSPARENT != aColor.GetColor() ) && ( maBmpSize.Width() == maBmpSize.Height() ) )
                     pBmpAcc->SetLineColor( aColor );
                 else if( mpTbx->GetBackground().GetColor().IsDark() )
                     pBmpAcc->SetLineColor( Color( COL_WHITE ) );
@@ -135,33 +135,10 @@ namespace svx
 
                 pBmpAcc->SetFillColor( maCurColor = aColor );
 
-                if( maBmpSize.Width() <= 16 )
-                    maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
-                else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
-                {
-                    maUpdRect.Left() = 22;
-                    maUpdRect.Top() = 2;
-                    maUpdRect.Right() = 73;
-                    maUpdRect.Bottom() = 9;
-                }
-                else if(maBmpSize.Width() >= (2 * maBmpSize.Height() - 2) && maBmpSize.Height() >= 16)
-                {
-                    maUpdRect.Left() = maBmpSize.Height() + 2;
-                    maUpdRect.Top() = 2;
-                    maUpdRect.Right() = maBmpSize.Width() - 3;
-                    maUpdRect.Bottom() = maBmpSize.Height() - 3;
-                }
+                if( maBmpSize.Width() == maBmpSize.Height() )
+                    maUpdRect = Rectangle( Point( 0, maBmpSize.Height() * 3 / 4 ), Size( maBmpSize.Width(), maBmpSize.Height() / 4 ) );
                 else
-                {
-                    maUpdRect = Rectangle( Point( 0, 0 ), Size( maBmpSize.Width(), maBmpSize.Height() ) );
-
-                    // Now, fit the selected color inside the toolbox color-rectangle such that
-                    // the distinct boundaries of the rectangle of toolbox are also clearly visible.
-                    maUpdRect.Left() += 21;
-                    maUpdRect.Top() += 1;
-                    maUpdRect.Bottom() -= 1;
-                    maUpdRect.Right() -= 4;
-                }
+                    maUpdRect = Rectangle( Point( maBmpSize.Height() + 2, 2 ), Point( maBmpSize.Width() - 3, maBmpSize.Height() - 3 ) );
 
                 pBmpAcc->DrawRect( maUpdRect );
 
