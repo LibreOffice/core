@@ -84,7 +84,6 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 #include <set>
-#include <time.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -430,7 +429,6 @@ sal_Int32 lcl_getChartType( const OUString& sChartType )
 sal_Int32 lcl_generateRandomValue()
 {
     static sal_Int32 MAX_NUMBER = 100000000;
-    //srand( unsigned( time( NULL ) ));
     return sal_Int32( rand() % MAX_NUMBER );
 }
 
@@ -1667,8 +1665,6 @@ void ChartExport::exportCandleStickSeries(
     }
 }
 
-
-
 void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence > & xValueSeq )
 {
     FSHelperPtr pFS = GetFS();
@@ -1811,7 +1807,7 @@ void ChartExport::exportShapeProps( Reference< XPropertySet > xPropSet )
 
 void ChartExport::InitPlotArea( )
 {
-       Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
+    Reference< XPropertySet > xDiagramProperties (mxDiagram, uno::UNO_QUERY);
 
     //    Check for supported services and then the properties provided by this service.
     Reference<lang::XServiceInfo> xServiceInfo (mxDiagram, uno::UNO_QUERY);
@@ -2427,7 +2423,6 @@ void ChartExport::exportDataPoints(
                 }
                 catch( const uno::Exception & rEx )
                 {
-                    (void)rEx; // avoid warning for pro build
                     SAL_WARN( "oox", "Exception caught during Export of data point: " << rEx.Message );
                 }
             }
