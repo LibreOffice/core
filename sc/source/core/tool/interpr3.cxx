@@ -1506,10 +1506,10 @@ void ScInterpreter::ScNegBinomDist()
     }
 }
 
-void ScInterpreter::ScNormDist()
+void ScInterpreter::ScNormDist( int nMinParamCount )
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 3, 4))
+    if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
     bool bCumulative = nParamCount == 4 ? GetBool() : true;
     double sigma = GetDouble();                 // standard deviation
@@ -1526,10 +1526,10 @@ void ScInterpreter::ScNormDist()
         PushDouble(phi((x-mue)/sigma)/sigma);
 }
 
-void ScInterpreter::ScLogNormDist() //expanded, see #i100119#
+void ScInterpreter::ScLogNormDist( int nMinParamCount ) //expanded, see #i100119# and fdo72158
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 4))
+    if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
     bool bCumulative = nParamCount == 4 ? GetBool() : true; // cumulative
     double sigma = nParamCount >= 3 ? GetDouble() : 1.0; // standard deviation
@@ -1559,6 +1559,20 @@ void ScInterpreter::ScLogNormDist() //expanded, see #i100119#
 void ScInterpreter::ScStdNormDist()
 {
     PushDouble(integralPhi(GetDouble()));
+}
+
+void ScInterpreter::ScStdNormDist_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 2 ) )
+        return;
+    bool bCumulative = GetBool();                        // cumulative
+    double x = GetDouble();                              // x
+
+    if ( bCumulative )
+        PushDouble( integralPhi( x ) );
+    else
+        PushDouble( exp( - pow( x, 2 ) / 2 ) / sqrt( 2 * F_PI ) );
 }
 
 void ScInterpreter::ScExpDist()
