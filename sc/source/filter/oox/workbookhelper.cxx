@@ -604,8 +604,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         // #i79890# disable automatic update of defined names
         mpDoc->CompileNameFormula(true);
 
-        //! TODO: localize progress bar text
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Loading..." ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
 
         //prevent unnecessary broadcasts and "half way listeners" as
@@ -614,8 +613,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     }
     else if( mrBaseFilter.isExportFilter() )
     {
-        //! TODO: localize progress bar text
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Saving..." ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_SAVE_DOC) ) );
     }
     // filter specific
     switch( getFilterType() )
