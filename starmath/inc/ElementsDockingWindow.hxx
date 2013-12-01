@@ -76,8 +76,6 @@ class SmElementsControl : public Control
     static const sal_uInt16 aAttributes[][2];
     static const sal_uInt16 aBrackets[][2];
     static const sal_uInt16 aFormats[][2];
-    static const sal_uInt16 aGreek[][2];
-    static const sal_uInt16 aSymbols[][2];
     static const sal_uInt16 aOthers[][2];
 
     Link aSelectHdlLink;
