@@ -248,9 +248,9 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
     if( maTypeInfo.mbPolarCoordSystem )
     {
         if( mb3dChart )
-            xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
-        else
             xCoordSystem = css::chart2::PolarCoordinateSystem3d::create(xContext);
+        else
+            xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
     }
     else
     {
