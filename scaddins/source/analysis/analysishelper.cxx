@@ -2546,8 +2546,8 @@ ConvertDataList::ConvertDataList( void )
 
     // PRESSURE: 1 Pascal is...
     NEWDP( "Pa",    1.0000000000000000E00,  CDC_Pressure ); // Pascal
-    NEWDP( "atm",   9.8692329999819300E-06, CDC_Pressure ); // Atmosphere
-    NEWDP( "at",    1.0197162129779000E-05, CDC_Pressure ); // Atmosphere also
+    NEWDP( "atm",   9.8692329999819300E-06, CDC_Pressure ); // Standard Atmosphere
+    NEWDP( "at",    1.0197162129779000E-05, CDC_Pressure ); // Technical Atmosphere -> http://physics.nist.gov/Pubs/SP811/appenB8.html
     NEWDP( "mmHg",  7.5006170799862700E-03, CDC_Pressure ); // mm Hg (Mercury)
     NEWD( "Torr",   7.5006380000000000E-03, CDC_Pressure ); // *** Torr
     NEWD( "psi",    1.4503770000000000E-04, CDC_Pressure ); // *** Psi
