@@ -189,34 +189,6 @@ const sal_uInt16 SmElementsControl::aFormats[][2] =
     {RID_MATRIX, RID_MATRIX_HELP},
 };
 
-const sal_uInt16 SmElementsControl::aGreek[][2] =
-{
-    {RID_GRC_ALPHA, RID_GRC_ALPHA_HELP}, {RID_GRC_BETA, RID_GRC_BETA_HELP},
-    {RID_GRC_GAMMA, RID_GRC_GAMMA_HELP}, {RID_GRC_DELTA, RID_GRC_DELTA_HELP},
-    {RID_GRC_EPSILON, RID_GRC_EPSILON_HELP}, {RID_GRC_ZETA, RID_GRC_ZETA_HELP},
-    {RID_GRC_ETA, RID_GRC_ETA_HELP}, {RID_GRC_THETA, RID_GRC_THETA_HELP},
-    {RID_GRC_IOTA, RID_GRC_IOTA_HELP}, {RID_GRC_KAPPA, RID_GRC_KAPPA_HELP},
-    {RID_GRC_LAMBDA, RID_GRC_LAMBDA_HELP}, {RID_GRC_MU, RID_GRC_MU_HELP},
-    {RID_GRC_NU, RID_GRC_NU_HELP}, {RID_GRC_XI, RID_GRC_XI_HELP},
-    {RID_GRC_OMICRON, RID_GRC_OMICRON_HELP}, {RID_GRC_PI, RID_GRC_PI_HELP},
-    {RID_GRC_RHO, RID_GRC_RHO_HELP}, {RID_GRC_SIGMA, RID_GRC_SIGMA_HELP},
-    {RID_GRC_TAU, RID_GRC_TAU_HELP}, {RID_GRC_UPSILON, RID_GRC_UPSILON_HELP},
-    {RID_GRC_PHI, RID_GRC_PHI_HELP}, {RID_GRC_CHI, RID_GRC_CHI_HELP},
-    {RID_GRC_PSI, RID_GRC_PSI_HELP}, {RID_GRC_OMEGA, RID_GRC_OMEGA_HELP}
-};
-
-const sal_uInt16 SmElementsControl::aSymbols[][2] =
-{
-    {RID_SYM_VAREPSILON, RID_SYM_VAREPSILON_HELP}, {RID_SYM_VARTHETA, RID_SYM_VARTHETA_HELP},
-    {RID_SYM_VARPI, RID_SYM_VARPI_HELP}, {RID_SYM_VARRHO, RID_SYM_VARRHO_HELP},
-    {RID_SYM_VARSIGMA, RID_SYM_VARSIGMA_HELP}, {RID_SYM_VARPHI, RID_SYM_VARPHI_HELP},
-    {RID_SYM_ELEMENT, RID_SYM_ELEMENT_HELP}, {RID_SYM_NOELEMENT, RID_SYM_NOELEMENT_HELP},
-    {RID_SYM_STRICTLYLESSTHAN, RID_SYM_STRICTLYLESSTHAN_HELP}, {RID_SYM_STRICTLYGREATERTHAN, RID_SYM_STRICTLYGREATERTHAN_HELP},
-    {RID_SYM_NOTEQUAL, RID_SYM_NOTEQUAL_HELP}, {RID_SYM_IDENTICAL, RID_SYM_IDENTICAL_HELP},
-    {RID_SYM_TENDTO, RID_SYM_TENDTO_HELP}, {RID_SYM_INFINITE, RID_SYM_INFINITE_HELP}, {RID_SYM_ANGLE, RID_SYM_ANGLE_HELP},
-    {RID_SYM_PERTHOUSAND, RID_SYM_PERTHOUSAND_HELP}, {RID_SYM_AND, RID_SYM_AND_HELP}, {RID_SYM_OR, RID_SYM_OR_HELP}
-};
-
 const sal_uInt16 SmElementsControl::aOthers[][2] =
 {
     {RID_INFINITY, RID_INFINITY_HELP}, {RID_PARTIAL, RID_PARTIAL_HELP}, {RID_NABLA, RID_NABLA_HELP},
@@ -525,17 +497,6 @@ void SmElementsControl::build()
         case RID_CATEGORY_FORMATS:
             addElements(aFormats, SAL_N_ELEMENTS(aFormats));
         break;
-        case RID_CATEGORY_SYMBOLS:
-            // upper case Greek symbols get generated from the lowercase ones
-            for ( sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aGreek); i++)
-                addElement(SM_RESSTR(aGreek[i][0]).toAsciiUpperCase(), SM_RESSTR(aGreek[i][0]).toAsciiUpperCase(), SM_RESSTR(aGreek[i][1]));
-
-            addSeparator();
-            // lower case Greek symbols
-            addElements(aGreek, SAL_N_ELEMENTS(aGreek));
-            addSeparator();
-            addElements(aSymbols, SAL_N_ELEMENTS(aSymbols));
-        break;
         case RID_CATEGORY_OTHERS:
             addElements(aOthers, SAL_N_ELEMENTS(aOthers));
         break;
@@ -566,7 +527,6 @@ const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
     RID_CATEGORY_ATTRIBUTES,
     RID_CATEGORY_BRACKETS,
     RID_CATEGORY_FORMATS,
-    RID_CATEGORY_SYMBOLS,
     RID_CATEGORY_OTHERS,
     RID_CATEGORY_EXAMPLES
 };
@@ -578,7 +538,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 {
     maElementsControl.SetBorderStyle( WINDOW_BORDER_MONO );
 
-    maElementListBox.SetDropDownLineCount( 11 );
+    maElementListBox.SetDropDownLineCount( 10 );
 
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aCategories) ; i++)
     {
