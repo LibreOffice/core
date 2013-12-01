@@ -34,6 +34,66 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "Analysis of Variance";
     };
 
+    String STR_ANOVA_SINGLE_FACTOR_LABEL
+    {
+        Text [ en-US ] = "ANOVA - Single Factor";
+    };
+
+    String STR_ANOVA_LABEL_GROUPS
+    {
+        Text [ en-US ] = "Groups";
+    };
+
+    String STR_ANOVA_LABEL_BETWEEN_GROUPS
+    {
+        Text [ en-US ] = "Between Groups";
+    };
+
+    String STR_ANOVA_LABEL_WITHIN_GROUPS
+    {
+        Text [ en-US ] = "Within Groups";
+    };
+
+    String STR_ANOVA_LABEL_SOURCE_OF_VARIATION
+    {
+        Text [ en-US ] = "Source of Variation";
+    };
+
+    String STR_ANOVA_LABEL_SS
+    {
+        Text [ en-US ] = "SS";
+    };
+
+    String STR_ANOVA_LABEL_DF
+    {
+        Text [ en-US ] = "df";
+    };
+
+    String STR_ANOVA_LABEL_MS
+    {
+        Text [ en-US ] = "MS";
+    };
+
+    String STR_ANOVA_LABEL_F
+    {
+        Text [ en-US ] = "F";
+    };
+
+    String STR_ANOVA_LABEL_P_VALUE
+    {
+        Text [ en-US ] = "P-value";
+    };
+
+    String STR_ANOVA_LABEL_F_CRITICAL
+    {
+        Text [ en-US ] = "F critical";
+    };
+
+    String STR_ANOVA_LABEL_TOTAL
+    {
+        Text [ en-US ] = "Total";
+    };
+
     /* CorrelationDialog */
 
     String STR_CORRELATION_UNDO_NAME
@@ -41,11 +101,21 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "Correlation";
     };
 
+    String STR_CORRELATION_LABEL
+    {
+        Text [ en-US ] = "Correlations";
+    };
+
     /* CovarianceDialog */
 
     String STR_COVARIANCE_UNDO_NAME
     {
         Text [ en-US ] = "Covariance";
+    };
+
+    String STR_COVARIANCE_LABEL
+    {
+        Text [ en-US ] = "Covariances";
     };
 
     /* DescriptiveStatisticsDialog */
@@ -191,6 +261,20 @@ Resource RID_STATISTICS_DLGS
     String STR_SAMPLING_UNDO_NAME
     {
         Text [ en-US ] = "Sampling";
+    };
+
+    /* Common */
+    String STR_COLUMN_LABEL_TEMPLATE
+    {
+        Text [ en-US ] = "Column %NUMBER%";
+    };
+    String STR_ROW_LABEL_TEMPLATE
+    {
+        Text [ en-US ] = "Row %NUMBER%";
+    };
+    String STR_LABEL_ALPHA
+    {
+        Text [ en-US ] = "Alpha";
     };
 };
 

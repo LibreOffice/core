@@ -10,12 +10,13 @@
 
 #include "docsh.hxx"
 #include "reffact.hxx"
+#include "strload.hxx"
+#include "StatisticsDialogs.hrc"
 
 #include "CovarianceDialog.hxx"
 
 namespace
 {
-    static const OUString strCovarianceLabel("Covariances");
     static const OUString strCovarianceTemplate("=COVAR(%VAR1%; %VAR2%)");
 }
 
@@ -32,12 +33,12 @@ sal_Bool ScCovarianceDialog::Close()
     return DoClose( ScCovarianceDialogWrapper::GetChildWindowId() );
 }
 
-const OUString& ScCovarianceDialog::getLabel()
+const OUString ScCovarianceDialog::getLabel()
 {
-    return strCovarianceLabel;
+    return SC_STRLOAD(RID_STATISTICS_DLGS, STR_COVARIANCE_LABEL);
 }
 
-const OUString& ScCovarianceDialog::getTemplate()
+const OUString ScCovarianceDialog::getTemplate()
 {
     return strCovarianceTemplate;
 }

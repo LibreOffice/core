@@ -30,9 +30,14 @@
 namespace
 {
 
-static const char* lclBasicStatisticsLabels[] =
+static sal_Int16 lclBasicStatisticsLabels[] =
 {
-    "Groups", "Count", "Sum", "Mean", "Variance", NULL
+    STR_ANOVA_LABEL_GROUPS,
+    STRID_CALC_COUNT,
+    STRID_CALC_SUM,
+    STRID_CALC_MEAN,
+    STRID_CALC_VARIANCE,
+    0
 };
 
 static const char* lclBasicStatisticsFormula[] =
@@ -40,15 +45,20 @@ static const char* lclBasicStatisticsFormula[] =
     "=COUNT(%RANGE%)", "=SUM(%RANGE%)", "=AVERAGE(%RANGE%)", "=VAR(%RANGE%)", NULL
 };
 
-static const char* lclAnovaLabels[] =
+static sal_Int16 lclAnovaLabels[] =
 {
-    "Source of Variation", "SS", "df", "MS", "F", "P-value", "F critical", NULL
+    STR_ANOVA_LABEL_SOURCE_OF_VARIATION,
+    STR_ANOVA_LABEL_SS,
+    STR_ANOVA_LABEL_DF,
+    STR_ANOVA_LABEL_MS,
+    STR_ANOVA_LABEL_F,
+    STR_ANOVA_LABEL_P_VALUE,
+    STR_ANOVA_LABEL_F_CRITICAL,
+    0
 };
 
 static const OUString strWildcardRange("%RANGE%");
 static const OUString strWildcardNumber("%NUMBER%");
-static const OUString strColumnLabelTemplate("Column %NUMBER%");
-static const OUString strRowLabelTemplate("Row %NUMBER%");
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,
@@ -97,14 +107,14 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument);
     FormulaTemplate aTemplate(mDocument, mAddressDetails);
 
-    output.writeBoldString("ANOVA - Single Factor");
+    output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_SINGLE_FACTOR_LABEL));
     output.nextRow();
     output.nextRow();
 
     // Write labels
-    for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != NULL; i++)
+    for(sal_Int32 i = 0; lclBasicStatisticsLabels[i] != 0; i++)
     {
-        output.writeString(lclBasicStatisticsLabels[i]);
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclBasicStatisticsLabels[i]));
         output.nextColumn();
     }
     output.nextRow();
@@ -123,12 +133,13 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
         output.resetColumn();
 
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(strColumnLabelTemplate);
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(strRowLabelTemplate);
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
         aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
-        pDocShell->GetDocFunc().SetStringCell(output.current(), aTemplate.getTemplate(), true);
+        output.writeString(aTemplate.getTemplate());
+
         output.nextColumn();
 
         ScRange aColumnRange = pIterator->get();
@@ -149,9 +160,9 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
 
     // Write ANOVA labels
     output.resetColumn();
-    for(sal_Int32 i = 0; lclAnovaLabels[i] != NULL; i++)
+    for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
     {
-        output.writeString(lclAnovaLabels[i]);
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, lclAnovaLabels[i]));
         output.nextColumn();
     }
     output.nextRow();
@@ -160,7 +171,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     {
         // Label
         output.resetColumn();
-        output.writeString("Between Groups");
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_BETWEEN_GROUPS));
         output.nextColumn();
 
         // Sum of Squares
@@ -217,7 +228,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     {
         // Label
         output.resetColumn();
-        output.writeString("Within Groups");
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_WITHIN_GROUPS));
         output.nextColumn();
 
         // Sum of Squares
@@ -246,7 +257,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
     {
         // Label
         output.resetColumn();
-        output.writeString("Total");
+        output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_TOTAL));
         output.nextColumn();
 
         // Sum of Squares

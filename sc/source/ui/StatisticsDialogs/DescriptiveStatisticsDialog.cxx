@@ -57,8 +57,7 @@ static const StatisticCalculation lclCalcDefinitions[] =
 
 static const OUString strWildcardRange("%RANGE%");
 static const OUString strWildcardNumber("%NUMBER%");
-static const OUString strColumnLabelTemplate("Column %NUMBER%");
-static const OUString strRowLabelTemplate("Row %NUMBER%");
+
 }
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
@@ -99,9 +98,10 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(strColumnLabelTemplate);
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(strRowLabelTemplate);
+            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+
         aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
         aOutput.writeBoldString(aTemplate.getTemplate());
         aOutput.nextColumn();
