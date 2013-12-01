@@ -1277,8 +1277,11 @@ void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
     exportSeries( xChartType, nAttachedAxis );
 
-    // firstSliceAng
-    exportFirstSliceAng( );
+    if( !mbIs3DChart )
+    {
+        // firstSliceAng
+        exportFirstSliceAng( );
+    }
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
