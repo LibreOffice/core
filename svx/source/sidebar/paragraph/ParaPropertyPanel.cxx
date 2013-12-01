@@ -345,9 +345,8 @@ void ParaPropertyPanel::InitToolBoxBGColor()
 {
     const sal_uInt16 nIdBackColor = mpTBxBackColor->GetItemId(UNO_PARABACKCOLOR);
 
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_BACKGROUND_COLOR, nIdBackColor, mpTBxBackColor));
-
     mpTBxBackColor->SetItemImage(nIdBackColor, GetDisplayBackground().GetColor().IsDark()? maImgBackColorHigh : maImgBackColor);
+    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_BACKGROUND_COLOR, nIdBackColor, mpTBxBackColor));
     mpTBxBackColor->SetItemBits( nIdBackColor, mpTBxBackColor->GetItemBits( nIdBackColor ) | TIB_DROPDOWNONLY );
 
     Link aLink = LINK(this, ParaPropertyPanel, ToolBoxBackColorDDHandler);
