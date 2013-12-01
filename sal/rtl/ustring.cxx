@@ -43,7 +43,6 @@
 #include <rtl/ustring.h>
 
 #include "rtl/math.h"
-#include "rtl/tencinfo.h"
 
 /* ======================================================================= */
 

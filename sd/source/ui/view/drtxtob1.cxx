@@ -57,7 +57,6 @@
 
 #include "app.hrc"
 
-#include <editeng/outliner.hxx>
 #include "ViewShell.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"

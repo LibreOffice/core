@@ -36,7 +36,6 @@
 #include <rtl/string.h>
 
 #include "rtl/math.h"
-#include "rtl/tencinfo.h"
 
 /* ======================================================================= */
 

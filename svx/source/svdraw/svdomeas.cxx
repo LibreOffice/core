@@ -61,7 +61,6 @@
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
-#include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
 #include <svx/xlnedcit.hxx>
 #include <svx/xlnedit.hxx>

@@ -62,7 +62,6 @@
 #include "svdoutlinercache.hxx"
 
 #include "svx/xflclit.hxx"
-#include "svx/xflhtit.hxx"
 #include "svx/xlnclit.hxx"
 
 #include "officecfg/Office/Common.hxx"

@@ -31,9 +31,7 @@
 #include <sal/types.h>
 #include <float.h>
 
-#include <osl/diagnose.h>
 #include <osl/mutex.h>
-#include <sal/types.h>
 
 #include "internal/rtllifecycle.h"
 

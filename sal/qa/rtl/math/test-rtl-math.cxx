@@ -25,7 +25,6 @@
 #include "rtl/math.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 
 CPPUNIT_NS_BEGIN
 

@@ -25,7 +25,6 @@
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 #include <sal/macros.h>
 
 namespace test { namespace oustring {

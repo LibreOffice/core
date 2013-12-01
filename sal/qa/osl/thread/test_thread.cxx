@@ -24,7 +24,6 @@
 #include "osl/conditn.hxx"
 #include "osl/thread.hxx"
 #include "osl/time.h"
-#include "sal/types.h"
 
 namespace {
 

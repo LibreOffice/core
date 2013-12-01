@@ -39,7 +39,6 @@
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include "stbctrls.h"
-#include "sfx2/module.hxx"
 
 #include <svx/dialogs.hrc>
 #include <unotools/localedatawrapper.hxx>

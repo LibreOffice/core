@@ -66,7 +66,6 @@
 #include "DrawViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "Window.hxx"
-#include "sdmod.hxx"
 #include "OutlineViewShell.hxx"
 #include "sdxmlwrp.hxx"
 #include "sdpptwrp.hxx"
@@ -75,7 +74,6 @@
 #include "sdhtmlfilter.hxx"
 #include "framework/FrameworkHelper.hxx"
 
-#include <sfx2/viewfrm.hxx>
 #include "SdUnoDrawView.hxx"
 
 using namespace ::com::sun::star;

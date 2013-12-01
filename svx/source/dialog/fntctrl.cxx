@@ -49,7 +49,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/editids.hrc>
-#include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -62,7 +61,6 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/colritem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/twolinesitem.hxx>

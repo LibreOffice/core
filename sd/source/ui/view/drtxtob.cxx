@@ -55,8 +55,6 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
-#include <editeng/outliner.hxx>
-
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"

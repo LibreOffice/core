@@ -36,7 +36,6 @@
 #include <svx/dialmgr.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
-#include <fmundo.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>

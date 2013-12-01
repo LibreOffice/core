@@ -22,7 +22,6 @@
 #include <math.h>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>

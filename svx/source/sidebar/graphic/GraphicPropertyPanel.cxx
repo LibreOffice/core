@@ -26,7 +26,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "svx/dialogs.hrc"
 
 using namespace css;
 using namespace cssu;

@@ -47,7 +47,6 @@
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
-#include <svx/svdoutl.hxx>
 #include <svx/svddrgv.hxx>
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"

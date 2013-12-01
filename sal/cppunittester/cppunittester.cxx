@@ -35,7 +35,6 @@
 #include "rtl/textcvt.h"
 #include "rtl/ustring.hxx"
 #include "sal/main.h"
-#include "sal/types.h"
 
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/TestResult.h"

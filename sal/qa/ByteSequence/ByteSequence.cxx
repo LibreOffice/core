@@ -23,7 +23,6 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include "rtl/byteseq.hxx"
-#include "sal/types.h"
 
 namespace {
 

@@ -34,7 +34,6 @@
 #include <svtools/transfer.hxx>
 #include <sfx2/shell.hxx>
 
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
 class SfxModule;

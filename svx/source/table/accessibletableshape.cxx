@@ -34,7 +34,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <svx/svdotable.hxx>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 

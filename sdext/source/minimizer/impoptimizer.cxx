@@ -58,7 +58,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace ::std;
