@@ -120,6 +120,8 @@ private:
 public:
                         InfoBox( Window* pParent, const XubString& rMessage );
                         InfoBox( Window* pParent, const ResId & rResId );
+                        InfoBox( Window* pParent, WinBits nStyle,
+                                const XubString& rMessage );
 
     static Image        GetStandardImage();
     static Image        GetStandardImageHC();

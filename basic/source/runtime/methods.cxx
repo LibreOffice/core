@@ -4311,7 +4311,7 @@ RTLFUNC(MsgBox)
             pBox = new WarningBox( pParent, nWinBits, aMsg );
             break;
         case 64:
-            pBox = new InfoBox( pParent, aMsg );
+            pBox = new InfoBox( pParent, nWinBits, aMsg );
             break;
         default:
             pBox = new MessBox( pParent, nWinBits, aTitle, aMsg );
