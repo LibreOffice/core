@@ -662,7 +662,7 @@ void ScTable::CopyFromClip(
         for ( SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]); // notes are handles at column level
 
-        if (rCxt.getInsertFlag() == IDF_ATTRIB)
+        if (rCxt.getInsertFlag() & IDF_ATTRIB)
         {
             // make sure that there are no old references to the cond formats
             sal_uInt16 nWhichArray[2];
