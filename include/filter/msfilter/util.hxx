@@ -131,6 +131,9 @@ struct MSFILTER_DLLPUBLIC EquationResult
 
 MSFILTER_DLLPUBLIC EquationResult ParseCombinedChars(const OUString& rStr);
 
+/// Similar to EnhancedCustomShapeTypeNames::Get(), but it also supports OOXML types.
+MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const char* sShapeType );
+
 }
 
 }
