@@ -48,12 +48,12 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     GetView().GetEditWin().FlushInBuffer();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_Bool bSelect = sal_False;
-    sal_uInt16 nCount = 1;
+    sal_Int32 nCount = 1;
     if(pArgs)
     {
         const SfxPoolItem *pItem;
         if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_COUNT, sal_True, &pItem))
-            nCount = ((const SfxInt16Item *)pItem)->GetValue();
+            nCount = ((const SfxInt32Item *)pItem)->GetValue();
         if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_SELECTION, sal_True, &pItem))
             bSelect = ((const SfxBoolItem *)pItem)->GetValue();
     }
@@ -69,14 +69,14 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
             GetView().GetViewFrame()->GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
-        rReq.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nCount) );
+        rReq.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nCount) );
         rReq.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, bSelect) );
     }
     sal_uInt16 nSlot = rReq.GetSlot();
     rReq.Done();
     // Get EditWin before calling the move functions (shell change may occur!)
     SwEditWin& rTmpEditWin = GetView().GetEditWin();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    for( sal_Int32 i = 0; i < nCount; i++ )
     {
         switch(nSlot)
         {

@@ -197,7 +197,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 
         const SfxPoolItem* pSelectionItem;
         sal_Bool bInsert = sal_False;
-        xub_StrLen nInsert = 0;
+        sal_Int32 nInsert = 0;
 
         // The old item is for unknown reasons back in the set again.
         if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, sal_False, &pSelectionItem) )
@@ -215,7 +215,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                 aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
                 aReq.Done();
                 SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
-                aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
+                aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
                 aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, sal_True) );
                 aReq1.Done();
             }
@@ -234,7 +234,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         if(bInsert)
         {
             SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
-            aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
+            aReq1.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nInsert) );
             aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, sal_False) );
             aReq1.Done();
             rWrtSh.SwapPam();
