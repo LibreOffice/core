@@ -447,7 +447,7 @@ sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart n
 */
 UInt32 AquaSalGraphics::getState( ControlState nState )
 {
-    bool bDrawActive = mpFrame ? ([mpFrame->getWindow() isKeyWindow] ? true : false) : true;
+    const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
     if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
     {
         if( (nState & CTRL_STATE_HIDDEN) == 0 )
@@ -467,7 +467,7 @@ UInt32 AquaSalGraphics::getState( ControlState nState )
 
 UInt32 AquaSalGraphics::getTrackState( ControlState nState )
 {
-    bool bDrawActive = mpFrame ? ([mpFrame->getWindow() isKeyWindow] ? true : false) : true;
+    const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
     if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
             return kThemeTrackInactive;
 

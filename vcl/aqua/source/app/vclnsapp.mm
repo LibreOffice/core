@@ -91,9 +91,9 @@
                     // instead.
 
                     // Instead of:
-                    // [pFrame->getWindow() windowShouldClose: nil];
+                    // [pFrame->getNSWindow() windowShouldClose: nil];
                     // do:
-                    objc_msgSend(pFrame->getWindow(), @selector(windowShouldClose:), nil);
+                    objc_msgSend(pFrame->getNSWindow(), @selector(windowShouldClose:), nil);
 
                     return;
                 }
@@ -104,9 +104,9 @@
              */
             if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"m"] )
             {
-                if ( nModMask == NSCommandKeyMask && ([pFrame->getWindow() styleMask] & NSMiniaturizableWindowMask) )
+                if ( nModMask == NSCommandKeyMask && ([pFrame->getNSWindow() styleMask] & NSMiniaturizableWindowMask) )
                 {
-                    [pFrame->getWindow() performMiniaturize: nil];
+                    [pFrame->getNSWindow() performMiniaturize: nil];
                     return;
                 }
 
@@ -223,7 +223,7 @@
                 if( (*it)->mpDockMenuEntry != NULL &&
                     (*it)->mbShown )
                 {
-                    [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                    [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                     return;
                 }
             }
@@ -235,7 +235,7 @@
             if( (*it)->mpDockMenuEntry != NULL &&
                 (*it)->mbShown )
             {
-                [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                 return;
             }
             ++it;
@@ -263,7 +263,7 @@
                 if( (*it)->mpDockMenuEntry != NULL &&
                     (*it)->mbShown )
                 {
-                    [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                    [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                     return;
                 }
             }
@@ -275,7 +275,7 @@
             if( (*it)->mpDockMenuEntry != NULL &&
                 (*it)->mbShown )
             {
-                [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                 return;
             }
             ++it;
@@ -462,9 +462,10 @@
     for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
-        [(*it)->mpWindow setLevel: NSPopUpMenuWindowLevel];
-        if( [(*it)->mpWindow isVisible] )
-            [(*it)->mpWindow orderFront: NSApp];
+        NSWindow* pNSWindow = (*it)->getNSWindow();
+        [pNSWindow setLevel: NSPopUpMenuWindowLevel];
+        if( [pNSWindow isVisible] )
+            [pNSWindow orderFront: NSApp];
     }
 }
 
@@ -488,7 +489,7 @@
     for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
-        [(*it)->mpWindow setLevel: NSNormalWindowLevel];
+        [(*it)->getNSWindow() setLevel: NSNormalWindowLevel];
     }
 }
 #endif

@@ -61,7 +61,7 @@ struct SystemEnvData
 #if defined( WNT )
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
-    NSView*               pView;          // the cocoa (NSView *) implementing this object
+    NSView*             mpNSView;       // the cocoa (NSView *) implementing this object
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
