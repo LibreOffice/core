@@ -29,7 +29,14 @@
 
 namespace osl
 {
-
+    /**
+     * Warning: the Condition abstraction is inadequate for any
+     * situation where there may be multiple threads setting,
+     * waiting, and resetting the same condition. It can only be
+     * used to synchronise interactions between two threads
+     * cf. lost wakeups in:
+     *    http://www.cs.wustl.edu/~schmidt/win32-cv-1.html
+     */
     class Condition
     {
     public:
