@@ -33,9 +33,16 @@
 namespace chart
 {
 
+void lcl_setValue( FormattedField& rFmtField, double fValue )
+{
+    rFmtField.SetValue( fValue );
+    rFmtField.SetDefaultValue( fValue );
+}
+
 TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs ) :
         m_eTrendLineType( CHREGRESS_LINEAR ),
-        m_bTrendLineUnique( true )
+        m_bTrendLineUnique( true ),
+        m_pNumFormatter(NULL)
 {
     SfxTabPage* pTabPage = reinterpret_cast<SfxTabPage*>(pParent);
     pTabPage->get(m_pRB_Linear,"linear");
@@ -50,7 +57,7 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
     pTabPage->get(m_pNF_ExtrapolateForward,"extrapolateForward");
     pTabPage->get(m_pNF_ExtrapolateBackward,"extrapolateBackward");
     pTabPage->get(m_pCB_SetIntercept,"setIntercept");
-    pTabPage->get(m_pNF_InterceptValue,"interceptValue");
+    pTabPage->get(m_pFmtFld_InterceptValue,"interceptValue");
     pTabPage->get(m_pCB_ShowEquation,"showEquation");
     pTabPage->get(m_pCB_ShowCorrelationCoeff,"showCorrelationCoefficient");
     pTabPage->get(m_pFI_Linear,"imageLinear");
@@ -69,17 +76,15 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
     m_pRB_Polynomial->SetClickHdl( aLink );
     m_pRB_MovingAverage->SetClickHdl( aLink );
 
-    aLink = LINK(this, TrendlineResources, ChangeNumericField );
+    aLink = LINK(this, TrendlineResources, ChangeValue );
     m_pNF_Degree->SetModifyHdl( aLink );
     m_pNF_Period->SetModifyHdl( aLink );
-    m_pNF_InterceptValue->SetModifyHdl( aLink );
+    m_pFmtFld_InterceptValue->SetModifyHdl( aLink );
 
     m_pNF_ExtrapolateForward->SetMin( SAL_MIN_INT64 );
     m_pNF_ExtrapolateForward->SetMax( SAL_MAX_INT64 );
     m_pNF_ExtrapolateBackward->SetMin( SAL_MIN_INT64 );
     m_pNF_ExtrapolateBackward->SetMax( SAL_MAX_INT64 );
-    m_pNF_InterceptValue->SetMin( SAL_MIN_INT64 );
-    m_pNF_InterceptValue->SetMax( SAL_MAX_INT64 );
 
     Reset( rInAttrs );
     UpdateControlStates();
@@ -174,15 +179,12 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_pNF_ExtrapolateBackward->SetValue( 0 );
     }
 
+    double nValue = 0.0;;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
-        double nValue = static_cast< const SvxDoubleItem * >( pPoolItem )->GetValue() * 10000;
-        m_pNF_InterceptValue->SetValue( (sal_Int64) nValue );
+        nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
     }
-    else
-    {
-        m_pNF_InterceptValue->SetValue( 0 );
-    }
+    lcl_setValue( *m_pFmtFld_InterceptValue, nValue );
 
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SET_INTERCEPT, sal_True, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
@@ -280,7 +282,9 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
     if( m_pCB_SetIntercept->GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_pCB_SetIntercept->IsChecked() ));
 
-    double aInterceptValue = m_pNF_InterceptValue->GetValue() / 10000.0;
+    double aInterceptValue = 0.0;
+    sal_uInt32 nIndex = 0;
+    m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aInterceptValue);
     rOutAttrs.Put(SvxDoubleItem( aInterceptValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
 
     return sal_True;
@@ -302,7 +306,7 @@ void TrendlineResources::UpdateControlStates()
     m_pNF_ExtrapolateForward->Enable(!bMovingAverage);
     m_pNF_ExtrapolateBackward->Enable(!bMovingAverage);
     m_pCB_SetIntercept->Enable(!bMovingAverage);
-    m_pNF_InterceptValue->Enable(!bMovingAverage);
+    m_pFmtFld_InterceptValue->Enable(!bMovingAverage);
     if(bMovingAverage)
     {
         m_pCB_ShowEquation->SetState( STATE_NOCHECK );
@@ -312,7 +316,7 @@ void TrendlineResources::UpdateControlStates()
     m_pCB_ShowCorrelationCoeff->Enable(!bMovingAverage);
 }
 
-IMPL_LINK( TrendlineResources, ChangeNumericField, NumericField *, pNumericField)
+IMPL_LINK( TrendlineResources, ChangeValue, void *, pNumericField)
 {
     if( pNumericField == m_pNF_Degree )
     {
@@ -330,7 +334,7 @@ IMPL_LINK( TrendlineResources, ChangeNumericField, NumericField *, pNumericField
                 SelectTrendLine(m_pRB_MovingAverage);
         }
     }
-    else if( pNumericField == m_pNF_InterceptValue )
+    else if( pNumericField == m_pFmtFld_InterceptValue )
     {
         if( !m_pCB_SetIntercept->IsChecked() )
                 m_pCB_SetIntercept->Check();
@@ -339,6 +343,13 @@ IMPL_LINK( TrendlineResources, ChangeNumericField, NumericField *, pNumericField
 
     return 0;
 }
+
+void TrendlineResources::SetNumFormatter( SvNumberFormatter* pFormatter )
+{
+    m_pNumFormatter = pFormatter;
+    m_pFmtFld_InterceptValue->SetFormatter( m_pNumFormatter );
+}
+
 
 } //  namespace chart
 

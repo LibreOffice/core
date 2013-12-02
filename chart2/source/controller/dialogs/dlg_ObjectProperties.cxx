@@ -634,6 +634,15 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
                     m_pParameter->ProvidesBarConnectors() );
             break;
         }
+        case TP_TRENDLINE:
+        {
+            TrendlineTabPage* pTrendlineTabPage = dynamic_cast< TrendlineTabPage* >( &rPage );
+            if(pTrendlineTabPage)
+            {
+                pTrendlineTabPage->SetNumFormatter( m_pNumberFormatter );
+            }
+            break;
+        }
     }
 }
 

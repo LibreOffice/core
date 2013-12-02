@@ -58,6 +58,11 @@ void TrendlineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
         m_aTrendlineResources.FillValueSets();
 }
 
+void TrendlineTabPage::SetNumFormatter( SvNumberFormatter* pNumFormatter )
+{
+    m_aTrendlineResources.SetNumFormatter( pNumFormatter );
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
