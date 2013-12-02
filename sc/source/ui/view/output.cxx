@@ -882,11 +882,12 @@ BitmapEx& getIcon( ScIconSetType eType, sal_Int32 nIndex )
 
 void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, OutputDevice* pDev, const Rectangle& rRect )
 {
-    long nSize = 16;
+    //long nSize = 16;
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
     BitmapEx& rIcon = getIcon( eType, nIndex );
-    pDev->DrawBitmapEx( Point( rRect.Left() +2, rRect.Top() + 2 ), Size( nSize, nSize ), rIcon );
+    long aOrigSize = std::max<long>(0,std::min(rRect.GetSize().getWidth() - 4, rRect.GetSize().getHeight() -4));
+    pDev->DrawBitmapEx( Point( rRect.Left() +2, rRect.Top() + 2 ), Size(aOrigSize, aOrigSize), rIcon );
 }
 
 void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
