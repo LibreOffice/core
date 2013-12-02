@@ -54,13 +54,24 @@ public:
                               SalX11Screen nXScreen,
                               Pixmap hDrawable = None,
                               XRenderPictFormat* pXRenderFormat = NULL );
-    inline  void            InitGraphics( X11SalVirtualDevice *pVD );
-
-    inline  Display        *GetXDisplay() const;
-    inline  SalDisplay     *GetDisplay() const;
-    inline  sal_Bool        IsDisplay() const;
-    inline  Pixmap          GetDrawable() const { return hDrawable_; }
-    inline  sal_uInt16      GetDepth() const { return nDepth_; }
+    void InitGraphics( X11SalVirtualDevice *pVD )
+    {
+        pGraphics_->Init( pVD );
+    }
+    Display *GetXDisplay() const
+    {
+        return pDisplay_->GetDisplay();
+    }
+    SalDisplay *GetDisplay() const
+    {
+        return pDisplay_;
+    }
+    sal_Bool IsDisplay() const
+    {
+        return pDisplay_->IsDisplay();
+    }
+    Pixmap          GetDrawable() const { return hDrawable_; }
+    sal_uInt16      GetDepth() const { return nDepth_; }
     int                     GetWidth() const { return nDX_; }
     int                     GetHeight() const { return nDY_; }
     SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
@@ -72,6 +83,7 @@ public:
     virtual sal_Bool        SetSize( long nNewDX, long nNewDY );
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
+
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H
 

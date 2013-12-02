@@ -25,7 +25,7 @@
 
 #include <unx/salunx.h>
 #include <unx/saltype.h>
-
+#include <unx/saldisp.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
 #include <salinst.hxx>
@@ -37,7 +37,6 @@
 
 #include <list>
 
-class   SalDisplay;
 class   X11SalGraphics;
 class   SalI18N_InputContext;
 
@@ -171,9 +170,18 @@ public:
     void            Init( sal_uIntPtr nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
                           SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
-    SalDisplay*             GetDisplay() const { return pDisplay_; }
-    Display*                GetXDisplay() const;
-    XLIB_Window             GetDrawable() const;
+    SalDisplay* GetDisplay() const
+    {
+        return pDisplay_;
+    }
+    Display *GetXDisplay() const
+    {
+        return pDisplay_->GetDisplay();
+    }
+    XLIB_Window GetDrawable() const
+    {
+        return GetWindow();
+    }
     SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
     XLIB_Window             GetWindow() const { return mhWindow; }
     XLIB_Window             GetShellWindow() const { return mhShellWindow; }
@@ -183,8 +191,8 @@ public:
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
               sal_uIntPtr           GetStyle() const { return nStyle_; }
 
-    inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
-    inline  sal_Bool            IsCaptured() const { return nCaptured_ == 1; }
+    XLIB_Cursor     GetCursor() const { return hCursor_; }
+    sal_Bool            IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
     void            HandleExtTextEvent (XClientMessageEvent *pEvent);
 #endif
