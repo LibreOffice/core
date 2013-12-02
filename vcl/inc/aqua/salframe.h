@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALFRAME_H
-#define _SV_SALFRAME_H
+#ifndef INCLUDED_VCL_INC_AQUA_SALFRAME_H
+#define INCLUDED_VCL_INC_AQUA_SALFRAME_H
 
 #include <premac.h>
 #include <IOKit/pwr_mgt/IOPMLib.h>
@@ -212,6 +212,6 @@ public:
     AquaSalFrame& operator=(const AquaSalFrame&);
 };
 
-#endif // _SV_SALFRAME_H
+#endif // INCLUDED_VCL_INC_AQUA_SALFRAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALDATA_HXX
-#define _SV_SALDATA_HXX
+#ifndef INCLUDED_VCL_INC_AQUA_SALDATA_HXX
+#define INCLUDED_VCL_INC_AQUA_SALDATA_HXX
 
 #include <config_features.h>
 
@@ -118,6 +118,6 @@ sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 
-#endif  // _SV_SALDATA_HXX
+#endif // INCLUDED_VCL_INC_AQUA_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

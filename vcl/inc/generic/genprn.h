@@ -95,7 +95,6 @@ public:
     virtual sal_uIntPtr                 GetErrorCode();
 };
 
-#endif // _SV_SALPRN_H
-
+#endif // INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

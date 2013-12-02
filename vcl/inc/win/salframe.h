@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALFRAME_H
-#define _SV_SALFRAME_H
+#ifndef INCLUDED_VCL_INC_WIN_SALFRAME_H
+#define INCLUDED_VCL_INC_WIN_SALFRAME_H
 
 #include <vcl/sysdata.hxx>
 #include <salframe.hxx>
@@ -146,6 +146,6 @@ namespace vcl_sal {
         LONG nSymbol );
 }
 
-#endif // _SV_SALFRAME_H
+#endif // INCLUDED_VCL_INC_WIN_SALFRAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

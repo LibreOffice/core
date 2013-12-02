@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALDATA_HXX
-#define _SV_SALDATA_HXX
+#ifndef INCLUDED_VCL_INC_WIN_SALDATA_HXX
+#define INCLUDED_VCL_INC_WIN_SALDATA_HXX
 
 #include "osl/module.h"
 
@@ -313,6 +313,6 @@ inline WinSalObject* GetSalObjWindowPtr( HWND hWnd )
     return (WinSalObject*)GetWindowLongPtr( hWnd, SAL_OBJECT_THIS );
 }
 
-#endif  // _SV_SALDATA_HXX
+#endif // INCLUDED_VCL_INC_WIN_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

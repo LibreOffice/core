@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_SALFRAME_H
-#define _SV_SALFRAME_H
+
+#ifndef INCLUDED_VCL_INC_UNX_SALFRAME_H
+#define INCLUDED_VCL_INC_UNX_SALFRAME_H
 
 #include <prex.h>
 #include <postx.h>
@@ -269,16 +270,6 @@ public:
     void setPendingSizeEvent();
 };
 
-#ifdef _SV_SALDISP_HXX
-
-inline Display *X11SalFrame::GetXDisplay() const
-{ return pDisplay_->GetDisplay(); }
-
-inline XLIB_Window X11SalFrame::GetDrawable() const
-{ return GetWindow(); }
-
-#endif
-
-#endif // _SV_SALFRAME_H
+#endif // INCLUDED_VCL_INC_UNX_SALFRAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,6 +58,6 @@ public:
     virtual const SystemEnvData*    GetSystemData() const;
 };
 
-#endif // _SV_SALOBJ_H
+#endif // INCLUDED_VCL_INC_UNX_GTK_GTKOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

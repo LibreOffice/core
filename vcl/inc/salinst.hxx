@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALINST_HXX
-#define _SV_SALINST_HXX
+#ifndef INCLUDED_VCL_INC_SALINST_HXX
+#define INCLUDED_VCL_INC_SALINST_HXX
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -196,6 +196,6 @@ void InitSalMain();
 
 VCL_DLLPUBLIC int SVMain();
 
-#endif // _SV_SALINST_HXX
+#endif // INCLUDED_VCL_INC_SALINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

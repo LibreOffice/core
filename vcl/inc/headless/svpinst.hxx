@@ -163,6 +163,6 @@ public:
     virtual GenPspGraphics *CreatePrintGraphics();
 };
 
-#endif // _SV_SALINST_HXX
+#endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

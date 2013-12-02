@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALVD_H
-#define _SV_SALVD_H
+#ifndef INCLUDED_VCL_INC_WIN_SALVD_H
+#define INCLUDED_VCL_INC_WIN_SALVD_H
 
 #include <salvd.hxx>
 
@@ -55,6 +55,6 @@ public:
     virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 
-#endif // _SV_SALVD_H
+#endif // INCLUDED_VCL_INC_WIN_SALVD_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

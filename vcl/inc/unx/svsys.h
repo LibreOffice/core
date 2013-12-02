@@ -16,12 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_SVSYS_H
-#define _SV_SVSYS_H
+#ifndef INCLUDED_VCL_INC_UNX_SVSYS_H
+#define INCLUDED_VCL_INC_UNX_SVSYS_H
 
 #include <prex.h>
 #include <postx.h>
 
-#endif // _SV_SVSYS_H
+#endif // INCLUDED_VCL_INC_UNX_SVSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

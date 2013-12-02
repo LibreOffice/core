@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALINST_H
-#define _SV_SALINST_H
+#ifndef INCLUDED_VCL_INC_WIN_SALINST_H
+#define INCLUDED_VCL_INC_WIN_SALINST_H
 
 #include <salinst.hxx>
 
@@ -83,6 +83,6 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild );
 void ImplSalStartTimer( sal_uIntPtr nMS, sal_Bool bMutex = sal_False );
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
 
-#endif // _SV_SALINST_H
+#endif // INCLUDED_VCL_INC_WIN_SALINST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALBMP_HXX
-#define _SV_SALBMP_HXX
+#ifndef INCLUDED_VCL_INC_SALBMP_HXX
+#define INCLUDED_VCL_INC_SALBMP_HXX
 
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>

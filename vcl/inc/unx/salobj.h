@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALOBJ_H
-#define _SV_SALOBJ_H
+#ifndef INCLUDED_VCL_INC_UNX_SALOBJ_H
+#define INCLUDED_VCL_INC_UNX_SALOBJ_H
 
 #include <tools/solar.h>
 #include <vcl/sysdata.hxx>
@@ -88,6 +88,6 @@ public:
     virtual const SystemEnvData*    GetSystemData() const;
 };
 
-#endif // _SV_SALOBJ_H
+#endif // INCLUDED_VCL_INC_UNX_SALOBJ_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

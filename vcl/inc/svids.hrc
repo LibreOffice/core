@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SVIDS_HRC
-#define _SV_SVIDS_HRC
+#ifndef INCLUDED_VCL_INC_SVIDS_HRC
+#define INCLUDED_VCL_INC_SVIDS_HRC
 
 #define SV_RESID_STDOFFSET                  0
 #define SV_RESID_MONOOFFSET                 1
@@ -251,6 +251,6 @@
 #define SV_ICON_ID_FORMULA                     13
 #define SV_ICON_ID_PRINTERADMIN               501
 
-#endif  // _SV_SVIDS_HRC
+#endif // INCLUDED_VCL_INC_SVIDS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

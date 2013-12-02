@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALTIMER_H
-#define _SV_SALTIMER_H
+#ifndef INCLUDED_VCL_INC_AQUA_SALTIMER_H
+#define INCLUDED_VCL_INC_AQUA_SALTIMER_H
 
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

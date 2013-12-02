@@ -30,6 +30,6 @@
 -(NSArray *)accessibilityAttributeNames;
 @end
 
-#endif // _SV_AQUA11WRAPPERCHECKOBOX_H
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YWRAPPERCHECKBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

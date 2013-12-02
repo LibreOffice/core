@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALVD_H
-#define _SV_SALVD_H
+#ifndef INCLUDED_VCL_INC_UNX_SALVD_H
+#define INCLUDED_VCL_INC_UNX_SALVD_H
 
 #include <prex.h>
 #include <postx.h>
@@ -73,22 +73,6 @@ public:
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
 
-#ifdef _SV_SALDISP_HXX
-
-inline void X11SalVirtualDevice::InitGraphics( X11SalVirtualDevice *pVD )
-{ pGraphics_->Init( pVD ); }
-
-inline Display *X11SalVirtualDevice::GetXDisplay() const
-{ return pDisplay_->GetDisplay(); }
-
-inline SalDisplay *X11SalVirtualDevice::GetDisplay() const
-{ return pDisplay_; }
-
-inline sal_Bool X11SalVirtualDevice::IsDisplay() const
-{ return pDisplay_->IsDisplay(); }
-
-#endif
-
-#endif // _SV_SALVD_H
+#endif // INCLUDED_VCL_INC_UNX_SALVD_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
