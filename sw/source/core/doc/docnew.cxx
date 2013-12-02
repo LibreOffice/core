@@ -277,6 +277,7 @@ SwDoc::SwDoc()
     mbLinksUpdated( false ), //#i38810#
     mbClipBoard( false ),
     mbColumnSelection( false ),
+    mbIsPrepareSelAll(false),
 #ifdef DBG_UTIL
     mbXMLExport(false),
 #endif
