@@ -1213,8 +1213,95 @@ void makeRedline( SwPaM& rPaM,
         DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
     }
 
+    SwRedlineExtraData_FormattingChanges* pRedlineExtraData = NULL;
+
+    // Read the 'Redline Revert Properties' from the parameters
+    uno::Sequence< beans::PropertyValue > aRevertProperties;
+    uno::Any aRevertPropertiesValue;
+    aRevertPropertiesValue = aPropMap.getUnpackedValueOrDefault("RedlineRevertProperties", aRevertPropertiesValue);
+
+    // Check if the value exists
+    if ( aRevertPropertiesValue >>= aRevertProperties )
+    {
+        // http://opengrok.libreoffice.org/xref/core/sw/source/core/unocore/unoport.cxx#83 is where it's decided what map gets used for a text portion
+        // so it's PROPERTY_MAP_TEXTPORTION_EXTENSIONS, unless it's a redline portion
+        SfxItemPropertySet const& rPropSet = (*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXTPORTION_EXTENSIONS));
+
+        // Check if there are any properties
+        if (aRevertProperties.getLength())
+        {
+            SwDoc *const pDoc = rPaM.GetDoc();
+            OUString aUnknownExMsg, aPropertyVetoExMsg;
+
+            // Build set of attributes we want to fetch
+            std::vector<sal_uInt16> aWhichPairs;
+            std::vector<SfxItemPropertySimpleEntry const*> aEntries;
+            aEntries.reserve(aRevertProperties.getLength());
+            for (sal_Int32 i = 0; i < aRevertProperties.getLength(); ++i)
+            {
+                const OUString &rPropertyName = aRevertProperties[i].Name;
+                SfxItemPropertySimpleEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);
+
+                // Queue up any exceptions until the end ...
+                if (!pEntry)
+                {
+                    aUnknownExMsg += "Unknown property: '" + rPropertyName + "' ";
+                    break;
+                }
+                else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+                {
+                    aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
+                    break;
+                }
+                else
+                {
+                    // FIXME: we should have some nice way of merging ranges surely ?
+                    aWhichPairs.push_back(pEntry->nWID);
+                    aWhichPairs.push_back(pEntry->nWID);
+                }
+                aEntries.push_back(pEntry);
+            }
+
+            if (!aWhichPairs.empty())
+            {
+                aWhichPairs.push_back(0); // terminate
+                SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
+
+                /*
+                // Fetch, overwrite, and re-set the attributes from the core
+                bool bPreviousPropertyCausesSideEffectsInNodes = false;
+                */
+                for (size_t i = 0; i < aEntries.size(); ++i)
+                {
+                    SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
+                    /*
+                    bool bPropertyCausesSideEffectsInNodes = propertyCausesSideEffectsInNodes(pEntry->nWID);
+
+                    // we need to get up-to-date item set from nodes
+                    if (i == 0 || bPreviousPropertyCausesSideEffectsInNodes)
+                        SwUnoCursorHelper::GetCrsrAttr(rPaM, aItemSet);
+
+                    const uno::Any &rValue = rPropertyValues[i].Value;
+                    // this can set some attributes in nodes' mpAttrSet
+                    if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
+                        rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+
+                    if (i + 1 == aEntries.size() || bPropertyCausesSideEffectsInNodes)
+                        SwUnoCursorHelper::SetCrsrAttr(rPaM, aItemSet, nAttrMode, bTableMode);
+
+                    bPreviousPropertyCausesSideEffectsInNodes = bPropertyCausesSideEffectsInNodes;
+                    */
+                    const uno::Any &rValue = aRevertProperties[i].Value;
+                    rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
+                }
+                pRedlineExtraData = new SwRedlineExtraData_FormattingChanges( &aItemSet );
+            }
+        }
+    }
+
     SwRedline* pRedline = new SwRedline( aRedlineData, rPaM );
     RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+    pRedline->SetExtraData( pRedlineExtraData );
 
     pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
     bool bRet = pRedlineAccess->AppendRedline( pRedline, false );
