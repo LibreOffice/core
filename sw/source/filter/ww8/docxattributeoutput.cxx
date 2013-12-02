@@ -585,14 +585,14 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
-
-    // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks( );
 }
 
 void DocxAttributeOutput::EndParagraphProperties()
 {
     WriteCollectedParagraphProperties();
+
+    // Merge the marks for the ordered elements
+    m_pSerializer->mergeTopMarks( );
 
     // insert copy of <rPr>
     m_pSerializer->copyTopMarkPop();
@@ -1136,9 +1136,6 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
-
-    // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks();
 }
 
 void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -1148,6 +1145,9 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     Redline( pRedlineData );
 
     WriteCollectedRunProperties();
+
+    // Merge the marks for the ordered elements
+    m_pSerializer->mergeTopMarks();
 
     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
@@ -1500,6 +1500,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
         }
 
         m_pSerializer->endElementNS( XML_w, XML_rPrChange );
+
         break;
     default:
         SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedline->GetType());
@@ -3796,11 +3797,19 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
     if ( bParProp )
     {
         WriteCollectedParagraphProperties();
+
+        // Merge the marks for the ordered elements
+        m_pSerializer->mergeTopMarks( );
+
         m_pSerializer->endElementNS( XML_w, XML_pPr );
     }
     else
     {
         WriteCollectedRunProperties();
+
+        // Merge the marks for the ordered elements
+        m_pSerializer->mergeTopMarks();
+
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 }
