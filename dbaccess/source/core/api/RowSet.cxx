@@ -2260,7 +2260,6 @@ sal_Bool ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
     {
         try
         {
-            ::comphelper::disposeComponent( m_xComposer );
             m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
         }
         catch (const Exception& ) { m_xComposer = NULL; }
