@@ -31,6 +31,8 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
+	icui18n \
+	icuuc \
 	boostdatetime \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
 	cups \
@@ -43,8 +45,6 @@ $(eval $(call gb_Library_use_externals,merged,\
 	$(if $(ENABLE_GTK),gtk) \
 	harfbuzz \
 	hunspell \
-	icui18n \
-	icuuc \
 	jpeg \
 	lcms2 \
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
