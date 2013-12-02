@@ -305,7 +305,7 @@ sub make_path_conform
 
 sub copy_collector
 {
-    my ($oldcollector) = @_;
+    my ( $oldcollector ) = @_;
 
     my @newcollector = ();
 

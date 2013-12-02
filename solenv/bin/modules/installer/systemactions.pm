@@ -451,16 +451,7 @@ sub create_directories
 
         if (!($locallanguagesref eq "" ))   # this will be a path like "01_49", for Profiles and ConfigurationFiles, idt-Files
         {
-            my $languagestring = $$languagesref;
-
-            if (length($languagestring) > $installer::globals::max_lang_length )
-            {
-                my $number_of_languages = get_number_of_langs($languagestring);
-                chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-                # $languagestring = $shorter;
-                my $id = substr($shorter, 0, 8); # taking only the first 8 digits
-                $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
-            }
+            my $languagestring = installer::languages::get_language_directory_name($$languagesref);
 
             $path = $path . $languagestring  . $installer::globals::separator;
             create_directory($path);

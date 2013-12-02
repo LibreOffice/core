@@ -1645,15 +1645,8 @@ for (;1;last)
     if ( $installer::globals::updatepack ) { $logminor = $installer::globals::lastminor; }
     else { $logminor = $installer::globals::minor; }
 
-    my $loglanguagestring = $$languagestringref;
-    my $loglanguagestring_orig = $loglanguagestring;
-    if (length($loglanguagestring) > $installer::globals::max_lang_length)
-    {
-        my $number_of_languages = installer::systemactions::get_number_of_langs($loglanguagestring);
-        chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/ .*//g"`);
-        my $id = substr($shorter, 0, 8); # taking only the first 8 digits
-        $loglanguagestring = "lang_" . $number_of_languages . "_id_" . $id;
-    }
+    my $loglanguagestring_orig = $$languagestringref;
+    my $loglanguagestring = installer::languages::get_language_directory_name($$languagestringref);
 
     # Setup the directory where the language dependent log file will be stored.
     $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator;

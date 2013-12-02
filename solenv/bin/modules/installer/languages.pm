@@ -29,6 +29,10 @@ use installer::exiter;
 use installer::globals;
 use installer::remover;
 use installer::ziplist;
+use Digest::MD5;
+
+use strict;
+
 
 =head2 analyze_languagelist()
 
@@ -65,6 +69,33 @@ sub analyze_languagelist()
     }
 
     $installer::globals::languageproduct = $languageproduct;
+}
+
+
+
+
+=head2 get_language_directory_name ($language_string)
+
+    Create a directory name that contains the given set of languages.
+    When $language_string exceeds a certain length then it is shortened.
+
+=cut
+sub get_language_directory_name ($)
+{
+    my ($language_string) = @_;
+
+    if (length($language_string) > $installer::globals::max_lang_length)
+    {
+        my $number_of_languages = ($language_string =~ tr/_//);
+        my $digest = new Digest::MD5();
+        $digest->add($language_string);
+        my $short_digest = substr($digest->hexdigest(), 0, 8);
+        return "lang_" . $number_of_languages . "_id_" . $short_digest;
+    }
+    else
+    {
+        return $language_string;
+    }
 }
 
 
@@ -123,27 +154,23 @@ sub all_elements_of_array1_in_array2
 # All languages defined for one product
 #############################################
 
-sub get_all_languages_for_one_product
+=head2 get_all_languages_for_one_product($languagestring, $allvariables)
+
+    $languagestring can be one or more language names, separated by ','.
+
+    $installer::globals::ismultilingual is set to 1 when $languagestring contains more than one languages.
+
+=cut
+sub get_all_languages_for_one_product ($$)
 {
     my ( $languagestring, $allvariables ) = @_;
 
-    my @languagearray = ();
 
-    my $last = $languagestring;
+    $installer::globals::ismultilingual = ($languagestring =~ /\,/ ) ? 1 : 0;
 
-    $installer::globals::ismultilingual = 0;        # setting the global variable $ismultilingual !
-    if ( $languagestring =~ /\,/ ) { $installer::globals::ismultilingual = 1; }
-
-    while ( $last =~ /^\s*(.+?)\,(.+)\s*$/) # "$" for minimal matching, comma separated list
-    {
-        my $first = $1;
-        $last = $2;
-        installer::remover::remove_leading_and_ending_whitespaces(\$first);
-        push(@languagearray, "$first");
-    }
-
-    installer::remover::remove_leading_and_ending_whitespaces(\$last);
-    push(@languagearray, "$last");
+    my $languages = $languagestring;
+    $languages =~ s/\s+//g;
+    my @languagearray = split(/,/, $languages);
 
     if ( $installer::globals::iswindowsbuild )
     {
@@ -381,10 +408,58 @@ sub get_java_language
     #   $javalanguage =~ s/\-/\_/;
     # }
 
-    $javalanguage = $language;
+    my $javalanguage = $language;
     $javalanguage =~ s/\-/\_/;
 
     return $javalanguage;
+}
+
+
+
+=head2 get_key_language ($languages)
+
+    Determine the key language from the array of @$languages.
+
+    If there is only one language then that is the key language.
+
+    If there are two languages and one is en-US and was automatically
+    added, then the other language is the key language.
+
+    When there is more than one language and the case above does not
+    apply then return either 'multiasia' or 'multiwestern' as key
+    language, depending on whether one of the asian language parts
+    'jp', 'ko', 'zh' appear.
+
+=cut
+sub get_key_language ($)
+{
+    my ($languages) = @_;
+
+    my $language_count = scalar @$languages;
+
+    if ($language_count == 1)
+    {
+        return $languages->[0];
+    }
+    else
+    {
+        if ($installer::globals::added_english && $language_count==1)
+        {
+            # Only multilingual because of added English.
+            return $languages->[1];
+        }
+        else
+        {
+            if ($languages->[1] =~ /(jp|ko|zh)/)
+            {
+                return "multiasia";
+            }
+            else
+            {
+                return "multiwestern";
+            }
+        }
+    }
 }
 
 1;
