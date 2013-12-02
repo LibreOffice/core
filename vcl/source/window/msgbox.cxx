@@ -456,6 +456,14 @@ InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
 
 // -----------------------------------------------------------------------
 
+InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
+    MessBox( pParent, nStyle, OUString(), rMessage )
+{
+    ImplInitInfoBoxData();
+}
+
+// -----------------------------------------------------------------------
+
 Image InfoBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
