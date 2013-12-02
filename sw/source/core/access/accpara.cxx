@@ -2521,7 +2521,6 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             if ( GetPortionData().IsIndexInFootnode(nIndex) )
             {
-                GetPropName( UNO_NAME_CHAR_ESCAPEMENT );
                 rValue.Value <<= (sal_Int32)101;
             }
             continue;
