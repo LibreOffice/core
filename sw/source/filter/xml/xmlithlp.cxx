@@ -78,7 +78,7 @@ const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
         { XML_THICK,    SVX_XML_BORDER_WIDTH_THICK      },
         { XML_TOKEN_INVALID, 0 }
 };
-// mapping tables to map external xml input to intarnal box line widths
+// mapping tables to map external xml input to internal box line widths
 
 
 const sal_uInt16 aBorderWidths[] =
