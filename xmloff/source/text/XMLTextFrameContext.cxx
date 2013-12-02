@@ -1307,12 +1307,20 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
 void XMLTextFrameContext_Impl::SetName()
 {
     Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
-    if (xNamed.is())
+    if (!m_sOrigName.isEmpty() && xNamed.is())
     {
         OUString const name(xNamed->getName());
         if (name != m_sOrigName)
         {
-            xNamed->setName(m_sOrigName);
+            try
+            {
+                xNamed->setName(m_sOrigName);
+            }
+            catch (uno::Exception const& e)
+            {   // fdo#71698 document contains 2 frames with same draw:name
+                SAL_INFO("xmloff.text", "SetName(): exception setting \""
+                        << m_sOrigName << "\": " << e.Message);
+            }
         }
     }
 }
