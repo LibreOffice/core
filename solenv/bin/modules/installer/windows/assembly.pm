@@ -350,8 +350,10 @@ sub add_assembly_condition_into_component_table
                         $keypath) . "\n";
                     ${$componenttable}[$j] = $oneline;
                     $changed = 1;
-                    $installer::logger::Lang->print("Changing %s :\n", $componenttablename);
+
+                    $installer::logger::Lang->printf("Changing %s :\n",  $componenttablename);
                     $installer::logger::Lang->print($oneline);
+
                     last;
                 }
             }
@@ -362,7 +364,7 @@ sub add_assembly_condition_into_component_table
     {
         # Saving the file
         installer::files::save_file($componenttablename ,$componenttable);
-        $installer::logger::Lang->print("Saved idt file: %s\n", $componenttablename);
+        $installer::logger::Lang->printf("Saved idt file: %s\n", $componenttablename);
     }
 }
 

@@ -30,6 +30,8 @@ use installer::pathanalyzer;
 use installer::windows::idtglobal;
 use installer::windows::msiglobal;
 
+use strict;
+
 ##############################################################
 # Collecting all directory trees in global hash
 ##############################################################
@@ -73,12 +75,22 @@ sub overwrite_programfilesfolder
     }
 }
 
-##############################################################
-# Maximum length of directory name is 72.
-# Taking care of underlines, which are the separator.
-##############################################################
 
-sub make_short_dir_version
+
+
+=head2 make_short_dir_version($longstring)
+
+    Transform the given string into one that is at most 70 characters long.
+    That is done in two steps:
+    - Cut all parts separated by '_' or '-' down to a length of 5.
+    - Cut down the result to a length of 60 and fill it up to length 70
+      with the MD5 checksum.
+
+    This transform always returns the same result for the same string.
+    There is no counter and reference to a global set of names to make the string unique.
+
+=cut
+sub make_short_dir_version ($)
 {
     my ($longstring) = @_;
 
@@ -90,29 +102,24 @@ sub make_short_dir_version
     # Splitting the string at each "underline" and allowing only $length characters per directory name.
     # Checking also uniqueness and length.
 
-    my $stringarray = installer::converter::convert_stringlist_into_array_without_newline(\$longstring, "_");
-
-    foreach my $onestring ( @{$stringarray} )
+    my @outer_parts = split(/_/, $longstring);
+    foreach my $onestring (@outer_parts)
     {
         my $partstring = "";
 
         if ( $onestring =~ /\-/ )
         {
-            my $localstringarray = installer::converter::convert_stringlist_into_array_without_newline(\$onestring, "-");
-            foreach my $onelocalstring ( @{$localstringarray} )
-            {
-                if ( length($onelocalstring) > $length ) { $onelocalstring = substr($onelocalstring, 0, $length); }
-                $partstring = $partstring . "-" . $onelocalstring;
-            }
+            my @inner_parts = split(/-/, $onestring);
+            @inner_parts = map {substr($_,0,$length)} @inner_parts;
+            $partstring = join("-", @inner_parts);
             $partstring =~ s/^\s*\-//;
         }
         else
         {
-            if ( length($onestring) > $length ) { $partstring = substr($onestring, 0, $length); }
-            else { $partstring = $onestring; }
+            $partstring = substr($onestring, 0, $length);
         }
 
-        $shortstring = $shortstring . "_" . $partstring;
+        $shortstring .= "_" . $partstring;
     }
 
     $shortstring =~ s/^\s*\_//;
@@ -120,14 +127,8 @@ sub make_short_dir_version
     # Setting unique ID to each directory
     # No counter allowed, process must be absolute reproducable due to patch creation process.
 
-    # chomp(my $id = `echo $longstring_save | md5sum | sed -e "s/ .*//g"`);  # Very, very slow
-    # my $subid = substr($id, 0, 9); # taking only the first 9 digits
-
     my $subid = installer::windows::msiglobal::calculate_id($longstring_save, 9); # taking only the first 9 digits
-
-    if ( length($shortstring) > $cutlength ) { $shortstring = substr($shortstring, 0, $cutlength); }
-
-    $shortstring = $shortstring . "_" . $subid;
+    $shortstring = substr($shortstring, 0, $cutlength) . "_" . $subid;
 
     return $shortstring;
 }
@@ -558,13 +559,9 @@ sub create_directory_table ($$$$)
     my $infoline;
 
     overwrite_programfilesfolder($allvariableshashref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_unique_directorynames($directoryref, $allvariableshashref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1a.log", $directoryref); }
     create_defaultdir_directorynames($directoryref);    # only destdir!
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
     set_installlocation_directory($directoryref, $allvariableshashref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
     add_root_directories(\@directorytable, $allvariableshashref);
     create_directorytable_from_collection(\@directorytable, $directoryref);

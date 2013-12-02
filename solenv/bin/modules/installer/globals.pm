@@ -31,6 +31,8 @@ BEGIN
 {
     $prog="make_installer.pl";
 
+    # WARNING: the following lines are matched verbatim in i18npool/source/isolang/langid.pl
+
     @noMSLocaleLangs = (
         "br",
         "bs",
@@ -411,8 +413,6 @@ BEGIN
     $previous_idt_dir = "";
     $updatepack = 0;
     $msitranpath = "";
-    $insert_file_at_end = 0;
-    $newfilesexist = 0;
     $usesharepointpath = 0;
     %newfilescollector = ();
 
@@ -489,10 +489,6 @@ BEGIN
         $isunix = 0;
         $iswin = 1;
         $archiveformat = ".zip";
-        %savedmapping = ();
-        %savedrevmapping = ();
-        %savedrev83mapping = ();
-        %saved83dirmapping = ();
     }
     elsif ( $plat =~ /os2/i )
     {

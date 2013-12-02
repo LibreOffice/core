@@ -30,37 +30,46 @@ use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
 
+use strict;
+
+
 #################################################################################
 # Collecting all pairs of features and components from the files collector
 #################################################################################
 
-sub create_featurecomponent_table_from_files_collector
+sub create_featurecomponent_table_from_files_collector ($$)
 {
     my ($featurecomponenttableref, $filesref) = @_;
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    foreach my $onefile (@$filesref)
     {
-        my $onefile = ${$filesref}[$i];
-
         my $filecomponent = $onefile->{'componentname'};
         my $filemodules = $onefile->{'modules'};
 
         if ( $filecomponent eq "" )
         {
-            installer::exiter::exit_program("ERROR: No component defined for file $onefile->{'Name'}", "create_featurecomponent_table_from_files_collector");
+            installer::exiter::exit_program(
+                sprintf("ERROR: No component defined for file %s", $onefile->{'Name'}),
+                "create_featurecomponent_table_from_files_collector");
         }
-        if ( $filemodules eq "" )
+        if ( ! defined $filemodules)
         {
-            installer::exiter::exit_program("ERROR: No modules found for file $onefile->{'Name'}", "create_featurecomponent_table_from_files_collector");
+            # Temporary for files created from source installation set.
+            die;
+        }
+        if ($filemodules eq "")
+        {
+            installer::exiter::exit_program(
+                sprintf("ERROR: No modules found for file %s", $onefile->{'Name'}),
+                "create_featurecomponent_table_from_files_collector");
         }
 
         my $filemodulesarrayref = installer::converter::convert_stringlist_into_array(\$filemodules, ",");
 
-        for ( my $j = 0; $j <= $#{$filemodulesarrayref}; $j++ )
+        foreach my $onemodule (@$filemodulesarrayref)
         {
             my %featurecomponent = ();
 
-            my $onemodule = ${$filemodulesarrayref}[$j];
             $onemodule =~ s/\s*$//;
             $featurecomponent{'Feature'} = $onemodule;
             $featurecomponent{'Component'} = $filecomponent;
@@ -70,7 +79,7 @@ sub create_featurecomponent_table_from_files_collector
 
             installer::windows::idtglobal::shorten_feature_gid(\$featurecomponent{'Feature'});
 
-            $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
+            my $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
 
             # control of uniqueness
 
@@ -82,56 +91,66 @@ sub create_featurecomponent_table_from_files_collector
     }
 }
 
-#################################################################################
-# Collecting all pairs of features and components from the registry collector
-#################################################################################
 
-sub create_featurecomponent_table_from_registry_collector
+
+
+=head2 create_featurecomponent_table_from_registry_collector ($featurecomponenttableref, $registryref)
+
+    Add entries for the FeatureComponent table for components that contain registry entries.
+
+=cut
+sub create_featurecomponent_table_from_registry_collector ($$)
 {
     my ($featurecomponenttableref, $registryref) = @_;
 
-    for ( my $i = 0; $i <= $#{$registryref}; $i++ )
+    my $replacement_count = 0;
+    my $unique_count = 0;
+    foreach my $oneregistry (@$registryref)
     {
-        my $oneregistry = ${$registryref}[$i];
-
-        my $registrycomponent = $oneregistry->{'componentname'};
-        my $registrymodule = $oneregistry->{'ModuleID'};
-
-        if ( $registrycomponent eq "" )
+        my $component_name = $oneregistry->{'componentname'};
+        if ($component_name eq "")
         {
-            installer::exiter::exit_program("ERROR: No component defined for registry $oneregistry->{'gid'}", "create_featurecomponent_table_from_registry_collector");
-        }
-        if ( $registrymodule eq "" )
-        {
-            installer::exiter::exit_program("ERROR: No modules found for registry $oneregistry->{'gid'}", "create_featurecomponent_table_from_registry_collector");
+            installer::exiter::exit_program(
+                sprintf("ERROR: No component defined for registry %s", $oneregistry->{'gid'}),
+                "create_featurecomponent_table_from_registry_collector");
         }
 
-        my %featurecomponent = ();
-
-        $featurecomponent{'Feature'} = $registrymodule;
-        $featurecomponent{'Component'} = $registrycomponent;
+        my $feature_name = $oneregistry->{'ModuleID'};
+        if ($feature_name eq "")
+        {
+            installer::exiter::exit_program(
+                sprintf("ERROR: No modules found for registry %s", $oneregistry->{'gid'}),
+                "create_featurecomponent_table_from_registry_collector");
+        }
 
         # Attention: Features are renamed, because the maximum length is 38.
         # But in the files collector ($filesref), the original names are saved.
 
-        installer::windows::idtglobal::shorten_feature_gid(\$featurecomponent{'Feature'});
+        $feature_name = installer::windows::idtglobal::create_shortend_feature_gid($feature_name);
 
-        $oneline = "$featurecomponent{'Feature'}\t$featurecomponent{'Component'}\n";
-
-        # control of uniqueness
-
-        if (! installer::existence::exists_in_array($oneline, $featurecomponenttableref))
+        my $oneline = sprintf("%s\t%s\n", $feature_name, $component_name);
+        if ( ! installer::existence::exists_in_array($oneline, $featurecomponenttableref))
         {
-            push(@{$featurecomponenttableref}, $oneline);
+            push(@$featurecomponenttableref, $oneline);
+            ++$unique_count;
+        }
+        else
+        {
+            $installer::logger::Lang->printf("feature component pair already exists\n");
         }
     }
+    $installer::logger::Lang->printf(
+        "replaced %d (%d) of %d component names in FeatureComponent table\n",
+        $unique_count,
+        $replacement_count,
+        scalar @$registryref);
 }
 
 #################################################################################
 # Collecting all feature that are listed in the featurecomponent table.
 #################################################################################
 
-sub collect_all_feature
+sub collect_all_features
 {
     my ($featurecomponenttable) = @_;
 
@@ -145,7 +164,10 @@ sub collect_all_feature
         {
             my $feature = $1;
 
-            if (! installer::existence::exists_in_array($feature, \@allfeature)) { push(@allfeature, $feature); }
+            if (! installer::existence::exists_in_array($feature, \@allfeature))
+            {
+                push(@allfeature, $feature);
+            }
         }
     }
 
@@ -165,7 +187,7 @@ sub check_number_of_components_at_feature
     $installer::logger::Lang->print("\n");
     $installer::logger::Lang->print("Checking number of components at features. Maximum is 817 (for Win 98 and Win Me)\n");
 
-    my $allfeature = collect_all_feature($featurecomponenttable);
+    my $allfeature = collect_all_features($featurecomponenttable);
 
     for ( my $i = 0; $i <= $#{$allfeature}; $i++ )
     {
@@ -196,7 +218,7 @@ sub check_number_of_components_at_feature
 # Feature Component
 #################################################################################
 
-sub create_featurecomponent_table
+sub create_featurecomponent_table ($$$)
 {
     my ($filesref, $registryref, $basedir) = @_;
 
@@ -216,9 +238,13 @@ sub create_featurecomponent_table
     # At the moment only the files are related to components (and the files know their modules).
     # The component for each file is written into the files collector $filesinproductlanguageresolvedarrayref
 
-    create_featurecomponent_table_from_files_collector(\@featurecomponenttable, $filesref);
+    create_featurecomponent_table_from_files_collector(
+        \@featurecomponenttable,
+        $filesref);
 
-    create_featurecomponent_table_from_registry_collector(\@featurecomponenttable, $registryref);
+    create_featurecomponent_table_from_registry_collector(
+        \@featurecomponenttable,
+        $registryref);
 
     # Additional components have to be added here
 

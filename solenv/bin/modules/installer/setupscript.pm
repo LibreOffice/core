@@ -80,128 +80,85 @@ sub get_all_scriptvariables_from_installation_object ($$)
 {
     my ($scriptref, $script_filename) = @_;
 
-    my @installobjectvariables;
+    my $installobjectvariables = {};
 
-    for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
+    my $firstline = $scriptref->[0];
+    if ($firstline !~ /^\s*Installation\s+\w+\s*$/)
     {
-        my $line = ${$scriptref}[$i];
+        installer::logger::PrintError("did not find 'Installation' keyword in first line of %s\n",
+            $script_filename);
+    }
+    foreach my $line (@$scriptref)
+    {
+        next if $line =~ /^\s*Installation\s+\w+\s*$/; # Already processed.
+        last if $line =~ /^\s*End\s*$/;
 
-        if ( $line =~ /^\s*Installation\s+\w+\s*$/ )    # should be the first line
+        if ($line =~ /^\s*(\w+)\s+\=\s*\"?(.*?)\"?\s*\;\s*$/ )
         {
-            my $counter = $i+1;
-            my $installline = ${$scriptref}[$counter];
+            my ($key, $value) = ($1, $2);
 
-            while (!($installline =~ /^\s*End\s*$/ ))
-            {
-                if ( $installline =~ /^\s*(\w+)\s+\=\s*(.*?)\s*\;\s*$/ )
-                {
-                    my $key = $1;
-                    my $value = $2;
-
-                    # removing leading and ending " in $value
-
-                    if ( $value =~ /^\s*\"(.*)\"\s*$/ )
-                    {
-                        $value = $1;
-                    }
-
-                    $key = "\%" . uc($key);  # $key is %PRODUCTNAME
-
-                    my $input = $key . " " . $value . "\n";   # $key can only be the first word
-
-                    push(@installobjectvariables ,$input);
-                }
-
-                $counter++;
-                $installline = ${$scriptref}[$counter];
-            }
+            $installobjectvariables->{uc($key)} = $value;
         }
 
-        last;   # not interesting after installation object
     }
 
-    return \@installobjectvariables;
+    return $installobjectvariables;
 }
 
 ######################################################################
 # Including LCPRODUCTNAME into the array
 ######################################################################
 
-sub add_lowercase_productname_setupscriptvariable
+sub add_lowercase_productname_setupscriptvariable ($)
 {
     my ( $variablesref ) = @_;
 
-    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+    my %additional_variables = ();
+
+    while (my ($key, $value) = each %$variablesref)
     {
-        my $variableline = ${$variablesref}[$j];
-
-        my ($key, $value);
-
-        if ( $variableline =~ /^\s*\%(\w+?)\s+(.*?)\s*$/ )
+        if ($key eq "PRODUCTNAME")
         {
-            $key = $1;
-            $value = $2;
-
-            if ( $key eq "PRODUCTNAME" )
-            {
-                my $newline = "\%LCPRODUCTNAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                my $original = $value;
-                $value =~ s/\s*//g;
-                $newline = "\%ONEWORDPRODUCTNAME " . $value . "\n";
-                push(@{$variablesref} ,$newline);
-                $newline = "\%LCONEWORDPRODUCTNAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                $value = $original;
-                $value =~ s/\s*$//g;
-                $value =~ s/^\s*//g;
-                $value =~ s/ /\%20/g;
-                $newline = "\%MASKEDPRODUCTNAME " . $value . "\n";
-                push(@{$variablesref} ,$newline);
-                $value = $original;
-                $value =~ s/\s/\_/g;
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
-                $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                $newline = "\%SYSTEMINTUNIXPACKAGENAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
-                $newline = "\%UNIXPACKAGENAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                $value = $original;
-                $value =~ s/\s/\_/g;
-                $value =~ s/\.//g;
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
-                $newline = "\%WITHOUTDOTUNIXPRODUCTNAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
-                $newline = "\%WITHOUTDOTUNIXPACKAGENAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                $newline = "\%SOLARISBRANDPACKAGENAME " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-                $value = $original;
-            }
-            elsif  ( $key eq "PRODUCTEXTENSION" )
-            {
-                my $newline = "\%LCPRODUCTEXTENSION " . lc($value) . "\n";
-                push(@{$variablesref} ,$newline);
-            }
-            elsif  ( $key eq "PRODUCTVERSION" )
-            {
-                $value =~ s/\.//g;
-                my $newline = "\%WITHOUTDOTPRODUCTVERSION " . $value . "\n";
-                push(@{$variablesref} ,$newline);
-            }
-            elsif  ( $key eq "OOOBASEVERSION" )
-            {
-                $value =~ s/\.//g;
-                my $newline = "\%WITHOUTDOTOOOBASEVERSION " . $value . "\n";
-                push(@{$variablesref} ,$newline);
-            }
-
+            $additional_variables{"LCPRODUCTNAME"} = lc($value);
+            my $original = $value;
+            $value =~ s/\s+//g;
+            $additional_variables{"ONEWORDPRODUCTNAME"} = $value;
+            $additional_variables{"LCONEWORDPRODUCTNAME"} = lc($value);
+            $value = $original;
+            $value =~ s/(^\s+|\s+$)//g;
+            $value =~ s/ /\%20/g;
+            $additional_variables{"MASKEDPRODUCTNAME"} = $value;
+            $value = $original;
+            $value =~ s/\s/\_/g;
+            $additional_variables{"UNIXPRODUCTNAME"} = lc($value);
+            $additional_variables{"SYSTEMINTUNIXPACKAGENAME"} = lc($value);
+            $additional_variables{"UNIXPACKAGENAME"} = lc($value);
+            $value = $original;
+            $value =~ s/\s/\_/g;
+            $value =~ s/\.//g;
+            $additional_variables{"WITHOUTDOTUNIXPRODUCTNAME"} = lc($value);
+            $additional_variables{"WITHOUTDOTUNIXPACKAGENAME"} = lc($value);
+            $additional_variables{"SOLARISBRANDPACKAGENAME"} = lc($value);
         }
+        elsif  ($key eq "PRODUCTEXTENSION")
+        {
+            $additional_variables{"LCPRODUCTEXTENSION"} = lc($value);
+        }
+        elsif  ($key eq "PRODUCTVERSION")
+        {
+            $value =~ s/\.//g;
+            $additional_variables{"WITHOUTDOTPRODUCTVERSION"} = $value;
+        }
+        elsif  ($key eq "OOOBASEVERSION")
+        {
+            $value =~ s/\.//g;
+            $additional_variables{"WITHOUTDOTOOOBASEVERSION"} = $value;
+        }
+    }
+
+    while (my ($key, $value) = each %additional_variables)
+    {
+        $variablesref->{$key} = $value;
     }
 }
 
@@ -209,98 +166,71 @@ sub add_lowercase_productname_setupscriptvariable
 # Resolving the new introduced lowercase script variables
 ######################################################################
 
-sub resolve_lowercase_productname_setupscriptvariable
+sub resolve_lowercase_productname_setupscriptvariable ($)
 {
-    my ( $variablesref ) = @_;
+    my ($variablesref) = @_;
 
-    my %variables = ();
-
-    # First step: Collecting variables
-
-    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+    while (my ($key,$value) = each %$variablesref)
     {
-        my $variableline = ${$variablesref}[$j];
-
-        my ($key, $value);
-
-        if ( $variableline =~ /^\s*\%(\w+?)\s+(.*?)\s*$/ )
+        if ($value =~ /\$\{(.*?)\}/)
         {
-            $key = $1;
-            $value = $2;
-            $variables{$key} = $value;
+            my $varname = $1;
+            my $replacement = $variablesref->{$varname};
+            my $new_value = $value;
+            $new_value =~ s/\$\{\Q$varname\E\}/$replacement/g;
+            $variablesref->{$key} = $new_value;
         }
     }
-
-    # Second step: Resolving variables
-
-    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
-    {
-        if ( ${$variablesref}[$j] =~ /\$\{(.*?)\}/ )
-        {
-            my $key = $1;
-            ${$variablesref}[$j] =~ s/\$\{\Q$key\E\}/$variables{$key}/g;
-        }
-    }
-
 }
+
+
+
 
 ######################################################################
 # Replacing all setup script variables inside the setup script file
 ######################################################################
 
-sub replace_all_setupscriptvariables_in_script
+sub replace_all_setupscriptvariables_in_script ($$)
 {
-    my ( $scriptref, $variablesref ) = @_;
+    my ($script_lines, $variables) = @_;
 
     installer::logger::include_header_into_globallogfile("Replacing variables in setup script (start)");
 
-    # make hash of variables to be substituted if they appear in the script
-    my %subs;
-    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
-    {
-        my $variableline = ${$variablesref}[$j];
+    # This is far faster than running a regexp for each line
+    my $bigstring = join("", @$script_lines);
 
-        if ( $variableline =~ /^\s*(\%\w+?)\s+(.*?)\s*$/ )
+    while (my ($key,$value) = each %$variables)
+    {
+        # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
+        my $count = ($bigstring =~ s/%$key/$value/g);
+        if ($count > 0)
         {
-            $subs{$1}= $2;
+            $installer::logger::Lang->printf("replaced %s %d times\n", $key, $count);
         }
     }
 
-    # This is far faster than running a regexp for each line
-    my $bigstring = '';
-    for my $line (@{$scriptref}) { $bigstring = $bigstring . $line; }
-
-    foreach my $key ( keys %subs )
-    {
-        # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
-        my $value = $subs{$key};
-        $bigstring =~ s/$key/$value/g;
-    }
-
     my @newlines = split /\n/, $bigstring;
-    $scriptref = \@newlines;
 
     # now check for any mis-named '%' variables that we have left
     my $num = 0;
-    for my $check (@newlines)
+    foreach my $line (@newlines)
     {
         $num++;
-        if ( $check =~ /^.*\%\w+.*$/ )
+        if ($line =~ /\%\w+/)
         {
-            if (( $check =~ /%1/ ) || ( $check =~ /%2/ ) || ( $check =~ /%verify/ ))
+            if (( $line =~ /%1/ ) || ( $line =~ /%2/ ) || ( $line =~ /%verify/ ))
             {
                 next;
             }
-            $installer::logger::Global->printf(
-                "WARNING: mis-named or un-known '%s' variable in setup script at line %s:\n",
-                "%", $num);
-            $installer::logger::Global->printf("%s\n", $check);
+            $installer::logger::Info->printf(
+                "WARNING: mis-named or un-known %%-variable in setup script at line %s:\n",$num);
+            $installer::logger::Info->printf("%s\n", $line);
         }
     }
 
     installer::logger::include_header_into_globallogfile("Replacing variables in setup script (end)");
 
-    return $scriptref;
+    return \@newlines;
 }
 
 #######################################################################
@@ -471,21 +401,13 @@ sub prepare_non_advertised_files
 # object, the installation object is more important
 #####################################################################################
 
-sub add_installationobject_to_variables
+sub add_installationobject_to_variables ($$)
 {
-    my ($allvariables, $allscriptvariablesref) = @_;
+    my ($variables, $script_variables) = @_;
 
-    for ( my $i = 0; $i <= $#{$allscriptvariablesref}; $i++ )
+    while (my ($key, $value) = each %$script_variables)
     {
-        my $line = ${$allscriptvariablesref}[$i];
-
-        if ( $line =~ /^\s*\%(\w+)\s+(.*?)\s*$/ )
-        {
-            my $key = $1;
-            my $value = $2;
-
-            $allvariables->{$key} = $value; # overwrite existing values from zip.lst
-        }
+        $variables->{$key} = $value;    # overwrite existing values from zip.lst
     }
 }
 

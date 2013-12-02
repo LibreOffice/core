@@ -256,25 +256,53 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
     $modulesinproductlanguageresolvedarrayref = installer::windows::feature::sort_feature($modulesinproductlanguageresolvedarrayref);
     installer::windows::feature::create_feature_table($modulesinproductlanguageresolvedarrayref, $newidtdir, $languagesarrayref, $allvariableshashref);
 
-    installer::windows::featurecomponent::create_featurecomponent_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $newidtdir);
+    installer::windows::featurecomponent::create_featurecomponent_table(
+        $filesinproductlanguageresolvedarrayref,
+        $registryitemsinproductlanguageresolvedarrayref,
+        $newidtdir);
 
-    installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
+    installer::windows::media::create_media_table(
+        $filesinproductlanguageresolvedarrayref,
+        $newidtdir,
+        $allvariableshashref);
 
-    installer::windows::font::create_font_table($filesinproductlanguageresolvedarrayref, $newidtdir);
+    installer::windows::font::create_font_table(
+        $filesinproductlanguageresolvedarrayref,
+        $newidtdir);
 
     # Attention: The table "Shortcut.idt" contains language specific strings -> parameter: $languagesarrayref !
     # Attention: Shortcuts (Folderitems) have icon files, that have to be copied into the Icon directory (last parameter)
     my @iconfilecollector = ();
 
-    installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, $languagesarrayref, $includepatharrayref, \@iconfilecollector);
+    installer::windows::shortcut::create_shortcut_table(
+        $filesinproductlanguageresolvedarrayref,
+        $linksinproductlanguageresolvedarrayref,
+        $folderinproductlanguageresolvedarrayref,
+        $folderitemsinproductlanguageresolvedarrayref,
+        $directoriesforepmarrayref,
+        $newidtdir,
+        $languagesarrayref,
+        $includepatharrayref,
+        \@iconfilecollector);
 
-    installer::windows::inifile::create_inifile_table($inifiletableentries, $filesinproductlanguageresolvedarrayref, $newidtdir);
+    installer::windows::inifile::create_inifile_table(
+        $inifiletableentries,
+        $filesinproductlanguageresolvedarrayref,
+        $newidtdir);
 
-    installer::windows::icon::create_icon_table(\@iconfilecollector, $newidtdir);    # creating the icon table with all iconfiles used as shortcuts (FolderItems)
+    installer::windows::icon::create_icon_table(
+        \@iconfilecollector,
+        $newidtdir);     # creating the icon table with all iconfiles used as shortcuts (FolderItems)
 
-    installer::windows::createfolder::create_createfolder_table($directoriesforepmarrayref, $filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
+    installer::windows::createfolder::create_createfolder_table(
+        $directoriesforepmarrayref,
+        $filesinproductlanguageresolvedarrayref,
+        $newidtdir,
+        $allvariableshashref);
 
-    installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
+    installer::windows::upgrade::create_upgrade_table(
+        $newidtdir,
+        $allvariableshashref);
 
     if ( ! $installer::globals::languagepack )   # the following tables not for language packs
     {
@@ -384,7 +412,9 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
         {
             my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
             my $licensefile = installer::files::read_file($licensefilesource);
-            installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariableshashref);
+            installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile(
+                $licensefile,
+                $allvariableshashref);
             my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
             my $controltable = installer::files::read_file($controltablename);
             installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
@@ -519,9 +549,6 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
 
     $installer::globals::packjobref = installer::windows::msiglobal::generate_cab_file_list($filesinproductlanguageresolvedarrayref, $installdir, $ddfdir, $allvariableshashref);
 
-    # Update and patch reasons the pack order needs to be saved
-    installer::windows::msiglobal::save_packorder();
-
     $installer::logger::Info->print("\n");
 
     #######################################################
@@ -545,7 +572,6 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
     installer::worker::clean_output_tree(); # removing directories created in the output tree
     ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
 
-
     #######################################################
     # Creating download installation set
     #######################################################
@@ -563,6 +589,7 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
         my $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
         installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
     }
+
 }
 
 
@@ -821,7 +848,6 @@ sub MakeNonWindowsBuild ($$$$$$$$$$$$$$$)
                     $installer::globals::makelinuxlinkrpm = 0;
                     if ( $installer::globals::patch ) { $installer::globals::call_epm = 1; }     # enabling packing again
                     $run = 1;
-
                 }
 
                 if (( ! $installer::globals::makelinuxlinkrpm ) && ( ! $run ))
@@ -833,7 +859,6 @@ sub MakeNonWindowsBuild ($$$$$$$$$$$$$$$)
                     if ( $installer::globals::patch ) { $installer::globals::call_epm = 0; }     # no packing of core module in patch
                     $shellscriptsfilename = ""; # shell scripts only need to be included into the link rpm
                     $run = 1;
-
                 }
             }
         }
@@ -961,7 +986,7 @@ sub MakeNonWindowsBuild ($$$$$$$$$$$$$$$)
             {
                 # changing into the "install" directory to create installation sets
 
-                $currentdir = cwd();    # $currentdir is global in this file
+                my $currentdir = cwd(); # $currentdir is global in this file
 
                 chdir($installdir);     # changing into install directory ($installdir is global in this file)
 
@@ -1186,8 +1211,6 @@ sub MakeNonWindowsBuild ($$$$$$$$$$$$$$$)
 }
 
 
-
-
 #################################################
 # Main program
 #################################################
@@ -1206,6 +1229,7 @@ $installer::logger::Global->add_timestamp("starting logging");
 # While there is no language set and logger::Lang is not yet tied to a log file,
 # forward its output to logger::Global.
 $installer::logger::Lang->set_forward($installer::logger::Global);
+$installer::logger::Info->set_forward($installer::logger::Global);
 
 #########################################
 # Checking the environment and setting
@@ -1254,89 +1278,29 @@ my $current_install_number = "";
 # Checking the system requirements
 ######################################
 
-$installer::logger::Info->print( "... checking required files ...\n" );
+$installer::logger::Info->print("... checking required files ...\n");
 installer::control::check_system_path();
 
 my $pathvariableshashref = installer::environment::create_pathvariables($environmentvariableshashref);
-
-###############################################
-# Checking saved setting for Windows patches
-###############################################
-
-if (( $installer::globals::iswindowsbuild ) &&  ( $installer::globals::prepare_winpatch )) { installer::windows::msiglobal::read_saved_mappings(); }
 
 ###################################################
 # Analyzing the settings and variables in zip.lst
 ###################################################
 
-installer::logger::globallog("zip list file: $installer::globals::ziplistname");
-
-my $ziplistref = installer::files::read_file($installer::globals::ziplistname);
-
 $installer::logger::Info->print( "... analyzing $installer::globals::ziplistname ... \n" );
 
-my ($productblockref, $parent) = installer::ziplist::getproductblock($ziplistref, $installer::globals::product, 1);     # product block from zip.lst
-
-my ($settingsblockref, undef) = installer::ziplist::getproductblock($productblockref, "Settings", 0);       # settings block from zip.lst
-
-$settingsblockref = installer::ziplist::analyze_settings_block($settingsblockref);              # select data from settings block in zip.lst
-
-my $allsettingsarrayref = installer::ziplist::get_settings_from_ziplist($settingsblockref);
-
-my $allvariablesarrayref = installer::ziplist::get_variables_from_ziplist($settingsblockref);
-
-my ($globalproductblockref, undef) = installer::ziplist::getproductblock($ziplistref, $installer::globals::globalblock, 0);     # global product block from zip.lst
-
-while (defined $parent)
+my ($allvariableshashref,
+    $allsettingsarrayref)
+    = installer::ziplist::read_openoffice_lst_file(
+        $installer::globals::ziplistname,
+        $installer::globals::product,
+        $loggingdir);
+$installer::logger::Lang->printf("variables:\n");
+foreach my $key (sort keys %$allvariableshashref)
 {
-    my $parentproductblockref;
-    ($parentproductblockref, $parent) = installer::ziplist::getproductblock(
-        $ziplistref, $parent, 1);
-    my ($parentsettingsblockref, undef) = installer::ziplist::getproductblock(
-        $parentproductblockref, "Settings", 0);
-    $parentsettingsblockref = installer::ziplist::analyze_settings_block(
-        $parentsettingsblockref);
-    my $allparentsettingsarrayref =
-        installer::ziplist::get_settings_from_ziplist($parentsettingsblockref);
-    my $allparentvariablesarrayref =
-        installer::ziplist::get_variables_from_ziplist($parentsettingsblockref);
-    $allsettingsarrayref =
-        installer::converter::combine_arrays_from_references_first_win(
-            $allsettingsarrayref, $allparentsettingsarrayref)
-        if $#{$allparentsettingsarrayref} > -1;
-    $allvariablesarrayref =
-        installer::converter::combine_arrays_from_references_first_win(
-            $allvariablesarrayref, $allparentvariablesarrayref)
-        if $#{$allparentvariablesarrayref} > -1;
+    $installer::logger::Global->printf("    %s -> %s\n", $key, $allvariableshashref->{$key});
 }
 
-if ( $#{$globalproductblockref} > -1 )
-{
-    my ($globalsettingsblockref, undef) = installer::ziplist::getproductblock($globalproductblockref, "Settings", 0);       # settings block from zip.lst
-
-    $globalsettingsblockref = installer::ziplist::analyze_settings_block($globalsettingsblockref);              # select data from settings block in zip.lst
-
-    my $allglobalsettingsarrayref = installer::ziplist::get_settings_from_ziplist($globalsettingsblockref);
-
-    my $allglobalvariablesarrayref = installer::ziplist::get_variables_from_ziplist($globalsettingsblockref);
-
-    if ( $#{$allglobalsettingsarrayref} > -1 ) { $allsettingsarrayref = installer::converter::combine_arrays_from_references_first_win($allsettingsarrayref, $allglobalsettingsarrayref); }
-    if ( $#{$allglobalvariablesarrayref} > -1 ) { $allvariablesarrayref = installer::converter::combine_arrays_from_references_first_win($allvariablesarrayref, $allglobalvariablesarrayref); }
-}
-
-$allsettingsarrayref = installer::ziplist::remove_multiples_from_ziplist($allsettingsarrayref); # the settings from the zip.lst
-
-$allvariablesarrayref = installer::ziplist::remove_multiples_from_ziplist($allvariablesarrayref);
-
-installer::ziplist::replace_variables_in_ziplist_variables($allvariablesarrayref);
-
-my $allvariableshashref = installer::converter::convert_array_to_hash($allvariablesarrayref);   # the variables from the zip.lst
-
-installer::ziplist::set_default_productversion_if_required($allvariableshashref);
-
-installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
-
-installer::ziplist::overwrite_ooovendor( $allvariableshashref );
 
 ########################################################
 # Check if this is simple packaging mechanism
@@ -1684,19 +1648,19 @@ for (;1;last)
 
     if ( $installer::globals::updatepack ) { $shipinstalldir = installer::control::determine_ship_directory($languagestringref); }
 
-    ###################################################################
-    # Reading an existing msi database, to prepare update and patch
-    ###################################################################
-
     ##############################################
     # Setting global code variables for Windows
     ##############################################
 
     if (!($installer::globals::is_copy_only_project))
     {
-        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
+        if (( $installer::globals::iswindowsbuild )
+            && ( $installer::globals::packageformat ne "archive" )
+            && ( $installer::globals::packageformat ne "installed" ))
         {
-            installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $allvariableshashref);
+            installer::windows::msiglobal::set_global_code_variables(
+                $languagesarrayref,
+                $allvariableshashref);
         }
     }
 
@@ -1745,7 +1709,6 @@ for (;1;last)
     }
 
     installer::scriptitems::changing_name_of_language_dependent_keys($filesinproductlanguageresolvedarrayref);
-
     if ( $installer::globals::iswin and $^O =~ /MSWin/i ) { installer::converter::convert_slash_to_backslash($filesinproductlanguageresolvedarrayref); }
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_non_existent_languages_in_productlists($filesinproductlanguageresolvedarrayref, $languagestringref, "Name", "file");
@@ -1848,6 +1811,7 @@ for (;1;last)
     ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
 
     # installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
+    # if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3.log", $directoriesforepmarrayref); }
 
     #########################################################
     # language dependent scpactions part
@@ -2054,7 +2018,15 @@ for (;1;last)
     if (( $installer::globals::iswindowsbuild ) && ( ! $installer::globals::patch ))    # Windows specific items: Folder, FolderItem, RegistryItem
     {
         $installer::logger::Info->print( "... creating inf files ...\n" );
-        installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
+        installer::worker::create_inf_file(
+            $filesinproductlanguageresolvedarrayref,
+            $registryitemsinproductlanguageresolvedarrayref,
+            $folderinproductlanguageresolvedarrayref,
+            $folderitemsinproductlanguageresolvedarrayref,
+            $modulesinproductlanguageresolvedarrayref,
+            $languagesarrayref,
+            $languagestringref,
+            $allvariableshashref);
     }
 
     ###########################################
@@ -2096,16 +2068,13 @@ for (;1;last)
     installer::packagelist::log_packages_content($packages);
     installer::packagelist::create_module_destination_hash($packages, $allvariableshashref);
 
-
-    # saving debug info, before starting part 2
-    if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
-
     #################################################
     # Part 2: The platform dependent part
     #################################################
 
-    if ($installer::globals::iswindowsbuild)
+    if ( $installer::globals::iswindowsbuild )
     {
+        # Create .idt tables and a .msi file.
         MakeWindowsBuild(
             $allvariableshashref,
             $allsettingsarrayref,
@@ -2130,6 +2099,7 @@ for (;1;last)
     }
     else
     {
+        # Creating epm list file.
         MakeNonWindowsBuild(
             $allvariableshashref,
             $allsettingsarrayref,

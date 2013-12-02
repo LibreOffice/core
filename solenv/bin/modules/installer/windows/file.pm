@@ -47,68 +47,65 @@ sub assign_cab_to_files
 
     my $infoline = "";
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    foreach my $file (@$filesref)
     {
-        if ( ! exists(${$filesref}[$i]->{'modules'}) ) { installer::exiter::exit_program("ERROR: No module assignment found for ${$filesref}[$i]->{'gid'} !", "assign_cab_to_files"); }
-        my $module = ${$filesref}[$i]->{'modules'};
+        if ( ! exists($file->{'modules'}) )
+        {
+            installer::exiter::exit_program(
+                sprintf("ERROR: No module assignment found for %s", $file->{'gid'}),
+                "assign_cab_to_files");
+        }
+        my $module = $file->{'modules'};
         # If modules contains a list of modules, only taking the first one.
         if ( $module =~ /^\s*(.*?)\,/ ) { $module = $1; }
 
-        if ( ! exists($installer::globals::allcabinetassigns{$module}) ) { installer::exiter::exit_program("ERROR: No cabinet file assigned to module \"$module\" (${$filesref}[$i]->{'gid'}) !", "assign_cab_to_files"); }
-        ${$filesref}[$i]->{'assignedcabinetfile'} = $installer::globals::allcabinetassigns{$module};
+        if ( ! exists($installer::globals::allcabinetassigns{$module}) )
+        {
+            installer::exiter::exit_program(
+                sprintf("ERROR: No cabinet file assigned to module \"%s\" %s",
+                    $module,
+                    $file->{'gid'}),
+                "assign_cab_to_files");
+        }
+        $file->{'assignedcabinetfile'} = $installer::globals::allcabinetassigns{$module};
 
         # Counting the files in each cabinet file
-        if ( ! exists($installer::globals::cabfilecounter{${$filesref}[$i]->{'assignedcabinetfile'}}) )
+        if ( ! exists($installer::globals::cabfilecounter{$file->{'assignedcabinetfile'}}) )
         {
-            $installer::globals::cabfilecounter{${$filesref}[$i]->{'assignedcabinetfile'}} = 1;
+            $installer::globals::cabfilecounter{$file->{'assignedcabinetfile'}} = 1;
         }
         else
         {
-            $installer::globals::cabfilecounter{${$filesref}[$i]->{'assignedcabinetfile'}}++;
+            $installer::globals::cabfilecounter{$file->{'assignedcabinetfile'}}++;
         }
-    }
-
-    # logging the number of files in each cabinet file
-
-    $installer::logger::Lang->print("\n");
-    $installer::logger::Lang->print("Cabinet file content:\n");
-    my $cabfile;
-    foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
-    {
-        $infoline = "$cabfile : $installer::globals::cabfilecounter{$cabfile} files\n";
-        $installer::logger::Lang->print($infoline);
     }
 
     # assigning startsequencenumbers for each cab file
 
+    my %count = ();
     my $offset = 1;
-    foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
+    foreach my $cabfile ( sort keys %installer::globals::cabfilecounter )
     {
         my $filecount = $installer::globals::cabfilecounter{$cabfile};
+        $count{$cabfile} = $filecount;
         $installer::globals::cabfilecounter{$cabfile} = $offset;
         $offset = $offset + $filecount;
 
         $installer::globals::lastsequence{$cabfile} = $offset - 1;
     }
 
-    # logging the start sequence numbers
+    # logging the number of files in each cabinet file
 
     $installer::logger::Lang->print("\n");
-    $installer::logger::Lang->print("Cabinet file start sequences:\n");
-    foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
+    $installer::logger::Lang->print("Cabinet files:\n");
+    foreach my $cabfile (sort keys %installer::globals::cabfilecounter)
     {
-        $infoline = "$cabfile : $installer::globals::cabfilecounter{$cabfile}\n";
-        $installer::logger::Lang->print($infoline);
-    }
-
-    # logging the last sequence numbers
-
-    $installer::logger::Lang->print("\n");
-    $installer::logger::Lang->print("Cabinet file last sequences:\n");
-    foreach $cabfile ( sort keys %installer::globals::lastsequence )
-    {
-        $infoline = "$cabfile : $installer::globals::lastsequence{$cabfile}\n";
-        $installer::logger::Lang->print($infoline);
+        $installer::logger::Lang->printf(
+            "%-30s : %4s files, from %4d to %4d\n",
+            $cabfile,
+            $count{$cabfile},
+            $installer::globals::cabfilecounter{$cabfile},
+            $installer::globals::lastsequence{$cabfile});
     }
 }
 
@@ -373,20 +370,8 @@ sub generate_unique_filename_for_filetable ($$)
     my $counter = 0;
 
     if ( $fileref->{'Name'} ) { $uniquefilename = $fileref->{'Name'}; }
-
-    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$uniquefilename); # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
-
-    # Reading unique filename with help of "Component_" in File table from old database
-    if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$component/$uniquefilename"}) ))
-    {
-        # If we have a FTK mapping for this component/file, use it.
-        $installer::globals::savedmapping{"$component/$uniquefilename"} =~ m/^(.*);/;
-        $uniquefilename = $1;
-         $lcuniquefilename = lc($uniquefilename);
-        $installer::globals::alluniquefilenames{$uniquefilename} = 1;
-        $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
-        return $uniquefilename;
-    }
+       # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
+    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$uniquefilename);
 
     $uniquefilename =~ s/\-/\_/g;       # no "-" allowed
     $uniquefilename =~ s/\@/\_/g;       # no "@" allowed
@@ -399,8 +384,7 @@ sub generate_unique_filename_for_filetable ($$)
 
     my $newname = 0;
 
-    if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) &&
-         ! exists($installer::globals::savedrevmapping{$lcuniquefilename}) )
+    if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}))
     {
         $installer::globals::alluniquefilenames{$uniquefilename} = 1;
         $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
@@ -431,8 +415,7 @@ sub generate_unique_filename_for_filetable ($$)
             $newname = 0;
             $lcuniquefilename = lc($uniquefilename);    # only lowercase names
 
-            if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) &&
-                 ! exists($installer::globals::savedrevmapping{$lcuniquefilename}) )
+            if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}))
             {
                 $installer::globals::alluniquefilenames{$uniquefilename} = 1;
                 $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
@@ -459,30 +442,20 @@ sub generate_filename_for_filetable ($$)
 
     my $filename = $fileref->{'Name'};
 
-    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$filename);   # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
+    # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
+    installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$filename);
 
-    my $shortstring;
+    my $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
 
-    # Reading short string with help of "FileName" in File table from old database
-    if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"}) ))
+    if ( $shortstring eq $filename )
     {
-        $installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"} =~ m/.*;(.*)/;
-        if ($1 ne '')
-        {
-            $shortstring = $1;
-        }
-        else
-        {
-            $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
-        }
+        # nothing changed
+        $returnstring = $filename;
     }
     else
     {
-        $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
+        $returnstring = $shortstring . "\|" . $filename;
     }
-
-    if ( $shortstring eq $filename ) { $returnstring = $filename; } # nothing changed
-    else {$returnstring = $shortstring . "\|" . $filename; }
 
     return $returnstring;
 }
@@ -524,7 +497,10 @@ sub get_fileversion
 
     if ( $allvariables->{'USE_FILEVERSION'} )
     {
-        if ( ! $allvariables->{'LIBRARYVERSION'} ) { installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion"); }
+        if ( ! $allvariables->{'LIBRARYVERSION'} )
+        {
+            installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion");
+        }
         my $libraryversion = $allvariables->{'LIBRARYVERSION'};
         if ( $libraryversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
         {
@@ -535,18 +511,23 @@ sub get_fileversion
             $libraryversion = $major . "\." . $concat;
         }
         my $vendornumber = 0;
-        if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
+        if ( $allvariables->{'VENDORPATCHVERSION'} )
+        {
+            $vendornumber = $allvariables->{'VENDORPATCHVERSION'};
+        }
         $fileversion = $libraryversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
-        if ( $onefile->{'FileVersion'} ) { $fileversion = $onefile->{'FileVersion'}; } # overriding FileVersion in scp
-
-        # if ( $styles =~ /\bFONT\b/ )
-        # {
-        #   my $newfileversion = installer::windows::font::get_font_version($onefile->{'sourcepath'});
-        #   if ( $newfileversion != 0 ) { $fileversion = $newfileversion; }
-        # }
+        if ( $onefile->{'FileVersion'} )
+        {
+            # overriding FileVersion in scp
+            $fileversion = $onefile->{'FileVersion'};
+        }
     }
 
-    if ( $installer::globals::prepare_winpatch ) { $fileversion = ""; } # Windows patches do not allow this version # -> who says so?
+    if ( $installer::globals::prepare_winpatch )
+    {
+        # Windows patches do not allow this version # -> who says so?
+        $fileversion = "";
+    }
 
     return $fileversion;
 }

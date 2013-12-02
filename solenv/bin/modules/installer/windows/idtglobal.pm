@@ -56,6 +56,19 @@ sub shorten_feature_gid
     $$stringref =~ s/_Replacement_/_rpl_/;
 }
 
+=head2 create_shortend_feature_gid ($feature_name)
+
+    This is a side effect free version of shorten_feature_gid.
+    The shortened feature name is returned instead of overwriting the given name.
+
+=cut
+sub create_shortend_feature_gid ($)
+{
+    my ($feature_name) = @_;
+    shorten_feature_gid(\$feature_name);
+    return $feature_name;
+}
+
 ############################################
 # Getting the next free number, that
 # can be added.

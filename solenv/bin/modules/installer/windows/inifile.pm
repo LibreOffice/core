@@ -28,6 +28,8 @@ use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
 
+use strict;
+
 ####################################################
 # Setting the profile for a special profileitem
 ####################################################
@@ -66,21 +68,18 @@ sub file_is_part_of_product
 {
     my ($profilegid, $filesref) = @_;
 
-    my $part_of_product = 0;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    foreach my $file (@$filesref)
     {
-        $onefile = ${$filesref}[$i];
-        my $filegid = $onefile->{'gid'};
+        my $filegid = $file->{'gid'};
+        next unless defined $filegid;
 
         if ( $filegid eq $profilegid )
         {
-            $part_of_product = 1;
-            last;
+            return 1;
         }
     }
 
-    return $part_of_product;
+    return 0;
 }
 
 ###########################################################################################################

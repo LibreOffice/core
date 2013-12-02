@@ -37,6 +37,7 @@ use installer::systemactions;
 use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
+use strict;
 
 ###########################################################################
 # Generating the header of the ddf file.
@@ -332,65 +333,6 @@ sub get_file_sequence
     return $sequence;
 }
 
-########################################################################
-# For update and patch reasons the pack order needs to be saved.
-# The pack order is saved in the ddf files; the names and locations
-# of the ddf files are saved in @installer::globals::allddffiles.
-# The outputfile "packorder.txt" can be saved in
-# $installer::globals::infodirectory .
-########################################################################
-
-sub save_packorder
-{
-    installer::logger::include_header_into_logfile("Saving pack order");
-
-    $installer::logger::Lang->add_timestamp("Performance Info: saving pack order start");
-
-    my $packorderfilename = "packorder.txt";
-    $packorderfilename = $installer::globals::infodirectory . $installer::globals::separator . $packorderfilename;
-
-    my @packorder = ();
-
-    my $headerline = "\# Syntax\: Filetable_Sequence Cabinetfilename Physical_FileName Unique_FileName\n\n";
-    push(@packorder, $headerline);
-
-    for ( my $i = 0; $i <= $#installer::globals::allddffiles; $i++ )
-    {
-        my $ddffilename = $installer::globals::allddffiles[$i];
-        my $ddffile = installer::files::read_file($ddffilename);
-        my $cabinetfile = "";
-
-        for ( my $j = 0; $j <= $#{$ddffile}; $j++ )
-        {
-            my $oneline = ${$ddffile}[$j];
-
-            # Getting the Cabinet file name
-
-            if ( $oneline =~ /^\s*\.Set\s+CabinetName.*\=(.*?)\s*$/ ) { $cabinetfile = $1; }
-            if ( $oneline =~ /^\s*\.Set\s+/ ) { next; }
-
-            if ( $oneline =~ /^\s*\"(.*?)\"\s+(.*?)\s*$/ )
-            {
-                my $sourcefile = $1;
-                my $uniquefilename = $2;
-
-                installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$sourcefile);
-
-                # Using the hash created in create_files_table for performance reasons to get the sequence number
-                my $filesequence = "";
-                if ( exists($installer::globals::uniquefilenamesequence{$uniquefilename}) ) { $filesequence = $installer::globals::uniquefilenamesequence{$uniquefilename}; }
-                else { installer::exiter::exit_program("ERROR: No sequence number value for $uniquefilename !", "save_packorder"); }
-
-                my $line = $filesequence . "\t" . $cabinetfile . "\t" . $sourcefile . "\t" . $uniquefilename . "\n";
-                push(@packorder, $line);
-            }
-        }
-    }
-
-    installer::files::save_file($packorderfilename ,\@packorder);
-
-    $installer::logger::Lang->add_timestamp("Performance Info: saving pack order end");
-}
 
 #################################################################
 # Returning the name of the msi database
@@ -1087,8 +1029,7 @@ sub create_setup_ini
 
     installer::files::save_file($setupinifilename, $setupinifile);
 
-    $infoline = "Generated file $setupinifilename !\n";
-    $installer::logger::Lang->print($infoline);
+    $installer::logger::Lang->printf("Generated file %s\n", $setupinifilename);
 }
 
 #################################################################
@@ -1133,7 +1074,7 @@ sub copy_windows_installer_files_into_installset
 
     installer::logger::include_header_into_logfile("Copying Windows installer files into installation set");
 
-    @copyfile = ();
+    my @copyfile = ();
     push(@copyfile, "loader2.exe");
 
     if ( $allvariables->{'NOLOADERREQUIRED'} ) { @copyfile = (); }
@@ -1489,7 +1430,7 @@ sub prepare_64bit_database
             if ( -f $fullfilename )
             {
                 my $saving_required = 0;
-                $filecontent = installer::files::read_file($fullfilename);
+                my $filecontent = installer::files::read_file($fullfilename);
 
                 for ( my $i = 3; $i <= $#{$filecontent}; $i++ )     # ignoring the first three lines
                 {
@@ -1766,8 +1707,8 @@ sub set_global_code_variables ($$)
     {
         # UpgradeCode can take english as default, if not defined in specified language
 
-        $searchstring = "UPGRADECODE";  # searching in the codes.txt file
-        $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+        my $searchstring = "UPGRADECODE";   # searching in the codes.txt file
+        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
         $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
     }
 
@@ -1948,167 +1889,6 @@ sub update_removere_table
     }
 }
 
-##########################################################################
-# Reading saved mappings in Files.idt and Director.idt.
-# This is required, if installation sets shall be created,
-# that can be used for creation of msp files.
-##########################################################################
-
-sub read_saved_mappings
-{
-    installer::logger::include_header_into_logfile("Reading saved mappings from older installation sets:");
-
-    $installer::logger::Lang->add_timestamp("Performance Info: Reading saved mappings start");
-
-    if ( $installer::globals::previous_idt_dir )
-    {
-        my @errorlines = ();
-        my $errorstring = "";
-        my $error_occured = 0;
-        my $file_error_occured = 0;
-        my $dir_error = 0;
-
-        my $idtdir = $installer::globals::previous_idt_dir;
-        $idtdir =~ s/\Q$installer::globals::separator\E\s*$//;
-
-        # Reading File.idt
-
-        my $idtfile = $idtdir . $installer::globals::separator . "File.idt";
-        $installer::logger::Global->print("\n");
-        $installer::logger::Global->printf("Analyzing file: %s\n", $idtfile);
-        if ( ! -f $idtfile )
-        {
-            $installer::logger::Global->printf("Warning: File %s does not exist!\n", $idtfile);
-        }
-
-        my $n = 0;
-        open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
-        <F>; <F>; <F>;
-        while (<F>)
-        {
-            m/^([^\t]+)\t([^\t]+)\t((.*)\|)?([^\t]*)/;
-            print "OUT1: \$1: $1, \$2: $2, \$3: $3, \$4: $4, \$5: $5\n";
-            next if ("$1" eq "$5") && (!defined($3));
-            my $lc1 = lc($1);
-
-            if ( exists($installer::globals::savedmapping{"$2/$5"}))
-            {
-                if ( ! $file_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate savedmapping{" . "$2/$5}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
-            }
-
-            if ( exists($installer::globals::savedrevmapping{$lc1}))
-            {
-                if ( ! $file_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate savedrevmapping{" . "$lc1}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
-            }
-
-            my $shortname = $4 || '';
-
-            # Don't reuse illegal 8.3 mappings that we used to generate in 2.0.4
-            if (index($shortname, '.') > 8 ||
-                (index($shortname, '.') == -1 && length($shortname) > 8))
-            {
-                $shortname = '';
-            }
-
-            if (( $shortname ne '' ) && ( index($shortname, '~') > 0 ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
-            {
-                if ( ! $file_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate savedrev83mapping{" . "$shortname}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
-            }
-
-            $installer::globals::savedmapping{"$2/$5"} = "$1;$shortname";
-            $installer::globals::savedrevmapping{lc($1)} = "$2/$5";
-            $installer::globals::savedrev83mapping{$shortname} = "$2/$5" if $shortname ne '';
-            $n++;
-        }
-
-        close (F);
-
-        $installer::logger::Global->printf("Read %s old file table key or 8.3 name mappings from %s\n",
-            $n, $idtfile);
-
-        # Reading Director.idt
-
-        $idtfile = $idtdir . $installer::globals::separator . "Director.idt";
-        $installer::logger::Global->print("\n");
-        $installer::logger::Global->printf("Analyzing file %s\n", $idtfile);
-        if ( ! -f $idtfile )
-        {
-            $installer::logger::Global->printf("Warning: File %s does not exist!\n", $idtfile);
-        }
-
-        $n = 0;
-        open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
-        <F>; <F>; <F>;
-        while (<F>)
-        {
-            m/^([^\t]+)\t([^\t]+)\t(([^~]+~\d.*)\|)?([^\t]*)/;
-            next if (!defined($3));
-            my $lc1 = lc($1);
-
-            print "OUT2: \$1: $1, \$2: $2, \$3: $3\n";
-
-            if ( exists($installer::globals::saved83dirmapping{$1}) )
-            {
-                if ( ! $dir_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate saved83dirmapping{" . "$1}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $dir_error_occured = 1;
-            }
-
-            $installer::globals::saved83dirmapping{$1} = $4;
-            $n++;
-        }
-        close (F);
-
-        $installer::logger::Global->printf("Read %s old directory 8.3 name mappings from %s\n",
-            $n, $idtfile);
-
-        # Analyzing errors
-
-        if ( $error_occured )
-        {
-            for my $line (@errorlines)
-            {
-                $installer::logger::Info->print($line);
-                $installer::logger::Global->print($line);
-            }
-            installer::exiter::exit_program("ERROR: Duplicate entries in saved mappings!", "read_saved_mappings");
-        }
-    } else {
-        installer::exiter::exit_program("ERROR: Windows patch shall be prepared, but environment variable PREVIOUS_IDT_DIR is not set!", "read_saved_mappings");
-    }
-
-    $installer::logger::Lang->add_timestamp("Performance Info: Reading saved mappings end");
-}
 
 1;
 

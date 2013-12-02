@@ -350,25 +350,24 @@ sub create_registry_table
 {
     my ($registryref, $allregistrycomponentsref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
 
-    for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
+    my %table_data = ();
+    foreach my $onelanguage (@$languagesarrayref)
     {
-        my $onelanguage = ${$languagesarrayref}[$m];
 
         my @registrytable = ();
         my @reg64table = ();
 
         installer::windows::idtglobal::write_idt_header(\@registrytable, "registry");
         installer::windows::idtglobal::write_idt_header(\@reg64table, "reg64");
-
-        for ( my $i = 0; $i <= $#{$registryref}; $i++ )
+        my $table_items = [];
+        foreach my $oneregistry (@$registryref)
         {
-            my $oneregistry = ${$registryref}[$i];
-
             # Controlling the language!
             # Only language independent folderitems or folderitems with the correct language
             # will be included into the table
 
-            if (! (!(( $oneregistry->{'ismultilingual'} )) || ( $oneregistry->{'specificlanguage'} eq $onelanguage )) )  { next; }
+            next if $oneregistry->{'ismultilingual'}
+                && $oneregistry->{'specificlanguage'} ne $onelanguage;
 
             my %registry = ();
 
@@ -378,7 +377,9 @@ sub create_registry_table
             $registry{'Name'} = get_registry_name($oneregistry, $allvariableshashref);
             $registry{'Value'} = get_registry_value($oneregistry, $allvariableshashref);
             $registry{'Val64'} = get_registry_val64($oneregistry, $allvariableshashref);
-            $registry{'Component_'} = get_registry_component($oneregistry, $allvariableshashref);
+            my $component_name = get_registry_component_name($oneregistry, $allvariableshashref);
+            $oneregistry->{'componentname'} = $component_name;
+            $registry{'Component_'} = $component_name;
 
             # Collecting all components
             if (!(installer::existence::exists_in_array($registry{'Component_'}, $allregistrycomponentsref)))
@@ -387,12 +388,19 @@ sub create_registry_table
             }
 
             # Collecting all components with DONT_DELETE style
-            my $style = "";
-            if ( $oneregistry->{'Styles'} ) { $style = $oneregistry->{'Styles'}; }
-            if ( $style =~ /\bDONT_DELETE\b/ ) { $installer::globals::dontdeletecomponents{$registry{'Component_'}} = 1; }
+            my $style = $oneregistry->{'Styles'} // "";
+            $registry{'styles'} = $style;
+
+            if ( $style =~ /\bDONT_DELETE\b/ )
+            {
+                $installer::globals::dontdeletecomponents{$component_name} = 1;
+            }
 
             # Saving upgradekey to write this into setup.ini for minor upgrades
-            if ( $style =~ /\bUPGRADEKEY\b/ ) { $installer::globals::minorupgradekey = $registry{'Key'}; }
+            if ( $style =~ /\bUPGRADEKEY\b/ )
+            {
+                $installer::globals::minorupgradekey = $registry{'Key'};
+            }
 
             # Collecting all registry components with ALWAYS_REQUIRED style
             if ( ! ( $style =~ /\bALWAYS_REQUIRED\b/ ))

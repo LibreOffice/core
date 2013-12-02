@@ -2617,9 +2617,10 @@ sub build_modulegids_table ($$)
 
     # build map of item names to list of respective module gids
     # containing these items
-    foreach my $onemodule (@{$modulesref})
+    foreach my $onemodule (@$modulesref)
     {
         next if ! defined $onemodule->{$itemname};
+
         # these are the items contained in this module
         # eg. Files = (gid_a_b_c,gid_d_e_f)
         my $module_gids = $onemodule->{$itemname};
@@ -2649,10 +2650,9 @@ sub get_string_of_modulegids_for_itemgid ($$)
     my $haslanguagemodule = 0;
     my %foundmodules = ();
 
-    # print STDERR "lookup '" . lc($itemgid) . "'\n";
     my $gid_list = $module_lookup_table->{lc($itemgid)};
 
-    foreach my $gid (@{$gid_list})
+    foreach my $gid (@$gid_list)
     {
         $foundmodules{$gid} = 1;
         # Is this module a language module? This info should be stored at the file.
@@ -2674,8 +2674,8 @@ sub get_string_of_modulegids_for_itemgid ($$)
         {
             installer::exiter::exit_program(
                 sprintf(
-                    "ERROR: \"\" is assigned to modules with flag "
-                    . "\"LANGUAGEMODULE\" and also to modules without this flag! Modules: %s",
+                    "ERROR: \"%s\" is assigned to modules with flag "
+                    ."\"LANGUAGEMODULE\" and also to modules without this flag! Modules: %s",
                     $itemgid,
                     $allmodules),
                 "get_string_of_modulegids_for_itemgid");

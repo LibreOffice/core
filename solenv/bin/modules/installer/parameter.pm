@@ -634,7 +634,6 @@ sub outputparameter ()
     foreach my $line (@output)
     {
         $installer::logger::Info->print($line);
-        $installer::logger::Global->print($line);
     }
 }
 

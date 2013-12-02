@@ -94,6 +94,8 @@ sub replace_productname_in_file
     my $replacestring = "";
     for ( my $i = 1; $i <= 80; $i++ ) { $replacestring .= $onestring; }
 
+    $installer::logger::Lang->printf("processing PATCH_SO_NAME: %s -> %s\n", $sourcepath, $destpath);
+
     my $productname = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTVERSION'};
     if ( exists($onefilehash->{'FileDescription'}) ) { $productname = $onefilehash->{'FileDescription'}; }
     my $unicode_productname = convert_to_unicode($productname);
@@ -153,6 +155,7 @@ sub resolving_patchsoname_flag
             # if (!(-f $destinationpath))   # do nothing if the file already exists
             # {
 
+            $installer::logger::Lang->printf("PATCH_SO_NAME: copying '%s' to '%s'\n", $sourcepath, $movepath);
             my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
 
             if ( $copysuccess )
