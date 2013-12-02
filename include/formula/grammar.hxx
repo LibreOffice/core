@@ -244,6 +244,13 @@ public:
             ::com::sun::star::sheet::FormulaLanguage::ODFF;
     }
 
+    /// If grammar is of OOXML
+    static inline bool isOOXML( const Grammar eGrammar )
+    {
+        return extractFormulaLanguage( eGrammar) ==
+            ::com::sun::star::sheet::FormulaLanguage::OOXML;
+    }
+
 };
 // =============================================================================
 } // formula

@@ -156,6 +156,9 @@ public:
         /// Is it an ODFF / ODF 1.2 mapping?
         inline bool isODFF() const { return FormulaGrammar::isODFF( meGrammar); }
 
+        /// Is it an OOXML mapping?
+        inline bool isOOXML() const { return FormulaGrammar::isOOXML( meGrammar); }
+
         /// Does it have external symbol/name mappings?
         inline bool hasExternals() const { return !mpExternalHashMap->empty(); }
 
