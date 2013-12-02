@@ -827,6 +827,11 @@ void DockingWindow::SetFloatingMode( sal_Bool bFloatMode )
                 // BorderWindow den Parent umsetzen
                 if ( mpOldBorderWin )
                     mpOldBorderWin->SetParent( pWin );
+
+                // #i123765# reset the buffered DropTargets when undocking, else it may not
+                // be correctly initialized
+                mpWindowImpl->mxDNDListenerContainer.clear();
+
                 SetParent( pWin );
                 SetPosPixel( Point() );
                 mpWindowImpl->mpBorderWindow = pWin;
