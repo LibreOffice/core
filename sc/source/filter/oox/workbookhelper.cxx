@@ -572,7 +572,8 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         if( xLockable.is() )
             xLockable->addActionLock();
 
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
+        //! TODO: localize progress bar text
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Loading..." ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
 
         //prevent unnecessary broadcasts and "half way listeners" as
@@ -581,7 +582,8 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     }
     else if( mrBaseFilter.isExportFilter() )
     {
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_SAVE_DOC) ) );
+        //! TODO: localize progress bar text
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Saving..." ) );
     }
     // filter specific
     switch( getFilterType() )
