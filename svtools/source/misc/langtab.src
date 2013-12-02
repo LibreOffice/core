@@ -216,6 +216,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Kurdish, Northern (Syria)" ; LANGUAGE_USER_KURDISH_SYRIA ; > ;
         < "Kurdish, Central (Iraq)" ; LANGUAGE_USER_KURDISH_IRAQ ; > ;
         < "Kurdish, Central (Iran)" ; LANGUAGE_USER_KURDISH_IRAN ; > ;
+        < "Kurdish, Southern (Iran)" ; LANGUAGE_USER_KURDISH_SOUTHERN_IRAN ; > ;
         < "Kurdish, Southern (Iraq)" ; LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ ; > ;
         < "Sardinian" ; LANGUAGE_USER_SARDINIAN ; > ;
         < "Dzongkha" ; LANGUAGE_DZONGKHA ; > ;

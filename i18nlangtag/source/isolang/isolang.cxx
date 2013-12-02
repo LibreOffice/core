@@ -513,6 +513,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_KURDISH_ARABIC_IRAQ,        "ckb", "IQ", 0     },
     { LANGUAGE_KURDISH_ARABIC_IRAQ,         "ku", "IQ", kSAME },
     { LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ,  "ku", "IQ", LANGUAGE_KURDISH_ARABIC_IRAQ },
+    { LANGUAGE_USER_KURDISH_SOUTHERN_IRAN, "sdh", "IR", 0     },
     { LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ, "sdh", "IQ", 0     },
     { LANGUAGE_USER_KURDISH_IRAN,          "ckb", "IR", 0     },
     { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR", kSAME },

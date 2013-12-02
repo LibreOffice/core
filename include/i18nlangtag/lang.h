@@ -535,6 +535,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KURDISH_IRAQ          LANGUAGE_KURDISH_ARABIC_IRAQ
 #define LANGUAGE_USER_KURDISH_IRAN          0x1226  /* sublang 0x04, Arabic script */
 #define LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ 0x8092  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
+#define LANGUAGE_USER_KURDISH_SOUTHERN_IRAN 0x8492  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
 #define LANGUAGE_USER_SARDINIAN             0x0627
 /* was reserved for Dzongkha but turned down with #i53497#: 0x0628 */  /* obsoleted by LANGUAGE_DZONGKHA */
 #define LANGUAGE_USER_DZONGKHA_MAP_LONLY    0xF851  /* to map "dz" only, because of the MS error, and preserve CTL information, sub 0x3e */
