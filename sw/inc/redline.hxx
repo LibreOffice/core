@@ -32,7 +32,7 @@
 class SfxItemSet;
 class SwView;
 
-class SwRedlineExtraData
+class SW_DLLPUBLIC SwRedlineExtraData
 {
     SwRedlineExtraData( const SwRedlineExtraData& );
     SwRedlineExtraData& operator=( const SwRedlineExtraData& );
@@ -77,6 +77,29 @@ public:
     virtual SwRedlineExtraData* CreateNew() const;
     virtual void Reject( SwPaM& rPam ) const;
     virtual int operator == ( const SwRedlineExtraData& ) const;
+};
+
+/*
+ * This class is used to store 'redline' data regarding formatting changes,
+ * e.g. - a text portion *was* italic and now is not italic,
+ * e.g. - a text portion got a hightlight to it
+ *
+ * The way the information is stored is in an 'SfxItemSet' that holds all
+ * the WhichIds with their values.
+ */
+class SW_DLLPUBLIC SwRedlineExtraData_FormattingChanges : public SwRedlineExtraData
+{
+    SfxItemSet* pSet;
+
+    SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy );
+
+public:
+    SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet );
+    virtual ~SwRedlineExtraData_FormattingChanges();
+    virtual SwRedlineExtraData* CreateNew() const;
+    virtual void Reject( SwPaM& rPam ) const;
+    virtual int operator == ( const SwRedlineExtraData& ) const;
+    SfxItemSet* GetItemSet( ) const;
 };
 
 
