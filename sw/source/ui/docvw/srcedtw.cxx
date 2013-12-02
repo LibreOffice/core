@@ -97,13 +97,13 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
                 aPortionList.push_back( aText );
                 nInsert++;
             }
-            sal_Unicode cFollowFirst = rSource[(xub_StrLen)(nActPos + 1)];
-            sal_Unicode cFollowNext = rSource[(xub_StrLen)(nActPos + 2)];
+            sal_Unicode cFollowFirst = rSource[nActPos + 1];
+            sal_Unicode cFollowNext = rSource[nActPos + 2];
             if(cExclamation == cFollowFirst)
             {
                 // "<!" SGML or comment
                 if(cMinus == cFollowNext &&
-                    nActPos < nStrLen - 3 && cMinus == rSource[(xub_StrLen)(nActPos + 3)])
+                    nActPos < nStrLen - 3 && cMinus == rSource[nActPos + 3])
                 {
                     eFoundType = svtools::HTMLCOMMENT;
                 }
