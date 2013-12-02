@@ -15,6 +15,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <svx/msdffdef.hxx>
 #include <com/sun/star/awt/Size.hpp>
 
 namespace msfilter {
@@ -131,8 +132,11 @@ struct MSFILTER_DLLPUBLIC EquationResult
 
 MSFILTER_DLLPUBLIC EquationResult ParseCombinedChars(const OUString& rStr);
 
-/// Similar to EnhancedCustomShapeTypeNames::Get(), but it also supports OOXML types.
+/// Similar to EnhancedCustomShapeTypeNames::Get(), but it also supports OOXML types and returns a drawingML string.
 MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const char* sShapeType );
+
+/// Similar to EnhancedCustomShapeTypeNames::Get(), but returns an MSO_SPT (binary / VML type).
+MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(OString aType);
 
 }
 
