@@ -34,6 +34,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include "svl/urihelper.hxx"
@@ -105,7 +106,6 @@
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
 #include "docparam.hxx"
-
 #include "docshimp.hxx"
 #include "sizedev.hxx"
 
@@ -1571,6 +1571,20 @@ sal_Bool ScDocShell::Save()
 
     PrepareSaveGuard aPrepareGuard( *this);
 
+    aDocument.setDocAccTitle(OUString());
+    SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
+    if (pFrame1)
+    {
+        Window* pWindow = &pFrame1->GetWindow();
+        if ( pWindow )
+        {
+            Window* pSysWin = pWindow->GetSystemWindow();
+            if ( pSysWin )
+            {
+                pSysWin->SetAccessibleName(OUString());
+            }
+        }
+    }
     //  wait cursor is handled with progress bar
     sal_Bool bRet = SfxObjectShell::Save();
     if( bRet )

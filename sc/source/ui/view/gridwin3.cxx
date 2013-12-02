@@ -175,6 +175,8 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
                         bUsed = false;                  // nichts geloescht
+                    if(bOldMarked)
+                        GetFocus();
                 }
             if (!bLeaveDraw)
                 UpdateStatusPosSize();      // for moving/resizing etc. by keyboard

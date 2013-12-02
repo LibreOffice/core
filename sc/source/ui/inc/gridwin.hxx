@@ -244,6 +244,8 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 
     bool            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 
+    bool            HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRange& rScenRange );
+
     bool            DropScroll( const Point& rMousePos );
 
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
@@ -379,6 +381,7 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
+    virtual void SwitchView();
 
     void            UpdateDPFromFieldPopupMenu();
     bool            UpdateVisibleRange();

@@ -38,6 +38,7 @@
 #include "editsh.hxx"
 #include "dociter.hxx"
 #include "inputhdl.hxx"
+#include <svx/srchdlg.hxx>
 #include "document.hxx"
 
 //==================================================================
@@ -235,7 +236,23 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
-                    SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
+                    sal_Bool bSuccess = SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
+                    SvxSearchDialog* pSearchDlg =
+                        ((SvxSearchDialog*)(SfxViewFrame::Current()->GetChildWindow(
+                        SvxSearchDialogWrapper::GetChildWindowId())->GetWindow()));
+                    if( pSearchDlg )
+                    {
+                        ScTabView* pTabView = GetViewData()->GetView();
+                        if( pTabView )
+                        {
+                            Window* pWin = pTabView->GetActiveWin();
+                            if( pWin )
+                            {
+                                pSearchDlg->SetDocWin( pWin );
+                                pSearchDlg->SetSrchFlag( bSuccess );
+                            }
+                        }
+                    }
                     rReq.Done();
                 }
             }
@@ -287,6 +304,22 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                             SFX_CALLMODE_STANDARD,
                             &aSearchItem, 0L );
+                    SvxSearchDialog* pSearchDlg =
+                        ((SvxSearchDialog*)(SfxViewFrame::Current()->GetChildWindow(
+                        SvxSearchDialogWrapper::GetChildWindowId())->GetWindow()));
+                    if( pSearchDlg )
+                    {
+                        ScTabView* pTabView = GetViewData()->GetView();
+                        if( pTabView )
+                        {
+                            Window* pWin = pTabView->GetActiveWin();
+                            if( pWin )
+                            {
+                                pSearchDlg->SetDocWin( pWin );
+                                pSearchDlg->SetSrchFlag();
+                            }
+                        }
+                    }
                 }
                 else
                 {

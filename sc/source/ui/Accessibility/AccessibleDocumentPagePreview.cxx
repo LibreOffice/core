@@ -1696,4 +1696,31 @@ ScShapeChildren* ScAccessibleDocumentPagePreview::GetShapeChildren()
     return mpShapeChildren;
 }
 
+OUString ScAccessibleDocumentPagePreview::getAccessibleName(void)
+throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString sName = ScResId(STR_ACC_DOC_SPREADSHEET);
+    ScDocument* pScDoc = mpViewShell->GetDocument();
+    if ( pScDoc )
+    {
+        OUString sFileName = pScDoc->getDocAccTitle();
+        if ( !sFileName.getLength() )
+        {
+            SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+            if ( pObjSh )
+            {
+                sFileName = pObjSh->GetTitle( SFX_TITLE_APINAME );
+            }
+        }
+        if ( sFileName.getLength() )
+        {
+            sName = sFileName + " - " + sName;
+            sName += ScResId(STR_ACC_DOC_PREVIEW_SUFFIX);
+
+        }
+    }
+
+    return sName;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

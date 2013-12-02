@@ -741,6 +741,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         aTbxCmd.Select(IID_ZOOMOUT);
         aTbxCmd.RemoveItem(aTbxCmd.GetItemPos(IID_ZOOMOUT));
     }
+    aLbEntries.SetNavigatorDlgFlag(sal_True);
 }
 
 //------------------------------------------------------------------------
@@ -934,7 +935,11 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 case FID_ANYDATACHANGED:
                     aContentTimer.Start();      // Notizen nicht sofort suchen
                     break;
-
+                case FID_KILLEDITVIEW:
+                    aLbEntries.ObjectFresh( SC_CONTENT_OLEOBJECT );
+                    aLbEntries.ObjectFresh( SC_CONTENT_DRAWING );
+                    aLbEntries.ObjectFresh( SC_CONTENT_GRAPHIC );
+                    break;
                 default:
                     break;
             }

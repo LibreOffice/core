@@ -136,12 +136,22 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     m_pWndCenter->SetFont( aPatAttr );
     m_pWndRight->SetFont( aPatAttr );
 
+    m_pWndLeft->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
+    m_pWndCenter->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
+    m_pWndRight->SetObjectSelectHdl( LINK(this,ScHFEditPage,ObjectSelectHdl) );
     FillCmdArr();
 
     m_pWndLeft->GrabFocus();
 
     InitPreDefinedList();
 
+}
+
+IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
+{
+    (void)pEdit;
+    m_pBtnText->GrabFocus();
+    return 0;
 }
 
 // -----------------------------------------------------------------------

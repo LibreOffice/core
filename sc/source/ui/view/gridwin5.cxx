@@ -27,6 +27,7 @@
 #include <svtools/imapobj.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -448,15 +449,34 @@ void ScGridWindow::HideNoteMarker()
 com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
     ScGridWindow::CreateAccessible()
 {
+    com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc= GetAccessible(sal_False);
+    if (xAcc.is())
+    {
+        return xAcc;
+    }
+
     ScAccessibleDocument* pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
             pViewData->GetViewShell(), eWhich);
 
-    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
+    xAcc = pAccessibleDocument;
+    SetAccessible(xAcc);
 
     pAccessibleDocument->Init();
 
-    return xAccessible;
+    return xAcc;
+ }
+
+// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
+// There are other notifications for this when the active view has chnaged, so
+// please update the code to use that event mechanism
+void ScGridWindow::SwitchView()
+{
+    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(sal_False).get());
+    if (pAccDoc)
+    {
+        pAccDoc->SwitchViewFireFocus();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

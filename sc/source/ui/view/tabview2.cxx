@@ -353,7 +353,7 @@ void ScTabView::InitOwnBlockMode()
 }
 
 void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                               bool bTestNeg, bool bCols, bool bRows )
+                               bool bTestNeg, bool bCols, bool bRows, bool bForceNeg )
 {
     if (!IsBlockMode())
     {
@@ -364,7 +364,9 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         SCTAB nTab = aViewData.GetTabNo();
 
         //  Teil von Markierung aufheben?
-        if (bTestNeg)
+        if (bForceNeg)
+            bBlockNeg = sal_True;
+        else if (bTestNeg)
         {
             if ( bCols )
                 bBlockNeg = rMark.IsColumnMarked( nCurX );

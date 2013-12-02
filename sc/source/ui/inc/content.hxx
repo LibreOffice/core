@@ -29,6 +29,7 @@ class ScNavigatorDlg;
 class ScDocument;
 class ScDocShell;
 class ScAreaLink;
+class SdrPage;
 
 #define SC_CONTENT_ROOT         0
 #define SC_CONTENT_TABLE        1
@@ -54,6 +55,8 @@ class ScContentTree : public SvTreeListBox
     OUString            aHiddenName;        // URL to load
     OUString            aHiddenTitle;       // for display
     ScDocument*         pHiddenDocument;    // temporary
+    sal_Bool            bisInNavigatoeDlg;
+    OUString            sKeyString;
 
     sal_uInt16              pPosList[SC_CONTENT_COUNT];     // for the sequence
 
@@ -101,10 +104,11 @@ class ScContentTree : public SvTreeListBox
 
     DECL_LINK( ContentDoubleClickHdl, void* );
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
+public:
+    SvTreeListEntry* pTmpEntry;
 
+    bool m_bFirstPaint;
 protected:
-//  virtual sal_Bool    Drop( const DropEvent& rEvt );
-//  virtual sal_Bool    QueryDrop( DropEvent& rEvt );
 
     using SvTreeListBox::ExecuteDrop;
 
@@ -115,11 +119,17 @@ protected:
 
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-
+    virtual void    InitEntry(SvTreeListEntry*,const OUString&,const Image&,const Image&, SvLBoxButtonKind);
 public:
             ScContentTree( Window* pParent, const ResId& rResId );
             ~ScContentTree();
 
+    OUString getAltLongDescText(SvTreeListEntry* pEntry , sal_Bool isAltText) const;
+    OUString GetEntryAltText( SvTreeListEntry* pEntry ) const;
+    OUString GetEntryLongDescription( SvTreeListEntry* pEntry ) const;
+
+    void     ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry = NULL);
+    sal_Bool     SetNavigatorDlgFlag(sal_Bool isInNavigatoeDlg){ return bisInNavigatoeDlg=isInNavigatoeDlg;};
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
 

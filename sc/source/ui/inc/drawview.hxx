@@ -146,6 +146,10 @@ public:
     SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 
+    SdrObject*  GetObjectByName(const OUString& rName);
+    sal_Bool    GetObjectIsMarked(  SdrObject * pObject );
+    sal_Bool    SelectCurrentViewObject( const OUString& rName );
+
     static void CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
     virtual void SyncForGrid( SdrObject* pObj );
 };

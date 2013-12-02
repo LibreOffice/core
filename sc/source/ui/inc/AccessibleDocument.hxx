@@ -25,7 +25,9 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #include <svx/IAccessibleViewForwarder.hxx>
 
 class ScTabViewShell;
@@ -43,13 +45,15 @@ namespace utl
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::ImplHelper2< ::com::sun::star::accessibility::XAccessibleSelection,
+typedef cppu::ImplHelper3< ::com::sun::star::accessibility::XAccessibleSelection,
+                            ::com::sun::star::accessibility::XAccessibleExtendedAttributes,
                             ::com::sun::star::view::XSelectionChangeListener >
                     ScAccessibleDocumentImpl;
 
 class ScAccessibleDocument
     :   public ScAccessibleDocumentBase,
         public ScAccessibleDocumentImpl,
+        public com::sun::star::accessibility::XAccessibleGetAccFlowTo,
         public accessibility::IAccessibleViewForwarder
 {
 public:
@@ -116,6 +120,12 @@ public:
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual OUString SAL_CALL
+        getAccessibleName(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
     ///=====  XAccessibleSelection  ===========================================
 
     virtual void SAL_CALL
@@ -310,6 +320,22 @@ private:
     OUString GetCurrentCellDescription() const;
 
     Rectangle GetVisibleArea_Impl() const;
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any > GetScAccFlowToSequence();
+public:
+    ScDocument *GetDocument() const ;
+    ScAddress   GetCurCellAddress() const;
+    //=====  XAccessibleGetAccFromXShape  ============================================
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+     virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+protected:
+    void SwitchViewFireFocus();
 };
 
 

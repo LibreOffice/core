@@ -48,6 +48,7 @@
 #include "userdat.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
+#include "table.hxx"
 #include "markdata.hxx"
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -74,8 +75,21 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
+#include <svx/AccessibleControlShape.hxx>
+#include <svx/AccessibleShape.hxx>
+#include <svx/ShapeTypeHandler.hxx>
+#include <svx/SvxShapeTypes.hxx>
+#include <sfx2/objsh.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+
 #include <list>
 #include <algorithm>
+
+#include "AccessibleCell.hxx"
+
+#include "svx/unoapi.hxx"
+#include "scmod.hxx"
 
 #ifdef indices
 #undef indices
@@ -256,6 +270,14 @@ public:
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException);
 
+    virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
+        (::com::sun::star::beans::XPropertySet* pSet)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual  ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>
+        GetAccessibleCaption (const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape>& xShape)
+            throw (::com::sun::star::uno::RuntimeException);
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
 
@@ -474,6 +496,44 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
         }
     }
     return bResult;
+}
+
+::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 count = GetCount();
+    for (sal_Int32 index=0;index<count;index++)
+    {
+        ScAccessibleShapeData* pShape = maZOrderedShapes[index];
+                if (pShape)
+            {
+                ::accessibility::AccessibleShape* pAccShape = pShape->pAccShape;
+                if (pAccShape  && ::accessibility::ShapeTypeHandler::Instance().GetTypeId (pAccShape->GetXShape()) == ::accessibility::DRAWING_CONTROL)
+                {
+                ::accessibility::AccessibleControlShape *pCtlAccShape = static_cast < ::accessibility::AccessibleControlShape* >(pAccShape);
+                if (pCtlAccShape && pCtlAccShape->GetControlModel() == pSet)
+                    return pCtlAccShape;
+              }
+                }
+    }
+    return NULL;
+}
+
+::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible >
+ScChildrenShapes::GetAccessibleCaption (const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape>& xShape)
+            throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 count = GetCount();
+    for (sal_Int32 index=0;index<count;index++)
+    {
+        ScAccessibleShapeData* pShape = maZOrderedShapes[index];
+            if (pShape && pShape->xShape == xShape )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xNewChild(  pShape->pAccShape );
+                if(xNewChild.get())
+                return xNewChild;
+            }
+    }
+    return NULL;
 }
 
 sal_Int32 ScChildrenShapes::GetCount() const
@@ -754,6 +814,8 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
         std::vector < uno::Reference < drawing::XShape > > aShapes;
         FillShapes(aShapes);
 
+        if(aShapes.size()<=0)
+            return xAccessible;
         SortedShapes::iterator aItr;
         if (FindShape(aShapes[nSelectedChildIndex], aItr))
             xAccessible = Get(aItr - maZOrderedShapes.begin());
@@ -898,9 +960,16 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
     }
     else
         mnShapesSelected = 0;
+    SdrObject *pFocusedObj = NULL;
+    if( mnShapesSelected == 1 && aShapesList.size() == 1)
+    {
+        pFocusedObj = GetSdrObjectFromXShape(aShapesList[0]->xShape);
+    }
     ScShapeDataLess aLess;
     std::sort(aShapesList.begin(), aShapesList.end(), aLess);
-
+    SortedShapes vecSelectedShapeAdd;
+    SortedShapes vecSelectedShapeRemove;
+    sal_Bool bHasSelect=sal_False;
     SortedShapes::iterator aXShapesItr(aShapesList.begin());
     SortedShapes::const_iterator aXShapesEndItr(aShapesList.end());
     SortedShapes::iterator aDataItr(maZOrderedShapes.begin());
@@ -925,8 +994,13 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                         (*aDataItr)->pAccShape->SetState(AccessibleStateType::SELECTED);
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
                         bResult = sal_True;
+                        vecSelectedShapeAdd.push_back((*aDataItr));
                     }
                     aFocusedItr = aDataItr;
+                }
+                else
+                {
+                     bHasSelect = sal_True;
                 }
                 ++aDataItr;
                 ++aXShapesItr;
@@ -941,6 +1015,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::SELECTED);
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
                         bResult = sal_True;
+                        vecSelectedShapeRemove.push_back(*aDataItr);
                     }
                 }
                 ++aDataItr;
@@ -955,9 +1030,120 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
         else
             ++aDataItr;
     }
-    if ((aFocusedItr != aDataEndItr) && (*aFocusedItr)->pAccShape && (mnShapesSelected == 1))
+    bool bWinFocus=false;
+    ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
+    if (pWin)
+    {
+        bWinFocus = pWin->HasFocus();
+    }
+    const SdrMarkList* pMarkList = NULL;
+    SdrObject* pMarkedObj = NULL;
+    SdrObject* pUpObj = NULL;
+    sal_Bool bIsFocuseMarked = sal_True;
+    if( mpViewShell && mnShapesSelected == 1 && bWinFocus)
+    {
+        ScDrawView* pScDrawView = mpViewShell->GetViewData()->GetScDrawView();
+        if( pScDrawView )
+        {
+            if( pScDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
+            {
+                pMarkList = &(pScDrawView->GetMarkedObjectList());
+                pMarkedObj = pMarkList->GetMark(0)->GetMarkedSdrObj();
+                uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
+                if( aFocusedItr != aDataEndItr &&
+                    (*aFocusedItr)->xShape.is() &&
+                    xMarkedXShape.is() &&
+                    (*aFocusedItr)->xShape != xMarkedXShape )
+                    bIsFocuseMarked = sal_False;
+            }
+        }
+    }
+    //if ((aFocusedItr != aDataEndItr) && (*aFocusedItr)->pAccShape && (mnShapesSelected == 1))
+    if ( bIsFocuseMarked && (aFocusedItr != aDataEndItr) && (*aFocusedItr)->pAccShape && (mnShapesSelected == 1) && bWinFocus)
+    {
         (*aFocusedItr)->pAccShape->SetState(AccessibleStateType::FOCUSED);
+    }
+    else if( pFocusedObj && bWinFocus && pMarkList && pMarkList->GetMarkCount() == 1 && mnShapesSelected == 1 )
+    {
+        if( pMarkedObj )
+        {
+            uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
+            pUpObj = pMarkedObj->GetUpGroup();
 
+            if( pMarkedObj == pFocusedObj )
+            {
+                if( pUpObj )
+                {
+                    uno::Reference< drawing::XShape > xUpGroupXShape (pUpObj->getUnoShape(), uno::UNO_QUERY);
+                    uno::Reference < XAccessible > xAccGroupShape =
+                        const_cast<ScChildrenShapes*>(this)->GetAccessibleCaption( xUpGroupXShape );
+                    if( xAccGroupShape.is() )
+                    {
+                        ::accessibility::AccessibleShape* pAccGroupShape =
+                            static_cast< ::accessibility::AccessibleShape* >(xAccGroupShape.get());
+                        if( pAccGroupShape )
+                        {
+                            sal_Int32 nCount =  pAccGroupShape->getAccessibleChildCount();
+                            for( sal_Int32 i = 0; i < nCount; i++ )
+                            {
+                                uno::Reference<XAccessible> xAccShape = pAccGroupShape->getAccessibleChild(i);
+                                if (xAccShape.is())
+                                {
+                                    ::accessibility::AccessibleShape* pChildAccShape =  static_cast< ::accessibility::AccessibleShape* >(xAccShape.get());
+                                    uno::Reference< drawing::XShape > xChildShape = pChildAccShape->GetXShape();
+                                    if (xChildShape == xMarkedXShape)
+                                    {
+                                        pChildAccShape->SetState(AccessibleStateType::FOCUSED);
+                                    }
+                                    else
+                                    {
+                                        pChildAccShape->ResetState(AccessibleStateType::FOCUSED);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (vecSelectedShapeAdd.size() >= 10 )
+    {
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
+        aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
+        mpAccessibleDocument->CommitChange(aEvent);
+    }
+    else
+    {
+        SortedShapes::iterator vi = vecSelectedShapeAdd.begin();
+        for (; vi != vecSelectedShapeAdd.end() ; ++vi )
+        {
+            AccessibleEventObject aEvent;
+            if (bHasSelect)
+            {
+                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
+            }
+            else
+            {
+                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
+            }
+            aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
+            uno::Reference< XAccessible > xChild( (*vi)->pAccShape);
+            aEvent.NewValue <<= xChild;
+            mpAccessibleDocument->CommitChange(aEvent);
+        }
+    }
+    SortedShapes::iterator vi = vecSelectedShapeRemove.begin();
+    for (; vi != vecSelectedShapeRemove.end() ; ++vi )
+    {
+        AccessibleEventObject aEvent;
+        aEvent.EventId =  AccessibleEventId::SELECTION_CHANGED_REMOVE;
+        aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
+        uno::Reference< XAccessible > xChild( (*vi)->pAccShape);
+        aEvent.NewValue <<= xChild;
+        mpAccessibleDocument->CommitChange(aEvent);
+    }
     std::for_each(aShapesList.begin(), aShapesList.end(), Destroy());
 
     return bResult;
@@ -1345,12 +1531,30 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const ScAccGridWinFocusGotHint& rRef = (const ScAccGridWinFocusGotHint&)rHint;
         if (rRef.GetNewGridWin() == meSplitPos)
         {
+            uno::Reference<XAccessible> xAccessible;
+            if (mpChildrenShapes)
+            {
+                sal_Bool bTabMarked(IsTableSelected());
+                xAccessible = mpChildrenShapes->GetSelected(0, bTabMarked);
+            }
+            if( xAccessible.is() )
+            {
+                uno::Any aNewValue;
+                aNewValue<<=AccessibleStateType::FOCUSED;
+                static_cast< ::accessibility::AccessibleShape* >(xAccessible.get())->
+                    CommitChange(AccessibleEventId::STATE_CHANGED,
+                                aNewValue,
+                                uno::Any() );
+            }
+            else
+            {
             if (mxTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->GotFocus();
             else if (mpAccessibleSpreadsheet)
                 mpAccessibleSpreadsheet->GotFocus();
             else
                 CommitFocusGained();
+            }
         }
     }
     else if (rHint.ISA( SfxSimpleHint ))
@@ -1370,10 +1574,16 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );
             }
 
+            //Invoke Init() to rebuild the mpChildrenShapes variable
+            this->Init();
+
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
             aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent); // all children changed
+
+            if (mpAccessibleSpreadsheet)
+                mpAccessibleSpreadsheet->FireFirstCellFocus();
         }
         else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
@@ -1384,19 +1594,23 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mpViewShell && mpViewShell->GetViewData()->HasEditView(meSplitPos))
             {
-                mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
-                    mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
-                    OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
-                uno::Reference<XAccessible> xAcc = mpTempAccEdit;
+                const EditEngine* pEditEng = mpViewShell->GetViewData()->GetEditView(meSplitPos)->GetEditEngine();
+                if (pEditEng && pEditEng->GetUpdateMode())
+                {
+                    mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
+                        mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
+                        OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
+                    uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
-                AddChild(xAcc, sal_True);
+                    AddChild(xAcc, sal_True);
 
-                if (mpAccessibleSpreadsheet)
-                    mpAccessibleSpreadsheet->LostFocus();
-                else
-                    CommitFocusLost();
+                    if (mpAccessibleSpreadsheet)
+                        mpAccessibleSpreadsheet->LostFocus();
+                    else
+                        CommitFocusLost();
 
-                mpTempAccEdit->GotFocus();
+                    mpTempAccEdit->GotFocus();
+                }
             }
         }
         else if (rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
@@ -1408,10 +1622,9 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, sal_True);
-
-                if (mpAccessibleSpreadsheet)
+                if (mpAccessibleSpreadsheet && mpViewShell->IsActive())
                     mpAccessibleSpreadsheet->GotFocus();
-                else
+                else if( mpViewShell->IsActive())
                     CommitFocusGained();
             }
         }
@@ -1472,6 +1685,10 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 
         CommitChange(aEvent);
     }
+    if(mpChildrenShapes )
+    {
+        mpChildrenShapes->SelectionChanged();
+    }
 }
 
     //=====  XInterface  =====================================================
@@ -1479,6 +1696,13 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
 {
+    uno::Any aAnyTmp;
+    if(rType == ::getCppuType((com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> *)NULL) )
+       {
+         com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> AccFromXShape = this;
+            aAnyTmp <<= AccFromXShape;
+         return aAnyTmp;
+       }
     uno::Any aAny (ScAccessibleDocumentImpl::queryInterface(rType));
     return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
 }
@@ -1630,7 +1854,37 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
-    ///=====  XAccessibleSelection  ===========================================
+OUString SAL_CALL
+    ScAccessibleDocument::getAccessibleName(void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString sName = ScResId(STR_ACC_DOC_SPREADSHEET);
+    ScDocument* pScDoc = GetDocument();
+    if ( pScDoc )
+    {
+        OUString sFileName = pScDoc->getDocAccTitle();
+        if ( !sFileName.getLength() )
+        {
+            SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+            if ( pObjSh )
+            {
+                sFileName = pObjSh->GetTitle( SFX_TITLE_APINAME );
+            }
+        }
+        OUString sReadOnly;
+        if (pScDoc->getDocReadOnly())
+        {
+            sReadOnly = ScResId(STR_ACC_DOC_SPREADSHEET_READONLY);
+        }
+        if ( sFileName.getLength() )
+        {
+            sName = sFileName + sReadOnly + " - " + sName;
+        }
+    }
+    return sName;
+}
+
+///=====  XAccessibleSelection  ===========================================
 
 void SAL_CALL
     ScAccessibleDocument::selectAccessibleChild( sal_Int32 nChildIndex )
@@ -2096,6 +2350,208 @@ OUString ScAccessibleDocument::GetCurrentCellName() const
 OUString ScAccessibleDocument::GetCurrentCellDescription() const
 {
     return OUString();
+}
+
+ScDocument *ScAccessibleDocument::GetDocument() const
+{
+    return mpViewShell ? mpViewShell->GetViewData()->GetDocument() : NULL;
+}
+
+ScAddress   ScAccessibleDocument::GetCurCellAddress() const
+{
+    return mpViewShell ? mpViewShell->GetViewData()->GetCurPos() :ScAddress();
+}
+
+uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+{
+
+    uno::Any anyAtrribute;
+
+    OUString sName;
+    OUString sValue;
+    sal_uInt16 sheetIndex;
+    OUString sSheetName;
+    sheetIndex = getVisibleTable();
+    if(GetDocument()==NULL)
+        return anyAtrribute;
+    GetDocument()->GetName(sheetIndex,sSheetName);
+    sName = "page-name:";
+    sValue = sName + sSheetName ;
+    sName = ";page-number:";
+    sValue += sName;
+    sValue += OUString::number(sheetIndex+1) ;
+    sName = ";total-pages:";
+    sValue += sName;
+    sValue += OUString::number(GetDocument()->GetTableCount());
+    sValue += ";";
+    anyAtrribute <<= sValue;
+    return anyAtrribute;
+}
+
+com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::GetScAccFlowToSequence()
+{
+    if ( getAccessibleChildCount() )
+    {
+        uno::Reference < XAccessible > xSCTableAcc = getAccessibleChild( 0 ); // table
+        if ( xSCTableAcc.is() )
+        {
+            uno::Reference < XAccessibleSelection > xAccSelection( xSCTableAcc, uno::UNO_QUERY );
+            sal_Int32 nSelCount = xAccSelection->getSelectedAccessibleChildCount();
+            if( nSelCount )
+            {
+                uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 ); // selected cell
+                if ( xSel.is() )
+                {
+                    uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
+                    if ( xSelContext.is() )
+                    {
+                        if ( xSelContext->getAccessibleRole() == AccessibleRole::TABLE_CELL )
+                        {
+                            sal_Int32 nParaCount = 0;
+                            uno::Sequence <uno::Any> aSequence(nSelCount);
+                            for ( sal_Int32 i = 0; i < nSelCount; i++ )
+                            {
+                                xSel = xAccSelection->getSelectedAccessibleChild( i )   ;
+                                if ( xSel.is() )
+                                {
+                                    xSelContext = xSel->getAccessibleContext();
+                                    if ( xSelContext.is() )
+                                    {
+                                        if ( xSelContext->getAccessibleRole() == AccessibleRole::TABLE_CELL )
+                                        {
+                                            aSequence[nParaCount] = uno::makeAny( xSel );
+                                            nParaCount++;
+                                        }
+                                    }
+                                }
+                            }
+                            return aSequence;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    uno::Sequence <uno::Any> aEmpty;
+    return aEmpty;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+        SAL_CALL ScAccessibleDocument::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
+        throw ( ::com::sun::star::uno::RuntimeException )
+{
+    const sal_Int32 SPELLCHECKFLOWTO = 1;
+    const sal_Int32 FINDREPLACEFLOWTO = 2;
+    if ( nType == SPELLCHECKFLOWTO )
+    {
+        uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+        rAny >>= xShape;
+        if ( xShape.is() )
+        {
+            uno::Reference < XAccessible > xAcc = mpChildrenShapes->GetAccessibleCaption(xShape);
+            uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
+            if ( xAccSelection.is() )
+            {
+                if ( xAccSelection->getSelectedAccessibleChildCount() )
+                {
+                    uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 );
+                    if ( xSel.is() )
+                    {
+                        uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
+                        if ( xSelContext.is() )
+                        {
+                            //if in sw we find the selected paragraph here
+                            if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+                            {
+                                uno::Sequence<uno::Any> aRet( 1 );
+                                aRet[0] = uno::makeAny( xSel );
+                                return aRet;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if ( getSelectedAccessibleChildCount() )
+            {
+                uno::Reference < XAccessible > xSel = getSelectedAccessibleChild( 0 );
+                if ( xSel.is() )
+                {
+                    uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
+                    if ( xSelContext.is() )
+                    {
+                        uno::Reference < XAccessibleSelection > xAccChildSelection( xSel, uno::UNO_QUERY );
+                        if ( xAccChildSelection.is() )
+                        {
+                            if ( xAccChildSelection->getSelectedAccessibleChildCount() )
+                            {
+                                uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
+                                if ( xChildSel.is() )
+                                {
+                                    uno::Reference < ::com::sun::star::accessibility::XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
+                                    if ( xChildSelContext.is() &&
+                                        xChildSelContext->getAccessibleRole() == ::com::sun::star::accessibility::AccessibleRole::PARAGRAPH )
+                                    {
+                                        uno::Sequence<uno::Any> aRet( 1 );
+                                        aRet[0] = uno::makeAny( xChildSel );
+                                        return aRet;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else if ( nType == FINDREPLACEFLOWTO )
+    {
+        sal_Bool bSuccess;
+        rAny >>= bSuccess;
+        if ( bSuccess )
+        {
+            uno::Sequence< uno::Any> aSeq = GetScAccFlowToSequence();
+            if ( aSeq.getLength() )
+            {
+                return aSeq;
+            }
+            else if( mpAccessibleSpreadsheet )
+            {
+                uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
+                // add xFindCellAcc to the return the Sequence
+                uno::Sequence< uno::Any> aSeq2(1);
+                aSeq2[0] = uno::makeAny( xFindCellAcc );
+                return aSeq2;
+            }
+        }
+    }
+    uno::Sequence< uno::Any> aEmpty;
+    return aEmpty;
+}
+
+void ScAccessibleDocument::SwitchViewFireFocus()
+{
+    if (mpAccessibleSpreadsheet)
+    {
+        mpAccessibleSpreadsheet->FireFirstCellFocus();
+    }
+}
+
+sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
+        throw (uno::RuntimeException)
+{
+    return COL_BLACK;
+}
+
+sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
+        throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    IsObjectValid();
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -976,7 +976,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 }
 
 
-ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin)
+ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin, sal_Bool isClone)
     :
     mpViewForwarder(NULL),
     mpEditViewForwarder(NULL),
@@ -985,13 +985,16 @@ ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditVi
     mpForwarder(NULL),
     mpWindow(pWin)
 {
-    if (mpEditEngine)
+    // If the object is cloned, do NOT add notify hdl.
+    mbIsCloned = isClone;
+    if (mpEditEngine && !mbIsCloned)
         mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
 }
 
 ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 {
-    if (mpEditEngine)
+    // If the object is cloned, do NOT set notify hdl.
+    if (mpEditEngine && !mbIsCloned)
         mpEditEngine->SetNotifyHdl(Link());
     if (mpViewForwarder)
         delete mpViewForwarder;
@@ -1023,7 +1026,8 @@ void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint&
 
 ScAccessibleTextData* ScAccessibleEditObjectTextData::Clone() const
 {
-    return new ScAccessibleEditObjectTextData(mpEditView, mpWindow);
+    // Add para to indicate the object is cloned
+    return new ScAccessibleEditObjectTextData(mpEditView, mpWindow,sal_True);
 }
 
 SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
@@ -1032,7 +1036,8 @@ SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
     {
         if (!mpEditEngine)
             mpEditEngine = mpEditView->GetEditEngine();
-        if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet())
+        // If the object is cloned, do NOT add notify hdl.
+        if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet()&&!mbIsCloned)
             mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
         if(!mpForwarder)
             mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);

@@ -24,6 +24,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <editeng/boxitem.hxx>
+#include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/prtqry.hxx>
@@ -104,7 +105,7 @@ sal_uInt16 ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 void ScTabViewShell::Activate(sal_Bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
-
+    bIsActive = sal_True;
     //  hier kein GrabFocus, sonst gibt's Probleme wenn etwas inplace editiert wird!
 
     if ( bMDI )
@@ -234,7 +235,7 @@ void ScTabViewShell::Deactivate(sal_Bool bMDI)
     }
 
     SfxViewShell::Deactivate(bMDI);
-
+    bIsActive = sal_False;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl(this);
 
     if( bMDI )
@@ -1404,6 +1405,50 @@ sal_Bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         }
     }
 
+    // use Ctrl+Alt+Shift+arrow keys to move the cursor in cells
+    // while keeping the last selection
+    if ( !bUsed && bAlt && bControl && bShift)
+    {
+        sal_uInt16 nSlotId = 0;
+        switch (nCode)
+        {
+            case KEY_UP:
+                nSlotId = SID_CURSORUP;
+                break;
+            case KEY_DOWN:
+                nSlotId = SID_CURSORDOWN;
+                break;
+            case KEY_LEFT:
+                nSlotId = SID_CURSORLEFT;
+                break;
+            case KEY_RIGHT:
+                nSlotId = SID_CURSORRIGHT;
+                break;
+            case KEY_PAGEUP:
+                nSlotId = SID_CURSORPAGEUP;
+                break;
+            case KEY_PAGEDOWN:
+                nSlotId = SID_CURSORPAGEDOWN;
+                break;
+            case KEY_HOME:
+                nSlotId = SID_CURSORHOME;
+                break;
+            case KEY_END:
+                nSlotId = SID_CURSOREND;
+                break;
+            default:
+                nSlotId = 0;
+                break;
+        }
+        if ( nSlotId )
+        {
+            sal_uInt16 nMode = GetLockedModifiers();
+            LockModifiers(KEY_MOD1);
+            GetViewData()->GetDispatcher().Execute( nSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            LockModifiers(nMode);
+            bUsed = sal_True;
+        }
+    }
     if (bHideCursor)
         ShowAllCursors();
 
@@ -1477,6 +1522,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     bReadOnly = pDocSh->IsReadOnly();
+    bIsActive = sal_False;
 
     EnableAutoSpell(pDoc->GetDocOptions().IsAutoSpell());
 
@@ -1870,8 +1916,14 @@ void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
     rSet.Put( SfxUInt16Item( SID_TBXCTL_INSOBJ,   nInsObjCtrlState ) );
 }
 
-
-
-
+const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & ScTabViewShell::GetForms() const
+{
+    if( !pFormShell || !pFormShell->GetCurPage() )
+    {
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > aRef;
+        return aRef;
+    }
+    return pFormShell->GetCurPage()->GetForms();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

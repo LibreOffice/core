@@ -1548,7 +1548,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo, sal_Bool bRecord )
 //----------------------------------------------------------------------------
 //  Suchen & Ersetzen
 
-void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
+sal_Bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         sal_Bool bAddUndo, sal_Bool bIsApi )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -1787,6 +1787,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             pDocSh->PostPaintGridAll();                             // mark
         GetFrameWin()->LeaveWait();
     }
+    return bFound;
 }
 
 

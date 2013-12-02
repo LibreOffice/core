@@ -422,6 +422,11 @@ public:
     void            SetSolverSaveData( const ScOptSolverSave& rData );
     ScSheetSaveData* GetSheetSaveData();
 
+    void setDocAccTitle( const OUString& rTitle ) { aDocument.setDocAccTitle( rTitle ); }
+    const OUString getDocAccTitle() const { return aDocument.getDocAccTitle(); }
+    void setDocReadOnly(bool b) { aDocument.setDocReadOnly(b); }
+    bool getDocReadOnly() const { return aDocument.getDocReadOnly(); }
+
     void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
 
     // password protection for Calc (derived from SfxObjectShell)

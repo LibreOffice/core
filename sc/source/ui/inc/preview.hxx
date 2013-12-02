@@ -159,6 +159,8 @@ public:
 
     FmFormView* GetDrawView() { return pDrawView; }
 
+    virtual void SwitchView();
+
     SC_DLLPUBLIC void SetSelectedTabs(const ScMarkData& rMark);
     SC_DLLPUBLIC const ScMarkData::MarkedTabsType& GetSelectedTabs() const;
 };

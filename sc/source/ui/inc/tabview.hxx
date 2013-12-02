@@ -468,7 +468,7 @@ public:
                                 bool bCols = false, bool bRows = false, bool bCellSelection = false );
     void            InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                    bool bTestNeg = false,
-                                   bool bCols = false, bool bRows = false );
+                                   bool bCols = false, bool bRows = false, bool bForceNeg = false );
     void            InitOwnBlockMode();
     void            DoneBlockMode( bool bContinue = false );
 

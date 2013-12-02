@@ -237,6 +237,7 @@ friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
+friend class ScAccessibleTableBase;
 friend class ScAttrRectIterator;
 friend class ScDocShell;
 friend class ScDocRowHeightUpdater;
@@ -438,7 +439,20 @@ private:
 
     bool                mbUseEmbedFonts;
 
+    OUString msDocAccTitle;
+
 public:
+    void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
+    const OUString getDocAccTitle() const { return msDocAccTitle; }
+
+private:
+    bool mbReadOnly;
+
+public:
+    void setDocReadOnly(bool b){ mbReadOnly = b; }
+    bool getDocReadOnly() const { return mbReadOnly; }
+    sal_Bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
+    void GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, sal_Bool &pbLeftEdge);
     bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells

@@ -36,4 +36,9 @@ ScAccessibleDocumentBase::~ScAccessibleDocumentBase(void)
 {
 }
 
+void ScAccessibleDocumentBase::SwitchViewFireFocus()
+{
+    CommitFocusGained();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

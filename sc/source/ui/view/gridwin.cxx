@@ -1070,6 +1070,44 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     CaptureMouse();
 }
 
+bool ScGridWindow::HasScenarioRange( sal_uInt16 nCol, sal_Int32 nRow, ScRange& rScenRange )
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    sal_uInt16 nTab = pViewData->GetTabNo();
+    sal_uInt16 nTabCount = pDoc->GetTableCount();
+    if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
+    {
+        SCTAB i;
+        ScMarkData aMarks;
+        for (i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
+            pDoc->MarkScenario( i, nTab, aMarks, sal_False, SC_SCENARIO_SHOWFRAME );
+        ScRangeList aRanges;
+        aMarks.FillRangeListWithMarks( &aRanges, sal_False );
+        SCTAB nRangeCount = aRanges.size();
+        for (i=0; i<nRangeCount; i++)
+        {
+            ScRange aRange = *aRanges[i];
+            pDoc->ExtendTotalMerge( aRange );
+            sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
+            sal_Bool bIsInScen = sal_False;
+            if ( bTextBelow )
+            {
+                bIsInScen = (aRange.aStart.Col() == nCol && aRange.aEnd.Row() == nRow-1);
+            }
+            else
+            {
+                bIsInScen = (aRange.aStart.Col() == nCol && aRange.aStart.Row() == nRow+1);
+            }
+            if (bIsInScen)
+            {
+                rScenRange = aRange;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
     delete pFilterBox;
@@ -2435,6 +2473,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
             pViewData->GetView()->InvalidateAttribs();
         }
+        pViewData->GetViewShell()->SelectionChanged();
         return;
     }
 }
@@ -3237,7 +3276,6 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
             SC_MOD()->EndReference();
-            return;
         }
         else if( pViewData->GetViewShell()->MoveCursorKeyInput( rKEvt ) )
         {
@@ -3245,8 +3283,9 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
                 pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                 pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
             SC_MOD()->SetReference( aRef, pViewData->GetDocument() );
-            return;
         }
+        pViewData->GetViewShell()->SelectionChanged();
+        return ;
     }
     else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
     {

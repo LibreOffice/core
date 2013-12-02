@@ -197,6 +197,9 @@ public:
 
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate = false );
 
+    virtual ImageMap* GetImageMapForObject(SdrObject* pObj);
+    virtual sal_Int32 GetHyperlinkCount(SdrObject* pObj);
+
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel
 public:

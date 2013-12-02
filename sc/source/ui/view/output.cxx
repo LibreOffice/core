@@ -87,23 +87,6 @@ static const ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
 //  Hilfsklasse, fuer die Farbzuordnung,
 //  um nicht mehrfach hintereinander denselben User aus der Liste zu suchen
 
-class ScActionColorChanger
-{
-private:
-    const ScAppOptions&     rOpt;
-    const std::set<OUString>& rUsers;
-    OUString           aLastUserName;
-    size_t                  nLastUserIndex;
-    ColorData               nColor;
-
-public:
-                ScActionColorChanger( const ScChangeTrack& rTrack );
-                ~ScActionColorChanger() {}
-
-    void        Update( const ScChangeAction& rAction );
-    ColorData   GetColor() const    { return nColor; }
-};
-
 //------------------------------------------------------------------
 
 ScActionColorChanger::ScActionColorChanger( const ScChangeTrack& rTrack ) :

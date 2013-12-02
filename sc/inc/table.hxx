@@ -1067,6 +1067,9 @@ private:
         SCROW mnCurRow;
         SCROW mnUBound;
     };
+
+public :
+    ScColumn* GetColumnByIndex(sal_Int32 index);
 };
 
 

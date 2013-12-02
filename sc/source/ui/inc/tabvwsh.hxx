@@ -161,6 +161,8 @@ private:
 
     sal_Bool                    bReadOnly;                  // to detect status changes
 
+    sal_Bool                    bIsActive;
+
     SbxObject*              pScSbxObject;
 
     sal_Bool                    bChartAreaValid;            // if chart is drawn
@@ -409,6 +411,10 @@ public:
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
+
+    sal_Bool IsActive() const { return bIsActive; }
+    OUString GetFormula(ScAddress& rAddress);
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & GetForms() const;
 
     // ugly hack to call Define Names from Manage Names
     void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);

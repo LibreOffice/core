@@ -241,7 +241,7 @@ public:
     ScAutoFormatData* CreateAutoFormatData();
     void            AutoFormat( sal_uInt16 nFormatNo, sal_Bool bRecord = sal_True );
 
-    void            SearchAndReplace( const SvxSearchItem* pSearchItem,
+    sal_Bool        SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         sal_Bool bAddUndo, sal_Bool bIsApi );
 
     void            Solve( const ScSolveParam& rParam );
