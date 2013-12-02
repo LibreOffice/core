@@ -549,6 +549,19 @@ static const XclFunctionInfo saFuncTable_Odf[] =
 
 #undef EXC_FUNCENTRY_ODF
 
+
+#define EXC_FUNCENTRY_OOO( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+/** Functions defined by Calc, but not in OpenFormula nor supported by Excel. */
+static const XclFunctionInfo saFuncTable_OOoLO[] =
+{
+    EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" )
+};
+
+#undef EXC_FUNCENTRY_OOO
+
 // ----------------------------------------------------------------------------
 
 XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
@@ -574,6 +587,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     (this->*pFillFunc)( saFuncTable_2010, STATIC_ARRAY_END( saFuncTable_2010 ) );
     (this->*pFillFunc)( saFuncTable_2013, STATIC_ARRAY_END( saFuncTable_2013 ) );
     (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
+    (this->*pFillFunc)( saFuncTable_OOoLO, STATIC_ARRAY_END( saFuncTable_OOoLO ) );
 }
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const
