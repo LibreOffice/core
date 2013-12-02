@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALGDI_H
-#define _SV_SALGDI_H
+#ifndef INCLUDED_VCL_INC_UNX_SALGDI_H
+#define INCLUDED_VCL_INC_UNX_SALGDI_H
 
 #include <prex.h>
 #include <postx.h>
@@ -374,6 +374,6 @@ inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 #define stderr0( s )            ;
 #endif
 
-#endif // _SV_SALGDI_H
+#endif // INCLUDED_VCL_INC_UNX_SALGDI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

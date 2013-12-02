@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALGDI_H
-#define _SV_SALGDI_H
+#ifndef INCLUDED_VCL_INC_CORETEXT_SALGDI2_H
+#define INCLUDED_VCL_INC_CORETEXT_SALGDI2_H
 
 #include <vector>
 
@@ -431,6 +431,6 @@ inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 
 #endif
 
-#endif // _SV_SALGDI_H
+#endif // INCLUDED_VCL_INC_CORETEXT_SALGDI2_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
