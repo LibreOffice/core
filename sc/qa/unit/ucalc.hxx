@@ -391,6 +391,9 @@ public:
     CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST(testEditTextIterator);
     CPPUNIT_TEST(testCondFormatINSDEL);
+    CPPUNIT_TEST(testCondFormatInsertRow);
+    CPPUNIT_TEST(testCondFormatInsertCol);
+    CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
