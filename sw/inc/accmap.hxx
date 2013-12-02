@@ -95,9 +95,6 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     ::com::sun::star::uno::WeakReference < ::com::sun::star::accessibility::XAccessible > mxCursorContext;
 
     sal_Int32 mnPara;
-    sal_Int32 mnFootnote;
-    sal_Int32 mnEndnote;
-
 
     bool mbShapeSelected;
 

@@ -1611,8 +1611,6 @@ SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpVSh( pSh ),
         mpPreview( 0 ),
     mnPara( 1 ),
-    mnFootnote( 1 ),
-    mnEndnote( 1 ),
     mbShapeSelected( false ),
     mpSeletedFrmMap(NULL)
 {
