@@ -11,12 +11,6 @@
 # a) fixincludeguards.sh header.hxx
 # b) find . -name *.hxx -or -name *.h | xargs sh fixincludeguards.sh
 
-# TODO: This doesn't fix wrong #endif comments, like:
-# #ifndef FOO_BAR_HXX
-# #define FOO_BAR_HXX
-# ...
-# #endif // OTHER_BAR_HXX
-
 guard_prefix="INCLUDED_"
 
 for fn in "$@"; do
