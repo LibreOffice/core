@@ -2250,12 +2250,14 @@ sal_Bool ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
     if ( !bUseEscapeProcessing )
         return bUseEscapeProcessing;
 
+    if (m_bCommandFacetsDirty)
+        m_xComposer = NULL;
+
     Reference< XMultiServiceFactory > xFactory( m_xActiveConnection, UNO_QUERY );
-    if ( xFactory.is() )
+    if ( !m_xComposer.is() && xFactory.is() )
     {
         try
         {
-            ::comphelper::disposeComponent( m_xComposer );
             m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
         }
         catch (const Exception& ) { m_xComposer = NULL; }
