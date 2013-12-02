@@ -222,6 +222,7 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
         case LANGUAGE_KURDISH_ARABIC_IRAQ:
         case LANGUAGE_KURDISH_ARABIC_LSO:
+        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
             return true;
 
@@ -338,6 +339,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ:
         case LANGUAGE_KURDISH_ARABIC_IRAQ:
         case LANGUAGE_KURDISH_ARABIC_LSO:
+        case LANGUAGE_USER_KURDISH_SOUTHERN_IRAN:
         case LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ:
         case LANGUAGE_USER_KYRGYZ_CHINA:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
