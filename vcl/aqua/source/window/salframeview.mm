@@ -436,7 +436,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
-    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [pFrame->getWindow() frame] styleMask: pFrame->mnStyleMask]]) != nil)
+    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [pFrame->getNSWindow() frame] styleMask: pFrame->mnStyleMask]]) != nil)
     {
         mDraggingDestinationHandler = nil;
         mpFrame = pFrame;
@@ -526,7 +526,7 @@ private:
         {
             mpFrame->mpGraphics->UpdateWindow( aRect );
             if( mpFrame->getClipPath() )
-                [mpFrame->getWindow() invalidateShadow];
+                [mpFrame->getNSWindow() invalidateShadow];
         }
     }
 }
@@ -559,7 +559,7 @@ private:
     {
         // is this event actually inside that NSWindow ?
         NSPoint aPt = [NSEvent mouseLocation];
-        NSRect aFrameRect = [pDispatchFrame->getWindow() frame];
+        NSRect aFrameRect = [pDispatchFrame->getNSWindow() frame];
         
 	if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
@@ -1698,7 +1698,7 @@ private:
 }
 
 -(id)parentAttribute {
-    return (NSView *) mpFrame -> mpWindow;
+    return mpFrame->getNSWindow();
 }
 
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext
@@ -1716,9 +1716,9 @@ private:
     return [ super accessibleContext ];
 }
 
--(NSView *)viewElementForParent
+-(NSView*)viewElementForParent
 {
-    return (NSView *) mpFrame -> mpWindow;
+    return mpFrame->getNSView();
 }
 
 -(void)registerMouseEventListener: (id)theListener

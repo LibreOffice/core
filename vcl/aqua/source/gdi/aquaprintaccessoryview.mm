@@ -145,30 +145,14 @@ class ControllerProperties
         mnLastPageCount = nPages;
         if( mpState->bNeedRestart )
         {
-            #if 0
             // Warning: bad hack ahead
             // Apple does not give us a chance of changing the page count,
             // and they don't let us cancel the dialog either
             // hack: send a cancel message to the window displaying our views.
             // this is ugly.
-            for( std::vector< NSObject* >::iterator it = maViews.begin(); it != maViews.end(); ++it )
-            {
-                if( [*it isKindOfClass: [NSView class]] )
-                {
-                    NSView* pView = (NSView*)*it;
-                    NSWindow* pWindow = [pView window];
-                    if( pWindow )
-                    {
-                        [pWindow cancelOperation: nil];
-                        break;
-                    }
-                }
-            }
-            #else
-            NSWindow* pWindow = [NSApp modalWindow];
-            if( pWindow )
-                [pWindow cancelOperation: nil];
-            #endif
+            NSWindow* pNSWindow = [NSApp modalWindow];
+            if( pNSWindow )
+                [pNSWindow cancelOperation: nil];
             [[mpOp printInfo] setJobDisposition: NSPrintCancelJob];
         }
         else
@@ -597,7 +581,7 @@ struct ColumnItem
     }
 };
 
-static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize,
+static void adjustViewAndChildren( NSView* pNSView, NSSize& rMaxSize,
                                    std::vector< ColumnItem >& rLeftColumn,
                                    std::vector< ColumnItem >& rRightColumn
                                   )
@@ -657,7 +641,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize,
         }
     }
     
-    NSArray* pSubViews = [pView subviews];
+    NSArray* pSubViews = [pNSView subviews];
     unsigned int nViews = [pSubViews count];
     NSRect aUnion = { { 0, 0 }, { 0, 0 } };
 
@@ -680,7 +664,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize,
     // resize the view itself
     aUnion.size.height += 10;
     aUnion.size.width += 20;
-    [pView setFrameSize: aUnion.size];
+    [pNSView setFrameSize: aUnion.size];
     
     if( aUnion.size.width > rMaxSize.width )
         rMaxSize.width = aUnion.size.width;
@@ -696,15 +680,15 @@ static void adjustTabViews( NSTabView* pTabView, NSSize aTabSize )
     for( int i = 0; i < nViews; i++ )
     {
         NSTabViewItem* pItem = (NSTabViewItem*)[pTabbedViews objectAtIndex: i];
-        NSView* pView = [pItem view];
-        if( pView )
+        NSView* pNSView = [pItem view];
+        if( pNSView )
         {
-            NSRect aRect = [pView frame];
+            NSRect aRect = [pNSView frame];
             double nDiff = aTabSize.height - aRect.size.height;
             aRect.size = aTabSize;
-            [pView setFrame: aRect];
+            [pNSView setFrame: aRect];
             
-            NSArray* pSubViews = [pView subviews];
+            NSArray* pSubViews = [pNSView subviews];
             unsigned int nSubViews = [pSubViews count];
 
             // move everything up

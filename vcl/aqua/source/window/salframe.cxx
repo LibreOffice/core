@@ -61,8 +61,8 @@ AquaSalFrame* AquaSalFrame::s_pCaptureFrame = NULL;
 // =======================================================================
 
 AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
-    mpWindow(nil),
-    mpView(nil),
+    mpNSWindow(nil),
+    mpNSView(nil),
     mpDockMenuEntry(nil),
     mpGraphics(NULL),
     mpParent(NULL),
@@ -128,12 +128,12 @@ AquaSalFrame::~AquaSalFrame()
     if( mpDockMenuEntry )
         // life cycle comment: the menu has ownership of the item, so no release
         [AquaSalInstance::GetDynamicDockMenu() removeItem: mpDockMenuEntry];
-    if ( mpView ) {
-        [AquaA11yFactory revokeView: mpView];
-        [mpView release];
+    if ( mpNSView ) {
+        [AquaA11yFactory revokeView: mpNSView];
+        [mpNSView release];
     }
-    if ( mpWindow )
-        [mpWindow release];
+    if ( mpNSWindow )
+        [mpNSWindow release];
 }
 
 // -----------------------------------------------------------------------
@@ -142,13 +142,13 @@ void AquaSalFrame::initWindowAndView()
 {
     // initialize mirroring parameters
     // FIXME: screens changing
-    NSScreen * pScreen = [mpWindow screen];
-    if( pScreen == nil )
-        pScreen = [NSScreen mainScreen];
-    maScreenRect = [pScreen frame];
+    NSScreen* pNSScreen = [mpNSWindow screen];
+    if( pNSScreen == nil )
+        pNSScreen = [NSScreen mainScreen];
+    maScreenRect = [pNSScreen frame];
 
     // calculate some default geometry
-    NSRect aVisibleRect = [pScreen visibleFrame];
+    NSRect aVisibleRect = [pNSScreen visibleFrame];
     CocoaToVCL( aVisibleRect );
 
     maGeometry.nX = static_cast<int>(aVisibleRect.origin.x + aVisibleRect.size.width / 10);
@@ -194,8 +194,8 @@ void AquaSalFrame::initWindowAndView()
     // #i91990# support GUI-less (daemon) execution
     @try
     {
-    mpWindow = [[SalFrameWindow alloc] initWithSalFrame: this];
-    mpView = [[SalFrameView alloc] initWithSalFrame: this];
+        mpNSWindow = [[SalFrameWindow alloc] initWithSalFrame: this];
+        mpNSView = [[SalFrameView alloc] initWithSalFrame: this];
     }
     @catch ( id exception )
     {
@@ -203,20 +203,20 @@ void AquaSalFrame::initWindowAndView()
     }
 
     if( (mnStyle & SAL_FRAME_STYLE_TOOLTIP) )
-        [mpWindow setIgnoresMouseEvents: YES];
+        [mpNSWindow setIgnoresMouseEvents: YES];
     else
-        [mpWindow setAcceptsMouseMovedEvents: YES];
-    [mpWindow setHasShadow: YES];
-    [mpWindow setDelegate: mpWindow];
+        [mpNSWindow setAcceptsMouseMovedEvents: YES];
+    [mpNSWindow setHasShadow: YES];
+    [mpNSWindow setDelegate: mpNSWindow];
 
     const NSRect aRect = NSMakeRect( 0,0, maGeometry.nWidth, maGeometry.nHeight );
-    mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];
+    mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
 
-    maSysData.pView = mpView;
+    maSysData.mpNSView = mpNSView;
 
     UpdateFrameGeometry();
 
-    [mpWindow setContentView: mpView];
+    [mpNSWindow setContentView: mpNSView];
 }
 
 // -----------------------------------------------------------------------
@@ -301,14 +301,14 @@ sal_Bool AquaSalFrame::PostEvent( void *pData )
 // -----------------------------------------------------------------------
 void AquaSalFrame::SetTitle(const XubString& rTitle)
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
     NSString* pTitle = CreateNSString( rTitle );
-    [mpWindow setTitle: pTitle];
+    [mpNSWindow setTitle: pTitle];
 
     // create an entry in the dock menu
     const sal_uLong nAppWindowStyle = (SAL_FRAME_STYLE_CLOSEABLE | SAL_FRAME_STYLE_MOVEABLE);
@@ -322,7 +322,7 @@ void AquaSalFrame::SetTitle(const XubString& rTitle)
                                      action: @selector(dockMenuItemTriggered:)
                                      keyEquivalent: @""
                                      atIndex: 0];
-            [mpDockMenuEntry setTarget: mpWindow];
+            [mpDockMenuEntry setTarget: mpNSWindow];
 
             // TODO: image (either the generic window image or an icon
             // check mark (for "main" window ?)
@@ -356,7 +356,7 @@ void AquaSalFrame::SetRepresentedURL( const rtl::OUString& i_rDocURL )
         if( pStr )
         {
             [pStr autorelease];
-            [mpWindow setRepresentedFilename: pStr];
+            [mpNSWindow setRepresentedFilename: pStr];
         }
     }
 }
@@ -397,7 +397,7 @@ void AquaSalFrame::initShow()
     }
 
     // make sure the view is present in the wrapper list before any children receive focus
-    [AquaA11yFactory registerView: mpView];
+    [AquaA11yFactory registerView: mpNSView];
 }
 
 void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
@@ -418,7 +418,7 @@ void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
 
 void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -434,10 +434,10 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
         // trigger filling our backbuffer
         SendPaintEvent();
 
-        if( bNoActivate || [mpWindow canBecomeKeyWindow] == NO )
-            [mpWindow orderFront: NSApp];
+        if( bNoActivate || [mpNSWindow canBecomeKeyWindow] == NO )
+            [mpNSWindow orderFront: NSApp];
         else
-            [mpWindow makeKeyAndOrderFront: NSApp];
+            [mpNSWindow makeKeyAndOrderFront: NSApp];
 
         if( mpParent )
         {
@@ -450,12 +450,12 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
             */
             if( mpParent->mbShown || (mnStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT) ) )
             {
-                [mpParent->mpWindow addChildWindow: mpWindow ordered: NSWindowAbove];
+                [mpParent->mpNSWindow addChildWindow: mpNSWindow ordered: NSWindowAbove];
             }
         }
 
         if( mbPresentation )
-            [mpWindow makeMainWindow];
+            [mpNSWindow makeMainWindow];
     }
     else
     {
@@ -466,14 +466,14 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 
         // #i90440# #i94443# work around the focus going back to some other window
         // if a child gets hidden for a parent window
-        if( mpParent && mpParent->mbShown && [mpWindow isKeyWindow] )
-            [mpParent->mpWindow makeKeyAndOrderFront: NSApp];
+        if( mpParent && mpParent->mbShown && [mpNSWindow isKeyWindow] )
+            [mpParent->mpNSWindow makeKeyAndOrderFront: NSApp];
 
         [SalFrameView unsetMouseFrame: this];
-        if( mpParent && [mpWindow parentWindow] == mpParent->mpWindow )
-            [mpParent->mpWindow removeChildWindow: mpWindow];
+        if( mpParent && [mpNSWindow parentWindow] == mpParent->mpNSWindow )
+            [mpParent->mpNSWindow removeChildWindow: mpNSWindow];
 
-        [mpWindow orderOut: NSApp];
+        [mpNSWindow orderOut: NSApp];
     }
 }
 
@@ -493,7 +493,7 @@ void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
     mnMinWidth = nWidth;
     mnMinHeight = nHeight;
 
-    if( mpWindow )
+    if( mpNSWindow )
     {
         // Always add the decoration as the dimension concerns only
         // the content rectangle
@@ -504,7 +504,7 @@ void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
 
         // Size of full window (content+structure) although we only
         // have the client size in arguments
-        [mpWindow setMinSize: aSize];
+        [mpNSWindow setMinSize: aSize];
     }
 }
 
@@ -518,7 +518,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     mnMaxWidth = nWidth;
     mnMaxHeight = nHeight;
 
-    if( mpWindow )
+    if( mpNSWindow )
     {
         // Always add the decoration as the dimension concerns only
         // the content rectangle
@@ -533,7 +533,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
 
         // Size of full window (content+structure) although we only
         // have the client size in arguments
-        [mpWindow setMaxSize: aSize];
+        [mpNSWindow setMaxSize: aSize];
     }
 }
 
@@ -544,11 +544,11 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( mpWindow )
+    if( mpNSWindow )
     {
         const NSSize aSize = NSMakeSize( nWidth, nHeight);
 
-        [mpWindow setContentSize: aSize];
+        [mpNSWindow setContentSize: aSize];
         UpdateFrameGeometry();
         if( mbShown )
             // trigger filling our backbuffer
@@ -579,10 +579,10 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if ( mpWindow )
+    if ( mpNSWindow )
     {
     // set normal state
-    NSRect aStateRect = [mpWindow frame];
+    NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
     if( pState->mnMask & SAL_FRAMESTATE_MASK_X )
@@ -596,11 +596,11 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     VCLToCocoa( aStateRect );
     aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
 
-    [mpWindow setFrame: aStateRect display: NO];
+    [mpNSWindow setFrame: aStateRect display: NO];
     if( pState->mnState == SAL_FRAMESTATE_MINIMIZED )
-        [mpWindow miniaturize: NSApp];
-    else if( [mpWindow isMiniaturized] )
-        [mpWindow deminiaturize: NSApp];
+        [mpNSWindow miniaturize: NSApp];
+    else if( [mpNSWindow isMiniaturized] )
+        [mpNSWindow deminiaturize: NSApp];
 
 
     /* ZOOMED is not really maximized (actually it toggles between a user set size and
@@ -609,13 +609,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     */
     if( pState->mnState == SAL_FRAMESTATE_MAXIMIZED )
     {
-        if(! [mpWindow isZoomed])
-            [mpWindow zoom: NSApp];
+        if(! [mpNSWindow isZoomed])
+            [mpNSWindow zoom: NSApp];
     }
     else
     {
-        if( [mpWindow isZoomed] )
-            [mpWindow zoom: NSApp];
+        if( [mpNSWindow isZoomed] )
+            [mpNSWindow zoom: NSApp];
     }
     }
 
@@ -638,13 +638,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     if( nEvent )
         CallCallback( nEvent, NULL );
 
-    if( mbShown && mpWindow )
+    if( mbShown && mpNSWindow )
     {
         // trigger filling our backbuffer
         SendPaintEvent();
 
         // tell the system the views need to be updated
-        [mpWindow display];
+        [mpNSWindow display];
     }
 }
 
@@ -652,7 +652,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 
 sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return FALSE;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -670,7 +670,7 @@ sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
                      #endif
                      SAL_FRAMESTATE_MASK_STATE;
 
-    NSRect aStateRect = [mpWindow frame];
+    NSRect aStateRect = [mpNSWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
     pState->mnX         = long(aStateRect.origin.x);
@@ -678,9 +678,9 @@ sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnWidth     = long(aStateRect.size.width);
     pState->mnHeight    = long(aStateRect.size.height);
 
-    if( [mpWindow isMiniaturized] )
+    if( [mpNSWindow isMiniaturized] )
         pState->mnState = SAL_FRAMESTATE_MINIMIZED;
-    else if( ! [mpWindow isZoomed] )
+    else if( ! [mpNSWindow isZoomed] )
         pState->mnState = SAL_FRAMESTATE_NORMAL;
     else
         pState->mnState = SAL_FRAMESTATE_MAXIMIZED;
@@ -692,7 +692,7 @@ sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 
 void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -708,17 +708,17 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
         NSRect aNewScreen = [pScreen frame];
 
         // get current screen frame
-        pScreen = [mpWindow screen];
+        pScreen = [mpNSWindow screen];
         if( pScreen )
         {
             NSRect aCurScreen = [pScreen frame];
             if( aCurScreen.origin.x != aNewScreen.origin.x ||
                 aCurScreen.origin.y != aNewScreen.origin.y )
             {
-                NSRect aFrameRect = [mpWindow frame];
+                NSRect aFrameRect = [mpNSWindow frame];
                 aFrameRect.origin.x += aNewScreen.origin.x - aCurScreen.origin.x;
                 aFrameRect.origin.y += aNewScreen.origin.y - aCurScreen.origin.y;
-                [mpWindow setFrame: aFrameRect display: NO];
+                [mpNSWindow setFrame: aFrameRect display: NO];
                 UpdateFrameGeometry();
             }
         }
@@ -729,7 +729,7 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
 
 void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -781,7 +781,7 @@ void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
         if( aNewContentRect.size.width == 0 && aNewContentRect.size.height == 0 )
         {
             if( pScreen == nil )
-                pScreen = [mpWindow screen];
+                pScreen = [mpNSWindow screen];
             if( pScreen == nil )
                 pScreen = [NSScreen mainScreen];
 
@@ -791,9 +791,9 @@ void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
         if( bHideMenu )
             [NSMenu setMenuBarVisible:NO];
 
-        maFullScreenRect = [mpWindow frame];
+        maFullScreenRect = [mpNSWindow frame];
         {
-            [mpWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
+            [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
         }
 
         UpdateFrameGeometry();
@@ -804,7 +804,7 @@ void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
     else
     {
         {
-            [mpWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
+            [mpNSWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
         }
         UpdateFrameGeometry();
 
@@ -842,7 +842,7 @@ public:
 
 void AquaSalFrame::StartPresentation( sal_Bool bStart )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -852,15 +852,15 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
     {
         GetSalData()->maPresentationFrames.push_back( this );
         mpActivityTimer.reset( new PreventSleepTimer() );
-        [mpWindow setLevel: NSPopUpMenuWindowLevel];
+        [mpNSWindow setLevel: NSPopUpMenuWindowLevel];
         if( mbShown )
-            [mpWindow makeMainWindow];
+            [mpNSWindow makeMainWindow];
     }
     else
     {
         GetSalData()->maPresentationFrames.remove( this );
         mpActivityTimer.reset();
-        [mpWindow setLevel: NSNormalWindowLevel];
+        [mpNSWindow setLevel: NSNormalWindowLevel];
     }
 }
 
@@ -874,7 +874,7 @@ void AquaSalFrame::SetAlwaysOnTop( sal_Bool )
 
 void AquaSalFrame::ToTop(sal_uInt16 nFlags)
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -885,13 +885,13 @@ void AquaSalFrame::ToTop(sal_uInt16 nFlags)
 
     if( ! (nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN) )
     {
-        if( ! [mpWindow isVisible] || [mpWindow isMiniaturized] )
+        if( ! [mpNSWindow isVisible] || [mpNSWindow isMiniaturized] )
             return;
     }
     if( nFlags & SAL_FRAME_TOTOP_GRABFOCUS )
-        [mpWindow makeKeyAndOrderFront: NSApp];
+        [mpNSWindow makeKeyAndOrderFront: NSApp];
     else
-        [mpWindow orderFront: NSApp];
+        [mpNSWindow orderFront: NSApp];
 }
 
 // -----------------------------------------------------------------------
@@ -936,7 +936,7 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
 
 void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -946,7 +946,7 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
         return;
     mePointerStyle = ePointerStyle;
 
-    [mpWindow invalidateCursorRectsForView: mpView];
+    [mpNSWindow invalidateCursorRectsForView: mpNSView];
 }
 
 // -----------------------------------------------------------------------
@@ -965,21 +965,21 @@ void AquaSalFrame::SetPointerPos( long nX, long nY )
 
 void AquaSalFrame::Flush( void )
 {
-    if( !(mbGraphics && mpGraphics && mpView && mbShown) )
+    if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
 
-    [mpView setNeedsDisplay: YES];
+    [mpNSView setNeedsDisplay: YES];
 
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
     if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
-        [mpView display];
+        [mpNSView display];
     }
 }
 
@@ -987,7 +987,7 @@ void AquaSalFrame::Flush( void )
 
 void AquaSalFrame::Flush( const Rectangle& rRect )
 {
-    if( !(mbGraphics && mpGraphics && mpView && mbShown) )
+    if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -995,14 +995,14 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
 
     NSRect aNSRect = NSMakeRect( rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
     VCLToCocoa( aNSRect, false );
-    [mpView setNeedsDisplayInRect: aNSRect];
+    [mpNSView setNeedsDisplayInRect: aNSRect];
 
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
     if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
-        [mpView display];
+        [mpNSView display];
     }
 }
 
@@ -1010,13 +1010,13 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
 
 void AquaSalFrame::Sync()
 {
-    if( mbGraphics && mpGraphics && mpView && mbShown )
+    if( mbGraphics && mpGraphics && mpNSView && mbShown )
     {
         // #i113170# may not be the main thread if called from UNO API
         SalData::ensureThreadAutoreleasePool();
 
-        [mpView setNeedsDisplay: YES];
-        [mpView display];
+        [mpNSView setNeedsDisplay: YES];
+        [mpNSView display];
     }
 }
 
@@ -1237,13 +1237,13 @@ void AquaSalFrame::getResolution( long& o_rDPIX, long& o_rDPIY )
 // doesn't make the anything cleaner for now
 void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    [mpView lockFocus];
+    [mpNSView lockFocus];
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
@@ -1291,22 +1291,22 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetIconFont( aLabelFont );
 
     Color aHighlightColor( getColor( [NSColor selectedTextBackgroundColor],
-                                      aStyleSettings.GetHighlightColor(), mpWindow ) );
+                                      aStyleSettings.GetHighlightColor(), mpNSWindow ) );
     aStyleSettings.SetHighlightColor( aHighlightColor );
     Color aHighlightTextColor( getColor( [NSColor selectedTextColor],
-                                         aStyleSettings.GetHighlightTextColor(), mpWindow ) );
+                                         aStyleSettings.GetHighlightTextColor(), mpNSWindow ) );
     aStyleSettings.SetHighlightTextColor( aHighlightTextColor );
 
     Color aMenuHighlightColor( getColor( [NSColor selectedMenuItemColor],
-                                         aStyleSettings.GetMenuHighlightColor(), mpWindow ) );
+                                         aStyleSettings.GetMenuHighlightColor(), mpNSWindow ) );
     aStyleSettings.SetMenuHighlightColor( aMenuHighlightColor );
     Color aMenuHighlightTextColor( getColor( [NSColor selectedMenuItemTextColor],
-                                             aStyleSettings.GetMenuHighlightTextColor(), mpWindow ) );
+                                             aStyleSettings.GetMenuHighlightTextColor(), mpNSWindow ) );
     aStyleSettings.SetMenuHighlightTextColor( aMenuHighlightTextColor );
 
     aStyleSettings.SetMenuColor( aBackgroundColor );
     Color aMenuTextColor( getColor( [NSColor textColor],
-                                    aStyleSettings.GetMenuTextColor(), mpWindow ) );
+                                    aStyleSettings.GetMenuTextColor(), mpNSWindow ) );
     aStyleSettings.SetMenuTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarTextColor( aMenuTextColor );
 
@@ -1325,7 +1325,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     rSettings.SetStyleSettings( aStyleSettings );
 
-    [mpView unlockFocus];
+    [mpNSView unlockFocus];
 }
 
 // -----------------------------------------------------------------------
@@ -1354,7 +1354,7 @@ void AquaSalFrame::Beep( SoundType eSoundType )
 
 void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
@@ -1362,8 +1362,8 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
 
     sal_uInt16 nEvent = 0;
 
-    if( [mpWindow isMiniaturized] )
-        [mpWindow deminiaturize: NSApp]; // expand the window
+    if( [mpNSWindow isMiniaturized] )
+        [mpNSWindow deminiaturize: NSApp]; // expand the window
 
     if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
     {
@@ -1377,7 +1377,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
     }
 
-    NSRect aFrameRect = [mpWindow frame];
+    NSRect aFrameRect = [mpNSWindow frame];
     NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
 
     // position is always relative to parent frame
@@ -1392,7 +1392,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
             else
                 nX = mpParent->maGeometry.nWidth - static_cast<long int>( aContentRect.size.width-1) - nX;
         }
-        NSRect aParentFrameRect = [mpParent->mpWindow frame];
+        NSRect aParentFrameRect = [mpParent->mpNSWindow frame];
         aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: mpParent->mnStyleMask];
     }
     else
@@ -1424,7 +1424,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
 
     // do not display yet, we need to update our backbuffer
     {
-        [mpWindow setFrame: [NSWindow frameRectForContentRect: aContentRect styleMask: mnStyleMask] display: NO];
+        [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aContentRect styleMask: mnStyleMask] display: NO];
     }
 
     UpdateFrameGeometry();
@@ -1438,19 +1438,19 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
         SendPaintEvent();
 
         // now inform the system that the views need to be drawn
-        [mpWindow display];
+        [mpNSWindow display];
     }
 }
 
 void AquaSalFrame::GetWorkArea( Rectangle& rRect )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
         return;
 
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    NSScreen* pScreen = [mpWindow screen];
+    NSScreen* pScreen = [mpNSWindow screen];
     if( pScreen ==  nil )
         pScreen = [NSScreen mainScreen];
     NSRect aRect = [pScreen visibleFrame];
@@ -1470,7 +1470,7 @@ SalPointerState AquaSalFrame::GetPointerState()
     state.mnState = 0;
 
     // get position
-    NSPoint aPt = [mpWindow mouseLocationOutsideOfEventStream];
+    NSPoint aPt = [mpNSWindow mouseLocationOutsideOfEventStream];
     CocoaToVCL( aPt, false );
     state.maPos = Point(static_cast<long>(aPt.x), static_cast<long>(aPt.y));
 
@@ -1585,13 +1585,13 @@ void AquaSalFrame::SetMenu( SalMenu* pSalMenu )
 
 void AquaSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 {
-    if ( mpWindow )
+    if ( mpNSWindow )
     {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
     if( (mnExtStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) != (nStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) )
-        [mpWindow setDocumentEdited: (nStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) ? YES : NO];
+        [mpNSWindow setDocumentEdited: (nStyle & SAL_FRAME_EXT_STYLE_DOCMODIFIED) ? YES : NO];
     }
 
     mnExtStyle = nStyle;
@@ -1624,7 +1624,7 @@ void AquaSalFrame::SetParent( SalFrame* pNewParent )
 
 void AquaSalFrame::UpdateFrameGeometry()
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
     {
         return;
     }
@@ -1633,7 +1633,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     // whereas vcl's are upper left
 
     // update screen rect
-    NSScreen * pScreen = [mpWindow screen];
+    NSScreen * pScreen = [mpNSWindow screen];
     if( pScreen )
     {
         maScreenRect = [pScreen frame];
@@ -1642,14 +1642,14 @@ void AquaSalFrame::UpdateFrameGeometry()
             maGeometry.nScreenNumber = [pScreens indexOfObject: pScreen];
     }
 
-    NSRect aFrameRect = [mpWindow frame];
+    NSRect aFrameRect = [mpNSWindow frame];
     NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
 
     // release old track rect
-    [mpView removeTrackingRect: mnTrackingRectTag];
+    [mpNSView removeTrackingRect: mnTrackingRectTag];
     // install the new track rect
     NSRect aTrackRect = { { 0, 0 }, aContentRect.size };
-    mnTrackingRectTag = [mpView addTrackingRect: aTrackRect owner: mpView userData: nil assumeInside: NO];
+    mnTrackingRectTag = [mpNSView addTrackingRect: aTrackRect owner: mpNSView userData: nil assumeInside: NO];
 
     // convert to vcl convention
     CocoaToVCL( aFrameRect );
@@ -1701,7 +1701,7 @@ void AquaSalFrame::CaptureMouse( sal_Bool bCapture )
 
 void AquaSalFrame::ResetClipRegion()
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
     {
         return;
     }
@@ -1713,18 +1713,18 @@ void AquaSalFrame::ResetClipRegion()
     CGPathRelease( mrClippingPath );
     mrClippingPath = NULL;
 
-    if( mpView && mbShown )
-        [mpView setNeedsDisplay: YES];
-    if( mpWindow )
+    if( mpNSView && mbShown )
+        [mpNSView setNeedsDisplay: YES];
+    if( mpNSWindow )
     {
-        [mpWindow setOpaque: YES];
-        [mpWindow invalidateShadow];
+        [mpNSWindow setOpaque: YES];
+        [mpNSWindow invalidateShadow];
     }
 }
 
 void AquaSalFrame::BeginSetClipRegion( sal_uLong nRects )
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
     {
         return;
     }
@@ -1763,7 +1763,7 @@ void AquaSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
 
 void AquaSalFrame::EndSetClipRegion()
 {
-    if ( !mpWindow )
+    if ( !mpNSWindow )
     {
         return;
     }
@@ -1776,12 +1776,12 @@ void AquaSalFrame::EndSetClipRegion()
         mrClippingPath = CGPathCreateMutable();
         CGPathAddRects( mrClippingPath, NULL, &maClippingRects[0], maClippingRects.size() );
     }
-    if( mpView && mbShown )
-        [mpView setNeedsDisplay: YES];
-    if( mpWindow )
+    if( mpNSView && mbShown )
+        [mpNSView setNeedsDisplay: YES];
+    if( mpNSWindow )
     {
-        [mpWindow setOpaque: (mrClippingPath != NULL) ? NO : YES];
-        [mpWindow setBackgroundColor: [NSColor clearColor]];
+        [mpNSWindow setOpaque: (mrClippingPath != NULL) ? NO : YES];
+        [mpNSWindow setBackgroundColor: [NSColor clearColor]];
         // shadow is invalidated when view gets drawn again
     }
 }

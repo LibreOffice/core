@@ -47,7 +47,7 @@ struct SystemEnvData
 #if defined( WNT ) || defined( OS2 )
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
-    NSView*               pView;          // the cocoa (NSView *) implementing this object
+    NSView*             mpNSView;       // the cocoa (NSView *) implementing this object
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object

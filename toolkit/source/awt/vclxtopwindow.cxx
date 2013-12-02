@@ -113,7 +113,7 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
 #elif (defined QUARTZ)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
-                 aRet <<= (sal_IntPtr)pSysData->pView;
+                 aRet <<= (sal_IntPtr)pSysData->mpNSView;
             }
 #elif (defined UNX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )

@@ -351,9 +351,9 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
 
     // get the pointers
     AquaSalFrame * pParentAquaSalFrame = (AquaSalFrame *) pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame();
-    NSWindow * pParentNSWindow = pParentAquaSalFrame->mpWindow;
-    NSView * pParentNSView = [pParentNSWindow contentView];
-    NSView * pPopupNSView = ((AquaSalFrame *) pWin->ImplGetWindow()->ImplGetFrame())->mpView;
+    NSWindow* pParentNSWindow = pParentAquaSalFrame->mpNSWindow;
+    NSView* pParentNSView = [pParentNSWindow contentView];
+    NSView* pPopupNSView = ((AquaSalFrame *) pWin->ImplGetWindow()->ImplGetFrame())->mpNSView;
     NSRect popupFrame = [pPopupNSView frame];
 
     // since we manipulate the menu below (removing entries)
@@ -800,9 +800,9 @@ void AquaSalMenu::statusLayout()
 {
     if( GetSalData()->mpStatusItem )
     {
-        NSView* pView = [GetSalData()->mpStatusItem view];
-        if( [pView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
-            [(OOStatusItemView*)pView layout];
+        NSView* pNSView = [GetSalData()->mpStatusItem view];
+        if( [pNSView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
+            [(OOStatusItemView*)pNSView layout];
         else
             DBG_ERROR( "someone stole our status view" );
     }
@@ -883,15 +883,15 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
     if( ! pItem )
         return Rectangle();
 
-    NSView* pView = [pItem view];
-    if( ! pView )
+    NSView* pNSView = [pItem view];
+    if( ! pNSView )
         return Rectangle();
-    NSWindow* pWin = [pView window];
-    if( ! pWin )
+    NSWindow* pNSWin = [pNSView window];
+    if( ! pNSWin )
         return Rectangle();
 
-    NSRect aRect = [pWin frame];
-    aRect.origin = [pWin convertBaseToScreen: NSMakePoint( 0, 0 )];
+    NSRect aRect = [pNSWin frame];
+    aRect.origin = [pNSWin convertBaseToScreen: NSMakePoint( 0, 0 )];
 
     // make coordinates relative to reference frame
     static_cast<AquaSalFrame*>(i_pReferenceFrame)->CocoaToVCL( aRect.origin );

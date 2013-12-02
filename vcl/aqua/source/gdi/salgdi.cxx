@@ -338,7 +338,7 @@ void AquaSalGraphics::updateResolution()
 {
     DBG_ASSERT( mbWindow, "updateResolution on inappropriate graphics" );
 
-    initResolution( (mbWindow && mpFrame) ?  mpFrame->mpWindow : nil );
+    initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
 }
 
 void AquaSalGraphics::initResolution( NSWindow* )
@@ -433,7 +433,7 @@ void AquaSalGraphics::initResolution( NSWindow* )
 void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
     if( !mnRealDPIY )
-        initResolution( (mbWindow && mpFrame) ? mpFrame->mpWindow : nil );
+        initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
 
     rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
@@ -442,7 +442,7 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 {
     if( !rGraphics.mnRealDPIY && rGraphics.mbWindow && rGraphics.mpFrame )
-        rGraphics.initResolution( rGraphics.mpFrame->mpWindow );
+        rGraphics.initResolution( rGraphics.mpFrame->getNSWindow() );
 
     mnRealDPIX = rGraphics.mnRealDPIX;
     mnRealDPIY = rGraphics.mnRealDPIY;

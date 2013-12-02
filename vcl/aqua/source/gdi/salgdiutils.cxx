@@ -198,7 +198,7 @@ bool AquaSalGraphics::CheckContext()
         if( !mrContext )
         {
             const CGSize aLayerSize = CGSizeMake( nWidth, nHeight);
-            NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getWindow()];
+            NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
             CGContextRef xCGContext = reinterpret_cast<CGContextRef>([pNSGContext graphicsPort]);
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
             if( mxLayer )

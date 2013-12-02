@@ -54,8 +54,8 @@ typedef struct SalFrame::SalPointerState SalPointerState;
 class AquaSalFrame : public SalFrame
 {
 public:
-    NSWindow*                       mpWindow;               // Cocoa window
-    NSView*                         mpView;                 // Cocoa view (actually a custom view, see below
+    NSWindow*                       mpNSWindow;             // Cocoa window
+    NSView*                         mpNSView;               // Cocoa view (actually a custom view)
     NSMenuItem*                     mpDockMenuEntry;        // entry in the dynamic dock menu
     NSRect                          maScreenRect;           // for mirroring purposes
     AquaSalGraphics*                mpGraphics;             // current frame graphics
@@ -175,8 +175,8 @@ public:
 
     static AquaSalFrame* GetCaptureFrame() { return s_pCaptureFrame; }
 
-    NSWindow* getWindow() const { return mpWindow; }
-    NSView* getView() const { return mpView; }
+    NSWindow* getNSWindow() const { return mpNSWindow; }
+    NSView* getNSView() const { return mpNSView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
 
     void getResolution( long& o_rDPIX, long& o_rDPIY );
