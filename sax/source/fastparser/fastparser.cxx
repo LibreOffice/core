@@ -40,6 +40,45 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
+extern "C" {
+
+static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
+{
+    sax_fastparser::FastSaxParser* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParser*>( userData );
+    pFastParser->callbackStartElement( name, atts );
+}
+
+static void call_callbackEndElement(void *userData, const XML_Char *name)
+{
+    sax_fastparser::FastSaxParser* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParser*>( userData );
+    pFastParser->callbackEndElement( name );
+}
+
+static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
+{
+    sax_fastparser::FastSaxParser* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParser*>( userData );
+    pFastParser->callbackCharacters( s, nLen );
+}
+
+static void call_callbackEntityDecl(void *userData, const XML_Char *entityName,
+        int is_parameter_entity, const XML_Char *value, int value_length,
+        const XML_Char *base, const XML_Char *systemId,
+        const XML_Char *publicId, const XML_Char *notationName)
+{
+    sax_fastparser::FastSaxParser* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParser*>(userData);
+    pFastParser->callbackEntityDecl(entityName, is_parameter_entity, value,
+            value_length, base, systemId, publicId, notationName);
+}
+
+static int call_callbackExternalEntityRef( XML_Parser parser,
+        const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId )
+{
+    sax_fastparser::FastSaxParser* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParser*>( XML_GetUserData( parser ) );
+    return pFastParser->callbackExternalEntityRef( parser, openEntityNames, base, systemId, publicId );
+}
+
+} // extern "C"
+
 namespace sax_fastparser {
 
 SaxContext::SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName ):
@@ -115,44 +154,6 @@ private:
 // the implementation part
 //---------------------------------------------
 
-extern "C" {
-
-static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
-{
-    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( userData );
-    pFastParser->callbackStartElement( name, atts );
-}
-
-static void call_callbackEndElement(void *userData, const XML_Char *name)
-{
-    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( userData );
-    pFastParser->callbackEndElement( name );
-}
-
-static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
-{
-    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( userData );
-    pFastParser->callbackCharacters( s, nLen );
-}
-
-static void call_callbackEntityDecl(void *userData, const XML_Char *entityName,
-        int is_parameter_entity, const XML_Char *value, int value_length,
-        const XML_Char *base, const XML_Char *systemId,
-        const XML_Char *publicId, const XML_Char *notationName)
-{
-    FastSaxParser* pFastParser = reinterpret_cast<FastSaxParser*>(userData);
-    pFastParser->callbackEntityDecl(entityName, is_parameter_entity, value,
-            value_length, base, systemId, publicId, notationName);
-}
-
-static int call_callbackExternalEntityRef( XML_Parser parser,
-        const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId )
-{
-    FastSaxParser* pFastParser = reinterpret_cast< FastSaxParser* >( XML_GetUserData( parser ) );
-    return pFastParser->callbackExternalEntityRef( parser, openEntityNames, base, systemId, publicId );
-}
-
-} // extern "C"
 
 // --------------------------------------------------------------------
 // FastLocatorImpl implementation

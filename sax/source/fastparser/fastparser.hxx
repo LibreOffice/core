@@ -193,8 +193,8 @@ public:
             const XML_Char *systemId, const XML_Char *publicId,
             const XML_Char *notationName);
 
-    inline void pushEntity( const Entity& rEntity ) { maEntities.push( rEntity ); }
-    inline void popEntity()                         { maEntities.pop(); }
+    void pushEntity( const Entity& rEntity ) { maEntities.push( rEntity ); }
+    void popEntity()                         { maEntities.pop(); }
     Entity& getEntity()                             { return maEntities.top(); }
     void parse();
     void produce( CallbackType aType );
