@@ -15,4 +15,8 @@ $(eval $(call gb_Module_add_targets,package,\
 	Package_dtd \
 ))
 
+$(eval $(call gb_Module_add_check_targets,package,\
+    CppunitTest_package2_test \
+))
+
 # vim: set noet sw=4 ts=4:
