@@ -611,6 +611,16 @@ Reference< XShape > Shape::createAndInsert(
         // assertions from svx) ...
         if( aServiceName != "com.sun.star.drawing.GroupShape" )
         {
+            if (aServiceName == "com.sun.star.text.TextFrame")
+            {
+                // TextFrames have BackColorTransparency, not FillTransparence
+                if (aShapeProps.hasProperty(PROP_FillTransparence))
+                {
+                    aShapeProps.setProperty(PROP_BackColorTransparency, aShapeProps[PROP_FillTransparence]);
+                    aShapeProps.erase(PROP_FillTransparence);
+                }
+            }
+
             PropertySet( xSet ).setProperties( aShapeProps );
             if (mbLockedCanvas && aServiceName == "com.sun.star.drawing.LineShape")
             {
