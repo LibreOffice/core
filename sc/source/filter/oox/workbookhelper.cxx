@@ -71,6 +71,7 @@
 #include "dbdata.hxx"
 #include "datauno.hxx"
 #include "globalnames.hxx"
+#include "globstr.hrc"
 
 #include "formulabuffer.hxx"
 #include "vcl/mapmod.hxx"
@@ -582,8 +583,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         if( xLockable.is() )
             xLockable->addActionLock();
 
-        //! TODO: localize progress bar text
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Loading..." ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
 
         //prevent unnecessary broadcasts and "half way listeners" as
@@ -592,8 +592,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     }
     else if( mrBaseFilter.isExportFilter() )
     {
-        //! TODO: localize progress bar text
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Saving..." ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_SAVE_DOC) ) );
     }
     // filter specific
     switch( getFilterType() )
