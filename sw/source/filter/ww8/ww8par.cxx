@@ -2383,7 +2383,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                 pPlcxMan->GetPap()->Restore( aSave );
             }
         }
-    } while (nInTable < nCellLevel);
+    } while (!bFtnEdn && (nInTable < nCellLevel));
     return bTableRowEnd;
 }
 
