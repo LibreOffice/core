@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAX_FASTPARSER_HXX_
-#define _SAX_FASTPARSER_HXX_
+#ifndef INCLUDED_SAX_FASTPARSER_HXX
+#define INCLUDED_SAX_FASTPARSER_HXX
 
 #include <queue>
 #include <vector>
@@ -36,25 +36,23 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <expat.h>
-#include "xml2utf.hxx"
+#include "saxdllapi.h"
 
 #include <sax/fastattribs.hxx>
-
-#define PARSER_IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
-#define PARSER_SERVICE_NAME        "com.sun.star.xml.sax.FastParser"
 
 namespace sax_fastparser {
 
 struct Event;
 class FastLocatorImpl;
 struct NamespaceDefine;
+struct Entity;
 
 typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 
 typedef ::boost::unordered_map< OUString, sal_Int32,
         OUStringHash, ::std::equal_to< OUString > > NamespaceMap;
 
-struct NameWithToken
+struct SAX_DLLPUBLIC NameWithToken
 {
     OUString msName;
     sal_Int32 mnToken;
@@ -66,7 +64,8 @@ typedef std::vector<Event> EventList;
 
 enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
 
-struct Event {
+struct Event
+{
     OUString msChars;
     sal_Int32 mnElementToken;
     OUString msNamespace;
@@ -88,7 +87,7 @@ struct SaxContext
 
 // --------------------------------------------------------------------
 
-struct ParserData
+struct SAX_DLLPUBLIC ParserData
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler > mxDocumentHandler;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >    mxTokenHandler;
@@ -103,63 +102,8 @@ struct ParserData
 
 // --------------------------------------------------------------------
 
-// Entity binds all information needed for a single file | single call of parseStream
-struct Entity : public ParserData
-{
-    // Amount of work producer sends to consumer in one iteration:
-    static const size_t mnEventListSize = 1000;
-
-    // unique for each Entity instance:
-
-    // Number of valid events in mpProducedEvents:
-    size_t mnProducedEventsSize;
-    EventList *mpProducedEvents;
-    std::queue< EventList * > maPendingEvents;
-    std::queue< EventList * > maUsedEvents;
-    osl::Mutex maEventProtector;
-
-    static const size_t mnEventLowWater = 4;
-    static const size_t mnEventHighWater = 8;
-    osl::Condition maConsumeResume;
-    osl::Condition maProduceResume;
-    // Event we use to store data if threading is disabled:
-    Event maSharedEvent;
-
-    // copied in copy constructor:
-
-    // Allow to disable threading for small documents:
-    bool                                    mbEnableThreads;
-    ::com::sun::star::xml::sax::InputSource maStructSource;
-    XML_Parser                              mpParser;
-    ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
-
-    // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
-    // therefore the exception must be saved somewhere.
-    ::com::sun::star::uno::Any              maSavedException;
-
-    ::std::stack< NameWithToken >           maNamespaceStack;
-    /* Context for main thread consuming events.
-     * startElement() stores the data, which characters() and endElement() uses
-     */
-    ::std::stack< SaxContext>               maContextStack;
-    // Determines which elements of maNamespaceDefines are valid in current context
-    ::std::stack< sal_uInt32 >              maNamespaceCount;
-    ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
-
-    explicit Entity( const ParserData& rData );
-    Entity( const Entity& rEntity );
-    ~Entity();
-    void startElement( Event *pEvent );
-    void characters( const OUString& sChars );
-    void endElement();
-    EventList* getEventList();
-    Event& getEvent( CallbackType aType );
-};
-
-// --------------------------------------------------------------------
-
 // This class implements the external Parser interface
-class FastSaxParser : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastParser, ::com::sun::star::lang::XServiceInfo >
+class SAX_DLLPUBLIC FastSaxParser : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastParser, ::com::sun::star::lang::XServiceInfo >
 {
 public:
     FastSaxParser();

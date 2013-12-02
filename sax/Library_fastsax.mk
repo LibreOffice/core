@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_static_libraries,fastsax,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fastsax,\
-	sax/source/fastparser/facreg \
 	sax/source/fastparser/fastparser \
 ))
 
