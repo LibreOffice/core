@@ -94,6 +94,7 @@ OCollectionView::OCollectionView( Window * pParent
 
     m_aView.SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
     m_aView.EnableAutoResize();
+    m_aView.EnableDelete(true);
     m_aUp.SetClickHdl( LINK( this, OCollectionView, Up_Click ) );
     m_aNewFolder.SetClickHdl( LINK( this, OCollectionView, NewFolder_Click ) );
     m_aPB_OK.SetClickHdl( LINK( this, OCollectionView, Save_Click ) );

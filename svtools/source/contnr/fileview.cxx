@@ -644,7 +644,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mnSearchIndex       ( 0 ),
     mbResizeDisabled    ( sal_False ),
     mbAutoResize        ( sal_False ),
-    mbEnableDelete      ( sal_True ),
+    mbEnableDelete      ( sal_False ),
     mbEnableRename      ( sal_True ),
     mbShowHeader        ( (nFlags & FILEVIEW_SHOW_NONE) == 0 )
 {
