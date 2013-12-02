@@ -116,7 +116,7 @@ protected:
     void            HighlightFunctionParas(const OUString& aFormula);
 
     void            SetMeText(const OUString& _sText);
-    FormulaDlgMode SetMeText(const OUString& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd, sal_Bool bMatrix, sal_Bool _bSelect, sal_Bool _bUpdate);
+    FormulaDlgMode SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, sal_Bool bMatrix, sal_Bool _bSelect, sal_Bool _bUpdate);
     void            Update();
     sal_Bool        CheckMatrix(OUString& aFormula /*IN/OUT*/);
     OUString        GetMeText() const;
