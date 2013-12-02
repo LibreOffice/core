@@ -64,6 +64,7 @@
 #include "cppuhelper/com/sun/star/beans/PropertyValue.hpp"
 #include "cppuhelper/com/sun/star/beans/XPropertySet.hpp"
 #include "cppuhelper/com/sun/star/beans/XMultiPropertySet.hpp"
+#include "cppuhelper/com/sun/star/container/XContentEnumerationAccess.hpp"
 #include "cppuhelper/com/sun/star/container/XEnumerationAccess.hpp"
 #include "cppuhelper/com/sun/star/container/XEnumeration.hpp"
 #include "cppuhelper/com/sun/star/container/XNameAccess.hpp"
@@ -117,6 +118,7 @@ void primeWeakMap( void)
     InitTypeDesc( com::sun::star::container::XElementAccess );
     InitTypeDesc( com::sun::star::container::XEnumeration );
     InitTypeDesc( com::sun::star::container::XEnumerationAccess );
+    InitTypeDesc( com::sun::star::container::XContentEnumerationAccess );
     InitTypeDesc( com::sun::star::container::XHierarchicalNameAccess );
     InitTypeDesc( com::sun::star::container::XNameAccess );
     InitTypeDesc( com::sun::star::container::XNameReplace );

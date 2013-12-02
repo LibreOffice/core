@@ -60,6 +60,7 @@ UNOTYPES= \
         com.sun.star.bridge.UnoUrlResolver \
         com.sun.star.bridge.XUnoUrlResolver \
         com.sun.star.connection.SocketPermission \
+        com.sun.star.container.XContentEnumerationAccess \
         com.sun.star.container.XElementAccess \
         com.sun.star.container.XEnumerationAccess \
         com.sun.star.container.XHierarchicalNameAccess \
@@ -177,7 +178,6 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(GUI)$(COMNAME)"=="OS2gcc3"
 SHL1VERSIONMAP=gcc3os2.map
-#.ELIF "$(COMNAME)"=="gcc3" || "$(COMNAME)"=="Clang"
 .ELSE
 SHL1VERSIONMAP=gcc3.map
 .ENDIF
