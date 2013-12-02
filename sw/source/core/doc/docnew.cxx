@@ -319,7 +319,8 @@ SwDoc::SwDoc()
 
     // COMPATIBILITY FLAGS END
 
-    mbStartIdleTimer(false)
+    mbStartIdleTimer(false),
+    mbReadOnly(false)
 {
     // COMPATIBILITY FLAGS START
 
