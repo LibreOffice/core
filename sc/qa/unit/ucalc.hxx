@@ -285,6 +285,7 @@ public:
     void testCondFormatINSDEL();
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
+    void testCondCopyPaste();
 
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
