@@ -42,7 +42,7 @@ enum ScHFEntryId
 };
 
 class EditTextObject;
-
+class EditEngine;
 
 class ScHFEditPage : public SfxTabPage
 {
@@ -87,7 +87,6 @@ private:
     OUString         aCmdArr[6];
 
 private:
-#ifdef _TPHFEDIT_CXX
     void FillCmdArr();
     void InitPreDefinedList();
     void ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling = false);
@@ -100,7 +99,6 @@ private:
     DECL_LINK( ListHdl_Impl, ListBox* );
     DECL_LINK( ClickHdl,  PushButton* );
     DECL_LINK( MenuHdl, ScExtIButton* );
-#endif
 };
 
 //===================================================================

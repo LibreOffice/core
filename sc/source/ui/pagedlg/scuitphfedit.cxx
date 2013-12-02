@@ -20,11 +20,8 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 //------------------------------------------------------------------
 
-#define _TPHFEDIT_CXX
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
