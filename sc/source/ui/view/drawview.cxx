@@ -628,6 +628,90 @@ void ScDrawView::UpdateUserViewOptions()
     }
 }
 
+SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
+{
+    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    if (pShell)
+    {
+        SdrModel* pDrawLayer = GetModel();
+        sal_uInt16 nTabCount = pDoc->GetTableCount();
+        for (sal_uInt16 i=0; i<nTabCount; i++)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(i);
+            DBG_ASSERT(pPage,"Page ?");
+            if (pPage)
+            {
+                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                SdrObject* pObject = aIter.Next();
+                while (pObject)
+                {
+                    if ( ScDrawLayer::GetVisibleName( pObject ) == rName )
+                    {
+                        return pObject;
+                    }
+                    pObject = aIter.Next();
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+//realize multi-selection of objects
+//==================================================
+sal_Bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
+{
+    sal_uInt16 nObjectTab = 0;
+    SdrObject* pFound = NULL;
+       sal_Bool bUnMark=sal_False;
+    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    if (pShell)
+    {
+        SdrModel* pDrawLayer = GetModel();
+        sal_uInt16 nTabCount = pDoc->GetTableCount();
+        for (sal_uInt16 i=0; i<nTabCount && !pFound; i++)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(i);
+            DBG_ASSERT(pPage,"Page ?");
+            if (pPage)
+            {
+                SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
+                SdrObject* pObject = aIter.Next();
+                while (pObject && !pFound)
+                {
+                    if ( ScDrawLayer::GetVisibleName( pObject ) == rName )
+                    {
+                        pFound = pObject;
+                        nObjectTab = i;
+                    }
+                    pObject = aIter.Next();
+                }
+            }
+        }
+    }
+    if ( pFound )
+    {
+        ScTabView* pView = pViewData->GetView();
+        if ( nObjectTab != nTab )                               // Tabelle umschalten
+            pView->SetTabNo( nObjectTab );
+        DBG_ASSERT( nTab == nObjectTab, "Tabellen umschalten hat nicht geklappt" );
+        pView->ScrollToObject( pFound );
+        if ( pFound->GetLayer() == SC_LAYER_BACK &&
+                !pViewData->GetViewShell()->IsDrawSelMode() &&
+                !pDoc->IsTabProtected( nTab ) &&
+                !pViewData->GetSfxDocShell()->IsReadOnly() )
+        {
+            SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
+            if (pLayer)
+                SetLayerLocked( pLayer->GetName(), sal_False );
+        }
+        SdrPageView* pPV = GetSdrPageView();
+              bUnMark = IsObjMarked(pFound);
+           MarkObj( pFound, pPV, bUnMark);
+    }
+    return ( bUnMark );
+}
+
 sal_Bool ScDrawView::SelectObject( const OUString& rName )
 {
     UnmarkAll();
@@ -689,6 +773,16 @@ sal_Bool ScDrawView::SelectObject( const OUString& rName )
     return ( pFound != NULL );
 }
 
+//If  object  is marked , return true , else return false .
+sal_Bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
+{
+    sal_Bool bisMarked =false;
+    if (pObject )
+    {
+        bisMarked = IsObjMarked(pObject);
+    }
+    return  bisMarked;
+}
 
 bool ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions)
 {

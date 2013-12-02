@@ -71,7 +71,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
+    ScHeaderEditEngine*  GetEditEngine() const { return pEdEngine; }
+    void SetObjectSelectHdl( const Link& aLink) { aObjectSelectLink = aLink; }
 
     void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
@@ -93,6 +94,8 @@ private:
 
     com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
+
+    Link                aObjectSelectLink;
 };
 
 //===================================================================

@@ -1691,4 +1691,9 @@ sal_Bool ScDetectiveFunc::IsColorsInitialized()
     return bColorsInitialized;
 }
 
+void ScDetectiveFunc::AppendChangTrackNoteSeparator(OUString &rDisplay)
+{
+    rDisplay += "\n--------\n";
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,6 +30,9 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 
+#include "cellvalue.hxx"
+#include "docoptio.hxx"
+
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
 #include "reffact.hxx"
@@ -39,7 +42,6 @@
 #include "drawattr.hxx"
 #include "spelldialog.hxx"
 #include <searchresults.hxx>
-
 
 #define ScTabViewShell
 #include "scslots.hxx"
@@ -98,6 +100,19 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )
 {
     SFX_VIEW_REGISTRATION(ScDocShell);
+}
+
+OUString ScTabViewShell::GetFormula(ScAddress& rAddress)
+{
+    OUString sFormula;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, rAddress);
+    if (!aCell.isEmpty() && aCell.meType == CELLTYPE_FORMULA)
+    {
+        sFormula = aCell.mpString->getString();
+    }
+    return sFormula;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

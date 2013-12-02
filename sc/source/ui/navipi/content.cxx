@@ -30,7 +30,8 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urlbmk.hxx>
-#include "svtools/svlbitm.hxx"
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 #include <stdlib.h>
 
 #include "content.hxx"
@@ -55,6 +56,8 @@
 #include "navicfg.hxx"
 #include "navsett.hxx"
 #include "postit.hxx"
+#include "tabvwsh.hxx"
+#include "drawview.hxx"
 #include "clipparam.hxx"
 #include "markdata.hxx"
 
@@ -117,7 +120,8 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( false ),
-    pHiddenDocument ( NULL )
+    pHiddenDocument ( NULL ),
+    bisInNavigatoeDlg  ( sal_False )
 {
     sal_uInt16 i;
     for (i=0; i<SC_CONTENT_COUNT; i++)
@@ -133,11 +137,78 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
 
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
 
+    pTmpEntry= NULL;
+    m_bFirstPaint=true;
+
     SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 ScContentTree::~ScContentTree()
 {
+}
+
+// helper function for  GetEntryAltText and GetEntryLongDescription
+OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry , sal_Bool isAltText) const
+{
+    SdrObject* pFound = NULL;
+
+    sal_uInt16 nType;
+    sal_uLong nChild;
+    GetEntryIndexes( nType, nChild, pEntry );
+    switch( nType )
+    {
+    case SC_CONTENT_OLEOBJECT:
+    case SC_CONTENT_GRAPHIC:
+    case SC_CONTENT_DRAWING:
+        {
+            ScDocument* pDoc = ( const_cast< ScContentTree* >(this) )->GetSourceDocument();
+            SdrIterMode eIter = ( nType == SC_CONTENT_DRAWING ) ? IM_FLAT : IM_DEEPNOGROUPS;
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            SfxObjectShell* pShell = pDoc->GetDocumentShell();
+            if (pDrawLayer && pShell)
+            {
+                sal_uInt16 nTabCount = pDoc->GetTableCount();
+                for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
+                {
+                    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+                    DBG_ASSERT(pPage,"Page ?");
+                    if (pPage)
+                    {
+                        SdrObjListIter aIter( *pPage, eIter );
+                        SdrObject* pObject = aIter.Next();
+                        while (pObject)
+                        {
+                            if( ScDrawLayer::GetVisibleName( pObject ) == GetEntryText( pEntry ) )
+                            {
+                                pFound = pObject;
+                                break;
+                            }
+                            pObject = aIter.Next();
+                        }
+                    }
+                }
+            }
+             if( pFound )
+             {
+                if( isAltText )
+                    return pFound->GetTitle();
+                else
+                    return pFound->GetDescription();
+             }
+        }
+        break;
+    }
+    return OUString();
+}
+
+OUString  ScContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_True );
+}
+
+OUString ScContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
+{
+    return getAltLongDescText( pEntry, sal_False);
 }
 
 void ScContentTree::InitRoot( sal_uInt16 nType )
@@ -162,7 +233,15 @@ void ScContentTree::InitRoot( sal_uInt16 nType )
 
 void ScContentTree::ClearAll()
 {
+    //There are one method in Control::SetUpdateMode(), and one override method SvTreeListBox::SetUpdateMode(). Here although
+    //SvTreeListBox::SetUpdateMode() is called in refresh method, it only call SvTreeListBox::SetUpdateMode(), not Control::SetUpdateMode().
+    //In SvTreeList::Clear(), Broadcast( LISTACTION_CLEARED ) will be called and finally, it will be trapped into the event yield() loop. And
+    //the InitRoot() method won't be called. Then if a user click or press key to update the navigator tree, crash happens.
+    //So the solution is to disable the UpdateMode of Control, then call Clear(), then recover the update mode
+    sal_Bool bOldUpdate = Control::IsUpdateMode();
+    Control::SetUpdateMode(sal_False);
     Clear();
+    Control::SetUpdateMode(bOldUpdate);
     for (sal_uInt16 i=1; i<SC_CONTENT_COUNT; i++)
         InitRoot(i);
 }
@@ -383,10 +462,80 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
             break;
         }
     }
-    StoreSettings();
+    //Make KEY_SPACE has same function as DoubleClick
+    if ( bisInNavigatoeDlg )
+    {
+        if(aCode.GetCode() == KEY_SPACE )
+        {
+            bUsed = sal_True;
+            sal_uInt16 nType;
+            sal_uLong nChild;
+            SvTreeListEntry* pEntry = GetCurEntry();
+            GetEntryIndexes( nType, nChild, pEntry );
+            if( pEntry && (nType != SC_CONTENT_ROOT) && (nChild != SC_CONTENT_NOCHILD) )
+            {
+                if ( bHiddenDoc )
+                    return ;                //! spaeter...
+                OUString aText( GetEntryText( pEntry ) );
+                sKeyString = aText;
+                if (!aManualDoc.isEmpty())
+                    pParentWindow->SetCurrentDoc( aManualDoc );
+                switch( nType )
+                {
+                    case SC_CONTENT_OLEOBJECT:
+                    case SC_CONTENT_GRAPHIC:
+                    case SC_CONTENT_DRAWING:
+                    {
+                        Window* pWindow=(Window*)GetParent(pEntry);
+                        ScNavigatorDlg* pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
+                        ScTabViewShell* pScTabViewShell = NULL;
+                        ScDrawView* pScDrawView = NULL;
+                        if (pScNavigatorDlg!=NULL)
+                              pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
+                        if(pScTabViewShell !=NULL)
+                              pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
+                        if(pScDrawView!=NULL)
+                         {
+                            pScDrawView->SelectCurrentViewObject(aText );
+                            sal_Bool bHasMakredObject = sal_False;
+                            SvTreeListEntry* pParent = pRootNodes[nType];
+                            SvTreeListEntry* pBeginEntry = NULL;
+                            if( pParent )
+                                pBeginEntry = FirstChild(pParent);
+                            while( pBeginEntry )
+                            {
+                                OUString aTempText( GetEntryText( pBeginEntry ) );
+                                 if( pScDrawView->GetObjectIsMarked( pScDrawView->GetObjectByName( aTempText ) ) )
+                                 {
+                                    bHasMakredObject = sal_True;
+                                    break;
+                                  }
+                                pBeginEntry =  Next( pBeginEntry );
+                            }
+                            if(  !bHasMakredObject && pScTabViewShell)
+                                pScTabViewShell->SetDrawShell(sal_False);
+                            ObjectFresh( nType,pEntry );
+                        }
+                    }
+                    break;
+                 }
+            }
+           }
+       }
 
     if( !bUsed )
-        SvTreeListBox::KeyInput(rKEvt);
+    {
+        if(aCode.GetCode() == KEY_F5 )
+        {
+            StoreSettings();
+            SvTreeListBox::KeyInput(rKEvt);
+        }
+        else
+        {
+            SvTreeListBox::KeyInput(rKEvt);
+            StoreSettings();
+        }
+    }
 }
 
 sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
@@ -572,6 +721,45 @@ ScDocument* ScContentTree::GetSourceDocument()
 
     }
     return NULL;
+}
+
+//Move along and draw "*" sign .
+void ScContentTree::ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry )
+{
+    if ( bHiddenDoc && !pHiddenDocument )
+        return;     // anderes Dokument angezeigt
+      if(nType ==SC_CONTENT_GRAPHIC||nType ==SC_CONTENT_OLEOBJECT||nType ==SC_CONTENT_DRAWING)
+        {
+        SetUpdateMode(sal_False);
+        ClearType( nType );
+        GetDrawNames( nType/*, nId*/ );
+        if( !pEntry )
+            ApplySettings();
+        SetUpdateMode(sal_True);
+        if( pEntry )
+        {
+            SvTreeListEntry* pParent = pRootNodes[nType];
+            SvTreeListEntry* pBeginEntry = NULL;
+            SvTreeListEntry* pOldEntry = NULL;
+            if( pParent )
+                pBeginEntry = FirstChild(pParent);
+            while( pBeginEntry )
+            {
+                OUString aTempText( GetEntryText( pBeginEntry ) );
+                if( aTempText ==  sKeyString )
+                {
+                    pOldEntry = pBeginEntry;
+                    break;
+                }
+                pBeginEntry =  Next( pBeginEntry );
+            }
+            if( pOldEntry )
+            {
+                Expand(pParent);
+                Select( pOldEntry,sal_True);
+            }
+        }
+        }
 }
 
 void ScContentTree::Refresh( sal_uInt16 nType )
@@ -765,7 +953,44 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                     {
                         OUString aName = ScDrawLayer::GetVisibleName( pObject );
                         if (!aName.isEmpty())
-                            InsertContent( nType, aName );
+                        {
+                            if( bisInNavigatoeDlg )
+                            {
+                                if (nType >= SC_CONTENT_COUNT)
+                                {
+                                    SAL_WARN("sc", "ScContentTree::InsertContent mit falschem Typ");
+                                    return;
+                                }
+
+                                SvTreeListEntry* pParent = pRootNodes[nType];
+                                if (pParent)
+                                {
+                                    SvTreeListEntry* pChild=InsertEntry( aName, pParent );
+                                    if(pChild)
+                                        pChild->SetMarked( sal_False);
+                                    Window* pWindow=NULL;
+                                    ScTabViewShell* pScTabViewShell=NULL;
+                                    ScDrawView* pScDrawView=NULL;
+                                    ScNavigatorDlg* pScNavigatorDlg=NULL;
+                                    if(pChild)
+                                         pWindow=(Window*)GetParent(pChild);
+                                    if(pWindow)
+                                            pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
+                                    if (pScNavigatorDlg!=NULL)
+                                          pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
+                                    if(pScTabViewShell !=NULL)
+                                          pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
+                                    if(pScDrawView!=NULL)
+                                     {
+                                         sal_Bool bMarked =pScDrawView->GetObjectIsMarked(pObject);
+                                         pChild->SetMarked( bMarked );
+                                      }
+                                }//end if parent
+                                else
+                                    SAL_WARN("sc", "InsertContent ohne Parent");
+                            }
+                        }
+
                     }
 
                     pObject = aIter.Next();
@@ -1445,13 +1670,14 @@ void ScContentTree::StoreSettings() const
     }
 }
 
-
-//
-//------------------------------------------------------------------------
-//
-
-
-
-
+void ScContentTree::InitEntry(SvTreeListEntry* pEntry,
+    const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
+{
+    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
+    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SvLBoxString* pStr = new SvLBoxString( pEntry, 0, pCol->GetText() );
+    pEntry->ReplaceItem( pStr, nColToHilite );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

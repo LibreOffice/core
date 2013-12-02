@@ -81,6 +81,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 
     Init();
 
+    aFilterCtr.SetAccessibleRelationMemberOf(&aFlFilter);
 }
 
 ScHighlightChgDlg::~ScHighlightChgDlg()
@@ -217,6 +218,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
         aEdAssign.Show();
         aRbAssign.Show();
         aEdAssign.SetText(aFilterCtr.GetRange());
+        aEdAssign.GrabFocus();
         ScAnyRefDlg::RefInputStart(&aEdAssign,&aRbAssign);
     }
     return 0;

@@ -81,6 +81,8 @@ public:
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual OUString SAL_CALL getAccessibleName(void)
+        throw (::com::sun::star::uno::RuntimeException);
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.

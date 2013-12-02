@@ -22,6 +22,7 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
+#include "table.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
@@ -64,8 +65,19 @@ void SAL_CALL ScAccessibleTableBase::disposing()
 uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
 {
-    uno::Any aAny (ScAccessibleTableBaseImpl::queryInterface(rType));
-    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
+    uno::Any aRet;
+    if ( rType == ::getCppuType((uno::Reference<XAccessibleTableSelection> *)0) )
+    {
+        uno::Reference<XAccessibleTableSelection> xThis( this );
+        aRet <<= xThis;
+        return aRet;
+    }
+    else
+    {
+        uno::Any aAny (ScAccessibleTableBaseImpl::queryInterface(rType));
+        return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
+    }
+    return aRet;
 }
 
 void SAL_CALL ScAccessibleTableBase::acquire()
@@ -140,12 +152,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
     {
         SCROW nEndRow(0);
         SCCOL nEndCol(0);
-        if (mpDoc->ExtendMerge(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow),
-            nEndCol, nEndRow, maRange.aStart.Tab()))
-        {
-            if (nEndRow > nRow)
-                nCount = nEndRow - nRow + 1;
-        }
+        mpDoc->FetchTable(maRange.aStart.Tab())->GetColumnByIndex(nColumn)->
+            ExtendMerge( static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow), nRow, nEndCol, nEndRow, sal_False );
+        if (nEndRow > nRow)
+               nCount = nEndRow - nRow + 1;
     }
 
     return nCount;
@@ -169,12 +179,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
     {
         SCROW nEndRow(0);
         SCCOL nEndCol(0);
-        if (mpDoc->ExtendMerge(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow),
-            nEndCol, nEndRow, maRange.aStart.Tab()))
-        {
-            if (nEndCol > nColumn)
+        mpDoc->FetchTable(maRange.aStart.Tab())->GetColumnByIndex(nColumn)->
+            ExtendMerge( static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow), nRow, nEndCol, nEndRow, sal_False );
+        if (nEndCol > nColumn)
                 nCount = nEndCol - nColumn + 1;
-        }
     }
 
     return nCount;
@@ -477,6 +485,30 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     aEvent.NewValue <<= aModelChange;
 
     CommitChange(aEvent);
+}
+
+sal_Bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
+throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ScAccessibleTableBase::unselectRow( sal_Int32 )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+        return sal_True;
+}
+
+sal_Bool SAL_CALL ScAccessibleTableBase::unselectColumn( sal_Int32 )
+        throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

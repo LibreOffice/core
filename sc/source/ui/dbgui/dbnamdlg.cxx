@@ -157,6 +157,10 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     pSaveObj = new DBSaveData( *m_pEdAssign, *m_pBtnHeader,
                         *m_pBtnDoSize, *m_pBtnKeepFmt, *m_pBtnStripData, theCurArea );
     Init();
+
+    SynFocusTimer.SetTimeout(150);
+    SynFocusTimer.SetTimeoutHdl(LINK( this, ScDbNameDlg, FocusToComoboxHdl));
+    SynFocusTimer.Start();
 }
 
 
@@ -635,8 +639,36 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
     if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
         theCurArea = aTmpRange;
 
+    if (!aText.isEmpty() && !m_pEdName->GetText().isEmpty())
+    {
+        m_pBtnAdd->Enable();
+        m_pBtnHeader->Enable();
+        m_pBtnDoSize->Enable();
+        m_pBtnKeepFmt->Enable();
+        m_pBtnStripData->Enable();
+        m_pFTSource->Enable();
+        m_pFTOperations->Enable();
+    }
+    else
+    {
+        m_pBtnAdd->Disable();
+        m_pBtnHeader->Disable();
+        m_pBtnDoSize->Disable();
+        m_pBtnKeepFmt->Disable();
+        m_pBtnStripData->Disable();
+        m_pFTSource->Disable();
+        m_pFTOperations->Disable();
+    }
+
     return 0;
 }
 
+IMPL_LINK( ScDbNameDlg, FocusToComoboxHdl, Timer*, pTi)
+{
+    (void)pTi;
+    // CallEventListeners is still protected - figure out if we need to make it public, or if the focus stuff can be handled better in VCL directly. First see what AT is expecting...
+    // aEdName.CallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

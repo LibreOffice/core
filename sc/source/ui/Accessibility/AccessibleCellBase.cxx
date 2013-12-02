@@ -28,11 +28,16 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "unonames.hxx"
+#include "detfunc.hxx"
+#include "chgtrack.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSheetAnnotation.hpp>
+#include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
+#include <com/sun/star/text/XSimpleText.hpp>
 #include <editeng/brushitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -212,15 +217,9 @@ OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    OUString sName( SC_RESSTR(STR_ACC_CELL_NAME) );
     // Document not needed, because only the cell address, but not the tablename is needed
     // always us OOO notation
-    OUString sAddress(maCellAddress.Format(SCA_VALID, NULL));
-    /*  #i65103# ZoomText merges cell address and contents, e.g. if value 2 is
-        contained in cell A1, ZT reads "cell A twelve" instead of "cell A1 - 2".
-        Simple solution: Append a space character to the cell address. */
-    sName = sName.replaceFirst("%1", sAddress) + " ";
-    return OUString(sName);
+    return maCellAddress.Format(SCA_VALID, NULL);
 }
 
     //=====  XAccessibleValue  ================================================
@@ -229,12 +228,14 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue(  )
     throw (uno::RuntimeException)
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     uno::Any aAny;
     if (mpDoc)
-        aAny <<= mpDoc->GetValue(maCellAddress);
-
+    {
+        OUString valStr(mpDoc->GetString(maCellAddress.Col(),maCellAddress.Row(),maCellAddress.Tab()));
+        aAny <<= valStr;
+    }
     return aAny;
 }
 
@@ -318,6 +319,307 @@ sal_Bool ScAccessibleCellBase::IsEditable(
     if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
         bEditable = sal_True;
     return bEditable;
+}
+
+OUString SAL_CALL ScAccessibleCellBase::GetNote(void)
+                                throw (::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    IsObjectValid();
+    OUString msNote;
+    if (mpDoc)
+    {
+        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        if ( pObjSh )
+        {
+            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
+            if ( xSpreadDoc.is() )
+            {
+                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+                if ( xIndex.is() )
+                {
+                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    uno::Reference<sheet::XSpreadsheet> xTable;
+                    if (aTable>>=xTable)
+                    {
+                        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(maCellAddress.Col(), maCellAddress.Row());
+                        if (xCell.is())
+                        {
+                            uno::Reference <sheet::XSheetAnnotationAnchor> xAnnotationAnchor ( xCell, uno::UNO_QUERY);
+                            if(xAnnotationAnchor.is())
+                            {
+                                uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation = xAnnotationAnchor->getAnnotation();
+                                if (xSheetAnnotation.is())
+                                {
+                                    uno::Reference <text::XSimpleText> xText (xSheetAnnotation, uno::UNO_QUERY);
+                                    if (xText.is())
+                                    {
+                                        msNote = xText->getString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return msNote;
+}
+
+#include <com/sun/star/table/ShadowFormat.hpp>
+
+OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs(void)
+                                        throw (::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    IsObjectValid();
+    table::ShadowFormat aShadowFmt;
+    if (mpDoc)
+    {
+        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        if ( pObjSh )
+        {
+            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
+            if ( xSpreadDoc.is() )
+            {
+                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+                if ( xIndex.is() )
+                {
+                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    uno::Reference<sheet::XSpreadsheet> xTable;
+                    if (aTable>>=xTable)
+                    {
+                        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(maCellAddress.Col(), maCellAddress.Row());
+                        if (xCell.is())
+                        {
+                            uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
+                            if (xCellProps.is())
+                            {
+                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_SHADOW));
+                                aAny >>= aShadowFmt;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //construct shadow attributes string
+    OUString sShadowAttrs("Shadow:");
+    OUString sInnerSplit(",");
+    OUString sOuterSplit(";");
+    sal_Int32 nLocationVal = 0;
+    switch( aShadowFmt.Location )
+    {
+    case table::ShadowLocation_TOP_LEFT:
+        nLocationVal = 1;
+        break;
+    case table::ShadowLocation_TOP_RIGHT:
+        nLocationVal = 2;
+        break;
+    case table::ShadowLocation_BOTTOM_LEFT:
+        nLocationVal = 3;
+        break;
+    case table::ShadowLocation_BOTTOM_RIGHT:
+        nLocationVal = 4;
+        break;
+    default:
+        break;
+    }
+    //if there is no shadow property for the cell
+    if ( nLocationVal == 0 )
+    {
+        sShadowAttrs += sOuterSplit;
+        return sShadowAttrs;
+    }
+    //else return all the shadow properties
+    sShadowAttrs += "Location=";
+    sShadowAttrs += OUString::number( (sal_Int32)nLocationVal );
+    sShadowAttrs += sInnerSplit;
+    sShadowAttrs += "ShadowWidth=";
+    sShadowAttrs += OUString::number( (sal_Int32)aShadowFmt.ShadowWidth ) ;
+    sShadowAttrs += sInnerSplit;
+    sShadowAttrs += "IsTransparent=";
+    sShadowAttrs += OUString::number( (sal_Bool)aShadowFmt.IsTransparent ) ;
+    sShadowAttrs += sInnerSplit;
+    sShadowAttrs += "Color=";
+    sShadowAttrs += OUString::number( (sal_Int32)aShadowFmt.Color );
+    sShadowAttrs += sOuterSplit;
+    return sShadowAttrs;
+}
+
+#include <com/sun/star/table/BorderLine.hpp>
+
+OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs(void)
+                                        throw (::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    IsObjectValid();
+    table::BorderLine aTopBorder;
+    table::BorderLine aBottomBorder;
+    table::BorderLine aLeftBorder;
+    table::BorderLine aRightBorder;
+    if (mpDoc)
+    {
+        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        if ( pObjSh )
+        {
+            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
+            if ( xSpreadDoc.is() )
+            {
+                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+                if ( xIndex.is() )
+                {
+                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    uno::Reference<sheet::XSpreadsheet> xTable;
+                    if (aTable>>=xTable)
+                    {
+                        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(maCellAddress.Col(), maCellAddress.Row());
+                        if (xCell.is())
+                        {
+                            uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
+                            if (xCellProps.is())
+                            {
+                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_TOPBORDER));
+                                aAny >>= aTopBorder;
+                                aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_BOTTBORDER));
+                                aAny >>= aBottomBorder;
+                                aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_LEFTBORDER));
+                                aAny >>= aLeftBorder;
+                                aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_RIGHTBORDER));
+                                aAny >>= aRightBorder;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Color aColor;
+    sal_Bool bIn = mpDoc ? mpDoc->IsCellInChangeTrack(maCellAddress,&aColor) : sal_False;
+    if (bIn)
+    {
+        aTopBorder.Color = aColor.GetColor();
+        aBottomBorder.Color = aColor.GetColor();
+        aLeftBorder.Color = aColor.GetColor();
+        aRightBorder.Color = aColor.GetColor();
+        aTopBorder.OuterLineWidth =2;
+        aBottomBorder.OuterLineWidth =2;
+        aLeftBorder.OuterLineWidth =2;
+        aRightBorder.OuterLineWidth =2;
+    }
+
+    //construct border attributes string
+    OUString sBorderAttrs;
+    OUString sInnerSplit(",");
+    OUString sOuterSplit(";");
+    //top border
+    //if top of the cell has no border
+    if ( aTopBorder.InnerLineWidth == 0 && aTopBorder.OuterLineWidth == 0 )
+    {
+        sBorderAttrs += "TopBorder:;";
+    }
+    else//add all the border properties to the return string.
+    {
+        sBorderAttrs += "TopBorder:Color=";
+        sBorderAttrs += OUString::number( (sal_Int32)aTopBorder.Color );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "InnerLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aTopBorder.InnerLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "OuterLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aTopBorder.OuterLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "LineDistance=";
+        sBorderAttrs += OUString::number( (sal_Int32)aTopBorder.LineDistance );
+        sBorderAttrs += sOuterSplit;
+    }
+    //bottom border
+    if ( aBottomBorder.InnerLineWidth == 0 && aBottomBorder.OuterLineWidth == 0 )
+    {
+        sBorderAttrs += "BottomBorde:;";
+    }
+    else
+    {
+        sBorderAttrs += "BottomBorder:Color=";
+        sBorderAttrs += OUString::number( (sal_Int32)aBottomBorder.Color );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "InnerLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aBottomBorder.InnerLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "OuterLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aBottomBorder.OuterLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "LineDistance=";
+        sBorderAttrs += OUString::number( (sal_Int32)aBottomBorder.LineDistance );
+        sBorderAttrs += sOuterSplit;
+    }
+    //left border
+    if ( aLeftBorder.InnerLineWidth == 0 && aLeftBorder.OuterLineWidth == 0 )
+    {
+        sBorderAttrs += "LeftBorder:;";
+    }
+    else
+    {
+        sBorderAttrs += "LeftBorder:Color=";
+        sBorderAttrs += OUString::number( (sal_Int32)aLeftBorder.Color );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "InnerLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aLeftBorder.InnerLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "OuterLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aLeftBorder.OuterLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "LineDistance=";
+        sBorderAttrs += OUString::number( (sal_Int32)aLeftBorder.LineDistance );
+        sBorderAttrs += sOuterSplit;
+    }
+    //right border
+    if ( aRightBorder.InnerLineWidth == 0 && aRightBorder.OuterLineWidth == 0 )
+    {
+        sBorderAttrs += "RightBorder:;";
+    }
+    else
+    {
+        sBorderAttrs += "RightBorder:Color=";
+        sBorderAttrs += OUString::number( (sal_Int32)aRightBorder.Color );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "InnerLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aRightBorder.InnerLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "OuterLineWidth=";
+        sBorderAttrs += OUString::number( (sal_Int32)aRightBorder.OuterLineWidth );
+        sBorderAttrs += sInnerSplit;
+        sBorderAttrs += "LineDistance=";
+        sBorderAttrs += OUString::number( (sal_Int32)aRightBorder.LineDistance );
+        sBorderAttrs += sOuterSplit;
+    }
+    return sBorderAttrs;
+}
+//end of cell attributes
+
+OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote(void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OUString strNote;
+    OUString strTrackText;
+    if (mpDoc)
+    {
+        sal_Bool bLeftedge=sal_False;
+        mpDoc->GetCellChangeTrackNote(maCellAddress,strTrackText,bLeftedge);
+    }
+    if (!strTrackText.isEmpty())
+    {
+        ScDetectiveFunc::AppendChangTrackNoteSeparator(strTrackText);
+        strNote = strTrackText;
+    }
+    strNote += GetNote();
+    return strNote;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

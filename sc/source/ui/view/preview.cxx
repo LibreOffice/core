@@ -1470,11 +1470,30 @@ void ScPreview::LoseFocus()
 
 com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
 {
+    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> xAcc= GetAccessible(sal_False);
+    if (xAcc.is())
+    {
+        return xAcc;
+    }
+
     ScAccessibleDocumentPagePreview* pAccessible =
         new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
-    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xAccessible = pAccessible;
+
+    xAcc = pAccessible;
+    SetAccessible(xAcc);
     pAccessible->Init();
-    return xAccessible;
+    return xAcc;
+}
+
+// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
+// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
+void ScPreview::SwitchView()
+{
+    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(sal_False).get());
+    if (pAccDoc)
+    {
+        pAccDoc->SwitchViewFireFocus();
+    }
 }
 
 void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )

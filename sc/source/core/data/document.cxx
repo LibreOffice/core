@@ -179,7 +179,6 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
     }
 }
 
-
 bool ScDocument::HasTable( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))

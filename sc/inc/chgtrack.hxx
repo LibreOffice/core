@@ -25,9 +25,10 @@
 #include <set>
 #include <stack>
 
+#include <tools/color.hxx>
 #include <tools/datetime.hxx>
+#include <tools/link.hxx>
 #include <tools/mempool.hxx>
-#include "tools/link.hxx"
 #include <unotools/options.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"
@@ -37,6 +38,26 @@
 
 class ScDocument;
 class ScFormulaCell;
+class ScChangeAction;
+class ScChangeTrack;
+class ScAppOptions;
+
+class ScActionColorChanger
+{
+private:
+    const ScAppOptions&     rOpt;
+    const std::set<OUString>& rUsers;
+    OUString                aLastUserName;
+    sal_uInt16              nLastUserIndex;
+    ColorData               nColor;
+
+
+public:
+    ScActionColorChanger( const ScChangeTrack& rTrack );
+    ~ScActionColorChanger() {}
+    void        Update( const ScChangeAction& rAction );
+    ColorData   GetColor() const    { return nColor; }
+};
 
 enum ScChangeActionType
 {
