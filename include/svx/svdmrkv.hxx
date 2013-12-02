@@ -228,6 +228,8 @@ public:
     void SetFrameDragSingles(sal_Bool bOn=sal_True) { SetFrameHandles(bOn); }
     sal_Bool IsFrameDragSingles() const { return IsFrameHandles(); }
 
+    sal_Bool HasMarkableObj() const;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // migrate selections
 
