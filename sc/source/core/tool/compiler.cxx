@@ -3632,16 +3632,18 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     struct FunctionStack
     {
         OpCode  eOp;
-        short   nPar;
+        short   nSep;
     };
-    // FunctionStack only used if PODF!
+    // FunctionStack only used if PODF or OOXML!
     bool bPODF = FormulaGrammar::isPODF( meGrammar);
+    bool bOOXML = FormulaGrammar::isOOXML( meGrammar);
+    bool bUseFunctionStack = (bPODF || bOOXML);
     const size_t nAlloc = 512;
     FunctionStack aFuncs[ nAlloc ];
-    FunctionStack* pFunctionStack =
-        (bPODF && static_cast<size_t>(rFormula.getLength()) > nAlloc ? new FunctionStack[rFormula.getLength()] : &aFuncs[0]);
+    FunctionStack* pFunctionStack = (bUseFunctionStack && static_cast<size_t>(rFormula.getLength()) > nAlloc ?
+         new FunctionStack[rFormula.getLength()] : &aFuncs[0]);
     pFunctionStack[0].eOp = ocNone;
-    pFunctionStack[0].nPar = 0;
+    pFunctionStack[0].nSep = 0;
     size_t nFunction = 0;
     short nBrackets = 0;
     bool bInArray = false;
@@ -3657,11 +3659,11 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             case ocOpen:
             {
                 ++nBrackets;
-                if (bPODF)
+                if (bUseFunctionStack)
                 {
                     ++nFunction;
                     pFunctionStack[ nFunction ].eOp = eLastOp;
-                    pFunctionStack[ nFunction ].nPar = 0;
+                    pFunctionStack[ nFunction ].nSep = 0;
                 }
             }
             break;
@@ -3678,14 +3680,14 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 }
                 else
                     nBrackets--;
-                if (bPODF && nFunction)
+                if (bUseFunctionStack && nFunction)
                     --nFunction;
             }
             break;
             case ocSep:
             {
-                if (bPODF)
-                    ++pFunctionStack[ nFunction ].nPar;
+                if (bUseFunctionStack)
+                    ++pFunctionStack[ nFunction ].nSep;
             }
             break;
             case ocArrayOpen:
@@ -3695,11 +3697,11 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 else
                     bInArray = true;
                 // Don't count following column separator as parameter separator.
-                if (bPODF)
+                if (bUseFunctionStack)
                 {
                     ++nFunction;
                     pFunctionStack[ nFunction ].eOp = eOp;
-                    pFunctionStack[ nFunction ].nPar = 0;
+                    pFunctionStack[ nFunction ].nSep = 0;
                 }
             }
             break;
@@ -3718,7 +3720,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                         aCorrectedSymbol = "";
                     }
                 }
-                if (bPODF && nFunction)
+                if (bUseFunctionStack && nFunction)
                     --nFunction;
             }
             default:
@@ -3741,21 +3743,41 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 SetError(errCodeOverflow); break;
             }
         }
-        if (bPODF)
+        if (bOOXML)
+        {
+            // Append a parameter for CEILING, FLOOR and WEEKNUM, all 1.0
+            // Function is already closed, parameter count is nSep+1
+            size_t nFunc = nFunction + 1;
+            if (eOp == ocClose && (
+                    (pFunctionStack[ nFunc ].eOp == ocCeil &&   // 3rd Excel mode
+                     pFunctionStack[ nFunc ].nSep == 1) ||
+                    (pFunctionStack[ nFunc ].eOp == ocFloor &&  // 3rd Excel mode
+                     pFunctionStack[ nFunc ].nSep == 1) ||
+                    (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
+                     pFunctionStack[ nFunc ].nSep == 0)))
+            {
+                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
+                        !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
+                {
+                    SetError(errCodeOverflow); break;
+                }
+            }
+        }
+        else if (bPODF)
         {
             /* TODO: for now this is the only PODF adapter. If there were more,
              * factor this out. */
             // Insert ADDRESS() new empty parameter 4 if there is a 4th, now to be 5th.
             if (eOp == ocSep &&
                     pFunctionStack[ nFunction ].eOp == ocAddress &&
-                    pFunctionStack[ nFunction ].nPar == 3)
+                    pFunctionStack[ nFunction ].nSep == 3)
             {
-                if (!static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep,ocSep)) ||
+                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
                 {
                     SetError(errCodeOverflow); break;
                 }
-                ++pFunctionStack[ nFunction ].nPar;
+                ++pFunctionStack[ nFunction ].nSep;
             }
         }
         FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( pRawToken->CreateToken());
