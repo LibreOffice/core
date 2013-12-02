@@ -86,8 +86,8 @@ struct SpellState
     ShellModes          m_eSelMode;
     const SwNode*       m_pPointNode;
     const SwNode*       m_pMarkNode;
-    xub_StrLen          m_nPointPos;
-    xub_StrLen          m_nMarkPos;
+    sal_Int32           m_nPointPos;
+    sal_Int32           m_nMarkPos;
     const SdrOutliner*  m_pOutliner;
     ESelection          m_aESelection;
 
