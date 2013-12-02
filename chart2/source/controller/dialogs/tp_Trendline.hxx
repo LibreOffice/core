@@ -37,6 +37,7 @@ public:
     virtual void Reset( const SfxItemSet& rInAttrs );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    void SetNumFormatter( SvNumberFormatter* pFormatter );
 
 private:
     TrendlineResources   m_aTrendlineResources;

@@ -25,7 +25,10 @@
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include <vcl/field.hxx>
-
+// header for class SvNumberformat
+#include <svl/zformat.hxx>
+// header for class FormattedField
+#include <svtools/fmtfield.hxx>
 namespace chart
 {
 
@@ -39,6 +42,8 @@ public:
     sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
 
     void FillValueSets();
+
+    void SetNumFormatter( SvNumberFormatter* pFormatter );
 
 private:
     RadioButton* m_pRB_Linear;
@@ -61,7 +66,7 @@ private:
     NumericField* m_pNF_ExtrapolateForward;
     NumericField* m_pNF_ExtrapolateBackward;
     CheckBox*     m_pCB_SetIntercept;
-    NumericField* m_pNF_InterceptValue;
+    FormattedField* m_pFmtFld_InterceptValue;
     CheckBox*     m_pCB_ShowEquation;
     CheckBox*     m_pCB_ShowCorrelationCoeff;
 
@@ -69,9 +74,11 @@ private:
 
     bool                m_bTrendLineUnique;
 
+    SvNumberFormatter*  m_pNumFormatter;
+
     void UpdateControlStates();
     DECL_LINK( SelectTrendLine, RadioButton * );
-    DECL_LINK( ChangeNumericField, NumericField *);
+    DECL_LINK( ChangeValue, void *);
 };
 
 } //  namespace chart
