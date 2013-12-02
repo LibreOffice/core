@@ -363,30 +363,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     uno::Any aAny;
-
-    const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
-    const SwStartNode *pSttNd = pCellFrm->GetTabBox()->GetSttNd();
-    if( pSttNd )
-    {
-        OUString strRet;
-        SwNodeIndex aCntntIdx( *pSttNd, 0 );
-        SwCntntNode* pCNd=NULL;
-        for(int nIndex = 0 ;
-            0 != ( pCNd = pSttNd->GetNodes().GoNext( &aCntntIdx ) ) &&
-            aCntntIdx.GetIndex() < pSttNd->EndOfSectionIndex();
-            ++nIndex )
-        {
-            if(pCNd && pCNd->IsTxtNode())
-            {
-                if (0 != nIndex)
-                {
-                    strRet += " ";
-                }
-                strRet +=((SwTxtNode*)pCNd)->GetTxt();
-            }
-        }
-        aAny <<= strRet;
-    }
+    aAny <<= GetTblBoxFormat()->GetTblBoxValue().GetValue();
     return aAny;
 }
 
