@@ -110,10 +110,15 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
 
     bIsSelected = IsSelected();
 
-    //Need not assign the pointer of accessible table object to m_pAccTable,
-    //for it already done in SwAccessibleCell::GetTable(); Former codes:
-    //m_pAccTable= GetTable();
-    GetTable();
+    css::uno::Reference<css::accessibility::XAccessible> xTableReference(
+        getAccessibleParent());
+    css::uno::Reference<css::accessibility::XAccessibleContext> xContextTable(
+        xTableReference, css::uno::UNO_QUERY);
+    SAL_WARN_IF(
+        (!xContextTable.is()
+         || xContextTable->getAccessibleRole() != AccessibleRole::TABLE),
+        "sw.core", "bad accessible context");
+    m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
 }
 
 sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
@@ -137,7 +142,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     if( bChanged )
     {
         FireStateChangedEvent( AccessibleStateType::SELECTED, bNew );
-        if (m_pAccTable)
+        if (m_pAccTable.is())
         {
             m_pAccTable->AddSelectionCell(this,bNew);
         }
@@ -214,7 +219,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
         _InvalidateChildrenCursorPos( pTabFrm );
         pTabFrm = pTabFrm->GetFollow();
     }
-    if (m_pAccTable)
+    if (m_pAccTable.is())
     {
         m_pAccTable->FireSelectionEvent();
     }
@@ -525,24 +530,6 @@ void SwAccessibleCell::deselectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
-}
-
-SwAccessibleTable *SwAccessibleCell::GetTable()
-{
-    if (!m_pAccTable)
-    {
-        if (!xTableReference.is())
-        {
-            xTableReference = getAccessibleParent();
-        #ifdef OSL_DEBUG_LEVEL
-            uno::Reference<XAccessibleContext> xContextTable(xTableReference, uno::UNO_QUERY);
-            OSL_ASSERT(xContextTable.is() && xContextTable->getAccessibleRole() == AccessibleRole::TABLE);
-        #endif
-            //SwAccessibleTable aTable = *(static_cast<SwAccessibleTable *>(xTable.get()));
-        }
-        m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
-    }
-    return m_pAccTable;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

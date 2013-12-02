@@ -42,6 +42,8 @@ class SwAccessibleCell : public SwAccessibleContext,
     sal_Bool _InvalidateMyCursorPos();
     sal_Bool _InvalidateChildrenCursorPos( const SwFrm *pFrm );
 
+    rtl::Reference<SwAccessibleTable> m_pAccTable;
+
 protected:
     // Set states for getAccessibleStateSet.
     // This drived class additionaly sets SELECTABLE(1) and SELECTED(+)
@@ -155,10 +157,6 @@ public:
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
-
-    SwAccessibleTable *GetTable();
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTableReference;
-    SwAccessibleTable *m_pAccTable;
 };
 
 #endif
