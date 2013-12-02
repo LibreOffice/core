@@ -1114,7 +1114,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             while( aIter != aEndIter )
             {
-                sal_Bool bChanged = sal_False;
                 sal_Bool bMarked = sal_False;
                 SwAccessibleChild pFrm( (*aIter).first );
 
@@ -1162,13 +1161,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if( xAcc.is() )
-                                                bChanged = (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->SetState( AccessibleStateType::SELECTED );
+                                                static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->SetState( AccessibleStateType::SELECTED );
                                         }
                                         else
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if( xAcc.is() )
-                                                bChanged = (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
+                                                static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
                                         }
                                     }
                                     else if( pAnchor.GetAnchorId() == FLY_AT_PARA )
@@ -1178,13 +1177,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if( xAcc.is() )
-                                                bChanged = (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->SetState( AccessibleStateType::SELECTED );
+                                                static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->SetState( AccessibleStateType::SELECTED );
                                         }
                                         else
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if(xAcc.is())
-                                                bChanged = (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
+                                                (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
                                         }
                                     }
                                 }
@@ -1204,15 +1203,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             {
                                 uno::Reference < XAccessible > xAcc( (*aIter).second );
                                 if(xAcc.is())
-                                    bChanged = (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
+                                    (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
                             }
                             --nNumShapes;
                             ++pShape;
                         }
                     }
                 }
-
-                (void)bChanged; //cmc: this is totally busted, bChanged is not used at all
 
                 ++aIter;
             }//while( aIter != aEndIter )
@@ -1468,22 +1465,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
                     }
                     ++nCountSelectedShape;
                 }
-                /* MT: This still was in DEV300m80, but was removed in IA2 CWS.
-                   Someone needs to check what should happen here, see original diff CWS oo31ia2 vs. OOO310M11
-                else
-                {
-                    bChanged =
-                        pShape->second->ResetState( AccessibleStateType::SELECTED );
-                    pShape->second->ResetState( AccessibleStateType::FOCUSED );
-                }
-                if( bChanged )
-                {
-                    const SwFrm* pParent = SwAccessibleFrame::GetParent(
-                                                    SwAccessibleChild( pShape->first ),
-                                                    GetShell()->IsPreview() );
-                    aParents.push_back( pParent );
-                }
-                */
             }
 
             --nShapes;
