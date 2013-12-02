@@ -733,7 +733,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_DDE { Text = "DDE" ; };
     String SC_OPCODE_BASE { Text = "_xlfn.BASE" ; };
     String SC_OPCODE_DECIMAL { Text = "_xlfn.DECIMAL" ; };
-    String SC_OPCODE_CONVERT { Text = "CONVERT" ; };
+    String SC_OPCODE_CONVERT { Text = "_xlfn.ORG.OPENOFFICE.CONVERT" ; };
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "_xlfn.ARABIC" ; };
     String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
