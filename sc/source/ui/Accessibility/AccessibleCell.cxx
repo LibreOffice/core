@@ -501,16 +501,14 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
     uno::Any strRet;
     if (mpViewShell)
     {
-        const OUString strAttr(":");
-        const OUString strSplit(";");
         OUString strFor = mpViewShell->GetFormula(maCellAddress) ;
         strFor = strFor.replaceAt(0,1,"");
         strFor = ReplaceFourChar(strFor);
         strFor = "Formula:" + strFor;
         strFor += strSplit;
-        strFor += "Note:";
+        strFor += ";Note:";
         strFor += ReplaceFourChar(GetAllDisplayNote());
-        strFor += strSplit;
+        strFor += ";";
         strFor += getShadowAttrs();//the string returned contains the spliter ";"
         strFor += getBorderAttrs();//the string returned contains the spliter ";"
         //end of cell attributes
