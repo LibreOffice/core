@@ -27,6 +27,7 @@
 
 #include <cstdio>
 
+#if HAVE_FEATURE_OPENCL
 #ifdef DISABLE_DYNLOADING
 
 extern "C" size_t getOpenCLPlatformCount(void);
@@ -35,6 +36,7 @@ extern "C" bool switchOpenClDevice(const OUString*, bool, bool);
 extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
 extern "C" void getOpenCLDeviceInfo(size_t*, size_t*);
 
+#endif
 #endif
 
 namespace sc {
@@ -556,6 +558,9 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
 void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms)
 {
+#if !HAVE_FEATURE_OPENCL
+    (void) rPlatforms;
+#else
 #ifndef DISABLE_DYNLOADING
     osl::Module* pModule = getOpenCLModule();
     if (!pModule)
@@ -584,6 +589,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
     std::vector<OpenclPlatformInfo> aPlatforms(nPlatforms);
     ::fillOpenCLInfo(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
+#endif
 #endif
 }
 
