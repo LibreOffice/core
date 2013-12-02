@@ -2290,6 +2290,8 @@ sal_Bool ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
 
     _out_rCommandToExecute = m_xComposer->getQueryWithSubstitution();
 
+    m_bCommandFacetsDirty = sal_False;
+
     return bUseEscapeProcessing;
 }
 
