@@ -491,11 +491,11 @@ bool SwCrsrShell::bColumnChange()
         }
     }
 
-    if(oldColFrm == pCurrCol)
+    if(m_oldColFrm == pCurrCol)
         return sal_False;
     else
     {
-        oldColFrm = pCurrCol;
+        m_oldColFrm = pCurrCol;
         return sal_True;
     }
 }
@@ -2581,7 +2581,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
     m_eMvState( MV_NONE ),
     m_sMarkedListId(),
-    m_nMarkedListLevel( 0 )
+    m_nMarkedListLevel( 0 ), m_oldColFrm(0)
 {
     SET_CURR_SHELL( this );
     // only keep the position of the current cursor of the copy shell
@@ -2596,7 +2596,6 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     m_bSetCrsrInReadOnly = sal_True;
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
-    oldColFrm = NULL;
 
 #if defined(ANDROID) || defined(IOS)
     HideCrsr();
@@ -2611,7 +2610,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
     m_eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
     m_sMarkedListId(),
-    m_nMarkedListLevel( 0 )
+    m_nMarkedListLevel( 0 ), m_oldColFrm(0)
 {
     SET_CURR_SHELL( this );
     // create initial cursor and set it to first content position

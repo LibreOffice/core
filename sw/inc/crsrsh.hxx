@@ -230,6 +230,8 @@ private:
 
     bool m_bMacroExecAllowed : 1;
 
+    SwFrm* m_oldColFrm;
+
     SW_DLLPRIVATE void UpdateCrsr(
         sal_uInt16 eFlags = SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
         sal_Bool bIdleEnd = sal_False );
@@ -825,7 +827,6 @@ public:
     sal_Bool IsInRightToLeftText( const Point* pPt = 0 ) const;
 
     void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
-    SwFrm* oldColFrm;
     bool   bColumnChange();
     void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
     void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
