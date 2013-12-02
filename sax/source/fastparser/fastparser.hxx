@@ -58,8 +58,8 @@ struct NameWithToken
 {
     OUString msName;
     sal_Int32 mnToken;
-    NameWithToken(const OUString& sName, const sal_Int32& nToken):
-        msName(sName), mnToken(nToken) {}
+
+    NameWithToken(const OUString& sName, const sal_Int32& nToken);
 };
 
 typedef std::vector<Event> EventList;
@@ -193,9 +193,9 @@ public:
             const XML_Char *systemId, const XML_Char *publicId,
             const XML_Char *notationName);
 
-    void pushEntity( const Entity& rEntity ) { maEntities.push( rEntity ); }
-    void popEntity()                         { maEntities.pop(); }
-    Entity& getEntity()                             { return maEntities.top(); }
+    void pushEntity( const Entity& rEntity );
+    void popEntity();
+    Entity& getEntity();
     void parse();
     void produce( CallbackType aType );
 

@@ -81,6 +81,9 @@ static int call_callbackExternalEntityRef( XML_Parser parser,
 
 namespace sax_fastparser {
 
+NameWithToken::NameWithToken(const OUString& sName, const sal_Int32& nToken) :
+    msName(sName), mnToken(nToken) {}
+
 SaxContext::SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName ):
         mnElementToken(nElementToken)
 {
@@ -845,6 +848,21 @@ bool FastSaxParser::consume(EventList *pEventList)
         }
     }
     return true;
+}
+
+void FastSaxParser::pushEntity( const Entity& rEntity )
+{
+    maEntities.push( rEntity );
+}
+
+void FastSaxParser::popEntity()
+{
+    maEntities.pop();
+}
+
+Entity& FastSaxParser::getEntity()
+{
+    return maEntities.top();
 }
 
 // starts parsing with actual parser !
