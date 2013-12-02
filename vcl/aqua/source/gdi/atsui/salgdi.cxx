@@ -320,7 +320,6 @@ AquaSalGraphics::~AquaSalGraphics()
         // destroy backbuffer bitmap context that we created ourself
         CGContextRelease( mrContext );
         mrContext = NULL;
-        // memory is freed automatically by maOwnContextMemory
     }
 }
 
