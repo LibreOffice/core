@@ -519,6 +519,25 @@ sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
     return nCount;
 }
 
+sal_Bool SdrMarkView::HasMarkableObj() const
+{
+    sal_uIntPtr nCount=0;
+
+    SdrPageView* pPV = GetSdrPageView();
+    if(pPV)
+    {
+        SdrObjList* pOL=pPV->GetObjList();
+        sal_uIntPtr nObjAnz=pOL->GetObjCount();
+        for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz && nCount==0; nObjNum++) {
+            SdrObject* pObj=pOL->GetObj(nObjNum);
+            if (IsObjMarkable(pObj,pPV)) {
+                nCount++;
+            }
+        }
+    }
+    return nCount!=0;
+}
+
 void SdrMarkView::hideMarkHandles()
 {
     if(!mbMarkHandlesHidden)
