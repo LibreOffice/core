@@ -1215,11 +1215,11 @@ static icu::UnicodeString lcl_QuotRange(
 
 static bool lcl_isTag( const icu::UnicodeString& rString )
 {
-    const int nSize = 12;
+    static const int nSize = 13;
     static const icu::UnicodeString vTags[nSize] = {
         "ahelp", "link", "item", "emph", "defaultinline",
         "switchinline", "caseinline", "variable",
-        "bookmark_value", "image", "embedvar", "alt" };
+        "bookmark_value", "image", "embedvar", "alt", "sup" };
 
     for( int nIndex = 0; nIndex < nSize; ++nIndex )
     {
