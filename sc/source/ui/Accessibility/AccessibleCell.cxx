@@ -505,7 +505,6 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
         strFor = strFor.replaceAt(0,1,"");
         strFor = ReplaceFourChar(strFor);
         strFor = "Formula:" + strFor;
-        strFor += strSplit;
         strFor += ";Note:";
         strFor += ReplaceFourChar(GetAllDisplayNote());
         strFor += ";";
