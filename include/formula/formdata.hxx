@@ -37,7 +37,7 @@ public:
     sal_Bool                    HasParent() const   { return pParent != NULL; }
 
     inline sal_uInt16       GetMode() const     { return nMode; }
-    inline xub_StrLen       GetFStart() const   { return nFStart; }
+    inline sal_Int32        GetFStart() const   { return nFStart; }
     inline sal_uInt16       GetCatSel() const   { return nCatSel; }
     inline sal_uInt16       GetFuncSel() const  { return nFuncSel; }
     inline sal_uInt16       GetOffset() const   { return nOffset; }
@@ -48,7 +48,7 @@ public:
     inline const Selection& GetSelection()const { return aSelection;}
 
     inline void             SetMode( sal_uInt16 nNew )                  { nMode = nNew; }
-    inline void             SetFStart( xub_StrLen nNew )            { nFStart = nNew; }
+    inline void             SetFStart( sal_Int32 nNew )                 { nFStart = nNew; }
     inline void             SetCatSel( sal_uInt16 nNew )                { nCatSel = nNew; }
     inline void             SetFuncSel( sal_uInt16 nNew )               { nFuncSel = nNew; }
     inline void             SetOffset( sal_uInt16 nNew )                { nOffset = nNew; }
@@ -65,7 +65,7 @@ protected:
     FormEditData*   pParent;            // fuer Verschachtelung
 private:
     sal_uInt16          nMode;              // enum ScFormulaDlgMode
-    xub_StrLen          nFStart;
+    sal_Int32           nFStart;
     sal_uInt16          nCatSel;
     sal_uInt16          nFuncSel;
     sal_uInt16          nOffset;

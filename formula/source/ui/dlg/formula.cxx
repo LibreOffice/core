@@ -371,7 +371,7 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
 {
     if (pData) // it won't be destroyed via Close
     {
-        pData->SetFStart((xub_StrLen)pMEdit->GetSelection().Min());
+        pData->SetFStart(pMEdit->GetSelection().Min());
         pData->SetSelection(pMEdit->GetSelection());
 
         if(aTabCtrl.GetCurPageId()==TP_FUNCTION)
