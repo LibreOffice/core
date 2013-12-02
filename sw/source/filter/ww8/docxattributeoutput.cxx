@@ -1482,23 +1482,6 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
                 FSNS( XML_w, XML_date ), aDate.getStr(),
                 FSEND );
 
-        if ( m_pCharLangAttrList )
-        {
-            if (m_pCharLangAttrList->hasAttribute(FSNS(XML_w, XML_val)))
-            {
-                m_pSerializer->mark();
-                m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
-                sVal = m_pCharLangAttrList->getValue(FSNS(XML_w, XML_val));
-                sOVal = OUStringToOString(sVal, RTL_TEXTENCODING_UTF8);
-                m_pSerializer->startElementNS(XML_w, XML_lang,
-                    FSNS(XML_w, XML_val), sOVal.getStr(),
-                    FSEND);
-                m_pSerializer->endElementNS(XML_w, XML_lang);
-                m_pSerializer->endElementNS( XML_w, XML_rPr );
-                m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
-            }
-        }
-
         m_pSerializer->endElementNS( XML_w, XML_rPrChange );
 
         break;
