@@ -27,10 +27,16 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/factory.hxx>
 
-#include "fastparser.hxx"
+#include "sax/fastparser.hxx"
+
+#include "xml2utf.hxx"
 
 #include <string.h>
+
+#define PARSER_IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
+#define PARSER_SERVICE_NAME        "com.sun.star.xml.sax.FastParser"
 
 using namespace ::std;
 using namespace ::osl;
@@ -103,6 +109,59 @@ struct NamespaceDefine
     OUString    maNamespaceURL;
 
     NamespaceDefine( const OString& rPrefix, sal_Int32 nToken, const OUString& rNamespaceURL ) : maPrefix( rPrefix ), mnToken( nToken ), maNamespaceURL( rNamespaceURL ) {}
+};
+
+// Entity binds all information needed for a single file | single call of parseStream
+struct Entity : public ParserData
+{
+    // Amount of work producer sends to consumer in one iteration:
+    static const size_t mnEventListSize = 1000;
+
+    // unique for each Entity instance:
+
+    // Number of valid events in mpProducedEvents:
+    size_t mnProducedEventsSize;
+    EventList *mpProducedEvents;
+    std::queue< EventList * > maPendingEvents;
+    std::queue< EventList * > maUsedEvents;
+    osl::Mutex maEventProtector;
+
+    static const size_t mnEventLowWater = 4;
+    static const size_t mnEventHighWater = 8;
+    osl::Condition maConsumeResume;
+    osl::Condition maProduceResume;
+    // Event we use to store data if threading is disabled:
+    Event maSharedEvent;
+
+    // copied in copy constructor:
+
+    // Allow to disable threading for small documents:
+    bool                                    mbEnableThreads;
+    ::com::sun::star::xml::sax::InputSource maStructSource;
+    XML_Parser                              mpParser;
+    ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
+
+    // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
+    // therefore the exception must be saved somewhere.
+    ::com::sun::star::uno::Any              maSavedException;
+
+    ::std::stack< NameWithToken >           maNamespaceStack;
+    /* Context for main thread consuming events.
+     * startElement() stores the data, which characters() and endElement() uses
+     */
+    ::std::stack< SaxContext>               maContextStack;
+    // Determines which elements of maNamespaceDefines are valid in current context
+    ::std::stack< sal_uInt32 >              maNamespaceCount;
+    ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
+
+    explicit Entity( const ParserData& rData );
+    Entity( const Entity& rEntity );
+    ~Entity();
+    void startElement( Event *pEvent );
+    void characters( const OUString& sChars );
+    void endElement();
+    EventList* getEventList();
+    Event& getEvent( CallbackType aType );
 };
 
 class ParserThread: public salhelper::Thread
@@ -1181,5 +1240,48 @@ int FastSaxParser::callbackExternalEntityRef(
 }
 
 } // namespace sax_fastparser
+
+Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+    throw(Exception)
+{
+    sax_fastparser::FastSaxParser *p = new sax_fastparser::FastSaxParser;
+    return Reference< XInterface > ( (OWeakObject * ) p );
+}
+
+extern "C" {
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL fastsax_component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager,
+    SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
+{
+    void * pRet = 0;
+
+    if (pServiceManager )
+    {
+        Reference< XSingleServiceFactory > xRet;
+        Reference< XMultiServiceFactory > xSMgr( reinterpret_cast< XMultiServiceFactory * > ( pServiceManager ) );
+
+        OUString aImplementationName( OUString::createFromAscii( pImplName ) );
+
+        if ( aImplementationName == PARSER_IMPLEMENTATION_NAME  )
+        {
+            xRet = createSingleFactory(
+                xSMgr, aImplementationName,
+                FastSaxParser_CreateInstance,
+                sax_fastparser::FastSaxParser::getSupportedServiceNames_Static() );
+        }
+
+        if (xRet.is())
+        {
+            xRet->acquire();
+            pRet = xRet.get();
+        }
+    }
+
+    return pRet;
+}
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

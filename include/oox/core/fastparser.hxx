@@ -28,6 +28,10 @@ namespace oox {
     class StorageBase;
 }
 
+namespace sax_fastparser {
+    class FastSaxParser;
+}
+
 namespace oox {
 namespace core {
 
@@ -85,6 +89,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >
                         mxTokenHandler;
     const NamespaceMap& mrNamespaceMap;
+
+    sax_fastparser::FastSaxParser* mpParser;
 };
 
 // ============================================================================
