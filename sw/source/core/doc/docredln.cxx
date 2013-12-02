@@ -2978,6 +2978,65 @@ int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) co
     return nRet;
 }
 
+SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet )
+    : pSet(0)
+{
+    if( pItemSet && pItemSet->Count() )
+        pSet = new SfxItemSet( *pItemSet );
+}
+
+SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy )
+    : SwRedlineExtraData()
+{
+    if( rCpy.pSet->Count() )
+    {
+        pSet = new SfxItemSet( *(rCpy.pSet) );
+    }
+    else
+    {
+        pSet = 0;
+    }
+}
+
+SwRedlineExtraData_FormattingChanges::~SwRedlineExtraData_FormattingChanges()
+{
+    delete pSet;
+}
+
+SwRedlineExtraData* SwRedlineExtraData_FormattingChanges::CreateNew() const
+{
+    return new SwRedlineExtraData_FormattingChanges( *this );
+}
+
+void SwRedlineExtraData_FormattingChanges::Reject( SwPaM& rPam ) const
+{
+    rPam.GetDoc();  // This is here just to prevent build 'warning'
+
+    // ToDo: Add 'Reject' logic
+}
+
+int SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraData& rExtraData ) const
+{
+    const SwRedlineExtraData_FormattingChanges& rCmp = (SwRedlineExtraData_FormattingChanges&)rExtraData;
+
+    if ( !pSet && !rCmp.pSet )
+    {
+        // Both SfxItemSet are null
+        return 1;
+    }
+    else if ( pSet && rCmp.pSet && *pSet == *rCmp.pSet )
+    {
+        // Both SfxItemSet exist and are equal
+        return 1;
+    }
+    return 0;
+}
+
+SfxItemSet* SwRedlineExtraData_FormattingChanges::GetItemSet( ) const
+{
+    return pSet;
+}
+
 SwRedlineData::SwRedlineData( RedlineType_t eT, sal_uInt16 nAut )
     : pNext( 0 ), pExtraData( 0 ),
     aStamp( DateTime::SYSTEM ),
@@ -3006,16 +3065,24 @@ SwRedlineData::SwRedlineData(RedlineType_t eT, sal_uInt16 nAut, const DateTime& 
 
 SwRedlineData::~SwRedlineData()
 {
-    delete pExtraData;
-    delete pNext;
+    // Check if there is extra data - and if so - delete it
+    if (pExtraData)
+        delete pExtraData;
+
+    // Check if there is a next node - and if so - delete it
+    if (pNext)
+        delete pNext;
 }
 
 /// ExtraData is copied. The Pointer's ownership is thus NOT transferred
 /// to the Redline Object!
 void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
 {
-    delete pExtraData;
+    // Check if there is extra data - and if so - delete it
+    if (pExtraData)
+        delete pExtraData;
 
+    // Check if there is data - and if so - delete it
     if( pData )
         pExtraData = pData->CreateNew();
     else
