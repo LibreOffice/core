@@ -163,16 +163,15 @@ sub compare_package_content
     if ( $identical )
     {
         my $first = 1;
-        my $start = "\n";
         foreach my $dest ( keys %{$newcontent} )
         {
             if ( ! exists($oldcontent->{$dest}) )
             {
                 $identical = 0;
-                $installer::logger::Info->printf("%s...... file only in one package (A): %s\n", $start, $dest);
+                $installer::logger::Info->print("\n") if $first;
+                $installer::logger::Info->printf("...... file only in one package (A): %s\n", $dest);
                 $infoline = "File only in existing pool package: $dest\n";
                 push(@installer::globals::pcfdiffcomment, $infoline);
-                if ( $first ) { $start = ""; }
                 $first = 0;
             }
         }
@@ -185,10 +184,10 @@ sub compare_package_content
                 if ( ! exists($newcontent->{$dest}) )
                 {
                     $identical = 0;
-                    $installer::logger::Info->printf("%s...... file only in one package (B): %s\n", $start, $dest);
+                    $installer::logger::Info->print("\n") if $first;
+                    $installer::logger::Info->printf("...... file only in one package (B): %s\n", $dest);
                     $infoline = "File only in new package: $dest\n";
                     push(@installer::globals::pcfdiffcomment, $infoline);
-                    if ( $first ) { $start = ""; }
                     $first = 0;
                 }
             }
