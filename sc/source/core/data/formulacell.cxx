@@ -989,6 +989,11 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         return ;
     }
 
+    // Compilation changes RPN count, remove and reinsert to FormulaTree if it
+    // was in to update its count.
+    bool bWasInFormulaTree = pDocument->IsInFormulaTree( this);
+    if (bWasInFormulaTree)
+        pDocument->RemoveFromFormulaTree( this);
     ScCompiler aComp( pDocument, aPos, *pCode);
     aComp.SetGrammar(eTempGrammar);
     OUString aFormula, aFormulaNmsp;
@@ -1039,6 +1044,8 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         SetDirtyVar();
         pDocument->PutInFormulaTree(this);
     }
+    else if (bWasInFormulaTree)
+        pDocument->PutInFormulaTree(this);
 }
 
 
