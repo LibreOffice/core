@@ -86,6 +86,8 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
          msTitle.isEmpty() )
     {
         SwAccessibleFrameBase::Modify( pOld, pNew );
+        if (!GetRegisteredIn())
+            return; // probably was deleted - avoid doing anything
     }
 
     const SwNoTxtNode *pNd = GetNoTxtNode();
