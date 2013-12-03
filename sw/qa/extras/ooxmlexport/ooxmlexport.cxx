@@ -2034,6 +2034,13 @@ DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOoxmlTriangle, "ooxml-triangle.docx")
+{
+    // The problem was that ooxml-triangle shape type wasn't handled by VML
+    // export (only isosceles-triangle), leading to a missing shape.
+    getShape(1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

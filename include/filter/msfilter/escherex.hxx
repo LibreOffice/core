@@ -1337,7 +1337,8 @@ public:
     static MSO_SPT      GetCustomShapeType(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                             sal_uInt32& nMirrorFlags,
-                            OUString& rShapeType
+                            OUString& rShapeType,
+                            bool bOOXML = false
                         );
 
     // helper functions which are also used in ooxml export
@@ -1584,12 +1585,13 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         sal_Bool                    mbEscherSpgr;
         sal_Bool                    mbEscherDg;
         sal_Bool                    mbOleEmf;                   // OLE is EMF instead of WMF
+        bool                        mbOOXML;
 
 
         virtual sal_Bool DoSeek( sal_uInt32 nKey );
 
 public:
-    explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm );
+    explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
     virtual             ~EscherEx();
 
     /** Creates and returns a new shape identifier, updates the internal shape

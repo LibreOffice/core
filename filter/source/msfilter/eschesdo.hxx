@@ -43,12 +43,13 @@ class ImplEESdrObject
     sal_Bool                mbValid : 1;
     sal_Bool                mbPresObj : 1;
     sal_Bool                mbEmptyPresObj : 1;
+    bool mbOOXML;
 
     void Init( ImplEESdrWriter& rEx );
 public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   mXPropSet;
 
-    ImplEESdrObject( ImplEscherExSdr& rEx, const SdrObject& rObj );
+    ImplEESdrObject( ImplEscherExSdr& rEx, const SdrObject& rObj, bool bOOXML = false );
     ImplEESdrObject( ImplEESdrWriter& rEx, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 
@@ -85,6 +86,7 @@ public:
 
     sal_uInt32              ImplGetText();
     sal_Bool                ImplHasText() const;
+    bool GetOOXML() const;
 };
 
 

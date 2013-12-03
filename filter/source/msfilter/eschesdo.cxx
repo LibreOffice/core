@@ -254,7 +254,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             sal_uInt32 nMirrorFlags;
 
             OUString sCustomShapeType;
-            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags, sCustomShapeType );
+            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags, sCustomShapeType, rObj.GetOOXML() );
             if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
             {
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
@@ -953,7 +953,7 @@ void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
 
 sal_uInt32 EscherEx::AddSdrObject( const SdrObject& rObj )
 {
-    ImplEESdrObject aObj( *mpImplEscherExSdr, rObj );
+    ImplEESdrObject aObj( *mpImplEscherExSdr, rObj, mbOOXML );
     if( aObj.IsValid() )
         return mpImplEscherExSdr->ImplWriteTheShape( aObj );
     return 0;
@@ -1006,13 +1006,14 @@ const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
 
 
 ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
-                                    const SdrObject& rObj ) :
+                                    const SdrObject& rObj, bool bOOXML ) :
     mnShapeId( 0 ),
     mnTextSize( 0 ),
     mnAngle( 0 ),
     mbValid( sal_False ),
     mbPresObj( sal_False ),
-    mbEmptyPresObj( sal_False )
+    mbEmptyPresObj( sal_False ),
+    mbOOXML(bOOXML)
 {
     SdrPage* pPage = rObj.GetPage();
     DBG_ASSERT( pPage, "ImplEESdrObject::ImplEESdrObject: no SdrPage" );
@@ -1033,7 +1034,8 @@ ImplEESdrObject::ImplEESdrObject( ImplEESdrWriter& rEx,
     mnAngle( 0 ),
     mbValid( sal_False ),
     mbPresObj( sal_False ),
-    mbEmptyPresObj( sal_False )
+    mbEmptyPresObj( sal_False ),
+    mbOOXML(false)
 {
     Init( rEx );
 }
@@ -1253,6 +1255,11 @@ sal_Bool ImplEESdrObject::ImplHasText() const
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
     return xXText.is() && !xXText->getString().isEmpty();
+}
+
+bool ImplEESdrObject::GetOOXML() const
+{
+    return mbOOXML;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

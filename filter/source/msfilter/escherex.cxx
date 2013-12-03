@@ -22,6 +22,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <filter/msfilter/util.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
@@ -3761,7 +3762,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     }
 }
 
-MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags, OUString& rShapeType )
+MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags, OUString& rShapeType, bool bOOXML )
 {
     MSO_SPT eShapeType = mso_sptNil;
     nMirrorFlags = 0;
@@ -3782,7 +3783,20 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                     if ( rProp.Name == "Type" )
                     {
                         if ( rProp.Value >>= rShapeType )
-                            eShapeType = EnhancedCustomShapeTypeNames::Get( rShapeType );
+                        {
+                            if (bOOXML)
+                            {
+                                // In case of VML export, try to handle the
+                                // ooxml- prefix in rShapeType. If that fails,
+                                // just do the same as the binary export.
+                                OString aType = OUStringToOString(rShapeType, RTL_TEXTENCODING_UTF8);
+                                eShapeType = msfilter::util::GETVMLShapeType(aType);
+                                if (eShapeType == mso_sptNil)
+                                    eShapeType = EnhancedCustomShapeTypeNames::Get(rShapeType);
+                            }
+                            else
+                                eShapeType = EnhancedCustomShapeTypeNames::Get( rShapeType );
+                        }
                     }
                     else if ( rProp.Name == "MirroredX" )
                     {
@@ -4933,7 +4947,7 @@ public:
     virtual ~SvNullStream() {}
 };
 
-EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm ) :
+EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML ) :
     mxGlobal                ( rxGlobal ),
     mpOutStrm               ( pOutStrm ),
     mbOwnsStrm              ( false ),
@@ -4944,7 +4958,8 @@ EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm ) :
     mnHellLayerId           ( USHRT_MAX ),
 
     mbEscherSpgr            ( sal_False ),
-    mbEscherDg              ( sal_False )
+    mbEscherDg              ( sal_False ),
+    mbOOXML(bOOXML)
 {
     if (!mpOutStrm)
     {
