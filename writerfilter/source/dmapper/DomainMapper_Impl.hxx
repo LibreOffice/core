@@ -259,6 +259,9 @@ struct RedlineParams
     OUString m_sDate;
     sal_Int32       m_nId;
     sal_Int32       m_nToken;
+
+    /// This can hold properties of runs that had formatted 'track changes' properties
+    uno::Sequence<beans::PropertyValue> m_aRevertProperties;
 };
 typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
 
@@ -675,6 +678,7 @@ public:
     void SetCurrentRedlineDate( OUString sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
+    void SetCurrentRedlineRevertProperties( uno::Sequence<beans::PropertyValue> aProperties );
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
     void SetCurrentRedlineInitials( OUString sInitials );

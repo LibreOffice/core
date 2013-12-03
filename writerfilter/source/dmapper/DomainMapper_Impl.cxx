@@ -1566,12 +1566,14 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
                 break;
             }
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
-            beans::PropertyValues aRedlineProperties( 2 );
+            beans::PropertyValues aRedlineProperties( 3 );
             beans::PropertyValue * pRedlineProperties = aRedlineProperties.getArray(  );
             pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
             pRedlineProperties[0].Value <<= pRedline->m_sAuthor;
             pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
             pRedlineProperties[1].Value <<= lcl_DateStringToDateTime( pRedline->m_sDate );
+            pRedlineProperties[2].Name = rPropNameSupplier.GetName( PROP_REDLINE_REVERT_PROPERTIES );
+            pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
 
             xRedline->makeRedline( sType, aRedlineProperties );
         }
@@ -3934,6 +3936,12 @@ void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
         pCurrent->m_nToken = nToken;
 }
 
+void DomainMapper_Impl::SetCurrentRedlineRevertProperties( uno::Sequence<beans::PropertyValue> aProperties )
+{
+    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+    if ( pCurrent.get(  ) )
+        pCurrent->m_aRevertProperties = aProperties;
+}
 
 
 void DomainMapper_Impl::RemoveCurrentRedline( )
