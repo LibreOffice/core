@@ -4674,7 +4674,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     rLineInfo.Clear();
     if ( !rStr.isEmpty() && (nWidth > 0) )
     {
-        OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
         // get service provider
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
@@ -4710,7 +4709,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
                     i18n::LineBreakUserOptions aUserOptions;
-                    i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
+                    i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
                     nBreakPos = (xub_StrLen)aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
@@ -4727,7 +4726,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         if ( xHyph.is() )
                         {
                             sal_Unicode cAlternateReplChar = 0;
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
+                            i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
                             sal_Int32 nWordStart = nPos;
                             sal_Int32 nWordEnd = (sal_Int32) aBoundary.endPos;
                             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
@@ -4737,7 +4736,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             {
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
                                 // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
-                                OUString aWord = aText.copy( nWordStart, nWordLen );
+                                OUString aWord = rStr.copy( nWordStart, nWordLen );
                                 sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Before the "broken off" char
                                 uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
