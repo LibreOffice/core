@@ -110,6 +110,13 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
+void OpCoth::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(local_cothDecl);
+    funs.insert(local_coth);
+}
+
 void OpCoth::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
@@ -134,7 +141,7 @@ void OpCoth::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
 #endif
-    ss << "    double tmp=1/tanh(arg0);\n";
+    ss << "    double tmp=local_coth(arg0);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
