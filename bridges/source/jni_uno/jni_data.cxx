@@ -1618,31 +1618,6 @@ void Bridge::map_to_java(
         if (in_param)
         {
             uno_Any const * pAny = (uno_Any const *)uno_data;
-
-#if defined BRIDGES_JNI_UNO_FORCE_BOXED_ANY
-            if (typelib_TypeClass_VOID == pAny->pType->eTypeClass)
-            {
-                jo_any.reset(
-                    jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
-            }
-            else
-            {
-                jvalue args[ 2 ];
-                map_to_java(
-                    jni, &args[ 1 ], pAny->pData, pAny->pType, 0,
-                    true /* in */, false /* no out */,
-                    true /* create integral wrappers */ );
-                jo_any.reset( args[ 1 ].l );
-                // build up com.sun.star.uno.Any
-                JLocalAutoRef jo_type( jni, create_type( jni, pAny->pType ) );
-                args[ 0 ].l = jo_type.get();
-                jo_any.reset(
-                    jni->NewObjectA(
-                        m_jni_info->m_class_Any,
-                        m_jni_info->m_ctor_Any_with_Type_Object, args ) );
-                jni.ensure_no_exception();
-            }
-#else
             switch (pAny->pType->eTypeClass)
             {
             case typelib_TypeClass_VOID:
@@ -1832,7 +1807,6 @@ void Bridge::map_to_java(
                 break;
             }
             }
-#endif
         }
 
         if (out_param)
