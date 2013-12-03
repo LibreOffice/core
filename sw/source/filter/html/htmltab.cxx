@@ -3460,7 +3460,7 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
 
     // Attributierungs-Anfang neu setzen
     const SwNodeIndex& rSttPara = pPam->GetPoint()->nNode;
-    xub_StrLen nSttCnt = pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nSttCnt = pPam->GetPoint()->nContent.GetIndex();
 
     _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
     for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );

@@ -1051,11 +1051,11 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 
             // Update the rsid of each pasted text node.
             {
-                xub_StrLen nNodesCnt = aCpyPam.End()->nNode.GetIndex() - aCpyPam.Start()->nNode.GetIndex();
+                sal_Int32 nNodesCnt = aCpyPam.End()->nNode.GetIndex() - aCpyPam.Start()->nNode.GetIndex();
                 SwNodes &rDestNodes = GetDoc()->GetNodes();
-                xub_StrLen nDestStart = PCURCRSR->GetPoint()->nNode.GetIndex() - nNodesCnt;
+                sal_Int32 nDestStart = PCURCRSR->GetPoint()->nNode.GetIndex() - nNodesCnt;
 
-                for (xub_StrLen nIdx = 0; nIdx <= nNodesCnt; ++nIdx)
+                for (sal_Int32 nIdx = 0; nIdx <= nNodesCnt; ++nIdx)
                 {
                     SwTxtNode *pTxtNode = rDestNodes[ nDestStart + nIdx ]->GetTxtNode();
                     if ( pTxtNode )

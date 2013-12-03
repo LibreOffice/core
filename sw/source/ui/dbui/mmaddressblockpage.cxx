@@ -1334,7 +1334,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
     for(sal_uLong nPara = 0; nPara < nParaCount; ++nPara)
     {
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         OUString sPara = pTextEngine->GetText( nPara );
         if(!sPara.isEmpty() && !sPara.endsWith(" "))
         {

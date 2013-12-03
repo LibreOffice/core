@@ -839,7 +839,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
                 0, 0);
     }
     bool bForceExpandHints(false);
-    const xub_StrLen nStartPos(pStartPos->nContent.GetIndex());
+    const sal_Int32 nStartPos(pStartPos->nContent.GetIndex());
     // not <= but < because nMetaStart is behind dummy char!
     // not >= but > because == means insert at end!
     if ((nStartPos < nMetaStart) || (nStartPos > nMetaEnd))
@@ -863,7 +863,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
                     "of text range not in same paragraph as text content",
                     0, 0);
         }
-        const xub_StrLen nEndPos(pEndPos->nContent.GetIndex());
+        const sal_Int32 nEndPos(pEndPos->nContent.GetIndex());
         // not <= but < because nMetaStart is behind dummy char!
         // not >= but > because == means insert at end!
         if ((nEndPos < nMetaStart) || (nEndPos > nMetaEnd))

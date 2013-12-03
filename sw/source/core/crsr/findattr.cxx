@@ -159,7 +159,7 @@ static sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
     const SwTxtAttr *pTxtHt = 0;
     sal_Bool bForward = fnMove == fnMoveForward;
     sal_uInt16 nPos = bForward ? 0 : rTxtNd.GetSwpHints().Count();
-    xub_StrLen nCntntPos = rPam.GetPoint()->nContent.GetIndex();
+    sal_Int32 nCntntPos = rPam.GetPoint()->nContent.GetIndex();
 
     while( 0 != ( pTxtHt=(*fnMove->fnGetHint)(rTxtNd.GetSwpHints(),nPos,nCntntPos)))
         if( pTxtHt->Which() == rCmpItem.Which() &&

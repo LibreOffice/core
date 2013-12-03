@@ -1721,7 +1721,7 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
     SwWrongList *pWrong;
     SwNodeIndex aIdx = rErrorPosition.Start()->nNode;
     SwNodeIndex aEndIdx = rErrorPosition.Start()->nNode;
-    xub_StrLen nStart = rErrorPosition.Start()->nContent.GetIndex();
+    sal_Int32 nStart = rErrorPosition.Start()->nContent.GetIndex();
     xub_StrLen nEnd = STRING_LEN;
     while( aIdx <= aEndIdx )
     {

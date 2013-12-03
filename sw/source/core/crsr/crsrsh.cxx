@@ -3055,7 +3055,7 @@ bool SwCrsrShell::SelectHiddenRange()
         const SwTxtNode* pNode = rPt.nNode.GetNode().GetTxtNode();
         if ( pNode )
         {
-            const xub_StrLen nPos = rPt.nContent.GetIndex();
+            const sal_Int32 nPos = rPt.nContent.GetIndex();
 
             // check if nPos is in hidden range
             xub_StrLen nHiddenStart;
