@@ -20,15 +20,6 @@
 #ifndef INCLUDED_JNI_BASE_H
 #define INCLUDED_JNI_BASE_H
 
-#if defined (__SUNPRO_CC) || defined (__SUNPRO_C)
-// workaround solaris include trouble on jumbo
-#include <stdarg.h>
-namespace std
-{
-typedef __va_list va_list;
-}
-#endif
-
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
