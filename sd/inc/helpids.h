@@ -71,9 +71,6 @@
 
 #define HID_SD_WIN_PRESENTATION                                 "SD_HID_SD_WIN_PRESENTATION"
 
-#define HID_CTL_ACTION_DLG_1                                    "SD_HID_CTL_ACTION_DLG_1"
-#define HID_CTL_ACTION_DLG_2                                    "SD_HID_CTL_ACTION_DLG_2"
-
 #define HID_SD_BTN_PRESENTATION                                 "SD_HID_SD_BTN_PRESENTATION"
 
 #define HID_SD_HTMLEXPORT_PAGE1                                 "SD_HID_SD_HTMLEXPORT_PAGE1"
