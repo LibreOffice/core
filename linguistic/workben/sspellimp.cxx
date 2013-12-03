@@ -135,12 +135,12 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale & )
     String aTmp( rWord );
     if (aTmp.Len())
     {
-        if (STRING_NOTFOUND != aTmp.SearchAscii( "liss" ))
+        if (-1 != aTmp.indexOf( "liss" ))
         {
             nRes = SpellFailure::IS_NEGATIVE_WORD;
         }
-        else if (STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'x' )  ||
-                 STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'X' ))
+        else if (-1 != aTmp.indexOf( (sal_Unicode) 'x' )  ||
+                 -1 != aTmp.indexOf( (sal_Unicode) 'X' ))
         {
             nRes = SpellFailure::SPELLING_ERROR;
         }
@@ -216,14 +216,14 @@ Reference< XSpellAlternatives >
     {
         sal_Int16 nLang = LinguLocaleToLanguage( rLocale );
 
-        if (STRING_NOTFOUND != aTmp.SearchAscii( "liss" ))
+        if (-1 != aTmp.indexOf( "liss" ))
         {
             aTmp.SearchAndReplaceAllAscii( "liss", "liz" );
             xRes = new SpellAlternatives( aTmp, nLang,
                         SpellFailure::IS_NEGATIVE_WORD, ::com::sun::star::uno::Sequence< OUString >() );
         }
-        else if (STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'x' )  ||
-                 STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'X' ))
+        else if (-1 != aTmp.indexOf( (sal_Unicode) 'x' )  ||
+                 -1 != aTmp.indexOf( (sal_Unicode) 'X' ))
         {
             Sequence< OUString > aStr( 2 );
             OUString *pStr = aStr.getArray();

@@ -231,9 +231,9 @@ IMPL_LINK( MyWin, QuitHdl, Button*, )
 
 IMPL_LINK( MyWin, SelectHdl, ListBox*, )
 {
-    String aEntry = m_aSvpBitmaps.GetSelectEntry();
-    sal_uInt16 nPos = aEntry.SearchAscii( ": " );
-    if( nPos != STRING_NOTFOUND )
+    OUString aEntry = m_aSvpBitmaps.GetSelectEntry();
+    sal_Int32 nPos = aEntry.indexOf( ": " );
+    if( nPos != -1 )
     {
         OStringBuffer aCommand( 64 );
         aCommand.append( "get " );

@@ -96,10 +96,10 @@ public:
 //-------------------------------------------------------------------------
 void MyOutWindow::Append( const String &rLine )
 {
-    String aLine( rLine );
+    OUString aLine( rLine );
 
-    xub_StrLen nPos = aLine.Search( '\n' );
-    while ( nPos != STRING_NOTFOUND )
+    sal_Int32 nPos = aLine.indexOf( '\n' );
+    while ( nPos != -1 )
     {
         if ( GetEntryCount() >= MYOUTWINDOW_MAXLINES )
             RemoveEntry( 0 );
@@ -2254,17 +2254,16 @@ void MyApp::Main()
     USHORT nParams = Application::GetCommandLineParamCount();
     for ( USHORT n = 0; n < nParams; ++n )
     {
-        String aParam( Application::GetCommandLineParam( n ) );
+        OUString aParam( Application::GetCommandLineParam( n ) );
         if (aParam.CompareIgnoreCaseToAscii("-key=",
                                             RTL_CONSTASCII_LENGTH("-key="))
                 == COMPARE_EQUAL)
         {
-            xub_StrLen nSlash
-                = aParam.Search('/', RTL_CONSTASCII_LENGTH("-key="));
-            if (nSlash == STRING_NOTFOUND)
+            sal_Int32 nSlash = aParam.indexOf('/', RTL_CONSTASCII_LENGTH("-key="));
+            if (nSlash == -1)
             {
                 aConfigurationKey1
-                    = aParam.Copy(RTL_CONSTASCII_LENGTH("-key="));
+                    = aParam.copy(RTL_CONSTASCII_LENGTH("-key="));
                 aConfigurationKey2 = "";
             }
             else
