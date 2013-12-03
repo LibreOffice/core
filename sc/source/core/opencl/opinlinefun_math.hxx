@@ -25,16 +25,18 @@ std::string bikDecl = "double bik(double n,double k);\n";
 std::string bik =
 "double bik(double n,double k)\n"
 "{\n"
-"    double nVal = n/k;\n"
+"    double nVal1 = n;\n"
+"    double nVal2 = k;\n"
 "    n = n - 1;\n"
 "    k = k - 1;\n"
 "    while (k > 0)\n"
 "    {\n"
-"        nVal = nVal * ( n/k );\n"
+"        nVal1 = nVal1 * n;\n"
+"        nVal2 = nVal2 * k;\n"
 "        k = k - 1;\n"
 "        n = n - 1;\n"
 "    }\n"
-"    return nVal;\n"
+"    return (nVal1 / nVal2);\n"
 "}\n";
 
 std::string local_cothDecl = "double local_coth(double n);\n";

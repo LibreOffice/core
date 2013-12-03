@@ -200,19 +200,19 @@ void OpCombina::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << "    arg0 = trunc(arg0);\n";
     ss << "    arg1 = trunc(arg1);\n";
-    ss << "    if(arg0 < arg1 || arg0 < 0 || arg1 < 0)\n";
-    ss << "        tem = -1;\n";
+    ss << "    if(arg0 >= arg1 && arg0 > 0 && arg1 > 0)\n";
+    ss << "        tem = bik(arg0+arg1-1,arg1);\n"; 
     ss << "    else if(arg0 == 0 && arg1 == 0)\n";
     ss << "        tem = 0;\n";
     ss << "    else if(arg0 > 0 && arg1 == 0)\n";
     ss << "        tem = 1;\n";
     ss << "    else\n";
-    ss << "        tem = bik(arg0+arg1-1,arg1);\n";
-    ss << "    double k = tem - trunc(tem);\n";
-    ss << "    if(k < 0.5)\n";
+    ss << "        tem = -1;\n";
+    ss << "    double i = tem - trunc(tem);\n";
+    ss << "    if(i < 0.5)\n";
     ss << "        tem = trunc(tem);\n";
     ss << "    else\n";
-    ss << "        tem = trunc(tem) + 1;";
+    ss << "        tem = trunc(tem) + 1;\n";
     ss << "    return tem;\n";
     ss << "}";
 }
