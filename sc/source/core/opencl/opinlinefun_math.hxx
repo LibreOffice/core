@@ -47,6 +47,15 @@ std::string local_coth =
 "    return nVal;\n"
 "}\n";
 
+std::string local_coshDecl = "double local_cosh(double n);\n";
+std::string local_cosh =
+"double local_cosh(double n)\n"
+"{\n"
+"    double nVal = (exp(n) + exp(-n)) / 2;\n"
+"    return nVal;\n"
+"}\n";
+
+
 #endif //SC_OPENCL_OPINLINFUN_MATH
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
