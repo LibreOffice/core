@@ -3203,44 +3203,7 @@ void OpNper::GenSlidingWindowFunction(std::stringstream &ss,
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-#else
-                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
-#endif
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-#else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
-#endif
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-#ifdef  ISNAN
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-#endif
-            }
-            else {
-#ifdef  ISNAN
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-#endif
-            }
-            nItems += nCurWindowSize;
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
+        if (pCur->GetType() == formula::svSingleVectorRef)
         {
 #ifdef  ISNAN
             const formula::SingleVectorRefToken* pSVR =
@@ -3288,16 +3251,17 @@ void OpNper::GenSlidingWindowFunction(std::stringstream &ss,
 #endif
     }
     ss <<"    if (tmp0 == 0.0)\n";
-    ss <<"        tmp=(-(tmp2 + tmp3)/tmp1);\n";
+    ss <<"        tmp=(-1*(tmp2 + tmp3)/tmp1);\n";
     ss <<"    else if (tmp4 > 0.0)\n";
-    ss <<"        tmp=log(-(tmp0*tmp3-tmp1*(1.0+tmp0))/";
-    ss <<"(tmp0*tmp2+tmp1*(1.0+tmp0)))/log(1.0+tmp0);\n";
+    ss <<"        tmp=log(-1*(tmp0*tmp3-tmp1*(1.0+tmp0))*";
+    ss <<"pow((tmp0*tmp2+tmp1*(1.0+tmp0)),-1))/log(1.0+tmp0);\n";
     ss <<"    else\n";
-    ss <<"        tmp=log(-(tmp0*tmp3-tmp1)/(tmp0*tmp2+tmp1))";
+    ss <<"        tmp=log(-1*(tmp0*tmp3-tmp1)*pow(tmp0*tmp2+tmp1,-1))";
     ss <<"/log(1.0+tmp0);\n";
     ss <<"    return tmp;\n";
     ss <<"}";
  }
+
 void OpPPMT::BinInlineFun(std::set<std::string>& decls,
         std::set<std::string>& funs)
 {
