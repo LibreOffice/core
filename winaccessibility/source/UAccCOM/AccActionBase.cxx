@@ -334,6 +334,7 @@ OLECHAR* CAccActionBase::getOLECHARFromKeyCode(long key)
     }
     map[] =
         {
+#define CODEENTRY(key)   {KEYCODE_##key, L#key}
             {MODIFIER_SHIFT, L"SHIFT" },
             {MODIFIER_CTRL, L"CTRL" },
             {MODIFIER_ALT, L"ALT" },
@@ -386,7 +387,7 @@ OLECHAR* CAccActionBase::getOLECHARFromKeyCode(long key)
             { KEYCODE_CONTEXTMENU, L"CONTEXTMENU" },
             { KEYCODE_HELP, L"HELP" },
         };
-    static long nCount = countof(map);
+    static long nCount = SAL_N_ELEMENTS(map);
 
     long min = 0;
     long max = nCount-1;
