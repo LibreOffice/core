@@ -303,6 +303,11 @@ OUString XmlFilterBase::getNamespaceURL( const OUString& rPrefix )
     return mxImpl->maFastParser.getNamespaceURL( rPrefix );
 }
 
+bool XmlFilterBase::hasNamespaceURL( const OUString& rPrefix ) const
+{
+    return mxImpl->maFastParser.hasNamespaceURL(rPrefix);
+}
+
 sal_Int32 XmlFilterBase::getNamespaceId( const OUString& rUrl )
 {
      return mxImpl->maFastParser.getNamespaceId( rUrl );

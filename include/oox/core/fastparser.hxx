@@ -75,10 +75,12 @@ public:
     void                parseStream( StorageBase& rStorage, const OUString& rStreamName, bool bCloseStream = false )
                             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
 
-     OUString getNamespaceURL( const OUString& rPrefix )
+    OUString getNamespaceURL( const OUString& rPrefix )
                         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-     sal_Int32 getNamespaceId( const OUString& aUrl );
+    bool hasNamespaceURL( const OUString& rPrefix ) const;
+
+    sal_Int32 getNamespaceId( const OUString& aUrl );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >
                getTokenHandler() const { return mxTokenHandler; }

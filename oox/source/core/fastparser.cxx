@@ -25,6 +25,8 @@
 #include "oox/helper/storagebase.hxx"
 #include "oox/token/namespacemap.hxx"
 
+#include "sax/fastparser.hxx"
+
 namespace oox {
 namespace core {
 
@@ -66,11 +68,13 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
 // ============================================================================
 
 FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    mrNamespaceMap( StaticNamespaceMap::get() )
+    mrNamespaceMap( StaticNamespaceMap::get() ),
+    mpParser(NULL)
 {
     // create a fast parser instance
     Reference< XMultiComponentFactory > xFactory( rxContext->getServiceManager(), UNO_SET_THROW );
     mxParser.set( xFactory->createInstanceWithContext( "com.sun.star.xml.sax.FastParser", rxContext ), UNO_QUERY_THROW );
+    mpParser = dynamic_cast<sax_fastparser::FastSaxParser*>(mxParser.get());
 
     // create the fast tokenhandler
     mxTokenHandler.set( new FastTokenHandler );
@@ -129,6 +133,17 @@ OUString FastParser::getNamespaceURL( const OUString& rPrefix ) throw( IllegalAr
     if( !mxParser.is() )
         throw RuntimeException();
     return mxParser->getNamespaceURL( rPrefix );
+}
+
+bool FastParser::hasNamespaceURL( const OUString& rPrefix ) const
+{
+    if (!mxParser.is())
+        throw RuntimeException();
+
+    if (!mpParser)
+        return false;
+
+    return mpParser->hasNamespaceURL(rPrefix);
 }
 
 sal_Int32 FastParser::getNamespaceId( const OUString& rUrl )

@@ -140,8 +140,11 @@ public:
     void pushEntity( const Entity& rEntity );
     void popEntity();
     Entity& getEntity();
+    const Entity& getEntity() const;
     void parse();
     void produce( CallbackType aType );
+
+    bool hasNamespaceURL( const OUString& rPrefix ) const;
 
 private:
     bool consume(EventList *);

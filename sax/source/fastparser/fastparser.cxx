@@ -859,6 +859,24 @@ void FastSaxParser::produce( CallbackType aType )
     }
 }
 
+bool FastSaxParser::hasNamespaceURL( const OUString& rPrefix ) const
+{
+    const Entity& rEntity = getEntity();
+
+    if (rEntity.maNamespaceCount.empty())
+        return false;
+
+    OString aPrefix = OUStringToOString(rPrefix, RTL_TEXTENCODING_UTF8);
+    sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
+    while (nNamespace--)
+    {
+        if (rEntity.maNamespaceDefines[nNamespace]->maPrefix == aPrefix)
+            return true;
+    }
+
+    return false;
+}
+
 bool FastSaxParser::consume(EventList *pEventList)
 {
     Entity& rEntity = getEntity();
@@ -920,6 +938,11 @@ void FastSaxParser::popEntity()
 }
 
 Entity& FastSaxParser::getEntity()
+{
+    return maEntities.top();
+}
+
+const Entity& FastSaxParser::getEntity() const
 {
     return maEntities.top();
 }
