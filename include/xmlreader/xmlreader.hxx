@@ -39,6 +39,8 @@ namespace xmlreader {
 
 class OOO_DLLPUBLIC_XMLREADER XmlReader: private boost::noncopyable {
 public:
+    explicit XmlReader(char *sStr, const sal_uInt32 nLength);
+
     explicit XmlReader(OUString const & fileUrl)
         SAL_THROW((
             com::sun::star::container::NoSuchElementException,

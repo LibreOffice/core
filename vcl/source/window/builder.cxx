@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+
+#include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
@@ -98,24 +101,44 @@ void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUStrin
             aTransBuf.append('.');
             nLastSlash = 0;
         }
-        aTransBuf.append("/res/").append(rLanguageTag.getLanguage());
+        aTransBuf.append("/res/");
+        OUString sLang(rLanguageTag.getLanguage());
         switch (i)
         {
             case 0:
-                aTransBuf.append('-').append(rLanguageTag.getCountry());
+                sLang = sLang + "-" + rLanguageTag.getCountry();
                 break;
             default:
                 break;
         }
+        aTransBuf.append(sLang);
+        aTransBuf.append(".zip");
         sal_Int32 nEndName = rUri.lastIndexOf('.');
         if (nEndName == -1)
             nEndName = rUri.getLength();
-        aTransBuf.append(rUri.copy(nLastSlash, nEndName-nLastSlash));
-
-        OUString sTransUri = aTransBuf.makeStringAndClear();
+        OUString sZippedFile(rUri.copy(nLastSlash + 1, nEndName - nLastSlash - 1) + "/" + sLang + ".ui");
         try
         {
-            xmlreader::XmlReader reader(sTransUri);
+            uno::Reference<packages::zip::XZipFileAccess2> xNameAccess =
+                packages::zip::ZipFileAccess::createWithURL(
+                        comphelper::getProcessComponentContext(), aTransBuf.makeStringAndClear());
+            if (!xNameAccess.is())
+                continue;
+            uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(sZippedFile), uno::UNO_QUERY);
+            if (!xInputStream.is())
+                continue;
+            OStringBuffer sStr;
+            for (;;)
+            {
+                sal_Int32 const size = 2048;
+                css::uno::Sequence< sal_Int8 > data(size);
+                sal_Int32 n = xInputStream->readBytes(data, size);
+                sStr.append(reinterpret_cast<const sal_Char *>(data.getConstArray()), n);
+                if (n < size)
+                    break;
+            }
+
+            xmlreader::XmlReader reader(const_cast<char *>(sStr.getStr()), sStr.getLength());
             handleTranslations(reader);
             break;
         }

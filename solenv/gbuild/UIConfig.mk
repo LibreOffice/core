@@ -61,17 +61,17 @@ $(call gb_UILocalizeTarget_get_clean_target,%) :
 #
 # gb_UILocalizeTarget_UILocalizeTarget target
 define gb_UILocalizeTarget_UILocalizeTarget
-$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)))
+$(call gb_UILocalizeTarget__UILocalizeTarget_impl,$(1),$(2),$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po)))
 
 endef
 
 # gb_UILocalizeTarget__UILocalizeTarget_impl target pofiles
 define gb_UILocalizeTarget__UILocalizeTarget_impl
-$(call gb_UILocalizeTarget_get_target,$(1)) : POFILES := $(2)
-$(call gb_UILocalizeTarget_get_target,$(1)) : UIConfig_FILE := $(SRCDIR)/$(1).ui
+$(call gb_UILocalizeTarget_get_target,$(1)) : POFILES := $(3)
+$(call gb_UILocalizeTarget_get_target,$(1)) : UIConfig_FILE := $(SRCDIR)/$(2).ui
 
-$(call gb_UILocalizeTarget_get_target,$(1)) : $(2)
-$(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(1).ui
+$(call gb_UILocalizeTarget_get_target,$(1)) : $(3)
+$(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) :| \
 	$(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir \
 	$(call gb_UILocalizeTarget_get_workdir,$(1))/.dir
@@ -216,10 +216,6 @@ $(call gb_UIConfig_get_imagelist_target,$(1)) :| $(dir $(call gb_UIConfig_get_im
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 
-ifneq ($(gb_UIConfig_LANGS),)
-$(foreach lang,$(gb_UIConfig_LANGS),$(call gb_UIConfig__UIConfig_for_lang,$(1),$(lang)))
-endif
-
 $$(eval $$(call gb_Module_register_target,$(call gb_UIConfig_get_target,$(1)),$(call gb_UIConfig_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UIConfig)
 $(call gb_Postprocess_register_target,AllUIConfigs,UIConfig,$(1))
@@ -227,9 +223,10 @@ $(call gb_Postprocess_register_target,AllUIConfigs,UIConfig,$(1))
 endef
 
 define gb_UIConfig__UIConfig_for_lang
-$(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(gb_UILocalizeTarget_WORKDIR))
-$(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
-$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
+$(call gb_Zip_Zip_internal,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(gb_UILocalizeTarget_WORKDIR)/$(1))
+$(call gb_Zip_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2))) : $(SRCDIR)/solenv/gbuild/UIConfig.mk
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_Zip_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 
 endef
 
@@ -260,8 +257,9 @@ endef
 #
 # gb_UIConfig__add_uifile_for_lang target file lang
 define gb_UIConfig__add_uifile_for_lang
-$(call gb_UIConfig__package_uifile,$(1),$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3)),res/$(3)/$(notdir $(2)),$(2)/$(3).ui)
-$(call gb_Package_SOURCEDIR_$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3)))/$(2)/$(3).ui : $(call gb_UILocalizeTarget_get_target,$(2))
+$(call gb_Zip_add_file,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3)),$(notdir $(2))/$(3).ui)
+$(call gb_Zip_add_dependency,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3)),$(call gb_UILocalizeTarget_get_target,$(1)/$(notdir $(2))))
+$(call gb_Zip_set_install_name,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(3)),$(INSTROOT)/$(gb_UIConfig_INSTDIR)/$(1)/ui/res/$(3).zip)
 
 endef
 
@@ -278,9 +276,9 @@ endef
 
 # gb_UIConfig__add_translations_impl target uifile langs
 define gb_UIConfig__add_translations_impl
-$(call gb_UILocalizeTarget_UILocalizeTarget,$(2))
-$(call gb_UIConfig_get_target,$(1)) : $(call gb_UILocalizeTarget_get_target,$(2))
-$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UILocalizeTarget_get_clean_target,$(2))
+$(call gb_UILocalizeTarget_UILocalizeTarget,$(1)/$(notdir $(2)),$(2))
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_UILocalizeTarget_get_target,$(1)/$(notdir $(2)))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UILocalizeTarget_get_clean_target,$(1)/$(notdir $(2)))
 $(foreach lang,$(3),$(call gb_UIConfig__add_uifile_for_real_lang,$(1),$(2),$(lang)))
 
 endef
@@ -313,6 +311,7 @@ gb_UIConfig_ALLFILES:=
 #
 # gb_UIConfig_add_uifile target uifile
 define gb_UIConfig_add_uifile
+$(if $(3),,$(call gb_Output_error,gb_UIConfig_add_uifile: Do not use. Use gb_UIConfig_add_uifiles and only once.))
 gb_UIConfig_ALLFILES+=$(1):$(notdir $(2))
 $(call gb_UIConfig__add_uifile,$(1),$(2))
 
@@ -326,7 +325,11 @@ endef
 #
 # gb_UIConfig_add_uifiles target uifile(s)
 define gb_UIConfig_add_uifiles
-$(foreach uifile,$(2),$(call gb_UIConfig_add_uifile,$(1),$(uifile)))
+ifneq ($(gb_UIConfig_LANGS),)
+$(foreach lang,$(gb_UIConfig_LANGS),$(call gb_UIConfig__UIConfig_for_lang,$(1),$(lang)))
+endif
+
+$(foreach uifile,$(2),$(call gb_UIConfig_add_uifile,$(1),$(uifile),do-not-fail))
 
 endef
 
