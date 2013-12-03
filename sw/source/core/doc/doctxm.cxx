@@ -75,9 +75,9 @@ TYPEINIT2( SwTOXBaseSection, SwTOXBase, SwSection );    // for RTTI
 struct LinkStruct
 {
     SwFmtINetFmt    aINetFmt;
-    xub_StrLen nStartTextPos, nEndTextPos;
+    sal_Int32 nStartTextPos, nEndTextPos;
 
-    LinkStruct( const OUString& rURL, xub_StrLen nStart, xub_StrLen nEnd )
+    LinkStruct( const OUString& rURL, sal_Int32 nStart, sal_Int32 nEnd )
         : aINetFmt( rURL, aEmptyOUStr),
         nStartTextPos( nStart),
         nEndTextPos(nEnd) {}
@@ -188,9 +188,9 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 class CompareNodeCntnt
 {
     sal_uLong nNode;
-    xub_StrLen nCntnt;
+    sal_Int32 nCntnt;
 public:
-    CompareNodeCntnt( sal_uLong nNd, xub_StrLen nCnt )
+    CompareNodeCntnt( sal_uLong nNd, sal_Int32 nCnt )
         : nNode( nNd ), nCntnt( nCnt ) {}
 
     int operator==( const CompareNodeCntnt& rCmp ) const
@@ -221,9 +221,9 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 
     CompareNodeCntnt aAbsIdx( pTOXSrc->GetIndex(), *pMark->GetStart() );
     CompareNodeCntnt aPrevPos( 0, 0 );
-    CompareNodeCntnt aNextPos( ULONG_MAX, STRING_NOTFOUND );
+    CompareNodeCntnt aNextPos( ULONG_MAX, SAL_MAX_INT32 );
     CompareNodeCntnt aMax( 0, 0 );
-    CompareNodeCntnt aMin( ULONG_MAX, STRING_NOTFOUND );
+    CompareNodeCntnt aMin( ULONG_MAX, SAL_MAX_INT32 );
 
     const SwTOXMark*    pNew    = 0;
     const SwTOXMark*    pMax    = &rCurTOXMark;
@@ -2020,7 +2020,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         for(sal_uInt16 nHintIdx = 0; nHintIdx < pHints->GetStartCount(); nHintIdx++)
         {
             SwTxtAttr* pAttr = pHints->GetStart(nHintIdx);
-            const xub_StrLen nTmpEnd = pAttr->End() ? *pAttr->End() : 0;
+            const sal_Int32 nTmpEnd = pAttr->End() ? *pAttr->End() : 0;
             if( nStartPos >= *pAttr->GetStart() &&
                 (nStartPos + 2) <= nTmpEnd &&
                 pAttr->Which() == RES_TXTATR_CHARFMT)
@@ -2136,8 +2136,8 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         SwFmtCharFmt aCharFmt(pCharFmt);
         for (sal_uInt16 j = 0; j < xCharStyleIdx->size(); j += 2)
         {
-            xub_StrLen nStartIdx = (*xCharStyleIdx)[j] + nOffset;
-            xub_StrLen nEndIdx = (*xCharStyleIdx)[j + 1]  + nOffset;
+            sal_Int32 nStartIdx = (*xCharStyleIdx)[j] + nOffset;
+            sal_Int32 nEndIdx   = (*xCharStyleIdx)[j + 1]  + nOffset;
             pNd->InsertItem(aCharFmt, nStartIdx, nEndIdx, nsSetAttrMode::SETATTR_DONTEXPAND);
         }
 
