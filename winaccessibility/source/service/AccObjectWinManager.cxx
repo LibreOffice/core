@@ -26,9 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <oleacc.h>
-#ifndef _SV_AccObjectWinManager_HXX
 #include "AccObjectWinManager.hxx"
-#endif
 #include "AccEventListener.hxx"
 #include "AccComponentEventListener.hxx"
 #include "AccContainerEventListener.hxx"
