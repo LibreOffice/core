@@ -16,6 +16,10 @@ $(eval $(call gb_Library_set_include,fastsax,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_add_defs,fastsax,\
+    -DSAX_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_sdk_api,fastsax))
 
 $(eval $(call gb_Library_use_externals,fastsax,\
