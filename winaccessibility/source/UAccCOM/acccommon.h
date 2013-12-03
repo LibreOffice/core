@@ -63,10 +63,6 @@ inline BOOL ImplIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 #define InlineIsEqualGUID ImplIsEqualGUID
 //End
 
-//for AccAction.cxx
-#define CODEENTRY(key) \
-    {KEYCODE_##key, L#key}
-#define countof(x)  (sizeof(x)/sizeof(x[0]))
 
 #define SELECT       L"Select"
 #define PRESS        L"Press"

@@ -3098,7 +3098,7 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
     *states = 0x0;
     for( int i = 0; i < count; i++  )
     {
-        for( int j = 0; j < sizeof(UNO_STATES) / sizeof(UNO_STATES[0]); j++ )
+        for( int j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
         {
             if( pStates[i] == UNO_STATES[j] )
             {
