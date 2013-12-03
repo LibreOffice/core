@@ -158,7 +158,7 @@ public:
                         const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual salInt32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
+    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // for glyph+font+script fallback
