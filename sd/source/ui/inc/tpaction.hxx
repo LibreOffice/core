@@ -23,8 +23,8 @@
 
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <svx/dlgctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -40,15 +40,12 @@ class SdDrawDocument;
 /**
  * Effect-SingleTab-Dialog
  */
-class SdActionDlg : public SfxNoLayoutSingleTabDialog
+class SdActionDlg : public SfxSingleTabDialog
 {
 private:
     const SfxItemSet&   rOutAttrs;
-
 public:
-
-            SdActionDlg( Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView );
-            ~SdActionDlg() {};
+    SdActionDlg(Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);
 };
 
 /**
@@ -57,22 +54,21 @@ public:
 class SdTPAction : public SfxTabPage
 {
 private:
-    FixedText               aFtAction;              // always visible
-    ListBox                 aLbAction;
+    ListBox*                m_pLbAction;
 
-    FixedText               aFtTree;                // jump destination controls
-    SdPageObjsTLB           aLbTree;
-    SdPageObjsTLB           aLbTreeDocument;
-    ListBox                 aLbOLEAction;
+    FixedText*              m_pFtTree;                // jump destination controls
+    SdPageObjsTLB*          m_pLbTree;
+    SdPageObjsTLB*          m_pLbTreeDocument;
+    ListBox*                m_pLbOLEAction;
 
-    FixedLine               aFlSeparator;
-    Edit                    aEdtSound;
-    Edit                    aEdtBookmark;
-    Edit                    aEdtDocument;
-    Edit                    aEdtProgram;
-    Edit                    aEdtMacro;
-    PushButton              aBtnSearch;
-    PushButton              aBtnSeek;
+    VclFrame*               m_pFrame;
+    Edit*                   m_pEdtSound;
+    Edit*                   m_pEdtBookmark;
+    Edit*                   m_pEdtDocument;
+    Edit*                   m_pEdtProgram;
+    Edit*                   m_pEdtMacro;
+    PushButton*             m_pBtnSearch;
+    PushButton*             m_pBtnSeek;
 
     const SfxItemSet&       rOutAttrs;
     const ::sd::View*       mpView;

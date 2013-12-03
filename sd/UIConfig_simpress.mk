@@ -83,6 +83,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/headerfooterdialog \
 	sd/uiconfig/simpress/ui/headerfootertab \
 	sd/uiconfig/simpress/ui/insertslides \
+	sd/uiconfig/simpress/ui/interactiondialog \
+	sd/uiconfig/simpress/ui/interactionpage \
 	sd/uiconfig/simpress/ui/masterlayoutdlg \
 	sd/uiconfig/simpress/ui/optimpressgeneralpage \
 	sd/uiconfig/simpress/ui/photoalbum \
