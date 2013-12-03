@@ -45,15 +45,6 @@ struct ltComp
     }
 };
 
-#define BEGIN_AGGOBJECT_MAP(x) \
-    static _UNO_AGGMAP_ENTRY* WINAPI _GetAggEntries() { \
-    static _UNO_AGGMAP_ENTRY _aggentries[] = {
-#define END_AGGOBJECT_MAP()   {NULL, NULL,NULL}}; \
-    return _aggentries;}
-#define AGGOBJECT_ENTRY(iid, clsid, ifindex) {&iid, \
-    CComAggregateCreator< CComObject<CMAccessible>, &clsid >::CreateInstance,\
-    XI_##ifindex},
-
 enum DM_NIR {
     DM_FIRSTCHILD = 0x00,
     DM_LASTCHILD = 0x01,

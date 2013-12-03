@@ -65,32 +65,6 @@ class ATL_NO_VTABLE CMAccessible :
 {
     typedef ::std::map<const GUID, CComPtr<IUnknown>, ltComp> XGUIDToComObjHash;
 
-    typedef HRESULT (WINAPI _UNO_AGGCREATORFUNC)(void*, REFIID, LPVOID*);
-
-    struct _UNO_AGGMAP_ENTRY
-    {
-        const IID* piid;
-        _UNO_AGGCREATORFUNC* pfnCreateInstance;
-        int XIFIndex;
-    };
-
-    enum XInterfaceIndex {
-        XI_COMPONENT    = 0x01,
-        XI_TEXT         = 0x02,
-        XI_TABLE        = 0x03,
-        XI_EDITABLETEXT = 0x04,
-        XI_IMAGE        = 0x05,
-        XI_SELECTION    = 0x06,
-        XI_EXTENDEDCOMP = 0x07,
-        XI_VALUE        = 0x08,
-        XI_KEYBINDING   = 0x09,
-        XI_ACTION       = 0x0A,
-        XI_HYPERTEXT    = 0x0B,
-        XI_HYPERLINK    = 0x0C,
-        XI_ATTRIBUTE    = 0x0D,
-        XI_NULL         = -1
-    };
-
 public:
     CMAccessible();
     virtual ~CMAccessible();
@@ -110,21 +84,6 @@ public:
     COM_INTERFACE_ENTRY(IServiceProvider)
     COM_INTERFACE_ENTRY_FUNC_BLIND(NULL,_SmartQI)
     END_COM_MAP()
-
-    // AGGREGATE OBJECT MAP
-    BEGIN_AGGOBJECT_MAP(CMAccessible)
-    AGGOBJECT_ENTRY(IID_IAccessibleComponent, CLSID_AccComponent, COMPONENT)
-    AGGOBJECT_ENTRY(IID_IAccessibleText, CLSID_AccText, TEXT)
-    AGGOBJECT_ENTRY(IID_IAccessibleEditableText, CLSID_AccEditableText, EDITABLETEXT)
-    AGGOBJECT_ENTRY(IID_IAccessibleImage, CLSID_AccImage, IMAGE)
-    AGGOBJECT_ENTRY(IID_IAccessibleTable, CLSID_AccTable, TABLE)
-    AGGOBJECT_ENTRY(IID_IAccessibleAction, CLSID_AccAction, ACTION)
-    AGGOBJECT_ENTRY(IID_IAccessibleValue, CLSID_AccValue, VALUE)
-    AGGOBJECT_ENTRY(IID_IAccessibleHypertext, CLSID_AccHypertext, HYPERTEXT)
-    AGGOBJECT_ENTRY(IID_IAccessibleHyperlink, CLSID_AccHyperLink, HYPERLINK)
-
-
-    END_AGGOBJECT_MAP()
 
     // IMAccessible
     STDMETHOD(put_accValue)(VARIANT varChild,BSTR szValue);
