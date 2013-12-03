@@ -300,6 +300,12 @@ protected:
         return data;
     }
 
+    bool hasProperty(const uno::Reference<uno::XInterface>& obj, const OUString& name) const
+    {
+        uno::Reference<beans::XPropertySet> properties(obj, uno::UNO_QUERY_THROW);
+        return properties->getPropertySetInfo()->hasPropertyByName(name);
+    }
+
     /// Get number of paragraphs of the document.
     int getParagraphs()
     {

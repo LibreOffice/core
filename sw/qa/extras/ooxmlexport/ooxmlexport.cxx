@@ -1175,14 +1175,7 @@ DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
 
     // make sure we don't introduce a redlined delete in the 2nd paragraph
     xParagraph = getParagraph(2);
-    OUString aProperty;
-    try
-    {
-        // throws when not present
-        aProperty = getProperty<OUString>(getRun(xParagraph, 1), "RedlineType");
-    }
-    catch (const beans::UnknownPropertyException&) {}
-    CPPUNIT_ASSERT_EQUAL(OUString(), aProperty);
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(xParagraph, 1), "RedlineType"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
