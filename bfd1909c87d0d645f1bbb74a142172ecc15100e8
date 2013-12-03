@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///Sg\u003d",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-12-03T23:22:06Z",
+      "side": 0,
+      "message": "are you sure that the HasAtHook() [ and SAL_FORCE_IACCESSIBLE2 to override it  ] can be removed?\nit checks that a screen reader is actually running...\n\n(check used to be in winaccessibility but i\u0027ve moved it here)",
+      "revId": "bfd1909c87d0d645f1bbb74a142172ecc15100e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///Sc\u003d",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-12-03T23:22:06Z",
+      "side": 0,
+      "message": "wow that java error handling is huge...\n\nperhaps some of these SV_ACCESSERROR_* can be removed too - can do that in a followup patch of course",
+      "revId": "bfd1909c87d0d645f1bbb74a142172ecc15100e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
