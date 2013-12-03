@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCOBJECTWINMANAGER_HXX
-#define __ACCOBJECTWINMANAGER_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTWINMANAGER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTWINMANAGER_HXX
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -144,6 +144,6 @@ public:
     bool IsStateManageDescendant(com::sun::star::accessibility::XAccessible* pAccessible);
 
 };
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTWINMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

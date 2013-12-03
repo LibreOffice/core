@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __UNOXWRAPPER_H_
-#define __UNOXWRAPPER_H_
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_UNOXWRAPPER_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_UNOXWRAPPER_H
 
 #include "resource.h"       // main symbols
 
@@ -65,6 +65,6 @@ protected:
     com::sun::star::accessibility::XAccessible* pUNOInterface;
 };
 
-#endif //__UNOXWRAPPER_H_
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_UNOXWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

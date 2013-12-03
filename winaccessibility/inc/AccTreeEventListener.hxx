@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCTREEEVENTLISTENER_HXX
-#define __ACCTREEEVENTLISTENER_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCTREEEVENTLISTENER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCTREEEVENTLISTENER_HXX
 
 #include <stdio.h>
 #include "AccDescendantManagerEventListener.hxx"
@@ -46,6 +46,6 @@ public:
             css::uno::Any oldValue, css::uno::Any newValue);
 };
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCTREEEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

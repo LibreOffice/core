@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCRESOURCE_HXX
-#define _ACCRESOURCE_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCRESOURCE_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCRESOURCE_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -61,7 +61,6 @@ public:
     static ::rtl::OUString loadString(sal_uInt16 _nResId);
 };
 
-
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

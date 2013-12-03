@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCACTION_H_
-#define __ACCACTION_H_
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTION_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTION_H
 
 #include "resource.h"       // main symbols
 #include "AccActionBase.h"
@@ -100,6 +100,6 @@ public:
 
 };
 
-#endif //__ACCACTION_H_
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTION_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCESSIBLEKEYSTROKE_H_
-#define __ACCESSIBLEKEYSTROKE_H_
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCESSIBLEKEYSTROKE_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCESSIBLEKEYSTROKE_H
 
 #pragma once
 
@@ -152,6 +152,6 @@ const short PROPERTIES = 17;
 const short FRONT = 18;
 
 
-#endif //#define __ACCESSIBLEKEYSTROKE_H_
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCESSIBLEKEYSTROKE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

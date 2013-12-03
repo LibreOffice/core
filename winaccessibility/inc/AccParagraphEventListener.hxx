@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCPARAGRAPHEVENTLISTENER_HXX
-#define __ACCPARAGRAPHEVENTLISTENER_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCPARAGRAPHEVENTLISTENER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCPARAGRAPHEVENTLISTENER_HXX
 
 #include <stdio.h>
 #include "AccContainerEventListener.hxx"
@@ -51,6 +51,6 @@ public:
     void HandleTextSelectionChangedEvent();
 };
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCPARAGRAPHEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

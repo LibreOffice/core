@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCCONTAINEREVENTLISTENERHXX
-#define __ACCCONTAINEREVENTLISTENERHXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCCONTAINEREVENTLISTENER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCCONTAINEREVENTLISTENER_HXX
 
 #include <stdio.h>
 #include "AccEventListener.hxx"
@@ -97,6 +97,6 @@ public:
     virtual void HandleNameChangedEvent(css::uno::Any name) SAL_OVERRIDE;
 };
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCCONTAINEREVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

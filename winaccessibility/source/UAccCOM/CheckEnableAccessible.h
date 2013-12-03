@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHECKENABLEACCESSIBLE_HXX
-#define _CHECKENABLEACCESSIBLE_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_CHECKENABLEACCESSIBLE_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_CHECKENABLEACCESSIBLE_H
 
 inline bool IsEnableAccessibleInterface() { return true; }
 
 #define CHECK_ENABLE_INF if(!IsEnableAccessibleInterface()){ return S_FALSE; }
 #define CHECK_ENABLE_INF_ZERO if(!IsEnableAccessibleInterface()){ return 0; }
 
-#endif //_CHECKENABLEACCESSIBLE_HXX
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_CHECKENABLEACCESSIBLE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

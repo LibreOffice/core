@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCMENUEVENTLISTENER_HXX
-#define __ACCMENUEVENTLISTENER_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCMENUEVENTLISTENER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCMENUEVENTLISTENER_HXX
 
 #include <stdio.h>
 #include "AccComponentEventListener.hxx"
@@ -52,6 +52,6 @@ public:
     virtual void FireStatePropertyChange(short state, bool set) SAL_OVERRIDE;
 };
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCMENUEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

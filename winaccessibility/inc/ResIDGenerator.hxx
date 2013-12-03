@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __RESIDGENERATOR_HXX
-#define __RESIDGENERATOR_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_RESIDGENERATOR_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_RESIDGENERATOR_HXX
 
 #define PRIMARY_RESID 0x00000001
 #include <deque>
@@ -45,6 +45,6 @@ public:
 
 };
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_RESIDGENERATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

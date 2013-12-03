@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCOBJECTMANAGERAGENT_HXX
-#define __ACCOBJECTMANAGERAGENT_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTMANAGERAGENT_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTMANAGERAGENT_HXX
 
 #include <boost/scoped_ptr.hpp>
 

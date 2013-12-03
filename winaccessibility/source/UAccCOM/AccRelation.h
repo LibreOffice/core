@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCRELATION_H_
-#define __ACCRELATION_H_
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCRELATION_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCRELATION_H
 
 #include "resource.h"       // main symbols
 
@@ -83,6 +83,6 @@ private:
     com::sun::star::accessibility::AccessibleRelation relation;
 };
 
-#endif //__ACCRELATION_H_
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCRELATION_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

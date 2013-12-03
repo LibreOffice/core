@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCTOPWINDOWLISTENER_HXX
-#define __ACCTOPWINDOWLISTENER_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCTOPWINDOWLISTENER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCTOPWINDOWLISTENER_HXX
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
@@ -63,6 +63,6 @@ public:
     sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 };
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCTOPWINDOWLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

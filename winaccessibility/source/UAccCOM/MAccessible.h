@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MACCESSIBLE_H_
-#define __MACCESSIBLE_H_
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_MACCESSIBLE_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_MACCESSIBLE_H
 
 #include <windows.h>
 #include "resource.h"       // main symbols
@@ -294,6 +294,6 @@ public:
 
 
 
-#endif //__MACCESSIBLE_H_
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_MACCESSIBLE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

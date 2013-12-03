@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ACCHELPER_HXX
-#define __ACCHELPER_HXX
+#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCHELPER_HXX
+#define INCLUDED_WINACCESSIBILITY_INC_ACCHELPER_HXX
 
 #include <UAccCOMdllapi.h>
 
@@ -35,6 +35,6 @@ enum DIRECTION
 struct IMAccessible;
 UACCCOM_DLLPUBLIC IMAccessible * UAccCOMCreateInstance();
 
-#endif
+#endif // INCLUDED_WINACCESSIBILITY_INC_ACCHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
