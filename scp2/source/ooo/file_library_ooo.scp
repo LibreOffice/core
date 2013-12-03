@@ -275,7 +275,7 @@ SPECIAL_LIB_FILE(gid_File_Lib_Sqlite3,sqlite3)
 #else
 #if !defined(MACOSX)
 File gid_File_Lib_Sqlite3
-    Name = "sqlite/" SPECIAL_NAME(sqlite3);
+    Name = SPECIAL_NAME(sqlite3);
     PACKED_LIB_FILE_BODY;
 End
 #endif //!defined(MACOSX)

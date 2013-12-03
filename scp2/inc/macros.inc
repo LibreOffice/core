@@ -481,12 +481,12 @@ End
 
 #include <langmacros.inc>
 
-#define UI_FILELIST_ALL_LANG(name, file, ext) \
+#define UI_FILELIST_ALL_LANG(name, file) \
     File CONCAT3(gid_File_Share_Config_Sofficecfg_uiconfig_, name, _Lang) \
         TXT_FILE_BODY; \
-        Styles = (FILELIST); \
-        Dir = FILELIST_DIR; \
-        EXTRA_ALL_LANG_BUT_EN_US(file, ext); \
+        Styles = (PACKED); \
+        Dir = gid_Dir_Share_Config_Sofficecfg; \
+        UI_ALL_LANG_BUT_EN_US(file); \
     End
 
 #define URE_PRIVATE_LIB(id,name) \

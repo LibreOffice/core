@@ -607,31 +607,31 @@ UI_FILELIST(uui, "UIConfig/uui.filelist")
 UI_FILELIST(vcl, "UIConfig/vcl.filelist")
 UI_FILELIST(xmlsec, "UIConfig/xmlsec.filelist")
 
-UI_FILELIST_ALL_LANG(basicide, UIConfig/modules/BasicIDE, filelist)
-UI_FILELIST_ALL_LANG(cui, UIConfig/cui, filelist)
+UI_FILELIST_ALL_LANG(basicide, modules/BasicIDE)
+UI_FILELIST_ALL_LANG(cui, cui)
 #ifdef DBCONNECTIVITY
-UI_FILELIST_ALL_LANG(dbaccess, UIConfig/dbaccess, filelist)
+UI_FILELIST_ALL_LANG(dbaccess, dbaccess)
 #endif
-UI_FILELIST_ALL_LANG(desktop, UIConfig/desktop, filelist)
-UI_FILELIST_ALL_LANG(filter, UIConfig/filter, filelist)
-UI_FILELIST_ALL_LANG(scalc, UIConfig/modules/scalc, filelist)
-UI_FILELIST_ALL_LANG(schart, UIConfig/modules/schart, filelist)
-UI_FILELIST_ALL_LANG(sdraw, UIConfig/modules/sdraw, filelist)
-UI_FILELIST_ALL_LANG(sfx, UIConfig/sfx, filelist)
-UI_FILELIST_ALL_LANG(simpress, UIConfig/modules/simpress, filelist)
-UI_FILELIST_ALL_LANG(smath, UIConfig/modules/smath, filelist)
+UI_FILELIST_ALL_LANG(desktop, desktop)
+UI_FILELIST_ALL_LANG(filter, filter)
+UI_FILELIST_ALL_LANG(scalc, modules/scalc)
+UI_FILELIST_ALL_LANG(schart, modules/schart)
+UI_FILELIST_ALL_LANG(sdraw, modules/sdraw)
+UI_FILELIST_ALL_LANG(sfx, sfx)
+UI_FILELIST_ALL_LANG(simpress, modules/simpress)
+UI_FILELIST_ALL_LANG(smath, modules/smath)
 #ifdef GUIBASE_UNX
-UI_FILELIST_ALL_LANG(spa, UIConfig/spa, filelist)
+UI_FILELIST_ALL_LANG(spa, spa)
 #endif
-UI_FILELIST_ALL_LANG(svt, UIConfig/svt, filelist)
-UI_FILELIST_ALL_LANG(svx, UIConfig/svx, filelist)
-UI_FILELIST_ALL_LANG(swriter, UIConfig/modules/swriter, filelist)
+UI_FILELIST_ALL_LANG(svt, svt)
+UI_FILELIST_ALL_LANG(svx, svx)
+UI_FILELIST_ALL_LANG(swriter, modules/swriter)
 #ifdef ENABLE_TELEPATHY
-UI_FILELIST_ALL_LANG(tubes, UIConfig/tubes, filelist)
+UI_FILELIST_ALL_LANG(tubes, tubes)
 #endif
-UI_FILELIST_ALL_LANG(uui, UIConfig/uui, filelist)
-UI_FILELIST_ALL_LANG(vcl, UIConfig/vcl, filelist)
-UI_FILELIST_ALL_LANG(xmlsec, UIConfig/xmlsec, filelist)
+UI_FILELIST_ALL_LANG(uui, uui)
+UI_FILELIST_ALL_LANG(vcl, vcl)
+UI_FILELIST_ALL_LANG(xmlsec, xmlsec)
 
 #ifdef WNT
 
