@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FILECTRL_HRC
-#define _SV_FILECTRL_HRC
+#ifndef INCLUDED_SVTOOLS_SOURCE_INC_FILECTRL_HRC
+#define INCLUDED_SVTOOLS_SOURCE_INC_FILECTRL_HRC
 
 #define STR_FILECTRL_BUTTONTEXT     333     // ID-Range?!
 
@@ -27,6 +27,6 @@
 #define  STR_TABBAR_PUSHBUTTON_MOVERIGHT     ( STR_FILECTRL_BUTTONTEXT+ 3)
 #define  STR_TABBAR_PUSHBUTTON_MOVETOEND    ( STR_FILECTRL_BUTTONTEXT+ 4)
 
-#endif
+#endif // INCLUDED_SVTOOLS_SOURCE_INC_FILECTRL_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
