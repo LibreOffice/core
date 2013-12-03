@@ -593,10 +593,10 @@ public:
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const OUString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
-    xub_StrLen          GetTextBreak( const OUString& rStr, long nTextWidth,
+    sal_Int32           GetTextBreak( const OUString& rStr, long nTextWidth,
                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                       long nCharExtra = 0 ) const;
-    xub_StrLen          GetTextBreak( const OUString& rStr, long nTextWidth,
+    sal_Int32           GetTextBreak( const OUString& rStr, long nTextWidth,
                                       sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                       sal_Int32 nIndex, sal_Int32 nLen,
                                       long nCharExtra = 0 ) const;

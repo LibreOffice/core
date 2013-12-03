@@ -4705,12 +4705,12 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 if ( xBI.is() )
                 {
                     const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
-                    xub_StrLen nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+                    sal_Int32 nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                     i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
                     i18n::LineBreakUserOptions aUserOptions;
                     i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
-                    nBreakPos = (xub_StrLen)aLBR.breakIndex;
+                    nBreakPos = aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
                     if ( bHyphenate )
@@ -4728,7 +4728,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             sal_Unicode cAlternateReplChar = 0;
                             i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
                             sal_Int32 nWordStart = nPos;
-                            sal_Int32 nWordEnd = (sal_Int32) aBoundary.endPos;
+                            sal_Int32 nWordEnd = aBoundary.endPos;
                             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
 
                             sal_Int32 nWordLen = nWordEnd - nWordStart;
@@ -4737,14 +4737,14 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
                                 // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
                                 OUString aWord = rStr.copy( nWordStart, nWordLen );
-                                sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Before the "broken off" char
+                                sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char
                                 uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
                                     xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
                                 if (xHyphWord.is())
                                 {
                                     sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
-                                    sal_uInt16 _nWordLen = 1 + xHyphWord->getHyphenPos();
+                                    sal_Int32 _nWordLen = 1 + xHyphWord->getHyphenPos();
 
                                     if ( ( _nWordLen >= 2 ) && ( (nWordStart+_nWordLen) >= ( 2 ) ) )
                                     {
@@ -4770,10 +4770,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             // index.
                                             // TODO: The whole junk will be made easier by a function in
                                             // the Hyphenator, as soon as AMA adds it.
-                                            sal_uInt16 nAltStart = _nWordLen - 1;
-                                            sal_uInt16 nTxtStart = nAltStart - (aAlt.getLength() - aWord.getLength());
-                                            sal_uInt16 nTxtEnd = nTxtStart;
-                                            sal_uInt16 nAltEnd = nAltStart;
+                                            sal_Int32 nAltStart = _nWordLen - 1;
+                                            sal_Int32 nTxtStart = nAltStart - (aAlt.getLength() - aWord.getLength());
+                                            sal_Int32 nTxtEnd = nTxtStart;
+                                            sal_Int32 nAltEnd = nAltStart;
 
                                             // The area between nStart and nEnd is the difference
                                             // between AlternativString and OriginalString
@@ -5993,14 +5993,14 @@ sal_Bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, 
     return (nCharPos != nIndex) ? sal_True : sal_False;
 }
 
-xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
+sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        long nCharExtra ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
-    xub_StrLen nRetVal = STRING_LEN;
+    sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
         // convert logical widths into layout units
@@ -6017,7 +6017,7 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
             nCharExtra *= nWidthFactor * nSubPixelFactor;
             nExtraPixelWidth = ImplLogicWidthToDevicePixel( nCharExtra );
         }
-        nRetVal = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
+        nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
         pSalLayout->Release();
     }
@@ -6025,18 +6025,18 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     return nRetVal;
 }
 
-xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
+sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Unicode nHyphenatorChar, sal_Int32& rHyphenatorPos,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        long nCharExtra ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    rHyphenatorPos = STRING_LEN;
+    rHyphenatorPos = -1;
 
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     if( !pSalLayout )
-        return STRING_LEN;
+        return -1;
 
     // convert logical widths into layout units
     // NOTE: be very careful to avoid rounding errors for nCharExtra case
@@ -6055,7 +6055,7 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     }
 
     // calculate un-hyphenated break position
-    xub_StrLen nRetVal = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
+    sal_Int32 nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
     // calculate hyphenated break position
     OUString aHyphenatorStr(nHyphenatorChar);
@@ -6072,14 +6072,11 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         if( nExtraPixelWidth > 0 )
             nTextPixelWidth -= nExtraPixelWidth;
 
-        // why does this return "int" and use STRING_LEN for errors???
-        xub_StrLen nTmp = sal::static_int_cast<xub_StrLen>(
-            pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor));
+        rHyphenatorPos =
+            pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor);
 
-        nTmp = std::min(nTmp, nRetVal);
-
-        // TODO: remove nTmp when GetTextBreak sal_Int32
-        rHyphenatorPos = (nTmp == STRING_LEN) ? -1 : nTmp;
+        if( rHyphenatorPos > nRetVal )
+            rHyphenatorPos = nRetVal;
     }
 
     pSalLayout->Release();
@@ -6574,7 +6571,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
     OUString aStr = rOrigStr;
     sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
 
-    if ( nIndex != STRING_LEN )
+    if ( nIndex != -1 )
     {
         if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
         {

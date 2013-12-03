@@ -669,12 +669,12 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 // NOTE: the nFactor is used to prevent rounding errors for small nCharExtra values
 {
     if( mnWidth )
         if( (mnWidth * nFactor + mnCharCount * nCharExtra) <= nMaxWidth )
-            return STRING_LEN;
+            return -1;
 
     long nExtraWidth = mnBaseAdv * nFactor;
     for( int n = 0; n < mnCharCount; ++n )
@@ -689,7 +689,7 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
         nExtraWidth += nCharExtra;
     }
 
-    return STRING_LEN;
+    return -1;
 }
 
 // -----------------------------------------------------------------------
@@ -2182,7 +2182,7 @@ long UniscribeLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     long nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
@@ -2222,7 +2222,7 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
     }
 
     // the whole layout did fit inside the nMaxWidth
-    return STRING_LEN;
+    return -1;
 }
 
 // -----------------------------------------------------------------------

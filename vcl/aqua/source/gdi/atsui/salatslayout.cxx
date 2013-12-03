@@ -748,13 +748,13 @@ long ATSLayout::FillDXArray( sal_Int32* pDXArray ) const
  *
  * @return : string index corresponding to the suggested line break
 **/
-int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     SAL_INFO("vcl.atsui.layout", "GetTextBreak(" << this << ",nMaxWidth=" << nMaxWidth << ",nCharExtra=" << nCharExtra << ",nFactor=" << nFactor << ")" );
 
     if( !maATSULayout ) {
-        SAL_INFO( "vcl.atsui.layout", "GetTextBreak(): no maATSULayout, returning STRING_LEN" );
-        return STRING_LEN;
+        SAL_INFO( "vcl.atsui.layout", "GetTextBreak(): no maATSULayout, returning -1" );
+        return -1;
     }
 
     // the semantics of the legacy use case (nCharExtra!=0) cannot be mapped to ATSUBreakLine()
@@ -762,7 +762,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     {
         // prepare the measurement by layouting and measuring the un-expanded/un-condensed text
         if( !InitGIA() )
-            return STRING_LEN;
+            return -1;
 
         // TODO: use a better way than by testing each the char position
         ATSUTextMeasurement nATSUSumWidth = 0;
@@ -779,7 +779,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
                     return (mnMinCharPos + i);
         }
 
-        return STRING_LEN;
+        return -1;
     }
 
     // get a quick overview on what could fit
@@ -806,15 +806,15 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     OSStatus eStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
         nATSUMaxWidth, false, &nBreakPos );
     if( (eStatus != noErr) && (eStatus != kATSULineBreakInWord) )
-        return STRING_LEN;
+        return -1;
 
     // the result from ATSUBreakLine() doesn't match the semantics expected by its
     // application layer callers from SW+SVX+I18N. Adjust the results to the expectations:
 
     // ATSU reports that everything fits even when trailing spaces would break the line
-    // #i89789# OOo's application layers expect STRING_LEN if everything fits
+    // #i89789# OOo's application layers expect -1 if everything fits
     if( nBreakPos >= static_cast<UniCharArrayOffset>(mnEndCharPos) )
-        return STRING_LEN;
+        return -1;
 
     // GetTextBreak()'s callers expect it to return the "stupid visual line break".
     // Returning anything else result.s in subtle problems in the application layers.

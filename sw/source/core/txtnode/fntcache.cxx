@@ -2357,7 +2357,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
-    xub_StrLen nTxtBreak = 0;
+    sal_Int32 nTxtBreak = 0;
     long nKern = 0;
 
     sal_uInt16 nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().getLength()
@@ -2477,24 +2477,19 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             bTextReplaced = true;
         }
 
-        OUString sTmpText(*pTmpText); // only needed until *pTmpText is OUString
-        sal_Int32 nTmpIdx2 = nTmpIdx;  // ditto
-        sal_Int32 nTmpLen2 = nTmpLen;  // ditto
         if( rInf.GetHyphPos() ) {
             sal_Int32 nHyphPos = *rInf.GetHyphPos();
-            nTxtBreak = rInf.GetOut().GetTextBreak( sTmpText, nTextWidth,
+            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
                              static_cast<sal_Unicode>('-'), nHyphPos,
-                             nTmpIdx2, nTmpLen2, nKern );
+                             nTmpIdx, nTmpLen, nKern );
             *rInf.GetHyphPos() = (nHyphPos == -1)
                 ? STRING_LEN : static_cast<xub_StrLen>(nHyphPos);
         }
         else
-            nTxtBreak = rInf.GetOut().GetTextBreak( sTmpText, nTextWidth,
-                                                    nTmpIdx2, nTmpLen2, nKern );
+            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
+                                                    nTmpIdx, nTmpLen, nKern );
 
-        nTmpIdx = nTmpIdx2;     // ditto
-        nTmpLen = nTmpLen2;     // ditto
-        if ( bTextReplaced && STRING_LEN != nTxtBreak )
+        if ( bTextReplaced && nTxtBreak != -1 )
         {
             if ( nTmpLen != nLn )
                 nTxtBreak = sw_CalcCaseMap( *this, rInf.GetText(),
@@ -2504,17 +2499,19 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
     }
 
+    xub_StrLen nTxtBreak2 = nTxtBreak == -1 ? STRING_LEN : nTxtBreak;
+
     if ( ! bCompress )
-        return nTxtBreak;
+        return nTxtBreak2;
 
-    nTxtBreak = nTxtBreak - rInf.GetIdx();
+    nTxtBreak2 = nTxtBreak2 - rInf.GetIdx();
 
-    if( nTxtBreak < nLn )
+    if( nTxtBreak2 < nLn )
     {
-        if( !nTxtBreak && nLn )
+        if( !nTxtBreak2 && nLn )
             nLn = 1;
-        else if( nLn > 2 * nTxtBreak )
-            nLn = 2 * nTxtBreak;
+        else if( nLn > 2 * nTxtBreak2 )
+            nLn = 2 * nTxtBreak2;
         sal_Int32 *pKernArray = new sal_Int32[ nLn ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
@@ -2522,22 +2519,22 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                             rInf.GetKanaComp(), (sal_uInt16)GetHeight( nActual ) ) )
         {
             long nKernAdd = nKern;
-            xub_StrLen nTmpBreak = nTxtBreak;
-            if( nKern && nTxtBreak )
-                nKern *= nTxtBreak - 1;
-            while( nTxtBreak<nLn && nTextWidth >= pKernArray[nTxtBreak] +nKern )
+            xub_StrLen nTmpBreak = nTxtBreak2;
+            if( nKern && nTxtBreak2 )
+                nKern *= nTxtBreak2 - 1;
+            while( nTxtBreak2<nLn && nTextWidth >= pKernArray[nTxtBreak2] +nKern )
             {
                 nKern += nKernAdd;
-                ++nTxtBreak;
+                ++nTxtBreak2;
             }
             if( rInf.GetHyphPos() )
-                *rInf.GetHyphPos() += nTxtBreak - nTmpBreak; // It's not perfect
+                *rInf.GetHyphPos() += nTxtBreak2 - nTmpBreak; // It's not perfect
         }
         delete[] pKernArray;
     }
-    nTxtBreak = nTxtBreak + rInf.GetIdx();
+    nTxtBreak2 = nTxtBreak2 + rInf.GetIdx();
 
-    return nTxtBreak;
+    return nTxtBreak2;
 }
 
 extern Color aGlobalRetoucheColor;

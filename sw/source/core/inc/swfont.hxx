@@ -338,7 +338,7 @@ public:
     Size GetCapitalSize( SwDrawTextInfo& rInf )
         { return aSub[nActual].GetCapitalSize( rInf ); }
 
-    xub_StrLen GetCapitalBreak( SwViewShell* pSh,  const OutputDevice* pOut,
+    sal_Int32 GetCapitalBreak( SwViewShell* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rTxt,
         long nTextWidth, const xub_StrLen nIdx,
         const xub_StrLen nLen );

@@ -182,17 +182,17 @@ class SwDoGetCapitalBreak : public SwDoCapitals
 {
 protected:
     long nTxtWidth;
-    xub_StrLen nBreak;
+    sal_Int32 m_nBreak;
 public:
     SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long const nWidth)
         :   SwDoCapitals ( rInfo )
         ,   nTxtWidth( nWidth )
-        ,   nBreak( STRING_LEN )
+        ,   m_nBreak( -1 )
         { }
     virtual ~SwDoGetCapitalBreak() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
-    xub_StrLen GetBreak() const { return nBreak; }
+    sal_Int32 getBreak() const { return m_nBreak; }
 };
 
 void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
@@ -208,30 +208,23 @@ void SwDoGetCapitalBreak::Do()
         else
         {
             xub_StrLen nEnd = rInf.GetEnd();
-            OUString sText(rInf.GetText()); // only needed until rInf.GetText() returns OUString
-            sal_Int32 nIdx2 = rInf.GetIdx(); // ditto
-            sal_Int32 nLen2 = rInf.GetLen(); // ditto
-            nBreak = GetOut().GetTextBreak( sText, nTxtWidth,
-                               nIdx2, nLen2, rInf.GetKern() );
+            m_nBreak = GetOut().GetTextBreak( rInf.GetText(), nTxtWidth,
+                               rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
 
-            rInf.SetText(sText); // ditto
-            rInf.SetIdx(nIdx2);  // ditto
-            rInf.SetLen(nLen2);  // ditto
+            if (m_nBreak > nEnd || m_nBreak < 0)
+                m_nBreak = nEnd;
 
-            if( nBreak > nEnd )
-                nBreak = nEnd;
-
-            // nBreak may be relative to the display string. It has to be
+            // m_nBreak may be relative to the display string. It has to be
             // calculated relative to the original string:
             if ( GetCapInf()  )
             {
                 if ( GetCapInf()->nLen != rInf.GetLen() )
-                    nBreak = sw_CalcCaseMap( *rInf.GetFont(),
+                    m_nBreak = sw_CalcCaseMap( *rInf.GetFont(),
                                               GetCapInf()->rString,
                                               GetCapInf()->nIdx,
-                                              GetCapInf()->nLen, nBreak );
+                                              GetCapInf()->nLen, m_nBreak );
                 else
-                    nBreak = nBreak + GetCapInf()->nIdx;
+                    m_nBreak = m_nBreak + GetCapInf()->nIdx;
             }
 
             nTxtWidth = 0;
@@ -243,7 +236,7 @@ void SwDoGetCapitalBreak::Do()
  *                    SwFont::GetCapitalBreak()
  *************************************************************************/
 
-xub_StrLen SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
+sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const OUString& rTxt, long const nTextWidth,
     const xub_StrLen nIdx, const xub_StrLen nLen )
 {
@@ -263,7 +256,7 @@ xub_StrLen SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
 
     SwDoGetCapitalBreak aDo(aInfo, nTextWidth);
     DoOnCapitals( aDo );
-    return aDo.GetBreak();
+    return aDo.getBreak();
 }
 
 /*************************************************************************

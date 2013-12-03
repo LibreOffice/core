@@ -397,19 +397,19 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
     return nPixWidth;
 }
 
-int CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFactor ) const
+sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFactor ) const
 {
     if( !mpCTLine )
-        return STRING_LEN;
+        return -1;
 
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
     const double fCTMaxWidth = (double)nMaxWidth / nFactor;
     CFIndex nIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
     if( nIndex >= mnCharCount )
-        return STRING_LEN;
+        return -1;
 
     nIndex += mnMinCharPos;
-    return (int)nIndex;
+    return nIndex;
 }
 
 void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const

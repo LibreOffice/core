@@ -42,7 +42,7 @@ namespace vcl
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength,
                                 MetricVector* _pVector, OUString* _pDisplayText ) = 0;
         virtual bool        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
-        virtual xub_StrLen  GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual sal_Int32   GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
     protected:
@@ -84,7 +84,7 @@ namespace vcl
                                 sal_Int32 _nStartIndex,
                                 sal_Int32 _nLength
                             ) const;
-        virtual xub_StrLen  GetTextBreak(
+        virtual sal_Int32   GetTextBreak(
                                 const OUString& _rText,
                                 long _nMaxTextWidth,
                                 sal_Int32 _nStartIndex,

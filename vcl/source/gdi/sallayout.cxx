@@ -1351,12 +1351,12 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray
 
 // -----------------------------------------------------------------------
 
-int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
     sal_Int32* pCharWidths = (sal_Int32*)alloca( nCharCapacity * sizeof(sal_Int32) );
     if( !GetCharWidths( pCharWidths ) )
-        return STRING_LEN;
+        return -1;
 
     long nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
@@ -1367,7 +1367,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor
         nWidth += nCharExtra;
     }
 
-    return STRING_LEN;
+    return -1;
 }
 
 // -----------------------------------------------------------------------
@@ -2003,10 +2003,10 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 
  // -----------------------------------------------------------------------
 
-int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     if( mnLevel <= 0 )
-        return STRING_LEN;
+        return -1;
     if( mnLevel == 1 )
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
@@ -2037,7 +2037,7 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
         nWidth += nCharExtra;
     }
 
-    return STRING_LEN;
+    return -1;
 }
 
 // -----------------------------------------------------------------------

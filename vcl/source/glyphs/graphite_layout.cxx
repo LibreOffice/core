@@ -680,7 +680,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment)
     return true;
 }
 
-int GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) const
+sal_Int32 GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) const
 {
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"Gr::GetTextBreak c[%d-%d) maxWidth %ld char extra %ld factor %d\n",
@@ -689,7 +689,7 @@ int GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) c
 
     // return quickly if this segment is narrower than the target width
     if (maxmnWidth > mnWidth * factor + char_extra * (mnEndCharPos - mnMinCharPos - 1))
-        return STRING_LEN;
+        return -1;
 
     long nWidth = mvCharDxs[0] * factor;
     long wLastBreak = 0;
@@ -724,8 +724,10 @@ int GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) c
     fprintf(grLog(), "Gr::GetTextBreak break after %d, weights(%d, %d)\n", nBreak - mnMinCharPos, mvCharBreaks[nBreak - mnMinCharPos], mvCharBreaks[nBreak - mnMinCharPos - 1]);
 #endif
 
-    if (nBreak > mnEndCharPos) nBreak = STRING_LEN;
-    else if (nBreak < mnMinCharPos) nBreak = mnMinCharPos;
+    if (nBreak > mnEndCharPos)
+        nBreak = -1;
+    else if (nBreak < mnMinCharPos)
+        nBreak = mnMinCharPos;
     return nBreak;
 }
 

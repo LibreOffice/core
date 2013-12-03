@@ -1145,7 +1145,7 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
                 if ( IsRightToLeft() != pTextPortion->IsRightToLeft() )
                     nPosInPortion = pTextPortion->GetWidth() - nPosInPortion;
                 nCurIndex = mpRefDev->GetTextBreak( pPortion->GetNode()->GetText(), nPosInPortion, nCurIndex );
-                // MT: GetTextBreak should assure that we are not withing a CTL cell...
+                // MT: GetTextBreak should assure that we are not within a CTL cell...
             }
             return nCurIndex;
         }
@@ -1688,7 +1688,7 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
 
     DBG_ASSERT( nMaxBreakPos < pNode->GetText().getLength(), "ImpBreakLine: Break?!" );
 
-    if ( nMaxBreakPos == STRING_LEN )   // GetTextBreak() != GetTextSize()
+    if ( nMaxBreakPos == -1 )   // GetTextBreak() != GetTextSize()
         nMaxBreakPos = pNode->GetText().getLength() - 1;
 
     uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
