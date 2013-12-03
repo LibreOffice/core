@@ -57,6 +57,23 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
+enum XInterfaceIndex {
+    XI_COMPONENT    = 0x01,
+    XI_TEXT         = 0x02,
+    XI_TABLE        = 0x03,
+    XI_EDITABLETEXT = 0x04,
+    XI_IMAGE        = 0x05,
+    XI_SELECTION    = 0x06,
+    XI_EXTENDEDCOMP = 0x07,
+    XI_VALUE        = 0x08,
+    XI_KEYBINDING   = 0x09,
+    XI_ACTION       = 0x0A,
+    XI_HYPERTEXT    = 0x0B,
+    XI_HYPERLINK    = 0x0C,
+    XI_ATTRIBUTE    = 0x0D,
+    XI_NULL         = -1
+};
+
 // IA2 states mapping, and name
 // maintenance the consistency, change one array, change the three all
 long IA2_STATES[] =
@@ -2571,6 +2588,29 @@ createAggInstance(CMAccessible &rOuter, void ** ppvObject)
             rOuter.GetControllingUnknown(), IID_IUnknown, ppvObject);
 }
 
+typedef HRESULT (AggCreatorFunc)(CMAccessible &, void **);
+
+struct AggMapEntry
+{
+    const IID* piid;
+    AggCreatorFunc* pfnCreateInstance;
+    int XIFIndex;
+};
+
+static AggMapEntry g_CMAccessible_AggMap[] = {
+    { &IID_IAccessibleComponent, &createAggInstance<CAccComponent>, XI_COMPONENT },
+    { &IID_IAccessibleText, &createAggInstance<CAccText>, XI_TEXT },
+    { &IID_IAccessibleEditableText, &createAggInstance<CAccEditableText>, XI_EDITABLETEXT },
+    { &IID_IAccessibleImage, &createAggInstance<CAccImage>, XI_IMAGE },
+    { &IID_IAccessibleTable, &createAggInstance<CAccTable>, XI_TABLE },
+    { &IID_IAccessibleAction, &createAggInstance<CAccAction>, XI_ACTION },
+    { &IID_IAccessibleValue, &createAggInstance<CAccValue>, XI_VALUE },
+    { &IID_IAccessibleHypertext, &createAggInstance<CAccHypertext>, XI_HYPERTEXT },
+    { &IID_IAccessibleHyperlink, &createAggInstance<CAccHyperLink>, XI_HYPERLINK },
+    { 0, 0, 0 },
+};
+
+
 HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
 {
     ENTER_PROTECTED_BLOCK
@@ -2583,7 +2623,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
             return E_FAIL;
 
 
-    _UNO_AGGMAP_ENTRY* pMap = _GetAggEntries();
+    AggMapEntry * pMap = &g_CMAccessible_AggMap[0];
     while(pMap && pMap->piid)
     {
         if(ImplIsEqualGUID(iid, *pMap->piid))
@@ -2603,39 +2643,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
             }
             else
             {
-                HRESULT hr(REGDB_E_CLASSNOTREG);
-                switch (pMap->XIFIndex)
-                {
-                    case XI_COMPONENT:
-                        hr = createAggInstance<CAccComponent>(*this, ppvObject);
-                        break;
-                    case XI_TEXT:
-                        hr = createAggInstance<CAccText>(*this, ppvObject);
-                        break;
-                    case XI_EDITABLETEXT:
-                        hr = createAggInstance<CAccEditableText>(*this, ppvObject);
-                        break;
-                    case XI_IMAGE:
-                        hr = createAggInstance<CAccImage>(*this, ppvObject);
-                        break;
-                    case XI_TABLE:
-                        hr = createAggInstance<CAccTable>(*this, ppvObject);
-                        break;
-                    case XI_ACTION:
-                        hr = createAggInstance<CAccAction>(*this, ppvObject);
-                        break;
-                    case XI_VALUE:
-                        hr = createAggInstance<CAccValue>(*this, ppvObject);
-                        break;
-                    case XI_HYPERTEXT:
-                        hr = createAggInstance<CAccHypertext>(*this, ppvObject);
-                        break;
-                    case XI_HYPERLINK:
-                        hr = createAggInstance<CAccHyperLink>(*this, ppvObject);
-                        break;
-                    default:
-                        assert(false);
-                }
+                HRESULT hr = pMap->pfnCreateInstance(*this, ppvObject);
                 assert(hr == S_OK);
                 if(hr == S_OK)
                 {
