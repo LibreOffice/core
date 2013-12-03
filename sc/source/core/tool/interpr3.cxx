@@ -721,6 +721,30 @@ void ScInterpreter::ScChiSqDist()
     }
 }
 
+void ScInterpreter::ScChiSqDist_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 3, 3 ) )
+        return;
+    bool bCumulative = GetBool();
+    double fDF = ::rtl::math::approxFloor( GetDouble() );
+    if ( fDF < 1.0 || fDF > 1E10 )
+        PushIllegalArgument();
+    else
+    {
+        double fX = GetDouble();
+        if ( fX < 0 )
+            PushIllegalArgument();
+        else
+        {
+            if ( bCumulative )
+                PushDouble( GetChiSqDistCDF( fX, fDF ) );
+            else
+                PushDouble( GetChiSqDistPDF( fX, fDF ) );
+        }
+    }
+}
+
 void ScInterpreter::ScGamma()
 {
     double x = GetDouble();
