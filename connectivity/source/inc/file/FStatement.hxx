@@ -42,8 +42,6 @@
 #include <tools/string.hxx>
 #include "TSortIndex.hxx"
 
-#define SQL_COLUMN_NOTFOUND STRING_NOTFOUND
-
 namespace connectivity
 {
     namespace file
