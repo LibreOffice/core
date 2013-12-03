@@ -47,9 +47,6 @@ using namespace std;
  */
 STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK XInterface#
@@ -75,9 +72,6 @@ STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
  */
 STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if( !pRXEdtTxt.is() )
@@ -100,9 +94,6 @@ STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
  */
 STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (text == NULL)
@@ -130,9 +121,6 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
  */
 STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if( !pRXEdtTxt.is() )
@@ -154,9 +142,6 @@ STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
  */
 STDMETHODIMP CAccEditableText::pasteText(long offset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if( !pRXEdtTxt.is() )
@@ -180,9 +165,6 @@ STDMETHODIMP CAccEditableText::pasteText(long offset)
  */
 STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BSTR * text)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -210,9 +192,6 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
  */
 STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, BSTR * attributes)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#

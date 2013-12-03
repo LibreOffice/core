@@ -284,8 +284,6 @@ CMAccessible::~CMAccessible()
 */
 STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -321,8 +319,6 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 */
 STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -355,8 +351,6 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 */
 STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChild)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -391,8 +385,6 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
 */
 STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -430,8 +422,6 @@ STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 */
 STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -475,8 +465,6 @@ STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 */
 STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescription)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -514,8 +502,6 @@ STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescrip
 */
 STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -565,8 +551,6 @@ STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 */
 STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -669,8 +653,6 @@ static void GetMnemonicChar( const ::rtl::OUString& aStr, WCHAR* wStr)
 */
 STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
 
         ISDESTROY()
@@ -824,8 +806,6 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 */
 STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -863,8 +843,6 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 */
 STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -912,8 +890,6 @@ STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 */
 STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -970,8 +946,6 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
 */
 STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -1012,8 +986,6 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
 
 STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -1678,8 +1650,6 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 */
 STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
 
         // #CHECK#
@@ -1708,8 +1678,6 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 
 STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -1771,8 +1739,6 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
 STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
 
         // #CHECK#
@@ -1915,8 +1881,6 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
 
 STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -2091,8 +2055,6 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
 
 STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
@@ -2318,8 +2280,6 @@ STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 */
 STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         if( (flagsSelect&SELFLAG_ADDSELECTION) &&
@@ -3079,8 +3039,6 @@ STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
 }
 STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
@@ -3118,8 +3076,6 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
 // return the UNO roles
 STDMETHODIMP CMAccessible:: get_extendedRole( BSTR __RPC_FAR *  )
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
@@ -3139,8 +3095,6 @@ STDMETHODIMP CMAccessible:: get_localizedExtendedRole( BSTR __RPC_FAR *  )
 }
 STDMETHODIMP CMAccessible:: get_nExtendedStates( long __RPC_FAR * )
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
 
@@ -3163,8 +3117,6 @@ STDMETHODIMP CMAccessible:: get_localizedExtendedStates( long, BSTR __RPC_FAR *_
 
 STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -3182,8 +3134,6 @@ STDMETHODIMP CMAccessible:: get_indexInParent( long __RPC_FAR *accParentIndex)
 }
 STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
 {
-
-    CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         if(locale == NULL)
@@ -3304,7 +3254,6 @@ STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 
 STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 {
-    CHECK_ENABLE_INF
     Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
     if( !pRContext.is() )
     {

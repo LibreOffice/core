@@ -35,9 +35,6 @@ using namespace com::sun::star::uno;
 
 STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (currentValue == NULL)
@@ -63,9 +60,6 @@ STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
    */
 STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if ( !pRXVal.is() )
@@ -144,9 +138,6 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
    */
 STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (maximumValue == NULL)
@@ -171,9 +162,6 @@ STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
    */
 STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (mininumValue == NULL)

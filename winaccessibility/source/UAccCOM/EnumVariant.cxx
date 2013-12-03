@@ -46,7 +46,6 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     if (pvar == NULL)
         return E_INVALIDARG;
 
-    CHECK_ENABLE_INF
     if (pcElementFetched != NULL)
         *pcElementFetched = 0;
 
@@ -91,7 +90,6 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
 {
-    CHECK_ENABLE_INF
     m_lCurrent += cElements;
     if (m_lCurrent > (long)(m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount()))
     {
@@ -169,8 +167,6 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Create(CEnumVariant __RPC_FAR *__RPC_FAR
    */
 long CEnumVariant::GetCountOfElements()
 {
-    CHECK_ENABLE_INF_ZERO
-
     if(m_pXAccessibleSelection.is())
         return m_pXAccessibleSelection->getSelectedAccessibleChildCount();
     return 0;

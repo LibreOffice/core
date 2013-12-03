@@ -45,9 +45,6 @@ CAccComponentBase::~CAccComponentBase()
  */
 STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
 {
-
-    CHECK_ENABLE_INF
-
     try
     {
         if (x == NULL || y == NULL)
@@ -76,9 +73,6 @@ STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
  */
 STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
 {
-
-    CHECK_ENABLE_INF
-
     try
     {
         if (x == NULL || y == NULL)
@@ -106,9 +100,6 @@ STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
  */
 STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (success == NULL)
@@ -133,9 +124,6 @@ STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
  */
 STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (foreground == NULL)
@@ -159,9 +147,6 @@ STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
  */
 STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (background == NULL)
@@ -185,9 +170,6 @@ STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
  */
 STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInterface)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);
