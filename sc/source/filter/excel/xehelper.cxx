@@ -1034,7 +1034,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
             }
             else if( ScMatrix::IsNonValueType( nMatVal.nType ) )
             {
-                XclExpString aStr( nMatVal.GetString(), EXC_STR_DEFAULT );
+                XclExpString aStr( nMatVal.GetString().getString(), EXC_STR_DEFAULT );
                 rStrm.SetSliceSize( 6 );
                 rStrm << EXC_CACHEDVAL_STRING << aStr;
             }

@@ -731,7 +731,7 @@ bool ScValidationData::GetSelectionFromFormula(
             // strings and empties
             if( ScMatrix::IsNonValueType( nMatVal.nType ) )
             {
-                aValStr = nMatVal.GetString();
+                aValStr = nMatVal.GetString().getString();
 
                 if( NULL != pStrings )
                     pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);

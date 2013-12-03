@@ -54,7 +54,7 @@ struct ScMatrixValue
     ScMatValType nType;
 
     /// Only valid if ScMatrix methods indicate so!
-    OUString GetString() const { return aStr.getString(); }
+    svl::SharedString GetString() const { return aStr; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
