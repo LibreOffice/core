@@ -20,9 +20,7 @@
 #ifndef _ACCRESOURCE_HXX
 #define _ACCRESOURCE_HXX
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 class SimpleResMgr;
 
