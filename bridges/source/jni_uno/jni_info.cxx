@@ -49,11 +49,10 @@ JNI_type_info::JNI_type_info(
     m_td.makeComplete();
     if (! m_td.get()->bComplete)
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "cannot make type complete: " );
-        buf.append( OUString::unacquired( &m_td.get()->pTypeName ) );
-        buf.append( jni.get_stack_trace() );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError(
+            "cannot make type complete: "
+            + OUString::unacquired( &m_td.get()->pTypeName )
+            + jni.get_stack_trace() );
     }
 }
 
@@ -366,11 +365,8 @@ JNI_type_info const * JNI_info::create_type_info(
     }
     default:
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "type info not supported for " );
-        buf.append( uno_name );
-        buf.append( jni.get_stack_trace() );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError(
+            "type info not supported for " + uno_name + jni.get_stack_trace() );
     }
     }
 
@@ -465,11 +461,8 @@ JNI_type_info const * JNI_info::get_type_info(
         css::uno::TypeDescription td( uno_name );
         if (! td.is())
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "UNO type not found: " );
-            buf.append( uno_name );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "UNO type not found: " + uno_name + jni.get_stack_trace() );
         }
         info = create_type_info( jni, td.get() );
     }

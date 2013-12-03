@@ -90,11 +90,10 @@ void Bridge::handle_java_exc(
             jni, jni->CallObjectMethodA(
                 jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
         jni.ensure_no_exception();
-        OUStringBuffer buf( 128 );
-        buf.append( "non-UNO exception occurred: " );
-        buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
-        buf.append( jni.get_stack_trace( jo_exc.get() ) );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError(
+            "non-UNO exception occurred: "
+            + jstring_to_oustring( jni, (jstring) jo_descr.get() )
+            + jni.get_stack_trace( jo_exc.get() ) );
     }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -144,11 +143,10 @@ void Bridge::call_java(
             reinterpret_cast<typelib_TypeDescription *>(iface_td) );
         iface_holder.makeComplete();
         if (! iface_holder.get()->bComplete) {
-            OUStringBuffer buf;
-            buf.append( "cannot make type complete: " );
-            buf.append( OUString::unacquired(&iface_holder.get()->pTypeName) );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "cannot make type complete: "
+                + OUString::unacquired(&iface_holder.get()->pTypeName)
+                + jni.get_stack_trace() );
         }
         iface_td = reinterpret_cast<typelib_InterfaceTypeDescription *>(
             iface_holder.get() );

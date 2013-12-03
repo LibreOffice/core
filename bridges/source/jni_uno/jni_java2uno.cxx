@@ -19,15 +19,12 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
+
 #include <sal/alloca.h>
 
 #include "jni_bridge.h"
-
-#include <rtl/ustrbuf.hxx>
-
-#include <algorithm>
-
 
 using namespace ::rtl;
 
@@ -125,11 +122,10 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
                 jni, jni->CallObjectMethodA(
                     jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
             jni.ensure_no_exception();
-            OUStringBuffer buf( 128 );
-            buf.append( "throwing java exception failed: " );
-            buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "throwing java exception failed: "
+                + jstring_to_oustring( jni, (jstring) jo_descr.get() )
+                + jni.get_stack_trace() );
         }
     }
     else
@@ -579,14 +575,10 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             }
         }
         // the thing that should not be... no method info found!
-        OUStringBuffer buf( 64 );
-        buf.append( "calling undeclared function on interface " );
-        buf.append( OUString::unacquired(
-                        &((typelib_TypeDescription *)td)->pTypeName ) );
-        buf.append( ": " );
-        buf.append( method_name );
-        buf.append( jni.get_stack_trace() );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError(
+            "calling undeclared function on interface "
+            + OUString::unacquired(&((typelib_TypeDescription *)td)->pTypeName)
+            + ": " + method_name + jni.get_stack_trace() );
     }
     catch (const BridgeRuntimeError & err)
     {

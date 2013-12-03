@@ -24,7 +24,6 @@
 #include "jni_bridge.h"
 
 #include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
 #include "uno/sequence2.h"
 
 
@@ -388,12 +387,9 @@ void Bridge::map_to_uno(
         }
         if (0 == java_data.l)
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] null-ref given!" );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] null-ref given!" + jni.get_stack_trace() );
         }
         if (! assign)
             *(rtl_uString **)uno_data = 0;
@@ -413,12 +409,9 @@ void Bridge::map_to_uno(
         }
         if (0 == java_data.l)
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] null-ref given!" );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] null-ref given!" + jni.get_stack_trace() );
         }
 
         // type name
@@ -427,26 +420,20 @@ void Bridge::map_to_uno(
                 java_data.l, m_jni_info->m_field_Type__typeName ) );
         if (! jo_type_name.is())
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append("] incomplete type object: "
-                       "no type name!" );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] incomplete type object: no type name!"
+                + jni.get_stack_trace() );
         }
         OUString type_name(
             jstring_to_oustring( jni, (jstring) jo_type_name.get() ) );
         ::com::sun::star::uno::TypeDescription td( type_name );
         if (! td.is())
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] UNO type not found: " );
-            buf.append( type_name );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] UNO type not found: " + type_name
+                + jni.get_stack_trace() );
         }
         typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
         if (assign)
@@ -489,12 +476,10 @@ void Bridge::map_to_uno(
                                java_data.l, m_jni_info->m_field_Any__type ) );
             if (! jo_type.is())
             {
-                OUStringBuffer buf( 128 );
-                buf.append( "[map_to_uno():" );
-                buf.append( OUString::unacquired( &type->pTypeName ) );
-                buf.append( "] no type set at " "com.sun.star.uno.Any!" );
-                buf.append( jni.get_stack_trace() );
-                throw BridgeRuntimeError( buf.makeStringAndClear() );
+                throw BridgeRuntimeError(
+                    "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                    + "] no type set at com.sun.star.uno.Any!"
+                    + jni.get_stack_trace() );
             }
             // wrapped value
             jo_wrapped_holder.reset(
@@ -520,13 +505,10 @@ void Bridge::map_to_uno(
         ::com::sun::star::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] UNO type not found: " );
-            buf.append( type_name );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] UNO type not found: " + type_name
+                + jni.get_stack_trace() );
         }
         typelib_TypeClass type_class = value_td.get()->eTypeClass;
 
@@ -671,12 +653,10 @@ void Bridge::map_to_uno(
             }
             default:
             {
-                OUStringBuffer buf( 128 );
-                buf.append( "[map_to_uno():" );
-                buf.append( type_name );
-                buf.append( "] unsupported value type " "of any!" );
-                buf.append( jni.get_stack_trace() );
-                throw BridgeRuntimeError( buf.makeStringAndClear() );
+                throw BridgeRuntimeError(
+                    "[map_to_uno():" + type_name
+                    + "] unsupported value type of any!"
+                    + jni.get_stack_trace() );
             }
             }
         }
@@ -705,12 +685,9 @@ void Bridge::map_to_uno(
         }
         if (0 == java_data.l)
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] null-ref given!" );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] null-ref given!" + jni.get_stack_trace() );
         }
 
         *(jint *) uno_data = jni->GetIntField(
@@ -730,12 +707,9 @@ void Bridge::map_to_uno(
         }
         if (0 == java_data.l)
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] null-ref given!" );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] null-ref given!" + jni.get_stack_trace() );
         }
 
         if (0 == info)
@@ -1002,12 +976,9 @@ void Bridge::map_to_uno(
         }
         if (0 == java_data.l)
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] null-ref given!" );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] null-ref given!" + jni.get_stack_trace() );
         }
 
         TypeDescr td( type );
@@ -1140,13 +1111,11 @@ void Bridge::map_to_uno(
         }
         default:
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_uno():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] unsupported sequence element" " type: " );
-            buf.append( OUString::unacquired( &element_type->pTypeName ) );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+                + "] unsupported sequence element type: "
+                + OUString::unacquired( &element_type->pTypeName )
+                + jni.get_stack_trace() );
         }
         }
 
@@ -1195,12 +1164,9 @@ void Bridge::map_to_uno(
     }
     default:
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "[map_to_uno():" );
-        buf.append( OUString::unacquired( &type->pTypeName ) );
-        buf.append( "] unsupported type!" );
-        buf.append( jni.get_stack_trace() );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError(
+            "[map_to_uno():" + OUString::unacquired( &type->pTypeName )
+            + "] unsupported type!" + jni.get_stack_trace() );
     }
     }
 }
@@ -2443,13 +2409,11 @@ void Bridge::map_to_java(
         }
         default:
         {
-            OUStringBuffer buf( 128 );
-            buf.append( "[map_to_java():" );
-            buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.append( "] unsupported element type: " );
-            buf.append( OUString::unacquired( &element_type->pTypeName ) );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
+            throw BridgeRuntimeError(
+                "[map_to_java():" + OUString::unacquired( &type->pTypeName )
+                + "] unsupported element type: "
+                + OUString::unacquired( &element_type->pTypeName )
+                + jni.get_stack_trace() );
         }
         }
 
@@ -2524,12 +2488,9 @@ void Bridge::map_to_java(
     }
     default:
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "[map_to_java():" );
-        buf.append( OUString::unacquired( &type->pTypeName ) );
-        buf.appendAscii( "] unsupported type!" );
-        buf.append( jni.get_stack_trace() );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );
+        throw BridgeRuntimeError(
+            "[map_to_java():" + OUString::unacquired( &type->pTypeName )
+            + "] unsupported type!" + jni.get_stack_trace() );
     }
     }
 }
