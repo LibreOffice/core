@@ -322,7 +322,7 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
         OSL_ENSURE(pTxtNode, "need current SwTxtNode");
         if(!pTxtNode)
             return;
-        xub_StrLen nTextIndex = *pTxtTOXMark->GetStart();
+        sal_Int32 nTextIndex = *pTxtTOXMark->GetStart();
         nLangForPhoneticReading = pTxtNode->GetLang( nTextIndex );
     }
     else //if dialog is opened to create a new mark

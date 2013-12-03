@@ -3352,7 +3352,7 @@ void SwTxtNode::ClearSwpHintsArr( bool bDelFields )
     }
 }
 
-sal_uInt16 SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
+sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                            sal_uInt16 nScript ) const
 {
     sal_uInt16 nRet = LANGUAGE_DONTKNOW;
