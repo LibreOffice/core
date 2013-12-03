@@ -17,9 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include "jni_bridge.h"
 
+#include <boost/static_assert.hpp>
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
@@ -61,8 +65,9 @@ void SAL_CALL Mapping_map_to_uno(
     uno_Interface ** ppUnoI = (uno_Interface **)ppOut;
     jobject javaI = (jobject) pIn;
 
-    OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
-    OSL_ENSURE( ppUnoI && td, "### null ptr!" );
+    BOOST_STATIC_ASSERT( sizeof (void *) == sizeof (jobject) );
+    assert(ppUnoI != 0);
+    assert(td != 0);
 
     if (0 == javaI)
     {
@@ -98,21 +103,13 @@ void SAL_CALL Mapping_map_to_uno(
         }
         catch (const BridgeRuntimeError & err)
         {
-#if OSL_DEBUG_LEVEL > 0
-            OString cstr_msg(
-                OUStringToOString(
-                    "[jni_uno bridge error] " + err.m_message,
-                    RTL_TEXTENCODING_ASCII_US ) );
-            OSL_FAIL( cstr_msg.getStr() );
-#else
-            (void) err; // unused
-#endif
+            SAL_WARN(
+                "bridges",
+                "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
         }
         catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
-            OSL_FAIL(
-                "[jni_uno bridge error] attaching current thread "
-                "to java failed!" );
+            SAL_WARN("bridges", "attaching current thread to java failed");
         }
     }
 }
@@ -126,8 +123,9 @@ void SAL_CALL Mapping_map_to_java(
     jobject * ppJavaI = (jobject *) ppOut;
     uno_Interface * pUnoI = (uno_Interface *)pIn;
 
-    OSL_ASSERT( sizeof (void *) == sizeof (jobject) );
-    OSL_ENSURE( ppJavaI && td, "### null ptr!" );
+    BOOST_STATIC_ASSERT( sizeof (void *) == sizeof (jobject) );
+    assert(ppJavaI != 0);
+    assert(td != 0);
 
     try
     {
@@ -167,20 +165,13 @@ void SAL_CALL Mapping_map_to_java(
     }
     catch (const BridgeRuntimeError & err)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg(
-            OUStringToOString(
-                "[jni_uno bridge error] " + err.m_message,
-                RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg.getStr() );
-#else
-            (void) err; // unused
-#endif
+        SAL_WARN(
+            "bridges",
+            "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
     }
     catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_FAIL(
-            "[jni_uno bridge error] attaching current thread to java failed!" );
+        SAL_WARN("bridges", "attaching current thread to java failed");
     }
 }
 
@@ -247,7 +238,8 @@ Bridge::Bridge(
         reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
             m_java_env->pContext ) );
 
-    OSL_ASSERT( 0 != m_java_env && 0 != m_uno_env );
+    assert(m_java_env != 0);
+    assert(m_uno_env != 0);
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
     (*m_java_env->acquire)( m_java_env );
 
@@ -278,7 +270,7 @@ void JNI_context::java_exc_occurred() const
 
     JLocalAutoRef jo_exc( *this, m_env->ExceptionOccurred() );
     m_env->ExceptionClear();
-    OSL_ASSERT( jo_exc.is() );
+    assert(jo_exc.is());
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
@@ -305,7 +297,7 @@ void JNI_context::java_exc_occurred() const
             "cannot get method id of java.lang.Object.toString()!" +
             get_stack_trace() );
     }
-    OSL_ASSERT( 0 != method_Object_toString );
+    assert(method_Object_toString != 0);
 
     JLocalAutoRef jo_descr(
         *this, m_env->CallObjectMethodA(
@@ -450,7 +442,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
 {
     java_env->environmentDisposing = java_env_disposing;
     java_env->pExtEnv = 0; // no extended support
-    OSL_ASSERT( 0 != java_env->pContext );
+    assert(java_env->pContext != 0);
 
     ::jvmaccess::UnoVirtualMachine * machine =
           reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
@@ -467,23 +459,25 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( 0 != ppMapping && 0 != pFrom && 0 != pTo );
+    assert(ppMapping != 0);
+    assert(pFrom != 0);
+    assert(pTo != 0);
     if (0 != *ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
         *ppMapping = 0;
     }
 
-    OSL_ASSERT( JNI_FALSE == sal_False );
-    OSL_ASSERT( JNI_TRUE == sal_True );
-    OSL_ASSERT( sizeof (jboolean) == sizeof (sal_Bool) );
-    OSL_ASSERT( sizeof (jchar) == sizeof (sal_Unicode) );
-    OSL_ASSERT( sizeof (jdouble) == sizeof (double) );
-    OSL_ASSERT( sizeof (jfloat) == sizeof (float) );
-    OSL_ASSERT( sizeof (jbyte) == sizeof (sal_Int8) );
-    OSL_ASSERT( sizeof (jshort) == sizeof (sal_Int16) );
-    OSL_ASSERT( sizeof (jint) == sizeof (sal_Int32) );
-    OSL_ASSERT( sizeof (jlong) == sizeof (sal_Int64) );
+    BOOST_STATIC_ASSERT( JNI_FALSE == sal_False );
+    BOOST_STATIC_ASSERT( JNI_TRUE == sal_True );
+    BOOST_STATIC_ASSERT( sizeof (jboolean) == sizeof (sal_Bool) );
+    BOOST_STATIC_ASSERT( sizeof (jchar) == sizeof (sal_Unicode) );
+    BOOST_STATIC_ASSERT( sizeof (jdouble) == sizeof (double) );
+    BOOST_STATIC_ASSERT( sizeof (jfloat) == sizeof (float) );
+    BOOST_STATIC_ASSERT( sizeof (jbyte) == sizeof (sal_Int8) );
+    BOOST_STATIC_ASSERT( sizeof (jshort) == sizeof (sal_Int16) );
+    BOOST_STATIC_ASSERT( sizeof (jint) == sizeof (sal_Int32) );
+    BOOST_STATIC_ASSERT( sizeof (jlong) == sizeof (sal_Int64) );
     if ((JNI_FALSE == sal_False) &&
         (JNI_TRUE == sal_True) &&
         (sizeof (jboolean) == sizeof (sal_Bool)) &&
@@ -525,21 +519,13 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         }
         catch (const BridgeRuntimeError & err)
         {
-#if OSL_DEBUG_LEVEL > 0
-            OString cstr_msg(
-                OUStringToOString(
-                    "[jni_uno bridge error] " + err.m_message,
-                    RTL_TEXTENCODING_ASCII_US ) );
-            OSL_FAIL( cstr_msg.getStr() );
-#else
-            (void) err; // unused
-#endif
+            SAL_WARN(
+                "bridges",
+                "ingoring BridgeRuntimeError \"" << err.m_message << "\"");
         }
         catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
-            OSL_FAIL(
-                "[jni_uno bridge error] attaching current thread "
-                "to java failed!" );
+            SAL_WARN("bridges", "attaching current thread to java failed");
         }
 
         *ppMapping = mapping;

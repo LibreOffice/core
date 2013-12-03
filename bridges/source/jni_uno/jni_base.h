@@ -20,6 +20,10 @@
 #ifndef INCLUDED_JNI_BASE_H
 #define INCLUDED_JNI_BASE_H
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
@@ -208,7 +212,7 @@ inline void JLocalAutoRef::reset( jobject jo )
 //______________________________________________________________________________
 inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
 {
-    OSL_ASSERT( m_jni.get_jni_env() == auto_ref.m_jni.get_jni_env() );
+    assert( m_jni.get_jni_env() == auto_ref.m_jni.get_jni_env() );
     reset( auto_ref.m_jo );
     auto_ref.m_jo = 0;
     return *this;

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include <sal/alloca.h>
 
@@ -63,7 +66,7 @@ void Bridge::handle_java_exc(
     JNI_context const & jni,
     JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const
 {
-    OSL_ASSERT( jo_exc.is() );
+    assert( jo_exc.is() );
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
@@ -113,19 +116,11 @@ void Bridge::handle_java_exc(
     uno_exc->pType = td.get()->pWeakRef;
     uno_exc->pData = uno_data.release();
 
-#if OSL_DEBUG_LEVEL > 1
-    OUStringBuffer trace_buf( 128 );
-    trace_buf.append( "exception occurred uno->java: [" );
-    trace_buf.append( exc_name );
-    trace_buf.append( "] " );
-    trace_buf.append(
-        reinterpret_cast< ::com::sun::star::uno::Exception const * >(
-            uno_exc->pData )->Message );
-    OString cstr_trace(
-        OUStringToOString(
-            trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_trace.getStr() );
-#endif
+    SAL_INFO(
+        "bridges",
+        "exception occurred uno->java: [" << exc_name << "] "
+        << (reinterpret_cast<css::uno::Exception const *>(uno_exc->pData)
+            ->Message));
 }
 
 //______________________________________________________________________________
@@ -136,7 +131,7 @@ void Bridge::call_java(
     typelib_MethodParameter * params, sal_Int32 nParams,
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const
 {
-    OSL_ASSERT( function_pos_offset == 0 || function_pos_offset == 1 );
+    assert( function_pos_offset == 0 || function_pos_offset == 1 );
 
     JNI_guarded_context jni(
         m_jni_info, reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
@@ -157,7 +152,7 @@ void Bridge::call_java(
         }
         iface_td = reinterpret_cast<typelib_InterfaceTypeDescription *>(
             iface_holder.get() );
-        OSL_ASSERT( iface_td->aBase.eTypeClass == typelib_TypeClass_INTERFACE );
+        assert( iface_td->aBase.eTypeClass == typelib_TypeClass_INTERFACE );
     }
 
     // prepare java args, save param td
@@ -201,19 +196,20 @@ void Bridge::call_java(
     }
 
     sal_Int32 base_members = iface_td->nAllMembers - iface_td->nMembers;
-    OSL_ASSERT( base_members < iface_td->nAllMembers );
+    assert( base_members < iface_td->nAllMembers );
     sal_Int32 base_members_function_pos =
         iface_td->pMapMemberIndexToFunctionIndex[ base_members ];
     sal_Int32 member_pos = base_members + local_member_index;
-    OSL_ENSURE(
-        member_pos < iface_td->nAllMembers, "### member pos out of range!" );
+    SAL_WARN_IF(
+        member_pos >= iface_td->nAllMembers, "bridges",
+        "member pos out of range");
     sal_Int32 function_pos =
         iface_td->pMapMemberIndexToFunctionIndex[ member_pos ]
         + function_pos_offset;
-    OSL_ENSURE(
-        function_pos >= base_members_function_pos
-        && function_pos < iface_td->nMapFunctionIndexToMemberIndex,
-        "### illegal function index!" );
+    SAL_WARN_IF(
+        (function_pos < base_members_function_pos
+         || function_pos >= iface_td->nMapFunctionIndexToMemberIndex),
+        "bridges", "illegal function index");
     function_pos -= base_members_function_pos;
 
     JNI_interface_type_info const * info =
@@ -221,7 +217,7 @@ void Bridge::call_java(
             m_jni_info->get_type_info( jni, &iface_td->aBase ) );
     jmethodID method_id = info->m_methods[ function_pos ];
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     OUStringBuffer trace_buf( 128 );
     trace_buf.append( "calling " );
     JLocalAutoRef jo_method(
@@ -246,10 +242,7 @@ void Bridge::call_java(
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
     trace_buf.append( ")" );
-    OString cstr_trace(
-        OUStringToOString(
-            trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_trace.getStr() );
+    SAL_INFO("bridges", trace_buf.makeStringAndClear());
 #endif
 
     // complex return value
@@ -476,9 +469,7 @@ inline void UNO_proxy::acquire() const
             m_bridge->m_uno_env, &that,
             UNO_proxy_free, m_oid.pData,
             (typelib_InterfaceTypeDescription *)m_type_info->m_td.get() );
-#if OSL_DEBUG_LEVEL > 1
-        OSL_ASSERT( this == (void const * const)that );
-#endif
+        assert( this == (void const * const)that );
     }
 }
 
@@ -538,16 +529,8 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     UNO_proxy const * that = reinterpret_cast< UNO_proxy const * >( proxy );
     Bridge const * bridge = that->m_bridge;
 
-    if ( env != bridge->m_uno_env ) {
-        OSL_ASSERT(false);
-    }
-#if OSL_DEBUG_LEVEL > 1
-    OString cstr_msg(
-        OUStringToOString(
-            "freeing binary uno proxy: " + that->m_oid,
-            RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_msg.getStr() );
-#endif
+    assert(env == bridge->m_uno_env);
+    SAL_INFO("bridges", "freeing binary uno proxy: " << that->m_oid);
 
     try
     {
@@ -561,22 +544,17 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     }
     catch (BridgeRuntimeError & err)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg2(
-            OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg2.getStr() );
-#else
-        (void) err; // unused
-#endif
+        SAL_WARN(
+            "bridges",
+            "ignoring BridgeRuntimeError \"" << err.m_message << "\"");
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_FAIL(
-            "[jni_uno bridge error] attaching current thread to java failed!" );
+        SAL_WARN("bridges", "attaching current thread to java failed");
     }
 
     bridge->release();
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     *(int *)that = 0xdeadcafe;
 #endif
     delete that;
@@ -607,17 +585,10 @@ void SAL_CALL UNO_proxy_dispatch(
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
     Bridge const * bridge = that->m_bridge;
 
-#if OSL_DEBUG_LEVEL > 1
-    OUStringBuffer trace_buf( 64 );
-    trace_buf.append( "uno->java call: " );
-    trace_buf.append( OUString::unacquired( &member_td->pTypeName ) );
-    trace_buf.append( " on oid " );
-    trace_buf.append( that->m_oid );
-    OString cstr_msg(
-        OUStringToOString(
-            trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "%s", cstr_msg.getStr() );
-#endif
+    SAL_INFO(
+        "bridges",
+        "uno->java call: " << OUString::unacquired(&member_td->pTypeName)
+            << " on oid " << that->m_oid);
 
     try
     {
@@ -633,7 +604,7 @@ void SAL_CALL UNO_proxy_dispatch(
             while ( attrib_td->pBaseRef != 0 ) {
                 attrib_holder = com::sun::star::uno::TypeDescription(
                     attrib_td->pBaseRef );
-                OSL_ASSERT(
+                assert(
                     attrib_holder.get()->eTypeClass
                     == typelib_TypeClass_INTERFACE_ATTRIBUTE );
                 attrib_td = reinterpret_cast<
@@ -676,7 +647,7 @@ void SAL_CALL UNO_proxy_dispatch(
             while ( method_td->pBaseRef != 0 ) {
                 method_holder = com::sun::star::uno::TypeDescription(
                     method_td->pBaseRef );
-                OSL_ASSERT(
+                assert(
                     method_holder.get()->eTypeClass
                     == typelib_TypeClass_INTERFACE_METHOD );
                 method_td = reinterpret_cast<
@@ -737,15 +708,15 @@ void SAL_CALL UNO_proxy_dispatch(
                     {
                         if (jo_ret.is())
                         {
-#if OSL_DEBUG_LEVEL > 0
-                            JLocalAutoRef jo_oid(
-                                jni, compute_oid( jni, jo_ret.get() ) );
-                            OUString oid( jstring_to_oustring(
-                                              jni, (jstring) jo_oid.get() ) );
-                            OSL_ENSURE(
-                                oid.equals( that->m_oid ),
-                                "### different oids!" );
-#endif
+                            SAL_WARN_IF(
+                                (jstring_to_oustring(
+                                    jni,
+                                    static_cast<jstring>(
+                                        JLocalAutoRef(
+                                            jni, compute_oid(jni, jo_ret.get()))
+                                        .get()))
+                                 != that->m_oid),
+                                "bridges", "different oids");
                             // refcount initially 1
                             uno_Interface * pUnoI2 = new UNO_proxy(
                                 jni, bridge, jo_ret.get(),
@@ -830,11 +801,7 @@ void SAL_CALL UNO_proxy_dispatch(
               ::com::sun::star::uno::XInterface >() );
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
-#if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg2(
-            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "%s", cstr_msg2.getStr() );
-#endif
+        SAL_INFO("bridges", exc.Message);
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
@@ -845,11 +812,7 @@ void SAL_CALL UNO_proxy_dispatch(
               ::com::sun::star::uno::XInterface >() );
         ::com::sun::star::uno::Type const & exc_type = ::getCppuType( &exc );
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0 );
-#if OSL_DEBUG_LEVEL > 0
-        OString cstr_msg2(
-            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg2.getStr() );
-#endif
+        SAL_WARN("bridges", exc.Message);
     }
 }
 

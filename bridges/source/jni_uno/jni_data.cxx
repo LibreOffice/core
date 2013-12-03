@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include "jni_bridge.h"
 
@@ -111,7 +114,7 @@ void createDefaultUnoValue(
         }
         *static_cast< typelib_TypeDescriptionReference ** >(uno_data)
             = *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID);
-        OSL_ASSERT(
+        assert(
             *static_cast< typelib_TypeDescriptionReference ** >(uno_data) != 0);
         typelib_typedescriptionreference_acquire(
             *static_cast< typelib_TypeDescriptionReference ** >(uno_data));
@@ -205,7 +208,7 @@ void createDefaultUnoValue(
         break;
 
     default:
-        OSL_ASSERT(false);
+        assert(false);
         break;
     }
 }
@@ -220,7 +223,7 @@ void Bridge::map_to_uno(
     bool assign, bool out_param,
     bool special_wrapped_integral_types ) const
 {
-    OSL_ASSERT(
+    assert(
         !out_param ||
         (1 == jni->GetArrayLength( (jarray) java_data.l )) );
 
@@ -504,16 +507,6 @@ void Bridge::map_to_uno(
             // create type out of class
             JLocalAutoRef jo_class( jni, jni->GetObjectClass( java_data.l ) );
             jo_type.reset( create_type( jni, (jclass) jo_class.get() ) );
-#if OSL_DEBUG_LEVEL > 1
-            {
-            JLocalAutoRef jo_toString(
-                jni, jni->CallObjectMethodA(
-                    java_data.l, m_jni_info->m_method_Object_toString, 0 ) );
-            jni.ensure_no_exception();
-            OUString toString(
-                jstring_to_oustring( jni, (jstring) jo_toString.get() ) );
-            }
-#endif
         }
 
         // get type name
@@ -935,7 +928,7 @@ void Bridge::map_to_uno(
                     if (0 == field_id)
                     {
                         // special for Message: call Throwable.getMessage()
-                        OSL_ASSERT(
+                        assert(
                             type_equals(
                                 type,
                                 m_jni_info->m_Exception_type.getTypeLibType() )
@@ -943,7 +936,7 @@ void Bridge::map_to_uno(
                                 type,
                                 m_jni_info->m_RuntimeException_type.
                                 getTypeLibType() ) );
-                        OSL_ASSERT( 0 == nPos ); // first member
+                        assert( 0 == nPos ); // first member
                         // call getMessage()
                         jo_field.reset(
                             jni->CallObjectMethodA(
@@ -1570,7 +1563,7 @@ void Bridge::map_to_java(
         }
         else
         {
-            OSL_ASSERT( in_param );
+            assert( in_param );
             java_data->l =
                 ustring_to_jstring( jni, *(rtl_uString * const *) uno_data );
         }
@@ -1604,7 +1597,7 @@ void Bridge::map_to_java(
         }
         else
         {
-            OSL_ASSERT( in_param );
+            assert( in_param );
             java_data->l =
                 create_type(
                     jni,
@@ -1774,7 +1767,7 @@ void Bridge::map_to_java(
                 // polymorphic struct types:
                 OUString const & name = OUString::unacquired(
                     &pAny->pType->pTypeName);
-                OSL_ASSERT(!name.isEmpty());
+                assert(!name.isEmpty());
                 if (name[name.getLength() - 1] == '>')
                 {
                     // Box up in com.sun.star.uno.Any:
@@ -1850,7 +1843,7 @@ void Bridge::map_to_java(
             jmethodID method_id = jni->GetStaticMethodID(
                 (jclass) jo_enum_class.get(), "fromInt", sig.getStr() );
             jni.ensure_no_exception();
-            OSL_ASSERT( 0 != method_id );
+            assert( 0 != method_id );
 
             jvalue arg;
             arg.i = *(jint const *) uno_data;
@@ -2339,7 +2332,7 @@ void Bridge::map_to_java(
                 jmethodID method_id = jni->GetStaticMethodID(
                     (jclass) jo_enum_class.get(), "fromInt", sig.getStr() );
                 jni.ensure_no_exception();
-                OSL_ASSERT( 0 != method_id );
+                assert( 0 != method_id );
 
                 sal_Int32 const * p = (sal_Int32 const *)seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
