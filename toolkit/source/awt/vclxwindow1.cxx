@@ -20,9 +20,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
-#ifndef _SV_WORKWIN
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/window.hxx>
 
 #ifdef WNT
