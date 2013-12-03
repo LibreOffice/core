@@ -51,20 +51,4 @@ DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
     Text [ en-US ] = "Page Pane" ;
 };
 
-DockingWindow FLT_TOOL_PANEL_DOCKING_WINDOW
-{
-    HelpID = "sd:DockingWindow:FLT_TOOL_PANEL_DOCKING_WINDOW";
-    Border = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-    Size = MAP_APPFONT (100,200) ;
-    Text [ en-US ] = "Task Pane" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
