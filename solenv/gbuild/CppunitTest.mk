@@ -156,7 +156,6 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,$(gb_CPPU_
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,affine_uno)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unobootstrapprotector)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unoexceptionprotector)
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,cppuhelper_unorc)
 
 endef
 
