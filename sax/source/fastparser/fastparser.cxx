@@ -194,25 +194,25 @@ class FastSaxParserImpl
 {
 public:
     FastSaxParserImpl( FastSaxParser* pFront );
-    virtual ~FastSaxParserImpl();
+    ~FastSaxParserImpl();
 
     // The implementation details
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void);
 
     // XFastParser
-    void SAL_CALL parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setFastDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setEntityResolver( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >& Resolver ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException);
+    void parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void setFastDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
+    void setTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
+    void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    OUString getNamespaceURL( const OUString& rPrefix ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    void setErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
+    void setEntityResolver( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >& Resolver ) throw (::com::sun::star::uno::RuntimeException);
+    void setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    OUString getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const XML_Char* name, const XML_Char** atts );
@@ -824,13 +824,13 @@ void FastSaxParserImpl::setFastDocumentHandler( const Reference< XFastDocumentHa
     maData.mxDocumentHandler = Handler;
 }
 
-void SAL_CALL FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& xHandler ) throw (RuntimeException)
+void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& xHandler ) throw (RuntimeException)
 {
     maData.mxTokenHandler = xHandler;
     maData.mpTokenHandler = dynamic_cast< FastTokenHandlerBase *>( xHandler.get() );
 }
 
-void SAL_CALL FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (IllegalArgumentException, RuntimeException)
+void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (IllegalArgumentException, RuntimeException)
 {
     if( NamespaceToken >= FastToken::NAMESPACE )
     {
@@ -843,7 +843,7 @@ void SAL_CALL FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL
     throw IllegalArgumentException();
 }
 
-OUString SAL_CALL FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix ) throw(IllegalArgumentException, RuntimeException)
+OUString FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix ) throw(IllegalArgumentException, RuntimeException)
 {
     try
     {
