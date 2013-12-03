@@ -852,7 +852,7 @@ void SwEditWin::FlushInBuffer()
 
             SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
 
-            xub_StrLen nExpandSelection = 0;
+            sal_Int32 nExpandSelection = 0;
             if (nOldLen > 0)
             {
                 sal_Int32 nTmpPos = nOldLen;
@@ -885,7 +885,7 @@ void SwEditWin::FlushInBuffer()
                     if (nChgLen)
                     {
                         m_aInBuffer = aNewText.copy( nChgPos, nChgLen );
-                        nExpandSelection = static_cast< xub_StrLen >(nOldLen - nChgPos);
+                        nExpandSelection = nOldLen - nChgPos;
                     }
                     else
                         m_aInBuffer = "";
