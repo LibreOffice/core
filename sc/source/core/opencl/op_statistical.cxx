@@ -5282,6 +5282,27 @@ void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    if(length!=length1)\n";
     ss << "        return 0;\n";
     ss << "    double tmp = 0;\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            ss << "return HUGE_VAL";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "return HUGE_VAL";
+#endif
+        }
+    }
     ss << "    for (int i = 0; i <" << nCurWindowSize << "; i++)\n";
     ss << "    {\n";
     ss << "        double arg0 = ";
@@ -5333,13 +5354,13 @@ void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        if(isNan(arg1)||((gid0+i)>=";
     ss <<pCurDVR1->GetArrayLength();
     ss <<"))\n";
-    ss << "        {";
+    ss << "        {\n";
     ss << "            continue;\n";
     ss << "        }\n";
 #endif
     ss << "        fSumDeltaXDeltaY+=(arg1 - fMeanX) * (arg0 - fMeanY);";
     ss << ";\n";
-    ss << "        fSumSqrDeltaX+=(arg1 - fMeanX) * (arg1 - fMeanX);\n";
+    ss << "        fSumSqrDeltaX    += pow(arg1 - fMeanX, 2);\n";
     ss << "    }\n";
     ss << "    tmp = fMeanY - fSumDeltaXDeltaY / fSumSqrDeltaX";
     ss << "* fMeanX;\n";
