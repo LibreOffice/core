@@ -517,8 +517,8 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
                 break;
                 case SC_MATVAL_STRING:
                 {
-                    const OUString& rStr = aVal.GetString();
-                    ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
+                    const svl::SharedString aStr( aVal.GetString());
+                    ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(aStr));
                     xTab->setCell(nCol, nRow, pToken, 0, false);
                 }
                 break;

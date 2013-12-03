@@ -1319,8 +1319,8 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                 }
                 else    // string or empty
                 {
-                    const OUString& rStr = nMatVal.GetString();
-                    if( rStr.isEmpty() )
+                    const OUString aStr( nMatVal.GetString().getString());
+                    if( aStr.isEmpty() )
                     {
                         AppendExt( EXC_CACHEDVAL_EMPTY );
                         AppendExt( 0, 8 );
@@ -1328,7 +1328,7 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                     else
                     {
                         AppendExt( EXC_CACHEDVAL_STRING );
-                        AppendExt( rStr );
+                        AppendExt( aStr );
                     }
                 }
             }

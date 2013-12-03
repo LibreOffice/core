@@ -1855,7 +1855,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
             }
             else
             {
-                OUString aStr( nMatVal.GetString());
+                svl::SharedString aStr( nMatVal.GetString());
                 FormulaTokenRef xRes = new FormulaStringToken( aStr);
                 PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_TEXT;
