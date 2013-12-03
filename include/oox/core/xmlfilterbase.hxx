@@ -227,6 +227,8 @@ public:
 
     OUString getNamespaceURL( const OUString& rPrefix );
 
+    bool hasNamespaceURL( const OUString& rPrefix ) const;
+
     sal_Int32 getNamespaceId( const OUString& rUrl );
 
     void importDocumentProperties();

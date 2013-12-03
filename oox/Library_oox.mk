@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     cppuhelper \
     editeng \
     drawinglayer \
+    fastsax \
     msfilter \
     sal \
 	i18nlangtag \
