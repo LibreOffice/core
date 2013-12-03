@@ -2031,12 +2031,6 @@ AC_ARG_WITH(parallelism,
         10.]),
 ,)
 
-AC_ARG_WITH(check-jobs,
-    AS_HELP_STRING([--with-check-jobs],
-        [Maximum number of jobs that will be issued at the same time during 'make subsequenttest'.
-         Default value is the same as 'parallelism'. Useful because the subsequent tests are very lightweight.]),
-,)
-
 AC_ARG_WITH(all-tarballs,
     AS_HELP_STRING([--with-all-tarballs],
         [Download all external tarballs unconditionally]))
