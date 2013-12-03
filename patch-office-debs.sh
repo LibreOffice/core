@@ -6,7 +6,7 @@ VER_APPEND=$3
 DIR_WORK=$4
 LIBLDAP_PACKAGE="libldap-2.4-2"
 LIBLDAP_FILE="/usr/lib/libldap-2.4.so.2"
-LO_BASE_VERSION="3.6"
+LO_BASE_VERSION="4.1"
 LO_BASE_PATH=opt/libreoffice${LO_BASE_VERSION}
 
 LO_LIBLDAP="${LO_BASE_PATH}/program/libldap50.so"
@@ -25,79 +25,6 @@ function usage {
 	exit $2
 }
 
-if [ "x" = "x$DIR_IN" ]; then
-	usage "Scan directory not supplied" 1
-fi
-
-if [ "x" = "x$(which fakeroot)" ]; then
-	usage "This script needs fakeroot" 1
-fi
-
-if [ ! -d $DIR_IN ]; then
-	usage "Scan directory not existing or no directory" 2
-fi
-
-if [ "x" = "x$DIR_OUT" ]; then
-	usage "Output directory not supplied" 3
-fi
-
-if [ -d "$DIR_OUT" ]; then
-	usage "Output directory already existing - please remove" 4
-fi
-
-if [ "x" = "x$VER_APPEND" ]; then
-	usage "Version append string not given" 5
-fi
-
-DEBVER=$(ls "$DIR_IN"/main/libreoffice*base*.deb | awk -F '-' '{ print $3; }')
-if [ "x" = "x${DEBVER}" ]; then
-	echo "Couldn't extract debian version from .deb file"
-	exit 1
-fi
-
-if [ -d "package-data" ]; then
-	rm -rf "package-data"
-fi
-
-mkdir -p package-data
-mkdir $DIR_OUT
-
-function patch_libldap2 {
-	if [ -e "package-data/${LO_LIBLDAP}" ]; then
-		echo "Symlinking $(basename ${LO_LIBLDAP}) and adding libldap-2.4-2 depends"
-		rm -f "package-data/${LO_LIBLDAP}"
-		fakeroot ln -s ${LIBLDAP_FILE} "package-data/${LO_LIBLDAP}"
-		fakeroot sed -i -e "s/Depends: .*/\0, ${LIBLDAP_PACKAGE}/" \
-			package-data/DEBIAN/control
-	fi
-}
-
-function patch_sdk_exec {
-	if [ -d "package-data/${LO_BASE_PATH}/sdk/bin" ]; then
-		# Rechte für Programme in SDK
-		echo "Changing permissions in sdk/bin"
-		fakeroot chmod a+x package-data/${LO_BASE_PATH}/sdk/bin/*
-	fi
-}
-
-function patch_opensymbol_lhm {
-	if [ -f "package-data/${OPENSYMBOL_PATH}" ]; then
-		echo "Symlinking 'OpenSymbol TTF font' and adding ${OPENSYMBOL_PACKAGE} depends"
-		rm -f "package-data/${OPENSYMBOL_PATH}"
-		fakeroot sed -i -e "s/Depends: .*/\0, ${OPENSYMBOL_PACKAGE}/" \
-			package-data/DEBIAN/control
-		ln -s "/usr/share/fonts/truetype/${OPENSYMBOL_PACKAGE#ttf-}/${OPENSYMBOL_FONT}" \
-			"package-data/${OPENSYMBOL_PATH}"
-	fi
-}
-
-function patch_tmp_path {
-	if [ -f "package-data/${LO_MAIN_XCD}" ]; then
-		echo "patching temp path ..."
-		sed -i -e 's|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>$(temp)</value></prop></node></node>|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>file:///var/tmp/</value></prop></node></node>|' package-data/${LO_MAIN_XCD}
-		sed -i -e 's|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>$(temp)</value></prop></node></node>|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>file:///var/tmp/</value></prop></node></node>|' package-data/${LO_MAIN_XCD}
-	fi
-}
 function copy_packages {
 
   OUTFOLDER=$DIR_WORK
@@ -183,10 +110,82 @@ function copy_packages {
 
   rm -rf patched
 
-  tar -cvzf LibO+lhm${BUILD_NUMBER}_Linux_${NODE_LABELS%% *}_x86_install-deb_LHM${VERSION}.tar.gz patched
+}
 
-  echo $(ls -1 patched/*/*.deb | wc -l) Pakete
+#copy_packages
 
+if [ "x" = "x$DIR_IN" ]; then
+	usage "Scan directory not supplied" 1
+fi
+
+if [ "x" = "x$(which fakeroot)" ]; then
+	usage "This script needs fakeroot" 1
+fi
+
+if [ ! -d $DIR_IN ]; then
+	usage "Scan directory not existing or no directory" 2
+fi
+
+if [ "x" = "x$DIR_OUT" ]; then
+	usage "Output directory not supplied" 3
+fi
+
+if [ -d "$DIR_OUT" ]; then
+	usage "Output directory already existing - please remove" 4
+fi
+
+if [ "x" = "x$VER_APPEND" ]; then
+	usage "Version append string not given" 5
+fi
+
+DEBVER=$(ls "$DIR_IN"/main/libreoffice*base*.deb | awk -F '-' '{ print $3; }')
+if [ "x" = "x${DEBVER}" ]; then
+	echo "Couldn't extract debian version from .deb file"
+	exit 1
+fi
+
+if [ -d "package-data" ]; then
+	rm -rf "package-data"
+fi
+
+mkdir -p package-data
+mkdir $DIR_OUT
+
+function patch_libldap2 {
+	if [ -e "package-data/${LO_LIBLDAP}" ]; then
+		echo "Symlinking $(basename ${LO_LIBLDAP}) and adding libldap-2.4-2 depends"
+		rm -f "package-data/${LO_LIBLDAP}"
+		fakeroot ln -s ${LIBLDAP_FILE} "package-data/${LO_LIBLDAP}"
+		fakeroot sed -i -e "s/Depends: .*/\0, ${LIBLDAP_PACKAGE}/" \
+			package-data/DEBIAN/control
+	fi
+}
+
+function patch_sdk_exec {
+	if [ -d "package-data/${LO_BASE_PATH}/sdk/bin" ]; then
+		# Rechte für Programme in SDK
+		echo "Changing permissions in sdk/bin"
+		fakeroot chmod a+x package-data/${LO_BASE_PATH}/sdk/bin/*
+	fi
+}
+
+function patch_opensymbol_lhm {
+	if [ -f "package-data/${OPENSYMBOL_PATH}" ]; then
+		echo "Symlinking 'OpenSymbol TTF font' and adding ${OPENSYMBOL_PACKAGE} depends"
+		rm -f "package-data/${OPENSYMBOL_PATH}"
+		fakeroot sed -i -e "s/Depends: .*/\0, ${OPENSYMBOL_PACKAGE}/" \
+			package-data/DEBIAN/control
+		ln -s "/usr/share/fonts/truetype/${OPENSYMBOL_PACKAGE#ttf-}/${OPENSYMBOL_FONT}" \
+			"package-data/${OPENSYMBOL_PATH}"
+	fi
+}
+
+function patch_tmp_path {
+	if [ -f "package-data/${LO_MAIN_XCD}" ]; then
+		echo "patching temp path ..."
+		sed -i -e 's|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>$(temp)</value></prop></node></node>|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>file:///var/tmp/</value></prop></node></node>|' package-data/${LO_MAIN_XCD}
+		sed -i -e 's|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>$(temp)</value></prop></node></node>|<node oor:name="Path"><node oor:name="Current"><prop oor:name="Temp" oor:type="xs:string"><value>file:///var/tmp/</value></prop></node></node>|' package-data/${LO_MAIN_XCD}
+	fi
 }
 
 function patch_paths_xcu {
@@ -465,8 +464,6 @@ function patch_deb {
 
 OLDIFS=$IFS
 IFS=$'\n'
-
-copy_packages
 
 SOURCE="ooo-orig"
 DEBFILES=$(ls -1 "$DIR_IN"/main/*${DEBVER}*.deb "$DIR_IN"/sdk/*${DEBVER}*.deb)
