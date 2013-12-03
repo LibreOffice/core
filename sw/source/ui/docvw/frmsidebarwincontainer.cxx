@@ -28,9 +28,9 @@
 namespace {
     struct SidebarWinKey
     {
-        const xub_StrLen mnIndex;
+        const sal_Int32 mnIndex;
 
-        explicit SidebarWinKey( const xub_StrLen nIndex )
+        explicit SidebarWinKey( const sal_Int32 nIndex )
             : mnIndex( nIndex )
         {}
 
