@@ -227,22 +227,17 @@ void OpEven::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"        arg0 = 0;\n";
 #endif
     ss << "    double tmp;\n";
-    ss << "    arg0 = arg0 / 2;\n";
-    ss << "    if (arg0 < 0)\n";
-    ss << "        if (trunc(arg0) == arg0)\n";
-    ss << "            tmp = arg0 * 2;\n";
-    ss << "        else\n";
-    ss << "            tmp = (trunc(arg0) - 1) * 2;\n";
-    ss << "    else if (arg0 > 0)\n";
-    ss << "         if (trunc(arg0) == arg0)\n";
-    ss << "             tmp = arg0 * 2;\n";
-    ss << "         else\n";
-    ss << "             tmp = (trunc(arg0) + 1) * 2;\n";
+    ss << "    tmp = fabs(arg0 / 2);\n";
+    ss << "    if ( trunc(tmp) == tmp )\n";
+    ss << "        tmp = tmp * 2;\n";
     ss << "    else\n";
-    ss << "        tmp = 0;\n";
+    ss << "        tmp = (trunc(tmp) + 1) * 2;\n";
+    ss << "    if (arg0 < 0)\n";
+    ss << "        tmp = tmp * -1.0;\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
+
 void OpMod::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
