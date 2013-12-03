@@ -2034,6 +2034,12 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlTriangle, "ooxml-triangle.docx")
     getShape(1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMce, "mce.docx")
+{
+    // The shape is red in Word2007, green in Word2010. Check that our import follows the later.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bbb59), getProperty<sal_Int32>(getShape(1), "FillColor"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
