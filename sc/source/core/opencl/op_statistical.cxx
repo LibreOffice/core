@@ -5770,18 +5770,84 @@ void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << ") {\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    double arg0 = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-    ss << "    double arg1 = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-    ss << "    double arg2 = ";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-    ss << "    double arg3 = ";
-    ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    ss << "    double arg0,arg1,arg2,arg3;\n";
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n ";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n ";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+            ss << "    {\n";
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            arg"<<i<<"=";
+            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "    }\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"= 0;\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        arg"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        arg"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#endif
+        }
+    }
     ss << "    double tmp;\n";
 #ifdef ISNAN
     ss << "    if(isNan(arg0)||(gid0>=";
@@ -5816,11 +5882,12 @@ void OpLogNormDist::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "            tmp = 0.5 * erfc(-temp * 0.7071067811865475);\n";
     ss << "    }\n";
     ss << "    else\n";
-    ss << "        tmp = (0.39894228040143268 * exp(-(temp * temp)";
-    ss << " / 2.0))/arg2/arg0;\n";
+    ss << "        tmp = (0.39894228040143268 * exp((-1)*pow(temp, 2)";
+    ss << " / 2.0))/(arg2*arg0);\n";
     ss << "    return tmp;\n";
     ss << "}\n";
 }
+
 void OpGammaDist::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
