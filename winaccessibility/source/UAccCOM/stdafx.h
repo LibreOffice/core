@@ -51,7 +51,6 @@ extern CComModule _Module;
 
 #include <windows.h>
 #undef OPAQUE
-#include "CheckEnableAccessible.h"
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

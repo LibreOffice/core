@@ -33,9 +33,6 @@ using namespace com::sun::star::uno;
 */
 STDMETHODIMP CAccImage::get_description(BSTR * description)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#

@@ -107,9 +107,6 @@ void GetDfActionByUNORole(XAccessibleContext* pRContext, BSTR* pRet)
  */
 STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -132,9 +129,6 @@ STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
  */
 STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if( pRXAct.is() )
@@ -154,9 +148,6 @@ STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
  */
 STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *description)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -204,9 +195,6 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
     /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
     /* [retval][out] */ long __RPC_FAR *nBinding)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if( !keyBinding || !nBinding)

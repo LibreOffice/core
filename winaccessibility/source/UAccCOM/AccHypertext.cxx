@@ -276,9 +276,6 @@ STDMETHODIMP CAccHypertext::scrollSubstringTo(long startIndex, long endIndex,enu
 */
 STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -304,9 +301,6 @@ STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
 */
 STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hyperlink)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -353,9 +347,6 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
 */
 STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex, long *hyperlinkIndex)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#

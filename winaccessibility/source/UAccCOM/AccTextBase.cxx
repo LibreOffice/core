@@ -57,9 +57,6 @@ CAccTextBase::~CAccTextBase()
 */
 STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK XInterface#
@@ -94,9 +91,6 @@ STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
 */
 STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long * endOffset, BSTR * textAttributes)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (startOffset == NULL || endOffset == NULL || textAttributes == NULL)
@@ -217,9 +211,6 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
 */
 STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (offset == NULL)
@@ -244,9 +235,6 @@ STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
 */
 STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (nCharacters == NULL)
@@ -275,9 +263,6 @@ STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
 */
 STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (x == NULL || height == NULL || y == NULL || width == NULL)
@@ -348,9 +333,6 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
 */
 STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (nSelections == NULL)
@@ -395,7 +377,6 @@ STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
 */
 STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, long * offset)
 {
-    CHECK_ENABLE_INF
     ENTER_PROTECTED_BLOCK
 
     if (offset == NULL)
@@ -423,9 +404,6 @@ STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, 
 
 STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset, long * endOffset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (startOffset == NULL || endOffset == NULL )
@@ -473,9 +451,6 @@ STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset
 */
 STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * text)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (text == NULL)
@@ -521,9 +496,6 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
 */
 STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -610,9 +582,6 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
 */
 STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (startOffset == NULL || endOffset == NULL || text == NULL)
@@ -697,10 +666,6 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
 */
 STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType boundaryType, long * startOffset, long * endOffset, BSTR * text)
 {
-
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (startOffset == NULL || text == NULL ||endOffset == NULL)
@@ -783,9 +748,6 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
 */
 STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK XInterface#
@@ -820,9 +782,6 @@ STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
 */
 STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK XInterface#
@@ -846,9 +805,6 @@ STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
 */
 STDMETHODIMP CAccTextBase::setSelection(long, long startOffset, long endOffset)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK XInterface#
@@ -871,9 +827,6 @@ STDMETHODIMP CAccTextBase::setSelection(long, long startOffset, long endOffset)
 */
 STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (nCharacters == NULL)
@@ -938,9 +891,6 @@ STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
 */
 STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);

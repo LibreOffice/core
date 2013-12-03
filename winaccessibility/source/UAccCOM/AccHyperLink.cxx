@@ -102,9 +102,6 @@ STDMETHODIMP CAccHyperLink::get_keyBinding(
 STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
         /* [retval][out] */ VARIANT __RPC_FAR *anchor)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -135,9 +132,6 @@ STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
 STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
         /* [retval][out] */ VARIANT __RPC_FAR *anchorTarget)
 {
-
-
-    CHECK_ENABLE_INF
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -168,9 +162,6 @@ STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
 */
 STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *index)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -192,9 +183,6 @@ STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *i
 */
 STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *index)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -221,9 +209,6 @@ STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *ind
 */
 STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *valid)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -250,9 +235,6 @@ STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *val
 */
 STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     CAccActionBase::put_XInterface(pXInterface);
@@ -284,9 +266,6 @@ STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 */
 STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubInterface)
 {
-
-    CHECK_ENABLE_INF
-
     pRXLink = reinterpret_cast<XAccessibleHyperlink*>(pXSubInterface);
     pRXAct = reinterpret_cast<XAccessibleAction*>(pXSubInterface);
 

@@ -34,9 +34,6 @@ using namespace com::sun::star::uno;
 */
 STDMETHODIMP CAccRelation::get_relationType(BSTR * relationType)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (relationType == NULL)
@@ -70,11 +67,8 @@ STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR *)
 */
 STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
 {
-
-
     ENTER_PROTECTED_BLOCK
 
-    CHECK_ENABLE_INF
     if (nTargets == NULL)
         return E_INVALIDARG;
 
@@ -93,9 +87,6 @@ STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
 */
 STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     if (target == NULL)
@@ -131,9 +122,6 @@ STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
 */
 STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * target, long * nTargets)
 {
-
-    CHECK_ENABLE_INF
-
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
