@@ -20,7 +20,6 @@
 
 #include "SlideSorter.hxx"
 
-#include "SlideSorterChildWindow.hrc"
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsScrollBarManager.hxx"
