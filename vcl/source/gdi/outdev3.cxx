@@ -4679,8 +4679,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         // get service provider
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
+        bool bHyphenate = (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION)
+            == TEXT_DRAW_WORDBREAK_HYPHENATION;
         uno::Reference< linguistic2::XHyphenator > xHyph;
-        if ( nStyle & TEXT_DRAW_WORDBREAK )
+        if ( bHyphenate )
         {
             uno::Reference< linguistic2::XLinguServiceManager2> xLinguMgr = linguistic2::LinguServiceManager::create(xContext);
             xHyph = xLinguMgr->getHyphenator();
@@ -4712,7 +4714,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     nBreakPos = (xub_StrLen)aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
                         nBreakPos = nSoftBreak;
-                    if ( (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION) == TEXT_DRAW_WORDBREAK_HYPHENATION )
+                    if ( bHyphenate )
                     {
                         // Whether hyphen or not: Put the word after the hyphen through
                         // word boundary.
