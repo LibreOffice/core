@@ -28,25 +28,33 @@ $(call gb_Zip_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),ZIP,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(if $(CLEAR_LOCATION),rm -rf $(gb_Package_Location_$*) &&) \
+		$(if $(INSTALL_NAME),rm -f $(INSTALL_NAME) &&) \
 		rm -f $(call gb_Zip_get_target,$*) && \
 		rm -f $(call gb_Zip__get_preparation_target,$*))
+
+$(dir $(call gb_Zip_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_Zip_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 # rule to create zip package in workdir
 # --filesync makes sure that all files in the zip package will be removed that no longer are in $(FILES)
 $(call gb_Zip_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),ZIP,3)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(if $(FILES),$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
                         $(FILES)) && \
-	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
 	cd $(LOCATION) && cat $${RESPONSEFILE} | tr "[:space:]" "\n" | $(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match $(call gb_Zip_get_target,$*) && \
-	rm -f $${RESPONSEFILE} )
+	rm -f $${RESPONSEFILE} && \
+	touch $@ \
+	$(if $(INSTALL_NAME),&& cp $(call gb_Zip_get_target,$*) $(INSTALL_NAME)) \
+	))
 
 # the preparation target is here to ensure proper ordering of actions in cases
 # when we want to, e.g., create a zip from files created by a custom target
 $(call gb_Zip__get_preparation_target,%) :
-	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) && touch $@)
+	touch $@
 
 # clear file list, set location (zipping uses relative paths)
 # register target and clean target
@@ -57,8 +65,12 @@ $(call gb_Zip__get_preparation_target,%) :
 # the location can't be stored in a scoped variable as it is needed in the add_file macro (see rule above)
 define gb_Zip_Zip_internal_nodeliver
 $(call gb_Zip_get_target,$(1)) : FILES :=
+$(call gb_Zip_get_target,$(1)) : INSTALL_NAME :=
 $(call gb_Zip_get_target,$(1)) : LOCATION := $(2)
+$(call gb_Zip_get_target,$(1)) :| $(dir $(call gb_Zip_get_target,$(1))).dir
+$(call gb_Zip__get_preparation_target,$(1)) :| $(dir $(call gb_Zip__get_preparation_target,$(1))).dir
 $(call gb_Zip_get_clean_target,$(1)) : CLEAR_LOCATION :=
+$(call gb_Zip_get_clean_target,$(1)) : INSTALL_NAME :=
 $(eval gb_Package_Location_$(1) := $(2))
 
 endef
@@ -115,6 +127,13 @@ endef
 
 define gb_Zip_add_commandoptions
 $(call gb_Zip_get_target,$(1)) : gb_Zip_ZIPCOMMAND += $(2)
+
+endef
+
+define gb_Zip_set_install_name
+$(call gb_Zip_get_target,$(1)) : INSTALL_NAME := $(2)
+$(call gb_Zip_get_target,$(1)) :| $(dir $(2)).dir
+$(call gb_Zip_get_clean_target,$(1)) : INSTALL_NAME := $(2)
 
 endef
 
