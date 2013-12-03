@@ -89,7 +89,7 @@ namespace vcl
                                 long _nMaxTextWidth,
                                 sal_Int32 _nStartIndex,
                                 sal_Int32 _nLength
-                            ) const;
+                            ) const SAL_OVERRIDE;
         virtual bool        DecomposeTextRectAction() const;
 
     private:

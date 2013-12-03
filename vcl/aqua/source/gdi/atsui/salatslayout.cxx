@@ -53,7 +53,7 @@ public:
 
     virtual long    GetTextWidth() const;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
+    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 

@@ -263,7 +263,7 @@ class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 {
 public:
     virtual void    DrawText( SalGraphics& ) const;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const;
+    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
@@ -359,7 +359,7 @@ public:
     // used by upper layers
     virtual long    GetTextWidth() const;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
-    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const;
+    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
 
     // used by display layers

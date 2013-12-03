@@ -119,7 +119,7 @@ public:
     virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting positions
 
     // methods using string indexing
-    virtual int   GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const;
+    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
     virtual long  FillDXArray( sal_Int32* pDXArray ) const;
     virtual void  ApplyDXArray(ImplLayoutArgs &rArgs, std::vector<int> & rDeltaWidth);
 

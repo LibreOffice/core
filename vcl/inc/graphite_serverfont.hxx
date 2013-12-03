@@ -68,7 +68,8 @@ public:
         };
         virtual long    GetTextWidth() const                           { return maImpl.GetTextWidth(); }
         virtual long    FillDXArray( sal_Int32* dxa ) const                 { return maImpl.FillDXArray(dxa); }
-        virtual int     GetTextBreak( long mw, long ce, int f ) const  { return maImpl.GetTextBreak(mw, ce, f); }
+        virtual sal_Int32 GetTextBreak(long mw, long ce, int f) const SAL_OVERRIDE
+            { return maImpl.GetTextBreak(mw, ce, f); }
         virtual void    GetCaretPositions( int as, sal_Int32* cxa ) const   { maImpl.GetCaretPositions(as, cxa); }
 
         // used by display layers
