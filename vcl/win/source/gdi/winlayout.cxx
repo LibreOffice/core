@@ -158,7 +158,7 @@ public:
                         const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
+    virtual salInt32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // for glyph+font+script fallback
@@ -1010,7 +1010,7 @@ public:
                         const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
+    virtual sal_Int32 GetTextBreak(long nMaxWidth, long nCharExtra, int nFactor) const;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
     virtual bool    IsKashidaPosValid ( int nCharPos ) const;
 
@@ -2719,7 +2719,7 @@ public:
     virtual void  DrawText( SalGraphics& ) const;
 
     // methods using string indexing
-    virtual int   GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const;
+    virtual sal_Int32 GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const;
     virtual long  FillDXArray( long* pDXArray ) const;
 
     virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
@@ -2855,9 +2855,10 @@ void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
           DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
-int GraphiteWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+sal_Int32 GraphiteWinLayout::GetTextBreak(
+        long nMaxWidth, long nCharExtra, int nFactor) const
 {
-    int nBreak = maImpl.GetTextBreak(nMaxWidth, nCharExtra, nFactor);
+    sal_Int32 nBreak = maImpl.GetTextBreak(nMaxWidth, nCharExtra, nFactor);
     return nBreak;
 }
 
