@@ -2614,19 +2614,21 @@ static AggMapEntry g_CMAccessible_AggMap[] = {
 HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
 {
     ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-        if( ImplIsEqualGUID(iid,IID_IAccIdentity) ||
-            ImplIsEqualGUID(iid,IID_IStdMarshalInfo) ||
-            ImplIsEqualGUID(iid,IID_IMarshal) ||
-            ImplIsEqualGUID(iid,IID_IExternalConnection)||
-            ImplIsEqualGUID(iid,IID_IOleWindow))
-            return E_FAIL;
 
+    ISDESTROY()
+    if (InlineIsEqualGUID(iid,IID_IAccIdentity) ||
+        InlineIsEqualGUID(iid,IID_IStdMarshalInfo) ||
+        InlineIsEqualGUID(iid,IID_IMarshal) ||
+        InlineIsEqualGUID(iid,IID_IExternalConnection)||
+        InlineIsEqualGUID(iid,IID_IOleWindow))
+    {
+        return E_FAIL;
+    }
 
     AggMapEntry * pMap = &g_CMAccessible_AggMap[0];
     while(pMap && pMap->piid)
     {
-        if(ImplIsEqualGUID(iid, *pMap->piid))
+        if (InlineIsEqualGUID(iid, *pMap->piid))
         {
             XInterface* pXI = NULL;
             BOOL bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),

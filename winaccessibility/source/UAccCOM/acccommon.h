@@ -52,17 +52,6 @@ enum DM_NIR {
     DM_PREVCHILD = 0x03
 };
 
-inline BOOL ImplIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
-{
-    return (
-               ((PLONG) &rguid1)[0] == ((PLONG) &rguid2)[0] &&
-               ((PLONG) &rguid1)[1] == ((PLONG) &rguid2)[1] &&
-               ((PLONG) &rguid1)[2] == ((PLONG) &rguid2)[2] &&
-               ((PLONG) &rguid1)[3] == ((PLONG) &rguid2)[3]);
-}
-#define InlineIsEqualGUID ImplIsEqualGUID
-//End
-
 
 #define SELECT       L"Select"
 #define PRESS        L"Press"
