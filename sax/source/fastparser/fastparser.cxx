@@ -83,7 +83,7 @@ struct Event
     CallbackType maType;
 };
 
-struct SAX_DLLPUBLIC NameWithToken
+struct NameWithToken
 {
     OUString msName;
     sal_Int32 mnToken;

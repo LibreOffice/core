@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-#include "saxdllapi.h"
+#include <sax/fastsaxdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 
@@ -41,7 +41,10 @@ namespace sax_fastparser {
 class FastSaxParserImpl;
 
 // This class implements the external Parser interface
-class SAX_DLLPUBLIC FastSaxParser : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastParser, ::com::sun::star::lang::XServiceInfo >
+class FASTSAX_DLLPUBLIC FastSaxParser
+    : public ::cppu::WeakImplHelper2<
+                ::com::sun::star::xml::sax::XFastParser,
+                ::com::sun::star::lang::XServiceInfo >
 {
     FastSaxParserImpl* mpImpl;
 

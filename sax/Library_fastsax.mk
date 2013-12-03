@@ -17,7 +17,7 @@ $(eval $(call gb_Library_set_include,fastsax,\
 ))
 
 $(eval $(call gb_Library_add_defs,fastsax,\
-    -DSAX_DLLIMPLEMENTATION \
+    -DFASTSAX_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,fastsax))
