@@ -1330,7 +1330,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
         {
             sal_Int32 nPos1 = m_aFormulaHelper.GetFunctionEnd(aString,nFStart);
 
-            if(nPos1>nPos || nPos1==STRING_NOTFOUND)
+            if(nPos1>nPos)
             {
                 EditThisFunc(nFStart);
             }
