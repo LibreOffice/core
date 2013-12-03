@@ -463,109 +463,109 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
 {
+    if ( !m_aTokenList.hasElements() )
+        return SAL_MAX_INT32;
+
     const sal_Unicode sep = m_pHelper->getFunctionManager()->getSingleToken(IFunctionManager::eSep);
 
-    sal_Int32 nFuncPos = STRING_NOTFOUND;
+    sal_Int32 nFuncPos = SAL_MAX_INT32;
     sal_Bool  bFlag = sal_False;
     OUString  aFormString = m_aFormulaHelper.GetCharClass()->uppercase(pMEdit->GetText());
 
-    if ( m_aTokenList.getLength() )
+    const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
+    const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+
+    const sheet::FormulaToken* pIter = m_aTokenList.getConstArray();
+    const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
+    try
     {
-        const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
-        const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
-
-        const sheet::FormulaToken* pIter = m_aTokenList.getConstArray();
-        const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
-        try
+        sal_Int32 nTokPos = 1;
+        sal_Int32 nOldTokPos = 1;
+        sal_Int32 nPrevFuncPos = 1;
+        short nBracketCount = 0;
+        while ( pIter != pEnd )
         {
-            sal_Int32 nTokPos=1;
-            sal_Int32 nOldTokPos=1;
-            sal_Int32 nPrevFuncPos = 1;
-            short nBracketCount = 0;
-            while ( pIter != pEnd )
+            const sal_Int32 eOp = pIter->OpCode;
+            uno::Sequence<sheet::FormulaToken> aArgs(1);
+            aArgs[0] = *pIter;
+            const OUString aString = xParser->printFormula(aArgs, aRefPos);
+            const sheet::FormulaToken* pNextToken = pIter + 1;
+
+            if( !bUserMatrixFlag && FormulaCompiler::IsMatrixFunction((OpCode)eOp) )
             {
-                const sal_Int32 eOp = pIter->OpCode;
-                uno::Sequence<sheet::FormulaToken> aArgs(1);
-                aArgs[0] = *pIter;
-                const OUString aString = xParser->printFormula(aArgs, aRefPos);
-                const sheet::FormulaToken* pNextToken = pIter + 1;
+                aBtnMatrix.Check();
+            }
 
-                if(!bUserMatrixFlag && FormulaCompiler::IsMatrixFunction((OpCode)eOp) )
+            if( eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::PUSH].Token.OpCode ||
+                eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode )
+            {
+                const sal_Int32 n1 = aFormString.indexOf(sep, nTokPos);
+                const sal_Int32 n2 = aFormString.indexOf(')',nTokPos);
+                sal_Int32 nXXX = nTokPos;
+                if( n1 < n2 )
                 {
-                    aBtnMatrix.Check();
-                }
-
-                if ( eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::PUSH].Token.OpCode ||
-                    eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode )
-                {
-                    const sal_Int32 n1 = aFormString.indexOf(sep, nTokPos);
-                    const sal_Int32 n2 = aFormString.indexOf(')',nTokPos);
-                    sal_Int32 nXXX = nTokPos;
-                    if(n1<n2)
-                    {
-                        nTokPos=n1;
-                    }
-                    else
-                    {
-                        nTokPos=n2;
-                    }
-                    if ( pNextToken != pEnd )
-                    {
-                        aArgs[0] = *pNextToken;
-                        const OUString a2String = xParser->printFormula(aArgs, aRefPos);
-                        const sal_Int32 n3 = aFormString.indexOf(a2String,nXXX);
-                        if ( n3 < nTokPos )
-                            nTokPos = n3;
-                    }
+                    nTokPos=n1;
                 }
                 else
                 {
-                    nTokPos = nTokPos + aString.getLength();
+                    nTokPos=n2;
                 }
+                if( pNextToken != pEnd )
+                {
+                    aArgs[0] = *pNextToken;
+                    const OUString a2String = xParser->printFormula(aArgs, aRefPos);
+                    const sal_Int32 n3 = aFormString.indexOf(a2String,nXXX);
+                    if ( n3 < nTokPos )
+                        nTokPos = n3;
+                }
+            }
+            else
+            {
+                nTokPos = nTokPos + aString.getLength();
+            }
 
-                if ( eOp == m_aSeparatorsOpCodes[TOKEN_OPEN].OpCode )
-                {
-                    nBracketCount++;
-                    bFlag=sal_True;
-                }
-                else if ( eOp == m_aSeparatorsOpCodes[TOKEN_CLOSE].OpCode )
-                {
-                    nBracketCount--;
-                    bFlag=sal_False;
-                    nFuncPos=nPrevFuncPos;
-                }
-                bool bIsFunction = ::std::find_if(m_aFunctionOpCodes.getConstArray(),m_pFunctionOpCodesEnd,::std::bind2nd(OpCodeCompare(),boost::cref(eOp))) != m_pFunctionOpCodesEnd;
+            if( eOp == m_aSeparatorsOpCodes[TOKEN_OPEN].OpCode )
+            {
+                nBracketCount++;
+                bFlag = sal_True;
+            }
+            else if( eOp == m_aSeparatorsOpCodes[TOKEN_CLOSE].OpCode )
+            {
+                nBracketCount--;
+                bFlag = sal_False;
+                nFuncPos = nPrevFuncPos;
+            }
+            bool bIsFunction = ::std::find_if(m_aFunctionOpCodes.getConstArray(),m_pFunctionOpCodesEnd,::std::bind2nd(OpCodeCompare(),boost::cref(eOp))) != m_pFunctionOpCodesEnd;
 
-                if ( bIsFunction && m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode != eOp )
-                {
-                    nPrevFuncPos = nFuncPos;
-                    nFuncPos = nOldTokPos;
-                }
+            if( bIsFunction && m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode != eOp )
+            {
+                nPrevFuncPos = nFuncPos;
+                nFuncPos = nOldTokPos;
+            }
 
-                if ( nOldTokPos <= nPos && nPos < nTokPos )
+            if( nOldTokPos <= nPos && nPos < nTokPos )
+            {
+                if( !bIsFunction )
                 {
-                    if ( !bIsFunction )
+                    if( nBracketCount < 1 )
                     {
-                        if ( nBracketCount < 1 )
-                        {
-                            nFuncPos= pMEdit->GetText().getLength();
-                        }
-                        else if ( !bFlag )
-                        {
-                            nFuncPos=nPrevFuncPos;
-                        }
+                        nFuncPos = pMEdit->GetText().getLength();
                     }
-                    break;
+                    else if( !bFlag )
+                    {
+                        nFuncPos = nPrevFuncPos;
+                    }
                 }
+                break;
+            }
 
-                pIter = pNextToken;
-                nOldTokPos = nTokPos;
-            } // while ( pIter != pEnd )
-        }
-        catch(const uno::Exception& )
-        {
-            OSL_FAIL("Exception caught!");
-        }
+            pIter = pNextToken;
+            nOldTokPos = nTokPos;
+        } // while ( pIter != pEnd )
+    }
+    catch( const uno::Exception& )
+    {
+        OSL_FAIL("Exception caught!");
     }
 
     return nFuncPos;
