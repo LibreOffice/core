@@ -1611,7 +1611,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         pFrm = (SwTxtFrm*)(pFrm->GetFollow());
         if( pFrm )
         {
-            rHyphInf.nLen = rHyphInf.nLen - (pFrm->GetOfst() - rHyphInf.nStart);
+            rHyphInf.nEnd = rHyphInf.nEnd - (pFrm->GetOfst() - rHyphInf.nStart);
             rHyphInf.nStart = pFrm->GetOfst();
         }
     }

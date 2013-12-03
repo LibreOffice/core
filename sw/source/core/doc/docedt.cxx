@@ -2047,7 +2047,7 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCrsrPos,
 inline void SwHyphArgs::SetRange( const SwNode *pNew )
 {
     nStart = pStart == pNew ? nPamStart : 0;
-    nLen   = pEnd   == pNew ? nPamLen : STRING_NOTFOUND;
+    nEnd   = pEnd   == pNew ? nPamStart + nPamLen : SAL_MAX_INT32;
 }
 
 void SwHyphArgs::SetPam( SwPaM *pPam ) const

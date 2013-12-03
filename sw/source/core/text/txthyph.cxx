@@ -100,7 +100,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
                 aLine.Next();
         }
 
-        const xub_StrLen nEnd = rHyphInf.GetEnd();
+        const sal_Int32 nEnd = rHyphInf.GetEnd();
         while( !bRet && aLine.GetStart() < nEnd )
         {
             bRet = aLine.Hyphenate( rHyphInf );
@@ -177,9 +177,9 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         // Bereich.
 
         SwLinePortion *pPos = pCurr->GetPortion();
-        const xub_StrLen nPamStart = rHyphInf.nStart;
+        const sal_Int32 nPamStart = rHyphInf.nStart;
         nWrdStart = nStart;
-        const xub_StrLen nEnd = rHyphInf.GetEnd();
+        const sal_Int32 nEnd = rHyphInf.GetEnd();
         while( pPos )
         {
             // Entweder wir liegen drueber oder wir laufen gerade auf eine

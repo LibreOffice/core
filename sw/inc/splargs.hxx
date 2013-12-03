@@ -126,43 +126,40 @@ struct SwSpellArgs : SwArgsBase
 
 class SwInterHyphInfo
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >    xHyphWord;
-    const   Point aCrsrPos;
+    ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >    xHyphWord;
+    const Point aCrsrPos;
     sal_Bool    bNoLang : 1;
     sal_Bool    bCheck  : 1;
 public:
-    xub_StrLen nStart;
-    xub_StrLen nLen;
-    xub_StrLen nWordStart;
-    xub_StrLen nWordLen;
-    xub_StrLen nHyphPos;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+    sal_Int32 nWordStart;
+    sal_Int32 nWordLen;
+    sal_Int32 nHyphPos;
     sal_uInt16 nMinTrail;
 
     inline SwInterHyphInfo( const Point &rCrsrPos,
-                            const sal_uInt16 nStartPos = 0,
-                            const sal_uInt16 nLength = USHRT_MAX )
+                            sal_Int32 nStartPos = 0,
+                            sal_Int32 nLength = SAL_MAX_INT32 )
          : aCrsrPos( rCrsrPos ),
            bNoLang(sal_False), bCheck(sal_False),
-           nStart(nStartPos), nLen(nLength),
+           nStart(nStartPos),
+           nEnd( std::max(SAL_MAX_INT32, nStartPos + nLength) ),
            nWordStart(0), nWordLen(0),
            nHyphPos(0), nMinTrail(0)
          { }
-    inline xub_StrLen GetEnd() const
-    { return STRING_LEN == nLen ? nLen : nStart + nLen; }
+    inline sal_Int32 GetEnd() const
+        { return nEnd; }
     inline const Point *GetCrsrPos() const
-    { return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : 0; }
+        { return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : 0; }
     inline sal_Bool IsCheck() const { return bCheck; }
     inline void SetCheck( const sal_Bool bNew ) { bCheck = bNew; }
     inline void SetNoLang( const sal_Bool bNew ) { bNoLang = bNew; }
 
-    inline void
-            SetHyphWord(const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XHyphenatedWord >  &rxHW)
-            { xHyphWord = rxHW; }
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >
-            GetHyphWord() { return xHyphWord; }
+    inline void SetHyphWord(const ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >  &rxHW)
+        { xHyphWord = rxHW; }
+    inline ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord > GetHyphWord()
+        { return xHyphWord; }
 };
 
 
