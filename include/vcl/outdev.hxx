@@ -595,7 +595,7 @@ public:
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     xub_StrLen          GetTextBreak( const OUString& rStr, long nTextWidth,
                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                      long nCharExtra = 0, sal_Bool bCellBreaking = sal_True ) const;
+                                      long nCharExtra = 0 ) const;
     xub_StrLen          GetTextBreak( const OUString& rStr, long nTextWidth,
                                       sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                       sal_Int32 nIndex, sal_Int32 nLen,

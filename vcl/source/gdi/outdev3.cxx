@@ -5995,7 +5995,7 @@ sal_Bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, 
 
 xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                       long nCharExtra, sal_Bool /*TODO: bCellBreaking*/ ) const
+                                       long nCharExtra ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
