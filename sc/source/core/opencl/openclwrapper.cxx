@@ -922,6 +922,9 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation)
 {
+    if(fillOpenCLInfo().empty())
+        return false;
+
     cl_device_id pDeviceId = NULL;
     if(pDevice)
         pDeviceId = findDeviceIdByDeviceString(*pDevice, fillOpenCLInfo());
