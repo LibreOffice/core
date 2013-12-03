@@ -233,8 +233,7 @@ uno::Any SAL_CALL
     uno::Any aAny;
     if (mpDoc)
     {
-        OUString valStr(mpDoc->GetString(maCellAddress.Col(),maCellAddress.Row(),maCellAddress.Tab()));
-        aAny <<= valStr;
+        aAny <<= mpDoc->GetValue(maCellAddress);
     }
     return aAny;
 }
