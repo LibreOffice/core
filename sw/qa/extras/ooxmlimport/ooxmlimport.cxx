@@ -1555,6 +1555,14 @@ DECLARE_OOXMLIMPORT_TEST(testWpgOnly, "wpg-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(548005)), xShape->getPosition().X);
 }
 
+DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // The relativeFrom attribute was ignored for groupshapes, i.e. these were text::RelOrientation::FRAME.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
 {
     // The document contains a rotated bitmap

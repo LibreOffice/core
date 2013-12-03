@@ -360,14 +360,19 @@ public:
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT          ),
                 uno::makeAny(nHoriOrient));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT          ),
+                uno::makeAny(nVertOrient));
+    }
+
+    void applyRelativePosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
+    {
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
                 uno::makeAny(nLeftPosition));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_RELATION ),
                 uno::makeAny(nHoriRelation));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_TOGGLE ),
                 uno::makeAny(bPageToggle));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT          ),
-                uno::makeAny(nVertOrient));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
                 uno::makeAny(nTopPosition));
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
@@ -1034,6 +1039,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             // Position of the groupshape should be set after children have been added.
                             m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
                         }
+                        m_pImpl->applyRelativePosition(xShapeProps);
 
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
@@ -1517,6 +1523,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 }
 
                 m_pImpl->applyPosition(xGraphicObjectProperties);
+                m_pImpl->applyRelativePosition(xGraphicObjectProperties);
                 bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
                 if( !bOpaque )
                 {
