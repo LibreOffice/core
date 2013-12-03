@@ -20,91 +20,31 @@
 #ifndef INCLUDED_SAX_FASTPARSER_HXX
 #define INCLUDED_SAX_FASTPARSER_HXX
 
-#include <queue>
-#include <vector>
-#include <stack>
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
-#include <osl/conditn.hxx>
-#include <rtl/ref.hxx>
-#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-#include <expat.h>
 #include "saxdllapi.h"
 
-#include <sax/fastattribs.hxx>
+namespace com { namespace sun { namespace star { namespace xml { namespace sax {
+
+class XFastContextHandler;
+class XFastDocumentHandler;
+class XFastTokenHandler;
+
+}}}}}
 
 namespace sax_fastparser {
 
-struct Event;
-class FastLocatorImpl;
-struct NamespaceDefine;
-struct Entity;
-
-typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
-
-typedef ::boost::unordered_map< OUString, sal_Int32,
-        OUStringHash, ::std::equal_to< OUString > > NamespaceMap;
-
-struct SAX_DLLPUBLIC NameWithToken
-{
-    OUString msName;
-    sal_Int32 mnToken;
-
-    NameWithToken(const OUString& sName, const sal_Int32& nToken);
-};
-
-typedef std::vector<Event> EventList;
-
-enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
-
-struct Event
-{
-    OUString msChars;
-    sal_Int32 mnElementToken;
-    OUString msNamespace;
-    OUString msElementName;
-    rtl::Reference< FastAttributeList > mxAttributes;
-    CallbackType maType;
-};
-
 // --------------------------------------------------------------------
 
-struct SaxContext
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > mxContext;
-    sal_Int32                   mnElementToken;
-    boost::optional< OUString > maNamespace;
-    boost::optional< OUString > maElementName;
-    SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName );
-};
-
-// --------------------------------------------------------------------
-
-struct SAX_DLLPUBLIC ParserData
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler > mxDocumentHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >    mxTokenHandler;
-    FastTokenHandlerBase *mpTokenHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >        mxErrorHandler;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >      mxEntityResolver;
-    ::com::sun::star::lang::Locale          maLocale;
-
-    ParserData();
-    ~ParserData();
-};
-
-// --------------------------------------------------------------------
+class FastSaxParserImpl;
 
 // This class implements the external Parser interface
 class SAX_DLLPUBLIC FastSaxParser : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastParser, ::com::sun::star::lang::XServiceInfo >
 {
+    FastSaxParserImpl* mpImpl;
+
 public:
     FastSaxParser();
     virtual ~FastSaxParser();
@@ -127,50 +67,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // called by the C callbacks of the expat parser
-    void callbackStartElement( const XML_Char* name, const XML_Char** atts );
-    void callbackEndElement( const XML_Char* name );
-    void callbackCharacters( const XML_Char* s, int nLen );
-    int  callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
-    void callbackEntityDecl(const XML_Char *entityName, int is_parameter_entity,
-            const XML_Char *value, int value_length, const XML_Char *base,
-            const XML_Char *systemId, const XML_Char *publicId,
-            const XML_Char *notationName);
-
-    void pushEntity( const Entity& rEntity );
-    void popEntity();
-    Entity& getEntity();
-    const Entity& getEntity() const;
-    void parse();
-    void produce( CallbackType aType );
-
     bool hasNamespaceURL( const OUString& rPrefix ) const;
-
-private:
-    bool consume(EventList *);
-    void deleteUsedEvents();
-
-    sal_Int32 GetToken( const sal_Char* pToken, sal_Int32 nTokenLen = 0 );
-    sal_Int32 GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (::com::sun::star::xml::sax::SAXException);
-    OUString GetNamespaceURL( const OString& rPrefix ) throw (::com::sun::star::xml::sax::SAXException);
-    OUString GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw (::com::sun::star::xml::sax::SAXException);
-    sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
-    sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const sal_Char* pName, int nNameLen );
-    void DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL );
-
-    void pushContext();
-    void popContext();
-
-    void splitName( const XML_Char *pwName, const XML_Char *&rpPrefix, sal_Int32 &rPrefixLen, const XML_Char *&rpName, sal_Int32 &rNameLen );
-
-private:
-    osl::Mutex maMutex; ///< Protecting whole parseStream() execution
-    ::rtl::Reference< FastLocatorImpl >     mxDocumentLocator;
-    NamespaceMap                            maNamespaceMap;
-
-    ParserData maData;                      /// Cached parser configuration for next call of parseStream().
-    ::std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
-    FastTokenLookup maTokenLookup;
 };
 
 }
