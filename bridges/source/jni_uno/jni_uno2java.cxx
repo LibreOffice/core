@@ -527,7 +527,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     UNO_proxy const * that = reinterpret_cast< UNO_proxy const * >( proxy );
     Bridge const * bridge = that->m_bridge;
 
-    assert(env == bridge->m_uno_env);
+    assert(env == bridge->m_uno_env); (void) env;
     SAL_INFO("bridges", "freeing binary uno proxy: " << that->m_oid);
 
     try
