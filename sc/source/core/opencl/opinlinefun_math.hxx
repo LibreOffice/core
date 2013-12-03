@@ -37,6 +37,16 @@ std::string bik =
 "    return nVal;\n"
 "}\n";
 
+std::string local_cothDecl = "double local_coth(double n);\n";
+std::string local_coth =
+"double local_coth(double n)\n"
+"{\n"
+"    double a = exp(n);\n"
+"    double b = exp(-n);\n"
+"    double nVal = (a + b) / (a - b);\n"
+"    return nVal;\n"
+"}\n";
+
 #endif //SC_OPENCL_OPINLINFUN_MATH
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
