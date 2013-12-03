@@ -722,12 +722,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
     SAL_CALL ScAccessibleDataPilotButton::getAccessibleRelationSet( ) throw (::com::sun::star::uno::RuntimeException)
 {
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    uno::Reference< com::sun::star::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
     if(mxParent.is())
     {
         uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
         aSequence[0] = mxParent;
-        pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        pRelationSetHelper->AddRelation( com::sun::star::accessibility::AccessibleRelation(
+            com::sun::star::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
     }
 
     return xSet;
