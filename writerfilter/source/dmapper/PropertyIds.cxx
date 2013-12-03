@@ -274,6 +274,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_REDLINE_DATE_TIME     :    sName = "RedlineDateTime"; break;
             case PROP_REDLINE_COMMENT       :    sName = "RedlineComment"; break;
             case PROP_REDLINE_TYPE          :    sName = "RedlineType"; break;
+            case PROP_REDLINE_REVERT_PROPERTIES: sName = "RedlineRevertProperties"; break;
             case PROP_REDLINE_SUCCESSOR_DATA:    sName = "RedlineSuccessorData"; break;
             case PROP_REDLINE_IDENTIFIER    :    sName = "RedlineIdentifier"; break;
             case PROP_SIZE_PROTECTED        :    sName = "SizeProtected"; break;
