@@ -52,9 +52,10 @@ typedef std::vector< UnknownAttribute > UnknownAttributeList;
 /// A native C++ interface to tokenisation
 class SAX_DLLPUBLIC FastTokenHandlerBase
 {
-    public:
-        virtual ~FastTokenHandlerBase();
-        virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const = 0;
+public:
+    FastTokenHandlerBase();
+    virtual ~FastTokenHandlerBase();
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const = 0;
 };
 
 /// avoid constantly allocating and freeing sequences.

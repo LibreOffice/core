@@ -32,6 +32,10 @@ FastTokenHandlerBase::FastTokenHandlerBase()
 {
 }
 
+FastTokenHandlerBase::~FastTokenHandlerBase()
+{
+}
+
 UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue )
     : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( pValue )
 {
