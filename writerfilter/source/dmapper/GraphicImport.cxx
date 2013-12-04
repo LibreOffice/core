@@ -1043,8 +1043,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 
                         m_pImpl->applyMargins(xShapeProps);
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
-                        if (!bOpaque)
-                            xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
+                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(m_pImpl->nWrap));
                     }
                 }

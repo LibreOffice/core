@@ -1561,6 +1561,8 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
     // The relativeFrom attribute was ignored for groupshapes, i.e. these were text::RelOrientation::FRAME.
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+    // Make sure the shape is not in the background, as we have behindDoc="0" in the doc.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xShape, "Opaque")));
 
     // The 3 paragraphs on the rectangles inside the groupshape ended up in the
     // body text, make sure we don't have multiple paragraphs there anymore.
