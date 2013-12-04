@@ -799,7 +799,7 @@ static bool raiseException(XBridgeTest* xLBT )
        bRet = performQueryForUnknownType( xLBT ) && bRet;
         if (! bRet)
         {
-            throw unoidl::com::sun::star::uno::RuntimeException(
+            throw new unoidl::com::sun::star::uno::RuntimeException(
                 new String("error: test failed!"), 0);
         }
     }
@@ -819,7 +819,7 @@ static bool raiseException(XBridgeTest* xLBT )
         {
             if (args->Length < 1)
             {
-                throw RuntimeException(
+                throw new RuntimeException(
                     "missing argument for bridgetest!", this );
             }
             Object* test_obj =
@@ -846,7 +846,7 @@ static bool raiseException(XBridgeTest* xLBT )
             s->Append(exc->GetType()->Name);
             s->Append(S"\n Message: ");
             s->Append(exc->Message);
-            throw unoidl::com::sun::star::uno::RuntimeException(
+            throw new unoidl::com::sun::star::uno::RuntimeException(
                 s->ToString(), 0);
         }
     }
