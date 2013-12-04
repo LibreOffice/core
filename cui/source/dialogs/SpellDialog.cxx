@@ -503,7 +503,7 @@ void SpellDialog::StartSpellOptDlg_Impl()
     SfxItemSet aSet( SFX_APP()->GetPool(), aSpellInfos);
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
     SfxSingleTabDialog* pDlg =
-        new SfxSingleTabDialog(this, aSet);
+        new SfxSingleTabDialog(this, aSet, "SpellOptionsDialog", "cui/ui/spelloptionsdialog.ui");
     SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), aSet );
     ( (SvxLinguTabPage*)pPage )->HideGroups( GROUP_MODULES );
     pDlg->setTabPage( pPage );

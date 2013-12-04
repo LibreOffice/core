@@ -127,6 +127,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/slantcornertabpage \
 	cui/uiconfig/ui/specialcharacters \
 	cui/uiconfig/ui/spellingdialog \
+	cui/uiconfig/ui/spelloptionsdialog \
 	cui/uiconfig/ui/splitcellsdialog \
 	cui/uiconfig/ui/storedwebconnectiondialog \
 	cui/uiconfig/ui/swpossizepage \
