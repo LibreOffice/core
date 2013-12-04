@@ -452,7 +452,7 @@ function patch_deb {
 		patch_sdk_exec
 		patch_paths_xcu
 		patch_tmp_path
-		patch_opensymbol_lhm
+		#patch_opensymbol_lhm
 
 		echo "Packaging ${NEW_BASE} ..."
 		fakeroot mkdir -p "${NEW_DIR}"
