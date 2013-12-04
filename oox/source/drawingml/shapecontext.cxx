@@ -93,6 +93,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
         return new ShapeStyleContext( *this, *mpShapePtr );
 
     case XML_txBody:
+    case XML_txbxContent:
     {
         TextBodyPtr xTextBody( new TextBody );
         mpShapePtr->setTextBody( xTextBody );

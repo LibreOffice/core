@@ -2156,6 +2156,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
     bool bGroupShape = Element == Token_t(NS_vml | OOXML_group);
+    // drawingML version also counts as a group shape.
+    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NS_wpg | OOXML_wgp);
     sal_uInt32 nNamespace = Element & 0xffff0000;
 
     switch (nNamespace)

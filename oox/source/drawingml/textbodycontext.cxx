@@ -62,6 +62,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     switch( aElementToken )
     {
     case A_TOKEN( r ):      // "CT_RegularTextRun" Regular Text Run.
+    case OOX_TOKEN( doc, r ):
     {
         TextRunPtr pRun( new TextRun );
         mrParagraph.addRun( pRun );
@@ -104,6 +105,7 @@ void RegularTextRunContext::onEndElement( )
     switch( getCurrentElement() )
     {
     case A_TOKEN( t ):
+    case OOX_TOKEN( doc, t ):
     {
         mbIsInText = false;
         break;
@@ -135,6 +137,7 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
         return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
     case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
+    case OOX_TOKEN( doc, t ):
         mbIsInText = true;
         break;
     }
@@ -161,6 +164,7 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
     case A_TOKEN( lstStyle ):   // CT_TextListStyle
         return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
     case A_TOKEN( p ):          // CT_TextParagraph
+    case OOX_TOKEN( doc, p ):
         return new TextParagraphContext( *this, mrTextBody.addParagraph() );
     }
 
