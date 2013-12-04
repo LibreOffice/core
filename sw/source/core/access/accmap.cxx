@@ -744,12 +744,18 @@ static bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
         if( pAccImpl->GetFrm()->IsCellFrm() )
         {
             const SwTabFrm *pTabFrm1 = pAccImpl->GetFrm()->FindTabFrm();
-            while( pTabFrm1->GetFollow() )
-                   pTabFrm1 = pTabFrm1->GetFollow();
+            if (pTabFrm1)
+            {
+                while (pTabFrm1->GetFollow())
+                    pTabFrm1 = pTabFrm1->GetFollow();
+            }
 
             const SwTabFrm *pTabFrm2 = pFrm->FindTabFrm();
-            while( pTabFrm2->GetFollow() )
-                   pTabFrm2 = pTabFrm2->GetFollow();
+            if (pTabFrm2)
+            {
+                while (pTabFrm2->GetFollow())
+                    pTabFrm2 = pTabFrm2->GetFollow();
+            }
 
             bRet = (pTabFrm1 == pTabFrm2);
         }
