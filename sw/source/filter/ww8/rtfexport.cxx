@@ -1178,7 +1178,7 @@ SwRTFWriter::SwRTFWriter( const OUString& rFltName, const OUString & rBaseURL )
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
     // export outline nodes, only (send outline to clipboard/presentation)
-    m_bOutOutlineOnly = (!rFltName.isEmpty() && 'O' == rFltName[0]);
+    m_bOutOutlineOnly = rFltName.startsWith("O");
 }
 
 SwRTFWriter::~SwRTFWriter()
