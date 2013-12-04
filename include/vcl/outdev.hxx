@@ -1088,8 +1088,8 @@ public:
     sal_Bool                GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
-    xub_StrLen          HasGlyphs( const Font& rFont, const OUString& rStr,
-                            xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;
+    sal_Int32           HasGlyphs( const Font& rFont, const OUString& rStr,
+                            sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
 
     long                GetMinKashida() const;
 

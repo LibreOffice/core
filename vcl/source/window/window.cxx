@@ -441,8 +441,7 @@ bool Window::ImplCheckUIFont( const Font& rFont )
         aTestText += aButtonStr;
     }
 
-    const int nFirstChar = HasGlyphs( rFont, aTestText );
-    const bool bUIFontOk = (nFirstChar >= aTestText.getLength());
+    const bool bUIFontOk = ( HasGlyphs( rFont, aTestText ) == -1 );
     return bUIFontOk;
 }
 

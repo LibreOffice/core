@@ -7710,14 +7710,16 @@ sal_Bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     return sal_True;
 }
 
-xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
-    xub_StrLen nIndex, xub_StrLen nLen ) const
+sal_Int32 OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
+    sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     if( nIndex >= rStr.getLength() )
         return nIndex;
-    sal_Int32 nEnd = nIndex + nLen;
-    if( nIndex+nLen > rStr.getLength() )
+    sal_Int32 nEnd;
+    if( nLen == -1 )
         nEnd = rStr.getLength();
+    else
+        nEnd = std::min( rStr.getLength(), nIndex + nLen );
 
     DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );
     DBG_ASSERT( nEnd <= rStr.getLength(), "String too short" );
@@ -7737,7 +7739,7 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
         if( ! aFontCharMap.HasChar( rStr[i] ) )
             return nIndex;
 
-    return STRING_LEN;
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

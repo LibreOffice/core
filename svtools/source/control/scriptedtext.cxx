@@ -222,7 +222,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                                 nScript = i18n::ScriptType::LATIN;
                                 while( (nScript != i18n::ScriptType::WEAK) && (nCharIx == nNextCharIx) )
                                 {
-                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, sal::static_int_cast< sal_uInt16 >(nCharIx), sal::static_int_cast< sal_uInt16 >(nNextPos - nCharIx) );
+                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, nCharIx, nNextPos - nCharIx );
                                     if( nCharIx == nNextCharIx )
                                         ++nScript;
                                 }

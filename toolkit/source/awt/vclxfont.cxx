@@ -198,7 +198,7 @@ sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
     if ( pOutDev )
     {
         OUString aStr( aText );
-        if ( pOutDev->HasGlyphs( maFont, aStr, 0, aStr.getLength() ) == STRING_LEN )
+        if ( pOutDev->HasGlyphs( maFont, aStr ) == -1 )
         {
             return sal_True;
         }

@@ -44,7 +44,7 @@ bool isSymbolFont(const Font &rFont)
 bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
 {
     const Font &rFont = rDevice.GetFont();
-    return !isSymbolFont(rFont) && (STRING_LEN == rDevice.HasGlyphs(rFont, rFont.GetName()));
+    return !isSymbolFont(rFont) && ( -1 == rDevice.HasGlyphs(rFont, rFont.GetName()) );
 }
 
 OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
@@ -95,7 +95,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
         0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
     const sal_Unicode* pText = bOpenSymbol ? aImplStarSymbolText : aImplSymbolFontText;
     OUString sSampleText(pText);
-    bool bHasSampleTextGlyphs = (STRING_LEN == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
+    bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
     return bHasSampleTextGlyphs ? sSampleText : OUString();
 }
 
@@ -1115,22 +1115,22 @@ namespace
 
             const sal_Unicode aKorean[] = { 0x3131 };
             OUString sKorean(aKorean, SAL_N_ELEMENTS(aKorean));
-            if (STRING_LEN == rDevice.HasGlyphs(rFont, sKorean))
+            if (-1 == rDevice.HasGlyphs(rFont, sKorean))
                 bKore = true;
 
             const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
             OUString sJapanese(aJapanese, SAL_N_ELEMENTS(aJapanese));
-            if (STRING_LEN == rDevice.HasGlyphs(rFont, sJapanese))
+            if (-1 == rDevice.HasGlyphs(rFont, sJapanese))
                 bJpan = true;
 
             const sal_Unicode aTraditionalChinese[] = { 0x570B };
             OUString sTraditionalChinese(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
-            if (STRING_LEN == rDevice.HasGlyphs(rFont, sTraditionalChinese))
+            if (-1 == rDevice.HasGlyphs(rFont, sTraditionalChinese))
                 bHant = true;
 
             const sal_Unicode aSimplifiedChinese[] = { 0x56FD };
             OUString sSimplifiedChinese(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
-            if (STRING_LEN == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
+            if (-1 == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
                 bHans = true;
 
             if (bKore && !bJpan && !bHans)
@@ -1172,7 +1172,7 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
     eScript = attemptToDisambiguateHan(eScript, rDevice);
 
     OUString sSampleText = makeShortRepresentativeTextForScript(eScript);
-    bool bHasSampleTextGlyphs = (STRING_LEN == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
+    bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
     return bHasSampleTextGlyphs ? sSampleText : OUString();
 }
 
@@ -1502,7 +1502,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &rFont)
     OUString sRet(makeRepresentativeTextForLanguage(rFont.GetLanguage()));
 
     VirtualDevice aDevice;
-    if (sRet.isEmpty() || (STRING_LEN != aDevice.HasGlyphs(rFont, sRet)))
+    if (sRet.isEmpty() || (-1 != aDevice.HasGlyphs(rFont, sRet)))
     {
         aDevice.SetFont(rFont);
         vcl::FontCapabilities aFontCapabilities;
@@ -1543,10 +1543,10 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &rFont)
             if (nScriptType == com::sun::star::i18n::ScriptType::COMPLEX)
             {
                 sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
-                if (STRING_LEN != aDevice.HasGlyphs(rFont, sRet))
+                if (-1 != aDevice.HasGlyphs(rFont, sRet))
                 {
                     sRet = makeMinimalTextForScript(USCRIPT_HEBREW);
-                    if (STRING_LEN != aDevice.HasGlyphs(rFont, sRet))
+                    if (-1 != aDevice.HasGlyphs(rFont, sRet))
                         sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
                 }
             }

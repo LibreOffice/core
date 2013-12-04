@@ -1347,7 +1347,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 OUString sText = makeShortRepresentativeTextForScript(aScripts[i]);
                 if (!sText.isEmpty())
                 {
-                    bool bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
+                    bool bHasSampleTextGlyphs = (-1 == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
                     if (bHasSampleTextGlyphs)
                     {
                         sSampleText = sText;
@@ -1367,7 +1367,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 OUString sText = makeShortMinimalTextForScript(aMinimalScripts[i]);
                 if (!sText.isEmpty())
                 {
-                    bool bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
+                    bool bHasSampleTextGlyphs = (-1 == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
                     if (bHasSampleTextGlyphs)
                     {
                         sSampleText = sText;
