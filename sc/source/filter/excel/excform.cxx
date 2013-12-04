@@ -133,15 +133,31 @@ void ImportExcel::Formula(
                 if (pLast && pLast->mpCell && pLast->mnRow == (aScPos.Row()-1))
                 {
                     ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
-                    rDoc.getDoc().EnsureTable(aScPos.Tab());
-                    rDoc.setFormulaCell(aScPos, pCell);
-                    xGroup->mnLength = aScPos.Row() - xGroup->mpTopCell->aPos.Row() + 1;
-                    pCell->SetNeedNumberFormat(false);
-                    if (!rtl::math::isNan(fCurVal))
-                        pCell->SetResultDouble(fCurVal);
 
-                    GetXFRangeBuffer().SetXF(aScPos, nXF);
-                    SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, pCell);
+                    if (!xGroup->mpTopCell && nSharedRow == aScPos.Row())
+                        // This formula group object is a duplicate of the
+                        // original one due to Excel's multi-column shared
+                        // range, and doesn't have the top cell assigned yet.
+                        // Assign the current cell as its top cell.
+                        xGroup->mpTopCell = pCell;
+
+                    if (xGroup->mpTopCell)
+                    {
+                        rDoc.getDoc().EnsureTable(aScPos.Tab());
+                        rDoc.setFormulaCell(aScPos, pCell);
+                        xGroup->mnLength = aScPos.Row() - xGroup->mpTopCell->aPos.Row() + 1;
+                        pCell->SetNeedNumberFormat(false);
+                        if (!rtl::math::isNan(fCurVal))
+                            pCell->SetResultDouble(fCurVal);
+
+                        GetXFRangeBuffer().SetXF(aScPos, nXF);
+                        SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, pCell);
+                    }
+                    else
+                    {
+                        // No idea what's going on here...
+                        delete pCell;
+                    }
                 }
             }
             else
