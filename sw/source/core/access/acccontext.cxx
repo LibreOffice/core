@@ -588,7 +588,8 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
 
 SwAccessibleContext::~SwAccessibleContext()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(Application::GetUnoWrapper())
+        vos::OGuard aGuard(Application::GetSolarMutex());
 
     DBG_MSG_CD( "destructed" )
     RemoveFrmFromAccessibleMap();

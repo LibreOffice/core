@@ -594,7 +594,8 @@ SwAccessibleParagraph::SwAccessibleParagraph(
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(Application::GetUnoWrapper())
+        vos::OGuard aGuard(Application::GetSolarMutex());
 
     delete pPortionData;
     delete pHyperTextData;
