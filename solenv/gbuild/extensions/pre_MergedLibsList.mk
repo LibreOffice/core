@@ -69,7 +69,6 @@ gb_EXTRAMERGEDLIBS := \
 	$(if $(filter-out WNT,$(OS)),$(call gb_Helper_optional,DBCONNECTIVITY,mork)) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
-	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	odfflatxml \
 	offacc \
 	oox \

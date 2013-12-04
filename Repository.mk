@@ -304,7 +304,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	mtfrenderer \
 	mysql \
 	odbc \
-	odbcbase \
 	odfflatxml \
 	offacc \
 	oox \
