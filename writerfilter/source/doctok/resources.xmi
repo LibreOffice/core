@@ -2692,9 +2692,6 @@
         <!--Class LFO-->
         <UML:Class xmi.id="LFO" name="LFO">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="withindex"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -2991,9 +2988,6 @@
         <!--Class SttbRgtplc-->
         <!--Class LFOData-->
         <UML:Class xmi.id="LFOData" name="LFOData">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
@@ -4176,12 +4170,6 @@
         <!--Class StyleSheet-->
         <!--Class Fib-->
         <UML:Class xmi.id="Fib" name="Fib">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="withmembers"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>898</UML:TaggedValue.dataValue>
@@ -19238,9 +19226,6 @@
         <!--Class Fib-->
         <!--Class FibRgFcLcb2000-->
         <UML:Class xmi.id="FibRgFcLcb2000" name="FibRgFcLcb2000">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>856</UML:TaggedValue.dataValue>
@@ -20885,9 +20870,6 @@
         <!--Class FibRgFcLcb2000-->
         <!--Class BKD-->
         <UML:Class xmi.id="BKD" name="BKD">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>6</UML:TaggedValue.dataValue>
@@ -21465,9 +21447,6 @@
         <!--Class SED-->
         <!--Class SHD-->
         <UML:Class xmi.id="SHD" name="SHD">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
@@ -21717,9 +21696,6 @@
         <!--Class CellShd-->
         <UML:Class xmi.id="CellShd" name="CellShd">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8nocalcsize"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -21916,9 +21892,6 @@
         <!--Class CellShd-->
         <!--Class BRC-->
         <UML:Class xmi.id="BRC" name="BRC">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
@@ -22375,9 +22348,6 @@
         <!--Class BRC-->
         <!--Class TC-->
         <UML:Class xmi.id="TC" name="TC">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>20</UML:TaggedValue.dataValue>
@@ -23236,9 +23206,6 @@
         <!--Class TC-->
         <!--Class BKF-->
         <UML:Class name="BKF" xmi.id="BKF">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
@@ -38532,9 +38499,6 @@
         <!--SPRM sprmPBrcTop-->
         <UML:Class xmi.id="sprmPBrcTop" name="sprmPBrcTop">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -38631,9 +38595,6 @@
         <!--SPRM sprmPBrcTop-->
         <!--SPRM sprmPBrcLeft-->
         <UML:Class xmi.id="sprmPBrcLeft" name="sprmPBrcLeft">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -38732,9 +38693,6 @@
         <!--SPRM sprmPBrcBottom-->
         <UML:Class xmi.id="sprmPBrcBottom" name="sprmPBrcBottom">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -38831,9 +38789,6 @@
         <!--SPRM sprmPBrcBottom-->
         <!--SPRM sprmPBrcRight-->
         <UML:Class xmi.id="sprmPBrcRight" name="sprmPBrcRight">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -38932,9 +38887,6 @@
         <!--SPRM sprmPBrcBetween-->
         <UML:Class xmi.id="sprmPBrcBetween" name="sprmPBrcBetween">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -39031,9 +38983,6 @@
         <!--SPRM sprmPBrcBetween-->
         <!--SPRM sprmPBorderTop-->
         <UML:Class xmi.id="sprmPBorderTop" name="sprmPBorderTop">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -39132,9 +39081,6 @@
         <!--SPRM sprmPBorderLeft-->
         <UML:Class xmi.id="sprmPBorderLeft" name="sprmPBorderLeft">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -39231,9 +39177,6 @@
         <!--SPRM sprmPBorderLeft-->
         <!--SPRM sprmPBorderBottom-->
         <UML:Class xmi.id="sprmPBorderBottom" name="sprmPBorderBottom">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -39332,9 +39275,6 @@
         <!--SPRM sprmPBorderRight-->
         <UML:Class xmi.id="sprmPBorderRight" name="sprmPBorderRight">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -39431,9 +39371,6 @@
         <!--SPRM sprmPBorderRight-->
         <!--SPRM sprmPBorderBetween-->
         <UML:Class xmi.id="sprmPBorderBetween" name="sprmPBorderBetween">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -39532,9 +39469,6 @@
         <!--SPRM sprmCBorder-->
         <UML:Class xmi.id="sprmCBorder" name="sprmCBorder">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -39631,9 +39565,6 @@
         <!--SPRM sprmCBorder-->
         <!--SPRM sprmTTPreferredWidth-->
         <UML:Class xmi.id="sprmTTPreferredWidth" name="sprmTTPreferredWidth">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
@@ -39798,9 +39729,6 @@
         <!--SPRM sprmTTRLeft-->
         <UML:Class xmi.id="sprmTTRLeft" name="sprmTTRLeft">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -39964,9 +39892,6 @@
         <!--SPRM sprmCEastAsianLayout-->
         <UML:Class xmi.id="sprmCEastAsianLayout" name="sprmCEastAsianLayout">
           <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
@@ -40065,9 +39990,6 @@
         <UML:Class xmi.id="sprmTWidthBefore" name="sprmTWidthBefore">
           <UML:ModelElement.stereotype>
             <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
           </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
