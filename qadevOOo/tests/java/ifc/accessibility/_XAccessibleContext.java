@@ -206,24 +206,21 @@ public class _XAccessibleContext extends MultiMethodTest {
         XAccessibleContext parentAC = parent.getAccessibleContext();
 
         try {
-            if (parentAC.getAccessibleChild(idx) == null) {
+            XAccessible child = parentAC.getAccessibleChild(idx);
+            XAccessibleContext childAC = null;
+            if (child == null) {
                 log.println("Parent has no child with this index");
                 bOK &= false;
             } else {
-                bOK &= AccessibilityTools.equals(parentAC.getAccessibleChild(
-                                                         idx)
-                                                         .getAccessibleContext(),
-                                                 oObj);
+                childAC = child.getAccessibleContext();
+                bOK &= AccessibilityTools.equals(childAC, oObj);
             }
 
             if (!bOK) {
                 log.println("Expected: " + util.utils.getImplName(oObj));
 
-                if (parentAC.getAccessibleChild(idx) != null) {
-                    log.println("Getting: " +
-                                util.utils.getImplName(
-                                        parentAC.getAccessibleChild(idx)
-                                                .getAccessibleContext()));
+                if (childAC != null) {
+                    log.println("Getting: " + util.utils.getImplName(childAC));
                 }
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
