@@ -13,7 +13,7 @@
   <object class="GtkDialog" id="AnalysisOfVarianceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Descriptive Statistics</property>
+    <property name="title" translatable="yes">Analysis of Variance (ANOVA)</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
