@@ -502,11 +502,11 @@ void SpellDialog::StartSpellOptDlg_Impl()
     };
     SfxItemSet aSet( SFX_APP()->GetPool(), aSpellInfos);
     aSet.Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
-    SfxNoLayoutSingleTabDialog* pDlg =
-        new SfxNoLayoutSingleTabDialog( this, aSet, RID_SFXPAGE_LINGU );
-    SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg, aSet );
+    SfxSingleTabDialog* pDlg =
+        new SfxSingleTabDialog(this, aSet);
+    SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg->get_content_area(), aSet );
     ( (SvxLinguTabPage*)pPage )->HideGroups( GROUP_MODULES );
-    pDlg->SetTabPage( pPage );
+    pDlg->setTabPage( pPage );
     if(RET_OK == pDlg->Execute())
     {
         InitUserDicts();
