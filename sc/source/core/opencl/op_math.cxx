@@ -702,7 +702,7 @@ void OpExp::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"))\n\t\t";
     ss<<"arg0 = 0;\n\t";
 #endif
-    ss << "double tmp=exp(arg0);\n\t";
+    ss << "double tmp = pow(M_E, arg0);\n\t";
     ss << "return tmp;\n";
     ss << "}";
 }
