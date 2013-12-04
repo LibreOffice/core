@@ -189,5 +189,43 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return t;\n";
     ss << "}\n";
 }
+void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double tmp=0;\n";
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
+#ifdef ISNAN
+        const formula::SingleVectorRefToken*pCurDVR= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur0);
+        ss <<"    if(gid0 >= "<<pCurDVR->GetArrayLength()<<" || isNan(";
+        ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        tmp = 0;\n    else\n";
+#endif
+        ss <<"        tmp = ";
+        ss <<vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n";
+        ss <<"    tmp = (tmp == 0.0);\n";
+    }
+    else if(tmpCur0->GetType() == formula::svDouble)
+    {
+        ss <<"        tmp = ";
+        ss <<vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n";
+        ss <<"    tmp = (tmp == 0.0);\n";
+    }
+    ss << "    return tmp;\n";
+    ss << "}\n";
+}
 }}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
