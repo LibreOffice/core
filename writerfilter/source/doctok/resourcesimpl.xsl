@@ -51,84 +51,6 @@ using namespace ::std;
 </xsl:template>
 
   <xsl:template match="UML:Class" mode="class">
-    <xsl:choose>
-      <xsl:when test='.//UML:Stereotype[@xmi.idref = "ww8resource"]'>
-        <xsl:apply-templates select="." mode="ww8resource">
-          <xsl:with-param name="classprefix">WW8</xsl:with-param>          
-          <xsl:with-param name="needsinit">true</xsl:with-param>          
-        </xsl:apply-templates>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="UML:Class" mode="ww8resource">
-    <xsl:param name="classprefix"/>
-    <xsl:param name="needsinit"/>
-    <xsl:variable name="parentresource">
-      <xsl:call-template name='parenttype'>
-        <xsl:with-param name='type'><xsl:value-of select='@xmi.id'/></xsl:with-param>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name='size_'><xsl:value-of select='./*/UML:TaggedValue[./*/UML:TagDefinition/@xmi.idref="size"]/UML:TaggedValue.dataValue'/></xsl:variable>
-    <xsl:variable name='size'>
-      <xsl:choose>
-        <xsl:when test='$size_ != ""'><xsl:value-of select='$size_'/></xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="classname"><xsl:value-of select="$classprefix"/><xsl:value-of select="@name"/></xsl:variable>
-    <xsl:variable name="superclass">
-      <xsl:choose>
-        <xsl:when test='.//UML:Stereotype[@xmi.idref = "ww8sprm"]'>WW8PropertyImpl</xsl:when>
-        <xsl:otherwise>WW8StructBase</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="surroundclass">
-      <xsl:choose>
-        <xsl:when test='.//UML:Stereotype[@xmi.idref = "ww8sprm"]'>WW8PropertyImpl</xsl:when>
-        <xsl:otherwise>WW8StructBase</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:text>
-/*
-    Automatically generated class: </xsl:text><xsl:value-of select="@name"/><xsl:text>
-    </xsl:text>
-    <xsl:for-each select='./UML:ModelElement.stereotype/UML:Stereotype'>
-      <xsl:text>
-    Stereotype </xsl:text>
-      <xsl:value-of select='@xmi.idref'/>
-      <xsl:text>&#xa;</xsl:text>
-    </xsl:for-each>
-    <xsl:text>
-    Parent Resource: </xsl:text>
-    <xsl:value-of select="$parentresource"/>
-    <xsl:text>
-    Size: </xsl:text><xsl:value-of select='$size'/>
-    <xsl:text>
-*/
-    </xsl:text>
-    
-    <xsl:value-of select="$classname"/>
-    <xsl:text>::~</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>()
-    {
-    }
-    </xsl:text>
-
-    <xsl:choose>
-      <xsl:when test='$parentresource="Properties"'>
-        <xsl:apply-templates select="." mode="resolveProperties">
-          <xsl:with-param name="classname" select="$classname"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:when test='$parentresource="Table"'>
-        <xsl:apply-templates select="." mode="resolveTable">
-          <xsl:with-param name="classname" select="$classname"/>
-        </xsl:apply-templates>
-      </xsl:when>
-    </xsl:choose>
-
   </xsl:template>
 
   <xsl:template match="UML:Class" mode="resolveProperties">
@@ -150,19 +72,6 @@ using namespace ::std;
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <xsl:text>
-    void </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:choose>
-      <xsl:when test=".//UML:Stereotype[@xmi.idref='ww8resource']">
-        <xsl:text>::resolve(Properties &amp; </xsl:text>
-        <xsl:text>)</xsl:text>
-      </xsl:when>
-    </xsl:choose>
-    <xsl:text>
-    {
-    }
-    </xsl:text>
   </xsl:template>
 
   <xsl:template match='UML:Attribute' mode='resolveAttribute'>
