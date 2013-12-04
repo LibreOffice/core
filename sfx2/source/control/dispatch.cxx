@@ -67,7 +67,36 @@
 DBG_NAME(SfxDispatcherFlush)
 DBG_NAME(SfxDispatcherFillState)
 
+typedef std::vector<SfxShell*> SfxShellStack_Impl;
+
 typedef std::vector<SfxRequest*> SfxRequestPtrArray;
+
+struct SfxToDo_Impl
+{
+    SfxShell*  pCluster;
+    bool       bPush;
+    bool       bDelete;
+    bool       bDeleted;
+    bool       bUntil;
+
+    SfxToDo_Impl()
+        : pCluster(0)
+        , bPush(false)
+        , bDelete(false)
+        , bDeleted(false)
+        , bUntil(false)
+                {}
+    SfxToDo_Impl( bool bOpPush, bool bOpDelete, bool bOpUntil, SfxShell& rCluster )
+        : pCluster(&rCluster)
+        , bPush(bOpPush)
+        , bDelete(bOpDelete)
+        , bDeleted(false)
+        , bUntil(bOpUntil)
+                {}
+
+    bool operator==( const SfxToDo_Impl& rWith ) const
+    { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
+};
 
 struct SfxObjectBars_Impl
 {
@@ -122,11 +151,72 @@ struct SfxDispatcher_Impl
     sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
     const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
     sal_uInt32           nDisableFlags;
+    bool                 bFlushed;
+    std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
 };
 
 //------------------------------------------------------------------
 
 #define SFX_FLUSH_TIMEOUT    50
+
+//--------------------------------------------------------------------
+
+/** This method checks if the stack of the SfxDispatchers is flushed, or if
+    push- or pop- commands are pending.
+*/
+bool SfxDispatcher::IsFlushed() const
+{
+     return pImp->bFlushed;
+}
+
+/** This method performs outstanding push- and pop- commands. For <SfxShell>s,
+    which are new on the stack, the <SfxShell::Activate(sal_Bool)> is invoked
+    with bMDI == sal_True, for SfxShells that are removed from the stack, the
+    <SfxShell::Deactivate(sal_Bool)> is invoked with bMDI == sal_True
+*/
+void SfxDispatcher::Flush()
+{
+    if (!pImp->bFlushed) FlushImpl();
+}
+
+/** With this method, a <SfxShell> pushed on to the SfxDispatcher.
+    The SfxShell is first marked for push and a timer is set up.
+    First when the timer has couted down to zero the push
+    ( <SfxDispatcher::Flush()> ) is actually performed and the
+    <SfxBindings> is invalidated. While the timer is counting down
+    the opposing push and pop commands on the same SfxShell are
+    leveled out.
+*/
+void SfxDispatcher::Push(SfxShell& rShell)
+
+{
+    Pop( rShell, SFX_SHELL_PUSH );
+}
+
+/*  This method checks whether a particular <SfxShell> instance is
+    on the SfxDispatcher.
+
+    @returns sal_True   The SfxShell instance is on the SfxDispatcher.
+             sal_False  The SfxShell instance is not on the SfxDispatcher.
+*/
+sal_Bool SfxDispatcher::IsActive(const SfxShell& rShell)
+
+{
+    return CheckVirtualStack(rShell, sal_True);
+}
+
+/*  This method checks whether a particular <SfxShell> instance is on
+    top of the SfxDispatcher.
+
+    @returns sal_True   The SfxShell instance is on the top of
+                        the SfxDispatcher.
+             sal_False  The SfxShell instance is not on the top of
+                        the SfxDispatcher.
+*/
+sal_Bool SfxDispatcher::IsOnTop(const SfxShell& rShell)
+{
+    return CheckVirtualStack(rShell, sal_False);
+}
 
 //====================================================================
 sal_Bool SfxDispatcher::IsLocked( sal_uInt16 ) const
@@ -269,8 +359,8 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 //====================================================================
 void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 {
-    pImp = new SfxDispatcher_Impl;
-    bFlushed = sal_True;
+    pImp.reset(new SfxDispatcher_Impl);
+    pImp->bFlushed = true;
 
     pImp->pCachedServ1 = 0;
     pImp->pCachedServ2 = 0;
@@ -363,7 +453,7 @@ SfxDispatcher::~SfxDispatcher()
     SfxBindings* pBindings = GetBindings();
 
     // When not flushed, revive the bindings
-    if ( pBindings && !pSfxApp->IsDowning() && !bFlushed )
+    if (pBindings && !pSfxApp->IsDowning() && !pImp->bFlushed)
         pBindings->DLEAVEREGISTRATIONS();
 
     // may unregister the bindings
@@ -373,8 +463,6 @@ SfxDispatcher::~SfxDispatcher()
             pBindings->SetDispatcher(0);
         pBindings = pBindings->GetSubBindings_Impl();
     }
-
-    delete pImp;
 }
 
 //====================================================================
@@ -437,10 +525,10 @@ void SfxDispatcher::Pop
     {
         // Remember ::com::sun::star::chaos::Action
         pImp->aToDoStack.push_front( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
-        if ( bFlushed )
+        if (pImp->bFlushed)
         {
             OSL_TRACE("Unflushed dispatcher!");
-            bFlushed = sal_False;
+            pImp->bFlushed = false;
             pImp->bUpdated = sal_False;
 
             // Put bindings to sleep
@@ -1599,15 +1687,15 @@ void SfxDispatcher::FlushImpl()
 
     pImp->bFlushing = sal_False;
     pImp->bUpdated = sal_False; // not only when bModify, if Doc/Template-Config
-    bFlushed = sal_True;
+    pImp->bFlushed = true;
     OSL_TRACE("Successfully flushed dispatcher!");
 
     //fdo#70703 FlushImpl may call back into itself so use aToDoCopyStack to talk
     //to outer levels of ourself. If DoActivate_Impl/DoDeactivate_Impl deletes
     //an entry, then they will walk back up aToDoCopyStack and set outer
     //levels's entries to bDeleted
-    aToDoCopyStack.push_back(aToDoCopy);
-    std::deque<SfxToDo_Impl>& rToDoCopy = aToDoCopyStack.back();
+    pImp->aToDoCopyStack.push_back(aToDoCopy);
+    std::deque<SfxToDo_Impl>& rToDoCopy = pImp->aToDoCopyStack.back();
     // Activate the Shells and possible delete them in the 2nd round
     for(std::deque<SfxToDo_Impl>::reverse_iterator i = rToDoCopy.rbegin(); i != rToDoCopy.rend(); ++i)
     {
@@ -1621,19 +1709,19 @@ void SfxDispatcher::FlushImpl()
             i->pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
     }
 
-    aToDoCopy = aToDoCopyStack.back();
-    aToDoCopyStack.pop_back();
+    aToDoCopy = pImp->aToDoCopyStack.back();
+    pImp->aToDoCopyStack.pop_back();
 
     for(std::deque<SfxToDo_Impl>::reverse_iterator i = aToDoCopy.rbegin(); i != aToDoCopy.rend(); ++i)
     {
         if (i->bDelete && !i->bDeleted)
         {
-            if (!aToDoCopyStack.empty())
+            if (!pImp->aToDoCopyStack.empty())
             {
                 //fdo#70703 if there is an outer FlushImpl then inform it that
                 //we have deleted this cluster
-                for (std::deque< std::deque<SfxToDo_Impl> >::iterator aI = aToDoCopyStack.begin();
-                    aI != aToDoCopyStack.end(); ++aI)
+                for (std::deque< std::deque<SfxToDo_Impl> >::iterator aI = pImp->aToDoCopyStack.begin();
+                    aI != pImp->aToDoCopyStack.end(); ++aI)
                 {
                     std::deque<SfxToDo_Impl> &v = *aI;
                     for(std::deque<SfxToDo_Impl>::iterator aJ = v.begin(); aJ != v.end(); ++aJ)
@@ -1652,7 +1740,7 @@ void SfxDispatcher::FlushImpl()
 
     // If more changes have occurred on the stach when
     // Activate/Deactivate/Delete:
-    if (!bFlushed)
+    if (!pImp->bFlushed)
         // If Push/Pop hs been called by someone, theb also EnterReg was called!
         FlushImpl();
 
@@ -2004,8 +2092,9 @@ sal_Bool SfxDispatcher::_FillState
 
     if ( pSlot )
     {
-        DBG_ASSERT(bFlushed, "Dispatcher not flushed after retrieving slot servers!");
-        if ( !bFlushed )
+        DBG_ASSERT(pImp->bFlushed,
+                "Dispatcher not flushed after retrieving slot servers!");
+        if (!pImp->bFlushed)
             return sal_False;
 
         // Determine the object and call the Message of this object

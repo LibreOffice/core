@@ -27,9 +27,8 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <deque>
 #include <map>
-#include <vector>
+#include <boost/scoped_ptr.hpp>
 
 class SfxSlotServer;
 class SfxShell;
@@ -41,8 +40,6 @@ class SfxItemSet;
 class SfxPopupMenuManager;
 class SfxModule;
 struct SfxDispatcher_Impl;
-
-typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
 namespace com
 {
@@ -77,38 +74,9 @@ public:
     }
 };
 
-struct SfxToDo_Impl
-{
-    SfxShell*  pCluster;
-    bool       bPush;
-    bool       bDelete;
-    bool       bDeleted;
-    bool       bUntil;
-
-    SfxToDo_Impl()
-        : pCluster(0)
-        , bPush(false)
-        , bDelete(false)
-        , bDeleted(false)
-        , bUntil(false)
-                {}
-    SfxToDo_Impl( bool bOpPush, bool bOpDelete, bool bOpUntil, SfxShell& rCluster )
-        : pCluster(&rCluster)
-        , bPush(bOpPush)
-        , bDelete(bOpDelete)
-        , bDeleted(false)
-        , bUntil(bOpUntil)
-                {}
-
-    bool operator==( const SfxToDo_Impl& rWith ) const
-    { return pCluster==rWith.pCluster && bPush==rWith.bPush; }
-};
-
 class SFX2_DLLPUBLIC SfxDispatcher
 {
-    SfxDispatcher_Impl*      pImp;
-    sal_Bool                 bFlushed;
-    std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
+    boost::scoped_ptr<SfxDispatcher_Impl> pImp;
 
 private:
     // Search for temporary evaluated Todos
@@ -199,7 +167,7 @@ public:
                               Window *pWin = 0, const Point *pPosPixel = 0 );
 
     sal_Bool            IsAppDispatcher() const;
-    sal_Bool            IsFlushed() const;
+    bool                IsFlushed() const;
     void                Flush();
     void                Lock( sal_Bool bLock );
     sal_Bool                IsLocked( sal_uInt16 nSID = 0 ) const;
@@ -235,102 +203,6 @@ public:
     SAL_DLLPRIVATE void InvalidateBindings_Impl(sal_Bool);
     SAL_DLLPRIVATE sal_uInt16 GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, OUString *pStr );
 };
-
-//--------------------------------------------------------------------
-
-inline sal_Bool SfxDispatcher::IsFlushed() const
-
-/*  [Description]
-
-    This method checks if the stack of the SfxDispatchers is flushed, or if
-    push- or pop- commands are pending.
-*/
-
-{
-     return bFlushed;
-}
-
-//--------------------------------------------------------------------
-
-inline void SfxDispatcher::Flush()
-
-/*  [Description]
-
-    This method performs outstanding push- and pop- commands. For <SfxShell>s,
-    which are new on the stack, the <SfxShell::Activate(sal_Bool)> is invoked with
-    bMDI == sal_True, for SfxShells that are removed from the stack, the
-    <SfxShell::Deactivate(sal_Bool)> is invoked with bMDI == sal_True
-*/
-
-{
-    if ( !bFlushed ) FlushImpl();
-}
-
-//--------------------------------------------------------------------
-
-inline void SfxDispatcher::Push( SfxShell& rShell )
-
-/*  [Description]
-
-    With this method, a <SfxShell> pushed on to the SfxDispatcher.
-    The SfxShell is first marked for push and a timer is set up.
-    First when the timer has couted down to zero the push
-    ( <SfxDispatcher::Flush()> ) is actually performed and the
-    <SfxBindings> is invalidated. While the timer is counting down
-    the opposing push and pop commands on the same SfxShell are
-    leveled out.
-*/
-
-{
-    Pop( rShell, SFX_SHELL_PUSH );
-}
-
-//--------------------------------------------------------------------
-
-inline sal_Bool SfxDispatcher::IsActive( const SfxShell& rShell )
-
-/*  [Description]
-
-    This method checks whether a particular <SfxShell> instance is
-    on the SfxDispatcher.
-
-    [Return value]
-
-    sal_Bool                sal_True
-                        The SfxShell instance is on the SfxDispatcher.
-
-                        sal_False
-                        The SfxShell instance is not on the SfxDispatcher.
-*/
-
-{
-    return CheckVirtualStack( rShell, sal_True );
-}
-//--------------------------------------------------------------------
-
-inline sal_Bool SfxDispatcher::IsOnTop( const SfxShell& rShell )
-
-/*  [Description]
-
-    This method checks whether a particular <SfxShell> instance is on
-    top of the SfxDispatcher.
-
-    [Return value]
-
-    sal_Bool                sal_True
-                        The SfxShell instance is on the top of
-                        the SfxDispatcher.
-
-                        sal_False
-                        The SfxShell instance is not on the top of
-                        the SfxDispatcher.
-*/
-
-{
-    return CheckVirtualStack( rShell, sal_False );
-}
-
-//--------------------------------------------------------------------
 
 #endif
 
