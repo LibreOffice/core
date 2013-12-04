@@ -23,9 +23,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_file \
 	Library_flat \
 	Library_mysql \
-	$(if $(filter ANDROID IOS,$(OS)),, \
-		Library_odbc \
-		Library_odbcbase) \
+	$(if $(filter ANDROID IOS,$(OS)),,Library_odbc) \
 	Library_sdbc2 \
 ))
 

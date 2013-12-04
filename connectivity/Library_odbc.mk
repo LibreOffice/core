@@ -20,14 +20,23 @@ $(eval $(call gb_Library_set_include,odbc,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
-$(eval $(call gb_Library_use_external,odbc,odbc_headers))
+$(eval $(call gb_Library_add_defs,odbc,\
+	-DOOO_DLLIMPLEMENTATION_ODBCBASE \
+))
+
+$(eval $(call gb_Library_use_externals,odbc,\
+	boost_headers \
+	odbc_headers \
+))
 
 $(eval $(call gb_Library_use_libraries,odbc,\
-	odbcbase \
 	cppu \
 	cppuhelper \
+	comphelper \
+	dbtools \
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
@@ -37,6 +46,15 @@ $(eval $(call gb_Library_add_exception_objects,odbc,\
 	connectivity/source/drivers/odbc/oservices \
 	connectivity/source/drivers/odbc/ORealDriver \
 	connectivity/source/drivers/odbc/OFunctions \
+	connectivity/source/drivers/odbc/OPreparedStatement \
+	connectivity/source/drivers/odbc/OStatement \
+	connectivity/source/drivers/odbc/OResultSetMetaData \
+	connectivity/source/drivers/odbc/OResultSet \
+	connectivity/source/drivers/odbc/OTools \
+	connectivity/source/drivers/odbc/ODatabaseMetaDataResultSet \
+	connectivity/source/drivers/odbc/ODatabaseMetaData \
+	connectivity/source/drivers/odbc/ODriver \
+	connectivity/source/drivers/odbc/OConnection \
 ))
 
 # vim: set noet sw=4 ts=4:
