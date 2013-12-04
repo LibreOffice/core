@@ -128,8 +128,8 @@ class SwInterHyphInfo
 {
     ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >    xHyphWord;
     const Point aCrsrPos;
-    sal_Bool    bNoLang : 1;
-    sal_Bool    bCheck  : 1;
+    bool bNoLang : 1;
+    bool bCheck  : 1;
 public:
     sal_Int32 nStart;
     sal_Int32 nEnd;
@@ -138,30 +138,37 @@ public:
     sal_Int32 nHyphPos;
     sal_uInt16 nMinTrail;
 
-    inline SwInterHyphInfo( const Point &rCrsrPos,
-                            sal_Int32 nStartPos = 0,
-                            sal_Int32 nLength = SAL_MAX_INT32 )
-         : aCrsrPos( rCrsrPos ),
-           bNoLang(sal_False), bCheck(sal_False),
-           nStart(nStartPos),
-           nEnd( nLength == SAL_MAX_INT32 ? SAL_MAX_INT32 : nStartPos + nLength ),
-           nWordStart(0), nWordLen(0),
-           nHyphPos(0), nMinTrail(0)
-         { }
-    inline sal_Int32 GetEnd() const
-        { return nEnd; }
-    inline const Point *GetCrsrPos() const
-        { return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : 0; }
-    inline sal_Bool IsCheck() const { return bCheck; }
-    inline void SetCheck( const sal_Bool bNew ) { bCheck = bNew; }
-    inline void SetNoLang( const sal_Bool bNew ) { bNoLang = bNew; }
-
-    inline void SetHyphWord(const ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >  &rxHW)
-        { xHyphWord = rxHW; }
-    inline ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord > GetHyphWord()
-        { return xHyphWord; }
+    SwInterHyphInfo( const Point &rCrsrPos, sal_Int32 nStartPos = 0,
+        sal_Int32 nLength = SAL_MAX_INT32 )
+        : aCrsrPos(rCrsrPos)
+        , bNoLang(false)
+        , bCheck(false)
+        , nStart(nStartPos)
+        , nEnd(nLength == SAL_MAX_INT32 ? SAL_MAX_INT32 : nStartPos + nLength)
+        , nWordStart(0), nWordLen(0)
+        , nHyphPos(0), nMinTrail(0)
+    {
+    }
+    sal_Int32 GetEnd() const
+    {
+        return nEnd;
+    }
+    const Point *GetCrsrPos() const
+    {
+        return aCrsrPos.X() || aCrsrPos.Y() ? &aCrsrPos : 0;
+    }
+    bool IsCheck() const { return bCheck; }
+    void SetCheck( const bool bNew ) { bCheck = bNew; }
+    void SetNoLang( const bool bNew ) { bNoLang = bNew; }
+    void SetHyphWord(const ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >  &rxHW)
+    {
+        xHyphWord = rxHW;
+    }
+    ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord > GetHyphWord()
+    {
+        return xHyphWord;
+    }
 };
-
 
 #endif
 
