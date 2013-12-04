@@ -15,7 +15,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cmis,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 						external/libcmis/libcmis-0.4.1.patch \
-						external/libcmis/libcmis-0.4.1-empty-path.patch))
+						external/libcmis/libcmis-0.4.1-empty-path.patch \
+						external/libcmis/libcmis-0.4.1-properties-fix.patch))
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_add_patches,cmis,external/libcmis/boost-win.patch))
