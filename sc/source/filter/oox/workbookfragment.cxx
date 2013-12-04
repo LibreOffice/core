@@ -41,6 +41,7 @@
 #include "viewsettings.hxx"
 #include "workbooksettings.hxx"
 #include "worksheetbuffer.hxx"
+#include "worksheethelper.hxx"
 #include "worksheetfragment.hxx"
 #include "sheetdatacontext.hxx"
 #include "threadpool.hxx"
@@ -51,6 +52,7 @@
 #include "calcconfig.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 
 #include <oox/core/fastparser.hxx>
 #include <comphelper/processfactory.hxx>
@@ -211,12 +213,15 @@ typedef std::vector<SheetFragmentHandler> SheetFragmentVector;
 
 class WorkerThread : public ThreadTask
 {
+    sal_Int32 &mrSheetsLeft;
     WorkbookFragment& mrWorkbookHandler;
     rtl::Reference<FragmentHandler> mxHandler;
 
 public:
     WorkerThread( WorkbookFragment& rWorkbookHandler,
-                  const rtl::Reference<FragmentHandler>& xHandler ) :
+                  const rtl::Reference<FragmentHandler>& xHandler,
+                  sal_Int32 &rSheetsLeft ) :
+        mrSheetsLeft( rSheetsLeft ),
         mrWorkbookHandler( rWorkbookHandler ),
         mxHandler( xHandler )
     {
@@ -237,6 +242,61 @@ public:
         SAL_INFO( "sc.filter",  "start import\n" );
         mrWorkbookHandler.importOoxFragment( mxHandler, *xParser );
         SAL_INFO( "sc.filter",  "end import, release solar\n" );
+        mrSheetsLeft--;
+        assert( mrSheetsLeft >= 0 );
+        if( mrSheetsLeft == 0 )
+            Application::EndYield();
+    }
+};
+
+class ProgressBarTimer : Timer
+{
+    // FIXME: really we should unify all sheet loading
+    // progress reporting into something pleasant.
+    class ProgressWrapper : public ISegmentProgressBar
+    {
+        double mfPosition;
+        ISegmentProgressBarRef mxWrapped;
+    public:
+        ProgressWrapper( const ISegmentProgressBarRef &xRef ) :
+            mxWrapped( xRef )
+        {
+        }
+        virtual ~ProgressWrapper() {}
+        // IProgressBar
+        virtual double getPosition() const { return mfPosition; }
+        virtual void   setPosition( double fPosition ) { mfPosition = fPosition; }
+        // ISegmentProgressBar
+        virtual double getFreeLength() const { return 0.0; }
+        virtual ISegmentProgressBarRef createSegment( double /* fLength */ )
+        {
+            return ISegmentProgressBarRef();
+        }
+        void UpdateBar()
+        {
+            mxWrapped->setPosition( mfPosition );
+        }
+    };
+    std::vector< ISegmentProgressBarRef > aSegments;
+public:
+    ProgressBarTimer() : Timer()
+    {
+        SetTimeout( 500 );
+    }
+    virtual ~ProgressBarTimer()
+    {
+        aSegments.clear();
+    }
+    ISegmentProgressBarRef wrapProgress( const ISegmentProgressBarRef &xProgress )
+    {
+        aSegments.push_back( ISegmentProgressBarRef( new ProgressWrapper( xProgress ) ) );
+        return aSegments.back();
+    }
+    virtual void Timeout()
+    {
+        fprintf( stderr, "Progress bar update\n" );
+        for( size_t i = 0; i < aSegments.size(); i++)
+            static_cast< ProgressWrapper *>( aSegments[ i ].get() )->UpdateBar();
     }
 };
 
@@ -261,18 +321,30 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
             nThreads = 0;
         ThreadPool aPool( nThreads );
 
+        sal_Int32 nSheetsLeft = 0;
+        ProgressBarTimer aProgressUpdater;
         SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
         for( ; it != itEnd; ++it )
-            aPool.pushTask( new WorkerThread( rWorkbookHandler, it->second ) )
-                ;
-
         {
-            // Ideally no-one else but our worker threads can re-acquire that.
-            // potentially if that causes a problem we might want to extend
-            // the SolarMutex functionality to allow passing it around.
-            SolarMutexReleaser aReleaser;
-            aPool.waitUntilWorkersDone();
+            // getting at the WorksheetGlobals is rather unpleasant
+            IWorksheetProgress *pProgress = WorksheetHelper::getWorksheetInterface( it->first );
+            pProgress->setCustomRowProgress(
+                        aProgressUpdater.wrapProgress(
+                                pProgress->getRowProgress() ) );
+            aPool.pushTask( new WorkerThread( rWorkbookHandler, it->second,
+                                              /* ref */ nSheetsLeft ) );
+            nSheetsLeft++;
         }
+
+        while( nSheetsLeft > 0)
+        {
+            // This is a much more controlled re-enterancy hazard than
+            // allowing a yield deeper inside the filter code for progress
+            // bar updating.
+            Application::Yield();
+        }
+        // join all the threads:
+        aPool.waitUntilWorkersDone();
     }
     else
     {

@@ -35,7 +35,7 @@ namespace oox {
 
 /** Interface for progress bar classes.
  */
-class IProgressBar
+class OOX_DLLPUBLIC IProgressBar
 {
 public:
     virtual             ~IProgressBar();
@@ -66,7 +66,7 @@ typedef ::boost::shared_ptr< ISegmentProgressBar > ISegmentProgressBarRef;
 /** Interface for a segment in a progress bar, that is able to create sub
     segments from itself.
  */
-class ISegmentProgressBar : public IProgressBar
+class OOX_DLLPUBLIC ISegmentProgressBar : public IProgressBar
 {
 public:
     virtual             ~ISegmentProgressBar();
