@@ -1525,15 +1525,14 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 m_pImpl->m_rDMapper.GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW );
         }
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         if( bParaProperties && m_pImpl->m_pDefaultParaProps.get() && m_pImpl->m_pDefaultParaProps->size())
         {
-            PropertyMap::iterator aMapIter = m_pImpl->m_pDefaultParaProps->begin();
-            for( ; aMapIter != m_pImpl->m_pDefaultParaProps->end(); ++aMapIter )
+            uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultParaProps->GetPropertyValues();
+            for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
             {
                 try
                 {
-                    m_pImpl->m_xTextDefaults->setPropertyValue(rPropNameSupplier.GetName( aMapIter->first ), aMapIter->second.getValue());
+                    m_pImpl->m_xTextDefaults->setPropertyValue( aPropValues[i].Name, aPropValues[i].Value );
                 }
                 catch( const uno::Exception& )
                 {
@@ -1543,12 +1542,12 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         }
         if( !bParaProperties && m_pImpl->m_pDefaultCharProps.get() && m_pImpl->m_pDefaultCharProps->size())
         {
-            PropertyMap::iterator aMapIter = m_pImpl->m_pDefaultCharProps->begin();
-            for( ; aMapIter != m_pImpl->m_pDefaultCharProps->end(); ++aMapIter )
+            uno::Sequence< beans::PropertyValue > aPropValues = m_pImpl->m_pDefaultCharProps->GetPropertyValues();
+            for( sal_Int32 i = 0; i < aPropValues.getLength(); ++i )
             {
                 try
                 {
-                    m_pImpl->m_xTextDefaults->setPropertyValue(rPropNameSupplier.GetName( aMapIter->first ), aMapIter->second.getValue());
+                    m_pImpl->m_xTextDefaults->setPropertyValue( aPropValues[i].Name, aPropValues[i].Value );
                 }
                 catch( const uno::Exception& )
                 {

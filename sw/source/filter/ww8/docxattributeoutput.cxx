@@ -2634,6 +2634,9 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
         case RES_PARATR_SNAPTOGRID:
             bMustWrite = !static_cast< const SvxParaGridItem& >(rHt).GetValue();
             break;
+        case RES_CHRATR_GRABBAG:
+            bMustWrite = true;
+            break;
 
         default:
             SAL_INFO("sw.ww8", "Unhandled SfxPoolItem with id " << rHt.Which() );
