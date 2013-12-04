@@ -24216,12 +24216,6 @@
         <!--Class METAFILEPICT-->
         <!--Class FFDATA-->
         <UML:Class xmi.id="FFDATA" name="FFDATA">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="resolvenoauto"/>
-          </UML:ModelElement.stereotype>
           <UML:Classifier.feature>
             <UML:Attribute name="unknown">
               <UML:ModelElement.taggedValue>
