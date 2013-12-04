@@ -27,7 +27,6 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <map>
 #include <boost/scoped_ptr.hpp>
 
 class SfxSlotServer;
@@ -62,17 +61,6 @@ namespace com
 #define SFX_SHELL_PUSH          1
 
 //=========================================================================
-
-// Maps the Which() field to a pointer to a SfxPoolItem
-class SfxItemPtrMap : public std::map<sal_uInt16, SfxPoolItem*>
-{
-public:
-    ~SfxItemPtrMap()
-    {
-        for(iterator it = begin(); it != end(); ++it)
-            delete it->second;
-    }
-};
 
 class SFX2_DLLPUBLIC SfxDispatcher
 {

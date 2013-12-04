@@ -44,6 +44,20 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sidebar/ContextChangeBroadcaster.hxx>
 
+#include <map>
+
+
+// Maps the Which() field to a pointer to a SfxPoolItem
+class SfxItemPtrMap : public std::map<sal_uInt16, SfxPoolItem*>
+{
+public:
+    ~SfxItemPtrMap()
+    {
+        for(iterator it = begin(); it != end(); ++it)
+            delete it->second;
+    }
+};
+
 //====================================================================
 
 DBG_NAME(SfxShell)
