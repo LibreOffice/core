@@ -40,7 +40,7 @@
 /*****************************************************************************/
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
-    HINSTANCE hInstance;
+    HMODULE h;
 #if OSL_DEBUG_LEVEL < 2
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 #endif
@@ -56,10 +56,10 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     if ( osl_File_E_None != nError )
         rtl_uString_assign(&Module, strModuleName);
 
-    hInstance = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
+    h = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
 
-    if (hInstance == NULL)
-        hInstance = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), NULL,
+    if (h == NULL)
+        h = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
     //In case of long path names (\\?\c:\...) try to shorten the filename.
@@ -67,26 +67,22 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     //In case the path is to long, the function will fail. However, the error
     //code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
     //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
-    if (hInstance == NULL && Module->length > 260)
+    if (h == NULL && Module->length > 260)
     {
         std::vector<WCHAR, rtl::Allocator<WCHAR> > vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
                                       reinterpret_cast<LPWSTR>(&vec[0]), Module->length + 1);
         if (len )
         {
-            hInstance = LoadLibraryW(reinterpret_cast<LPWSTR>(&vec[0]));
+            h = LoadLibraryW(reinterpret_cast<LPWSTR>(&vec[0]));
 
-            if (hInstance == NULL)
-                hInstance = LoadLibraryExW(reinterpret_cast<LPWSTR>(&vec[0]), NULL,
+            if (h == NULL)
+                h = LoadLibraryExW(reinterpret_cast<LPWSTR>(&vec[0]), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
         }
     }
 
-
-    if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
-        hInstance = 0;
-
-    ret = (oslModule) hInstance;
+    ret = (oslModule) h;
     rtl_uString_release(Module);
 #if OSL_DEBUG_LEVEL < 2
     SetErrorMode(errorMode);
@@ -103,22 +99,19 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 {
     (void) nRtldMode; /* avoid warnings */
 
-    HINSTANCE hInstance;
+    HMODULE h;
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
     oslModule ret = 0;
 
     SAL_INFO( "sal.osl", "{ osl_loadModule start: " << pModuleName );
     OSL_ASSERT(pModuleName);
 
-    hInstance = LoadLibrary(pModuleName);
-    if (hInstance == NULL)
-        hInstance = LoadLibraryEx(pModuleName, NULL,
+    h = LoadLibrary(pModuleName);
+    if (h == NULL)
+        h = LoadLibraryEx(pModuleName, NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
-        hInstance = 0;
-
-    ret = (oslModule) hInstance;
+    ret = (oslModule) h;
     SetErrorMode(errorMode);
 
     SAL_INFO( "sal.osl", "} osl_loadModule end: " << pModuleName );
@@ -139,10 +132,10 @@ sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     LPCWSTR pName = pModuleName ? reinterpret_cast<LPCWSTR>(pModuleName->buffer) : NULL;
-    HINSTANCE hInstance = GetModuleHandleW(pName);
-    if( hInstance )
+    HMODULE h = GetModuleHandleW(pName);
+    if( h )
     {
-        *pResult = (oslModule) hInstance;
+        *pResult = (oslModule) h;
         return sal_True;
     }
 
@@ -154,7 +147,7 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule Module)
 {
-    FreeLibrary((HINSTANCE)Module);
+    FreeLibrary((HMODULE)Module);
 }
 
 /*****************************************************************************/
@@ -210,7 +203,7 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
     oslGenericFunction fncAddr = NULL;
 
     if( pSymbol )
-        fncAddr=(oslGenericFunction)GetProcAddress((HINSTANCE) Module, pSymbol);
+        fncAddr=(oslGenericFunction)GetProcAddress((HMODULE) Module, pSymbol);
 
     return fncAddr;
 }
