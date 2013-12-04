@@ -220,26 +220,5 @@ FloatingWindow RID_SVXDLG_CONTOUR
 };
 
 /******************************************************************************/
-String STR_CONTOURDLG_MODIFY
-{
-    Text [ en-US ] = "The contour has been modified.\nDo you want to save the changes?" ;
-};
-
-String STR_CONTOURDLG_NEWPIPETTE
-{
-    Text [ en-US ] = "Do you want to create a new contour?" ;
-};
-
-String STR_CONTOURDLG_WORKPLACE
-{
-    Text [ en-US ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
-};
-
-String STR_CONTOURDLG_LINKED
-{
-    Text [ en-US ] = "This graphic object is linked to the document. Do you want to unlink the graphics in order to edit it?" ;
-};
-
-/******************************************************************************/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
