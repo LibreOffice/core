@@ -180,6 +180,14 @@ struct ValidationModel
 class WorksheetGlobals;
 typedef ::boost::shared_ptr< WorksheetGlobals > WorksheetGlobalsRef;
 
+class IWorksheetProgress {
+public:
+    virtual ~IWorksheetProgress() {}
+    virtual ISegmentProgressBarRef getRowProgress() = 0;
+    virtual void                   setCustomRowProgress(
+                                        const ISegmentProgressBarRef &rxRowProgress ) = 0;
+};
+
 class WorksheetHelper : public WorkbookHelper
 {
 public:
@@ -190,6 +198,9 @@ public:
                             const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
+
+    // horrible accessor for hidden WorksheetGlobals ...
+    static IWorksheetProgress *getWorksheetInterface( const WorksheetGlobalsRef &xRef );
 
     // ------------------------------------------------------------------------
 

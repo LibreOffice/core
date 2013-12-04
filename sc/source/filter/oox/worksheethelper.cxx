@@ -96,18 +96,6 @@ using namespace ::com::sun::star::util;
 
 namespace {
 
-void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, const CellRangeAddress& rUsedArea, sal_Int32 nRow )
-{
-    if (!rxProgressBar || nRow < rUsedArea.StartRow || rUsedArea.EndRow < nRow)
-        return;
-
-    double fCurPos = rxProgressBar->getPosition();
-    double fNewPos = static_cast<double>(nRow - rUsedArea.StartRow + 1.0) / (rUsedArea.EndRow - rUsedArea.StartRow + 1.0);
-    if (fCurPos < fNewPos && (fNewPos - fCurPos) > 0.3)
-        // Try not to re-draw progress bar too frequently.
-        rxProgressBar->setPosition(fNewPos);
-}
-
 void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double fPosition )
 {
     if( rxProgressBar.get() )
@@ -228,7 +216,7 @@ void ValidationModel::setBiffErrorStyle( sal_uInt8 nErrorStyle )
 // ============================================================================
 // ============================================================================
 
-class WorksheetGlobals : public WorkbookHelper
+class WorksheetGlobals : public WorkbookHelper, public IWorksheetProgress
 {
 public:
     explicit            WorksheetGlobals(
@@ -236,6 +224,7 @@ public:
                             const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
+    virtual            ~WorksheetGlobals() {}
 
     /** Returns true, if this helper refers to an existing Calc sheet. */
     inline bool         isValidSheet() const { return mxSheet.is(); }
@@ -350,6 +339,17 @@ public:
 
     void finalizeDrawingImport();
 
+    /// Allow the threaded importer to override our progress bar impl.
+    virtual ISegmentProgressBarRef getRowProgress()
+    {
+        return mxRowProgress;
+    }
+    virtual void setCustomRowProgress( const ISegmentProgressBarRef &rxRowProgress )
+    {
+        mxRowProgress = rxRowProgress;
+        mbFastRowProgress = true;
+    }
+
 private:
     typedef ::std::vector< sal_Int32 >                  OutlineLevelVec;
     typedef ::std::pair< ColumnModel, sal_Int32 >       ColumnModelRange;
@@ -387,6 +387,9 @@ private:
     /** Imports the drawings of the sheet (DML, VML, DFF) and updates the used area. */
     void                finalizeDrawings();
 
+    /** Update the row import progress bar */
+    void UpdateRowProgress( const CellRangeAddress& rUsedArea, sal_Int32 nRow );
+
 private:
     typedef ::std::auto_ptr< VmlDrawing >       VmlDrawingPtr;
     typedef ::std::auto_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
@@ -417,6 +420,7 @@ private:
     awt::Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
     awt::Rectangle           maShapeBoundingBox; /// Bounding box for all shapes from all drawings.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
+    bool                   mbFastRowProgress; /// Do we have a progress bar thread ?
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
     ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
     WorksheetType       meSheetType;        /// Type of this sheet.
@@ -441,6 +445,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     maPageSett( *this ),
     maSheetViewSett( *this ),
     mxProgressBar( rxProgressBar ),
+    mbFastRowProgress( false ),
     meSheetType( eSheetType ),
     mbHasDefWidth( false )
 {
@@ -934,8 +939,29 @@ void WorksheetGlobals::setRowModel( const RowModel& rModel )
             maSheetData.setColSpans( nRow, rModel.maColSpans );
         }
     }
-    lclUpdateProgressBar( mxRowProgress, maUsedArea, nRow );
+
+    UpdateRowProgress( maUsedArea, nRow );
 }
+
+// This is called at a higher frequency inside the (threaded) inner loop.
+void WorksheetGlobals::UpdateRowProgress( const CellRangeAddress& rUsedArea, sal_Int32 nRow )
+{
+    if (!mxRowProgress || nRow < rUsedArea.StartRow || rUsedArea.EndRow < nRow)
+        return;
+
+    double fNewPos = static_cast<double>(nRow - rUsedArea.StartRow + 1.0) / (rUsedArea.EndRow - rUsedArea.StartRow + 1.0);
+
+    if (mbFastRowProgress)
+        mxRowProgress->setPosition(fNewPos);
+    else
+    {
+        double fCurPos = mxRowProgress->getPosition();
+        if (fCurPos < fNewPos && (fNewPos - fCurPos) > 0.3)
+            // Try not to re-draw progress bar too frequently.
+            mxRowProgress->setPosition(fNewPos);
+    }
+}
+
 
 void WorksheetGlobals::initializeWorksheetImport()
 {
@@ -1393,6 +1419,11 @@ WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
     if( !xSheetGlob->isValidSheet() )
         xSheetGlob.reset();
     return xSheetGlob;
+}
+
+/* static */ IWorksheetProgress *WorksheetHelper::getWorksheetInterface( const WorksheetGlobalsRef &xRef )
+{
+    return static_cast< IWorksheetProgress *>( xRef.get() );
 }
 
 WorksheetType WorksheetHelper::getSheetType() const

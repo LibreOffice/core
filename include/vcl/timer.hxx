@@ -46,7 +46,8 @@ public:
     void            Start();
     void            Stop();
 
-    void            SetTimeout( sal_uLong nTimeout );
+    /// set the timeout in milliseconds
+    void            SetTimeout( sal_uLong nTimeoutMs );
     sal_uLong       GetTimeout() const { return mnTimeout; }
     sal_Bool        IsActive() const { return mbActive ? sal_True : sal_False; }
 
