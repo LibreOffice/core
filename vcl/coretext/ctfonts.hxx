@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 #ifdef IOS
 #include "headless/svpgdi.hxx"
 #endif

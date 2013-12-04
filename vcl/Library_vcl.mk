@@ -343,7 +343,7 @@ vcl_quartz_code= \
 vcl_coretext_code= \
     vcl/coretext/ctfonts \
     vcl/coretext/ctlayout \
-    vcl/coretext/salgdi2 \
+    vcl/coretext/salgdi \
 
 # GUIBASE specific stuff
 

@@ -28,7 +28,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 
 #include "quartz/salbmp.h"
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 
 #include "fontsubset.hxx"
 #include "sft.hxx"

@@ -27,7 +27,7 @@
 #include "aqua/salinst.h"
 #include "aqua/salprn.h"
 #include "aqua/aquaprintview.h"
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 #include "aqua/saldata.hxx"
 #include "quartz/utils.h"
 

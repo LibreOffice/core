@@ -22,7 +22,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"
 
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 #include "aqua/salnativewidgets.h"
 #include "aqua/saldata.hxx"
 #include "aqua/salframe.h"

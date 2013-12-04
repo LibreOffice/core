@@ -38,7 +38,7 @@
 #include "vcl/sysdata.hxx"
 #include "vcl/svapp.hxx"
 
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 
 #ifdef MACOSX
 #include "aqua/salframe.h"

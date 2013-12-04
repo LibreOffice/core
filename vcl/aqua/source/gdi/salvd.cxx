@@ -23,7 +23,7 @@
 
 #include "aqua/salvd.h"
 #include "aqua/salinst.h"
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 #include "aqua/saldata.hxx"
 #include "aqua/salframe.h"
 

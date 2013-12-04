@@ -24,7 +24,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include "postmac.h"
 
-#include "coretext/salgdi2.h"
+#include "coretext/salgdi.h"
 
 #include "salvd.hxx"
 
