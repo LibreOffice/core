@@ -23,10 +23,13 @@ public:
     void testErrorBarXLSX();
     void testTrendline();
 
+    void testStockChart();
+
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
+    CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -255,6 +258,25 @@ void Chart2ExportTest::testTrendline()
 
 }
 
+void Chart2ExportTest::testStockChart()
+{
+    /*  For attached file Stock_Chart.docx, in chart1.xml,
+     * <c:stockChart>, there are four types of series as
+     * Open,Low,High and Close.
+     * For Open series, in <c:idx val="0" />
+     * an attribute val of index should start from 1 and not from 0.
+     * Which was problem area.
+     */
+    load("/chart2/qa/extras/data/docx/", "testStockChart.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+           return;
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:idx", "val", "1");
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:order", "val", "1");
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v", "Open");
+    }
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

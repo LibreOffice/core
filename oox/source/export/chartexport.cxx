@@ -1626,6 +1626,7 @@ void ChartExport::exportCandleStickSeries(
 
             Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
             const char* sSeries[] = {"values-first","values-max","values-min","values-last",0};
+
             for( sal_Int32 idx = 0; sSeries[idx] != 0 ; idx++ )
             {
                 Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii(sSeries[idx]) ) );
@@ -1639,11 +1640,12 @@ void ChartExport::exportCandleStickSeries(
                                 FSEND );
 
                             // TODO: idx and order
+                            // idx attribute should start from 1 and not from 0.
                             pFS->singleElement( FSNS( XML_c, XML_idx ),
-                                XML_val, I32S(idx),
+                                XML_val, I32S(idx+1),
                                 FSEND );
                             pFS->singleElement( FSNS( XML_c, XML_order ),
-                                XML_val, I32S(idx),
+                                XML_val, I32S(idx+1),
                                 FSEND );
 
                             // export label
