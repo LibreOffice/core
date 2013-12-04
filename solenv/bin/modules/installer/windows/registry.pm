@@ -29,6 +29,8 @@ use installer::worker;
 use installer::windows::msiglobal;
 use installer::windows::idtglobal;
 
+use strict;
+
 #####################################################
 # Generating the component name from a registryitem
 #####################################################
@@ -284,25 +286,6 @@ sub get_registry_val64
     return $value;
 }
 
-##############################################################
-# Returning component for registry table.
-##############################################################
-
-sub get_registry_component
-{
-    my ($registry, $allvariables) = @_;
-
-    # All registry items belonging to one module can
-    # be included into one component
-
-    my $componentname = get_registry_component_name($registry, $allvariables);
-
-    # saving componentname in the registryitem collector
-
-    $registry->{'componentname'} = $componentname;
-
-    return $componentname;
-}
 
 ######################################################
 # Adding the content of
@@ -345,20 +328,13 @@ sub add_userregs_to_registry_table
 # Content:
 # Registry Root Key Name Value Component_
 ######################################################
-
-sub create_registry_table
+sub prepare_registry_table ($$$)
 {
-    my ($registryref, $allregistrycomponentsref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
+    my ($registryref, $languagesarrayref, $allvariableshashref) = @_;
 
     my %table_data = ();
     foreach my $onelanguage (@$languagesarrayref)
     {
-
-        my @registrytable = ();
-        my @reg64table = ();
-
-        installer::windows::idtglobal::write_idt_header(\@registrytable, "registry");
-        installer::windows::idtglobal::write_idt_header(\@reg64table, "reg64");
         my $table_items = [];
         foreach my $oneregistry (@$registryref)
         {
@@ -380,12 +356,6 @@ sub create_registry_table
             my $component_name = get_registry_component_name($oneregistry, $allvariableshashref);
             $oneregistry->{'componentname'} = $component_name;
             $registry{'Component_'} = $component_name;
-
-            # Collecting all components
-            if (!(installer::existence::exists_in_array($registry{'Component_'}, $allregistrycomponentsref)))
-            {
-                push(@{$allregistrycomponentsref}, $registry{'Component_'});
-            }
 
             # Collecting all components with DONT_DELETE style
             my $style = $oneregistry->{'Styles'} // "";
@@ -420,14 +390,93 @@ sub create_registry_table
                 }
             }
 
-            my $oneline = $registry{'Registry'} . "\t" . $registry{'Root'} . "\t" . $registry{'Key'} . "\t"
-                        . $registry{'Name'} . "\t" . $registry{'Value'} . "\t" . $registry{'Component_'} . "\n";
+            push @$table_items, \%registry;
+        }
+        $table_data{$onelanguage} = $table_items;
+    }
 
-            my $oneline64 = $registry{'Registry'} . "\t" . $registry{'Root'} . "\t" . $registry{'Key'} . "\t"
-                        . $registry{'Name'} . "\t" . $registry{'Val64'} . "\t" . $registry{'Component_'} . "\n";
+    return \%table_data;
+}
 
-            if ( ! ( $style =~ /\bX64_ONLY\b/ )) { push(@registrytable, $oneline); }    # standard registry table for 32 Bit
-            if (( $style =~ /\bX64\b/ ) || ( $style =~ /\bX64_ONLY\b/ )) { push(@reg64table , $oneline64); }
+
+
+
+sub collect_registry_components ($)
+{
+    my ($table_data) = @_;
+
+    my %components = ();
+    foreach my $language_data (values %$table_data)
+    {
+        foreach my $item (@$language_data)
+        {
+            $components{$item->{'Component_'}} = 1;
+        }
+    }
+    return keys %components;
+}
+
+
+
+
+sub translate_component_names ($$$)
+{
+    my ($translation_map, $registry_items, $table_data) = @_;
+
+    my $replacement_count = 0;
+    foreach my $item (@$registry_items)
+    {
+        my $translated_name = $translation_map->{$item->{'componentname'}};
+        if (defined $translated_name)
+        {
+            $item->{'componentname'} = $translated_name;
+            ++$replacement_count;
+        }
+    }
+    $installer::logger::Lang->printf("replaced %d component names in registry items\n", $replacement_count);
+
+    $replacement_count = 0;
+    foreach my $language_data (values %$table_data)
+    {
+        foreach my $item (@$language_data)
+        {
+            my $translated_name = $translation_map->{$item->{'Component_'}};
+            if (defined $translated_name)
+            {
+                $item->{'Component_'} = $translated_name;
+                ++$replacement_count;
+            }
+        }
+    }
+    $installer::logger::Lang->printf("replaced %d component names in registry table\n", $replacement_count);
+}
+
+
+
+
+sub create_registry_table_32 ($$$$)
+{
+    my ($basedir, $languagesarrayref, $allvariableshashref, $table_data) = @_;
+
+    foreach my $onelanguage (@$languagesarrayref)
+    {
+        my @registrytable = ();
+        installer::windows::idtglobal::write_idt_header(\@registrytable, "registry");
+
+        foreach my $item (@{$table_data->{$onelanguage}})
+        {
+            next if $item->{'styles'} =~ /\bX64_ONLY\b/;
+
+            my $oneline = join("\t",
+                $item->{'Registry'},
+                $item->{'Root'},
+                $item->{'Key'},
+                $item->{'Name'},
+                $item->{'Value'},
+                $item->{'Component_'})
+                . "\n";
+
+            push(@registrytable, $oneline);
         }
 
         # If there are added user registry keys for files collected in
@@ -436,15 +485,47 @@ sub create_registry_table
         # files in PREDEFINED_OSSHELLNEWDIR, because their component
         # needs as KeyPath a RegistryItem in HKCU.
 
-        if ( $installer::globals::addeduserregitrykeys ) { add_userregs_to_registry_table(\@registrytable, $allvariableshashref); }
+        if ( $installer::globals::addeduserregitrykeys )
+        {
+            add_userregs_to_registry_table(\@registrytable, $allvariableshashref);
+        }
 
-        # Saving the file
-
+        # Save the database file.
         my $registrytablename = $basedir . $installer::globals::separator . "Registry.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@registrytable);
         $installer::logger::Lang->printf("Created idt file: %s\n", $registrytablename);
+    }
+}
 
-        $registrytablename = $basedir . $installer::globals::separator . "Reg64.idt" . "." . $onelanguage;
+
+
+
+sub create_registry_table_64 ($$$$)
+{
+    my ($basedir, $languagesarrayref, $allvariableshashref, $table_data) = @_;
+
+    foreach my $onelanguage (@$languagesarrayref)
+    {
+        my @reg64table = ();
+        installer::windows::idtglobal::write_idt_header(\@reg64table, "reg64");
+        foreach my $item (@{$table_data->{$onelanguage}})
+        {
+            next unless $item->{'styles'} =~ /\b(X64|X64_ONLY)\b/;
+
+            my $oneline64 = join("\t",
+                $item->{'Registry'},
+                $item->{'Root'},
+                $item->{'Key'},
+                $item->{'Name'},
+                $item->{'Val64'},
+                $item->{'Component_'})
+                . "\n";
+
+            push(@reg64table , $oneline64);
+        }
+
+        # Save the database file.
+        my $registrytablename = $basedir . $installer::globals::separator . "Reg64.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@reg64table );
         $installer::logger::Lang->printf("Created idt file: %s\n", $registrytablename);
     }

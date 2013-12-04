@@ -1710,36 +1710,48 @@ sub read_complete_directory
 # Version 2
 ##############################################################
 
-sub read_full_directory {
+sub read_full_directory ($$$)
+{
     my ( $currentdir, $pathstring, $collector ) = @_;
     my $item;
     my $fullname;
     local *DH;
 
-    unless (opendir(DH, $currentdir))
-    {
-        return;
-    }
-    while (defined ($item = readdir(DH)))
-    {
-        next if($item eq "." or $item eq "..");
-        $fullname = $currentdir . $installer::globals::separator . $item;
-        my $sep = "";
-        if ( $pathstring ne "" ) { $sep = $installer::globals::separator; }
+    $installer::logger::Lang->printf("seaching files under '%s'\n", $currentdir);
 
-        if( -d $fullname)
+    my @directory_queue = [$currentdir, $pathstring];
+
+    while (scalar @directory_queue > 0)
+    {
+        my ($path, $relative_path) = @{shift @directory_queue};
+        my $start_count = scalar @$collector;
+
+        next unless opendir(DH, $path);
+
+        while (defined ($item = readdir(DH)))
         {
-            my $newpathstring = $pathstring . $sep . $item;
-            read_full_directory($fullname, $newpathstring, $collector) if(-d $fullname);
+            next if($item eq "." or $item eq "..");
+            $fullname = $path . $installer::globals::separator . $item;
+            my $sep = "";
+            if ($relative_path ne "")
+            {
+                $sep = $installer::globals::separator;
+            }
+
+            if( -d $fullname)
+            {
+                push @directory_queue, [$fullname, $relative_path . $sep . $item];
+            }
+            else
+            {
+                my $content = $relative_path . $sep . $item;
+                push(@{$collector}, $content);
+            }
         }
-        else
-        {
-            my $content = $pathstring . $sep . $item;
-            push(@{$collector}, $content);
-        }
+        closedir(DH);
+        my $count = scalar @$collector - $start_count;
+        $installer::logger::Lang->printf("    found %d new files in '%s'\n", $count, $path);
     }
-    closedir(DH);
-    return
 }
 
 ##############################################################

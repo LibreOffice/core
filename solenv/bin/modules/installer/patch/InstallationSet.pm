@@ -25,8 +25,24 @@ use installer::patch::Tools;
 use installer::patch::Version;
 use installer::logger;
 
+use strict;
 
+# TODO: Detect the location of 7z.exe
 my $Unpacker = "/c/Program\\ Files/7-Zip/7z.exe";
+
+
+
+# TODO: Is there a touch in a standard library?
+sub touch ($)
+{
+    my ($filename) = @_;
+
+    open my $out, ">", $filename;
+    close $out;
+}
+
+
+
 
 =head1 NAME
 
@@ -48,27 +64,23 @@ sub UnpackExe ($$)
 
     # Unpack to a temporary path and change its name to the destination path
     # only when the unpacking has completed successfully.
-    my $temporary_destination_path = $destination_path . ".tmp";
-    File::Path::make_path($temporary_destination_path);
+    File::Path::make_path($destination_path);
 
-    my $windows_filename = installer::patch::Tools::CygpathToWindows($filename);
-    my $windows_destination_path = installer::patch::Tools::CygpathToWindows($temporary_destination_path);
+    my $windows_filename = installer::patch::Tools::ToEscapedWindowsPath($filename);
+    my $windows_destination_path = installer::patch::Tools::ToEscapedWindowsPath($destination_path);
     my $command = join(" ",
         $Unpacker,
-        "x", "-o".$windows_destination_path,
+        "x",
+        "-y",
+        "-o".$windows_destination_path,
         $windows_filename);
     my $result = qx($command);
 
     # Check the existence of the .cab files.
-    my $cab_filename = File::Spec->catfile($temporary_destination_path, "openoffice1.cab");
+    my $cab_filename = File::Spec->catfile($destination_path, "openoffice1.cab");
     if ( ! -f $cab_filename)
     {
         installer::logger::PrintError("cab file '%s' was not extracted from installation set\n", $cab_filename);
-        return 0;
-    }
-    if (rename($temporary_destination_path, $destination_path) == 0)
-    {
-        installer::logger::PrintError("can not rename temporary extraction directory\n");
         return 0;
     }
     return 1;
@@ -99,7 +111,7 @@ sub UnpackCab ($$$)
     # Extract the directory structure from the 'File' and 'Directory' tables in the given msi.
     $installer::logger::Info->printf("setting up directory tree\n");
     my $file_table = $msi->GetTable("File");
-    my $file_to_directory_map = $msi->GetFileToDirectoryMap();
+    my $file_map = $msi->GetFileMap();
 
     # Step 2
     # Unpack the .cab file to a temporary path.
@@ -122,19 +134,17 @@ sub UnpackCab ($$$)
     foreach my $file_row (@{$file_table->GetAllRows()})
     {
         my $unique_name = $file_row->GetValue('File');
-        my $directory_full_names = $file_to_directory_map->{$unique_name};
-        my ($source_full_name, $target_full_name) = @$directory_full_names;
+        my $directory_item = $file_map->{$unique_name}->{'directory'};
+        my $source_full_name = $directory_item->{'full_source_long_name'};
 
         my $flat_filename = File::Spec->catfile($temporary_destination_path, $unique_name);
         my $dir_path = File::Spec->catfile($destination_path, $source_full_name);
         my $dir_filename = File::Spec->catfile($dir_path, $unique_name);
 
-        printf("%d: making path %s and copying %s to %s\n",
-            $count,
-            $dir_path,
-            $unique_name,
-            $dir_filename);
-        File::Path::make_path($dir_path);
+        if ( ! -d $dir_path)
+        {
+            File::Path::make_path($dir_path);
+        }
         File::Copy::move($flat_filename, $dir_filename);
 
         ++$count;
@@ -166,16 +176,14 @@ sub UnpackCabFlat ($$$)
     # when another step fails.
 
     $installer::logger::Info->printf("unpacking cab file\n");
-    my $temporary_destination_path = $destination_path . ".tmp";
-    File::Path::make_path($temporary_destination_path);
-    my $windows_cab_filename = installer::patch::Tools::CygpathToWindows($cab_filename);
-    my $windows_destination_path = installer::patch::Tools::CygpathToWindows($temporary_destination_path);
+    File::Path::make_path($destination_path);
+    my $windows_cab_filename = installer::patch::Tools::ToEscapedWindowsPath($cab_filename);
+    my $windows_destination_path = installer::patch::Tools::ToEscapedWindowsPath($destination_path);
     my $command = join(" ",
         $Unpacker,
         "x", "-o".$windows_destination_path,
         $windows_cab_filename,
         "-y");
-    printf("running command '%s'\n", $command);
     open my $cmd, $command."|";
     my $extraction_count = 0;
     my $file_count = $file_table->GetRowCount();
@@ -190,61 +198,52 @@ sub UnpackCabFlat ($$$)
             $extraction_count*100/$file_count);
     }
     close $cmd;
-    printf("extraction done                               \n");
-
-    rename($temporary_destination_path, $destination_path)
-        || installer::logger::PrintError(
-            "can not rename the temporary directory '%s' to '%s'\n",
-            $temporary_destination_path,
-            $destination_path);
 }
 
 
 
 
-=head GetUnpackedMsiPath ($version, $language, $package_format, $product)
+=head GetUnpackedExePath ($version, $is_current_version, $language, $package_format, $product)
 
     Convenience function that returns where a downloadable installation set is extracted to.
 
 =cut
-sub GetUnpackedMsiPath ($$$$)
+sub GetUnpackedExePath ($$$$$)
 {
-    my ($version, $language, $package_format, $product) = @_;
+    my ($version, $is_current_version, $language, $package_format, $product) = @_;
 
-    return File::Spec->catfile(
-        GetUnpackedPath($version, $language, $package_format, $product),
-        "unpacked_msi");
+    my $path = GetUnpackedPath($version, $is_current_version, $language, $package_format, $product);
+    return File::Spec->catfile($path, "unpacked");
 }
 
 
 
 
-=head GetUnpackedCabPath ($version, $language, $package_format, $product)
+=head GetUnpackedCabPath ($version, $is_current_version, $language, $package_format, $product)
 
     Convenience function that returns where a cab file is extracted
     (with injected directory structure from the msi file) to.
 
 =cut
-sub GetUnpackedCabPath ($$$$)
+sub GetUnpackedCabPath ($$$$$)
 {
-    my ($version, $language, $package_format, $product) = @_;
+    my ($version, $is_current_version, $language, $package_format, $product) = @_;
 
-    return File::Spec->catfile(
-        GetUnpackedPath($version, $language, $package_format, $product),
-        "unpacked_cab");
+    my $path = GetUnpackedPath($version, $is_current_version, $language, $package_format, $product);
+    return File::Spec->catfile($path, "unpacked");
 }
 
 
 
 
-=head2 GetUnpackedPath($version, $language, $package_format, $product)
+=head2 GetUnpackedPath($version, $is_current_version, $language, $package_format, $product)
 
     Internal function for creating paths to where archives are unpacked.
 
 =cut
-sub GetUnpackedPath ($$$$)
+sub GetUnpackedPath ($$$$$)
 {
-    my ($version, $language, $package_format, $product) = @_;
+    my ($version, $is_current_version, $language, $package_format, $product) = @_;
 
     return File::Spec->catfile(
         $ENV{'SRC_ROOT'},
@@ -252,8 +251,36 @@ sub GetUnpackedPath ($$$$)
         $ENV{'INPATH'},
         $product,
         $package_format,
-        installer::patch::Version::ArrayToDirectoryName(installer::patch::Version::StringToNumberArray($version)),
+        installer::patch::Version::ArrayToDirectoryName(
+            installer::patch::Version::StringToNumberArray($version)),
         $language);
+}
+
+
+
+
+sub GetMsiFilename ($$)
+{
+    my ($path, $version) = @_;
+
+    my $no_dot_version = installer::patch::Version::ArrayToNoDotName(
+        installer::patch::Version::StringToNumberArray(
+            $version));
+    return File::Spec->catfile(
+        $path,
+        "openoffice" . $no_dot_version . ".msi");
+}
+
+
+
+
+sub GetCabFilename ($$)
+{
+    my ($path, $version) = @_;
+
+    return File::Spec->catfile(
+        $path,
+        "openoffice1.cab");
 }
 
 
@@ -464,4 +491,282 @@ sub ProvideDownloadSet ($$$)
     return $ext_sources_filename;
 }
 
+
+
+
+sub ProvideUnpackedExe ($$$$$)
+{
+    my ($version, $is_current_version, $language, $package_format, $product_name) = @_;
+
+    # Check if the exe has already been unpacked.
+    my $unpacked_exe_path = installer::patch::InstallationSet::GetUnpackedExePath(
+        $version,
+        $is_current_version,
+        $language,
+        $package_format,
+        $product_name);
+    my $unpacked_exe_flag_filename = File::Spec->catfile($unpacked_exe_path, "__exe_is_unpacked");
+    my $exe_is_unpacked = -f $unpacked_exe_flag_filename;
+
+    if ($exe_is_unpacked)
+    {
+        # Yes, exe has already been unpacked.  There is nothing more to do.
+        $installer::logger::Info->printf("downloadable installation set has already been unpacked to\n");
+        $installer::logger::Info->printf("    %s\n", $unpacked_exe_path);
+        return 1;
+    }
+    elsif ($is_current_version)
+    {
+        # For the current version the exe is created from the unpacked
+        # content and both are expected to be already present.
+
+        # In order to have the .cab and its unpacked content in one
+        # directory and don't interfere with the creation of regular
+        # installation sets, we copy the unpacked .exe into a separate
+        # directory.
+
+        my $original_path = File::Spec->catfile(
+            $ENV{'SRC_ROOT'},
+            "instsetoo_native",
+            $ENV{'INPATH'},
+            $product_name,
+            $package_format,
+            "install",
+            $language);
+        $installer::logger::Info->printf("creating a copy\n");
+        $installer::logger::Info->printf("    of %s\n", $original_path);
+        $installer::logger::Info->printf("    at %s\n", $unpacked_exe_path);
+        File::Path::make_path($unpacked_exe_path) unless -d $unpacked_exe_path;
+    my ($file_count,$directory_count) = CopyRecursive($original_path, $unpacked_exe_path);
+    return 0 if ( ! defined $file_count);
+        $installer::logger::Info->printf("    copied %d files in %d directories\n",
+        $file_count,
+        $directory_count);
+
+        touch($unpacked_exe_flag_filename);
+
+        return 1;
+    }
+    else
+    {
+        # No, we have to unpack the exe.
+
+        # Provide the exe.
+        my $filename = installer::patch::InstallationSet::ProvideDownloadSet(
+            $version,
+            $language,
+            $package_format);
+
+        # Unpack it.
+        if (defined $filename)
+        {
+            if (installer::patch::InstallationSet::UnpackExe($filename, $unpacked_exe_path))
+            {
+                $installer::logger::Info->printf("downloadable installation set has been unpacked to\n");
+                $installer::logger::Info->printf("    %s\n", $unpacked_exe_path);
+
+                touch($unpacked_exe_flag_filename);
+
+                return 1;
+            }
+        }
+        else
+        {
+            installer::logger::PrintError("could not provide .exe installation set at '%s'\n", $filename);
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+sub CopyRecursive ($$)
+{
+    my ($source_path, $destination_path) = @_;
+
+    return (undef,undef) unless -d $source_path;
+
+    my @todo = ([$source_path, $destination_path]);
+    my $file_count = 0;
+    my $directory_count = 0;
+    while (scalar @todo > 0)
+    {
+    my ($source,$destination) = @{shift @todo};
+
+    next if ! -d $source;
+    File::Path::make_path($destination);
+    ++$directory_count;
+
+    # Read list of files in the current source directory.
+    opendir( my $dir, $source);
+    my @files = readdir $dir;
+    closedir $dir;
+
+    # Copy all files and push all directories to @todo.
+    foreach my $file (@files)
+    {
+        next if $file =~ /^\.+$/;
+
+        my $source_file = File::Spec->catfile($source, $file);
+        my $destination_file = File::Spec->catfile($destination, $file);
+        if ( -f $source_file)
+        {
+        File::Copy::copy($source_file, $destination_file);
+        ++$file_count;
+        }
+        elsif ( -d $source_file)
+        {
+        push @todo, [$source_file, $destination_file];
+        }
+    }
+    }
+
+    return ($file_count, $directory_count);
+}
+
+
+
+
+sub CheckLocalCopy ($$$$)
+{
+    my ($version, $language, $package_format, $product_name) = @_;
+
+    # Compare creation times of the original .msi and its copy.
+
+    my $original_path = File::Spec->catfile(
+        $ENV{'SRC_ROOT'},
+        "instsetoo_native",
+        $ENV{'INPATH'},
+        $product_name,
+        $package_format,
+        "install",
+        $language);
+
+    my $copy_path = installer::patch::InstallationSet::GetUnpackedExePath(
+        $version,
+        1,
+        $language,
+        $package_format,
+        $product_name);
+
+    my $msi_basename = "openoffice"
+        . installer::patch::Version::ArrayToNoDotName(
+            installer::patch::Version::StringToNumberArray($version))
+        . ".msi";
+
+    my $original_msi_filename = File::Spec->catfile($original_path, $msi_basename);
+    my $copied_msi_filename = File::Spec->catfile($copy_path, $msi_basename);
+
+    my @original_msi_stats = stat($original_msi_filename);
+    my @copied_msi_stats = stat($copied_msi_filename);
+    my $original_msi_mtime = $original_msi_stats[9];
+    my $copied_msi_mtime = $copied_msi_stats[9];
+
+    if (defined $original_msi_mtime
+        && defined $copied_msi_mtime
+        && $original_msi_mtime > $copied_msi_mtime)
+    {
+        # The installation set is newer than its copy.
+        # Remove the copy.
+        $installer::logger::Info->printf(
+            "removing copy of installation set (version %s) because it is out of date\n",
+            $version);
+        File::Path::remove_tree($copy_path);
+    }
+}
+
+
+
+
+=head2 ProvideUnpackedCab
+
+    1a. Make sure that a downloadable installation set is present.
+    1b. or that a freshly built installation set (packed and unpacked is present)
+    2. Unpack the downloadable installation set
+    3. Unpack the .cab file.
+
+    The 'Provide' in the function name means that any step that has
+    already been made is not made again.
+
+=cut
+sub ProvideUnpackedCab ($$$$$)
+{
+    my ($version, $is_current_version, $language, $package_format, $product_name) = @_;
+
+    if ($is_current_version)
+    {
+        # For creating patches we maintain a copy of the unpacked .exe.  Make sure that that is updated when
+        # a new installation set has been built.
+        CheckLocalCopy($version, $language, $package_format, $product_name);
+    }
+
+    # Check if the cab file has already been unpacked.
+    my $unpacked_cab_path = installer::patch::InstallationSet::GetUnpackedCabPath(
+        $version,
+        $is_current_version,
+        $language,
+        $package_format,
+        $product_name);
+    my $unpacked_cab_flag_filename = File::Spec->catfile($unpacked_cab_path, "__cab_is_unpacked");
+    my $cab_is_unpacked = -f $unpacked_cab_flag_filename;
+
+    if ($cab_is_unpacked)
+    {
+        # Yes. Cab was already unpacked. There is nothing more to do.
+        $installer::logger::Info->printf("cab has already been unpacked to\n");
+        $installer::logger::Info->printf("    %s\n", $unpacked_cab_path);
+
+        return 1;
+    }
+    else
+    {
+        # Make sure that the exe is unpacked and the cab file exists.
+        ProvideUnpackedExe($version, $is_current_version, $language, $package_format, $product_name);
+
+        # Unpack the cab file.
+        my $unpacked_exe_path = installer::patch::InstallationSet::GetUnpackedExePath(
+                $version,
+                $is_current_version,
+                $language,
+                $package_format,
+                $product_name);
+        my $msi = new installer::patch::Msi(
+                installer::patch::InstallationSet::GetMsiFilename($unpacked_exe_path, $version),
+                $version,
+                $is_current_version,
+                $language,
+                $product_name);
+
+        my $cab_filename = installer::patch::InstallationSet::GetCabFilename(
+            $unpacked_exe_path,
+            $version);
+        if ( ! -f $cab_filename)
+        {
+             # Cab file does not exist.
+            installer::logger::PrintError(
+                "could not find .cab file at '%s'.  Extraction of .exe seems to have failed.\n",
+                $cab_filename);
+            return 0;
+        }
+
+        if (installer::patch::InstallationSet::UnpackCab(
+            $cab_filename,
+            $msi,
+            $unpacked_cab_path))
+        {
+            $installer::logger::Info->printf("unpacked cab file '%s'\n", $cab_filename);
+            $installer::logger::Info->printf("    to '%s'\n", $unpacked_cab_path);
+
+            touch($unpacked_cab_flag_filename);
+
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
 1;

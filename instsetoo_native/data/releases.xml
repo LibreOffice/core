@@ -21,296 +21,357 @@
  ***********************************************************-->
 <releases>
   <release>
-    <version>4.0.0</version>
-    <download>
+    <version>
+      <major>4</major>
+      <minor>0</minor>
+      <micro>0</micro>
+    </version>
+    <downloads>
       <package-format>msi</package-format>
       <url-template>
         http://archive.apache.org/dist/openoffice/4.0.0/binaries/%L/Apache_OpenOffice_4.0.0_Win_x86_install_%L.exe
       </url-template>
+      <upgrade-code>7C35B9AB-2CE3-4C18-BE7C-5B97EA089EB3</upgrade-code>
+      <build-id>9702</build-id>
       <item>
         <language>ast</language>
         <checksum type="sha256">415e2f3cf4d99a3f6ad495e33b89c716ef6966c9c4d7df90ad6e004fcf0222f4</checksum>
         <size>154219869</size>
+        <product-code>59496534-E113-4A02-AC23-DD77E6079398</product-code>
       </item>
       <item>
         <language>cs</language>
         <checksum type="sha256">a90a2c00c58f3e30654b89b4a363b099b0a7d1f829ebf9c7c18333d387f4bf41</checksum>
         <size>130773239</size>
+        <product-code>A81E275C-C1D1-473D-90D9-7EAE310550C7</product-code>
       </item>
       <item>
         <language>de</language>
         <checksum type="sha256">5569634ac40b42a710c666d0511f6aa4dbcb05d1a525e06f6be038e828c507f0</checksum>
         <size>162401424</size>
+        <product-code>B28DBCBA-60F8-40ED-B35B-F510C327946C</product-code>
       </item>
       <item>
         <language>el</language>
         <checksum type="sha256">cc5cde6314cea634200da6861da527c11ca7d74338074cdd4e5a22e1ffd9ef7c</checksum>
         <size>139633387</size>
+        <product-code>43A3EED6-E15A-4EBA-9FBA-E0A0D1793EDA</product-code>
       </item>
       <item>
         <language>en-GB</language>
         <checksum type="sha256">7f83397877b72e7f2da38f11b76c3f46e30b93713b40becba699d21f913847e0</checksum>
         <size>136201626</size>
-      </item>
-      <item>
-        <language>en-US</language>
-        <checksum type="sha256">8db246183f549c298d731cf61771f8f8adb37028d8ecc737fe1ad452899adb2d</checksum>
-        <size>143436858</size>
+        <product-code>EA1DC8F8-C357-44CA-A332-AB9762DF698C</product-code>
       </item>
       <item>
         <language>es</language>
         <checksum type="sha256">eb991c71b436c4d740f3d2b5441716fc321bb57eb7f36c7019ec86feebb7f5d4</checksum>
         <size>132424454</size>
+        <product-code>FBD275C7-DD8C-4056-BD4F-5ECC1A56DE6A</product-code>
       </item>
       <item>
         <language>fi</language>
         <checksum type="sha256">fa2b9015864651be44afc940988ed20c6093bc8707aea72ab1b75cf147d81ed2</checksum>
         <size>138474963</size>
+        <product-code>1D365623-A8E7-4ACA-8CBB-431A6CCA1F84</product-code>
       </item>
       <item>
         <language>fr</language>
         <checksum type="sha256">b4b20eac7f6220a4a6250e79d950a328d08b927b8856d762b0b1e033833e198f</checksum>
         <size>133397214</size>
+        <product-code>4F8C9861-DDCF-4EE8-978C-35B691C406B3</product-code>
       </item>
       <item>
         <language>gd</language>
         <checksum type="sha256">c2e5ac75f899efab61f039a193a68ec2f4d092fd43c6eb46d8b2d34d8166ce6e</checksum>
         <size>154472734</size>
+        <product-code>D67CE80F-3DD6-4433-ACE3-C591B8CA013B</product-code>
       </item>
       <item>
         <language>gl</language>
         <checksum type="sha256">bac4915fd47b9e219d72a02a268fa590096c0884ebafd966b10e9b77fe16eee0</checksum>
         <size>137952793</size>
+        <product-code>529BC9F1-8478-4F1E-9FCD-144ED91B529B</product-code>
       </item>
       <item>
         <language>hu</language>
         <checksum type="sha256">2e01d00431692cb6071cf520e71b900dba28a846dccf4ed3a85c245761c98906</checksum>
         <size>133240224</size>
+        <product-code>FAA13518-DA5A-429B-990F-896589C83900</product-code>
       </item>
       <item>
         <language>it</language>
         <checksum type="sha256">8663c01de8f62b26a7864ac4da6abd316a1c2e00b35c60372cad5287120fe409</checksum>
         <size>138823014</size>
+        <product-code>B73A5540-CC29-489E-B513-B58EEDEB3A69</product-code>
       </item>
       <item>
         <language>ja</language>
         <checksum type="sha256">559f165ee9ff516a80573befaf7d0936ca81fa89aca655213b4f265eb7c7059a</checksum>
         <size>136416679</size>
+        <product-code>B611F56C-12F5-4AC2-8395-F6E7E79A2FE7</product-code>
       </item>
       <item>
         <language>ko</language>
         <checksum type="sha256">daa7f3b51e6ffb0b541a98fbcdc0bad53eea579a7d74c9acbdd73ad660b117b1</checksum>
         <size>131617051</size>
+        <product-code>FAF9DE58-C459-44C8-A627-DCD83BC071BA</product-code>
       </item>
       <item>
         <language>nl</language>
         <checksum type="sha256">fcc6e55c7a1407be8e8f2faf7305ebb9a8f7e1bea882e5d917b5846a2c0ee955</checksum>
         <size>138526756</size>
+        <product-code>EB29A33D-3425-486D-B602-E464ADE4D71C</product-code>
       </item>
       <item>
         <language>pt</language>
         <checksum type="sha256">58307e0eeb485840e1462a23f8741e793422ccdc468123f85876ae287482a987</checksum>
         <size>130929247</size>
+        <product-code>497906E9-6B2F-45C4-BA2B-B662DCFDE940</product-code>
       </item>
       <item>
         <language>pt-BR</language>
         <checksum type="sha256">08ef83f28e138dc0bc6bdf761e4676eb13c2b30717ce47e0becec2de90c73f7a</checksum>
         <size>130814647</size>
+        <product-code>8DCC7121-A76E-4493-A90E-06E06485E4FF</product-code>
       </item>
       <item>
         <language>ru</language>
         <checksum type="sha256">dda689b273eb9ddadfb156a08df8e73c3b41e3cc8178a16546e282f8e1c54d77</checksum>
         <size>137558077</size>
+        <product-code>970C0E46-87BD-4210-9F24-CCD5A902F7D3</product-code>
       </item>
       <item>
         <language>sk</language>
         <checksum type="sha256">d2722d2569178838a57705e76062603f995f71d5219e8f910bc7a6b46fa6039a</checksum>
         <size>131199460</size>
+        <product-code>B645BA5F-A4CD-44B8-BE37-A0F6BDF4A6D3</product-code>
       </item>
       <item>
         <language>sl</language>
         <checksum type="sha256">eecea1c75833a873a3cc00f81c85f411319b085728224c716ac90159622c0c3e</checksum>
         <size>132340393</size>
+        <product-code>0489E54B-1826-45CB-8197-794634889904</product-code>
       </item>
       <item>
         <language>ta</language>
         <checksum type="sha256">4051b4831a960a8f27a3f56f32d7bd5a7bbdfcf859238a149aca9cd69ae0121c</checksum>
         <size>136961005</size>
+        <product-code>99F5B898-533E-4248-90D6-AA7202A3325C</product-code>
       </item>
       <item>
         <language>zh-CN</language>
         <checksum type="sha256">94424b9c24d3237e70d6452da8366cf9c6617a46fa171901db093b1a1166934d</checksum>
         <size>131840961</size>
+        <product-code>BFB77D24-4983-4FD8-99A8-164206DEFBEE</product-code>
       </item>
-    </download>
+    </downloads>
   </release>
   <release>
-    <version>4.0.1</version>
-    <download>
+    <version>
+      <major>4</major>
+      <minor>0</minor>
+      <micro>1</micro>
+    </version>
+    <downloads>
       <package-format>msi</package-format>
       <url-template>
         http://archive.apache.org/dist/openoffice/4.0.1/binaries/%L/Apache_OpenOffice_4.0.1_Win_x86_install_%L.exe
       </url-template>
+      <upgrade-code>7C35B9AB-2CE3-4C18-BE7C-5B97EA089EB3</upgrade-code>
+      <build-id>9714</build-id>
       <item>
-    <language>ast</language>
-    <checksum type="sha256">9854b6a99c6e56902e30ec01009e294aafe091e4733e9b8933690ee0365d6754</checksum>
-    <size>154320289</size>
+        <language>ast</language>
+        <checksum type="sha256">9854b6a99c6e56902e30ec01009e294aafe091e4733e9b8933690ee0365d6754</checksum>
+        <size>154320289</size>
+        <product-code>0D9885DA-8FEC-410B-A1A9-0282C58E04FC</product-code>
       </item>
       <item>
-    <language>cs</language>
-    <checksum type="sha256">b23c5dc07a6e521a7ad24e7c1d131c96ea3a6fdf3a2f96020b5cad2e7ebe0253</checksum>
-    <size>130785256</size>
+        <language>cs</language>
+        <checksum type="sha256">b23c5dc07a6e521a7ad24e7c1d131c96ea3a6fdf3a2f96020b5cad2e7ebe0253</checksum>
+        <size>130785256</size>
+        <product-code>220C463A-2890-4C7F-B97C-C49FE175B849</product-code>
       </item>
       <item>
-    <language>de</language>
-    <checksum type="sha256">fbbe39def767e6ecd16c7b6802f35d6e4b035c4b72328bbf0a8f045cf585aaa7</checksum>
-    <size>163606685</size>
+        <language>de</language>
+        <checksum type="sha256">fbbe39def767e6ecd16c7b6802f35d6e4b035c4b72328bbf0a8f045cf585aaa7</checksum>
+        <size>163606685</size>
+        <product-code>0AEC308E-7EB3-47F7-BB59-F2C9C6166B27</product-code>
       </item>
       <item>
-    <language>el</language>
-    <checksum type="sha256">e59f47b986c4bcd8f21062446b299f68ac7ed941356813b0e2dbd651fb59c847</checksum>
-    <size>139717373</size>
+        <language>el</language>
+        <checksum type="sha256">e59f47b986c4bcd8f21062446b299f68ac7ed941356813b0e2dbd651fb59c847</checksum>
+        <size>139717373</size>
+        <product-code>8022138A-6A6B-45CC-A2F2-81E7E21A4284</product-code>
       </item>
       <item>
-    <language>en-GB</language>
-    <checksum type="sha256">75f06dbe9f13804ea9f3ef20d831e300a55df1bf1a5b656d2422206a8a0d8bda</checksum>
-    <size>136295104</size>
+        <language>en-GB</language>
+        <checksum type="sha256">75f06dbe9f13804ea9f3ef20d831e300a55df1bf1a5b656d2422206a8a0d8bda</checksum>
+        <size>136295104</size>
+        <product-code>24B89186-2A56-4D28-B930-6F4FCF224E2F</product-code>
       </item>
       <item>
-    <language>en-US</language>
-    <checksum type="sha256">3b68145a33fa83d246febb3b7551fb0cbf57363bc772401ac0c37cfc1cde21b3</checksum>
-    <size>143485940</size>
+        <language>en-US</language>
+        <checksum type="sha256">3b68145a33fa83d246febb3b7551fb0cbf57363bc772401ac0c37cfc1cde21b3</checksum>
+        <size>143485940</size>
+        <product-code>47F460DA-D1BE-4D85-8DF2-AA1F31D3445F</product-code>
       </item>
       <item>
-    <language>es</language>
-    <checksum type="sha256">5136276a370378d11327b9a0bd074d269a49e797c7186f2e3cc9cf6c0bbc20fc</checksum>
-    <size>132478227</size>
+        <language>es</language>
+        <checksum type="sha256">5136276a370378d11327b9a0bd074d269a49e797c7186f2e3cc9cf6c0bbc20fc</checksum>
+        <size>132478227</size>
+        <product-code>52F63384-0FE8-41F5-B9C1-3331BE2E74F1</product-code>
       </item>
       <item>
-    <language>eu</language>
-    <checksum type="sha256">aae1ff61af9ac117637842ccc1c28221620c79b05ffbb1fb47d8a6fcbe3b1700</checksum>
-    <size>131476228</size>
+        <language>eu</language>
+        <checksum type="sha256">aae1ff61af9ac117637842ccc1c28221620c79b05ffbb1fb47d8a6fcbe3b1700</checksum>
+        <size>131476228</size>
+        <product-code>3EEA17A1-B7AC-40BC-BDA8-ED58A5695225</product-code>
       </item>
       <item>
-    <language>fi</language>
-    <checksum type="sha256">65ff3209a51afefde11dd1326921340ebe035f09626d8884f37a0f72f8c2785b</checksum>
-    <size>138523539</size>
+        <language>fi</language>
+        <checksum type="sha256">65ff3209a51afefde11dd1326921340ebe035f09626d8884f37a0f72f8c2785b</checksum>
+        <size>138523539</size>
+        <product-code>955C3F64-C693-41E6-B9D5-A505A5C41B52</product-code>
       </item>
       <item>
-    <language>fr</language>
-    <checksum type="sha256">70c97dc59412a8e4aeb87e51e8714cbba776397beb6a774804591653150e78d5</checksum>
-    <size>134622711</size>
+        <language>fr</language>
+        <checksum type="sha256">70c97dc59412a8e4aeb87e51e8714cbba776397beb6a774804591653150e78d5</checksum>
+        <size>134622711</size>
+        <product-code>8D5D54B8-3D29-4AB4-8DA8-1868DAF941D8</product-code>
       </item>
       <item>
-    <language>gd</language>
-    <checksum type="sha256">a57115a636f4004de2df9599e72bc4d07937b65a6bb99fe126dc18a788a57142</checksum>
-    <size>154574682</size>
+        <language>gd</language>
+        <checksum type="sha256">a57115a636f4004de2df9599e72bc4d07937b65a6bb99fe126dc18a788a57142</checksum>
+        <size>154574682</size>
+        <product-code>17010592-9593-4061-B5C8-21CED2273B3C</product-code>
       </item>
       <item>
-    <language>gl</language>
-    <checksum type="sha256">4c8fe9b42193dc37dc6a2b979b790ea6317ea25a6fa27fcb9007036c5725111d</checksum>
-    <size>138019151</size>
+        <language>gl</language>
+        <checksum type="sha256">4c8fe9b42193dc37dc6a2b979b790ea6317ea25a6fa27fcb9007036c5725111d</checksum>
+        <size>138019151</size>
+        <product-code>61A540F1-3DB4-4215-9259-21BD0D98746D</product-code>
       </item>
       <item>
-    <language>hu</language>
-    <checksum type="sha256">97765ef536ed1e3f07220fe4cb90520efdfb376fab751ad2cac7390316f14e65</checksum>
-    <size>133302800</size>
+        <language>hu</language>
+        <checksum type="sha256">97765ef536ed1e3f07220fe4cb90520efdfb376fab751ad2cac7390316f14e65</checksum>
+        <size>133302800</size>
+        <product-code>BE64FC93-72C0-4540-BC12-B8FEAE8CA33B</product-code>
       </item>
       <item>
-    <language>it</language>
-    <checksum type="sha256">c6fa3e0e9bef615d804b5d24d3f2cc49f7655aee01ef34cecb9b520a47249d02</checksum>
-    <size>138894766</size>
+        <language>it</language>
+        <checksum type="sha256">c6fa3e0e9bef615d804b5d24d3f2cc49f7655aee01ef34cecb9b520a47249d02</checksum>
+        <size>138894766</size>
+        <product-code>03F15CFC-BA7D-48B8-AA16-7F152BA27547</product-code>
       </item>
       <item>
-    <language>ja</language>
-    <checksum type="sha256">93d20ae5f96f4a93c705894849f01b6501604bf003e9b66f7d0dbdc6f2282965</checksum>
-    <size>136444096</size>
+        <language>ja</language>
+        <checksum type="sha256">93d20ae5f96f4a93c705894849f01b6501604bf003e9b66f7d0dbdc6f2282965</checksum>
+        <size>136444096</size>
+        <product-code>BA498C26-5210-4F14-BE9C-63041FCD306E</product-code>
       </item>
       <item>
-    <language>km</language>
-    <checksum type="sha256">4fc263c631d4ba797633d28ca529202b600d5fe676a8c215904d12d08ed8cc49</checksum>
-    <size>151866955</size>
+        <language>km</language>
+        <checksum type="sha256">4fc263c631d4ba797633d28ca529202b600d5fe676a8c215904d12d08ed8cc49</checksum>
+        <size>151866955</size>
+        <product-code>D10262B9-30E7-4EF8-8BF1-3C7BEDBEF4EE</product-code>
       </item>
       <item>
-    <language>ko</language>
-    <checksum type="sha256">2abd13afe2978c4300d872a06dcec00ae23592ed563be3d0d046ef81738d7a87</checksum>
-    <size>131671507</size>
+        <language>ko</language>
+        <checksum type="sha256">2abd13afe2978c4300d872a06dcec00ae23592ed563be3d0d046ef81738d7a87</checksum>
+        <size>131671507</size>
+        <product-code>697857AD-7EF1-4A6E-8F5B-D53409B97FB0</product-code>
       </item>
       <item>
-    <language>lt</language>
-    <checksum type="sha256">4ac6c2c88edb5254e0cf93f49daaf5e411ea0168d6c431d11da5d89638977cff</checksum>
-    <size>136935582</size>
+        <language>lt</language>
+        <checksum type="sha256">4ac6c2c88edb5254e0cf93f49daaf5e411ea0168d6c431d11da5d89638977cff</checksum>
+        <size>136935582</size>
+        <product-code>4DDF6CE7-9E5E-4192-9996-288AB7B23644</product-code>
       </item>
       <item>
-    <language>nl</language>
-    <checksum type="sha256">85292dad5aa80711c126091d3565dc9cd2219d818a59cbd5c7c9a4bc5282ebb8</checksum>
-    <size>139734741</size>
+        <language>nl</language>
+        <checksum type="sha256">85292dad5aa80711c126091d3565dc9cd2219d818a59cbd5c7c9a4bc5282ebb8</checksum>
+        <size>139734741</size>
+        <product-code>EA9BAE1A-2D68-4160-81E6-14B712435D66</product-code>
       </item>
       <item>
-    <language>pl</language>
-    <checksum type="sha256">c71c63d0c0e76f28b7d3bebb39e1cb9c0ca35e29557c53528f631e6c1aeca04c</checksum>
-    <size>133661993</size>
+        <language>pl</language>
+        <checksum type="sha256">c71c63d0c0e76f28b7d3bebb39e1cb9c0ca35e29557c53528f631e6c1aeca04c</checksum>
+        <size>133661993</size>
+        <product-code>DA0106A3-216E-48DE-9CF6-655DA8FC1D22</product-code>
       </item>
       <item>
-    <language>pt-BR</language>
-    <checksum type="sha256">e6baed3d30d4b18e32e21ab4fcd22446ac1f8a40efe49a4f105e9c3fc0ba1611</checksum>
-    <size>130866989</size>
+        <language>pt</language>
+        <checksum type="sha256">dd855dc99fc41fd509e938881397798fa2e9ed92e663cb8b9ea6c356d5d5a096</checksum>
+        <size>130989882</size>
+        <product-code>08D91641-36A2-4DA8-BA5B-6DFF68BBFE04</product-code>
       </item>
       <item>
-    <language>pt</language>
-    <checksum type="sha256">dd855dc99fc41fd509e938881397798fa2e9ed92e663cb8b9ea6c356d5d5a096</checksum>
-    <size>130989882</size>
+        <language>pt-BR</language>
+        <checksum type="sha256">e6baed3d30d4b18e32e21ab4fcd22446ac1f8a40efe49a4f105e9c3fc0ba1611</checksum>
+        <size>130866989</size>
+        <product-code>50FA6B86-D3C4-4961-A58F-1A061B2DCE04</product-code>
       </item>
       <item>
-    <language>ru</language>
-    <checksum type="sha256">7e965822f8dfb0aa4a67bf5bff8ddb852901c672886bb9f2ee275c5c976c0a48</checksum>
-    <size>137584051</size>
+        <language>ru</language>
+        <checksum type="sha256">7e965822f8dfb0aa4a67bf5bff8ddb852901c672886bb9f2ee275c5c976c0a48</checksum>
+        <size>137584051</size>
+        <product-code>85B491F5-56FA-483B-92EE-C6F90CCDBA74</product-code>
       </item>
       <item>
-    <language>sk</language>
-    <checksum type="sha256">4400eb30ca5072b175da7963049bb0ecca761af73b7dbccb9a0b4cd789b26042</checksum>
-    <size>131265676</size>
+        <language>sk</language>
+        <checksum type="sha256">4400eb30ca5072b175da7963049bb0ecca761af73b7dbccb9a0b4cd789b26042</checksum>
+        <size>131265676</size>
+        <product-code>A00F439C-600D-4220-96CF-C6F1F8C32633</product-code>
       </item>
       <item>
-    <language>sl</language>
-    <checksum type="sha256">83d384d9e50ddcb9c1d74069d8796e5f37bed55b5da6f43c326c0784a6e61cef</checksum>
-    <size>132368586</size>
+        <language>sl</language>
+        <checksum type="sha256">83d384d9e50ddcb9c1d74069d8796e5f37bed55b5da6f43c326c0784a6e61cef</checksum>
+        <size>132368586</size>
+        <product-code>0BFA9E1C-B3EB-4E6C-812F-CAA1D88F0F09</product-code>
       </item>
       <item>
-    <language>sr</language>
-    <checksum type="sha256">a2d2e043c1c3fa9a90924ae29138641b238d7749984f873a8672e2844a55e3d9</checksum>
-    <size>136961170</size>
+        <language>sr</language>
+        <checksum type="sha256">a2d2e043c1c3fa9a90924ae29138641b238d7749984f873a8672e2844a55e3d9</checksum>
+        <size>136961170</size>
+        <product-code>02E47753-869E-4757-92FA-478E8EF0FEA3</product-code>
       </item>
       <item>
-    <language>sv</language>
-    <checksum type="sha256">15cbdb4f5a7ecf253f31981d0203c08e279a26603ca737e64f740524e1d672ca</checksum>
-    <size>131330363</size>
+        <language>sv</language>
+        <checksum type="sha256">15cbdb4f5a7ecf253f31981d0203c08e279a26603ca737e64f740524e1d672ca</checksum>
+        <size>131330363</size>
+        <product-code>46BCB691-9148-4FCB-B215-CCDF70B5D95A</product-code>
       </item>
       <item>
-    <language>ta</language>
-    <checksum type="sha256">352083d6d2fc6c39027a03fbbb6449d4a67955b370c5a8efba0407b74a456bc9</checksum>
-    <size>137001517</size>
+        <language>ta</language>
+        <checksum type="sha256">352083d6d2fc6c39027a03fbbb6449d4a67955b370c5a8efba0407b74a456bc9</checksum>
+        <size>137001517</size>
+        <product-code>1297D7DE-BCDB-4B37-81AC-03C34DCF0A9B</product-code>
       </item>
       <item>
-    <language>tr</language>
-    <checksum type="sha256">bdfbf83cc905bf44f086ea51295899a042667fa6334e6378ef5b5b354843ba37</checksum>
-    <size>130397087</size>
+        <language>tr</language>
+        <checksum type="sha256">bdfbf83cc905bf44f086ea51295899a042667fa6334e6378ef5b5b354843ba37</checksum>
+        <size>130397087</size>
+        <product-code>7242DE31-0571-4C24-A142-E60AB70D6982</product-code>
       </item>
       <item>
-    <language>vi</language>
-    <checksum type="sha256">0483c20036f47738ae86a19d0ab4e66eff8d8f5226f716970a4ec7f56a78bff6</checksum>
-    <size>131526617</size>
+        <language>vi</language>
+        <checksum type="sha256">0483c20036f47738ae86a19d0ab4e66eff8d8f5226f716970a4ec7f56a78bff6</checksum>
+        <size>131526617</size>
+        <product-code>37188DD9-F074-40CC-BCE4-EB0E7EA664BD</product-code>
       </item>
       <item>
-    <language>zh-CN</language>
-    <checksum type="sha256">f2966f3c251cf31a24d7931950838c04e410935dd15a6fdd9241acf81bc5e784</checksum>
-    <size>131863915</size>
+        <language>zh-CN</language>
+        <checksum type="sha256">f2966f3c251cf31a24d7931950838c04e410935dd15a6fdd9241acf81bc5e784</checksum>
+        <size>131863915</size>
+        <product-code>2E6C4507-4909-44A6-AD5C-0FC1FDCDCFA1</product-code>
       </item>
       <item>
-    <language>zh-TW</language>
-    <checksum type="sha256">a194cfb2dc2cbcae2e89740485ebfcbf605b7c80a5bbdffb699e447c53698e53</checksum>
-    <size>131990994</size>
+        <language>zh-TW</language>
+        <checksum type="sha256">a194cfb2dc2cbcae2e89740485ebfcbf605b7c80a5bbdffb699e447c53698e53</checksum>
+        <size>131990994</size>
+        <product-code>7890D527-C555-46DA-B60F-173675BFCC19</product-code>
       </item>
-    </download>
+    </downloads>
   </release>
 </releases>

@@ -37,6 +37,8 @@ use installer::systemactions;
 use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
+use installer::patch::ReleasesList;
+
 use strict;
 
 ###########################################################################
@@ -498,11 +500,7 @@ sub get_packagecode_for_sis
 {
     # always generating a new package code for each package
 
-    my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
-
-    ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
-
-    my $guid = "\{" . ${$guidref}[0] . "\}";
+    my $guid = "\{" . create_guid() . "\}";
 
     my $infoline = "PackageCode: $guid\n";
     $installer::logger::Lang->print($infoline);
@@ -1127,47 +1125,19 @@ sub copy_child_projects_into_installset
     }
 }
 
-#################################################################
-# Getting a list of GUID using uuidgen.exe.
-# This works only on Windows
-#################################################################
 
-sub get_guid_list
+
+=head2 create_guid ()
+
+    Create a single UUID aka GUID via calling the external executable 'uuidgen'.
+    There are Perl modules for that, but do they exist on the build bots?
+
+=cut
+sub create_guid ()
 {
-    my ($number, $log) = @_;
-
-    if ( $log ) { installer::logger::include_header_into_logfile("Generating $number GUID"); }
-
-    my $uuidgen = "uuidgen.exe";        # Has to be in the path
-
-    # "-c" for uppercase output
-
-    # my $systemcall = "$uuidgen -n$number -c |";
-    my $systemcall = "$uuidgen -n$number |";
-    open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
-    my @uuidlist = <UUIDGEN>;
-    close (UUIDGEN);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    if ( $log ) { $installer::logger::Lang->print($infoline); }
-
-    my $comparenumber = $#uuidlist + 1;
-
-    if ( $comparenumber == $number )
-    {
-        $infoline = "Success: Executed $uuidgen successfully!\n";
-        if ( $log ) { $installer::logger::Lang->print($infoline); }
-    }
-    else
-    {
-        $infoline = "ERROR: Could not execute $uuidgen successfully!\n";
-        if ( $log ) { $installer::logger::Lang->print($infoline); }
-    }
-
-    # uppercase, no longer "-c", because this is only supported in uuidgen.exe v.1.01
-    for ( my $i = 0; $i <= $#uuidlist; $i++ ) { $uuidlist[$i] = uc($uuidlist[$i]); }
-
-    return \@uuidlist;
+    my $uuid = qx("uuidgen");
+    $uuid =~ s/\s*$//;
+    return uc($uuid);
 }
 
 #################################################################
@@ -1188,6 +1158,9 @@ sub calculate_guid
     # my $id = pack("A32", $digest);
     my ($first, $second, $third, $fourth, $fifth) = unpack ('A8 A4 A4 A4 A12', $digest);
     $guid = "$first-$second-$third-$fourth-$fifth";
+
+    $installer::logger::Lang->printf("guid for '%s' is %s\n",
+        $string, $guid);
 
     return $guid;
 }
@@ -1264,7 +1237,7 @@ sub create_new_component_file
 # This works only on Windows
 #################################################################
 
-sub set_uuid_into_component_table
+sub __set_uuid_into_component_table
 {
     my ($idtdirbase, $allvariables) = @_;
 
@@ -1303,19 +1276,32 @@ sub set_uuid_into_component_table
             {
                 # Calculating new GUID with the help of the component name.
                 my $useooobaseversion = 1;
-                if ( exists($installer::globals::base_independent_components{$componentname})) { $useooobaseversion = 0; }
+                if ( exists($installer::globals::base_independent_components{$componentname}))
+                {
+                    $useooobaseversion = 0;
+                }
                 my $sourcestring = $componentname;
 
                 if ( $useooobaseversion )
                 {
-                    if ( ! exists($allvariables->{'OOOBASEVERSION'}) ) { installer::exiter::exit_program("ERROR: Could not find variable \"OOOBASEVERSION\" (required value for GUID creation)!", "set_uuid_into_component_table"); }
+                    if ( ! exists($allvariables->{'OOOBASEVERSION'}) )
+                    {
+                        installer::exiter::exit_program(
+                            "ERROR: Could not find variable \"OOOBASEVERSION\" (required value for GUID creation)!",
+                            "set_uuid_into_component_table");
+                    }
                     $sourcestring = $sourcestring . "_" . $allvariables->{'OOOBASEVERSION'};
                 }
                 $uuid = calculate_guid($sourcestring);
                 $counter++;
 
                 # checking, if there is a conflict with an already created guid
-                if ( exists($installer::globals::allcalculated_guids{$uuid}) ) { installer::exiter::exit_program("ERROR: \"$uuid\" was already created before!", "set_uuid_into_component_table"); }
+                if ( exists($installer::globals::allcalculated_guids{$uuid}) )
+                {
+                    installer::exiter::exit_program(
+                        "ERROR: \"$uuid\" was already created before!",
+                        "set_uuid_into_component_table");
+                }
                 $installer::globals::allcalculated_guids{$uuid} = 1;
                 $installer::globals::calculated_component_guids{$componentname} = $uuid;
 
@@ -1631,107 +1617,138 @@ sub execute_packaging
     $installer::logger::Lang->print($infoline);
 }
 
-###############################################################
-# Setting the global variables ProductCode and the UpgradeCode
-###############################################################
 
+=head2 get_source_codes($languagesref)
+
+    Return product code and upgrade code from the source version.
+    When no source version is defined then return undef for both.
+
+=cut
+sub get_source_codes ($)
+{
+    my ($languagesref) = @_;
+
+    if ( ! defined $installer::globals::source_version)
+    {
+        return;
+    }
+
+    my $onelanguage = installer::languages::get_key_language($languagesref);
+
+    my $release_data = installer::patch::ReleasesList::Instance()
+        ->{$installer::globals::source_version}
+        ->{$installer::globals::packageformat};
+    if (defined $release_data)
+    {
+        my $language_data = $release_data->{$onelanguage};
+        if (defined $language_data)
+        {
+            $installer::logger::Lang->printf("source product code is %s\n", $language_data->{'product-code'});
+            $installer::logger::Lang->printf("source upgrade code is %s\n", $release_data->{'upgrade-code'});
+
+            return (
+                $language_data->{'product-code'},
+                $release_data->{'upgrade-code'}
+                );
+        }
+        else
+        {
+            $installer::logger::Info->printf(
+                "Warning: can not access information about previous version %s and language %s\n",
+                $installer::globals::source_version,
+                $onelanguage);
+            return (undef,undef);
+        }
+    }
+    else
+    {
+        $installer::logger::Info->printf("Warning: can not access information about previous version %s\n",
+            $installer::globals::source_version);
+        return (undef,undef);
+    }
+}
+
+
+
+
+=head2 set_global_code_variables ($languagesref, $allvariableshashref)
+
+    Determine values for the product code and upgrade code of the target version.
+
+    As perparation for building a Windows patch, certain conditions have to be fullfilled.
+     - The upgrade code changes from old to new version
+     - The product code remains the same
+     In order to inforce that we have to access information about the source version.
+
+    The resulting values are stored as global variables
+        $installer::globals::productcode
+        $installer::globals::upgradecode
+    and as variables in the given hash
+        $allvariableshashref->{'PRODUCTCODE'}
+        $allvariableshashref->{'UPGRADECODE'}
+
+=cut
 sub set_global_code_variables ($$)
 {
     my ($languagesref, $allvariableshashref) = @_;
 
-    # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
-    # and the UpgradeCode for the product are defined.
-    # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME .
-    # Default $installer::globals::codefilename is defined in parameter.pm.
+    my ($source_product_code, $source_upgrade_code) = get_source_codes($languagesref);
+    my ($target_product_code, $target_upgrade_code) = (undef, undef);
 
-    if ( $allvariableshashref->{'CODEFILENAME'} )
+    if (defined $source_product_code && defined $source_upgrade_code)
     {
-        $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $allvariableshashref->{'CODEFILENAME'};
-        installer::files::check_file($installer::globals::codefilename);
-    }
-
-    my $infoline = "Using Codes file: $installer::globals::codefilename \n";
-    $installer::logger::Lang->print($infoline);
-
-    my $codefile = installer::files::read_file($installer::globals::codefilename);
-
-    my $isopensource = 0;
-    if ( $allvariableshashref->{'OPENSOURCE'} ) { $isopensource = $allvariableshashref->{'OPENSOURCE'}; }
-
-    my $onelanguage = "";
-
-    if ( $#{$languagesref} > 0 )    # more than one language
-    {
-        if (( $installer::globals::added_english ) && ( $#{$languagesref} == 1 )) # only multilingual because of added English
+        if ($installer::globals::is_major_release)
         {
-            $onelanguage = ${$languagesref}[1];  # setting the first language, that is not english
+            # For a major release we have to change the product code.
+            $target_product_code = "{" . create_guid() . "}";
+            $installer::logger::Lang->printf("building a major release, created new product code %s\n",
+                $target_product_code);
+
+            # Let's do a paranoia check that the new and the old guids are
+            # different.  In reality the new guid really has to be
+            # different from all other guids used for * codes, components,
+            # etc.
+            if ($target_product_code eq $source_product_code)
+            {
+                installer::logger::PrintError(
+                    "new GUID for product code is the same as the old product code but should be different.");
+            }
         }
         else
         {
-            if (( ${$languagesref}[1] =~ /jp/ ) ||
-                ( ${$languagesref}[1] =~ /ko/ ) ||
-                ( ${$languagesref}[1] =~ /zh/ ))
-            {
-                $onelanguage = "multiasia";
-            }
-            else
-            {
-                $onelanguage = "multiwestern";
-            }
+            # For minor or micro releases we have to keeep the old product code.
+            $target_product_code = "{" . $source_product_code . "}";
+            $installer::logger::Lang->printf("building a minor or micro release, reusing product code %s\n",
+                $target_product_code);
         }
-    }
-    else    # only one language
-    {
-        $onelanguage = ${$languagesref}[0];
-    }
 
-    # ProductCode must not change, if Windows patches shall be applied
-    if ( $installer::globals::prepare_winpatch )
-    {
-        # ProductCode has to be specified in each language
-        my $searchstring = "PRODUCTCODE";
-        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-        $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
-    } else {
-        my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
-        ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
-        $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
-    }
-
-    if ( $installer::globals::patch ) # patch upgrade codes are defined in soffice.lst
-    {
-        if ( $allvariableshashref->{'PATCHUPGRADECODE'} ) { $installer::globals::upgradecode = $allvariableshashref->{'PATCHUPGRADECODE'}; }
-        else { installer::exiter::exit_program("ERROR: PATCHUPGRADECODE not defined in list file!", "set_global_code_variables"); }
+        $target_upgrade_code = "{" . create_guid() . "}";
+        # Again, just one test for paranoia.
+        if ($target_upgrade_code eq $source_upgrade_code)
+        {
+            installer::logger::PrintError(
+                "new GUID for upgrade code is the same as the old upgrade code but should be different.");
+        }
     }
     else
     {
-        # UpgradeCode can take english as default, if not defined in specified language
-
-        my $searchstring = "UPGRADECODE";   # searching in the codes.txt file
-        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-        $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
+        # There is no previous version with which to compare the product code.
+        # Just create two new uuids.
+        $target_product_code = "{" . create_guid() . "}";
+        $target_upgrade_code = "{" . create_guid() . "}";
     }
 
-    # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
-    if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
+    $installer::globals::productcode = $target_product_code;
+    $installer::globals::upgradecode = $target_upgrade_code;
+    $allvariableshashref->{'PRODUCTCODE'} = $target_product_code;
+    $allvariableshashref->{'UPGRADECODE'} = $target_upgrade_code;
 
-    $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
-    $installer::logger::Lang->print($infoline);
-    $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
-    $installer::logger::Lang->print($infoline);
-
-    # Adding both variables into the variables array
-
-    $allvariableshashref->{'PRODUCTCODE'} = $installer::globals::productcode;
-    $allvariableshashref->{'UPGRADECODE'} = $installer::globals::upgradecode;
-
-    $infoline = "Defined variable PRODUCTCODE: $installer::globals::productcode \n";
-    $installer::logger::Lang->print($infoline);
-
-    $infoline = "Defined variable UPGRADECODE: $installer::globals::upgradecode \n";
-    $installer::logger::Lang->print($infoline);
-
+    $installer::logger::Lang->printf("target product code is %s\n", $target_product_code);
+    $installer::logger::Lang->printf("target upgrade code is %s\n", $target_upgrade_code);
 }
+
+
+
 
 ###############################################################
 # Setting the product version used in property table and

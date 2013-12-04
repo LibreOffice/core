@@ -23,6 +23,11 @@ package installer::patch::Msi;
 
 use installer::patch::MsiTable;
 use installer::patch::Tools;
+use installer::patch::InstallationSet;
+
+use File::Basename;
+use File::Copy;
+
 use strict;
 
 
@@ -32,9 +37,37 @@ use strict;
 
 =cut
 
+sub FindAndCreate($$$$$)
+{
+    my ($class, $version, $is_current_version, $language, $product_name) = @_;
+
+    my $condensed_version = $version;
+    $condensed_version =~ s/\.//g;
+
+    # When $version is the current version we have to search the msi at a different place.
+    my $path;
+    my $filename;
+    my $is_current = 0;
+    $path = installer::patch::InstallationSet::GetUnpackedExePath(
+        $version,
+        $is_current_version,
+        $language,
+        "msi",
+        $product_name);
+
+    # Find the msi in the path.ls .
+    $filename = File::Spec->catfile($path, "openoffice".$condensed_version.".msi");
+    $is_current = $is_current_version;
+
+    return $class->new($filename, $version, $is_current, $language, $product_name);
+}
 
 
-=head2 new($class, $version, $language, $product_name)
+
+
+
+
+=head2 new($class, $filename, $version, $is_current_version, $language, $product_name)
 
     Create a new object of the Msi class.  The values of $version, $language, and $product_name define
     where to look for the msi file.
@@ -42,47 +75,24 @@ use strict;
     If construction fails then IsValid() will return false.
 
 =cut
-sub new ($$$$)
+sub new ($$$$$$)
 {
-    my ($class, $version, $language, $product_name) = @_;
-
-    my $path = installer::patch::InstallationSet::GetUnpackedMsiPath(
-        $version,
-        $language,
-        "msi",
-        $product_name);
-
-    # Find the msi in the path.
-    my $filename = undef;
-    if ( -d $path)
-    {
-        my @msi_files = glob(File::Spec->catfile($path, "*.msi"));
-        if (scalar @msi_files != 1)
-        {
-            printf STDERR ("there are %d msi files in %s, should be 1", scalar @msi_files, $filename);
-            $filename = "";
-        }
-        else
-        {
-            $filename = $msi_files[0];
-        }
-    }
-    else
-    {
-        installer::logger::PrintError("can not access path '%s' to find msi\n", $path);
-        return undef;
-    }
+    my ($class, $filename, $version, $is_current_version, $language, $product_name) = @_;
 
     if ( ! -f $filename)
     {
-        installer::logger::PrintError("can not access MSI file at '%s'\n", $filename);
+        installer::logger::PrintError("can not find the .msi file for version %s and language %s at '%s'\n",
+            $version,
+            $language,
+            $filename);
         return undef;
     }
 
     my $self = {
         'filename' => $filename,
-        'path' => $path,
+        'path' => dirname($filename),
         'version' => $version,
+        'is_current_version' => $is_current_version,
         'language' => $language,
         'package_format' => "msi",
         'product_name' => $product_name,
@@ -102,6 +112,41 @@ sub IsValid ($)
     my ($self) = @_;
 
     return $self->{'is_valid'};
+}
+
+
+
+
+=head2 Commit($self)
+
+    Write all modified tables back into the databse.
+
+=cut
+sub Commit ($)
+{
+    my $self = shift;
+
+    my @tables_to_update = ();
+    foreach my $table (values %{$self->{'tables'}})
+    {
+        push @tables_to_update,$table if ($table->IsModified());
+    }
+
+    if (scalar @tables_to_update > 0)
+    {
+        $installer::logger::Info->printf("writing modified tables to database:\n");
+        foreach my $table (@tables_to_update)
+        {
+            $installer::logger::Info->printf("    %s\n", $table->GetName());
+            $self->PutTable($table);
+        }
+
+        foreach my $table (@tables_to_update)
+        {
+            $table->UpdateTimestamp();
+            $table->MarkAsUnmodified();
+        }
+    }
 }
 
 
@@ -129,8 +174,8 @@ sub GetTable ($$)
             my $truncated_table_name = length($table_name)>8 ? substr($table_name,0,8) : $table_name;
             my $command = join(" ",
                 "msidb.exe",
-                "-d", installer::patch::Tools::CygpathToWindows($self->{'filename'}),
-                "-f", installer::patch::Tools::CygpathToWindows($self->{'tmpdir'}),
+                "-d", installer::patch::Tools::ToEscapedWindowsPath($self->{'filename'}),
+                "-f", installer::patch::Tools::ToEscapedWindowsPath($self->{'tmpdir'}),
                 "-e", $table_name);
             my $result = qx($command);
             print $result;
@@ -142,6 +187,51 @@ sub GetTable ($$)
     }
 
     return $table;
+}
+
+
+
+
+=head2 PutTable($self, $table)
+
+    Write the given table back to the databse.
+
+=cut
+sub PutTable ($$)
+{
+    my ($self, $table) = @_;
+
+    # Create text file from the current table content.
+    $table->WriteFile();
+
+    my $table_name = $table->GetName();
+
+    # Store table from text file into database.
+    my $table_filename = $table->{'filename'};
+
+    if (length($table_name) > 8)
+    {
+        # The file name of the table data must not be longer than 8 characters (not counting the extension).
+        # The name passed as argument to the -i option may be longer.
+        my $truncated_table_name = substr($table_name,0,8);
+        my $table_truncated_filename = File::Spec->catfile(
+            dirname($table_filename),
+            $truncated_table_name.".idt");
+        File::Copy::copy($table_filename, $table_truncated_filename) || die("can not create table file with short name");
+    }
+
+    my $command = join(" ",
+        "msidb.exe",
+        "-d", installer::patch::Tools::ToEscapedWindowsPath($self->{'filename'}),
+        "-f", installer::patch::Tools::ToEscapedWindowsPath($self->{'tmpdir'}),
+        "-i", $table_name);
+    my $result = system($command);
+
+    if ($result != 0)
+    {
+        installer::logger::PrintError("writing table '%s' back to database failed", $table_name);
+        # For error messages see http://msdn.microsoft.com/en-us/library/windows/desktop/aa372835%28v=vs.85%29.aspx
+    }
 }
 
 
@@ -226,52 +316,44 @@ sub SplitTargetSourceLongShortName ($)
 }
 
 
+=head2 GetDirectoryMap($self)
 
-
-=head2 GetFileToDirectoryMap ($)
-
-    Return a map (hash) that maps the unique name (column 'File' in
-    the 'File' table) to its directory names.  Each value is a
-    reference to an array of two elements: the source path and the
-    target path.
-
-    The map is kept alive for the lifetime of the Msi object.  All
-    calls but the first are cheap.
+    Return a map that maps directory unique names (column 'Directory' in table 'Directory')
+    to hashes that contains short and long source and target names.
 
 =cut
-sub GetFileToDirectoryMap ($)
+sub GetDirectoryMap ($)
 {
     my ($self) = @_;
 
-    if (defined $self->{'FileToDirectoryMap'})
+    if (defined $self->{'DirectoryMap'})
     {
-        return $self->{'FileToDirectoryMap'};
+        return $self->{'DirectoryMap'};
     }
 
-    my $file_table = $self->GetTable("File");
     my $directory_table = $self->GetTable("Directory");
-    my $component_table = $self->GetTable("Component");
-    $installer::logger::Info->printf("got access to tables File, Directory, Component\n");
-
     my %dir_map = ();
     foreach my $row (@{$directory_table->GetAllRows()})
     {
-        my ($target_name, undef, $source_name, undef)
+        my ($target_long_name, $target_short_name, $source_long_name, $source_short_name)
             = installer::patch::Msi::SplitTargetSourceLongShortName($row->GetValue("DefaultDir"));
-        $dir_map{$row->GetValue("Directory")} = {
+        my $unique_name = $row->GetValue("Directory");
+        $dir_map{$unique_name} =
+        {
+            'unique_name' => $unique_name,
             'parent' => $row->GetValue("Directory_Parent"),
-            'source_name' => $source_name,
-            'target_name' => $target_name};
+            'default_dir' => $row->GetValue("DefaultDir"),
+            'source_long_name' => $source_long_name,
+            'source_short_name' => $source_short_name,
+            'target_long_name' => $target_long_name,
+            'target_short_name' => $target_short_name
+        };
     }
 
     # Set up full names for all directories.
     my @todo = map {$_} (keys %dir_map);
-    my $process_count = 0;
-    my $push_count = 0;
     while (scalar @todo > 0)
     {
-        ++$process_count;
-
         my $key = shift @todo;
         my $item = $dir_map{$key};
         next if defined $item->{'full_source_name'};
@@ -279,17 +361,25 @@ sub GetFileToDirectoryMap ($)
         if ($item->{'parent'} eq "")
         {
             # Directory has no parent => full names are the same as the name.
-            $item->{'full_source_name'} = $item->{'source_name'};
-            $item->{'full_target_name'} = $item->{'target_name'};
+            $item->{'full_source_long_name'} = $item->{'source_long_name'};
+            $item->{'full_source_short_name'} = $item->{'source_short_name'};
+            $item->{'full_target_long_name'} = $item->{'target_long_name'};
+            $item->{'full_target_short_name'} = $item->{'target_short_name'};
         }
         else
         {
             my $parent = $dir_map{$item->{'parent'}};
-            if ( defined $parent->{'full_source_name'})
+            if ( defined $parent->{'full_source_long_name'})
             {
                 # Parent aleady has full names => we can create the full name of the current item.
-                $item->{'full_source_name'} = $parent->{'full_source_name'} . "/" . $item->{'source_name'};
-                $item->{'full_target_name'} = $parent->{'full_target_name'} . "/" . $item->{'target_name'};
+                $item->{'full_source_long_name'}
+                    = $parent->{'full_source_long_name'} . "/" . $item->{'source_long_name'};
+                $item->{'full_source_short_name'}
+                    = $parent->{'full_source_short_name'} . "/" . $item->{'source_short_name'};
+                $item->{'full_target_long_name'}
+                    = $parent->{'full_target_long_name'} . "/" . $item->{'target_long_name'};
+                $item->{'full_target_short_name'}
+                    = $parent->{'full_target_short_name'} . "/" . $item->{'target_short_name'};
             }
             else
             {
@@ -297,45 +387,78 @@ sub GetFileToDirectoryMap ($)
                 # Push both to the head of the list.
                 unshift @todo, $key;
                 unshift @todo, $item->{'parent'};
-
-                ++$push_count;
             }
         }
     }
 
-    foreach my $key (keys %dir_map)
+    # Postprocess the path names for cleanup.
+    foreach my $item (values %dir_map)
     {
-        $dir_map{$key}->{'full_source_name'} =~ s/\/(\.\/)+/\//g;
-        $dir_map{$key}->{'full_source_name'} =~ s/^SourceDir\///;
-        $dir_map{$key}->{'full_target_name'} =~ s/\/(\.\/)+/\//g;
-        $dir_map{$key}->{'full_target_name'} =~ s/^SourceDir\///;
+        foreach my $id (
+            'full_source_long_name',
+            'full_source_short_name',
+            'full_target_long_name',
+            'full_target_short_name')
+        {
+            $item->{$id} =~ s/\/(\.\/)+/\//g;
+            $item->{$id} =~ s/^SourceDir\///;
+            $item->{$id} =~ s/^\.$//;
+        }
     }
-    $installer::logger::Info->printf("for %d directories there where %d processing steps and %d pushes\n",
-        $directory_table->GetRowCount(),
-        $process_count,
-        $push_count);
+
+    $self->{'DirectoryMap'} = \%dir_map;
+    return $self->{'DirectoryMap'};
+}
+
+
+
+
+=head2 GetFileMap ($)
+
+    Return a map (hash) that maps the unique name (column 'File' in
+    the 'File' table) to data that is associated with that file, like
+    the directory or component.
+
+    The map is kept alive for the lifetime of the Msi object.  All
+    calls but the first are cheap.
+
+=cut
+sub GetFileMap ($)
+{
+    my ($self) = @_;
+
+    if (defined $self->{'FileMap'})
+    {
+        return $self->{'FileMap'};
+    }
+
+    my $file_table = $self->GetTable("File");
+    my $component_table = $self->GetTable("Component");
+    my $dir_map = $self->GetDirectoryMap();
 
     # Setup a map from component names to directory items.
-    my %component_to_directory_map = map {$_->GetValue('Component') => $_->GetValue('Directory_')} @{$component_table->GetAllRows()};
+    my %component_to_directory_map =
+        map
+        {$_->GetValue('Component') => $_->GetValue('Directory_')}
+        @{$component_table->GetAllRows()};
 
     # Finally, create the map from files to directories.
-    my $map = {};
+    my $file_map = {};
     my $file_component_index = $file_table->GetColumnIndex("Component_");
     my $file_file_index = $file_table->GetColumnIndex("File");
     foreach my $file_row (@{$file_table->GetAllRows()})
     {
         my $component_name = $file_row->GetValue($file_component_index);
         my $directory_name = $component_to_directory_map{$component_name};
-        my $dir_item = $dir_map{$directory_name};
         my $unique_name = $file_row->GetValue($file_file_index);
-        $map->{$unique_name} = [$dir_item->{'full_source_name'},$dir_item->{'full_target_name'}];
+        $file_map->{$unique_name} = {
+            'directory' => $dir_map->{$directory_name},
+            'component_name' => $component_name
+        };
     }
 
-    $installer::logger::Info->printf("got full paths for %d files\n",
-        $file_table->GetRowCount());
-
-    $self->{'FileToDirectoryMap'} = $map;
-    return $map;
+    $self->{'FileMap'} = $file_map;
+    return $file_map;
 }
 
 

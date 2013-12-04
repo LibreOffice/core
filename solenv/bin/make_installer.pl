@@ -86,8 +86,10 @@ use installer::windows::upgrade;
 use installer::worker;
 use installer::xpdinstaller;
 use installer::ziplist;
-
+use installer::patch::InstallationSet;
+use installer::patch::Msi;
 use strict;
+
 
 sub GetSetupScriptLines ($$$)
 {
@@ -210,9 +212,6 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
     my $newidtdir = $idtdirbase . $installer::globals::separator . "00";    # new files into language independent directory "00"
     installer::systemactions::create_directory($newidtdir);
 
-    my @allfilecomponents = ();
-    my @allregistrycomponents = ();
-
     # Collecting all files with flag "BINARYTABLE"
     my $binarytablefiles = installer::worker::collect_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE");
 
@@ -234,27 +233,81 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
     # Collection all available directory trees
     installer::windows::directory::collectdirectorytrees($directoriesforepmarrayref);
 
-    $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table(
+    $filesinproductlanguageresolvedarrayref = installer::windows::file::filter_files(
         $filesinproductlanguageresolvedarrayref,
-        \@allfilecomponents,
-        $newidtdir,
         $allvariableshashref);
+    installer::windows::file::prepare_file_table_creation(
+        $filesinproductlanguageresolvedarrayref,
+        $directoriesforepmarrayref,
+        $allvariableshashref);
+    my $file_table_data = installer::windows::file::create_file_table_data(
+        $filesinproductlanguageresolvedarrayref,
+        $allvariableshashref);
+    installer::windows::file::create_file_table($file_table_data, $newidtdir);
+    installer::windows::file::create_filehash_table($filesinproductlanguageresolvedarrayref, $newidtdir);
+    my @allfilecomponents = installer::windows::file::collect_components($filesinproductlanguageresolvedarrayref);
 
+
+    installer::windows::directory::prepare_directory_table_creation(
+        $directoriesforepmarrayref,
+        $allvariableshashref);
     installer::windows::directory::create_directory_table(
         $directoriesforepmarrayref,
         $newidtdir,
-        $allvariableshashref,
-        $loggingdir);
+        $allvariableshashref);
 
     # Attention: The table "Registry.idt" contains language specific strings -> parameter: $languagesarrayref !
-    installer::windows::registry::create_registry_table($registryitemsinproductlanguageresolvedarrayref, \@allregistrycomponents, $newidtdir, $languagesarrayref, $allvariableshashref);
+    my $registry_table_data = installer::windows::registry::prepare_registry_table(
+        $registryitemsinproductlanguageresolvedarrayref,
+        $languagesarrayref,
+        $allvariableshashref);
+    my @allregistrycomponents = installer::windows::registry::collect_registry_components($registry_table_data);
 
-    installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir, $allvariableshashref);
+    my $target_registry_component_translation = installer::windows::component::prepare_component_table_creation(
+        \@allfilecomponents,
+        \@allregistrycomponents,
+        $allvariableshashref);
+
+    @allregistrycomponents = installer::windows::component::apply_component_translation(
+        $target_registry_component_translation,
+        @allregistrycomponents);
+    installer::windows::registry::translate_component_names(
+        $target_registry_component_translation,
+        $registryitemsinproductlanguageresolvedarrayref,
+        $registry_table_data);
+
+    installer::windows::registry::create_registry_table_32(
+        $newidtdir,
+        $languagesarrayref,
+        $allvariableshashref,
+        $registry_table_data);
+    installer::windows::registry::create_registry_table_64(
+        $newidtdir,
+        $languagesarrayref,
+        $allvariableshashref,
+        $registry_table_data);
+
+    my $component_table_data = installer::windows::component::create_component_table_data (
+        $filesinproductlanguageresolvedarrayref,
+        $registryitemsinproductlanguageresolvedarrayref,
+        $directoriesforepmarrayref,
+        \@allfilecomponents,
+        \@allregistrycomponents,
+        $allvariableshashref);
+    installer::windows::component::create_component_table(
+        $component_table_data,
+        $newidtdir);
 
     # Attention: The table "Feature.idt" contains language specific strings -> parameter: $languagesarrayref !
     installer::windows::feature::add_uniquekey($modulesinproductlanguageresolvedarrayref);
-    $modulesinproductlanguageresolvedarrayref = installer::windows::feature::sort_feature($modulesinproductlanguageresolvedarrayref);
-    installer::windows::feature::create_feature_table($modulesinproductlanguageresolvedarrayref, $newidtdir, $languagesarrayref, $allvariableshashref);
+    $modulesinproductlanguageresolvedarrayref = installer::windows::feature::sort_feature(
+        $modulesinproductlanguageresolvedarrayref);
+
+    installer::windows::feature::create_feature_table(
+        $modulesinproductlanguageresolvedarrayref,
+        $newidtdir,
+        $languagesarrayref,
+        $allvariableshashref);
 
     installer::windows::featurecomponent::create_featurecomponent_table(
         $filesinproductlanguageresolvedarrayref,
@@ -482,7 +535,11 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
 
             $installer::logger::Info->print( "... creating msi database (language $onelanguage) ... \n" );
 
-            installer::windows::msiglobal::set_uuid_into_component_table($languageidtdir, $allvariableshashref);    # setting new GUID for the components using the tool uuidgen.exe
+            # setting new GUID for the components using the tool uuidgen.exe
+#            installer::windows::msiglobal::set_uuid_into_component_table(
+#                $languageidtdir,
+#                $allvariableshashref);
+
             installer::windows::msiglobal::prepare_64bit_database($languageidtdir, $allvariableshashref);   # making last 64 bit changes
             installer::windows::msiglobal::create_msi_database($languageidtdir ,$msifilename);
 
@@ -1302,6 +1359,38 @@ foreach my $key (sort keys %$allvariableshashref)
 }
 
 
+# When we are building a release (-release option was given on the command line)
+# then we need additional information.
+if ($installer::globals::is_release)
+{
+    $installer::logger::Info->print("...  building a release, checking required values  ... \n");
+    $installer::globals::target_version = $allvariableshashref->{'PRODUCTVERSION'};
+    $installer::globals::source_version = $allvariableshashref->{'PREVIOUS_VERSION'};
+    if ( ! defined $installer::globals::source_version)
+    {
+        $installer::globals::source_version = installer::patch::ReleasesList::GetPreviousVersion(
+            $installer::globals::target_version);
+    }
+    if ( ! defined $installer::globals::source_version)
+    {
+        installer::exiter::exit_program(
+            "can not detect the previous version number.  Please add a 'PREVIOUS_VERSION' variable to openoffice.lst",
+            "make_installer.pl");
+    }
+
+    # Determine if we are building a new major release, ie if target_version is ?.0.0
+    $installer::globals::is_major_release
+        = installer::patch::Version::IsMajorVersion($installer::globals::target_version);
+
+    $installer::logger::Info->printf("    building version %s\n", $installer::globals::target_version);
+    $installer::logger::Info->printf("        which is %sa major version\n",
+        $installer::globals::is_major_release
+            ? ""
+            : "not ");
+    $installer::logger::Info->printf("    previous version is %s\n", $installer::globals::source_version);
+}
+
+
 ########################################################
 # Check if this is simple packaging mechanism
 ########################################################
@@ -1595,6 +1684,22 @@ for (;1;last)
 
         if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::makedownload = 1; }
         else { $installer::globals::makedownload = 0; }
+    }
+
+    # Set up an MSI object for the source version.
+    if ($installer::globals::is_release
+        && $installer::globals::iswindowsbuild)
+    {
+        $installer::logger::Info->printf("preparing MSI object for source version %s\n",
+            $installer::globals::source_version);
+        my $source_version_string = join(
+            "",
+            installer::patch::Version::StringToNumberArray($installer::globals::source_version));
+        $installer::globals::source_msi = installer::patch::Msi->FindAndCreate(
+            $installer::globals::source_version,
+            0,
+            $$languagestringref,
+            $installer::globals::product);
     }
 
     ############################################################

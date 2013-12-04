@@ -1,0 +1,1571 @@
+#!/usr/bin/perl -w
+
+#**************************************************************
+#
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#
+#**************************************************************
+
+use Getopt::Long;
+use Pod::Usage;
+use File::Path;
+use File::Spec;
+use File::Basename;
+use XML::LibXML;
+use Digest;
+use Archive::Zip;
+use Archive::Extract;
+
+use installer::ziplist;
+use installer::logger;
+use installer::windows::msiglobal;
+use installer::patch::Msi;
+use installer::patch::ReleasesList;
+use installer::patch::Version;
+
+use strict;
+
+
+=head1 NAME
+
+    patch_tool.pl - Create Windows MSI patches.
+
+=head1 SYNOPSIS
+
+    patch_tool.pl command [options]
+
+    Commands:
+        create    create patches
+        apply     apply patches
+
+    Options:
+        -p|--product-name <product-name>
+             The product name, eg Apache_OpenOffice
+        -o|--output-path <path>
+             Path to the instsetoo_native platform output tree
+        -d|--data-path <path>
+             Path to the data directory that is expected to be under version control.
+        --source-version <major>.<minor>.<micro>
+             The version that is to be patched.
+        --target-version <major>.<minor>.<micro>
+             The version after the patch has been applied.
+
+=head1 DESCRIPTION
+
+    Creates windows MSP patch files, one for each relevant language.
+    Patches convert an installed OpenOffice to the target version.
+
+    Required data are:
+        Installation sets of the source versions
+            Taken from ext_sources/
+            Downloaded from archive.apache.org on demand
+
+        Installation set of the target version
+            This is expected to be the current version.
+
+=cut
+
+#    my $ImageFamily = "MNPapps";
+# The ImageFamily name has to have 1-8 alphanumeric characters.
+my $ImageFamily = "AOO";
+my $SourceImageName = "Source";
+my $TargetImageName = "Target";
+
+
+
+sub ProcessCommandline ()
+{
+    my $arguments = {
+        'product-name' => undef,
+        'output-path' => undef,
+        'data-path' => undef,
+        'lst-file' => undef,
+        'source-version' => undef,
+        'target-version' => undef};
+
+    if ( ! GetOptions(
+               "product-name=s", \$arguments->{'product-name'},
+               "output-path=s", \$arguments->{'output-path'},
+               "data-path=s" => \$arguments->{'data-path'},
+               "lst-file=s" => \$arguments->{'lst-file'},
+               "source-version:s" => \$arguments->{'source-version'},
+               "target-version:s" => \$arguments->{'target-version'}
+        ))
+    {
+        pod2usage(2);
+    }
+
+    # Only the command should be left in @ARGV.
+    pod2usage(2) unless scalar @ARGV == 1;
+    $arguments->{'command'} = shift @ARGV;
+
+    # At the moment we only support patches on windows.  When this
+    # is extended in the future we need the package format as an
+    # argument.
+    $arguments->{'package-format'} = "msi";
+
+    return $arguments;
+}
+
+
+
+
+sub GetSourceMsiPath ($$)
+{
+    my ($context, $language) = @_;
+    my $unpacked_path = File::Spec->catfile(
+    $context->{'output-path'},
+    $context->{'product-name'},
+        $context->{'package-format'},
+    installer::patch::Version::ArrayToDirectoryName(
+        installer::patch::Version::StringToNumberArray(
+        $context->{'source-version'})),
+    $language);
+}
+
+
+
+
+sub GetTargetMsiPath ($$)
+{
+    my ($context, $language) = @_;
+    return File::Spec->catfile(
+        $context->{'output-path'},
+        $context->{'product-name'},
+        $context->{'package-format'},
+        "install",
+        $language);
+}
+
+
+
+sub ProvideInstallationSets ($$)
+{
+    my ($context, $language) = @_;
+
+    # Assume that the target installation set is located in the output tree.
+    my $target_path = GetTargetMsiPath($context, $language);
+    if ( ! -d $target_path)
+    {
+        installer::logger::PrintError("can not find target installation set at '%s'\n", $target_path);
+        return 0;
+    }
+    my @target_version = installer::patch::Version::StringToNumberArray($context->{'target-version'});
+    my $target_msi_file = File::Spec->catfile(
+        $target_path,
+        sprintf("openoffice%d%d%d.msi", $target_version[0], $target_version[1], $target_version[2]));
+    if ( ! -f $target_msi_file)
+    {
+        installer::logger::PrintError("can not find target msi file at '%s'\n", $target_msi_file);
+        return 0;
+    }
+
+    return 1;
+}
+
+
+
+
+sub GetLanguages ()
+{
+    # The set of languages is taken from the WITH_LANG environment variable.
+    # If that is missing or is empty then the default 'en-US' is used instead.
+    my @languages = ("en-US");
+    my $with_lang = $ENV{'WITH_LANG'};
+    if (defined $with_lang && $with_lang ne "")
+    {
+        @languages = split(/\s+/, $with_lang);
+    }
+    return @languages;
+}
+
+
+
+
+sub FindValidLanguages ($$$)
+{
+    my ($context, $release_data, $languages) = @_;
+
+    my @valid_languages = ();
+    foreach my $language (@$languages)
+    {
+        if ( ! ProvideInstallationSets($context, $language))
+        {
+            installer::logger::PrintError("    '%s' has no target installation set\n", $language);
+        }
+        elsif ( ! defined $release_data->{$language})
+        {
+            installer::logger::PrintError("    '%s' is not a released language for version %s\n",
+                $language,
+                $context->{'source-version'});
+        }
+        else
+        {
+            push @valid_languages, $language;
+        }
+    }
+
+    return @valid_languages;
+}
+
+
+
+
+sub ProvideSourceInstallationSet ($$$)
+{
+    my ($context, $language, $release_data) = @_;
+
+    my $url = $release_data->{$language}->{'URL'};
+    $url =~ /^(.*)\/([^\/]*)$/;
+    my ($location, $basename) = ($1,$2);
+
+    my $ext_sources_path = $ENV{'TARFILE_LOCATION'};
+    if ( ! -d $ext_sources_path)
+    {
+        installer::logger::PrintError("Can not determine the path to ext_sources/.\n");
+        installer::logger::PrintError("Maybe SOURCE_ROOT_DIR has not been correctly set in the environment?");
+        return 0;
+    }
+
+    # We need the unpacked installation set in <platform>/<product>/<package>/<source-version>,
+    # eg wntmsci12.pro/Apache_OpenOffice/msi/v-4-0-0.
+    my $unpacked_path = GetSourceMsiPath($context, $language);
+    if ( ! -d $unpacked_path)
+    {
+        # Make sure that the downloadable installation set (.exe) is present in ext_sources/.
+        my $filename = File::Spec->catfile($ext_sources_path, $basename);
+        if ( -f $filename)
+        {
+            PrintInfo("%s is already present in ext_sources/.  Nothing to do\n", $basename);
+        }
+        else
+        {
+            return 0 if ! installer::patch::Download($language, $release_data, $location, $basename, $filename);
+            return 0 if ! -f $filename;
+        }
+
+        # Unpack the installation set.
+        if ( -d $unpacked_path)
+        {
+            # Take the existence of the destination path as proof that the
+            # installation set was successfully unpacked before.
+        }
+        else
+        {
+            installer::patch::InstallationSet::Unpack($filename, $unpacked_path);
+        }
+    }
+}
+
+
+
+
+# Find the source and target version between which the patch will be
+# created.  Typically the target version is the current version and
+# the source version is the version of the previous release.
+sub DetermineVersions ($$)
+{
+    my ($context, $variables) = @_;
+
+    if (defined $context->{'source-version'} && defined $context->{'target-version'})
+    {
+        # Both source and target version have been specified on the
+        # command line.  There remains nothing to be be done.
+        return;
+    }
+
+    if ( ! defined $context->{'target-version'})
+    {
+        # Use the current version as target version.
+        $context->{'target-version'} = $variables->{PRODUCTVERSION};
+    }
+
+    my @target_version = installer::patch::Version::StringToNumberArray($context->{'target-version'});
+    shift @target_version;
+    my $is_target_version_major = 1;
+    foreach my $number (@target_version)
+    {
+        $is_target_version_major = 0 if ($number ne "0");
+    }
+    if ($is_target_version_major)
+    {
+        installer::logger::PrintError("can not create patch where target version is a new major version (%s)\n",
+            $context->{'target-version'});
+        die;
+    }
+
+    if ( ! defined $context->{'source-version'})
+    {
+        my $releases = installer::patch::ReleasesList::Instance();
+
+        # Search for target release in the list of previous releases.
+        # If it is found, use the previous version as source version.
+        # Otherwise use the last released version.
+        my $last_release = undef;
+        foreach my $release (@{$releases->{'releases'}})
+        {
+            last if ($release eq $context->{'target-version'});
+            $last_release = $release;
+        }
+        $context->{'source-version'} = $last_release;
+    }
+}
+
+
+
+
+=head2 CheckUpgradeCode($source_msi, $target_msi)
+
+    The 'UpgradeCode' values in the 'Property' table differs from source to target
+
+=cut
+sub CheckUpgradeCode($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    my $source_upgrade_code = $source_msi->GetTable("Property")->GetValue("Property", "UpgradeCode", "Value");
+    my $target_upgrade_code = $target_msi->GetTable("Property")->GetValue("Property", "UpgradeCode", "Value");
+
+    if ($source_upgrade_code eq $target_upgrade_code)
+    {
+        $installer::logger::Info->printf("Error: The UpgradeCode properties have to differ but are both '%s'\n",
+            $source_upgrade_code);
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: UpgradeCode values are identical\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckProductCode($source_msi, $target_msi)
+
+    The 'ProductCode' values in the 'Property' tables remain the same.
+
+=cut
+sub CheckProductCode($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    my $source_product_code = $source_msi->GetTable("Property")->GetValue("Property", "ProductCode", "Value");
+    my $target_product_code = $target_msi->GetTable("Property")->GetValue("Property", "ProductCode", "Value");
+
+    if ($source_product_code ne $target_product_code)
+    {
+        $installer::logger::Info->printf("Error: The ProductCode properties have to remain the same but are\n");
+        $installer::logger::Info->printf("       '%s' and '%s'\n",
+            $source_product_code,
+            $target_product_code);
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: ProductCode properties differ\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckBuildIdCode($source_msi, $target_msi)
+
+    The 'PRODUCTBUILDID' values in the 'Property' tables (not the AOO build ids) differ and the
+    target value is higher than the source value.
+
+=cut
+sub CheckBuildIdCode($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    my $source_build_id = $source_msi->GetTable("Property")->GetValue("Property", "PRODUCTBUILDID", "Value");
+    my $target_build_id = $target_msi->GetTable("Property")->GetValue("Property", "PRODUCTBUILDID", "Value");
+
+    if ($source_build_id >= $target_build_id)
+    {
+        $installer::logger::Info->printf(
+            "Error: The PRODUCTBUILDID properties have to increase but are '%s' and '%s'\n",
+            $source_build_id,
+            $target_build_id);
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: source build id is lower than target build id\n");
+        return 1;
+    }
+}
+
+
+
+
+sub CheckProductName ($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    my $source_product_name = $source_msi->GetTable("Property")->GetValue("Property", "DEFINEDPRODUCT", "Value");
+    my $target_product_name = $target_msi->GetTable("Property")->GetValue("Property", "DEFINEDPRODUCT", "Value");
+
+    if ($source_product_name ne $target_product_name)
+    {
+        $installer::logger::Info->printf("Error: product names of are not identical:\n");
+        $installer::logger::Info->printf("       %s != %s\n", $source_product_name, $target_product_name);
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: product names are identical\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckRemovedFiles($source_msi, $target_msi)
+
+    Files and components must not be deleted.
+
+=cut
+sub CheckRemovedFiles($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    # Get the 'File' tables.
+    my $source_file_table = $source_msi->GetTable("File");
+    my $target_file_table = $target_msi->GetTable("File");
+
+    # Create data structures for fast lookup.
+    my @source_files = map {$_->GetValue("File")} @{$source_file_table->GetAllRows()};
+    my %target_file_map = map {$_->GetValue("File") => $_} @{$target_file_table->GetAllRows()};
+
+    # Search for removed files (files in source that are missing from target).
+    my $removed_file_count = 0;
+    foreach my $uniquename (@source_files)
+    {
+        if ( ! defined $target_file_map{$uniquename})
+        {
+            ++$removed_file_count;
+        }
+    }
+
+    if ($removed_file_count > 0)
+    {
+        $installer::logger::Info->printf("Error: %d files have been removed\n", $removed_file_count);
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: no files have been removed\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckNewFiles($source_msi, $target_msi)
+
+    New files have to be in new components.
+
+=cut
+sub CheckNewFiles($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    # Get the 'File' tables.
+    my $source_file_table = $source_msi->GetTable("File");
+    my $target_file_table = $target_msi->GetTable("File");
+
+    # Create data structures for fast lookup.
+    my %source_file_map = map {$_->GetValue("File") => $_} @{$source_file_table->GetAllRows()};
+    my @target_files = map {$_->GetValue("File")} @{$target_file_table->GetAllRows()};
+
+    # Search for added files (files in target that where not in source).
+    my $added_file_count = 0;
+    foreach my $uniquename (@target_files)
+    {
+        if ( ! defined $source_file_map{$uniquename})
+        {
+            ++$added_file_count;
+        }
+    }
+
+    if ($added_file_count > 0)
+    {
+        $installer::logger::Info->printf("Warning: %d files have been added\n", $added_file_count);
+
+        $installer::logger::Info->printf("Check for new files being part of new components is not yet implemented\n");
+
+        return 1;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: no files have been added\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckComponentSets($source_msi, $target_msi)
+
+    Components must not be removed but can be added.
+    Features of added components have also to be new.
+
+=cut
+sub CheckComponentSets($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    # Get the 'Component' tables.
+    my $source_component_table = $source_msi->GetTable("Component");
+    my $target_component_table = $target_msi->GetTable("Component");
+
+    # Create data structures for fast lookup.
+    my %source_component_map = map {$_->GetValue("Component") => $_} @{$source_component_table->GetAllRows()};
+    my %target_component_map = map {$_->GetValue("Component") => $_} @{$target_component_table->GetAllRows()};
+
+    # Check that no component has been removed.
+    my @removed_components = ();
+    foreach my $componentname (keys %source_component_map)
+    {
+        if ( ! defined $target_component_map{$componentname})
+        {
+            push @removed_components, $componentname;
+        }
+    }
+    if (scalar @removed_components > 0)
+    {
+        # There are removed components.
+
+        # Check if any of them is not a registry component.
+        my $is_file_component_removed = 0;
+        foreach my $componentname (@removed_components)
+        {
+            if ($componentname !~ /^registry/)
+            {
+                $is_file_component_removed = 1;
+            }
+        }
+        if ($is_file_component_removed)
+        {
+            $installer::logger::Info->printf(
+                "Error: %d components have been removed, some of them are file components:\n",
+                scalar @removed_components);
+            $installer::logger::Info->printf("       %s\n", join(", ", @removed_components));
+            return 0;
+        }
+        else
+        {
+            $installer::logger::Info->printf(
+                "Error: %d components have been removed, all of them are registry components:\n",
+                scalar @removed_components);
+            return 0;
+        }
+    }
+
+    # Check that added components belong to new features.
+    my @added_components = ();
+    foreach my $componentname (keys %target_component_map)
+    {
+        if ( ! defined $source_component_map{$componentname})
+        {
+            push @added_components, $componentname;
+        }
+    }
+
+    if (scalar @added_components > 0)
+    {
+        # Check if any of them is not a registry component.
+        my $is_file_component_removed = 0;
+        foreach my $componentname (@removed_components)
+        {
+            if ($componentname !~ /^registry/)
+            {
+                $is_file_component_removed = 1;
+            }
+        }
+
+        if ($is_file_component_removed)
+        {
+            $installer::logger::Info->printf(
+                "Warning: %d components have been addded\n",
+                scalar @added_components);
+            $installer::logger::Info->printf(
+                "Test for new components belonging to new features has not yet been implemented\n");
+            return 0;
+        }
+        else
+        {
+            $installer::logger::Info->printf(
+                "Warning: %d components have been addded, all of them registry components\n",
+                scalar @added_components);
+        }
+    }
+
+    $installer::logger::Info->printf("OK: component sets in source and target are compatible\n");
+    return 1;
+}
+
+
+
+
+=head2 CheckComponent($source_msi, $target_msi)
+
+    In the 'Component' table the 'ComponentId' and 'Component' values
+    for corresponding componts in the source and target release have
+    to be identical.
+
+=cut
+sub CheckComponentValues($$$)
+{
+    my ($source_msi, $target_msi, $variables) = @_;
+
+    # Get the 'Component' tables.
+    my $source_component_table = $source_msi->GetTable("Component");
+    my $target_component_table = $target_msi->GetTable("Component");
+
+    # Create data structures for fast lookup.
+    my %source_component_map = map {$_->GetValue("Component") => $_} @{$source_component_table->GetAllRows()};
+    my %target_component_map = map {$_->GetValue("Component") => $_} @{$target_component_table->GetAllRows()};
+
+    my @differences = ();
+    my $comparison_count = 0;
+    while (my ($componentname, $source_component_row) = each %source_component_map)
+    {
+        my $target_component_row = $target_component_map{$componentname};
+        if (defined $target_component_row)
+        {
+            ++$comparison_count;
+            if ($source_component_row->GetValue("ComponentId") ne $target_component_row->GetValue("ComponentId"))
+            {
+                push @differences, [
+                    $componentname,
+                    $source_component_row->GetValue("ComponentId"),
+                    $target_component_row->GetValue("ComponentId"),
+                    $target_component_row->GetValue("Component"),
+                ];
+            }
+        }
+    }
+
+    if (scalar @differences > 0)
+    {
+        $installer::logger::Info->printf(
+            "Error: there are %d components with different 'ComponentId' values after %d comparisons.\n",
+            scalar @differences,
+            $comparison_count);
+        foreach my $item (@differences)
+        {
+            $installer::logger::Info->printf("%s  %s\n", $item->[1], $item->[2]);
+        }
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: components in source and target are identical\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckFileSequence($source_msi, $target_msi)
+
+    In the 'File' table the 'Sequence' numbers for corresponding files has to be identical.
+
+=cut
+sub CheckFileSequence($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    # Get the 'File' tables.
+    my $source_file_table = $source_msi->GetTable("File");
+    my $target_file_table = $target_msi->GetTable("File");
+
+    # Create temporary data structures for fast access.
+    my %source_file_map = map {$_->GetValue("File") => $_} @{$source_file_table->GetAllRows()};
+    my %target_file_map = map {$_->GetValue("File") => $_} @{$target_file_table->GetAllRows()};
+
+    # Search files with mismatching sequence numbers.
+    my @mismatching_files = ();
+    while (my ($uniquename,$source_file_row) = each %source_file_map)
+    {
+        my $target_file_row = $target_file_map{$uniquename};
+        if (defined $target_file_row)
+        {
+            if ($source_file_row->GetValue('Sequence') ne $target_file_row->GetValue('Sequence'))
+            {
+                push @mismatching_files, [
+                    $uniquename,
+                    $source_file_row,
+                    $target_file_row
+                ];
+            }
+        }
+    }
+
+    if (scalar @mismatching_files > 0)
+    {
+        $installer::logger::Info->printf("Error: there are %d files with mismatching 'Sequence' numbers\n",
+            scalar @mismatching_files);
+        foreach my $item (@mismatching_files)
+        {
+            $installer::logger::Info->printf("    %s: %d != %d\n",
+                $item->[0],
+                $item->[1]->GetValue("Sequence"),
+                $item->[2]->GetValue("Sequence"));
+        }
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: all files have matching 'Sequence' numbers\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckFileSequenceUnique($source_msi, $target_msi)
+
+    In the 'File' table the 'Sequence' values have to be unique.
+
+=cut
+sub CheckFileSequenceUnique($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    # Get the 'File' tables.
+    my $target_file_table = $target_msi->GetTable("File");
+
+    my %sequence_numbers = ();
+    my $collision_count = 0;
+    foreach my $row (@{$target_file_table->GetAllRows()})
+    {
+        my $sequence_number = $row->GetValue("Sequence");
+        if (defined $sequence_numbers{$sequence_number})
+        {
+            ++$collision_count;
+        }
+        else
+        {
+            $sequence_numbers{$sequence_number} = 1;
+        }
+    }
+
+    if ($collision_count > 0)
+    {
+        $installer::logger::Info->printf("Error: there are %d collisions ofn the sequence numbers\n",
+            $collision_count);
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: sequence numbers are unique\n");
+        return 1;
+    }
+}
+
+
+
+
+=head2 CheckFileSequenceHoles ($target_msi)
+
+    Check the sequence numbers of the target msi if the n files use numbers 1..n or if there are holes.
+    Holes are reported as warnings.
+
+=cut
+sub CheckFileSequenceHoles ($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    my $target_file_table = $target_msi->GetTable("File");
+    my %sequence_numbers = map {$_->GetValue("Sequence") => $_} @{$target_file_table->GetAllRows()};
+    my @sorted_sequence_numbers = sort {$a <=> $b} keys %sequence_numbers;
+    my $expected_next_sequence_number = 1;
+    my @holes = ();
+    foreach my $sequence_number (@sorted_sequence_numbers)
+    {
+        if ($sequence_number != $expected_next_sequence_number)
+        {
+            push @holes, [$expected_next_sequence_number, $sequence_number-1];
+        }
+        $expected_next_sequence_number = $sequence_number+1;
+    }
+    if (scalar @holes > 0)
+    {
+        $installer::logger::Info->printf("Warning: sequence numbers have %d holes\n");
+        foreach my $hole (@holes)
+        {
+            if ($hole->[0] != $hole->[1])
+            {
+                $installer::logger::Info->printf("    %d\n", $hole->[0]);
+            }
+            else
+            {
+                $installer::logger::Info->printf("    %d -> %d\n", $hole->[0], $hole->[1]);
+            }
+        }
+    }
+    else
+    {
+        $installer::logger::Info->printf("OK: there are no holes in the sequence numbers\n");
+    }
+    return 1;
+}
+
+
+
+
+=head2 CheckRegistryItems($source_msi, $target_msi)
+
+    In the 'Registry' table the 'Component_' and 'Key' values must not
+    depend on the version number (beyond the unchanging major
+    version).
+
+    'Value' values must only depend on the major version number to
+    avoid duplicate entries in the start menu.
+
+    Violations are reported as warnings for now.
+
+=cut
+sub CheckRegistryItems($$$)
+{
+    my ($source_msi, $target_msi, $product_name) = @_;
+
+    # Get the registry tables.
+    my $source_registry_table = $source_msi->GetTable("Registry");
+    my $target_registry_table = $target_msi->GetTable("Registry");
+
+    my $registry_index = $target_registry_table->GetColumnIndex("Registry");
+    my $component_index = $target_registry_table->GetColumnIndex("Component_");
+
+    # Create temporary data structures for fast access.
+    my %source_registry_map = map {$_->GetValue($registry_index) => $_} @{$source_registry_table->GetAllRows()};
+    my %target_registry_map = map {$_->GetValue($registry_index) => $_} @{$target_registry_table->GetAllRows()};
+
+    # Prepare version numbers to search.
+    my $source_version_number = $source_msi->{'version'};
+    my $source_version_nodots = installer::patch::Version::ArrayToNoDotName(
+        installer::patch::Version::StringToNumberArray($source_version_number));
+    my $source_component_pattern = lc($product_name).$source_version_nodots;
+    my $target_version_number = $target_msi->{'version'};
+    my $target_version_nodots = installer::patch::Version::ArrayToNoDotName(
+        installer::patch::Version::StringToNumberArray($target_version_number));
+    my $target_component_pattern = lc($product_name).$target_version_nodots;
+
+    foreach my $source_row (values %source_registry_map)
+    {
+        my $target_row = $target_registry_map{$source_row->GetValue($registry_index)};
+        if ( ! defined $target_row)
+        {
+            $installer::logger::Info->printf("Error: sets of registry entries differs\n");
+            return 1;
+        }
+
+        my $source_component_name = $source_row->GetValue($component_index);
+        my $target_component_name = $source_row->GetValue($component_index);
+
+    }
+
+    $installer::logger::Info->printf("OK: registry items are OK\n");
+    return 1;
+}
+
+
+
+
+=head2
+
+    Component->KeyPath must not change. (see component.pm/get_component_keypath)
+
+=cut
+sub CheckComponentKeyPath ($$)
+{
+    my ($source_msi, $target_msi) = @_;
+
+    # Get the registry tables.
+    my $source_component_table = $source_msi->GetTable("Component");
+    my $target_component_table = $target_msi->GetTable("Component");
+
+    # Create temporary data structures for fast access.
+    my %source_component_map = map {$_->GetValue("Component") => $_} @{$source_component_table->GetAllRows()};
+    my %target_component_map = map {$_->GetValue("Component") => $_} @{$target_component_table->GetAllRows()};
+
+    my @mismatches = ();
+    while (my ($componentname, $source_component_row) = each %source_component_map)
+    {
+        my $target_component_row = $target_component_map{$componentname};
+        if (defined $target_component_row)
+        {
+            my $source_keypath = $source_component_row->GetValue("KeyPath");
+            my $target_keypath = $target_component_row->GetValue("KeyPath");
+            if ($source_keypath ne $target_keypath)
+            {
+                push @mismatches, [$componentname, $source_keypath, $target_keypath];
+            }
+        }
+    }
+
+    if (scalar @mismatches > 0)
+    {
+        $installer::logger::Info->printf(
+            "Error: there are %d mismatches in the 'KeyPath' column of the 'Component' table\n",
+            scalar @mismatches);
+
+        foreach my $item (@mismatches)
+        {
+            $installer::logger::Info->printf(
+                "    %s: %s != %s\n",
+                $item->[0],
+                $item->[1],
+                $item->[2]);
+        }
+
+        return 0;
+    }
+    else
+    {
+        $installer::logger::Info->printf(
+            "OK: no mismatches in the 'KeyPath' column of the 'Component' table\n");
+        return 1;
+    }
+}
+
+
+
+
+sub Check ($$$$)
+{
+    my ($source_msi, $target_msi, $variables, $product_name) = @_;
+
+    $installer::logger::Info->printf("checking if source and target releases are compatable\n");
+    $installer::logger::Info->increase_indentation();
+
+    my $result = 1;
+
+    $result &&= CheckUpgradeCode($source_msi, $target_msi);
+    $result &&= CheckProductCode($source_msi, $target_msi);
+    $result &&= CheckBuildIdCode($source_msi, $target_msi);
+    $result &&= CheckProductName($source_msi, $target_msi);
+    $result &&= CheckRemovedFiles($source_msi, $target_msi);
+    $result &&= CheckNewFiles($source_msi, $target_msi);
+    $result &&= CheckComponentSets($source_msi, $target_msi);
+    $result &&= CheckComponentValues($source_msi, $target_msi, $variables);
+    $result &&= CheckFileSequence($source_msi, $target_msi);
+    $result &&= CheckFileSequenceUnique($source_msi, $target_msi);
+    $result &&= CheckFileSequenceHoles($source_msi, $target_msi);
+    $result &&= CheckRegistryItems($source_msi, $target_msi, $product_name);
+    $result &&= CheckComponentKeyPath($source_msi, $target_msi);
+
+    $installer::logger::Info->decrease_indentation();
+
+    return $result;
+}
+
+
+
+
+=head2 FindPcpTemplate ()
+
+    The template.pcp file is part of the Windows SDK.
+
+=cut
+sub FindPcpTemplate ()
+{
+    my $psdk_home = $ENV{'PSDK_HOME'};
+    if ( ! defined $psdk_home)
+    {
+        $installer::logger::Info->printf("Error: the PSDK_HOME environment variable is not set.\n");
+        $installer::logger::Info->printf("       did you load the AOO build environment?\n");
+        $installer::logger::Info->printf("       you may want to use the --with-psdk-home configure option\n");
+        return undef;
+    }
+    if ( ! -d $psdk_home)
+    {
+        $installer::logger::Info->printf(
+            "Error: the PSDK_HOME environment variable does not point to a valid directory: %s\n",
+            $psdk_home);
+        return undef;
+    }
+
+    my $schema_path = File::Spec->catfile($psdk_home, "Bin", "msitools", "Schemas", "MSI");
+    if (  ! -d $schema_path)
+    {
+        $installer::logger::Info->printf("Error: Can not locate the msi template folder in the Windows SDK\n");
+        $installer::logger::Info->printf("       %s\n", $schema_path);
+        $installer::logger::Info->printf("       Is the Windows SDK properly installed?\n");
+        return undef;
+    }
+
+    my $schema_filename = File::Spec->catfile($schema_path, "template.pcp");
+    if (  ! -f $schema_filename)
+    {
+        $installer::logger::Info->printf("Error: Can not locate the pcp template at\n");
+        $installer::logger::Info->printf("       %s\n", $schema_filename);
+        $installer::logger::Info->printf("       Is the Windows SDK properly installed?\n");
+        return undef;
+    }
+
+    return $schema_filename;
+}
+
+
+
+
+sub SetupPcpPatchMetadataTable ($$$)
+{
+    my ($pcp, $source_msi, $target_msi) = @_;
+
+    # Determine values for eg product name and source and new version.
+    my $source_version = $source_msi->{'version'};
+    my $target_version = $target_msi->{'version'};
+
+    my $property_table = $target_msi->GetTable("Property");
+    my $display_product_name = $property_table->GetValue("Property", "DEFINEDPRODUCT", "Value");
+
+    # Set table.
+    my $table = $pcp->GetTable("PatchMetadata");
+    $table->SetRow(
+        "Company", "",
+        "*Property", "Description",
+        "Value", sprintf("Update of %s from %s to %s", $display_product_name, $source_version, $target_version)
+        );
+    $table->SetRow(
+        "Company", "",
+        "*Property", "DisplayName",
+        "Value", sprintf("Update of %s from %s to %s", $display_product_name, $source_version, $target_version)
+        );
+    $table->SetRow(
+        "Company", "",
+        "*Property", "ManufacturerName",
+        "Value", $property_table->GetValue("Property", "Manufacturer", "Value"),
+        );
+    $table->SetRow(
+        "Company", "",
+        "*Property", "MoreInfoURL",
+        "Value", $property_table->GetValue("Property", "ARPURLINFOABOUT", "Value")
+        );
+    $table->SetRow(
+        "Company", "",
+        "*Property", "TargetProductName",
+        "Value", $property_table->GetValue("Property", "ProductName", "Value")
+        );
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime(time);
+
+    $table->SetRow(
+        "Company", "",
+        "*Property", "CreationTimeUTC",
+        "Value", sprintf("%d/%d/%d %d:%02d", $mon+1,$mday,$year+1900,$hour,$min)
+        );
+}
+
+
+
+
+sub SetupPropertiesTable ($$)
+{
+    my ($pcp, $msp_filename) = @_;
+
+    my $table = $pcp->GetTable("Properties");
+
+    $table->SetRow(
+        "*Name", "PatchOutputPath",
+        "Value", installer::patch::Tools::ToWindowsPath($msp_filename)
+        );
+    # Request at least Windows installer 2.0.
+    # Version 2.0 allows us to omit some values from ImageFamilies table.
+    $table->SetRow(
+        "*Name", "MinimumRequiredMsiVersion",
+        "Value", 200
+        );
+    # Allow diffs for binary files.
+    $table->SetRow(
+        "*Name", "IncludeWholeFilesOnly",
+        "Value", 0
+        );
+
+    my $uuid = installer::windows::msiglobal::create_guid();
+    my $uuid_string = "{" . $uuid . "}";
+    $table->SetRow(
+        "*Name", "PatchGUID",
+        "Value", $uuid_string
+        );
+    $installer::logger::Info->printf("created new PatchGUID %s\n", $uuid_string);
+
+    # Prevent sequence table from being generated.
+    $table->SetRow(
+        "*Name", "SEQUENCE_DATA_GENERATION_DISABLED",
+        "Value", 1);
+}
+
+
+
+
+sub SetupImageFamiliesTable ($)
+{
+    my ($pcp) = @_;
+
+    $pcp->GetTable("ImageFamilies")->SetRow(
+        "Family", $ImageFamily,
+        "MediaSrcPropName", "",#"MNPSrcPropName",
+        "MediaDiskId", "",
+        "FileSequenceStart", "",
+        "DiskPrompt", "",
+        "VolumeLabel", "");
+}
+
+
+
+
+sub SetupUpgradedImagesTable ($$)
+{
+    my ($pcp, $target_msi_path) = @_;
+
+    my $msi_path = installer::patch::Tools::ToWindowsPath($target_msi_path);
+    $pcp->GetTable("UpgradedImages")->SetRow(
+        "Upgraded", $TargetImageName,
+        "MsiPath", $msi_path,
+        "PatchMsiPath", "",
+        "SymbolPaths", "",
+        "Family", $ImageFamily);
+}
+
+
+
+
+sub SetupTargetImagesTable ($$)
+{
+    my ($pcp, $source_msi_path) = @_;
+
+    $pcp->GetTable("TargetImages")->SetRow(
+        "Target", $SourceImageName,
+        "MsiPath", installer::patch::Tools::ToWindowsPath($source_msi_path),
+        "SymbolPaths", "",
+        "Upgraded", $TargetImageName,
+        "Order", 1,
+        "ProductValidateFlags", "",
+        "IgnoreMissingSrcFiles", 0);
+}
+
+
+
+
+sub SetAdditionalValues ($%)
+{
+    my ($pcp, %data) = @_;
+
+    while (my ($key,$value) = each(%data))
+    {
+        $key =~ /^([^\/]+)\/([^:]+):(.+)$/
+            || die("invalid key format");
+        my ($table_name, $key_column,$key_value) = ($1,$2,$3);
+        $value =~ /^([^:]+):(.*)$/
+            || die("invalid value format");
+        my ($value_column,$value_value) = ($1,$2);
+
+        my $table = $pcp->GetTable($table_name);
+        $table->SetRow(
+                "*".$key_column, $key_value,
+                $value_column, $value_value);
+    }
+}
+
+
+
+
+sub CreatePcp ($$$$$$%)
+{
+    my ($source_msi,
+        $target_msi,
+        $language,
+        $context,
+        $msp_path,
+        $pcp_schema_filename,
+        %additional_values) = @_;
+
+    # Create filenames.
+    my $pcp_filename = File::Spec->catfile($msp_path, "openoffice.pcp");
+    my $msp_filename = File::Spec->catfile($msp_path, "openoffice.msp");
+
+    # Setup msp path and filename.
+    unlink($pcp_filename) if -f $pcp_filename;
+    if ( ! File::Copy::copy($pcp_schema_filename, $pcp_filename))
+    {
+        $installer::logger::Info->printf("Error: could not create openoffice.pcp as copy of pcp schema\n");
+        $installer::logger::Info->printf("       %s\n", $pcp_schema_filename);
+        $installer::logger::Info->printf("       %s\n", $pcp_filename);
+        return undef;
+    }
+    my $pcp = installer::patch::Msi->new(
+        $pcp_filename,
+        undef,
+        undef,
+        $language,
+        $context->{'product-name'});
+
+    # Store some values in the pcp for easy reference in the msp creation.
+    $pcp->{'msp_filename'} = $msp_filename;
+
+    SetupPcpPatchMetadataTable($pcp, $source_msi, $target_msi);
+    SetupPropertiesTable($pcp, $msp_filename);
+    SetupImageFamiliesTable($pcp);
+    SetupUpgradedImagesTable($pcp, $target_msi->{'filename'});
+    SetupTargetImagesTable($pcp, $source_msi->{'filename'});
+
+    SetAdditionalValues(%additional_values);
+
+    $pcp->Commit();
+
+    # Remove the PatchSequence table to avoid MsiMsp error message:
+    # "Since MSI 3.0 will block installation of major upgrade patches with
+    #  sequencing information, creation of such patches is blocked."
+    #$pcp->RemoveTable("PatchSequence");
+    # TODO: alternatively add property SEQUENCE_DATA_GENERATION_DISABLED to pcp Properties table.
+
+
+    $installer::logger::Info->printf("created pcp file at\n");
+    $installer::logger::Info->printf("    %s\n", $pcp->{'filename'});
+
+    return $pcp;
+}
+
+
+
+
+sub ShowLog ($$$$)
+{
+    my ($log_path, $log_filename, $log_basename, $new_title) = @_;
+
+    if ( -f $log_filename)
+    {
+        my $destination_path = File::Spec->catfile($log_path, $log_basename);
+        File::Path::make_path($destination_path) if ! -d $destination_path;
+        my $command = join(" ",
+            "wilogutl.exe",
+            "/q",
+            "/l", "'".installer::patch::Tools::ToWindowsPath($log_filename)."'",
+            "/o", "'".installer::patch::Tools::ToWindowsPath($destination_path)."'");
+        printf("running command $command\n");
+        my $response = qx($command);
+        printf("response is '%s'\n", $response);
+        my @candidates = glob($destination_path . "/Details*");
+        foreach my $candidate (@candidates)
+        {
+            next unless -f $candidate;
+            my $new_name = $candidate;
+            $new_name =~ s/Details.*$/$log_basename.html/;
+
+            # Rename the top-level html file and replace the title.
+            open my $in, "<", $candidate;
+            open my $out, ">", $new_name;
+            while (<$in>)
+            {
+                if (/^(.*\<title\>)([^<]+)(.*)$/)
+                {
+                    print $out $1.$new_title.$3;
+                }
+                else
+                {
+                    print $out $_;
+                }
+            }
+            close $in;
+            close $out;
+
+            my $URL = $new_name;
+            $URL =~ s/\/c\//c|\//;
+            $URL =~ s/^(.):/$1|/;
+            $URL = "file:///". $URL;
+            $installer::logger::Info->printf("open %s in your browser to see the log messages\n", $URL);
+        }
+    }
+    else
+    {
+        $installer::logger::Info->printf("Error: log file not found at %s\n", $log_filename);
+    }
+}
+
+
+
+
+sub CreateMsp ($)
+{
+    my ($pcp) = @_;
+
+    # Prepare log files.
+    my $log_path = File::Spec->catfile($pcp->{'path'}, "log");
+    my $log_basename = "msp";
+    my $log_filename = File::Spec->catfile($log_path, $log_basename.".log");
+    my $performance_log_basename = "performance";
+    my $performance_log_filename = File::Spec->catfile($log_path, $performance_log_basename.".log");
+    File::Path::make_path($log_path) if ! -d $log_path;
+    unlink($log_filename) if -f $log_filename;
+    unlink($performance_log_filename) if -f $performance_log_filename;
+
+    # Create the .msp patch file.
+    my $temporary_msimsp_path = File::Spec->catfile($pcp->{'path'}, "tmp");
+    if ( ! -d $temporary_msimsp_path)
+    {
+        File::Path::make_path($temporary_msimsp_path)
+            || die ("can not create temporary path ".$temporary_msimsp_path);
+    }
+    $installer::logger::Info->printf("running msimsp.exe, that will take a while\n");
+    my $command = join(" ",
+        "msimsp.exe",
+        "-s", "'".installer::patch::Tools::ToWindowsPath($pcp->{'filename'})."'",
+        "-p", "'".installer::patch::Tools::ToWindowsPath($pcp->{'msp_filename'})."'",
+        "-l", "'".installer::patch::Tools::ToWindowsPath($log_filename)."'",
+        "-f", "'".installer::patch::Tools::ToWindowsPath($temporary_msimsp_path)."'");
+#       "-lp", MsiTools::ToEscapedWindowsPath($performance_log_filename),
+    $installer::logger::Info->printf("running command %s\n", $command);
+    my $response = qx($command);
+    $installer::logger::Info->printf("response of msimsp is %s\n", $response);
+    if ( ! -d $temporary_msimsp_path)
+    {
+        die("msimsp failed and deleted temporary path ".$temporary_msimsp_path);
+    }
+
+    # Show the log file that was created by the msimsp.exe command.
+    ShowLog($log_path, $log_filename, $log_basename, "msp creation");
+    ShowLog($log_path, $performance_log_filename, $performance_log_basename, "msp creation perf");
+}
+
+
+
+sub CreatePatch ($$)
+{
+    my ($context, $variables) = @_;
+
+    $installer::logger::Info->printf("patch will update product %s from %s to %s\n",
+        $context->{'product-name'},
+        $context->{'source-version'},
+        $context->{'target-version'});
+
+    # Locate the Pcp schema file early on to report any errors before the lengthy operations that follow.
+    my $pcp_schema_filename = FindPcpTemplate();
+    if ( ! defined $pcp_schema_filename)
+    {
+        exit(1);
+    }
+
+    my $release_data = installer::patch::ReleasesList::Instance()
+        ->{$context->{'source-version'}}
+        ->{$context->{'package-format'}};
+
+    # Create a patch for each language.
+    my @requested_languages = GetLanguages();
+    my @valid_languages = FindValidLanguages($context, $release_data, \@requested_languages);
+    $installer::logger::Info->printf("of the requested languages '%s' are valid: '%s'\n",
+        join("', '", @requested_languages),
+        join("', '", @valid_languages));
+    foreach my $language (@valid_languages)
+    {
+        $installer::logger::Info->printf("processing language '%s'\n", $language);
+        $installer::logger::Info->increase_indentation();
+
+        # Provide .msi and .cab files and unpacke .cab for the source release.
+        $installer::logger::Info->printf("locating source package (%s)\n", $context->{'source-version'});
+        $installer::logger::Info->increase_indentation();
+        if ( ! installer::patch::InstallationSet::ProvideUnpackedCab(
+            $context->{'source-version'},
+            0,
+            $language,
+            "msi",
+            $context->{'product-name'}))
+        {
+            die "could not provide unpacked .cab file";
+        }
+        my $source_msi = installer::patch::Msi->FindAndCreate(
+            $context->{'source-version'},
+            0,
+            $language,
+            $context->{'product-name'});
+        die unless $source_msi->IsValid();
+
+        $installer::logger::Info->decrease_indentation();
+
+        # Provide .msi and .cab files and unpacke .cab for the target release.
+        $installer::logger::Info->printf("locating target package (%s)\n", $context->{'target-version'});
+        $installer::logger::Info->increase_indentation();
+        if ( ! installer::patch::InstallationSet::ProvideUnpackedCab(
+            $context->{'target-version'},
+            1,
+            $language,
+            "msi",
+            $context->{'product-name'}))
+        {
+            die;
+        }
+        my $target_msi = installer::patch::Msi->FindAndCreate(
+            $context->{'target-version'},
+            0,
+            $language,
+            $context->{'product-name'});
+        die unless defined $target_msi;
+        die unless $target_msi->IsValid();
+        $installer::logger::Info->decrease_indentation();
+
+        # Trigger reading of tables.
+        foreach my $table_name (("File", "Component", "Registry"))
+        {
+            $source_msi->GetTable($table_name);
+            $target_msi->GetTable($table_name);
+            $installer::logger::Info->printf("read %s table (source and target\n", $table_name);
+        }
+
+        # Check if the source and target msis fullfil all necessary requirements.
+        if ( ! Check($source_msi, $target_msi, $variables, $context->{'product-name'}))
+        {
+            $installer::logger::Info->printf("Error: Source and target releases are not compatible.\n");
+            $installer::logger::Info->printf("       => Can not create patch.\n");
+            $installer::logger::Info->printf("       Did you create the target installation set with 'release=t' ?\n");
+            exit(1);
+        }
+        else
+        {
+            $installer::logger::Info->printf("OK: Source and target releases are compatible.\n");
+        }
+
+        # Provide the base path for creating .pcp and .mcp file.
+        my $msp_path = File::Spec->catfile(
+            $context->{'output-path'},
+            $context->{'product-name'},
+            "msp",
+            sprintf("%s_%s",
+              installer::patch::Version::ArrayToDirectoryName(
+                installer::patch::Version::StringToNumberArray(
+                    $source_msi->{'version'})),
+              installer::patch::Version::ArrayToDirectoryName(
+                installer::patch::Version::StringToNumberArray(
+                    $target_msi->{'version'}))),
+            $language
+            );
+        File::Path::make_path($msp_path) unless -d $msp_path;
+
+        # Create the .pcp file that drives the msimsp.exe command.
+        my $pcp = CreatePcp(
+            $source_msi,
+            $target_msi,
+            $language,
+            $context,
+            $msp_path,
+            $pcp_schema_filename,
+            "Properties/Name:DontRemoveTempFolderWhenFinished" => "Value:1",
+            "Properties/Name:SEQUENCE_DATA_GENERATION_DISABLED" => "Value:1",
+            "Properties/Name:TrustMsi" => "Value:0",
+            "Properties/Name:ProductName" => "Value:OOO341");
+
+        # Finally create the msp.
+        CreateMsp($pcp);
+
+        $installer::logger::Info->decrease_indentation();
+    }
+}
+
+
+
+
+sub ApplyPatch ($$)
+{
+    my ($context, $variables) = @_;
+
+    $installer::logger::Info->printf("will apply patches that update product %s from %s to %s\n",
+        $context->{'product-name'},
+        $context->{'source-version'},
+        $context->{'target-version'});
+    my @languages = GetLanguages();
+
+    my $source_version_dirname = installer::patch::Version::ArrayToDirectoryName(
+      installer::patch::Version::StringToNumberArray(
+          $context->{'source-version'}));
+    my $target_version_dirname = installer::patch::Version::ArrayToDirectoryName(
+      installer::patch::Version::StringToNumberArray(
+          $context->{'target-version'}));
+
+    foreach my $language (@languages)
+    {
+        my $msp_filename = File::Spec->catfile(
+            $context->{'output-path'},
+            $context->{'product-name'},
+            "msp",
+            $source_version_dirname . "_" . $target_version_dirname,
+            $language,
+            "openoffice.msp");
+        if ( ! -f $msp_filename)
+        {
+            $installer::logger::Info->printf("%s does not point to a valid file\n", $msp_filename);
+            next;
+        }
+
+        my $log_path = File::Spec->catfile(dirname($msp_filename), "log");
+        my $log_basename = "apply-msp";
+        my $log_filename = File::Spec->catfile($log_path, $log_basename.".log");
+
+        my $command = join(" ",
+            "msiexec.exe",
+            "/update", "'".installer::patch::Tools::ToWindowsPath($msp_filename)."'",
+            "/L*xv!", "'".installer::patch::Tools::ToWindowsPath($log_filename)."'",
+            "REINSTALL=ALL",
+#            "REINSTALLMODE=vomus",
+            "REINSTALLMODE=omus",
+            "MSIENFORCEUPGRADECOMPONENTRULES=1");
+
+        printf("executing command %s\n", $command);
+        my $response = qx($command);
+        Encode::from_to($response, "UTF16LE", "UTF8");
+        printf("response was '%s'\n", $response);
+
+        ShowLog($log_path, $log_filename, $log_basename, "msp application");
+    }
+}
+
+
+
+
+sub main ()
+{
+    installer::logger::SetupSimpleLogging(undef);
+    my $context = ProcessCommandline();
+    my ($variables, undef, undef) = installer::ziplist::read_openoffice_lst_file(
+        $context->{'lst-file'},
+        $context->{'product-name'},
+        undef);
+    DetermineVersions($context, $variables);
+
+    if ($context->{'command'} eq "create")
+    {
+        CreatePatch($context, $variables);
+    }
+    elsif ($context->{'command'} eq "apply")
+    {
+        ApplyPatch($context, $variables);
+    }
+}
+
+
+main();

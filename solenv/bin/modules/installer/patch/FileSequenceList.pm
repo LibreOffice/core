@@ -21,7 +21,6 @@
 
 package installer::patch::FileSequenceList;
 
-use XML::LibXML;
 use strict;
 
 =head1 NAME
@@ -50,22 +49,53 @@ sub new ($)
 
 
 
-sub SetFromFileList ($$)
-{
-    my ($self, $files) = @_;
-
-    my %data = map {$_->{'uniquename'} => $_->{'sequencenumber'}} @$files;
-    $self->{'data'} = \%data;
-}
-
-
-
-
 sub SetFromMap ($$)
 {
     my ($self, $map) = @_;
 
     $self->{'data'} = $map;
+}
+
+
+
+
+sub SetFromMsi ($$)
+{
+    my ($self, $msi) = @_;
+
+    my $file_table = $msi->GetTable("File");
+    my $file_map = $msi->GetFileMap();
+
+    my $file_column_index = $file_table->GetColumnIndex("File");
+    my $filename_column_index = $file_table->GetColumnIndex("FileName");
+    my $sequence_column_index = $file_table->GetColumnIndex("Sequence");
+
+    my %sequence_data = ();
+
+    printf("extracting columns %d and %d from %d rows\n",
+        $file_column_index,
+        $sequence_column_index,
+        $file_table->GetRowCount());
+
+    foreach my $row (@{$file_table->GetAllRows()})
+    {
+        my $unique_name = $row->GetValue($file_column_index);
+        my $filename = $row->GetValue($filename_column_index);
+        my ($long_filename,$short_filename) = installer::patch::Msi::SplitLongShortName($filename);
+        my $sequence = $row->GetValue($sequence_column_index);
+        my $directory_item = $file_map->{$unique_name}->{'directory'};
+        my $source_path = $directory_item->{'full_source_long_name'};
+        my $target_path = $directory_item->{'full_target_long_name'};
+        my $key = $source_path ne ""
+            ? $source_path."/".$long_filename
+            : $long_filename;
+        $sequence_data{$key} = {
+            'sequence' => $sequence,
+            'uniquename' => $unique_name,
+            'row' => $row
+        };
+    }
+    $self->{'data'} = \%sequence_data;
 }
 
 
@@ -81,78 +111,45 @@ sub GetFileCount ($)
 
 
 
-=head2 GetSequenceNumbers ($files)
-
-    $files is a hash that maps unique file names (File->File) to sequence
-    numbers (File->Sequence). The later is (expected to be) initially unset and
-    is set in this method.
-
-    For new files -- entries in the given $files that do not exist in the 'data'
-    member -- no sequence numbers are defined.
-
-    When there are removed files -- entries in the 'data' member that do not
-    exist in the given $files -- then a list of these files is returned.  In
-    that case the given $files remain unmodified.
-
-    The returned list is empty when everyting is OK.
-
-=cut
-sub GetSequenceNumbers ($$)
+sub get_removed_files ($@)
 {
-    my ($self, $files) = @_;
+    my ($self, $target_unique_names) = @_;
+
+    my %uniquename_to_row_map = map{$_->{'uniquename'} => $_->{'row'}} values %{$self->{'data'}};
 
     # Check if files have been removed.
     my @missing = ();
-    foreach my $name (keys %{$self->{'data'}})
+    foreach my $item (values %{$self->{'data'}})
     {
-        if ( ! defined $files->{$name})
+        my ($uniquename, $row) = ($item->{'uniquename'}, $item->{'row'});
+        if ( ! defined $target_unique_names->{$uniquename})
         {
-            push @missing, $name;
+            # $name is defined in source but not in target => it has been removed.
+            push @missing, $row;
         }
     }
-    if (scalar @missing > 0)
-    {
-        # Yes.  Return the names of the removed files.
-        return @missing;
-    }
-
-    # No files where removed.  Set the sequence numbers.
-    foreach my $name (keys %$files)
-    {
-        $files->{$name} = $self->{'data'}->{$name};
-    }
-    return ();
+    return @missing;
 }
 
 
 
 
-sub GetDifference ($$)
+sub get_sequence_and_unique_name($$)
 {
-    my ($self, $other) = @_;
+    my ($self, $source_path) = @_;
 
-    # Create maps for easy reference.
-    my (@files_in_both, @files_in_self, @files_in_other);
-    foreach my $name (keys %{$self->{'data'}})
+    my $sequence_and_unique_name = $self->{'data'}->{$source_path};
+    if ( ! defined $sequence_and_unique_name)
     {
-        if (defined $other->{'data'}->{$name})
-        {
-            push @files_in_both, $name;
-        }
-        else
-        {
-            push @files_in_self, $name;
-        }
+        $installer::logger::Lang->printf("can not find entry for source path '%s'\n", $source_path);
+        return (undef,undef);
     }
-    foreach my $name (keys %{$self->{'data'}})
+    else
     {
-        if ( ! defined $self->{'data'}->{$name})
-        {
-            push @files_in_other, $name;
-        }
+        return (
+            $sequence_and_unique_name->{'sequence'},
+            $sequence_and_unique_name->{'uniquename'});
     }
-
-    return (\@files_in_both, \@files_in_self, \@files_in_other);
 }
 
 

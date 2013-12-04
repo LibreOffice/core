@@ -29,6 +29,7 @@ use installer::globals;
 use installer::pathanalyzer;
 use installer::windows::idtglobal;
 use installer::windows::msiglobal;
+use installer::scriptitems;
 
 use strict;
 
@@ -133,172 +134,305 @@ sub make_short_dir_version ($)
     return $shortstring;
 }
 
-##############################################################
-# Adding unique directory names to the directory collection
-##############################################################
 
-sub create_unique_directorynames
+
+
+=head2 get_unique_name ($hostname, $unique_map, $shortdirhash, $shortdirhashreverse)
+
+    Return a long and a short unique name for the given $hostname.
+    Despite the function name and unlike the generation of unique
+    names for files, the returned names are not really unique.  Quite
+    the opposite.  The returned names are quaranteed to return the
+    same result for the same input.
+
+    The returned short name has at most length 70.
+
+=cut
+sub get_unique_name ($$)
 {
-    my ($directoryref, $allvariables) = @_;
+    my ($hostname, $hostnamehash) = @_;
 
-    $installer::globals::officeinstalldirectoryset = 0;
+    # Make sure that we where not called for this hostname before.  Otherwise the other test would be triggered.
+    if (defined $hostnamehash->{$hostname})
+    {
+        installer::exiter::exit_program(
+            "ERROR: get_unique_name was already called for hostname ".$hostname,
+            "get_unique_name");
+    }
+    $hostnamehash->{$hostname} = 1;
+
+    my $uniquename = $hostname;
+
+    $uniquename =~ s/^\s*//g;               # removing beginning white spaces
+    $uniquename =~ s/\s*$//g;               # removing ending white spaces
+    $uniquename =~ s/\s//g;                 # removing white spaces
+    $uniquename =~ s/\_//g;                 # removing existing underlines
+    $uniquename =~ s/\.//g;                 # removing dots in directoryname
+    $uniquename =~ s/OpenOffice/OO/g;
+
+    $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
+
+    $uniquename =~ s/_registry/_rgy/g;
+    $uniquename =~ s/_registration/_rgn/g;
+    $uniquename =~ s/_extension/_ext/g;
+    $uniquename =~ s/_frame/_frm/g;
+    $uniquename =~ s/_table/_tbl/g;
+    $uniquename =~ s/_chart/_crt/g;
+
+    my $short_uniquename = make_short_dir_version($uniquename);
+
+    return ($uniquename, $short_uniquename);
+}
+
+
+
+
+=head2 check_unique_directorynames($directories)
+
+    The one really important check is made in get_unique_name().  It
+    checks that get_unique_name() is not called twice for the same
+    directory host name.  The tests in this function contain the
+    legacy tests that basically only check if there where a collision
+    of the partial MD5 sum that is used to make the short unique names
+    unique.
+
+    The maps $unique_map, $shortdirhash, $shortdirhashreverse are used
+    only to check that _different_ input names are mapped to different
+    results.  They are not used to influence the result.  That assumes
+    that this function is called only once for every directory
+    hostname.
+=cut
+sub check_unique_directorynames ($)
+{
+    my ($directories) = @_;
 
     my %completedirhashstep1 = ();
     my %shortdirhash = ();
     my %shortdirhashreverse = ();
+
+    # Check unique name of directories.
+    foreach my $directory (@$directories)
+    {
+        my ($long_uniquename, $short_uniquename) = ($directory->{'long_uniquename'}, $directory->{'uniquename'});
+
+        # The names after this small changes must still be unique!
+        if (exists($completedirhashstep1{$long_uniquename}))
+        {
+            installer::exiter::exit_program(
+                sprintf("ERROR: Unallowed modification of directory name, not unique (step 1): \"%s\".",
+                    $short_uniquename),
+                "check_unique_directorynames");
+        }
+        $completedirhashstep1{$long_uniquename} = 1;
+
+
+        # Checking if the same directory already exists, but has another short version.
+        if (exists($shortdirhash{$long_uniquename})
+            && ( $shortdirhash{$long_uniquename} ne $short_uniquename ))
+        {
+            installer::exiter::exit_program(
+                sprintf(
+                    "ERROR: Unallowed modification of directory name, not unique (step 2A): \"%s\".",
+                    $short_uniquename),
+                "check_unique_directorynames");
+        }
+        $shortdirhash{$long_uniquename} = $short_uniquename;
+
+        # Also checking vice versa
+        # Checking if the same short directory already exists, but has another long version.
+        if (exists($shortdirhashreverse{$short_uniquename})
+            && ( $shortdirhashreverse{$short_uniquename} ne $long_uniquename ))
+        {
+            installer::exiter::exit_program(
+                sprintf(
+                    "ERROR: Unallowed modification of directory name, not unique (step 2B): \"%s\".",
+                    $short_uniquename),
+                "check_unique_directorynames");
+        }
+        $shortdirhashreverse{$short_uniquename} = $long_uniquename;
+    }
+
+    # Check unique name of parents
+    foreach my $directory (@$directories)
+    {
+        my ($long_uniquename, $short_uniquename)
+            = ($directory->{'long_uniqueparentname'}, $directory->{'uniqueparentname'});
+
+        # Again checking if the same directory already exists, but has another short version.
+        if (exists($shortdirhash{$long_uniquename})
+            && ( $shortdirhash{$long_uniquename} ne $short_uniquename ))
+        {
+            installer::exiter::exit_program(
+                sprintf(
+                    "ERROR: Unallowed modification of directory name, not unique (step 3A): \"%s\".",
+                    $short_uniquename),
+                "check_unique_directorynames");
+        }
+        $shortdirhash{$long_uniquename} = $short_uniquename;
+
+        # Also checking vice versa
+        # Checking if the same short directory already exists, but has another long version.
+        if (exists($shortdirhashreverse{$short_uniquename})
+            && ( $shortdirhashreverse{$short_uniquename} ne $long_uniquename ))
+        {
+            installer::exiter::exit_program(
+                sprintf(
+                    "ERROR: Unallowed modification of directory name, not unique (step 3B): \"%s\".",
+                    $short_uniquename),
+                "check_unique_directorynames");
+        }
+        $shortdirhashreverse{$short_uniquename} = $long_uniquename;
+    }
+}
+
+
+
+
+sub get_unique_parent_name ($$)
+{
+    my ($uniqueparentname, $styles) = @_;
+
+    my $keepparent = 1;
+
+    if ( $uniqueparentname =~ /^\s*(.*)\_(.*?)\s*$/ )   # the underline is now the separator
+    {
+        $uniqueparentname = $1;
+        $keepparent = 0;
+    }
+    else
+    {
+        $uniqueparentname = $installer::globals::programfilesfolder;
+        $keepparent = 1;
+    }
+
+    if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ )
+    {
+        $uniqueparentname = $installer::globals::programfilesfolder;
+        $keepparent = 1;
+    }
+    if ( $styles =~ /\bCOMMONFILESFOLDER\b/ )
+    {
+        $uniqueparentname = $installer::globals::commonfilesfolder;
+        $keepparent = 1;
+    }
+    if ( $styles =~ /\bCOMMONAPPDATAFOLDER\b/ )
+    {
+        $uniqueparentname = $installer::globals::commonappdatafolder;
+        $keepparent = 1;
+    }
+    if ( $styles =~ /\bLOCALAPPDATAFOLDER\b/ )
+    {
+        $uniqueparentname = $installer::globals::localappdatafolder;
+        $keepparent = 1;
+    }
+
+    if ( $styles =~ /\bSHAREPOINTPATH\b/ )
+    {
+        $uniqueparentname = "SHAREPOINTPATH";
+        $installer::globals::usesharepointpath = 1;
+        $keepparent = 1;
+    }
+
+    # also setting short directory name for the parent
+
+    my $originaluniqueparentname = $uniqueparentname;
+
+    if ( ! $keepparent )
+    {
+        $uniqueparentname = make_short_dir_version($uniqueparentname);
+    }
+
+    return ($originaluniqueparentname, $uniqueparentname);
+}
+
+
+
+
+##############################################################
+# Adding unique directory names to the directory collection
+##############################################################
+
+sub create_unique_directorynames ($)
+{
+    my ($directories) = @_;
+
+    $installer::globals::officeinstalldirectoryset = 0;
+
+    my %hostnamehash = ();
     my $infoline = "";
     my $errorcount = 0;
 
-    for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
+    foreach my $directory (@$directories)
     {
-        my $onedir = ${$directoryref}[$i];
-        my $uniquename = $onedir->{'HostName'};
+        next if defined $directory->{'uniquename'};
 
-        my $styles = "";
-        if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
+        my $styles = $directory->{'Styles'} // "";
 
-        $uniquename =~ s/^\s*//g;               # removing beginning white spaces
-        $uniquename =~ s/\s*$//g;               # removing ending white spaces
-        $uniquename =~ s/\s//g;                 # removing white spaces
-        $uniquename =~ s/\_//g;                 # removing existing underlines
-        $uniquename =~ s/\.//g;                 # removing dots in directoryname
-        $uniquename =~ s/OpenOffice/OO/g;
+        my ($originaluniquename, $uniquename) = get_unique_name(
+            $directory->{'HostName'},
+            \%hostnamehash);
 
-        $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
+        my ($originaluniqueparentname, $uniqueparentname) = get_unique_parent_name(
+            $originaluniquename,
+            $styles);
 
-        $uniquename =~ s/_registry/_rgy/g;
-        $uniquename =~ s/_registration/_rgn/g;
-        $uniquename =~ s/_extension/_ext/g;
-        $uniquename =~ s/_frame/_frm/g;
-        $uniquename =~ s/_table/_tbl/g;
-        $uniquename =~ s/_chart/_crt/g;
-
-        # The names after this small changes must still be unique!
-        if ( exists($completedirhashstep1{$uniquename}) ) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 1): \"$uniquename\".", "create_unique_directorynames"); }
-        $completedirhashstep1{$uniquename} = 1;
-
-        # Starting to make unique name for the parent and its directory
-        my $originaluniquename = $uniquename;
-
-        $uniquename = make_short_dir_version($uniquename);
-
-        # Checking if the same directory already exists, but has another short version.
-        if (( exists($shortdirhash{$originaluniquename}) ) && ( $shortdirhash{$originaluniquename} ne $uniquename )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 2A): \"$uniquename\".", "create_unique_directorynames"); }
-
-        # Also checking vice versa
-        # Checking if the same short directory already exists, but has another long version.
-        if (( exists($shortdirhashreverse{$uniquename}) ) && ( $shortdirhashreverse{$uniquename} ne $originaluniquename )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 2B): \"$uniquename\".", "create_unique_directorynames"); }
-
-        # Creating assignment from long to short directory names
-        $shortdirhash{$originaluniquename} = $uniquename;
-        $shortdirhashreverse{$uniquename} = $originaluniquename;
-
-        # Important: The unique parent is generated from the string $originaluniquename (with the use of underlines).
-
-        my $uniqueparentname = $originaluniquename;
-        my $keepparent = 1;
-
-        if ( $uniqueparentname =~ /^\s*(.*)\_(.*?)\s*$/ )   # the underline is now the separator
-        {
-            $uniqueparentname = $1;
-            $keepparent = 0;
-        }
-        else
-        {
-            $uniqueparentname = $installer::globals::programfilesfolder;
-            $keepparent = 1;
-        }
-
-        if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ )
-        {
-            $uniqueparentname = $installer::globals::programfilesfolder;
-            $keepparent = 1;
-        }
-        if ( $styles =~ /\bCOMMONFILESFOLDER\b/ )
-        {
-            $uniqueparentname = $installer::globals::commonfilesfolder;
-            $keepparent = 1;
-        }
-        if ( $styles =~ /\bCOMMONAPPDATAFOLDER\b/ )
-        {
-            $uniqueparentname = $installer::globals::commonappdatafolder;
-            $keepparent = 1;
-        }
-        if ( $styles =~ /\bLOCALAPPDATAFOLDER\b/ )
-        {
-            $uniqueparentname = $installer::globals::localappdatafolder;
-            $keepparent = 1;
-        }
-
-        if ( $styles =~ /\bSHAREPOINTPATH\b/ )
-        {
-            $uniqueparentname = "SHAREPOINTPATH";
-            $installer::globals::usesharepointpath = 1;
-            $keepparent = 1;
-        }
-
-        # also setting short directory name for the parent
-
-        my $originaluniqueparentname = $uniqueparentname;
-
-        if ( ! $keepparent )
-        {
-            $uniqueparentname = make_short_dir_version($uniqueparentname);
-        }
-
-        # Again checking if the same directory already exists, but has another short version.
-        if (( exists($shortdirhash{$originaluniqueparentname}) ) && ( $shortdirhash{$originaluniqueparentname} ne $uniqueparentname )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 3A): \"$uniqueparentname\".", "create_unique_directorynames"); }
-
-        # Also checking vice versa
-        # Checking if the same short directory already exists, but has another long version.
-        if (( exists($shortdirhashreverse{$uniqueparentname}) ) && ( $shortdirhashreverse{$uniqueparentname} ne $originaluniqueparentname )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 3B): \"$uniqueparentname\".", "create_unique_directorynames"); }
-
-        $shortdirhash{$originaluniqueparentname} = $uniqueparentname;
-        $shortdirhashreverse{$uniqueparentname} = $originaluniqueparentname;
 
         # Hyphen not allowed in database
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
         $uniqueparentname =~ s/\-/\_/g;     # making "-" to "_"
 
         # And finally setting the values for the directories
-        $onedir->{'uniquename'} = $uniquename;
-        $onedir->{'uniqueparentname'} = $uniqueparentname;
+        $directory->{'uniquename'} = $uniquename;
+        $directory->{'uniqueparentname'} = $uniqueparentname;
+        $directory->{'long_uniquename'} = $originaluniquename;
+        $directory->{'long_uniqueparentname'} = $originaluniqueparentname;
+    }
+
+    # Find the installation directory.
+    foreach my $directory (@$directories)
+    {
+        next unless defined $directory->{'Styles'};
 
         # setting the installlocation directory
-        if ( $styles =~ /\bISINSTALLLOCATION\b/ )
+        next unless $directory->{'Styles'} =~ /\bISINSTALLLOCATION\b/;
+
+        if ( $installer::globals::installlocationdirectoryset )
         {
-            if ( $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION alread set: \"$installer::globals::installlocationdirectory\".", "create_unique_directorynames"); }
-            $installer::globals::installlocationdirectory = $uniquename;
-            $installer::globals::installlocationdirectoryset = 1;
+            installer::exiter::exit_program(
+                sprintf(
+                    "ERROR: Directory with flag ISINSTALLLOCATION alread set: \"%s\".",
+                    $installer::globals::installlocationdirectory),
+                "create_unique_directorynames");
         }
 
-        # setting the sundirectory
-        if ( $styles =~ /\bSUNDIRECTORY\b/ )
-        {
-            if ( $installer::globals::vendordirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag SUNDIRECTORY alread set: \"$installer::globals::vendordirectory\".", "create_unique_directorynames"); }
-            $installer::globals::vendordirectory = $uniquename;
-            $installer::globals::vendordirectoryset = 1;
-        }
+        $installer::globals::installlocationdirectory = $directory->{'uniquename'};
+        $installer::globals::installlocationdirectoryset = 1;
     }
 }
+
+
+
 
 #####################################################
 # Adding ":." to selected default directory names
 #####################################################
 
-sub check_sourcedir_addon
+sub update_defaultdir ($$)
 {
     my ( $onedir, $allvariableshashref ) = @_;
 
-    if (($installer::globals::addchildprojects) ||
-        ($installer::globals::patch) ||
-        ($installer::globals::languagepack) ||
-        ($allvariableshashref->{'CHANGETARGETDIR'}))
+    if ($installer::globals::addchildprojects
+        || $installer::globals::patch
+        || $installer::globals::languagepack
+        || $allvariableshashref->{'CHANGETARGETDIR'})
     {
         my $sourcediraddon = "\:\.";
-        $onedir->{'defaultdir'} = $onedir->{'defaultdir'} . $sourcediraddon;
+        return $onedir->{'defaultdir'} . $sourcediraddon;
     }
-
+    else
+    {
+        return $onedir->{'defaultdir'};
+    }
 }
 
 #####################################################
@@ -310,7 +444,12 @@ sub set_installlocation_directory
 {
     my ( $directoryref, $allvariableshashref ) = @_;
 
-    if ( ! $installer::globals::installlocationdirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag ISINSTALLLOCATION not set!", "set_installlocation_directory"); }
+    if ( ! $installer::globals::installlocationdirectoryset )
+    {
+        installer::exiter::exit_program(
+            "ERROR: Directory with flag ISINSTALLLOCATION not set!",
+            "set_installlocation_directory");
+    }
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
@@ -319,12 +458,12 @@ sub set_installlocation_directory
         if ( $onedir->{'uniquename'} eq $installer::globals::installlocationdirectory )
         {
             $onedir->{'uniquename'} = "INSTALLLOCATION";
-            check_sourcedir_addon($onedir, $allvariableshashref);
+            $onedir->{'defaultdir'} = update_defaultdir($onedir, $allvariableshashref);
         }
 
         if ( $onedir->{'uniquename'} eq $installer::globals::vendordirectory )
         {
-            check_sourcedir_addon($onedir, $allvariableshashref);
+            $onedir->{'defaultdir'} = update_defaultdir($onedir, $allvariableshashref);
         }
 
         if ( $onedir->{'uniqueparentname'} eq $installer::globals::installlocationdirectory )
@@ -346,6 +485,31 @@ sub get_last_directory_name
     if ( $$completepathref =~ /^.*[\/\\](.+?)\s*$/ )
     {
         $$completepathref = $1;
+    }
+}
+
+sub setup_global_font_directory_name ($)
+{
+    my ($directories) = @_;
+
+    foreach my $directory (@$directories)
+    {
+        next unless defined $directory->{'Dir'};
+        next unless defined $directory->{'defaultdir'};
+
+        next if $directory->{'Dir'} ne "PREDEFINED_OSSYSTEMFONTDIR";
+        next if $directory->{'defaultdir'} ne $installer::globals::fontsdirhostname;
+
+        $installer::globals::fontsdirname = $installer::globals::fontsdirhostname;
+        $installer::globals::fontsdirparent = $directory->{'uniqueparentname'};
+
+        $installer::logger::Info->printf("%s, fdhn %s, dd %s, ipn %s, HN %s\n",
+            "PREDEFINED_OSSYSTEMFONTDIR",
+            $installer::globals::fontsdirhostname,
+            $directory->{'defaultdir'},
+            $directory->{'uniqueparentname'},
+            $directory->{'HostName'});
+        installer::scriptitems::print_script_item($directory);
     }
 }
 
@@ -391,18 +555,6 @@ sub create_defaultdir_directorynames ($)
         }
 
         $onedir->{'defaultdir'} = $defaultdir;
-
-        my $fontdir = "";
-        if ( $onedir->{'Dir'} ) { $fontdir = $onedir->{'Dir'}; }
-
-        my $fontdefaultdir = "";
-        if ( $onedir->{'defaultdir'} ) { $fontdefaultdir = $onedir->{'defaultdir'}; }
-
-        if (( $fontdir eq "PREDEFINED_OSSYSTEMFONTDIR" ) && ( $fontdefaultdir eq $installer::globals::fontsdirhostname ))
-        {
-            $installer::globals::fontsdirname = $onedir->{'defaultdir'};
-            $installer::globals::fontsdirparent = $onedir->{'uniqueparentname'};
-        }
     }
 }
 
@@ -410,23 +562,28 @@ sub create_defaultdir_directorynames ($)
 # Fill content into the directory table
 ###############################################
 
-sub create_directorytable_from_collection
+sub create_directorytable_from_collection ($$)
 {
     my ($directorytableref, $directoryref) = @_;
 
-    for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
+    foreach my $onedir (@$directoryref)
     {
-        my $onedir = ${$directoryref}[$i];
-        my $hostname = $onedir->{'HostName'};
-        my $dir = "";
+        # Remove entries for special directories.
+        if (defined $onedir->{'HostName'}
+            && $onedir->{'HostName'} eq ""
+            && defined $onedir->{'Dir'}
+            && $onedir->{'Dir'} eq "PREDEFINED_PROGDIR")
+        {
+            next;
+        }
 
-        if ( $onedir->{'Dir'} ) { $dir = $onedir->{'Dir'}; }
+        my $oneline = sprintf(
+            "%s\t%s\t%s\n",
+            $onedir->{'uniquename'},
+            $onedir->{'uniqueparentname'},
+            $onedir->{'defaultdir'});
 
-        if (( $dir eq "PREDEFINED_PROGDIR" ) && ( $hostname eq "" )) { next; }  # removing files from root directory
-
-        my $oneline = $onedir->{'uniquename'} . "\t" . $onedir->{'uniqueparentname'} . "\t" . $onedir->{'defaultdir'} . "\n";
-
-        push(@{$directorytableref}, $oneline);
+        push @{$directorytableref}, $oneline;
     }
 }
 
@@ -434,18 +591,9 @@ sub create_directorytable_from_collection
 # Defining the root installation structure
 ###############################################
 
-sub add_root_directories
+sub process_root_directories ($$)
 {
-    my ($directorytableref, $allvariableshashref) = @_;
-
-#   my $sourcediraddon = "";
-#   if (($installer::globals::addchildprojects) ||
-#       ($installer::globals::patch) ||
-#       ($installer::globals::languagepack) ||
-#       ($allvariableshashref->{'CHANGETARGETDIR'}))
-#   {
-#       $sourcediraddon = "\:\.";
-#   }
+    my ($allvariableshashref, $functor) = @_;
 
     my $oneline = "";
 
@@ -474,76 +622,188 @@ sub add_root_directories
             $realproductkey =~ s/\ /\_/g;
         }
 
-        my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
+        my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir", undef);
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
 
-        $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$realproductkey\n";
-        push(@{$directorytableref}, $oneline);
+        &$functor(
+            $installer::globals::officemenufolder,
+            $installer::globals::programmenufolder,
+            $shortproductkey . "|". $realproductkey);
     }
 
-    $oneline = "TARGETDIR\t\tSourceDir\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::desktopfolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::startmenufolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::commonfilesfolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::commonappdatafolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    $oneline = "$installer::globals::localappdatafolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
+    &$functor("TARGETDIR", "", "SourceDir");
+    &$functor($installer::globals::programfilesfolder, "TARGETDIR", ".");
+    &$functor($installer::globals::programmenufolder, "TARGETDIR", ".");
+    &$functor($installer::globals::startupfolder, "TARGETDIR", ".");
+    &$functor($installer::globals::desktopfolder, "TARGETDIR", ".");
+    &$functor($installer::globals::startmenufolder, "TARGETDIR", ".");
+    &$functor($installer::globals::commonfilesfolder, "TARGETDIR", ".");
+    &$functor($installer::globals::commonappdatafolder, "TARGETDIR", ".");
+    &$functor($installer::globals::localappdatafolder, "TARGETDIR", ".");
 
     if ( $installer::globals::usesharepointpath )
     {
-        $oneline = "SHAREPOINTPATH\tTARGETDIR\t.\n";
-        push(@{$directorytableref}, $oneline);
+        &$functor("SHAREPOINTPATH", "TARGETDIR", ".");
     }
 
-    $oneline = "$installer::globals::systemfolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
+    &$functor($installer::globals::systemfolder, "TARGETDIR", ".");
 
     my $localtemplatefoldername = $installer::globals::templatefoldername;
     my $directorytableentry = $localtemplatefoldername;
     my $shorttemplatefoldername = installer::windows::idtglobal::make_eight_three_conform($localtemplatefoldername, "dir");
-    if ( $shorttemplatefoldername ne $localtemplatefoldername ) { $directorytableentry = "$shorttemplatefoldername|$localtemplatefoldername"; }
-    $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$directorytableentry\n";
-    push(@{$directorytableref}, $oneline);
+    if ( $shorttemplatefoldername ne $localtemplatefoldername )
+    {
+        $directorytableentry = $shorttemplatefoldername . "|" . $localtemplatefoldername;
+    }
+    &$functor($installer::globals::templatefolder, "TARGETDIR", $directorytableentry);
 
     if ( $installer::globals::fontsdirname )
     {
-        $oneline = "$installer::globals::fontsfolder\t$installer::globals::fontsdirparent\t$installer::globals::fontsfoldername\:$installer::globals::fontsdirname\n";
+        &$functor(
+             $installer::globals::fontsfolder,
+             $installer::globals::fontsdirparent,
+             $installer::globals::fontsfoldername . ":" . $installer::globals::fontsdirname);
     }
     else
     {
-        $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
+        &$functor(
+             $installer::globals::fontsfolder,
+             "TARGETDIR",
+             $installer::globals::fontsfoldername);
+    }
+}
+
+
+
+
+sub find_missing_directories ($$)
+{
+    my ($directories, $allvariableshashref) = @_;
+
+    # Set up the list of target directories.
+    my %target_directories = map {$_->{'uniquename'} => 1} @$directories;
+    # Add special directories.
+    process_root_directories(
+        $allvariableshashref,
+        sub($$$){
+            my ($uniquename, $parentname, $defaultdir) = @_;
+            $target_directories{$uniquename} = 1;
+        }
+    );
+
+    # Set up the list of source directories.
+    my $source_directory_map = $installer::globals::source_msi->GetDirectoryMap();
+    my $source_file_map = $installer::globals::source_msi->GetFileMap();
+    my %source_directories = map {$_->{'unique_name'} => $_} values %$source_directory_map;
+
+    # Find the missing source directories.
+    my @missing_directories = ();
+    foreach my $source_uniquename (keys %source_directories)
+    {
+        if ( ! $target_directories{$source_uniquename})
+        {
+            push @missing_directories, $source_directories{$source_uniquename};
+        }
     }
 
-    push(@{$directorytableref}, $oneline);
+    # Report the missing directories.
+    $installer::logger::Info->printf("found %d missing directories\n", scalar @missing_directories);
+    my $index = 0;
+    foreach my $directory_item (@missing_directories)
+    {
+        # Print information about the directory.
+        $installer::logger::Info->printf("missing directory %d: %s\n",
+            ++$index,
+            $directory_item->{'full_target_long_name'});
+        while (my($key,$value) = each %$directory_item)
+        {
+            $installer::logger::Info->printf("    %s -> %s\n", $key, $value);
+        }
 
+        # Print the referencing files.
+        my @filenames = ();
+        while (my ($key,$value) = each %$source_file_map)
+        {
+            if ($value->{'directory'}->{'unique_name'} eq $directory_item->{'unique_name'})
+            {
+                push @filenames, $key;
+            }
+        }
+        $installer::logger::Info->printf("  referencing files are %s\n", join(", ", @filenames));
+    }
+
+    foreach my $directory (@$directories)
+    {
+        $installer::logger::Lang->printf("target directory %s -> HN %s\n",
+            $directory->{'uniquename'},
+            $directory->{'HostName'});
+        installer::scriptitems::print_script_item($directory);
+    }
+
+    # Setup a map of directory uniquenames to verify that the new
+    # entries don't use unique names that are already in use.
+    my %unique_names = map {$_->{'uniquename'} => $_} @$directories;
+
+    # Create script items for the missing directories.
+    my @new_source_directories = ();
+    foreach my $source_directory_item (@missing_directories)
+    {
+        my $new_directory_item = {
+            'uniquename' => $source_directory_item->{'unique_name'},
+            'uniqueparentname' => $source_directory_item->{'parent'},
+            'defaultdir' => $source_directory_item->{'default_dir'},
+            'HostName' => $source_directory_item->{'full_target_long_name'},
+            'componentname' => $source_directory_item->{'component_name'},
+        };
+
+        if (defined $unique_names{$new_directory_item->{'uniquename'}})
+        {
+            installer::logger::PrintError("newly created directory entry collides with existing directory");
+            last;
+        }
+
+        push @new_source_directories, $new_directory_item;
+    }
+
+    return @new_source_directories;
 }
+
+
+
+
+sub prepare_directory_table_creation ($$)
+{
+    my ($directories, $allvariableshashref) = @_;
+
+    foreach my $directory (@$directories)
+    {
+        delete $directory->{'uniquename'};
+    }
+
+    overwrite_programfilesfolder($allvariableshashref);
+    create_unique_directorynames($directories);
+    check_unique_directorynames($directories);
+    create_defaultdir_directorynames($directories); # only destdir!
+    setup_global_font_directory_name($directories);
+    set_installlocation_directory($directories, $allvariableshashref);
+
+    if ($installer::globals::is_release)
+    {
+        my @new_directories = find_missing_directories($directories, $allvariableshashref);
+        push @$directories, @new_directories;
+    }
+}
+
+
+
 
 ###############################################
 # Creating the file Director.idt dynamically
 ###############################################
 
-sub create_directory_table ($$$$)
+sub create_directory_table ($$$)
 {
-    my ($directoryref, $basedir, $allvariableshashref, $loggingdir) = @_;
+    my ($directoryref, $basedir, $allvariableshashref) = @_;
 
     # Structure of the directory table:
     # Directory Directory_Parent DefaultDir
@@ -556,14 +816,17 @@ sub create_directory_table ($$$$)
     $installer::logger::Lang->add_timestamp("Performance Info: Directory Table start");
 
     my @directorytable = ();
-    my $infoline;
-
-    overwrite_programfilesfolder($allvariableshashref);
-    create_unique_directorynames($directoryref, $allvariableshashref);
-    create_defaultdir_directorynames($directoryref);    # only destdir!
-    set_installlocation_directory($directoryref, $allvariableshashref);
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
-    add_root_directories(\@directorytable, $allvariableshashref);
+
+    # Add entries for the root directories (and a few special directories like that for fonts).
+    process_root_directories(
+        $allvariableshashref,
+        sub($$$){
+            push(@directorytable, join("\t", @_)."\n");
+        }
+    );
+
+    # Add entries for the non-root directories.
     create_directorytable_from_collection(\@directorytable, $directoryref);
 
     # Saving the file
@@ -574,5 +837,6 @@ sub create_directory_table ($$$$)
 
     $installer::logger::Lang->add_timestamp("Performance Info: Directory Table end");
 }
+
 
 1;

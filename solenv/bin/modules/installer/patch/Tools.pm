@@ -30,17 +30,32 @@ package installer::patch::Tools;
 
 
 
-=head2 CygpathToWindows ($path)
+=head2 ToEscapedWindowsPath ($path)
 
     Convert the given path with the 'cygpath' command into Windows format.  Quote backslashes.
 
 =cut
-sub CygpathToWindows($)
+sub ToEscapedWindowsPath($)
 {
     my ($path) = @_;
+
     my $windows_path = qx(cygpath -w "$path");
     $windows_path =~ s/(^\s+|\s+$)//g;
     $windows_path =~ s/\\/\\\\/g;
+
+    return $windows_path;
+}
+
+
+
+
+sub ToWindowsPath ($)
+{
+    my ($path) = @_;
+
+    my $windows_path = qx(cygpath -w "$path");
+    $windows_path =~ s/(^\s+|\s+$)//g;
+
     return $windows_path;
 }
 

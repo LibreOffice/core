@@ -99,6 +99,15 @@ sub SetValue ($$$)
 
 
 
+sub GetAllValues ($)
+{
+    my ($self) = @_;
+    return @{$self->{'values'}};
+}
+
+
+
+
 sub Format ($$)
 {
     my $self = shift;

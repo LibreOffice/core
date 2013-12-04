@@ -93,10 +93,11 @@ our $Info = installer::logger->new("info",
 
 =head2 SetupSimpleLogging ($filename)
 
-    Setup logging so that $Global, $Lang and $Info all print to the console AND to the log file.
+    Setup logging so that $Global, $Lang and $Info all print to the console.
+    If $filename is given then logging also goes to that file.
 
 =cut
-sub SetupSimpleLogging ($)
+sub SetupSimpleLogging (;$)
 {
     my ($log_filename) = @_;
 
@@ -114,7 +115,10 @@ sub SetupSimpleLogging ($)
         'is_show_relative_time' => 1,
         'forward' => [$Info]
         );
-    $Info->set_filename($log_filename);
+    if (defined $log_filename)
+    {
+        $Info->set_filename($log_filename);
+    }
     $Info->{'is_print_to_console'} = 1;
     $installer::globals::quiet = 0;
     starttime();

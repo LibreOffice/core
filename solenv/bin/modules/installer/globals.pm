@@ -155,8 +155,8 @@ BEGIN
     $fontsfolder = "FontsFolder";
     $fontsfoldername = "Fonts";
     $fontsdirparent = "";
-    $fontsdirname = "";
     $fontsdirhostname = "truetype";
+    $fontsdirname = $fontsdirhostname;
     $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
     $startupfolder = "StartupFolder";
@@ -535,6 +535,13 @@ BEGIN
 
     # ToDo: Needs to be expanded for additional platforms
 
+    $is_release = 0;  # Is changed in parameter.pm when the -release option is given.
+    $source_version = undef;
+    $target_version = undef;
+    $source_msi = undef;
+
+    # Is set to 1 when target_version is a major version, ie ?.0.0
+    $is_major_release = 0;
 }
 
 1;

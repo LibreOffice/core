@@ -35,7 +35,7 @@ my $VersionPartCount = 3;
 
 
 
-=head StringToNumberArray($version_string)
+=head2 StringToNumberArray($version_string)
 
     Convert a version string (where the individual parts are separated by '.') into an array of three numbers.
     Missing numbers are filled with 0.
@@ -57,7 +57,7 @@ sub StringToNumberArray ($)
 
 
 
-=head ArrayToDirectoryName (@)
+=head2 ArrayToDirectoryName (@)
 
     Return a directory name (without any path) for the given array of version numbers.
 
@@ -68,6 +68,37 @@ sub ArrayToDirectoryName (@)
 }
 
 
+
+=head2 ArrayToNoDotName (@)
+
+    This symply creates a version array (A,B,C) into a version string
+    "ABC" with no dots between major, minor and micro version number.
+
+=cut
+sub ArrayToNoDotName (@)
+{
+    return join("", @_);
+}
+
+
+
+
+=head2 IsMajorVersion ($version_string)
+
+    Return 1 if $version_string is a major version, ie. ?.0.0
+    Return 0 otherwise.
+
+=cut
+sub IsMajorVersion ($)
+{
+    my ($version_string) = @_;
+    my @version = installer::patch::Version::StringToNumberArray($version_string);
+    for (my $index=1; $index<$VersionPartCount; ++$index)
+    {
+        return 0 if $version[$index] ne "0";
+    }
+    return 1;
+}
 
 
 
