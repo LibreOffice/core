@@ -47,6 +47,18 @@ using namespace ::com::sun::star::xml::sax;
 
 typedef boost::shared_ptr<Stream> StreamPointer_t;
 
+/**
+ * Struct to store our 'alternate state'. If multiple mc:AlternateContent
+ * elements arrive, then while the inner ones are active, the original state is
+ * saved away, and once they inner goes out of scope, the original state is
+ * restored.
+ */
+struct SavedAlternateState
+{
+    bool m_bDiscardChildren;
+    bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
+};
+
 class OOXMLFastContextHandler:
     public ::cppu::WeakImplHelper1<
         xml::sax::XFastContextHandler>
@@ -293,6 +305,7 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
+    std::stack<SavedAlternateState> m_aSavedAlternateStates;
 
     static sal_uInt32 mnInstanceCount;
 
