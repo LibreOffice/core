@@ -2040,6 +2040,26 @@ DECLARE_OOXMLEXPORT_TEST(testMce, "mce.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bbb59), getProperty<sal_Int32>(getShape(1), "FillColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
+{
+    // check default font theme values have been preserved
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    if (!pXmlStyles)
+        return;
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "asciiTheme", "minorHAnsi");
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
+
+    // check the font theme values in style definitions
+    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
+
+    // check direct format font theme values have been preserved
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts", "hAnsiTheme", "majorBidi");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts", "cstheme", "majorBidi");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
