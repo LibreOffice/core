@@ -1024,16 +1024,12 @@ void ChartExport::exportPlotArea( )
             exportBubbleChart( xChartType );
             break;
         }
-        case chart::TYPEID_DOUGHNUT:
-        {
-            exportDoughnutChart( xChartType );
-            break;
-        }
         case chart::TYPEID_OFPIE:
         {
             exportOfPieChart( xChartType );
             break;
         }
+        case chart::TYPEID_DOUGHNUT:
         case chart::TYPEID_PIE:
         {
             exportPieChart( xChartType );
@@ -1261,6 +1257,12 @@ void ChartExport::exportOfPieChart( Reference< chart2::XChartType > /*xChartType
 
 void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )
 {
+    sal_Int32 eChartType = getChartType( );
+    if(eChartType == chart::TYPEID_DOUGHNUT)
+    {
+        exportDoughnutChart( xChartType );
+        return;
+    }
     FSHelperPtr pFS = GetFS();
     sal_Int32 nTypeId = XML_pieChart;
     if( mbIs3DChart )
