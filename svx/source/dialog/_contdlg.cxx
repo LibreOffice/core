@@ -43,6 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
+#include <vcl/layout.hxx>
 
 SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
@@ -303,8 +304,7 @@ sal_Bool SvxSuperContourDlg::Close()
 
     if ( aTbx1.IsItemEnabled( TBI_APPLY ) )
     {
-        QueryBox    aQBox( this, WB_YES_NO_CANCEL | WB_DEF_YES,
-                           CONT_RESID(STR_CONTOURDLG_MODIFY).toString() );
+        MessageDialog aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
         const long  nRet = aQBox.Execute();
 
         if ( nRet == RET_YES )
@@ -439,7 +439,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
         {
             if ( aTbx1.IsItemChecked( TBI_WORKPLACE ) )
             {
-                QueryBox aQBox( this, WB_YES_NO | WB_DEF_NO, CONT_RESID(STR_CONTOURDLG_WORKPLACE).toString() );
+                MessageDialog aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui");
 
                 if ( !aContourWnd.IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
                     aContourWnd.SetWorkplaceMode( sal_True );
@@ -535,7 +535,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
                 aStbStatus.Invalidate();
             else if ( bGraphicLinked )
             {
-                QueryBox aQBox( this, WB_YES_NO | WB_DEF_YES, CONT_RESID(STR_CONTOURDLG_LINKED).toString() );
+                MessageDialog aQBox( this,"QueryUnlinkGraphicsDialog","svx/ui/queryunlinkgraphicsdialog.ui");
 
                 if ( aQBox.Execute() != RET_YES )
                 {
@@ -733,7 +733,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                QueryBox    aQBox( this, WB_YES_NO | WB_DEF_YES, CONT_RESID(STR_CONTOURDLG_NEWPIPETTE).toString() );
+                MessageDialog aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui");
                 sal_Bool        bNewContour;
 
                 aRedoGraphic = Graphic();
