@@ -11,10 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libodfgen))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libodfgen,$(ODFGEN_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libodfgen,1))
-
-$(eval $(call gb_UnpackedTarball_add_patches,libodfgen,\
-	external/libodfgen/0001-use-correct-header-for-std-swap.patch \
-))
-
 # vim: set noet sw=4 ts=4:
