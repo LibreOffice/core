@@ -116,7 +116,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
     rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
 
-    if( !bUseOptional || moBaseline.has() ) {
+    if( moBaseline.has() ) {
         rPropMap[ PROP_CharEscapement ] <<= sal_Int16(moBaseline.get( 0 ) / 1000);
         rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(DFLT_ESC_PROP);
     }
