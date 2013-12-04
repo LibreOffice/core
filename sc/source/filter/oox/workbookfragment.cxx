@@ -294,7 +294,6 @@ public:
     }
     virtual void Timeout()
     {
-        fprintf( stderr, "Progress bar update\n" );
         for( size_t i = 0; i < aSegments.size(); i++)
             static_cast< ProgressWrapper *>( aSegments[ i ].get() )->UpdateBar();
     }
