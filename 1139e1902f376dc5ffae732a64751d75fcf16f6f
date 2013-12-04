@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///QU\u003d",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-12-04T12:28:48Z",
+      "side": 1,
+      "message": "only one-arg ctors need to be explicit",
+      "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///QQ\u003d",
+        "filename": "solenv/gbuild/UIConfig.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-12-04T12:28:48Z",
+      "side": 1,
+      "message": "What is the reason for this?",
+      "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///QM\u003d",
+        "filename": "solenv/gbuild/Zip.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-12-04T12:28:48Z",
+      "side": 1,
+      "message": "Is it not possible to use the right name for the zip already?",
+      "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
