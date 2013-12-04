@@ -1816,6 +1816,7 @@ namespace cppcanvas
                             sal_Int32 aCount;
 
                             ReadRectangle (rMF, sx, sy, sw, sh);
+                            Rectangle aSource(Point(sx, sy), Size(sw, sh));
 
                             EMFP_DEBUG (printf ("EMF+ %s source rectangle: %f,%f %fx%f\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", sx, sy, sw, sh));
 
@@ -1856,6 +1857,7 @@ namespace cppcanvas
 
                             if (bValid) {
                                 BitmapEx aBmp( image.graphic.GetBitmapEx () );
+                                aBmp.Crop( aSource );
 
                                 Size aSize( aBmp.GetSizePixel() );
                                 EMFP_DEBUG (printf ("EMF+ bitmap size: %ldx%ld\n", aSize.Width(), aSize.Height()));
