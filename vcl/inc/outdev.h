@@ -202,7 +202,6 @@ class ImplFontCache
 private:
     ImplFontEntry*      mpFirstEntry;
     int                 mnRef0Count;    // number of unreferenced ImplFontEntries
-    bool                mbPrinter;
 
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
