@@ -357,12 +357,6 @@ $(eval $(call gb_Library_add_defs,vcl,\
 	-DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
 ))
 
-ifeq ($(ENABLE_CORETEXT),TRUE)
-
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_CORETEXT \
-))
-
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     $(vcl_coretext_code) \
 ))
@@ -370,15 +364,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 	ApplicationServices \
 ))
-
-else # ATSUI
-
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/aqua/source/gdi/atsui/salatslayout \
-    vcl/aqua/source/gdi/atsui/salatsuifontutils \
-    vcl/aqua/source/gdi/atsui/salgdi \
-))
-endif
 
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/aqua/source/a11y/aqua11yactionwrapper \

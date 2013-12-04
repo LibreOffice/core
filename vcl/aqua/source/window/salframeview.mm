@@ -25,7 +25,7 @@
 #include "vcl/svapp.hxx"
 
 #include "aqua/salinst.h"
-#include "aqua/salgdi.h"
+#include "coretext/salgdi2.h"
 #include "aqua/salframe.h"
 #include "aqua/salframeview.h"
 #include "aqua/aqua11yfactory.h"

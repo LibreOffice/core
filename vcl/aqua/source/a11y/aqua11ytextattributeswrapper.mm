@@ -20,7 +20,7 @@
 
 #include "aqua/salinst.h"
 #include "quartz/utils.h"
-#include "aqua/salgdi.h"
+#include "coretext/salgdi2.h"
 
 #include "aqua11ytextattributeswrapper.h"
 

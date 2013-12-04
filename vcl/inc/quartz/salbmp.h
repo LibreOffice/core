@@ -27,7 +27,7 @@
 #include "vcl/salbtype.hxx"
 
 #ifdef MACOSX
-#include "aqua/salgdi.h"
+#include "coretext/salgdi2.h"
 #else
 #include "headless/svpgdi.hxx"
 #endif

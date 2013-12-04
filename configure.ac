@@ -1272,12 +1272,6 @@ AC_ARG_ENABLE(firebird-sdbc,
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
 ,enable_firebird_sdbc=yes)
 
-AC_ARG_ENABLE(coretext,
-    AS_HELP_STRING([--disable-coretext],
-        [Don't use CoreText on Mac (but the obsolete ATSU instead).
-         In a 64-bit LibreOffice CoreText is by necessity always used.]),
-)
-
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
         [Enable use of winegcc during the build, in order to create msi* tools
@@ -11347,21 +11341,6 @@ else
     AC_MSG_RESULT([integration])
 fi
 AC_SUBST(WITH_HELPPACK_INTEGRATION)
-
-dnl ===================================================================
-dnl Test whether to use CoreText framework
-dnl ===================================================================
-ENABLE_CORETEXT=
-if test "$_os" = "Darwin"; then
-    AC_MSG_CHECKING([whether to use CoreText framework])
-    if test "$enable_coretext" != no -o "$BITNESS_OVERRIDE" = 64; then
-        AC_MSG_RESULT([yes])
-        ENABLE_CORETEXT=TRUE
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-AC_SUBST(ENABLE_CORETEXT)
 
 ###############################################################################
 # Extensions checking

@@ -27,9 +27,7 @@
 // predeclare the native classes to avoid header/include problems
 typedef struct CGContext *CGContextRef;
 typedef struct CGLayer   *CGLayerRef;
-#ifdef ENABLE_CORETEXT
 typedef const struct __CTFont * CTFontRef;
-#endif
 #ifdef __OBJC__
 @class NSView;
 #else
@@ -214,9 +212,6 @@ struct SystemFontData
 #if defined( WNT )
     HFONT           hFont;          // native font object
 #elif defined( MACOSX )
-#ifndef ENABLE_CORETEXT
-    void*           aATSUFontID;    // native font object
-#endif
 #elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags
@@ -231,9 +226,6 @@ struct SystemFontData
 #if defined( WNT )
         , hFont( 0 )
 #elif defined( MACOSX )
-#ifndef ENABLE_CORETEXT
-        , aATSUFontID( NULL )
-#endif
 #elif defined( UNX )
         , nFontId( NULL )
         , nFontFlags( 0 )

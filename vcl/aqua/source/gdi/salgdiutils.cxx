@@ -29,7 +29,7 @@
 
 #include "vcl/svapp.hxx"
 
-#include "aqua/salgdi.h"
+#include "coretext/salgdi2.h"
 #include "aqua/salframe.h"
 #include "aqua/saldata.hxx"
 
