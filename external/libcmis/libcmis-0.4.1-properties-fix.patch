@@ -1,0 +1,280 @@
+From 958b3c763fb52d1bf2ad88c177e7e4f426aab354 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?C=C3=A9dric=20Bosdonnat?= <cbosdo@users.sourceforge.net>
+Date: Wed, 4 Dec 2013 10:44:37 +0100
+Subject: [PATCH] Object creation mixed relationship properties with document
+ properties
+
+Added a Unit test to show the problem. We surely don't want the
+relationship cmis:properties to be read as properties. This bug caused
+some problems with other operations like checkout.
+---
+ .../data/atom/test-document-relationships.xml      | 179 +++++++++++++++++++++
+ qa/libcmis/test-atom.cxx                           |  34 ++++
+ src/libcmis/object.cxx                             |   4 +-
+ 3 files changed, 215 insertions(+), 2 deletions(-)
+ create mode 100644 qa/libcmis/data/atom/test-document-relationships.xml
+
+diff --git qa/libcmis/data/atom/test-document-relationships.xml qa/libcmis/data/atom/test-document-relationships.xml
+new file mode 100644
+index 0000000..bacfda8
+--- /dev/null
++++ qa/libcmis/data/atom/test-document-relationships.xml
+@@ -0,0 +1,179 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<atom:entry xmlns:atom="http://www.w3.org/2005/Atom" xmlns:cmis="http://docs.oasis-open.org/ns/cmis/core/200908/" xmlns:cmisra="http://docs.oasis-open.org/ns/cmis/restatom/200908/" xmlns:app="http://www.w3.org/2007/app">
++  <atom:author>
++    <atom:name>unknown</atom:name>
++  </atom:author>
++  <atom:id>Some obscure Id</atom:id>
++  <atom:published>2013-01-28T14:10:06Z</atom:published>
++  <atom:title>Test Document</atom:title>
++  <app:edited>2013-01-28T14:10:06Z</app:edited>
++  <atom:updated>2013-01-28T14:10:06Z</atom:updated>
++  <atom:content src="http://mockup/mock/content/data.txt?id=test-document" type="text/plain"/>
++  <cmisra:object xmlns:ns3="http://docs.oasis-open.org/ns/cmis/messaging/200908/">
++    <cmis:properties>
++      <cmis:propertyInteger queryName="cmis:contentStreamLength" displayName="Content Length" localName="cmis:contentStreamLength" propertyDefinitionId="cmis:contentStreamLength">
++        <cmis:value>12345</cmis:value>
++      </cmis:propertyInteger>
++      <cmis:propertyId queryName="cmis:objectTypeId" displayName="Type-Id" localName="cmis:objectTypeId" propertyDefinitionId="cmis:objectTypeId">
++        <cmis:value>DocumentLevel2</cmis:value>
++      </cmis:propertyId>
++      <cmis:propertyString queryName="cmis:versionSeriesCheckedOutBy" displayName="Checked Out By" localName="cmis:versionSeriesCheckedOutBy" propertyDefinitionId="cmis:versionSeriesCheckedOutBy"/>
++      <cmis:propertyHtml queryName="HtmlProp" displayName="Sample Html Property" localName="HtmlProp" propertyDefinitionId="HtmlProp"/>
++      <cmis:propertyId queryName="cmis:versionSeriesCheckedOutId" displayName="Checked Out Id" localName="cmis:versionSeriesCheckedOutId" propertyDefinitionId="cmis:versionSeriesCheckedOutId"/>
++      <cmis:propertyId queryName="IdProp" displayName="Sample Id Property" localName="IdProp" propertyDefinitionId="IdProp"/>
++      <cmis:propertyUri queryName="UriProp" displayName="Sample Uri Property" localName="UriProp" propertyDefinitionId="UriProp"/>
++      <cmis:propertyDateTime queryName="DateTimePropMV" displayName="Sample DateTime multi-value Property" localName="DateTimePropMV" propertyDefinitionId="DateTimePropMV"/>
++      <cmis:propertyId queryName="cmis:versionSeriesId" displayName="Version Series Id" localName="cmis:versionSeriesId" propertyDefinitionId="cmis:versionSeriesId"/>
++      <cmis:propertyDecimal queryName="DecimalProp" displayName="Sample Decimal Property" localName="DecimalProp" propertyDefinitionId="DecimalProp"/>
++      <cmis:propertyUri queryName="UriPropMV" displayName="Sample Uri multi-value Property" localName="UriPropMV" propertyDefinitionId="UriPropMV"/>
++      <cmis:propertyBoolean queryName="cmis:isLatestVersion" displayName="Is Latest Version" localName="cmis:isLatestVersion" propertyDefinitionId="cmis:isLatestVersion">
++        <cmis:value>true</cmis:value>
++      </cmis:propertyBoolean>
++      <cmis:propertyString queryName="cmis:versionLabel" displayName="Version Label" localName="cmis:versionLabel" propertyDefinitionId="cmis:versionLabel"/>
++      <cmis:propertyBoolean queryName="BooleanProp" displayName="Sample Boolean Property" localName="BooleanProp" propertyDefinitionId="BooleanProp"/>
++      <cmis:propertyBoolean queryName="cmis:isVersionSeriesCheckedOut" displayName="Checked Out" localName="cmis:isVersionSeriesCheckedOut" propertyDefinitionId="cmis:isVersionSeriesCheckedOut">
++        <cmis:value>false</cmis:value>
++      </cmis:propertyBoolean>
++      <cmis:propertyString queryName="cmis:lastModifiedBy" displayName="Modified By" localName="cmis:lastModifiedBy" propertyDefinitionId="cmis:lastModifiedBy">
++        <cmis:value>unknown</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyString queryName="cmis:createdBy" displayName="Created By" localName="cmis:createdBy" propertyDefinitionId="cmis:createdBy">
++        <cmis:value>unknown</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyId queryName="IdPropMV" displayName="Sample Id Html multi-value Property" localName="IdPropMV" propertyDefinitionId="IdPropMV"/>
++      <cmis:propertyString queryName="PickListProp" displayName="Sample Pick List Property" localName="PickListProp" propertyDefinitionId="PickListProp">
++        <cmis:value>blue</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyHtml queryName="HtmlPropMV" displayName="Sample Html multi-value Property" localName="HtmlPropMV" propertyDefinitionId="HtmlPropMV"/>
++      <cmis:propertyInteger queryName="IntProp" displayName="Sample Int Property" localName="IntProp" propertyDefinitionId="IntProp"/>
++      <cmis:propertyBoolean queryName="cmis:isLatestMajorVersion" displayName="Is Latest Major Version" localName="cmis:isLatestMajorVersion" propertyDefinitionId="cmis:isLatestMajorVersion">
++        <cmis:value>true</cmis:value>
++      </cmis:propertyBoolean>
++      <cmis:propertyString queryName="cmis:contentStreamId" displayName="Stream Id" localName="cmis:contentStreamId" propertyDefinitionId="cmis:contentStreamId"/>
++      <cmis:propertyString queryName="cmis:name" displayName="Name" localName="cmis:name" propertyDefinitionId="cmis:name">
++        <cmis:value>Test Document</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyString queryName="cmis:contentStreamMimeType" displayName="Mime Type" localName="cmis:contentStreamMimeType" propertyDefinitionId="cmis:contentStreamMimeType">
++        <cmis:value>text/plain</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyString queryName="StringProp" displayName="Sample String Property" localName="StringProp" propertyDefinitionId="StringProp">
++        <cmis:value>My Doc StringProperty 6</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyDateTime queryName="cmis:creationDate" displayName="Creation Date" localName="cmis:creationDate" propertyDefinitionId="cmis:creationDate">
++        <cmis:value>2013-01-28T14:10:06.736Z</cmis:value>
++      </cmis:propertyDateTime>
++      <cmis:propertyString queryName="cmis:changeToken" displayName="Change Token" localName="cmis:changeToken" propertyDefinitionId="cmis:changeToken">
++        <cmis:value>1359382206736</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyDecimal queryName="DecimalPropMV" displayName="Sample Decimal multi-value Property" localName="DecimalPropMV" propertyDefinitionId="DecimalPropMV"/>
++      <cmis:propertyDateTime queryName="DateTimeProp" displayName="Sample DateTime Property" localName="DateTimeProp" propertyDefinitionId="DateTimeProp"/>
++      <cmis:propertyBoolean queryName="BooleanPropMV" displayName="Sample Boolean multi-value Property" localName="BooleanPropMV" propertyDefinitionId="BooleanPropMV"/>
++      <cmis:propertyString queryName="cmis:checkinComment" displayName="Checkin Comment" localName="cmis:checkinComment" propertyDefinitionId="cmis:checkinComment"/>
++      <cmis:propertyId queryName="cmis:objectId" displayName="Object Id" localName="cmis:objectId" propertyDefinitionId="cmis:objectId">
++        <cmis:value>test-document</cmis:value>
++      </cmis:propertyId>
++      <cmis:propertyBoolean queryName="cmis:isImmutable" displayName="Immutable" localName="cmis:isImmutable" propertyDefinitionId="cmis:isImmutable">
++        <cmis:value>false</cmis:value>
++      </cmis:propertyBoolean>
++      <cmis:propertyBoolean queryName="cmis:isMajorVersion" displayName="Is Major Version" localName="cmis:isMajorVersion" propertyDefinitionId="cmis:isMajorVersion">
++        <cmis:value>true</cmis:value>
++      </cmis:propertyBoolean>
++      <cmis:propertyId queryName="cmis:baseTypeId" displayName="Base-Type-Id" localName="cmis:baseTypeId" propertyDefinitionId="cmis:baseTypeId">
++        <cmis:value>cmis:document</cmis:value>
++      </cmis:propertyId>
++      <cmis:propertyInteger queryName="IntPropMV" displayName="Sample Int multi-value Property" localName="IntPropMV" propertyDefinitionId="IntPropMV"/>
++      <cmis:propertyString queryName="cmis:contentStreamFileName" displayName="File Name" localName="cmis:contentStreamFileName" propertyDefinitionId="cmis:contentStreamFileName">
++        <cmis:value>data.txt</cmis:value>
++      </cmis:propertyString>
++      <cmis:propertyDateTime queryName="cmis:lastModificationDate" displayName="Modification Date" localName="cmis:lastModificationDate" propertyDefinitionId="cmis:lastModificationDate">
++        <cmis:value>2013-01-28T14:10:06.736Z</cmis:value>
++      </cmis:propertyDateTime>
++    </cmis:properties>
++    <cmis:allowableActions>
++      <cmis:canDeleteObject>true</cmis:canDeleteObject>
++      <cmis:canUpdateProperties>true</cmis:canUpdateProperties>
++      <cmis:canGetFolderTree>false</cmis:canGetFolderTree>
++      <cmis:canGetProperties>true</cmis:canGetProperties>
++      <cmis:canGetObjectRelationships>false</cmis:canGetObjectRelationships>
++      <cmis:canGetObjectParents>true</cmis:canGetObjectParents>
++      <cmis:canGetFolderParent>false</cmis:canGetFolderParent>
++      <cmis:canGetDescendants>false</cmis:canGetDescendants>
++      <cmis:canMoveObject>true</cmis:canMoveObject>
++      <cmis:canDeleteContentStream>true</cmis:canDeleteContentStream>
++      <cmis:canCheckOut>true</cmis:canCheckOut>
++      <cmis:canCancelCheckOut>false</cmis:canCancelCheckOut>
++      <cmis:canCheckIn>false</cmis:canCheckIn>
++      <cmis:canSetContentStream>true</cmis:canSetContentStream>
++      <cmis:canGetAllVersions>true</cmis:canGetAllVersions>
++      <cmis:canAddObjectToFolder>true</cmis:canAddObjectToFolder>
++      <cmis:canRemoveObjectFromFolder>true</cmis:canRemoveObjectFromFolder>
++      <cmis:canGetContentStream>true</cmis:canGetContentStream>
++      <cmis:canApplyPolicy>false</cmis:canApplyPolicy>
++      <cmis:canGetAppliedPolicies>false</cmis:canGetAppliedPolicies>
++      <cmis:canRemovePolicy>false</cmis:canRemovePolicy>
++      <cmis:canGetChildren>false</cmis:canGetChildren>
++      <cmis:canCreateDocument>false</cmis:canCreateDocument>
++      <cmis:canCreateFolder>false</cmis:canCreateFolder>
++      <cmis:canCreateRelationship>false</cmis:canCreateRelationship>
++      <cmis:canDeleteTree>false</cmis:canDeleteTree>
++      <cmis:canGetRenditions>false</cmis:canGetRenditions>
++      <cmis:canGetACL>false</cmis:canGetACL>
++      <cmis:canApplyACL>false</cmis:canApplyACL>
++    </cmis:allowableActions>
++    <exampleExtension:exampleExtension xmlns="http://mockup/cmis/extension" xmlns:exampleExtension="http://mockup/cmis/extension">
++      <objectId xmlns:ns0="http://mockup/cmis/extension" ns0:type="DocumentLevel2">test-document</objectId>
++      <name>Test Document</name>
++    </exampleExtension:exampleExtension>
++    <cmis:relationship>
++      <cmis:properties>
++        <cmis:propertyId displayName="Target Id" localName="targetId" propertyDefinitionId="cmis:targetId" queryName="cmis:targetId">
++          <cmis:value>workspace://SpacesStore/5d8908d9-1b4a-4265-b1de-5d7244fcea70;2.2</cmis:value>
++        </cmis:propertyId>
++        <cmis:propertyId displayName="Object Type Id" localName="objectTypeId" propertyDefinitionId="cmis:objectTypeId" queryName="cmis:objectTypeId">
++          <cmis:value>R:cm:original</cmis:value>
++        </cmis:propertyId>
++        <cmis:propertyString displayName="Last Modified By" localName="lastModifiedBy" propertyDefinitionId="cmis:lastModifiedBy" queryName="cmis:lastModifiedBy">
++          <cmis:value>admin</cmis:value>
++        </cmis:propertyString>
++        <cmis:propertyId displayName="Source Id" localName="sourceId" propertyDefinitionId="cmis:sourceId" queryName="cmis:sourceId">
++          <cmis:value>workspace://SpacesStore/5d8908d9-1b4a-4265-b1de-5d7244fcea70;pwc</cmis:value>
++        </cmis:propertyId>
++        <cmis:propertyString displayName="Name" localName="name" propertyDefinitionId="cmis:name" queryName="cmis:name">
++          <cmis:value>75|workspace://SpacesStore/3885d9a2-0540-41ab-810a-38ccb1b160d6|workspace://SpacesStore/5d8908d9-1b4a-4265-b1de-5d7244fcea70|{http://www.alfresco.org/model/content/1.0}original</cmis:value>
++        </cmis:propertyString>
++        <cmis:propertyString displayName="Created by" localName="createdBy" propertyDefinitionId="cmis:createdBy" queryName="cmis:createdBy">
++          <cmis:value>admin</cmis:value>
++        </cmis:propertyString>
++        <cmis:propertyId displayName="Object Id" localName="objectId" propertyDefinitionId="cmis:objectId" queryName="cmis:objectId">
++          <cmis:value>assoc:75</cmis:value>
++        </cmis:propertyId>
++        <cmis:propertyDateTime displayName="Creation Date" localName="creationDate" propertyDefinitionId="cmis:creationDate" queryName="cmis:creationDate">
++          <cmis:value>2010-05-01T00:00:00+02:00</cmis:value>
++        </cmis:propertyDateTime>
++        <cmis:propertyString displayName="Change token" localName="changeToken" propertyDefinitionId="cmis:changeToken" queryName="cmis:changeToken"/>
++        <cmis:propertyId displayName="Base Type Id" localName="baseTypeId" propertyDefinitionId="cmis:baseTypeId" queryName="cmis:baseTypeId">
++          <cmis:value>cmis:relationship</cmis:value>
++        </cmis:propertyId>
++        <cmis:propertyId displayName="Alfresco Node Ref" localName="nodeRef" propertyDefinitionId="alfcmis:nodeRef" queryName="alfcmis:nodeRef">
++          <cmis:value>75|workspace://SpacesStore/3885d9a2-0540-41ab-810a-38ccb1b160d6|workspace://SpacesStore/5d8908d9-1b4a-4265-b1de-5d7244fcea70|{http://www.alfresco.org/model/content/1.0}original</cmis:value>
++        </cmis:propertyId>
++        <cmis:propertyString displayName="Description" localName="description" propertyDefinitionId="cmis:description" queryName="cmis:description"/>
++        <cmis:propertyDateTime displayName="Last Modified Date" localName="lastModificationDate" propertyDefinitionId="cmis:lastModificationDate" queryName="cmis:lastModificationDate">
++          <cmis:value>2010-05-01T00:00:00+02:00</cmis:value>
++        </cmis:propertyDateTime>
++      </cmis:properties>
++    </cmis:relationship>
++  </cmisra:object>
++  <atom:link rel="service" href="http://mockup/mock" type="application/atomsvc+xml"/>
++  <atom:link rel="self" href="http://mockup/mock/id?id=test-document" type="application/atom+xml;type=entry" cmisra:id="test-document"/>
++  <atom:link rel="enclosure" href="http://mockup/mock/id?id=test-document" type="application/atom+xml;type=entry"/>
++  <atom:link rel="edit" href="http://mockup/mock/id?id=test-document" type="application/atom+xml;type=entry"/>
++  <atom:link rel="describedby" href="http://mockup/mock/type?id=DocumentLevel2" type="application/atom+xml;type=entry"/>
++  <atom:link rel="http://docs.oasis-open.org/ns/cmis/link/200908/allowableactions" href="http://mockup/mock/allowableactions?id=test-document" type="application/cmisallowableactions+xml"/>
++  <atom:link rel="up" href="http://mockup/mock/parents?id=test-document" type="application/atom+xml;type=feed"/>
++  <atom:link rel="edit-media" href="http://mockup/mock/content?id=test-document" type="text/plain"/>
++  <atom:link rel="http://docs.oasis-open.org/ns/cmis/link/200908/acl" href="http://mockup/mock/acl?id=test-document" type="application/cmisacl+xml"/>
++  <atom:link rel="version-history" href="http://mockup/mock/versions?id=test-document" type="application/atom+xml;type=feed"/>
++  <atom:link rel="alternate" href="http://mockup/mock/renditions?id=test-document-rendition1" type="image/png" cmisra:renditionKind="cmis:thumbnail" title="picture" length="40385"/>
++  <atom:link rel="alternate" href="http://mockup/mock/renditions?id=test-document-rendition2" type="application/pdf" cmisra:renditionKind="pdf" title="Doc as PDF"/>
++</atom:entry>
+diff --git qa/libcmis/test-atom.cxx qa/libcmis/test-atom.cxx
+index 57864d9..af16616 100644
+--- qa/libcmis/test-atom.cxx
++++ qa/libcmis/test-atom.cxx
+@@ -64,6 +64,7 @@ class AtomTest : public CppUnit::TestFixture
+         void getTypeChildrenTest( );
+         void getObjectTest( );
+         void getDocumentTest( );
++        void getDocumentRelationshipsTest( );
+         void getUnexistantObjectTest( );
+         void getFolderTest( );
+         void getFolderBadTypeTest( );
+@@ -101,6 +102,7 @@ class AtomTest : public CppUnit::TestFixture
+         CPPUNIT_TEST( getTypeChildrenTest );
+         CPPUNIT_TEST( getObjectTest );
+         CPPUNIT_TEST( getDocumentTest );
++        CPPUNIT_TEST( getDocumentRelationshipsTest );
+         CPPUNIT_TEST( getUnexistantObjectTest );
+         CPPUNIT_TEST( getFolderTest );
+         CPPUNIT_TEST( getFolderBadTypeTest );
+@@ -441,6 +443,38 @@ void AtomTest::getDocumentTest( )
+     CPPUNIT_ASSERT_MESSAGE( "Content length is missing", 12345 == document->getContentLength( ) );
+ }
+ 
++void AtomTest::getDocumentRelationshipsTest( )
++{
++    curl_mockup_reset( );
++    curl_mockup_addResponse( "http://mockup/mock/id", "id=test-document", "GET", DATA_DIR "/atom/test-document-relationships.xml" );
++    curl_mockup_addResponse( "http://mockup/mock/type", "id=DocumentLevel2", "GET", DATA_DIR "/atom/type-docLevel2.xml" );
++    curl_mockup_setCredentials( SERVER_USERNAME, SERVER_PASSWORD );
++
++    AtomPubSession session = getTestSession( SERVER_USERNAME, SERVER_PASSWORD );
++
++    string expectedId( "test-document" );
++    libcmis::ObjectPtr actual = session.getObject( expectedId );
++
++    // Do we have a document?
++    libcmis::DocumentPtr document = boost::dynamic_pointer_cast< libcmis::Document >( actual );
++    CPPUNIT_ASSERT_MESSAGE( "Fetched object should be an instance of libcmis::DocumentPtr",
++            NULL != document );
++
++    // Test the document properties
++    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong document ID", expectedId, document->getId( ) );
++    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong document name", string( "Test Document" ), document->getName( ) );
++    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong document type", string( "text/plain" ), document->getContentType( ) );
++    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong base type", string( "cmis:document" ), document->getBaseType( ) );
++
++    CPPUNIT_ASSERT_MESSAGE( "CreatedBy is missing", !document->getCreatedBy( ).empty( ) );
++    CPPUNIT_ASSERT_MESSAGE( "CreationDate is missing", !document->getCreationDate( ).is_not_a_date_time() );
++    CPPUNIT_ASSERT_MESSAGE( "LastModifiedBy is missing", !document->getLastModifiedBy( ).empty( ) );
++    CPPUNIT_ASSERT_MESSAGE( "LastModificationDate is missing", !document->getLastModificationDate( ).is_not_a_date_time() );
++    CPPUNIT_ASSERT_MESSAGE( "ChangeToken is missing", !document->getChangeToken( ).empty( ) );
++
++    CPPUNIT_ASSERT_MESSAGE( "Content length is missing", 12345 == document->getContentLength( ) );
++}
++
+ void AtomTest::getFolderTest( )
+ {
+     curl_mockup_reset( );
+diff --git src/libcmis/object.cxx src/libcmis/object.cxx
+index 538c98e..d5e0c7a 100644
+--- src/libcmis/object.cxx
++++ src/libcmis/object.cxx
+@@ -105,10 +105,10 @@ namespace libcmis
+             xmlXPathFreeObject( xpathObj );
+ 
+             // First get the type id as it will give us the property definitions
+-            string typeIdReq( "//cmis:propertyId[@propertyDefinitionId='cmis:objectTypeId']/cmis:value/text()" );
++            string typeIdReq( "/*/cmis:properties/cmis:propertyId[@propertyDefinitionId='cmis:objectTypeId']/cmis:value/text()" );
+             m_typeId = libcmis::getXPathValue( xpathCtx, typeIdReq );
+ 
+-            string propertiesReq( "//cmis:properties/*" );
++            string propertiesReq( "/*/cmis:properties/*" );
+             xpathObj = xmlXPathEvalExpression( BAD_CAST( propertiesReq.c_str() ), xpathCtx );
+             if ( NULL != xpathObj && NULL != xpathObj->nodesetval )
+             {
+-- 
+1.8.4.4
+
