@@ -274,14 +274,13 @@ int do_init_pipe()
         if (iniEnd == NULL) {
             return NPERR_GENERIC_ERROR;
         }
-        boost::scoped_array< WCHAR > args(
-            new WCHAR[
-                MY_LENGTH(L"\"") + (exeEnd - exe) + MY_LENGTH(L"\" ") +
-                wcslen(s_read_fd) + MY_LENGTH(L" ") + wcslen(s_write_fd) +
-                MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
-                (iniEnd - ini) + MY_LENGTH(L"\"") + 1]); //TODO: overflow
-        wsprintfW(
-            args.get(),
+        size_t len = MY_LENGTH(L"\"") + (exeEnd - exe) + MY_LENGTH(L"\" ") +
+            wcslen(s_read_fd) + MY_LENGTH(L" ") + wcslen(s_write_fd) +
+            MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
+            (iniEnd - ini) + MY_LENGTH(L"\"") + 1; //TODO: overflow
+        boost::scoped_array< WCHAR > args(new WCHAR[len]);
+        _snwprintf(
+            args.get(), len,
             L"\"%s\" %s %s \"-env:INIFILENAME=vnd.sun.star.pathname:%s\"", exe,
             s_read_fd, s_write_fd, ini);
         STARTUPINFOW NSP_StarInfo;
