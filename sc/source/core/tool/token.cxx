@@ -1473,6 +1473,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocStDevP:
             case ocCovar:
             case ocAnd:
+            case ocOr:
             // Don't change the state.
             break;
             default:
