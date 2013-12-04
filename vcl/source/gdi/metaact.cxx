@@ -159,6 +159,8 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
 
     rIStm >> nType;
 
+    SAL_INFO("vcl.gdi", "ReadMetaAction " << nType);
+
     switch( nType )
     {
         case( META_NULL_ACTION ): pAction = new MetaAction; break;
@@ -4173,6 +4175,8 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     COMPAT( rIStm );
     maComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
     rIStm >> mnValue >> mnDataSize;
+
+    SAL_INFO("vcl.gdi", "MetaCommentAction::Read " << maComment);
 
     delete[] mpData;
 
