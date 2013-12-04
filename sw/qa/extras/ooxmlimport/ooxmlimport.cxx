@@ -1565,6 +1565,11 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
     // The 3 paragraphs on the rectangles inside the groupshape ended up in the
     // body text, make sure we don't have multiple paragraphs there anymore.
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs()); // was 4
+
+    // Character escapement was enabled by default, this was 58.
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xText), 1), "CharEscapementHeight"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
