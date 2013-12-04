@@ -144,7 +144,7 @@ public:
          : aCrsrPos( rCrsrPos ),
            bNoLang(sal_False), bCheck(sal_False),
            nStart(nStartPos),
-           nEnd( std::max(SAL_MAX_INT32, nStartPos + nLength) ),
+           nEnd( nLength == SAL_MAX_INT32 ? SAL_MAX_INT32 : (std::min(SAL_MAX_INT32, nStartPos + nLength)) ),
            nWordStart(0), nWordLen(0),
            nHyphPos(0), nMinTrail(0)
          { }
