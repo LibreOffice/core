@@ -602,6 +602,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // init reverse print
     maJobPage.mpReverseOrderBox->Check( maPController->getReversePrint() );
 
+    Printer::updatePrinters();
+
     // fill printer listbox
     const std::vector< OUString >& rQueues( Printer::GetPrinterQueues() );
     for( std::vector< OUString >::const_iterator it = rQueues.begin();
