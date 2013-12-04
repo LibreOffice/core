@@ -719,6 +719,7 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     CGContextDrawPath( mrContext, kCGPathStroke );
 
     Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
+    // Is a call to RefreshRect( aRefreshRect ) missing here?
 }
 
 void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, SalColor nMaskColor )
