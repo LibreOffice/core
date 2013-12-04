@@ -1623,7 +1623,12 @@ void ChartExport::exportCandleStickSeries(
 
             Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
             const char* sSeries[] = {"values-first","values-max","values-min","values-last",0};
-            for( sal_Int32 idx = 0; sSeries[idx] != 0 ; idx++ )
+
+            /* n_idxVal : Series Open(values-first) should start an idx value with 1.
+             *            Earlier it was starting with zero which causes a problem
+             *            while Roundtripping.
+             */
+            for( sal_Int32 idx = 0, n_idxVal = 0; sSeries[idx] != 0 ; idx++ )
             {
                 Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( lcl_getDataSequenceByRole( aSeqCnt, OUString::createFromAscii(sSeries[idx]) ) );
                 if( xLabeledSeq.is())
@@ -1637,10 +1642,10 @@ void ChartExport::exportCandleStickSeries(
 
                             // TODO: idx and order
                             pFS->singleElement( FSNS( XML_c, XML_idx ),
-                                XML_val, I32S(idx),
+                                XML_val, I32S(++n_idxVal),
                                 FSEND );
                             pFS->singleElement( FSNS( XML_c, XML_order ),
-                                XML_val, I32S(idx),
+                                XML_val, I32S(n_idxVal),
                                 FSEND );
 
                             // export label
