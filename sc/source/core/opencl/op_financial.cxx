@@ -102,7 +102,8 @@ void RRI::GenSlidingWindowFunction(
 }
 
 void OpNominal::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -114,31 +115,59 @@ void OpNominal::GenSlidingWindowFunction(
     }
     ss << ") {\n\t";
     ss << "double tmp = 0;\n\t";
+    ss << "double temp = 0;\n\t";
     ss << "int gid0 = get_global_id(0);\n\t";
-    ss <<"double tmp0 = ";
-    ss <<vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n\t";
-    ss <<"double tmp1 = ";
-    ss <<vSubArguments[1]->GenSlidingWindowDeclRef()<<";\n\t";
-#ifdef ISNAN
-
-    FormulaToken *tmpCur0 = vSubArguments[0]
-        ->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    ss<<"if("<<tmpCurDVR0->GetArrayLength()<<"<=gid0||";
-    ss <<"isNan(tmp0))\n\t\t";
-    ss<<" tmp0= 0;\n\t";
-    FormulaToken *tmpCur1 = vSubArguments[1]
-        ->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-    ss<<"if("<<tmpCurDVR1->GetArrayLength()<<"<=gid0||";
-    ss <<"isNan(tmp1))\n\t\t";
-    ss<<" tmp1= 0;\n\t";
+    ss << "double tmp0=0,tmp1=0;\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#else
 #endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
+#endif
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss <<"    temp="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+            ss <<"    if (isNan(temp))\n";
+            ss <<"        tmp"<<i<<"= 0;\n";
+            ss <<"    else\n";
+            ss <<"        tmp"<<i<<"=temp;\n";
+            ss <<"    }\n";
+        }
+        else
+        {
+            ss <<"    tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef(
+);
+            ss <<";\n";
+        }
+#else
+    ss <<"    tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#endif
+    }
     ss<<"if(tmp1==0)\n\t";
     ss<<"\treturn 0;\n\t";
-    ss<<"tmp=( pow( tmp0+ 1.0, 1.0 / tmp1 ) - 1.0 ) *";
+    ss<<"tmp=pow( tmp1,-1);\n\t";
+    ss<<"tmp=( pow( tmp0+ 1.0, tmp ) - 1.0 ) *";
     ss<<"tmp1;\n\t";
     ss << "return tmp;\n";
     ss << "}";
