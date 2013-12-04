@@ -665,7 +665,7 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
 
 sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
 {
-    // compare their width, weight, italic and style name
+    // compare their width, weight, italic, style name and family name
     if( GetWidthType() < rOther.GetWidthType() )
         return -1;
     else if( GetWidthType() > rOther.GetWidthType() )
@@ -681,7 +681,14 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
     else if( GetSlant() > rOther.GetSlant() )
         return 1;
 
-    return GetFamilyName().compareTo( rOther.GetFamilyName() );
+    sal_Int32 nRet = GetFamilyName().compareTo( rOther.GetFamilyName() );
+
+    if (nRet == 0)
+    {
+        nRet = GetStyleName().compareTo( rOther.GetStyleName() );
+    }
+
+    return nRet;
 }
 
 sal_Int32 PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
