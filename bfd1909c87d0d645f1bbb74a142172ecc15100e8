@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAa3///R0\u003d",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-12-04T10:55:25Z",
+      "side": 0,
+      "message": "Woops, that is a merge bug and must be restored.",
+      "parentUuid": "AAAAa3///Sg\u003d",
+      "revId": "bfd1909c87d0d645f1bbb74a142172ecc15100e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAa3///Sc\u003d",
         "filename": "vcl/source/app/svdata.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2013-12-03T23:22:06Z",
       "side": 0,
       "message": "wow that java error handling is huge...\n\nperhaps some of these SV_ACCESSERROR_* can be removed too - can do that in a followup patch of course",
+      "revId": "bfd1909c87d0d645f1bbb74a142172ecc15100e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///Ro\u003d",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-12-04T10:55:25Z",
+      "side": 0,
+      "message": "Good catch, will do it in the new ps.",
+      "parentUuid": "AAAAa3///Sc\u003d",
       "revId": "bfd1909c87d0d645f1bbb74a142172ecc15100e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
