@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,vcl_osxres,$(SRCDIR)/vcl/aqua/source/res))
+$(eval $(call gb_Package_Package,vcl_osxres,$(SRCDIR)/vcl/osx/res))
 
 $(eval $(call gb_Package_add_files_with_dir,vcl_osxres,Resources,\
     MainMenu.nib/classes.nib \

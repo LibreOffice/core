@@ -501,7 +501,7 @@ void Edit::ImplInvalidateOrRepaint( sal_Int32 nStart, sal_Int32 nEnd )
     if( IsPaintTransparent() )
     {
         Invalidate();
-        // FIXME: this is currently only on aqua
+        // FIXME: this is currently only on OS X
         if( ImplGetSVData()->maNWFData.mbNoFocusRects )
             Update();
     }
@@ -2023,7 +2023,7 @@ void Edit::GetFocus()
 
         ImplShowCursor();
 
-        // FIXME: this is currently only on aqua
+        // FIXME: this is currently only on OS X
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
@@ -2069,7 +2069,7 @@ void Edit::LoseFocus()
 
     if ( !mpSubEdit )
     {
-        // FIXME: this is currently only on aqua
+        // FIXME: this is currently only on OS X
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
@@ -2492,7 +2492,7 @@ void Edit::Modify()
 
         // #i13677# notify edit listeners about caret position change
         ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
-        // FIXME: this is currently only on aqua
+        // FIXME: this is currently only on OS X
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&

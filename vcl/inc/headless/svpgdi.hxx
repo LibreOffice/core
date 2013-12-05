@@ -27,7 +27,7 @@
 #include "sallayout.hxx"
 
 #ifdef IOS
-#include "coretext/salgdi.h"
+#include "quartz/salgdi.h"
 #include <premac.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>

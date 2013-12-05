@@ -32,9 +32,9 @@
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
-    abuse the HitTestNativeControl interface. All theming engines but aqua
+    abuse the HitTestNativeControl interface. All theming engines but OS X
     are actually able to draw the thumb according to our internal representation.
-    However aqua draws a little outside. The canonical way would be to enhance the
+    However OS X draws a little outside. The canonical way would be to enhance the
     HitTestNativeControl passing a ScrollbarValue additionally so all necessary
     information is available in the call.
     .

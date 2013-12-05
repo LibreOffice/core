@@ -18,6 +18,7 @@
  */
 
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
+#define INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2ibox.hxx>
@@ -135,6 +136,7 @@ public:
     static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
 
 };
+
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

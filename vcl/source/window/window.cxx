@@ -370,7 +370,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
     pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
     pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
 
-    // FIXME: this is currently only on aqua, check with other
+    // FIXME: this is currently only on OS X, check with other
     // platforms
     if( pSVData->maNWFData.mbNoFocusRects )
     {

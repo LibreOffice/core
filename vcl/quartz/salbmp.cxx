@@ -31,7 +31,7 @@
 #include "quartz/salbmp.h"
 
 #ifdef MACOSX
-#include "aqua/saldata.hxx"
+#include "osx/saldata.hxx"
 #else
 #include "saldatabasic.hxx"
 #endif

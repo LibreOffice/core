@@ -341,9 +341,9 @@ vcl_quartz_code= \
     vcl/quartz/utils \
 
 vcl_coretext_code= \
-    vcl/coretext/ctfonts \
-    vcl/coretext/ctlayout \
-    vcl/coretext/salgdi \
+    vcl/quartz/ctfonts \
+    vcl/quartz/ctlayout \
+    vcl/quartz/salgdi \
 
 # GUIBASE specific stuff
 
@@ -366,68 +366,68 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
-    vcl/aqua/source/a11y/aqua11yactionwrapper \
-    vcl/aqua/source/a11y/aqua11ycomponentwrapper \
-    vcl/aqua/source/a11y/aqua11yfactory \
-    vcl/aqua/source/a11y/aqua11yrolehelper \
-    vcl/aqua/source/a11y/aqua11yselectionwrapper \
-    vcl/aqua/source/a11y/aqua11ytablewrapper \
-    vcl/aqua/source/a11y/aqua11ytextattributeswrapper \
-    vcl/aqua/source/a11y/aqua11ytextwrapper \
-    vcl/aqua/source/a11y/aqua11yutil \
-    vcl/aqua/source/a11y/aqua11yvaluewrapper \
-    vcl/aqua/source/a11y/aqua11ywrapper \
-    vcl/aqua/source/a11y/aqua11ywrapperbutton \
-    vcl/aqua/source/a11y/aqua11ywrappercheckbox \
-    vcl/aqua/source/a11y/aqua11ywrappercombobox \
-    vcl/aqua/source/a11y/aqua11ywrappergroup \
-    vcl/aqua/source/a11y/aqua11ywrapperlist \
-    vcl/aqua/source/a11y/aqua11ywrapperradiobutton \
-    vcl/aqua/source/a11y/aqua11ywrapperradiogroup \
-    vcl/aqua/source/a11y/aqua11ywrapperrow \
-    vcl/aqua/source/a11y/aqua11ywrapperscrollarea \
-    vcl/aqua/source/a11y/aqua11ywrapperscrollbar \
-    vcl/aqua/source/a11y/aqua11ywrappersplitter \
-    vcl/aqua/source/a11y/aqua11ywrapperstatictext \
-    vcl/aqua/source/a11y/aqua11ywrappertabgroup \
-    vcl/aqua/source/a11y/aqua11ywrappertextarea \
-    vcl/aqua/source/a11y/aqua11ywrappertoolbar \
-    vcl/aqua/source/app/salnstimer \
-    vcl/aqua/source/app/vclnsapp \
-    vcl/aqua/source/gdi/aquaprintaccessoryview \
-    vcl/aqua/source/gdi/aquaprintview \
-    vcl/aqua/source/window/salframeview \
-    vcl/aqua/source/window/salnsmenu \
+    vcl/osx/a11yactionwrapper \
+    vcl/osx/a11ycomponentwrapper \
+    vcl/osx/a11yfactory \
+    vcl/osx/a11yrolehelper \
+    vcl/osx/a11yselectionwrapper \
+    vcl/osx/a11ytablewrapper \
+    vcl/osx/a11ytextattributeswrapper \
+    vcl/osx/a11ytextwrapper \
+    vcl/osx/a11yutil \
+    vcl/osx/a11yvaluewrapper \
+    vcl/osx/a11ywrapper \
+    vcl/osx/a11ywrapperbutton \
+    vcl/osx/a11ywrappercheckbox \
+    vcl/osx/a11ywrappercombobox \
+    vcl/osx/a11ywrappergroup \
+    vcl/osx/a11ywrapperlist \
+    vcl/osx/a11ywrapperradiobutton \
+    vcl/osx/a11ywrapperradiogroup \
+    vcl/osx/a11ywrapperrow \
+    vcl/osx/a11ywrapperscrollarea \
+    vcl/osx/a11ywrapperscrollbar \
+    vcl/osx/a11ywrappersplitter \
+    vcl/osx/a11ywrapperstatictext \
+    vcl/osx/a11ywrappertabgroup \
+    vcl/osx/a11ywrappertextarea \
+    vcl/osx/a11ywrappertoolbar \
+    vcl/osx/salnstimer \
+    vcl/osx/vclnsapp \
+    vcl/osx/printaccessoryview \
+    vcl/osx/printview \
+    vcl/osx/salframeview \
+    vcl/osx/salnsmenu \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/aqua/source/a11y/aqua11yfocuslistener \
-    vcl/aqua/source/a11y/aqua11yfocustracker \
-    vcl/aqua/source/a11y/aqua11ylistener \
-    vcl/aqua/source/a11y/documentfocuslistener \
-    vcl/aqua/source/app/saldata \
-    vcl/aqua/source/app/salinst \
-    vcl/aqua/source/app/salsys \
-    vcl/aqua/source/app/saltimer \
-    vcl/aqua/source/dtrans/DataFlavorMapping \
-    vcl/aqua/source/dtrans/DragActionConversion \
-    vcl/aqua/source/dtrans/DragSource \
-    vcl/aqua/source/dtrans/DragSourceContext \
-    vcl/aqua/source/dtrans/DropTarget \
-    vcl/aqua/source/dtrans/HtmlFmtFlt \
-    vcl/aqua/source/dtrans/OSXTransferable \
-    vcl/aqua/source/dtrans/PictToBmpFlt \
-    vcl/aqua/source/dtrans/aqua_clipboard \
-    vcl/aqua/source/dtrans/service_entry \
+    vcl/osx/a11yfocuslistener \
+    vcl/osx/a11yfocustracker \
+    vcl/osx/a11ylistener \
+    vcl/osx/documentfocuslistener \
+    vcl/osx/saldata \
+    vcl/osx/salinst \
+    vcl/osx/salsys \
+    vcl/osx/saltimer \
+    vcl/osx/DataFlavorMapping \
+    vcl/osx/DragActionConversion \
+    vcl/osx/DragSource \
+    vcl/osx/DragSourceContext \
+    vcl/osx/DropTarget \
+    vcl/osx/HtmlFmtFlt \
+    vcl/osx/OSXTransferable \
+    vcl/osx/PictToBmpFlt \
+    vcl/osx/clipboard \
+    vcl/osx/service_entry \
     $(vcl_quartz_code) \
-    vcl/aqua/source/gdi/salgdicommon \
-    vcl/aqua/source/gdi/salgdiutils \
-    vcl/aqua/source/gdi/salmathutils \
-    vcl/aqua/source/gdi/salnativewidgets \
-    vcl/aqua/source/gdi/salprn \
-    vcl/aqua/source/gdi/salvd \
-    vcl/aqua/source/window/salframe \
-    vcl/aqua/source/window/salmenu \
-    vcl/aqua/source/window/salobj \
+    vcl/quartz/salgdicommon \
+    vcl/quartz/salgdiutils \
+    vcl/quartz/salmathutils \
+    vcl/osx/salnativewidgets \
+    vcl/osx/salprn \
+    vcl/osx/salvd \
+    vcl/osx/salframe \
+    vcl/osx/salmenu \
+    vcl/osx/salobj \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \

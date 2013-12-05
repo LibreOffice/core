@@ -23,7 +23,7 @@
 #ifdef WNT
 #include "win/svsys.h"
 #elif defined MACOSX
-#include "aqua/svsys.h"
+#include "osx/svsys.h"
 #elif defined IOS
 #include "ios/svsys.h"
 #elif defined ANDROID

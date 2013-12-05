@@ -914,7 +914,7 @@ long SpinField::PreNotify( NotifyEvent& rNEvt )
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
                 if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
                 {
-                    // FIXME: this is currently only on aqua
+                    // FIXME: this is currently only on OS X
                     // check for other platforms that need similar handling
                     if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
                         IsNativeWidgetEnabled() &&

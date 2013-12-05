@@ -20,7 +20,7 @@
 #include <tools/tools.h>
 
 #ifndef MACOSX
-// MacOSX implementation of ImplSVMainHook is in aqua/source/app/salinst.cxx
+// MacOSX implementation of ImplSVMainHook is in osx/salinst.cxx
 
 sal_Bool ImplSVMainHook( int * )
 {

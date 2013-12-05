@@ -371,7 +371,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
         vcl::LazyDelete::flush();
 
     // the system timer events will not necessarily come in in non waiting mode
-    // e.g. on aqua; need to trigger timer checks manually
+    // e.g. on OS X; need to trigger timer checks manually
     if( pSVData->maAppData.mbNoYield && !pSVData->mbNoCallTimer )
     {
         do

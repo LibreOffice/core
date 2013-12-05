@@ -27,7 +27,7 @@
 #include "vcl/dllapi.h"
 
 #ifdef IOS
-#include "coretext/salgdi.h"
+#include "quartz/salgdi.h"
 #endif
 
 namespace psp

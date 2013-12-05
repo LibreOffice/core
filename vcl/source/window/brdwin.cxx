@@ -1103,7 +1103,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     }
     else
     {
-        // FIXME: this is currently only on aqua, check with other
+        // FIXME: this is currently only on OS X, check with other
         // platforms
         if( ImplGetSVData()->maNWFData.mbNoFocusRects && !( nBorderStyle & WINDOW_BORDER_NWF ) )
         {
@@ -1344,9 +1344,9 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             nState |= CTRL_STATE_FOCUSED;
         else if( mbNWFBorder )
         {
-            // FIXME: this is curently only on aqua, see if other platforms can profit
+            // FIXME: this is curently only on OS X, see if other platforms can profit
 
-            // FIXME: for aqua focus rings all controls need to support GetNativeControlRegion
+            // FIXME: for OS X focus rings all controls need to support GetNativeControlRegion
             // for the dropdown style
             if( pCtrl->HasFocus() || pCtrl->HasChildPathFocus() )
                 nState |= CTRL_STATE_FOCUSED;

@@ -17,14 +17,16 @@ headless/
 	+ a backend renderer that draws to bitmaps
 
 android/
-	+ Android backend (work in progress, does work to some extent)
+	+ Android backend
 
-aqua/
+osx/
 	+ OS X backend
 
 ios/
-	+ iOS backend (work in progres, does not work, needs re-think
-	and re-write)
+	+ iOS backend
+
+quartz/
+	+ code common to OS X and iOS
 
 win/
 	+ Windows backend
