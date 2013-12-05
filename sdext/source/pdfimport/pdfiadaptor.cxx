@@ -68,11 +68,11 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         sal_Int32 nPwPos = -1;
         for( sal_Int32 i = 0; i < nAttribs; i++ )
         {
-            #if OSL_DEBUG_LEVEL > 1
-            OUString aVal( "<no string>" );
-            pAttribs[i].Value >>= aVal;
-            SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name << " = " << aVal << "\n");
-            #endif
+            SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name
+                    << " = " << (pAttribs[i].Value.has<OUString>()
+                            ? pAttribs[i].Value.get<OUString>()
+                            : OUString("<no string>"))
+                    << "\n");
             if ( pAttribs[i].Name == "EmbeddedSubstream" )
                 pAttribs[i].Value >>= xSubStream;
             else if ( pAttribs[i].Name == "Password" )
@@ -178,15 +178,11 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     bRet = xSubFilter->filter( rFilterData );
             }
         }
-        #if OSL_DEBUG_LEVEL > 1
         else
             SAL_INFO("sdext.pdfimport", "PDFIAdaptor::filter: no embedded substream set" );
-        #endif
     }
-    #if OSL_DEBUG_LEVEL > 1
     else
         SAL_INFO("sdext.pdfimport", "PDFIAdaptor::filter: no model set" );
-    #endif
 
     return bRet;
 }
