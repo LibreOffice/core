@@ -41,6 +41,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <float.h>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -4749,7 +4750,6 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScCellRangesObj" );
@@ -4758,11 +4758,7 @@ OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    OUString aServiceStr(rServiceName);
-    return aServiceStr.equalsAscii( SCSHEETCELLRANGES_SERVICE ) ||
-           aServiceStr.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           aServiceStr.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           aServiceStr.equalsAscii( SCPARAPROPERTIES_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
@@ -4776,8 +4772,6 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
     pArray[3] = OUString( SCPARAPROPERTIES_SERVICE );
     return aRet;
 }
-
-//------------------------------------------------------------------------
 
 uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument* pDoc, const ScRange& rR )
 {
@@ -6052,11 +6046,7 @@ OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeExce
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCSHEETCELLRANGE_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLRANGE_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCPARAPROPERTIES_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
@@ -6784,17 +6774,7 @@ OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException
 sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    //  CellRange/SheetCellRange are not in SheetCell service description,
-    //  but ScCellObj is used instead of ScCellRangeObj in CellRanges collections,
-    //  so it must support them
-
-    return rServiceName.equalsAscii( SCSHEETCELL_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELL_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCPARAPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCSHEETCELLRANGE_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLRANGE_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
@@ -8705,13 +8685,7 @@ OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCSPREADSHEET_SERVICE ) ||
-           rServiceName.equalsAscii( SCSHEETCELLRANGE_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLRANGE_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCPARAPROPERTIES_SERVICE ) ||
-           rServiceName.equalsAscii( SCLINKTARGET_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()

@@ -20,6 +20,7 @@
 #include "ooxformulaparser.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include "formulaparser.hxx"
 
 namespace oox {
@@ -132,7 +133,6 @@ OOXMLFormulaParser::~OOXMLFormulaParser()
 }
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
-
 OUString SAL_CALL OOXMLFormulaParser::getImplementationName() throw( RuntimeException )
 {
     return OOXMLFormulaParser_getImplementationName();
@@ -140,10 +140,7 @@ OUString SAL_CALL OOXMLFormulaParser::getImplementationName() throw( RuntimeExce
 
 sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService ) throw( RuntimeException )
 {
-    const Sequence< OUString > aServices( OOXMLFormulaParser_getSupportedServiceNames() );
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rService ) != pArrayEnd;
+    return cppu::supportsService(this, rService);
 }
 
 Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames() throw( RuntimeException )

@@ -57,6 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -2030,7 +2031,6 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScModelObj::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScModelObj" );
@@ -2039,17 +2039,16 @@ OUString SAL_CALL ScModelObj::getImplementationName() throw(uno::RuntimeExceptio
 sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCMODELOBJ_SERVICE ) ||
-           rServiceName.equalsAscii( SCDOCSETTINGS_SERVICE ) ||
-           rServiceName.equalsAscii( SCDOC_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<OUString> aRet(2);
+    uno::Sequence<OUString> aRet(3);
     aRet[0] = SCMODELOBJ_SERVICE;
     aRet[1] = SCDOCSETTINGS_SERVICE;
+    aRet[2] = SCDOC_SERVICE;
     return aRet;
 }
 

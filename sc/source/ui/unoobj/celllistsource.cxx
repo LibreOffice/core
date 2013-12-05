@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 //.........................................................................
 namespace calc
@@ -165,7 +166,6 @@ namespace calc
             // TODO: is it worth having an error message here?
     }
 
-    //--------------------------------------------------------------------
     void OCellListSource::checkInitialized() SAL_THROW( ( RuntimeException ) )
     {
         if ( !m_bInitialized )
@@ -173,26 +173,16 @@ namespace calc
             // TODO: error message
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.sheet.OCellListSource" );
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-        const OUString* pLookup = aSupportedServices.getConstArray();
-        const OUString* pLookupEnd = aSupportedServices.getConstArray() + aSupportedServices.getLength();
-        while ( pLookup != pLookupEnd )
-            if ( *pLookup++ == _rServiceName )
-                return sal_True;
-
-        return false;
+        return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServices( 2 );
@@ -201,7 +191,6 @@ namespace calc
         return aServices;
     }
 
-    //--------------------------------------------------------------------
     CellRangeAddress OCellListSource::getRangeAddress( ) const
     {
         OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );

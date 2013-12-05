@@ -22,6 +22,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "cursuno.hxx"
 #include "cellsuno.hxx"
@@ -464,9 +465,7 @@ OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCSHEETCELLCURSOR_SERVICE ) ||
-           rServiceName.equalsAscii( SCCELLCURSOR_SERVICE ) ||
-           ScCellRangeObj::supportsService(rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()

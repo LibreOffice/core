@@ -54,6 +54,7 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <limits>
@@ -129,7 +130,6 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
 
 //------------------------------------------------------------------------
 
-#define SCDATABASERANGEOBJ_SERVICE      "com.sun.star.sheet.DatabaseRange"
 
 SC_SIMPLE_SERVICE_INFO( ScConsolidationDescriptor, "ScConsolidationDescriptor", "com.sun.star.sheet.ConsolidationDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScDatabaseRangesObj, "ScDatabaseRangesObj", "com.sun.star.sheet.DatabaseRanges" )
@@ -2205,7 +2205,6 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDatabaseRangeObj )
 
 // XServiceInfo
-
 OUString SAL_CALL ScDatabaseRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScDatabaseRangeObj" );
@@ -2214,8 +2213,7 @@ OUString SAL_CALL ScDatabaseRangeObj::getImplementationName() throw(uno::Runtime
 sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCDATABASERANGEOBJ_SERVICE ) ||
-           rServiceName.equalsAscii( SCLINKTARGET_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
@@ -2223,7 +2221,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCDATABASERANGEOBJ_SERVICE );
+    pArray[0] = "com.sun.star.sheet.DatabaseRange";
     pArray[1] = OUString( SCLINKTARGET_SERVICE );
     return aRet;
 }

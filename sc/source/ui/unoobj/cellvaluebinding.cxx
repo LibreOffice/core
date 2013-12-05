@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 //.........................................................................
 namespace calc
@@ -466,7 +467,6 @@ namespace calc
         }
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL OCellValueBinding::getImplementationName(  ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -474,22 +474,11 @@ namespace calc
         return OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
-
-        Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-        const OUString* pLookup = aSupportedServices.getConstArray();
-        const OUString* pLookupEnd = aSupportedServices.getConstArray() + aSupportedServices.getLength();
-        while ( pLookup != pLookupEnd )
-            if ( *pLookup++ == _rServiceName )
-                return sal_True;
-
-        return false;
+        return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
@@ -502,7 +491,6 @@ namespace calc
         return aServices;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL OCellValueBinding::addModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {
        if ( _rxListener.is() )

@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -659,16 +660,7 @@ OUString SAL_CALL ScFilterDetect::getImplementationName() throw (uno::RuntimeExc
 sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
     throw (uno::RuntimeException)
 {
-    uno::Sequence<OUString> seqServiceNames(getSupportedServiceNames());
-    const OUString* pArray = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-    return false ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 com::sun::star::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()

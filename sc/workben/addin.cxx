@@ -40,17 +40,9 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------
-
 SMART_UNO_IMPLEMENTATION( ScTestAddIn, UsrObject );
 
-#define SCADDIN_SERVICE         L"com.sun.star.sheet.AddIn"
 #define SCTESTADDIN_SERVICE     L"stardiv.one.sheet.DemoAddIn"
-
-//------------------------------------------------------------------------
 
 extern "C" {
 
@@ -127,7 +119,7 @@ UString ScTestAddIn::getImplementationName_Static()
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = SCADDIN_SERVICE;
+    pArray[0] = L"com.sun.star.sheet.AddIn";
     pArray[1] = SCTESTADDIN_SERVICE;
     return aRet;
 }
@@ -539,16 +531,13 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
     }
 }
 
-
 // XServiceName
-
 OUString SAL_CALL ScTestAddIn::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return SCTESTADDIN_SERVICE;     // name of specific AddIn service
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScTestAddIn::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -556,17 +545,12 @@ OUString SAL_CALL ScTestAddIn::getImplementationName(  ) throw(::com::sun::star:
 
 sal_Bool SAL_CALL ScTestAddIn::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ServiceName == SCADDIN_SERVICE ||
-            ServiceName == SCTESTADDIN_SERVICE;
+    return cppu::supportsService(this, ServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL ScTestAddIn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-
-//------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
