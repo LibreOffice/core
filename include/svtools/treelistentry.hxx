@@ -63,7 +63,7 @@ private:
     void InvalidateChildrensListPositions();
 
 public:
-    static size_t ITEM_NOT_FOUND;
+    const size_t ITEM_NOT_FOUND = std::numeric_limits<size_t>::max();
 
     SvTreeListEntry();
     SvTreeListEntry(const SvTreeListEntry& r);

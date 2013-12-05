@@ -22,8 +22,6 @@
 
 #include <limits>
 
-size_t SvTreeListEntry::ITEM_NOT_FOUND = std::numeric_limits<size_t>::max();
-
 void SvTreeListEntry::ClearChildren()
 {
     maChildren.clear();
