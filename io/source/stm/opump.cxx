@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 
@@ -430,14 +431,11 @@ void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw()
     // data transfer starts in XActiveDataControl::start
 }
 
-// ------------------------------------------------------------
-
 Reference< XOutputStream > Pump::getOutputStream() throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
     return m_xOutput;
 }
-
 
 // XServiceInfo
 OUString Pump::getImplementationName() throw(  )
@@ -448,14 +446,7 @@ OUString Pump::getImplementationName() throw(  )
 // XServiceInfo
 sal_Bool Pump::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
