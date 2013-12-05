@@ -869,11 +869,9 @@ void ImportExcel::Shrfmla( void )
 
     OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray is NULL!" );
 
-    // The range in this record can be erroneous especially the row range.
-    // Use the row from the last FORMULA record as the start row.  The end row
-    // will be adjusted by the formula cells that follow.
-    SCCOL nCol1 = nFirstCol;
-    SCCOL nCol2 = nLastCol;
+    // The shared range in this record is erroneous more than half the time.
+    // Don't ever rely on it.
+    SCCOL nCol1 = mpLastFormula->mnCol;
     SCROW nRow1 = mpLastFormula->mnRow;
 
     ScAddress aPos(nCol1, nRow1, GetCurrScTab());
