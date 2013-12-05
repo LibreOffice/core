@@ -32,6 +32,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -429,14 +430,7 @@ OUString OMarkableOutputStream::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -444,9 +438,6 @@ Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw
 {
     return OMarkableOutputStream_getSupportedServiceNames();
 }
-
-
-
 
 /*------------------------
 *
@@ -946,8 +937,6 @@ void OMarkableInputStream::checkMarksAndFlush()
     }
 }
 
-
-
 // XServiceInfo
 OUString OMarkableInputStream::getImplementationName() throw ()
 {
@@ -957,14 +946,7 @@ OUString OMarkableInputStream::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -972,7 +954,6 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw 
 {
     return OMarkableInputStream_getSupportedServiceNames();
 }
-
 
 /*------------------------
 *

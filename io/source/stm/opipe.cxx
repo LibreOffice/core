@@ -27,8 +27,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>
-
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -415,14 +415,7 @@ OUString OPipeImpl::getImplementationName() throw(  )
 // XServiceInfo
 sal_Bool OPipeImpl::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -430,10 +423,6 @@ Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(  )
 {
     return OPipeImpl_getSupportedServiceNames();
 }
-
-
-
-
 
 /* implementation functions
 *
