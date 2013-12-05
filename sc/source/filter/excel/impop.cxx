@@ -876,29 +876,22 @@ void ImportExcel::Shrfmla( void )
     SCCOL nCol2 = nLastCol;
     SCROW nRow1 = mpLastFormula->mnRow;
 
-    pExcRoot->pShrfmlaBuff->Store(
-        ScRange(nCol1, nRow1, GetCurrScTab(), nCol2, nRow1, GetCurrScTab()), *pErgebnis);
+    ScAddress aPos(nCol1, nRow1, GetCurrScTab());
+    pExcRoot->pShrfmlaBuff->Store(aPos, *pErgebnis);
 
     // Create formula cell for the last formula record.
 
-    ScAddress aPos(nCol1, nRow1, GetCurrScTab());
-    ScFormulaCellGroupRef xGroup = pExcRoot->pShrfmlaBuff->Find(aPos);
-    if (xGroup)
-    {
-        ScDocumentImport& rDoc = GetDocImport();
-        xGroup->compileCode(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScDocumentImport& rDoc = GetDocImport();
 
-        ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, xGroup);
-        xGroup->mpTopCell = pCell;
-        rDoc.getDoc().EnsureTable(aPos.Tab());
-        rDoc.setFormulaCell(aPos, pCell);
-        pCell->SetNeedNumberFormat(false);
-        if (!rtl::math::isNan(mpLastFormula->mfValue))
-            pCell->SetResultDouble(mpLastFormula->mfValue);
+    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, *pErgebnis);
+    rDoc.getDoc().EnsureTable(aPos.Tab());
+    rDoc.setFormulaCell(aPos, pCell);
+    pCell->SetNeedNumberFormat(false);
+    if (!rtl::math::isNan(mpLastFormula->mfValue))
+        pCell->SetResultDouble(mpLastFormula->mfValue);
 
-        GetXFRangeBuffer().SetXF(aPos, mpLastFormula->mnXF);
-        mpLastFormula->mpCell = pCell;
-    }
+    GetXFRangeBuffer().SetXF(aPos, mpLastFormula->mnXF);
+    mpLastFormula->mpCell = pCell;
 }
 
 
