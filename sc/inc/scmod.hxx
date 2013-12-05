@@ -217,6 +217,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd );
     void                InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd );
     void                InputReplaceSelection( const OUString& rStr );
+    void                InputTurnOffWinEngine();
     OUString            InputGetFormulaStr();
     void                ActivateInputWindow( const OUString* pStr = NULL,
                                                 sal_Bool bMatrix = false );

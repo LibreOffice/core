@@ -3906,6 +3906,20 @@ void ScInputHandler::InputReplaceSelection( const OUString& rStr )
     bModified = true;
 }
 
+void ScInputHandler::InputTurnOffWinEngine()
+{
+    bInOwnChange = true;                // disable ModifyHdl (reset below)
+
+    eMode = SC_INPUT_NONE;
+    /* TODO: it would be better if there was some way to reset the input bar
+     * engine instead of deleting and having it recreate through
+     * GetFuncEditView(), but first least invasively let this fix fdo#71667 and
+     * fdo#72278 without reintroducing fdo#69971. */
+    StopInputWinEngine(true);
+
+    bInOwnChange = false;
+}
+
 //========================================================================
 //  ScInputHdlState
 //========================================================================

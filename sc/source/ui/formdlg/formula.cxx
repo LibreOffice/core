@@ -623,7 +623,7 @@ void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
         //ScMultiTextWnd::Paint a new editengine will have been created via
         //GetEditView with its default Modification handler enabled. So ensure
         //its off when we will access it via InputReplaceSelection
-        pScMod->InputEnterHandler();
+        pScMod->InputTurnOffWinEngine();
     }
     pScMod->InputReplaceSelection(_sReplacement);
 }
