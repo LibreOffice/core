@@ -159,7 +159,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSe
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
 }
 
-void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue)
+void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -207,12 +207,11 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
     return bModified;
 }
 
-void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
+void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess, const OUString& sPath)
 {
     sal_Bool bIsLeafNode;
 
     Reference< XHierarchicalNameAccess > xHierarchicalNameAccess( xNameAccess, uno::UNO_QUERY_THROW );
-
 
     uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
     for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
