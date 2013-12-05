@@ -323,6 +323,7 @@ mimetypes = {
     'application/x-pocket-word': 'psw',
     'application/x-t602': '602',
     'application/x-fictionbook+xml': 'fb2',
+    'application/x-abiword': 'abw',
 # binfilter
     'application/x-starcalc': 'sdc',
     'application/vnd.stardivision.calc': 'sdc5',
