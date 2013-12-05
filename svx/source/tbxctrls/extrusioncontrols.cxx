@@ -300,8 +300,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, Fiel
     : ModalDialog( pParent, "ExtrustionDepthDialog", "svx/ui/extrustiondepthdialog.ui" )
 {
     get(m_pMtrDepth, "depth");
-    bool bMetric = IsMetric( eDefaultUnit );
-    m_pMtrDepth->SetUnit( bMetric ? FUNIT_CM : FUNIT_INCH );
+    m_pMtrDepth->SetUnit( eDefaultUnit );
     m_pMtrDepth->SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
 }
 
