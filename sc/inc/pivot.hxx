@@ -51,12 +51,14 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
-struct ScDPName
+struct SC_DLLPUBLIC ScDPName
 {
     OUString     maName;         ///< Original name of the dimension.
     OUString     maLayoutName;   ///< Layout name (display name)
+    sal_uInt8 mnDupCount;
 
-    explicit ScDPName(const OUString& rName, const OUString& rLayoutName);
+    ScDPName();
+    explicit ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount);
 };
 
 struct ScDPLabelData
@@ -69,6 +71,7 @@ struct ScDPLabelData
     sal_uInt16          mnFuncMask;     ///< Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     ///< Used hierarchy.
     sal_Int32           mnFlags;        ///< Flags from the DataPilotSource dimension
+    sal_uInt8           mnDupCount;
     bool                mbShowAll:1;    ///< true = Show all (also empty) results.
     bool                mbIsValue:1;    ///< true = Sum or count in data field.
     bool                mbDataLayout:1;

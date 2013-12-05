@@ -35,6 +35,7 @@
 #include "dpsave.hxx"
 #include "pvfundlg.hrc"
 #include "globstr.hrc"
+#include "dputil.hxx"
 
 #include <vector>
 
@@ -574,8 +575,13 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     else
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::DATA;
 
-    rLabelData.maSortInfo.Field = GetFieldName(maLbSortBy.GetSelectEntry());
-    rLabelData.maSortInfo.IsAscending = maRbSortAsc.IsChecked();
+    ScDPName aFieldName = GetFieldName(maLbSortBy.GetSelectEntry());
+    if (!aFieldName.maName.isEmpty())
+    {
+        rLabelData.maSortInfo.Field =
+            ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
+        rLabelData.maSortInfo.IsAscending = maRbSortAsc.IsChecked();
+    }
 
     // *** LAYOUT MODE ***
 
@@ -584,10 +590,15 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     // *** AUTO SHOW ***
 
-    rLabelData.maShowInfo.IsEnabled = maCbShow.IsChecked();
-    rLabelData.maShowInfo.ShowItemsMode = maLbShowFromWrp.GetControlValue();
-    rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( maNfShow.GetValue() );
-    rLabelData.maShowInfo.DataField = GetFieldName(maLbShowUsing.GetSelectEntry());
+    aFieldName = GetFieldName(maLbShowUsing.GetSelectEntry());
+    if (!aFieldName.maName.isEmpty())
+    {
+        rLabelData.maShowInfo.IsEnabled = maCbShow.IsChecked();
+        rLabelData.maShowInfo.ShowItemsMode = maLbShowFromWrp.GetControlValue();
+        rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( maNfShow.GetValue() );
+        rLabelData.maShowInfo.DataField =
+            ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
+    }
 
     // *** HIDDEN ITEMS ***
 
@@ -613,7 +624,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
     {
         // Cache names for later lookup.
-        maDataFieldNameMap.insert(NameMapType::value_type(aIt->maLayoutName, aIt->maName));
+        maDataFieldNameMap.insert(NameMapType::value_type(aIt->maLayoutName, *aIt));
 
         maLbSortBy.InsertEntry( aIt->maLayoutName );
         maLbShowUsing.InsertEntry( aIt->maLayoutName );  // for AutoShow
@@ -714,10 +725,10 @@ void ScDPSubtotalOptDlg::InitHideListBox()
     maLbHide.Enable( bEnable );
 }
 
-const OUString& ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
+ScDPName ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
 {
     NameMapType::const_iterator itr = maDataFieldNameMap.find(rLayoutName);
-    return itr == maDataFieldNameMap.end() ? rLayoutName : itr->second;
+    return itr == maDataFieldNameMap.end() ? ScDPName() : itr->second;
 }
 
 sal_uInt16 ScDPSubtotalOptDlg::FindListBoxEntry(
@@ -728,8 +739,9 @@ sal_uInt16 ScDPSubtotalOptDlg::FindListBoxEntry(
     while (nPos < rLBox.GetEntryCount())
     {
         // translate the displayed field name back to its original field name.
-        const OUString& rName = GetFieldName(rLBox.GetEntry(nPos));
-        if (rName.equals(rEntry))
+        ScDPName aName = GetFieldName(rLBox.GetEntry(nPos));
+        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(aName.maName, aName.mnDupCount);
+        if (aUnoName.equals(rEntry))
         {
             bFound = true;
             break;
