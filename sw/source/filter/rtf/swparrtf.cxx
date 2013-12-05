@@ -87,8 +87,8 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     aDescriptor[0].Name = "InputStream";
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStrm));
     aDescriptor[0].Value <<= xStream;
-    aDescriptor[1].Name = "IsNewDoc";
-    aDescriptor[1].Value <<= sal_False;
+    aDescriptor[1].Name = "InsertMode";
+    aDescriptor[1].Value <<= sal_True;
     aDescriptor[2].Name = "TextInsertModeRange";
     aDescriptor[2].Value <<= xInsertTextRange;
     sal_uLong ret(0);

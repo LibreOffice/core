@@ -91,8 +91,8 @@ protected:
         SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename, STREAM_WRITE);
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
         aDescriptor[0].Value <<= xStream;
-        aDescriptor[1].Name = "IsNewDoc";
-        aDescriptor[1].Value <<= sal_False;
+        aDescriptor[1].Name = "InsertMode";
+        aDescriptor[1].Value <<= sal_True;
         if (xTextRange.is())
         {
             aDescriptor[2].Name = "TextInsertModeRange";

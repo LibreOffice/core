@@ -75,7 +75,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     {
         MediaDescriptor aMediaDesc( aDescriptor );
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
-        bool bIsNewDoc = aMediaDesc.getUnpackedValueOrDefault( "IsNewDoc", true );
+        bool bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault("InsertMode", false);
         uno::Reference<text::XTextRange> xInsertTextRange = aMediaDesc.getUnpackedValueOrDefault( "TextInsertModeRange", uno::Reference<text::XTextRange>());
 #ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
