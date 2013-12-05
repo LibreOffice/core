@@ -113,6 +113,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
