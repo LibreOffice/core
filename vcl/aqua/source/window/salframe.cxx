@@ -217,7 +217,7 @@ void AquaSalFrame::initWindowAndView()
         objc_msgSend(mpNSWindow, @selector(setRestorable:), NO);
     }
     NSRect aRect = { { 0,0 }, { static_cast<CGFloat>(maGeometry.nWidth), static_cast<CGFloat>(maGeometry.nHeight) } };
-    mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];
+    mnTrackingRectTag = [mpNSView addTrackingRect: aRect owner: mpNSView userData: nil assumeInside: NO];
 
     maSysData.mpNSView = mpNSView;
 
