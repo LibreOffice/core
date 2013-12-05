@@ -38,7 +38,7 @@ androidlibs=
 if test "$OS" = ANDROID; then
     androidlibs="$WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
     androidlibs="$androidlibs $WORKDIR/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a"
-    androidlibs="$androidlibs $WORKDIR/UnpackedTarball/freetype/src/.libs/libfreetype.a"
+    androidlibs="$androidlibs $WORKDIR/UnpackedTarball/freetype/objs/.libs/libfreetype.a"
 fi
 
 echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
