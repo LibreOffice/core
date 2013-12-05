@@ -3888,6 +3888,11 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_bHasFtnSep = true;
         return;
     }
+    else if (len == 1 && sText[0] == '\t' && m_pImpl->m_bIgnoreNextTab)
+    {
+        m_pImpl->m_bIgnoreNextTab = false;
+        return;
+    }
 
     try
     {
