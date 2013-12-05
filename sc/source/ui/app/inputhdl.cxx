@@ -1247,11 +1247,15 @@ static void lcl_CompleteFunction( EditView* pView, const OUString& rInsert, bool
 
             ESelection aWordSel = pView->GetSelection();
             OUString aOld = pView->GetEditEngine()->GetText(0);
-            sal_Unicode cNext = aOld[aWordSel.nEndPos];
-            if ( cNext == '(' )
+            // aWordSel.EndPos points one behind string if word at end.
+            if (aWordSel.nEndPos < aOld.getLength())
             {
-                bDoParen = false;
-                aInsStr = aInsStr.copy( 0, nInsLen - 2 );   // Klammern weglassen
+                sal_Unicode cNext = aOld[aWordSel.nEndPos];
+                if ( cNext == '(' )
+                {
+                    bDoParen = false;
+                    aInsStr = aInsStr.copy( 0, nInsLen - 2 );   // Klammern weglassen
+                }
             }
         }
 
