@@ -165,6 +165,8 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
         case FID_SEARCH_NOW:
         {
             {
+                if(FID_SEARCH_NOW == nSlot && !rReq.IsAPI())
+                    SwView::SetMoveType(NID_SRCH_REP);
                 if ( pWrp )
                 {
                     m_pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());

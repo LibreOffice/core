@@ -560,6 +560,11 @@ sal_uInt16 SwView::GetMoveType()
     return m_nMoveType;
 }
 
+void SwView::SetMoveType(sal_uInt16 nSet)
+{
+    m_nMoveType = nSet;
+}
+
 void SwView::SetActMark(sal_Int32 nSet)
 {
     m_nActMark = nSet;

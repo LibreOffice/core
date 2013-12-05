@@ -553,6 +553,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     sal_uInt16 nSet = pSet->GetCurItemId();
     if( nSet != NID_PREV && nSet != NID_NEXT )
     {
+        SwView::SetMoveType(nSet);
         aToolBox.SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
         aToolBox.SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
         aInfoField.SetText(aToolBox.GetItemText(nSet));
