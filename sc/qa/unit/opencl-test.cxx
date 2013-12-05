@@ -247,6 +247,7 @@ public:
     void testStatisticalParallelCountBug();
     void testSpreadSheetFormulaVLookup();
     void testLogicalFormulaNot();
+    void testLogicalFormulaXor();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -425,6 +426,7 @@ public:
     CPPUNIT_TEST(testSpreadSheetFormulaVLookup);
     CPPUNIT_TEST(testLogicalFormulaOr);
     CPPUNIT_TEST(testLogicalFormulaNot);
+    CPPUNIT_TEST(testLogicalFormulaXor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4939,6 +4941,28 @@ void ScOpenclTest:: testLogicalFormulaNot()
     enableOpenCL();
     pDoc->CalcAll();
     ScDocShellRef xDocShRes = loadDoc("opencl/logical/not.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i < 30000; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(1, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-272]
+void ScOpenclTest:: testLogicalFormulaXor()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/logical/xor.", XLS);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/logical/xor.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i < 30000; ++i)
