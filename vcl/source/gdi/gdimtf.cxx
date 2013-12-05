@@ -2765,6 +2765,13 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             {
                 pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
 
+                if (pAction->GetType() == META_COMMENT_ACTION)
+                {
+                    MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
+                    if ( pCommentAct->GetComment() == "EMF_PLUS" )
+                        rGDIMetaFile.UseCanvas( sal_True );
+                }
+
                 if( pAction )
                     rGDIMetaFile.AddAction( pAction );
             }
