@@ -96,7 +96,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	ucb/source/ucp/expand/ucpexpand1 \
 	ucb/source/ucp/ext/ucpext \
 	ucb/source/ucp/file/ucpfile1 \
-	ucb/source/ucp/ftp/ucpftp1 \
+	$(if $(ENABLE_CURL),ucb/source/ucp/ftp/ucpftp1) \
 	ucb/source/ucp/hierarchy/ucphier1 \
 	ucb/source/ucp/package/ucppkg1 \
 	ucb/source/ucp/tdoc/ucptdoc1 \

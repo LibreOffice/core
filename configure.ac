@@ -8640,17 +8640,21 @@ if test "$with_system_curl" = "yes"; then
     libo_MINGW_TRY_DLL([libgpg-error])
     libo_MINGW_TRY_DLL([libgcrypt])
     libo_MINGW_TRY_DLL([libssh2])
+    ENABLE_CURL=TRUE
 elif test $_os = iOS; then
     # Let's see if we need curl, I think not?
     AC_MSG_RESULT([none])
+    ENABLE_CURL=
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
     BUILD_TYPE="$BUILD_TYPE CURL"
+    ENABLE_CURL=TRUE
 fi
 AC_SUBST(SYSTEM_CURL)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
+AC_SUBST(ENABLE_CURL)
 
 dnl ===================================================================
 dnl Check for system boost
