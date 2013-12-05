@@ -400,6 +400,18 @@ void ScFiltersTest::testSharedFormulaXLS()
     if (!checkFormula(*pDoc, ScAddress(1,7,0), "A8*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
+    // We re-group formula cells on load. Let's check that as well.
+
+    ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch formula cell.", pFC);
+    CPPUNIT_ASSERT_MESSAGE("This should be the top cell in formula group.", pFC->IsSharedTop());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    pFC = pDoc->GetFormulaCell(ScAddress(1,4,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch formula cell.", pFC);
+    CPPUNIT_ASSERT_MESSAGE("This should be the top cell in formula group.", pFC->IsSharedTop());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+
     xDocSh->DoClose();
 }
 
