@@ -50,6 +50,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "styleuno.hxx"
 #include "docsh.hxx"
@@ -1986,9 +1987,7 @@ OUString SAL_CALL ScStyleObj::getImplementationName() throw(uno::RuntimeExceptio
 sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
-    return rServiceName.startsWith( SCSTYLE_SERVICE ) ||
-           ( bPage ? rServiceName.startsWith( SCPAGESTYLE_SERVICE ) : rServiceName.startsWith( SCCELLSTYLE_SERVICE ) );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()

@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -430,8 +431,7 @@ OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.startsWith( SCNAMEDRANGEOBJ_SERVICE ) ||
-           rServiceName.startsWith( SCLINKTARGET_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()

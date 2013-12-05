@@ -40,6 +40,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
@@ -2199,7 +2200,6 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScTabViewObj" );
@@ -2208,8 +2208,7 @@ OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeExcept
 sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCTABVIEWOBJ_SERVICE ) ||
-           rServiceName.equalsAscii( SCVIEWSETTINGS_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()

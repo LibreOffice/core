@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/app.hxx>
 #include <svl/itemprop.hxx>
 
@@ -234,7 +235,6 @@ uno::Sequence<OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 }
 
 // XServiceInfo
-
 OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScFunctionAccess");
@@ -243,8 +243,7 @@ OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeEx
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCFUNCTIONACCESS_SERVICE ) ||
-           rServiceName.equalsAscii( SCDOCSETTINGS_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()

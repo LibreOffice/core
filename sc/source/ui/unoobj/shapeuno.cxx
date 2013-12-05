@@ -29,6 +29,7 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1523,14 +1524,7 @@ OUString SAL_CALL ScShapeObj::getImplementationName(  ) throw (uno::RuntimeExcep
 
 ::sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& _ServiceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSupported( getSupportedServiceNames() );
-    for ( const OUString* pSupported = aSupported.getConstArray();
-          pSupported != aSupported.getConstArray() + aSupported.getLength();
-          ++pSupported
-        )
-        if ( _ServiceName == *pSupported )
-            return sal_True;
-    return false;
+    return cppu::supportsService(this, _ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) throw (uno::RuntimeException)

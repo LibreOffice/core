@@ -29,6 +29,7 @@
 #include <svl/smplhint.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -462,28 +463,16 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
 }
 
 //=====  XServiceInfo  ========================================================
-
-OUString SAL_CALL
-       ScAccessibleContextBase::getImplementationName(void)
+OUString SAL_CALL ScAccessibleContextBase::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return OUString("ScAccessibleContextBase");
 }
 
-sal_Bool SAL_CALL
-     ScAccessibleContextBase::supportsService(const OUString& sServiceName)
+sal_Bool SAL_CALL ScAccessibleContextBase::supportsService(const OUString& sServiceName)
     throw (uno::RuntimeException)
 {
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    uno::Sequence< OUString> aSupportedServices (
-        getSupportedServiceNames ());
-    sal_Int32 nLength(aSupportedServices.getLength());
-    const OUString* pServiceNames = aSupportedServices.getConstArray();
-    for (int i=0; i<nLength; ++i, ++pServiceNames)
-        if (sServiceName == *pServiceNames)
-            return sal_True;
-    return false;
+    return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString> SAL_CALL

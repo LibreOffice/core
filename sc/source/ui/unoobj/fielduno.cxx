@@ -38,6 +38,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -144,8 +145,6 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 
 }
 
-#define SCTEXTFIELD_SERVICE         "com.sun.star.text.TextField"
-#define SCTEXTCONTENT_SERVICE       "com.sun.star.text.TextContent"
 
 SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
@@ -1439,7 +1438,7 @@ OUString SAL_CALL ScEditFieldObj::getImplementationName() throw(uno::RuntimeExce
 sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName == SCTEXTFIELD_SERVICE || rServiceName == SCTEXTCONTENT_SERVICE;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
@@ -1447,8 +1446,8 @@ uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = SCTEXTFIELD_SERVICE;
-    pArray[1] = SCTEXTCONTENT_SERVICE;
+    pArray[0] = "com.sun.star.text.TextField";
+    pArray[1] = "com.sun.star.text.TextContent";
     return aRet;
 }
 

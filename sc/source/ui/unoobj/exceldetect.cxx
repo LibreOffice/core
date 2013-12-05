@@ -11,6 +11,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "svl/itemset.hxx"
 #include "svl/eitem.hxx"
@@ -33,14 +34,7 @@ OUString ScExcelBiffDetect::getImplementationName() throw (uno::RuntimeException
 
 sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName ) throw (uno::RuntimeException)
 {
-    uno::Sequence<OUString> aSrvNames = getSupportedServiceNames();
-    const OUString* pArray = aSrvNames.getConstArray();
-    for (sal_Int32 i = 0; i < aSrvNames.getLength(); ++i, ++pArray)
-    {
-        if (*pArray == aName)
-            return true;
-    }
-    return false;
+    return cppu::supportsService(this, aName);
 }
 
 uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames() throw (uno::RuntimeException)

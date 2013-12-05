@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 #include "pageuno.hxx"
 #include "shapeuno.hxx"
@@ -52,7 +53,7 @@ OUString SAL_CALL ScPageObj::getImplementationName()
 sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( "com.sun.star.sheet.SpreadsheetDrawPage" );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()

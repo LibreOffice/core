@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "srchuno.hxx"
 #include "docsh.hxx"
@@ -199,8 +200,7 @@ OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCSEARCHDESCRIPTOR_SERVICE ) ||
-           rServiceName.equalsAscii( SCREPLACEDESCRIPTOR_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()

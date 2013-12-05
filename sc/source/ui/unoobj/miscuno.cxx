@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"
@@ -230,7 +231,7 @@ OUString SAL_CALL ScIndexEnumeration::getImplementationName()
 sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return sServiceName == ServiceName;
+    return cppu::supportsService(this, ServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString >

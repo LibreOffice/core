@@ -19,6 +19,7 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
@@ -296,9 +297,7 @@ OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::Run
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    OUString aServiceStr( rServiceName );
-    return aServiceStr.equalsAscii( bIsRange ? SC_SERVICENAME_RANGEADDRESS
-                                             : SC_SERVICENAME_CELLADDRESS );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()

@@ -30,6 +30,7 @@
 #include "sc.hrc"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -37,8 +38,6 @@
 
 using namespace com::sun::star;
 
-#define SCCOMPSCPREADSHEETSETTINGS_SERVICE      "com.sun.star.comp.SpreadsheetSettings"
-#define SCDOCUMENTSETTINGS_SERVICE              "com.sun.star.document.Settings"
 #define SCSAVEVERSION                           "SaveVersionOnClose"
 
 
@@ -464,7 +463,6 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 // XServiceInfo
-
 OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString( "ScDocumentConfiguration" );
@@ -473,8 +471,7 @@ OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::Ru
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE ) ||
-           rServiceName.equalsAscii( SCDOCUMENTSETTINGS_SERVICE );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
@@ -482,11 +479,9 @@ uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNam
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
-    pArray[1] = OUString( SCDOCUMENTSETTINGS_SERVICE );
+    pArray[0] = "com.sun.star.comp.SpreadsheetSettings";
+    pArray[1] = "com.sun.star.document.Settings";
     return aRet;
 }
-
-//-------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
