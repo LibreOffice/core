@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_GENERICCONTROLLER_HXX
 #define INCLUDED_DBACCESS_GENERICCONTROLLER_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <dbaccess/AsyncronousLink.hxx>
 #include <dbaccess/controllerframe.hxx>
 #include <dbaccess/dbaccessdllapi.h>
@@ -226,7 +230,7 @@ namespace dbaui
         };
 
         DECLARE_STL_MAP( sal_uInt16, FeatureState, ::std::less< sal_uInt16 >, StateCache );
-        DECLARE_STL_VECTOR( DispatchTarget, Dispatch);
+        typedef std::vector<DispatchTarget> Dispatch;
 
         FeatureListeners        m_aFeaturesToInvalidate;
 

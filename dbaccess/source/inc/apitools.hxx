@@ -20,17 +20,20 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 #define INCLUDED_DBACCESS_SOURCE_INC_APITOOLS_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 
 // various typedefs
 namespace {
-DECLARE_STL_VECTOR(::com::sun::star::uno::WeakReferenceHelper, OWeakRefArray);
+typedef std::vector<css::uno::WeakReferenceHelper> OWeakRefArray;
 }
 
 // OSubComponent - a component which holds a hard ref to it's parent

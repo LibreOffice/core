@@ -23,10 +23,10 @@
 #include <sal/config.h>
 
 #include <map>
+#include <vector>
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -57,7 +57,7 @@ class OBookmarkContainer
 {
 protected:
     typedef std::map<OUString, OUString> MapString2String;
-    DECLARE_STL_VECTOR(MapString2String::iterator, MapIteratorVector);
+    typedef std::vector<MapString2String::iterator> MapIteratorVector;
 
     MapString2String        m_aBookmarks;           // the bookmarks itself
     MapIteratorVector       m_aBookmarksIndexed;    // for index access to the

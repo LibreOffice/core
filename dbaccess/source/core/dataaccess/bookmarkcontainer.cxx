@@ -272,7 +272,7 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(Runt
     Sequence< OUString > aNames(m_aBookmarks.size());
     OUString* pNames = aNames.getArray();
     ;
-    for (   ConstMapIteratorVectorIterator aNameIter = m_aBookmarksIndexed.begin();
+    for (   MapIteratorVector::const_iterator aNameIter = m_aBookmarksIndexed.begin();
             aNameIter != m_aBookmarksIndexed.end();
             ++pNames, ++aNameIter
         )
@@ -297,7 +297,7 @@ void OBookmarkContainer::implRemove(const OUString& _rName)
 
     // look for the name in the index access vector
     MapString2String::iterator aMapPos = m_aBookmarks.end();
-    for (   MapIteratorVectorIterator aSearch = m_aBookmarksIndexed.begin();
+    for (   MapIteratorVector::iterator aSearch = m_aBookmarksIndexed.begin();
             aSearch != m_aBookmarksIndexed.end();
             ++aSearch
         )

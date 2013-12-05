@@ -270,7 +270,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollectionIterator& iter, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
+sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     sal_Bool bSuccess(sal_True);
     if (m_bForward)
@@ -399,13 +399,13 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 
 //------------------------------------------------------------------------
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos,
-    FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
+    FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     // die Startposition merken
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
-    FieldCollectionIterator iterInitialField = iterFieldLoop;
+    FieldCollection::iterator iterInitialField = iterFieldLoop;
 
     // --------------------------------------------------------------
     sal_Bool bFound(sal_False);
@@ -464,13 +464,13 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
 
 //------------------------------------------------------------------------
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
-    FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
+    FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     // die Startposition merken
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
-    FieldCollectionIterator iterInitialField = iterFieldLoop;
+    FieldCollection::iterator iterInitialField = iterFieldLoop;
 
     WildCard aSearchExpression(strExpression);
 
@@ -542,7 +542,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
 
 //------------------------------------------------------------------------
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos,
-    FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
+    FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     DBG_ASSERT(m_bLevenshtein || m_bRegular,
         "FmSearchEngine::SearchRegularApprox : ungueltiger Suchmodus !");
@@ -553,7 +553,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
-    FieldCollectionIterator iterInitialField = iterFieldLoop;
+    FieldCollection::iterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
     SearchOptions aParam;
@@ -782,7 +782,7 @@ sal_Bool FmSearchEngine::GetCaseSensitive() const
 //------------------------------------------------------------------------
 void FmSearchEngine::clearControlTexts()
 {
-    for (   ControlTextSuppliersIterator aIter = m_aControlTexts.begin();
+    for (   ControlTextSuppliers::iterator aIter = m_aControlTexts.begin();
             aIter < m_aControlTexts.end();
             ++aIter
         )
@@ -1014,9 +1014,9 @@ void FmSearchEngine::SearchNextImpl()
     }
 
     // fuer Arbeit auf Feldliste
-    FieldCollectionIterator iterBegin = m_arrUsedFields.begin();
-    FieldCollectionIterator iterEnd = m_arrUsedFields.end();
-    FieldCollectionIterator iterFieldCheck;
+    FieldCollection::iterator iterBegin = m_arrUsedFields.begin();
+    FieldCollection::iterator iterEnd = m_arrUsedFields.end();
+    FieldCollection::iterator iterFieldCheck;
 
     sal_Int32 nFieldPos;
 

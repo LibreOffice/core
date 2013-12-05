@@ -20,6 +20,10 @@
 #ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
 #define _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -63,8 +67,8 @@ namespace connectivity
     {
 
     public:
-        DECLARE_STL_VECTOR(ORowSetValueDecoratorRef,ORow);
-        DECLARE_STL_VECTOR(ORow, ORows);
+        typedef std::vector<ORowSetValueDecoratorRef> ORow;
+        typedef std::vector<ORow> ORows;
 
         enum MetaDataResultSetType
         {

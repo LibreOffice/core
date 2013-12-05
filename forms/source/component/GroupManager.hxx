@@ -27,11 +27,11 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 
 #include <algorithm>
 #include <map>
+#include <vector>
 
 using namespace comphelper;
 
@@ -120,7 +120,7 @@ public:
     OUString GetName() const { return m_aName; }
 };
 
-DECLARE_STL_VECTOR(OGroupComp, OGroupCompArr);
+typedef std::vector<OGroupComp> OGroupCompArr;
 
 //========================================================================
 class OGroupComp;
@@ -141,7 +141,7 @@ public:
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 
-DECLARE_STL_VECTOR(OGroupCompAcc, OGroupCompAccArr);
+typedef std::vector<OGroupCompAcc> OGroupCompAccArr;
 
 //========================================================================
 class OGroup
@@ -174,7 +174,7 @@ public:
 };
 
 typedef std::map<OUString, OGroup> OGroupArr;
-DECLARE_STL_VECTOR(OGroupArr::iterator, OActiveGroups);
+typedef std::vector<OGroupArr::iterator> OActiveGroups;
 
 //========================================================================
 class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>

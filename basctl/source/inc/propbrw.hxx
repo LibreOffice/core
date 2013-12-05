@@ -20,9 +20,12 @@
 #ifndef BASCTL_PROPBRW_HXX
 #define BASCTL_PROPBRW_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
-#include <comphelper/stl_types.hxx>
 #include <svl/lstner.hxx>
 #include <svl/brdcst.hxx>
 #include <svx/svdmark.hxx>
@@ -56,7 +59,7 @@ protected:
     virtual void Resize();
     virtual sal_Bool Close();
 
-    DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
+    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
         CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );

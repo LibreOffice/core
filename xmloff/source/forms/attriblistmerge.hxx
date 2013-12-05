@@ -20,7 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_ATTRIBLISTMERGE_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_ATTRIBLISTMERGE_HXX
 
-#include <comphelper/stl_types.hxx>
+#include <sal/config.h>
+
+#include <vector>
+
 #include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -39,7 +42,7 @@ namespace xmloff
     {
     protected:
         ::osl::Mutex        m_aMutex;
-        DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >, AttributeListArray );
+        typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > > AttributeListArray;
         AttributeListArray  m_aLists;
 
         ~OAttribListMerger() { }

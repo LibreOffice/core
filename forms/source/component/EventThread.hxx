@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_EVENTTHREAD_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_EVENTTHREAD_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -29,7 +33,6 @@
 
 #include <osl/conditn.hxx>
 #include <cppuhelper/component.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 using namespace comphelper;
 
@@ -47,9 +50,9 @@ class OComponentEventThread
             ,public ::com::sun::star::lang::XEventListener
             ,public ::cppu::OWeakObject
 {
-    DECLARE_STL_VECTOR(::com::sun::star::lang::EventObject*, ThreadEvents);
-    DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter> , ThreadObjects);
-    DECLARE_STL_VECTOR(sal_Bool,    ThreadBools);
+    typedef std::vector<css::lang::EventObject*> ThreadEvents;
+    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter> > ThreadObjects;
+    typedef std::vector<sal_Bool> ThreadBools;
 
     ::osl::Mutex                    m_aMutex;
     ::osl::Condition                m_aCond;            // Queue filled?

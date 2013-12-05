@@ -62,9 +62,9 @@ namespace dbaui
         if (_rLHS.size() != _rRHS.size())
             return sal_False;
 
-        ConstIndexFieldsIterator aLeft = _rLHS.begin();
-        ConstIndexFieldsIterator aLeftEnd = _rLHS.end();
-        ConstIndexFieldsIterator aRight = _rRHS.begin();
+        IndexFields::const_iterator aLeft = _rLHS.begin();
+        IndexFields::const_iterator aLeftEnd = _rLHS.end();
+        IndexFields::const_iterator aRight = _rRHS.begin();
         for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
         {
             if (*aLeft != *aRight)
@@ -669,7 +669,7 @@ DBG_NAME(DbaIndexDialog)
         return sal_True;
     }
 
-    sal_Bool DbaIndexDialog::implCheckPlausibility(const ConstIndexesIterator& _rPos)
+    sal_Bool DbaIndexDialog::implCheckPlausibility(const Indexes::const_iterator& _rPos)
     {
         // need at least one field
         if (0 == _rPos->aFields.size())
@@ -682,7 +682,7 @@ DBG_NAME(DbaIndexDialog)
 
         // no double fields
         std::set< OUString > aExistentFields;
-        for (   ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
+        for (   IndexFields::const_iterator aFieldCheck = _rPos->aFields.begin();
                 aFieldCheck != _rPos->aFields.end();
                 ++aFieldCheck
             )

@@ -20,9 +20,9 @@
 #include <unotools/configvaluecontainer.hxx>
 #include <unotools/confignode.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/stl_types.hxx>
 #include <uno/data.h>
 #include <algorithm>
+#include <vector>
 
 #ifdef DBG_UTIL
 #include <rtl/strbuf.hxx>
@@ -205,7 +205,7 @@ namespace utl
         }
     };
 
-    DECLARE_STL_VECTOR( NodeValueAccessor, NodeValueAccessors );
+    typedef std::vector<NodeValueAccessor> NodeValueAccessors;
 
     //=====================================================================
     //= OConfigurationValueContainerImpl
@@ -329,7 +329,7 @@ namespace utl
 
 #ifdef DBG_UTIL
         // another check (should be the first container for this node)
-        ConstNodeValueAccessorsIterator aExistent = ::std::find(
+        NodeValueAccessors::const_iterator aExistent = ::std::find(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             _rAccessor

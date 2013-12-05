@@ -42,7 +42,7 @@ sal_Int32 PropertyInfoService::getPropertyId(const OUString& _rName)
 
     PropertyAssignment aCompareName(_rName, -1);
 
-    ::std::pair<PropertyMapIterator,PropertyMapIterator> aPair = ::std::equal_range(
+    ::std::pair<PropertyMap::iterator,PropertyMap::iterator> aPair = ::std::equal_range(
         s_AllKnownProperties.begin(),
         s_AllKnownProperties.end(),
         aCompareName,

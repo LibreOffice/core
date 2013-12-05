@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <unotools/eventlisteneradapter.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/stl_types.hxx>
 
 //.........................................................................
 namespace utl

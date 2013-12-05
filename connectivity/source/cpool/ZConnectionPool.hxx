@@ -19,6 +19,11 @@
 #ifndef _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
 #define _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
 
+#include <sal/config.h>
+
+#include <map>
+#include <vector>
+
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
@@ -27,7 +32,6 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <salhelper/timer.hxx>
 #include <rtl/ref.hxx>

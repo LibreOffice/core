@@ -20,7 +20,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXES_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXES_HXX
 
-#include <comphelper/stl_types.hxx>
+#include <sal/config.h>
+
+#include <vector>
 
 namespace dbaui
 {
@@ -33,7 +35,7 @@ namespace dbaui
         OIndexField() : bSortAscending(sal_True) { }
     };
 
-    DECLARE_STL_VECTOR( OIndexField, IndexFields );
+    typedef std::vector<OIndexField> IndexFields;
 
     // OIndex
     struct GrantIndexAccess
@@ -76,7 +78,7 @@ namespace dbaui
         OIndex();   // not implemented
     };
 
-    DECLARE_STL_VECTOR( OIndex, Indexes );
+    typedef std::vector<OIndex> Indexes;
 
 }   // namespace dbaui
 

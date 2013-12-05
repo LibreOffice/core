@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <vector>
 
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -33,7 +34,6 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include <cppuhelper/implbase3.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/logging.hxx>
 #include <osl/mutex.hxx>
 #include "connectivity/DriversConfig.hxx"
@@ -69,7 +69,7 @@ namespace drivermanager
         css::uno::Reference<css::uno::XComponentContext>  m_xContext;
         ::comphelper::EventLogger       m_aEventLogger;
 
-        DECLARE_STL_VECTOR(DriverAccess, DriverAccessArray);
+        typedef std::vector<DriverAccess> DriverAccessArray;
         DriverAccessArray               m_aDriversBS;
 
         // for drivers registered at runtime (not bootstrapped) we don't require an XServiceInfo interface,

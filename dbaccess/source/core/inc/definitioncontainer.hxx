@@ -23,10 +23,10 @@
 #include <sal/config.h>
 
 #include <map>
+#include <vector>
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>
-#include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -96,7 +96,7 @@ class ODefinitionContainer
 {
 protected:
     typedef std::map< OUString, ::com::sun::star::uno::WeakReference< ::com::sun::star::ucb::XContent > > Documents;
-    DECLARE_STL_VECTOR(Documents::iterator, DocumentsIndexAccess);
+    typedef std::vector<Documents::iterator> DocumentsIndexAccess;
 
     enum ContainerOperation
     {

@@ -29,7 +29,6 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/charclass.hxx>
@@ -37,6 +36,7 @@
 #include <osl/thread.hxx>
 
 #include <deque>
+#include <vector>
 
 /**
  * class FmSearchThread
@@ -158,7 +158,7 @@ namespace svxform {
 
 enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
 
-DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
+typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
 
 class SVX_DLLPUBLIC FmSearchEngine
 {
@@ -187,11 +187,11 @@ class SVX_DLLPUBLIC FmSearchEngine
         sal_Bool                bDoubleHandling;
     };
 
-    DECLARE_STL_VECTOR(FieldInfo, FieldCollection);
+    typedef std::vector<FieldInfo> FieldCollection;
     FieldCollection             m_arrUsedFields;
     sal_Int32                   m_nCurrentFieldIndex;   // the last parameter of RebuildUsedFields, it allows checks in FormatField
 
-    DECLARE_STL_VECTOR(svxform::ControlTextWrapper*, ControlTextSuppliers);
+    typedef std::vector<svxform::ControlTextWrapper*> ControlTextSuppliers;
     ControlTextSuppliers    m_aControlTexts;
 
     sal_Bool                m_bUsingTextComponents;
@@ -200,7 +200,7 @@ class SVX_DLLPUBLIC FmSearchEngine
 
     // Data for the decision in which field a "Found" is accepted
     ::com::sun::star::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
-    FieldCollectionIterator     m_iterPreviousLocField;     // field of the last finding
+    FieldCollection::iterator     m_iterPreviousLocField;     // field of the last finding
 
     // Communication with the thread that does the actual searching
     OUString            m_strSearchExpression;              // forward direction
@@ -354,12 +354,12 @@ private:
     // three methods implementing a complete search loop (null/not null, wildcard, SearchText)
     // (they all have some code in common, but with this solution we have do do a distinction only once per search (before
     // starting the loop), not in every loop step
-    SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
-        const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-    SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
-        const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-    SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
-        const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
+    SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+        const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
+    SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+        const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
+    SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+        const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
 
     SVX_DLLPRIVATE void PropagateProgress(sal_Bool _bDontPropagateOverflow);
     // call the ProgressHandler with STATE_PROGRESS and the current position of the search iterator
@@ -367,7 +367,7 @@ private:
     // helpers, that are needed several times
     SVX_DLLPRIVATE sal_Bool MoveCursor();
     // moves m_xSearchIterator with respect to direction/overflow cursor
-    SVX_DLLPRIVATE sal_Bool MoveField(sal_Int32& nPos, FieldCollectionIterator& iter, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
+    SVX_DLLPRIVATE sal_Bool MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     // moves the iterator with respect to the direction/overflow iterator/overflow cursor
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
     // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields

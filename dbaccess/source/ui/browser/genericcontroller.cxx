@@ -504,8 +504,8 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
         // we are notifying them, so we must use a copy of m_arrStatusListener, not
         // m_arrStatusListener itself
         Dispatch aNotifyLoop( m_arrStatusListener );
-        DispatchIterator iterSearch = aNotifyLoop.begin();
-        DispatchIterator iterEnd = aNotifyLoop.end();
+        Dispatch::iterator iterSearch = aNotifyLoop.begin();
+        Dispatch::iterator iterEnd = aNotifyLoop.end();
 
         while (iterSearch != iterEnd)
         {
@@ -748,7 +748,7 @@ void OGenericUnoController::addStatusListener(const Reference< XStatusListener >
 
 void OGenericUnoController::removeStatusListener(const Reference< XStatusListener > & aListener, const URL& _rURL) throw(RuntimeException)
 {
-    DispatchIterator iterSearch = m_arrStatusListener.begin();
+    Dispatch::iterator iterSearch = m_arrStatusListener.begin();
 
     sal_Bool bRemoveForAll = _rURL.Complete.isEmpty();
     while ( iterSearch != m_arrStatusListener.end() )

@@ -496,7 +496,7 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
     OUString aName;
     OUString aValue;
 
-    for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
+    for (   HtmlSuccessfulObjList::iterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
             ++pSuccObj
         )
@@ -557,7 +557,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
 
     // Aggregate Liste to OUString
-    for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
+    for (   HtmlSuccessfulObjList::iterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
             ++pSuccObj
         )

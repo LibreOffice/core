@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <vector>
 #include <map>
 
 #include <stack>
@@ -245,10 +244,6 @@ OutputIter intersperse(
 
 #define DECLARE_STL_STDKEY_MAP(keytype, valuetype, classname)               \
     DECLARE_STL_MAP(keytype, valuetype, std::less< keytype >, classname)    \
-
-#define DECLARE_STL_VECTOR(valuetyp, classname)     \
-    typedef std::vector< valuetyp >     classname;  \
-    DECLARE_STL_ITERATORS(classname)                \
 
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 

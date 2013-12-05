@@ -158,7 +158,7 @@ namespace dbaui
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
 
             // the fields
-            for (   ConstIndexFieldsIterator aFieldLoop = _rPos->aFields.begin();
+            for (   IndexFields::const_iterator aFieldLoop = _rPos->aFields.begin();
                     aFieldLoop != _rPos->aFields.end();
                     ++aFieldLoop
                 )

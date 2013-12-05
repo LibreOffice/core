@@ -20,7 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_INC_DSNTYPES_HXX
 #define INCLUDED_DBACCESS_SOURCE_INC_DSNTYPES_HXX
 
-#include <comphelper/stl_types.hxx>
+#include <sal/config.h>
+
+#include <vector>
+
 #include "dbadllapi.hxx"
 #include <connectivity/DriversConfig.hxx>
 
@@ -97,7 +100,7 @@ enum DATASOURCE_TYPE
 class OOO_DLLPUBLIC_DBA ODsnTypeCollection
 {
 protected:
-    DECLARE_STL_VECTOR(OUString, StringVector);
+    typedef std::vector<OUString> StringVector;
 
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource

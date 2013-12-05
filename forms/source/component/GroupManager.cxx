@@ -246,7 +246,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
     Sequence<Reference<XControlModel> > aControlModelSeq( nLen );
     Reference<XControlModel>* pModels = aControlModelSeq.getArray();
 
-    ConstOGroupCompArrIterator aGroupComps = m_aCompArray.begin();
+    OGroupCompArr::const_iterator aGroupComps = m_aCompArray.begin();
     for (sal_Int32 i = 0; i < nLen; ++i, ++pModels, ++aGroupComps)
     {
         *pModels = aGroupComps->GetControlModel();

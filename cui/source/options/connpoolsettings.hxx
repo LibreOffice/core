@@ -20,7 +20,10 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLSETTINGS_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLSETTINGS_HXX
 
-#include <comphelper/stl_types.hxx>
+#include <sal/config.h>
+
+#include <vector>
+
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 
@@ -50,12 +53,12 @@ namespace offapp
     class DriverPoolingSettings
     {
     protected:
-        DECLARE_STL_VECTOR( DriverPooling, DriverSettings );
+        typedef std::vector<DriverPooling> DriverSettings;
         DriverSettings      m_aDrivers;
 
     public:
-        typedef ConstDriverSettingsIterator const_iterator;
-        typedef DriverSettingsIterator      iterator;
+        typedef DriverSettings::const_iterator const_iterator;
+        typedef DriverSettings::iterator iterator;
 
     public:
         DriverPoolingSettings();

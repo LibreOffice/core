@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include "propertybaghelper.hxx"
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
@@ -111,8 +115,7 @@ public:
     }
 };
 
-
-DECLARE_STL_VECTOR(HtmlSuccessfulObj, HtmlSuccessfulObjList);
+typedef std::vector<HtmlSuccessfulObj> HtmlSuccessfulObjList;
 
 //========================================================================
 class OGroupManager;

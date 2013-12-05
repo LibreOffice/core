@@ -23,8 +23,8 @@
 #include <sal/config.h>
 
 #include <set>
+#include <vector>
 
-#include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -37,8 +37,8 @@ namespace dbaui
 {
 
     typedef std::set<OUString> StringBag;
-    DECLARE_STL_VECTOR( sal_Int8, ByteVector );
-    DECLARE_STL_VECTOR( OUString, StringArray );
+    typedef std::vector<sal_Int8> ByteVector;
+    typedef std::vector<OUString> StringArray;
 
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 

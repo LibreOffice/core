@@ -4219,7 +4219,7 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 #ifdef DBG_UTIL
     // check if we already have a interceptor for the given object
-    for (   ConstInterceptorsIterator aIter = m_aControlDispatchInterceptors.begin();
+    for (   Interceptors::const_iterator aIter = m_aControlDispatchInterceptors.begin();
             aIter != m_aControlDispatchInterceptors.end();
             ++aIter
         )
@@ -4262,7 +4262,7 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // search the interceptor responsible for the given object
-    InterceptorsIterator aIter;
+    Interceptors::iterator aIter;
     for (   aIter = m_aControlDispatchInterceptors.begin();
             aIter != m_aControlDispatchInterceptors.end();
             ++aIter

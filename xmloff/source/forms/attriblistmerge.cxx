@@ -36,7 +36,7 @@ namespace xmloff
     sal_Bool OAttribListMerger::seekToIndex(sal_Int16 _nGlobalIndex, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         sal_Int16 nLeftOver = _nGlobalIndex;
-        ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
+        AttributeListArray::const_iterator aLookupSublist = m_aLists.begin();
 
         for ( ; (aLookupSublist != m_aLists.end()) && (nLeftOver >= (*aLookupSublist)->getLength());
                 ++aLookupSublist
@@ -55,7 +55,7 @@ namespace xmloff
 
     sal_Bool OAttribListMerger::seekToName(const OUString& _rName, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
-        for (   ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
+        for (   AttributeListArray::const_iterator aLookupSublist = m_aLists.begin();
                 aLookupSublist != m_aLists.end();
                 ++aLookupSublist
             )
@@ -74,7 +74,7 @@ namespace xmloff
     sal_Int16 SAL_CALL OAttribListMerger::getLength(  ) throw(RuntimeException)
     {
         sal_Int16 nCount = 0;
-        for (   ConstAttributeListArrayIterator aAccumulate = m_aLists.begin();
+        for (   AttributeListArray::const_iterator aAccumulate = m_aLists.begin();
                 aAccumulate != m_aLists.end();
                 ++aAccumulate
             )

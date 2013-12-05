@@ -51,7 +51,6 @@
 #include "svx/fmsrccfg.hxx"
 #include <osl/mutex.hxx>
 #include <cppuhelper/component.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/container.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/compbase6.hxx>
@@ -66,7 +65,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 typedef std::vector<SdrObject*> SdrObjArray;
-DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
+typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > > FmFormArray;
 
 // catch database exceptions if they occur
 #define DO_SAFE(statement) try { statement; } catch( const Exception& ) { OSL_FAIL("unhandled exception (I tried to move a cursor (or something like that).)"); }

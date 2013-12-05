@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FORMCONTROLLER_HXX
 #define INCLUDED_SVX_SOURCE_INC_FORMCONTROLLER_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include "delayedevent.hxx"
 #include "formdispatchinterceptor.hxx"
 #include "sqlparserclient.hxx"
@@ -69,7 +73,6 @@
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <vcl/timer.hxx>
 
@@ -205,7 +208,7 @@ namespace svxform
 
         // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
         // the ::com::sun::star::frame::XDispatchProviderInterceptor interface can intercept only _one_ objects dispatches, we need a helper class
-        DECLARE_STL_VECTOR(DispatchInterceptionMultiplexer*, Interceptors);
+        typedef std::vector<DispatchInterceptionMultiplexer*> Interceptors;
         Interceptors    m_aControlDispatchInterceptors;
 
     public:

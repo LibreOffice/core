@@ -367,7 +367,7 @@ namespace dbp
 
         // fill the listbox
         m_aDefSelection.Clear();
-        for (   ConstStringArrayIterator aLoop = rSettings.aLabels.begin();
+        for (   StringArray::const_iterator aLoop = rSettings.aLabels.begin();
                 aLoop != rSettings.aLabels.end();
                 ++aLoop
             )
@@ -452,7 +452,7 @@ namespace dbp
         // fill the list with all available options
         m_aOptions.Clear();
         m_nLastSelection = -1;
-        for (   ConstStringArrayIterator aLoop = rSettings.aLabels.begin();
+        for (   StringArray::const_iterator aLoop = rSettings.aLabels.begin();
                 aLoop != rSettings.aLabels.end();
                 ++aLoop
             )

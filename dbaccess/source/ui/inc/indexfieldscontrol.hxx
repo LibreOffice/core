@@ -36,7 +36,7 @@ namespace dbaui
         IndexFields                 m_aSavedValue;
 
         IndexFields                 m_aFields;          // !! order matters !!
-        ConstIndexFieldsIterator    m_aSeekRow;         // !!
+        IndexFields::const_iterator m_aSeekRow;         // !!
 
         Link                        m_aModifyHdl;
 
@@ -79,8 +79,8 @@ namespace dbaui
         void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
 
     protected:
-        OUString GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const;
-        sal_Bool implGetFieldDesc(long _nRow, ConstIndexFieldsIterator& _rPos);
+        OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;
+        sal_Bool implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos);
 
         sal_Bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
 

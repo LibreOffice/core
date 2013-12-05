@@ -29,7 +29,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -38,6 +37,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <vector>
 
 #include <o3tl/compat_functional.hxx>
 
@@ -66,9 +66,9 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
 
-    DECLARE_STL_VECTOR( Reference< XDriver >, DriverArray );
+    typedef std::vector< Reference< XDriver > > DriverArray;
     DriverArray                 m_aDrivers;
-    ConstDriverArrayIterator    m_aPos;
+    DriverArray::const_iterator m_aPos;
     // order matters!
 
 protected:
@@ -371,7 +371,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
         const OUString* pDriverOrderEnd  =   pDriverOrder +  aDriverOrder.getLength();
 
         // the first driver for which there is no preference
-        DriverAccessArrayIterator aNoPrefDriversStart = m_aDriversBS.begin();
+        DriverAccessArray::iterator aNoPrefDriversStart = m_aDriversBS.begin();
             // at the moment this is the first of all drivers we know
 
         for ( ; ( pDriverOrder < pDriverOrderEnd ) && ( aNoPrefDriversStart != m_aDriversBS.end() ); ++pDriverOrder )
@@ -380,7 +380,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
             driver_order.sImplementationName = *pDriverOrder;
 
             // look for the impl name in the DriverAccess array
-            ::std::pair< DriverAccessArrayIterator, DriverAccessArrayIterator > aPos =
+            ::std::pair< DriverAccessArray::iterator, DriverAccessArray::iterator > aPos =
                 ::std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), driver_order, CompareDriverAccessByName() );
 
             if ( aPos.first != aPos.second )

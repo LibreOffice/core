@@ -181,9 +181,9 @@ DBG_NAME(IndexFieldsControl)
     {
         // do not just copy the array, we may have empty field names (which should not be copied)
         _rFields.resize(m_aFields.size());
-        ConstIndexFieldsIterator aSource = m_aFields.begin();
-        ConstIndexFieldsIterator aSourceEnd = m_aFields.end();
-        IndexFieldsIterator aDest = _rFields.begin();
+        IndexFields::const_iterator aSource = m_aFields.begin();
+        IndexFields::const_iterator aSourceEnd = m_aFields.end();
+        IndexFields::iterator aDest = _rFields.begin();
         for (; aSource < aSourceEnd; ++aSource)
             if (!aSource->sFieldName.isEmpty())
             {
@@ -263,7 +263,7 @@ DBG_NAME(IndexFieldsControl)
         if (!IsEnabled())
             return NULL;
 
-        ConstIndexFieldsIterator aRow;
+        IndexFields::const_iterator aRow;
         sal_Bool bNewField = !implGetFieldDesc(_nRow, aRow);
 
         DbaMouseDownListBoxController* pReturn = NULL;
@@ -288,7 +288,7 @@ DBG_NAME(IndexFieldsControl)
         return pReturn;
     }
 
-    sal_Bool IndexFieldsControl::implGetFieldDesc(long _nRow, ConstIndexFieldsIterator& _rPos)
+    sal_Bool IndexFieldsControl::implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos)
     {
         _rPos = m_aFields.end();
         if ((_nRow < 0) || (_nRow >= (sal_Int32)m_aFields.size()))
@@ -331,7 +331,7 @@ DBG_NAME(IndexFieldsControl)
                     if (nRow >= 0)  // may be -1 in case the control was empty
                     {
                         // remove the field from the selection
-                        IndexFieldsIterator aPos = m_aFields.begin() + nRow;
+                        IndexFields::iterator aPos = m_aFields.begin() + nRow;
 
                         if (bEmptySelected)
                         {
@@ -373,7 +373,7 @@ DBG_NAME(IndexFieldsControl)
 
     void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, long _nRow, sal_uInt16 _nColumnId)
     {
-        ConstIndexFieldsIterator aFieldDescription;
+        IndexFields::const_iterator aFieldDescription;
         sal_Bool bNewField = !implGetFieldDesc(_nRow, aFieldDescription);
 
         switch (_nColumnId)
@@ -430,7 +430,7 @@ DBG_NAME(IndexFieldsControl)
     }
     OUString IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
     {
-        ConstIndexFieldsIterator aRow = m_aFields.end();
+        IndexFields::const_iterator aRow = m_aFields.end();
         if ( _nRow >= 0 )
         {
             aRow = m_aFields.begin() + _nRow;
@@ -438,7 +438,7 @@ DBG_NAME(IndexFieldsControl)
         }
         return GetRowCellText(aRow,nColId);
     }
-    OUString IndexFieldsControl::GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const
+    OUString IndexFieldsControl::GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const
     {
         if (_rRow < m_aFields.end())
         {

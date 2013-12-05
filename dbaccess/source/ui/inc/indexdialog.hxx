@@ -154,7 +154,7 @@ namespace dbaui
 
         sal_Bool implDropIndex(SvTreeListEntry* _pEntry, sal_Bool _bRemoveFromCollection);
 
-        sal_Bool implCheckPlausibility(const ConstIndexesIterator& _rPos);
+        sal_Bool implCheckPlausibility(const Indexes::const_iterator& _rPos);
 
         /** checks if the controls have to be replaced and moved.
         */

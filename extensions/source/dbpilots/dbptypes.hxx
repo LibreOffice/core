@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <set>
+#include <vector>
 
 #include <comphelper/stl_types.hxx>
 
@@ -31,7 +32,7 @@ namespace dbp
 {
 //.........................................................................
 
-    DECLARE_STL_VECTOR( OUString, StringArray );
+    typedef std::vector<OUString> StringArray;
     typedef std::set<OUString> StringBag;
     DECLARE_STL_STDKEY_MAP( sal_uInt32, OUString, MapInt2String );
 

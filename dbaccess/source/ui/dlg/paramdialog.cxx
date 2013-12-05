@@ -336,7 +336,7 @@ DBG_NAME(OParameterDialog)
         m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
 
         // was it the last "not visited yet" entry ?
-        ConstByteVectorIterator aIter;
+        ByteVector::const_iterator aIter;
         for (   aIter = m_aVisitedParams.begin();
                 aIter < m_aVisitedParams.end();
                 ++aIter

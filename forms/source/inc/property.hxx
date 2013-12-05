@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_PROPERTY_HXX
 #define INCLUDED_FORMS_SOURCE_INC_PROPERTY_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -27,7 +31,6 @@
 #include <cppuhelper/proptypehlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propagg.hxx>
-#include <comphelper/stl_types.hxx>
 
 using namespace comphelper;
 
@@ -61,7 +64,7 @@ class PropertyInfoService
 
     };
 
-    DECLARE_STL_VECTOR(PropertyAssignment, PropertyMap);
+    typedef std::vector<PropertyAssignment> PropertyMap;
     static PropertyMap      s_AllKnownProperties;
 
     //..................................................................
