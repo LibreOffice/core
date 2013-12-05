@@ -264,10 +264,6 @@ OutputIter intersperse(
     typedef ::std::set< valuetype > classname;          \
     DECLARE_STL_ITERATORS(classname)                    \
 
-#define DECLARE_STL_SET(valuetype, comparefct, classname)               \
-    typedef ::std::set< valuetype, comparefct > classname;  \
-    DECLARE_STL_ITERATORS(classname)                        \
-
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

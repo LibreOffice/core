@@ -557,7 +557,7 @@ struct PropertyValueLess
         { return x.Name < y.Name ? true : false; }      // construct prevents a MSVC6 warning
 };
 
-DECLARE_STL_SET( PropertyValue, PropertyValueLess, PropertyValueSet);
+typedef std::set<PropertyValue, PropertyValueLess> PropertyValueSet;
 
 void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPropertySet >& _rxSource, SfxItemSet& _rDest)
 {
@@ -620,7 +620,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
                     ++aIndirect)
             {
                 aSearchFor.Name = aIndirect->second;
-                ConstPropertyValueSetIterator aInfoPos = aInfos.find(aSearchFor);
+                PropertyValueSet::const_iterator aInfoPos = aInfos.find(aSearchFor);
                 if (aInfos.end() != aInfoPos)
                     // the property is contained in the info sequence
                     // -> transfer it into an item
@@ -745,7 +745,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     for (sal_Int32 i = 0; i < nCount; ++i, ++pInfo)
     {
         aSearchFor.Name = pInfo->Name;
-        PropertyValueSetIterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
+        PropertyValueSet::iterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
         if (aRelevantSettings.end() != aOverwrittenSetting)
         {   // the setting was present in the original sequence, and it is to be overwritten -> replace it
             if ( !::comphelper::compare(pInfo->Value,aOverwrittenSetting->Value) )
@@ -815,8 +815,8 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         sal_Int32 nOldLength = _rInfo.getLength();
         _rInfo.realloc(nOldLength + aRelevantSettings.size());
         PropertyValue* pAppendValues = _rInfo.getArray() + nOldLength;
-        ConstPropertyValueSetIterator aRelevantEnd = aRelevantSettings.end();
-        for (   ConstPropertyValueSetIterator aLoop = aRelevantSettings.begin();
+        PropertyValueSet::const_iterator aRelevantEnd = aRelevantSettings.end();
+        for (   PropertyValueSet::const_iterator aLoop = aRelevantSettings.begin();
                 aLoop != aRelevantEnd;
                 ++aLoop, ++pAppendValues
             )
