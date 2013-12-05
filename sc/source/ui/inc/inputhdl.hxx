@@ -233,6 +233,7 @@ public:
     void            InputGetSelection       ( xub_StrLen& rStart, xub_StrLen& rEnd );
     void            InputSetSelection       ( xub_StrLen nStart, xub_StrLen nEnd );
     void            InputReplaceSelection   ( const OUString& rStr );
+    void            InputTurnOffWinEngine();
 
     bool            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
