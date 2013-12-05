@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include "CustomAnimationPreset.hxx"
 
@@ -153,11 +154,6 @@ private:
 
 // --------------------------------------------------------------------
 
-static const sal_Char* pSN1 = "com.sun.star.animations.ParallelTimeContainer";
-static const sal_Char* pSN2 = "com.sun.star.comp.sd.RandomAnimationNode";
-
-// --------------------------------------------------------------------
-
 SD_DLLPUBLIC Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
 {
     Reference< XInterface > xInt( static_cast<XWeak*>( new RandomAnimationNode( nPresetClass ) ) );
@@ -183,8 +179,9 @@ OUString RandomNode__getImplementationName() throw( RuntimeException )
 
 Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( RuntimeException )
 {
-    static const OUString aSN2( OUString::createFromAscii( pSN2 ) );
-    Sequence< OUString > aSeq( &aSN2, 1 );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[0] = "com.sun.star.animations.ParallelTimeContainer";
+    aSeq[1] = "com.sun.star.comp.sd.RandomAnimationNode";
     return aSeq;
 }
 
@@ -671,7 +668,7 @@ OUString RandomAnimationNode::getImplementationName() throw()
 // XServiceInfo
 sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName) throw()
 {
-    return ServiceName.equalsAscii( pSN1 ) || ServiceName.equalsAscii( pSN2 );
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

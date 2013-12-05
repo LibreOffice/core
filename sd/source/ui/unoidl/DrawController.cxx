@@ -34,6 +34,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationController.hpp>
@@ -222,9 +223,7 @@ void SAL_CALL DrawController::removeEventListener (
     return SfxBaseController::suspend( Suspend );
 }
 
-
 // XServiceInfo
-
 OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeException)
 {
     // Do not throw an excepetion at the moment.  This leads to a crash
@@ -233,22 +232,13 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
     return OUString("DrawController") ;
 }
 
-
-
 static OUString ssServiceName( "com.sun.star.drawing.DrawingDocumentDrawView");
 
-sal_Bool SAL_CALL DrawController::supportsService (
-    const OUString& rsServiceName)
+sal_Bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName)
     throw(RuntimeException)
 {
-    // Do not throw an exception at the moment.  This leads to a crash
-    // under Solaris on relead.  See issue i70929 for details.
-    //    ThrowIfDisposed();
-    return rsServiceName.equals(ssServiceName);
+    return cppu::supportsService(this, rsServiceName);
 }
-
-
-
 
 Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
     throw(RuntimeException)
@@ -260,11 +250,7 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
     return aSupportedServices;
 }
 
-
-
-
 //------ XSelectionSupplier --------------------------------------------
-
 sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
     throw(lang::IllegalArgumentException, RuntimeException)
 {

@@ -39,6 +39,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svditer.hxx>
@@ -1699,7 +1700,7 @@ OUString SAL_CALL SdUnoEventsAccess::getImplementationName(  )
 sal_Bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return ServiceName == maStrServiceName;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames(  )

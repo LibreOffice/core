@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
@@ -1117,36 +1118,24 @@ void SdStyleSheetPool::throwIfDisposed() throw(::com::sun::star::uno::RuntimeExc
         throw DisposedException();
 }
 
-// --------------------------------------------------------------------
 // XServiceInfo
-// --------------------------------------------------------------------
-
 OUString SAL_CALL SdStyleSheetPool::getImplementationName() throw(RuntimeException)
 {
     return OUString( "SdStyleSheetPool" );
 }
 
-// --------------------------------------------------------------------
-
-static const sal_Char* gpServiceName = "com.sun.star.style.StyleFamilies";
-
 sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return ServiceName.equalsAscii( gpServiceName );
+    return cppu::supportsService(this, ServiceName);
 }
-
-// --------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames() throw(RuntimeException)
 {
-    OUString aStr( OUString::createFromAscii( gpServiceName ) );
+    OUString aStr("com.sun.star.style.StyleFamilies");
     return Sequence< OUString >( &aStr, 1 );
 }
 
-// --------------------------------------------------------------------
 // XNameAccess
-// --------------------------------------------------------------------
-
 Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     throwIfDisposed();
