@@ -19,7 +19,7 @@
 #  
 #**************************************************************
 
-
+CC_PATH*=""
 
 #######################################################
 # instructions for linking
@@ -122,8 +122,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
-    @strip -i -R $(MISC)/$(@:b).strip -X $@
+    @-$(CC_PATH)nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @$(CC_PATH)strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP$(TNR)RPATH) $@

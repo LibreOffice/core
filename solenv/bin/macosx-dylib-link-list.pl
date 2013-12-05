@@ -64,7 +64,7 @@ foreach (@ARGV)
 }
 foreach $file (@todo)
 {
-    my $call = "otool -L $file";
+    my $call = "${::CC_PATH}otool -L $file";
     open(IN, "-|", $call) or die "cannot $call";
     while (<IN>)
     {
