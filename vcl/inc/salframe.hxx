@@ -208,7 +208,7 @@ public:                     // public for Sal Implementation
     // set new parent window
     virtual void            SetParent( SalFrame* pNewParent ) = 0;
     // reparent window to act as a plugin; implementation
-    // may choose to use a new system window inetrnally
+    // may choose to use a new system window internally
     // return false to indicate failure
     virtual bool            SetPluginParent( SystemParentData* pNewParent ) = 0;
 
