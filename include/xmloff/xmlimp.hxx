@@ -21,6 +21,9 @@
 #define INCLUDED_XMLOFF_XMLIMP_HXX
 
 #include <sal/config.h>
+
+#include <set>
+
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/embed/XStorage.hpp>

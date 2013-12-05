@@ -83,6 +83,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <set>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;

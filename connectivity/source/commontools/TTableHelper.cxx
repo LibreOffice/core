@@ -37,6 +37,7 @@
 #include <o3tl/compat_functional.hxx>
 
 #include <iterator>
+#include <set>
 
 using namespace ::comphelper;
 using namespace connectivity;

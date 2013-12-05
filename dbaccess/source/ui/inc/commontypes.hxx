@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_COMMONTYPES_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_COMMONTYPES_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
@@ -32,7 +36,7 @@ namespace com { namespace sun { namespace star {
 namespace dbaui
 {
 
-    DECLARE_STL_STDKEY_SET( OUString, StringBag );
+    typedef std::set<OUString> StringBag;
     DECLARE_STL_VECTOR( sal_Int8, ByteVector );
     DECLARE_STL_VECTOR( OUString, StringArray );
 

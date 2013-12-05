@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTYEXPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTYEXPORT_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include "formattributes.hxx"
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -54,7 +58,7 @@ namespace xmloff
     class OPropertyExport
     {
     private:
-        DECLARE_STL_STDKEY_SET(OUString, StringSet);
+        typedef std::set<OUString> StringSet;
         StringSet       m_aRemainingProps;
             // see examinePersistence
 

@@ -25,7 +25,6 @@
 #include <map>
 
 #include <stack>
-#include <set>
 
 #include <math.h>
 #include <functional>
@@ -259,10 +258,6 @@ OutputIter intersperse(
 
 #define DECLARE_STL_USTRINGACCESS_MAP(valuetype, classname)                 \
     DECLARE_STL_MAP(OUString, valuetype, ::comphelper::UStringLess, classname)   \
-
-#define DECLARE_STL_STDKEY_SET(valuetype, classname)    \
-    typedef ::std::set< valuetype > classname;          \
-    DECLARE_STL_ITERATORS(classname)                    \
 
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 

@@ -1331,7 +1331,7 @@ namespace xmloff
                 ++pValues;
             }
 
-            Int16SetIterator aSelectedPos = aSelection.find(i);
+            Int16Set::iterator aSelectedPos = aSelection.find(i);
             if (aSelection.end() != aSelectedPos)
             {   // the item at this position is selected
                 AddAttribute(
@@ -1342,7 +1342,7 @@ namespace xmloff
                 aSelection.erase(aSelectedPos);
             }
 
-            Int16SetIterator aDefaultSelectedPos = aDefaultSelection.find(i);
+            Int16Set::iterator aDefaultSelectedPos = aDefaultSelection.find(i);
             if (aDefaultSelection.end() != aDefaultSelectedPos)
             {   // the item at this position is selected as default
                 AddAttribute(

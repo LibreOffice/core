@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DSMETA_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DSMETA_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include "dsntypes.hxx"
 #include "dsitems.hxx"
 

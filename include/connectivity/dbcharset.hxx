@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <set>
 
 #include <comphelper/stl_types.hxx>
 #include <rtl/textenc.h>
@@ -55,7 +56,7 @@ namespace dbtools
     class OOO_DLLPUBLIC_DBTOOLS OCharsetMap
     {
     protected:
-        DECLARE_STL_STDKEY_SET( rtl_TextEncoding, TextEncBag );
+        typedef std::set<rtl_TextEncoding> TextEncBag;
 
         TextEncBag  m_aEncodings;
 

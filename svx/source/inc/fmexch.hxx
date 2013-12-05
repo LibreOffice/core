@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMEXCH_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMEXCH_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <comphelper/stl_types.hxx>
 #include <svtools/transfer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

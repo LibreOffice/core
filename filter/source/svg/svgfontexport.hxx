@@ -20,9 +20,15 @@
 #ifndef INCLUDED_FILTER_SOURCE_SVG_SVGFONTEXPORT_HXX
 #define INCLUDED_FILTER_SOURCE_SVG_SVGFONTEXPORT_HXX
 
-#include <comphelper/stl_types.hxx>
-#include <tools/fontenum.hxx>
+#include <sal/config.h>
 
+#include <functional>
+#include <map>
+#include <set>
+#include <vector>
+
+#include <rtl/ustring.hxx>
+#include <tools/fontenum.hxx>
 
 // -----------------
 // - SVGFontExport -

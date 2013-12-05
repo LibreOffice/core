@@ -67,8 +67,10 @@
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/digest.h>
+
 #include <algorithm>
 #include <iterator>
+#include <set>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;

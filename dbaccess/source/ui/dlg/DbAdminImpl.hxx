@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DBADMINIMPL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_DBADMINIMPL_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

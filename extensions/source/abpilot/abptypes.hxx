@@ -20,6 +20,10 @@
 #ifndef EXTENSIONS_ABP_ABPTYPES_HXX
 #define EXTENSIONS_ABP_ABPTYPES_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <comphelper/stl_types.hxx>
 #include <rtl/ustring.hxx>
 
@@ -28,7 +32,7 @@ namespace abp
 {
 //.........................................................................
 
-    DECLARE_STL_STDKEY_SET( OUString, StringBag );
+    typedef std::set<OUString> StringBag;
 
     DECLARE_STL_USTRINGACCESS_MAP( OUString, MapString2String );
 

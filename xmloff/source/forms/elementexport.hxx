@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTEXPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTEXPORT_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -83,7 +87,7 @@ namespace xmloff
                 ,public OElementExport
     {
     protected:
-        DECLARE_STL_STDKEY_SET(sal_Int16, Int16Set);
+        typedef std::set<sal_Int16> Int16Set;
             // used below
 
         OUString         m_sControlId;           // the control id to use when exporting

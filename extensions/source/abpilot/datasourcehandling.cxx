@@ -213,7 +213,7 @@ namespace abp
     OUString& ODataSourceContext::disambiguate(OUString& _rDataSourceName)
     {
         OUString sCheck( _rDataSourceName );
-        ConstStringBagIterator aPos = m_pImpl->aDataSourceNames.find( sCheck );
+        StringBag::const_iterator aPos = m_pImpl->aDataSourceNames.find( sCheck );
 
         sal_Int32 nPostFix = 1;
         while ( ( m_pImpl->aDataSourceNames.end() != aPos ) && ( nPostFix < 65535 ) )

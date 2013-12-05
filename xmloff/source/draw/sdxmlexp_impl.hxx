@@ -26,8 +26,8 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <comphelper/stl_types.hxx>
 
+#include <set>
 #include <vector>
 
 class Rectangle;
@@ -59,7 +59,7 @@ enum XmlPlaceholder
     XmlPlaceholderVerticalOutline
 };
 
-DECLARE_STL_STDKEY_SET( sal_Int32, SdXMLFormatMap );
+typedef std::set<sal_Int32> SdXMLFormatMap;
 
 struct HeaderFooterPageSettingsImpl
 {

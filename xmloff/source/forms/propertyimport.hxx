@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTYIMPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTYIMPORT_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <xmloff/xmlictxt.hxx>
 #include "formattributes.hxx"
 #include <rtl/ref.hxx>
@@ -68,7 +72,7 @@ namespace xmloff
         PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
 
-        DECLARE_STL_STDKEY_SET( OUString, StringSet );
+        typedef std::set<OUString> StringSet;
         StringSet                   m_aEncounteredAttributes;
 
         OFormLayerXMLImport_Impl&       m_rContext;

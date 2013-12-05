@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_LAYEREXPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_LAYEREXPORT_HXX
 
+#include <sal/config.h>
+
+#include <set>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>

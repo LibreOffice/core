@@ -138,7 +138,7 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
          sSelected = m_aDatasource.GetSelectEntry();
     m_aDatasource.Clear();
     // fill the list
-    for (   ConstStringBagIterator aDS = _rDatasources.begin();
+    for (   StringBag::const_iterator aDS = _rDatasources.begin();
             aDS != _rDatasources.end();
             ++aDS
         )

@@ -72,7 +72,7 @@ namespace abp
             // this page should never bother the user if there is 1 or less tables.
 
         // fill the list
-        for (   ConstStringBagIterator aTables = aTableNames.begin();
+        for (   StringBag::const_iterator aTables = aTableNames.begin();
                 aTables != aTableNames.end();
                 ++aTables
             )
