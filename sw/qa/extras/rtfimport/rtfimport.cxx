@@ -1360,9 +1360,8 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    // Why the tab has to be removed here?
     OUString aExpected("Footnote first line.\n");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString().replaceAll("\t", ""));
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
 #endif
