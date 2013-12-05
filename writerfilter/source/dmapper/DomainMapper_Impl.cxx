@@ -160,7 +160,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInHeaderFooterImport( false ),
         m_bDiscardHeaderFooter( false ),
         m_bLineNumberingSet( false ),
-        m_bIsInFootnoteProperties( true ),
+        m_bIsInFootnoteProperties( false ),
         m_bIsCustomFtnMark( false ),
         m_bIsParaChange( false ),
         m_bParaChanged( false ),
