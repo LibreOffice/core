@@ -3615,7 +3615,10 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        nCount = pDoc->CountNotes();
+        const ScRangeList aRangeList( ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab) );
+        std::vector<sc::NoteEntry> rNotes;
+        pDoc->GetNotesInRange(aRangeList, rNotes);
+        nCount = rNotes.size();
     }
     return nCount;
 }
