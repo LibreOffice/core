@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
 #include "sdpage.hxx"
@@ -485,12 +486,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
     return static_cast<sal_Int32>(nColor);
 }
 
-
-
-
-
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL
        AccessibleSlideSorterObject::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -498,27 +494,11 @@ OUString SAL_CALL
     return OUString("AccessibleSlideSorterObject");
 }
 
-
-
-
-sal_Bool SAL_CALL
-     AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
+sal_Bool SAL_CALL AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ThrowIfDisposed ();
-
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    uno::Sequence< OUString> aSupportedServices (
-        getSupportedServiceNames ());
-    for (int i=0; i<aSupportedServices.getLength(); i++)
-        if (sServiceName == aSupportedServices[i])
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
-
-
-
 
 uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterObject::getSupportedServiceNames (void)
@@ -532,9 +512,6 @@ uno::Sequence< OUString> SAL_CALL
     };
     return uno::Sequence<OUString> (sServiceNames, 2);
 }
-
-
-
 
 void AccessibleSlideSorterObject::ThrowIfDisposed (void)
     throw (lang::DisposedException)

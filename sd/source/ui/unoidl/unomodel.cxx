@@ -1181,17 +1181,7 @@ OUString SAL_CALL SdXImpressDocument::getImplementationName()
 sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    ::SolarMutexGuard aGuard;
-
-    if ( ServiceName == "com.sun.star.document.OfficeDocument"
-      || ServiceName == "com.sun.star.drawing.GenericDrawingDocument"
-      || ServiceName == "com.sun.star.drawing.DrawingDocumentFactory" )
-    {
-        return sal_True;
-    }
-
-    return ( ( mbImpressDoc && ServiceName == "com.sun.star.presentation.PresentationDocument" )
-         || ( !mbImpressDoc && ServiceName == "com.sun.star.drawing.DrawingDocument" ) );
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames() throw(uno::RuntimeException)
@@ -2577,7 +2567,7 @@ OUString SAL_CALL SdDrawPagesAccess::getImplementationName(  ) throw(uno::Runtim
 
 sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ServiceName == pSdDrawPagesAccessService;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
@@ -2845,7 +2835,7 @@ OUString SAL_CALL SdMasterPagesAccess::getImplementationName(  ) throw(uno::Runt
 
 sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ServiceName == pSdMasterPagesAccessService;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)

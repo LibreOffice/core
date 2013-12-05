@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -32,6 +31,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
@@ -94,10 +94,7 @@ public:
 
 };
 
-// -------------------------
 // - SdHtmlOptionsDialog -
-// -------------------------
-
 Reference< XInterface >
     SAL_CALL SdHtmlOptionsDialog_CreateInstance(
         SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
@@ -109,12 +106,6 @@ OUString SdHtmlOptionsDialog_getImplementationName()
     throw( RuntimeException )
 {
     return OUString( "com.sun.star.comp.draw.SdHtmlOptionsDialog" );
-}
-
-sal_Bool SAL_CALL SdHtmlOptionsDialog_supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
-{
-    return ServiceName.equals("com.sun.star.ui.dialog.FilterOptionsDialog");
 }
 
 Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
@@ -167,7 +158,7 @@ OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
 sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rServiceName )
     throw( RuntimeException )
 {
-    return SdHtmlOptionsDialog_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
     throw ( RuntimeException )

@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -511,16 +512,7 @@ OUString SAL_CALL SdFilterDetect::getImplementationName() throw( RuntimeExceptio
 /* XServiceInfo */
 sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString*         pArray          = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */

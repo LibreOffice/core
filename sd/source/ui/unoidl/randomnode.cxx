@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include "CustomAnimationPreset.hxx"
 
@@ -153,7 +154,6 @@ private:
 
 // --------------------------------------------------------------------
 
-static const sal_Char* pSN1 = "com.sun.star.animations.ParallelTimeContainer";
 static const sal_Char* pSN2 = "com.sun.star.comp.sd.RandomAnimationNode";
 
 // --------------------------------------------------------------------
@@ -671,7 +671,7 @@ OUString RandomAnimationNode::getImplementationName() throw()
 // XServiceInfo
 sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName) throw()
 {
-    return ServiceName.equalsAscii( pSN1 ) || ServiceName.equalsAscii( pSN2 );
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
