@@ -297,27 +297,17 @@ Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceName
 // ####################################################################
 
 ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit )
-:   ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_EXTRUSION_DEPTH ) ),
-    maFLDepth( this, SVX_RES( FL_DEPTH ) ),
-    maMtrDepth( this, SVX_RES( MTR_DEPTH ) ),
-    maOKButton( this, SVX_RES( BTN_OK ) ),
-    maCancelButton( this, SVX_RES( BTN_CANCEL ) ),
-    maHelpButton( this, SVX_RES( BTN_HELP ) )
+    : ModalDialog( pParent, "ExtrustionDepthDialog", "svx/ui/extrustiondepthdialog.ui" )
 {
+    get(m_pMtrDepth, "depth");
     bool bMetric = IsMetric( eDefaultUnit );
-    maMtrDepth.SetUnit( bMetric ? FUNIT_CM : FUNIT_INCH );
-    maMtrDepth.SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
-
-    FreeResource();
-}
-
-ExtrusionDepthDialog::~ExtrusionDepthDialog()
-{
+    m_pMtrDepth->SetUnit( bMetric ? FUNIT_CM : FUNIT_INCH );
+    m_pMtrDepth->SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
 }
 
 double ExtrusionDepthDialog::getDepth() const
 {
-    return (double)( maMtrDepth.GetValue( FUNIT_100TH_MM ) ) / 100.0;
+    return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
 // ####################################################################

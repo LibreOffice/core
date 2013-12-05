@@ -80,8 +80,6 @@
 #define IMG_LIGHTING_NORMAL     111
 #define IMG_LIGHTING_DIM        112
 
-#define FL_DEPTH                1
-#define MTR_DEPTH               2
 #define BTN_OK                  3
 #define BTN_CANCEL              4
 #define BTN_HELP                5

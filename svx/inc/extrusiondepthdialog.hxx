@@ -31,15 +31,10 @@ namespace svx {
 
 class ExtrusionDepthDialog : public ModalDialog
 {
-    FixedText           maFLDepth;
-    MetricField         maMtrDepth;
-    OKButton            maOKButton;
-    CancelButton        maCancelButton;
-    HelpButton          maHelpButton;
+    MetricField* m_pMtrDepth;
 
 public:
     ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit );
-    ~ExtrusionDepthDialog();
 
     double getDepth() const;
 };

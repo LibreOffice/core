@@ -1020,7 +1020,6 @@
 // "ModalDialog" resource ids
 
 #define RID_SVX_MDLG_FONTWORK_GALLERY       ( RID_SVX_START +  2 )
-#define RID_SVX_MDLG_EXTRUSION_DEPTH        ( RID_SVX_START +  3 )
 
 // ----------------------------------------------------------------------------
 // "Menu" resource ids

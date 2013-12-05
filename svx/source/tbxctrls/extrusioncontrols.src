@@ -430,63 +430,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
     };
 };
 
-#define WIDTH                       140
-#define HEIGHT                      (4 * 3 + 3 * 14)
-
-ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
-{
-    HelpID = "svx:ModalDialog:RID_SVX_MDLG_EXTRUSION_DEPTH";
-    OutputSize = TRUE;
-    SVLook = TRUE ;
-    Moveable = TRUE;
-    Closeable = TRUE;
-
-    Size = MAP_APPFONT( WIDTH, HEIGHT );
-
-    Text [ en-US ] = "Extrusion Depth" ;
-
-    FixedText FL_DEPTH
-    {
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( WIDTH - 50 - 12 , 8 ) ;
-        Text [ en-US ] = "~Value" ;
-    };
-    MetricField MTR_DEPTH
-    {
-        Border = FALSE ;
-        Pos = MAP_APPFONT ( 3 , 14 ) ;
-        Size = MAP_APPFONT ( WIDTH - 50 - 12, 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 0 ;
-        Maximum = 338666 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        SpinSize = 10 ;
-    };
-    OkButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( WIDTH - 50 - 3 , 1 * 3 + 0 * 14 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        DefButton = TRUE ;
-        TabStop = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( WIDTH - 50 - 3 , 2 * 3 + 1 * 14 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( WIDTH - 50 - 3 , 3 * 3 + 2 * 14 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        TabStop = TRUE ;
-    };
-};
-
 String RID_SVXSTR_EXTRUSION_COLOR
 {
     Text [ en-US ] = "Extrusion Color";
