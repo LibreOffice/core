@@ -387,6 +387,7 @@ private:
     bool                            m_bUsingEnhancedFields;
     /// If the current paragraph is inside a structured document element.
     bool                            m_bSdt;
+    bool                            m_isFirstRun;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -677,6 +678,9 @@ public:
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
     void SetCurrentRedlineInitials( OUString sInitials );
+    bool IsFirstRun() { return m_isFirstRun;}
+    void SetIsFirstRun() { m_isFirstRun = true;}
+    void UpdateIsFirstRun() { m_isFirstRun = false;}
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();

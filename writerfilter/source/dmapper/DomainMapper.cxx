@@ -97,7 +97,7 @@ LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, bIsNewDoc )),
-    mnBackgroundColor(0), mbIsHighlightSet(false), mbIsBIDI(false)
+    mnBackgroundColor(0), mbIsHighlightSet(false), mbIsBIDI(false), mbIsSplitPara(false)
 {
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
@@ -3669,7 +3669,17 @@ void DomainMapper::lcl_endSectionGroup()
 void DomainMapper::lcl_startParagraphGroup()
 {
     m_pImpl->getTableManager().startParagraphGroup();
-    m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
+    /*
+     * Add new para properties only if paragraph is not split
+     * or the top context is not of paragraph properties
+     * Set mbIsSplitPara to false as it has been handled
+     */
+    if (!mbIsSplitPara)
+        m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
+    mbIsSplitPara = false;
+    if (!(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) == m_pImpl->GetTopContext()))
+        m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
+
     static OUString sDefault("Standard");
     if (m_pImpl->GetTopContext())
     {
@@ -3683,6 +3693,7 @@ void DomainMapper::lcl_startParagraphGroup()
         else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
             m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
     }
+    m_pImpl->SetIsFirstRun();
     m_pImpl->clearDeferredBreaks();
 }
 
@@ -3933,7 +3944,15 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                     m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE) );
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
+                {
+                    if (!m_pImpl->IsFirstRun())
+                    {
+                        mbIsSplitPara = true;
+                        m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
+                        lcl_startParagraphGroup();
+                    }
                     m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
+                }
                 m_pImpl->clearDeferredBreaks();
             }
 
@@ -3958,6 +3977,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
 
         }
+        m_pImpl->UpdateIsFirstRun();
     }
     catch( const uno::RuntimeException& )
     {
