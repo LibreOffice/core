@@ -131,6 +131,7 @@
 #include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
+#include <unotextrange.hxx>
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
 
@@ -2150,7 +2151,11 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                     else
                     {
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                        nErrno = pDocSh->ImportFrom( *pMedium, true ) ? 0 : ERR_SWG_READ_ERROR;
+                        uno::Reference<text::XTextRange> const xInsertPosition(
+                            SwXTextRange::CreateXTextRange(*pDoc,
+                                *m_pWrtShell->GetCrsr()->GetPoint(), 0));
+                        nErrno = pDocSh->ImportFrom(*pMedium, xInsertPosition)
+                                    ? 0 : ERR_SWG_READ_ERROR;
                     }
 
                 }

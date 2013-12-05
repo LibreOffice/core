@@ -116,6 +116,9 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XComponent;
     }
+    namespace text {
+        class XTextRange;
+    }
 } } }
 
 typedef sal_uInt32 SfxObjectShellFlags;
@@ -348,7 +351,12 @@ public:
                                     sal_Bool bForceNonModified = sal_False );
     sal_Bool                    SaveCompletedChildren( sal_Bool bSuccess );
 
-    virtual sal_Bool            ImportFrom( SfxMedium &rMedium, bool bInsert );
+    /** a very special case to insert at a position in Writer from UNO,
+        via OwnSubFilterService */
+    virtual bool                InsertGeneratedStream(SfxMedium& rMedium,
+            css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
+    virtual bool                ImportFrom( SfxMedium &rMedium,
+            css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
     sal_Bool                    ExportTo( SfxMedium &rMedium );
 
     // xmlsec05, check with SFX team

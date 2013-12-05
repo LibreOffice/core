@@ -375,9 +375,10 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 /**
  * load from 3rd party format
  */
-sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium, bool bInsert )
+bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
+        uno::Reference<text::XTextRange> const& xInsertPosition)
 {
-    const sal_Bool bRet=SfxObjectShell::ImportFrom(rMedium, bInsert);
+    const sal_Bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )

@@ -76,7 +76,9 @@ public:
     virtual void            Activate( sal_Bool bMDI );
     virtual void            Deactivate( sal_Bool bMDI );
     virtual sal_Bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual sal_Bool        ImportFrom( SfxMedium &rMedium, bool bInsert=false );
+    virtual bool            ImportFrom(SfxMedium &rMedium,
+            css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
+        SAL_OVERRIDE;
     virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
     virtual sal_Bool            Save();
     virtual sal_Bool            SaveAsOwnFormat( SfxMedium& rMedium );
