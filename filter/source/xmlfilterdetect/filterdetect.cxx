@@ -78,10 +78,24 @@ bool isXMLStream(const OString& aHeaderStrm)
     size_t n = aHeaderStrm.getLength();
     size_t i = 0;
 
+    // Skip UTF-8 BOM
+    const char sBOM[] = {(char)0xEF, (char)0xBB, (char)0xBF};
+    for (i = 0; i < n; ++i, ++p)
+    {
+        if (i < 3 && *p == sBOM[i])
+            continue;
+        else if (i == 3 || i == 0)
+            break;
+        else if (i > 0)
+            return false;
+    }
+
+    n -= i;
+
     // Skip all preceding blank characters.
     for (i = 0; i < n; ++i, ++p)
     {
-        sal_Char c = *p;
+        char c = *p;
         if (c == ' ' || c == '\n' || c == '\t')
             continue;
         break;
