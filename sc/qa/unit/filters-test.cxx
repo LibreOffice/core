@@ -399,6 +399,8 @@ void ScFiltersTest::testSharedFormulaXLS()
 
     if (!checkFormula(*pDoc, ScAddress(1,7,0), "A8*20"))
         CPPUNIT_FAIL("Wrong formula.");
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testSharedFormulaXLSX()
