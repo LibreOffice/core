@@ -143,6 +143,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
