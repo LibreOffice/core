@@ -39,7 +39,7 @@ using namespace rtl;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-OUString ReplaceFourChar(OUString oldOUString);
+static OUString ReplaceFourChar(OUString oldOUString);
 
 CAccTextBase::CAccTextBase()
 {}
@@ -962,7 +962,7 @@ STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface)
     LEAVE_PROTECTED_BLOCK
 }
 
-OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
+static OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
 {
     int iReplace = -1;
     iReplace = oldOUString.lastIndexOf(replacedChar);
@@ -975,9 +975,9 @@ OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString re
         }
     }
     return oldOUString;
-
 }
-OUString ReplaceFourChar(OUString oldOUString)
+
+static OUString ReplaceFourChar(OUString oldOUString)
 {
     oldOUString = ReplaceOneChar(oldOUString, OUString("\\"), OUString("\\\\"));
     oldOUString = ReplaceOneChar(oldOUString, OUString(";"), OUString("\\;"));

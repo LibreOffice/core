@@ -470,7 +470,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     }
 }
 
-OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
+static OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
 {
     int iReplace = -1;
     iReplace = oldOUString.lastIndexOf(replacedChar);
@@ -485,7 +485,7 @@ OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString re
     return oldOUString;
 }
 
-OUString ReplaceFourChar(OUString oldOUString)
+static OUString ReplaceFourChar(OUString oldOUString)
 {
     oldOUString = ReplaceOneChar(oldOUString, "\\", "\\\\");
     oldOUString = ReplaceOneChar(oldOUString, ";", "\\;");
