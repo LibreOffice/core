@@ -273,7 +273,7 @@ public class HelpSearch
 
             // Perform search
             TopDocs aHits = searcher.search( aQuery, 100 );
-            int nHitCount = aHits.totalHits;
+            int nHitCount = aHits.scoreDocs.length;
 
             String aDocs[] = new String[nHitCount];
             float aScores[] = null;
