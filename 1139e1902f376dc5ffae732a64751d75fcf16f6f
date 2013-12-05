@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAa3///Nc\u003d",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-05T09:30:26Z",
+      "side": 1,
+      "message": "Right, I don\u0027t know why I did not make it const, thanks.",
+      "parentUuid": "AAAAa3///Ps\u003d",
+      "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAa3///QQ\u003d",
         "filename": "solenv/gbuild/UIConfig.mk",
         "patchSetId": 1
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAa3///Ng\u003d",
+        "filename": "solenv/gbuild/UIConfig.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-05T09:30:26Z",
+      "side": 1,
+      "message": "Yes, this was the reason.\nIf you think this is better.. why not, maybe you are right.\nHopefully fixed in next patch set.\n\nFirst plan was to avoid empty zips, but there is another thing creating them, so I just added $(if $(FILES), hack to Zip.mk in the end.\nMy ultimate plan is to avoid that and also avoid empty packages.",
+      "parentUuid": "AAAAa3///QA\u003d",
+      "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAa3///QM\u003d",
         "filename": "solenv/gbuild/Zip.mk",
         "patchSetId": 1
@@ -99,6 +135,24 @@
       "writtenOn": "2013-12-04T13:16:02Z",
       "side": 1,
       "message": "If this really cannot be done by any other way, at least the installed file must be deleted in the clean target.",
+      "parentUuid": "AAAAa3///QM\u003d",
+      "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///NE\u003d",
+        "filename": "solenv/gbuild/Zip.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-05T09:30:26Z",
+      "side": 1,
+      "message": "The name does not matter that much, we have to install it somehow.\nIdeally something like set_target,\u003csomething_in_instdir\u003e) would solve this.\nSo that, get_target would not be in workdir/Zip ..but that\u0027s not possible with make probably - or would need some more hacking.",
       "parentUuid": "AAAAa3///QM\u003d",
       "revId": "1139e1902f376dc5ffae732a64751d75fcf16f6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
