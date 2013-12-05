@@ -1273,7 +1273,9 @@ void OpArcTanH::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    else \n    ";
 #endif
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-    ss << "    return atanh(tmp);\n";
+    ss << "    double a = 1.0 + tmp;\n";
+    ss << "    double b = 1.0 - tmp;\n";
+    ss << "    return log(pow(a/b, 0.5));\n";
     ss << "}";
 }
 void OpBitAnd::GenSlidingWindowFunction(std::stringstream &ss,
