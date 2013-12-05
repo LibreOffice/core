@@ -1472,7 +1472,8 @@ sal_Bool SvListView::IsSelected( SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvDataTable::const_iterator itr = maDataTable.find(pEntry );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    if (itr == maDataTable.end())
+        return false;
     return itr->second->IsSelected();
 }
 
@@ -1487,7 +1488,8 @@ void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus )
 const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
 {
     SvDataTable::const_iterator itr = maDataTable.find( const_cast<SvTreeListEntry*>(pEntry) );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
+    if (itr == maDataTable.end())
+        return NULL;
     return itr->second;
 }
 
