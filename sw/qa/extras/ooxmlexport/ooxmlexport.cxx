@@ -39,7 +39,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-
+#include <com/sun/star/style/BreakType.hpp>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
@@ -2058,6 +2058,15 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
         return;
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts", "hAnsiTheme", "majorBidi");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts", "cstheme", "majorBidi");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(5, "This is first line after col brk."), "BreakType"));
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
 #endif

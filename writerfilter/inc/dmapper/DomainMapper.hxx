@@ -164,6 +164,7 @@ private:
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
     bool mbIsBIDI;
+    bool mbIsSplitPara;
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };
 

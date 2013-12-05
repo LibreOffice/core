@@ -162,6 +162,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsCustomFtnMark( false ),
+        m_isFirstRun(false),
         m_bIsParaChange( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
