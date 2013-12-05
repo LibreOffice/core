@@ -52,13 +52,14 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
-
-struct ScDPName
+struct SC_DLLPUBLIC ScDPName
 {
-    OUString     maName;         /// Original name of the dimension.
-    OUString     maLayoutName;   /// Layout name (display name)
+    OUString     maName;         ///< Original name of the dimension.
+    OUString     maLayoutName;   ///< Layout name (display name)
+    sal_uInt8 mnDupCount;
 
-    explicit ScDPName(const OUString& rName, const OUString& rLayoutName);
+    ScDPName();
+    explicit ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount);
 };
 
 // ============================================================================
@@ -68,13 +69,14 @@ struct ScDPLabelData
     OUString       maName;         /// Original name of the dimension.
     OUString       maLayoutName;   /// Layout name (display name)
     OUString       maSubtotalName;
-    SCCOL               mnCol;          /// 0-based field index (not the source column index)
-    long                mnOriginalDim;  /// original dimension index (>= 0 for duplicated dimension)
-    sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
-    sal_Int32           mnUsedHier;     /// Used hierarchy.
-    sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
-    bool                mbShowAll:1;    /// true = Show all (also empty) results.
-    bool                mbIsValue:1;    /// true = Sum or count in data field.
+    SCCOL               mnCol;          ///< 0-based field index (not the source column index)
+    long                mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
+    sal_uInt16          mnFuncMask;     ///< Page/Column/Row subtotal function.
+    sal_Int32           mnUsedHier;     ///< Used hierarchy.
+    sal_Int32           mnFlags;        ///< Flags from the DataPilotSource dimension
+    sal_uInt8           mnDupCount;
+    bool                mbShowAll:1;    ///< true = Show all (also empty) results.
+    bool                mbIsValue:1;    ///< true = Sum or count in data field.
     bool                mbDataLayout:1;
 
     struct Member
