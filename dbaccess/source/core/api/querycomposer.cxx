@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/processfactory.hxx>
 #include "dbastrings.hrc"
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/types.hxx>
@@ -138,8 +139,7 @@ OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    SAL_INFO("dbaccess", "OQueryComposer::supportsService" );
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OQueryComposer::getSupportedServiceNames(  ) throw (RuntimeException)

@@ -70,6 +70,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
@@ -481,7 +482,7 @@ OUString SAL_CALL ORowSet::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > ORowSet::getSupportedServiceNames_static(  ) throw (RuntimeException)
@@ -2840,7 +2841,7 @@ OUString ORowSetClone::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool ORowSetClone::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > ORowSetClone::getSupportedServiceNames(  ) throw (RuntimeException)

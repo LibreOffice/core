@@ -22,6 +22,7 @@
 #include "apitools.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -191,8 +192,7 @@ OUString OResultSet::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OResultSet::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    //SAL_INFO("dbaccess", "OResultSet::supportsService" );
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeException)

@@ -42,11 +42,8 @@
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
-#include <comphelper/implbase_var.hxx>
-#endif
+#include <cppuhelper/implbase13.hxx>
+#include <comphelper/stl_types.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>
@@ -54,7 +51,7 @@
 namespace dbaccess
 {
 
-typedef ::comphelper::ImplHelper14  <   ::com::sun::star::container::XChild
+typedef cppu::ImplHelper13  <   ::com::sun::star::container::XChild
                                     ,   ::com::sun::star::sdbcx::XTablesSupplier
                                     ,   ::com::sun::star::sdbcx::XViewsSupplier
                                     ,   ::com::sun::star::sdbc::XConnection
@@ -62,7 +59,6 @@ typedef ::comphelper::ImplHelper14  <   ::com::sun::star::container::XChild
                                     ,   ::com::sun::star::sdb::XQueriesSupplier
                                     ,   ::com::sun::star::sdb::XSQLQueryComposerFactory
                                     ,   ::com::sun::star::sdb::XCommandPreparation
-                                    ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::lang::XMultiServiceFactory
                                     ,   ::com::sun::star::sdbcx::XUsersSupplier
                                     ,   ::com::sun::star::sdbcx::XGroupsSupplier

@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
@@ -455,8 +456,7 @@ OUString OStatement::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    SAL_INFO("dbaccess", "OStatement::supportsService" );
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException)

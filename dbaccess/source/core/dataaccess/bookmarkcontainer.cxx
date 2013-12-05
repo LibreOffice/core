@@ -30,6 +30,7 @@
 #include <comphelper/extract.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -89,9 +90,7 @@ OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeExc
 
 sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
-    return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
