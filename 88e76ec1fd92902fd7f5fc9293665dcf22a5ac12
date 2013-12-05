@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///Ms\u003d",
+        "filename": "solenv/gbuild/Zip.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-12-05T11:01:58Z",
+      "side": 1,
+      "message": "A nitpick: I think it would be better to add dir dep on the $(INSTALL_NAME)\u0027s dir in gb_Zip_set_install_name and drop the explicit mkdir.",
+      "revId": "88e76ec1fd92902fd7f5fc9293665dcf22a5ac12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
