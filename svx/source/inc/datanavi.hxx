@@ -509,24 +509,17 @@ namespace svxform
     class AddModelDialog : public ModalDialog
     {
     private:
-        FixedLine           m_aModelFL;
-        FixedText           m_aNameFT;
-        Edit                m_aNameED;
-        CheckBox            m_aModifyCB;
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        Edit* m_pNameED;
+        CheckBox* m_pModifyCB;
 
     public:
         AddModelDialog( Window* pParent, bool _bEdit );
-        ~AddModelDialog();
 
-        inline OUString           GetName() const { return m_aNameED.GetText(); }
-        inline void             SetName( const OUString& _rName ) { m_aNameED.SetText( _rName );}
+        OUString         GetName() const { return m_pNameED->GetText(); }
+        void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
 
-        inline bool             GetModifyDoc() const { return bool( m_aModifyCB.IsChecked() ); }
-        inline void             SetModifyDoc( const bool _bModify ) { m_aModifyCB.Check( _bModify ); }
+        bool             GetModifyDoc() const { return bool( m_pModifyCB->IsChecked() ); }
+        void             SetModifyDoc( const bool bModify ) { m_pModifyCB->Check( bModify ); }
     };
 
     //========================================================================

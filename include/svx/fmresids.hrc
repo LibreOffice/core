@@ -66,7 +66,7 @@
 #define RID_SVXDLG_NAMESPACE_ITEM                   (RID_FORMS_START + 14)
 
 #define RID_SVXDLG_ADD_SUBMISSION                   (RID_FORMS_START + 16)
-#define RID_SVXDLG_ADD_MODEL                        (RID_FORMS_START + 17)
+
 #define RID_SVXDLG_ADD_INSTANCE                     (RID_FORMS_START + 18)
 #define RID_SVXWIN_DATANAVIGATOR                    (RID_FORMS_START + 19)
 #define RID_SVX_XFORMS_TABPAGES                     (RID_FORMS_START + 20)

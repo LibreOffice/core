@@ -3583,28 +3583,14 @@ namespace svxform
     // class AddModelDialog
     //========================================================================
 
-    AddModelDialog::AddModelDialog( Window* pParent, bool _bEdit ) :
-
-        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_MODEL ) ),
-
-        m_aModelFL      ( this, SVX_RES( FL_MODEL ) ),
-        m_aNameFT       ( this, SVX_RES( FT_MODEL_NAME ) ),
-        m_aNameED       ( this, SVX_RES( ED_MODEL_NAME ) ),
-        m_aModifyCB     ( this, SVX_RES( CB_MODIFIES_DOCUMENT ) ),
-        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) )
-
+    AddModelDialog::AddModelDialog(Window* pParent, bool bIsEdit)
+        : ModalDialog(pParent, "AddModelDialog", "svx/ui/addmodeldialog.ui")
     {
-        if ( _bEdit )
-            SetText(SVX_RESSTR(STR_EDIT_TEXT));
+        get(m_pNameED, "name");
+        get(m_pModifyCB, "modify");
 
-        FreeResource();
-    }
-
-    AddModelDialog::~AddModelDialog()
-    {
+        if (bIsEdit)
+            SetText(get<FixedText>("alttitle")->GetText());
     }
 
     //========================================================================

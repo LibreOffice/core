@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,svx))
 
 $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/acceptrejectchangesdialog \
+	svx/uiconfig/ui/addmodeldialog \
 	svx/uiconfig/ui/addnamespacedialog \
 	svx/uiconfig/ui/asianphoneticguidedialog \
 	svx/uiconfig/ui/chineseconversiondialog \
