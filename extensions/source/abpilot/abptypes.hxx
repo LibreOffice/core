@@ -22,9 +22,9 @@
 
 #include <sal/config.h>
 
+#include <map>
 #include <set>
 
-#include <comphelper/stl_types.hxx>
 #include <rtl/ustring.hxx>
 
 //.........................................................................
@@ -34,7 +34,7 @@ namespace abp
 
     typedef std::set<OUString> StringBag;
 
-    DECLARE_STL_USTRINGACCESS_MAP( OUString, MapString2String );
+    typedef std::map<OUString, OUString> MapString2String;
 
 //.........................................................................
 }   // namespace abp

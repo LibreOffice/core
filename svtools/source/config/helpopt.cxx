@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
 
 #include <svtools/helpopt.hxx>
 #include <unotools/configmgr.hxx>
@@ -26,7 +29,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/help.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 
 #include "itemholder2.hxx"
 
@@ -53,7 +55,7 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     OUString        aSystem;
     OUString        sHelpStyleSheet;
 
-    DECLARE_STL_USTRINGACCESS_MAP( sal_Int32, MapString2Int );
+    typedef std::map <OUString, sal_Int32> MapString2Int;
     MapString2Int   aURLIgnoreCounters;
     ::osl::Mutex    aIgnoreCounterSafety;
 

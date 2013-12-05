@@ -17,8 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #ifdef HSQLDB_DBG
+
+#include <map>
+
 #include "accesslog.hxx"
 #include "hsqldb/HStorageMap.hxx"
 
@@ -26,7 +30,7 @@
 
 namespace connectivity { namespace hsqldb
 {
-    DECLARE_STL_USTRINGACCESS_MAP(FILE *,TDebugStreamMap);
+    typedef std::map<OUString, FILE *> TDebugStreamMap;
     TDebugStreamMap& getStreams()
     {
         static TDebugStreamMap streams;

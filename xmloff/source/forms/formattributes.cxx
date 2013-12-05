@@ -229,7 +229,7 @@ namespace xmloff
     const OAttribute2Property::AttributeAssignment* OAttribute2Property::getAttributeTranslation(
             const OUString& _rAttribName)
     {
-        ConstAttributeAssignmentsIterator aPos = m_aKnownProperties.find(_rAttribName);
+        AttributeAssignments::const_iterator aPos = m_aKnownProperties.find(_rAttribName);
         if (m_aKnownProperties.end() != aPos)
             return &aPos->second;
         return NULL;

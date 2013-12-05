@@ -25,10 +25,11 @@
 #include <tools/rtti.hxx>
 #include <svtools/transfer.hxx>
 
-#include <comphelper/stl_types.hxx>
 #include "callbacks.hxx"
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
+
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -79,7 +80,7 @@ namespace dbaui
         friend class OJoinMoveTabWinUndoAct;
 
     public:
-        DECLARE_STL_USTRINGACCESS_MAP(OTableWindow*,OTableWindowMap);
+        typedef std::map<OUString, OTableWindow*> OTableWindowMap;
 
     private:
         OTableWindowMap     m_aTableMap;

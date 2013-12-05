@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakagg.hxx>
@@ -41,7 +45,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-DECLARE_STL_USTRINGACCESS_MAP( Any, GenericAnyMapImpl );
+typedef std::map<OUString, Any> GenericAnyMapImpl;
 
 namespace comphelper
 {

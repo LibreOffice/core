@@ -240,7 +240,7 @@ sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMa
     DBG_CHKTHIS(OQueryTableView,NULL);
     sal_Int32 nRet = 0;
 
-    OTableWindowMapIterator aIter = GetTabWinMap()->find(rName);
+    OTableWindowMap::iterator aIter = GetTabWinMap()->find(rName);
     while(aIter != GetTabWinMap()->end())
     {
         OUString aNewName = OUString(rName) + "_" + OUString::number(++nRet);

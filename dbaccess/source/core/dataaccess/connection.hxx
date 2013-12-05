@@ -19,6 +19,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_CONNECTION_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_CONNECTION_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "apitools.hxx"
 #include "querycontainer.hxx"
 #include "tablecontainer.hxx"
@@ -43,7 +47,6 @@
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include <comphelper/implbase_var.hxx>
 #endif
-#include <comphelper/stl_types.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/warningscontainer.hxx>
 
@@ -92,7 +95,7 @@ protected:
 
     // defines the helper services for example to query the command of a view
     // @ see com.sun.star.sdb.tools.XViewAccess
-    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, TSupportServices);
+    typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > TSupportServices;
     TSupportServices                m_aSupportServices;
 
     OTableContainer*                m_pTables;

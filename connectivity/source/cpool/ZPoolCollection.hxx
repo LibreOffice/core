@@ -19,6 +19,10 @@
 #ifndef CONNECTIVITY_POOLCOLLECTION_HXX
 #define CONNECTIVITY_POOLCOLLECTION_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
@@ -55,7 +59,7 @@ namespace connectivity
 
         //==========================================================================
         typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
-        DECLARE_STL_USTRINGACCESS_MAP(OConnectionPool*, OConnectionPools);
+        typedef std::map<OUString, OConnectionPool*> OConnectionPools;
 
         DECLARE_STL_MAP(
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,

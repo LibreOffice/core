@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
@@ -39,7 +42,7 @@ namespace rptui
 
     using namespace ::com::sun::star;
 
-DECLARE_STL_USTRINGACCESS_MAP(bool, AllProperties);
+typedef std::map<OUString, bool> AllProperties;
 DECLARE_STL_STDKEY_MAP(uno::Reference< beans::XPropertySet >, AllProperties, PropertySetInfoCache);
 
 class OXReportControllerObserverImpl

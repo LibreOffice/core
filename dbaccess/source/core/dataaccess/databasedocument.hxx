@@ -19,6 +19,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEDOCUMENT_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEDOCUMENT_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "ModelImpl.hxx"
 #include "documenteventnotifier.hxx"
 
@@ -165,7 +169,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         Initialized
     };
 
-    DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >,TNumberedController);
+    typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers > > TNumberedController;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2>           m_xUIConfigurationManager;
 
     ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;

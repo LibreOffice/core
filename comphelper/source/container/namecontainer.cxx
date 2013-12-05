@@ -17,13 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <comphelper/namecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
 
-DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Any, SvGenericNameContainerMapImpl );
+typedef std::map<OUString, ::com::sun::star::uno::Any> SvGenericNameContainerMapImpl;
 
 namespace comphelper
 {

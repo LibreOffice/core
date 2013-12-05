@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASECONTEXT_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASECONTEXT_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "ModelImpl.hxx"
 
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -38,7 +42,6 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 
 #include <basic/basicmanagerrepository.hxx>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -97,10 +100,10 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseRegistrations >
                                     m_xDatabaseRegistrations;
 
-    DECLARE_STL_USTRINGACCESS_MAP( ODatabaseModelImpl*, ObjectCache );
+    typedef std::map<OUString, ODatabaseModelImpl*> ObjectCache;
     ObjectCache     m_aDatabaseObjects;
 
-    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >, PropertyCache );
+    typedef std::map< OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > PropertyCache;
     PropertyCache   m_aDatasourceProperties;
         // as we hold our data sources weak, we have to cache all properties on the data sources which are
         // transient but stored as long as the session lasts. The database context is the session (as it lives

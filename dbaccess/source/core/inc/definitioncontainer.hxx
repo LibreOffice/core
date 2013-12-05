@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DEFINITIONCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_DEFINITIONCONTAINER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/stl_types.hxx>
@@ -91,7 +95,7 @@ class ODefinitionContainer
             ,public ODefinitionContainer_Base
 {
 protected:
-    DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::WeakReference< ::com::sun::star::ucb::XContent >, Documents);
+    typedef std::map< OUString, ::com::sun::star::uno::WeakReference< ::com::sun::star::ucb::XContent > > Documents;
     DECLARE_STL_VECTOR(Documents::iterator, DocumentsIndexAccess);
 
     enum ContainerOperation

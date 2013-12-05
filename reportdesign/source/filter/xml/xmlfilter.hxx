@@ -37,9 +37,9 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <map>
 #include <memory>
 #include <boost/shared_ptr.hpp>
 #include <xmloff/prhdlfac.hxx>
@@ -68,8 +68,8 @@ using namespace ::com::sun::star::xml::sax;
 class ORptFilter : public SvXMLImport
 {
 public:
-    DECLARE_STL_USTRINGACCESS_MAP(Sequence<PropertyValue>,TPropertyNameMap);
-    DECLARE_STL_USTRINGACCESS_MAP( Reference<XFunction> ,TGroupFunctionMap);
+    typedef std::map< OUString, Sequence<PropertyValue> > TPropertyNameMap;
+    typedef std::map< OUString, Reference<XFunction> > TGroupFunctionMap;
 private:
 
     TGroupFunctionMap                               m_aFunctions;

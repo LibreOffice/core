@@ -563,7 +563,7 @@ OUString SAL_CALL OSDBCDriverManager::getSingletonName_static(  ) throw(RuntimeE
 Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const OUString& _rName ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    ConstDriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
+    DriverCollection::const_iterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
@@ -580,7 +580,7 @@ void SAL_CALL OSDBCDriverManager::registerObject( const OUString& _rName, const 
         _rName
     );
 
-    ConstDriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
+    DriverCollection::const_iterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
     {
         Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
@@ -608,7 +608,7 @@ void SAL_CALL OSDBCDriverManager::revokeObject( const OUString& _rName ) throw(E
         _rName
     );
 
-    DriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
+    DriverCollection::iterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
@@ -673,7 +673,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
     if ( !xReturn.is() )
     {
         // no -> search the runtime drivers
-        DriverCollectionIterator aPos = ::std::find_if(
+        DriverCollection::iterator aPos = ::std::find_if(
             m_aDriversRT.begin(),       // begin of search range
             m_aDriversRT.end(),         // end of search range
             o3tl::unary_compose< AcceptsURL, ExtractDriverFromCollectionElement >( AcceptsURL( _rURL ), ExtractDriverFromCollectionElement() )

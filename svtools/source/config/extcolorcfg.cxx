@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <svtools/extcolorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -34,8 +38,6 @@
 #include <vcl/event.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
-#include <comphelper/stl_types.hxx>
-
 
 //-----------------------------------------------------------------------------
 using namespace utl;
@@ -56,11 +58,11 @@ ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = NULL;
 
 class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
-    DECLARE_STL_USTRINGACCESS_MAP( OUString, TDisplayNames);
-    DECLARE_STL_USTRINGACCESS_MAP(ExtendedColorConfigValue,TConfigValues);
+    typedef std::map<OUString, OUString> TDisplayNames;
+    typedef std::map<OUString, ExtendedColorConfigValue> TConfigValues;
     typedef ::std::vector<TConfigValues::iterator> TMapPos;
     typedef ::std::pair< TConfigValues, TMapPos > TComponentMapping;
-    DECLARE_STL_USTRINGACCESS_MAP(TComponentMapping,TComponents);
+    typedef std::map<OUString, TComponentMapping> TComponents;
     TComponents         m_aConfigValues;
     TDisplayNames       m_aComponentDisplayNames;
     ::std::vector<TComponents::iterator> m_aConfigValuesPos;

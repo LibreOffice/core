@@ -38,8 +38,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "apitools.hxx"
-#include <comphelper/stl_types.hxx>
 
+#include <map>
 #include <memory>
 
 namespace dbaxml
@@ -58,7 +58,7 @@ using namespace ::com::sun::star::xml::sax;
 class ODBFilter : public SvXMLImport
 {
 public:
-    DECLARE_STL_USTRINGACCESS_MAP(Sequence<PropertyValue>,TPropertyNameMap);
+    typedef std::map< OUString, Sequence<PropertyValue> > TPropertyNameMap;
     typedef ::std::vector< ::com::sun::star::beans::PropertyValue> TInfoSequence;
 private:
     TPropertyNameMap                                m_aQuerySettings;

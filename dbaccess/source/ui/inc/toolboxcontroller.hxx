@@ -20,11 +20,12 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TOOLBOXCONTROLLER_HXX
 
 #include <svtools/toolboxcontroller.hxx>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include "apitools.hxx"
 #include "moduledbu.hxx"
+
+#include <map>
 #include <memory>
 
 class PopupMenu;
@@ -35,7 +36,7 @@ namespace dbaui
     class OToolboxController : public ::svt::ToolboxController
                               ,public TToolboxController_BASE
     {
-        DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TCommandState);
+        typedef std::map<OUString, sal_Bool> TCommandState;
         OModuleClient   m_aModuleClient;
         TCommandState   m_aStates;
         sal_uInt16      m_nToolBoxId;

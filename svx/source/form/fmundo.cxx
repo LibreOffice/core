@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
 
 #include <sal/macros.h>
 #include "fmundo.hxx"
@@ -151,7 +154,7 @@ struct PropertyInfo
 
 struct PropertySetInfo
 {
-    DECLARE_STL_USTRINGACCESS_MAP(PropertyInfo, AllProperties);
+    typedef std::map<OUString, PropertyInfo> AllProperties;
 
     AllProperties   aProps;                 // all properties of this set which we know so far
     sal_Bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
@@ -622,7 +625,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         // now we have access to the cached info about the set
         // let's see what we know about the property
         PropertySetInfo::AllProperties& rPropInfos = aSetPos->second.aProps;
-        PropertySetInfo::AllPropertiesIterator aPropertyPos = rPropInfos.find(evt.PropertyName);
+        PropertySetInfo::AllProperties::iterator aPropertyPos = rPropInfos.find(evt.PropertyName);
         if (aPropertyPos == rPropInfos.end())
         {   // nothing 'til now ... have to change this ....
             PropertyInfo aNewEntry;

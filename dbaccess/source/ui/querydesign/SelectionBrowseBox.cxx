@@ -1002,7 +1002,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
                     if (pTabWinList)
                     {
-                        OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(aAliasName);
+                        OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->find(aAliasName);
                         if(aIter != pTabWinList->end())
                         {
                             OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
@@ -2674,7 +2674,7 @@ sal_Bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const O
     OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
     if (pTabWinList)
     {
-        OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(_sTableName);
+        OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->find(_sTableName);
         if(aIter != pTabWinList->end())
         {
             OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);

@@ -19,8 +19,11 @@
 #ifndef RPTUI_TOOLBOXCONTROLLER_HXX
 #define RPTUI_TOOLBOXCONTROLLER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <svtools/toolboxcontroller.hxx>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
@@ -37,7 +40,7 @@ namespace rptui
     class OToolboxController : public ::svt::ToolboxController
                               ,public TToolboxController_BASE
     {
-        DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TCommandState);
+        typedef std::map<OUString, sal_Bool> TCommandState;
         TCommandState   m_aStates;
         TToolbarHelper  m_pToolbarController;
         sal_uInt16      m_nToolBoxId;

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_BOOKMARKCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_BOOKMARKCONTAINER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/stl_types.hxx>
@@ -52,8 +56,8 @@ class OBookmarkContainer
             :public OBookmarkContainer_Base
 {
 protected:
-    DECLARE_STL_USTRINGACCESS_MAP(OUString, MapString2String);
-    DECLARE_STL_VECTOR(MapString2StringIterator, MapIteratorVector);
+    typedef std::map<OUString, OUString> MapString2String;
+    DECLARE_STL_VECTOR(MapString2String::iterator, MapIteratorVector);
 
     MapString2String        m_aBookmarks;           // the bookmarks itself
     MapIteratorVector       m_aBookmarksIndexed;    // for index access to the

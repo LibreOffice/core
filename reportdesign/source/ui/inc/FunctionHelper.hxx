@@ -24,10 +24,9 @@
 #include <com/sun/star/report/meta/XFunctionManager.hpp>
 #include <com/sun/star/report/meta/XFunctionCategory.hpp>
 #include <com/sun/star/report/meta/XFunctionDescription.hpp>
+#include <map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <comphelper/stl_types.hxx>
-
 
 namespace rptui
 {
@@ -37,8 +36,8 @@ class FunctionDescription;
 //============================================================================
 class FunctionManager : public formula::IFunctionManager
 {
-    DECLARE_STL_USTRINGACCESS_MAP( ::boost::shared_ptr< FunctionDescription >,  TFunctionsMap);
-    DECLARE_STL_USTRINGACCESS_MAP( ::boost::shared_ptr< FunctionCategory > ,    TCategoriesMap);
+    typedef std::map< OUString, ::boost::shared_ptr< FunctionDescription > > TFunctionsMap;
+    typedef std::map< OUString, ::boost::shared_ptr< FunctionCategory > > TCategoriesMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionManager> m_xMgr;
     mutable TCategoriesMap  m_aCategories;
     mutable ::std::vector< TCategoriesMap::iterator > m_aCategoryIndex;

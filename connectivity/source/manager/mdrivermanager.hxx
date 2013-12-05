@@ -20,6 +20,10 @@
 #ifndef _CONNECTIVITY_DRIVERMANAGER_HXX_
 #define _CONNECTIVITY_DRIVERMANAGER_HXX_
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -40,7 +44,7 @@ namespace drivermanager
     //======================================================================
     //= various
     //======================================================================
-    DECLARE_STL_USTRINGACCESS_MAP( css::uno::Reference< css::sdbc::XDriver >, DriverCollection );
+    typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > DriverCollection;
 
     struct DriverAccess
     {
@@ -70,7 +74,7 @@ namespace drivermanager
 
         // for drivers registered at runtime (not bootstrapped) we don't require an XServiceInfo interface,
         // so we have to remember their impl-name in another way
-        DECLARE_STL_USTRINGACCESS_MAP(css::uno::Reference< css::sdbc::XDriver >, DriverCollection);
+        typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > DriverCollection;
         DriverCollection                m_aDriversRT;
 
         ::connectivity::DriversConfig   m_aDriverConfig;

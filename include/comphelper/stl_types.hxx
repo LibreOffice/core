@@ -250,10 +250,6 @@ OutputIter intersperse(
     typedef std::vector< valuetyp >     classname;  \
     DECLARE_STL_ITERATORS(classname)                \
 
-#define DECLARE_STL_USTRINGACCESS_MAP(valuetype, classname)                 \
-    typedef std::map< OUString, valuetype > classname; \
-    DECLARE_STL_ITERATORS(classname)
-
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

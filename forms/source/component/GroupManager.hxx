@@ -31,6 +31,7 @@
 #include <comphelper/types.hxx>
 
 #include <algorithm>
+#include <map>
 
 using namespace comphelper;
 
@@ -172,7 +173,7 @@ public:
         { return m_aCompArray[nP].GetComponent(); }
 };
 
-DECLARE_STL_USTRINGACCESS_MAP(OGroup, OGroupArr);
+typedef std::map<OUString, OGroup> OGroupArr;
 DECLARE_STL_VECTOR(OGroupArr::iterator, OActiveGroups);
 
 //========================================================================

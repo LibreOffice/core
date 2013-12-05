@@ -20,10 +20,13 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_FORMATTRIBUTES_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_FORMATTRIBUTES_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <comphelper/stl_types.hxx>
 
 struct SvXMLEnumMapEntry;
 
@@ -244,7 +247,7 @@ namespace xmloff
         };
 
     protected:
-        DECLARE_STL_USTRINGACCESS_MAP( AttributeAssignment, AttributeAssignments );
+        typedef std::map<OUString, AttributeAssignment> AttributeAssignments;
         AttributeAssignments        m_aKnownProperties;
 
     public:

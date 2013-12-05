@@ -34,6 +34,7 @@
 
 // header for class SotStorage
 #include <sot/storage.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

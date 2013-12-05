@@ -19,13 +19,16 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_SHAPETOOLBARCONTROLLER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_SHAPETOOLBARCONTROLLER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/implementationreference.hxx>
-#include <comphelper/stl_types.hxx>
 #include <svtools/toolboxcontroller.hxx>
 
 class SfxToolBoxControl;
@@ -41,7 +44,7 @@ typedef ::comphelper::ImplementationReference< SfxToolBoxControl, ::com::sun::st
 class ShapeToolbarController : public ::svt::ToolboxController
                               ,public ShapeToolbarController_Base
 {
-    DECLARE_STL_USTRINGACCESS_MAP( sal_Bool, TCommandState );
+    typedef std::map<OUString, sal_Bool> TCommandState;
     TCommandState   m_aStates;
     TToolbarHelper  m_pToolbarController;
     sal_uInt16      m_nToolBoxId;

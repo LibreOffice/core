@@ -521,7 +521,7 @@ void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, Ru
     }
 
     // check if URL is already loaded
-    ObjectCacheIterator aExistent = m_aDatabaseObjects.find( sURL );
+    ObjectCache::iterator aExistent = m_aDatabaseObjects.find( sURL );
     if ( aExistent != m_aDatabaseObjects.end() )
         m_aDatabaseObjects.erase( aExistent );
 
@@ -666,7 +666,7 @@ sal_Bool ODatabaseContext::hasByName(const OUString& _rName) throw( RuntimeExcep
 
 Reference< XInterface > ODatabaseContext::getObject( const OUString& _rURL )
 {
-    ObjectCacheIterator aFind = m_aDatabaseObjects.find( _rURL );
+    ObjectCache::iterator aFind = m_aDatabaseObjects.find( _rURL );
     Reference< XInterface > xExistent;
     if ( aFind != m_aDatabaseObjects.end() )
         xExistent = aFind->second->getOrCreateDataSource();

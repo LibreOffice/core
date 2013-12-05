@@ -20,10 +20,13 @@
 #ifndef _REPORT_RPTUIDEF_HXX
 #define _REPORT_RPTUIDEF_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "dllapi.h"
 #include <tools/solar.h>
 #include <svx/svdobj.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
 #include <boost/shared_ptr.hpp>
@@ -92,7 +95,7 @@ public:
 */
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
 typedef ::std::pair< OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
-DECLARE_STL_USTRINGACCESS_MAP(TPropertyConverter , TPropertyNamePair);
+typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
 /** returns the property name map for the givern property id
     @param  _nObjectId  the object id
 */

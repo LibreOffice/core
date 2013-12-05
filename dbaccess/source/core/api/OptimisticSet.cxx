@@ -41,6 +41,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <list>
+#include <map>
 #include <algorithm>
 #include <string.h>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -65,7 +66,7 @@ using namespace ::com::sun::star;
 using namespace ::cppu;
 using namespace ::osl;
 
-DECLARE_STL_USTRINGACCESS_MAP(OUStringBuffer,TSQLStatements);
+typedef std::map<OUString, OUStringBuffer> TSQLStatements;
 namespace
 {
     void lcl_fillKeyCondition(const OUString& i_sTableName,const OUString& i_sQuotedColumnName,const ORowSetValue& i_aValue,TSQLStatements& io_aKeyConditions)

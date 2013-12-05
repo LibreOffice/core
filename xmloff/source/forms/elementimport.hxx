@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTIMPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTIMPORT_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "propertyimport.hxx"
 #include "controlelement.hxx"
 #include "valueproperties.hxx"
@@ -32,8 +36,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-
-#include <comphelper/stl_types.hxx>
 
 class XMLTextStyleContext;
 namespace xmloff
@@ -49,7 +51,7 @@ namespace xmloff
     class OElementNameMap : public OControlElement
     {
     protected:
-        DECLARE_STL_USTRINGACCESS_MAP( ElementType, MapString2Element );
+        typedef std::map<OUString, ElementType> MapString2Element;
         static MapString2Element    s_sElementTranslations;
 
     protected:

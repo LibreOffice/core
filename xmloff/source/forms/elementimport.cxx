@@ -120,7 +120,7 @@ namespace xmloff
             for (ElementType eType=(ElementType)0; eType<UNKNOWN; ++eType)
                 s_sElementTranslations[OUString::createFromAscii(getElementName(eType))] = eType;
         }
-        ConstMapString2ElementIterator aPos = s_sElementTranslations.find(_rName);
+        MapString2Element::const_iterator aPos = s_sElementTranslations.find(_rName);
         if (s_sElementTranslations.end() != aPos)
             return aPos->second;
 

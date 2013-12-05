@@ -25,8 +25,8 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <comphelper/stl_types.hxx>
 
+#include <map>
 #include <vector>
 #include <xmloff/xmlimp.hxx>
 
@@ -166,8 +166,8 @@ struct DateTimeDeclContextImpl
     DateTimeDeclContextImpl() : mbFixed(sal_True) {}
 };
 
-DECLARE_STL_USTRINGACCESS_MAP( OUString, HeaderFooterDeclMap );
-DECLARE_STL_USTRINGACCESS_MAP( DateTimeDeclContextImpl, DateTimeDeclMap );
+typedef std::map<OUString, OUString> HeaderFooterDeclMap;
+typedef std::map<OUString, DateTimeDeclContextImpl> DateTimeDeclMap;
 
 class SdXMLImport: public SvXMLImport
 {

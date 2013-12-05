@@ -20,9 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYSETINFO_HXX
 #define INCLUDED_COMPHELPER_PROPERTYSETINFO_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 //=========================================================================
@@ -44,7 +47,7 @@ struct PropertyMapEntry
     sal_uInt8 mnMemberId;
 };
 
-DECLARE_STL_USTRINGACCESS_MAP( PropertyMapEntry*, PropertyMap );
+typedef std::map<OUString, PropertyMapEntry*> PropertyMap;
 
 class PropertyMapImpl;
 

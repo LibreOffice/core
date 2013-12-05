@@ -463,7 +463,7 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const OUStri
     Reference< XPropertySet > xReturn;
     if (m_aCurrentPageIds != m_aControlIds.end())
     {
-        ConstMapString2PropertySetIterator aPos = m_aCurrentPageIds->second.find(_rControlId);
+        MapString2PropertySet::const_iterator aPos = m_aCurrentPageIds->second.find(_rControlId);
         if (m_aCurrentPageIds->second.end() != aPos)
             xReturn = aPos->second;
         else

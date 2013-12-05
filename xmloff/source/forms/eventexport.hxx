@@ -20,12 +20,15 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_EVENTEXPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_EVENTEXPORT_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/stl_types.hxx>
 
 namespace xmloff
 {
@@ -45,7 +48,7 @@ namespace xmloff
     class OEventDescriptorMapper : public OEventDescriptorMapper_Base
     {
     protected:
-        DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >, MapString2PropertyValueSequence );
+        typedef std::map< OUString, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > MapString2PropertyValueSequence;
         MapString2PropertyValueSequence m_aMappedEvents;
 
     public:

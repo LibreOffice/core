@@ -19,6 +19,10 @@
 #ifndef CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX
 #define CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -26,7 +30,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <comphelper/stl_types.hxx>
 #include <jni.h>
 //........................................................................
 namespace connectivity
@@ -50,10 +53,10 @@ namespace connectivity
         };
 
 
-        DECLARE_STL_USTRINGACCESS_MAP(::boost::shared_ptr<StreamHelper>,TStreamMap);
+        typedef std::map< OUString, ::boost::shared_ptr<StreamHelper> > TStreamMap;
         typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >, OUString > TStorageURLPair;
         typedef ::std::pair< TStorageURLPair, TStreamMap> TStoragePair;
-        DECLARE_STL_USTRINGACCESS_MAP(TStoragePair,TStorages);
+        typedef std::map<OUString, TStoragePair> TStorages;
         /** contains all storages so far accessed.
         */
         class StorageContainer

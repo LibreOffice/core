@@ -28,7 +28,6 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
@@ -51,6 +50,7 @@
 #include "svl/filenotation.hxx"
 #include <tools/urlobj.hxx>
 #include <algorithm>
+#include <map>
 
 // .......................................................................
 namespace svt
@@ -72,7 +72,7 @@ namespace svt
 
     typedef std::vector<OUString> StringArray;
     typedef std::set<OUString> StringBag;
-    DECLARE_STL_USTRINGACCESS_MAP( OUString, MapString2String );
+    typedef std::map<OUString, OUString> MapString2String;
 
     namespace
     {
@@ -224,7 +224,7 @@ public:
     // -------------------------------------------------------------------
     sal_Bool AssigmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
     {
-        ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
+        MapString2String::const_iterator aPos = m_aAliases.find( _rLogicalName );
         return  ( m_aAliases.end() != aPos )
             &&  ( !aPos->second.isEmpty() );
     }
@@ -233,7 +233,7 @@ public:
     OUString AssigmentTransientData::getFieldAssignment(const OUString& _rLogicalName)
     {
         OUString sReturn;
-        ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
+        MapString2String::const_iterator aPos = m_aAliases.find( _rLogicalName );
         if ( m_aAliases.end() != aPos )
             sReturn = aPos->second;
 
@@ -249,7 +249,7 @@ public:
     // -------------------------------------------------------------------
     void AssigmentTransientData::clearFieldAssignment(const OUString& _rLogicalName)
     {
-        MapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
+        MapString2String::iterator aPos = m_aAliases.find( _rLogicalName );
         if ( m_aAliases.end() != aPos )
             m_aAliases.erase( aPos );
     }

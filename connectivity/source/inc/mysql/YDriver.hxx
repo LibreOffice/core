@@ -19,13 +19,16 @@
 #ifndef CONNECTIVITY_MYSQL_DRIVER_HXX
 #define CONNECTIVITY_MYSQL_DRIVER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/CommonTools.hxx"
 
@@ -48,7 +51,7 @@ namespace connectivity
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,OMetaConnection*> TWeakConnectionPair;
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
-        DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,TJDBCDrivers);
+        typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > > TJDBCDrivers;
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
 

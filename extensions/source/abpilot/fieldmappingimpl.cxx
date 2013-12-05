@@ -251,7 +251,7 @@ namespace abp
                     // there should be a redundancy in the config data .... if this asserts, there isn't anymore!
 
                 // do we have a new alias for the programmatic?
-                MapString2StringIterator aPos = aFieldAssignment.find( *pExistentFields );
+                MapString2String::iterator aPos = aFieldAssignment.find( *pExistentFields );
                 if ( aFieldAssignment.end() != aPos )
                 {   // yes
                     // -> set a new value
@@ -269,7 +269,7 @@ namespace abp
 
             // now everything remaining in aFieldAssignment marks a mapping entry which was not present
             // in the config before
-            for (   ConstMapString2StringIterator aNewMapping = aFieldAssignment.begin();
+            for (   MapString2String::const_iterator aNewMapping = aFieldAssignment.begin();
                     aNewMapping != aFieldAssignment.end();
                     ++aNewMapping
                 )

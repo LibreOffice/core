@@ -25,15 +25,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/stl_types.hxx>
-
 
 #include <map>
 
 
 using namespace com::sun::star;
 
-DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence<beans::PropertyValue>, NamedPropertyValues );
+typedef std::map< OUString, uno::Sequence<beans::PropertyValue> > NamedPropertyValues;
 
 class NamedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {

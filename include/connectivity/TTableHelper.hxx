@@ -20,11 +20,14 @@
 #ifndef INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 #define INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sdbcx/VKey.hxx>
 #include <connectivity/StdTypeDefs.hxx>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/sdb/tools/XTableRename.hpp>
 #include <com/sun/star/sdb/tools/XTableAlteration.hpp>
 #include <com/sun/star/sdb/tools/XKeyAlteration.hpp>
@@ -72,7 +75,7 @@ namespace connectivity
 
     OOO_DLLPUBLIC_DBTOOLS OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
-    DECLARE_STL_USTRINGACCESS_MAP( sdbcx::TKeyProperties , TKeyMap);
+    typedef std::map<OUString, sdbcx::TKeyProperties> TKeyMap;
 
     struct OTableHelperImpl;
 

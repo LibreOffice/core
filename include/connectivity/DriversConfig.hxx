@@ -19,7 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
 #define INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
 
-#include <comphelper/stl_types.hxx>
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -37,7 +40,7 @@ namespace connectivity
         OUString sDriverFactory;
         OUString sDriverTypeDisplayName;
     } TInstalledDriver;
-    DECLARE_STL_USTRINGACCESS_MAP( TInstalledDriver, TInstalledDrivers);
+    typedef std::map<OUString, TInstalledDriver> TInstalledDrivers;
 
     class DriversConfigImpl
     {

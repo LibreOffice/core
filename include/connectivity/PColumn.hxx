@@ -19,6 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_PCOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_PCOLUMN_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -95,7 +99,7 @@ namespace connectivity
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns
                 );
 
-            DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
+            typedef std::map<OUString, int> StringMap;
             /** creates a single OParseColumn, as described by a result set meta data instance.
                 The column names are unique.
             */

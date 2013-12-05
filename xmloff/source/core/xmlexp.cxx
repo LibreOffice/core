@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include <sal/config.h>
+
+#include <stack>
+#include <string.h>
 
 #include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>

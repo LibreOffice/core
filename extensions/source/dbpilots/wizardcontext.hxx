@@ -20,6 +20,10 @@
 #ifndef _EXTENSIONS_DBP_WIZARDCONTEXT_HXX_
 #define _EXTENSIONS_DBP_WIZARDCONTEXT_HXX_
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
@@ -28,7 +32,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <comphelper/stl_types.hxx>
 
 //.........................................................................
 namespace dbp
@@ -68,7 +71,7 @@ namespace dbp
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                     xObjectContainer;
         // the column types container of the object the form is bound to (table, query or SQL statement)
-        DECLARE_STL_USTRINGACCESS_MAP(sal_Int32,TNameTypeMap);
+        typedef std::map<OUString, sal_Int32> TNameTypeMap;
         TNameTypeMap aTypes;
         // the column names of the object the form is bound to (table, query or SQL statement)
         ::com::sun::star::uno::Sequence< OUString >

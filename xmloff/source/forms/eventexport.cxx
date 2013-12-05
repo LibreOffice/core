@@ -95,7 +95,7 @@ namespace xmloff
 
     Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
     {
-        ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
+        MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
             throw NoSuchElementException(
                 OUString("There is no element named ") += _rName,
@@ -108,7 +108,7 @@ namespace xmloff
     {
         Sequence< OUString > aReturn(m_aMappedEvents.size());
         OUString* pReturn = aReturn.getArray();
-        for (   ConstMapString2PropertyValueSequenceIterator aCollect = m_aMappedEvents.begin();
+        for (   MapString2PropertyValueSequence::const_iterator aCollect = m_aMappedEvents.begin();
                 aCollect != m_aMappedEvents.end();
                 ++aCollect, ++pReturn
             )
@@ -119,7 +119,7 @@ namespace xmloff
 
     sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException)
     {
-        ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
+        MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;
     }
 

@@ -19,11 +19,14 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEGRANTCTRL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEGRANTCTRL_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/stl_types.hxx>
 #include "moduledbu.hxx"
 
 class Edit;
@@ -38,7 +41,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
         sal_Int32 nWithGrant;
     } TPrivileges;
 
-    DECLARE_STL_USTRINGACCESS_MAP(TPrivileges,TTablePrivilegeMap);
+    typedef std::map<OUString, TPrivileges> TTablePrivilegeMap;
 
     OModuleClient        m_aModuleClient;
 

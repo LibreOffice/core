@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
 
 #include <cmdid.h>
 
@@ -51,7 +54,6 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/makesequence.hxx>
 #include <svx/scene3d.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -63,7 +65,7 @@
 
 using namespace ::com::sun::star;
 
-DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *,  SwShapeImplementationIdMap );
+typedef std::map<OUString, uno::Sequence< sal_Int8 > *> SwShapeImplementationIdMap;
 
 static SwShapeImplementationIdMap aImplementationIdMap;
 

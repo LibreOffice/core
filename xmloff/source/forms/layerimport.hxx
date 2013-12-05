@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_LAYERIMPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_LAYERIMPORT_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <rtl/ref.hxx>
@@ -57,7 +61,7 @@ namespace xmloff
         SvXMLStylesContext*                 m_pAutoStyles;
 
     protected:
-        DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
+        typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > > MapString2PropertySet;
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
 
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page

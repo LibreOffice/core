@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
 
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
@@ -47,7 +49,7 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *,  ScShapeImplementationIdMap );
+typedef std::map<OUString, uno::Sequence< sal_Int8 > *> ScShapeImplementationIdMap;
 
 static ScShapeImplementationIdMap aImplementationIdMap;
 

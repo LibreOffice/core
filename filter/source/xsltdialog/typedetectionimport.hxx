@@ -24,10 +24,10 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <comphelper/stl_types.hxx>
 
 #include "xmlfilterjar.hxx"
 
+#include <map>
 #include <vector>
 #include <stack>
 
@@ -48,7 +48,7 @@ enum ImportState
     e_Unknown
 };
 
-DECLARE_STL_USTRINGACCESS_MAP( OUString, PropertyMap );
+typedef std::map<OUString, OUString> PropertyMap;
 
 struct Node
 {
