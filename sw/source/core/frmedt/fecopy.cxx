@@ -1039,25 +1039,22 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 aIndexBefore--;
 
                 pClpDoc->CopyRange( aCpyPam, rInsPos, false );
+                // Note: aCpyPam is invalid now
 
-                {
-                    ++aIndexBefore;
-                    SwPaM aPaM(SwPosition(aIndexBefore),
-                               SwPosition(rInsPos.nNode));
+                ++aIndexBefore;
+                SwPaM aPaM(SwPosition(aIndexBefore),
+                           SwPosition(rInsPos.nNode));
 
-                    aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
-                }
-            }
+                aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
 
-            // Update the rsid of each pasted text node.
-            {
-                sal_Int32 nNodesCnt = aCpyPam.End()->nNode.GetIndex() - aCpyPam.Start()->nNode.GetIndex();
+                // Update the rsid of each pasted text node.
                 SwNodes &rDestNodes = GetDoc()->GetNodes();
-                sal_Int32 nDestStart = PCURCRSR->GetPoint()->nNode.GetIndex() - nNodesCnt;
+                sal_uLong const nEndIdx = aPaM.End()->nNode.GetIndex();
 
-                for (sal_Int32 nIdx = 0; nIdx <= nNodesCnt; ++nIdx)
+                for (sal_uLong nIdx = aPaM.Start()->nNode.GetIndex();
+                        nIdx <= nEndIdx; ++nIdx)
                 {
-                    SwTxtNode *pTxtNode = rDestNodes[ nDestStart + nIdx ]->GetTxtNode();
+                    SwTxtNode *const pTxtNode = rDestNodes[nIdx]->GetTxtNode();
                     if ( pTxtNode )
                     {
                         GetDoc()->UpdateParRsid( pTxtNode );
