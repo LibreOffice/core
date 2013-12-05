@@ -74,14 +74,6 @@
 
 #include <svx/svxids.hrc>
 
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 #define OWN_ATTR_VALUE_START_TEXT               (OWN_ATTR_VALUE_START+0)    // the next 10 entries are reserved for text
 #define OWN_ATTR_VALUE_POLYGONKIND              (OWN_ATTR_VALUE_START+10)
 #define OWN_ATTR_VALUE_POLYPOLYGON              (OWN_ATTR_VALUE_START+11)
@@ -229,9 +221,9 @@
     LINE_PROPERTIES_DEFAULTS
 
 #define LINE_PROPERTIES_START_END \
-    { MAP_CHAR_LEN(UNO_NAME_LINEEND),           XATTR_LINEEND,          SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0}, \
+    { MAP_CHAR_LEN(UNO_NAME_LINEEND),           XATTR_LINEEND,          &::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0}, \
     { MAP_CHAR_LEN("LineEndName"),              XATTR_LINEEND,          &::getCppuType((const OUString*)0), 0, MID_NAME }, \
-    { MAP_CHAR_LEN(UNO_NAME_LINESTART),         XATTR_LINESTART,        SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},  \
+    { MAP_CHAR_LEN(UNO_NAME_LINESTART),         XATTR_LINESTART,        &::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},  \
     { MAP_CHAR_LEN("LineStartName"),            XATTR_LINESTART,            &::getCppuType((const OUString*)0), 0, MID_NAME },
 
 #define FILL_PROPERTIES_BMP \
@@ -311,12 +303,12 @@
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_FRAMERECT),        OWN_ATTR_FRAMERECT,         &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0,  0 }, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ROTATEANGLE),      SDRATTR_ROTATEANGLE,        &::getCppuType((const sal_Int32*)0),        0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_BITMAP),                    OWN_ATTR_BITMAP,            &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
-    { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),             OWN_ATTR_METAFILE,          SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
+    { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),             OWN_ATTR_METAFILE,          &::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
     { MAP_CHAR_LEN("IsFontwork"),                       OWN_ATTR_ISFONTWORK,        &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT),        OWN_ATTR_BOUNDRECT,         &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
 
 #define MISC_OBJ_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0)),  0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0),  0,  0}, \
     MISC_OBJ_PROPERTIES_NO_SHEAR \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SHEARANGLE),       SDRATTR_SHEARANGLE,         &::getCppuType((const sal_Int32*)0),        0,  0},
 
@@ -403,8 +395,8 @@
     { MAP_CHAR_LEN(UNO_NAME_POLYGONKIND),   OWN_ATTR_VALUE_POLYGONKIND, &::getCppuType((const ::com::sun::star::drawing::PolygonKind*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
 
 #define SPECIAL_POLYPOLYGON_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_POLYPOLYGON),   OWN_ATTR_VALUE_POLYPOLYGON, SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PointSequenceSequence*)0)), 0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_POLYGON),       OWN_ATTR_VALUE_POLYGON,     SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PointSequence*)0)),         0,  0},
+    { MAP_CHAR_LEN(UNO_NAME_POLYPOLYGON),   OWN_ATTR_VALUE_POLYPOLYGON, &::getCppuType((const ::com::sun::star::drawing::PointSequenceSequence*)0), 0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_POLYGON),       OWN_ATTR_VALUE_POLYGON,     &::getCppuType((const ::com::sun::star::drawing::PointSequence*)0),         0,  0},
 
 #define SPECIAL_POLYPOLYGONBEZIER_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_POLYPOLYGONBEZIER), OWN_ATTR_VALUE_POLYPOLYGONBEZIER,   &::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0),       0,  0},
@@ -531,7 +523,7 @@
     { MAP_CHAR_LEN(UNO_NAME_3D_BACKSCALE        ),SDRATTR_3DOBJ_BACKSCALE           ,&::getCppuType((const sal_Int16*)0), 0, 0}, \
 
 #define CUSTOMSHAPE_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_CUSTOMSHAPE_ADJUSTMENT),SDRATTR_CUSTOMSHAPE_ADJUSTMENT,         SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int32>*)0)), 0, 0}, \
+    { MAP_CHAR_LEN(UNO_NAME_CUSTOMSHAPE_ADJUSTMENT),SDRATTR_CUSTOMSHAPE_ADJUSTMENT,         &::getCppuType((::com::sun::star::uno::Sequence<sal_Int32>*)0), 0, 0}, \
 
 #endif
 

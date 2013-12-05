@@ -1500,7 +1500,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException)
     {
-        return *SEQTYPE(::getCppuType((const uno::Sequence< beans::PropertyValue >*)0));
+        return ::getCppuType((const uno::Sequence< beans::PropertyValue >*)0);
     }
 
     virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException)

@@ -71,14 +71,6 @@
 #include "imapinfo.hxx"
 #include "EffectMigration.hxx"
 
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
@@ -1687,7 +1679,7 @@ sal_Bool SAL_CALL SdUnoEventsAccess::hasByName( const OUString& aName )
 uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
     throw(uno::RuntimeException)
 {
-    return *SEQTYPE(::getCppuType((const uno::Sequence< beans::PropertyValue >*)0));
+    return ::getCppuType((const uno::Sequence< beans::PropertyValue >*)0);
 }
 
 sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  ) throw(uno::RuntimeException)

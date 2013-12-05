@@ -77,16 +77,6 @@ using namespace comphelper;
 
 extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
-//////////////////////////////////////////////////////////////////////////////
-
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 #define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
@@ -460,7 +450,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "Preview" ),         0, &::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "PageLayouts" ), 0, SEQTYPE(::getCppuType((const uno::Reference< container::XNameAccess >*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { MAP_LEN( "PageLayouts" ), 0, &::getCppuType((const uno::Reference< container::XNameAccess >*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
         { MAP_LEN( "PrivateData" ), 0,
               &::getCppuType( (Reference<XInterface> *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -839,7 +829,7 @@ sal_Bool SdXMLFilter::Export()
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
-            { MAP_LEN( "PageLayoutNames" ), 0, SEQTYPE(::getCppuType((const OUString*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+            { MAP_LEN( "PageLayoutNames" ), 0, &::getCppuType((const OUString*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
             { MAP_LEN( "BaseURI" ), 0,
                   &::getCppuType( (OUString *)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },

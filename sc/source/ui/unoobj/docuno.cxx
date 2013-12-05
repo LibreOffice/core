@@ -101,16 +101,6 @@ using namespace com::sun::star;
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
 #define SC_UNO_VBAGLOBNAME "VBAGlobalConstantName"
 
-//------------------------------------------------------------------------
-
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
 //! umbenennen, sind nicht mehr nur Options
@@ -158,7 +148,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_REFERENCEDEVICE),         0, &getCppuType((uno::Reference<awt::XDevice>*)0),                    beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN("BuildId"),                      0, &::getCppuType(static_cast< const OUString * >(0)),                0, 0},
         {MAP_CHAR_LEN(SC_UNO_CODENAME),                0, &getCppuType(static_cast< const OUString * >(0)),                  0, 0},
-        {MAP_CHAR_LEN(SC_UNO_INTEROPGRABBAG),          0, SEQTYPE(::getCppuType((uno::Sequence< beans::PropertyValue >*)0)), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_INTEROPGRABBAG),          0, &::getCppuType((uno::Sequence< beans::PropertyValue >*)0), 0, 0},
 
         {0,0,0,0,0,0}
     };

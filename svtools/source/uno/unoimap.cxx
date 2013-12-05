@@ -42,14 +42,6 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imappoly.hxx>
 
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 #define MAP_LEN(x) x, sizeof(x)-1
 
 
@@ -148,7 +140,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
-                { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     SEQTYPE(::getCppuType((const PointSequence*)0)),    0, 0 },
+                { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     &::getCppuType((const PointSequence*)0),    0, 0 },
                 {0,0,0,0,0,0}
             };
 

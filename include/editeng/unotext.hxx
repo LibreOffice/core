@@ -62,14 +62,6 @@
 
 class SvxItemPropertySet;
 
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 #define WID_FONTDESC                OWN_ATTR_VALUE_START
 #define WID_NUMLEVEL                OWN_ATTR_VALUE_START+1
 #define WID_PORTIONTYPE             OWN_ATTR_VALUE_START+2
@@ -145,7 +137,7 @@ class SvxItemPropertySet;
     {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_LMARGIN),      EE_PARA_LRSPACE,            &::getCppuType((const sal_Int32*)0),            0, MID_TXT_LMARGIN|SFX_METRIC_ITEM }, \
     {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_LINESPACING),  EE_PARA_SBL,                &::getCppuType((const ::com::sun::star::style::LineSpacing*)0),     0, 0 }, \
     {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_RMARGIN),      EE_PARA_LRSPACE,            &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN|SFX_METRIC_ITEM }, \
-    {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_TAPSTOPS),     EE_PARA_TABS,               SEQTYPE(::getCppuType((const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >*)0)), 0, 0 }, \
+    {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_TAPSTOPS),     EE_PARA_TABS,               &::getCppuType((const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >*)0), 0, 0 }, \
     {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_TMARGIN),      EE_PARA_ULSPACE,            &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN|SFX_METRIC_ITEM },\
     {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT),     EE_PARA_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_FIRST_LINE_INDENT|SFX_METRIC_ITEM}, \
     {MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION),EE_PARA_HANGINGPUNCTUATION,    &::getBooleanCppuType(),                0 ,0 }, \

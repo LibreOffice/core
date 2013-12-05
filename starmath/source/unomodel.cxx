@@ -232,14 +232,6 @@ enum SmModelPropertyHandles
     HANDLE_INTEROP_GRAB_BAG,
 };
 
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
-
 static PropertySetInfo * lcl_createModelPropertyInfo ()
 {
     static PropertyMapEntry aModelPropertyInfoMap[] =
@@ -311,7 +303,7 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly"                     ), HANDLE_LOAD_READONLY                      ,  &::getBooleanCppuType(),                                                 PROPERTY_NONE,  0                     },
         // #i972#
         { RTL_CONSTASCII_STRINGPARAM( "BaseLine"                         ), HANDLE_BASELINE                           ,  &::getCppuType((const sal_Int16*)0),                                     PROPERTY_NONE,  0                     },
-        { RTL_CONSTASCII_STRINGPARAM( "InteropGrabBag"                   ), HANDLE_INTEROP_GRAB_BAG                   ,  SEQTYPE(::getCppuType((uno::Sequence< beans::PropertyValue >*)0)),       PROPERTY_NONE,  0                     },
+        { RTL_CONSTASCII_STRINGPARAM( "InteropGrabBag"                   ), HANDLE_INTEROP_GRAB_BAG                   ,  &::getCppuType((uno::Sequence< beans::PropertyValue >*)0),       PROPERTY_NONE,  0                     },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
