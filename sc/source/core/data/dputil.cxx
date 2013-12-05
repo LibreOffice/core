@@ -68,6 +68,27 @@ OUString ScDPUtil::getSourceDimensionName(const OUString& rName)
     return comphelper::string::stripEnd(rName, '*');
 }
 
+sal_uInt8 ScDPUtil::getDuplicateIndex(const OUString& rName)
+{
+    // Count all trailing '*'s.
+
+    sal_Int32 n = rName.getLength();
+    if (!n)
+        return 0;
+
+    sal_uInt8 nDupCount = 0;
+    const sal_Unicode* p = rName.getStr();
+    const sal_Unicode* pStart = p;
+    p += n-1; // Set it to the last char.
+    for (; p != pStart; --p, ++nDupCount)
+    {
+        if (*p != '*')
+            break;
+    }
+
+    return nDupCount;
+}
+
 OUString ScDPUtil::createDuplicateDimensionName(const OUString& rOriginal, size_t nDupCount)
 {
     if (!nDupCount)

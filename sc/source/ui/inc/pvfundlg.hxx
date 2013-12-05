@@ -162,7 +162,7 @@ private:
     void                Init( const ScDPNameVec& rDataFields, bool bEnableLayout );
     void                InitHideListBox();
 
-    const OUString& GetFieldName(const OUString& rLayoutName) const;
+    ScDPName GetFieldName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
     sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, sal_uInt16 nStartPos ) const;
@@ -203,7 +203,7 @@ private:
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
 
-    typedef ::boost::unordered_map< OUString, OUString, OUStringHash > NameMapType;
+    typedef ::boost::unordered_map<OUString, ScDPName, OUStringHash> NameMapType;
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
