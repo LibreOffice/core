@@ -126,12 +126,6 @@
 #define STR_HEADER_PREFIX       10
 #define STR_HEADER_URL          11
 
-// class ManageNamespaceDialog
-#define FT_PREFIX               10
-#define ED_PREFIX               11
-#define FT_URL                  12
-#define ED_URL                  13
-
 #define STR_EDIT_TEXT           10
 
 // class AddSubmissionDialog

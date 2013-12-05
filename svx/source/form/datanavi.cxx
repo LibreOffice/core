@@ -3300,40 +3300,24 @@ namespace svxform
     // class ManageNamespaceDialog
     //========================================================================
 
-    ManageNamespaceDialog::ManageNamespaceDialog(
-        Window* pParent, AddConditionDialog* _pCondDlg, bool _bIsEdit ) :
-
-        ModalDialog( pParent, SVX_RES( RID_SVXDLG_MANAGE_NAMESPACE ) ),
-
-        m_aPrefixFT     ( this, SVX_RES( FT_PREFIX ) ),
-        m_aPrefixED     ( this, SVX_RES( ED_PREFIX ) ),
-        m_aUrlFT        ( this, SVX_RES( FT_URL ) ),
-        m_aUrlED        ( this, SVX_RES( ED_URL ) ),
-        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
-
-        m_pConditionDlg ( _pCondDlg )
-
+    ManageNamespaceDialog::ManageNamespaceDialog(Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit)
+        : ModalDialog(pParent, "AddNamespaceDialog", "svx/ui/addnamespacedialog.ui")
+        , m_pConditionDlg ( _pCondDlg )
     {
-        if ( _bIsEdit )
-            SetText(SVX_RESSTR(STR_EDIT_TEXT));
+        get(m_pOKBtn, "ok");
+        get(m_pPrefixED, "prefix");
+        get(m_pUrlED, "url");
 
-        FreeResource();
+        if (bIsEdit)
+            SetText(get<FixedText>("alttitle")->GetText());
 
-        m_aOKBtn.SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
-    }
-
-    //------------------------------------------------------------------------
-    ManageNamespaceDialog::~ManageNamespaceDialog()
-    {
+        m_pOKBtn->SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
     }
 
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
     {
-        OUString sPrefix = m_aPrefixED.GetText();
+        OUString sPrefix = m_pPrefixED->GetText();
 
         try
         {

@@ -64,7 +64,7 @@
 #define RID_SVXDLG_ADD_DATAITEM                     (RID_FORMS_START + 12)
 #define RID_SVXDLG_ADD_CONDITION                    (RID_FORMS_START + 13)
 #define RID_SVXDLG_NAMESPACE_ITEM                   (RID_FORMS_START + 14)
-#define RID_SVXDLG_MANAGE_NAMESPACE                 (RID_FORMS_START + 15)
+
 #define RID_SVXDLG_ADD_SUBMISSION                   (RID_FORMS_START + 16)
 #define RID_SVXDLG_ADD_MODEL                        (RID_FORMS_START + 17)
 #define RID_SVXDLG_ADD_INSTANCE                     (RID_FORMS_START + 18)

@@ -440,33 +440,25 @@ namespace svxform
     class ManageNamespaceDialog : public ModalDialog
     {
     private:
-        FixedText           m_aPrefixFT;
-        Edit                m_aPrefixED;
-        FixedText           m_aUrlFT;
-        Edit                m_aUrlED;
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        Edit*               m_pPrefixED;
+        Edit*               m_pUrlED;
+        OKButton*           m_pOKBtn;
 
         AddConditionDialog* m_pConditionDlg;
 
         DECL_LINK(OKHdl, void *);
 
     public:
-        ManageNamespaceDialog( Window* pParent, AddConditionDialog* _pCondDlg, bool _bIsEdit );
-        ~ManageNamespaceDialog();
+        ManageNamespaceDialog(Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
 
-        inline void         SetNamespace( const OUString& _rPrefix, const OUString& _rURL );
-        inline OUString     GetPrefix() const { return m_aPrefixED.GetText(); }
-        inline OUString     GetURL() const { return m_aUrlED.GetText(); }
+        void SetNamespace(const OUString& _rPrefix, const OUString& _rURL)
+        {
+            m_pPrefixED->SetText( _rPrefix );
+            m_pUrlED->SetText( _rURL );
+        }
+        OUString GetPrefix() const { return m_pPrefixED->GetText(); }
+        OUString GetURL() const { return m_pUrlED->GetText(); }
     };
-
-    void ManageNamespaceDialog::SetNamespace( const OUString& _rPrefix, const OUString& _rURL )
-    {
-        m_aPrefixED.SetText( _rPrefix );
-        m_aUrlED.SetText( _rURL );
-    }
 
     //========================================================================
     class AddSubmissionDialog : public ModalDialog
