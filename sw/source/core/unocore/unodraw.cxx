@@ -55,6 +55,7 @@
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/makesequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/scene3d.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <fmtwrapinfluenceonobjpos.hxx>
@@ -433,7 +434,7 @@ OUString SwXShapesEnumeration::getImplementationName(void) throw(uno::RuntimeExc
 
 sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException)
 {
-    return ServiceName == "com.sun.star.container.XEnumeration";
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames(void) throw(uno::RuntimeException)
@@ -458,7 +459,7 @@ OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.drawing.GenericDrawPage";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2132,16 +2133,7 @@ OUString SwXShape::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SwXShape::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    sal_Bool bRet = sal_False;
-    if (rServiceName == "com.sun.star.drawing.Shape")
-        bRet = sal_True;
-    else if(xShapeAgg.is())
-    {
-        uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
-        SvxShape* pSvxShape = GetSvxShape();
-        bRet = pSvxShape->supportsService(rServiceName);
-    }
-    return bRet;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXShape::getSupportedServiceNames(void) throw( uno::RuntimeException )

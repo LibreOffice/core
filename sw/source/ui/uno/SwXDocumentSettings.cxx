@@ -22,6 +22,7 @@
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -1239,15 +1240,7 @@ OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
 sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    const Sequence< OUString > aSeq( getSupportedServiceNames() );
-    sal_Int32 nCount = aSeq.getLength();
-    const OUString* pServices = aSeq.getConstArray();
-    while( nCount-- )
-    {
-        if( *pServices++ == ServiceName )
-            return sal_True;
-    }
-    return sal_True;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )

@@ -91,6 +91,7 @@
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <reffld.hxx>
 #include <docufld.hxx>
@@ -1219,10 +1220,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
         const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName,
-                                          sizeof(sServiceName)-1 ) ||
-           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                             sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()

@@ -26,6 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotxdoc.hxx>
 
@@ -37,7 +38,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 
-#define SWFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
 #define SWFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Writer.FilterOptionsDialog"
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 
@@ -57,7 +57,7 @@ OUString  SwXFilterOptions::getImplementationName_Static()
 
 uno::Sequence< OUString> SwXFilterOptions::getSupportedServiceNames_Static()
 {
-    OUString sService(SWFILTEROPTIONSOBJ_SERVICE);
+    OUString sService("com.sun.star.ui.dialogs.FilterOptionsDialog");
     return uno::Sequence< OUString> (&sService, 1);
 }
 
@@ -159,7 +159,7 @@ OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException)
 sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
     throw(uno::RuntimeException)
 {
-    return rServiceName == SWFILTEROPTIONSOBJ_SERVICE;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()

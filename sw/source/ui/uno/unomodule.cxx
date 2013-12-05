@@ -23,6 +23,7 @@
 #include "swmodule.hxx"
 #include "swdll.hxx"
 #include "unomodule.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -142,16 +143,7 @@ OUString SAL_CALL SwUnoModule::getImplementationName(  ) throw(uno::RuntimeExcep
 
 sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString*           pArray          = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException)

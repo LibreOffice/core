@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -99,11 +100,10 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
     return OUString("SwXRedlines");
 }
 
-sal_Bool SwXRedlines::supportsService(const OUString& /*ServiceName*/)
+sal_Bool SwXRedlines::supportsService(const OUString& ServiceName)
     throw( uno::RuntimeException )
 {
-    OSL_FAIL("not implemented");
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
@@ -166,9 +166,9 @@ OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeE
     return OUString("SwXRedlineEnumeration");
 }
 
-sal_Bool SwXRedlineEnumeration::supportsService(const OUString& /*ServiceName*/) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )

@@ -27,6 +27,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -238,21 +239,17 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
     return aRet;
 }
 
-
 OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
     throw (RuntimeException)
 {
     return OUString("SwXTextDefaults");
 }
 
-
 sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    uno::Sequence< OUString > aSeq(getSupportedServiceNames());
-    return std::find(aSeq.begin(), aSeq.end(), rServiceName) != aSeq.end();
+    return cppu::supportsService(this, rServiceName);
 }
-
 
 uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
     throw (RuntimeException)
@@ -268,7 +265,5 @@ uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
     *pArr++ = "com.sun.star.style.ParagraphPropertiesComplex";
     return aRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

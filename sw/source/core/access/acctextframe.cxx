@@ -19,6 +19,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -42,8 +43,6 @@ using namespace ::com::sun::star::accessibility;
 using utl::AccessibleRelationSetHelper;
 using ::com::sun::star::accessibility::XAccessibleContext;
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextFrameView";
-const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTextFrameView";
 
 SwAccessibleTextFrame::SwAccessibleTextFrame(
         SwAccessibleMap* pInitMap,
@@ -288,17 +287,13 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
 OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
         throw( uno::RuntimeException )
 {
-    return OUString(sImplementationName);
+    return OUString("com.sun.star.comp.Writer.SwAccessibleTextFrameView");
 }
 
-sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(
-        const OUString& sTestServiceName)
+sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName,
-                                          sizeof(sServiceName)-1 ) ||
-           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                             sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
@@ -306,7 +301,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sServiceName );
+    pArray[0] = "com.sun.star.text.AccessibleTextFrameView";
     pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }

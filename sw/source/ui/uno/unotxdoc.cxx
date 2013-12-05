@@ -101,6 +101,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
@@ -1772,16 +1773,7 @@ OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    if ( rServiceName == "com.sun.star.document.OfficeDocument" || rServiceName == "com.sun.star.text.GenericTextDocument" )
-        return sal_True;
-
-    bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
-    bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
-
-    return ( (bWebDoc    && rServiceName == "com.sun.star.text.WebDocument")
-          || (bGlobalDoc && rServiceName == "com.sun.star.text.GlobalDocument")
-          || (bTextDoc   && rServiceName == "com.sun.star.text.TextDocument") );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
@@ -3475,7 +3467,7 @@ OUString SwXLinkTargetSupplier::getImplementationName(void) throw( RuntimeExcept
 sal_Bool SwXLinkTargetSupplier::supportsService(const OUString& rServiceName)
                                                 throw( RuntimeException )
 {
-    return (rServiceName == "com.sun.star.document.LinkTargets");
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
@@ -3761,7 +3753,7 @@ OUString SwXLinkNameAccessWrapper::getImplementationName(void) throw( RuntimeExc
 sal_Bool SwXLinkNameAccessWrapper::supportsService(const OUString& rServiceName)
                                                     throw( RuntimeException )
 {
-    return (rServiceName == "com.sun.star.document.LinkTargets");
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
@@ -3839,7 +3831,7 @@ OUString SwXOutlineTarget::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXOutlineTarget::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    return ServiceName == "com.sun.star.document.LinkTarget";
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( RuntimeException )

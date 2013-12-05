@@ -21,6 +21,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
 #include "cntfrm.hxx"
@@ -34,7 +35,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextEmbeddedObject";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
@@ -80,14 +80,10 @@ OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
     return OUString(sImplementationName);
 }
 
-sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(
-        const OUString& sTestServiceName)
+sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName,
-                                          sizeof(sServiceName)-1 ) ||
-           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                             sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()
@@ -95,7 +91,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServi
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sServiceName );
+    pArray[0] = "com.sun.star.text.AccessibleTextEmbeddedObject";
     pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }

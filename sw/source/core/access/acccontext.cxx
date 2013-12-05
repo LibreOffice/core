@@ -44,6 +44,7 @@
 #include <acccontext.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "accpara.hxx"
 #include <PostItMgr.hxx>
 
@@ -988,12 +989,10 @@ OUString SAL_CALL SwAccessibleContext::getImplementationName()
     THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "implementation name needs to be overloaded" )
 }
 
-sal_Bool SAL_CALL
-    SwAccessibleContext::supportsService (const OUString& )
+sal_Bool SAL_CALL SwAccessibleContext::supportsService (const OUString& ServiceName)
         throw (uno::RuntimeException)
 {
-    OSL_ENSURE( !this, "supports service needs to be overloaded" );
-    THROW_RUNTIME_EXCEPTION( lang::XServiceInfo, "supports service needs to be overloaded" )
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()

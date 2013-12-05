@@ -110,6 +110,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <switerator.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 // from fefly1.cxx
 extern sal_Bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -815,9 +816,7 @@ OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName.equalsAscii("com.sun.star.text.BaseFrame") ||
-           rServiceName.equalsAscii("com.sun.star.text.TextContent") ||
-           rServiceName.equalsAscii("com.sun.star.document.LinkTarget");
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2743,9 +2742,7 @@ OUString SwXTextFrame::getImplementationName(void) throw( uno::RuntimeException 
 
 sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.Text" ||
-           rServiceName == "com.sun.star.text.TextFrame" ||
-           SwXFrame::supportsService(rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2905,8 +2902,7 @@ OUString SwXTextGraphicObject::getImplementationName(void) throw( uno::RuntimeEx
 
 sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextGraphicObject" ||
-           SwXFrame::supportsService(rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
@@ -3166,8 +3162,7 @@ OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeE
 
 sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextEmbeddedObject" ||
-           SwXFrame::supportsService(rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames(void)

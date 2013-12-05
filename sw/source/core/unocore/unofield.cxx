@@ -43,6 +43,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -489,15 +490,10 @@ OUString getServiceName(const sal_uInt16 aId)
 
 }
 
-sal_Bool SAL_CALL
-SwXFieldMaster::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    if (rServiceName=="com.sun.star.text.TextFieldMaster")
-        return sal_True;
-
-    const OUString sName(getServiceName(m_pImpl->m_nResTypeId));
-    return !sName.isEmpty() && sName==rServiceName;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2476,15 +2472,7 @@ static OUString OldNameToNewName_Impl( const OUString &rOld )
 sal_Bool SAL_CALL SwXTextField::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    OUString sServiceName =
-        SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
-
-    // case-corected version of service-name (see #i67811)
-    // (need to supply both because of compatibility to older versions)
-    OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
-
-    return sServiceName == rServiceName || sServiceNameCC == rServiceName ||
-        rServiceName == "com.sun.star.text.TextContent";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
@@ -2562,7 +2550,7 @@ OUString SwXTextFieldMasters::getImplementationName(void) throw( uno::RuntimeExc
 
 sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextFieldMasters";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2778,7 +2766,7 @@ OUString SwXTextFieldTypes::getImplementationName(void) throw( uno::RuntimeExcep
 
 sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextFields";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -2891,11 +2879,10 @@ SwXFieldEnumeration::getImplementationName() throw (uno::RuntimeException)
     return OUString("SwXFieldEnumeration");
 }
 
-sal_Bool SAL_CALL
-SwXFieldEnumeration::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return rServiceName == "com.sun.star.text.FieldEnumeration";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

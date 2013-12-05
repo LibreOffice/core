@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <ftnfrm.hxx>
 #include <fmtftn.hxx>
@@ -102,18 +103,10 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
         return OUString(sImplementationNameFootnote);
 }
 
-sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(
-        const OUString& sTestServiceName)
+sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                       sizeof(sAccessibleServiceName)-1 ) )
-        return sal_True;
-    else if( AccessibleRole::END_NOTE == GetRole() )
-        return sTestServiceName.equalsAsciiL( sServiceNameEndnote, sizeof(sServiceNameEndnote)-1 );
-    else
-        return sTestServiceName.equalsAsciiL( sServiceNameFootnote, sizeof(sServiceNameFootnote)-1 );
-
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()

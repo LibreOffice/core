@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <comphelper/ChainablePropertySetInfo.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <edtwin.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
@@ -253,13 +254,7 @@ OUString SwXModule::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    const Sequence< OUString > aNames = SwXModule_getSupportedServiceNames();
-    for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
-    {
-        if(aNames.getConstArray()[nService] == rServiceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeException )
@@ -545,7 +540,7 @@ OUString SwXPrintSettings::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.PrintSettings";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( RuntimeException )
@@ -984,7 +979,7 @@ OUString SwXViewSettings::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.ViewSettings";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( RuntimeException )

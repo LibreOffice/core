@@ -23,6 +23,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
@@ -45,11 +46,6 @@
 #include <docary.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
-
-#define SN_DATA_PROVIDER            "com.sun.star.chart2.data.DataProvider"
-#define SN_DATA_SOURCE              "com.sun.star.chart2.data.DataSource"
-#define SN_DATA_SEQUENCE            "com.sun.star.chart2.data.DataSequence"
-#define SN_LABELED_DATA_SEQUENCE    "com.sun.star.chart2.data.LabeledDataSequence"
 
 using namespace ::com::sun::star;
 
@@ -1505,12 +1501,10 @@ OUString SAL_CALL SwChartDataProvider::getImplementationName(  )
     return OUString("SwChartDataProvider");
 }
 
-sal_Bool SAL_CALL SwChartDataProvider::supportsService(
-        const OUString& rServiceName )
+sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    return rServiceName == SN_DATA_PROVIDER;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
@@ -1518,7 +1512,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = SN_DATA_PROVIDER;
+    aRes.getArray()[0] = "com.sun.star.chart2.data.DataProvider";
     return aRes;
 }
 
@@ -1894,12 +1888,10 @@ OUString SAL_CALL SwChartDataSource::getImplementationName(  )
     return OUString("SwChartDataSource");
 }
 
-sal_Bool SAL_CALL SwChartDataSource::supportsService(
-        const OUString& rServiceName )
+sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    return rServiceName == SN_DATA_SOURCE;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
@@ -1907,7 +1899,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames( 
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = SN_DATA_SOURCE;
+    aRes.getArray()[0] = "com.sun.star.chart2.data.DataSource";
     return aRes;
 }
 
@@ -2354,11 +2346,10 @@ OUString SAL_CALL SwChartDataSequence::getImplementationName(  )
     return OUString("SwChartDataSequence");
 }
 
-sal_Bool SAL_CALL SwChartDataSequence::supportsService(
-        const OUString& rServiceName )
+sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName == SN_DATA_SEQUENCE;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
@@ -2366,7 +2357,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = SN_DATA_SEQUENCE;
+    aRes.getArray()[0] = "com.sun.star.chart2.data.DataSequence";
     return aRes;
 }
 
@@ -2867,7 +2858,7 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
         const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName == SN_LABELED_DATA_SEQUENCE;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
@@ -2875,7 +2866,8 @@ uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServi
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = SN_LABELED_DATA_SEQUENCE;
+    aRes.getArray()[0] = "com.sun.star.chart2.data.LabeledDataSequence";
+
     return aRes;
 }
 

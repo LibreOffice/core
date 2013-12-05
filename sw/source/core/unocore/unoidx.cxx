@@ -58,7 +58,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -457,16 +457,7 @@ sal_Bool SAL_CALL
 SwXDocumentIndex::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    return rServiceName == "com.sun.star.text.BaseIndex"
-        || ((TOX_INDEX == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.DocumentIndex")
-        || ((TOX_CONTENT == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.ContentIndex")
-        || ((TOX_USER == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.UserDefinedIndex")
-        || ((TOX_ILLUSTRATIONS == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.IllustrationsIndex")
-        || ((TOX_TABLES == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.TableIndex")
-        || ((TOX_OBJECTS == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.ObjectIndex")
-        || ((TOX_AUTHORITIES == m_pImpl->m_eTOXType) && rServiceName == "com.sun.star.text.Bibliography");
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -1674,22 +1665,10 @@ SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException)
     return OUString("SwXDocumentIndexMark");
 }
 
-sal_Bool SAL_CALL
-SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-
-    return rServiceName.equalsAscii(cBaseMark)
-        || rServiceName.equalsAscii(cTextContent)
-        || ((m_pImpl->m_eTOXType == TOX_USER)
-                && rServiceName.equalsAscii(cUserMark))
-        || ((m_pImpl->m_eTOXType == TOX_CONTENT)
-                && rServiceName.equalsAscii(cContentMark))
-        || ((m_pImpl->m_eTOXType == TOX_INDEX)
-                && rServiceName.equalsAscii(cIdxMark))
-        || ((m_pImpl->m_eTOXType == TOX_INDEX)
-                && rServiceName.equalsAscii(cIdxMarkAsian));
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2375,8 +2354,7 @@ static char const*const g_ServicesDocumentIndexes[] =
     "com.sun.star.text.DocumentIndexes",
 };
 
-sal_Bool SAL_CALL
-SwXDocumentIndexes::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
@@ -2705,8 +2683,7 @@ static char const*const g_ServicesIndexTokenAccess[] =
     "com.sun.star.text.DocumentIndexLevelFormat",
 };
 
-sal_Bool SAL_CALL
-SwXDocumentIndex::TokenAccess_Impl::supportsService(
+sal_Bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
         const OUString& rServiceName)
 throw (uno::RuntimeException)
 {

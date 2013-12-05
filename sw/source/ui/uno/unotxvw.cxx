@@ -73,6 +73,7 @@
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -856,7 +857,7 @@ OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextDocumentView" || rServiceName == "com.sun.star.view.OfficeDocumentView";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1698,13 +1699,7 @@ OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException 
 
 sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii("com.sun.star.text.TextViewCursor") ||
-            rServiceName.equalsAscii("com.sun.star.style.CharacterProperties") ||
-            rServiceName.equalsAscii("com.sun.star.style.CharacterPropertiesAsian") ||
-            rServiceName.equalsAscii("com.sun.star.style.CharacterPropertiesComplex") ||
-            rServiceName.equalsAscii("com.sun.star.style.ParagraphProperties") ||
-            rServiceName.equalsAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
-            rServiceName.equalsAscii("com.sun.star.style.ParagraphPropertiesComplex");
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( RuntimeException )

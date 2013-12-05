@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <hffrm.hxx>
 #include "accheaderfooter.hxx"
@@ -32,8 +33,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-const sal_Char sServiceNameHeader[] = "com.sun.star.text.AccessibleHeaderView";
-const sal_Char sServiceNameFooter[] = "com.sun.star.text.AccessibleFooterView";
 const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeaderView";
 const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
 
@@ -88,18 +87,10 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
         return OUString(sImplementationNameFooter);
 }
 
-sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(
-        const OUString& sTestServiceName)
+sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                       sizeof(sAccessibleServiceName)-1 ) )
-        return sal_True;
-    else if( AccessibleRole::HEADER == GetRole() )
-        return sTestServiceName.equalsAsciiL( sServiceNameHeader, sizeof(sServiceNameHeader)-1 );
-    else
-        return sTestServiceName.equalsAsciiL( sServiceNameFooter, sizeof(sServiceNameFooter)-1 );
-
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
@@ -108,9 +99,9 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     if( AccessibleRole::HEADER == GetRole() )
-        pArray[0] = OUString( sServiceNameHeader );
+        pArray[0] = "com.sun.star.text.AccessibleHeaderView";
     else
-        pArray[0] = OUString( sServiceNameFooter );
+        pArray[0] = "com.sun.star.text.AccessibleFooterView";
     pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }

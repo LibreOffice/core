@@ -53,13 +53,11 @@
 #include <frmatr.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
-
-const sal_Char sServiceName[] = "com.sun.star.table.AccessibleTableView";
-const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTableView";
 
 typedef ::std::less < sal_Int32 > Int32Less_Impl;
 typedef ::std::set < sal_Int32, Int32Less_Impl > Int32Set_Impl;
@@ -1370,17 +1368,14 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
         throw( uno::RuntimeException )
 {
-    return OUString(sImplementationName);
+    return OUString("com.sun.star.comp.Writer.SwAccessibleTableView");
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::supportsService(
         const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName,
-                                          sizeof(sServiceName)-1 ) ||
-           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                             sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
@@ -1388,7 +1383,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sServiceName );
+    pArray[0] = "com.sun.star.table.AccessibleTableView";
     pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
