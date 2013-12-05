@@ -3886,13 +3886,19 @@ formula::SingleVectorRefToken *>(tmpCur);
     ss << "return tmp;\n";
     ss << "}\n";
 }
+void OpGauss::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(taylorDecl);decls.insert(phiDecl);
+    decls.insert(gaussDecl);
+    funs.insert(taylor);funs.insert(phi);
+    funs.insert(gauss);
+}
 
 void OpGauss::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
 {
-    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
-                formula::SingleVectorRefToken *>(tmpCur);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -3901,18 +3907,45 @@ void OpGauss::GenSlidingWindowFunction(
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss <<"int gid0=get_global_id(0);\n\t";
-    ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
+    ss << ") {\n";
+    ss <<"    int gid0=get_global_id(0);\n";
+    ss <<"    double arg0;\n";
+    if(vSubArguments.size() != 1)
+    {
+        ss << "    return DBL_MAX;\n";
+        return ;
+    }
+    FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
+    assert(pCur);
+    if (pCur->GetType() == formula::svDoubleVectorRef)
+    {
+        ss << "    return DBL_MAX;\n";
+        return ;
+    }
+    else if (pCur->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+        ss << "    arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
 #ifdef ISNAN
-    ss<< "if(isNan(arg0)||(gid0>=";
-    ss<<tmpCurDVR->GetArrayLength();
-    ss<<"))\n\t\t";
-    ss<<"arg0 = 0;\n\t";
+        ss<< "    if(isNan(arg0)||(gid0>=";
+        ss<<pSVR->GetArrayLength();
+        ss<<"))\n";
+        ss<<"        arg0 = 0;\n";
 #endif
-    ss << "double tmp=0.5 *erfc(-arg0 * 0.7071067811865475)-0.5;\n\t";
-    ss << "return tmp;\n";
+    }
+    else if (pCur->GetType() == formula::svDouble)
+    {
+        ss << "    arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+#ifdef ISNAN
+        ss << "    if(isNan(arg0))\n";
+        ss << "        return DBL_MAX;\n";
+#endif
+    }
+    ss << "    double tmp=gauss(arg0);\n";
+    ss << "    return tmp;\n";
     ss << "}\n";
 }
 
