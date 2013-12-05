@@ -87,6 +87,14 @@ namespace connectivity
             void ensurePrepared()
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::uno::RuntimeException);
+            /**
+             * Assumes that all necessary mutexes have been taken.
+             */
+            void openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QUAD& rBlobId);
+            /**
+             * Assumes that all necessary mutexes have been taken.
+             */
+            void closeBlobAfterWriting(isc_blob_handle& rBlobHandle);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
