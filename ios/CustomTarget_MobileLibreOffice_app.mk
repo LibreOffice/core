@@ -44,9 +44,9 @@ MobileLibreOffice_setup:
 	# Libs #
 	# Create the link flags in the xcconfig for Xcode linkage
 	all_libs=`$(SRCDIR)/bin/lo-all-static-libs`; \
-	sed -i '' -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_libs|" $(LO_XCCONFIG)
+	sed -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_libs|" < $(BUILDDIR)/ios/$(LO_XCCONFIG) > $(BUILDDIR)/ios/$(LO_XCCONFIG).new && mv $(BUILDDIR)/ios/$(LO_XCCONFIG).new $(BUILDDIR)/ios/$(LO_XCCONFIG)
 
-	# Copy lo.xcconfig to source dir for Xcode projects
+	# Copy lo.xcconfig to source dir for the Xcode projects
 	if test $(SRCDIR) != $(BUILDDIR); then \
 		cp $(BUILDDIR)/ios/$(LO_XCCONFIG) $(SRCDIR)/ios; \
 	fi
