@@ -716,6 +716,8 @@ public:
      * PFInTable SPRM or not).
      */
     sal_Int32 m_nTableDepth;
+    /// If the next tab should be ignored, used for footnotes.
+    bool m_bIgnoreNextTab;
     /// Pending floating tables: they may be converted to text frames at the section end.
     std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 };

@@ -191,7 +191,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsNewDoc(bIsNewDoc),
         m_bInTableStyleRunProps(false),
         m_pSdtHelper(0),
-        m_nTableDepth(0)
+        m_nTableDepth(0),
+        m_bIgnoreNextTab(false)
 
 {
     appendTableManager( );
@@ -1515,6 +1516,11 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
+
+        // Word has a leading tab on footnotes, but we don't implement space
+        // between the footnote number and text using a tab, so just ignore
+        // that for now.
+        m_bIgnoreNextTab = true;
     }
     catch( const uno::Exception& e )
     {
