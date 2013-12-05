@@ -25,7 +25,7 @@ FixedText FT_NAME
 
 String STR_WELCOME
 {
-    Text [ en-US ] = "Welcome! You can open or create a new document!";
+    Text [ en-US ] = "Welcome to %PRODUCTNAME. Use the sidebar to open or create a file.";
 };
 
 Image IMG_WELCOME
