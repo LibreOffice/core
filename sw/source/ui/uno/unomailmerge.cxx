@@ -29,6 +29,7 @@
 #include <sfx2/docfilt.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/text/MailMergeType.hpp>
@@ -69,9 +70,6 @@
 #include <memory>
 
 #include <unomid.h>
-
-#define SN_MAIL_MERGE               "com.sun.star.text.MailMerge"
-#define SN_DATA_ACCESS_DESCRIPTOR   "com.sun.star.sdb.DataAccessDescriptor"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1162,8 +1160,7 @@ OUString SAL_CALL SwXMailMerge::getImplementationName()
 sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
     throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
-    return rServiceName == SN_MAIL_MERGE || rServiceName == SN_DATA_ACCESS_DESCRIPTOR;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
@@ -1178,8 +1175,8 @@ uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames()
 {
     uno::Sequence< OUString > aNames(2);
     OUString *pName = aNames.getArray();
-    pName[0] = SN_MAIL_MERGE;
-    pName[1] = SN_DATA_ACCESS_DESCRIPTOR;
+    pName[0] = "com.sun.star.text.MailMerge";
+    pName[1] = "com.sun.star.sdb.DataAccessDescriptor";
     return aNames;
 }
 

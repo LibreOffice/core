@@ -29,6 +29,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <accmap.hxx>
@@ -435,14 +436,10 @@ OUString SAL_CALL SwAccessibleDocument::getImplementationName()
     return OUString(sImplementationName);
 }
 
-sal_Bool SAL_CALL SwAccessibleDocument::supportsService(
-        const OUString& sTestServiceName)
+sal_Bool SAL_CALL SwAccessibleDocument::supportsService(const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName,
-                                          sizeof(sServiceName)-1 ) ||
-           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                             sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()

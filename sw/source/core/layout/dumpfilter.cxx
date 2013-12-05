@@ -10,6 +10,7 @@
 #include "dumpfilter.hxx"
 
 #include <wrtsh.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
@@ -166,16 +167,7 @@ namespace sw
     sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
         throw (uno::RuntimeException)
     {
-        uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-        const OUString* pArray = seqServiceNames.getConstArray();
-        for ( sal_Int32 nCounter=0; nCounter < seqServiceNames.getLength(); nCounter++ )
-        {
-            if ( pArray[nCounter] == rServiceName )
-            {
-                return sal_True ;
-            }
-        }
-        return sal_False ;
+        return cppu::supportsService(this, rServiceName);
     }
 
     uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()

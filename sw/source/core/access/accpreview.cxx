@@ -20,10 +20,10 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "access.hrc"
 #include <accpreview.hxx>
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentPageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
@@ -51,14 +51,14 @@ OUString SwAccessiblePreview::getImplementationName( )
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
     throw( RuntimeException )
 {
-    return rServiceName == sServiceName || rServiceName == sAccessibleServiceName;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     throw( RuntimeException )
 {
     Sequence<OUString> aSeq( 2 );
-    aSeq[0] = OUString( sServiceName );
+    aSeq[0] = "com.sun.star.text.AccessibleTextDocumentPageView";
     aSeq[1] = OUString( sAccessibleServiceName );
     return aSeq;
 }

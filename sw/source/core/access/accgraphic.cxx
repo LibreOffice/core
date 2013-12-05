@@ -21,6 +21,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
 #include <fmturl.hxx>
 #include "accgraphic.hxx"
@@ -29,9 +30,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
-
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextGraphicObject";
-const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleGraphic";
 
 SwAccessibleGraphic::SwAccessibleGraphic(
         SwAccessibleMap* pInitMap,
@@ -47,17 +45,13 @@ SwAccessibleGraphic::~SwAccessibleGraphic()
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
         throw( RuntimeException )
 {
-    return OUString(sImplementationName);
+    return OUString("com.sun.star.comp.Writer.SwAccessibleGraphic");
 }
 
-sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(
-        const OUString& sTestServiceName)
+sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName,
-                                          sizeof(sServiceName)-1 ) ||
-           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
-                                             sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
@@ -65,7 +59,7 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sServiceName );
+    pArray[0] = "com.sun.star.text.AccessibleTextGraphicObject";
     pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }

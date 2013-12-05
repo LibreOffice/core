@@ -23,6 +23,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "accpage.hxx"
 
 #include "access.hrc"
@@ -144,9 +145,7 @@ OUString SwAccessiblePage::getImplementationName( )
 sal_Bool SwAccessiblePage::supportsService( const OUString& rServiceName)
     throw( RuntimeException )
 {
-    return rServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 ) ||
-           rServiceName.equalsAsciiL( sAccessibleServiceName,
-                                   sizeof(sAccessibleServiceName)-1 );
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )

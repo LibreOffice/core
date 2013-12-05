@@ -58,6 +58,7 @@
 #include <unochart.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <list>
 #include <iterator>
 #include <unosection.hxx>
@@ -982,7 +983,7 @@ OUString SwXTextTables::getImplementationName(void) throw( uno::RuntimeException
 
 sal_Bool SwXTextTables::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextTables";
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -1140,7 +1141,7 @@ OUString SwXFrameEnumeration<T>::getImplementationName(void) throw( RuntimeExcep
 template<FlyCntType T>
 sal_Bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    return ServiceName == "com.sun.star.container.XEnumeration";
+    return cppu::supportsService(this, ServiceName);
 }
 
 template<FlyCntType T>
@@ -1159,7 +1160,7 @@ OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextFrames";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SwXFrames::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1326,7 +1327,7 @@ OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextFrames";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextFrames::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1356,7 +1357,7 @@ OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeExcept
 
 sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextGraphicObjects";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1386,7 +1387,7 @@ OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeExcep
 
 sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextEmbeddedObjects";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1413,7 +1414,7 @@ OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.TextSections";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1601,7 +1602,7 @@ OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return OUString("com.sun.star.text.Bookmarks") == rServiceName;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1810,7 +1811,7 @@ OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )
 
 sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.Footnotes";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1909,7 +1910,7 @@ OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException 
 
 sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName == "com.sun.star.text.ReferenceMarks";
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames(void) throw( RuntimeException )
