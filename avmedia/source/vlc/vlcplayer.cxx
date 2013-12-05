@@ -177,7 +177,7 @@ namespace
             return -1;
 
 #if defined MACOSX
-        const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->pView );
+        const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->mpNSView );
 #elif defined WNT
         const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->hWnd );
 #else
