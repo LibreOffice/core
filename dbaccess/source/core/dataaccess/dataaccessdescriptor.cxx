@@ -33,6 +33,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace dbaccess
 {
@@ -181,10 +182,7 @@ namespace dbaccess
 
     ::sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aServices( getSupportedServiceNames() );
-        const OUString* pStart = aServices.getConstArray();
-        const OUString* pEnd = aServices.getConstArray() + aServices.getLength();
-        return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     Sequence< OUString > SAL_CALL DataAccessDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -279,10 +277,7 @@ namespace dbaccess
 
     ::sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aServices( getSupportedServiceNames_static() );
-        const OUString* pStart = aServices.getConstArray();
-        const OUString* pEnd = aServices.getConstArray() + aServices.getLength();
-        return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames(  ) throw (RuntimeException)

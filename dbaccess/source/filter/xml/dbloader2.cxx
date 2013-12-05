@@ -285,13 +285,7 @@ OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
 // XServiceInfo
 sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pBegin   = aSNL.getConstArray();
-    const OUString * pEnd     = pBegin + aSNL.getLength();
-    for( ; pBegin != pEnd; ++pBegin)
-        if( *pBegin == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

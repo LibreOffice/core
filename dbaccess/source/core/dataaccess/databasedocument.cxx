@@ -74,6 +74,7 @@
 #include <connectivity/dbtools.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <framework/titlehelper.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
@@ -1878,7 +1879,7 @@ Sequence< OUString > ODatabaseDocument::getSupportedServiceNames_static(  ) thro
 
 sal_Bool ODatabaseDocument::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Reference< XDataSource > SAL_CALL ODatabaseDocument::getDataSource() throw (RuntimeException)

@@ -45,6 +45,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -79,8 +80,7 @@ OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OConnection::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    SAL_INFO("dbaccess", "OConnection::supportsService" );
-    return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeException)

@@ -39,6 +39,7 @@
 #include <connectivity/TTableHelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
@@ -98,7 +99,7 @@ OUString OColumn::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OColumn::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -206,7 +207,7 @@ OUString OColumns::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OColumns::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException)

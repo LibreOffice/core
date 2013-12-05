@@ -53,6 +53,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svl/filenotation.hxx>
@@ -225,7 +226,7 @@ OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool ODatabaseContext::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (RuntimeException)

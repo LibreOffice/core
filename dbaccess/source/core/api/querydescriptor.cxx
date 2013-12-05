@@ -24,6 +24,7 @@
 #include "dbastrings.hrc"
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "definitioncolumn.hxx"
@@ -217,7 +218,7 @@ OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(Runtime
 
 sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException)

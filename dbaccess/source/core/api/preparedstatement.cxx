@@ -26,6 +26,7 @@
 
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <preparedstatement.hxx>
 #include <resultcolumn.hxx>
@@ -127,7 +128,7 @@ OUString OPreparedStatement::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > OPreparedStatement::getSupportedServiceNames(  ) throw (RuntimeException)

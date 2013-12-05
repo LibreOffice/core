@@ -56,6 +56,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -611,8 +612,7 @@ Sequence< OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw 
 
 sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    SAL_INFO("dbaccess", "ODatabaseSource::supportsService" );
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 // OComponentHelper
