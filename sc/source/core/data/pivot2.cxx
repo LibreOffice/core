@@ -58,10 +58,10 @@ bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& 
 
 }
 
-// ============================================================================
+ScDPName::ScDPName() : mnDupCount(0) {}
 
-ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName) :
-    maName(rName), maLayoutName(rLayoutName) {}
+ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount) :
+    maName(rName), maLayoutName(rLayoutName), mnDupCount(nDupCount) {}
 
 // ============================================================================
 
@@ -85,6 +85,7 @@ ScDPLabelData::ScDPLabelData() :
     mnFuncMask(PIVOT_FUNC_NONE),
     mnUsedHier(0),
     mnFlags(0),
+    mnDupCount(0),
     mbShowAll(false),
     mbIsValue(false),
     mbDataLayout(false)

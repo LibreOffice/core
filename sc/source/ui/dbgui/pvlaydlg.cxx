@@ -60,6 +60,7 @@
 #include "dpsave.hxx"
 #include "dpshttab.hxx"
 #include "scmod.hxx"
+#include "dputil.hxx"
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
@@ -781,7 +782,7 @@ void ScPivotLayoutDlg::NotifyDoubleClick( ScPivotFieldType eType, size_t nFieldI
                     OUString aFuncStr = GetFuncString(nMask);
                     aLayoutName = aFuncStr + pDFData->maName;
                 }
-                aDataFieldNames.push_back(ScDPName(pDFData->maName, aLayoutName));
+                aDataFieldNames.push_back(ScDPName(pDFData->maName, aLayoutName, pDFData->mnDupCount));
             }
 
             bool bLayout = (eType == PIVOTFIELDTYPE_ROW) &&
@@ -1584,7 +1585,9 @@ IMPL_LINK_NOARG(ScPivotLayoutDlg, OkHdl)
 
     for( ScDPLabelDataVector::const_iterator aIt = maLabelData.begin(), aEnd = maLabelData.end(); aIt != aEnd; ++aIt )
     {
-        ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName(aIt->maName);
+        // "UNO" name may have trailing '*'s which signifies duplicate index.
+        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(aIt->maName, aIt->mnDupCount);
+        ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName(aUnoName);
 
         if (!pDim)
             continue;

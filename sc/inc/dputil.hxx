@@ -26,7 +26,13 @@ public:
 
     SC_DLLPUBLIC static OUString getSourceDimensionName(const OUString& rName);
 
-    static OUString createDuplicateDimensionName(const OUString& rOriginal, size_t nDupCount);
+    /**
+     * Get a duplicate index in case the dimension is a duplicate.  It returns
+     * 0 in case it's an original dimension.
+     */
+    sal_uInt8 static getDuplicateIndex(const OUString& rName);
+
+    SC_DLLPUBLIC static OUString createDuplicateDimensionName(const OUString& rOriginal, size_t nDupCount);
 
     static OUString getDateGroupName(
         sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
