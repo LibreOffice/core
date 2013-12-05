@@ -3503,11 +3503,11 @@ if test "$_os" = "WINNT"; then
         MSPDB_PATH=
 
         if test "$BITNESS_OVERRIDE" = ""; then
-			if test "$vcnum" = "120"; then
-				MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
-			else
-				MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
-			fi
+            if test "$vcnum" = "120"; then
+                MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
+            else
+                MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+            fi
         else
             MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
         fi
