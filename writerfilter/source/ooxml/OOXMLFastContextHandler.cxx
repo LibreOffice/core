@@ -198,6 +198,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
             OUString aRequires = rAttribs->getOptionalValue(OOXML_Requires);
             static const char* aFeatures[] = {
                 "wps",
+                "wpg",
             };
             for (size_t i = 0; i < SAL_N_ELEMENTS(aFeatures); ++i)
             {

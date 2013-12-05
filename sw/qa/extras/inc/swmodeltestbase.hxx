@@ -351,9 +351,11 @@ protected:
         return xParagraph;
     }
 
-    uno::Reference<text::XTextRange> getParagraphOfText(int number, uno::Reference<text::XText> xText) const
+    uno::Reference<text::XTextRange> getParagraphOfText(int number, uno::Reference<text::XText> xText, OUString content = OUString()) const
     {
         uno::Reference<text::XTextRange> const xParagraph(getParagraphOrTable(number, xText), uno::UNO_QUERY_THROW);
+        if (!content.isEmpty())
+            CPPUNIT_ASSERT_EQUAL(content, xParagraph->getString());
         return xParagraph;
     }
 

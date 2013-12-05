@@ -1574,6 +1574,15 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xText), 1), "CharEscapementHeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testMceWpg, "mce-wpg.docx")
+{
+    // Make sure that we read the primary branch, if wpg is requested as a feature.
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY)->getText();
+    // This was VML1.
+    getParagraphOfText(1, xText, "DML1");
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
 {
     // The document contains a rotated bitmap
