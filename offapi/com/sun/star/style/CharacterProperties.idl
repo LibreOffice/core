@@ -444,7 +444,7 @@ published service CharacterProperties
 
     /** Grab bag of character properties, used as a string-any map for interim interop purposes.
 
-        @since LibreOffice 4.2
+        @since LibreOffice 4.3
 
         <p>This property is intentionally not handled by the ODF filter. Any
         member that should be handled there should be first moved out from this grab
