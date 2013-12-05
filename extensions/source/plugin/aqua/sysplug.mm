@@ -82,7 +82,7 @@ struct SysPlugData
 
 void XPlugin_Impl::SetSysPlugDataParentView(SystemEnvData const& rEnvData)
 {
-    m_pSysPlugData->m_pParentView = rEnvData.pView;
+    m_pSysPlugData->m_pParentView = rEnvData.mpNSView;
 }
 
 extern "C" {

@@ -528,7 +528,7 @@ void XPlugin_Impl::loadPlugin()
 #if defined MACOSX
             PluginComm* pComm = new MacPluginComm( m_aDescription.Mimetype,
                                                    m_aDescription.PluginName,
-                                                   pEnvData->pView );
+                                                   pEnvData->mpNSView );
 #elif defined UNX
             // need a new PluginComm
             PluginComm* pComm = NULL;
