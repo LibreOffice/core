@@ -4081,8 +4081,8 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl:
         SvViewDataEntry* pViewDataNewCur = 0;
         if( pEntry )
         {
-            pViewDataNewCur= GetViewDataEntry(pEntry);
-            if(pViewDataNewCur->HasFocus())
+            pViewDataNewCur = GetViewDataEntry(pEntry);
+            if (pViewDataNewCur && pViewDataNewCur->HasFocus())
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
         }
     }
