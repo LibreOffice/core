@@ -861,8 +861,8 @@ void OpSin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "))\n";
     ss << "        arg0 = 0;\n";
 #endif
-    ss << "    double tmp=sin(arg0);\n";
-    ss << "    return tmp;\n";
+    ss << "    double x = arg0 * M_1_PI;\n";
+    ss << "    return sinpi(x);\n";
     ss << "}";
 }
 void OpAbs::GenSlidingWindowFunction(std::stringstream &ss,
