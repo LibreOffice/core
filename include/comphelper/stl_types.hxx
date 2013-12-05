@@ -44,12 +44,6 @@ namespace comphelper
 //========================================================================
 // comparison functors
 
-//------------------------------------------------------------------------
-struct UStringLess : public ::std::binary_function< OUString, OUString, bool>
-{
-    bool operator() (const OUString& x, const OUString& y) const { return x < y ? true : false;}      // construct prevents a MSVC6 warning
-};
-//------------------------------------------------------------------------
 struct UStringMixLess : public ::std::binary_function< OUString, OUString, bool>
 {
     bool m_bCaseSensitive;
@@ -257,7 +251,8 @@ OutputIter intersperse(
     DECLARE_STL_ITERATORS(classname)                \
 
 #define DECLARE_STL_USTRINGACCESS_MAP(valuetype, classname)                 \
-    DECLARE_STL_MAP(OUString, valuetype, ::comphelper::UStringLess, classname)   \
+    typedef std::map< OUString, valuetype > classname; \
+    DECLARE_STL_ITERATORS(classname)
 
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 

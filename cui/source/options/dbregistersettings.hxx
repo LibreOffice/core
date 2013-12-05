@@ -20,7 +20,10 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 
-#include <comphelper/stl_types.hxx>
+#include <sal/config.h>
+
+#include <map>
+
 #include <svl/poolitem.hxx>
 
 //........................................................................
@@ -58,7 +61,7 @@ namespace svx
         }
     };
 
-    typedef ::std::map< OUString, DatabaseRegistration, ::comphelper::UStringLess >   DatabaseRegistrations;
+    typedef ::std::map< OUString, DatabaseRegistration > DatabaseRegistrations;
 
     //====================================================================
     //= DatabaseMapItem

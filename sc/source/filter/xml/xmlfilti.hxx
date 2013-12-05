@@ -32,6 +32,7 @@
 #include "xmldpimp.hxx"
 #include "queryentry.hxx"
 
+#include <stack>
 #include <vector>
 
 class ScXMLImport;

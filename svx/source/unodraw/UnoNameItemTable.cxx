@@ -22,7 +22,6 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <svx/svdmodel.hxx>
@@ -237,7 +236,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
 {
     SolarMutexGuard aGuard;
 
-    std::set< OUString, comphelper::UStringLess > aNameSet;
+    std::set< OUString > aNameSet;
 
     NameOrIndex *pItem;
 
@@ -257,8 +256,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     uno::Sequence< OUString > aSeq( aNameSet.size() );
     OUString* pNames = aSeq.getArray();
 
-    std::set< OUString, comphelper::UStringLess >::iterator aIter( aNameSet.begin() );
-    const std::set< OUString, comphelper::UStringLess >::iterator aEnd( aNameSet.end() );
+    std::set< OUString >::iterator aIter( aNameSet.begin() );
+    const std::set< OUString >::iterator aEnd( aNameSet.end() );
 
     while( aIter != aEnd )
     {

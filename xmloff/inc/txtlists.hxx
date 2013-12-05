@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_INC_TXTLISTS_HXX
 
 #include <rtl/ustring.hxx>
-#include <comphelper/stl_types.hxx>
 #include <map>
 #include <vector>
 #include <stack>
@@ -138,8 +137,7 @@ class XMLTextListsHelper : private boost::noncopyable
         // map with <ListId> as key and pair( <ListStyleName, ContinueListId> )
         // as value
         typedef ::std::map< OUString,
-                            ::std::pair< OUString, OUString >,
-                            ::comphelper::UStringLess > tMapForLists;
+                            ::std::pair< OUString, OUString > > tMapForLists;
         tMapForLists* mpProcessedLists;
         OUString msLastProcessedListId;
         OUString msListStyleOfLastProcessedList;
@@ -153,8 +151,7 @@ class XMLTextListsHelper : private boost::noncopyable
         // container type to build up continue list chain:
         // map with <ListId> of master list as key and <ListId> of last list
         // continuing the master list as value
-        typedef ::std::map< OUString, OUString,
-                            ::comphelper::UStringLess > tMapForContinuingLists;
+        typedef ::std::map< OUString, OUString > tMapForContinuingLists;
         tMapForContinuingLists* mpContinuingLists;
 
         // stack type for opened list elements and its list style:

@@ -30,7 +30,6 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <xmloff/xmltkmap.hxx>
-#include <comphelper/stl_types.hxx>
 #include <xmloff/uniref.hxx>
 
 class XMLTextListsHelper;
@@ -662,7 +661,7 @@ public:
     virtual void endAppletOrPlugin(
         const com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> &rPropSet,
-        ::std::map < const OUString, OUString, ::comphelper::UStringLess > &rParamMap );
+        ::std::map < const OUString, OUString > &rParamMap );
 
     // applet helper methods
     // implemented in sw/filter/xml/txtparai.hxx

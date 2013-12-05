@@ -19,7 +19,6 @@
 
 
 #include <set>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
@@ -333,7 +332,7 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     return aAny;
 }
 
-static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set< OUString, comphelper::UStringLess >& rNameSet )
+static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set< OUString >& rNameSet )
 {
     const sal_uInt32 nSuroCount = pPool->GetItemCount2( nWhich );
 
@@ -354,7 +353,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
 {
     SolarMutexGuard aGuard;
 
-    std::set< OUString, comphelper::UStringLess > aNameSet;
+    std::set< OUString > aNameSet;
 
     // search model pool for line starts
     createNamesForPool( mpModelPool, XATTR_LINESTART, aNameSet );
@@ -365,8 +364,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     uno::Sequence< OUString > aSeq( aNameSet.size() );
     OUString* pNames = aSeq.getArray();
 
-    std::set< OUString, comphelper::UStringLess >::iterator aIter( aNameSet.begin() );
-    const std::set< OUString, comphelper::UStringLess >::iterator aEnd( aNameSet.end() );
+    std::set< OUString >::iterator aIter( aNameSet.begin() );
+    const std::set< OUString >::iterator aEnd( aNameSet.end() );
 
     while( aIter != aEnd )
     {

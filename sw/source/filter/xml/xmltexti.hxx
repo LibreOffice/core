@@ -87,7 +87,7 @@ public:
 
     virtual void endAppletOrPlugin(
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &rPropSet,
-        ::std::map < const OUString, OUString, ::comphelper::UStringLess> &rParamMap);
+        ::std::map < const OUString, OUString > &rParamMap);
 
     virtual sal_Bool IsInHeaderFooter() const;
 

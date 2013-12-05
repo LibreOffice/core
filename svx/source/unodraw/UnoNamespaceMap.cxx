@@ -27,13 +27,10 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 #include <svl/itempool.hxx>
 #include "svx/unoapi.hxx"
 #include "editeng/xmlcnitm.hxx"
 
-
-using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -224,7 +221,7 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
     OUString aPrefix;
     OUString aURL;
 
-    std::set< OUString, comphelper::UStringLess > aPrefixSet;
+    std::set< OUString > aPrefixSet;
 
     while( aIter.next( aPrefix, aURL ) )
         aPrefixSet.insert( aPrefix );
@@ -232,8 +229,8 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
     Sequence< OUString > aSeq( aPrefixSet.size() );
     OUString* pPrefixes = aSeq.getArray();
 
-    std::set< OUString, comphelper::UStringLess >::iterator aPrefixIter( aPrefixSet.begin() );
-    const std::set< OUString, comphelper::UStringLess >::iterator aEnd( aPrefixSet.end() );
+    std::set< OUString >::iterator aPrefixIter( aPrefixSet.begin() );
+    const std::set< OUString >::iterator aEnd( aPrefixSet.end() );
 
     while( aPrefixIter != aEnd )
     {

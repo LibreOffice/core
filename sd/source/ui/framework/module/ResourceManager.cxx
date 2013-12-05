@@ -24,7 +24,6 @@
 #include "framework/ConfigurationController.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <set>
 
 using namespace ::com::sun::star;
@@ -44,7 +43,7 @@ namespace {
 namespace sd { namespace framework {
 
 class ResourceManager::MainViewContainer
-    : public ::std::set<OUString, ::comphelper::UStringLess>
+    : public ::std::set<OUString>
 {
 public:
     MainViewContainer (void) {}

@@ -50,7 +50,6 @@
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextListItemContext.hxx"
 #include <xmloff/attrlist.hxx>
-#include <comphelper/stl_types.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -77,7 +76,7 @@ using ::com::sun::star::document::XEventsSupplier;
 #define XML_TEXT_FRAME_PLUGIN 6
 #define XML_TEXT_FRAME_FLOATING_FRAME 7
 
-typedef ::std::map < const OUString, OUString, ::comphelper::UStringLess> ParamMap;
+typedef ::std::map < const OUString, OUString > ParamMap;
 
 class XMLTextFrameContextHyperlink_Impl
 {

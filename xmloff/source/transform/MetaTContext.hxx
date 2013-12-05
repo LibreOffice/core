@@ -21,14 +21,12 @@
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_METATCONTEXT_HXX
 
 #include <rtl/ref.hxx>
-#include <comphelper/stl_types.hxx>
 #include <map>
 
 #include "FlatTContext.hxx"
 
 typedef ::std::multimap< OUString,
-                    ::rtl::Reference< XMLPersTextContentTContext >,
-                    ::comphelper::UStringLess > XMLMetaContexts_Impl;
+                    ::rtl::Reference< XMLPersTextContentTContext > > XMLMetaContexts_Impl;
 
 
 class XMLMetaTransformerContext : public XMLTransformerContext

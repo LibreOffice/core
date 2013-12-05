@@ -74,9 +74,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::ucb;
-using ::comphelper::UStringLess;
-
-
 
 static const SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
@@ -527,8 +524,7 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
         ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
             BookmarkMapEntry_t;
     /// start ranges for open bookmarks
-    ::std::map< OUString, BookmarkMapEntry_t,
-                ::comphelper::UStringLess> m_BookmarkStartRanges;
+    ::std::map< OUString, BookmarkMapEntry_t > m_BookmarkStartRanges;
 
     typedef ::std::vector< OUString > BookmarkVector_t;
     BookmarkVector_t m_BookmarkVector;
@@ -2738,7 +2734,7 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
 
 void XMLTextImportHelper::endAppletOrPlugin(
         const Reference < XPropertySet> &,
-        std::map < const OUString, OUString, UStringLess > &)
+        std::map < const OUString, OUString > &)
 {
 }
 // redline helper: dummy implementation to be overridden in sw/filter/xml

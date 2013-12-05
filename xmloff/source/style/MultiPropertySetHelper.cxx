@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/stl_types.hxx>
 
 // STL includes
 #include <algorithm>
@@ -37,7 +36,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::comphelper::UStringLess;
 using ::std::sort;
 
 

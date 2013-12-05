@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <comphelper/stl_types.hxx>
 
 #include <vector>
 #include <xmloff/xmlimp.hxx>

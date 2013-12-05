@@ -168,7 +168,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
     return xNewStyle;
 }
 
-typedef ::std::set < OUString, ::comphelper::UStringLess > PropertyNameSet;
+typedef ::std::set < OUString > PropertyNameSet;
 
 void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 {

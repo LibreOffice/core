@@ -23,7 +23,6 @@
 
 #include <map>
 #include <vector>
-#include <comphelper/stl_types.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
@@ -85,10 +84,10 @@ class XMLPropertyBackpatcher
 
     /// backpatch list for unresolved IDs
     //::std::map<const OUString, BackpatchListType*> aBackpatchListMap;
-    ::std::map<const OUString, void*, ::comphelper::UStringLess> aBackpatchListMap;
+    ::std::map<const OUString, void*> aBackpatchListMap;
 
     /// mapping of names -> IDs
-    ::std::map<const OUString, A, ::comphelper::UStringLess> aIDMap;
+    ::std::map<const OUString, A> aIDMap;
 
 public:
 
