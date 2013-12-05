@@ -295,7 +295,7 @@ bool ImplInitAccessBridge()
         css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
 
 #ifdef _WIN32
-        if (!HasAtHook() && !getenv("SAL_DISABLE_IACCESSIBLE2"))
+        if (!HasAtHook() && !getenv("SAL_FORCE_IACCESSIBLE2"))
         {
             SAL_INFO("vcl", "Apparently no running AT -> "
                      "not enabling IAccessible2 integration");
