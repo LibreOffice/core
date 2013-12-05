@@ -956,30 +956,51 @@ void OpArcCosHyp::GenSlidingWindowFunction(std::stringstream &ss,
 void OpTan::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
-          formula::SingleVectorRefToken *>(tmpCur);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        if (i)
-            ss << ",";
+        if (i) ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ")\n";
     ss << "{\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    double arg0 = "<< vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    ss << "    double arg0 = 0.0f;\n";
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR=
+                dynamic_cast
+                <const formula::SingleVectorRefToken *>(tmpCur);
+            ss << "    arg0 = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
 #ifdef ISNAN
-    ss << "    if(isNan(arg0)||(gid0>=";
-    ss << tmpCurDVR->GetArrayLength();
-    ss << "))\n";
-    ss << "        arg0 = 0;\n";
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "    { arg0 = 0.0f; }\n";
 #endif
-    ss << "    double tmp=tan(arg0);\n";
-    ss << "    return tmp;\n";
+        }
+        else if(tmpCur->GetType() == formula::svDouble)
+        {
+            ss << "    arg0=" << tmpCur->GetDouble() << ";\n";
+        }
+    }
+    else
+    {
+        ss << "        arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+    ss << "    arg0 = arg0 * M_1_PI;\n";
+    ss << "    return sinpi(arg0) * pow(cospi(arg0), -1);\n";
     ss << "}";
 }
 void OpTanH::GenSlidingWindowFunction(std::stringstream &ss,
