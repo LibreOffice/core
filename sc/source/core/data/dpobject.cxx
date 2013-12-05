@@ -2278,10 +2278,16 @@ bool ScDPObject::FillLabelDataForDimension(
         xDimProp, OUString(SC_UNO_DP_FIELD_SUBTOTALNAME), OUString());
 
     bool bIsValue = true;                               //! check
+
+    // Name from the UNO dimension object may have trailing '*'s in which
+    // case it's a duplicate dimension. Convert that to a duplicate index.
+
+    sal_uInt8 nDupCount = ScDPUtil::getDuplicateIndex(aFieldName);
     aFieldName = ScDPUtil::getSourceDimensionName(aFieldName);
 
     rLabelData.maName = aFieldName;
     rLabelData.mnCol = static_cast<SCCOL>(nDim);
+    rLabelData.mnDupCount = nDupCount;
     rLabelData.mbDataLayout = bData;
     rLabelData.mbIsValue = bIsValue;
 
