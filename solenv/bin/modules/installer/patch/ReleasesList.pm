@@ -157,6 +157,17 @@ sub GetAttribute ($$)
 
 
 sub PrintNode($$);
+
+=head2 ReadDomTree ($filename)
+
+    Read the dom tree for the XML in $filename.
+
+    Note that
+    a) this was initially written for another XML library that provided the dom tree directly.
+    b) the dom tree creation is basic and simple but good enough for the current format.
+       When the format should change substantially, then we may need a better parser.
+
+=cut
 sub ReadDomTree ($)
 {
     my ($filename) = @_;
@@ -182,6 +193,81 @@ sub ReadDomTree ($)
 
 
 
+=head HandleStartTag ($data, $expat, $element_name, @attributes)
+
+    Callback for start tags.
+
+    A new hash is appended to the array that is referenced by the parent by $element_name.
+    That means that when this function ends there the new hash can be referenced by
+        my $parent = $data->{'node_stack'}->[-1];
+        my $new_hash = $parent->{$element_name}->[-1];
+
+    Note that, just like in other implementations of dom trees,
+    $parent->{$element_name} is an array, even when there is only one
+    element.
+
+    The new hash is empty or contains the given @attributes as hash.
+    When fully read (ie its end tag has been processed) then it can contain two special keys:
+    __attributes__ for the attributes
+    __text__ for the concatenated text parts
+
+=cut
+sub HandleStartTag ($$$@)
+{
+    my ($data, $expat, $element_name, @attributes) = @_;
+
+    # Create new node with attributes.
+    my $node = {'__attributes__' => {@attributes}};
+
+    # Append it to the list of $element_name objects.
+    my $current_node = $data->{'current_node'};
+    $current_node->{$element_name} = [] unless defined $current_node->{$element_name};
+    push @{$current_node->{$element_name}}, $node;
+
+    # Make the new node the current node.
+    push @{$data->{'node_stack'}}, $current_node;
+    $data->{'current_node'} = $node;
+}
+
+=head HandleEndTag ($data, $expat, $element_name, @attributes)
+
+    Callback for end tags.
+
+=cut
+sub HandleEndTag ($$$)
+{
+    my ($data, $expat, $element) = @_;
+
+    # Restore the parent node as current node.
+    $data->{'current_node'} = pop @{$data->{'node_stack'}};
+}
+
+=head2 HandleText ($data, $expat, $text)
+
+    Callback for text.
+
+    $text is appended to the __text__ member of the current node in
+    the dom tree.
+
+=cut
+sub HandleText ($$$)
+{
+    my ($data, $expat, $text) = @_;
+    if ($text !~ /^\s*$/)
+    {
+        $data->{'current_node'}->{'__text__'} .= $text;
+    }
+}
+
+
+
+
+=head2 PrintNode ($indentation, $node)
+
+    For debugging.
+    Print $node recursively with initial $indentation.
+
+=cut
 sub PrintNode($$)
 {
     my ($indentation, $node) = @_;
@@ -223,39 +309,7 @@ sub PrintNode($$)
 }
 
 
-sub HandleStartTag ($$$@)
-{
-    my ($data, $expat, $element, @attributes) = @_;
 
-    # Create new node with attributes.
-    my $node = {'__attributes__' => {@attributes}};
-
-    # Append it to the list of $element objects.
-    my $current_node = $data->{'current_node'};
-    $current_node->{$element} = [] unless defined $current_node->{$element};
-    push @{$current_node->{$element}}, $node;
-
-    # Make the new node the current node.
-    push @{$data->{'node_stack'}}, $current_node;
-    $data->{'current_node'} = $node;
-}
-
-sub HandleEndTag ($$$)
-{
-    my ($data, $expat, $element) = @_;
-
-    # Restore the parent node as current node.
-    $data->{'current_node'} = pop @{$data->{'node_stack'}};
-}
-
-sub HandleText ($$$)
-{
-    my ($data, $expat, $text) = @_;
-    if ($text !~ /^\s*$/)
-    {
-        $data->{'current_node'}->{'__text__'} .= $text;
-    }
-}
 
 =head2 Read($self, $filename)
 
@@ -287,22 +341,26 @@ sub Read ($$)
 
         $self->{$version}->{$package_format}->{'upgrade-code'} = $upgrade_code;
         $self->{$version}->{$package_format}->{'build-id'} = $build_id;
+        $self->{$version}->{$package_format}->{'url-template'} = $url_template;
 
+        my @languages = ();
         foreach my $item_node (@{$download_node->{'item'}})
         {
             my ($language, $download_data) = ParseDownloadData($item_node, $url_template);
             if (defined $download_data && defined $language)
             {
+                push @languages, $language;
                 $self->{$version}->{$package_format}->{$language} = $download_data;
             }
         }
+        $self->{$version}->{$package_format}->{'languages'} = \@languages;
     }
 }
 
 
 
 
-=head2 ParseDownloadData ($download_node)
+=head2 ParseDownloadData ($item_node, $url_template)
 
     Parse the data for one set of download data (there is one per release and package format).
 
@@ -334,6 +392,119 @@ sub ParseDownloadData ($$)
             'file-size' => $file_size,
             'product-code' => $product_code
         });
+}
+
+
+
+
+=head2 Write($self, $filename)
+
+    Write the content of the releases data to a file named $filename.
+
+=cut
+sub Write ($$)
+{
+    my ($self, $filename) = @_;
+
+    open my $out, ">", $filename || die "can not write releases data to ".$filename;
+    $self->WriteHeader($out);
+    $self->WriteContent($out);
+    close $out;
+}
+
+
+
+
+=head2 WriteContent ($self, $out)
+
+    Write the content of the releases.xml list.
+
+=cut
+sub WriteContent ($$)
+{
+    my ($self, $out) = @_;
+
+    print $out "<releases>\n";
+    # Write the data sets for each releases with the same sort order as @{$self->{'releases'}}
+    foreach my $version (@{$self->{'releases'}})
+    {
+        print $out "  <release>\n";
+
+        my @version_array = split(/\./, $version);
+        printf $out "    <version>\n";
+        printf $out "      <major>%s</major>\n", $version_array[0];
+        printf $out "      <minor>%s</minor>\n", $version_array[1];
+        printf $out "      <micro>%s</micro>\n", $version_array[2];
+        printf $out "    </version>\n";
+
+        # Write one download data set per package format.
+        while (my ($package_format, $data) = each %{$self->{$version}})
+        {
+            print $out "    <download>\n";
+            printf $out "      <package-format>%s</package-format>\n", $package_format;
+            print $out "      <url-template>\n";
+            printf $out "        %s\n", $data->{'url-template'};
+            print $out "      </url-template>\n";
+            printf $out "      <upgrade-code>%s</upgrade-code>\n", $data->{'upgrade-code'};
+            printf $out "      <build-id>%s</build-id>\n", $data->{'build-id'};
+
+            foreach my $language (@{$data->{'languages'}})
+            {
+                my $language_data = $data->{$language};
+                print $out "      <item>\n";
+                printf $out "        <language>%s</language>\n", $language;
+                printf $out "        <checksum type=\"%s\">%s</checksum>\n",
+                    $language_data->{'checksum-type'},
+                    $language_data->{'checksum-value'};
+                printf $out "        <size>%s</size>\n", $language_data->{'file-size'};
+                printf $out "        <product-code>%s</product-code>\n", $language_data->{'product-code'};
+                print $out "      </item>\n";
+            }
+
+            print $out "    </download>\n";
+        }
+
+        print $out "    </release>\n";
+    }
+
+    print $out "</releases>\n";
+}
+
+
+
+
+=head2 WriteHeader ($self, $out)
+
+    Write the header for the releases.xml list.
+
+=cut
+sub WriteHeader ($$)
+{
+    my ($self, $out) = @_;
+
+print $out <<EOT;
+<?xml version='1.0' encoding='UTF-8'?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+EOT
 }
 
 

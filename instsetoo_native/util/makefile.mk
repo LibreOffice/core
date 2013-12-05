@@ -75,6 +75,7 @@ help .PHONY :
     @echo "experimental targets:"
     @echo "    patch_create           create a patch for updating an installed office (Windows only)"
     @echo "    patch_apply            apply a previously created patch"
+    @echo "    patch_update_releases_xml"
     @echo 
     @echo "Most targets (all except aoo_srcrelease and updatepack) accept suffixes"
     @echo "    add _<language> to build a target for one language only"
@@ -307,14 +308,25 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
 
 .IF "$(OS)" == "WNT"
 patch_create .PHONY : $(PRJ)$/data
-    perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_create.pl	\
+    perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
+        create								\
         --product-name Apache_OpenOffice				\
         --output-path $(OUT)						\
         --data-path $(PRJ)$/data					\
         --lst-file $(PRJ)$/util$/openoffice.lst
 patch_apply .PHONY :
-    perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_apply.pl \
-        ../wntmsci12.pro/Apache_OpenOffice/msp/v-4-0-1_v-4-1-0/en-US/openoffice.msp
+    perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
+        apply								\
+        --product-name Apache_OpenOffice				\
+        --output-path $(OUT)						\
+        --lst-file $(PRJ)$/util$/openoffice.lst
+patch_update_releases_xml .PHONY:
+    perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
+        update-releases-xml						\
+        --product-name Apache_OpenOffice				\
+        --output-path $(OUT)						\
+        --lst-file $(PRJ)$/util$/openoffice.lst\
+        --target-version 4.0.1
 
 $(PRJ)$/data :
     mkdir $@

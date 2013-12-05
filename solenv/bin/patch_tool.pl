@@ -255,7 +255,10 @@ sub ProvideSourceInstallationSet ($$$)
         }
         else
         {
-            return 0 if ! installer::patch::Download($language, $release_data, $location, $basename, $filename);
+            return 0 if ! installer::patch::InstallationSet::Download(
+                $language,
+                $release_data,
+                $filename);
             return 0 if ! -f $filename;
         }
 
@@ -1121,6 +1124,12 @@ sub SetupPropertiesTable ($$)
     $table->SetRow(
         "*Name", "SEQUENCE_DATA_GENERATION_DISABLED",
         "Value", 1);
+
+    # We don't provide file size and hash values.
+    # This value is set to make this fact explicit (0 should be the default).
+    $table->SetRow(
+        "*Name", "TrustMsi",
+        "Value", 0);
 }
 
 
@@ -1357,6 +1366,19 @@ sub CreateMsp ($)
 
 
 
+
+=head CreatePatch($context, $variables)
+
+    Create MSP patch files for all relevant languages.
+    The different steps are:
+    1. Determine the set of languages for which both the source and target installation sets are present.
+    Per language:
+        2. Unpack CAB files (for source and target).
+        3. Check if source and target releases are compatible.
+        4. Create the PCP driver file.
+        5. Create the MSP patch file.
+
+=cut
 sub CreatePatch ($$)
 {
     my ($context, $variables) = @_;
@@ -1377,7 +1399,7 @@ sub CreatePatch ($$)
         ->{$context->{'source-version'}}
         ->{$context->{'package-format'}};
 
-    # Create a patch for each language.
+    # 1. Determine the set of languages for which we can create patches.
     my @requested_languages = GetLanguages();
     my @valid_languages = FindValidLanguages($context, $release_data, \@requested_languages);
     $installer::logger::Info->printf("of the requested languages '%s' are valid: '%s'\n",
@@ -1388,7 +1410,7 @@ sub CreatePatch ($$)
         $installer::logger::Info->printf("processing language '%s'\n", $language);
         $installer::logger::Info->increase_indentation();
 
-        # Provide .msi and .cab files and unpacke .cab for the source release.
+        # 2a. Provide .msi and .cab files and unpacke .cab for the source release.
         $installer::logger::Info->printf("locating source package (%s)\n", $context->{'source-version'});
         $installer::logger::Info->increase_indentation();
         if ( ! installer::patch::InstallationSet::ProvideUnpackedCab(
@@ -1409,7 +1431,7 @@ sub CreatePatch ($$)
 
         $installer::logger::Info->decrease_indentation();
 
-        # Provide .msi and .cab files and unpacke .cab for the target release.
+        # 2b. Provide .msi and .cab files and unpacke .cab for the target release.
         $installer::logger::Info->printf("locating target package (%s)\n", $context->{'target-version'});
         $installer::logger::Info->increase_indentation();
         if ( ! installer::patch::InstallationSet::ProvideUnpackedCab(
@@ -1438,7 +1460,7 @@ sub CreatePatch ($$)
             $installer::logger::Info->printf("read %s table (source and target\n", $table_name);
         }
 
-        # Check if the source and target msis fullfil all necessary requirements.
+        # 3. Check if the source and target msis fullfil all necessary requirements.
         if ( ! Check($source_msi, $target_msi, $variables, $context->{'product-name'}))
         {
             $installer::logger::Info->printf("Error: Source and target releases are not compatible.\n");
@@ -1467,7 +1489,7 @@ sub CreatePatch ($$)
             );
         File::Path::make_path($msp_path) unless -d $msp_path;
 
-        # Create the .pcp file that drives the msimsp.exe command.
+        # 4. Create the .pcp file that drives the msimsp.exe command.
         my $pcp = CreatePcp(
             $source_msi,
             $target_msi,
@@ -1475,12 +1497,9 @@ sub CreatePatch ($$)
             $context,
             $msp_path,
             $pcp_schema_filename,
-            "Properties/Name:DontRemoveTempFolderWhenFinished" => "Value:1",
-            "Properties/Name:SEQUENCE_DATA_GENERATION_DISABLED" => "Value:1",
-            "Properties/Name:TrustMsi" => "Value:0",
-            "Properties/Name:ProductName" => "Value:OOO341");
+            "Properties/Name:DontRemoveTempFolderWhenFinished" => "Value:1");
 
-        # Finally create the msp.
+        # 5. Finally create the msp.
         CreateMsp($pcp);
 
         $installer::logger::Info->decrease_indentation();
@@ -1489,7 +1508,12 @@ sub CreatePatch ($$)
 
 
 
+=cut ApplyPatch ($context, $variables)
 
+    This is for testing only.
+    The patch is applied and (extensive) log information is created and transformed into HTML format.
+
+=cut
 sub ApplyPatch ($$)
 {
     my ($context, $variables) = @_;
@@ -1547,10 +1571,244 @@ sub ApplyPatch ($$)
 
 
 
+=head2 DownloadFile ($url)
+
+    A simpler version of InstallationSet::Download().  It is simple because it is used to
+    setup the $release_data structure that is used by InstallationSet::Download().
+
+=cut
+sub DownloadFile ($)
+{
+    my ($url) = shift;
+
+    my $agent = LWP::UserAgent->new();
+    $agent->timeout(120);
+    $agent->show_progress(0);
+
+    my $file_content = "";
+    my $last_was_redirect = 0;
+    my $bytes_read = 0;
+    $agent->add_handler('response_redirect'
+        => sub{
+            $last_was_redirect = 1;
+            return;
+        });
+    $agent->add_handler('response_data'
+        => sub{
+            if ($last_was_redirect)
+            {
+                $last_was_redirect = 0;
+                # Throw away the data we got so far.
+        $file_content = "";
+            }
+            my($response,$agent,$h,$data)=@_;
+        $file_content .= $data;
+        });
+    $agent->get($url);
+
+    return $file_content;
+}
+
+
+
+
+sub CreateReleaseItem ($$$)
+{
+    my ($language, $exe_filename, $msi) = @_;
+
+    die "can not open installation set at ".$exe_filename unless -f $exe_filename;
+
+    open my $in, "<", $exe_filename;
+    my $sha256_checksum = new Digest("SHA-256")->addfile($in)->hexdigest();
+    close $in;
+
+    my $filesize = -s $exe_filename;
+
+    # Get the product code property from the msi and strip the enclosing braces.
+    my $product_code = $msi->GetTable("Property")->GetValue("Property", "ProductCode", "Value");
+    $product_code =~ s/(^{|}$)//g;
+    my $upgrade_code = $msi->GetTable("Property")->GetValue("Property", "UpgradeCode", "Value");
+    $upgrade_code =~ s/(^{|}$)//g;
+    my $build_id = $msi->GetTable("Property")->GetValue("Property", "PRODUCTBUILDID", "Value");
+
+    return {
+        'language' => $language,
+        'checksum-type' => "sha256",
+        'checksum-value' => $sha256_checksum,
+        'file-size' => $filesize,
+        'product-code' => $product_code,
+        'upgrade-code' => $upgrade_code,
+        'build-id' => $build_id
+    };
+}
+
+
+
+
+sub GetReleaseItemForCurrentBuild ($$$)
+{
+    my ($context, $language, $exe_basename) = @_;
+
+    # Target version is the current version.
+    # Search instsetoo_native for the installation set.
+    my $filename = File::Spec->catfile(
+        $context->{'output-path'},
+        $context->{'product-name'},
+        $context->{'package-format'},
+        "install",
+        $language."_download",
+        $exe_basename);
+
+    printf("        current : %s\n", $filename);
+    if ( ! -f $filename)
+    {
+        printf("ERROR: can not find %s\n", $filename);
+        return undef;
+    }
+    else
+    {
+        my $msi = installer::patch::Msi->FindAndCreate(
+            $context->{'target-version'},
+            1,
+            $language,
+            $context->{'product-name'});
+        return CreateReleaseItem($language, $filename, $msi);
+    }
+}
+
+
+
+sub GetReleaseItemForOldBuild ($$$$)
+{
+    my ($context, $language, $exe_basename, $url_template) = @_;
+
+    # Use ext_sources/ as local cache for archive.apache.org
+    # and search these for the installation set.
+
+    my $version = $context->{'target-version'};
+    my $package_format =  $context->{'package-format'};
+    my $releases_list = installer::patch::ReleasesList::Instance();
+
+    my $url = $url_template;
+    $url =~ s/%L/$language/g;
+    $releases_list->{$version}->{$package_format}->{$language}->{'URL'} = $url;
+
+    if ( ! installer::patch::InstallationSet::ProvideUnpackedExe(
+               $version,
+               0,
+               $language,
+               $package_format,
+               $context->{'product-name'}))
+    {
+        # Can not provide unpacked EXE.
+        return undef;
+    }
+    else
+    {
+        my $exe_filename = File::Spec->catfile(
+            $ENV{'TARFILE_LOCATION'},
+            $exe_basename);
+        my $msi = installer::patch::Msi->FindAndCreate(
+            $version,
+            0,
+            $language,
+            $context->{'product-name'});
+        return CreateReleaseItem($language, $exe_filename, $msi);
+    }
+}
+
+
+
+
+sub UpdateReleasesXML($$)
+{
+    my ($context, $variables) = @_;
+
+    my $releases_list = installer::patch::ReleasesList::Instance();
+    my $output_filename = File::Spec->catfile(
+        $context->{'output-path'},
+        "misc",
+        "releases.xml");
+
+    my $target_version = $context->{'target-version'};
+    my %version_hash = map {$_=>1} @{$releases_list->{'releases'}};
+    my $item_hash = undef;
+    if ( ! defined $version_hash{$context->{'target-version'}})
+    {
+        # Target version is not yet present.  Add it and print message that asks caller to check order.
+        push @{$releases_list->{'releases'}}, $target_version;
+        printf("adding data for new version %s to list of released versions.\n", $target_version);
+        printf("please check order of releases in $output_filename\n");
+        $item_hash = {};
+    }
+    else
+    {
+        printf("adding data for existing version %s to releases.xml\n", $target_version);
+        $item_hash = $releases_list->{$target_version}->{$context->{'package-format'}};
+    }
+    $releases_list->{$target_version} = {$context->{'package-format'} => $item_hash};
+
+    my @languages = GetLanguages();
+    my %language_items = ();
+    foreach my $language (@languages)
+    {
+        # There are three different sources where to find the downloadable installation sets.
+        # 1. archive.apache.org for previously released versions.
+        # 2. A local cache or repository directory that conceptually is a local copy of archive.apache.org
+        # 3. The downloadable installation sets built in instsetoo_native/.
+
+        my $exe_basename = sprintf(
+            "%s_%s_Win_x86_install_%s.exe",
+            $context->{'product-name'},
+            $target_version,
+            $language);
+        my $url_template = sprintf(
+            "http://archive.apache.org/dist/openoffice/%s/binaries/%%L/%s_%s_Win_x86_install_%%L.exe",
+            $target_version,
+            $context->{'product-name'},
+            $target_version);
+
+        my $item = undef;
+        if ($target_version eq $variables->{PRODUCTVERSION})
+        {
+            $item = GetReleaseItemForCurrentBuild($context, $language, $exe_basename);
+        }
+        else
+        {
+            $item = GetReleaseItemForOldBuild($context, $language, $exe_basename, $url_template);
+        }
+
+        next unless defined $item;
+
+        $language_items{$language} = $item;
+        $item_hash->{$language} = $item;
+        $item_hash->{'upgrade-code'} = $item->{'upgrade-code'};
+        $item_hash->{'build-id'} = $item->{'build-id'};
+        $item_hash->{'url-template'} = $url_template;
+    }
+
+    my @valid_languages = sort keys %language_items;
+    $item_hash->{'languages'} = \@valid_languages;
+
+    $releases_list->Write($output_filename);
+
+    printf("\n\n");
+    printf("please copy '%s' to main/instsetoo_native/data\n", $output_filename);
+    printf("and check in the modified file to the version control system\n");
+}
+
+
+
+
 sub main ()
 {
     installer::logger::SetupSimpleLogging(undef);
     my $context = ProcessCommandline();
+    die "ERROR: list file is not defined, please use --lst-file option"
+        unless defined $context->{'lst-file'};
+    die "ERROR: product name is not defined, please use --product-name option"
+        unless defined $context->{'product-name'};
+
     my ($variables, undef, undef) = installer::ziplist::read_openoffice_lst_file(
         $context->{'lst-file'},
         $context->{'product-name'},
@@ -1564,6 +1822,10 @@ sub main ()
     elsif ($context->{'command'} eq "apply")
     {
         ApplyPatch($context, $variables);
+    }
+    elsif ($context->{'command'} eq "update-releases-xml")
+    {
+        UpdateReleasesXML($context, $variables);
     }
 }
 

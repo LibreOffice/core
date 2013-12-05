@@ -304,21 +304,27 @@ sub Download ($$$)
     $installer::logger::Info->printf("downloading %s\n", $basename);
     $installer::logger::Info->printf("    from '%s'\n", $location);
     my $filesize = $release_data->{'file-size'};
-    $installer::logger::Info->printf("    expected size is %d\n", $filesize);
+    if (defined $filesize)
+    {
+        $installer::logger::Info->printf("    expected size is %d\n", $filesize);
+    }
+    else
+    {
+        $installer::logger::Info->printf("    file size is not yet known\n");
+    }
     my $temporary_filename = $filename . ".part";
     my $resume_size = 0;
-    if ( -f $temporary_filename)
-    {
-        $resume_size = -s $temporary_filename;
-        $installer::logger::Info->printf(" trying to resume at %d/%d bytes\n", $resume_size, $filesize);
-    }
 
     # Prepare checksum.
     my $checksum = undef;
     my $checksum_type = $release_data->{'checksum-type'};
     my $checksum_value = $release_data->{'checksum-value'};
     my $digest = undef;
-    if ($checksum_type eq "sha256")
+    if ( ! defined $checksum_value)
+    {
+        # No checksum available.  Skip test.
+    }
+    elsif ($checksum_type eq "sha256")
     {
         $digest = Digest->new("SHA-256");
     }
@@ -335,7 +341,7 @@ sub Download ($$$)
     }
 
     # Download the extension.
-    open my $out, ">>$temporary_filename";
+    open my $out, ">$temporary_filename";
     binmode($out);
 
     my $mode = $|;
@@ -359,21 +365,28 @@ sub Download ($$$)
             {
                 $last_was_redirect = 0;
                 # Throw away the data we got so far.
-                $digest->reset();
+                $digest->reset() if defined $digest;
                 close $out;
                 open $out, ">$temporary_filename";
                 binmode($out);
             }
             my($response,$agent,$h,$data)=@_;
             print $out $data;
-            $digest->add($data);
+            $digest->add($data) if defined $digest;
             $bytes_read += length($data);
-            printf("read %*d / %d  %d%%  \r",
-                length($filesize),
-                $bytes_read,
-                $filesize,
-                $bytes_read*100/$filesize);
-        });
+            if (defined $filesize)
+            {
+                printf("read %*d / %d  %d%%  \r",
+                    length($filesize),
+                    $bytes_read,
+                    $filesize,
+                    $bytes_read*100/$filesize);
+            }
+            else
+            {
+                printf("read %6.2f MB\r", $bytes_read/(1024.0*1024.0));
+            }
+            });
     my $response;
     if ($resume_size > 0)
     {
@@ -393,9 +406,10 @@ sub Download ($$$)
 
     if ($response->is_success())
     {
-        if ($digest->hexdigest() eq $checksum_value)
+        if ( ! defined $digest
+            || $digest->hexdigest() eq $checksum_value)
         {
-            $installer::logger::Info->PrintInfo("download was successfull\n");
+            $installer::logger::Info->print("download was successfull\n");
             if ( ! rename($temporary_filename, $filename))
             {
                 installer::logger::PrintError("can not rename '%s' to '%s'\n", $temporary_filename, $filename);
@@ -453,7 +467,8 @@ sub ProvideDownloadSet ($$$)
     else
     {
         $installer::logger::Info->printf("download set exists at '%s'\n", $ext_sources_filename);
-        if ($release_item->{'checksum-type'} eq 'sha256')
+        if (defined $release_item->{'checksum-value'}
+            && $release_item->{'checksum-type'} eq 'sha256')
         {
             $installer::logger::Info->printf("checking SHA256 checksum\n");
             my $digest = Digest->new("SHA-256");
