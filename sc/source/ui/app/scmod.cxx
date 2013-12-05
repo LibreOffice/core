@@ -1543,6 +1543,13 @@ void ScModule::InputReplaceSelection( const OUString& rStr )
         pHdl->InputReplaceSelection( rStr );
 }
 
+void ScModule::InputTurnOffWinEngine()
+{
+    ScInputHandler* pHdl = GetInputHdl();
+    if (pHdl)
+        pHdl->InputTurnOffWinEngine();
+}
+
 OUString ScModule::InputGetFormulaStr()
 {
     ScInputHandler* pHdl = GetInputHdl();
