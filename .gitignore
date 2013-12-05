@@ -21,7 +21,9 @@
 
 # where stuff are built
 /instdir
+/instdir_for_build
 /workdir
+/workdir_for_build
 
 # where the external downloads maybe located
 /external/tarballs
