@@ -105,6 +105,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <unomid.h>
+#include <unotextrange.hxx>
 
 #include <sfx2/Metadatable.hxx>
 #include <switerator.hxx>
@@ -122,6 +123,22 @@ SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
 
 SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter"  )
+
+bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
+        uno::Reference<text::XTextRange> const& xInsertPosition)
+{
+    SwUnoInternalPaM aPam(*GetDoc()); // must have doc since called from SwView
+    if (!::sw::XTextRangeToSwPaM(aPam, xInsertPosition))
+        return false;
+    // similar to SwView::InsertMedium
+    SwReader *pReader(0);
+    Reader *const pRead = StartConvertFrom(rMedium, &pReader, 0, &aPam);
+    if (!pRead)
+        return false;
+    sal_uLong const nError = pReader->Read(*pRead);
+    delete pReader;
+    return 0 == nError;
+}
 
 // Prepare loading
 Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,

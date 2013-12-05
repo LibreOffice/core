@@ -66,6 +66,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 
@@ -548,7 +549,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
 sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
                     const uno::Reference< io::XStream >& xStream,
-                    const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+                    const uno::Sequence< beans::PropertyValue >& rMediaDescr )
 {
     if ( !xStream.is() )
         return sal_False;
@@ -572,22 +573,38 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
             pMedium->SetStorage_Impl( xStorage );
 
         SfxAllItemSet aSet( SFX_APP()->GetPool() );
-        TransformParameters( SID_OPENDOC, aMediaDescr, aSet );
+        TransformParameters( SID_OPENDOC, rMediaDescr, aSet );
         pMedium->GetItemSet()->Put( aSet );
         pMedium->CanDisposeStorage_Impl( sal_False );
-
-        // allow the subfilter to reinit the model
-        if ( pImp->m_bIsInit )
-            pImp->m_bIsInit = sal_False;
-
-        if ( LoadOwnFormat( *pMedium ) )
+        uno::Reference<text::XTextRange> xInsertTextRange;
+        for (sal_Int32 i = 0; i < rMediaDescr.getLength(); ++i)
         {
-            bHasName = sal_True;
-            if ( !IsReadOnly() && IsLoadReadonly() )
-                SetReadOnlyUI();
+            if (rMediaDescr[i].Name == "TextInsertModeRange")
+            {
+                rMediaDescr[i].Value >>= xInsertTextRange;
+            }
+        }
 
-            bResult = sal_True;
-            OSL_ENSURE( pImp->m_xDocStorage == xStorage, "Wrong storage is used!\n" );
+        if (xInsertTextRange.is())
+        {
+            bResult = InsertGeneratedStream(*pMedium, xInsertTextRange);
+        }
+        else
+        {
+
+            // allow the subfilter to reinit the model
+            if ( pImp->m_bIsInit )
+                pImp->m_bIsInit = sal_False;
+
+            if ( LoadOwnFormat( *pMedium ) )
+            {
+                bHasName = sal_True;
+                if ( !IsReadOnly() && IsLoadReadonly() )
+                    SetReadOnlyUI();
+
+                bResult = sal_True;
+                OSL_ENSURE( pImp->m_xDocStorage == xStorage, "Wrong storage is used!\n" );
+            }
         }
 
         // now the medium can be disconnected from the storage
@@ -748,7 +765,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     bSetProperty = false;
                 }
-                bOk = ImportFrom( *pMedium, false );
+                bOk = ImportFrom(*pMedium, 0);
                 if(bSetProperty)
                 {
                     try
@@ -2160,7 +2177,8 @@ sal_Bool SfxObjectShell::ConvertFrom
     return sal_False;
 }
 
-sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
+bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
+        css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
 {
     OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
@@ -2242,10 +2260,13 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
         }
 
-        if ( bInsert ) {
+        if (xInsertPosition.is()) {
             aArgs.realloc( ++nEnd );
             aArgs[nEnd-1].Name = "InsertMode";
             aArgs[nEnd-1].Value <<= (sal_Bool) sal_True;
+            aArgs.realloc( ++nEnd );
+            aArgs[nEnd-1].Name = "TextInsertModeRange";
+            aArgs[nEnd-1].Value <<= xInsertPosition;
         }
 
         // #i119492# During loading, some OLE objects like chart will be set
@@ -3603,6 +3624,15 @@ void SfxObjectShell::UpdateLinks()
 bool SfxObjectShell::LoadExternal( SfxMedium& )
 {
     // Not implemented. It's an error if the code path ever comes here.
+    assert(false);
+    return false;
+}
+
+bool SfxObjectShell::InsertGeneratedStream(SfxMedium&,
+        uno::Reference<text::XTextRange> const&)
+{
+    // Not implemented. It's an error if the code path ever comes here.
+    assert(false);
     return false;
 }
 
