@@ -108,7 +108,7 @@ css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifi
 #endif
 }
 
-::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLength ) const
+sal_Int32 OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLength ) const
 {
     struct tokenmap::token * pToken =
         tokenmap::Perfect_Hash::in_word_set( pStr, nLength );
