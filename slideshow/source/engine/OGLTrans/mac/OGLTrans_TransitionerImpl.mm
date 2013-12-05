@@ -366,7 +366,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
  
     const SystemEnvData* sysData(pPWindow->GetSystemData());
 
-    GLWin.apView = sysData->pView;
+    GLWin.apView = sysData->mpNSView;
 
     NSOpenGLPixelFormat* fmt = [AquaOpenGLView defaultPixelFormat];
     Window *pFrameWindow = pPWindow->GetWindow(WINDOW_FRAME);
