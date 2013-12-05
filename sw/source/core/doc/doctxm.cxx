@@ -1583,7 +1583,8 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
     // pTOXNd is only set at the first mark
     SwTxtNode* pTOXNd = (SwTxtNode*)aSortArr[nArrayIdx]->pTOXNd;
-    OUString rTxt = pTOXNd->GetTxt();
+    // FIXME this operates directly on the node text
+    OUString & rTxt = const_cast<OUString&>(pTOXNd->GetTxt());
     rTxt = "";
     for(sal_uInt16 nIndex = nArrayIdx; nIndex < nArrayIdx + nCount; nIndex++)
     {
