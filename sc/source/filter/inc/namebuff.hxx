@@ -153,20 +153,16 @@ inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
  */
 class SharedFormulaBuffer : public ExcRoot
 {
-    typedef boost::unordered_map<ScAddress, ScFormulaCellGroupRef, ScAddressHashFunctor> FormulaGroupsType;
-
-    FormulaGroupsType maFormulaGroups;
+    typedef boost::unordered_map<ScAddress, ScTokenArray*, ScAddressHashFunctor> TokenArraysType;
+    TokenArraysType maTokenArrays;
 
 public:
     SharedFormulaBuffer( RootData* pRD );
     virtual ~SharedFormulaBuffer();
     void Clear();
-    void Store( const ScRange& rRange, const ScTokenArray& rArray );
-    ScFormulaCellGroupRef Find( const ScAddress& rRefPos ) const;
+    void Store( const ScAddress& rPos, const ScTokenArray& rArray );
+    const ScTokenArray* Find( const ScAddress& rRefPos ) const;
 };
-
-
-
 
 class RangeNameBufferWK3
 {

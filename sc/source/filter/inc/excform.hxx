@@ -65,7 +65,7 @@ public:
     const ScTokenArray* GetBoolErr( XclBoolError );
 
     bool ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCROW& rRow );
-    ScFormulaCellGroupRef GetSharedFormula( const ScAddress& rRefPos );
+    const ScTokenArray* GetSharedFormula( const ScAddress& rRefPos ) const;
 
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 

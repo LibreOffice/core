@@ -70,37 +70,32 @@ void NameBuffer::operator <<( const OUString &rNewString )
 
 SharedFormulaBuffer::SharedFormulaBuffer( RootData* pRD ) : ExcRoot(pRD) {}
 
-SharedFormulaBuffer::~SharedFormulaBuffer() {}
+SharedFormulaBuffer::~SharedFormulaBuffer()
+{
+    Clear();
+}
 
 void SharedFormulaBuffer::Clear()
 {
-    maFormulaGroups.clear();
+    TokenArraysType::iterator it = maTokenArrays.begin(), itEnd = maTokenArrays.end();
+    for (; it != itEnd; ++it)
+        delete it->second;
+
+    maTokenArrays.clear();
 }
 
-void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArray )
+void SharedFormulaBuffer::Store( const ScAddress& rPos, const ScTokenArray& rArray )
 {
-    for (SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
-    {
-        // Create one group per column.
-        ScAddress aPos = rRange.aStart;
-        aPos.SetCol(i);
-
-        ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
-        // We have no ScFormulaCell yet to point mpTopCell to!?
-        // Let's hope that the only called of this in ImportExcel::Shrfmla()
-        // fixes that up properly.
-        xNewGroup->mpTopCell = NULL;
-        xNewGroup->mnLength = 1;
-        xNewGroup->setCode(rArray);
-        maFormulaGroups.insert(FormulaGroupsType::value_type(aPos, xNewGroup));
-    }
+    ScTokenArray* pCode = rArray.Clone();
+    pCode->GenHash();
+    maTokenArrays.insert(TokenArraysType::value_type(rPos, pCode));
 }
 
-ScFormulaCellGroupRef SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
+const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
 {
-    FormulaGroupsType::const_iterator it = maFormulaGroups.find(rRefPos);
-    if (it == maFormulaGroups.end())
-        return ScFormulaCellGroupRef();
+    TokenArraysType::const_iterator it = maTokenArrays.find(rRefPos);
+    if (it == maTokenArrays.end())
+        return NULL;
 
     return it->second;
 }
