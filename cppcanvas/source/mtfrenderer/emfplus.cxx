@@ -959,7 +959,7 @@ namespace cppcanvas
 
                 if (type == 1) { // bitmap
                     s >> width >> height >> stride >> pixelFormat >> unknown;
-                    SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << "pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
+                    SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
                     if (width == 0) { // non native formats
                         GraphicFilter filter;
 
