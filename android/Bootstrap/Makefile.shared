@@ -81,7 +81,7 @@ clean: android_version_setup properties
 
 LIBS = \
   -Wl,--start-group \
-  $(shell $(SRCDIR)/lo-all-static-libs) \
+  $(shell $(SRCDIR)/bin/lo-all-static-libs) \
   -Wl,--end-group
 
 WHOLELIBS = \
