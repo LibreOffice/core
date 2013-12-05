@@ -7743,7 +7743,14 @@ libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.4 >= 0.4.0])
+# libcmis requires curl and we can't build curl for iOS
+if test $_os != iOS; then
+    libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.4 >= 0.4.0])
+    ENABLE_CMIS=TRUE
+else
+    ENABLE_CMIS=
+fi
+AC_SUBST(ENABLE_CMIS)
 
 dnl ===================================================================
 dnl Check for system libwpd

@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_cached1 \
 	Library_srtrs1 \
 	Library_ucb1 \
-	Library_ucpcmis1 \
+	$(if $(ENABLE_CMIS),Library_ucpcmis1) \
 	Library_ucpexpand1 \
 	Library_ucpext \
 	Library_ucpfile1 \

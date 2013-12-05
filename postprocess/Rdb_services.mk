@@ -92,7 +92,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	ucb/source/sorter/srtrs1 \
 	ucb/source/core/ucb1 \
 	ucb/source/cacher/cached1 \
-	ucb/source/ucp/cmis/ucpcmis1 \
+	$(if $(ENABLE_CMIS),ucb/source/ucp/cmis/ucpcmis1) \
 	ucb/source/ucp/expand/ucpexpand1 \
 	ucb/source/ucp/ext/ucpext \
 	ucb/source/ucp/file/ucpfile1 \
