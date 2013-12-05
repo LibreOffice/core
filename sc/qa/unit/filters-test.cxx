@@ -349,8 +349,8 @@ void ScFiltersTest::testContentXLS_XML()
 void ScFiltersTest::testSharedFormulaXLS()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 18; ++i)
@@ -367,6 +367,38 @@ void ScFiltersTest::testSharedFormulaXLS()
     CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mpTopCell->aPos.Row() == 1 && xGroup->mnLength == 18);
 
     xDocSh->DoClose();
+
+    // The following file contains shared formula whose range is inaccurate.
+    // Excel can easily mess up shared formula ranges, so we need to be able
+    // to handle these wrong ranges that Excel stores.
+
+    xDocSh = loadDoc("shared-formula-gap.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll();
+
+    if (!checkFormula(*pDoc, ScAddress(1,0,0), "A1*20"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*pDoc, ScAddress(1,1,0), "A2*20"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*pDoc, ScAddress(1,2,0), "A3*20"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    // There is an intentional gap at row 4.
+
+    if (!checkFormula(*pDoc, ScAddress(1,4,0), "A5*20"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*pDoc, ScAddress(1,5,0), "A6*20"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*pDoc, ScAddress(1,6,0), "A7*20"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    if (!checkFormula(*pDoc, ScAddress(1,7,0), "A8*20"))
+        CPPUNIT_FAIL("Wrong formula.");
 }
 
 void ScFiltersTest::testSharedFormulaXLSX()
