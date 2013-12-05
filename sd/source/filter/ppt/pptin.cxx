@@ -421,7 +421,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 aStringAry[nToken] = OUStringToOString(aString.getToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
 
-                                            sal_Bool bSucceeded = sal_False;
+                                            sal_Bool bDocInternalSubAddress = sal_False;
 
                                             // first pass, searching for a SlideId
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
@@ -438,29 +438,29 @@ sal_Bool ImplSdPPTImport::Import()
                                                             if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                                             {
                                                                 nPageNumber = nPage;
-                                                                bSucceeded = sal_True;
+                                                                bDocInternalSubAddress = sal_True;
                                                                 break;
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                            if ( !bSucceeded )
+                                            if ( !bDocInternalSubAddress )
                                             {   // second pass, searching for a SlideName
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    OUString aToken( aString.getToken( nToken, (sal_Unicode)',' ) );
+                                                    OUString aToken(OStringToOUString(aStringAry[nToken], RTL_TEXTENCODING_UTF8));
                                                     std::vector<OUString>::const_iterator pIter =
                                                             std::find(maSlideNameList.begin(),maSlideNameList.end(),aToken);
 
                                                     if (pIter != maSlideNameList.end())
                                                     {
                                                         nPageNumber = pIter - maSlideNameList.begin();
-                                                        bSucceeded = sal_True;
+                                                        bDocInternalSubAddress = sal_True;
                                                     }
                                                 }
                                             }
-                                            if ( !bSucceeded )
+                                            if ( !bDocInternalSubAddress )
                                             {   // third pass, searching for a slide number
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
@@ -470,19 +470,26 @@ sal_Bool ImplSdPPTImport::Import()
                                                         if ( ( nNumber & ~0xff ) == 0 )
                                                         {
                                                             nPageNumber = (sal_uInt32)nNumber - 1;
-                                                            bSucceeded = sal_True;
+                                                            bDocInternalSubAddress = sal_True;
                                                             break;
                                                         }
                                                     }
                                                 }
                                             }
-                                            if ( bSucceeded )
+                                            // if a document internal sub address
+                                            if ( bDocInternalSubAddress )
                                             {
                                                 if ( nPageNumber < maSlideNameList.size() )
                                                     pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
                                                 if ( pHyperlink->aConvSubString.isEmpty() )
                                                 {
                                                     pHyperlink->aConvSubString = OUString( SdResId( STR_PAGE ) ) + " " + ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
+                                                }
+                                            } else {
+                                                // if sub address is given but not internal, use it as it is
+                                                if ( pHyperlink->aConvSubString.isEmpty() )
+                                                {
+                                                    pHyperlink->aConvSubString = aString;
                                                 }
                                             }
                                         }
