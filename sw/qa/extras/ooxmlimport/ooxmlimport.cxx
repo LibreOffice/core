@@ -1583,6 +1583,16 @@ DECLARE_OOXMLIMPORT_TEST(testMceWpg, "mce-wpg.docx")
     getParagraphOfText(1, xText, "DML1");
 }
 
+DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
+{
+    // Vertical position of the textbox was incorrect due to incorrect nested mce handling.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // positionV's posOffset from the bugdoc, was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(2514600)), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
 {
     // The document contains a rotated bitmap

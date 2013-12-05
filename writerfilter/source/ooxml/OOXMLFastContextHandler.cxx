@@ -242,7 +242,7 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     if (oox::getNamespace(Element) == static_cast<sal_Int32>(NS_mce))
         m_bDiscardChildren = prepareMceContext(Element, Attribs);
 
-    if (!m_bDiscardChildren)
+    else if (!m_bDiscardChildren)
     {
         attributes(Attribs);
         lcl_startFastElement(Element, Attribs);
@@ -283,7 +283,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
         m_bTookChoice = aState.m_bTookChoice;
     }
 
-    if (!m_bDiscardChildren)
+    else if (!m_bDiscardChildren)
         lcl_endFastElement(Element);
 
 #ifdef DEBUG_CONTEXT_HANDLER
