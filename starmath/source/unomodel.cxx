@@ -37,6 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <unomodel.hxx>
@@ -416,10 +417,7 @@ OUString SmModel::getImplementationName_Static()
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return (
-            rServiceName == "com.sun.star.document.OfficeDocument" ||
-            rServiceName == "com.sun.star.formula.FormulaProperties"
-           );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException )

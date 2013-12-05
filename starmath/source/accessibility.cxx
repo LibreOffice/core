@@ -26,12 +26,12 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -794,10 +794,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName == "com::sun::star::accessibility::Accessible" ||
-            rServiceName == "com::sun::star::accessibility::AccessibleComponent" ||
-            rServiceName == "com::sun::star::accessibility::AccessibleContext" ||
-            rServiceName == "com::sun::star::accessibility::AccessibleText";
+    return  cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
@@ -1945,9 +1942,7 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName == "com::sun::star::accessibility::Accessible" ||
-            rServiceName == "com::sun::star::accessibility::AccessibleComponent" ||
-            rServiceName == "com::sun::star::accessibility::AccessibleContext";
+    return  cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
