@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMVWIMP_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMVWIMP_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "svx/svdmark.hxx"
 #include "fmdocumentclassification.hxx"
 

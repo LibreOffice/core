@@ -20,6 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 #define INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>

@@ -61,11 +61,11 @@ namespace connectivity
         typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
         typedef std::map<OUString, OConnectionPool*> OConnectionPools;
 
-        DECLARE_STL_MAP(
+        typedef std::map<
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,
                 ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDriver >,
-                ODriverCompare,
-                MapDriver2DriverRef );
+                ODriverCompare>
+                MapDriver2DriverRef;
 
         MapDriver2DriverRef                                                                 m_aDriverProxies;
         ::osl::Mutex                                                                        m_aMutex;

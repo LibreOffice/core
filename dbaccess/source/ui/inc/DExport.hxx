@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <map>
 #include <vector>
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
@@ -54,7 +55,7 @@ namespace dbaui
     class ODatabaseExport
     {
     public:
-        DECLARE_STL_MAP(OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
+        typedef std::map<OUString, OFieldDescription*, ::comphelper::UStringMixLess> TColumns;
         typedef ::std::vector<TColumns::const_iterator>             TColumnVector;
         typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
 

@@ -776,7 +776,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
-        StateCacheIterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
+        StateCache::iterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
         if ( aCachePos != m_aStateCache.end() )
             m_aStateCache.erase( aCachePos );
     }

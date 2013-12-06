@@ -53,10 +53,10 @@
 #include "fmservs.hxx"
 #include "sdbdatacolumn.hxx"
 
-#include <comphelper/stl_types.hxx>
 #include <comphelper/property.hxx>
 
 #include <algorithm>
+#include <map>
 
 using namespace ::svxform;
 using namespace ::svt;
@@ -117,7 +117,7 @@ private:
 };
 
 class GridFieldValueListener;
-DECLARE_STL_MAP(sal_uInt16, GridFieldValueListener*, ::std::less<sal_uInt16>, ColumnFieldValueListeners);
+typedef std::map<sal_uInt16, GridFieldValueListener*> ColumnFieldValueListeners;
 
 DBG_NAME(GridFieldValueListener)
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
@@ -3464,7 +3464,7 @@ void DbGridControl::BeginCursorAction()
     if (m_pFieldListeners)
     {
         ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
-        ConstColumnFieldValueListenersIterator aIter = pListeners->begin();
+        ColumnFieldValueListeners::const_iterator aIter = pListeners->begin();
         while (aIter != pListeners->end())
         {
             GridFieldValueListener* pCurrent = (*aIter).second;
@@ -3483,7 +3483,7 @@ void DbGridControl::EndCursorAction()
     if (m_pFieldListeners)
     {
         ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
-        ConstColumnFieldValueListenersIterator aIter = pListeners->begin();
+        ColumnFieldValueListeners::const_iterator aIter = pListeners->begin();
         while (aIter != pListeners->end())
         {
             GridFieldValueListener* pCurrent = (*aIter).second;
@@ -3590,7 +3590,7 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
         return;
     }
 
-    ColumnFieldValueListenersIterator aPos = pListeners->find(_nId);
+    ColumnFieldValueListeners::iterator aPos = pListeners->find(_nId);
     if (aPos == pListeners->end())
     {
         OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (did not find the listener) !");

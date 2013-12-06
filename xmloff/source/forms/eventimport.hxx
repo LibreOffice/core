@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_FORMS_EVENTIMPORT_HXX
 #define INCLUDED_XMLOFF_SOURCE_FORMS_EVENTIMPORT_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "callbacks.hxx"
 #include "ifacecompare.hxx"
@@ -47,11 +51,11 @@ namespace xmloff
     class ODefaultEventAttacherManager : public IEventAttacherManager
     {
     protected:
-        DECLARE_STL_MAP(
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >,              // map from
-            ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >,     // map to
-            OPropertySetCompare,                                                                    // compare method
-            MapPropertySet2ScriptSequence);                                                         // class name
+        typedef std::map<
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >,
+            OPropertySetCompare>
+            MapPropertySet2ScriptSequence;
         // usually an event attacher manager will need to collect all script events registered, 'cause
         // the _real_ XEventAttacherManager handles it's events by index, but out indicies are not fixed
         // until _all_ controls have been inserted.

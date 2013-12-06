@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <map>
 #include <set>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,7 +31,6 @@
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include <comphelper/stl_types.hxx>
 #include "dsntypes.hxx"
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -52,7 +52,7 @@ namespace dbaui
     class ODbDataSourceAdministrationHelper
     {
     public:
-        DECLARE_STL_MAP(sal_Int32, OUString, ::std::less< sal_Int32 >, MapInt2String);
+        typedef std::map<sal_Int32, OUString> MapInt2String;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

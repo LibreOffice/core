@@ -20,10 +20,13 @@
 #ifndef INCLUDED_UNOTOOLS_IDHELPER_HXX
 #define INCLUDED_UNOTOOLS_IDHELPER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 
@@ -68,12 +71,8 @@ public:
     }
 };
 
-// declare the map
-DECLARE_STL_MAP (   TypeSequence,
-                    ::cppu::OImplementationId,
-                    TypeSequenceLess,
-                    MapType2Id
-                );
+typedef std::map<TypeSequence, ::cppu::OImplementationId, TypeSequenceLess>
+MapType2Id;
 
 //.........................................................................
 }   // namespace utl

@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARCONTROLLER_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARCONTROLLER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "AsynchronousCall.hxx"
 #include "Context.hxx"
 #include "FocusManager.hxx"

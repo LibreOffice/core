@@ -62,10 +62,10 @@ namespace xmloff
 
     protected:
         typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > > MapString2PropertySet;
-        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
+        typedef std::map<css::uno::Reference<css::drawing::XDrawPage>, MapString2PropertySet, ODrawPageCompare> MapDrawPage2Map;
 
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
-        MapDrawPage2MapIterator m_aCurrentPageIds;      // ifs of the controls on the current page
+        MapDrawPage2Map::iterator m_aCurrentPageIds;      // ifs of the controls on the current page
 
         typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, OUString >
                                 ModelStringPair;

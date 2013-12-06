@@ -43,6 +43,7 @@
 #include <comphelper/container.hxx>
 
 #include <algorithm>
+#include <map>
 #include <set>
 #include <vector>
 

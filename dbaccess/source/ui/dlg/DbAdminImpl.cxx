@@ -563,7 +563,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
 {
     if (_rxSource.is())
     {
-        for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
+        for (   MapInt2String::const_iterator aDirect = m_aDirectPropTranslator.begin();
                 aDirect != m_aDirectPropTranslator.end();
                 ++aDirect
             )
@@ -614,8 +614,8 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         if ( !aInfos.empty() )
         {
             PropertyValue aSearchFor;
-            ConstMapInt2StringIterator aEnd = m_aIndirectPropTranslator.end();
-            for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
+            MapInt2String::const_iterator aEnd = m_aIndirectPropTranslator.end();
+            for (   MapInt2String::const_iterator aIndirect = m_aIndirectPropTranslator.begin();
                     aIndirect != aEnd;
                     ++aIndirect)
             {
@@ -656,7 +656,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
 
     const OUString sUrlProp("URL");
     // transfer the direct properties
-    for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
+    for (   MapInt2String::const_iterator aDirect = m_aDirectPropTranslator.begin();
             aDirect != m_aDirectPropTranslator.end();
             ++aDirect
         )
@@ -713,7 +713,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
-    ConstMapInt2StringIterator aTranslation;
+    MapInt2String::const_iterator aTranslation;
     ::std::vector< sal_Int32>::iterator aDetailsEnd = aDetailIds.end();
     for (::std::vector< sal_Int32>::iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
     {
@@ -778,8 +778,8 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         // now check the to-be-preserved props
         ::std::vector< sal_Int32 > aRemoveIndexes;
         sal_Int32 nPositionCorrector = 0;
-        ConstMapInt2StringIterator aPreservedEnd = aPreservedSettings.end();
-        for (   ConstMapInt2StringIterator aPreserved = aPreservedSettings.begin();
+        MapInt2String::const_iterator aPreservedEnd = aPreservedSettings.end();
+        for (   MapInt2String::const_iterator aPreserved = aPreservedSettings.begin();
                 aPreserved != aPreservedEnd;
                 ++aPreserved
             )

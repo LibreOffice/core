@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <stack>
 
 #include <math.h>
@@ -237,10 +235,6 @@ OutputIter intersperse(
 #define DECLARE_STL_ITERATORS(classname)                            \
     typedef classname::iterator         classname##Iterator;        \
     typedef classname::const_iterator   Const##classname##Iterator  \
-
-#define DECLARE_STL_MAP(keytype, valuetype, comparefct, classname)  \
-    typedef std::map< keytype, valuetype, comparefct >  classname;  \
-    DECLARE_STL_ITERATORS(classname)                                \
 
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 

@@ -391,7 +391,7 @@ namespace xmloff
     {
         OUString sNumberStyle;
 
-        ConstMapPropertySet2IntIterator aControlFormatPos = m_aControlNumberFormats.find(_rxControl);
+        MapPropertySet2Int::const_iterator aControlFormatPos = m_aControlNumberFormats.find(_rxControl);
         if (m_aControlNumberFormats.end() != aControlFormatPos)
         {
             OSL_ENSURE(m_pControlNumberStyles, "OFormLayerXMLExport_Impl::getControlNumberStyle: have a control which has a format style, but no style exporter!");

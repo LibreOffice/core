@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <map>
 #include <set>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -111,7 +112,7 @@ namespace xmloff
         // TODO: To avoid this construct above, and to have a cleaner implementation, an class encapsulating the
         // export of a single page should be introduced.
 
-        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, sal_Int32, OPropertySetCompare, MapPropertySet2Int);
+        typedef std::map<css::uno::Reference<css::beans::XPropertySet>, sal_Int32, OPropertySetCompare> MapPropertySet2Int;
         MapPropertySet2Int  m_aControlNumberFormats;
             // maps controls to format keys, which are relative to our own formats supplier
 

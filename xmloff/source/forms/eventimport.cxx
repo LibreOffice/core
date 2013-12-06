@@ -123,7 +123,7 @@ namespace xmloff
         // loop through all elements
         sal_Int32 nCount = _rxContainer->getCount();
         Reference< XPropertySet > xCurrent;
-        ConstMapPropertySet2ScriptSequenceIterator aRegisteredEventsPos;
+        MapPropertySet2ScriptSequence::const_iterator aRegisteredEventsPos;
         for (sal_Int32 i=0; i<nCount; ++i)
         {
             ::cppu::extractInterface(xCurrent, _rxContainer->getByIndex(i));

@@ -19,7 +19,10 @@
 #ifndef INCLUDED_CONNECTIVITY_COMMONTOOLS_HXX
 #define INCLUDED_CONNECTIVITY_COMMONTOOLS_HXX
 
+#include <sal/config.h>
 #include <config_features.h>
+
+#include <map>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -57,7 +60,7 @@ namespace connectivity
     typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    OSQLTable;
 
-    DECLARE_STL_MAP(OUString,OSQLTable,comphelper::UStringMixLess,  OSQLTables);
+    typedef std::map<OUString,OSQLTable,comphelper::UStringMixLess> OSQLTables;
 
     // -------------------------------------------------------------------------
     // class ORefVector allows reference counting on a std::vector

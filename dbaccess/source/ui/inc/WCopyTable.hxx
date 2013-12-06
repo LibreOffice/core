@@ -39,6 +39,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <vcl/lstbox.hxx>
 #include <functional>
+#include <map>
 
 namespace dbaui
 {
@@ -220,7 +221,7 @@ namespace dbaui
         friend class        OWizNameMatching;
 
     public:
-        DECLARE_STL_MAP(OUString,OUString,::comphelper::UStringMixLess,TNameMapping);
+        typedef std::map<OUString, OUString, ::comphelper::UStringMixLess> TNameMapping;
 
         enum Wizard_Button_Style
         {

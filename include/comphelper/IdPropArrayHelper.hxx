@@ -19,6 +19,10 @@
 #ifndef INCLUDED_COMPHELPER_IDPROPARRAYHELPER_HXX
 #define INCLUDED_COMPHELPER_IDPROPARRAYHELPER_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

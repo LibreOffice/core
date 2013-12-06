@@ -187,7 +187,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _
     {
         Reference< XDriver > xExistentProxy;
         // look if we already have a proxy for this driver
-        for (   ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
+        for (   MapDriver2DriverRef::const_iterator aLookup = m_aDriverProxies.begin();
                 aLookup != m_aDriverProxies.end();
                 ++aLookup
             )
@@ -474,10 +474,10 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             getNodeValue(getDriverNameNodeName(),evt.Source) >>= sThisDriverName;
             // 1nd relase the driver
             // look if we already have a proxy for this driver
-            MapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
+            MapDriver2DriverRef::iterator aLookup = m_aDriverProxies.begin();
             while(  aLookup != m_aDriverProxies.end())
             {
-                MapDriver2DriverRefIterator aFind = aLookup;
+                MapDriver2DriverRef::iterator aFind = aLookup;
                 Reference<XServiceInfo> xInfo(aLookup->first,UNO_QUERY);
                 ++aLookup;
                 if(xInfo.is() && xInfo->getImplementationName() == sThisDriverName)

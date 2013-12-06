@@ -825,7 +825,7 @@ bool OSQLParseTreeIterator::impl_getColumnTableRange(const OSQLParseNode* pNode,
         if (aTableRange.isEmpty())   // None found
         {
             // Look for the columns in the tables
-            for (ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
+            for (OSQLTables::const_iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
             {
                 if (aIter->second.is())
                 {
@@ -1697,13 +1697,13 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
-        for(ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end();++aIter)
+        for(OSQLTables::const_iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end();++aIter)
             appendColumns(_rColumns,aIter->first,aIter->second);
     }
     else if( rColumnName.toChar() == '*' && !rTableRange.isEmpty() )
     {   // SELECT <table>.*
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
-        ConstOSQLTablesIterator aFind = m_pImpl->m_pTables->find(rTableRange);
+        OSQLTables::const_iterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
         if(aFind != m_pImpl->m_pTables->end())
             appendColumns(_rColumns,rTableRange,aFind->second);
@@ -1715,7 +1715,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
         {
             Reference< XPropertySet> xNewColumn;
 
-            for ( OSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter )
+            for ( OSQLTables::iterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter )
             {
                 if ( !aIter->second.is() )
                     continue;
@@ -1786,7 +1786,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
     }
     else    // ColumnName and TableName exist
     {
-        ConstOSQLTablesIterator aFind = m_pImpl->m_pTables->find(rTableRange);
+        OSQLTables::const_iterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
         sal_Bool bError = sal_False;
         if (aFind != m_pImpl->m_pTables->end() && aFind->second.is())
@@ -2095,7 +2095,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
     Reference< XPropertySet > xColumn;
     if ( !rTableRange.isEmpty() )
     {
-        ConstOSQLTablesIterator aFind = _rTables.find(rTableRange);
+        OSQLTables::const_iterator aFind = _rTables.find(rTableRange);
 
         if ( aFind != _rTables.end()
             && aFind->second.is()

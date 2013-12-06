@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 #include "sbamultiplex.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <map>
@@ -60,7 +59,7 @@ namespace dbaui
                 :public FmXGridControl
                 ,public ::com::sun::star::frame::XDispatch
     {
-        DECLARE_STL_MAP(::com::sun::star::util::URL, SbaXStatusMultiplexer*, SbaURLCompare,StatusMultiplexerArray);
+        typedef std::map<css::util::URL, SbaXStatusMultiplexer*, SbaURLCompare> StatusMultiplexerArray;
         StatusMultiplexerArray      m_aStatusMultiplexer;
 
     public:

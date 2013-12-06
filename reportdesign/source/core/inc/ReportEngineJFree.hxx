@@ -19,6 +19,10 @@
 #ifndef REPORTDESIGN_API_REPORTENGINEJFREE_HXX
 #define REPORTDESIGN_API_REPORTENGINEJFREE_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>

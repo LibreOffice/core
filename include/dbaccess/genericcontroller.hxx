@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <deque>
+#include <map>
 #include <vector>
 
 #include <dbaccess/AsyncronousLink.hxx>
@@ -51,7 +53,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sharedmutex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/stl_types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/compbase11.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -229,7 +230,7 @@ namespace dbaui
             DispatchTarget(const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef) : aURL(rURL), xListener(xRef) { }
         };
 
-        DECLARE_STL_MAP( sal_uInt16, FeatureState, ::std::less< sal_uInt16 >, StateCache );
+        typedef std::map<sal_uInt16, FeatureState> StateCache;
         typedef std::vector<DispatchTarget> Dispatch;
 
         FeatureListeners        m_aFeaturesToInvalidate;

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "dbu_reghelper.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "dbu_rel.hrc"
@@ -272,7 +276,7 @@ namespace
 {
     class RelationLoader : public ::osl::Thread
     {
-        DECLARE_STL_MAP(OUString,::boost::shared_ptr<OTableWindowData>,::comphelper::UStringMixLess,TTableDataHelper);
+        typedef std::map<OUString, ::boost::shared_ptr<OTableWindowData>, ::comphelper::UStringMixLess> TTableDataHelper;
         TTableDataHelper                    m_aTableData;
         TTableConnectionData                m_vTableConnectionData;
         const Sequence< OUString>    m_aTableList;
