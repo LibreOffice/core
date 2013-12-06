@@ -101,24 +101,6 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
 #define CFGPROPERTY_LAZYWRITE       "lazywrite"
 
 //=========================================================================
-
-struct equalString_Impl
-{
-  bool operator()( const OUString& s1, const OUString& s2 ) const
-  {
-        return !!( s1 == s2 );
-  }
-};
-
-struct hashString_Impl
-{
-    size_t operator()( const OUString & rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
-//=========================================================================
 //
 // PropertySetMap_Impl.
 //
@@ -128,8 +110,7 @@ typedef boost::unordered_map
 <
     OUString,
     PersistentPropertySet*,
-    hashString_Impl,
-    equalString_Impl
+    OUStringHash
 >
 PropertySetMap_Impl;
 
@@ -1207,8 +1188,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 typedef OMultiTypeInterfaceContainerHelperVar
 <
     OUString,
-    hashString_Impl,
-    equalString_Impl
+    OUStringHash
 > PropertyListeners_Impl;
 
 //=========================================================================

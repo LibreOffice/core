@@ -54,8 +54,7 @@ namespace framework{
 *//*-*************************************************************************************************************/
 
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
-                                                        OUStringHash,
-                                                        std::equal_to< OUString > > IMPL_ListenerHashContainer;
+                                                        OUStringHash > IMPL_ListenerHashContainer;
 
 
 /*-************************************************************************************************************//**

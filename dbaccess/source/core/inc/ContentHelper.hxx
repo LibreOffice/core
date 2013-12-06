@@ -34,12 +34,15 @@
 #include <cppuhelper/compbase9.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <connectivity/sqlerror.hxx>
 #include <boost/shared_ptr.hpp>
+
+namespace com { namespace sun { namespace star { namespace beans {
+    struct PropertyValue;
+} } } }
 
 namespace dbaccess
 {
@@ -76,8 +79,7 @@ namespace dbaccess
 
 
     typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString,
-                                                            OUStringHash,
-                                                            ::comphelper::UStringEqual
+                                                            OUStringHash
                                                         > PropertyChangeListenerContainer;
     typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
     typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::ucb::XContent

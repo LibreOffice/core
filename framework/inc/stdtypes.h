@@ -170,8 +170,7 @@ typedef BaseHash< sal_Int32 > NameToHandleHash;
     So it's better to declare it one times only!
 */
 typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString                    ,
-                                                        OUStringHash,
-                                                        ::std::equal_to< OUString > >    ListenerHash;
+                                                        OUStringHash >    ListenerHash;
 
 }       // namespace framework
 

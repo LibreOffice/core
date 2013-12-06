@@ -39,7 +39,6 @@
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -186,7 +185,7 @@ namespace dbaui
             ,public listenerclass                                                           \
     {                                                                                       \
         typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<                              \
-                OUString, OUStringHash, ::comphelper::UStringEqual >  ListenerContainerMap;   \
+                OUString, OUStringHash >  ListenerContainerMap;   \
         ListenerContainerMap    m_aListeners;                                               \
                                                                                             \
     public:                                                                                 \

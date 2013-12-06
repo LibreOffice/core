@@ -22,7 +22,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
@@ -66,7 +65,6 @@ namespace svx
 
     typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   OUString
                                                             ,   OUStringHash
-                                                            ,   ::comphelper::UStringEqual
                                                             >   PropertyChangeListenerContainer;
 
     //====================================================================

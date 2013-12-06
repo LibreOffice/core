@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_INC_UNOMAILMERGE_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_UNOMAILMERGE_HXX
 
-#include <functional>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <unotools/configitem.hxx>
@@ -72,8 +71,7 @@ struct PropHashType_Impl
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
     <
         sal_Int32,
-        PropHashType_Impl,
-        std::equal_to< sal_Int32 >
+        PropHashType_Impl
     > OPropertyListenerContainerHelper;
 
 ////////////////////////////////////////////////////////////

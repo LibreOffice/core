@@ -83,8 +83,7 @@ namespace fileaccess {
 
     typedef boost::unordered_map< OUString,
                            com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >,
-                           hashOUString,
-                           equalOUString >      ListenerMap;
+                           OUStringHash >      ListenerMap;
 
     class PropertyChangeNotifier
     {

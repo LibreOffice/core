@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_UNOCTITM_HXX
 #define INCLUDED_SFX2_UNOCTITM_HXX
 
-#include <functional>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -77,7 +76,7 @@ struct SfxStatusDispatcher_Impl_hashType
         { return s.hashCode(); }
 };
 
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar< OUString, SfxStatusDispatcher_Impl_hashType, std::equal_to< OUString > >   SfxStatusDispatcher_Impl_ListenerContainer ;
+typedef ::cppu::OMultiTypeInterfaceContainerHelperVar< OUString, SfxStatusDispatcher_Impl_hashType >   SfxStatusDispatcher_Impl_ListenerContainer ;
 
 class SfxStatusDispatcher   :   public ::cppu::WeakImplHelper1< css::frame::XNotifyingDispatch >
 {

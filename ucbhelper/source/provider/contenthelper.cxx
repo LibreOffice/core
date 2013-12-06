@@ -106,27 +106,10 @@ PropertiesEventListenerMap;
 //
 //=========================================================================
 
-struct equalStr
-{
-    bool operator()( const OUString& s1, const OUString& s2 ) const
-      {
-        return !!( s1 == s2 );
-    }
-};
-
-struct hashStr
-{
-    size_t operator()( const OUString& rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
 <
     OUString,
-    hashStr,
-    equalStr
+    OUStringHash
 > PropertyChangeListeners;
 
 //=========================================================================

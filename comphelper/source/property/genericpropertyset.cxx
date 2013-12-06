@@ -30,7 +30,6 @@
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/uuid.h>
 
@@ -62,7 +61,7 @@ namespace comphelper
     {
     private:
         GenericAnyMapImpl   maAnyMap;
-        ::cppu::OMultiTypeInterfaceContainerHelperVar< OUString, OUStringHash,UStringEqual> m_aListener;
+        ::cppu::OMultiTypeInterfaceContainerHelperVar<OUString, OUStringHash> m_aListener;
 
     protected:
         virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException );

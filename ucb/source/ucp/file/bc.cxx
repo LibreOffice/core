@@ -51,7 +51,7 @@ using namespace com::sun::star::ucb;
 // PropertyListeners
 
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar< OUString,hashOUString,equalOUString >
+typedef cppu::OMultiTypeInterfaceContainerHelperVar< OUString,OUStringHash >
 PropertyListeners_impl;
 
 class fileaccess::PropertyListeners

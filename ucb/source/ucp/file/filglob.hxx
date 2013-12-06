@@ -28,24 +28,6 @@ namespace fileaccess {
 
     class BaseContent;
 
-    struct equalOUString
-    {
-        bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
-        {
-            return !!( rKey1 == rKey2 );
-        }
-    };
-
-
-    struct hashOUString
-    {
-        size_t operator()( const OUString& rName ) const
-        {
-            return rName.hashCode();
-        }
-    };
-
-
     /******************************************************************************/
     /*                                                                            */
     /*                         Helper functions                                   */

@@ -76,10 +76,6 @@ namespace fileaccess {
     public:
         // Type definitions
 
-        typedef OUString UniquePath;
-        typedef equalOUString eUniquePath;
-        typedef hashOUString hUniquePath;
-
         class MyProperty
         {
         private:
@@ -155,7 +151,7 @@ namespace fileaccess {
             com::sun::star::uno::Reference< com::sun::star::beans::XPropertyAccess >        xA;
         };
 
-        typedef boost::unordered_map< UniquePath,UnqPathData,hUniquePath,eUniquePath > ContentMap;
+        typedef boost::unordered_map< OUString,UnqPathData,OUStringHash > ContentMap;
 
     public:
 

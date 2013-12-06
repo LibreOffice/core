@@ -31,35 +31,14 @@ using namespace ::com::sun::star;
 
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
-struct equalOUString
-{
-    bool operator()(
-        const OUString& rKey1,
-        const OUString& rKey2 ) const
-    {
-        return !!( rKey1 == rKey2 );
-    }
-};
-
-
-struct hashOUString
-{
-    size_t operator()( const OUString& rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
-
-
 class StatusChangeListenerContainer
     : public ::cppu::OMultiTypeInterfaceContainerHelperVar<
-OUString,hashOUString,equalOUString>
+OUString,OUStringHash>
 {
 public:
     StatusChangeListenerContainer( ::osl::Mutex& aMutex )
         :  cppu::OMultiTypeInterfaceContainerHelperVar<
-    OUString,hashOUString,equalOUString>(aMutex)
+    OUString,OUStringHash>(aMutex)
     {
     }
 };

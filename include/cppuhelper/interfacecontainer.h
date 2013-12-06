@@ -19,6 +19,9 @@
 #ifndef INCLUDED_CPPUHELPER_INTERFACECONTAINER_H
 #define INCLUDED_CPPUHELPER_INTERFACECONTAINER_H
 
+#include <sal/config.h>
+
+#include <functional>
 #include <vector>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
@@ -293,7 +296,7 @@ inline void OInterfaceContainerHelper::notifyEach( void ( SAL_CALL ListenerT::*N
   @see OInterfaceIteratorHelper
   @see OInterfaceContainerHelper
  */
-template< class key , class hashImpl , class equalImpl >
+template< class key , class hashImpl , class equalImpl = std::equal_to<key> >
 class OMultiTypeInterfaceContainerHelperVar
 {
 public:

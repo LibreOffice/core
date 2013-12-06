@@ -20,8 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 
-#include <functional>
-
 #include <uno/lbnames.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -85,8 +83,7 @@ struct PropHashType_Impl
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
     <
         sal_Int32,
-        PropHashType_Impl,
-        std::equal_to< sal_Int32 >
+        PropHashType_Impl
     > OPropertyListenerContainerHelper;
 
 
