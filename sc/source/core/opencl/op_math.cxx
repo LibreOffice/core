@@ -963,19 +963,36 @@ void OpArcCosHyp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0=
-        dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
-    ss << "    int buffer_len = " << tmpCurDVR0->GetArrayLength()<< ";\n";
-    ss << "    if((gid0)>=buffer_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n";
-    ss << "    else \n    ";
+    assert(tmpCur0);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur0->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR0=
+                dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+#ifdef ISNAN
+            ss << "    int buffer_len = "<<tmpCurDVR0->GetArrayLength()<<";\n";
+            ss << "    if((gid0)>=buffer_len || isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+            ss << "        tmp = " << GetBottom() << ";\n";
+            ss << "    else \n    ";
 #endif
-    ss << "    tmp = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-    ss << "    return acosh(tmp);\n";
+            ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+        }
+        else if(tmpCur0->GetType() == formula::svDouble)
+        {
+            ss << "    tmp = " << tmpCur0->GetDouble() << ";\n";
+        }
+    }
+    else
+    {
+        ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+
+    ss << "    return  log( tmp + pow( (pown(tmp, 2) - 1.0), 0.5));\n";
     ss << "}";
 }
 void OpTan::GenSlidingWindowFunction(std::stringstream &ss,
