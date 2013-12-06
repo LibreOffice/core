@@ -60,7 +60,7 @@ End
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
 #ifdef WNT
-    Name = EXENAME(pyuno/python);
+    Name = EXENAME(python);
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 #else
