@@ -197,12 +197,16 @@ public:
     virtual std::string BinFuncName(void) const { return "Gauss"; }
 };
 
-class OpGeoMean: public Normal
+class OpGeoMean: public CheckVariables
 {
 public:
+    OpGeoMean(void): CheckVariables(), mNeedReductionKernel(true) {}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "GeoMean"; }
+    bool NeedReductionKernel(void) const { return mNeedReductionKernel; }
+protected:
+    bool mNeedReductionKernel;
 };
 
 class OpHarMean: public Normal

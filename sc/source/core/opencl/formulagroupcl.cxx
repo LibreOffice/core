@@ -1450,6 +1450,67 @@ public:
         {
             i += (*it)->Marshal(k, argno + i, nVectorWidth, pProgram);
         }
+        if (OpGeoMean *OpSumCodeGen = dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
+        {
+            // Obtain cl context
+            KernelEnv kEnv;
+            OpenclDevice::setKernelEnv(&kEnv);
+            cl_int err;
+            DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
+                dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *>
+                (mvSubArguments[0].get());
+            cl_mem mpClmem2;
+
+            if (OpSumCodeGen->NeedReductionKernel())
+            {
+                assert(slidingArgPtr);
+                std::vector<cl_mem> vclmem;
+                for (SubArgumentsType::iterator it = mvSubArguments.begin(),
+                        e= mvSubArguments.end(); it!=e; ++it)
+                {
+                    if (VectorRef *VR = dynamic_cast<VectorRef *>(it->get()))
+                        vclmem.push_back(VR->GetCLBuffer());
+                    else
+                        vclmem.push_back(NULL);
+                }
+                mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
+                        sizeof(double)*nVectorWidth, NULL, &err);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                std::string kernelName = "GeoMean_reduction";
+                cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
+                if (err != CL_SUCCESS)
+                    throw OpenCLError(err);
+                    // set kernel arg of reduction kernel
+                for (size_t j=0; j< vclmem.size(); j++){
+                    err = clSetKernelArg(redKernel, j,
+                            vclmem[j]?sizeof(cl_mem):sizeof(double),
+                            (void *)&vclmem[j]);
+                    if (CL_SUCCESS != err)
+                        throw OpenCLError(err);
+                }
+                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void *)&mpClmem2);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                // set work group size and execute
+                size_t global_work_size[] = {256, (size_t)nVectorWidth };
+                size_t local_work_size[] = {256, 1};
+                err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
+                        global_work_size, local_work_size, 0, NULL, NULL);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+                err = clFinish(kEnv.mpkCmdQueue);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+
+                 // Pass mpClmem2 to the "real" kernel
+                err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&mpClmem2);
+                if (CL_SUCCESS != err)
+                    throw OpenCLError(err);
+            }
+         }
         if (OpSumIfs *OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
             // Obtain cl context
