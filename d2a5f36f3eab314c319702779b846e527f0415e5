@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///Is\u003d",
+        "filename": "i18npool/inc/xdictionary.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-06T18:42:57Z",
+      "side": 1,
+      "message": "Naming defines here with prefix SAL_RTL_... is confusing, this i18npool module is not sal/rtl/...\n\nFurthermore, since the defines are only used in one .cxx they don\u0027t need to be in the header file, defining them in the .cxx local to where they are used would be sufficient.\n\nBut, they are not needed at all, see comment in .cxx and overall review.",
+      "revId": "d2a5f36f3eab314c319702779b846e527f0415e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///Io\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-06T18:42:57Z",
+      "side": 1,
+      "message": "This code is executed only if len\u003d\u003d0 already (containing if-block), no need to repeat the check here.",
+      "revId": "d2a5f36f3eab314c319702779b846e527f0415e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///Ik\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-06T18:42:57Z",
+      "side": 1,
+      "message": "But to the real problem: this works only by accident ;-) with the sample data because the surrogate occurs at the end of the string.\n\nWordBreakCache::wordboundary stores the boundaries in utf16 positions, decrementing the position here means the boundary will be in between the two utf16 characters of the surrogate, the short sample data illustrates, with\n\n text \u003d {0x6a35, 0xd867, 0xdedb, 0x0}\n\nit will be\n\n rCache.wordboundary[0] \u003d 0\n rCache.wordboundary[1] \u003d 2\n rCache.wordboundary[2] \u003d 3\n rCache.wordboundary[3] \u003d 4\n\nwhere previously it was\n\n rCache.wordboundary[0] \u003d 0\n rCache.wordboundary[1] \u003d 3\n rCache.wordboundary[2] \u003d 4",
+      "revId": "d2a5f36f3eab314c319702779b846e527f0415e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
