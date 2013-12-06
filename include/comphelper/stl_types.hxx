@@ -228,14 +228,6 @@ OutputIter intersperse(
 }
 //... namespace comphelper ................................................
 
-//==================================================================
-// consistently defining stl-types
-//==================================================================
-
-#define DECLARE_STL_ITERATORS(classname)                            \
-    typedef classname::iterator         classname##Iterator;        \
-    typedef classname::const_iterator   Const##classname##Iterator  \
-
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

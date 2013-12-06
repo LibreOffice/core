@@ -26,7 +26,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <list>
-#include <comphelper/stl_types.hxx>
 
 namespace dbaui
 {
@@ -48,7 +47,6 @@ public:
 };
 
 typedef ::std::list< OTableIndex >  TableIndexList;
-DECLARE_STL_ITERATORS(TableIndexList);
 
 // OTableInfo
 class ODbaseIndexDialog;
@@ -69,7 +67,6 @@ public:
 };
 
 typedef ::std::list< OTableInfo >   TableInfoList;
-DECLARE_STL_ITERATORS(TableInfoList);
 
 // IndexDialog
 class ODbaseIndexDialog : public ModalDialog
@@ -110,7 +107,7 @@ protected:
 
     void        Init();
     void        SetCtrls();
-    sal_Bool    GetTable(const OUString& rName, TableInfoListIterator& _rPosition);
+    sal_Bool    GetTable(const OUString& rName, TableInfoList::iterator& _rPosition);
 
     OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
     void        implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);

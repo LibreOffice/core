@@ -85,7 +85,7 @@ ODbaseIndexDialog::~ODbaseIndexDialog()
     DBG_DTOR(ODbaseIndexDialog,NULL);
 }
 
-sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoListIterator& _rPosition)
+sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator& _rPosition)
 {
     for (   _rPosition = m_aTableInfoList.begin();
             _rPosition != m_aTableInfoList.end();
@@ -121,7 +121,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
 
     sal_Int32 nPos = 0;
 
-    TableIndexListIterator aSearch;
+    TableIndexList::iterator aSearch;
     for (   aSearch = _rList.begin();
             aSearch != _rList.end();
             ++aSearch, ++nPos
@@ -161,7 +161,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
     OTableIndex aReturn;
 
     // does the table exist ?
-    TableInfoListIterator aTablePos;
+    TableInfoList::iterator aTablePos;
     if (!GetTable(_rTableName, aTablePos))
         return aReturn;
 
@@ -170,7 +170,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, co
 
 void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex)
 {
-    TableInfoListIterator aTablePos;
+    TableInfoList::iterator aTablePos;
     if (!GetTable(_rTableName, aTablePos))
         return;
 
@@ -181,7 +181,7 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 {
     // let all tables write their INF file
 
-    for (   ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
+    for (   TableInfoList::const_iterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
             ++aLoop
         )
@@ -246,13 +246,13 @@ IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, /*NOTINTERESTEDIN*/
 IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 {
     // search the table
-    TableInfoListIterator aTablePos;
+    TableInfoList::iterator aTablePos;
     if (!GetTable(pComboBox->GetText(), aTablePos))
         return 0L;
 
     // fill the listbox for the indexes
     aLB_TableIndexes.Clear();
-    for (   ConstTableIndexListIterator aLoop = aTablePos->aIndexList.begin();
+    for (   TableIndexList::const_iterator aLoop = aTablePos->aIndexList.begin();
             aLoop != aTablePos->aIndexList.end();
             ++aLoop
         )
@@ -388,7 +388,7 @@ void ODbaseIndexDialog::Init()
 void ODbaseIndexDialog::SetCtrls()
 {
     // ComboBox tables
-    for (   ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
+    for (   TableInfoList::const_iterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
             ++aLoop
         )
@@ -401,7 +401,7 @@ void ODbaseIndexDialog::SetCtrls()
         aCB_Tables.SetText( rTabInfo.aTableName );
 
         // build ListBox of the table indices
-        for (   ConstTableIndexListIterator aIndex = rTabInfo.aIndexList.begin();
+        for (   TableIndexList::const_iterator aIndex = rTabInfo.aIndexList.begin();
                 aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
             )
@@ -412,7 +412,7 @@ void ODbaseIndexDialog::SetCtrls()
     }
 
     // ListBox of the free indices
-    for (   ConstTableIndexListIterator aFree = m_aFreeIndexList.begin();
+    for (   TableIndexList::const_iterator aFree = m_aFreeIndexList.begin();
             aFree != m_aFreeIndexList.end();
             ++aFree
         )
@@ -467,7 +467,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 
     // now add all saved indices
     sal_uInt16 nPos = 0;
-    for (   ConstTableIndexListIterator aIndex = aIndexList.begin();
+    for (   TableIndexList::const_iterator aIndex = aIndexList.begin();
             aIndex != aIndexList.end();
             ++aIndex, ++nPos
         )
