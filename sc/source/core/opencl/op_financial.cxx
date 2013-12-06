@@ -1648,54 +1648,64 @@ void MIRR::GenSlidingWindowFunction(
     ss << "}";
 }
 
-void OpEffective::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+void OpEffective::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
+    ss << "_" << BinFuncName() << "(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "double tmp = " << GetBottom() <<";\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "double nominal = " << GetBottom() <<";\n\t";
-    ss << "double period = "<< GetBottom() <<";\n\t";
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-    ss << "int buffer_nominal_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
-    ss << "int buffer_period_len = ";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
-    ss << "if((gid0)>=buffer_nominal_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "nominal = 0;\n\telse \n\t\t";
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    int gid0 = get_global_id(0);\n\t";
+    ss << "    double arg0 = " << GetBottom() << ";\n";
+    ss << "    double arg1 = " << GetBottom() << ";\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
-    ss << "nominal = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-#ifdef ISNAN
-    ss << "if((gid0)>=buffer_period_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "period = 0;\n\telse \n\t\t";
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    {\n";
 #endif
-    ss << "period = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-    ss << "tmp = pow(1.0 + nominal / period, period)-1.0;\t";
-    ss << "\n\treturn tmp;\n";
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg" << i << " = 0;\n";
+            ss << "        else\n";
+            ss << "            arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+            ss << "    }\n";
+        }
+        else
+        {
+            ss << "    arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+        }
+#else
+        ss << "    arg" << i;
+        ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+#endif
+    }
+    ss << "    tmp = pow(1.0 + arg0 * pow(arg1, -1), arg1)-1.0;\n";
+    ss << "    return tmp;\n";
     ss << "}";
 }
 
