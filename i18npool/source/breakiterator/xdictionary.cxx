@@ -387,9 +387,21 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
                 if (u_isWhitespace(ch))
                     i--;
             }
+
             boundary.endPos = boundary.startPos;
-            rText.iterateCodePoints(&boundary.endPos, aCache.wordboundary[i]);
-            rText.iterateCodePoints(&boundary.startPos, aCache.wordboundary[i-1]);
+            sal_Int32 counter = aCache.wordboundary[i];
+            while (counter < aCache.wordboundary[i])
+            {
+                 rText.iterateCodePoints(&counter, 1);
+            }
+            boundary.endPos += counter;
+            counter = aCache.wordboundary[i-1];
+            while (counter < aCache.wordboundary[i-1])
+            {
+                 rText.iterateCodePoints(&counter, 1);
+            }
+            boundary.startPos += counter;
+
         } else {
             boundary.startPos = anyPos;
             if (anyPos < len) rText.iterateCodePoints(&anyPos, 1);

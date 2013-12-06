@@ -2093,6 +2093,17 @@ DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testChineseSymbolText, "testChineseSymbolText.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    // string :: 樵樰樗槾褶褙
+    static sal_Unicode const utf16[] = {0x6A35, 0x6A30, 0x6A17, 0x69FE, 0x8936, 0x8919};
+    OUString utfString(utf16, SAL_N_ELEMENTS(utf16));
+    getRun(getParagraph(1), 1, utfString);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
