@@ -280,7 +280,7 @@ static float GetSwapFloat( SvStream& rSt )
             /// Render LineCap, like the start or end arrow of a polygon.
             /// @return how much we should shorten the original polygon.
             double EMFPPlusDrawLineCap(const ::basegfx::B2DPolygon& rPolygon, double fPolyLength,
-                    const ::basegfx::B2DPolyPolygon& rLineCap, bool bStart,
+                    const ::basegfx::B2DPolyPolygon& rLineCap, bool isFilled, bool bStart,
                     const com::sun::star::rendering::StrokeAttributes& rAttributes,
                     const ActionFactoryParameters& rParms, OutDevState& rState);
 
