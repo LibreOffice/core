@@ -2279,14 +2279,38 @@ void ChartExport::exportDataLabels(
         bool showNumberInPercent = false;
 
         sal_Int32 nElem;
+
+
+        uno::Reference< beans::XPropertySet > xPropSet;
+        nElem = 0;
+        if(nSeriesLength != 0)
+        {
+           try
+           {
+               xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
+                          xSeries, nElem, getModel() );
+            }
+            catch( const uno::Exception & rEx )
+            {
+                 SAL_WARN("oox", "Exception caught during Export of data label: " << rEx.Message );
+            }
+        }
+
+
+
+        if( xPropSet.is() )
+        {
+            namespace cssc2 = ::com::sun::star::chart2;
+            cssc2::DataPointLabel aTempLabel;
+            if (GetProperty( xPropSet, "Label"))
+               mAny >>= aTempLabel;
+
         for( nElem = 0; nElem < nSeriesLength; ++nElem)
         {
-            uno::Reference< beans::XPropertySet > xPropSet;
-
             try
             {
                 xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
-                        xSeries, nElem, getModel() );
+                xSeries, nElem, getModel() );
             }
             catch( const uno::Exception & rEx )
             {
@@ -2322,39 +2346,57 @@ void ChartExport::exportDataLabels(
                        case csscd::AVOID_OVERLAP: aPlacement = "bestFit";  break;
                    }
 
-                   if(aLabel.ShowLegendSymbol || aLabel.ShowNumber || aLabel.ShowCategoryName || aLabel.ShowNumberInPercent)
-                   {
+
+              if (aLabel.ShowLegendSymbol)
+              {
+                 showLegendSymbol = true;
+              }
+
+             if(aLabel.ShowNumber)
+             {
+                 showNumber = true;
+              }
+
+              if(aLabel.ShowCategoryName)
+              {
+                  showCategoryName =  true;
+              }
+
+              if(aLabel.ShowNumberInPercent)
+              {
+                   showNumberInPercent = true;
+              }
+
+              if(aTempLabel.ShowLegendSymbol != aLabel.ShowLegendSymbol || aTempLabel.ShowNumber!= aLabel.ShowNumber ||
+                       aTempLabel.ShowCategoryName != aLabel.ShowCategoryName || aTempLabel.ShowNumberInPercent != aLabel.ShowNumberInPercent)
+              {
                        pFS->startElement( FSNS( XML_c, XML_dLbl ), FSEND);
                        pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
                        pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
 
-                       pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val, aLabel.ShowLegendSymbol ? "1": "0", FSEND);
-                       if (aLabel.ShowLegendSymbol)
+                       if(aTempLabel.ShowLegendSymbol != aLabel.ShowLegendSymbol)
                        {
-                           showLegendSymbol = true;
+                           pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val, aLabel.ShowLegendSymbol ? "1": "0", FSEND);
+                        }
+
+                       if (aTempLabel.ShowNumber!= aLabel.ShowNumber)
+                       {
+                           pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,aLabel.ShowNumber ? "1": "0", FSEND);
                        }
 
-                       pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,aLabel.ShowNumber ? "1": "0", FSEND);
-                       if(aLabel.ShowNumber)
-                       {
-                           showNumber = true;
-                       }
 
-                       pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val, aLabel.ShowCategoryName ? "1": "0", FSEND);
-                       if(aLabel.ShowCategoryName)
+                       if(aTempLabel.ShowCategoryName != aLabel.ShowCategoryName)
                        {
-                           showCategoryName =  true;
+                           pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val, aLabel.ShowCategoryName ? "1": "0", FSEND);
                        }
-
                        // MSO somehow assumes series name to be on (=displayed) by default.
                        // Let's put false here and switch it off then, since we have no UI means
                        // in LibO to toggle it on anyway
                        pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
 
-                       pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,aLabel.ShowNumberInPercent ? "1": "0", FSEND);
-                       if(aLabel.ShowNumberInPercent)
+                       if(aTempLabel.ShowNumberInPercent != aLabel.ShowNumberInPercent)
                        {
-                           showNumberInPercent = true;
+                           pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,aLabel.ShowNumberInPercent ? "1": "0", FSEND);
                        }
 
                        if (GetProperty( xPropSet, "LabelSeparator"))
@@ -2366,9 +2408,8 @@ void ChartExport::exportDataLabels(
                        }
                        pFS->endElement( FSNS( XML_c, XML_dLbl ));
                    }
-
-               }
             }
+        }
         }
 
         pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val, showLegendSymbol ? "1": "0", FSEND);
@@ -2956,3 +2997,4 @@ sal_Bool ChartExport::isDeep3dChart()
 }// oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
