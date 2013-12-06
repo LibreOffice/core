@@ -9,12 +9,12 @@
 #
 
 import argparse
-import inspect
 import os
 import os.path
 import shutil
 import re
 import sys
+
 
 class GbuildParserState:
     def __init__(self):
@@ -23,25 +23,35 @@ class GbuildParserState:
         self.cxxobjects = []
         self.linked_libs = []
 
+
 class GbuildLinkTarget:
     def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
-        (self.name, self.location, self.include, self.defs, self.cxxobjects, self.linked_libs) = (name, location, include, defs, cxxobjects, linked_libs)
+        (self.name, self.location, self.include, self.defs, self.cxxobjects, self.linked_libs) = (
+        name, location, include, defs, cxxobjects, linked_libs)
+
     def short_name(self):
         return self.name
+
     def __str__(self):
-        return '%s at %s with include path: %s, defines %s, objects: %s and linked libs: %s' % (self.short_name(), self.location, self.include, self.defs, self.cxxobjects, self.linked_libs)
+        return '%s at %s with include path: %s, defines %s, objects: %s and linked libs: %s' % (
+        self.short_name(), self.location, self.include, self.defs, self.cxxobjects, self.linked_libs)
+
 
 class GbuildLib(GbuildLinkTarget):
     def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, defs, cxxobjects, linked_libs)
+
     def short_name(self):
         return 'Library %s' % self.name
+
 
 class GbuildExe(GbuildLinkTarget):
     def __init__(self, name, location, include, defs, cxxobjects, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, defs, cxxobjects, linked_libs)
+
     def short_name(self):
         return 'Executable %s' % self.name
+
 
 class GbuildParser:
     makecmdpattern = re.compile('^MAKE_COMMAND := (.*)')
@@ -54,8 +64,10 @@ class GbuildParser:
     defspattern = re.compile('# DEFS := (.*)')
     cxxpattern = re.compile('# CXXOBJECTS := (.*)')
     linkedlibspattern = re.compile('# LINKED_LIBS := (.*)')
+
     def __init__(self):
         (self.makecmd, self.srcdir, self.builddir, self.instdir, self.libs, self.exes) = ('', '', '', '', [], [])
+
     def parse(self, gbuildstate):
         state = GbuildParserState()
         for line in gbuildstate:
@@ -83,21 +95,26 @@ class GbuildParser:
                 continue
             libmatch = GbuildParser.libpattern.match(line)
             if libmatch:
-                self.libs.append(GbuildLib(libmatch.group(2), libmatch.group(1), state.include, state.defs, state.cxxobjects, state.linked_libs))
+                self.libs.append(
+                    GbuildLib(libmatch.group(2), libmatch.group(1), state.include, state.defs, state.cxxobjects,
+                              state.linked_libs))
                 state = GbuildParserState()
                 continue
             exematch = GbuildParser.exepattern.match(line)
             if exematch:
-                self.exes.append(GbuildExe(exematch.group(2), exematch.group(1), state.include, state.defs, state.cxxobjects, state.linked_libs))
+                self.exes.append(
+                    GbuildExe(exematch.group(2), exematch.group(1), state.include, state.defs, state.cxxobjects,
+                              state.linked_libs))
                 state = GbuildParserState()
                 continue
             includematch = GbuildParser.includepattern.match(line)
             if includematch:
-                state.include = [includeswitch.strip()[2:] for includeswitch in includematch.group(1).split(' ') if len(includeswitch) > 2]
+                state.include = [includeswitch.strip()[2:] for includeswitch in includematch.group(1).split(' ') if
+                                 len(includeswitch) > 2]
                 continue
             defsmatch = GbuildParser.defspattern.match(line)
             if defsmatch:
-                alldefs = [defswitch.strip()[2:] for defswitch in defsmatch.group(1).split(' ') if len(defswitch) >2]
+                alldefs = [defswitch.strip()[2:] for defswitch in defsmatch.group(1).split(' ') if len(defswitch) > 2]
                 for d in alldefs:
                     defparts = d.split('=')
                     if len(defparts) == 1:
@@ -115,15 +132,19 @@ class GbuildParser:
             #we could match a lot of other stuff here if needed for integration rpaths etc.
         return self
 
+
 class IdeIntegrationGenerator:
     def __init__(self, gbuildparser):
         self.gbuildparser = gbuildparser
+
     def emit(self):
         pass
+
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
+
     def emit(self):
         print(self.gbuildparser.srcdir)
         print(self.gbuildparser.builddir)
@@ -132,20 +153,25 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
         for exe in self.gbuildparser.exes:
             print(exe)
 
+
 class KdevelopIntegrationGenerator(IdeIntegrationGenerator):
     def encode_int(self, i):
         temp = '%08x' % i
         return '\\x%s\\x%s\\x%s\\x%s' % (temp[0:2], temp[2:4], temp[4:6], temp[6:8])
+
     def encode_string(self, string):
-        result = self.encode_int(len(string)*2)
+        result = self.encode_int(len(string) * 2)
         for c in string.encode('utf-16-be'):
-            if c in range(32,126):
+            if c in range(32, 126):
                 result += chr(c)
             else:
                 result += '\\x%02x' % c
         return result
+
     def generate_buildsystemconfigtool(self, configid, tool, args, exe, typenr):
-        return KdevelopIntegrationGenerator.buildsystemconfigtooltemplate % { 'configid' : configid, 'tool' : tool, 'args' : args, 'exe' : exe, 'typenr' : typenr }
+        return KdevelopIntegrationGenerator.buildsystemconfigtooltemplate % {'configid': configid, 'tool': tool,
+                                                                             'args': args, 'exe': exe, 'typenr': typenr}
+
     buildsystemconfigtooltemplate = """
 [CustomBuildSystem][BuildConfig%(configid)d][Tool%(tool)s]
 Arguments=%(args)s
@@ -155,32 +181,44 @@ Executable=%(exe)s
 Type=%(typenr)d
 
 """
-    def generate_buildsystemconfig(self, configid, moduledir, builddir, title, buildparms = ''):
-        result = KdevelopIntegrationGenerator.buildsystemconfigtemplate % { 'configid' : configid, 'builddir' : builddir, 'title' : title }
+
+    def generate_buildsystemconfig(self, configid, moduledir, builddir, title, buildparms=''):
+        result = KdevelopIntegrationGenerator.buildsystemconfigtemplate % {'configid': configid, 'builddir': builddir,
+                                                                           'title': title}
         pathid = 0
-        result += self.generate_buildsystemconfigtool(configid, 'Clean', 'clean %s' % buildparms, self.gbuildparser.makecmd, 3)
-        result += self.generate_buildsystemconfigtool(configid, 'Build', 'all %s' % buildparms, self.gbuildparser.makecmd, 0)
+        result += self.generate_buildsystemconfigtool(configid, 'Clean', 'clean %s' % buildparms,
+                                                      self.gbuildparser.makecmd, 3)
+        result += self.generate_buildsystemconfigtool(configid, 'Build', 'all %s' % buildparms,
+                                                      self.gbuildparser.makecmd, 0)
         return result
+
     buildsystemconfigtemplate = """
 [CustomBuildSystem][BuildConfig%(configid)d]
 BuildDir=file://%(builddir)s
 Title=%(title)s
 
 """
+
     def generate_buildsystem(self, moduledir):
-        result = KdevelopIntegrationGenerator.buildsystemtemplate % { 'defaultconfigid' : 0 }
+        result = KdevelopIntegrationGenerator.buildsystemtemplate % {'defaultconfigid': 0}
         result += self.generate_buildsystemconfig(0, moduledir, moduledir, 'Module Build -- Release')
         result += self.generate_buildsystemconfig(1, moduledir, self.gbuildparser.builddir, 'Full Build -- Release')
         result += self.generate_buildsystemconfig(2, moduledir, moduledir, 'Module Build -- Debug', 'debug=T')
-        result += self.generate_buildsystemconfig(3, moduledir, self.gbuildparser.builddir, 'Full Build -- Debug', 'debug=T')
+        result += self.generate_buildsystemconfig(3, moduledir, self.gbuildparser.builddir, 'Full Build -- Debug',
+                                                  'debug=T')
         return result
+
     buildsystemtemplate = """
 [CustomBuildSystem]
 CurrentConfiguration=BuildConfig%(defaultconfigid)d
 
 """
+
     def generate_launch(self, launchid, launchname, executablepath, args, workdir):
-        return KdevelopIntegrationGenerator.launchtemplate % { 'launchid' : launchid, 'launchname' : launchname, 'executablepath' : executablepath, 'args' : args, 'workdir' : workdir }
+        return KdevelopIntegrationGenerator.launchtemplate % {'launchid': launchid, 'launchname': launchname,
+                                                              'executablepath': executablepath, 'args': args,
+                                                              'workdir': workdir}
+
     launchtemplate = """
 [Launch][Launch Configuration %(launchid)d]
 Configured Launch Modes=execute
@@ -201,22 +239,34 @@ Working Directory=file://%(workdir)s
 isExecutable=true
 
 """
+
     def generate_launches(self, moduledir):
         launches = ','.join(['Launch Configuration %d' % i for i in range(7)])
-        result = KdevelopIntegrationGenerator.launchestemplate % { 'launches' : launches }
-        result += self.generate_launch(0, 'Local tests -- quick tests (unitcheck)', self.gbuildparser.makecmd, 'unitcheck', moduledir) 
-        result += self.generate_launch(1, 'Local tests -- slow tests (unitcheck, slowcheck)', self.gbuildparser.makecmd, 'unitcheck slowcheck', moduledir) 
-        result += self.generate_launch(2, 'Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)', self.gbuildparser.makecmd, 'unitcheck slowcheck subsequentcheck', moduledir) 
-        result += self.generate_launch(3, 'Global tests -- quick tests (unitcheck)', self.gbuildparser.makecmd, 'unitcheck', self.gbuildparser.builddir)
-        result += self.generate_launch(4, 'Global tests -- slow tests (unitcheck, slowcheck)', self.gbuildparser.makecmd, 'unitcheck slowcheck', self.gbuildparser.builddir) 
-        result += self.generate_launch(5, 'Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)', self.gbuildparser.makecmd, 'unitcheck slowcheck subsequentcheck', self.gbuildparser.builddir) 
-        result += self.generate_launch(6, 'Run LibreOffice', os.path.join(self.gbuildparser.instdir, 'program/soffice.bin'), '', self.gbuildparser.instdir)
+        result = KdevelopIntegrationGenerator.launchestemplate % {'launches': launches}
+        result += self.generate_launch(0, 'Local tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
+                                       'unitcheck', moduledir)
+        result += self.generate_launch(1, 'Local tests -- slow tests (unitcheck, slowcheck)', self.gbuildparser.makecmd,
+                                       'unitcheck slowcheck', moduledir)
+        result += self.generate_launch(2, 'Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck subsequentcheck', moduledir)
+        result += self.generate_launch(3, 'Global tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
+                                       'unitcheck', self.gbuildparser.builddir)
+        result += self.generate_launch(4, 'Global tests -- slow tests (unitcheck, slowcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck', self.gbuildparser.builddir)
+        result += self.generate_launch(5, 'Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck subsequentcheck',
+                                       self.gbuildparser.builddir)
+        result += self.generate_launch(6, 'Run LibreOffice',
+                                       os.path.join(self.gbuildparser.instdir, 'program/soffice.bin'), '',
+                                       self.gbuildparser.instdir)
         return result
+
     launchestemplate = """
 [Launch]
 Launch Configurations=%(launches)s
 
 """
+
     def write_modulebeef(self, moduledir, modulename):
         beefdir = os.path.join(moduledir, '.kdev4')
         os.mkdir(beefdir)
@@ -224,10 +274,14 @@ Launch Configurations=%(launches)s
         beeffile.write(self.generate_buildsystem(moduledir))
         beeffile.write(self.generate_launches(moduledir))
         beeffile.close()
+
     def write_modulestub(self, moduledir, modulename):
         stubfile = open(os.path.join(moduledir, 'Module_%s.kdev4' % modulename), 'w')
-        stubfile.write(KdevelopIntegrationGenerator.modulestubtemplate % { 'modulename' : modulename , 'builditem' : self.encode_string('Module_%s' % modulename)})
+        stubfile.write(KdevelopIntegrationGenerator.modulestubtemplate % {'modulename': modulename,
+                                                                          'builditem': self.encode_string(
+                                                                              'Module_%s' % modulename)})
         stubfile.close()
+
     modulestubtemplate = """
 [Buildset]
 BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01%(builditem)s)
@@ -246,6 +300,7 @@ VersionControl=kdevgit
             include |= set(target.include)
         includedirfile.write('\n'.join(include))
         includedirfile.close()
+
     def __init__(self, gbuildparser):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
         self.target_by_location = {}
@@ -261,7 +316,9 @@ VersionControl=kdevgit
                 self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
             if len(self.target_by_path[path]) > 1:
-                print('fdo#70422: multiple target use dir %s: %s' % (path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
+                print('fdo#70422: multiple target use dir %s: %s' % (
+                path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
+
     def emit(self):
         for path in self.target_by_path:
             self.write_includepaths(path)
@@ -276,6 +333,7 @@ VersionControl=kdevgit
             modulename = os.path.split(location)[1]
             self.write_modulestub(location, modulename)
             self.write_modulebeef(location, modulename)
+
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
     def indent(self, file, level):
@@ -299,9 +357,9 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         file.write('{')
         file.write('\n')
         for key in sorted(dict.keys()):
-            self.indent(file, indent+1)
+            self.indent(file, indent + 1)
             file.write('%s = ' % key)
-            self.write_object(dict[key], file, indent+1)
+            self.write_object(dict[key], file, indent + 1)
             file.write(';\n')
         self.indent(file, indent)
         file.write('}')
@@ -318,80 +376,81 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             return 'com.apple.product-type.something'
 
     counter = 0
+
     def generate_id(self):
         XcodeIntegrationGenerator.counter = XcodeIntegrationGenerator.counter + 1
         return str('X%07x' % XcodeIntegrationGenerator.counter)
 
     def generate_build_phases(self, modulename):
-        result = [ self.sourcesBuildPhaseId ]
+        result = [self.sourcesBuildPhaseId]
         return result
 
     def generate_root_object(self, modulename):
-        result = { 'isa':'PBXProject',
-                   'attributes':{ 'LastUpgradeCheck':'0500',
-                                  'ORGANIZATIONNAME':'LibreOffice' },
-                   'buildConfigurationList':self.generate_id(),
-                   'compatibilityVersion':'Xcode 3.2',
-                   'hasScannedForEncodings':0,
-                   'knownRegions':['en'],
-                   'mainGroup':self.mainGroupId,
-                   'productRefGroup':self.productRefGroupId,
-                   'projectDirPath':'',
-                   'projectRoot':'',
-                   'targets':self.targetId }
+        result = {'isa': 'PBXProject',
+                  'attributes': {'LastUpgradeCheck': '0500',
+                                 'ORGANIZATIONNAME': 'LibreOffice'},
+                  'buildConfigurationList': self.generate_id(),
+                  'compatibilityVersion': 'Xcode 3.2',
+                  'hasScannedForEncodings': 0,
+                  'knownRegions': ['en'],
+                  'mainGroup': self.mainGroupId,
+                  'productRefGroup': self.productRefGroupId,
+                  'projectDirPath': '',
+                  'projectRoot': '',
+                  'targets': self.targetId}
         return result
 
     def generate_target(self, modulename):
-        result = { 'isa':'PBXNativeTarget',
-                   'buildConfigurationList':self.generate_id(),
-                   'buildPhases':self.generate_build_phases(modulename),
-                   'buildRules':[],
-                   'dependencies':[],
-                   'name':modulename,
-                   'productName':modulename,
-                   'productReference':self.productReferenceId,
-                   'productType':self.get_product_type(modulename) }
+        result = {'isa': 'PBXNativeTarget',
+                  'buildConfigurationList': self.generate_id(),
+                  'buildPhases': self.generate_build_phases(modulename),
+                  'buildRules': [],
+                  'dependencies': [],
+                  'name': modulename,
+                  'productName': modulename,
+                  'productReference': self.productReferenceId,
+                  'productType': self.get_product_type(modulename)}
         return result
 
     def generate_main_group(self, modulename):
-        result = { 'isa':'PBXGroup',
-                   'children':[ self.subMainGroupId, self.productGroupId ],
-                   'sourceTree':'<group>' }
-        return result;
+        result = {'isa': 'PBXGroup',
+                  'children': [self.subMainGroupId, self.productGroupId],
+                  'sourceTree': '<group>'}
+        return result
 
     def generate_sub_main_children(self, modulename):
         return {}
 
     def generate_sub_main_group(self, modulename):
-        result = { 'isa':'PBXGroup',
-                   'children':self.generate_sub_main_children(modulename),
-                   'path':modulename,
-                   'sourceTree':'<group>' }
-        return result;
+        result = {'isa': 'PBXGroup',
+                  'children': self.generate_sub_main_children(modulename),
+                  'path': modulename,
+                  'sourceTree': '<group>'}
+        return result
 
     def generate_product_group(self, modulename):
-        result = { 'isa':'PBXGroup',
-                   'children':[ self.productReferenceId ],
-                   'name':'Products',
-                   'sourceTree':'<group>' }
-        return result;
+        result = {'isa': 'PBXGroup',
+                  'children': [self.productReferenceId],
+                  'name': 'Products',
+                  'sourceTree': '<group>'}
+        return result
 
     def build_source_list(self, modulename):
-        self.sourceList = { }
-        self.sourceRefList = { }
+        self.sourceList = {}
+        self.sourceRefList = {}
         for i in self.gbuildparser.libs[modulename].cxxobjects:
             ref = self.generate_id()
             self.sourceList[self.generate_id()] = ref
-            self.sourceRefList[ref] = { 'lastKnownFileType':'sourcecode.cpp.cpp',
-                                        'path':i + '.cxx',
-                                        'sourceTree':'<group>' }
+            self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
+                                       'path': i + '.cxx',
+                                       'sourceTree': '<group>'}
 
     def generate_sources_build_phase(self, modulename):
-        result = { 'isa':'PBXSourcesBuildPhase',
-                   'buildActionMask':2147483647,
-                   'files':self.sourceList.keys(),
-                   'runOnlyForDeploymentPostprocessing':0 }
-        return result;
+        result = {'isa': 'PBXSourcesBuildPhase',
+                  'buildActionMask': 2147483647,
+                  'files': self.sourceList.keys(),
+                  'runOnlyForDeploymentPostprocessing': 0}
+        return result
 
     def generate_project(self, modulename):
         self.rootObjectId = self.generate_id()
@@ -403,25 +462,25 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.targetId = self.generate_id()
         self.build_source_list(modulename)
         self.sourcesBuildPhaseId = self.generate_id()
-        objects = { self.rootObjectId:self.generate_root_object(modulename),
-                    self.targetId:self.generate_target(modulename),
-                    self.mainGroupId:self.generate_main_group(modulename),
-                    self.subMainGroupId:self.generate_sub_main_group(modulename),
-                    self.productGroupId:self.generate_product_group(modulename),
-                    self.sourcesBuildPhaseId:self.sources_build_phase(modulename)
-                    }
+        objects = {self.rootObjectId: self.generate_root_object(modulename),
+                   self.targetId: self.generate_target(modulename),
+                   self.mainGroupId: self.generate_main_group(modulename),
+                   self.subMainGroupId: self.generate_sub_main_group(modulename),
+                   self.productGroupId: self.generate_product_group(modulename),
+                   self.sourcesBuildPhaseId: self.generate_sources_build_phase(modulename)
+        }
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
-            objects[i] = { 'isa':'PBXBuildFile',
-                           'fileRef':ref }
-            objects[ref] = { 'isa':'PBXFileReference',
-                             'lastKnownFileType':self.sourceRefList[ref]['lastKnownFileType'],
-                             'path':self.sourceRefList[ref]['path'] }
-        project = { 'archiveVersion':1,
-                    'classes':{},
-                    'objectVersion':46,
-                    'objects':objects,
-                    'rootObject':self.rootObjectId }
+            objects[i] = {'isa': 'PBXBuildFile',
+                          'fileRef': ref}
+            objects[ref] = {'isa': 'PBXFileReference',
+                            'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
+                            'path': self.sourceRefList[ref]['path']}
+        project = {'archiveVersion': 1,
+                   'classes': {},
+                   'objectVersion': 46,
+                   'objects': objects,
+                   'rootObject': self.rootObjectId}
         return project
 
     # For some reverse-engineered documentation on the project.pbxproj format,
@@ -432,7 +491,8 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             os.mkdir(xcodeprojdir)
         except:
             pass
-        self.write_dict_to_plist(self.generate_project(modulename),open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
+        self.write_dict_to_plist(self.generate_project(modulename),
+                                 open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
 
     def __init__(self, gbuildparser):
         IdeIntegrationGenerator.__init__(self, gbuildparser)
@@ -447,13 +507,14 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             modulename = os.path.split(location)[1]
             self.write_xcodeproj(location, modulename)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
     parser.add_argument('--ide', dest='ide', required=True,
-        help='the IDE to generate project files for')
+                        help='the IDE to generate project files for')
     parser.add_argument('--input', dest='input', required=False,
-        help='the input file, not normally used, for debugging this script')
+                        help='the input file, not normally used, for debugging this script')
     args = parser.parse_args()
     paths = {}
     if args.input:
