@@ -35,12 +35,12 @@ void RRI::GenSlidingWindowFunction(
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "double tmp = " << GetBottom() <<";\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "double fv;\n\t";
-    ss << "double pv;\n\t";
-    ss << "double nper;\n\t";
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double fv;\n";
+    ss << "    double pv;\n";
+    ss << "    double nper;\n";
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
@@ -54,50 +54,50 @@ void RRI::GenSlidingWindowFunction(
     const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
     formula::SingleVectorRefToken *>(tmpCur2);
 
-    ss<< "int buffer_nper_len = ";
+    ss<< "    int buffer_nper_len = ";
     ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 
-    ss<< "int buffer_pv_len = ";
+    ss<< "    int buffer_pv_len = ";
     ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 
-    ss<< "int buffer_fv_len = ";
+    ss<< "    int buffer_fv_len = ";
     ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 #endif
 
 #ifdef ISNAN
-    ss<<"if(gid0>=buffer_nper_len || isNan(";
+    ss<<"    if(gid0>=buffer_nper_len || isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"nper = 0;\n\telse \n\t\t";
+    ss<<"))\n";
+    ss<<"        nper = 0;\n\telse \n";
 #endif
-    ss<<"nper = ";
+    ss<<"        nper = ";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
+    ss<<";\n";
 
 #ifdef ISNAN
-    ss<<"if(gid0>=buffer_pv_len || isNan(";
+    ss<<"    if(gid0>=buffer_pv_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"pv = 0;\n\telse \n\t\t";
+    ss<<"))\n";
+    ss<<"        pv = 0;\n\telse \n";
 #endif
-    ss<<"pv = ";
+    ss<<"        pv = ";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
+    ss<<";\n";
 
 #ifdef ISNAN
-    ss<<"if(gid0>=buffer_pv_len || isNan(";
+    ss<<"    if(gid0>=buffer_pv_len || isNan(";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"fv = 0;\n\telse \n\t\t";
+    ss<<"))\n";
+    ss<<"        fv = 0;\n\telse \n";
 #endif
-    ss<<"fv = ";
+    ss<<"        fv = ";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-    ss << "tmp = pow(fv/pv,1.0/nper)-1;\n\t;";
-    ss << "return tmp;\n";
+    ss<<";\n";
+    ss << "    tmp = pow(fv*pow(pv,-1),1.0*pow(nper,-1))-1;\n";
+    ss << "    return tmp;\n";
     ss << "}";
 }
 
