@@ -1400,6 +1400,447 @@ void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimensi
     pOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
+namespace {
+
+bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, OUString& rResult )
+{
+    // nStartPos has to point to opening quote
+
+    bool bRet = false;
+    const sal_Unicode cQuote = '\'';
+
+    if (rSource[nStartPos] == cQuote)
+    {
+        OUStringBuffer aBuffer;
+        sal_Int32 nPos = nStartPos + 1;
+        const sal_Int32 nLen = rSource.getLength();
+
+        while ( nPos < nLen )
+        {
+            const sal_Unicode cNext = rSource[nPos];
+            if ( cNext == cQuote )
+            {
+                if (nPos+1 < nLen && rSource[nPos+1] == cQuote)
+                {
+                    // double quote is used for an embedded quote
+                    aBuffer.append( cNext );    // append one quote
+                    ++nPos;                     // skip the next one
+                }
+                else
+                {
+                    // end of quoted string
+                    rResult = aBuffer.makeStringAndClear();
+                    rEndPos = nPos + 1;         // behind closing quote
+                    return true;
+                }
+            }
+            else
+                aBuffer.append( cNext );
+
+            ++nPos;
+        }
+        // no closing quote before the end of the string -> error (bRet still false)
+    }
+
+    return bRet;
+}
+
+struct ScGetPivotDataFunctionEntry
+{
+    const sal_Char*         pName;
+    sheet::GeneralFunction  eFunc;
+};
+
+bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sheet::GeneralFunction& rFunc )
+{
+    static const ScGetPivotDataFunctionEntry aFunctions[] =
+    {
+        // our names
+        { "Sum",        sheet::GeneralFunction_SUM       },
+        { "Count",      sheet::GeneralFunction_COUNT     },
+        { "Average",    sheet::GeneralFunction_AVERAGE   },
+        { "Max",        sheet::GeneralFunction_MAX       },
+        { "Min",        sheet::GeneralFunction_MIN       },
+        { "Product",    sheet::GeneralFunction_PRODUCT   },
+        { "CountNums",  sheet::GeneralFunction_COUNTNUMS },
+        { "StDev",      sheet::GeneralFunction_STDEV     },
+        { "StDevp",     sheet::GeneralFunction_STDEVP    },
+        { "Var",        sheet::GeneralFunction_VAR       },
+        { "VarP",       sheet::GeneralFunction_VARP      },
+        // compatibility names
+        { "Count Nums", sheet::GeneralFunction_COUNTNUMS },
+        { "StdDev",     sheet::GeneralFunction_STDEV     },
+        { "StdDevp",    sheet::GeneralFunction_STDEVP    }
+    };
+
+    const sal_Int32 nListLen = rList.getLength();
+    while (nStartPos < nListLen && rList[nStartPos] == ' ')
+        ++nStartPos;
+
+    bool bParsed = false;
+    bool bFound = false;
+    OUString aFuncStr;
+    sal_Int32 nFuncEnd = 0;
+    if (nStartPos < nListLen && rList[nStartPos] == '\'')
+        bParsed = dequote( rList, nStartPos, nFuncEnd, aFuncStr );
+    else
+    {
+        nFuncEnd = rList.indexOf(']', nStartPos);
+        if (nFuncEnd >= 0)
+        {
+            aFuncStr = rList.copy(nStartPos, nFuncEnd - nStartPos);
+            bParsed = true;
+        }
+    }
+
+    if ( bParsed )
+    {
+        aFuncStr = comphelper::string::strip(aFuncStr, ' ');
+
+        const sal_Int32 nFuncCount = sizeof(aFunctions) / sizeof(aFunctions[0]);
+        for ( sal_Int32 nFunc=0; nFunc<nFuncCount && !bFound; nFunc++ )
+        {
+            if (aFuncStr.equalsIgnoreAsciiCaseAscii(aFunctions[nFunc].pName))
+            {
+                rFunc = aFunctions[nFunc].eFunc;
+                bFound = true;
+
+                while (nFuncEnd < nListLen && rList[nFuncEnd] == ' ')
+                    ++nFuncEnd;
+                rEndPos = nFuncEnd;
+            }
+        }
+    }
+
+    return bFound;
+}
+
+bool isAtStart(
+    const OUString& rList, const OUString& rSearch, sal_Int32& rMatched,
+    bool bAllowBracket, sheet::GeneralFunction* pFunc )
+{
+    sal_Int32 nMatchList = 0;
+    sal_Int32 nMatchSearch = 0;
+    sal_Unicode cFirst = rList[0];
+    if ( cFirst == '\'' || cFirst == '[' )
+    {
+        // quoted string or string in brackets must match completely
+
+        OUString aDequoted;
+        sal_Int32 nQuoteEnd = 0;
+        bool bParsed = false;
+
+        if ( cFirst == '\'' )
+            bParsed = dequote( rList, 0, nQuoteEnd, aDequoted );
+        else if ( cFirst == '[' )
+        {
+            // skip spaces after the opening bracket
+
+            sal_Int32 nStartPos = 1;
+            const sal_Int32 nListLen = rList.getLength();
+            while (nStartPos < nListLen && rList[nStartPos] == ' ')
+                ++nStartPos;
+
+            if (rList[nStartPos] == '\'')         // quoted within the brackets?
+            {
+                if ( dequote( rList, nStartPos, nQuoteEnd, aDequoted ) )
+                {
+                    // after the quoted string, there must be the closing bracket, optionally preceded by spaces,
+                    // and/or a function name
+                    while (nQuoteEnd < nListLen && rList[nQuoteEnd] == ' ')
+                        ++nQuoteEnd;
+
+                    // semicolon separates function name
+                    if (nQuoteEnd < nListLen && rList[nQuoteEnd] == ';' && pFunc)
+                    {
+                        sal_Int32 nFuncEnd = 0;
+                        if ( parseFunction( rList, nQuoteEnd + 1, nFuncEnd, *pFunc ) )
+                            nQuoteEnd = nFuncEnd;
+                    }
+                    if (nQuoteEnd < nListLen && rList[nQuoteEnd] == ']')
+                    {
+                        ++nQuoteEnd;        // include the closing bracket for the matched length
+                        bParsed = true;
+                    }
+                }
+            }
+            else
+            {
+                // implicit quoting to the closing bracket
+
+                sal_Int32 nClosePos = rList.indexOf(']', nStartPos);
+                if (nClosePos >= 0)
+                {
+                    sal_Int32 nNameEnd = nClosePos;
+                    sal_Int32 nSemiPos = rList.indexOf(';', nStartPos);
+                    if (nSemiPos >= 0 && nSemiPos < nClosePos && pFunc)
+                    {
+                        sal_Int32 nFuncEnd = 0;
+                        if (parseFunction(rList, nSemiPos+1, nFuncEnd, *pFunc))
+                            nNameEnd = nSemiPos;
+                    }
+
+                    aDequoted = rList.copy(nStartPos, nNameEnd - nStartPos);
+                    // spaces before the closing bracket or semicolon
+                    aDequoted = comphelper::string::stripEnd(aDequoted, ' ');
+                    nQuoteEnd = nClosePos + 1;
+                    bParsed = true;
+                }
+            }
+        }
+
+        if ( bParsed && ScGlobal::GetpTransliteration()->isEqual( aDequoted, rSearch ) )
+        {
+            nMatchList = nQuoteEnd;             // match count in the list string, including quotes
+            nMatchSearch = rSearch.getLength();
+        }
+    }
+    else
+    {
+        // otherwise look for search string at the start of rList
+        ScGlobal::GetpTransliteration()->equals(
+            rList, 0, rList.getLength(), nMatchList, rSearch, 0, rSearch.getLength(), nMatchSearch);
+    }
+
+    if (nMatchSearch == rSearch.getLength())
+    {
+        // search string is at start of rList - look for following space or end of string
+
+        bool bValid = false;
+        if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+            bValid = true;
+        else
+        {
+            sal_Unicode cNext = rList[nMatchList];
+            if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
+                bValid = true;
+        }
+
+        if ( bValid )
+        {
+            rMatched = nMatchList;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
+bool ScDPObject::ParseFilters(
+    OUString& rDataFieldName,
+    std::vector<sheet::DataPilotFieldFilter>& rFilters,
+    std::vector<sheet::GeneralFunction>& rFilterFuncs, const OUString& rFilterList )
+{
+    // parse the string rFilterList into parameters for GetPivotData
+
+    CreateObjects();            // create xSource if not already done
+
+    std::vector<OUString> aDataNames;     // data fields (source name)
+    std::vector<OUString> aGivenNames;    // data fields (compound name)
+    std::vector<OUString> aFieldNames;    // column/row/data fields
+    std::vector< uno::Sequence<OUString> > aFieldValues;
+
+    //
+    // get all the field and item names
+    //
+
+    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
+    sal_Int32 nDimCount = xIntDims->getCount();
+    for ( sal_Int32 nDim = 0; nDim<nDimCount; nDim++ )
+    {
+        uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nDim) );
+        uno::Reference<container::XNamed> xDim( xIntDim, uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+        uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
+        sal_Bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+                            OUString(SC_UNO_DP_ISDATALAYOUT) );
+        sal_Int32 nOrient = ScUnoHelpFunctions::GetEnumProperty(
+                            xDimProp, OUString(SC_UNO_DP_ORIENTATION),
+                            sheet::DataPilotFieldOrientation_HIDDEN );
+        if ( !bDataLayout )
+        {
+            if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
+            {
+                OUString aSourceName;
+                OUString aGivenName;
+                ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xIntDim );
+                aDataNames.push_back( aSourceName );
+                aGivenNames.push_back( aGivenName );
+            }
+            else if ( nOrient != sheet::DataPilotFieldOrientation_HIDDEN )
+            {
+                // get level names, as in ScDPOutput
+
+                uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
+                sal_Int32 nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                                    OUString(SC_UNO_DP_USEDHIERARCHY) );
+                if ( nHierarchy >= xHiers->getCount() )
+                    nHierarchy = 0;
+
+                uno::Reference<uno::XInterface> xHier = ScUnoHelpFunctions::AnyToInterface(
+                                                    xHiers->getByIndex(nHierarchy) );
+                uno::Reference<sheet::XLevelsSupplier> xHierSupp( xHier, uno::UNO_QUERY );
+                if ( xHierSupp.is() )
+                {
+                    uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess( xHierSupp->getLevels() );
+                    sal_Int32 nLevCount = xLevels->getCount();
+                    for (sal_Int32 nLev=0; nLev<nLevCount; nLev++)
+                    {
+                        uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(
+                                                            xLevels->getByIndex(nLev) );
+                        uno::Reference<container::XNamed> xLevNam( xLevel, uno::UNO_QUERY );
+                        uno::Reference<sheet::XMembersSupplier> xLevSupp( xLevel, uno::UNO_QUERY );
+                        if ( xLevNam.is() && xLevSupp.is() )
+                        {
+                            uno::Reference<container::XNameAccess> xMembers = xLevSupp->getMembers();
+
+                            OUString aFieldName( xLevNam->getName() );
+                            uno::Sequence<OUString> aMemberNames( xMembers->getElementNames() );
+
+                            aFieldNames.push_back( aFieldName );
+                            aFieldValues.push_back( aMemberNames );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //
+    // compare and build filters
+    //
+
+    SCSIZE nDataFields = aDataNames.size();
+    SCSIZE nFieldCount = aFieldNames.size();
+    OSL_ENSURE( aGivenNames.size() == nDataFields && aFieldValues.size() == nFieldCount, "wrong count" );
+
+    bool bError = false;
+    bool bHasData = false;
+    OUString aRemaining(comphelper::string::strip(rFilterList, ' '));
+    while (!aRemaining.isEmpty() && !bError)
+    {
+        bool bUsed = false;
+
+        // look for data field name
+
+        for ( SCSIZE nDataPos=0; nDataPos<nDataFields && !bUsed; nDataPos++ )
+        {
+            OUString aFound;
+            sal_Int32 nMatched = 0;
+            if (isAtStart(aRemaining, aDataNames[nDataPos], nMatched, false, NULL))
+                aFound = aDataNames[nDataPos];
+            else if (isAtStart(aRemaining, aGivenNames[nDataPos], nMatched, false, NULL))
+                aFound = aGivenNames[nDataPos];
+
+            if (!aFound.isEmpty())
+            {
+                rDataFieldName = aFound;
+                aRemaining = aRemaining.copy(nMatched);
+                bHasData = true;
+                bUsed = true;
+            }
+        }
+
+        // look for field name
+
+        OUString aSpecField;
+        bool bHasFieldName = false;
+        if ( !bUsed )
+        {
+            sal_Int32 nMatched = 0;
+            for ( SCSIZE nField=0; nField<nFieldCount && !bHasFieldName; nField++ )
+            {
+                if (isAtStart(aRemaining, aFieldNames[nField], nMatched, true, NULL))
+                {
+                    aSpecField = aFieldNames[nField];
+                    aRemaining = aRemaining.copy(nMatched);
+                    aRemaining = comphelper::string::stripStart(aRemaining, ' ');
+
+                    // field name has to be followed by item name in brackets
+                    if (aRemaining[0] == '[')
+                    {
+                        bHasFieldName = true;
+                        // bUsed remains false - still need the item
+                    }
+                    else
+                    {
+                        bUsed = true;
+                        bError = true;
+                    }
+                }
+            }
+        }
+
+        // look for field item
+
+        if ( !bUsed )
+        {
+            bool bItemFound = false;
+            sal_Int32 nMatched = 0;
+            OUString aFoundName;
+            OUString aFoundValue;
+            sheet::GeneralFunction eFunc = sheet::GeneralFunction_NONE;
+            sheet::GeneralFunction eFoundFunc = sheet::GeneralFunction_NONE;
+
+            for ( SCSIZE nField=0; nField<nFieldCount; nField++ )
+            {
+                // If a field name is given, look in that field only, otherwise in all fields.
+                // aSpecField is initialized from aFieldNames array, so exact comparison can be used.
+                if ( !bHasFieldName || aFieldNames[nField] == aSpecField )
+                {
+                    const uno::Sequence<OUString>& rItems = aFieldValues[nField];
+                    sal_Int32 nItemCount = rItems.getLength();
+                    const OUString* pItemArr = rItems.getConstArray();
+                    for ( sal_Int32 nItem=0; nItem<nItemCount; nItem++ )
+                    {
+                        if ( isAtStart( aRemaining, pItemArr[nItem], nMatched, false, &eFunc ) )
+                        {
+                            if ( bItemFound )
+                                bError = true;      // duplicate (also across fields)
+                            else
+                            {
+                                aFoundName = aFieldNames[nField];
+                                aFoundValue = pItemArr[nItem];
+                                eFoundFunc = eFunc;
+                                bItemFound = true;
+                                bUsed = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( bItemFound && !bError )
+            {
+                sheet::DataPilotFieldFilter aField;
+                aField.FieldName = aFoundName;
+                aField.MatchValue = aFoundValue;
+                rFilters.push_back(aField);
+                rFilterFuncs.push_back(eFoundFunc);
+                aRemaining = aRemaining.copy(nMatched);
+            }
+        }
+
+        if ( !bUsed )
+            bError = true;
+
+        // remove any number of spaces between entries
+        aRemaining = comphelper::string::stripStart(aRemaining, ' ');
+    }
+
+    if ( !bError && !bHasData && aDataNames.size() == 1 )
+    {
+        // if there's only one data field, its name need not be specified
+        rDataFieldName = aDataNames[0];
+        bHasData = true;
+    }
+
+    return bHasData && !bError;
+}
+
 void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj)
 {
     CreateObjects();            // create xSource if not already done
