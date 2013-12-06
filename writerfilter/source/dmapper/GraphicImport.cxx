@@ -1303,6 +1303,15 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
                     m_pImpl->nHoriRelation = pHandler->relation();
                     m_pImpl->nHoriOrient = pHandler->orientation();
                     m_pImpl->nLeftPosition = pHandler->position();
+                    if (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && m_pImpl->nHoriOrient == text::HoriOrientation::RIGHT)
+                    {
+                        // If the shape is relative from page and aligned to
+                        // right, then set the relation to right and clear the
+                        // orientation, that provides the same visual result as
+                        // Word.
+                        m_pImpl->nHoriRelation = text::RelOrientation::PAGE_RIGHT;
+                        m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+                    }
                 }
             }
         }

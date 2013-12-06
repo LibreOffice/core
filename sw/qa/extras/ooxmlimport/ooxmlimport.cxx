@@ -1561,6 +1561,8 @@ DECLARE_OOXMLIMPORT_TEST(testWpgNested, "wpg-nested.docx")
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This was a com.sun.star.drawing.CustomShape, due to lack of handling of groupshapes inside groupshapes.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
+    // This was text::RelOrientation::PAGE_FRAME, effectively placing the group shape on the left side of the page instead of the right one.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_RIGHT, getProperty<sal_Int16>(xGroup, "HoriOrientRelation"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
