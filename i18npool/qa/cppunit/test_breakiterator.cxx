@@ -45,7 +45,7 @@ public:
 #endif
     void testKhmer();
     void testJapanese();
-
+    void testChinese();
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
     CPPUNIT_TEST(testGraphemeIteration);
@@ -64,6 +64,7 @@ public:
     CPPUNIT_TEST(testLao);
 #endif
     CPPUNIT_TEST(testJapanese);
+    CPPUNIT_TEST(testChinese);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
@@ -938,6 +939,23 @@ void TestBreakIterator::testJapanese()
     }
 }
 
+void TestBreakIterator::testChinese()
+{
+    lang::Locale aLocale;
+    aLocale.Language = "zh";
+    aLocale.Country = "CN";
+    i18n::Boundary aBounds;
+
+    {
+        const sal_Unicode JAPANESE[] = {0xD857, 0x6A35, 0x6A30, 0xD867, 0x69FE, 0xD867, 0x8919};
+
+        OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        aBounds = m_xBreak->getWordBoundary(aTest, 6, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 7);
+
+    }
+}
 void TestBreakIterator::setUp()
 {
     BootstrapFixtureBase::setUp();
