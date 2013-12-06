@@ -2,7 +2,6 @@
 
 DISTRO="tramp"
 SOURCEDIR="$1"
-TARGETDIR="$2"
 
 STEP=0
 function step
@@ -103,9 +102,6 @@ SOURCE=$(basename $(ls main/libreoffice*-debian-menus_*.deb) | awk -F '_' '{ pri
 DEBFILES=$(ls -1 ./main/libreoffice*-debian-menus_*.deb)
 
 gen_templates
-
-cd ..
-mv "$SOURCEDIR/upload" "$TARGETDIR"
 
 exit 0
 
