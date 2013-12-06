@@ -5319,10 +5319,10 @@ tmpCur4);
     ss << "        result=zw+rmz*zzr;\n";
     ss << "    else if(flag > 0)\n";
     ss << "        result=(zw*pow(1+zins,-zzr))+";
-    ss << "(rmz*(1-pow(1+zins,-zzr+1))/zins)+rmz;\n";
+    ss << "(rmz*(1-pow(1+zins,-zzr+1))*pow(zins,-1))+rmz;\n";
     ss << "    else\n";
     ss << "        result=(zw*pow(1+zins,-zzr))+";
-    ss << "(rmz*(1-pow(1+zins,-zzr))/zins);\n";
+    ss << "(rmz*(1-pow(1+zins,-zzr))*pow(zins,-1));\n";
     ss << "    return -result;\n";
     ss << "}";
 }
