@@ -3601,7 +3601,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAnnotationsObj::createEnumera
 sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uLong nCount = 0;
+    sal_Int32 nCount = 0;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
