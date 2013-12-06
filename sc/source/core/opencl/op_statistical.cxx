@@ -6743,7 +6743,8 @@ void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "            arg"<<i<<"= 0;\n";
             ss << "        else\n";
-            ss << "            arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "            arg"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << ";\n";
             ss << "    }\n";
             ss << "    else\n";
@@ -6758,7 +6759,8 @@ void OpGammaInv::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "        arg"<<i<<"= 0;\n";
             ss << "    else\n";
-            ss << "        arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "        arg"<<i<<"=";
+            ss <<vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << ";\n";
 #endif
         }
@@ -7043,9 +7045,10 @@ void OpFInv::GenSlidingWindowFunction(std::stringstream &ss,
     "        {\n"
     "            if (fPy!=fQy && fQy!=fRy && fRy!=fPy)\n"
     "            {\n"
-    "                fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)+"
-    " fRx * fQy * fPy"
-    "/ (fQy-fRy) / (fPy-fRy)+ fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);\n"
+    "                fSx = fPx * fRy * fQy *pow( (fRy-fPy),-1)"
+    " *pow( (fQy-fPy),-1)+fRx * fQy * fPy*pow( (fQy-fRy),-1) *"
+    "pow( (fPy-fRy),-1)+ fQx * fPy * fRy *pow( (fPy-fQy),-1)"
+    " *pow((fRy-fQy),-1);\n"
     "                bHasToInterpolate = (fAx < fSx) && (fSx < fBx);\n"
     "            }\n"
     "            else\n"
