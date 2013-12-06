@@ -242,15 +242,9 @@ public:
 //==============================================================================
 class ShowLicenseDialog : public ModalDialog
 {
-    MultiLineEdit   m_aLicenseText;
-    OKButton        m_aCloseBtn;
-
+    VclMultiLineEdit* m_pLicenseText;
 public:
-                    ShowLicenseDialog( Window * pParent,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    virtual        ~ShowLicenseDialog();
-
-    virtual void    Resize();
+    ShowLicenseDialog(Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
 };
 
 //==============================================================================

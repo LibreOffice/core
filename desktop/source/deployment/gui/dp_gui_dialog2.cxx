@@ -167,7 +167,7 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(Window* pParent)
 
 Size ExtBoxWithBtns_Impl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(250, 150), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(250, 150), MAP_APPFONT);
 }
 
 //------------------------------------------------------------------------------
@@ -1704,36 +1704,14 @@ void UpdateRequiredDialog::disableAllEntries()
 //                             ShowLicenseDialog
 //------------------------------------------------------------------------------
 ShowLicenseDialog::ShowLicenseDialog( Window * pParent,
-                                      const uno::Reference< deployment::XPackage > &xPackage ) :
-    ModalDialog( pParent, DialogHelper::getResId( RID_DLG_SHOW_LICENSE ) ),
-    m_aLicenseText( this, DialogHelper::getResId( ML_LICENSE ) ),
-    m_aCloseBtn( this,    DialogHelper::getResId( RID_EM_BTN_CLOSE ) )
+                                      const uno::Reference< deployment::XPackage > &xPackage )
+    : ModalDialog(pParent, "ShowLicenseDialog", "desktop/ui/showlicensedialog.ui")
 {
-    FreeResource();
-
-    OUString aText = xPackage->getLicenseText();
-    m_aLicenseText.SetText( aText );
-}
-
-//------------------------------------------------------------------------------
-ShowLicenseDialog::~ShowLicenseDialog()
-{}
-
-//------------------------------------------------------------------------------
-void ShowLicenseDialog::Resize()
-{
-    Size aTotalSize( GetOutputSizePixel() );
-    Size aTextSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_TOP - 2*RSC_SP_DLG_INNERBORDER_BOTTOM
-                                        - m_aCloseBtn.GetSizePixel().Height() );
-
-    m_aLicenseText.SetPosSizePixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ),
-                                    aTextSize );
-
-    Point aBtnPos( (aTotalSize.Width() - m_aCloseBtn.GetSizePixel().Width())/2,
-                    aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM
-                                        - m_aCloseBtn.GetSizePixel().Height() );
-    m_aCloseBtn.SetPosPixel( aBtnPos );
+    get(m_pLicenseText, "textview");
+    Size aSize(m_pLicenseText->LogicToPixel(Size(290, 170), MAP_APPFONT));
+    m_pLicenseText->set_width_request(aSize.Width());
+    m_pLicenseText->set_height_request(aSize.Height());
+    m_pLicenseText->SetText(xPackage->getLicenseText());
 }
 
 //=================================================================================
