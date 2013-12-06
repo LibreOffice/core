@@ -24,7 +24,6 @@
 #include <oox/helper/zipstorage.hxx>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/export/shapes.hxx>
-#include <comphelper/stl_types.hxx>
 #include "epptbase.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -156,7 +155,7 @@ private:
         sal_Int32 nId;
         sal_Int32 nLastIndex;
     };
-    typedef ::boost::unordered_map< OUString, struct AuthorComments, OUStringHash, comphelper::UStringEqual > AuthorsMap;
+    typedef ::boost::unordered_map< OUString, struct AuthorComments, OUStringHash > AuthorsMap;
     AuthorsMap maAuthors;
 
     void WriteAuthors();

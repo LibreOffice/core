@@ -24,15 +24,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <CustomAnimationEffect.hxx>
 
 #include <boost/unordered_map.hpp>
 
 namespace sd {
 
-typedef boost::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
-typedef boost::unordered_map< OUString, OUString, OUStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash > EffectsSubTypeMap;
+typedef boost::unordered_map< OUString, OUString, OUStringHash > UStringMap;
 typedef std::vector< OUString > UStringList;
 
 class CustomAnimationPreset
@@ -71,7 +70,7 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef boost::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash, comphelper::UStringEqual> EffectDescriptorMap;
+typedef boost::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory

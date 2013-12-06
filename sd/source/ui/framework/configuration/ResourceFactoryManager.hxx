@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 #include <boost/unordered_map.hpp>
 
 namespace sd { namespace framework {
@@ -86,8 +85,7 @@ private:
     typedef ::boost::unordered_map<
         OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory>,
-        OUStringHash,
-        ::comphelper::UStringEqual> FactoryMap;
+        OUStringHash> FactoryMap;
     FactoryMap maFactoryMap;
 
     typedef ::std::vector<

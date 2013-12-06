@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERTOKENMAP_HXX
 
 #include <rtl/ustring.hxx>
-#include <comphelper/stl_types.hxx>
 #include <boost/unordered_map.hpp>
 #include <xmloff/xmltoken.hxx>
 #include "TransformerTokenMap.hxx"
@@ -30,7 +29,7 @@
 
 class XMLTransformerTokenMap :
     public ::boost::unordered_map< OUString, ::xmloff::token::XMLTokenEnum,
-                            OUStringHash, ::comphelper::UStringEqual >
+                                   OUStringHash >
 {
 public:
     XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum *pInit );

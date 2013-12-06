@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <svx/svxdllapi.h>
 
@@ -187,8 +186,7 @@ private:
     */
     typedef ::boost::unordered_map<
         OUString,ShapeTypeId,
-        OUStringHash,
-        ::comphelper::UStringEqual> tServiceNameToSlotId;
+        OUStringHash> tServiceNameToSlotId;
     mutable tServiceNameToSlotId maServiceNameToSlotId;
 
     /**  Determine the slot id of the specified shape type.  With this id

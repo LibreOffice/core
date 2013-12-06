@@ -20,7 +20,6 @@
 #include "oox/drawingml/customshapegeometry.hxx"
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <comphelper/stl_types.hxx>
 #include <boost/unordered_map.hpp>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -83,7 +82,7 @@ static const FormularCommandNameTable pFormularCommandNameTable[] =
     { "val",    FC_VAL }
 
 };
-typedef boost::unordered_map< OUString, FormularCommand, OUStringHash, comphelper::UStringEqual > FormulaCommandHMap;
+typedef boost::unordered_map< OUString, FormularCommand, OUStringHash > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 

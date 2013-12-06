@@ -35,7 +35,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <svl/lstner.hxx>
 
-#include <comphelper/stl_types.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -291,8 +290,7 @@ class FrameworkHelper::ViewURLMap
     : public ::boost::unordered_map<
           OUString,
           ViewShell::ShellType,
-          OUStringHash,
-          ::comphelper::UStringEqual>
+          OUStringHash>
 {
 public:
     ViewURLMap (void) {}

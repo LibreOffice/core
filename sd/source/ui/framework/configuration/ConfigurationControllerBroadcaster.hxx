@@ -24,7 +24,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <vector>
 #include <boost/unordered_map.hpp>
 
@@ -119,8 +118,7 @@ private:
     typedef ::boost::unordered_map
         <OUString,
          ListenerList,
-         OUStringHash,
-         ::comphelper::UStringEqual> ListenerMap;
+         OUStringHash> ListenerMap;
     ListenerMap maListenerMap;
 
     /** Broadcast the given event to all listeners in the given list.

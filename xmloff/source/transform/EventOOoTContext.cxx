@@ -25,7 +25,6 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
-#include <comphelper/stl_types.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <boost/unordered_map.hpp>
@@ -35,8 +34,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public ::boost::unordered_map< OUString, NameKey_Impl,
-                            OUStringHash, ::comphelper::UStringEqual >
+    public ::boost::unordered_map< OUString, NameKey_Impl, OUStringHash >
 {
 public:
 

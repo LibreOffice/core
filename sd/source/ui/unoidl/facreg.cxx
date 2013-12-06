@@ -29,7 +29,6 @@
 
 #include <string.h>
 
-#include <comphelper/stl_types.hxx>
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -232,7 +231,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::boost::unordered_map<OUString, FactoryId, OUStringHash, comphelper::UStringEqual> FactoryMap;
+typedef ::boost::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
 
 
 namespace {

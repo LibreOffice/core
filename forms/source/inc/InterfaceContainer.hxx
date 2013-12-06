@@ -21,7 +21,6 @@
 #define INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 
 #include <boost/unordered_map.hpp>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -74,7 +73,7 @@ namespace frm
     };
 
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
-typedef ::boost::unordered_multimap< OUString, InterfaceRef, OUStringHash, ::comphelper::UStringEqual> OInterfaceMap;
+typedef ::boost::unordered_multimap< OUString, InterfaceRef, OUStringHash > OInterfaceMap;
 
 //==================================================================
 // OInterfaceContainer

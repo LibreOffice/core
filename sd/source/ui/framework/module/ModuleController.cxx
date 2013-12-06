@@ -22,7 +22,6 @@
 
 #include "tools/ConfigurationAccess.hxx"
 #include <comphelper/processfactory.hxx>
-#include <comphelper/stl_types.hxx>
 #include <boost/bind.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -45,8 +44,7 @@ class ModuleController::ResourceToFactoryMap
     : public ::boost::unordered_map<
     OUString,
     OUString,
-    OUStringHash,
-    ::comphelper::UStringEqual>
+    OUStringHash>
 {
 public:
     ResourceToFactoryMap (void) {}
@@ -57,8 +55,7 @@ class ModuleController::LoadedFactoryContainer
     : public ::boost::unordered_map<
     OUString,
     WeakReference<XInterface>,
-    OUStringHash,
-    ::comphelper::UStringEqual>
+    OUStringHash>
 {
 public:
     LoadedFactoryContainer (void) {}

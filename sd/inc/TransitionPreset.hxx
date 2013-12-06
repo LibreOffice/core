@@ -23,8 +23,6 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <comphelper/stl_types.hxx>
-
 #include <list>
 #include <boost/unordered_map.hpp>
 
@@ -40,7 +38,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef boost::unordered_map< OUString, OUString, OUStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< OUString, OUString, OUStringHash > UStringMap;
 
 class TransitionPreset
 {

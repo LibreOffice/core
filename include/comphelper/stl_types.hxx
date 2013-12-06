@@ -56,11 +56,6 @@ public:
 
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
-//------------------------------------------------------------------------
-struct UStringEqual
-{
-    sal_Bool operator() (const OUString& lhs, const OUString& rhs) const { return lhs.equals( rhs );}
-};
 
 //------------------------------------------------------------------------
 struct UStringIEqual
