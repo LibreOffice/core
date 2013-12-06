@@ -1233,7 +1233,7 @@ void Databases::setInstallPath( const OUString& aInstDir )
     osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory );
         //TODO: check returned error code
 
-    if( m_aInstallDirectory.endsWith( "/" ) )
+    if( !m_aInstallDirectory.endsWith( "/" ) )
         m_aInstallDirectory += "/";
 }
 
