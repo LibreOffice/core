@@ -1829,7 +1829,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
             if (tmpCur->GetType() == formula::svDoubleVectorRef)
             {
                 const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(tmpCur);
+                    dynamic_cast<const formula::DoubleVectorRefToken *>(tmpCur);
                 size_t nCurWindowSize = pDVR->GetRefRowSize();
                 ss << "    for (int i = ";
                 if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
@@ -1882,7 +1882,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        if (isNan(arg))\n";
                 ss << "            continue;\n";
 #endif
-                ss << "        sum += arg*arg;\n";
+                ss << "        sum += pown(arg, 2);\n";
                 ss << "    }\n";
             }
             else if(tmpCur->GetType() == formula::svSingleVectorRef)
@@ -1898,14 +1898,14 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        arg = 0.0f;\n";
-                ss << "    sum += arg * arg;\n";
+                ss << "    sum += pown(arg, 2);\n";
 #endif
             }
             else if(tmpCur->GetType() == formula::svDouble)
             {
                 ss << "        arg = ";
                 ss << tmpCur->GetDouble() << ";\n";
-                ss << "        sum += arg*arg;\n";
+                ss << "        sum += pown(arg, 2);\n";
             }
         }
         else
@@ -1913,7 +1913,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "        arg = ";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << ";\n";
-            ss << "        sum += arg*arg;\n";
+            ss << "        sum += pown(arg, 2);\n";
         }
     }
     ss << "    return sum;\n";
