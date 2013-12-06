@@ -1,5 +1,4 @@
 #!/bin/bash -e
-set -x
 
 DISTRO="tramp"
 SOURCEDIR="$1"
@@ -12,6 +11,8 @@ function step
 	echo "$STEP. $1"
 	let "STEP=STEP+1"
 }
+
+cd "$SOURCEDIR"
 
 step "Do prerequisite tests"
 if [ ! -d sdk -o ! -d main ]; then
@@ -82,8 +83,6 @@ EOF
 
 	cd - 1>/dev/null
 }
-
-cd "$SOURCEDIR"
 
 DEBVER=$(ls main/libreoffice*-base_*.deb | awk -F '_' '{ print $2; }')
 if [ "x" = "x${DEBVER}" ]; then
