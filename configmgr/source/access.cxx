@@ -565,14 +565,15 @@ OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     checkLocalizedPropertyAccess();
     // For backwards compatibility, return an absolute path representation where
     // available:
-    OUStringBuffer path;
+    OUString rootPath;
     rtl::Reference< RootAccess > root(getRootAccess());
     if (root.is()) {
-        path.append(root->getAbsolutePathRepresentation());
+        rootPath = root->getAbsolutePathRepresentation();
     }
     OUString rel(getRelativePathRepresentation());
-    if (path.getLength() != 0 && !rel.isEmpty()) {
-        path.append(sal_Unicode('/'));
+    OUStringBuffer path(rootPath);
+    if (!rootPath.isEmpty() && rootPath != "/" && !rel.isEmpty()) {
+        path.append('/');
     }
     path.append(rel);
     return path.makeStringAndClear();
