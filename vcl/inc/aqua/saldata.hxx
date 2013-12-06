@@ -52,9 +52,6 @@ class SystemFontList;
 
 #define SAL_CLIPRECT_COUNT 16
 
-#define VER_TIGER   0x1040
-#define VER_LEOPARD 0x1050
-
 class AquaSalFrame;
 struct FrameHash : public boost::hash<sal_IntPtr>
 {
