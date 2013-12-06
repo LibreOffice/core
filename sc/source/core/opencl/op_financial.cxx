@@ -1524,13 +1524,13 @@ void OpSYD::GenSlidingWindowFunction(std::stringstream &ss,
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "double result=0;\n\t";
-    ss << "double cost;\n\t";
-    ss << "double salvage;\n\t";
-    ss << "double life;\n\t";
-    ss << "double period;\n\t";
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double result=0;\n";
+    ss << "    double cost;\n";
+    ss << "    double salvage;\n";
+    ss << "    double life;\n";
+    ss << "    double period;\n";
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
@@ -1548,60 +1548,62 @@ void OpSYD::GenSlidingWindowFunction(std::stringstream &ss,
     const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
         formula::SingleVectorRefToken *>(tmpCur3);
 
-    ss << "int buffer_cost_len = ";
+    ss << "    int buffer_cost_len = ";
     ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 
-    ss << "int buffer_salvage_len = ";
+    ss << "    int buffer_salvage_len = ";
     ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 
-    ss << "int buffer_life_len = ";
+    ss << "    int buffer_life_len = ";
     ss << tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
-    ss << "int buffer_period_len = ";
+    ss << ";\n";
+    ss << "    int buffer_period_len = ";
     ss << tmpCurDVR3->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 #endif
 
 #ifdef ISNAN
-    ss <<"if(gid0>=buffer_cost_len || isNan(";
+    ss <<"    if(gid0>=buffer_cost_len || isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"cost = 0;\n\telse \n\t\t";
+    ss <<"))\n";
+    ss <<"        cost = 0;\n\telse \n";
 #endif
-    ss <<"cost = ";
+    ss <<"        cost = ";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0>=buffer_salvage_len || isNan(";
+    ss <<"    if(gid0>=buffer_salvage_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"salvage = 0;\n\telse \n\t\t";
+    ss <<"))\n";
+    ss <<"        salvage = 0;\n\telse \n";
 #endif
-    ss <<"salvage = ";
+    ss <<"        salvage = ";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0>=buffer_life_len || isNan(";
+    ss <<"    if(gid0>=buffer_life_len || isNan(";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"life = 0;\n\telse \n\t\t";
+    ss <<"))\n";
+    ss <<"        life = 0;\n\telse \n";
 #endif
-    ss <<"life = ";
+    ss <<"        life = ";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0>=buffer_period_len || isNan(";
+    ss <<"    if(gid0>=buffer_period_len || isNan(";
     ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"period = 0;\n\telse \n\t\t";
+    ss <<"))\n";
+    ss <<"        period = 0;\n\telse \n";
 #endif
-    ss <<"period = ";
+    ss <<"        period = ";
     ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
-    ss <<"result = ((cost-salvage)*(life-period+1)/((life*(life+1))/2));\n\t";
-    ss <<"return result;\n\t";
+    ss <<";\n";
+    ss <<"    double tmpvalue = ((life*(life+1))*pow(2.0,-1));\n";
+    ss <<"    result = ((cost-salvage)*(life-period+1)";
+    ss << "*pow(tmpvalue,-1));\n";
+    ss <<"    return result;\n";
     ss <<"}\n";
 }
 
