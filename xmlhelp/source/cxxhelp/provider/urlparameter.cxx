@@ -627,7 +627,7 @@ bool URLParameter::query()
         else if( parameter.equalsAscii( "Eid" ) )
             m_aEid = value;
         else if( parameter.equalsAscii( "UseDB" ) )
-            m_bUseDB = ( value.equalsAscii("no") != 0 );
+            m_bUseDB = !value.equalsAscii("no");
         else if( parameter.equalsAscii( "DbPAR" ) )
             m_aDbPar = value;
         else if( parameter.equalsAscii( "Query" ) )
