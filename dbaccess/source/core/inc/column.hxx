@@ -42,7 +42,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <comphelper/stl_types.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/TColumnsHelper.hxx>
@@ -52,8 +51,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <osl/diagnose.h>
-
-#include <boost/unordered_map.hpp>
 
 namespace dbaccess
 {
@@ -143,12 +140,6 @@ namespace dbaccess
     protected:
         ~IColumnFactory() {}
     };
-
-    // OColumns
-    // general columns map, could be used for readonly access
-    // no appending and dropping is supported
-    typedef ::boost::unordered_map<OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
-    typedef ::std::vector<OColumn*> OColumnArray;
 
     class OContainerMediator;
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
