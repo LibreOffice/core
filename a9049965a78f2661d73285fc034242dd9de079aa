@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3///Ic\u003d",
+        "filename": "sc/source/core/data/dpobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-06T23:07:25Z",
+      "side": 1,
+      "message": "This could need a check if nStartPos\u003cnListLen, String::GetChar() returned 0 if not, OUString::operator[] may assert.",
+      "revId": "a9049965a78f2661d73285fc034242dd9de079aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///IY\u003d",
+        "filename": "sc/source/core/data/dpobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-06T23:07:25Z",
+      "side": 1,
+      "message": "check if !aRemaining.isEmpty() for operator[]",
+      "revId": "a9049965a78f2661d73285fc034242dd9de079aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
