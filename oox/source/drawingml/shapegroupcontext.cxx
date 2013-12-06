@@ -88,11 +88,19 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
     case XML_grpSp:         // group shape
         return new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) );
     case XML_sp:            // shape
+    case XML_wsp:
         return new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) );
     case XML_pic:           // CT_Picture
         return new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) );
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
         return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true );
+    case XML_cNvGrpSpPr:
+        break;
+    case XML_grpSpLocks:
+        break;
+    default:
+        SAL_WARN("oox", "ShapeGroupContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+        break;
     }
 
     return this;

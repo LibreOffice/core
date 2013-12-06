@@ -47,6 +47,12 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
                 return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
             }
             break;
+        case XML_grpSp:
+            {
+                oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+                return new oox::drawingml::ShapeGroupContext(*this, mpShape, pShape);
+            }
+            break;
         default:
             SAL_WARN("oox", "WpgContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
             break;

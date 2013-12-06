@@ -1555,6 +1555,14 @@ DECLARE_OOXMLIMPORT_TEST(testWpgOnly, "wpg-only.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(548005)), xShape->getPosition().X);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testWpgNested, "wpg-nested.docx")
+{
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // This was a com.sun.star.drawing.CustomShape, due to lack of handling of groupshapes inside groupshapes.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
+}
+
 DECLARE_OOXMLIMPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
