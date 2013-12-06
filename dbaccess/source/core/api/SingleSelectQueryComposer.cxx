@@ -871,7 +871,6 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         }
 
         const ::comphelper::UStringMixEqual aCaseCompare( bCase );
-        const ::comphelper::TStringMixEqualFunctor aCaseCompareFunctor( bCase );
         typedef ::std::set< size_t > SizeTSet;
         SizeTSet aUsedSelectColumns;
         ::connectivity::parse::OParseColumn::StringMap aColumnNames;
@@ -947,12 +946,12 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 if ( sColumnName.isEmpty() )
                     xProp->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
 
-                aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sColumnName));
+                aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompare,sColumnName));
                 sal_Int32 j = 0;
                 while ( aFindName != aNames.end() )
                 {
                     sColumnName += OUString::number(++j);
-                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sColumnName));
+                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompare,sColumnName));
                 }
 
                 pColumn->setName(sColumnName);

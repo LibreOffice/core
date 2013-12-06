@@ -193,7 +193,7 @@ namespace
     struct OViewSetter : public ::std::unary_function< OTableTreeListBox::TNames::value_type, bool>
     {
         const Sequence< OUString> m_aViews;
-        ::comphelper::TStringMixEqualFunctor m_aEqualFunctor;
+        ::comphelper::UStringMixEqual m_aEqualFunctor;
 
         OViewSetter(const Sequence< OUString>& _rViews,sal_Bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
         OTableTreeListBox::TNames::value_type operator() (const OUString& lhs)

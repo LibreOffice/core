@@ -58,30 +58,15 @@ public:
 };
 
 //------------------------------------------------------------------------
-class UStringMixEqual
+class UStringMixEqual: public std::binary_function<OUString, OUString, bool>
 {
     sal_Bool m_bCaseSensitive;
 
 public:
     UStringMixEqual(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
-    sal_Bool operator() (const OUString& lhs, const OUString& rhs) const
-    {
-        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
-    }
-    sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
-};
-//------------------------------------------------------------------------
-class TStringMixEqualFunctor : public ::std::binary_function< OUString,OUString,bool>
-{
-    sal_Bool m_bCaseSensitive;
-
-public:
-    TStringMixEqualFunctor(sal_Bool bCaseSensitive = sal_True)
-        :m_bCaseSensitive(bCaseSensitive)
-    {}
     bool operator() (const OUString& lhs, const OUString& rhs) const
     {
-        return !!(m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs ));
+        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };

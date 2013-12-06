@@ -214,7 +214,7 @@ void OAdoColumn::fillPropertyValues()
             m_TypeName = pTypeInfo->aSimpleType.aTypeName;
         else if ( eType == adVarBinary && ADOS::isJetEngine(m_pConnection->getEngineType()) )
         {
-            ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+            ::comphelper::UStringMixEqual aCase(sal_False);
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                             pTypeInfoMap->end(),
                                                             ::o3tl::compose1(

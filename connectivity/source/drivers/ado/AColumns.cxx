@@ -86,7 +86,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
     pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
     const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-    ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+    ::comphelper::UStringMixEqual aCase(sal_False);
     // search for typeinfo where the typename is equal sTypeName
     OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                         pTypeInfoMap->end(),

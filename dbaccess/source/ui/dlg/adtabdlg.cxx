@@ -189,7 +189,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 
             const OUString* pViewBegin = sViews.getConstArray();
             const OUString* pViewEnd   = pViewBegin + sViews.getLength();
-            ::comphelper::TStringMixEqualFunctor aEqualFunctor;
+            ::comphelper::UStringMixEqual aEqualFunctor;
             for(;pViewBegin != pViewEnd;++pViewBegin)
                 aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
             OUString* pTables = aTables.empty() ? 0 : &aTables[0];

@@ -57,7 +57,7 @@ namespace dbaui
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
-                                const ::comphelper::TStringMixEqualFunctor& _aCase);
+                                const ::comphelper::UStringMixEqual& _aCase);
 
         void moveColumn(        ListBox* _pRight,
                                 ListBox* _pLeft,
@@ -65,14 +65,14 @@ namespace dbaui
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
-                                const ::comphelper::TStringMixEqualFunctor& _aCase);
+                                const ::comphelper::UStringMixEqual& _aCase);
 
         void enableButtons();
 
         sal_uInt16 adjustColumnPosition(ListBox* _pLeft,
                                     const OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
-                                    const ::comphelper::TStringMixEqualFunctor& _aCase);
+                                    const ::comphelper::UStringMixEqual& _aCase);
 
     public:
         virtual void            Reset ( );

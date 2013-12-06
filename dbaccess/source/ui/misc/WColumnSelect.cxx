@@ -198,7 +198,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
-    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
@@ -246,7 +246,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
-    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
@@ -280,7 +280,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                         const OUString&  _sColumnName,
                                         const OUString&  _sExtraChars,
                                         sal_Int32               _nMaxNameLen,
-                                        const ::comphelper::TStringMixEqualFunctor& _aCase)
+                                        const ::comphelper::UStringMixEqual& _aCase)
 {
     OUString sConvertedName = m_pParent->convertColumnName(TMultiListBoxEntryFindFunctor(&_rRightColumns,_aCase),
                                                                 _sColumnName,
@@ -306,7 +306,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                     const OUString&  _sColumnName,
                                     const OUString&  _sExtraChars,
                                     sal_Int32               _nMaxNameLen,
-                                    const ::comphelper::TStringMixEqualFunctor& _aCase)
+                                    const ::comphelper::UStringMixEqual& _aCase)
 {
     if(_pRight == &m_lbNewColumnNames)
     {
@@ -350,7 +350,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                const OUString&   _sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
-                                               const ::comphelper::TStringMixEqualFunctor& _aCase)
+                                               const ::comphelper::UStringMixEqual& _aCase)
 {
     sal_uInt16 nAdjustedPos = 0;
 

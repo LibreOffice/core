@@ -73,11 +73,11 @@ namespace dbaui
 
     class TMultiListBoxEntryFindFunctor : public TColumnFindFunctor
     {
-        ::comphelper::TStringMixEqualFunctor m_aCase;
+        ::comphelper::UStringMixEqual m_aCase;
         ::std::vector< OUString>* m_pVector;
     public:
         TMultiListBoxEntryFindFunctor(::std::vector< OUString>* _pVector,
-                                    const ::comphelper::TStringMixEqualFunctor& _aCase)
+                                    const ::comphelper::UStringMixEqual& _aCase)
             :m_aCase(_aCase)
             ,m_pVector(_pVector)
         {

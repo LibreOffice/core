@@ -596,7 +596,7 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
     }
     else if ( _sTypeName.getLength() )
     {
-        ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+        ::comphelper::UStringMixEqual aCase(sal_False);
         // search for typeinfo where the typename is equal _sTypeName
         OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
                                                             _rTypeInfo.end(),
