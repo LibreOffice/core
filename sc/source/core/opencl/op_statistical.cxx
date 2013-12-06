@@ -255,7 +255,16 @@ void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return vSum * pow(fCount - 1.0,-1.0);\n";
     ss << "}\n";
 }
-
+void OpZTest::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(phiDecl);
+    funs.insert(phi);
+    decls.insert(taylorDecl);
+    funs.insert(taylor);
+    decls.insert(gaussDecl);
+    funs.insert(gauss);
+}
 void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
@@ -269,13 +278,13 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << "){\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum=0.0;\n";
-    ss << "    double fSumSqr=0.0;\n";
-    ss << "    double mue=0.0;\n";
-    ss << "    double fCount=0.0;\n";
-    ss << "    double arg=0.0;\n";
-    ss << "    double sigma=0.0;\n";
-    ss << "    double mu=0.0;\n";
+    ss << "    double fSum = 0.0;\n";
+    ss << "    double fSumSqr = 0.0;\n";
+    ss << "    double mue = 0.0;\n";
+    ss << "    double fCount = 0.0;\n";
+    ss << "    double arg = 0.0;\n";
+    ss << "    double sigma = 0.0;\n";
+    ss << "    double mu = 0.0;\n";
     if(vSubArguments.size() == 1 || vSubArguments.size() == 0)
     {
         ss << "    return DBL_MAX;\n";
@@ -301,7 +310,7 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << " && i < " << nCurWindowSize  << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "gid0; i < " << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
@@ -309,10 +318,10 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             {
 #ifdef  ISNAN
                 ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++)\n";
+                ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < gid0+" << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
@@ -320,20 +329,20 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             {
 #ifdef  ISNAN
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++)\n";
+                ss << " &&  i < " << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < " << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
             else
             {
 #ifdef  ISNAN
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
@@ -345,13 +354,14 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "            continue;\n";
 #endif
             ss << "        fSum += arg;\n";
-            ss << "        fSumSqr += arg*arg;\n";
-            ss << "        fCount += 1;\n";
+            ss << "        fSumSqr += arg * arg;\n";
+            ss << "        fCount += 1.0;\n";
             ss << "    }\n";
-            ss << "    if(fCount<=1.0)\n";
+            ss << "    if(fCount <= 1.0)\n";
             ss << "        return DBL_MAX;\n";
-            ss << "    mue=fSum/fCount;\n";
-            ss << "    sigma=(fSumSqr-fSum*fSum/fCount)/(fCount-1.0);\n";
+            ss << "    mue = fSum *pow(fCount,-1.0);\n";
+            ss << "    sigma = (fSumSqr-fSum*fSum*";
+            ss << "pow(fCount,-1.0))*pow(fCount-1.0,-1.0);\n";
         }
         else
         {
@@ -359,25 +369,22 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "}\n";
             return ;
         }
-        if(ocPush==vSubArguments[1]->GetFormulaToken()->GetOpCode())
+        if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
         {
             if(pCur1->GetType() == formula::svSingleVectorRef)
             {
                 const formula::SingleVectorRefToken* pSVR =
-                    dynamic_cast< const formula::
-                        SingleVectorRefToken* >(pCur1);
+                    dynamic_cast<const formula::SingleVectorRefToken* >(pCur1);
                 assert(pSVR);
 #ifdef  ISNAN
                 ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
                 ss << "    {\n";
-                ss << "        if (isNan(";
-                ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-                ss << "            mu=0.0;\n";
-                ss << "        else\n";
 #endif
-                ss << "            mu=" ;
+                ss << "        mu = " ;
                 ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef ISNAN
+                ss << "        if (isNan(mu))\n";
+                ss << "            mu = 0.0;\n";
                 ss << "    }\n";
 #endif
 
@@ -395,11 +402,10 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    mu=" ;
+            ss << "    mu = " ;
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
         }
-        ss << "    return 0.5-(0.5 *erfc(-((mue-mu)/sqrt(sigma/fCount))";
-        ss << "* 0.7071067811865475)-0.5);\n";
+        ss << "    return 0.5 - gauss((mue-mu)/sqrt(sigma/fCount));\n";
         ss << "}\n";
         return ;
     }
@@ -424,7 +430,7 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << " && i < " << nCurWindowSize  << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "gid0; i < " << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
@@ -432,10 +438,10 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             {
 #ifdef  ISNAN
                 ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++)\n";
+                ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < gid0+" << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
@@ -443,20 +449,20 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             {
 #ifdef  ISNAN
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++)\n";
+                ss << " &&  i < " << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < " << nCurWindowSize << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
             else
             {
 #ifdef  ISNAN
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
                 ss << "    {\n";
 #else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+                ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
                 ss << "    {\n";
 #endif
             }
@@ -467,12 +473,12 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "            continue;\n";
 #endif
             ss << "        fSum += arg;\n";
-            ss << "        fSumSqr += arg*arg;\n";
-            ss << "        fCount += 1;\n";
+            ss << "        fSumSqr += arg * arg;\n";
+            ss << "        fCount += 1.0;\n";
             ss << "    }\n";
-            ss << "    if(fCount<=1.0)\n";
+            ss << "    if(fCount <= 1.0)\n";
             ss << "        return DBL_MAX;\n";
-            ss << "    mue=fSum/fCount;\n";
+            ss << "    mue = fSum * pow(fCount,-1.0);\n";
         }
         else
         {
@@ -480,25 +486,22 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "}\n";
             return ;
         }
-        if(ocPush==vSubArguments[1]->GetFormulaToken()->GetOpCode())
+        if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
         {
             if(pCur1->GetType() == formula::svSingleVectorRef)
             {
                 const formula::SingleVectorRefToken* pSVR1 =
-                    dynamic_cast< const formula::
-                        SingleVectorRefToken* >(pCur1);
+                    dynamic_cast<const formula::SingleVectorRefToken* >(pCur1);
                 assert(pSVR1);
 #ifdef  ISNAN
                 ss << "    if (gid0 < " << pSVR1->GetArrayLength() << ")\n";
                 ss << "    {\n";
-                ss << "        if (isNan(";
-                ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-                ss << "            mu=0.0;\n";
-                ss << "        else\n";
 #endif
-                ss << "            mu=" ;
+                ss << "        mu = " ;
                 ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef ISNAN
+                ss << "        if (isNan(mu))\n";
+                ss << "            mu = 0.0;\n";
                 ss << "    }\n";
 #endif
             }
@@ -518,25 +521,22 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    mu=" ;
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
         }
-        if(ocPush==vSubArguments[2]->GetFormulaToken()->GetOpCode())
+        if(ocPush == vSubArguments[2]->GetFormulaToken()->GetOpCode())
         {
             if(pCur2->GetType() == formula::svSingleVectorRef)
             {
                 const formula::SingleVectorRefToken* pSVR2 =
-                    dynamic_cast< const formula::
-                        SingleVectorRefToken* >(pCur2);
+                    dynamic_cast<const formula::SingleVectorRefToken* >(pCur2);
                 assert(pSVR2);
 #ifdef  ISNAN
                 ss << "    if (gid0 < " << pSVR2->GetArrayLength() << ")\n";
                 ss << "    {\n";
-                ss << "        if (isNan(";
-                ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
-                ss << "            sigma=0.0;\n";
-                ss << "        else\n";
 #endif
-                ss << "            sigma=" ;
+                ss << "        sigma = " ;
                 ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef ISNAN
+                ss << "        if (isNan(sigma))\n";
+                ss << "            sigma = 0.0;\n";
                 ss << "    }\n";
 #endif
             }
@@ -553,14 +553,14 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else
         {
-            ss << "    sigma=" ;
+            ss << "    sigma = " ;
             ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
         }
-        ss << "    return 0.5-(0.5 *erfc(-((mue-mu)*sqrt(fCount)/sigma)";
-        ss << " * 0.7071067811865475)-0.5);\n";
+        ss << "    return 0.5 - gauss((mue-mu)*sqrt(fCount)/sigma);\n";
         ss << "}\n";
     }
 }
+
 void OpTTest::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
