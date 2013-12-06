@@ -2733,6 +2733,10 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             {
                 pCurrent->set_non_homogeneous(toBool(sValue));
             }
+            else if (sKey == "homogeneous")
+            {
+                pCurrent->set_non_homogeneous(!toBool(sValue));
+            }
             else
             {
                 SAL_WARN("vcl.layout", "unknown packing: " << sKey.getStr());
