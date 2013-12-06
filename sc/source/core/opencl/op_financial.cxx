@@ -4542,12 +4542,12 @@ void OpReceived::GenSlidingWindowFunction(std::stringstream &ss,
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "double tmp = " << GetBottom() <<";\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "int nSettle, nMat;\n\t";
-    ss << "double fInvest,fDisc;\n\t";
-    ss << "int rOB;\n\t";
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() <<";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    int nSettle, nMat;\n";
+    ss << "    double fInvest,fDisc;\n";
+    ss << "    int rOB;\n";
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
@@ -4564,67 +4564,68 @@ void OpReceived::GenSlidingWindowFunction(std::stringstream &ss,
     FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
     formula::SingleVectorRefToken *>(tmpCur4);
-    ss<< "int buffer_settle_len = ";
+    ss<< "    int buffer_settle_len = ";
     ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_mat_len = ";
+    ss << ";\n";
+    ss<< "    int buffer_mat_len = ";
     ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_invest_len = ";
+    ss << ";\n";
+    ss<< "    int buffer_invest_len = ";
     ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_disc_len = ";
+    ss << ";\n";
+    ss<< "    int buffer_disc_len = ";
     ss<< tmpCurDVR3->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_rob_len = ";
+    ss << ";\n";
+    ss<< "    int buffer_rob_len = ";
     ss<< tmpCurDVR4->GetArrayLength();
-    ss << ";\n\t";
+    ss << ";\n";
 #endif
 #ifdef ISNAN
-    ss <<"if(gid0 >= buffer_settle_len || isNan(";
+    ss <<"    if(gid0 >= buffer_settle_len || isNan(";
     ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"nSettle = 0;\n\telse\n\t\t";
+    ss <<"))\n";
+    ss <<"        nSettle = 0;\n\telse\n";
 #endif
-    ss <<"nSettle = (int)"<<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<"        nSettle = (int)"<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0 >= buffer_mat_len || isNan(";
+    ss <<"    if(gid0 >= buffer_mat_len || isNan(";
     ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"nMat = 0;\n\telse\n\t\t";
+    ss <<"))\n";
+    ss <<"        nMat = 0;\n\telse\n";
 #endif
-    ss <<"nMat = (int)";
+    ss <<"        nMat = (int)";
     ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0 >= buffer_invest_len || isNan(";
+    ss <<"    if(gid0 >= buffer_invest_len || isNan(";
     ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"fInvest = 0;\n\telse\n\t\t";
+    ss <<"))\n";
+    ss <<"        fInvest = 0;\n\telse\n";
 #endif
-    ss <<"fInvest = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<"        fInvest = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0 >= buffer_disc_len || isNan(";
+    ss <<"    if(gid0 >= buffer_disc_len || isNan(";
     ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"fDisc = 0;\n\telse\n\t\t";
+    ss <<"))\n";
+    ss <<"        fDisc = 0;\n\telse\n";
 #endif
-    ss <<"fDisc = "<<vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<"        fDisc = "<<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0 >= buffer_rob_len || isNan(";
+    ss <<"    if(gid0 >= buffer_rob_len || isNan(";
     ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"rOB = 0;\n\telse\n\t\t";
+    ss <<"))\n";
+    ss <<"        rOB = 0;\n\telse\n";
 #endif
-    ss <<"rOB = (int)"<<vSubArguments[4]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
-    ss << "tmp = fInvest/(1.0-(fDisc";
+    ss <<"        rOB = (int)"<<vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+    ss << "    double tmpvalue = (1.0-(fDisc";
     ss <<" * GetYearDiff( GetNullDate()";
-    ss <<",nSettle,nMat,rOB)));";
-    ss << "\n\treturn tmp;\n";
+    ss <<",nSettle,nMat,rOB)));\n";
+    ss << "    tmp = fInvest*pow(tmpvalue,-1);\n";
+    ss << "    return tmp;\n";
     ss << "}";
 }
 
