@@ -626,6 +626,7 @@ namespace cppcanvas
             sal_uInt32 strokeStartCap, strokeEndCap, strokeJoin;
             float miterLimit;
             basegfx::B2DPolyPolygon polygon;
+            bool mbIsFilled;
 
         public:
             EMFPCustomLineCap() : EMFPObject()
@@ -652,7 +653,7 @@ namespace cppcanvas
                 aAttributes.MiterLimit = miterLimit;
             }
 
-            void ReadPath(SvStream& s, ImplRenderer& rR, bool bClosed)
+            void ReadPath(SvStream& s, ImplRenderer& rR, bool bFill)
             {
                 sal_Int32 pathLength;
                 s >> pathLength;
@@ -669,7 +670,7 @@ namespace cppcanvas
                 path.Read(s, pathFlags, rR);
 
                 polygon = path.GetPolygon(rR, false);
-                polygon.setClosed(bClosed);
+                mbIsFilled = bFill;
 
                 // transformation to convert the path to what LibreOffice
                 // expects
@@ -1320,7 +1321,7 @@ namespace cppcanvas
         }
 
         double ImplRenderer::EMFPPlusDrawLineCap(const ::basegfx::B2DPolygon& rPolygon, double fPolyLength,
-                const ::basegfx::B2DPolyPolygon& rLineCap, bool bStart, const rendering::StrokeAttributes& rAttributes,
+                const ::basegfx::B2DPolyPolygon& rLineCap, bool bIsFilled, bool bStart, const rendering::StrokeAttributes& rAttributes,
                 const ActionFactoryParameters& rParms, OutDevState& rState)
         {
             if (!rLineCap.count())
@@ -1347,6 +1348,20 @@ namespace cppcanvas
             {
                 maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
                 rParms.mrCurrActionIndex += pAction->getActionCount()-1;
+            }
+
+            if (bIsFilled)
+            {
+                bool bWasFillColorSet = rState.isFillColorSet;
+                rState.isFillColorSet = true;
+                rState.fillColor = rState.lineColor;
+                ActionSharedPtr pAction2(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState));
+                if (pAction2)
+                {
+                    maActions.push_back(MtfAction(pAction2, rParms.mrCurrActionIndex));
+                    rParms.mrCurrActionIndex += pAction2->getActionCount()-1;
+                }
+                rState.isFillColorSet = bWasFillColorSet;
             }
 
             return rAttributes.StrokeWidth;
@@ -1403,6 +1418,7 @@ namespace cppcanvas
                                 pen->customStartCap->SetAttributes(aAttributes);
 
                                 fStart = EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customStartCap->polygon,
+                                        pen->customStartCap->mbIsFilled,
                                         true, aAttributes, rParms, rState);
                             }
 
@@ -1413,6 +1429,7 @@ namespace cppcanvas
                                 pen->customEndCap->SetAttributes(aAttributes);
 
                                 fEnd = EMFPPlusDrawLineCap(aPolygon, fPolyLength, pen->customEndCap->polygon,
+                                        pen->customEndCap->mbIsFilled,
                                         false, aAttributes, rParms, rState);
                             }
 
