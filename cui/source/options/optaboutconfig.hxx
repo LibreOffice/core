@@ -62,7 +62,7 @@ public:
    CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ );
    void     InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue);
    void     Reset(/* const SfxItemSet&*/ );
-   void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess, const OUString& sPath);
+   void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess);
    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( OUString sNodePath, sal_Bool bUpdate );
    virtual sal_Bool FillItemSet( /* SfxItemSet& rSet*/ );
 

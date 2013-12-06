@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
@@ -175,27 +176,25 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& r
 
 void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
 {
-    OUString sRootNodePath = "";
     m_pPrefBox->Clear();
 
     m_vectorOfModified.clear();
     m_pPrefBox->GetModel()->SetSortMode( SortNone );
 
     m_pPrefBox->SetUpdateMode(sal_False);
-    Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
-    FillItems( xConfigAccess, sRootNodePath );
+    Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", sal_False );
+    FillItems( xConfigAccess );
     m_pPrefBox->SetUpdateMode(sal_True);
 }
 
 sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
 {
     sal_Bool bModified = sal_False;
-    Reference< XNameAccess > xUpdateAccess = getConfigAccess( "/", sal_True );
 
     std::vector< boost::shared_ptr< Prop_Impl > >::iterator pIter;
     for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
     {
-        xUpdateAccess = getConfigAccess( (*pIter)->Name , sal_True );
+        Reference< XNameAccess > xUpdateAccess = getConfigAccess( (*pIter)->Name , sal_True );
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
         xNameReplace->replaceByName( (*pIter)->Property, (*pIter)->Value );
@@ -208,10 +207,12 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
     return bModified;
 }
 
-void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess, const OUString& sPath)
+void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess)
 {
+    OUString sPath = Reference< XHierarchicalName >(
+        xNameAccess, uno::UNO_QUERY_THROW )->getHierarchicalName();
     uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
-    for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
+    for( sal_Int32 i = 0; i < seqItems.getLength(); ++i )
     {
         Any aNode = xNameAccess->getByName( seqItems[i] );
 
@@ -219,7 +220,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
         if( xNextNameAccess.is() )
         {
             // not leaf node
-            FillItems( xNextNameAccess, sPath + "/" + seqItems[i] );
+            FillItems( xNextNameAccess );
         }
         else
         {
@@ -227,100 +228,152 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             OUString sType = aNode.getValueTypeName();
 
             OUString sValue;
-            if( aNode.hasValue() )
+            switch( aNode.getValueType().getTypeClass() )
             {
-                switch( aNode.getValueType().getTypeClass() )
+            case ::com::sun::star::uno::TypeClass_VOID:
+                break;
+
+            case ::com::sun::star::uno::TypeClass_BOOLEAN:
+                sValue = OUString::boolean( aNode.get<bool>() );
+                break;
+
+            case ::com::sun::star::uno::TypeClass_SHORT:
+            case ::com::sun::star::uno::TypeClass_LONG:
+            case ::com::sun::star::uno::TypeClass_HYPER:
+                sValue = OUString::number( aNode.get<sal_Int64>() );
+                break;
+
+            case ::com::sun::star::uno::TypeClass_DOUBLE:
+                sValue = OUString::number( aNode.get<double>() );
+                break;
+
+            case ::com::sun::star::uno::TypeClass_STRING:
+                sValue = aNode.get<OUString>();
+                break;
+
+            case ::com::sun::star::uno::TypeClass_SEQUENCE:
+                if( sType == "[]boolean" )
                 {
-                    case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
-                    case ::com::sun::star::uno::TypeClass_SHORT :
-                    case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG :
-                    case ::com::sun::star::uno::TypeClass_LONG :
-                    //case ::com::sun::star::uno::TypeClass_INT :
+                    uno::Sequence<sal_Bool> seq = aNode.get< uno::Sequence<sal_Bool> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                     {
-                        sal_Int32 nVal = 0;
-                        if(aNode >>= nVal)
+                        if( j != 0 )
                         {
-                            sValue = OUString::number( nVal );
+                            sValue += ",";
                         }
-                    }
-                    break;
-
-                    case ::com::sun::star::uno::TypeClass_BOOLEAN :
-                    {
-                        sal_Bool bVal = sal_False;
-                        if(aNode >>= bVal  )
-                        {
-                            sValue = OUString::boolean( bVal );
-                        }
-                    }
-                    break;
-
-                    case ::com::sun::star::uno::TypeClass_STRING :
-                    {
-                        OUString sString;
-                        if(aNode >>= sString)
-                        {
-                            sValue = sString;
-                        }
-
-                    }
-                    break;
-
-                    case ::com::sun::star::uno::TypeClass_SEQUENCE :
-                    //case ::com::sun::star::uno::TypeClass_ARRAY :
-                    {
-                        sValue = "";
-                        if( "[]long" == sType || "[]short"== sType )
-                        {
-                            uno::Sequence<sal_Int32> seqLong;
-                            if( aNode >>= seqLong )
-                            {
-                                for(int nInd=0;  nInd < seqLong.getLength(); ++nInd)
-                                {
-                                    sValue += OUString::number(seqLong[nInd]) + ",";
-                                }
-                            }
-                        }
-
-                        if( "[]string" == sType )
-                        {
-                            uno::Sequence< OUString > seqOUString;
-                            if( aNode >>= seqOUString )
-                            {
-                                for( sal_Int16 nInd=0; nInd < seqOUString.getLength(); ++nInd )
-                                {
-                                    sValue += seqOUString[nInd] + ",";
-                                }
-                            }
-                        }
-
-                        if( "[]hyper" == sType )
-                        {
-                            uno::Sequence< sal_Int64 > seqHyp;
-                            if( aNode >>= seqHyp )
-                            {
-                                for(int nInd = 0; nInd < seqHyp.getLength(); ++nInd)
-                                {
-                                    sValue += OUString::number( seqHyp[nInd] ) + ",";
-                                }
-                            }
-                        }
-                    }
-                    break;
-
-                    default:
-                    {
-                        if( "hyper" == sType )
-                        {
-                            sal_Int64 nHyp = 0;
-                            if(aNode >>= nHyp)
-                            {
-                                sValue = OUString::number( nHyp );
-                            }
-                        }else
-                            sValue = "";
+                        sValue += OUString::boolean( seq[j] );
                     }
                 }
+                else if( sType == "[]byte" )
+                {
+                    uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        OUString s = OUString::number(
+                            static_cast<sal_uInt8>(seq[j]), 16 );
+                        if( s.getLength() == 1 )
+                        {
+                            sValue += "0";
+                        }
+                        sValue += s.toAsciiUpperCase();
+                    }
+                }
+                else if( sType == "[][]byte" )
+                {
+                    uno::Sequence< uno::Sequence<sal_Int8> > seq = aNode.get< uno::Sequence< uno::Sequence<sal_Int8> > >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        if( j != 0 )
+                        {
+                            sValue += ",";
+                        }
+                        for( sal_Int32 k = 0; k != seq[j].getLength(); ++k )
+                        {
+                            OUString s = OUString::number(
+                                static_cast<sal_uInt8>(seq[j][k]), 16 );
+                            if( s.getLength() == 1 )
+                            {
+                                sValue += "0";
+                            }
+                            sValue += s.toAsciiUpperCase();
+                        }
+                    }
+                }
+                else if( sType == "[]short" )
+                {
+                    uno::Sequence<sal_Int16> seq = aNode.get< uno::Sequence<sal_Int16> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        if( j != 0 )
+                        {
+                            sValue += ",";
+                        }
+                        sValue += OUString::number( seq[j] );
+                    }
+                }
+                else if( sType == "[]long" )
+                {
+                    uno::Sequence<sal_Int32> seq = aNode.get< uno::Sequence<sal_Int32> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        if( j != 0 )
+                        {
+                            sValue += ",";
+                        }
+                        sValue += OUString::number( seq[j] );
+                    }
+                }
+                else if( sType == "[]hyper" )
+                {
+                    uno::Sequence<sal_Int64> seq = aNode.get< uno::Sequence<sal_Int64> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        if( j != 0 )
+                        {
+                            sValue += ",";
+                        }
+                        sValue += OUString::number( seq[j] );
+                    }
+                }
+                else if( sType == "[]double" )
+                {
+                    uno::Sequence<double> seq = aNode.get< uno::Sequence<double> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        if( j != 0 )
+                        {
+                            sValue += ",";
+                        }
+                        sValue += OUString::number( seq[j] );
+                    }
+                }
+                else if( sType == "[]string" )
+                {
+                    uno::Sequence<OUString> seq = aNode.get< uno::Sequence<OUString> >();
+                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    {
+                        if( j != 0 )
+                        {
+                            sValue += ",";
+                        }
+                        sValue += seq[j];
+                    }
+                }
+                else
+                {
+                    SAL_WARN(
+                        "cui.options",
+                        "path \"" << sPath << "\" member " << seqItems[i]
+                            << " of unsupported type " << sType);
+                }
+                break;
+
+            default:
+                SAL_WARN(
+                    "cui.options",
+                    "path \"" << sPath << "\" member " << seqItems[i]
+                        << " of unsupported type " << sType);
+                break;
             }
 
             InsertEntry( sPath, seqItems[i], sType, sValue);
@@ -335,8 +388,6 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
                 com::sun::star::configuration::theDefaultProvider::get( xContext  ) );
 
-    if( sNodePath == "" )
-        sNodePath = "/";
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
     aProperty.Value = uno::makeAny( sNodePath );
@@ -365,7 +416,7 @@ void CuiAboutConfigTabPage::AddToModifiedVector( const boost::shared_ptr< Prop_I
     //Check if value modified before
     for( size_t nInd = 0; nInd < m_vectorOfModified.size() ; ++nInd )
     {
-        if( rProp->Name == m_vectorOfModified[nInd]->Name && rProp->Value == m_vectorOfModified[nInd]->Value )
+        if( rProp->Name == m_vectorOfModified[nInd]->Name && rProp->Property == m_vectorOfModified[nInd]->Property )
         {
             //property modified before. assing reference to the modified value
             //do your changes on this object. They will be saved later.
