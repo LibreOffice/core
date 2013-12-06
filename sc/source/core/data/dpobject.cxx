@@ -1541,7 +1541,7 @@ bool isAtStart(
             while (nStartPos < nListLen && rList[nStartPos] == ' ')
                 ++nStartPos;
 
-            if (rList[nStartPos] == '\'')         // quoted within the brackets?
+            if (nStartPos < nListLen && rList[nStartPos] == '\'')         // quoted within the brackets?
             {
                 if ( dequote( rList, nStartPos, nQuoteEnd, aDequoted ) )
                 {
@@ -1760,7 +1760,7 @@ bool ScDPObject::ParseFilters(
                     aRemaining = comphelper::string::stripStart(aRemaining, ' ');
 
                     // field name has to be followed by item name in brackets
-                    if (aRemaining[0] == '[')
+                    if (!aRemaining.isEmpty() && aRemaining[0] == '[')
                     {
                         bHasFieldName = true;
                         // bUsed remains false - still need the item
