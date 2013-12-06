@@ -191,7 +191,7 @@ std::string GetBetaDist =
 "    double flnX = log(fXin);\n"
 "    double fA = fAlpha;\n"
 "    double fB = fBeta;\n"
-"    bool bReflect = fXin > fAlpha/(fAlpha+fBeta);\n"
+"    bool bReflect = fXin > fAlpha*pow((fAlpha+fBeta),-1.0);\n"
 "    if (bReflect)\n"
 "    {\n"
 "        fA = fBeta;\n"
@@ -201,16 +201,13 @@ std::string GetBetaDist =
 "        flnX = flnY;\n"
 "        flnY = log(fXin);\n"
 "    }\n"
-"    fResult = lcl_GetBetaHelperContFrac(fX,fA,fB);\n"
-"    fResult = fResult/fA;\n"
-"    double fP = fA/(fA+fB);\n"
-"    double fQ = fB/(fA+fB);\n"
-"    double fTemp;\n"
+"    fResult = lcl_GetBetaHelperContFrac(fX,fA,fB)*pow(fA,-1.0);\n"
+"    double fP = fA*pow((fA+fB),-1.0);\n"
+"    double fQ = fB*pow((fA+fB),-1.0);\n"
 "    if (fA > 1.0 && fB > 1.0 && fP < 0.97 && fQ < 0.97)\n"
-"        fTemp = GetBetaDistPDF(fX,fA,fB)*fX*fY;\n"
+"        fResult *= GetBetaDistPDF(fX,fA,fB)*fX*fY;\n"
 "    else\n"
-"        fTemp = exp(fA*flnX + fB*flnY - GetLogBeta(fA,fB));\n"
-"    fResult *= fTemp;\n"
+"        fResult *= exp(fA*flnX + fB*flnY - GetLogBeta(fA,fB));\n"
 "    if (bReflect)\n"
 "        fResult = 0.5 - fResult + 0.5;\n"
 "    if (fResult > 1.0)\n"
@@ -219,6 +216,7 @@ std::string GetBetaDist =
 "        fResult = 0.0;\n"
 "    return fResult;\n"
 "}\n";
+
 std::string GetFDistDecl =
     "double GetFDist(double x, double fF1, double fF2);\n";
 std::string GetFDist =
@@ -1060,7 +1058,7 @@ std::string GetTDistDecl=" double GetTDist(double T, double fDF);\n";
 std::string GetTDist =
 "double GetTDist(double T, double fDF)\n"
 "{\n"
-"    return 0.5 * GetBetaDist(fDF/(fDF+T*T), fDF/2.0, 0.5);\n"
+"    return 0.5 * GetBetaDist(fDF*pow(fDF+T*T,-1.0),fDF*pow(2.0,-1.0), 0.5);\n"
 "}\n";
 
 std::string GetBetaDecl=" double GetBeta(double fAlpha, double fBeta);\n";
