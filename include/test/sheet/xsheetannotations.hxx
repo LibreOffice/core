@@ -20,11 +20,12 @@ public:
     // XSheetAnnotations
     void testInsertNew();
     void testRemoveByIndex();
+    void testCount();
 
 protected:
     ~XSheetAnnotations() {}
 
-    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations() = 0;
+    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(long nIndex) = 0;
 };
 
 }
