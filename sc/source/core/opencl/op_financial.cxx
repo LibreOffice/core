@@ -1033,18 +1033,8 @@ void Cumipmt::GenSlidingWindowFunction(
 void IRR::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
-    assert(pCur);
-    const formula::DoubleVectorRefToken* pCurDVR =
-        dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-    size_t nCurWindowSize = pCurDVR->GetRefRowSize();
-    FormulaToken* pCur1 = vSubArguments[1]->GetFormulaToken();
-    assert(pCur1);
-    const formula::SingleVectorRefToken* pSVR1 =
-        dynamic_cast< const formula::SingleVectorRefToken* >(pCur1);
-    assert(pSVR1);
     ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
+    ss << "_" << BinFuncName() << "(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
@@ -1052,53 +1042,204 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
-    ss << "#define  Epsilon   1.0E-7\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "double fSchaetzwert = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n\t";
-    ss << "double fEps = 1.0;\n\t";
-    ss << "double x = 0.0, xNeu = 0.0, fZaehler = 0.0, fNenner = 0.0;\n\t";
-    ss << "double nCount = 0.0;\n\t";
-    ss << "int argLen1 = " << pSVR1->GetArrayLength() << ";\n\t";
-#ifdef ISNAN
-    ss << "if (gid0 >= argLen1)\n\t\t";
-    ss << "fSchaetzwert = 0.1;\n\t";
-    ss << "if (isNan(fSchaetzwert))\n\t\t";
-    ss << "x = 0.1;\n\t";
-    ss << "else\n\t\t";
-#endif
-    ss << "x = fSchaetzwert;\n\t";
-    ss << "unsigned short nItCount = 0;\n\t";
-    ss << "while (fEps > Epsilon && nItCount < 20){\n\t\t";
-    ss << "nCount = 0.0;\n\t\tfZaehler = 0.0;\n\t\tfNenner = 0.0;\n\t\t";
-    ss << "double arg0;\n\t\t";
-    ss << "int arrayLength = " << pCurDVR->GetArrayLength() << ";\n\t";
-#ifdef ISNAN
-    ss << "for (int i = 0; i + gid0 < arrayLength &&";
-    ss << " i < " << nCurWindowSize << "; i++){\n\t\t\t";
-#else
-    ss << "for (int i = 0; i < " << nCurWindowSize << "; i++){\n\t\t\t";
-#endif
-    ss << "arg0 = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n\t\t\t";
+    ss << "    #define  Epsilon   1.0E-7\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    FormulaToken* pSur = vSubArguments[1]->GetFormulaToken();
+    assert(pSur);
+    ss << "    double fSchaetzwert = ";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    ss << "    double fEps = 1.0;\n";
+    ss << "    double x = 0.0, xNeu = 0.0, fZaehler = 0.0, fNenner = 0.0;\n";
+    ss << "    double nCount = 0.0;\n";
+    if (pSur->GetType() == formula::svSingleVectorRef)
+    {
 #ifdef  ISNAN
-    ss << "if (isNan(arg0))\n\t\t\t\t";
-    ss << "continue;\n\t\t\t";
+        const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pSur);
+        ss << "    if (gid0 >= " << pSVR->GetArrayLength() << ")\n";
+        ss << "        fSchaetzwert = 0.1;\n";
+        ss << "    if (isNan(fSchaetzwert))\n";
+        ss << "        x = 0.1;\n";
+        ss << "    else\n";
 #endif
-    ss << "fZaehler += arg0  / pow(1.0+x, nCount);\n\t\t\t";
-    ss << "fNenner  += -nCount * arg0 / pow(1.0+x,nCount+1.0);\n\t\t\t";
-    ss << "nCount+=1;\n";
-    ss << "\n\t\t}\n\t\t";
-    ss << "xNeu = x - fZaehler / fNenner;\n\t\t";
-    ss << "fEps = fabs(xNeu - x);\n\t\t";
-    ss << "x = xNeu;\n\t\t";
-    ss << "nItCount++;\n\t}\n\t";
-    ss << "if (fSchaetzwert == 0.0 && fabs(x) < Epsilon)\n\t\t";
-    ss << "x = 0.0;\n\t";
-    ss << "if (fEps < Epsilon)\n\t\t";
-    ss << "return x;\n\t";
-    ss << "else\n\t\t";
-    ss << "return (double)523;\n";
+    }
+    else if (pSur->GetType() == formula::svDouble)
+    {
+#ifdef  ISNAN
+        ss << "    if (isNan(fSchaetzwert))\n";
+        ss << "        x = 0.1;\n";
+        ss << "    else\n";
+#endif
+    }
+    ss << "        x = fSchaetzwert;\n";
+    ss << "    unsigned short nItCount = 0;\n";
+    ss << "    while (fEps > Epsilon && nItCount < 20){\n";
+    ss << "        nCount = 0.0; fZaehler = 0.0;  fNenner = 0.0;\n";
+    ss << "        double arg0, arg1;\n";
+    ss << "        int i = 0;\n";
+    FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
+    assert(pCur);
+    const formula::DoubleVectorRefToken* pDVR =
+        dynamic_cast<const formula::DoubleVectorRefToken* >(pCur);
+    size_t nCurWindowSize = pDVR->GetRefRowSize();
+    ss << "        for ( ";
+    if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+        ss << "i = gid0; i < " << pDVR->GetArrayLength();
+        ss << " && i < " << nCurWindowSize << " /2*2; i++){\n";
+#else
+        ss << "i = gid0; i < " << nCurWindowSize << " /2*2; i++)\n";
+#endif
+        ss << "            arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+        ss << "            i++;" << ";\n";
+        ss << "            arg1 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg0)){\n";
+#endif
+        ss << "            fZaehler += arg0 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
+        ss << "            nCount += 1;\n";
+        ss << "            }\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg1)){\n";
+#endif
+        ss << "                fZaehler += arg1 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
+        ss << "                nCount += 1;\n";
+        ss << "            }\n";
+#ifdef ISNAN
+        ss << "        }\n";
+        ss << "if(i < " << pDVR->GetArrayLength();
+        ss << " && i < " << nCurWindowSize << ") ;{\n";
+#else
+        ss << " i < " << nCurWindowSize << "){\n";
+#endif
+    }
+    else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+        ss << "; i < " << pDVR->GetArrayLength();
+        ss << " && i < (gid0+" << nCurWindowSize << " )/2*2; i++){\n";
+#else
+        ss << "; i < gid0+" << nCurWindowSize << " /2*2; i++)\n";
+#endif
+        ss << "            arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg0)){\n";
+#endif
+        ss << "            fZaehler += arg0 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
+        ss << "            nCount += 1;\n";
+#ifdef  ISNAN
+        ss << "            }\n";
+#endif
+        ss << "            i++;\n";
+        ss << "            arg1 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg1)){\n";
+#endif
+        ss << "                fZaehler += arg1 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
+        ss << "                nCount+=1;\n";
+        ss << "            }\n";
+#ifdef ISNAN
+        ss << "        }\n";
+        ss << "        if(i < " << pDVR->GetArrayLength();
+        ss << " && i < gid0+" << nCurWindowSize << "){\n";
+#else
+        ss << " i < " << nCurWindowSize << "){\n";
+#endif
+    }
+    else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+        ss << " ; i + gid0 < " << pDVR->GetArrayLength();
+        ss << " &&  i < " << nCurWindowSize << " /2*2; i++){\n";
+#else
+        ss << "; i < " << nCurWindowSize << " /2*2; i++)\n";
+#endif
+        ss << "            arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+        ss << "            i++;" << ";\n";
+        ss << "            arg1 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg0)){\n";
+#endif
+        ss << "            fZaehler += arg0 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
+        ss << "            nCount += 1;\n";
+        ss << "            }\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg1)){\n";
+#endif
+        ss << "                fZaehler += arg1 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
+        ss << "                nCount+=1;\n";
+        ss << "            }\n";
+#ifdef ISNAN
+        ss << "        }\n";
+        ss << "        if(i + gid0 < " << pDVR->GetArrayLength() << " &&";
+        ss << " i < " << nCurWindowSize << "){\n";
+#else
+        ss << " i < " << nCurWindowSize << "){\n";
+#endif
+
+    } else {
+#ifdef  ISNAN
+        ss << "; i < " << nCurWindowSize << " /2*2; i++){\n";
+#else
+        ss << "; i < " << nCurWindowSize << " /2*2; i++)\n";
+#endif
+        ss << "            arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+        ss << "            i++;" << ";\n";
+        ss << "            arg1 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg0)){\n";
+#endif
+        ss << "            fZaehler += arg0 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg0/pow(1.0+x,nCount+1.0);\n";
+        ss << "            nCount += 1;\n";
+        ss << "            }\n";
+#ifdef  ISNAN
+        ss << "            if (!isNan(arg1)){\n";
+#endif
+        ss << "                fZaehler += arg1 / pow(1.0 + x, nCount);\n";
+        ss << "            fNenner+=-1*nCount*arg1/pow(1.0+x,nCount+1.0);\n";
+        ss << "                nCount+=1;\n";
+        ss << "            }\n";
+#ifdef ISNAN
+        ss << "        }\n";
+        ss << "if(i<" << nCurWindowSize << "){\n";
+#else
+        ss << " i < " << nCurWindowSize << "){\n";
+#endif
+
+    }
+    ss << "            arg0 = ";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+    ss << "        if (isNan(arg0))\n";
+    ss << "            continue;\n";
+#endif
+    ss << "        fZaehler += arg0 / pow(1.0+x, nCount);\n";
+    ss << "        fNenner  += -nCount * arg0 / pow(1.0+x,nCount+1.0);\n";
+    ss << "        nCount+=1;\n";
+    ss << "        }\n";
+    ss << "        xNeu = x - fZaehler / fNenner;\n";
+    ss << "        fEps = fabs(xNeu - x);\n";
+    ss << "        x = xNeu;\n";
+    ss << "        nItCount++;\n    }\n";
+    ss << "        if (fSchaetzwert == 0.0 && fabs(x) < Epsilon)\n";
+    ss << "            x = 0.0;\n";
+    ss << "        if (fEps < Epsilon)\n";
+    ss << "            return x;\n";
+    ss << "        else\n";
+    ss << "            return (double)523;\n";
     ss << "}";
 }
 
