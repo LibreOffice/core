@@ -118,19 +118,6 @@ public:
         return !!(lhs.Name == rhs);
     }
 };
-//------------------------------------------------------------------------
-class UStringMixHash
-{
-    sal_Bool m_bCaseSensitive;
-
-public:
-    UStringMixHash(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
-    size_t operator() (const OUString& rStr) const
-    {
-        return m_bCaseSensitive ? rStr.hashCode() : rStr.toAsciiUpperCase().hashCode();
-    }
-    sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
-};
 
 //=====================================================================
 //= OInterfaceCompare
