@@ -72,9 +72,11 @@
 #include "documentimport.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
+#include "cellvalue.hxx"
 
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 
 namespace oox {
 namespace xls {
@@ -1057,39 +1059,24 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
 
 void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUString& rUrl )
 {
-    Reference< XCell > xCell = getCell( rAddress );
-    if( xCell.is() ) switch( xCell->getType() )
+    ScDocumentImport& rDoc = getDocImport();
+    ScAddress aPos(rAddress.Column, rAddress.Row, rAddress.Sheet);
+    ScRefCellValue aCell;
+    aCell.assign(rDoc.getDoc(), aPos);
+
+    if (aCell.meType == CELLTYPE_STRING || aCell.meType == CELLTYPE_EDIT)
     {
-        // #i54261# restrict creation of URL field to text cells
-        case CellContentType_TEXT:
-        {
-            Reference< XText > xText( xCell, UNO_QUERY );
-            if( xText.is() )
-            {
-                // create a URL field object and set its properties
-                Reference< XTextContent > xUrlField( getBaseFilter().getModelFactory()->createInstance( maUrlTextField ), UNO_QUERY );
-                OSL_ENSURE( xUrlField.is(), "WorksheetGlobals::insertHyperlink - cannot create text field" );
-                if( xUrlField.is() )
-                {
-                    // properties of the URL field
-                    PropertySet aPropSet( xUrlField );
-                    aPropSet.setProperty( PROP_URL, rUrl );
-                    aPropSet.setProperty( PROP_Representation, xText->getString() );
-                    try
-                    {
-                        // insert the field into the cell
-                        xText->setString( OUString() );
-                        Reference< XTextRange > xRange( xText->createTextCursor(), UNO_QUERY_THROW );
-                        xText->insertTextContent( xRange, xUrlField, sal_False );
-                    }
-                    catch( const Exception& )
-                    {
-                        OSL_FAIL( "WorksheetData::insertHyperlink - cannot insert text field" );
-                    }
-                }
-            }
-        }
-        break;
+        OUString aStr = aCell.getString(&rDoc.getDoc());
+        ScFieldEditEngine& rEE = rDoc.getDoc().GetEditEngine();
+
+        SvxURLField aURLField(rUrl, aStr, SVXURLFORMAT_REPR);
+        SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
+        rEE.QuickInsertField(aURLItem, ESelection());
+
+        rDoc.setEditCell(aPos, rEE.CreateTextObject());
+    }
+    else
+    {
         // Handle other cell types e.g. formulas ( and ? ) that have associated
         // hyperlinks.
         // Ideally all hyperlinks should be treated  as below. For the moment,
@@ -1099,12 +1086,9 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
         // saving to ods. Note: when we are able to save such hyperlinks to ods
         // we should handle *all* imported hyperlinks as below ( e.g. as cell
         // attribute ) for better interoperability.
-        default:
-        {
-            SfxStringItem aItem( ATTR_HYPERLINK, rUrl );
-            getScDocument().ApplyAttr( static_cast< SCCOL >( rAddress.Column ), static_cast< SCROW >( rAddress.Row ), static_cast< SCTAB >( rAddress.Sheet ), aItem );
-            break;
-        }
+
+        SfxStringItem aItem(ATTR_HYPERLINK, rUrl);
+        rDoc.getDoc().ApplyAttr(rAddress.Column, rAddress.Row, rAddress.Sheet, aItem);
     }
 }
 
