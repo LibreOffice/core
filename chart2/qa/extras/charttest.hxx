@@ -40,29 +40,91 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <iostream>
 
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
+#include <rootfrm.hxx>
+
+#include <libxml/xmlwriter.h>
+#include <libxml/xpath.h>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+
+
+/**
+ * Macro to declare a new test (with full round-trip. To test
+ * import only use the DECLARE_SW_IMPORT_TEST macro instead).
+ * In order to add a new test, one only needs to use this macro
+ * and then specify the test content, like this:
+ *
+ * DECLARE_SW_ROUNDTRIP_TEST(MyTest, "myfilename.docx", Test)
+ * {
+ *      CPPUNIT_ASSERT_EQUAL(blabla);
+ * }
+ *
+ */
 
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
+    ChartTest()
+        : mServiceName(),
+          m_bExported(false)
+    {
+    }
     void load( const char* pDir, const char* pName );
-    void reload( const OUString& rFilterName );
+    utl::TempFile reload( const OUString& rFilterName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
+    std::string getFileExtension( const char* pName );
 
+    void loadDocx(const char* pDir, const char* pName);
+    utl::TempFile reloadDocx();
     virtual void setUp();
     virtual void tearDown();
+
 protected:
     Reference< lang::XComponent > mxComponent;
-};
+     const char* mServiceName;
+    bool m_bExported; ///< Does m_aTempFile already contain something useful?
 
+};
+std::string ChartTest::getFileExtension( const char* pName )
+{
+    std::string extension ="";
+    int counter = 0;
+    bool dotOccurred = false;
+    while(pName[counter]!='\0')
+    {
+        if (dotOccurred)
+        {
+            extension = extension + pName[counter];
+        }
+        if(pName[counter]=='.')
+        {
+            dotOccurred = true;
+        }
+        counter++;
+    }
+    return extension;
+}
 void ChartTest::load( const char* pDir, const char* pName )
 {
-    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
+    std::string extension = getFileExtension(pName);
+    if(extension.compare("ods"))
+    {
+        mServiceName = "com.sun.star.sheet.SpreadsheetDocument";
+    }
+    else if(extension.compare("docx"))
+    {
+         mServiceName = "com.sun.star.text.TextDocument";
+
+    }
+    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), mServiceName);
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
-void ChartTest::reload(const OUString& rFilterName)
+utl::TempFile ChartTest::reload(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aArgs(1);
@@ -72,9 +134,10 @@ void ChartTest::reload(const OUString& rFilterName)
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), mServiceName);
     std::cout << aTempFile.GetURL();
     CPPUNIT_ASSERT(mxComponent.is());
+    return aTempFile;
 }
 
 void ChartTest::setUp()
