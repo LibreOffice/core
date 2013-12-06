@@ -52,7 +52,7 @@ void XSheetAnnotations::testInsertNew()
     sal_Int32 nBefore = xAnnotationsIndex->getCount();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "There should already be one note", 1, nBefore );
+        "There should already be one note", sal_Int32(1), nBefore );
 
     // insert the annotation
     table::CellAddress xTargetCellAddress (0,3,4);
