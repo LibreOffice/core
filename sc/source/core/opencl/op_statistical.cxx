@@ -1252,7 +1252,9 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double x,fDF,fFlag;\n";
+    ss << "    double x = 0.0;\n";
+    ss << "    double fDF = 0.0;\n";
+    ss << "    double fFlag = 0.0;\n";
     if(vSubArguments.size() != 3)
     {
         ss << "    return DBL_MAX;\n" << "}\n";
@@ -1260,22 +1262,24 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
     }
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     assert(tmpCur0);
-    if(ocPush==vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
         if(tmpCur0->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR0 =
                 dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
 #ifdef ISNAN
-            ss << "    int buffer_x_len = ";
-            ss << tmpCurDVR0->GetArrayLength() << ";\n";
-            ss << "    if(gid0 >= buffer_x_len || isNan(";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        x = 0.0;\n";
-            ss << "    else\n";
+            ss << "    if(gid0 < ";
+            ss << tmpCurDVR0->GetArrayLength() << ")\n";
+            ss << "    {\n";
 #endif
             ss << "        x = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+            ss << "        if(isNan(x))\n";
+            ss << "            x = 0.0;\n";
+            ss << "    }\n";
+#endif
         }
         else if(tmpCur0->GetType() == formula::svDouble)
         {
@@ -1294,26 +1298,33 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
     }
     FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
     assert(tmpCur1);
-    if(ocPush==vSubArguments[1]->GetFormulaToken()->GetOpCode())
+    if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
     {
         if(tmpCur1->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR1 =
                 dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur1);
 #ifdef ISNAN
-            ss << "    int buffer_fDF_len = ";
-            ss << tmpCurDVR1->GetArrayLength() << ";\n";
-            ss << "    if(gid0 >= buffer_fDF_len || isNan(";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        fDF = 0.0;\n";
-            ss << "    else\n";
+            ss << "    if(gid0 < ";
+            ss << tmpCurDVR1->GetArrayLength() << ")\n";
+            ss << "    {\n";
 #endif
-            ss << "        fDF = floor(";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+            ss << "        fDF = ";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+            ss << "        if(isNan(fDF))\n";
+            ss << "            fDF = 0.0;\n";
+            ss << "        else\n";
+#endif
+            ss << "            fDF = floor(fDF);\n";
+#ifdef ISNAN
+            ss << "    }\n";
+#endif
         }
         else if(tmpCur1->GetType() == formula::svDouble)
         {
-            ss << "    fDF = floor(" << tmpCur1->GetDouble() << ");\n";
+            ss << "    fDF = floor(convert_double(";
+            ss << tmpCur1->GetDouble() << "));\n";
         }
         else
         {
@@ -1329,26 +1340,34 @@ void OpTDist::GenSlidingWindowFunction(std::stringstream &ss,
 
     FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
     assert(tmpCur2);
-    if(ocPush==vSubArguments[2]->GetFormulaToken()->GetOpCode())
+    if(ocPush == vSubArguments[2]->GetFormulaToken()->GetOpCode())
     {
         if(tmpCur2->GetType() == formula::svSingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR2 =
                 dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur2);
 #ifdef ISNAN
-            ss << "    int buffer_fFlag_len = ";
-            ss << tmpCurDVR2->GetArrayLength() << ";\n";
-            ss << "    if(gid0>=buffer_fFlag_len || isNan(";
-            ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
-            ss << "        fFlag = 0.0;\n";
-            ss << "    else\n";
+            ss << "    if(gid0 < ";
+            ss << tmpCurDVR2->GetArrayLength() << ")\n";
+            ss << "    {\n";
 #endif
-            ss << "        fFlag = floor(";
-            ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ");\n";
+            ss << "        fFlag = ";
+            ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+            ss << "        if(isNan(fFlag))\n";
+            ss << "            fFlag = 0.0;\n";
+            ss << "        else\n";
+#endif
+            ss << "            fFlag = floor(fFlag);\n";
+#ifdef ISNAN
+            ss << "    }\n";
+#endif
+
         }
         else if(tmpCur2->GetType() == formula::svDouble)
         {
-            ss << "    fFlag = floor(" << tmpCur2->GetDouble() << ");\n";
+            ss << "    fFlag = floor(convert_double(";
+            ss << tmpCur2->GetDouble() << "));\n";
         }
         else
         {
