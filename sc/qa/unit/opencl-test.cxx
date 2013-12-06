@@ -1494,7 +1494,6 @@ void ScOpenclTest::testStatisticalFormulaNegbinomdist()
     {
         double fLibre = pDoc->GetValue(ScAddress(3,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(3,i,0));
-        std::cout<<fLibre<<"\t"<<fExcel<<"\n";
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
