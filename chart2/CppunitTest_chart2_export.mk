@@ -11,7 +11,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,chart2_export))
 
-$(eval $(call gb_CppunitTest_use_external,chart2_export,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,chart2_export, \
+	boost_headers \
+    libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,chart2_export, \
     chart2/qa/extras/chart2export \
@@ -50,10 +53,14 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_export, \
     vbahelper \
     vcl \
     xo \
+    sw \
     $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,chart2_export,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))
 
@@ -86,6 +93,9 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
+    sw/util/sw \
+    sw/util/swd \
+    sw/util/msword \
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
 	    sc/util/vbaobj) \
     scaddins/source/analysis/analysis \
@@ -105,6 +115,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    writerfilter/util/writerfilter \
     xmloff/util/xo \
 ))
 

@@ -40,20 +40,145 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <iostream>
 
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
+#include <rootfrm.hxx>
+
+#include <libxml/xmlwriter.h>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+
+
+/**
+ * Macro to declare a new test (with full round-trip. To test
+ * import only use the DECLARE_SW_IMPORT_TEST macro instead).
+ * In order to add a new test, one only needs to use this macro
+ * and then specify the test content, like this:
+ *
+ * DECLARE_SW_ROUNDTRIP_TEST(MyTest, "myfilename.docx", Test)
+ * {
+ *      CPPUNIT_ASSERT_EQUAL(blabla);
+ * }
+ *
+ */
+#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, BaseClass) \
+    class TestName : public BaseClass { \
+        public:\
+    CPPUNIT_TEST_SUITE(TestName); \
+    CPPUNIT_TEST(Import); \
+    CPPUNIT_TEST(Import_Export_Import); \
+    CPPUNIT_TEST_SUITE_END(); \
+    \
+    void Import() { \
+        executeImportTest(filename);\
+    }\
+    void Import_Export_Import() {\
+        executeImportExportImportTest(filename);\
+    }\
+    void verify();\
+    }; \
+    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
+    void TestName::verify()
+
 
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
+    ChartTest(const char* pTestDocumentPath = "", const char* pFilter = "")
+        : mpFilter(pFilter),
+        m_nStartTime(0),
+        mpXmlBuffer(0),
+        mpTestDocumentPath(pTestDocumentPath),
+        m_bExported(false)
+    {
+    }
+
     void load( const char* pDir, const char* pName );
     void reload( const OUString& rFilterName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
 
+    void loadDocx(const char* pDir, const char* pName);
+    void reloadDocx(const char* pFilter, const char* filename);
+    void executeImportTest(const char* pName);
+    void executeImportExportImportTest(const char* pName);
+
     virtual void setUp();
     virtual void tearDown();
+
 protected:
     Reference< lang::XComponent > mxComponent;
+
+    /**
+     * Override this function if interested in skipping import test for this file
+     */
+     virtual bool mustTestImportOf(const char* /* filename */) const
+     {
+        return true;
+     }
+
+    /**
+     * Function overloaded by unit test. See DECLARE_SW_*_TEST macros
+     */
+    virtual void verify()
+    {
+        CPPUNIT_FAIL( "verify method must be overriden" );
+    }
+
+    /**
+     * Override this function if some special filename-specific setup is needed
+     */
+    virtual void preTest(const char* /*filename*/)
+    {
+    }
+
+    /**
+     * Override this function if some special filename-specific teardown is needed
+     */
+    virtual void postTest(const char* /*filename*/)
+    {
+    }
+
+    /**
+     * Override this function if not calcing layout is needed
+     */
+    virtual bool mustCalcLayoutOf(const char* /*filename*/)
+    {
+        return true;
+    }
+
+    void header()
+    {
+        std::cout << "File tested,Execution Time (ms)" << std::endl;
+    }
+
+    void finish()
+    {
+        sal_uInt32 nEndTime = osl_getGlobalTimer();
+        std::cout << (nEndTime - m_nStartTime) << std::endl;
+        if (mpXmlBuffer)
+        {
+            xmlBufferFree(mpXmlBuffer);
+            mpXmlBuffer = 0;
+        }
+    }
+
+private:
+    void calcLayout()
+    {
+        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        pDoc->GetCurrentViewShell()->CalcLayout();
+    }
+
+protected:
+    const char* mpFilter;
+    sal_uInt32 m_nStartTime;
+    xmlBufferPtr mpXmlBuffer;
+    const char* mpTestDocumentPath;
+    utl::TempFile m_aTempFile;
+    bool m_bExported;
 };
 
 void ChartTest::load( const char* pDir, const char* pName )
@@ -204,5 +329,78 @@ uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const c
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;
 }
+
+
+//*****************************OOXML****************************************//
+
+void ChartTest::loadDocx(const char* pDir, const char* pName)
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+    // Output name early, so in the case of a hang, the name of the hanging input file is visible.
+    std::cout << pName << ",";
+    m_nStartTime = osl_getGlobalTimer();
+    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
+    if (mustCalcLayoutOf(pName))
+        calcLayout();
+}
+
+void ChartTest::reloadDocx(const char* pFilter, const char* filename)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "FilterName";
+    aArgs[0].Value <<= OUString::createFromAscii(pFilter);
+    m_aTempFile.EnableKillingFile();
+    xStorable->storeToURL(m_aTempFile.GetURL(), aArgs);
+    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+    xComponent->dispose();
+    m_bExported = true;
+    mxComponent = loadFromDesktop(m_aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    if (mpXmlBuffer)
+    {
+        xmlBufferFree(mpXmlBuffer);
+        mpXmlBuffer = 0;
+    }
+    if (mustCalcLayoutOf(filename))
+        calcLayout();
+}
+
+
+/**
+ * Helper func used by each unit test to test the 'import' code.
+ * (Loads the requested file and then calls 'verify' method)
+ */
+void ChartTest::executeImportTest(const char* pName)
+{
+    // If the testcase is stored in some other format, it's pointless to test.
+    if (mustTestImportOf(pName))
+    {
+        header();
+        preTest(pName);
+        loadDocx(mpTestDocumentPath, pName);
+        postTest(pName);
+        verify();
+        finish();
+    }
+}
+
+/**
+ * Helper func used by each unit test to test the 'export' code.
+ * (Loads the requested file, save it to temp file, load the
+ * temp file and then calls 'verify' method)
+ */
+void ChartTest::executeImportExportImportTest(const char* pName)
+{
+    header();
+    preTest(pName);
+    loadDocx(mpTestDocumentPath, pName);
+    reloadDocx(mpFilter, pName);
+    postTest(pName);
+    verify();
+    finish();
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
