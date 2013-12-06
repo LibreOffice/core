@@ -597,18 +597,18 @@ void OpTTest::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << "){\n";
     ss << "    int gid0 = get_global_id(0);\n";
-    ss << "    double fSum1=0.0;\n";
-    ss << "    double fSum2=0.0;\n";
-    ss << "    double fSumSqr1=0.0;\n";
-    ss << "    double fSumSqr2=0.0;\n";
-    ss << "    double fCount1=0.0;\n";
-    ss << "    double fCount2=0.0;\n";
-    ss << "    double arg1=0.0;\n";
-    ss << "    double arg2=0.0;\n";
-    ss << "    double mode=0.0;\n";
-    ss << "    double type=0.0;\n";
-    ss << "    double fT=0.0;\n";
-    ss << "    double fF=0.0;\n";
+    ss << "    double fSum1 = 0.0;\n";
+    ss << "    double fSum2 = 0.0;\n";
+    ss << "    double fSumSqr1 = 0.0;\n";
+    ss << "    double fSumSqr2 = 0.0;\n";
+    ss << "    double fCount1 = 0.0;\n";
+    ss << "    double fCount2 = 0.0;\n";
+    ss << "    double arg1 = 0.0;\n";
+    ss << "    double arg2 = 0.0;\n";
+    ss << "    double mode = 0.0;\n";
+    ss << "    double type = 0.0;\n";
+    ss << "    double fT = 0.0;\n";
+    ss << "    double fF = 0.0;\n";
     if(vSubArguments.size() != 4)
     {
         ss << "    return DBL_MAX;\n";
@@ -625,7 +625,7 @@ void OpTTest::GenSlidingWindowFunction(std::stringstream &ss,
         assert(pCur1);
         assert(pCur2);
         assert(pCur3);
-        if(ocPush==vSubArguments[2]->GetFormulaToken()->GetOpCode())
+        if(ocPush == vSubArguments[2]->GetFormulaToken()->GetOpCode())
         {
             if(pCur2->GetType() == formula::svSingleVectorRef)
             {
@@ -635,20 +635,23 @@ void OpTTest::GenSlidingWindowFunction(std::stringstream &ss,
 #ifdef  ISNAN
                 ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
                 ss << "    {\n";
-                ss << "        if (isNan(";
-                ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
+#endif
+                ss << "        mode = " ;
+                ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+                ss << "        if (isNan(mode))\n";
                 ss << "            mode = 0.0;\n";
                 ss << "        else\n";
 #endif
-                ss << "            mode = floor(" ;
-                ss << vSubArguments[2]->GenSlidingWindowDeclRef() << ");\n";
+                ss << "            mode = floor(mode);\n";
 #ifdef ISNAN
                 ss << "    }\n";
 #endif
             }
             else if(pCur2->GetType() == formula::svDouble)
             {
-                ss << "    mode = floor(" << pCur2->GetDouble() << ");\n";
+                ss << "    mode = floor(convert_double(";
+                ss << pCur2->GetDouble() << "));\n";
             }
             else
             {
