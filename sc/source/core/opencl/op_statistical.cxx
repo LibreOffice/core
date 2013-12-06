@@ -8384,9 +8384,9 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
     "    double M1=floor(arg2);\n"
     "    double n1=floor(arg1);\n"
     "    double x1=floor(arg0);\n"
-    "    double num[9],out[9];\n"
+    "    double num[9];\n"
     "    double PI = 3.1415926535897932384626433832795;\n"
-    "    double tmp,sum;\n"
+    "    double tmp;\n"
     "    if( (x1 < 0.0) || (n1 < x1) || (M1 < x1) || (N1 < n1) ||"
     "(N1 < M1) || (x1 < n1 - N1 + M1) )\n"
     "    {\n"
@@ -8407,16 +8407,16 @@ void OpHypGeomDist::GenSlidingWindowFunction(std::stringstream &ss,
     "        if(num[i]<171)\n"
     "        {\n"
     "            if(num[i]==0)\n"
-    "                out[i]=0;\n"
+    "                num[i]=0;\n"
     "            else\n"
-    "                out[i]=log(tgamma(num[i])*num[i]);\n"
+    "                num[i]=log(tgamma(num[i])*num[i]);\n"
     "        }\n"
     "        else\n"
-    "            out[i]=0.5*log(2.0*PI)+(num[i]+0.5)*log(num[i])-num[i]+"
-    "(1.0/12.0/num[i]-1.0/360/(num[i]*num[i]*num[i]));\n"
+    "            num[i]=0.5*log(2.0*PI)+(num[i]+0.5)*log(num[i])-num[i]+"
+    "(1.0*pow(12.0*num[i],-1)-1.0*pow(360*pow(num[i],3),-1));\n"
     "    }\n";
-    ss << "    sum=out[0]+out[3]+out[7]+out[8]-out[1]-out[2]-out[4]-out[5]-out[6];\n";
-    ss << "    tmp=exp(sum);\n";
+    ss << "    tmp=pow(M_E,(num[0]+num[3]+num[7]+num[8]";
+    ss << "-num[1]-num[2]-num[4]-num[5]-num[6]));\n";
     ss << "    return tmp;\n";
     ss << "}\n";
 }
