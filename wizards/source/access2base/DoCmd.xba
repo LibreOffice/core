@@ -1434,8 +1434,11 @@ Public Function SelectObject(	Optional pvObjectType As Variant _
 Dim oWindow As Object
 	Set oWindow = _SelectWindow(pvObjectType, pvObjectName)
 	If IsNull(oWindow.Frame) Then Goto Error_NotFound
-	oWindow.Frame.ContainerWindow.setFocus()
-	oWindow.Frame.ContainerWindow.setEnable(True)		&apos;	Added to try to bypass desynchro issue in Linux
+	With oWindow.Frame.ContainerWindow
+		.setFocus()
+		.setEnable(True)		&apos;	Added to try to bypass desynchro issue in Linux
+		.toFront()				&apos;	Added to force window change in Linux
+	End With
 
 Exit_Function:
 	Utils._ResetCalledSub(&quot;SelectObject&quot;)
@@ -1767,6 +1770,7 @@ Dim oWindow As _Window
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 	bActive = IsMissing(piWindowType)
+	If IsMissing(psWindow) Then psWindow = &quot;&quot;
 	Set oWindow.Frame = Nothing
 	If bActive Then
 		oWindow.WindowType = -1
@@ -1881,7 +1885,7 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;SelectWindow&quot;, Erl)
 	GoTo Exit_Function
-End Function		&apos;	_SelectWindow	V0.9.0
+End Function		&apos;	_SelectWindow	V1.0.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _SendWithAttachment( _
