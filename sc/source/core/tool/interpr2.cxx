@@ -2831,12 +2831,12 @@ void ScInterpreter::ScGetPivotData()
     }
 
     std::vector<sheet::DataPilotFieldFilter> aFilters;
-    svl::SharedString aDataFieldName;
+    OUString aDataFieldName;
     ScRange aBlock;
 
     if (bOldSyntax)
     {
-        aDataFieldName = GetString();
+        aDataFieldName = GetString().getString();
 
         switch (GetStackType())
         {
@@ -2887,7 +2887,7 @@ void ScInterpreter::ScGetPivotData()
                 return;
         }
 
-        aDataFieldName = GetString(); // First parameter is data field name.
+        aDataFieldName = GetString().getString(); // First parameter is data field name.
     }
 
     // NOTE : MS Excel docs claim to use the 'most recent' which is not
@@ -2900,7 +2900,22 @@ void ScInterpreter::ScGetPivotData()
         return;
     }
 
-    double fVal = pDPObj->GetPivotData(aDataFieldName.getString(), aFilters);
+    if (bOldSyntax)
+    {
+        OUString aFilterStr = aDataFieldName;
+        std::vector<sheet::GeneralFunction> aFilterFuncs;
+        if (!pDPObj->ParseFilters(aDataFieldName, aFilters, aFilterFuncs, aFilterStr))
+        {
+            PushError(errNoRef);
+            return;
+        }
+
+        // TODO : For now, we ignore filter functions since we couldn't find a
+        // live example of how they are supposed to be used. We'll support
+        // this again once we come across a real-world example.
+    }
+
+    double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);
     if (rtl::math::isNan(fVal))
     {
         PushError(errNoRef);

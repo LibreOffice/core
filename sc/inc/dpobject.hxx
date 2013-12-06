@@ -183,6 +183,12 @@ public:
         const OUString& rDataFieldName,
         std::vector<com::sun::star::sheet::DataPilotFieldFilter>& rFilters);
 
+    bool ParseFilters(
+        OUString& rDataFieldName,
+        std::vector<com::sun::star::sheet::DataPilotFieldFilter>& rFilters,
+        std::vector<com::sun::star::sheet::GeneralFunction>& rFilterFuncs,
+        const OUString& rFilterList );
+
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
