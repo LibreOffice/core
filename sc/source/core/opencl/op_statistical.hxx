@@ -54,6 +54,7 @@ class OpZTest: public Normal
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments);
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
     virtual std::string BinFuncName(void) const { return "ZTest"; }
 };
 class OpStDevP: public Normal
