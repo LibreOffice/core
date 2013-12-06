@@ -1175,22 +1175,45 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
         if (i) ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n";
-    ss << "    int gid0   = get_global_id(0);\n";
-    ss << "    double tmp = " << GetBottom() << ";\n";
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = 0.0f;\n";
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR=
+                dynamic_cast
+                <const formula::SingleVectorRefToken *>(tmpCur);
+            ss << "    arg0 = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";   
 #ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0=
-        dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
-    ss << "    int buffer_len = " << tmpCurDVR0->GetArrayLength() << ";\n";
-    ss << "    if((gid0)>=buffer_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        tmp = " << GetBottom() << ";\n";
-    ss << "    else \n    ";
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "    { arg0 = 0.0f; }\n"; 
 #endif
-    ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef()<< ";\n";
-    ss << "    return 0.5 * log((tmp + 1.0) / (tmp - 1.0));\n";
-    ss << "}";
+        }
+        else if(tmpCur->GetType() == formula::svDouble)
+        {
+            ss << "    arg0=";
+            ss << tmpCur->GetDouble() << ";\n";
+        }
+    }
+    else
+    {
+        ss << "        arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+     ss << "    return 0.5 * log(1 + 2 * pown(arg0 - 1.0, -1));\n";
+     ss << "}";
 }
 void OpArcSin::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string sSymName, SubArguments &vSubArguments)
