@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <iterator>
+
 #include "connection.hxx"
 #include "dbastrings.hrc"
 #include "datasource.hxx"
