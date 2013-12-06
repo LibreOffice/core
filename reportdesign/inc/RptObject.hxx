@@ -32,7 +32,6 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoashp.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/implementationreference.hxx>
 
 

@@ -24,7 +24,6 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/tabctrl.hxx>
-#include <comphelper/stl_types.hxx>
 #include <boost/mem_fn.hpp>
 #include <map>
 

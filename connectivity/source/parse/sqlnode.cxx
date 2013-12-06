@@ -49,7 +49,6 @@
 #include "TConnection.hxx"
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/stl_types.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbmetadata.hxx"
 #include <tools/diagnose_ex.h>

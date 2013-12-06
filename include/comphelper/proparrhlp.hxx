@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_PROPARRHLP_HXX
 #define INCLUDED_COMPHELPER_PROPARRHLP_HXX
 
-#include <comphelper/stl_types.hxx>
 #include <comphelper/propagg.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <osl/mutex.hxx>

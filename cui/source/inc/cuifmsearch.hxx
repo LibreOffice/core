@@ -31,7 +31,6 @@
 #include <vcl/lstbox.hxx>
 #include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 #include <rtl/ustring.hxx>
 
 namespace svxform {

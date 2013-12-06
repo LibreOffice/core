@@ -22,7 +22,6 @@
 
 #include "brwctrlr.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>

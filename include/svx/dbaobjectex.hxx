@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_DBAOBJECTEX_HXX
 
 #include <svtools/transfer.hxx>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

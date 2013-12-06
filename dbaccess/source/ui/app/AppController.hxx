@@ -36,7 +36,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase5.hxx>

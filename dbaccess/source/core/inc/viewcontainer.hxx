@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEWCONTAINER_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

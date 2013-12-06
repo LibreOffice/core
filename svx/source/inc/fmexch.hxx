@@ -23,7 +23,6 @@
 
 #include <set>
 
-#include <comphelper/stl_types.hxx>
 #include <svtools/transfer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

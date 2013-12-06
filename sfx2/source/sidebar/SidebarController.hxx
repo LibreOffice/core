@@ -44,7 +44,6 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <comphelper/stl_types.hxx>
 
 namespace cssu = ::com::sun::star::uno;
 

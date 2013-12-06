@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROW_HXX
 
-#include <comphelper/stl_types.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "TypeInfo.hxx"

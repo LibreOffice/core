@@ -33,7 +33,6 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 

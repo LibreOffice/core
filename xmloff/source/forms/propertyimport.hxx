@@ -27,7 +27,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include "formattributes.hxx"
 #include <rtl/ref.hxx>
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "layerimport.hxx"
 

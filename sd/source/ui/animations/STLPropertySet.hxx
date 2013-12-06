@@ -22,8 +22,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <comphelper/stl_types.hxx>
-
 #include <list>
 #include <map>
 

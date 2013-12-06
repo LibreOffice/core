@@ -18,7 +18,6 @@
  */
 
 #include <tools/diagnose_ex.h>
-#include <comphelper/stl_types.hxx>
 #include <svx/svdobj.hxx>
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"

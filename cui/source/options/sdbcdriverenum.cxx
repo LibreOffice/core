@@ -18,7 +18,6 @@
  */
 
 #include "sdbcdriverenum.hxx"
-#include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

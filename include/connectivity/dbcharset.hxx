@@ -25,7 +25,6 @@
 #include <cstddef>
 #include <set>
 
-#include <comphelper/stl_types.hxx>
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustring.hxx>

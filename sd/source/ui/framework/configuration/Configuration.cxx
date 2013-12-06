@@ -21,9 +21,6 @@
 #include "framework/Configuration.hxx"
 
 #include "framework/FrameworkHelper.hxx"
-#include <comphelper/stl_types.hxx>
-
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

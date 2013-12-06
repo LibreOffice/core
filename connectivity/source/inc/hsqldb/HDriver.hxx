@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/CommonTools.hxx"
 

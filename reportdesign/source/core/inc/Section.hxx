@@ -30,7 +30,6 @@
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

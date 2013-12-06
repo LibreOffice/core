@@ -32,7 +32,6 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
-#include <comphelper/stl_types.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace lang {

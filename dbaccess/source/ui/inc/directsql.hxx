@@ -25,7 +25,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <comphelper/stl_types.hxx>
 #include <deque>
 
 #include <com/sun/star/sdbc/XConnection.hpp>

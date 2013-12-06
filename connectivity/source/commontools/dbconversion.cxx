@@ -50,8 +50,6 @@ namespace dbtools
 {
 //.........................................................................
 
-
-    using namespace ::comphelper;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
     namespace utl = ::com::sun::star::util;

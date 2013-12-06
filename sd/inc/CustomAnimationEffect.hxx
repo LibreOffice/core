@@ -28,7 +28,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <comphelper/stl_types.hxx>
 #include <vcl/timer.hxx>
 
 #include <sddllapi.h>

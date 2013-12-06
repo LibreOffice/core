@@ -32,7 +32,6 @@
 #include <vcl/timer.hxx>
 #include <svl/hint.hxx>
 #include <svl/brdcst.hxx>
-#include <comphelper/stl_types.hxx>
 #include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>
 #include <boost/shared_ptr.hpp>

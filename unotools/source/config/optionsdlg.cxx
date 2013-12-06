@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 
 #include <boost/unordered_map.hpp>
 #include "itemholder1.hxx"

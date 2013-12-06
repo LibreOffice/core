@@ -28,7 +28,6 @@
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#include <comphelper/stl_types.hxx>
 
 namespace dbaccess
 {

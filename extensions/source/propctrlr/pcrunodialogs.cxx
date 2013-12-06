@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/beans/NamedValue.hpp>
+
 #include "pcrunodialogs.hxx"
 #include "formstrings.hxx"
 #include "pcrstrings.hxx"

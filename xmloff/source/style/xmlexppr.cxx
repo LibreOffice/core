@@ -37,7 +37,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/PropertySetInfoHash.hxx>
-#include <comphelper/stl_types.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;

@@ -23,7 +23,6 @@
 #include <svtools/wizdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
-#include <comphelper/stl_types.hxx>
 
 class Bitmap;
 //.........................................................................

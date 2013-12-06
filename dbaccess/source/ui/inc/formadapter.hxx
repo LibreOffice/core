@@ -54,7 +54,6 @@
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/implbase10.hxx>

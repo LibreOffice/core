@@ -23,7 +23,6 @@
 #include "adminpages.hxx"
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 #include <vcl/fixed.hxx>
 #include "tabletree.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>

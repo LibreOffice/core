@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include "ContentHelper.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>

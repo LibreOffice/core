@@ -28,7 +28,6 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/stl_types.hxx>
 #include "rptui_slotid.hrc"
 
 #include <connectivity/dbtools.hxx>

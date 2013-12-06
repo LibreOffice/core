@@ -28,7 +28,6 @@
 #include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/stl_types.hxx>
 #include "officeforms.hxx"
 
 namespace xmloff

@@ -55,7 +55,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase2.hxx>

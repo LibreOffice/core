@@ -25,7 +25,6 @@
 #include <set>
 
 #include "formattributes.hxx"
-#include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <callbacks.hxx>

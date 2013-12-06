@@ -20,10 +20,9 @@
 #include "TableConnectionData.hxx"
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/stl_types.hxx>
 
 using namespace dbaui;
-using namespace comphelper;
+
 // class OTableConnectionData
 DBG_NAME(OTableConnectionData)
 OTableConnectionData::OTableConnectionData()

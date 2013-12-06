@@ -25,7 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/stl_types.hxx>
 #include <rtl/ref.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/CommonTools.hxx>

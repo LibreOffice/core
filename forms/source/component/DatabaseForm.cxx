@@ -62,7 +62,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>

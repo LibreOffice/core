@@ -32,7 +32,6 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>

@@ -27,7 +27,6 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/stl_types.hxx>
 #include <rtl/instance.hxx>
 #include <cppuhelper/propshlp.hxx>
 

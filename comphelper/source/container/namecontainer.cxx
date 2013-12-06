@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <comphelper/stl_types.hxx>
 
 typedef std::map<OUString, ::com::sun::star::uno::Any> SvGenericNameContainerMapImpl;
 

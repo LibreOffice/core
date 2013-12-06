@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <comphelper/stl_types.hxx>
 #include <map>
 
 

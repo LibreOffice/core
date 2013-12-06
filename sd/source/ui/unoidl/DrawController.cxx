@@ -31,7 +31,6 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/bootstrap.hxx>

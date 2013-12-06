@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 
 #include <cppuhelper/implbase5.hxx>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

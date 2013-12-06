@@ -30,7 +30,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <comphelper/stl_types.hxx>
 #include <osl/thread.hxx>
 
 #include <boost/unordered_map.hpp>

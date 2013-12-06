@@ -18,7 +18,6 @@
  */
 
 #include <svx/dataaccessdescriptor.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <osl/diagnose.h>
