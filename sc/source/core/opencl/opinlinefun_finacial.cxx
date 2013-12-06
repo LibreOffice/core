@@ -72,6 +72,23 @@ std::string GetRmz=
 "    return -fRmz;\n"
 "}\n";
 
+std::string GetRmz_newDecl =
+"double GetRmz_new( double fZins, double fZzr, double fBw, double fZw,"
+"int nF );\n";
+std::string GetRmz_new=
+"double GetRmz_new( double fZins, double fZzr, double fBw, double fZw,"
+"int nF)\n"
+"{\n"
+"    double fRmz;\n"
+"        double  fTerm = pow( 1.0 + fZins, fZzr );\n"
+"        if( nF > 0 )\n"
+"            fRmz = ( fZw * fZins *pow ( fTerm - 1.0,-1 ) + fBw * fZins *pow( "
+"( 1.0 - pow( fTerm,-1) ),-1) )* pow ( 1.0 + fZins,-1 );\n"
+"        else\n"
+"            fRmz = fZw * fZins *pow ( fTerm - 1.0 ,-1) + fBw * fZins *pow( "
+"1.0 - pow( fTerm,-1),-1 );\n"
+"    return -fRmz;\n"
+"}\n";
 std::string GetZwDecl =
 "double GetZw( double fZins, double fZzr, double fRmz,"
 "double fBw, int nF );\n";
@@ -92,6 +109,24 @@ std::string GetZw =
 "        else\n"
 "                fZw = fBw * fTerm + fRmz * ( fTerm - 1.0 ) / fZins;\n"
 "    }\n"
+"    return -fZw;\n"
+"}\n";
+
+std::string GetZw_newDecl =
+"double GetZw_new( double fZins, double fZzr, double fRmz,"
+"double fBw, int nF );\n";
+
+std::string GetZw_new =
+"double GetZw_new( double fZins, double fZzr, double fRmz,"
+"double fBw, int nF )\n"
+"{\n"
+"    double fZw;\n"
+"    double  fTerm = pow( 1.0 + fZins, fZzr );\n"
+"    if( nF > 0 )\n"
+"        fZw = fBw * fTerm + fRmz * ( 1.0 + fZins ) *( fTerm - 1.0 ) "
+"*pow( fZins,-1);\n"
+"    else\n"
+"        fZw = fBw * fTerm + fRmz * ( fTerm - 1.0 ) *pow( fZins,-1);\n"
 "    return -fZw;\n"
 "}\n";
 
