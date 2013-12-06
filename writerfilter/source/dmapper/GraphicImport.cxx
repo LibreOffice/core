@@ -378,6 +378,33 @@ public:
         xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
                 uno::makeAny(nVertRelation));
     }
+
+    void applyZOrder(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
+    {
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        if (zOrder >= 0)
+        {
+            GraphicZOrderHelper* pZOrderHelper = rDomainMapper.graphicZOrderHelper();
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
+            pZOrderHelper->addItem(xGraphicObjectProperties, zOrder);
+        }
+    }
+
+    void applyName(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
+    {
+        try
+        {
+            if( !sName.isEmpty() )
+            {
+                uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
+                xNamed->setName( sName );
+            }
+        }
+        catch( const uno::Exception& e )
+        {
+            SAL_WARN("writerfilter", "failed. Message :" << e.Message);
+        }
+    }
 };
 
 
@@ -1045,6 +1072,8 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(m_pImpl->nWrap));
+                        m_pImpl->applyZOrder(xShapeProps);
+                        m_pImpl->applyName(xShapeProps);
                     }
                 }
             }
@@ -1581,13 +1610,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
                     uno::makeAny( m_pImpl->nFillColor ));
 
-                if( m_pImpl->zOrder >= 0 )
-                {
-                    GraphicZOrderHelper* zOrderHelper = m_pImpl->rDomainMapper.graphicZOrderHelper();
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_Z_ORDER ),
-                        uno::makeAny( zOrderHelper->findZOrder( m_pImpl->zOrder )));
-                    zOrderHelper->addItem( xGraphicObjectProperties, m_pImpl->zOrder );
-                }
+                m_pImpl->applyZOrder(xGraphicObjectProperties);
 
                 //there seems to be no way to detect the original size via _real_ API
                 uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
@@ -1635,18 +1658,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
                         uno::makeAny( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
                 m_pImpl->applyMargins(xGraphicObjectProperties);
-                try
-                {
-                    if( !m_pImpl->sName.isEmpty() )
-                    {
-                        uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
-                        xNamed->setName( m_pImpl->sName );
-                    }
-                }
-                catch( const uno::Exception& e )
-                {
-                    SAL_WARN("writerfilter", "failed. Message :" << e.Message);
-                }
+                m_pImpl->applyName(xGraphicObjectProperties);
             }
         }
     }
