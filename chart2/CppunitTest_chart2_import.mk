@@ -11,7 +11,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,chart2_import))
 
-$(eval $(call gb_CppunitTest_use_external,chart2_import,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,chart2_import, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,chart2_import, \
     chart2/qa/extras/chart2import \
@@ -52,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
     utl \
     vbahelper \
     xo \
+    sw \
     $(gb_UWINAPI) \
 ))
 

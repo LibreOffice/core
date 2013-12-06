@@ -40,29 +40,60 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <iostream>
 
+#include <libxml/xmlwriter.h>
+#include <libxml/xpath.h>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+
 
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
+    ChartTest()
+        : mServiceName(),
+          m_bExported(false)
+    {
+    }
     void load( const char* pDir, const char* pName );
-    void reload( const OUString& rFilterName );
+    utl::TempFile reload( const OUString& rFilterName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
+    OUString getFileExtension( const char* pName );
 
+    void loadDocx(const char* pDir, const char* pName);
+    utl::TempFile reloadDocx();
     virtual void setUp();
     virtual void tearDown();
+
 protected:
     Reference< lang::XComponent > mxComponent;
-};
+     const char* mServiceName;
+    bool m_bExported; ///< Does m_aTempFile already contain something useful?
 
+};
+OUString ChartTest::getFileExtension( const char* pName )
+{
+    OUString fileName = OUString::createFromAscii(pName);
+    sal_Int32 dotLocation = fileName.lastIndexOf(L'.');
+    return fileName.copy(dotLocation);
+}
 void ChartTest::load( const char* pDir, const char* pName )
 {
-    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
+    OUString extension = getFileExtension(pName);
+    if(extension.equals("ods"))
+    {
+        mServiceName = "com.sun.star.sheet.SpreadsheetDocument";
+    }
+    else if(extension.equals("docx"))
+    {
+         mServiceName = "com.sun.star.text.TextDocument";
+
+    }
+    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), mServiceName);
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
-void ChartTest::reload(const OUString& rFilterName)
+utl::TempFile ChartTest::reload(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aArgs(1);
@@ -72,9 +103,10 @@ void ChartTest::reload(const OUString& rFilterName)
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), mServiceName);
     std::cout << aTempFile.GetURL();
     CPPUNIT_ASSERT(mxComponent.is());
+    return aTempFile;
 }
 
 void ChartTest::setUp()
