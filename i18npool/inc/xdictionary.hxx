@@ -28,6 +28,18 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 #define CACHE_MAX 32        // max cache structure number
 #define DEFAULT_SIZE 256    // for boundary size, to avoid alloc and release memory
+#define SAL_RTL_FIRST_HIGH_SURROGATE 0xD800
+#define SAL_RTL_LAST_HIGH_SURROGATE 0xDBFF
+#define SAL_RTL_FIRST_LOW_SURROGATE 0xDC00
+#define SAL_RTL_LAST_LOW_SURROGATE 0xDFFF
+
+#define SAL_RTL_IS_HIGH_SURROGATE(utf16) \
+    ((utf16) >= SAL_RTL_FIRST_HIGH_SURROGATE && \
+    (utf16) <= SAL_RTL_LAST_HIGH_SURROGATE)
+
+#define SAL_RTL_IS_LOW_SURROGATE(utf16) \
+    ((utf16) >= SAL_RTL_FIRST_LOW_SURROGATE && \
+    (utf16) <= SAL_RTL_LAST_LOW_SURROGATE)
 
 // cache structure.
 struct WordBreakCache {

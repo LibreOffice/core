@@ -30,7 +30,6 @@
 #include <unicode/uchar.h>
 #include <string.h>
 #include <breakiteratorImpl.hxx>
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -322,6 +321,10 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
                         else if (type != JapaneseCharType(*str))
                             break;
                         count++;
+                        if (len == 0 && slen > 0 && SAL_RTL_IS_HIGH_SURROGATE(*str)  && SAL_RTL_IS_LOW_SURROGATE(*(str+1)))
+                        {
+                            count--;
+                        }
                     }
                 }
             }
