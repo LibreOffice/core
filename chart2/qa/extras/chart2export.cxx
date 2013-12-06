@@ -39,6 +39,7 @@ public:
     void testChartDataTable();
     void testChartExternalData();
     void testEmbeddingsGrabBag();
+    void testAreaChartLoad();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -50,6 +51,7 @@ public:
     CPPUNIT_TEST(testChartDataTable);
     CPPUNIT_TEST(testChartExternalData);
     CPPUNIT_TEST(testEmbeddingsGrabBag);
+    CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -440,6 +442,7 @@ void Chart2ExportTest::testCrosses()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", "autoZero");
 }
+
 void Chart2ExportTest::testChartDataTable()
 {
     load("/chart2/qa/extras/data/docx/", "testChartDataTable.docx");
@@ -498,6 +501,15 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
        }
    }
    CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
+}
+
+void Chart2ExportTest::testAreaChartLoad()
+{
+    load ("/chart2/qa/extras/data/docx/", "testAreaChartLoad.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:showVal", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
