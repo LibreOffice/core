@@ -322,6 +322,14 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
 
     if (xContextHandler.is())
         xContextHandler->endFastElement(Element);
+    // In case a textbox is sent, and later we get additional properties for
+    // the textbox, then the wps context is not cleared, so do that here.
+    if (Element == (NMSP_wps | XML_wsp))
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
+        if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+            mxWpsContext.clear();
+    }
 }
 
 void SAL_CALL ShapeContextHandler::endUnknownElement

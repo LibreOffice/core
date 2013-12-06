@@ -1603,6 +1603,10 @@ DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(2514600)), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
     // This was -1 (default), make sure the background color is set.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xFrame, "BackColor"));
+
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(getShape(2), uno::UNO_QUERY);
+    // This was a com.sun.star.drawing.CustomShape, due to incorrect handling of wpg elements after a wps textbox.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
