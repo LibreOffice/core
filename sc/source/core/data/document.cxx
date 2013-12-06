@@ -6239,7 +6239,7 @@ void ScDocument::GetNotesInRange( const ScRangeList& rRange, std::vector<sc::Not
     for( size_t i = 0; i < rRange.size(); ++i)
     {
         const ScRange* pRange = rRange[i];
-        for( SCTAB nTab = pRange->aStart.Tab(); nTab < pRange->aEnd.Tab(); ++nTab )
+        for( SCTAB nTab = pRange->aStart.Tab(); nTab <= pRange->aEnd.Tab(); ++nTab )
         {
             maTabs[nTab]->GetNotesInRange( *pRange, rNotes );
         }

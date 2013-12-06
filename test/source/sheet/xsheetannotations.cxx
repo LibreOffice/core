@@ -22,6 +22,27 @@ using namespace css::uno;
 
 namespace apitest {
 
+void XSheetAnnotations::testCount()
+{
+    uno::Reference< sheet::XSheetAnnotations > aSheetAnnotations (init(), UNO_QUERY_THROW);
+
+    // count on sheet 1 before inserting
+    uno::Reference< container::XIndexAccess > xAnnotationsIndex (aSheetAnnotations, UNO_QUERY_THROW);
+    sal_Int32 nBefore = xAnnotationsIndex->getCount();
+
+    // get Sheet 2 annotations
+    uno::Reference< sheet::XSheetAnnotations > xSheet2Annotations( getAnnotations(1), UNO_QUERY_THROW);
+
+    // insert a note on sheet 2
+    table::CellAddress xTargetCellAddress (1,0,0);
+    xSheet2Annotations->insertNew(xTargetCellAddress, "an inserted annotation on sheet 2");
+
+    // count again on sheet 1
+    sal_Int32 nAfter = xAnnotationsIndex->getCount();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Annotations count should not change on sheet 1", nBefore, nAfter);
+}
+
 void XSheetAnnotations::testInsertNew()
 {
     uno::Reference< sheet::XSheetAnnotations > aSheetAnnotations (init(), UNO_QUERY_THROW);
@@ -29,6 +50,9 @@ void XSheetAnnotations::testInsertNew()
     // count before inserting
     uno::Reference< container::XIndexAccess > xAnnotationsIndex (aSheetAnnotations, UNO_QUERY_THROW);
     sal_Int32 nBefore = xAnnotationsIndex->getCount();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should already be one note", 1, nBefore );
 
     // insert the annotation
     table::CellAddress xTargetCellAddress (0,3,4);

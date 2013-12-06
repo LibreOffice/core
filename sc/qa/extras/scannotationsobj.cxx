@@ -20,7 +20,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 3
 
 class ScAnnontationsObj : public CalcUnoApiTest, apitest::XSheetAnnotations
 {
@@ -31,11 +31,12 @@ public:
     virtual void tearDown();
 
     virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< sheet::XSheetAnnotations> getAnnotations();
+    virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(long nIndex);
 
     CPPUNIT_TEST_SUITE(ScAnnontationsObj);
     CPPUNIT_TEST(testInsertNew);
     CPPUNIT_TEST(testRemoveByIndex);
+    CPPUNIT_TEST(testCount);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -51,12 +52,12 @@ ScAnnontationsObj::ScAnnontationsObj()
 {
 }
 
-uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations()
+uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long nIndex)
 {
     // get the sheet
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(nIndex), UNO_QUERY_THROW);
 
     // get the annotations collection
     uno::Reference< sheet::XSheetAnnotationsSupplier > xAnnotationSupplier(xSheet, UNO_QUERY_THROW);
@@ -76,9 +77,8 @@ uno::Reference< uno::XInterface > ScAnnontationsObj::init()
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());
 
-    return getAnnotations();
+    return getAnnotations(0);
 }
-
 void ScAnnontationsObj::setUp()
 {
     nTest++;
