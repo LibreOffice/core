@@ -1591,6 +1591,8 @@ DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     // positionV's posOffset from the bugdoc, was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(2514600)), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
+    // This was -1 (default), make sure the background color is set.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xFrame, "BackColor"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")

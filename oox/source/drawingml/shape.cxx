@@ -613,6 +613,12 @@ Reference< XShape > Shape::createAndInsert(
         {
             if (aServiceName == "com.sun.star.text.TextFrame")
             {
+                // TextFrames have BackColor, not FillColor
+                if (aShapeProps.hasProperty(PROP_FillColor))
+                {
+                    aShapeProps.setProperty(PROP_BackColor, aShapeProps[PROP_FillColor]);
+                    aShapeProps.erase(PROP_FillColor);
+                }
                 // TextFrames have BackColorTransparency, not FillTransparence
                 if (aShapeProps.hasProperty(PROP_FillTransparence))
                 {
