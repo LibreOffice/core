@@ -67,7 +67,7 @@ struct VCL_DLLPUBLIC JobData
 
     void setCollate( bool bCollate );
     bool setPaper( int nWidth, int nHeight ); // dimensions in pt
-    bool setPaperBin( int nPaperBin ); // dimensions in pt
+    bool setPaperBin( int nPaperBin );
     void resolveDefaultBackend();
     void setDefaultBackend(bool bUsePDF);
 
