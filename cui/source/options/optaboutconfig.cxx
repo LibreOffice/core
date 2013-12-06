@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <iostream>
 
 using namespace svx;
 using namespace ::com::sun::star;
@@ -209,37 +210,26 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )
 
 void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess, const OUString& sPath)
 {
-    sal_Bool bIsLeafNode;
-
-    Reference< XHierarchicalNameAccess > xHierarchicalNameAccess( xNameAccess, uno::UNO_QUERY_THROW );
-
     uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
     for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
     {
-        Any aNode = xHierarchicalNameAccess->getByHierarchicalName( seqItems[i] );
+        Any aNode = xNameAccess->getByName( seqItems[i] );
 
-        bIsLeafNode = sal_True;
-
-        try
+        Reference< XNameAccess > xNextNameAccess( aNode, uno::UNO_QUERY );
+        if( xNextNameAccess.is() )
         {
-            Reference< XHierarchicalNameAccess >xNextHierarchicalNameAccess( aNode, uno::UNO_QUERY_THROW );
-            Reference< XNameAccess > xNextNameAccess( xNextHierarchicalNameAccess, uno::UNO_QUERY_THROW );
-            FillItems( xNextNameAccess, sPath + OUString("/") + seqItems[i] );
-            bIsLeafNode = sal_False;
-
+            // not leaf node
+            FillItems( xNextNameAccess, sPath + seqItems[i] );
         }
-        catch( uno::Exception& )
+        else
         {
-        }
-
-        if( bIsLeafNode )
-        {
-            Any aProp = xHierarchicalNameAccess->getByHierarchicalName(seqItems[i]);
+            // leaf node
+            OUString sType = aNode.getValueTypeName();
 
             OUString sValue;
-            if( aProp.hasValue() )
+            if( aNode.hasValue() )
             {
-                switch( aProp.getValueType().getTypeClass() )
+                switch( aNode.getValueType().getTypeClass() )
                 {
                     case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
                     case ::com::sun::star::uno::TypeClass_SHORT :
@@ -248,10 +238,9 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     //case ::com::sun::star::uno::TypeClass_INT :
                     {
                         sal_Int32 nVal = 0;
-                        if(aProp >>= nVal)
+                        if(aNode >>= nVal)
                         {
-                            OUString aNumber( OUString::number( nVal ) );
-                            sValue = aNumber;
+                            sValue = OUString::number( nVal );
                         }
                     }
                     break;
@@ -259,10 +248,9 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     case ::com::sun::star::uno::TypeClass_BOOLEAN :
                     {
                         sal_Bool bVal = sal_False;
-                        if(aProp >>= bVal  )
+                        if(aNode >>= bVal  )
                         {
-                            OUString sBoolean( OUString::boolean( bVal ) );
-                            sValue = sBoolean;
+                            sValue = OUString::boolean( bVal );
                         }
                     }
                     break;
@@ -270,7 +258,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     case ::com::sun::star::uno::TypeClass_STRING :
                     {
                         OUString sString;
-                        if(aProp >>= sString)
+                        if(aNode >>= sString)
                         {
                             sValue = sString;
                         }
@@ -282,43 +270,38 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     //case ::com::sun::star::uno::TypeClass_ARRAY :
                     {
                         sValue = "";
-                        if( OUString("[]long") ==aProp.getValueTypeName() ||
-                                OUString("[]short")==aProp.getValueTypeName() )
+                        if( "[]long" == sType || "[]short"== sType )
                         {
                             uno::Sequence<sal_Int32> seqLong;
-                            if( aProp >>= seqLong )
+                            if( aNode >>= seqLong )
                             {
                                 for(int nInd=0;  nInd < seqLong.getLength(); ++nInd)
                                 {
-                                    OUString sNumber( OUString::number(seqLong[nInd]) );
-                                    sValue += sNumber;
-                                    sValue += ",";
+                                    sValue += OUString::number(seqLong[nInd]) + ",";
                                 }
                             }
                         }
 
-                        if( OUString("[]string") == aProp.getValueTypeName() )
+                        if( "[]string" == sType )
                         {
                             uno::Sequence< OUString > seqOUString;
-                            if( aProp >>= seqOUString )
+                            if( aNode >>= seqOUString )
                             {
                                 for( sal_Int16 nInd=0; nInd < seqOUString.getLength(); ++nInd )
                                 {
-                                    sValue += seqOUString[nInd] + OUString(",");
+                                    sValue += seqOUString[nInd] + ",";
                                 }
                             }
                         }
 
-                        if( OUString("[]hyper") == aProp.getValueTypeName() )
+                        if( "[]hyper" == sType )
                         {
                             uno::Sequence< sal_Int64 > seqHyp;
-                            if( aProp >>= seqHyp )
+                            if( aNode >>= seqHyp )
                             {
                                 for(int nInd = 0; nInd < seqHyp.getLength(); ++nInd)
                                 {
-                                    OUString sHyper( OUString::number( seqHyp[nInd] ) );
-                                    sValue += sHyper;
-                                    sValue += ",";
+                                    sValue += OUString::number( seqHyp[nInd] ) + ",";
                                 }
                             }
                         }
@@ -327,13 +310,12 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
 
                     default:
                     {
-                        if( OUString("hyper") == aProp.getValueTypeName() )
+                        if( "hyper" == sType )
                         {
                             sal_Int64 nHyp = 0;
-                            if(aProp >>= nHyp)
+                            if(aNode >>= nHyp)
                             {
-                                OUString aHyp( OUString::number( nHyp ) );
-                                sValue = aHyp;
+                                sValue = OUString::number( nHyp );
                             }
                         }else
                             sValue = "";
@@ -341,8 +323,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 }
             }
 
-            OUString sType = aProp.getValueTypeName();
-            InsertEntry( sPath, seqItems [ i ], sType, sValue);
+            InsertEntry( sPath, seqItems[i], sType, sValue);
         }
     }
 }
