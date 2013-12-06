@@ -20,6 +20,10 @@
 #ifndef _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 #define _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <MNSInclude.hxx>
 #include "MErrorResource.hxx"
 #include <sal/types.h>
