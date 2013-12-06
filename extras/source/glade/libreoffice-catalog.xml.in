@@ -275,6 +275,9 @@
     <glade-widget-class title="Address MultiLine Edit" name="swuilo-AddressMultiLineEdit"
                         generic-name="AddressMultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
+    <glade-widget-class title="LicenseView" name="deploymentgui-LicenseView"
+                        generic-name="LicenseView" parent="GtkTextView"
+                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

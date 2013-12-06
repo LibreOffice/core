@@ -56,7 +56,7 @@ class LicenseView : public MultiLineEdit, public SfxListener
     Link            maScrolledHdl;
 
 public:
-    LicenseView( Window* pParent, const ResId& rResId );
+    LicenseView( Window* pParent, WinBits nStyle );
     ~LicenseView();
 
     void ScrollDown( ScrollType eScroll );
@@ -80,27 +80,22 @@ protected:
 struct LicenseDialogImpl : public ModalDialog
 {
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
-    FixedText m_ftHead;
-    FixedText m_ftBody1;
-    FixedText m_ftBody1Txt;
-    FixedText m_ftBody2;
-    FixedText m_ftBody2Txt;
-    FixedImage m_fiArrow1;
-    FixedImage m_fiArrow2;
-    LicenseView m_mlLicense;
-    PushButton m_pbDown;
-    FixedLine m_flBottom;
+    FixedText* m_pFtHead;
+    FixedImage* m_pArrow1;
+    FixedImage* m_pArrow2;
+    LicenseView* m_pLicense;
+    PushButton* m_pDown;
 
-    OKButton m_acceptButton;
-    CancelButton m_declineButton;
+    PushButton* m_pAcceptButton;
+    PushButton* m_pDeclineButton;
 
     DECL_LINK(PageDownHdl, void *);
     DECL_LINK(ScrolledHdl, void *);
     DECL_LINK(EndReachedHdl, void *);
+    DECL_LINK(CancelHdl, void *);
+    DECL_LINK(AcceptHdl, void *);
 
     bool m_bLicenseRead;
-
-    virtual ~LicenseDialogImpl();
 
     LicenseDialogImpl(
         Window * pParent,
@@ -112,12 +107,21 @@ struct LicenseDialogImpl : public ModalDialog
 
 };
 
-LicenseView::LicenseView( Window* pParent, const ResId& rResId )
-    : MultiLineEdit( pParent, rResId )
+LicenseView::LicenseView( Window* pParent, WinBits nStyle )
+    : MultiLineEdit( pParent, nStyle )
 {
     SetLeftMargin( 5 );
     mbEndReached = IsEndReached();
     StartListening( *GetTextEngine() );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLicenseView(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new LicenseView(pParent, nWinStyle | WB_VSCROLL);
 }
 
 LicenseView::~LicenseView()
@@ -184,45 +188,51 @@ LicenseDialogImpl::LicenseDialogImpl(
     Window * pParent,
     cssu::Reference< cssu::XComponentContext > const & xContext,
     const OUString & sExtensionName,
-    const OUString & sLicenseText):
-        ModalDialog(pParent, DpGuiResId(RID_DLG_LICENSE))
-        ,m_xComponentContext(xContext)
-        ,m_ftHead(this, DpGuiResId(FT_LICENSE_HEADER))
-        ,m_ftBody1(this, DpGuiResId(FT_LICENSE_BODY_1))
-        ,m_ftBody1Txt(this, DpGuiResId(FT_LICENSE_BODY_1_TXT))
-        ,m_ftBody2(this, DpGuiResId(FT_LICENSE_BODY_2))
-        ,m_ftBody2Txt(this, DpGuiResId(FT_LICENSE_BODY_2_TXT))
-        ,m_fiArrow1(this, DpGuiResId(FI_LICENSE_ARROW1))
-        ,m_fiArrow2(this, DpGuiResId(FI_LICENSE_ARROW2))
-        ,m_mlLicense(this, DpGuiResId(ML_LICENSE))
-        ,m_pbDown(this, DpGuiResId(PB_LICENSE_DOWN))
-        ,m_flBottom(this, DpGuiResId(FL_LICENSE))
-        ,m_acceptButton(this, DpGuiResId(BTN_LICENSE_ACCEPT))
-        ,m_declineButton(this, DpGuiResId(BTN_LICENSE_DECLINE))
-        ,m_bLicenseRead(false)
-
+    const OUString & sLicenseText)
+    : ModalDialog(pParent, "LicenseDialog", "desktop/ui/licensedialog.ui")
+    , m_xComponentContext(xContext)
+    , m_bLicenseRead(false)
 {
+    get(m_pFtHead, "head");
+    get(m_pArrow1, "arrow1");
+    get(m_pArrow2, "arrow2");
+    get(m_pDown, "down");
+    get(m_pAcceptButton, "accept");
+    get(m_pDeclineButton, "decline");
+    m_pArrow1->Show(true);
+    m_pArrow2->Show(false);
+    get(m_pLicense, "textview");
 
-    FreeResource();
+    Size aSize(m_pLicense->LogicToPixel(Size(290, 170), MAP_APPFONT));
+    m_pLicense->set_width_request(aSize.Width());
+    m_pLicense->set_height_request(aSize.Height());
 
-    m_acceptButton.SetUniqueId(UID_BTN_LICENSE_ACCEPT);
-    m_fiArrow1.Show(true);
-    m_fiArrow2.Show(false);
-    m_mlLicense.SetText(sLicenseText);
-    m_ftHead.SetText(m_ftHead.GetText() + OUString('\n') + sExtensionName);
+    m_pLicense->SetText(sLicenseText);
+    m_pFtHead->SetText(m_pFtHead->GetText() + "\n" + sExtensionName);
 
-    m_mlLicense.SetEndReachedHdl( LINK(this, LicenseDialogImpl, EndReachedHdl) );
-    m_mlLicense.SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
-    m_pbDown.SetClickHdl( LINK(this, LicenseDialogImpl, PageDownHdl) );
+    m_pAcceptButton->SetClickHdl( LINK(this, LicenseDialogImpl, AcceptHdl) );
+    m_pDeclineButton->SetClickHdl( LINK(this, LicenseDialogImpl, CancelHdl) );
+
+    m_pLicense->SetEndReachedHdl( LINK(this, LicenseDialogImpl, EndReachedHdl) );
+    m_pLicense->SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
+    m_pDown->SetClickHdl( LINK(this, LicenseDialogImpl, PageDownHdl) );
 
     // We want a automatic repeating page down button
-    WinBits aStyle = m_pbDown.GetStyle();
+    WinBits aStyle = m_pDown->GetStyle();
     aStyle |= WB_REPEAT;
-    m_pbDown.SetStyle( aStyle );
+    m_pDown->SetStyle( aStyle );
 }
 
-LicenseDialogImpl::~LicenseDialogImpl()
+IMPL_LINK_NOARG(LicenseDialogImpl, AcceptHdl)
 {
+    EndDialog(true);
+    return 0;
+}
+
+IMPL_LINK_NOARG(LicenseDialogImpl, CancelHdl)
+{
+    EndDialog(false);
+    return 0;
 }
 
 void LicenseDialogImpl::Activate()
@@ -230,17 +240,17 @@ void LicenseDialogImpl::Activate()
     if (!m_bLicenseRead)
     {
         //Only enable the scroll down button if the license text does not fit into the window
-        if (m_mlLicense.IsEndReached())
+        if (m_pLicense->IsEndReached())
         {
-            m_pbDown.Disable();
-            m_acceptButton.Enable();
-            m_acceptButton.GrabFocus();
+            m_pDown->Disable();
+            m_pAcceptButton->Enable();
+            m_pAcceptButton->GrabFocus();
         }
         else
         {
-            m_pbDown.Enable();
-            m_pbDown.GrabFocus();
-            m_acceptButton.Disable();
+            m_pDown->Enable();
+            m_pDown->GrabFocus();
+            m_pAcceptButton->Disable();
         }
     }
 }
@@ -248,26 +258,26 @@ void LicenseDialogImpl::Activate()
 IMPL_LINK_NOARG(LicenseDialogImpl, ScrolledHdl)
 {
 
-    if (m_mlLicense.IsEndReached())
-        m_pbDown.Disable();
+    if (m_pLicense->IsEndReached())
+        m_pDown->Disable();
     else
-        m_pbDown.Enable();
+        m_pDown->Enable();
 
     return 0;
 }
 
 IMPL_LINK_NOARG(LicenseDialogImpl, PageDownHdl)
 {
-    m_mlLicense.ScrollDown( SCROLL_PAGEDOWN );
+    m_pLicense->ScrollDown( SCROLL_PAGEDOWN );
     return 0;
 }
 
 IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl)
 {
-    m_acceptButton.Enable();
-    m_acceptButton.GrabFocus();
-    m_fiArrow1.Show(false);
-    m_fiArrow2.Show(true);
+    m_pAcceptButton->Enable();
+    m_pAcceptButton->GrabFocus();
+    m_pArrow1->Show(false);
+    m_pArrow2->Show(true);
     m_bLicenseRead = true;
     return 0;
 }

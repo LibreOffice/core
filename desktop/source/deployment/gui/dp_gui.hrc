@@ -33,20 +33,6 @@
 #define RID_EM_FT_PROGRESS                     14
 #define RID_EM_FT_MSG                          15
 
-// local RIDs:
-#define PB_LICENSE_DOWN                         50
-#define ML_LICENSE                              51
-#define BTN_LICENSE_DECLINE                     53
-#define FT_LICENSE_HEADER                       54
-#define FT_LICENSE_BODY_1                       55
-#define FT_LICENSE_BODY_1_TXT                   56
-#define FT_LICENSE_BODY_2                       57
-#define FT_LICENSE_BODY_2_TXT                   58
-#define FL_LICENSE                              69
-#define FI_LICENSE_ARROW1                       60
-#define FI_LICENSE_ARROW2                       61
-#define BTN_LICENSE_ACCEPT                      63
-
 // local RIDs for "Download and Install" dialog
 
 #define RID_DLG_UPDATE_INSTALL_ABORT 2
@@ -153,8 +139,6 @@
 #define RID_WARNINGBOX_REMOVE_SHARED_EXTENSION  (RID_DEPLOYMENT_GUI_START+104)
 #define RID_WARNINGBOX_ENABLE_SHARED_EXTENSION  (RID_DEPLOYMENT_GUI_START+105)
 #define RID_WARNINGBOX_DISABLE_SHARED_EXTENSION (RID_DEPLOYMENT_GUI_START+106)
-
-#define RID_DLG_LICENSE                         RID_DEPLOYMENT_LICENSE_START
 
 #endif
 
