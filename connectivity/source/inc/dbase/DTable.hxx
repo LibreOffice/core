@@ -33,9 +33,6 @@ namespace connectivity
         typedef file::OFileTable ODbaseTable_BASE;
         class ODbaseConnection;
 
-        typedef ::std::map< OUString,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
-
         class ODbaseTable : public ODbaseTable_BASE
         {
         // The first byte of a dBase file specifies its type

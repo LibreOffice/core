@@ -39,10 +39,6 @@ namespace connectivity
         typedef file::OFileTable OCalcTable_BASE;
         class OCalcConnection;
 
-        typedef ::std::map< OUString,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>,
-                        comphelper::UStringMixLess > OContainer;
-
         class OCalcTable :  public OCalcTable_BASE
         {
         private:
