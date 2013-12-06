@@ -63,7 +63,7 @@ private:
     void InvalidateChildrensListPositions();
 
 public:
-    const size_t ITEM_NOT_FOUND = SAL_MAX_SIZE;
+    static const size_t ITEM_NOT_FOUND = SAL_MAX_SIZE;
 
     SvTreeListEntry();
     SvTreeListEntry(const SvTreeListEntry& r);
