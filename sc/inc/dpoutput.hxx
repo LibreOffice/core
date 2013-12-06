@@ -41,28 +41,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class Rectangle;
 class ScDocument;
-
 struct ScDPOutLevelData;
-
-
-struct ScDPGetPivotDataField
-{
-    OUString maFieldName;
-    com::sun::star::sheet::GeneralFunction meFunction;
-
-    bool   mbValIsStr;
-    OUString maValStr;
-    double mnValNum;
-
-        ScDPGetPivotDataField() :
-            meFunction( com::sun::star::sheet::GeneralFunction_NONE ),
-            mbValIsStr( false ),
-            mnValNum( 0.0 )
-        {
-        }
-};
-
-
 
 class ScDPOutput
 {
