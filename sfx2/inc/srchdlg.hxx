@@ -36,14 +36,12 @@ namespace sfx2 {
 class SearchDialog : public ModelessDialog
 {
 private:
-    FixedText           m_aSearchLabel;
-    ComboBox            m_aSearchEdit;
-    CheckBox            m_aWholeWordsBox;
-    CheckBox            m_aMatchCaseBox;
-    CheckBox            m_aWrapAroundBox;
-    CheckBox            m_aBackwardsBox;
-    PushButton          m_aFindBtn;
-    CancelButton        m_aCancelBtn;
+    ComboBox*           m_pSearchEdit;
+    CheckBox*           m_pWholeWordsBox;
+    CheckBox*           m_pMatchCaseBox;
+    CheckBox*           m_pWrapAroundBox;
+    CheckBox*           m_pBackwardsBox;
+    PushButton*         m_pFindBtn;
 
     Link                m_aFindHdl;
     Link                m_aCloseHdl;
@@ -58,25 +56,24 @@ private:
     void                SaveConfig();
 
     DECL_LINK(FindHdl, void *);
-    DECL_LINK(ToggleHdl, void *);
 
 public:
     SearchDialog( Window* pWindow, const OUString& rConfigName );
     ~SearchDialog();
 
-    inline void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
-    inline void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
+    void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
+    void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
 
-    inline OUString     GetSearchText() const { return m_aSearchEdit.GetText(); }
-    inline void         SetSearchText( const OUString& _rText ) { m_aSearchEdit.SetText( _rText ); }
-    inline bool         IsOnlyWholeWords() const { return ( m_aWholeWordsBox.IsChecked() != sal_False ); }
-    inline bool         IsMarchCase() const { return ( m_aMatchCaseBox.IsChecked() != sal_False ); }
-    inline bool         IsWrapAround() const { return ( m_aWrapAroundBox.IsChecked() != sal_False ); }
-    inline bool         IsSearchBackwards() const { return ( m_aBackwardsBox.IsChecked() != sal_False ); }
+    OUString     GetSearchText() const { return m_pSearchEdit->GetText(); }
+    void         SetSearchText( const OUString& _rText ) { m_pSearchEdit->SetText( _rText ); }
+    bool         IsOnlyWholeWords() const { return ( m_pWholeWordsBox->IsChecked() ); }
+    bool         IsMarchCase() const { return ( m_pMatchCaseBox->IsChecked() ); }
+    bool         IsWrapAround() const { return ( m_pWrapAroundBox->IsChecked() ); }
+    bool         IsSearchBackwards() const { return ( m_pBackwardsBox->IsChecked() ); }
 
     void                SetFocusOnEdit();
 
-    virtual sal_Bool        Close();
+    virtual sal_Bool    Close();
     virtual void        Move();
     virtual void        StateChanged( StateChangedType nStateChange );
 };

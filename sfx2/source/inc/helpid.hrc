@@ -122,8 +122,6 @@
 
 #define HID_CONFIG_SAVE                                       "SFX2_HID_CONFIG_SAVE"
 
-#define HID_SEARCHDIALOG                                      "SFX2_HID_SEARCHDIALOG"
-
 #define HID_XMLSEC_QUERY_SAVEBEFORESIGN                       "SFX2_HID_XMLSEC_QUERY_SAVEBEFORESIGN"
 #define HID_XMLSECDLG_MACROWARN                               "SFX2_HID_XMLSECDLG_MACROWARN"
 #define HID_XMLSEC_INFO_WRONGDOCFORMAT                        "SFX2_HID_XMLSEC_INFO_WRONGDOCFORMAT"

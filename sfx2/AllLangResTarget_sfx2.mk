@@ -48,7 +48,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/inputdlg.src \
     sfx2/source/dialog/newstyle.src \
     sfx2/source/dialog/recfloat.src \
-    sfx2/source/dialog/srchdlg.src \
     sfx2/source/dialog/taskpane.src \
     sfx2/source/dialog/templateinfodlg.src \
     sfx2/source/dialog/templdlg.src \
