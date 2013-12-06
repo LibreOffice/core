@@ -89,11 +89,8 @@ void OpCosh::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+    const std::string sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
-          formula::SingleVectorRefToken *>(tmpCur);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -102,20 +99,48 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ")\n{\n";
-    ss <<"    int gid0=get_global_id(0);\n";
-    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = 0.0f;\n";
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR=
+                dynamic_cast
+                <const formula::SingleVectorRefToken *>(tmpCur);
+            ss << "    arg0 = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
 #ifdef ISNAN
-    ss<< "    if(isNan(arg0)||(gid0>=";
-    ss<<tmpCurDVR->GetArrayLength();
-    ss<<"))\n";
-    ss<<"        arg0 = 0;\n";
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "    { arg0 = 0.0f; }\n";
 #endif
-    ss << "    double tmp=1/tan(arg0);\n";
-    ss << "    return tmp;\n";
+        }
+        else if(tmpCur->GetType() == formula::svDouble)
+        {
+            ss << "    arg0=";
+            ss << tmpCur->GetDouble() << ";\n";
+        }
+    }
+    else
+    {
+        ss << "        arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+    ss << "    arg0 = arg0 * M_1_PI;\n";
+    ss << "    return cospi(arg0) * pow(sinpi(arg0), -1);\n";
     ss << "}";
 }
+
 
 void OpCoth::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
