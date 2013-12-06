@@ -388,8 +388,18 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
                     i--;
             }
             boundary.endPos = boundary.startPos;
-            rText.iterateCodePoints(&boundary.endPos, aCache.wordboundary[i]);
-            rText.iterateCodePoints(&boundary.startPos, aCache.wordboundary[i-1]);
+            sal_Int32 counter = aCache.wordboundary[i];
+            int sizeOfArray = 0;
+            while (aCache.wordboundary[sizeOfArray] != NULL)
+            { //loop until NULL character is found
+                sizeOfArray++; //increment size
+            }
+            for (int n = i ;n < sizeOfArray; n++)
+            {
+                 rText.iterateCodePoints(&counter, 1);
+            }
+            boundary.endPos = counter;
+            boundary.startPos = counter - (aCache.wordboundary[i]);
         } else {
             boundary.startPos = anyPos;
             if (anyPos < len) rText.iterateCodePoints(&anyPos, 1);
