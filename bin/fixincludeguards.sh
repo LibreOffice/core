@@ -17,6 +17,9 @@
 # ...
 # #endif // OTHER_BAR_HXX
 
+# TODO: Make this portable. As it is now, it likely only works on Linux, or
+# other platforms with a purely GNU toolset.
+
 guard_prefix="INCLUDED_"
 
 for fn in "$@"; do
