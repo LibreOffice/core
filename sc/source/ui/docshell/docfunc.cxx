@@ -946,7 +946,19 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     if (bUndo)
         aOldVal.assign(*pDoc, rPos);
 
-    pDoc->SetFormulaCell(rPos, xCell.release());
+    pCell = pDoc->SetFormulaCell(rPos, xCell.release());
+
+    // For performance reasons API calls may disable calculation while
+    // operating and recalculate once when done. If through user interaction
+    // and AutoCalc is disabled, calculate the formula (without its
+    // dependencies) once so the result matches the current document's content.
+    if (bInteraction && !pDoc->GetAutoCalc() && pCell)
+    {
+        // calculate just the cell once and set Dirty again
+        pCell->Interpret();
+        pCell->SetDirtyVar();
+        pDoc->PutInFormulaTree( pCell);
+    }
 
     if (bUndo)
     {
