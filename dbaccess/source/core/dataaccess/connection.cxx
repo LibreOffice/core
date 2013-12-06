@@ -487,8 +487,8 @@ void OConnection::disposing()
     OSubComponent::disposing();
     OConnectionWrapper::disposing();
 
-    OWeakRefArray::iterator aEnd = m_aStatements.end();
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); aEnd != i; ++i)
+    connectivity::OWeakRefArray::iterator aEnd = m_aStatements.end();
+    for (connectivity::OWeakRefArray::iterator i = m_aStatements.begin(); aEnd != i; ++i)
     {
         Reference<XComponent> xComp(i->get(),UNO_QUERY);
         ::comphelper::disposeComponent(xComp);
@@ -503,8 +503,8 @@ void OConnection::disposing()
 
     ::comphelper::disposeComponent(m_xQueries);
 
-    OWeakRefArray::iterator aComposerEnd = m_aComposers.end();
-    for (OWeakRefArray::iterator j = m_aComposers.begin(); aComposerEnd != j; ++j)
+    connectivity::OWeakRefArray::iterator aComposerEnd = m_aComposers.end();
+    for (connectivity::OWeakRefArray::iterator j = m_aComposers.begin(); aComposerEnd != j; ++j)
     {
         Reference<XComponent> xComp(j->get(),UNO_QUERY);
         ::comphelper::disposeComponent(xComp);

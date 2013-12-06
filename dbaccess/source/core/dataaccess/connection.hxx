@@ -48,6 +48,7 @@
 #include <comphelper/implbase_var.hxx>
 #endif
 #include <connectivity/ConnectionWrapper.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>
 
 namespace dbaccess
@@ -80,10 +81,10 @@ class OConnection           :public ::comphelper::OBaseMutex
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
                             m_xMasterTables; // just to avoid the recreation of the catalog
-    OWeakRefArray           m_aStatements;
+    connectivity::OWeakRefArray           m_aStatements;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                             m_xQueries;
-    OWeakRefArray           m_aComposers;
+    connectivity::OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
     ::com::sun::star::uno::Sequence< OUString >  m_aTableFilter;

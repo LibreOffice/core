@@ -22,19 +22,12 @@
 
 #include <sal/config.h>
 
-#include <vector>
-
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-
-// various typedefs
-namespace {
-typedef std::vector<css::uno::WeakReferenceHelper> OWeakRefArray;
-}
 
 // OSubComponent - a component which holds a hard ref to it's parent
 //                 and is been hold itself (by the parent) with a weak ref
