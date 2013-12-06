@@ -3005,6 +3005,21 @@ void ScInterpreter::ScGetPivotData()
         return;
     }
 
+    if (bOldSyntax)
+    {
+        OUString aFilterStr = aDataFieldName;
+        std::vector<sheet::GeneralFunction> aFilterFuncs;
+        if (!pDPObj->ParseFilters(aDataFieldName, aFilters, aFilterFuncs, aFilterStr))
+        {
+            PushError(errNoRef);
+            return;
+        }
+
+        // TODO : For now, we ignore filter functions since we couldn't find a
+        // live example of how they are supposed to be used. We'll support
+        // this again once we come across a real-world example.
+    }
+
     double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);
     if (rtl::math::isNan(fVal))
     {
