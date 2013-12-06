@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAa3///KU\u003d",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4116,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-12-06T06:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAa3///Lg\u003d",
+      "revId": "a2d4c2e2ec9bea0b96377e044c89b4bfdf0e21dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAa3///LY\u003d",
         "filename": "sc/source/filter/excel/xlformula.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-12-05T20:18:08Z",
       "side": 1,
       "message": "These should be the ..._MS opcodes instead, otherwise the non-MS functions would be im-/exported.",
+      "revId": "a2d4c2e2ec9bea0b96377e044c89b4bfdf0e21dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3///KM\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-12-06T06:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAa3///LY\u003d",
       "revId": "a2d4c2e2ec9bea0b96377e044c89b4bfdf0e21dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
