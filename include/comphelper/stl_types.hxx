@@ -58,12 +58,6 @@ public:
 };
 
 //------------------------------------------------------------------------
-struct UStringIEqual
-{
-    sal_Bool operator() (const OUString& lhs, const OUString& rhs) const { return lhs.equalsIgnoreAsciiCase( rhs );}
-};
-
-//------------------------------------------------------------------------
 class UStringMixEqual
 {
     sal_Bool m_bCaseSensitive;
