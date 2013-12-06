@@ -12,6 +12,13 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+
+#include <unotools/ucbstreamhelper.hxx>
+#include <rtl/strbuf.hxx>
+
+#include <libxml/xpathInternals.h>
+#include <libxml/parserInternals.h>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -19,15 +26,50 @@ using beans::XPropertySet;
 class Chart2ExportTest : public ChartTest
 {
 public:
+    Chart2ExportTest() : ChartTest() {}
     void test();
     void testErrorBarXLSX();
     void testTrendline();
-
+    void testBarChart();
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
+    CPPUNIT_TEST(testBarChart);
+
     CPPUNIT_TEST_SUITE_END();
+
+protected:
+    /**
+     * Given that some problem doesn't affect the result in the importer, we
+     * test the resulting file directly, by opening the zip file, parsing an
+     * xml stream, and asserting an XPath expression. This method returns the
+     * xml stream, so that you can do the asserting.
+     */
+    xmlDocPtr parseExport(const OUString& rStreamName);
+
+    /**
+     * Helper method to return nodes represented by rXPath.
+     */
+    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
+
+    /**
+     * Assert that rXPath exists, and returns exactly one node.
+     * In case rAttribute is provided, the rXPath's attribute's value must
+     * equal to the rExpected value.
+     */
+    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString());
+
+    /**
+     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
+     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
+     */
+    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
+
+    /**
+     * Same as the assertXPath(), but don't assert: return the string instead.
+     */
+    OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
 
 private:
 };
@@ -36,6 +78,69 @@ void Chart2ExportTest::test()
 {
     load("/chart2/qa/extras/data/ods/", "simple_export_chart.ods");
     reload("Calc Office Open XML");
+}
+
+xmlDocPtr Chart2ExportTest::parseExport(const OUString& rStreamName)
+{
+    if (!m_bExported)
+        return 0;
+    utl::TempFile aTempFile = reload("Office Open XML Text");
+
+    // Read the XML stream we're interested in.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
+    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+    OStringBuffer aDocument(nSize);
+    char ch;
+    for (sal_Size i = 0; i < nSize; ++i)
+    {
+        *pStream >> ch;
+        aDocument.append(ch);
+    }
+
+    // Parse the XML.
+    return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+}
+
+xmlNodeSetPtr Chart2ExportTest::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
+{
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
+    return pXmlXpathObj->nodesetval;
+}
+
+void Chart2ExportTest::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
+{
+    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OString("Attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
+        rExpectedValue, aValue);
+}
+
+void Chart2ExportTest::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+        nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
+OUString Chart2ExportTest::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+        1, xmlXPathNodeSetGetLength(pXmlNodes));
+    if (rAttribute.isEmpty())
+        return OUString();
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
 }
 
 namespace {
@@ -253,6 +358,18 @@ void Chart2ExportTest::testTrendline()
     reload("MS Excel 97");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
 
+}
+
+
+void Chart2ExportTest::testBarChart()
+{
+    load("/chart2/qa/extras/data/docx/", "testBarChart.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+           return;
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", "col");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
