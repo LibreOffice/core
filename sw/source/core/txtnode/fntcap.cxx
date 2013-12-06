@@ -541,7 +541,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                              rDo.GetInf().GetLen() );
     rDo.GetInf().SetLen( nMaxPos );
 
-    const OUString& rOldText = rDo.GetInf().GetText();
+    const OUString oldText = rDo.GetInf().GetText();
     rDo.GetInf().SetText( aTxt );
     xub_StrLen nPos = rDo.GetInf().GetIdx();
     xub_StrLen nOldPos = nPos;
@@ -551,8 +551,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     // Look if the length of the original text and the ToUpper-converted
     // text is different. If yes, do special handling.
     OUString aNewText;
-    SwCapitalInfo aCapInf( rOldText );
-    sal_Bool bCaseMapLengthDiffers( aTxt.getLength() != rOldText.getLength() );
+    SwCapitalInfo aCapInf(oldText);
+    sal_Bool bCaseMapLengthDiffers(aTxt.getLength() != oldText.getLength());
     if ( bCaseMapLengthDiffers )
         rDo.SetCapInf( aCapInf );
 
@@ -623,7 +623,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     if( nPos < nMaxPos )
     {
-        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfCharBlock(
+                        oldText, nPos,
             g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN )
             nPos = nOldPos;
@@ -647,7 +648,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 // Build an own 'changed' string for the given part of the
                 // source string and use it. That new string may differ in length
                 // from the source string.
-                const OUString aSnippet(rOldText.copy(nOldPos, nPos - nOldPos));
+                const OUString aSnippet(oldText.copy(nOldPos, nPos - nOldPos));
                 aNewText = CalcCaseMap( aSnippet );
                 aCapInf.nIdx = nOldPos;
                 aCapInf.nLen = nPos - nOldPos;
@@ -672,7 +673,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             rDo.Do();
             nOldPos = nPos;
         }
-        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->nextCharBlock(
+                            oldText, nPos,
                g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
@@ -695,7 +697,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 if( bWordWise )
                 {
                     nTmp = nOldPos;
-                    while( nTmp < nPos && CH_BLANK == rOldText[nTmp] )
+                    while (nTmp < nPos && CH_BLANK == oldText[nTmp])
                         ++nTmp;
                     if( nOldPos < nTmp )
                     {
@@ -713,7 +715,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                             // Build an own 'changed' string for the given part of the
                             // source string and use it. That new string may differ in length
                             // from the source string.
-                            const OUString aSnippet(rOldText.copy(nOldPos, nTmp - nOldPos));
+                            const OUString aSnippet(oldText.copy(nOldPos, nTmp - nOldPos));
                             aNewText = CalcCaseMap( aSnippet );
                             aCapInf.nIdx = nOldPos;
                             aCapInf.nLen = nTmp - nOldPos;
@@ -741,7 +743,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         nOldPos = nTmp;
                     }
 
-                    while( nTmp < nPos && CH_BLANK != rOldText[nTmp] )
+                    while (nTmp < nPos && CH_BLANK != oldText[nTmp])
                         ++nTmp;
                 }
                 else
@@ -754,7 +756,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         // Build an own 'changed' string for the given part of the
                         // source string and use it. That new string may differ in length
                         // from the source string.
-                        const OUString aSnippet(rOldText.copy(nOldPos, nTmp - nOldPos));
+                        const OUString aSnippet(oldText.copy(nOldPos, nTmp - nOldPos));
                         aNewText = CalcCaseMap( aSnippet );
                         aCapInf.nIdx = nOldPos;
                         aCapInf.nLen = nTmp - nOldPos;
@@ -776,7 +778,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     {
                         for( sal_Int32 nI = nOldPos; nI < nPos; ++nI )
                         {
-                            if( CH_BLANK == rOldText[nI] )
+                            if (CH_BLANK == oldText[nI])
                                 aPartSize.Width() += nSpaceAdd;
                         }
                     }
@@ -788,7 +790,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 }
             } while( nOldPos != nPos );
         }
-        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfCharBlock(
+                            oldText, nPos,
                g_pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
@@ -818,7 +821,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
 
     delete pSmallFontAccess;
-    rDo.GetInf().SetText( rOldText );
+    rDo.GetInf().SetText(oldText);
     rDo.GetInf().SetKanaDiff( nKana );
 }
 
