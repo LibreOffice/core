@@ -948,6 +948,24 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
 
     pDoc->SetFormulaCell(rPos, xCell.release());
 
+    // For performance reasons API calls may disable calculation while
+    // operating and recalculate once when done. If through user interaction
+    // and AutoCalc is disabled, calculate the formula (without its
+    // dependencies) once so the result matches the current document's content.
+    if (bInteraction && !pDoc->GetAutoCalc() && pCell)
+    {
+        // ScDocument/ScTable::SetFormulaCell() may have deleted pCell if
+        // position address was invalid, so check here again. This is
+        // backported code, new code handles that smarter..
+        if (rPos.Tab() < pDoc->GetTableCount() && ValidColRow( rPos.Col(), rPos.Row()))
+        {
+            // calculate just the cell once and set Dirty again
+            pCell->Interpret();
+            pCell->SetDirtyVar();
+            pDoc->PutInFormulaTree( pCell);
+        }
+    }
+
     if (bUndo)
     {
         svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
