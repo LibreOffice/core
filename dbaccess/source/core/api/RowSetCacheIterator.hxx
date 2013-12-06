@@ -19,8 +19,11 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETCACHEITERATOR_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETCACHEITERATOR_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include "RowSetRow.hxx"
-#include <comphelper/stl_types.hxx>
 
 namespace dbaccess
 {
@@ -32,7 +35,7 @@ namespace dbaccess
         ORowSetBase*                pRowSet;
     } ORowSetCacheIterator_Helper;
 
-    DECLARE_STL_STDKEY_MAP(sal_Int32,ORowSetCacheIterator_Helper,ORowSetCacheMap);
+    typedef std::map<sal_Int32, ORowSetCacheIterator_Helper> ORowSetCacheMap;
 
     class ORowSetCache;
     class ORowSetCacheIterator

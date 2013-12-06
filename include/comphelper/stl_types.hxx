@@ -242,9 +242,6 @@ OutputIter intersperse(
     typedef std::map< keytype, valuetype, comparefct >  classname;  \
     DECLARE_STL_ITERATORS(classname)                                \
 
-#define DECLARE_STL_STDKEY_MAP(keytype, valuetype, classname)               \
-    DECLARE_STL_MAP(keytype, valuetype, std::less< keytype >, classname)    \
-
 #endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -334,7 +334,7 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl,
     aEvt.IsEnabled = !pGrid->IsReadOnlyDB();
     aEvt.FeatureURL = _rUrl;
 
-    ConstMapDispatchToBoolIterator aURLStatePos = m_aDispatchStates.find( classifyDispatchURL( _rUrl ) );
+    MapDispatchToBool::const_iterator aURLStatePos = m_aDispatchStates.find( classifyDispatchURL( _rUrl ) );
     if ( m_aDispatchStates.end() != aURLStatePos )
         aEvt.State <<= aURLStatePos->second;
     else

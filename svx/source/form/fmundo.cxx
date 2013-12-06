@@ -55,7 +55,6 @@
 #include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/stl_types.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -167,7 +166,7 @@ sal_Bool operator < (const Reference< XPropertySet >& lhs,
     return lhs.get() < rhs.get();
 }
 
-DECLARE_STL_STDKEY_MAP(Reference< XPropertySet >, PropertySetInfo, PropertySetInfoCache);
+typedef std::map<Reference< XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
 //------------------------------------------------------------------------------
 
@@ -530,7 +529,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
         if (xSourceSet.is())
         {
             PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
-            PropertySetInfoCacheIterator aSetPos = pCache->find(xSourceSet);
+            PropertySetInfoCache::iterator aSetPos = pCache->find(xSourceSet);
             if (aSetPos != pCache->end())
                 pCache->erase(aSetPos);
         }
@@ -591,7 +590,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
 
         // let's see if we know something about the set
-        PropertySetInfoCacheIterator aSetPos = pCache->find(xSet);
+        PropertySetInfoCache::iterator aSetPos = pCache->find(xSet);
         if (aSetPos == pCache->end())
         {
             PropertySetInfo aNewEntry;

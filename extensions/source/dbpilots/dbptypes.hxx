@@ -22,10 +22,9 @@
 
 #include <sal/config.h>
 
+#include <map>
 #include <set>
 #include <vector>
-
-#include <comphelper/stl_types.hxx>
 
 //.........................................................................
 namespace dbp
@@ -34,7 +33,7 @@ namespace dbp
 
     typedef std::vector<OUString> StringArray;
     typedef std::set<OUString> StringBag;
-    DECLARE_STL_STDKEY_MAP( sal_uInt32, OUString, MapInt2String );
+    typedef std::map<sal_uInt32, OUString> MapInt2String;
 
 //.........................................................................
 }   // namespace dbp

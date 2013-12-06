@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <map>
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
@@ -25,7 +28,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/style.hxx>
@@ -86,11 +88,11 @@ extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 ///////////////////////////////////////////////////////////////////////
 
-DECLARE_STL_STDKEY_MAP(sal_uIntPtr, SfxExtItemPropertySetInfo*, SdExtPropertySetInfoCache);
+typedef std::map<sal_uIntPtr, SfxExtItemPropertySetInfo*> SdExtPropertySetInfoCache;
 static SdExtPropertySetInfoCache gImplImpressPropertySetInfoCache;
 static SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;
 
-DECLARE_STL_STDKEY_MAP(sal_uInt32, uno::Sequence< uno::Type >*, SdTypesCache);
+typedef std::map<sal_uInt32, uno::Sequence< uno::Type >*> SdTypesCache;
 static SdTypesCache gImplTypesCache;
 
 ///////////////////////////////////////////////////////////////////////

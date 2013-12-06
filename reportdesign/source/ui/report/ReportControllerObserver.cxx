@@ -43,7 +43,7 @@ namespace rptui
     using namespace ::com::sun::star;
 
 typedef std::map<OUString, bool> AllProperties;
-DECLARE_STL_STDKEY_MAP(uno::Reference< beans::XPropertySet >, AllProperties, PropertySetInfoCache);
+typedef std::map<uno::Reference< beans::XPropertySet >, AllProperties> PropertySetInfoCache;
 
 class OXReportControllerObserverImpl
 {

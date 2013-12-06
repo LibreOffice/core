@@ -31,6 +31,7 @@
 #include <comphelper/stl_types.hxx>
 #include "sbamultiplex.hxx"
 #include <svx/dataaccessdescriptor.hxx>
+#include <map>
 #include <queue>
 
 class SvNumberFormatter;
@@ -163,7 +164,7 @@ namespace dbaui
         };
         DispatchType classifyDispatchURL( const ::com::sun::star::util::URL& _rURL );
 
-        DECLARE_STL_STDKEY_MAP( DispatchType, sal_Bool, MapDispatchToBool );
+        typedef std::map<DispatchType, sal_Bool> MapDispatchToBool;
         MapDispatchToBool   m_aDispatchStates;
     };
 
