@@ -12,15 +12,17 @@
 
 #include <ibase.h>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase2.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XBlob.hpp>
 
 namespace connectivity
 {
     namespace firebird
     {
-        typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::sdbc::XBlob >
+        typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::sdbc::XBlob,
+                                                  ::com::sun::star::io::XInputStream >
             Blob_BASE;
 
         class Blob :
@@ -38,12 +40,18 @@ namespace connectivity
             isc_blob_handle     m_blobHandle;
 
             bool                m_bBlobOpened;
+            sal_Int64           m_nBlobLength;
+            sal_Int64           m_nBlobPosition;
 
             ISC_STATUS_ARRAY    m_statusVector;
 
-            ::com::sun::star::uno::Sequence< sal_Int8 > m_blobData;
-
             void ensureBlobIsOpened()
+                throw(::com::sun::star::sdbc::SQLException);
+            /**
+             * Closes the blob and cleans up resources -- can be used to reset
+             * the blob if we e.g. want to read from the beginning again.
+             */
+            void closeBlob()
                 throw(::com::sun::star::sdbc::SQLException);
 
         public:
@@ -73,6 +81,38 @@ namespace connectivity
                 positionOfBlob(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rPattern,
                                sal_Int64 aStart)
                 throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+
+            // ---- XInputStream ----------------------------------------------
+            virtual sal_Int32 SAL_CALL
+                readBytes(::com::sun::star::uno::Sequence< sal_Int8 >& rDataOut,
+                          sal_Int32 nBytes)
+                throw(::com::sun::star::io::NotConnectedException,
+                      ::com::sun::star::io::BufferSizeExceededException,
+                      ::com::sun::star::io::IOException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL
+                readSomeBytes(::com::sun::star::uno::Sequence< sal_Int8 >& rDataOut,
+                              sal_Int32 nMaximumBytes)
+                throw(::com::sun::star::io::NotConnectedException,
+                      ::com::sun::star::io::BufferSizeExceededException,
+                        ::com::sun::star::io::IOException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL
+                skipBytes(sal_Int32 nBytes)
+                throw(::com::sun::star::io::NotConnectedException,
+                      ::com::sun::star::io::BufferSizeExceededException,
+                      ::com::sun::star::io::IOException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL
+                available()
+                throw(::com::sun::star::io::NotConnectedException,
+                      ::com::sun::star::io::IOException,
+                      ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL
+                closeInput()
+                throw(::com::sun::star::io::NotConnectedException,
+                      ::com::sun::star::io::IOException,
                       ::com::sun::star::uno::RuntimeException);
 
             // ---- OComponentHelper ------------------------------------------
