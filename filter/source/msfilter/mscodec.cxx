@@ -150,7 +150,7 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
     sal_Size nIndex;
     sal_Size nLen = lclGetLen( pnPassData, 16 );
     const sal_uInt8* pnFillChar = spnFillChars;
-    for( nIndex = nLen; nIndex < sizeof( mpnKey ); ++nIndex, ++pnFillChar )
+    for( nIndex = nLen; nIndex < std::min(sizeof(mpnKey), sizeof(spnFillChars)); ++nIndex, ++pnFillChar )
         mpnKey[ nIndex ] = *pnFillChar;
 
     SVBT16 pnOrigKey;
