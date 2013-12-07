@@ -283,12 +283,14 @@ def get_launchpad_bugs(prefix):
 
 freedesktop = 'http://bugs.libreoffice.org/buglist.cgi'
 abisource = 'http://bugzilla.abisource.com/buglist.cgi' #added for abiword
+gentoo = 'http://bugs.gentoo.org/buglist.cgi'
 gnome = 'http://bugzilla.gnome.org/buglist.cgi' # added for gnumeric
 kde = 'http://bugs.kde.org/buglist.cgi' # added for koffice/calligra
 openoffice = 'https://issues.apache.org/ooo/buglist.cgi'
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
 redhatbug = 'https://bugzilla.redhat.com/show_bug.cgi?id='
 mozilla = 'https://bugzilla.mozilla.org/buglist.cgi'
+mandriva = 'https://qa.mandriva.com/buglist.cgi'
 
 #Novell Bugzilla requires users to log in in order to get details of the bugs such as attachment bodies etc.
 #As a dirty workaround, we parse comments containing "Created an attachment (id=xxxxxx)" and download attachments manually
@@ -460,6 +462,15 @@ for (mimetype,extension) in mimetypes.items():
 
 for (mimetype,extension) in mimetypes.items():
     get_through_rss_query(kde, mimetype, "kde", extension)
+
+for (mimetype,extension) in mimetypes.items():
+    get_through_rss_query(gentoo, mimetype, "gentoo", extension)
+
+for (mimetype,extension) in mimetypes.items():
+    get_through_rss_query(mozilla, mimetype, "moz", extension)
+
+for (mimetype,extension) in mimetypes.items():
+    get_through_rss_query(mandriva, mimetype, "mandriva", extension)
 
 try:
     get_launchpad_bugs("lp")
