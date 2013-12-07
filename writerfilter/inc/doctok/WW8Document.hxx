@@ -98,7 +98,7 @@ public:
    A property.
 
 */
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8Property
+class WW8Property
 {
 public:
     /**
@@ -145,7 +145,7 @@ public:
    }
    \endcode
 */
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8PropertySetIterator
+class WW8PropertySetIterator
 {
 public:
     typedef boost::shared_ptr<WW8PropertySetIterator> Pointer_t;
@@ -182,7 +182,7 @@ bool operator != (const WW8PropertySetIterator & rA,
 /**
    A set of properties.
 */
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8PropertySet
+class WW8PropertySet
 {
 public:
     typedef boost::shared_ptr<WW8PropertySet> Pointer_t;
