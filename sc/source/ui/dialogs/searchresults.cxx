@@ -69,6 +69,7 @@ IMPL_LINK_NOARG( SearchResults, ListSelectHdl )
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     pScViewShell->SetTabNo(aAddress.Tab());
     pScViewShell->SetCursor(aAddress.Col(), aAddress.Row());
+    pScViewShell->AlignToCursor(aAddress.Col(), aAddress.Row(), SC_FOLLOW_JUMP);
     return 0;
 }
 
