@@ -354,12 +354,34 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
 
 ScDPObject::~ScDPObject()
 {
-    delete pOutput;
-    delete pSaveData;
-    delete pSheetDesc;
-    delete pImpDesc;
-    delete pServDesc;
-    ClearTableData();
+    Clear();
+}
+
+ScDPObject& ScDPObject::operator= (const ScDPObject& r)
+{
+    Clear();
+
+    pDoc = r.pDoc;
+    aTableName = r.aTableName;
+    aTableTag = r.aTableTag;
+    aOutRange = r.aOutRange;
+    mnAutoFormatIndex = r.mnAutoFormatIndex;
+    nHeaderRows = r.nHeaderRows;
+    mbHeaderLayout = r.mbHeaderLayout;
+    bAllowMove = false;
+    bSettingsChanged = false;
+    mbEnableGetPivotData = r.mbEnableGetPivotData;
+
+    if (r.pSaveData)
+        pSaveData = new ScDPSaveData(*r.pSaveData);
+    if (r.pSheetDesc)
+        pSheetDesc = new ScSheetSourceDesc(*r.pSheetDesc);
+    if (r.pImpDesc)
+        pImpDesc = new ScImportSourceDesc(*r.pImpDesc);
+    if (r.pServDesc)
+        pServDesc = new ScDPServiceDesc(*r.pServDesc);
+
+    return *this;
 }
 
 void ScDPObject::EnableGetPivotData(bool b)
@@ -778,6 +800,21 @@ void ScDPObject::CreateObjects()
 void ScDPObject::InvalidateData()
 {
     bSettingsChanged = true;
+}
+
+void ScDPObject::Clear()
+{
+    delete pOutput;
+    delete pSaveData;
+    delete pSheetDesc;
+    delete pImpDesc;
+    delete pServDesc;
+    pOutput = NULL;
+    pSaveData = NULL;
+    pSheetDesc = NULL;
+    pImpDesc = NULL;
+    pServDesc = NULL;
+    ClearTableData();
 }
 
 void ScDPObject::ClearTableData()
