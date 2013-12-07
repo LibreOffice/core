@@ -12,8 +12,8 @@ use File::Find qw(finddepth);
 use File::Basename;
 
 # Find dirs in:
-# workdir/unxlngx6.pro/Dep/CxxObject/
-# workdir/unxlngx6.pro/Dep/CObject
+# workdir/Dep/CxxObject/
+# workdir/Dep/CObject
 #
 # Concat these files and compare them with the output of
 # `git ls-tree HEAD -r --name-only` and report files in the git ls-tree that aren't in the first.
@@ -31,8 +31,8 @@ sub wanted {
   $data{$tmp} = $File::Find::name;
 }
 
-finddepth(\&wanted, 'workdir/unxlngx6.pro/Dep/CxxObject');
-finddepth(\&wanted, 'workdir/unxlngx6.pro/Dep/CObject');
+finddepth(\&wanted, 'workdir/Dep/CxxObject');
+finddepth(\&wanted, 'workdir/Dep/CObject');
 
 my @gitfiles = `git ls-tree HEAD -r --name-only`;
 

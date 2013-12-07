@@ -29,7 +29,7 @@
 # Simple script to load a bunch of documents and export them as Flat ODF
 #
 # Personally I run it like this:
-# ~/lo/master-suse/instdir/unxlngx6/program/python ~/lo/master-suse/bin/benchmark-document-loading  --soffice=path:/home/tml/lo/master-suse/instdir/unxlngx6/program/soffice --outdir=file://$PWD/out --userdir=file:///tmp/test $PWD/docs
+# ~/lo/master-suse/instdir/program/python ~/lo/master-suse/bin/benchmark-document-loading  --soffice=path:/home/tml/lo/master-suse/instdir/program/soffice --outdir=file://$PWD/out --userdir=file:///tmp/test $PWD/docs
 #
 
 import datetime
