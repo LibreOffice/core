@@ -13,6 +13,8 @@
 
 #include "connectivity/dbexception.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace ::connectivity::firebird;
 
 using namespace ::cppu;
@@ -32,7 +34,8 @@ Blob::Blob(isc_db_handle* pDatabaseHandle,
     m_blobID(aBlobID),
     m_blobHandle(0),
     m_bBlobOpened(false),
-    m_blobData(0)
+    m_nBlobLength(0),
+    m_nBlobPosition(0)
 {
 }
 
@@ -52,44 +55,12 @@ void Blob::ensureBlobIsOpened()
                           &m_blobID,
                           0,
                           NULL);
+
     if (aErr)
         evaluateStatusVector(m_statusVector, "isc_open_blob2", *this);
 
-}
-
-void SAL_CALL Blob::disposing(void)
-{
-    MutexGuard aGuard(m_aMutex);
-
-    if (m_bBlobOpened)
-    {
-        ISC_STATUS aErr;
-        aErr = isc_close_blob(m_statusVector,
-                              &m_blobHandle);
-        if (aErr)
-        {
-            try
-            {
-                evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
-            }
-            catch (SQLException e)
-            {
-                // we cannot throw any exceptions here anyway
-                SAL_WARN("connectivity.firebird", "isc_close_blob failed\n" <<
-                         e.Message);
-            }
-        }
-    }
-
-    Blob_BASE::disposing();
-}
-
-sal_Int64 SAL_CALL Blob::length()
-    throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(Blob_BASE::rBHelper.bDisposed);
-    ensureBlobIsOpened();
+    m_bBlobOpened = true;
+    m_nBlobPosition = 0;
 
     char aBlobItems[] = {
         isc_info_blob_total_length
@@ -103,106 +74,186 @@ sal_Int64 SAL_CALL Blob::length()
                   sizeof(aResultBuffer),
                   aResultBuffer);
 
-    evaluateStatusVector(m_statusVector, "isc_blob_info", *this);
+    if (aErr)
+        evaluateStatusVector(m_statusVector, "isc_blob_info", *this);
+
     if (*aResultBuffer == isc_info_blob_total_length)
     {
-        short aResultLength = (short) isc_vax_integer(aResultBuffer, 2);
-        return isc_vax_integer(aResultBuffer+2, aResultLength);
+        short aResultLength = (short) isc_vax_integer(aResultBuffer+1, 2);
+        m_nBlobLength =  isc_vax_integer(aResultBuffer+3, aResultLength);
     }
-    return 0;
+    else
+    {
+        assert(false);
+    }
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL  Blob::getBytes(sal_Int64 aPosition, sal_Int32 aLength)
+void Blob::closeBlob()
+    throw (SQLException)
+{
+    MutexGuard aGuard(m_aMutex);
+
+    if (m_bBlobOpened)
+    {
+        ISC_STATUS aErr;
+        aErr = isc_close_blob(m_statusVector,
+                              &m_blobHandle);
+        if (aErr)
+            evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
+
+        m_bBlobOpened = false;
+        m_blobHandle = 0;
+    }
+}
+
+void SAL_CALL Blob::disposing(void)
+{
+    try
+    {
+         closeBlob();
+    }
+    catch (SQLException e)
+    {
+        // we cannot throw any exceptions here...
+        SAL_WARN("connectivity.firebird", "isc_close_blob failed\n" <<
+                 e.Message);
+        assert(false);
+    }
+    Blob_BASE::disposing();
+}
+
+sal_Int64 SAL_CALL Blob::length()
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Blob_BASE::rBHelper.bDisposed);
     ensureBlobIsOpened();
 
-    sal_Int64 aTotalLength = length();
+    return m_nBlobLength;
+}
 
-    if (!(aPosition + aLength < aTotalLength))
+uno::Sequence< sal_Int8 > SAL_CALL  Blob::getBytes(sal_Int64 nPosition,
+                                                   sal_Int32 nBytes)
+    throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(Blob_BASE::rBHelper.bDisposed);
+    ensureBlobIsOpened();
+
+    if (nPosition > m_nBlobLength)
+        throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
+    // We only have to read as many bytes as are available, i.e. nPosition+nBytes
+    // can legally be greater than the total length, hence we don't bother to check.
+
+    if (nPosition > m_nBlobPosition)
     {
-        throw SQLException("Byte array requested outwith valid range", *this, OUString(), 1, Any() );
+        // Resets to the beginning (we can't seek these blobs)
+        closeBlob();
+        ensureBlobIsOpened();
     }
 
-    if (aTotalLength != m_blobData.getLength())
-    {
-        m_blobData = uno::Sequence< sal_Int8 >(aTotalLength);
-        char* pArray = (char*) m_blobData.getArray();
-        sal_Int64 aBytesRead = 0;
+    skipBytes(nPosition - m_nBlobPosition);
 
-        unsigned short aLengthRead; // The amount read in in a isc_get_segment call
-
-        ISC_STATUS aErr;
-        do
-        {
-            aErr = isc_get_segment(m_statusVector,
-                                   &m_blobHandle,
-                                   &aLengthRead,
-                                   aTotalLength - aBytesRead,
-                                   pArray + aBytesRead);
-        }
-        while (aErr == 0 || m_statusVector[1] == isc_segment);
-        // Denotes either sucessful read, or only part of segment read successfully.
-        if (aErr)
-        {
-            m_blobData = uno::Sequence< sal_Int8 >(0);
-            evaluateStatusVector(m_statusVector, "isc_get_segment", *this);
-        }
-    }
-
-    if (aLength<aTotalLength)
-    {
-        uno::Sequence< sal_Int8 > aRet(aLength);
-        memcpy(aRet.getArray(), m_blobData.getArray() + aLength, aLength);
-        return aRet;
-    }
-    else
-    {
-        return m_blobData; // TODO: subsequence
-    }
+    // Don't bother preallocating: readBytes does the appropriate calculations
+    // and reallocates for us.
+    uno::Sequence< sal_Int8 > aBytes;
+    readBytes(aBytes, nBytes);
+    return aBytes;
 }
 
 uno::Reference< XInputStream > SAL_CALL  Blob::getBinaryStream()
     throw(SQLException, RuntimeException)
 {
-//     MutexGuard aGuard(m_aMutex);
-//     checkDisposed(Blob_BASE::rBHelper.bDisposed);
-//     ensureBlobIsOpened();
-
-    ::dbtools::throwFeatureNotImplementedException("Blob::positionOfBlob", *this);
-    return NULL;
+    return this;
 }
 
-sal_Int64 SAL_CALL  Blob::position(const uno::Sequence< sal_Int8 >& rPattern,
-                                   sal_Int64 aStart)
+sal_Int64 SAL_CALL  Blob::position(const uno::Sequence< sal_Int8 >& /*rPattern*/,
+                                   sal_Int64 /*nStart*/)
     throw(SQLException, RuntimeException)
 {
-//     MutexGuard aGuard(m_aMutex);
-//     checkDisposed(Blob_BASE::rBHelper.bDisposed);
-//     ensureBlobIsOpened();
+    ::dbtools::throwFeatureNotImplementedException("Blob::position", *this);
+    return 0;
+}
 
-    (void) rPattern;
-    (void) aStart;
+sal_Int64 SAL_CALL  Blob::positionOfBlob(const uno::Reference< XBlob >& /*rPattern*/,
+                                         sal_Int64 /*aStart*/)
+    throw(SQLException, RuntimeException)
+{
     ::dbtools::throwFeatureNotImplementedException("Blob::positionOfBlob", *this);
     return 0;
 }
 
-sal_Int64 SAL_CALL  Blob::positionOfBlob(const uno::Reference< XBlob >& rPattern,
-                                         sal_Int64 aStart)
-    throw(SQLException, RuntimeException)
-{
-//     MutexGuard aGuard(m_aMutex);
-//     checkDisposed(Blob_BASE::rBHelper.bDisposed);
-//     ensureBlobIsOpened();
+// ---- XInputStream ----------------------------------------------------------
 
-    (void) rPattern;
-    (void) aStart;
-    ::dbtools::throwFeatureNotImplementedException("Blob::positionOfBlob", *this);
-    return 0;
+sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
+                                   sal_Int32 nBytes)
+    throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(Blob_BASE::rBHelper.bDisposed);
+    ensureBlobIsOpened();
+
+    // Ensure we have enough space for the amount of data we can actually read.
+    const sal_Int64 nBytesAvailable = m_nBlobLength - m_nBlobPosition;
+    const sal_Int32 nBytesToRead = nBytes < nBytesAvailable ? nBytes : nBytesAvailable;
+
+    if (rDataOut.getLength() < nBytesToRead)
+        rDataOut.realloc(nBytesToRead);
+
+    sal_Int32 nTotalBytesRead = 0;
+    ISC_STATUS aErr;
+    while (nTotalBytesRead < nBytesToRead)
+    {
+        sal_uInt16 nBytesRead = 0;
+        sal_uInt64 nDataRemaining = nBytesToRead - nTotalBytesRead;
+        sal_uInt16 nReadSize = (nDataRemaining > SAL_MAX_UINT16) ? SAL_MAX_UINT16 : nDataRemaining;
+        aErr = isc_get_segment(m_statusVector,
+                               &m_blobHandle,
+                               &nBytesRead,
+                               nReadSize,
+                               (char*) rDataOut.getArray() + nTotalBytesRead);
+        if (aErr)
+            evaluateStatusVector(m_statusVector, "isc_get_segment", *this);
+        nTotalBytesRead += nBytesRead;
+        m_nBlobPosition += nBytesRead;
+    }
+
+    return nTotalBytesRead;
 }
 
+sal_Int32 SAL_CALL Blob::readSomeBytes(uno::Sequence< sal_Int8 >& rDataOut,
+                                sal_Int32 nMaximumBytes)
+    throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    // We don't have any way of verifying how many bytes are immediately available,
+    // hence we just pass through direct to readBytes
+    // (Spec: "reads the available number of bytes, at maximum nMaxBytesToRead.")
+    return readBytes(rDataOut, nMaximumBytes);
+}
 
+void SAL_CALL Blob::skipBytes(sal_Int32 nBytesToSkip)
+    throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    // There is no way of directly skipping, hence we have to pretend to skip
+    // by reading & discarding the data.
+    uno::Sequence< sal_Int8 > aBytes;
+    readBytes(aBytes, nBytesToSkip);
+}
+
+sal_Int32 SAL_CALL Blob::available()
+    throw (NotConnectedException,  IOException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(Blob_BASE::rBHelper.bDisposed);
+    ensureBlobIsOpened();
+
+    return m_nBlobLength - m_nBlobPosition;
+}
+
+void SAL_CALL Blob::closeInput()
+    throw(NotConnectedException, IOException, RuntimeException)
+{
+    closeBlob();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
