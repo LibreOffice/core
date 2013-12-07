@@ -316,17 +316,16 @@ void CGM::ImplDoClass5()
                     if ( nMaxColorIndex > 255 )
                     {
                         mbStatus = sal_False;
+                        break;
                     }
-                    else
-                    {
-                        if ( pElement->nLatestColorMaximumIndex < nMaxColorIndex )
-                            pElement->nLatestColorMaximumIndex = nMaxColorIndex;
+                    if ( pElement->nLatestColorMaximumIndex < nMaxColorIndex )
+                        pElement->nLatestColorMaximumIndex = nMaxColorIndex;
 
-                        for (  nIndex = nColorStartIndex; nIndex <= nMaxColorIndex; nIndex++ )
-                        {
-                            pElement->aLatestColorTable[ nIndex ] = ImplGetBitmapColor( sal_True );
-                        }
+                    for (  nIndex = nColorStartIndex; nIndex <= nMaxColorIndex; nIndex++ )
+                    {
+                        pElement->aLatestColorTable[ nIndex ] = ImplGetBitmapColor( sal_True );
                     }
+
                     pElement->nColorMaximumIndex = pElement->nLatestColorMaximumIndex;
                     for ( nIndex = nColorStartIndex; nIndex <= nMaxColorIndex; nIndex++ )
                     {
