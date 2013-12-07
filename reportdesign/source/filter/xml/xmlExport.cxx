@@ -1020,7 +1020,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 OUString ORptExport::convertFormula(const OUString& _sFormula)
 {
     OUString sFormula = _sFormula;
-    if ( _sFormula.startsWith("rpt:") )
+    if ( _sFormula == "rpt:" )
         sFormula = "";
     return sFormula;
 }
