@@ -118,11 +118,14 @@ public:
     ScDPObject(const ScDPObject& r);
     ~ScDPObject();
 
+    ScDPObject& operator= (const ScDPObject& r);
+
     void EnableGetPivotData(bool b);
 
     void                SetAllowMove(bool bSet);
 
     void                InvalidateData();
+    void Clear();
     void ClearTableData();
     void ReloadGroupTableData();
 
