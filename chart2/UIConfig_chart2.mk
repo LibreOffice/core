@@ -33,6 +33,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/attributedialog \
 	chart2/uiconfig/ui/insertaxisdlg \
 	chart2/uiconfig/ui/insertgriddlg \
+	chart2/uiconfig/ui/inserttitledlg \
 	chart2/uiconfig/ui/smoothlinesdlg \
 	chart2/uiconfig/ui/steppedlinesdlg \
 	chart2/uiconfig/ui/titlerotationtabpage \

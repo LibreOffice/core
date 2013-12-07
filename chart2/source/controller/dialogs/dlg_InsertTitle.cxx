@@ -18,7 +18,6 @@
  */
 
 #include "dlg_InsertTitle.hxx"
-#include "dlg_InsertTitle.hrc"
 #include "res_Titles.hxx"
 #include "ResId.hxx"
 #include "ObjectNameProvider.hxx"
@@ -27,14 +26,9 @@ namespace chart
 {
 
 SchTitleDlg::SchTitleDlg(Window* pWindow, const TitleDialogData& rInput )
-    : ModalDialog(pWindow, SchResId(DLG_TITLE))
+    : ModalDialog( pWindow, "InsertTitleDialog", "modules/schart/ui/inserttitledlg.ui" )
     , m_apTitleResources( new TitleResources(this,true) )
-    , aBtnOK(this, SchResId(BTN_OK))
-    , aBtnCancel(this, SchResId(BTN_CANCEL))
-    , aBtnHelp(this, SchResId(BTN_HELP))
 {
-    FreeResource();
-
     this->SetText( ObjectNameProvider::getName(OBJECTTYPE_TITLE,true) );
     m_apTitleResources->writeToResources( rInput );
 }
