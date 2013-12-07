@@ -61,7 +61,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfexport,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
-    sax/source/fastparser/fastsax \
     sfx2/util/sfx \
     starmath/util/sm \
     svl/source/fsstor/fsstorage \

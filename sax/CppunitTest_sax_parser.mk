@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_use_components,sax_parser,\
 	framework/util/fwk \
 	i18npool/util/i18npool \
 	oox/util/oox \
-	sax/source/fastparser/fastsax \
+	sax/source/expatwrap/expwrap \
 	sfx2/util/sfx \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \

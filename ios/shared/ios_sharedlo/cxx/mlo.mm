@@ -91,7 +91,6 @@ extern "C" {
     ADD_LIB(embobj);            // needed for embeded objects
     ADD_LIB(emboleobj);         // needed for embeded objects
     ADD_LIB(expwrap);           // Wrapper around expat using UNO.
-    ADD_LIB(fastsax);           // Wrapper around expat using UNO.
     //ADD_LIB(protocolhandler); // Scripting 
     
     //ADD_LIB(sb);              // StarBasic * (tied to writer)
@@ -156,7 +155,7 @@ lo_get_libmap(void)
         //MAP_LIB(ucppkg1),     //MAP_LIB_LO(vbaswobj), //MAP_LIB_LO(wpftwriter),
         //MAP_LIB_LO(wpftdraw), //MAP_LIB_LO(svxcore),  //MAP_LIB_LO(protocolhandler),
         //MAP_LIB_LO_1(filterconfig), //MAP_LIB_LO(canvasfactory),    //MAP_LIB_LO(mtfrenderer),
-        MAP_LIB_LO(expwrap),    MAP_LIB_LO(fastsax),    MAP_LIB_LO(writerfilter),
+        MAP_LIB_LO(expwrap),    MAP_LIB_LO(writerfilter),
         MAP_LIB(embobj),        MAP_LIB(emboleobj),     MAP_LIB_LO(sot),
         
         // ADDED for search

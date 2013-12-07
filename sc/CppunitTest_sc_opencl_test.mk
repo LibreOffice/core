@@ -88,7 +88,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_opencl_test,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
-    sax/source/fastparser/fastsax \
     sc/util/sc \
     sc/util/scfilt \
     scaddins/source/analysis/analysis \

@@ -78,7 +78,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_tableautoformatfield,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
-    sax/source/fastparser/fastsax \
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
