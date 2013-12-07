@@ -101,6 +101,8 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     // for position calculations, we normalize the angle between 0 and 90 degrees
     if ( nAngle < 0 )
         nAngle = ( 36000 + nAngle ) % 36000;
+    if ( nAngle % 18000 == 0 )
+        nAngle = 0;
     while ( nAngle > 9000 )
         nAngle = ( 18000 - ( nAngle % 18000 ) );
 
