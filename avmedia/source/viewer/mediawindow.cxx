@@ -208,7 +208,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                       "Matroska Media", "mkv",
                                       "MIDI Audio", "mid;midi",
                                       "MPEG Audio", "mp2;mp3;mpa",
-                                      "MPEG Video", "mpg;mpeg;mpv;mp4",
+                                      "MPEG Video", "mpg;mpeg;mpv;mp4;m4v",
                                       "Ogg Audio", "ogg;oga",
                                       "Ogg Video", "ogv;ogx",
                                       "RMI MIDI Audio", "rmi",
