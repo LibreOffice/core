@@ -21,8 +21,11 @@
 from __future__ import print_function
 import feedparser
 import base64
+import datetime
+import glob
 import re
 import os, os.path
+import stat
 import sys
 try:
     from urllib.request import urlopen
@@ -49,130 +52,190 @@ def urlopen_retry(url):
 def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
     id = url.rsplit('=', 2)[1]
     print("id is " + prefix + id + " " + suffix)
-    if os.path.isfile(suffix + '/' + prefix + id + '-1.' + suffix):
-        print("assuming " + id + " is up to date")
-    else:
-        print("parsing " + id)
-        sock = urlopen_retry(url+"&ctype=xml")
-        dom = minidom.parse(sock)
-        sock.close()
-        attachmentid=0
-        for attachment in dom.getElementsByTagName('attachment'):
-            attachmentid += 1
-            print(" mimetype is", end=' ')
-            for node in attachment.childNodes:
-                if node.nodeName == 'type':
-                    print(node.firstChild.nodeValue, end=' ')
-                    if node.firstChild.nodeValue.lower() != mimetype.lower():
-                        print('skipping')
-                        break
-                elif node.nodeName == 'data':
-                    # check if attachment is deleted (i.e. https://bugs.kde.org/show_bug.cgi?id=53343&ctype=xml)
-                    if not node.firstChild:
-                        print('deleted attachment, skipping')
-                        continue
-
-                    download = suffix + '/' +prefix + id + '-' + str(attachmentid) + '.' + suffix
-                    print('downloading as ' + download)
-                    f = open(download, 'wb')
-                    f.write(base64.b64decode(node.firstChild.nodeValue))
-                    f.close()
+    print("parsing " + id)
+    sock = urlopen_retry(url+"&ctype=xml")
+    dom = minidom.parse(sock)
+    sock.close()
+    attachmentid=0
+    for attachment in dom.getElementsByTagName('attachment'):
+        attachmentid += 1
+        print(" mimetype is", end=' ')
+        for node in attachment.childNodes:
+            if node.nodeName == 'type':
+                print(node.firstChild.nodeValue, end=' ')
+                if node.firstChild.nodeValue.lower() != mimetype.lower():
+                    print('skipping')
                     break
+            elif node.nodeName == 'data':
+                # check if attachment is deleted (i.e. https://bugs.kde.org/show_bug.cgi?id=53343&ctype=xml)
+                if not node.firstChild:
+                    print('deleted attachment, skipping')
+                    continue
+
+                download = suffix + '/' +prefix + id + '-' + str(attachmentid) + '.' + suffix
+                if os.path.isfile(download):
+                    print("assuming " + download + " is up to date")
+                    continue
+
+                print('downloading as ' + download)
+                f = open(download, 'wb')
+                f.write(base64.b64decode(node.firstChild.nodeValue))
+                f.close()
+                break
 
 def get_novell_bug_via_xml(url, mimetype, prefix, suffix):
     id = url.rsplit('=', 2)[1]
     print("id is " + prefix + id + " " + suffix)
-    if os.path.isfile(suffix + '/' + prefix + id + '-1.' + suffix):
-        print("assuming " + id + " is up to date")
-    else:
-        print("parsing " + id)
-        sock = urlopen_retry(url+"&ctype=xml")
-        dom = minidom.parse(sock)
-        sock.close()
-        attachmentid=0
-        for comment in dom.getElementsByTagName('thetext'):
-            commentText = comment.firstChild.nodeValue
-            match = re.search(r".*Created an attachment \(id=([0-9]+)\)", commentText)
-            if not match:
-                continue
+    print("parsing " + id)
+    sock = urlopen_retry(url+"&ctype=xml")
+    dom = minidom.parse(sock)
+    sock.close()
+    attachmentid=0
+    for comment in dom.getElementsByTagName('thetext'):
+        commentText = comment.firstChild.nodeValue
+        match = re.search(r".*Created an attachment \(id=([0-9]+)\)", commentText)
+        if not match:
+            continue
 
-            attachmentid += 1
+        attachmentid += 1
 
-            download = suffix + '/' + prefix + id + '-' + str(attachmentid) + '.' + suffix
-            if os.path.isfile(download):
-                print("assuming " + download + " is up to date")
-                continue
+        download = suffix + '/' + prefix + id + '-' + str(attachmentid) + '.' + suffix
+        if os.path.isfile(download):
+            print("assuming " + download + " is up to date")
+            continue
 
-            realAttachmentId = match.group(1)
-            handle = urlopen_retry(novellattach + realAttachmentId)
-            if not handle:
-                print("attachment %s is not accessible" % realAttachmentId)
-                continue
-            print(" mimetype is", end=' ')
+        realAttachmentId = match.group(1)
+        handle = urlopen_retry(novellattach + realAttachmentId)
+        if not handle:
+            print("attachment %s is not accessible" % realAttachmentId)
+            continue
+        print(" mimetype is", end=' ')
 
-            info = handle.info()
-            if info.get_content_type:
-                remoteMime = info.get_content_type()
-            else:
-                remoteMime = info.gettype()
-            print(remoteMime, end=' ')
-            if remoteMime != mimetype:
-                print("skipping")
-                continue
+        info = handle.info()
+        if info.get_content_type:
+            remoteMime = info.get_content_type()
+        else:
+            remoteMime = info.gettype()
+        print(remoteMime, end=' ')
+        if remoteMime != mimetype:
+            print("skipping")
+            continue
 
-            print('downloading as ' + download)
-            f = open(download, 'wb')
-            f.write(handle.read())
-            f.close()
+        print('downloading as ' + download)
+        f = open(download, 'wb')
+        f.write(handle.read())
+        f.close()
+
+def create_query(mimetype):
+    query = dict()
+    query['query_format']='advanced'
+    query['field0-0-0']='attachments.mimetype'
+    query['type0-0-0']='equals'
+    query['value0-0-0']=mimetype
+    return query
+
+def get_downloaded_files(prefix, suffix):
+    return glob.glob(os.path.join(suffix, '%s*.%s' % (prefix, suffix)))
+
+def get_file_bz_ids(files, prefix):
+    return set([os.path.basename(f).split('-')[0].replace(prefix, '', 1) for f in files])
+
+def get_changed_date(files):
+    newest = max([os.stat(f)[stat.ST_MTIME] for f in files])
+    # Subtract a day to avoid timezone differences. The worst thing that
+    # can happen is that we are going to process more bugs than necessary.
+    return datetime.date.fromtimestamp(newest - 24 * 60 * 60)
 
 def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
     try:
         os.mkdir(suffix)
     except:
         pass
-    try:
-        proxy = xmlrpclib.ServerProxy(rpcurl)
-        query = dict()
-        query['column_list']='bug_id'
-        query['query_format']='advanced'
-        query['field0-0-0']='attachments.mimetype'
-        query['type0-0-0']='equals'
-        query['value0-0-0']=mimetype
-        result = proxy.Bug.search(query)
-        bugs = result['bugs']
-        print(str(len(bugs)) + ' bugs to process')
-        for bug in bugs:
-            url = showurl + str(bug['id'])
-            get_from_bug_url_via_xml(url, mimetype, prefix, suffix)
-    except xmlrpclib.Fault as err:
-        print("A fault occurred")
-        print("Fault code: %s" % err.faultCode)
-        print(err.faultString)
 
-def get_through_rss_query_url(url, mimetype, prefix, suffix):
+    def process(query, full, have=[]):
+        try:
+            proxy = xmlrpclib.ServerProxy(rpcurl)
+            result = proxy.Bug.search(query)
+            bugs = result['bugs']
+            print(str(len(bugs)) + ' bugs to process')
+
+            if full:
+                available = set([str(bug['id']) for bug in bugs])
+                # we already have files from all available bugs
+                if available.difference(set(have)) == set():
+                    print("assuming all downloaded files are up to date")
+                    return
+
+            for bug in bugs:
+                url = showurl + str(bug['id'])
+                get_from_bug_url_via_xml(url, mimetype, prefix, suffix)
+        except xmlrpclib.Fault as err:
+            print("A fault occurred")
+            print("Fault code: %s" % err.faultCode)
+            print(err.faultString)
+
+    query = create_query(mimetype)
+    query['column_list']='bug_id'
+
+    files = get_downloaded_files(prefix, suffix)
+
+    if files != []:
+        print('looking for updated bugs having %s attachment(s)' % mimetype)
+        query_changed = query.copy()
+        query_changed['field0-1-0'] = 'days_elapsed'
+        query_changed['type0-1-0'] = 'lessthaneq'
+        query_changed['value0-1-0'] = str((datetime.date.today() - get_changed_date(files)).days)
+        process(query_changed, False)
+
+    print('looking for all bugs having %s attachment(s)' % mimetype)
+    process(query, True, get_file_bz_ids(files, prefix))
+
+def get_through_rss_query(queryurl, mimetype, prefix, suffix):
     try:
         os.mkdir(suffix)
     except:
         pass
-    d = feedparser.parse(url)
 
     #Getting detailed bug information and downloading an attachment body is not possible without logging in to Novell bugzilla
     #get_novell_bug_via_xml function is a workaround for that situation
     get_bug_function = get_novell_bug_via_xml if prefix == "novell" else get_from_bug_url_via_xml
 
-    for entry in d['entries']:
-        try:
-            get_bug_function(entry['id'], mimetype, prefix, suffix)
-        except KeyboardInterrupt:
-            raise # Ctrl+C should work
-        except:
-            print(entry['id'] + " failed: " + str(sys.exc_info()[0]))
-            pass
+    def process(query, full, have=[]):
+        url = queryurl + '?' + '&'.join(['='.join(kv) for kv in query.iteritems()])
+        print('url is ' + url)
+        d = feedparser.parse(url)
 
-def get_through_rss_query(queryurl, mimetype, prefix, suffix):
-    url = queryurl + '?query_format=advanced&field0-0-0=attachments.mimetype&type0-0-0=equals&value0-0-0=' + escape(mimetype) + '&ctype=rss'
-    print('url is ' + url)
-    get_through_rss_query_url(url, mimetype, prefix, suffix)
+        if full:
+            available = set([str(entry['id'].split('=')[-1]) for entry in d['entries']])
+            # we already have files from all available bugs
+            if available.difference(set(have)) == set():
+                print("assuming all downloaded files are up to date")
+                return
+
+        for entry in d['entries']:
+            try:
+                get_bug_function(entry['id'], mimetype, prefix, suffix)
+            except KeyboardInterrupt:
+                raise # Ctrl+C should work
+            except:
+                print(entry['id'] + " failed: " + str(sys.exc_info()[0]))
+                pass
+
+    query = create_query(escape(mimetype))
+    query['ctype'] = 'rss'
+
+    files = get_downloaded_files(prefix, suffix)
+
+    if files != []:
+        print('looking for updated bugs having %s attachment(s)' % mimetype)
+        query_changed = query.copy()
+        query_changed['field0-1-0'] = 'changed'
+        query_changed['type0-1-0'] = 'changedbefore'
+        query_changed['value0-1-0'] = get_changed_date(files).isoformat()
+        process(query_changed, False)
+
+    print('looking for all bugs having %s attachment(s)' % mimetype)
+    process(query, True, get_file_bz_ids(files, prefix))
 
 def get_launchpad_bugs(prefix):
     #launchpadlib python module is required to download launchpad attachments
