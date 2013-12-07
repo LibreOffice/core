@@ -619,7 +619,6 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
             case unique_test:
             case all_or_any_predicate:
             case join_condition:
-            case boolean_test:
             case comparison_predicate_part_2:
             case parenthesized_boolean_value_expression:
             case other_like_predicate_part_2:
@@ -1384,6 +1383,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::where_clause, "where_clause" },
             { OSQLParseNode::opt_where_clause, "opt_where_clause" },
             { OSQLParseNode::search_condition, "search_condition" },
+            { OSQLParseNode::comparison, "comparison" },
             { OSQLParseNode::comparison_predicate, "comparison_predicate" },
             { OSQLParseNode::between_predicate, "between_predicate" },
             { OSQLParseNode::like_predicate, "like_predicate" },
@@ -1431,7 +1431,6 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::joined_table, "joined_table" },
             { OSQLParseNode::boolean_factor, "boolean_factor" },
             { OSQLParseNode::sql_not, "sql_not" },
-            { OSQLParseNode::boolean_test, "boolean_test" },
             { OSQLParseNode::manipulative_statement, "manipulative_statement" },
             { OSQLParseNode::subquery, "subquery" },
             { OSQLParseNode::value_exp_commalist, "value_exp_commalist" },
@@ -1966,7 +1965,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
         negateSearchCondition(pLeft,bNegate);
         negateSearchCondition(pRight,bNegate);
     }
-    // SQL_TOKEN_NOT ( boolean_test )
+    // SQL_TOKEN_NOT ( boolean_primary )
     else if (SQL_ISRULE(pSearchCondition,boolean_factor))
     {
         OSQLParseNode *pNot = pSearchCondition->removeAt((sal_uInt32)0);
@@ -1982,10 +1981,31 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
     // row_value_constructor comparison any_all_some subquery
     else if(bNegate && (SQL_ISRULE(pSearchCondition,comparison_predicate) || SQL_ISRULE(pSearchCondition,all_or_any_predicate)))
     {
+        assert(pSearchCondition->count() == 3);
         OSQLParseNode* pComparison = pSearchCondition->getChild(1);
         OSQLParseNode* pNewComparison = NULL;
-        switch(pComparison->getNodeType())
+        if(SQL_ISRULE(pComparison, comparison))
         {
+            assert(pComparison->count() == 2 ||
+                   pComparison->count() == 4);
+            assert(SQL_ISTOKEN(pComparison->getChild(0), IS));
+
+            OSQLParseNode* pNot = pComparison->getChild(1);
+            OSQLParseNode* pNotNot = NULL;
+            if(pNot->isRule()) // no NOT token (empty rule)
+                pNotNot = new OSQLParseNode(OUString("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
+            else
+            {
+                assert(SQL_ISTOKEN(pNot,NOT));
+                pNotNot = new OSQLParseNode(OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
+            }
+            pComparison->replace(pNot, pNotNot);
+            delete pNot;
+        }
+        else
+        {
+            switch(pComparison->getNodeType())
+            {
             case SQL_NODE_EQUAL:
                 pNewComparison = new OSQLParseNode(OUString("<>"),SQL_NODE_NOTEQUAL,SQL_NOTEQUAL);
                 break;
@@ -2007,29 +2027,30 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, sal_
             default:
                 SAL_WARN( "connectivity.parse", "OSQLParseNode::negateSearchCondition: unexpected node type!" );
                 break;
+            }
         }
         pSearchCondition->replace(pComparison, pNewComparison);
         delete pComparison;
     }
 
-    else if(bNegate && (SQL_ISRULE(pSearchCondition,test_for_null) || SQL_ISRULE(pSearchCondition,in_predicate) ||
-                        SQL_ISRULE(pSearchCondition,between_predicate) || SQL_ISRULE(pSearchCondition,boolean_test) ))
+    else if(bNegate && (SQL_ISRULE(pSearchCondition,test_for_null) ||
+                        SQL_ISRULE(pSearchCondition,in_predicate)  ||
+                        SQL_ISRULE(pSearchCondition,between_predicate) ))
     {
-        OSQLParseNode* pPart2 = pSearchCondition;
-        if ( !SQL_ISRULE(pSearchCondition,boolean_test) )
-            pPart2 = pSearchCondition->getChild(1);
+        OSQLParseNode* pPart2 = pSearchCondition->getChild(1);
         sal_uInt32 nNotPos = 0;
         if  ( SQL_ISRULE( pSearchCondition, test_for_null ) )
             nNotPos = 1;
-        else if ( SQL_ISRULE( pSearchCondition, boolean_test ) )
-            nNotPos = 2;
 
         OSQLParseNode* pNot = pPart2->getChild(nNotPos);
         OSQLParseNode* pNotNot = NULL;
-        if(pNot->isRule())
+        if(pNot->isRule()) // no NOT token (empty rule)
             pNotNot = new OSQLParseNode(OUString("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
         else
+        {
+            assert(SQL_ISTOKEN(pNot,NOT));
             pNotNot = new OSQLParseNode(OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
+        }
         pPart2->replace(pNot, pNotNot);
         delete pNot;
     }

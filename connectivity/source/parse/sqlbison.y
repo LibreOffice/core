@@ -222,7 +222,7 @@ using namespace connectivity;
 %type <pParseNode> non_join_query_term non_join_query_primary simple_table
 %type <pParseNode> table_value_const_list row_value_constructor row_value_const_list row_value_constructor_elem
 %type <pParseNode> qualified_join value_exp query_term join_type outer_join_type join_condition boolean_term
-%type <pParseNode> boolean_factor truth_value boolean_test boolean_primary named_columns_join join_spec
+%type <pParseNode> boolean_factor boolean_primary named_columns_join join_spec
 %type <pParseNode> cast_operand cast_target factor datetime_value_exp /*interval_value_exp*/ datetime_term datetime_factor
 %type <pParseNode> datetime_primary datetime_value_fct time_zone time_zone_specifier /*interval_term*/ interval_qualifier
 %type <pParseNode> start_field non_second_datetime_field end_field single_datetime_field extract_field datetime_field time_zone_field
@@ -1081,12 +1081,6 @@ opt_having_clause:
 	;
 
 	/* search conditions */
-truth_value:
-		SQL_TOKEN_TRUE
-	  | SQL_TOKEN_FALSE
-	  | SQL_TOKEN_UNKNOWN
-	  | SQL_TOKEN_NULL
-	  ;
 boolean_primary:
 		predicate
 	|   '(' search_condition ')'
@@ -1130,20 +1124,9 @@ parenthesized_boolean_value_expression:
 		$$->append(newNode(")", SQL_NODE_PUNCTUATION));
 	}
 	;
-boolean_test:
-		boolean_primary
-	|	boolean_primary SQL_TOKEN_IS sql_not truth_value
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-			$$->append($4);
-		}
-	;
 boolean_factor:
-        boolean_test
-	|   SQL_TOKEN_NOT boolean_test
+	    boolean_primary
+	|   SQL_TOKEN_NOT boolean_primary
 		{ // boolean_factor: rule 1
 		    $$ = SQL_NEW_RULE;
 		    $$->append($1);
@@ -1171,12 +1154,12 @@ search_condition:
 		}
 	;
 predicate:
-		comparison_predicate
+		comparison_predicate     %dprec 2
 	|       between_predicate
 	|       all_or_any_predicate
 	|       existence_test
 	|		unique_test
-	|		test_for_null
+	|		test_for_null    %dprec 1
 	|       in_predicate
 	|       like_predicate
 	;
@@ -1384,13 +1367,20 @@ opt_escape:
 	;
 
 null_predicate_part_2:
-	SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
-	{
+	  SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
+	  {
 		$$ = SQL_NEW_RULE; // test_for_null: rule 1
 		$$->append($1);
 		$$->append($2);
 		$$->append($3);
-	}
+	  }
+	| SQL_TOKEN_IS sql_not SQL_TOKEN_UNKNOWN
+	  {
+		$$ = SQL_NEW_RULE; // test_for_null: rule 1
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	  }
 	;
 test_for_null:
 		row_value_constructor null_predicate_part_2
@@ -3959,11 +3949,11 @@ when_operand_list:
 	;
 when_operand:
 		row_value_constructor_elem
-	|	comparison_predicate_part_2
+	|	comparison_predicate_part_2        %dprec 2
 	|	between_predicate_part_2
 	|	in_predicate_part_2
 	|	character_like_predicate_part_2
-	|	null_predicate_part_2
+	|	null_predicate_part_2              %dprec 1
 ;
 searched_when_clause_list:
 		searched_when_clause

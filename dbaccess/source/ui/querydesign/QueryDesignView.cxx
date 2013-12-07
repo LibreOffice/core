@@ -3345,6 +3345,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
         case OSQLParseNode::op_column_commalist:
         case OSQLParseNode::table_primary_as_range_column:
         case OSQLParseNode::character_string_type:
+        case OSQLParseNode::comparison:
             OSL_FAIL("Unexpected SQL RuleID");
             break;
         case OSQLParseNode::column:
@@ -3373,7 +3374,6 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
         case OSQLParseNode::all_or_any_predicate:
         case OSQLParseNode::join_condition:
         case OSQLParseNode::boolean_factor:
-        case OSQLParseNode::boolean_test:
         case OSQLParseNode::comparison_predicate_part_2:
         case OSQLParseNode::parenthesized_boolean_value_expression:
         case OSQLParseNode::other_like_predicate_part_2:
