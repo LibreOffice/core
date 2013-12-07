@@ -204,6 +204,7 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix):
         url = queryurl + '?' + '&'.join(['='.join(kv) for kv in query.iteritems()])
         print('url is ' + url)
         d = feedparser.parse(url)
+        print(str(len(d['entries'])) + ' bugs to process')
 
         if full:
             available = set([str(entry['id'].split('=')[-1]) for entry in d['entries']])
