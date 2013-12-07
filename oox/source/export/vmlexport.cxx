@@ -992,7 +992,7 @@ sal_Int32 VMLExport::StartShape()
     // add style
     m_pShapeAttrList->add( XML_style, m_pShapeStyle->makeStringAndClear() );
 
-    if ( nShapeElement >= 0 )
+    if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) )
     {
         if ( bReferToShapeType )
         {
