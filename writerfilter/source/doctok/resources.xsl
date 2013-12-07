@@ -53,7 +53,6 @@
 #include &lt;doctok/resourceids.hxx&gt;
 #include &lt;doctok/WW8StructBase.hxx&gt;
 #include &lt;doctok/WW8ResourceModelImpl.hxx&gt;
-#include &lt;doctok/WW8PropertySetImpl.hxx&gt;
 
 namespace writerfilter {
 namespace doctok {

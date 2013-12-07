@@ -288,23 +288,9 @@ using namespace ::std;
   </xsl:template>
 
 <xsl:template match='UML:Model' mode='createsprmprops'>
-writerfilter::Reference &lt; Properties &gt; ::Pointer_t createSprmProps
-(WW8PropertyImpl &amp;)
-{
-    writerfilter::Reference &lt; Properties &gt; ::Pointer_t pResult;
-    return pResult;
-}
 </xsl:template>
 
 <xsl:template match='UML:Model' mode='createsprmbinary'>
-<xsl:text>
-writerfilter::Reference &lt; BinaryObj &gt; ::Pointer_t createSprmBinary
-(WW8PropertyImpl &amp;)
-{
-    writerfilter::Reference &lt; BinaryObj &gt; ::Pointer_t pResult;
-    return pResult;
-}
-</xsl:text>
 </xsl:template>
 
 <!-- returns optname of UML:Class -->

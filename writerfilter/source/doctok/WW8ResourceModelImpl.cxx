@@ -193,13 +193,6 @@ writerfilter::Reference<BinaryObj>::Pointer_t WW8Sprm::getBinary()
 {
     writerfilter::Reference<BinaryObj>::Pointer_t pResult;
 
-    if (mpBinary.get() != NULL)
-        pResult = writerfilter::Reference<BinaryObj>::Pointer_t
-            (mpBinary->clone());
-    else if (mpProperty.get() != NULL)
-        pResult = createSprmBinary
-            (dynamic_cast<WW8PropertyImpl &>(*(mpProperty.get())));
-
     return pResult;
 }
 
@@ -211,12 +204,6 @@ writerfilter::Reference<Stream>::Pointer_t WW8Sprm::getStream()
 writerfilter::Reference<Properties>::Pointer_t WW8Sprm::getProps()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
-
-    if (mpProperty.get() != NULL)
-    {
-        pResult = createSprmProps
-            (dynamic_cast<WW8PropertyImpl &>(*(mpProperty.get())));
-    }
 
     return pResult;
 }
