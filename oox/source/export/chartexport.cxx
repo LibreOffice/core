@@ -1244,10 +1244,13 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
 
-    const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
-    pFS->singleElement( FSNS( XML_c, XML_marker ),
-            XML_val, marker,
-            FSEND );
+    if( !mbIs3DChart )
+    {
+        const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
+        pFS->singleElement( FSNS( XML_c, XML_marker ),
+                XML_val, marker,
+                FSEND );
+    }
 
     exportAxesId( nAttachedAxis );
 
