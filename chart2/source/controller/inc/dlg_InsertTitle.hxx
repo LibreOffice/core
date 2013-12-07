@@ -33,10 +33,6 @@ class SchTitleDlg : public ModalDialog
 private:
     ::std::auto_ptr< TitleResources >  m_apTitleResources;
 
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-
 public:
     SchTitleDlg( Window* pParent, const TitleDialogData& rInput );
     virtual ~SchTitleDlg();
