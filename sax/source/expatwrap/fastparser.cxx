@@ -42,6 +42,14 @@ using namespace ::com::sun::star::io;
 
 namespace sax_fastparser {
 
+Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
+        SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+        throw(Exception)
+{
+    FastSaxParser *p = new FastSaxParser;
+    return Reference< XInterface > ( (OWeakObject * ) p );
+}
+
 SaxContext::SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName ):
         mnElementToken(nElementToken)
 {

@@ -64,7 +64,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
-    sax/source/fastparser/fastsax \
     sw/util/sw \
     sw/util/swd \
     sw/util/msword \

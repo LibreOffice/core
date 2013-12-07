@@ -11,9 +11,7 @@ $(eval $(call gb_Module_Module,sax))
 
 $(eval $(call gb_Module_add_targets,sax,\
 	Library_expwrap \
-	Library_fastsax \
 	Library_sax \
-	StaticLibrary_sax_shared \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sax,\

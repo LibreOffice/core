@@ -35,6 +35,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 
+#include "fastparser.hxx"
+
 #include <expat.h>
 #include "xml2utf.hxx"
 

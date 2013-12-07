@@ -84,7 +84,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
-    sax/source/fastparser/fastsax \
     sd/util/sd \
     sd/util/sdfilt \
     sd/util/sdd \

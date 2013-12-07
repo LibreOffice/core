@@ -60,7 +60,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	package/source/xstor/xstor \
 	package/util/package2 \
 	sax/source/expatwrap/expwrap \
-	sax/source/fastparser/fastsax \
 	sc/util/sc \
 	sc/util/scd \
 	sc/util/scfilt \

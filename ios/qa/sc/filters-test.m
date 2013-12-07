@@ -137,7 +137,6 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "ComponentTarget/package/source/xstor/xstor.component",
         "ComponentTarget/package/util/package2.component",
         "ComponentTarget/sax/source/expatwrap/expwrap.component",
-        "ComponentTarget/sax/source/fastparser/fastsax.component",
         "ComponentTarget/sc/util/sc.component",
         "ComponentTarget/sc/util/scfilt.component",
         "ComponentTarget/scaddins/source/analysis/analysis.component",

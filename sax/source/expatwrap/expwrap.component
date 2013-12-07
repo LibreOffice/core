@@ -25,4 +25,7 @@
   <implementation name="com.sun.star.extensions.xml.sax.Writer">
     <service name="com.sun.star.xml.sax.Writer"/>
   </implementation>
+  <implementation name="com.sun.star.comp.extensions.xml.sax.FastParser">
+    <service name="com.sun.star.xml.sax.FastParser"/>
+  </implementation>
 </component>

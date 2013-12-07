@@ -48,8 +48,11 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
 #include "factory.hxx"
+#include "fastparser.hxx"
 #include "attrlistimpl.hxx"
-#include "xml2utf.hxx"
+//#include "xml2utf.hxx"
+
+using namespace sax_fastparser;
 
 namespace sax_expatwrap {
 
@@ -160,14 +163,14 @@ public:
         throw ( SAXException,
                 IOException,
                 RuntimeException);
-    virtual void SAL_CALL setDocumentHandler(const Reference< XDocumentHandler > & xHandler)
+    virtual void SAL_CALL setDocumentHandler(const ::com::sun::star::uno::Reference< XDocumentHandler > & xHandler)
         throw (RuntimeException);
 
-    virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler > & xHandler)
+    virtual void SAL_CALL setErrorHandler(const ::com::sun::star::uno::Reference< XErrorHandler > & xHandler)
         throw (RuntimeException);
-    virtual void SAL_CALL setDTDHandler(const Reference < XDTDHandler > & xHandler)
+    virtual void SAL_CALL setDTDHandler(const ::com::sun::star::uno::Reference < XDTDHandler > & xHandler)
         throw (RuntimeException);
-    virtual void SAL_CALL setEntityResolver(const Reference<  XEntityResolver >& xResolver)
+    virtual void SAL_CALL setEntityResolver(const ::com::sun::star::uno::Reference<  XEntityResolver >& xResolver)
         throw (RuntimeException);
 
     virtual void SAL_CALL setLocale( const Locale &locale )                     throw (RuntimeException);
@@ -186,16 +189,22 @@ private:
 //--------------------------------------
 // the extern interface
 //---------------------------------------
-Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+::com::sun::star::uno::Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
+    SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Reference< XMultiServiceFactory > & )
     throw(Exception)
 {
     SaxExpatParser *p = new SaxExpatParser;
 
-    return Reference< XInterface > ( (OWeakObject * ) p );
+    return ::com::sun::star::uno::Reference< XInterface > ( (OWeakObject * ) p );
 }
 
-
+::com::sun::star::uno::Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
+    SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Reference< XMultiServiceFactory > & )
+    throw(Exception)
+{
+    FastSaxParser *p = new FastSaxParser;
+    return ::com::sun::star::uno::Reference< XInterface > ( (OWeakObject * ) p );
+}
 
 Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
 {
@@ -226,16 +235,16 @@ public: // module scope
     OUString            sCDATA;
     bool m_bEnableDoS; // fdo#60471 thank you Adobe Illustrator
 
-    Reference< XDocumentHandler >   rDocumentHandler;
-    Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
+    ::com::sun::star::uno::Reference< XDocumentHandler >   rDocumentHandler;
+    ::com::sun::star::uno::Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
 
-    Reference< XErrorHandler >  rErrorHandler;
-    Reference< XDTDHandler >    rDTDHandler;
-    Reference< XEntityResolver > rEntityResolver;
-    Reference < XLocator >      rDocumentLocator;
+    ::com::sun::star::uno::Reference< XErrorHandler >  rErrorHandler;
+    ::com::sun::star::uno::Reference< XDTDHandler >    rDTDHandler;
+    ::com::sun::star::uno::Reference< XEntityResolver > rEntityResolver;
+    ::com::sun::star::uno::Reference < XLocator >      rDocumentLocator;
 
 
-    Reference < XAttributeList >    rAttrList;
+    ::com::sun::star::uno::Reference < XAttributeList >    rAttrList;
     AttributeList   *pAttrList;
 
     // External entity stack
@@ -440,12 +449,12 @@ SaxExpatParser::SaxExpatParser(  )
     m_pImpl = new SaxExpatParser_Impl;
 
     LocatorImpl *pLoc = new LocatorImpl( m_pImpl );
-    m_pImpl->rDocumentLocator = Reference< XLocator > ( pLoc );
+    m_pImpl->rDocumentLocator = ::com::sun::star::uno::Reference< XLocator > ( pLoc );
 
     // performance-improvement. Reference is needed when calling the startTag callback.
     // Handing out the same object with every call is allowed (see sax-specification)
     m_pImpl->pAttrList = new AttributeList;
-    m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );
+    m_pImpl->rAttrList = ::com::sun::star::uno::Reference< XAttributeList > ( m_pImpl->pAttrList );
 
     m_pImpl->bExceptionWasThrown = false;
     m_pImpl->bRTExceptionWasThrown = false;
@@ -494,7 +503,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.structSource.aInputStream.is() )
     {
         throw SAXException("No input source",
-                            Reference< XInterface > () , Any() );
+                            ::com::sun::star::uno::Reference< XInterface > () , Any() );
     }
 
     entity.converter.setInputStream( entity.structSource.aInputStream );
@@ -509,7 +518,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.pParser )
     {
         throw SAXException("Couldn't create parser",
-                            Reference< XInterface > (), Any() );
+                            ::com::sun::star::uno::Reference< XInterface > (), Any() );
     }
 
     // set all necessary C-Callbacks
@@ -589,27 +598,27 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     XML_ParserFree( entity.pParser );
 }
 
-void SaxExpatParser::setDocumentHandler(const Reference< XDocumentHandler > & xHandler)
+void SaxExpatParser::setDocumentHandler(const ::com::sun::star::uno::Reference< XDocumentHandler > & xHandler)
     throw (RuntimeException)
 {
     m_pImpl->rDocumentHandler = xHandler;
     m_pImpl->rExtendedDocumentHandler =
-        Reference< XExtendedDocumentHandler >( xHandler , UNO_QUERY );
+        ::com::sun::star::uno::Reference< XExtendedDocumentHandler >( xHandler , UNO_QUERY );
 }
 
-void SaxExpatParser::setErrorHandler(const Reference< XErrorHandler > & xHandler)
+void SaxExpatParser::setErrorHandler(const ::com::sun::star::uno::Reference< XErrorHandler > & xHandler)
     throw (RuntimeException)
 {
     m_pImpl->rErrorHandler = xHandler;
 }
 
-void SaxExpatParser::setDTDHandler(const Reference< XDTDHandler > & xHandler)
+void SaxExpatParser::setDTDHandler(const ::com::sun::star::uno::Reference< XDTDHandler > & xHandler)
     throw (RuntimeException)
 {
     m_pImpl->rDTDHandler = xHandler;
 }
 
-void SaxExpatParser::setEntityResolver(const Reference < XEntityResolver > & xResolver)
+void SaxExpatParser::setEntityResolver(const ::com::sun::star::uno::Reference < XEntityResolver > & xResolver)
     throw (RuntimeException)
 {
     m_pImpl->rEntityResolver = xResolver;
@@ -770,7 +779,7 @@ void SaxExpatParser_Impl::parse( )
 
             SAXParseException aExcept(
                 getErrorMessage(xmlE , sSystemId, nLine) ,
-                Reference< XInterface >(),
+                ::com::sun::star::uno::Reference< XInterface >(),
                 Any( &exception , getCppuType( &exception) ),
                 rDocumentLocator->getPublicId(),
                 rDocumentLocator->getSystemId(),
@@ -1066,8 +1075,8 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
 
     if (pServiceManager )
     {
-        Reference< XSingleServiceFactory > xRet;
-        Reference< XMultiServiceFactory > xSMgr =
+        ::com::sun::star::uno::Reference< XSingleServiceFactory > xRet;
+        ::com::sun::star::uno::Reference< XMultiServiceFactory > xSMgr =
             reinterpret_cast< XMultiServiceFactory * > ( pServiceManager );
 
         OUString aImplementationName = OUString::createFromAscii( pImplName );
@@ -1084,6 +1093,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
                                         SaxWriter_CreateInstance,
                                         SaxWriter_getSupportedServiceNames() );
         }
+        else if ( aImplementationName == PARSER_IMPLEMENTATION_NAME  )
+        {
+            xRet = createSingleFactory( xSMgr, aImplementationName,
+                                        FastSaxParser_CreateInstance,
+                                        FastSaxParser::getSupportedServiceNames_Static() );
+        }
 
         if (xRet.is())
         {
@@ -1094,7 +1109,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
 
     return pRet;
 }
-
 
 }
 
