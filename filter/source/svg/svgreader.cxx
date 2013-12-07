@@ -1421,7 +1421,7 @@ struct ShapeWritingVisitor
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
                 OUString sAttributeValue;
-                double x=0.0,y=0.0,width=0.0,height=0.0;
+                double x=0.0, y=0.0, width=0.0, height=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
                     sAttributeValue = xAttributes->item(i)->getNodeValue();
@@ -1445,6 +1445,20 @@ struct ShapeWritingVisitor
                             // skip
                             break;
                     }
+                }
+                // extract basic transformations out of CTM
+                basegfx::B2DTuple aScale, aTranslate;
+                double fRotate, fShearX;
+                if (maCurrState.maCTM.decompose(aScale, aTranslate, fRotate, fShearX))
+                {
+                    // apply transform
+                    x *= aScale.getX();
+                    width *= aScale.getX();
+                    y *= aScale.getY();
+                    height *= aScale.getY();
+                    x += aTranslate.getX();
+                    y += aTranslate.getY();
+                    //TODO: Rotate
                 }
 
                 OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : "";
@@ -1508,6 +1522,7 @@ struct ShapeWritingVisitor
                     y *= aScale.getY();
                     x += aTranslate.getX();
                     y += aTranslate.getY();
+                    //TODO: Rotate
                 }
                 else {
                     // some heuristic attempts to have text output
