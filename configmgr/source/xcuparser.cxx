@@ -92,7 +92,7 @@ bool XcuParser::startElement(
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-    } else if (state_.top().ignore) {
+    } else if (state_.top().ignore || state_.top().locked) {
         state_.push(State(false));
     } else if (!state_.top().node.is()) {
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name.equals("item"))
