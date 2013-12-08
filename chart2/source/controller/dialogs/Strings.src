@@ -384,16 +384,6 @@ String STR_TIP_SELECT_RANGE
     Text [ en-US ] = "Select data range" ;
 };
 
-String STR_TIP_CHOOSECOLOR
-{
-    Text [ en-US ] = "Select a color using the color dialog" ;
-};
-
-String STR_TIP_LIGHTSOURCE_X
-{
-    Text [ en-US ] = "Light Source %LIGHTNUMBER" ;
-};
-
 String STR_TIP_DATASERIES
 {
     Text [ en-US ] = "Data Series '%SERIESNAME'" ;
