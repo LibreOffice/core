@@ -313,6 +313,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_FORMAT   :    sName = "Format"; break;
             case PROP_INSERT   :    sName = "Insert"; break;
             case PROP_DELETE   :    sName = "Delete"; break;
+            case PROP_PARAGRAPH_FORMAT : sName = "ParagraphFormat"; break;
             case PROP_STREAM_NAME:    sName = "StreamName"; break;
             case PROP_BITMAP :    sName = "Bitmap"; break;
             case PROP_IS_DATE :   sName = "IsDate"; break;

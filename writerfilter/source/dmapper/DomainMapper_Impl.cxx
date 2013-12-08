@@ -1564,6 +1564,9 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
             case ooxml::OOXML_del:
                 sType = rPropNameSupplier.GetName( PROP_DELETE );
                 break;
+            case ooxml::OOXML_ParagraphFormat:
+                sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
+                break;
             }
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
             beans::PropertyValues aRedlineProperties( 3 );
@@ -1602,8 +1605,9 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange 
         CreateRedline( xRange, *pIt );
 
         // Adding the non-mod redlines to the temporary vector
-        if ( pIt->get( ) && ( ( *pIt )->m_nToken & 0xffff ) != ooxml::OOXML_mod )
+        if ( pIt->get( ) )
         {
+            if ( ( ( *pIt )->m_nToken & 0xffff ) != ooxml::OOXML_mod && ( ( *pIt )->m_nToken & 0xffff ) != ooxml::OOXML_ParagraphFormat)
             aCleaned.push_back( *pIt );
         }
     }

@@ -3454,10 +3454,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_paratrackchange:
         m_pImpl->StartParaMarkerChange( );
+    case NS_ooxml::LN_CT_PPr_pPrChange:
     case NS_ooxml::LN_trackchange:
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
     {
         m_pImpl->AddNewRedline( );
+
+        if (nSprmId == NS_ooxml::LN_CT_PPr_pPrChange)
+        {
+            m_pImpl->SetCurrentRedlineToken( ooxml::OOXML_ParagraphFormat );
+        }
+
         resolveSprmProps(*this, rSprm );
         // now the properties author, date and id should be available
         sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
@@ -3466,6 +3473,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             case ooxml::OOXML_mod :
             case ooxml::OOXML_ins :
             case ooxml::OOXML_del :
+            case ooxml::OOXML_ParagraphFormat :
                 break;
             default: OSL_FAIL( "redline token other than mod, ins or del" );
         }
@@ -3494,6 +3502,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
 
         // Pop back out the character properties that were on the run
         m_pImpl->PopProperties(CONTEXT_CHARACTER);
+    break;
+    case NS_ooxml::LN_CT_PPrChange_pPr:
+        // Push all the current 'Paragraph' properties to the stack, so that we don't store them
+        // as 'tracked changes' by mistake
+        m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
+
+        // Resolve all the properties that are under the 'pPrChange'->'pPr' XML node
+        resolveSprmProps(*this, rSprm );
+
+        if (m_pImpl->GetTopContext())
+        {
+            // Get all the properties that were processed in the 'pPrChange'->'pPr' XML node
+            uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
+
+            // Store these properties in the current redline object
+            m_pImpl->SetCurrentRedlineRevertProperties( currentRedlineRevertProperties );
+        }
+
+        // Pop back out the character properties that were on the run
+        m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     break;
     case NS_ooxml::LN_object:
     {
