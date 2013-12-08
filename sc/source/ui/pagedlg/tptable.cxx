@@ -33,30 +33,6 @@
 #include "sc.hrc"
 #include "pagedlg.hrc"
 
-// =======================================================================
-
-void EmptyNumericField::Modify()
-{
-    if( !GetText().isEmpty() )
-        NumericField::Modify();
-    else
-        SetEmptyFieldValue();
-}
-
-void EmptyNumericField::SetValue( sal_Int64 nValue )
-{
-    if( nValue == 0 )
-        SetEmptyFieldValue();
-    else
-        NumericField::SetValue( nValue );
-}
-
-sal_Int64 EmptyNumericField::GetValue() const
-{
-    return IsEmptyFieldValue() ? 0 : NumericField::GetValue();
-}
-
-// =======================================================================
 
 // STATIC DATA -----------------------------------------------------------
 

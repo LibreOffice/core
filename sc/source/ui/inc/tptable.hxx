@@ -25,25 +25,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 
-//===================================================================
-
-/** A vcl/NumericField that additionally supports empty text.
-    @descr  Value 0 is set as empty text, and empty text is returned as 0. */
-class EmptyNumericField : public NumericField
-{
-public:
-    inline explicit     EmptyNumericField( Window* pParent, WinBits nWinStyle ) :
-                            NumericField( pParent, nWinStyle ) {}
-    inline explicit     EmptyNumericField( Window* pParent, const ResId& rResId ) :
-                            NumericField( pParent, rResId ) {}
-
-    virtual void        Modify();
-    virtual void        SetValue( sal_Int64 nValue );
-    virtual sal_Int64   GetValue() const;
-};
-
-//===================================================================
-
 class ScTablePage : public SfxTabPage
 {
 public:
