@@ -133,12 +133,21 @@ gb_LinkTarget_INCLUDE :=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 	-I$(BUILDDIR)/config_$(gb_Side) \
 
+# We must name the .pdb like libname.pdb, not libname.\(dll\|exe\|pyd\).pdb,
+# otherwise WinDbg does not find it.
+define gb_LinkTarget__get_pdb_filename
+$(patsubst %.dll,%.pdb,$(patsubst %.exe,%.pdb,$(patsubst %.pyd,%.pdb,$(1))))
+endef
+
 gb_LinkTarget_get_pdbfile_in = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).objects.pdb
+
 gb_LinkTarget_get_pdbfile_out = \
- $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
+ $(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)))
+
 gb_LinkTarget_get_ilkfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).ilk
+
 gb_LinkTarget_get_manifestfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
 
@@ -193,7 +202,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),\
 			$(T_LIBS) user32.lib \
 			-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest \
-			-pdb:$(WORKDIR)/LinkTarget/$(2).pdb) \
+			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/$(2))) \
 		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(filter Library,$(TARGETTYPE)),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1); exit 42; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest -outputresource:$(1)\;2 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest $(ILIBTARGET); fi) \
