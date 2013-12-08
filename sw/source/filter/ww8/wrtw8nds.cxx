@@ -25,6 +25,7 @@
 #include <functional>
 #include <iostream>
 
+#include <i18nlangtag/mslangid.hxx>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
@@ -1291,11 +1292,21 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
             nDir = pDoc->GetTextDirection( aPos );
         }
         else if ( pOutFmtNode->ISA( SwTxtFmtColl ) )
-            nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
+        {
+            if ( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
+                nDir = FRMDIR_HORI_RIGHT_TOP;
+            else
+                nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
+        }
     }
 
     if ( nDir == FRMDIR_ENVIRONMENT )
-        nDir = FRMDIR_HORI_LEFT_TOP;        //Set something
+    {
+        if( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
+            nDir = FRMDIR_HORI_RIGHT_TOP;
+        else
+            nDir = FRMDIR_HORI_LEFT_TOP;        //Set something
+    }
 
     return nDir;
 }
