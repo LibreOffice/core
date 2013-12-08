@@ -1184,6 +1184,8 @@ void makeRedline( SwPaM& rPaM,
         eType = nsRedlineType_t::REDLINE_FORMAT;
     else if ( rRedlineType == "TextTable" )
         eType = nsRedlineType_t::REDLINE_TABLE;
+    else if ( rRedlineType == "ParagraphFormat" )
+        eType = nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT;
     else if( !rRedlineType.startsWith( "Insert" ))
         throw lang::IllegalArgumentException();
 

@@ -64,6 +64,7 @@ namespace nsRedlineType_t
     const RedlineType_t REDLINE_FORMAT = 0x2;// Attributes have been applied.
     const RedlineType_t REDLINE_TABLE = 0x3;// Table structure has been altered.
     const RedlineType_t REDLINE_FMTCOLL = 0x4;// Style has been altered (Autoformat!).
+    const RedlineType_t REDLINE_PARAGRAPH_FORMAT = 0x5;// Paragraph attributes have been changed
 
     // When larger than 128, flags can be inserted.
     const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
