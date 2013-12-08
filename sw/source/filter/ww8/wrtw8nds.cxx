@@ -1302,6 +1302,7 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
 
     if ( nDir == FRMDIR_ENVIRONMENT )
     {
+        // fdo#44029 put direction right when the locale are RTL.
         if( MsLangId::isRightToLeft( static_cast<LanguageType>(GetAppLanguage())) )
             nDir = FRMDIR_HORI_RIGHT_TOP;
         else
