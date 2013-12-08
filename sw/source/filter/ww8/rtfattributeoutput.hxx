@@ -57,7 +57,7 @@ public:
     virtual void StartParagraphProperties();
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties();
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData );
 
     /// Start of the text run.
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );

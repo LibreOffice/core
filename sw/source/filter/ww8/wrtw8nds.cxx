@@ -216,7 +216,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
     if ( !m_rExport.pDoc->GetRedlineTbl().empty() )
     {
         SwPosition aPosition( rNd, SwIndex( (SwTxtNode*)&rNd ) );
-        pCurRedline = m_rExport.pDoc->GetRedline( aPosition, &nCurRedlinePos );
+        pCurRedline = m_rExport.pDoc->GetRedline( aPosition, &nCurRedlinePos ); // Why are we doing this?
     }
 
     nAktSwPos = SearchNext(1);
@@ -1198,7 +1198,34 @@ bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
     return false;
 }
 
-const SwRedlineData* SwWW8AttrIter::GetRedline( sal_Int32 nPos )
+const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
+{
+    pCurRedline = NULL;
+
+    // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
+    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < m_rExport.pDoc->GetRedlineTbl().size(); ++nRedlinePos )
+    {
+        const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nRedlinePos ];
+
+        const SwPosition* pCheckedStt = pRedl->Start();
+
+        if( pCheckedStt->nNode == rNd )
+        {
+            // Maybe add here a check that also the start & end of the redline is the entire paragraph
+
+            // Only return if this is a paragraph formatting redline
+            if (pRedl->GetType() == nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT)
+            {
+                // write data of this redline
+                pCurRedline = pRedl;
+                return &( pCurRedline->GetRedlineData() );
+            }
+        }
+    }
+    return NULL;
+}
+
+const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
 {
     if( pCurRedline )
     {
@@ -1211,8 +1238,19 @@ const SwRedlineData* SwWW8AttrIter::GetRedline( sal_Int32 nPos )
         }
         else
         {
-            // write data of current redline
-            return &( pCurRedline->GetRedlineData() );
+            switch( pCurRedline->GetType() )
+            {
+                case nsRedlineType_t::REDLINE_INSERT:
+                case nsRedlineType_t::REDLINE_DELETE:
+                case nsRedlineType_t::REDLINE_FORMAT:
+                    // write data of this redline
+                    return &( pCurRedline->GetRedlineData() );
+                    break;
+                default:
+                    break;
+            };
+            pCurRedline = 0;
+            ++nCurRedlinePos;
         }
     }
 
@@ -1235,15 +1273,26 @@ const SwRedlineData* SwWW8AttrIter::GetRedline( sal_Int32 nPos )
                 {
                     if( pStt->nContent.GetIndex() == nPos )
                     {
-                        // write data of this redline
-                        pCurRedline = pRedl;
-                        return &( pCurRedline->GetRedlineData() );
+                            switch( pRedl->GetType() )
+                            {
+                                case nsRedlineType_t::REDLINE_INSERT:
+                                case nsRedlineType_t::REDLINE_DELETE:
+                                case nsRedlineType_t::REDLINE_FORMAT:
+                                    // write data of this redline
+                                    pCurRedline = pRedl;
+                                    return &( pCurRedline->GetRedlineData() );
+                                    break;
+                                default:
+                                    break;
+                            };
                     }
                     break;
                 }
             }
             else
+            {
                 break;
+            }
 
             if( pEnd->nNode == rNd &&
                 pEnd->nContent.GetIndex() < nPos )
@@ -1804,7 +1853,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
 
     do {
-        const SwRedlineData* pRedlineData = aAttrIter.GetRedline( nAktPos );
+        const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
 
         sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
         // Is this the only run in this paragraph and it's empty?
@@ -2034,7 +2083,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
                 if ( bRedlineAtEnd )
                 {
-                    AttrOutput().Redline( aAttrIter.GetRedline( nEnd ) );
+                    AttrOutput().Redline( aAttrIter.GetRunLevelRedline( nEnd ) );
                     AttrOutput().OutputFKP();
                 }
             }
@@ -2359,7 +2408,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
-    AttrOutput().EndParagraphProperties();
+    const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
+    AttrOutput().EndParagraphProperties( pParagraphRedlineData );
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 
