@@ -99,7 +99,7 @@ void SdFiltersTest::testDocumentLayout()
     struct { const char *pInput, *pDump; sal_Int32 nExportType; } aFilesToCompare[] =
     {
         { "odp/shapes-test.odp", "xml/shapes-test_page", -1 },
-        { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page", -1 },
+        { "fdo47434.pptx", "xml/fdo47434_", -1 },
         { "n758621.ppt", "xml/n758621_", -1 },
         { "fdo64586.ppt", "xml/fdo64586_", -1 },
         { "n819614.pptx", "xml/n819614_", -1 },
