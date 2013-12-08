@@ -41,7 +41,7 @@ namespace chart
 class LightButton : public ImageButton
 {
 public:
-    LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLightNumber );
+    LightButton( Window* pParent);
     virtual ~LightButton();
 
     void switchLightOn(bool bOn);
@@ -49,13 +49,6 @@ public:
 
 private:
     bool m_bLightOn;
-};
-
-class ColorButton : public ImageButton
-{
-public:
-    ColorButton( Window* pParent, const ResId& rResId );
-    virtual ~ColorButton();
 };
 
 struct LightSourceInfo;
@@ -89,30 +82,26 @@ private:
     void applyLightSourceToModel( sal_uInt32 nLightNumber );
     void applyLightSourcesToModel();
 
-    FixedText   m_aFT_LightSource;
+    LightButton* m_pBtn_Light1;
+    LightButton* m_pBtn_Light2;
+    LightButton* m_pBtn_Light3;
+    LightButton* m_pBtn_Light4;
+    LightButton* m_pBtn_Light5;
+    LightButton* m_pBtn_Light6;
+    LightButton* m_pBtn_Light7;
+    LightButton* m_pBtn_Light8;
 
-    LightButton m_aBtn_Light1;
-    LightButton m_aBtn_Light2;
-    LightButton m_aBtn_Light3;
-    LightButton m_aBtn_Light4;
-    LightButton m_aBtn_Light5;
-    LightButton m_aBtn_Light6;
-    LightButton m_aBtn_Light7;
-    LightButton m_aBtn_Light8;
+    ColorLB*     m_pLB_LightSource;
+    PushButton*  m_pBtn_LightSource_Color;
 
-    ColorLB     m_aLB_LightSource;
-    ColorButton m_aBtn_LightSource_Color;
+    ColorLB*     m_pLB_AmbientLight;
+    PushButton*  m_pBtn_AmbientLight_Color;
 
-    FixedText   m_aFT_AmbientLight;
-    ColorLB     m_aLB_AmbientLight;
-    ColorButton m_aBtn_AmbientLight_Color;
-
-    SvxLightCtl3D   m_aCtl_Preview;
+    SvxLightCtl3D*   m_pCtl_Preview;
 
     LightSourceInfo* m_pLightSourceInfoList;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
+    ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet > m_xSceneProperties;
 
     TimerTriggeredControllerLock    m_aTimerTriggeredControllerLock;
 

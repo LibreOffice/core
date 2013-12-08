@@ -28,6 +28,7 @@
 #include <svx/sphere3d.hxx>
 #include <svx/cube3d.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builder.hxx>
 #include <svx/helperhittest3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/polygn3d.hxx>
@@ -959,6 +960,23 @@ SvxLightCtl3D::SvxLightCtl3D( Window* pParent, const ResId& rResId)
     // init members
     Init();
 }
+
+SvxLightCtl3D::SvxLightCtl3D( Window* pParent)
+:   Control(pParent, WB_BORDER | WB_TABSTOP),
+    maLightControl(this, 0),
+    maHorScroller(this, WB_HORZ | WB_DRAG),
+    maVerScroller(this, WB_VERT | WB_DRAG),
+    maSwitcher(this, 0)
+{
+    // init members
+    Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLightCtl3D(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxLightCtl3D(pParent);
+}
+
 
 void SvxLightCtl3D::Init()
 {

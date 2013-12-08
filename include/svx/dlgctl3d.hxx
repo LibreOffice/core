@@ -166,6 +166,7 @@ private:
 
 public:
     SvxLightCtl3D( Window* pParent, const ResId& rResId);
+    SvxLightCtl3D( Window* pParent);
     ~SvxLightCtl3D();
 
     // react to size changes

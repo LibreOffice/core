@@ -260,9 +260,6 @@
 #define STR_ACTION_REARRANGE_CHART          (RID_APP_START + 94)
 #define STR_ACTION_EDIT_TEXT                (RID_APP_START + 95)
 
-#define STR_TIP_CHOOSECOLOR                 (RID_APP_START + 233)
-#define STR_TIP_LIGHTSOURCE_X               (RID_APP_START + 234)
-
 //-----------------------------------------------------------------------------
 //statusbar strings and balloon help
 
