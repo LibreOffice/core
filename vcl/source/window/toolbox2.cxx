@@ -1342,25 +1342,43 @@ void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
+void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rInputImage )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
     {
+        const Image* pImage = &rInputImage; // Use the pointer to avoid unnecessary copying
+        Image aImage; // But we still need to keep the modified image alive if created.
+        long nToolbarFontSize = Application::GetSettings().GetStyleSettings().GetMenuFont().GetHeight();
+
+        // Use the font size to detect a HiDPI screen: in most cases both font
+        // size and DPI will be increased in order to end up with the same
+        // physical sizing of text -- the toolbar icons should therefore also
+        // be doubled to be of similar size.
+        if (nToolbarFontSize > 14)
+        {
+            BitmapEx aBitmap = rInputImage.GetBitmapEx();
+            const Size aNewSize(aBitmap.GetSizePixel().Width()*2,
+                                aBitmap.GetSizePixel().Height()*2);
+            aBitmap.Scale(aNewSize, BMP_SCALE_FAST);
+            aImage = Image(aBitmap);
+            pImage = &aImage;
+        }
+
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         // Nur wenn alles berechnet ist, mehr Aufwand treiben
         if ( !mbCalc )
         {
             Size aOldSize = pItem->maImage.GetSizePixel();
-            pItem->maImage = rImage;
+            pItem->maImage = *pImage;
             if ( aOldSize != pItem->maImage.GetSizePixel() )
                 ImplInvalidate( sal_True );
             else
                 ImplUpdateItem( nPos );
         }
         else
-            pItem->maImage = rImage;
+            pItem->maImage = *pImage;
     }
 }
 
