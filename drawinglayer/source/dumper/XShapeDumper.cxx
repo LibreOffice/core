@@ -172,6 +172,8 @@ int closeCallback(void* )
     return 0;
 }
 
+bool m_bNameDumped;
+
 // ----------------------------------------
 // ---------- FillProperties.idl ----------
 // ----------------------------------------
@@ -1007,8 +1009,11 @@ void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWrite
 
 void dumpNameAsAttribute(OUString sName, xmlTextWriterPtr xmlWriter)
 {
-    if(!sName.isEmpty())
+    if(!sName.isEmpty() && !m_bNameDumped)
+    {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+        m_bNameDumped = true;
+    }
 }
 
 void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter)
@@ -1806,6 +1811,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName;
+    m_bNameDumped = false;
 
     dumpPositionAsAttribute(xShape->getPosition(), xmlWriter);
     dumpSizeAsAttribute(xShape->getSize(), xmlWriter);
@@ -1823,7 +1829,10 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
         if (aAny >>= aName)
         {
             if (!aName.isEmpty())
+            {
                 xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+                m_bNameDumped = true;
+            }
         }
     }
 
