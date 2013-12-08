@@ -263,6 +263,9 @@
     <glade-widget-class title="Bitmap Pixel Editor" name="svxlo-SvxPixelCtl"
                         generic-name="Bitmap Pixel Editor" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Svx 3D Light Control" name="svxlo-SvxLightCtl3D"
+                        generic-name="3D Light Control" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Selector" name="svxlo-SvxFrameSelector"
                         generic-name="Frame Border Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -368,6 +371,9 @@
     <glade-widget-class title="Text Direction ListBox" name="chartcontrollerlo-TextDirectionListBox"
                         generic-name="TextDirectionListBox" parent="svxlo-FrameDirectionListBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Chart Light Button" name="chartcontrollerlo-LightButton"
+                        generic-name="ChartLightButton" parent="GtkButton"
+                        icon-name="widget-gtk-button"/>
     <glade-widget-class title="Numbering Type ListBox" name="swlo-SwNumberingTypeListBox"
                         generic-name="NumberingTypeListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

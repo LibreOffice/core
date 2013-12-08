@@ -39,6 +39,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/titlerotationtabpage \
 	chart2/uiconfig/ui/tp_3D_SceneAppearance \
 	chart2/uiconfig/ui/tp_3D_SceneGeometry \
+	chart2/uiconfig/ui/tp_3D_SceneIllumination \
 	chart2/uiconfig/ui/tp_axisLabel \
 	chart2/uiconfig/ui/tp_AxisPositions \
 	chart2/uiconfig/ui/tp_LegendPosition \
