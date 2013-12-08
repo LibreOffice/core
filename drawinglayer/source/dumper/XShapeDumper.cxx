@@ -1952,3 +1952,4 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes)
     return OStringToOUString(aString.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

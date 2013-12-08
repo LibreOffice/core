@@ -1089,3 +1089,5 @@ void EnhancedShapeDumper::dumpScaleXAsAttribute(sal_Bool bScaleX)
     else
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "false");
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
