@@ -1346,6 +1346,14 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
+    BitmapEx aBitmap = rImage.GetBitmapEx();
+    double nScalingFactor = 1.0; //Application::GetSettings().GetStyleSettings().GetMenuFont().GetHeight() / 8.0;
+    const Size aNewSize(aBitmap.GetSizePixel().Width()*nScalingFactor,
+                        aBitmap.GetSizePixel().Height()*nScalingFactor);
+    aBitmap.Scale(aNewSize, BMP_SCALE_FAST);
+    Image aImage(aBitmap);
+
+    // TODO: adjust images here...
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
@@ -1353,14 +1361,14 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         if ( !mbCalc )
         {
             Size aOldSize = pItem->maImage.GetSizePixel();
-            pItem->maImage = rImage;
+            pItem->maImage = aImage;
             if ( aOldSize != pItem->maImage.GetSizePixel() )
                 ImplInvalidate( sal_True );
             else
                 ImplUpdateItem( nPos );
         }
         else
-            pItem->maImage = rImage;
+            pItem->maImage = aImage;
     }
 }
 
