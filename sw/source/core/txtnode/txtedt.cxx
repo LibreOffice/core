@@ -965,7 +965,7 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
         //
         if(!IsWrongDirty())
         {
-            xub_StrLen nTemp = GetWrong()->NextWrong( nBegin );
+            const sal_Int32 nTemp = GetWrong()->NextWrong( nBegin );
             if(nTemp > nEnd)
             {
                 // reset original text
@@ -1243,13 +1243,13 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     // a change of data indicates that at least one word has been modified
     const bool bRedlineChg = (pNode->GetTxt().getStr() != aOldTxt.getStr());
 
-    xub_StrLen nBegin = 0;
-    sal_Int32  nEnd = pNode->GetTxt().getLength();
-    xub_StrLen nInsertPos = 0;
-    xub_StrLen nChgStart = STRING_LEN;
-    xub_StrLen nChgEnd = 0;
-    xub_StrLen nInvStart = STRING_LEN;
-    xub_StrLen nInvEnd = 0;
+    sal_Int32 nBegin = 0;
+    sal_Int32 nEnd = pNode->GetTxt().getLength();
+    sal_Int32 nInsertPos = 0;
+    sal_Int32 nChgStart = STRING_LEN;
+    sal_Int32 nChgEnd = 0;
+    sal_Int32 nInvStart = STRING_LEN;
+    sal_Int32 nInvEnd = 0;
 
     const bool bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
                                   rViewOpt.IsAutoCompleteWords();
@@ -1259,11 +1259,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         nBegin = pNode->GetWrong()->GetBeginInv();
         if( STRING_LEN != nBegin )
         {
-            nEnd = pNode->GetWrong()->GetEndInv();
-            if (nEnd > pNode->GetTxt().getLength())
-            {
-                nEnd = pNode->GetTxt().getLength();
-            }
+            nEnd = std::max(pNode->GetWrong()->GetEndInv(), pNode->GetTxt().getLength());
         }
 
         // get word around nBegin, we start at nBegin - 1
@@ -1277,7 +1273,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                 g_pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
                     g_pBreakIt->GetLocale( eActLang ),
                     WordType::DICTIONARY_WORD, sal_True );
-            nBegin = xub_StrLen(aBound.startPos);
+            nBegin = aBound.startPos;
         }
 
         // get the position in the wrong list
@@ -1413,22 +1409,22 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
 
     SwWrongList* pSmartTagList = pNode->GetSmartTags();
 
-    xub_StrLen nBegin = 0;
-    xub_StrLen nEnd = static_cast< xub_StrLen >(rText.getLength());
+    sal_Int32 nBegin = 0;
+    sal_Int32 nEnd = rText.getLength();
 
     if ( pSmartTagList )
     {
         if ( pSmartTagList->GetBeginInv() != STRING_LEN )
         {
             nBegin = pSmartTagList->GetBeginInv();
-            nEnd = std::min( pSmartTagList->GetEndInv(), (xub_StrLen)rText.getLength() );
+            nEnd = std::min( pSmartTagList->GetEndInv(), rText.getLength() );
 
             if ( nBegin < nEnd )
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
                 const com::sun::star::lang::Locale aCurrLocale = g_pBreakIt->GetLocale( aCurrLang );
-                nBegin = static_cast< xub_StrLen >(g_pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale ));
-                nEnd = static_cast< xub_StrLen >(std::min( rText.getLength(), g_pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
+                nBegin = g_pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale );
+                nEnd = std::min( rText.getLength(), g_pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) );
             }
         }
     }
@@ -1440,8 +1436,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     // clear smart tag list between nBegin and nEnd:
     if ( 0 != nNumberOfEntries )
     {
-        xub_StrLen nChgStart = STRING_LEN;
-        xub_StrLen nChgEnd = 0;
+        sal_Int32 nChgStart = STRING_LEN;
+        sal_Int32 nChgEnd = 0;
         const sal_uInt16 nCurrentIndex = pSmartTagList->GetWrongPos( nBegin );
         pSmartTagList->Fresh( nChgStart, nChgEnd, nBegin, nEnd - nBegin, nCurrentIndex, STRING_LEN );
         nNumberOfRemovedEntries = nNumberOfEntries - pSmartTagList->Count();
@@ -1466,8 +1462,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
 
 
-        xub_StrLen nLangBegin = nBegin;
-        xub_StrLen nLangEnd = nEnd;
+        sal_Int32 nLangBegin = nBegin;
+        sal_Int32 nLangEnd = nEnd;
 
         // smart tag recognization has to be done for each language portion:
         SwLanguageIterator aIter( *pNode, nLangBegin );
@@ -1476,7 +1472,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         {
             const LanguageType nLang = aIter.GetLanguage();
             const com::sun::star::lang::Locale aLocale = g_pBreakIt->GetLocale( nLang );
-            nLangEnd = std::min( nEnd, aIter.GetChgPos() );
+            nLangEnd = std::min<sal_Int32>( nEnd, aIter.GetChgPos() );
 
             const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nLangBegin );
             const sal_Int32 nExpandEnd   = aConversionMap.ConvertToViewPosition( nLangEnd );

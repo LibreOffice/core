@@ -810,7 +810,7 @@ void SwTxtFrm::CalcLineSpace()
     }
 }
 
-static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, long nCnt, bool bMove )
+static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool bMove )
 {
     if ( !rFrm.IsFollow() )
     {
@@ -833,24 +833,24 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, long nCnt, bool bMove 
         }
         else
         {
-            xub_StrLen nLen = (xub_StrLen)nCnt;
             if( pTxtNode->GetWrong() )
-                pTxtNode->GetWrong()->Invalidate( nPos, nLen );
+                pTxtNode->GetWrong()->Invalidate( nPos, nCnt );
             if( pWrongGrammar )
-                pWrongGrammar->Invalidate( nPos, nLen );
+                pWrongGrammar->Invalidate( nPos, nCnt );
             if( pTxtNode->GetSmartTags() )
-                pTxtNode->GetSmartTags()->Invalidate( nPos, nLen );
+                pTxtNode->GetSmartTags()->Invalidate( nPos, nCnt );
         }
+        const sal_Int32 nEnd = nPos + (nCnt > 0 ? nCnt : 1 );
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
             pTxtNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
-            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetWrong()->SetInvalid( nPos, nEnd );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
-            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetSmartTags()->SetInvalid( nPos, nEnd );
         }
         pTxtNode->SetWrongDirty( true );
         pTxtNode->SetGrammarCheckDirty( true );
@@ -986,8 +986,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             nPos = ((SwDelTxt*)pNew)->nStart;
             nLen = ((SwDelTxt*)pNew)->nLen;
-            long m = nLen;
-            m *= -1;
+            const sal_Int32 m = -nLen;
             if( IsIdxInside( nPos, nLen ) )
             {
                 if( !nLen )

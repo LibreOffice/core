@@ -38,31 +38,31 @@ void SwGrammarMarkUp::CopyFrom( const SwWrongList& rCopy )
 }
 
 
-void SwGrammarMarkUp::MoveGrammar( xub_StrLen nPos, long nDiff )
+void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
 {
     Move( nPos, nDiff );
     if( !maSentence.size() )
         return;
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
+    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nPos )
         ++pIter;
-    xub_StrLen nEnd = nDiff < 0 ? xub_StrLen(nPos - nDiff) : nPos;
+    const sal_Int32 nEnd = nDiff < 0 ? nPos-nDiff : nPos;
     while( pIter != maSentence.end() )
     {
         if( *pIter >= nEnd )
-            *pIter = xub_StrLen( *pIter + nDiff );
+            *pIter += *pIter;
         else
             *pIter = nPos;
         ++pIter;
     }
 }
 
-SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( xub_StrLen nSplitPos )
+SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
 {
     SwGrammarMarkUp* pNew = (SwGrammarMarkUp*)SplitList( nSplitPos );
     if( !maSentence.size() )
         return pNew;
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
+    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nSplitPos )
         ++pIter;
     if( pIter != maSentence.begin() )
@@ -77,14 +77,14 @@ SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( xub_StrLen nSplitPos )
     return pNew;
 }
 
-void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, xub_StrLen nInsertPos )
+void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsertPos )
 {
     JoinList( pNext, nInsertPos );
     if (pNext)
     {
         if( !pNext->maSentence.size() )
             return;
-        std::vector< xub_StrLen >::iterator pIter = pNext->maSentence.begin();
+        std::vector< sal_Int32 >::iterator pIter = pNext->maSentence.begin();
         while( pIter != pNext->maSentence.end() )
         {
             *pIter = *pIter + nInsertPos;
@@ -94,21 +94,21 @@ void SwGrammarMarkUp::JoinGrammarList( SwGrammarMarkUp* pNext, xub_StrLen nInser
     }
 }
 
-void SwGrammarMarkUp::ClearGrammarList( xub_StrLen nSentenceEnd )
+void SwGrammarMarkUp::ClearGrammarList( sal_Int32 nSentenceEnd )
 {
     if( STRING_LEN == nSentenceEnd ) {
         ClearList();
         maSentence.clear();
         Validate();
     } else if( GetBeginInv() <= nSentenceEnd ) {
-        std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
-        xub_StrLen nStart = 0;
+        std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
+        sal_Int32 nStart = 0;
         while( pIter != maSentence.end() && *pIter < GetBeginInv() )
         {
             nStart = *pIter;
             ++pIter;
         }
-        std::vector< xub_StrLen >::iterator pLast = pIter;
+        std::vector< sal_Int32 >::iterator pLast = pIter;
         while( pLast != maSentence.end() && *pLast <= nSentenceEnd )
             ++pLast;
         maSentence.erase( pIter, pLast );
@@ -117,41 +117,39 @@ void SwGrammarMarkUp::ClearGrammarList( xub_StrLen nSentenceEnd )
     }
 }
 
-void SwGrammarMarkUp::setSentence( xub_StrLen nStart )
+void SwGrammarMarkUp::setSentence( sal_Int32 nStart )
 {
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
+    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nStart )
         ++pIter;
     if( pIter == maSentence.end() || *pIter > nStart )
         maSentence.insert( pIter, nStart );
 }
 
-xub_StrLen SwGrammarMarkUp::getSentenceStart( xub_StrLen nPos )
+sal_Int32 SwGrammarMarkUp::getSentenceStart( sal_Int32 nPos )
 {
     if( !maSentence.size() )
         return 0;
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
+    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter < nPos )
         ++pIter;
     if( pIter != maSentence.begin() )
         --pIter;
-    xub_StrLen nRet = 0;
     if( pIter != maSentence.end() && *pIter < nPos )
-        nRet = *pIter;
-    return nRet;
+        return *pIter;
+    return 0;
 }
 
-xub_StrLen SwGrammarMarkUp::getSentenceEnd( xub_StrLen nPos )
+sal_Int32 SwGrammarMarkUp::getSentenceEnd( sal_Int32 nPos )
 {
     if( !maSentence.size() )
         return STRING_LEN;
-    std::vector< xub_StrLen >::iterator pIter = maSentence.begin();
+    std::vector< sal_Int32 >::iterator pIter = maSentence.begin();
     while( pIter != maSentence.end() && *pIter <= nPos )
         ++pIter;
-    xub_StrLen nRet = STRING_LEN;
     if( pIter != maSentence.end() )
-        nRet = *pIter;
-    return nRet;
+        return *pIter;
+    return STRING_LEN;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

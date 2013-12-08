@@ -28,8 +28,8 @@
 
 SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-        xub_StrLen nPos,
-        xub_StrLen nLen)
+        sal_Int32 nPos,
+        sal_Int32 nLen)
 : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(0)
 {
     mColor =  getWrongAreaColor(listType, xPropertyBag);
@@ -38,8 +38,8 @@ SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
 
 SwWrongArea::SwWrongArea( const rtl::OUString& rType,
         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-        xub_StrLen nPos,
-        xub_StrLen nLen,
+        sal_Int32 nPos,
+        sal_Int32 nLen,
         SwWrongList* pSubList)
 : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList), mLineType(WRONGAREA_NONE)
 {
@@ -130,27 +130,24 @@ sal_Bool SwWrongList::InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const
 /*************************************************************************
  * sal_Bool SwWrongList::Check() liefert den ersten falschen Bereich
  *************************************************************************/
-sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
+sal_Bool SwWrongList::Check( sal_Int32 &rChk, sal_Int32 &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
-    rLn = rLn + rChk;
-    xub_StrLen nWrPos;
+    rLn += rChk;
 
     if( nPos == Count() )
         return sal_False;
 
-    xub_StrLen nEnd = Len( nPos );
-    nEnd = nEnd + ( nWrPos = Pos( nPos ) );
+    sal_Int32 nWrPos = Pos( nPos );
+    sal_Int32 nEnd = nWrPos + Len( nPos );
     if( nEnd == rChk )
     {
         ++nPos;
         if( nPos == Count() )
             return sal_False;
-        else
-        {
-            nEnd = Len( nPos );
-            nEnd = nEnd + ( nWrPos = Pos( nPos ) );
-        }
+
+        nWrPos = Pos( nPos );
+        nEnd = nWrPos + Len( nPos );
     }
     if( nEnd > rChk && nWrPos < rLn )
     {
@@ -158,20 +155,20 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
             rChk = nWrPos;
         if( nEnd < rLn )
             rLn = nEnd;
-        rLn = rLn - rChk;
+        rLn -= rChk;
         return 0 != rLn;
     }
     return sal_False;
 }
 
 /*************************************************************************
- * xub_StrLen SwWrongList::NextWrong() liefert die naechste Fehlerposition
+ * sal_Int32 SwWrongList::NextWrong() liefert die naechste Fehlerposition
  *************************************************************************/
 
-xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
+sal_Int32 SwWrongList::NextWrong( sal_Int32 nChk ) const
 {
-    xub_StrLen nRet;
-    xub_StrLen nPos = GetWrongPos( nChk );
+    sal_Int32 nRet = STRING_LEN;
+    sal_uInt16 nPos = GetWrongPos( nChk );
     if( nPos < Count() )
     {
         nRet = Pos( nPos );
@@ -183,22 +180,21 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
                 nRet = STRING_LEN;
         }
     }
-    else
-        nRet = STRING_LEN;
     if( nRet > GetBeginInv() && nChk < GetEndInv() )
         nRet = nChk > GetBeginInv() ? nChk : GetBeginInv();
     return nRet;
 }
 
 /*************************************************************************
- *                 MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue )
+ *                 sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue )
  *  sucht die erste Position im Array, die groessergleich nValue ist,
  * dies kann natuerlich auch hinter dem letzten Element sein!
  *************************************************************************/
 
-MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
+sal_uInt16 SwWrongList::GetWrongPos( sal_Int32 nValue ) const
 {
-    MSHORT nOben = Count(), nUnten = 0;
+    sal_uInt16 nOben = Count();
+    sal_uInt16 nUnten = 0;
 
     if( nOben > 0 )
     {
@@ -208,11 +204,11 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
         {
             for (std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end()); aIter != aEnd; ++aIter)
             {
-                const xub_StrLen nSTPos = (*aIter).mnPos;
-                const xub_StrLen nSTLen = (*aIter).mnLen;
+                const sal_Int32 nSTPos = (*aIter).mnPos;
+                const sal_Int32 nSTLen = (*aIter).mnLen;
                 if ( nSTPos <= nValue && nValue < nSTPos + nSTLen )
                     break;
-                else if ( nSTPos > nValue )
+                if ( nSTPos > nValue )
                     break;
 
                 ++nUnten;
@@ -221,11 +217,11 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
         }
 
         --nOben;
-        MSHORT nMitte = 0;
+        sal_uInt16 nMitte = 0;
         while( nUnten <= nOben )
         {
             nMitte = nUnten + ( nOben - nUnten ) / 2;
-            xub_StrLen nTmp = Pos( nMitte );
+            const sal_Int32 nTmp = Pos( nMitte );
             if( nTmp == nValue )
             {
                 nUnten = nMitte;
@@ -260,7 +256,7 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
  *                 void SwWrongList::_Invalidate()
  *************************************************************************/
 
-void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
+void SwWrongList::_Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
 {
     if ( nBegin < GetBeginInv() )
         nBeginInvalid = nBegin;
@@ -268,7 +264,7 @@ void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
         nEndInvalid = nEnd;
 }
 
-void SwWrongList::SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
+void SwWrongList::SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd )
 {
     nBeginInvalid = nBegin;
     nEndInvalid = nEnd;
@@ -276,34 +272,36 @@ void SwWrongList::SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
 
 
 /*************************************************************************
- *                      SwWrongList::Move( xub_StrLen nPos, long nDiff )
+ *                      SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
  *  veraendert alle Positionen ab nPos um den angegebenen Wert,
  *  wird nach Einfuegen oder Loeschen von Buchstaben benoetigt.
  *************************************************************************/
 
-void SwWrongList::Move( xub_StrLen nPos, long nDiff )
+void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 {
     MSHORT i = GetWrongPos( nPos );
     if( nDiff < 0 )
     {
-        xub_StrLen nEnd = nPos + xub_StrLen( -nDiff );
+        const sal_Int32 nEnd = nPos - nDiff;
         MSHORT nLst = i;
-        xub_StrLen nWrPos;
-        xub_StrLen nWrLen;
         bool bJump = false;
         while( nLst < Count() && Pos( nLst ) < nEnd )
             ++nLst;
-        if( nLst > i && ( nWrPos = Pos( nLst - 1 ) ) <= nPos )
+        if( nLst > i )
         {
-            nWrLen = Len( nLst - 1 );
-            // calculate new length of word
-            nWrLen = ( nEnd > nWrPos + nWrLen ) ?
-                       nPos - nWrPos :
-                       static_cast<xub_StrLen>(nWrLen + nDiff);
-            if( nWrLen )
+            const sal_Int32 nWrPos = Pos( nLst - 1 );
+            if ( nWrPos <= nPos )
             {
-                maList[--nLst].mnLen = nWrLen;
-                bJump = true;
+                sal_Int32 nWrLen = Len( nLst - 1 );
+                // calculate new length of word
+                nWrLen = ( nEnd > nWrPos + nWrLen ) ?
+                        nPos - nWrPos :
+                        nWrLen + nDiff;
+                if( nWrLen )
+                {
+                    maList[--nLst].mnLen = nWrLen;
+                    bJump = true;
+                }
             }
         }
         Remove( i, nLst - i );
@@ -321,32 +319,33 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
     }
     else
     {
-        xub_StrLen nWrPos;
-        xub_StrLen nEnd = nPos + xub_StrLen( nDiff );
+        const sal_Int32 nEnd = nPos + nDiff;
         if( STRING_LEN != GetBeginInv() )
         {
             if( nBeginInvalid > nPos )
-                nBeginInvalid = nBeginInvalid + xub_StrLen( nDiff );
+                nBeginInvalid += nDiff;
             if( nEndInvalid >= nPos )
-                nEndInvalid = nEndInvalid + xub_StrLen( nDiff );
+                nEndInvalid += nDiff;
         }
         // Wenn wir mitten in einem falschen Wort stehen, muss vom Wortanfang
         // invalidiert werden.
-        if( i < Count() && nPos >= ( nWrPos = Pos( i ) ) )
+        if( i < Count() )
         {
-            Invalidate( nWrPos, nEnd );
-            xub_StrLen nWrLen = Len( i ) + xub_StrLen( nDiff );
-            maList[i++].mnLen = nWrLen;
-            nWrLen = nWrLen + nWrPos;
-            Invalidate( nWrPos, nWrLen );
+            const sal_Int32 nWrPos = Pos( i );
+            if (nPos >= nWrPos)
+            {
+                Invalidate( nWrPos, nEnd );
+                const sal_Int32 nWrLen = Len( i ) + nDiff;
+                maList[i++].mnLen = nWrLen;
+                Invalidate( nWrPos, nWrPos + nWrLen );
+            }
         }
         else
             Invalidate( nPos, nEnd );
     }
     while( i < Count() )
     {
-        const xub_StrLen nTmp = static_cast<xub_StrLen>(nDiff + maList[i].mnPos);
-        maList[i++].mnPos = nTmp;
+        maList[i++].mnPos += nDiff;
     }
 }
 
@@ -357,23 +356,29 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
  * basically counts the number of SwWrongArea entries starting with nIndex
  * up to nPos + nLen. All these entries are removed.
  *************************************************************************/
-sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
-                             xub_StrLen nLen, MSHORT nIndex, xub_StrLen nCursorPos )
+sal_Bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
+                             sal_Int32 nLen, MSHORT nIndex, sal_Int32 nCursorPos )
 {
     // length of word must be greater than 0 and cursor position must be outside the word
     sal_Bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
 
-    xub_StrLen nWrPos = 0;
-    xub_StrLen nWrEnd = rEnd;
+    sal_Int32 nWrPos = 0;
+    sal_Int32 nWrEnd = rEnd;
     MSHORT nCnt = nIndex;
-    if( nCnt < Count() && ( nWrPos = Pos( nIndex ) ) < nPos )
+    if( nCnt < Count() )
     {
-        if( rStart > nWrPos )
+        nWrPos = Pos( nIndex );
+        if( nWrPos < nPos && rStart > nWrPos )
             rStart = nWrPos;
     }
 
-    while( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
+    while( nCnt < Count() )
+    {
+        nWrPos = Pos( nCnt );
+        if ( nWrPos >= nPos )
+            break;
         nWrEnd = nWrPos + Len( nCnt++ );
+    }
 
     if( nCnt < Count() && nWrPos == nPos && Len( nCnt ) == nLen )
     {
@@ -390,16 +395,22 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
         }
     }
 
-    nPos = nPos + nLen;
+    nPos += nLen;
 
-    if( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
+    if( nCnt < Count() )
     {
-        if( rStart > nWrPos )
+        nWrPos = Pos( nCnt );
+        if( nWrPos < nPos && rStart > nWrPos )
             rStart = nWrPos;
     }
 
-    while( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
+    while( nCnt < Count() )
+    {
+        nWrPos = Pos( nCnt );
+        if ( nWrPos >= nPos )
+            break;
         nWrEnd = nWrPos + Len( nCnt++ );
+    }
 
     if( rEnd < nWrEnd )
         rEnd = nWrEnd;
@@ -409,7 +420,7 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
     return bRet;
 }
 
-void SwWrongList::Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
+void SwWrongList::Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
 {
     if (STRING_LEN == GetBeginInv())
         SetInvalid( nBegin, nEnd );
@@ -421,29 +432,30 @@ sal_Bool SwWrongList::InvalidateWrong( )
 {
     if( Count() )
     {
-        xub_StrLen nFirst = Pos( 0 );
-        xub_StrLen nLast = Pos( Count() - 1 ) + Len( Count() - 1 );
+        const sal_Int32 nFirst = Pos( 0 );
+        const sal_Int32 nLast = Pos( Count() - 1 ) + Len( Count() - 1 );
         Invalidate( nFirst, nLast );
         return sal_True;
     }
-    else
-        return sal_False;
+    return sal_False;
 }
 
-SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
+SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
 {
     SwWrongList *pRet = NULL;
     MSHORT nLst = 0;
-    xub_StrLen nWrPos;
-    xub_StrLen nWrLen;
     while( nLst < Count() && Pos( nLst ) < nSplitPos )
         ++nLst;
-    if( nLst && ( nWrPos = Pos( nLst - 1 ) )
-        + ( nWrLen = Len( nLst - 1 ) ) > nSplitPos )
+    if( nLst )
     {
-        nWrLen += nWrPos - nSplitPos;
-        maList[--nLst].mnPos = nSplitPos;
-        maList[nLst].mnLen = nWrLen;
+        sal_Int32 nWrPos = Pos( nLst - 1 );
+        sal_Int32 nWrLen = Len( nLst - 1 );
+        if ( nWrPos+nWrLen > nSplitPos )
+        {
+            nWrLen += nWrPos - nSplitPos;
+            maList[--nLst].mnPos = nSplitPos;
+            maList[nLst].mnLen = nWrLen;
+        }
     }
     if( nLst )
     {
@@ -464,16 +476,14 @@ SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
         ShiftLeft( nEndInvalid, 0, nSplitPos );
         _Invalidate( 0, 1 );
     }
-    nLst = 0;
-    while( nLst < Count() )
+    for (nLst = 0; nLst < Count(); ++nLst )
     {
-        nWrPos = maList[nLst].mnPos - nSplitPos;
-        maList[nLst++].mnPos = nWrPos;
+        maList[nLst].mnPos -= nSplitPos;
     }
     return pRet;
 }
 
-void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
+void SwWrongList::JoinList( SwWrongList* pNext, sal_Int32 nInsertPos )
 {
     if (pNext)
     {
@@ -488,18 +498,18 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
         Invalidate( pNext->GetBeginInv(), pNext->GetEndInv() );
         if( nCnt && Count() > nCnt )
         {
-            xub_StrLen nWrPos = Pos( nCnt );
-            xub_StrLen nWrLen = Len( nCnt );
+            sal_Int32 nWrPos = Pos( nCnt );
+            sal_Int32 nWrLen = Len( nCnt );
             if( !nWrPos )
             {
-                nWrPos = nWrPos + nInsertPos;
-                nWrLen = nWrLen - nInsertPos;
+                nWrPos += nInsertPos;
+                nWrLen -= nInsertPos;
                 maList[nCnt].mnPos = nWrPos;
                 maList[nCnt].mnLen = nWrLen;
             }
             if( nWrPos == Pos( nCnt - 1 ) + Len( nCnt - 1 ) )
             {
-                nWrLen = nWrLen + Len( nCnt - 1 );
+                nWrLen += Len( nCnt - 1 );
                 maList[nCnt - 1].mnLen = nWrLen;
                 Remove( nCnt, 1 );
             }
@@ -509,7 +519,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
 }
 
 
-void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList )
+void SwWrongList::InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList )
 {
     if (pSubList)
     {
@@ -575,7 +585,7 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 #endif
 }
 
-void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
+void SwWrongList::RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
     sal_uInt16 nDelPos = 0;
     sal_uInt16 nDel = 0;
     std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end());
@@ -604,7 +614,7 @@ void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
         Remove( nDelPos, nDel );
 }
 
-bool SwWrongList::LookForEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
+bool SwWrongList::LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
     std::vector<SwWrongArea>::iterator aIter = maList.begin();
     while( aIter != maList.end() && (*aIter).mnPos < nBegin )
         ++aIter;
@@ -615,13 +625,13 @@ bool SwWrongList::LookForEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
 
 void SwWrongList::Insert( const OUString& rType,
                           com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-                          xub_StrLen nNewPos, xub_StrLen nNewLen )
+                          sal_Int32 nNewPos, sal_Int32 nNewLen )
 {
     std::vector<SwWrongArea>::iterator aIter = maList.begin();
 
     while ( aIter != maList.end() )
     {
-        const xub_StrLen nSTPos = (*aIter).mnPos;
+        const sal_Int32 nSTPos = (*aIter).mnPos;
 
         if ( nNewPos < nSTPos )
         {
@@ -632,9 +642,7 @@ void SwWrongList::Insert( const OUString& rType,
         {
             while ( aIter != maList.end() && (*aIter).mnPos == nSTPos )
             {
-                const xub_StrLen nSTLen = (*aIter).mnLen;
-
-                if ( nNewLen < nSTLen )
+                if ( nNewLen < (*aIter).mnLen )
                 {
                     // insert at current position
                     break;

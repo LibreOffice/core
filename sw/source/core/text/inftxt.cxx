@@ -1696,7 +1696,7 @@ SwTxtSlot::SwTxtSlot(
             if ( pOldSmartTagList )
             {
                 const sal_uInt16 nPos = pOldSmartTagList->GetWrongPos(nIdx);
-                const xub_StrLen nListPos = pOldSmartTagList->Pos(nPos);
+                const sal_Int32 nListPos = pOldSmartTagList->Pos(nPos);
                 if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
                 else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
@@ -1712,7 +1712,7 @@ SwTxtSlot::SwTxtSlot(
             if ( pOldGrammarCheckList )
             {
                 const sal_uInt16 nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
-                const xub_StrLen nListPos = pOldGrammarCheckList->Pos(nPos);
+                const sal_Int32 nListPos = pOldGrammarCheckList->Pos(nPos);
                 if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
                 else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aTxt.isEmpty() )

@@ -28,6 +28,8 @@
 #include <docary.hxx>
 #include <redline.hxx>
 
+#include <algorithm>
+
 namespace {
     void initChangeTrackTextMarkupLists( const SwTxtFrm& rTxtFrm,
                                          SwWrongList*& opChangeTrackInsertionTextMarkupList,
@@ -124,15 +126,11 @@ namespace {
             }
             if ( pMarkupList )
             {
-                const xub_StrLen nTxtFrmChangeTrackStart =
-                                    nTxtNodeChangeTrackStart <= nTxtFrmTextStartPos
-                                    ? nTxtFrmTextStartPos
-                                    : nTxtNodeChangeTrackStart;
+                const sal_Int32 nTxtFrmChangeTrackStart =
+                    std::max(nTxtNodeChangeTrackStart, nTxtFrmTextStartPos);
 
-                const xub_StrLen nTxtFrmChangeTrackEnd =
-                                    nTxtNodeChangeTrackEnd >= nTxtFrmTextEndPos
-                                    ? nTxtFrmTextEndPos
-                                    : nTxtNodeChangeTrackEnd;
+                const sal_Int32 nTxtFrmChangeTrackEnd =
+                    std::min(nTxtNodeChangeTrackEnd, nTxtFrmTextEndPos);
 
                 pMarkupList->Insert( OUString(), 0,
                                      nTxtFrmChangeTrackStart,

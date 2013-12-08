@@ -673,7 +673,7 @@ static bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 /* This helper structure (SwForbidden) contains the already marked parts of the string
     to avoid double lines (e.g grammar + spell check error) */
 
-typedef std::vector< std::pair< xub_StrLen, xub_StrLen > > SwForbidden;
+typedef std::vector< std::pair< sal_Int32, sal_Int32 > > SwForbidden;
 
 static void lcl_DrawLineForWrongListData(
     SwForbidden &rForbidden,
@@ -684,8 +684,8 @@ static void lcl_DrawLineForWrongListData(
 {
     if (!pWList) return;
 
-    xub_StrLen nStart = rInf.GetIdx();
-    xub_StrLen nWrLen = rInf.GetLen();
+    sal_Int32 nStart = rInf.GetIdx();
+    sal_Int32 nWrLen = rInf.GetLen();
 
     // check if respective data is available in the current text range
     if (!pWList->Check( nStart, nWrLen ))
@@ -711,22 +711,22 @@ static void lcl_DrawLineForWrongListData(
     // iterate over all ranges stored in the respective SwWrongList
     do
     {
-        nStart = nStart - rInf.GetIdx();
+        nStart -= rInf.GetIdx();
 
-        const xub_StrLen nEnd = nStart + nWrLen;
-        xub_StrLen nNext = nStart;
+        const sal_Int32 nEnd = nStart + nWrLen;
+        sal_Int32 nNext = nStart;
         while( nNext < nEnd )
         {
             while( pIter != rForbidden.end() && pIter->second <= nNext )
                 ++pIter;
 
-            xub_StrLen nNextStart = nNext;
-            xub_StrLen nNextEnd = nEnd;
+            const sal_Int32 nNextStart = nNext;
+            sal_Int32 nNextEnd = nEnd;
 
             if( pIter == rForbidden.end() || nNextEnd <= pIter->first )
             {
                 // No overlapping mark up found
-                std::pair< xub_StrLen, xub_StrLen > aNew;
+                std::pair< sal_Int32, sal_Int32 > aNew;
                 aNew.first = nNextStart;
                 aNew.second = nNextEnd;
                 rForbidden.insert( pIter, aNew );

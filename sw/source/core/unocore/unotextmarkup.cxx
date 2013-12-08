@@ -188,7 +188,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     if ( bStartInField && bEndInField && aStartPos.mnPos == aEndPos.mnPos )
     {
         nStart = aStartPos.mnSubPos;
-        const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
+        const sal_Int32 nFieldPosModel = aStartPos.mnPos;
         const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwWrongList* pSubList = pWList->SubList( nInsertPos );
@@ -217,7 +217,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         sal_Int32 nEnd = aEndPos.mnPos;
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
-            const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
+            const sal_Int32 nFieldPosModel = aStartPos.mnPos;
             const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
@@ -232,18 +232,17 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
             {
                 if( nType == text::TextMarkupType::SENTENCE )
                 {
-                    ((SwGrammarMarkUp*)pSubList)->setSentence( static_cast< xub_StrLen >(aStartPos.mnSubPos) );
+                    ((SwGrammarMarkUp*)pSubList)->setSentence( aStartPos.mnSubPos );
                     bCommit = false;
                 }
                 else
-                    pSubList->Insert( rIdentifier, xMarkupInfoContainer,
-                        static_cast< xub_StrLen >(aStartPos.mnSubPos), static_cast< xub_StrLen >(nTmpLen) );
+                    pSubList->Insert( rIdentifier, xMarkupInfoContainer, aStartPos.mnSubPos, nTmpLen );
             }
             ++nStart;
         }
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
-            const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
+            const sal_Int32 nFieldPosModel = aEndPos.mnPos;
             const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
@@ -252,7 +251,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
             const sal_Int32 nTmpLen = aEndPos.mnSubPos + 1;
-            pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, static_cast< xub_StrLen >(nTmpLen) );
+            pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, nTmpLen );
         }
         else
             ++nEnd;
@@ -265,10 +264,9 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     if ( bCommit )
     {
         if( nType == text::TextMarkupType::SENTENCE )
-            ((SwGrammarMarkUp*)pWList)->setSentence( static_cast< xub_StrLen >(nStart) );
+            ((SwGrammarMarkUp*)pWList)->setSentence( nStart );
         else
-            pWList->Insert( rIdentifier, xMarkupInfoContainer,
-                static_cast< xub_StrLen >(nStart), static_cast< xub_StrLen >(nLength) );
+            pWList->Insert( rIdentifier, xMarkupInfoContainer, nStart, nLength );
     }
 
     if( bRepaint )
@@ -298,7 +296,7 @@ static void lcl_commitGrammarMarkUp(
     if ( bStartInField && bEndInField && aStartPos.mnPos == aEndPos.mnPos )
     {
         nStart = aStartPos.mnSubPos;
-        const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
+        const sal_Int32 nFieldPosModel = aStartPos.mnPos;
         const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
@@ -324,7 +322,7 @@ static void lcl_commitGrammarMarkUp(
         sal_Int32 nEnd = aEndPos.mnPos;
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
-            const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
+            const sal_Int32 nFieldPosModel = aStartPos.mnPos;
             const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
@@ -336,13 +334,12 @@ static void lcl_commitGrammarMarkUp(
             const sal_Int32 nTmpLen = rConversionMap.ConvertToViewPosition( aStartPos.mnPos + 1 )
                                        - nTmpStart - aStartPos.mnSubPos;
             if( nTmpLen > 0 )
-                pSubList->Insert( rIdentifier, xMarkupInfoContainer,
-                    static_cast< xub_StrLen >(aStartPos.mnSubPos), static_cast< xub_StrLen >(nTmpLen) );
+                pSubList->Insert( rIdentifier, xMarkupInfoContainer, aStartPos.mnSubPos, nTmpLen );
             ++nStart;
         }
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
-            const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
+            const sal_Int32 nFieldPosModel = aEndPos.mnPos;
             const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
@@ -351,7 +348,7 @@ static void lcl_commitGrammarMarkUp(
                 pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
             }
             const sal_Int32 nTmpLen = aEndPos.mnSubPos + 1;
-            pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, static_cast< xub_StrLen >(nTmpLen) );
+            pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, nTmpLen );
         }
         else
             ++nEnd;
@@ -364,10 +361,9 @@ static void lcl_commitGrammarMarkUp(
     if ( bCommit )
     {
         if( nType == text::TextMarkupType::SENTENCE )
-            ((SwGrammarMarkUp*)pWList)->setSentence( static_cast< xub_StrLen >(nStart+nLength) );
+            ((SwGrammarMarkUp*)pWList)->setSentence( nStart+nLength );
         else
-            pWList->Insert( rIdentifier, xMarkupInfoContainer,
-                static_cast< xub_StrLen >(nStart), static_cast< xub_StrLen >(nLength) );
+            pWList->Insert( rIdentifier, xMarkupInfoContainer, nStart, nLength );
     }
 }
 
@@ -437,8 +433,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         const ModelToViewHelper::ModelPosition aSentenceEnd =
             maConversionMap.ConvertToModelPosition(
                 pMarkups[nSentenceMarkUpIndex].nOffset + pMarkups[nSentenceMarkUpIndex].nLength );
-        bAcceptGrammarError = (xub_StrLen)aSentenceEnd.mnPos > pWList->GetBeginInv();
-        pWList->ClearGrammarList( (xub_StrLen)aSentenceEnd.mnPos );
+        bAcceptGrammarError = aSentenceEnd.mnPos > pWList->GetBeginInv();
+        pWList->ClearGrammarList( aSentenceEnd.mnPos );
     }
 
     if( bAcceptGrammarError )

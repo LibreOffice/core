@@ -35,7 +35,7 @@
 
 class SwGrammarMarkUp : public SwWrongList
 {
-    std::vector< xub_StrLen > maSentence;
+    std::vector< sal_Int32 > maSentence;
 
 public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
@@ -46,22 +46,22 @@ public:
     virtual void CopyFrom( const SwWrongList& rCopy );
 
     /* SwWrongList::Move() + handling of maSentence */
-    void MoveGrammar( xub_StrLen nPos, long nDiff );
+    void MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff );
     /* SwWrongList::SplitList() + handling of maSentence */
-    SwGrammarMarkUp* SplitGrammarList( xub_StrLen nSplitPos );
+    SwGrammarMarkUp* SplitGrammarList( sal_Int32 nSplitPos );
     /* SwWrongList::JoinList() + handling of maSentence */
-    void JoinGrammarList( SwGrammarMarkUp* pNext, xub_StrLen nInsertPos );
+    void JoinGrammarList( SwGrammarMarkUp* pNext, sal_Int32 nInsertPos );
     /* SwWrongList::ClearList() + handling of maSentence */
-    void ClearGrammarList( xub_StrLen nSentenceEnd = STRING_LEN );
+    void ClearGrammarList( sal_Int32 nSentenceEnd = STRING_LEN );
     /* setSentence to define the start positionof a sentence,
        at the moment the end position is given by the next start position */
-    void setSentence( xub_StrLen nStart );
+    void setSentence( sal_Int32 nStart );
     /* getSentenceStart returns the last start position of a sentence
        which is lower or equal to the given parameter */
-    xub_StrLen getSentenceStart( xub_StrLen nPos );
+    sal_Int32 getSentenceStart( sal_Int32 nPos );
     /* getSentenceEnd returns the first start position of a sentence
        which is greater than the given parameter */
-    xub_StrLen getSentenceEnd( xub_StrLen nPos );
+    sal_Int32 getSentenceEnd( sal_Int32 nPos );
 };
 
 #endif

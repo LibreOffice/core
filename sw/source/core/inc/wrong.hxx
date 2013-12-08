@@ -59,8 +59,8 @@ class SwWrongArea
 public:
     OUString maType;
     com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > mxPropertyBag;
-    xub_StrLen mnPos;
-    xub_StrLen mnLen;
+    sal_Int32 mnPos;
+    sal_Int32 mnLen;
     SwWrongList* mpSubList;
 
     Color mColor;
@@ -69,13 +69,13 @@ public:
     SwWrongArea( const OUString& rType,
                  WrongListType listType,
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-                 xub_StrLen nPos,
-                 xub_StrLen nLen);
+                 sal_Int32 nPos,
+                 sal_Int32 nLen);
 
     SwWrongArea( const OUString& rType,
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-                 xub_StrLen nPos,
-                 xub_StrLen nLen,
+                 sal_Int32 nPos,
+                 sal_Int32 nLen,
                  SwWrongList* pSubList);
 private:
 
@@ -186,14 +186,14 @@ class SwWrongList
     std::vector<SwWrongArea> maList;
     WrongListType            meType;
 
-    xub_StrLen nBeginInvalid;   // Start of the invalid range
-    xub_StrLen nEndInvalid;     // End of the invalid range
+    sal_Int32 nBeginInvalid;   // Start of the invalid range
+    sal_Int32 nEndInvalid;     // End of the invalid range
 
-    void ShiftLeft( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
+    void ShiftLeft( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
-    void ShiftRight( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
+    void ShiftRight( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
     { if( rPos >= nStart ) rPos += nStart - nEnd; }
-    void _Invalidate( xub_StrLen nBegin, xub_StrLen nEnd );
+    void _Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
 
     void Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
     void Remove( sal_uInt16 nIdx, sal_uInt16 nLen );
@@ -210,38 +210,38 @@ public:
     virtual void CopyFrom( const SwWrongList& rCopy );
 
     inline WrongListType GetWrongListType() const { return meType; }
-    inline xub_StrLen GetBeginInv() const { return nBeginInvalid; }
-    inline xub_StrLen GetEndInv() const { return nEndInvalid; }
-    inline sal_Bool InsideInvalid( xub_StrLen nChk ) const
+    inline sal_Int32 GetBeginInv() const { return nBeginInvalid; }
+    inline sal_Int32 GetEndInv() const { return nEndInvalid; }
+    inline sal_Bool InsideInvalid( sal_Int32 nChk ) const
         { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
-    void SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd );
+    void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
     inline void Validate(){ nBeginInvalid = STRING_LEN; }
-    void Invalidate( xub_StrLen nBegin, xub_StrLen nEnd );
+    void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
     sal_Bool InvalidateWrong();
-    sal_Bool Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
-            xub_StrLen nLen, sal_uInt16 nIndex, xub_StrLen nCursorPos );
-    sal_uInt16 GetWrongPos( xub_StrLen nValue ) const;
+    sal_Bool Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
+            sal_Int32 nLen, sal_uInt16 nIndex, sal_Int32 nCursorPos );
+    sal_uInt16 GetWrongPos( sal_Int32 nValue ) const;
 
-    sal_Bool Check( xub_StrLen &rChk, xub_StrLen &rLn ) const;
+    sal_Bool Check( sal_Int32 &rChk, sal_Int32 &rLn ) const;
     sal_Bool InWrongWord( sal_Int32 &rChk, sal_Int32 &rLn ) const;
-    xub_StrLen NextWrong( xub_StrLen nChk ) const;
+    sal_Int32 NextWrong( sal_Int32 nChk ) const;
 
-    void Move( xub_StrLen nPos, long nDiff );
+    void Move( sal_Int32 nPos, sal_Int32 nDiff );
     void ClearList();
 
     // Divide the list into two part, the wrong words until nSplitPos will be
     // removed and transferred to a new SwWrongList.
-    SwWrongList* SplitList( xub_StrLen nSplitPos );
+    SwWrongList* SplitList( sal_Int32 nSplitPos );
     // Join the next SwWrongList, nInsertPos is my own text length, where
     // the other wrong list has to be inserted.
-    void JoinList( SwWrongList* pNext, xub_StrLen nInsertPos );
+    void JoinList( SwWrongList* pNext, sal_Int32 nInsertPos );
 
-    inline xub_StrLen Len( sal_uInt16 nIdx ) const
+    inline sal_Int32 Len( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mnLen : 0;
     }
 
-    inline xub_StrLen Pos( sal_uInt16 nIdx ) const
+    inline sal_Int32 Pos( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mnPos : 0;
     }
@@ -250,7 +250,7 @@ public:
 
     inline void Insert( const OUString& rType,
                         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-                        xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere )
+                        sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere )
     {
         std::vector<SwWrongArea>::iterator i = maList.begin();
         if ( nWhere >= maList.size() )
@@ -263,21 +263,21 @@ public:
 
     void Insert( const OUString& rType,
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-                 xub_StrLen nNewPos, xub_StrLen nNewLen );
+                 sal_Int32 nNewPos, sal_Int32 nNewLen );
 
     inline SwWrongList* SubList( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mpSubList : 0;
     }
 
-    void InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList );
+    void InsertSubList( sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList );
 
     inline const SwWrongArea* GetElement( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? &maList[nIdx] : 0;
     }
-    void RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd );
-    bool LookForEntry( xub_StrLen nBegin, xub_StrLen nEnd );
+    void RemoveEntry( sal_Int32 nBegin, sal_Int32 nEnd );
+    bool LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd );
 };
 
 #endif

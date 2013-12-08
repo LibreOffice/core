@@ -749,8 +749,8 @@ class SwTxtSlot
     const SwWrongList* pOldSmartTagList;
     const SwWrongList* pOldGrammarCheckList;
     SwWrongList* pTempList;
-    xub_StrLen nIdx;
-    xub_StrLen nLen;
+    sal_Int32 nIdx;
+    sal_Int32 nLen;
     sal_Bool bOn;
 protected:
     SwTxtSizeInfo *pInf;

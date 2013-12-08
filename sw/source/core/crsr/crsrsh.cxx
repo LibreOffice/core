@@ -3268,7 +3268,7 @@ OUString SwCrsrShell::GetCrsrDescr() const
 
 static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
-                             const SwWrongList& rSmartTagList, xub_StrLen nCurrent )
+                             const SwWrongList& rSmartTagList, sal_Int32 nCurrent )
 {
     // Insert smart tag information
     std::vector< OUString > aSmartTagTypes;
@@ -3276,8 +3276,8 @@ static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
 
     for ( sal_uInt16 i = 0; i < rSmartTagList.Count(); ++i )
     {
-        const xub_StrLen nSTPos = rSmartTagList.Pos( i );
-        const xub_StrLen nSTLen = rSmartTagList.Len( i );
+        const sal_Int32 nSTPos = rSmartTagList.Pos( i );
+        const sal_Int32 nSTLen = rSmartTagList.Len( i );
 
         if ( nSTPos <= nCurrent && nCurrent < nSTPos + nSTLen )
         {

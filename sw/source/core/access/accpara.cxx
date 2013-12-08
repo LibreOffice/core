@@ -973,9 +973,9 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                         {
                             sal_Int32 nBegin = nPos;
                             sal_Int32 nLen = 1;
-                            const xub_StrLen nNext = pWrongList->NextWrong(nBegin);
-                            xub_StrLen nLast;
-                            xub_StrLen nWrongPos = pWrongList->GetWrongPos( nBegin );
+                            const sal_Int32 nNext = pWrongList->NextWrong(nBegin);
+                            sal_Int32 nLast = 0;
+                            sal_uInt16 nWrongPos = pWrongList->GetWrongPos( nBegin );
                             if ( nWrongPos >= pWrongList->Count() ||
                                  ( nLast = pWrongList->Pos( nWrongPos ) ) >= nBegin )
                             {
@@ -986,9 +986,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                             if ( nBegin > pWrongList->GetBeginInv() &&
                                  ( nLast == STRING_LEN || nLast < pWrongList->GetEndInv() ) )
                             {
-                                nLast = nBegin > pWrongList->GetEndInv()
-                                        ? pWrongList->GetEndInv()
-                                        : nBegin;
+                                nLast = min(nBegin, pWrongList->GetEndInv());
                             }
                             else if ( nLast < STRING_LEN )
                             {
@@ -998,23 +996,23 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
                             sal_Bool bIn = pWrongList->InWrongWord(nBegin,nLen); // && !pTxtNode->IsSymbol(nBegin) )
                             if(bIn)
                             {
-                                rBound.startPos = max(nNext,(xub_StrLen)rBound.startPos);
-                                rBound.endPos = min(xub_StrLen(nNext + nLen),(xub_StrLen)rBound.endPos);
+                                rBound.startPos = max(nNext, rBound.startPos);
+                                rBound.endPos = min(nNext+nLen, rBound.endPos);
                             }
                             else
                             {
                                 if (STRING_LEN == nLast)//first
                                 {
-                                    rBound.endPos = min(nNext,(xub_StrLen)rBound.endPos);
+                                    rBound.endPos = min(nNext, rBound.endPos);
                                 }
                                 else if(STRING_LEN == nNext)
                                 {
-                                    rBound.startPos = max(nLast,(xub_StrLen)rBound.startPos);
+                                    rBound.startPos = max(nLast, rBound.startPos);
                                 }
                                 else
                                 {
-                                    rBound.startPos = max(nLast,(xub_StrLen)rBound.startPos);
-                                    rBound.endPos = min(nNext,(xub_StrLen)rBound.endPos);
+                                    rBound.startPos = max(nLast, rBound.startPos);
+                                    rBound.endPos = min(nNext, rBound.endPos);
                                 }
                             }
                         }

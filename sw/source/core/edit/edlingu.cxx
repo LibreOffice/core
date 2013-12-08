@@ -967,15 +967,13 @@ bool SwEditShell::GetGrammarCorrection(
                 // get error position of cursor in XFlatParagraph
                 rErrorPosInText = aConversionMap.ConvertToViewPosition( nBegin );
 
-                sal_Int32 nStartOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceStart( nBegin ) );
-                sal_Int32 nEndOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceEnd( nBegin ) );
-                if( nEndOfSentence == STRING_LEN )
-                {
-                        nEndOfSentence = aExpandText.getLength();
-                }
+                const sal_Int32 nStartOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceStart( nBegin ) );
+                const sal_Int32 nEndOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceEnd( nBegin ) );
 
                 rResult = xGCIterator->checkSentenceAtPosition(
-                        xDoc, xFlatPara, aExpandText, lang::Locale(), nStartOfSentence, nEndOfSentence, rErrorPosInText );
+                        xDoc, xFlatPara, aExpandText, lang::Locale(), nStartOfSentence,
+                        nEndOfSentence == STRING_LEN ? aExpandText.getLength() : nEndOfSentence,
+                        rErrorPosInText );
                 bRes = true;
 
                 // get suggestions to use for the specific error position
@@ -1722,7 +1720,7 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
     SwNodeIndex aIdx = rErrorPosition.Start()->nNode;
     SwNodeIndex aEndIdx = rErrorPosition.Start()->nNode;
     sal_Int32 nStart = rErrorPosition.Start()->nContent.GetIndex();
-    xub_StrLen nEnd = STRING_LEN;
+    sal_Int32 nEnd = STRING_LEN;
     while( aIdx <= aEndIdx )
     {
         pNode = aIdx.GetNode().GetTxtNode();
