@@ -25,7 +25,6 @@
 
 #include <list>
 #include <set>
-#include <toolkit/dllapi.h>
 
 //  ----------------------------------------------------
 //  class UnoPropertyArrayHelper

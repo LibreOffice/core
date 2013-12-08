@@ -18,7 +18,6 @@
 #include <basic/basrdll.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
-#include <basic/basrdll.hxx>
 #include <basic/sbuno.hxx>
 #include <osl/file.hxx>
 

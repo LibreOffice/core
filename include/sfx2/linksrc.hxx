@@ -27,8 +27,6 @@
 #include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <sal/config.h>
-
 namespace com { namespace sun { namespace star { namespace uno
 {
     class Any;

@@ -51,7 +51,6 @@
 #include "svtools/svtools.hrc"
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <memory>
 #include <queue>
 #include <boost/unordered_map.hpp>

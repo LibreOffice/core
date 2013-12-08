@@ -39,12 +39,10 @@
 
 #include "nsIEnumerator.h"
 #include "prprf.h"
-#include "nsCOMPtr.h"
 #include "nsIComponentManager.h"
 #include "nsEscape.h"
 #include "nsDirectoryServiceDefs.h"
 #include "nsAppDirectoryServiceDefs.h"
-#include "nsILocalFile.h"
 #include "nsReadableUtils.h"
 
 

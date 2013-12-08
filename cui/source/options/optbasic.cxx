@@ -24,7 +24,6 @@
 #include <officecfg/Office/BasicIDE.hxx>
 #include <boost/shared_ptr.hpp>
 #include <cuires.hrc>
-#include <svtools/miscopt.hxx>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( Window* pParent, const SfxItemSet& rSet )
 : SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", rSet)
