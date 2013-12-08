@@ -76,7 +76,6 @@
 #include "xfilter/xfdrawlinestyle.hxx"
 #include "xfilter/xfparagraph.hxx"
 #include "xfilter/xfstylemanager.hxx"
-#include "xfilter/xfdrawgroup.hxx"
 
 LwpSdwGroupLoaderV0102::LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj)
     : m_pStream(pStream)

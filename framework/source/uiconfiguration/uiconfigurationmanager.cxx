@@ -37,7 +37,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
-#include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
 
 #include <vcl/svapp.hxx>

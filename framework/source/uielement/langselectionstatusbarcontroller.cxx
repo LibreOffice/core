@@ -46,7 +46,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
 #include <svl/languageoptions.hxx>

@@ -22,7 +22,6 @@
 
 #include <macros/xserviceinfo.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <macros/xserviceinfo.hxx>
 
 namespace framework
 {

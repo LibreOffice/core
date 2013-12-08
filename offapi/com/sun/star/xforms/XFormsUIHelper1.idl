@@ -26,7 +26,6 @@
 #include <com/sun/star/container/XSet.idl>
 #include <com/sun/star/xforms/XDataTypeRepository.idl>
 #include <com/sun/star/xml/dom/XDocument.idl>
-#include <com/sun/star/xml/dom/XNode.idl>
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/xforms/XModel.idl>
 

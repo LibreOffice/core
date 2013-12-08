@@ -24,10 +24,6 @@
 #include <com/sun/star/awt/XMenu.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
-#include <com/sun/star/awt/XMenu.idl>
-
-#include <com/sun/star/awt/Rectangle.idl>
-
 module com {  module sun {  module star {  module awt {
 
 published interface XWindowPeer;

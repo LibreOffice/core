@@ -22,7 +22,6 @@
 
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
-#include "dbaccess_helpid.hrc"
 
 
 #define CHECKBOX_HEIGHT     8

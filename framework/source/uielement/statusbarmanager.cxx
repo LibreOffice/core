@@ -46,7 +46,6 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>

@@ -39,7 +39,6 @@
 //something, but do not change the name of _Module
 extern CComModule _Module;
 #include <atlcom.h>
-#include <stdio.h>
 #include <tchar.h>
 
 //{{AFX_INSERT_LOCATION}}

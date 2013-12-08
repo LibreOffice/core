@@ -26,7 +26,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/attrlist.hxx>

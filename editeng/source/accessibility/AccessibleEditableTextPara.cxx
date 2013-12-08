@@ -67,7 +67,6 @@
 #include "AccessibleHyperlink.hxx"
 
 #include <svtools/colorcfg.hxx>
-#include <algorithm>
 using namespace std;
 #include "editeng.hrc"
 #include <editeng/eerdll.hxx>

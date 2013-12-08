@@ -23,7 +23,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>

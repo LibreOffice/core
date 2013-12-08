@@ -29,7 +29,6 @@
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
 #include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/sheet/XCellRangeData.idl>
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/chart/XChartDataArray.idl>
 

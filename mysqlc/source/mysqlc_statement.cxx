@@ -49,8 +49,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
 
-#include <stdio.h>
-
 /* {{{ OConnection::OCommonStatement() -I- */
 OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement)
     :OCommonStatement_IBase(m_aMutex)
