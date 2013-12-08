@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="2823" positionY="-75" sizeX="19753" sizeY="19045" type="com.sun.star.drawing.GraphicObjectShape" name="Picture 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" shadow="false" shadowColor="808080" shadowTransparence="0" shadowXDistance="200" shadowYDistance="200" zOrder="0" layerID="0" layerName="layout" visible="true" printable="true" moveProtect="false" sizeProtect="false">
+  <Transformation>
+   <Line1 column1="19754.000000" column2="0.000000" column3="2823.000000"/>
+   <Line2 column1="0.000000" column2="19046.000000" column3="-75.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <InteropGrabBag/>
+ </XShape>
+</XShapes>
