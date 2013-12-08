@@ -2694,7 +2694,53 @@ void DynamicKernel::CreateKernel(void)
             err = clBuildProgram(mpProgram, 1,
                     OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
             if (err != CL_SUCCESS)
+            {
+#if OSL_DEBUG_LEVEL > 0
+                if (err == CL_BUILD_PROGRAM_FAILURE)
+                {
+                    cl_build_status stat;
+                    cl_int e = clGetProgramBuildInfo(
+                        mpProgram, OpenclDevice::gpuEnv.mpArryDevsID[0],
+                        CL_PROGRAM_BUILD_STATUS, sizeof (cl_build_status),
+                        &stat, 0);
+                    SAL_WARN_IF(
+                        e != CL_SUCCESS, "sc.opencl",
+                        "after CL_BUILD_PROGRAM_FAILURE,"
+                            " clGetProgramBuildInfo(CL_PROGRAM_BUILD_STATUS)"
+                            " fails with " << e);
+                    if (e == CL_SUCCESS)
+                    {
+                        size_t n;
+                        e = clGetProgramBuildInfo(
+                            mpProgram, OpenclDevice::gpuEnv.mpArryDevsID[0],
+                            CL_PROGRAM_BUILD_LOG, 0, 0, &n);
+                        SAL_WARN_IF(
+                            e != CL_SUCCESS || n == 0, "sc.opencl",
+                            "after CL_BUILD_PROGRAM_FAILURE,"
+                                " clGetProgramBuildInfo(CL_PROGRAM_BUILD_LOG)"
+                                " fails with " << e << ", n=" << n);
+                        if (e == CL_SUCCESS && n != 0)
+                        {
+                            std::vector<char> log(n);
+                            e = clGetProgramBuildInfo(
+                                mpProgram, OpenclDevice::gpuEnv.mpArryDevsID[0],
+                                CL_PROGRAM_BUILD_LOG, n, &log[0], 0);
+                            SAL_WARN_IF(
+                                e != CL_SUCCESS || n == 0, "sc.opencl",
+                                "after CL_BUILD_PROGRAM_FAILURE,"
+                                    " clGetProgramBuildInfo("
+                                    "CL_PROGRAM_BUILD_LOG) fails with " << e);
+                            if (e == CL_SUCCESS)
+                                SAL_WARN(
+                                    "sc.opencl",
+                                    "CL_BUILD_PROGRAM_FAILURE, status " << stat
+                                        << ", log \"" << &log[0] << "\"");
+                        }
+                    }
+                }
+#endif
                 throw OpenCLError(err);
+            }
             // Generate binary out of compiled kernel.
             OpenclDevice::generatBinFromKernelSource(mpProgram,
                     (mKernelSignature+GetMD5()).c_str());
