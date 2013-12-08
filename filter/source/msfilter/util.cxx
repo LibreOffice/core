@@ -1088,10 +1088,10 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "ooxml-ribbon", "ribbon" },
 };
 
-struct {
+static struct {
     const char* sDML;
     MSO_SPT nVML;
-} pDMLToVMLTable[] = {
+} const pDMLToVMLTable[] = {
     {"notPrimitive", mso_sptNotPrimitive},
     {"rectangle", mso_sptRectangle},
     {"roundRectangle", mso_sptRoundRectangle},
@@ -1307,7 +1307,7 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
     if( pCustomShapeTypeTranslationHashMap == NULL )
     {
         pCustomShapeTypeTranslationHashMap = new CustomShapeTypeTranslationHashMap ();
-        for( unsigned int i = 0; i < sizeof( pCustomShapeTypeTranslationTable )/sizeof( CustomShapeTypeTranslationTable ); i ++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCustomShapeTypeTranslationTable); ++i )
         {
             (*pCustomShapeTypeTranslationHashMap)[ pCustomShapeTypeTranslationTable[ i ].sOOo ] = pCustomShapeTypeTranslationTable[ i ].sMSO;
         }
