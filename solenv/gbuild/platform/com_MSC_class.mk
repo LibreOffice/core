@@ -135,15 +135,10 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_get_pdbfile_in = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).objects.pdb
-
-# we must name the .pdb like libname.pdb, not libname.\(dll\|pyd\).pdb,
-# otherwise WinDbg ignores the symbols
 gb_LinkTarget_get_pdbfile_out = \
- $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
-
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
 gb_LinkTarget_get_ilkfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).ilk
-
 gb_LinkTarget_get_manifestfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
 
