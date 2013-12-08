@@ -1007,8 +1007,8 @@ void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWrite
 
 void dumpNameAsAttribute(OUString sName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-        OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+    if(!sName.isEmpty())
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter)
