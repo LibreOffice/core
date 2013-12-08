@@ -280,6 +280,7 @@ Override
 Page
 Pages
 ParagraphAlign
+ParagraphFormat
 Paragraphs
 PartName
 PasswordChar
