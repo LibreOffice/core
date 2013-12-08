@@ -1492,7 +1492,8 @@ public:
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
     int OutAttrWithRange(sal_Int32 nPos);
-    const SwRedlineData* GetRedline( sal_Int32 nPos );
+    const SwRedlineData* GetParagraphLevelRedline( );
+    const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
     void OutFlys(sal_Int32 nSwPos);
 
     sal_Int32 WhereNext() const { return nAktSwPos; }

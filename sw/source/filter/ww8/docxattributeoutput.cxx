@@ -676,8 +676,12 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
-void DocxAttributeOutput::EndParagraphProperties()
+void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData )
 {
+    // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
+    // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
+    Redline( pRedlineData );
+
     WriteCollectedParagraphProperties();
 
     // Merge the marks for the ordered elements
@@ -1618,10 +1622,62 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
                 }
             }
         }
-
         m_pSerializer->endElementNS( XML_w, XML_rPrChange );
-
         break;
+
+    case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
+        m_pSerializer->startElementNS( XML_w, XML_pPrChange,
+                FSNS( XML_w, XML_id ), aId.getStr(),
+                FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                FSNS( XML_w, XML_date ), aDate.getStr(),
+                FSEND );
+
+        // Check if there is any extra data stored in the redline object
+        if (pRedline->GetExtraData())
+        {
+            const SwRedlineExtraData* pExtraData = pRedline->GetExtraData();
+            const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
+
+            // Check if the extra data is of type 'formatting changes'
+            if (pFormattingChanges)
+            {
+                // Get the item set that holds all the changes properties
+                const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
+                if (pChangesSet)
+                {
+                    m_pSerializer->mark();
+
+                    m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
+
+                    // The 'm_pFlyAttrList', 'm_pParagraphSpacingAttrList' are used to hold information
+                    // that should be collected by different properties in the core, and are all flushed together
+                    // to the DOCX when the function 'WriteCollectedParagraphProperties' gets called.
+                    // So we need to store the current status of these lists, so that we can revert back to them when
+                    // we are done exporting the redline attributes.
+                    ::sax_fastparser::FastAttributeList *pFlyAttrList_Original              = m_pFlyAttrList;
+                    ::sax_fastparser::FastAttributeList *pParagraphSpacingAttrList_Original = m_pParagraphSpacingAttrList;
+                    m_pFlyAttrList              = NULL;
+                    m_pParagraphSpacingAttrList = NULL;
+
+                    // Output the redline item set
+                    m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
+
+                    // Write the collected paragraph properties that are stored in 'm_pFlyAttrList', 'm_pParagraphSpacingAttrList'
+                    WriteCollectedParagraphProperties();
+
+                    // Revert back the original values that were stored in 'm_pFlyAttrList', 'm_pParagraphSpacingAttrList'
+                    m_pFlyAttrList              = pFlyAttrList_Original;
+                    m_pParagraphSpacingAttrList = pParagraphSpacingAttrList_Original;
+
+                    m_pSerializer->endElementNS( XML_w, XML_pPr );
+
+                    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+                }
+            }
+        }
+        m_pSerializer->endElementNS( XML_w, XML_pPrChange );
+        break;
+
     default:
         SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedline->GetType());
         break;

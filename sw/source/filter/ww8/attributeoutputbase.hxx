@@ -160,7 +160,7 @@ public:
     virtual void StartParagraphProperties() = 0;
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties() = 0;
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData ) = 0;
 
     /// Empty paragraph.
     virtual void EmptyParagraph() = 0;

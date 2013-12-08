@@ -388,7 +388,7 @@ void RtfAttributeOutput::StartParagraphProperties()
         m_aSectionHeaders.append(aPar.makeStringAndClear());
 }
 
-void RtfAttributeOutput::EndParagraphProperties()
+void RtfAttributeOutput::EndParagraphProperties( const SwRedlineData* /*pRedlineData*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     m_aStyles.append(m_aStylesEnd.makeStringAndClear());
