@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[4.1.10.2],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[4.1.10.3],[],[],[http://documentfoundation.org/])
 
 AC_PREREQ([2.59])
 save_CC=$CC
@@ -256,7 +256,7 @@ if test -n "$with_android_ndk"; then
     if test $host_cpu = arm; then
         ANDROID_APP_ABI=armeabi-v7a
         if test -n "$ANDROID_USING_CLANG"; then
-            ANDROIDCFLAGS="-gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT" 
+            ANDROIDCFLAGS="-gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT"
             ANDROIDCFLAGS="$ANDROIDCFLAGS -target armv7-none-linux-androideabi"
             ANDROIDCFLAGS="$ANDROIDCFLAGS -no-canonical-prefixes"
         else
@@ -1777,26 +1777,26 @@ AC_ARG_WITH(branding,
     AS_HELP_STRING([--with-branding],
         [Use given path to retrieve branding images set.])
     [
-                          Search for intro.png about.svg flat_logo.svg 
-                          backing_left.png backing_right.png 
-                          backing_rtl_left.png backing_rtl_right.png 
+                          Search for intro.png about.svg flat_logo.svg
+                          backing_left.png backing_right.png
+                          backing_rtl_left.png backing_rtl_right.png
                           backing_space.png. If any is missing, default
                           ones will be used instead.
 
-                          Search also progress.conf for progress 
+                          Search also progress.conf for progress
                           settings on intro screen :
 
-                          PROGRESSBARCOLOR="255,255,255" Set color of 
+                          PROGRESSBARCOLOR="255,255,255" Set color of
                           progress bar. Comma separated RGB decimal values.
-                          PROGRESSSIZE="407,6" Set size of progress bar. 
+                          PROGRESSSIZE="407,6" Set size of progress bar.
                           Comma separated decimal values (width, height).
                           PROGRESSPOSITION="61,317" Set position of progress
                           bar from left,top. Comma separated decimal values.
                           PROGRESSFRAMECOLOR="20,136,3" Set color of progress
                           bar frame. Comma separated RGB decimal values.
-                          PROGRESSTEXTCOLOR="255,255,255" Set color of progress 
+                          PROGRESSTEXTCOLOR="255,255,255" Set color of progress
                           bar text. Comma separated RGB decimal values.
-                          PROGRESSTEXTBASELINE="287" Set vertical position of 
+                          PROGRESSTEXTBASELINE="287" Set vertical position of
                           progress bar text from top. Decimal value.
 
                           Default values will be used if not found.
