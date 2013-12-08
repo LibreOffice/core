@@ -371,7 +371,9 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     for( int i = 0; i < 32; ++i )
         txt = txt.replace( i, '*' );
     OString txt8 = OUStringToOString( txt, RTL_TEXTENCODING_UTF8 );
+    writer.startElement("inner_text");
     xmlTextWriterWriteString( writer, BAD_CAST( txt8.getStr()));
+    writer.endElement( );
 
     if (GetFmtColl())
     {
@@ -475,7 +477,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
         {
             const SwPosition* pStart = pRedline->Start();
 
-            writer.startElement( "start_swposition" );
+            writer.startElement( "swposition_start" );
             //writer.writeFormatAttribute( "ptr", "%p", pStart );
             {
                 const SwNodeIndex pStartNodeIndex = pStart->nNode;
@@ -489,16 +491,18 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                     //writer.endElement( );    // swnode
                     writer.writeFormatAttribute( "swnode_type", "%d", pStartSwNode.GetNodeType() );
 
+                    writer.writeFormatAttribute( "paragraph_index", "%d", (int)pStartNodeIndex.GetIndex() );
+
                     const SwIndex&    pStartContent   = pStart->nContent;
                     //writer.startElement( "swindex" );
                     //writer.writeFormatAttribute( "ptr", "%p", &pStartContent );
                     //writer.writeFormatAttribute( "content_index", "%d", pStartContent.GetIndex() );
                     //writer.endElement( );    // swindex
-                    writer.writeFormatAttribute( "swindex_content_index", "%d", pStartContent.GetIndex() );
+                    writer.writeFormatAttribute( "character_index", "%d", pStartContent.GetIndex() );
                 }
                 //writer.endElement( );    // swnodeindex
             }
-            writer.endElement( );    // start_swposition
+            writer.endElement( );    // swposition_start
 
 
             const SwPosition* pEnd;
@@ -515,7 +519,7 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                 pEnd = pRedline->GetPoint();
             }
 
-            writer.startElement( "end___swposition" );
+            writer.startElement( "swposition_end" );
             //writer.writeFormatAttribute( "ptr", "%p", pStart );
             {
                 const SwNodeIndex pEndNodeIndex = pEnd->nNode;
@@ -529,26 +533,35 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                     //writer.endElement( );    // swnode
                     writer.writeFormatAttribute( "swnode_type", "%d", pEndSwNode.GetNodeType() );
 
+                    writer.writeFormatAttribute( "paragraph_index", "%d", (int)pEndNodeIndex.GetIndex() );
+
                     const SwIndex&    pEndContent   = pEnd->nContent;
                     //writer.startElement( "swindex" );
                     //writer.writeFormatAttribute( "ptr", "%p", &pEndContent );
                     //writer.writeFormatAttribute( "content_index", "%d", pEndContent.GetIndex() );
                     //writer.endElement( );    // swindex
-                    writer.writeFormatAttribute( "swindex_content_index", "%d", pEndContent.GetIndex() );
+                    writer.writeFormatAttribute( "character_index", "%d", pEndContent.GetIndex() );
                 }
                 //writer.endElement( );    // swnodeindex
             }
             writer.writeFormatAttribute( "end_is", "%s", BAD_CAST(bEndIsMark ? "mark" : "point"));
-            writer.endElement( );    // end_swposition
+            writer.endElement( );    // swposition_end
 
             //const SwRedlineData& aRedlineData = pRedline->GetRedlineData();
             const SwRedlineExtraData* pExtraRedlineData = pRedline->GetExtraData();
             writer.startElement( "extra_redline_data" );
             {
-                if (pExtraRedlineData == NULL)
-                    writer.writeFormatAttribute( "data", "%s", BAD_CAST( "none" ) );
+                const SwRedlineExtraData_FmtColl*           pExtraData_FmtColl           = dynamic_cast<const SwRedlineExtraData_FmtColl*>(pExtraRedlineData);
+                const SwRedlineExtraData_Format*            pExtraData_Format            = dynamic_cast<const SwRedlineExtraData_Format*>(pExtraRedlineData);
+                const SwRedlineExtraData_FormattingChanges* pExtraData_FormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraRedlineData);
+                if (pExtraData_FmtColl)
+                    writer.writeFormatAttribute( "extra_data_type", "%s", BAD_CAST( "fmt coll" ) );
+                else if (pExtraData_Format)
+                    writer.writeFormatAttribute( "extra_data_type", "%s", BAD_CAST( "format" ) );
+                else if (pExtraData_FormattingChanges)
+                    writer.writeFormatAttribute( "extra_data_type", "%s", BAD_CAST( "formatting changes" ) );
                 else
-                    writer.writeFormatAttribute( "data", "%s", BAD_CAST( "exists" ) );
+                    writer.writeFormatAttribute( "extra_data_type", "%s", BAD_CAST( "UNKNOWN" ) );
             }
             writer.endElement( );    // end_swposition
         }
