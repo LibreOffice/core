@@ -302,6 +302,9 @@ distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-sdk
 	$(SRCDIR)/bin/distro-install-file-lists
 
+install-package-%:
+	$(GNUMAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+
 id:
 	@create-ids
 

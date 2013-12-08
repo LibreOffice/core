@@ -24,7 +24,7 @@ ifneq ($(strip $(MAKECMDGOALS)),)
 # speed up depending on the target
 gb_SpeedUpTargets_LEVEL_4 := debugrun help translations
 gb_SpeedUpTargets_LEVEL_3 := showmodules $(gb_SpeedUpTargets_LEVEL_4)
-gb_SpeedUpTargets_LEVEL_2 := $(gb_SpeedUpTargets_LEVEL_3)
+gb_SpeedUpTargets_LEVEL_2 := $(gb_SpeedUpTargets_LEVEL_3) install-package-%
 gb_SpeedUpTargets_LEVEL_1 := clean showdeliverables $(gb_SpeedUpTargets_LEVEL_2)
 
 ifeq (T,$(if $(filter-out $(gb_SpeedUpTargets_LEVEL_1),$(MAKECMDGOALS)),,T))

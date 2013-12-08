@@ -74,11 +74,26 @@ $(if $(filter $(gb_Configuration_LANGS),$(1)),$(foreach configfile,Langpack- res
 endef
 
 .PHONY: packageinfo
-packageinfo:
+$(foreach filelist,files executables libraries,$(gb_PackageInfo_get_target)/%.$(filelist)):
 	@rm -rf $(gb_PackageInfo_get_target) && mkdir $(gb_PackageInfo_get_target)
 	$(foreach installmodule,$(gb_PackageInfo_InstallModules),$(call gb_PackageInfo_emit_binaries_command,$(installmodule)))
 	$(foreach helplang,$(gb_HELP_LANGS),$(call gb_PackageInfo_emit_help_for_one_lang,$(helplang)))
 	$(foreach l10nlang,$(if $(strip $(gb_WITH_LANG)),$(gb_WITH_LANG),en-US),$(call gb_PackageInfo_emit_l10n_for_one_lang,$(l10nlang)))
 
+packageinfo: $(gb_PackageInfo_get_target)/ure.files
+
+install-package-%: $(foreach filelist,files executables libraries,$(gb_PackageInfo_get_target)/%.$(filelist))
+	for executable in `cat $(gb_PackageInfo_get_target)/$*.executables`; \
+	do \
+		install -D $(INSTDIR)/$${executable} $(INSTALLDIR)/$${executable} ;\
+	done
+	for library in `cat $(gb_PackageInfo_get_target)/$*.libraries`; \
+	do \
+		install -D -m644 $(INSTDIR)/$${library} $(INSTALLDIR)/$${library}; \
+	done
+	for file in `cat $(gb_PackageInfo_get_target)/$*.files`; \
+	do \
+		install -D -m644 $(INSTDIR)/$${file} $(INSTALLDIR)/$${file}; \
+	done
 
 # vim: set noet sw=4 ts=4:
