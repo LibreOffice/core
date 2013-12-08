@@ -377,8 +377,8 @@ private:
 
     // Redline stack
     std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
-    RedlineParamsPtr                m_pParaRedline;
-    bool                            m_bIsParaChange;
+    RedlineParamsPtr                m_pParaMarkerRedline;
+    bool                            m_bIsParaMarkerChange;
 
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
@@ -445,12 +445,12 @@ public:
 
     void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange, RedlineParamsPtr& pRedline  );
 
-    void CheckParaRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange );
+    void CheckParaMarkerRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange );
 
     void CheckRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange );
 
-    void StartParaChange( );
-    void EndParaChange( );
+    void StartParaMarkerChange( );
+    void EndParaMarkerChange( );
 
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
@@ -680,7 +680,7 @@ public:
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void SetCurrentRedlineRevertProperties( uno::Sequence<beans::PropertyValue> aProperties );
     void RemoveCurrentRedline( );
-    void ResetParaRedline( );
+    void ResetParaMarkerRedline( );
     void SetCurrentRedlineInitials( OUString sInitials );
     bool IsFirstRun() { return m_bIsFirstRun;}
     void SetIsFirstRun(bool bval) { m_bIsFirstRun = bval;}

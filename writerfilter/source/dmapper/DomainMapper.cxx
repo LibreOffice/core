@@ -3453,7 +3453,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
     break;
     case NS_ooxml::LN_paratrackchange:
-        m_pImpl->StartParaChange( );
+        m_pImpl->StartParaMarkerChange( );
     case NS_ooxml::LN_trackchange:
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
     {
@@ -3465,10 +3465,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         {
             case ooxml::OOXML_mod :
             case ooxml::OOXML_ins :
-            case ooxml::OOXML_del : break;
+            case ooxml::OOXML_del :
+                break;
             default: OSL_FAIL( "redline token other than mod, ins or del" );
         }
-        m_pImpl->EndParaChange( );
+        m_pImpl->EndParaMarkerChange( );
     }
     break;
     case NS_ooxml::LN_endtrackchange:

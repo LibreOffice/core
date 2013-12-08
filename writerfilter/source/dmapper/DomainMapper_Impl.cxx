@@ -162,7 +162,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsCustomFtnMark( false ),
-        m_bIsParaChange( false ),
+        m_bIsParaMarkerChange( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsLastParaInSection( false ),
@@ -1136,7 +1136,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     xCur->gotoEnd( false );
                 xCur->goLeft( 1 , true );
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
-                CheckParaRedline( xParaEnd );
+                CheckParaMarkerRedline( xParaEnd );
 
                 m_bIsFirstParaInSection = false;
                 m_bIsLastParaInSection = false;
@@ -1584,12 +1584,12 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
     }
 }
 
-void DomainMapper_Impl::CheckParaRedline( uno::Reference< text::XTextRange > xRange )
+void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange > xRange )
 {
-    if ( m_pParaRedline.get( ) )
+    if ( m_pParaMarkerRedline.get( ) )
     {
-        CreateRedline( xRange, m_pParaRedline );
-        ResetParaRedline( );
+        CreateRedline( xRange, m_pParaMarkerRedline );
+        ResetParaMarkerRedline( );
     }
 }
 
@@ -1611,14 +1611,14 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > xRange 
     m_aRedlines.top().swap( aCleaned );
 }
 
-void DomainMapper_Impl::StartParaChange( )
+void DomainMapper_Impl::StartParaMarkerChange( )
 {
-    m_bIsParaChange = true;
+    m_bIsParaMarkerChange = true;
 }
 
-void DomainMapper_Impl::EndParaChange( )
+void DomainMapper_Impl::EndParaMarkerChange( )
 {
-    m_bIsParaChange = false;
+    m_bIsParaMarkerChange = false;
 }
 
 
@@ -3863,23 +3863,23 @@ void DomainMapper_Impl::AddNewRedline(  )
 {
     RedlineParamsPtr pNew( new RedlineParams );
     pNew->m_nToken = ooxml::OOXML_mod;
-    if ( !m_bIsParaChange )
+    if ( !m_bIsParaMarkerChange )
     {
         m_aRedlines.top().push_back( pNew );
     }
     else
     {
-        m_pParaRedline.swap( pNew );
+        m_pParaMarkerRedline.swap( pNew );
     }
 }
 
 RedlineParamsPtr DomainMapper_Impl::GetTopRedline(  )
 {
     RedlineParamsPtr pResult;
-    if ( !m_bIsParaChange && m_aRedlines.top().size(  ) > 0 )
+    if ( !m_bIsParaMarkerChange && m_aRedlines.top().size(  ) > 0 )
         pResult = m_aRedlines.top().back(  );
-    else if ( m_bIsParaChange )
-        pResult = m_pParaRedline;
+    else if ( m_bIsParaMarkerChange )
+        pResult = m_pParaMarkerRedline;
     return pResult;
 }
 
@@ -3952,12 +3952,12 @@ void DomainMapper_Impl::RemoveCurrentRedline( )
     }
 }
 
-void DomainMapper_Impl::ResetParaRedline( )
+void DomainMapper_Impl::ResetParaMarkerRedline( )
 {
-    if ( m_pParaRedline.get( ) )
+    if ( m_pParaMarkerRedline.get( ) )
     {
         RedlineParamsPtr pEmpty;
-        m_pParaRedline.swap( pEmpty );
+        m_pParaMarkerRedline.swap( pEmpty );
     }
 }
 
