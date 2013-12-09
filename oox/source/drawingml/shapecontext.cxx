@@ -114,6 +114,8 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
             mpShapePtr->setTextBody( TextBodyPtr(new TextBody) );
         return new TextBodyPropertiesContext( *this, rAttribs, mpShapePtr->getTextBody()->getTextProperties() );
         break;
+    case XML_txbx:
+        break;
     default:
         SAL_WARN("oox", "ShapeContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
         break;

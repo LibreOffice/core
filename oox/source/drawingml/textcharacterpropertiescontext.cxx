@@ -133,6 +133,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case OOX_TOKEN( doc, rFonts ):
             break;
         case OOX_TOKEN( doc, b ):
+            mrTextCharacterProperties.moBold = rAttribs.getBool(OOX_TOKEN( doc, val ), true);
             break;
         case OOX_TOKEN( doc, bCs ):
             break;

@@ -11,6 +11,7 @@
 #if !defined(WNT)
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -1614,6 +1615,7 @@ DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "[Year]");
     CPPUNIT_ASSERT_EQUAL(48.f, getProperty<float>(getRun(xParagraph, 1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 1), "CharWeight"));
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xGroup->getByIndex(1), "TextVerticalAdjust"));
 }
 
