@@ -323,7 +323,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         {
             case XML_min:       eAxisPos = cssc::ChartAxisPosition_START;   break;
             case XML_max:       eAxisPos = cssc::ChartAxisPosition_END;     break;
-            case XML_autoZero:  eAxisPos = cssc::ChartAxisPosition_VALUE;   break;
+            case XML_autoZero:  eAxisPos = cssc::ChartAxisPosition_ZERO;   break;
         }
         if( !mrModel.mbAuto )
             aAxisProp.setProperty( PROP_CrossoverPosition, eAxisPos );
