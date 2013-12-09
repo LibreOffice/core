@@ -166,6 +166,14 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
     case A_TOKEN( p ):          // CT_TextParagraph
     case OOX_TOKEN( doc, p ):
         return new TextParagraphContext( *this, mrTextBody.addParagraph() );
+    case OOX_TOKEN( doc, sdt ):
+    case OOX_TOKEN( doc, sdtContent ):
+        return this;
+    case OOX_TOKEN( doc, sdtPr ):
+    case OOX_TOKEN( doc, sdtEndPr ):
+        break;
+    default:
+        SAL_WARN("oox", "TextBodyContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
 
     return 0;
