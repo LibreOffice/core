@@ -997,20 +997,15 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
                 xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
         }
 
-        double fMinX;
-        double fMaxX;
-
         double fChartMinX = m_pPosHelper->getLogicMinX();
         double fChartMaxX = m_pPosHelper->getLogicMaxX();
 
+        double fMinX = fChartMinX;
+        double fMaxX = fChartMaxX;
+
         double fPointScale = 1.0;
 
-        if( bAverageLine )
-        {
-            fMinX = fChartMinX;
-            fMaxX = fChartMaxX;
-        }
-        else
+        if( !bAverageLine )
         {
             rVDataSeries.getMinMaxXValue(fMinX, fMaxX);
             fMaxX += aExtrapolateForward;
@@ -1018,21 +1013,13 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
 
             fPointScale = (fMaxX - fMinX) / (fChartMaxX - fChartMinX);
         }
+
         xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, aPeriod);
         xCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
         sal_Int32 nPointCount = 100 * fPointScale;
 
         if ( nPointCount < 2 )
             nPointCount = 2;
-
-        drawing::PolyPolygonShape3D aRegressionPoly;
-        aRegressionPoly.SequenceX.realloc(1);
-        aRegressionPoly.SequenceY.realloc(1);
-        aRegressionPoly.SequenceZ.realloc(1);
-        aRegressionPoly.SequenceX[0].realloc(nPointCount);
-        aRegressionPoly.SequenceY[0].realloc(nPointCount);
-        aRegressionPoly.SequenceZ[0].realloc(nPointCount);
-        sal_Int32 nRealPointCount=0;
 
         std::vector< ExplicitScaleData > aScales( m_pPosHelper->getScales());
         uno::Reference< chart2::XScaling > xScalingX;
@@ -1048,7 +1035,19 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
                             fMinX, fMaxX, nPointCount,
                             xScalingX, xScalingY, bMaySkipPoints ));
 
-        for(sal_Int32 nP=0; nP<aCalculatedPoints.getLength(); nP++)
+        nPointCount = aCalculatedPoints.getLength();
+
+        drawing::PolyPolygonShape3D aRegressionPoly;
+        aRegressionPoly.SequenceX.realloc(1);
+        aRegressionPoly.SequenceY.realloc(1);
+        aRegressionPoly.SequenceZ.realloc(1);
+        aRegressionPoly.SequenceX[0].realloc(nPointCount);
+        aRegressionPoly.SequenceY[0].realloc(nPointCount);
+        aRegressionPoly.SequenceZ[0].realloc(nPointCount);
+
+        sal_Int32 nRealPointCount = 0;
+
+        for(sal_Int32 nP = 0; nP < aCalculatedPoints.getLength(); ++nP)
         {
             double fLogicX = aCalculatedPoints[nP].X;
             double fLogicY = aCalculatedPoints[nP].Y;
