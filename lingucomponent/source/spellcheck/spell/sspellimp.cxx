@@ -66,8 +66,7 @@ SpellChecker::SpellChecker() :
     aDicts(NULL),
     aDEncs(NULL),
     aDLocs(NULL),
-    aDAffNames(NULL),
-    aDDicNames(NULL),
+    aDNames(NULL),
     numdict(0),
     aEvtListeners(GetLinguMutex()),
     pPropHelper(NULL),
@@ -87,8 +86,7 @@ SpellChecker::~SpellChecker()
     }
     delete[] aDEncs;
     delete[] aDLocs;
-    delete[] aDAffNames;
-    delete[] aDDicNames;
+    delete[] aDNames;
     if (pPropHelper)
     {
         pPropHelper->RemoveAsPropListener();
@@ -185,8 +183,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             aDicts  = new Hunspell* [numdict];
             aDEncs  = new rtl_TextEncoding [numdict];
             aDLocs  = new Locale [numdict];
-            aDAffNames = new OUString [numdict];
-            aDDicNames = new OUString [numdict];
+            aDNames = new OUString [numdict];
             k = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
@@ -204,16 +201,13 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                         aDicts[k]  = NULL;
                         aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aDLocs[k]  = LanguageTag::convertToLocale( aLocaleNames[i] );
-                        if ((aDictIt->aLocations[0]).endsWith(".aff"))
-                        {
-                            aDAffNames[k] = aDictIt->aLocations[0];
-                            aDDicNames[k] = aDictIt->aLocations[1];
-                        }
-                        else
-                        {
-                            aDAffNames[k] = aDictIt->aLocations[1];
-                            aDDicNames[k] = aDictIt->aLocations[0];
-                        }
+                        // also both files have to be in the same directory and the
+                        // file names must only differ in the extension (.aff/.dic).
+                        // Thus we use the first location only and strip the extension part.
+                        OUString aLocation = aDictIt->aLocations[0];
+                        sal_Int32 nPos = aLocation.lastIndexOf( '.' );
+                        aLocation = aLocation.copy( 0, nPos );
+                        aDNames[k] = aLocation;
 
                         ++k;
                     }
@@ -231,10 +225,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             aDEncs = NULL;
             delete[] aDLocs;
             aDLocs  = NULL;
-            delete[] aDAffNames;
-            delete[] aDDicNames;
-            aDAffNames = NULL;
-            aDDicNames = NULL;
+            delete[] aDNames;
+            aDNames = NULL;
             aSuppLocales.realloc(0);
         }
     }
@@ -311,16 +303,18 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
             {
                 if (!aDicts[i])
                 {
+                    OUString dicpath = aDNames[i] + ".dic";
+                    OUString affpath = aDNames[i] + ".aff";
                     OUString dict;
                     OUString aff;
-                    osl::FileBase::getSystemPathFromFileURL(aDDicNames[i],dict);
-                    osl::FileBase::getSystemPathFromFileURL(aDAffNames[i],aff);
+                    osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
+                    osl::FileBase::getSystemPathFromFileURL(affpath,aff);
                     OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 
 #if defined(WNT)
-                    // workaround for Windows specific problem that the
-                    // path length in calls to 'fopen' is limited to somewhat
+                    // workaround for Windows specifc problem that the
+                    // path length in calls to 'fopen' is limted to somewhat
                     // about 120+ characters which will usually be exceed when
                     // using dictionaries as extensions.
                     aTmpaff = Win_GetShortPathName( aff );
