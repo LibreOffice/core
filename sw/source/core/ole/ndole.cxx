@@ -715,10 +715,11 @@ SwOLEObj::~SwOLEObj()
             // successful closing of the object will automatically clear the reference then
             xOLERef.Lock(sal_False);
 
-            // Always remove object from conteiner it is connected to
+            // Always remove object from container it is connected to
             try
             {
-                pCnt->RemoveEmbeddedObject( aName );
+                // remove object from container but don't close it
+                pCnt->RemoveEmbeddedObject( aName, sal_False);
             }
             catch ( uno::Exception& )
             {

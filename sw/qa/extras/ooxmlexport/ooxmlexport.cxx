@@ -2136,6 +2136,15 @@ DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.docx")
+{
+     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     if (!pXmlDoc)
+         return;
+      assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
