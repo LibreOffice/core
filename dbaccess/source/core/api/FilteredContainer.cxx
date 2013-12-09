@@ -168,7 +168,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         // first, filter for the table names
         sal_Int32 nTableFilterCount = _tableFilter.getLength();
-        sal_Bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0].startsWith( "%" ) );
+        sal_Bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0] == "%" );
         if( dontFilterTableNames )
         {
             aFilteredTables = _unfilteredTables;
@@ -198,7 +198,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         // second, filter for the table types
         sal_Int32 nTableTypeFilterCount = _tableTypeFilter.getLength();
-        sal_Bool dontFilterTableTypes = ( ( nTableTypeFilterCount == 1 ) && _tableTypeFilter[0].startsWith( "%" ) );
+        sal_Bool dontFilterTableTypes = ( ( nTableTypeFilterCount == 1 ) && _tableTypeFilter[0] == "%" );
         dontFilterTableTypes = dontFilterTableTypes || ( nTableTypeFilterCount == 0 );
             // (for TableTypeFilter, unlike TableFilter, "empty" means "do not filter at all")
         if ( !dontFilterTableTypes )

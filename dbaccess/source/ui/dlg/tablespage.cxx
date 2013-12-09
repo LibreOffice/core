@@ -217,7 +217,7 @@ DBG_NAME(OTableSubscriptionPage)
         }
         else
         {
-            if ((1 == _rTableFilter.getLength()) && _rTableFilter[0].startsWith("%"))
+            if ((1 == _rTableFilter.getLength()) && _rTableFilter[0] == "%")
             {   // all tables visible
                 CheckAll(sal_True);
             }

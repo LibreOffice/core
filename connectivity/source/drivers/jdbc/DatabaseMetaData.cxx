@@ -135,7 +135,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             bool bIncludeAllTypes = false;
             for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
             {
-                if ( typeFilter->startsWith( "%" ) )
+                if ( *typeFilter == "%" )
                 {
                     bIncludeAllTypes = true;
                     break;
@@ -163,7 +163,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             aCatalogFilter = m_pConnection->getCatalogRestriction();
         // similar for schema
         Any aSchemaFilter;
-        if ( schemaPattern.startsWith( "%" ) )
+        if ( schemaPattern == "%" )
             aSchemaFilter = m_pConnection->getSchemaRestriction();
         else
             aSchemaFilter <<= schemaPattern;

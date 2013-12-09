@@ -346,11 +346,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
     OUString aStep;
     bool          bFloatValue( false );
 
-    if ( rControlCommand.Command.startsWith( "SetStep" ))
+    if ( rControlCommand.Command == "SetStep" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Step" ))
+            if ( rControlCommand.Arguments[i].Name == "Step" )
             {
                 sal_Int32   nValue;
                 double      fValue;
@@ -362,11 +362,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetValue" ))
+    else if ( rControlCommand.Command == "SetValue" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Value" ))
+            if ( rControlCommand.Arguments[i].Name == "Value" )
             {
                 sal_Int32   nValue;
                 double      fValue;
@@ -381,7 +381,7 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetValues" ))
+    else if ( rControlCommand.Command == "SetValues" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
@@ -392,30 +392,30 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             OUString aName = rControlCommand.Arguments[i].Name;
             if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
             {
-                if ( aName.startsWith( "Value" ))
+                if ( aName == "Value" )
                 {
                     aValue = bFloat ? OUString::number( fValue ) : OUString::number( nValue );
                     bFloatValue = bFloat;
                 }
-                else if ( aName.startsWith( "Step" ))
+                else if ( aName == "Step" )
                     aStep = bFloat ? OUString::number( fValue ) :
                                      OUString::number( nValue );
-                else if ( aName.startsWith( "LowerLimit" ))
+                else if ( aName == "LowerLimit" )
                     aMin = bFloat ? OUString::number( fValue ) :
                                     OUString::number( nValue );
-                else if ( aName.startsWith( "UpperLimit" ))
+                else if ( aName == "UpperLimit" )
                     aMax = bFloat ? OUString::number( fValue ) :
                                     OUString::number( nValue );
             }
-            else if ( aName.startsWith( "OutputFormat" ))
+            else if ( aName == "OutputFormat" )
                 rControlCommand.Arguments[i].Value >>= m_aOutFormat;
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetLowerLimit" ))
+    else if ( rControlCommand.Command == "SetLowerLimit" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "LowerLimit" ))
+            if ( rControlCommand.Arguments[i].Name == "LowerLimit" )
             {
                 sal_Int32   nValue;
                 double      fValue;
@@ -427,11 +427,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetUpperLimit" ))
+    else if ( rControlCommand.Command == "SetUpperLimit" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "UpperLimit" ))
+            if ( rControlCommand.Arguments[i].Name == "UpperLimit" )
             {
                 sal_Int32   nValue;
                 double      fValue;
@@ -443,11 +443,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetOutputFormat" ))
+    else if ( rControlCommand.Command == "SetOutputFormat" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "OutputFormat" ))
+            if ( rControlCommand.Arguments[i].Name == "OutputFormat" )
             {
                 rControlCommand.Arguments[i].Value >>= m_aOutFormat;
                 break;
