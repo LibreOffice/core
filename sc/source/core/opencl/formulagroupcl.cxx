@@ -1458,7 +1458,7 @@ public:
             DynamicKernelArgument *Arg = mvSubArguments[0].get();
             DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
                 dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *> (Arg);
-            cl_mem mpClmem2;
+            mpClmem2 = NULL;
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
@@ -1519,7 +1519,7 @@ public:
                 err = clFinish(kEnv.mpkCmdQueue);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err);
-
+                clReleaseKernel(redKernel);
                  // Pass mpClmem2 to the "real" kernel
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&mpClmem2);
                 if (CL_SUCCESS != err)
@@ -1616,7 +1616,16 @@ public:
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
             mvSubArguments[i]->DumpInlineFun(decls,funs);
     }
+   ~DynamicKernelSoPArguments()
+    {
+        if (mpClmem2)
+        {
+            clReleaseMemObject(mpClmem2);
+            mpClmem2 = NULL;
+        }
+    }
 private:
+    cl_mem mpClmem2;
     SubArgumentsType mvSubArguments;
     boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
 };
@@ -1676,7 +1685,7 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
 
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(
     const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen) :
-    DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen)
+    DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen),mpClmem2(NULL)
 {
     size_t nChildren = ft->Children.size();
 
