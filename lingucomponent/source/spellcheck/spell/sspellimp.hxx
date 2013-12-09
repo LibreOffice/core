@@ -63,8 +63,7 @@ class SpellChecker :
     Hunspell **                        aDicts;
     rtl_TextEncoding *                 aDEncs;
     Locale *                           aDLocs;
-    OUString *                         aDAffNames;
-    OUString *                         aDDicNames;
+    OUString *                         aDNames;
     sal_Int32                          numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
