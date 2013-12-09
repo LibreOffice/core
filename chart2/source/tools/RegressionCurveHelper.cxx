@@ -509,6 +509,30 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
     return NULL;
 }
 
+uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionCurveAtIndex(
+    const Reference< XRegressionCurveContainer >& xCurveContainer,
+    sal_Int32 aIndex )
+{
+    if( !xCurveContainer.is())
+        return NULL;
+
+    try
+    {
+        uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(xCurveContainer->getRegressionCurves());
+        if(0 <= aIndex && aIndex < aCurves.getLength())
+        {
+            if(!isMeanValueLine(aCurves[aIndex]))
+                return aCurves[aIndex];
+        }
+    }
+    catch( const Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return NULL;
+}
+
 RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
     const Reference< XRegressionCurve > & xCurve )
 {
