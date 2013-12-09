@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///6E\u003d",
+        "filename": "sax/source/expatwrap/sax_expat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-12-09T15:38:34Z",
+      "side": 1,
+      "message": "why do you need to add ::com::sun::star:: prefix everywhere, in a cxx file just do a \"using namespace\" instead",
+      "revId": "b31e5336ef4fedc07f63ae2ed657ff05ad3daab0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
