@@ -327,7 +327,8 @@ void SwHTMLParser::NewField()
     case RES_TIMEFLD:
         {
             sal_uLong nNumFmt = 0;
-            sal_uLong nTime = Time( Time::SYSTEM ).GetTime(), nDate = Date( Date::SYSTEM ).GetDate();
+            sal_Int64 nTime = Time( Time::SYSTEM ).GetTime();
+            sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
             sal_Bool bValidFmt = sal_False;
             HTMLNumFmtTblEntry * pFmtTbl;
@@ -337,7 +338,7 @@ void SwHTMLParser::NewField()
                 nSub = DATEFLD;
                 pFmtTbl = aHTMLDateFldFmtTable;
                 if( !aValue.isEmpty() )
-                    nDate = (sal_uLong)aValue.toInt32();
+                    nDate = aValue.toInt32();
             }
             else
             {
