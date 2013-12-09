@@ -41,6 +41,7 @@ SearchResults::~SearchResults()
 void SearchResults::Show(const ScRangeList &rMatchedRanges)
 {
     mpList->Clear();
+    mpList->SetUpdateMode(false);
     for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
     {
         ScCellIterator aIter(mpDoc, *rMatchedRanges[i]);
@@ -53,6 +54,7 @@ void SearchResults::Show(const ScRangeList &rMatchedRanges)
             mpList->InsertEntry(sAddress.replace('.', '\t') + "\t" + mpDoc->GetString(aAddress));
         }
     }
+    mpList->SetUpdateMode(true);
     ModelessDialog::Show();
 }
 
