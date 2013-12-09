@@ -37,7 +37,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/dlg_InsertLegend.src \
     chart2/source/controller/dialogs/dlg_ShapeFont.src \
     chart2/source/controller/dialogs/dlg_ShapeParagraph.src \
-    chart2/source/controller/dialogs/dlg_View3D.src \
     chart2/source/controller/dialogs/res_BarGeometry.src \
     chart2/source/controller/dialogs/res_TextSeparator.src \
     chart2/source/controller/dialogs/Strings_AdditionalControls.src \

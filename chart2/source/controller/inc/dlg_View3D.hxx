@@ -26,8 +26,6 @@
 #include <vcl/tabdlg.hxx>
 // header for class TabControl
 #include <vcl/tabctrl.hxx>
-// header for class OKButton
-#include <vcl/button.hxx>
 // header for class XColorList
 #include <svx/xtable.hxx>
 
@@ -51,10 +49,7 @@ public:
     virtual short Execute();
 
 private:
-    TabControl      m_aTabControl;
-    OKButton        m_aBtnOK;
-    CancelButton    m_aBtnCancel;
-    HelpButton      m_aBtnHelp;
+    TabControl*     m_pTabControl;
 
     ThreeD_SceneGeometry_TabPage*       m_pGeometry;
     ThreeD_SceneAppearance_TabPage*     m_pAppearance;

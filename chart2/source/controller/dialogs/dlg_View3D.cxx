@@ -18,7 +18,6 @@
  */
 
 #include "dlg_View3D.hxx"
-#include "dlg_View3D.hrc"
 #include "Strings.hrc"
 #include "TabPages.hrc"
 #include "ResId.hxx"
@@ -42,32 +41,28 @@ using namespace ::com::sun::star::chart2;
 sal_uInt16 View3DDialog::m_nLastPageId = 0;
 
 View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, const XColorListRef &pColorTable )
-    : TabDialog(pParent,SchResId(DLG_3D_VIEW))
-    , m_aTabControl(this,SchResId(TABCTRL))
-    , m_aBtnOK(this,SchResId(BTN_OK))
-    , m_aBtnCancel(this,SchResId(BTN_CANCEL))
-    , m_aBtnHelp(this,SchResId(BTN_HELP))
+    : TabDialog(pParent, "3DViewDialog", "modules/schart/ui/3dviewdialog.ui")
     , m_pGeometry(0)
     , m_pAppearance(0)
     , m_pIllumination(0)
     , m_aControllerLocker(xChartModel)
 {
-    FreeResource();
+    get(m_pTabControl, "tabcontrol");
 
     uno::Reference< beans::XPropertySet > xSceneProperties( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
-    m_pGeometry   = new ThreeD_SceneGeometry_TabPage(&m_aTabControl,xSceneProperties,m_aControllerLocker);
-    m_pAppearance = new ThreeD_SceneAppearance_TabPage(&m_aTabControl,xChartModel,m_aControllerLocker);
-    m_pIllumination = new ThreeD_SceneIllumination_TabPage(&m_aTabControl,xSceneProperties,xChartModel,pColorTable);
+    m_pGeometry   = new ThreeD_SceneGeometry_TabPage(m_pTabControl,xSceneProperties,m_aControllerLocker);
+    m_pAppearance = new ThreeD_SceneAppearance_TabPage(m_pTabControl,xChartModel,m_aControllerLocker);
+    m_pIllumination = new ThreeD_SceneIllumination_TabPage(m_pTabControl,xSceneProperties,xChartModel,pColorTable);
 
-    m_aTabControl.InsertPage( TP_3D_SCENEGEOMETRY, SCH_RESSTR(STR_PAGE_PERSPECTIVE) );
-    m_aTabControl.InsertPage( TP_3D_SCENEAPPEARANCE, SCH_RESSTR(STR_PAGE_APPEARANCE) );
-    m_aTabControl.InsertPage( TP_3D_SCENEILLUMINATION, SCH_RESSTR(STR_PAGE_ILLUMINATION) );
+    m_pTabControl->InsertPage( TP_3D_SCENEGEOMETRY, SCH_RESSTR(STR_PAGE_PERSPECTIVE) );
+    m_pTabControl->InsertPage( TP_3D_SCENEAPPEARANCE, SCH_RESSTR(STR_PAGE_APPEARANCE) );
+    m_pTabControl->InsertPage( TP_3D_SCENEILLUMINATION, SCH_RESSTR(STR_PAGE_ILLUMINATION) );
 
-    m_aTabControl.SetTabPage( TP_3D_SCENEGEOMETRY, m_pGeometry );
-    m_aTabControl.SetTabPage( TP_3D_SCENEAPPEARANCE, m_pAppearance );
-    m_aTabControl.SetTabPage( TP_3D_SCENEILLUMINATION, m_pIllumination );
+    m_pTabControl->SetTabPage( TP_3D_SCENEGEOMETRY, m_pGeometry );
+    m_pTabControl->SetTabPage( TP_3D_SCENEAPPEARANCE, m_pAppearance );
+    m_pTabControl->SetTabPage( TP_3D_SCENEILLUMINATION, m_pIllumination );
 
-    m_aTabControl.SelectTabPage( m_nLastPageId );
+    m_pTabControl->SelectTabPage( m_nLastPageId );
 }
 
 View3DDialog::~View3DDialog()
@@ -76,7 +71,7 @@ View3DDialog::~View3DDialog()
     delete m_pAppearance;
     delete m_pIllumination;
 
-    m_nLastPageId = m_aTabControl.GetCurPageId();
+    m_nLastPageId = m_pTabControl->GetCurPageId();
 }
 
 short View3DDialog::Execute()
