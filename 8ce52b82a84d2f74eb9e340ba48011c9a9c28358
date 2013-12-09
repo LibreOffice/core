@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///68\u003d",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-09T10:47:29Z",
+      "side": 1,
+      "message": "This change more than just of oof by one.\nwhat if xLabeled.is() is true for some idx and not other ?\nbefore the element written could go\n0,2,6\nif element 1,3,4,5 had xLableledSeq.is() false\nnow it would be\n1,2,3 instead",
+      "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
