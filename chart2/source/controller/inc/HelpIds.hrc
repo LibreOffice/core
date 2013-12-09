@@ -51,13 +51,6 @@
 #define HID_SCH_CB_SECONDARY_YAXIS                          "CHART2_HID_SCH_CB_SECONDARY_YAXIS"
 #define HID_SCH_CB_SECONDARY_ZAXIS                          "CHART2_HID_SCH_CB_SECONDARY_ZAXIS"
 
-#define HID_SCH_CB_XGRID                                    "CHART2_HID_SCH_CB_XGRID"
-#define HID_SCH_CB_YGRID                                    "CHART2_HID_SCH_CB_YGRID"
-#define HID_SCH_CB_ZGRID                                    "CHART2_HID_SCH_CB_ZGRID"
-#define HID_SCH_CB_SECONDARY_XGRID                          "CHART2_HID_SCH_CB_SECONDARY_XGRID"
-#define HID_SCH_CB_SECONDARY_YGRID                          "CHART2_HID_SCH_CB_SECONDARY_YGRID"
-#define HID_SCH_CB_SECONDARY_ZGRID                          "CHART2_HID_SCH_CB_SECONDARY_ZGRID"
-
 #define HID_SCH_LEGEND_POS_LEFT                             "CHART2_HID_SCH_LEGEND_POS_LEFT"
 #define HID_SCH_LEGEND_POS_TOP                              "CHART2_HID_SCH_LEGEND_POS_TOP"
 #define HID_SCH_LEGEND_POS_RIGHT                            "CHART2_HID_SCH_LEGEND_POS_RIGHT"
@@ -87,14 +80,6 @@
 #define HID_SCH_TEXTDIRECTION                               "CHART2_HID_SCH_TEXTDIRECTION"
 #define HID_SCH_DATALABEL_ROTATION_KNOB                     "CHART2_HID_SCH_DATALABEL_ROTATION_KNOB"
 #define HID_SCH_DATALABEL_ROTATION_EDIT                     "CHART2_HID_SCH_DATALABEL_ROTATION_EDIT"
-
-#define HID_SCH_TITLE_MAIN                                  "CHART2_HID_SCH_TITLE_MAIN"
-#define HID_SCH_TITLE_SUB                                   "CHART2_HID_SCH_TITLE_SUB"
-#define HID_SCH_TITLE_X                                     "CHART2_HID_SCH_TITLE_X"
-#define HID_SCH_TITLE_Y                                     "CHART2_HID_SCH_TITLE_Y"
-#define HID_SCH_TITLE_Z                                     "CHART2_HID_SCH_TITLE_Z"
-#define HID_SCH_TITLE_SECONDARY_X                           "CHART2_HID_SCH_TITLE_SECONDARY_X"
-#define HID_SCH_TITLE_SECONDARY_Y                           "CHART2_HID_SCH_TITLE_SECONDARY_Y"
 
 #define HID_SCH_WIZARD_ROADMAP                              "CHART2_HID_SCH_WIZARD_ROADMAP"
 #define HID_SCH_LEGEND_SHOW                                 "CHART2_HID_SCH_LEGEND_SHOW"
