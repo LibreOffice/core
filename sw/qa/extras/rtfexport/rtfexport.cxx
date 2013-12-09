@@ -579,6 +579,11 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testAbi10201, "abi10201.rtf")
+{
+    // crashtest
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -3021,9 +3021,12 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             // We in fact need RGB to BGR, but the transformation is symmetric.
             m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
 
-            double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
-            sal_Int32 nWidth = sal_Int32(fConverted * 635); // Twips -> EMUs
-            m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
+            if (pTop->GetBorderLineStyle() != table::BorderLineStyle::NONE)
+            {
+                double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
+                sal_Int32 nWidth = sal_Int32(fConverted * 635); // Twips -> EMUs
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
+            }
         }
 
         return;
