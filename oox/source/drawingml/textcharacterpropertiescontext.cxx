@@ -130,6 +130,27 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( hlinkClick ):     // CT_Hyperlink
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             return new HyperLinkContext( *this, rAttribs,  mrTextCharacterProperties.maHyperlinkPropertyMap );
+        case OOX_TOKEN( doc, rFonts ):
+            break;
+        case OOX_TOKEN( doc, b ):
+            break;
+        case OOX_TOKEN( doc, bCs ):
+            break;
+        case OOX_TOKEN( doc, color ):
+            break;
+        case OOX_TOKEN( doc, sz ):
+            if (rAttribs.getInteger(OOX_TOKEN(doc, val)).has())
+            {
+                sal_Int32 nVal = rAttribs.getInteger(OOX_TOKEN(doc, val)).get();
+                // wml has half points, dml has hundred points
+                mrTextCharacterProperties.moHeight = nVal * 50;
+            }
+            break;
+        case OOX_TOKEN( doc, szCs ):
+            break;
+        default:
+            SAL_WARN("oox", "TextCharacterPropertiesContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+            break;
     }
 
     return this;
