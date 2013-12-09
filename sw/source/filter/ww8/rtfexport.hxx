@@ -33,10 +33,6 @@ class SwTxtNode;
 class SwGrfNode;
 class SwOLENode;
 
-namespace com { namespace sun { namespace star {
-    namespace frame { class XModel; }
-} } }
-
 /// The class that does all the actual RTF export-related work.
 class RtfExport : public MSWordExportBase
 {
