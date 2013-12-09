@@ -6803,9 +6803,56 @@ SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
     GroupId = GID_VIEW;
 ]
 
-//--------------------------------------------------------------------------
-SfxVoidItem ScrollNextPrev FN_SCROLL_NEXT_PREV
-( SfxBoolItem ScrollNextPrev FN_SCROLL_NEXT_PREV )
+SfxVoidItem NavigationPopup FN_NAVIGATION_POPUP
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_NAVIGATOR;
+]
+
+SfxVoidItem ScrollToPrevious FN_SCROLL_PREV
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_NAVIGATOR;
+]
+
+SfxVoidItem ScrollToNext FN_SCROLL_NEXT
+()
 [
     /* flags: */
     AutoUpdate = FALSE,

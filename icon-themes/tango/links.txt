@@ -94,6 +94,10 @@ sd/imglst/sc27095.png cmd/sc_toggleobjectrotatemode.png
 cmd/lc_browseforward.png cmd/lc_pagedown.png
 cmd/lc_navigateforward.png cmd/lc_pagedown.png
 cmd/lc_nextpage.png cmd/lc_pagedown.png
+cmd/lc_scrolltoprevious.png cmd/lc_pageup.png
+cmd/sc_scrolltoprevious.png cmd/sc_pageup.png
+cmd/lc_scrolltonext.png cmd/lc_pagedown.png
+cmd/sc_scrolltonext.png cmd/sc_pagedown.png
 res/lc06300.png cmd/lc_pagedown.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/sc_closewin.png cmd/sc_closedoc.png

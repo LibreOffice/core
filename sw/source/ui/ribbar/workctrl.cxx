@@ -566,15 +566,12 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     }
     else
     {
-        SfxBoolItem aNext(FN_SCROLL_NEXT_PREV, NID_NEXT == nSet);
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "ScrollNextPrev";
-        aNext.QueryValue( a );
-        aArgs[0].Value = a;
+        Sequence< PropertyValue > aArgs;
+        OUString cmd(".uno:ScrollToPrevious");
+        if (NID_NEXT == nSet)
+            cmd = OUString(".uno:ScrollToNext");
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     OUString( ".uno:ScrollNextPrev" ),
-                                     aArgs );
+                                     cmd, aArgs );
     }
     return 0;
 }

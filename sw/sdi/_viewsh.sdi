@@ -76,7 +76,15 @@ interface BaseTextEditView
         ExecMethod = NoExec ;
         StateMethod = NoState ;
     ]
-    FN_SCROLL_NEXT_PREV
+    FN_NAVIGATION_POPUP
+    [
+        ExecMethod = Execute;
+    ]
+    FN_SCROLL_PREV
+    [
+        ExecMethod = Execute;
+    ]
+    FN_SCROLL_NEXT
     [
         ExecMethod = Execute;
     ]

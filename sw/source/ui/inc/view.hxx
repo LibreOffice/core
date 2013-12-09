@@ -525,7 +525,7 @@ public:
     void            ChangeTabMetric(FieldUnit eUnit);
     void            GetHRulerMetric(FieldUnit& rToFill) const;
 
-        // Handler
+    // Handler
     void            Execute(SfxRequest&);
     void            ExecPageMove(SfxRequest&);
     void            ExecStyle(SfxRequest&);
