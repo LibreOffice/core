@@ -401,7 +401,7 @@ private:
 class DummyChart : public DummyXShapes
 {
 public:
-    DummyChart(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage);
+    DummyChart(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xDrawPage);
     ~DummyChart();
     virtual DummyChart* getRootShape();
 
