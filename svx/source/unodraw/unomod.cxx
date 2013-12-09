@@ -680,7 +680,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
         SdrPage* pPage;
 
         if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
-            pPage = new FmFormPage(*(FmFormModel*)mrModel.mpDoc, NULL);
+            pPage = new FmFormPage(*(FmFormModel*)mrModel.mpDoc);
         else
             pPage = new SdrPage(*mrModel.mpDoc);
 
