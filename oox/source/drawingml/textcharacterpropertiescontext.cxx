@@ -137,6 +137,10 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case OOX_TOKEN( doc, bCs ):
             break;
         case OOX_TOKEN( doc, color ):
+            if (rAttribs.getInteger(OOX_TOKEN(doc, val)).has())
+            {
+                mrTextCharacterProperties.maCharColor.setSrgbClr(rAttribs.getIntegerHex(OOX_TOKEN(doc, val)).get());
+            }
             break;
         case OOX_TOKEN( doc, sz ):
             if (rAttribs.getInteger(OOX_TOKEN(doc, val)).has())
