@@ -196,7 +196,7 @@ inline Date setDate( util::DateTime& rDate )
     return Date( rDate.Day, rDate.Month, rDate.Year );
 }
 
-static util::DateTime getTime( long nTime )
+static util::DateTime getTime(sal_Int64 const nTime)
 {
     util::DateTime aTime;
     memset( &aTime, 0, sizeof( util::DateTime ) );
