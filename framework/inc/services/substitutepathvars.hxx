@@ -146,8 +146,6 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
             OUString           m_aNTDomain;
             bool                    m_bHostRetrieved;
             OUString           m_aHost;
-            bool                    m_bOSRetrieved;
-            OperatingSystem         m_eOSType;
 
             Link                    m_aListenerNotify;
             const OUString     m_aSharePointsNodeName;

@@ -230,7 +230,6 @@ SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyL
     m_bDNSDomainRetrieved( false ),
     m_bNTDomainRetrieved( false ),
     m_bHostRetrieved( false ),
-    m_bOSRetrieved( false ),
     m_aListenerNotify( aNotifyLink ),
     m_aSharePointsNodeName( OUString( "SharePoints" )),
     m_aDirPropertyName( OUString( "/Directory" )),
@@ -300,23 +299,17 @@ void SubstitutePathVariables_Impl::Commit()
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
 {
-    if ( !m_bOSRetrieved )
-    {
 #ifdef SOLARIS
-        m_eOSType = OS_SOLARIS;
+    return OS_SOLARIS;
 #elif defined LINUX
-        m_eOSType = OS_LINUX;
+    return OS_LINUX;
 #elif defined WIN32
-        m_eOSType = OS_WINDOWS;
+    return OS_WINDOWS;
 #elif defined UNIX
-        m_eOSType = OS_UNIX;
+    return OS_UNIX;
 #else
-        m_eOSType = OS_UNKNOWN;
+    return OS_UNKNOWN;
 #endif
-        m_bOSRetrieved = sal_True;
-    }
-
-    return m_eOSType;
 }
 
 const OUString& SubstitutePathVariables_Impl::GetYPDomainName()
