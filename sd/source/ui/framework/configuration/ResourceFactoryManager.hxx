@@ -20,6 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_RESOURCEFACTORYMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_RESOURCEFACTORYMANAGER_HXX
 
+#include <sal/config.h>
+
+#include <utility>
+#include <vector>
+
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
