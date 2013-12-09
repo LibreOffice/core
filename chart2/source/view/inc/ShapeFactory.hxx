@@ -221,10 +221,6 @@ private:
                     , const ::com::sun::star::drawing::Direction3D& rSize
                     , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
                     , bool bCylinder = false);
-
-    //member:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
-        m_xShapeFactory;
 };
 
 } //namespace chart

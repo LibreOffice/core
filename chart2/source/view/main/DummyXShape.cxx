@@ -839,8 +839,9 @@ bool DummyChart::initOpengl()
 }
 
 
-DummyChart::DummyChart():
-    mpWindow(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL))
+DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
+    mpWindow(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL)),
+    m_GLRender(xTarget)
 {
     SAL_WARN("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");

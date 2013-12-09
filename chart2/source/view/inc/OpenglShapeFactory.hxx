@@ -19,9 +19,6 @@ namespace opengl {
 class OpenglShapeFactory : public chart::AbstractShapeFactory
 {
 public:
-    OpenglShapeFactory();
-    OpenglShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
-        {m_xShapeFactory = xFactory;}
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup2D(
@@ -196,9 +193,6 @@ public:
     virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize );
 private:
     void *m_pChart;
-    //member:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
-        m_xShapeFactory;
 
 };
 

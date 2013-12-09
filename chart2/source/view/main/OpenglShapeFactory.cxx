@@ -59,8 +59,8 @@ namespace chart
 {
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
-                              {    return new opengl::OpenglShapeFactory(xFactory);}
+    SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory()
+                              {    return new opengl::OpenglShapeFactory();}
     }
 
 
@@ -114,7 +114,10 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
     {
         //create the root shape
         SAL_WARN("chart2.opengl", "getOrCreateChartRootShape");
-        dummy::DummyChart *pChart = new dummy::DummyChart();
+
+        uno::Reference< drawing::XShape > xTarget (m_xShapeFactory->createInstance(
+                "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
+        dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
         m_pChart = (void *)pChart;
         xRet = pChart;
 #if 0
@@ -524,11 +527,6 @@ void OpenglShapeFactory::renderSeries( const uno::Reference<
         double )
 {
     SAL_WARN("chart2.opengl", "OpenglShapeFactory::renderSeries()-----test:");
-}
-
-OpenglShapeFactory::OpenglShapeFactory()
-{
-    m_pChart = NULL;
 }
 
 } //namespace dummy

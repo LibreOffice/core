@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
+
 #if defined( _WIN32 )
 #include "prewin.h"
 #include "windows.h"
@@ -103,7 +105,8 @@ struct GLWindow
 class OpenGLRender
 {
 public:
-    OpenGLRender();
+    OpenGLRender(com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShape > xTarget );
     ~OpenGLRender();
     int InitOpenGL(GLWindow);
     int SetViewPoint(PosVeci3 camPos, PosVeci3 orgPos, int headUpFlag);
@@ -204,6 +207,8 @@ private:
     float m_fLineAlpha;
 
     list <Line2DPointList> m_Line2DShapePointList;
+
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

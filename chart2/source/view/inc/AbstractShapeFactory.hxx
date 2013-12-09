@@ -58,9 +58,15 @@ class Stripe;
 
 class AbstractShapeFactory
 {
+protected:
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
+        m_xShapeFactory;
 public:
 
     enum StackPosition { Top, Bottom };
+    void setShapeFactory(com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
+        { m_xShapeFactory = xFactory; }
 
     static AbstractShapeFactory* getOrCreateShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory);
 

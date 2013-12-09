@@ -11,6 +11,16 @@
 #include <vector>
 #include <iostream>
 #include "OpenGLRender.hxx"
+#include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/graph.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+
+using namespace com::sun::star;
+
+#include <boost/scoped_array.hpp>
 
 using namespace std;
 
@@ -483,7 +493,7 @@ int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArrayS
     {
         result = -1;
     }
-#if 1
+#if 0
     sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
     CreateBMPHeader(buf, m_iWidth, -m_iHeight);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
@@ -493,13 +503,36 @@ int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArrayS
     fclose(pfile);
 
 #else
-    boost::scoped_array<sal_uInt8> buf = new sal_uInt8[m_iWidth * m_iHeight * 4];
-    glBindTexture(GL_TEXTURE_2D, m_TextureObj);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf.get());
-    FILE *pfile = fopen(fileName,"wb");
-    fwrite(buf,m_iWidth * m_iHeight * 3, 1, pfile);
-    fclose(pfile);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
+    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf.get());
+    BitmapEx aBmp;
+    aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
+
+    Bitmap aBitmap( aBmp.GetBitmap() );
+    Bitmap aAlpha( aBmp.GetAlpha().GetBitmap() );
+
+    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+    Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
+
+    size_t nCurPos = 0;
+    for( size_t y = 0; y < m_iHeight; ++y)
+    {
+        Scanline pScan = pWriteAccess->GetScanline(y);
+        Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+
+        for( size_t x = 0; x < m_iWidth; ++x )
+        {
+            *pScan++ = buf[nCurPos];
+            *pScan++ = buf[nCurPos+1];
+            *pScan++ = buf[nCurPos+2];
+
+            nCurPos += 3;
+
+            *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
+        }
+    }
+
+    aBmp = BitmapEx(aBitmap, aAlpha);
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     RenderTexture(m_TextureObj[0]);
@@ -606,6 +639,7 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     {
         result = -1;
     }
+#if 0
     sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
     CreateBMPHeader(buf, m_iWidth, m_iHeight);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
@@ -613,6 +647,43 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     fwrite(buf,m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN, 1, pfile);
     free(buf);
     fclose(pfile);
+#else
+    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
+    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf.get());
+    BitmapEx aBmp;
+    aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
+
+    Bitmap aBitmap( aBmp.GetBitmap() );
+    Bitmap aAlpha( aBmp.GetAlpha().GetBitmap() );
+
+    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+    Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
+
+    size_t nCurPos = 0;
+    for( size_t y = 0; y < m_iHeight; ++y)
+    {
+        Scanline pScan = pWriteAccess->GetScanline(y);
+        Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+
+        for( size_t x = 0; x < m_iWidth; ++x )
+        {
+            *pScan++ = buf[nCurPos];
+            *pScan++ = buf[nCurPos+1];
+            *pScan++ = buf[nCurPos+2];
+
+            nCurPos += 3;
+
+            *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
+        }
+    }
+
+    aBmp = BitmapEx(aBitmap, aAlpha);
+    Graphic aGraphic(aBmp);
+    uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
+    uno::Reference < beans::XPropertySet > xPropSet ( mxRenderTarget, uno::UNO_QUERY );
+    xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
+
+#endif
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #if defined( WNT )
     SwapBuffers(glWin.hDC);
@@ -842,7 +913,7 @@ void OpenGLRender::Release()
 }
 
 
-OpenGLRender::OpenGLRender()
+OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
 {
     //[mod] by gaowei
     m_Model = glm::mat4(1.0f);
@@ -862,6 +933,9 @@ OpenGLRender::OpenGLRender()
     m_RboID[0] = 0;
     m_RboID[1] = 0;
     m_fLineAlpha = 1.0;
+
+    mxRenderTarget = xTarget;
+    mxRenderTarget->setPosition(awt::Point(0,0));
 }
 OpenGLRender::~OpenGLRender()
 {
