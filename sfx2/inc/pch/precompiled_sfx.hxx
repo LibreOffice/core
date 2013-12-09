@@ -647,7 +647,6 @@
 #include <svl/aeitem.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/ctypeitm.hxx>
-#include <svl/dateitem.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/eitem.hxx>
 #include <svl/flagitem.hxx>

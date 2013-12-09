@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/dateitem.hxx>
 #include "drawdoc.hxx"
 #include <svx/svdotext.hxx>
 #include <svtools/treelistbox.hxx>
