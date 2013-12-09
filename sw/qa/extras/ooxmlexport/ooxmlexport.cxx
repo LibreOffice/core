@@ -2021,6 +2021,15 @@ DECLARE_OOXMLEXPORT_TEST(testTableLineSpacing, "table_atleast.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.docx")
+{
+     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     if (!pXmlDoc)
+         return;
+      assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
