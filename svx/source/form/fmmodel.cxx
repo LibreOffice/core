@@ -131,7 +131,7 @@ FmFormModel::~FmFormModel()
 \************************************************************************/
 SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 {
-    return new FmFormPage(*this, NULL, bMasterPage);
+    return new FmFormPage(*this, bMasterPage);
 }
 
 /*************************************************************************

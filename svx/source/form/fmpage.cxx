@@ -56,10 +56,9 @@ using com::sun::star::container::XNameContainer;
 TYPEINIT1(FmFormPage, SdrPage);
 
 //------------------------------------------------------------------
-FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage)
+FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
            ,m_pImpl( new FmFormPageImpl( *this ) )
-           ,m_pBasic(_pBasic)
 {
 }
 
@@ -67,7 +66,6 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
            ,m_pImpl(new FmFormPageImpl( *this ) )
-           ,m_pBasic(0)
 {
     m_pImpl->initFrom( rPage.GetImpl() );
     m_sPageName = rPage.m_sPageName;

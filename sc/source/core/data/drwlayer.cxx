@@ -308,10 +308,7 @@ void ScDrawLayer::UseHyphenator()
 
 SdrPage* ScDrawLayer::AllocPage(bool bMasterPage)
 {
-    //  don't create basic until it is needed
-    StarBASIC* pBasic = NULL;
-    ScDrawPage* pPage = new ScDrawPage( *this, pBasic, bMasterPage);
-    return pPage;
+    return new ScDrawPage(*this, bMasterPage);
 }
 
 sal_Bool ScDrawLayer::HasObjects() const

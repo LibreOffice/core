@@ -156,7 +156,7 @@ protected:
 public:
     TYPEINFO();
 
-    SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage=sal_False);
+    SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage=sal_False);
     SdPage(const SdPage& rSrcPage);
     ~SdPage();
     virtual SdrPage* Clone() const;

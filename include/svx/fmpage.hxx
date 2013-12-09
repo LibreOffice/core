@@ -43,12 +43,11 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
     friend class FmFormObj;
     FmFormPageImpl*     m_pImpl;
     OUString            m_sPageName;
-    StarBASIC*          m_pBasic;
 
 public:
     TYPEINFO();
 
-    FmFormPage(FmFormModel& rModel,StarBASIC*, bool bMasterPage=sal_False);
+    FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 
@@ -70,7 +69,6 @@ public:
 public:
     const OUString&     GetName() const { return m_sPageName; }
     void                SetName( const OUString& rName ) { m_sPageName = rName; }
-    StarBASIC*          GetBasic() const { return m_pBasic; }
     sal_Bool            RequestHelp(
                             Window* pWin,
                             SdrView* pView,

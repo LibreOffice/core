@@ -28,8 +28,8 @@
 
 // -----------------------------------------------------------------------
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage) :
-    FmFormPage(rNewModel, pBasic, bMasterPage)
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
+    FmFormPage(rNewModel, bMasterPage)
 {
     SetSize( Size( LONG_MAX, LONG_MAX ) );
 }

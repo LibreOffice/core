@@ -502,7 +502,7 @@ SdrModel* SdDrawDocument::AllocModel() const
 // not know, as they are _derivatives_ of SdrPage) when loading.
 SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
-    return new SdPage(*this, NULL, bMasterPage);
+    return new SdPage(*this, bMasterPage);
 }
 
 // When the model has changed

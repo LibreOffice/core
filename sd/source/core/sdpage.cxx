@@ -89,8 +89,8 @@ TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
 |*
 \************************************************************************/
 
-SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage)
-:   FmFormPage(rNewDoc, pBasic, bMasterPage)
+SdPage::SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage)
+:   FmFormPage(rNewDoc, bMasterPage)
 ,   SdrObjUserCall()
 ,   mePageKind(PK_STANDARD)
 ,   meAutoLayout(AUTOLAYOUT_NONE)

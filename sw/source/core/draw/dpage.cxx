@@ -49,7 +49,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
 SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
-    FmFormPage(rNewModel, 0, bMasterPage),
+    FmFormPage(rNewModel, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
 {
