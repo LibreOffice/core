@@ -79,10 +79,10 @@ bool isXMLStream(const OString& aHeaderStrm)
     size_t i = 0;
 
     // Skip UTF-8 BOM
-    const char sBOM[] = {(char)0xEF, (char)0xBB, (char)0xBF};
+    const unsigned char sBOM[] = {0xEF, 0xBB, 0xBF};
     for (i = 0; i < n; ++i, ++p)
     {
-        if (i < 3 && *p == sBOM[i])
+        if (i < 3 && (unsigned char)(*p) == sBOM[i])
             continue;
         else if (i == 3 || i == 0)
             break;
