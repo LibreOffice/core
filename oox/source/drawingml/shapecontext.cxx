@@ -31,6 +31,7 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "oox/drawingml/textbodypropertiescontext.hxx"
 #include "hyperlinkcontext.hxx"
 
 using namespace oox::core;
@@ -95,15 +96,27 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_txBody:
     case XML_txbxContent:
     {
-        TextBodyPtr xTextBody( new TextBody );
-        mpShapePtr->setTextBody( xTextBody );
-        return new TextBodyContext( *this, *xTextBody );
+        if (!mpShapePtr->getTextBody())
+            mpShapePtr->setTextBody( TextBodyPtr(new TextBody) );
+        return new TextBodyContext( *this, *mpShapePtr->getTextBody() );
     }
     case XML_txXfrm:
     {
         mpShapePtr->getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
         break;
     }
+    case XML_cNvSpPr:
+        break;
+    case XML_spLocks:
+        break;
+    case XML_bodyPr:
+        if (!mpShapePtr->getTextBody())
+            mpShapePtr->setTextBody( TextBodyPtr(new TextBody) );
+        return new TextBodyPropertiesContext( *this, rAttribs, mpShapePtr->getTextBody()->getTextProperties() );
+        break;
+    default:
+        SAL_WARN("oox", "ShapeContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+        break;
     }
 
     return this;

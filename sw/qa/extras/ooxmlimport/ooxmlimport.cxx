@@ -1614,6 +1614,7 @@ DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "[Year]");
     CPPUNIT_ASSERT_EQUAL(48.f, getProperty<float>(getRun(xParagraph, 1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xGroup->getByIndex(1), "TextVerticalAdjust"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
