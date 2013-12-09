@@ -38,6 +38,7 @@ $(eval $(call gb_StaticLibrary_use_api,writerperfect,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect,\
+	writerperfect/source/common/DirectoryStream \
 	writerperfect/source/common/DocumentHandler \
 	writerperfect/source/common/WPXSvStream \
 ))

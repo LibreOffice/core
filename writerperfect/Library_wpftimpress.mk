@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,wpftimpress,\
 	sal \
 	sot \
 	tl \
+	ucbhelper \
 	utl \
 	xo \
 	$(gb_UWINAPI) \
