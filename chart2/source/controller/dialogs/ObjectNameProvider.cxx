@@ -747,8 +747,8 @@ OUString ObjectNameProvider::getNameForCID(
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
-        case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
+        case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel );
@@ -766,8 +766,30 @@ OUString ObjectNameProvider::getNameForCID(
                         aRet += getName( OBJECTTYPE_DATA_LABEL  );
                     }
                 }
+                else if (eType == OBJECTTYPE_DATA_CURVE || eType == OBJECTTYPE_DATA_CURVE_EQUATION)
+                {
+                    Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xModel ));
+                    Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+
+                    aRet += " ";
+                    aRet += getName(eType);
+
+                    if( xCurveCnt.is())
+                    {
+                        sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
+                        Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xCurveCnt, nCurveIndex) );
+                        if( xCurve.is())
+                        {
+                            aRet += " (";
+                            aRet += RegressionCurveHelper::getRegressionCurveName(xCurve);
+                            aRet += ")";
+                        }
+                    }
+                }
                 else
+                {
                     aRet += getName( eType );
+                }
                 return aRet;
             }
         default:
