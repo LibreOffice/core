@@ -874,7 +874,16 @@ sub get_Destination_Directory_For_Item_From_Directorylist       # this is used f
         elsif ((!( $ispredefinedprogdir )) && (!( $ispredefinedconfigdir )))
         {
             my $directorynameref = get_Directoryname_From_Directorygid($dirsarrayref, $searchdirgid, $onelanguage, $oneitemgid);
-            $destfilename = $$directorynameref . $installer::globals::separator . $oneitem->{'Name'};
+            my $styles = "";
+            if ($oneitem->{'Styles'}) { $styles = $oneitem->{'Styles'}; }
+            if ($styles =~ /\bFILELIST\b/)
+            {
+                $destfilename = $$directorynameref . $installer::globals::separator . $oneitemname;
+            }
+            else
+            {
+                $destfilename = $$directorynameref . $installer::globals::separator . $oneitem->{'Name'};
+            }
         }
         else
         {
