@@ -135,10 +135,14 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     switch( aElementToken )
     {
     case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
+    case OOX_TOKEN( doc, rPr ):
         return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
     case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
     case OOX_TOKEN( doc, t ):
         mbIsInText = true;
+        break;
+    default:
+        SAL_WARN("oox", "RegularTextRunContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
         break;
     }
 
