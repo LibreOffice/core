@@ -34,6 +34,24 @@
       "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///6Q\u003d",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-09T12:00:45Z",
+      "side": 1,
+      "message": "line 1631 you have a loop using idx\nline 1634 you have a if()\nn_idxVal is incremented _only_ if if(xLAbeledSeq().is is true\nwhereas nidx is incremented for as long as sSeries[idx] !\u003d 0\n\nso let\u0027s say that idx 0 and 3 yieled an element such that\nxLabeledSeq.is() is true\nthe pFs-\u003esingleElement( ... XML_idx) for instance\nwas called is idx \u003d 0 and idx \u003d 3\n\nafter the patch if would be called with\nn_idxVal \u003d 1, 2\n\nthat is because n_idxVal is not incremented if xLabaledSeq.is() is False...\n\nI do not know if that is a problem or not.. but that is surely a change _other_ than what your description says you intented.",
+      "parentUuid": "AAAAbH///6k\u003d",
+      "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
