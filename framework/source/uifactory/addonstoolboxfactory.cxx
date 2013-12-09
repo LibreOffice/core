@@ -113,18 +113,18 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
         const Sequence< PropertyValue >& rPropSeq = rPropSeqSeq[i];
         for ( sal_uInt32 j = 0; j < (sal_uInt32)rPropSeq.getLength(); j++ )
         {
-            if ( rPropSeq[j].Name.startsWith( "Context" ))
+            if ( rPropSeq[j].Name == "Context" )
             {
                 OUString aContextList;
                 if ( rPropSeq[j].Value >>= aContextList )
                     bIsCorrectContext = IsCorrectContext( aModuleIdentifier, aContextList );
                 nPropChecked++;
             }
-            else if ( rPropSeq[j].Name.startsWith( "URL" ))
+            else if ( rPropSeq[j].Name == "URL" )
             {
                 OUString aURL;
                 rPropSeq[j].Value >>= aURL;
-                bIsButton = !aURL.startsWith( "private:separator" );
+                bIsButton = aURL != "private:separator" ;
                 nPropChecked++;
             }
 

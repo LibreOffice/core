@@ -167,7 +167,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
     rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
     OUString aMimeType( rMimeType.toAsciiLowerCase() );
     sal_Int32 nIndex = 0;
-    if( aMimeType.getToken( 0, ';', nIndex ).startsWith( "text/plain" ) )
+    if( aMimeType.getToken( 0, ';', nIndex ) == "text/plain" )
     {
         if( aMimeType.getLength() == 10 ) // only "text/plain"
             aEncoding = RTL_TEXTENCODING_ISO_8859_1;
@@ -177,7 +177,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
             {
                 OUString aToken = aMimeType.getToken( 0, ';', nIndex );
                 sal_Int32 nPos = 0;
-                if( aToken.getToken( 0, '=', nPos ).startsWith( "charset" ) )
+                if( aToken.getToken( 0, '=', nPos ) == "charset" )
                 {
                     OString aEncToken = OUStringToOString( aToken.getToken( 0, '=', nPos ), RTL_TEXTENCODING_ISO_8859_1 );
                     aEncoding = rtl_getTextEncodingFromUnixCharset( aEncToken.getStr() );
@@ -1051,7 +1051,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
              OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
 
-    if( rType.startsWith( "text/plain;charset=utf-16" ) )
+    if( rType == "text/plain;charset=utf-16" )
     {
         // lets see if we have UTF16 else try to find something convertible
         if( it->second->m_aTypes.getLength() && ! it->second->m_bHaveUTF16 )
@@ -1105,7 +1105,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
             }
         }
     }
-    else if( rType.startsWith( "image/bmp" ) )
+    else if( rType == "image/bmp" )
     {
         // #i83376# try if someone has the data in image/bmp already before
         // doing the PIXMAP stuff (e.g. the gimp has this)
@@ -1350,7 +1350,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection, nFormat );
                 pFlavors->DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
                 sal_Int32 nIndex = 0;
-                if( pFlavors->MimeType.getToken( 0, ';', nIndex ).startsWith( "text/plain" ) )
+                if( pFlavors->MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
                 {
                     OUString aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
                     // omit text/plain;charset=unicode since it is not well defined

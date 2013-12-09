@@ -130,7 +130,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             PropertyValue aPropValue;
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.startsWith( "PopupMode" ))
+                if ( aPropValue.Name == "PopupMode" )
                 {
                     aPropValue.Value >>= bPopupMode;
                     break;

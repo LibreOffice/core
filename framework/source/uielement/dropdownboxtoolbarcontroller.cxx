@@ -214,11 +214,11 @@ long DropdownToolbarController::PreNotify( NotifyEvent& /*rNEvt*/ )
 
 void DropdownToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    if ( rControlCommand.Command.startsWith( "SetList" ))
+    if ( rControlCommand.Command == "SetList" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "List" ))
+            if ( rControlCommand.Arguments[i].Name == "List" )
             {
                 Sequence< OUString > aList;
                 m_pListBoxControl->Clear();
@@ -241,13 +241,13 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "AddEntry" ))
+    else if ( rControlCommand.Command == "AddEntry" )
     {
         sal_uInt16      nPos( LISTBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
+            if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 if ( rControlCommand.Arguments[i].Value >>= aText )
                     m_pListBoxControl->InsertEntry( aText, nPos );
@@ -255,13 +255,13 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "InsertEntry" ))
+    else if ( rControlCommand.Command == "InsertEntry" )
     {
         sal_uInt16      nPos( LISTBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
+            if ( rControlCommand.Arguments[i].Name == "Pos" )
             {
                 sal_Int32 nTmpPos = 0;
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
@@ -271,17 +271,17 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
                         nPos = sal_uInt16( nTmpPos );
                 }
             }
-            else if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
+            else if ( rControlCommand.Arguments[i].Name == "Text" )
                 rControlCommand.Arguments[i].Value >>= aText;
         }
 
         m_pListBoxControl->InsertEntry( aText, nPos );
     }
-    else if ( rControlCommand.Command.startsWith( "RemoveEntryPos" ))
+    else if ( rControlCommand.Command == "RemoveEntryPos" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
+            if ( rControlCommand.Arguments[i].Name == "Pos" )
             {
                 sal_Int32 nPos( -1 );
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
@@ -293,11 +293,11 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "RemoveEntryText" ))
+    else if ( rControlCommand.Command == "RemoveEntryText" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
+            if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 OUString aText;
                 if ( rControlCommand.Arguments[i].Value >>= aText )
@@ -306,11 +306,11 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetDropDownLines" ))
+    else if ( rControlCommand.Command == "SetDropDownLines" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Lines" ))
+            if ( rControlCommand.Arguments[i].Name == "Lines" )
             {
                 sal_Int32 nValue( 5 );
                 rControlCommand.Arguments[i].Value >>= nValue;

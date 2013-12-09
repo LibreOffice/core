@@ -135,12 +135,12 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
 {
     SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!
-    if (( rControlCommand.Command.startsWith( "SetImag" )) ||
-        ( rControlCommand.Command.startsWith( "SetImage" )) )
+    if( rControlCommand.Command == "SetImag" ||
+        rControlCommand.Command == "SetImage" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "URL" ))
+            if ( rControlCommand.Arguments[i].Name == "URL" )
             {
                 OUString aURL;
                 rControlCommand.Arguments[i].Value >>= aURL;
