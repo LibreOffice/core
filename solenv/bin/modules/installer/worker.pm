@@ -733,8 +733,10 @@ sub remove_all_items_with_special_flag
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
         if ( $styles =~ /\b$flag\b/ )
         {
-            my $infoline = "Attention: Removing from collector: $oneitem->{'Name'} !\n";
-            $installer::logger::Lang->print($infoline);
+            $installer::logger::Lang->printf(
+                "Attention: Removing from collector '%s' because it has flag %s\n",
+                $oneitem->{'Name'},
+                $flag);
             if ( $flag eq "BINARYTABLE_ONLY" ) { push(@installer::globals::binarytableonlyfiles, $oneitem); }
             next;
         }
