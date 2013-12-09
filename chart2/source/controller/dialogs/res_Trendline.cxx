@@ -303,10 +303,11 @@ void TrendlineResources::FillValueSets()
 void TrendlineResources::UpdateControlStates()
 {
     bool bMovingAverage = ( m_eTrendLineType == CHREGRESS_MOVING_AVERAGE );
+    bool bInterceptAvailable = ( m_eTrendLineType == CHREGRESS_LINEAR ) || ( m_eTrendLineType == CHREGRESS_POLYNOMIAL );
     m_pNF_ExtrapolateForward->Enable(!bMovingAverage);
     m_pNF_ExtrapolateBackward->Enable(!bMovingAverage);
-    m_pCB_SetIntercept->Enable(!bMovingAverage);
-    m_pFmtFld_InterceptValue->Enable(!bMovingAverage);
+    m_pCB_SetIntercept->Enable( bInterceptAvailable );
+    m_pFmtFld_InterceptValue->Enable( bInterceptAvailable );
     if(bMovingAverage)
     {
         m_pCB_ShowEquation->SetState( STATE_NOCHECK );
