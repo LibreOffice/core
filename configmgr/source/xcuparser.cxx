@@ -85,15 +85,15 @@ bool XcuParser::startElement(
             handleComponentData(reader);
         } else if (nsId == ParseManager::NAMESPACE_OOR && name.equals("items"))
         {
-            state_.push(State(rtl::Reference< Node >(), false));
+            state_.push(State::Modify(rtl::Reference< Node >()));
         } else {
             throw css::uno::RuntimeException(
                 ("bad root element <" + name.convertFromUtf8() + "> in " +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-    } else if (state_.top().ignore || state_.top().locked) {
-        state_.push(State(false));
+    } else if (state_.top().ignore) {
+        state_.push(State::Ignore(false));
     } else if (!state_.top().node.is()) {
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name.equals("item"))
         {
@@ -171,7 +171,7 @@ bool XcuParser::startElement(
                     "configmgr",
                     "bad set node <prop> member in \"" << reader.getUrl()
                         << '"');
-                state_.push(State(true)); // ignored
+                state_.push(State::Ignore(true));
             } else {
                 throw css::uno::RuntimeException(
                     ("bad set node member <" + name.convertFromUtf8() +
@@ -298,7 +298,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         path_.push_back(componentName_);
         if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
     }
@@ -310,7 +310,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
             "configmgr",
             "unknown component \"" << componentName_ << "\" in \""
                 << reader.getUrl() << '"');
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     }
     switch (op) {
@@ -326,7 +326,11 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         finalized ? valueParser_.getLayer() : Data::NO_LAYER,
         node->getFinalized());
     node->setFinalized(finalizedLayer);
-    state_.push(State(node, finalizedLayer < valueParser_.getLayer()));
+    if (finalizedLayer < valueParser_.getLayer()) {
+        state_.push(State::Ignore(true));
+        return;
+    }
+    state_.push(State::Modify(node));
 }
 
 void XcuParser::handleItem(xmlreader::XmlReader & reader) {
@@ -355,7 +359,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
         SAL_WARN(
             "configmgr",
             "unknown item \"" << path << "\" in \"" << reader.getUrl() << '"');
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     }
     assert(!path_.empty());
@@ -363,7 +367,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     if (trackPath_) {
         if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
     } else {
@@ -376,7 +380,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
             "configmgr",
             "item of bad type \"" << path << "\" in \"" << reader.getUrl()
                 << '"');
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     case Node::KIND_LOCALIZED_PROPERTY:
         valueParser_.type_ = dynamic_cast< LocalizedPropertyNode * >(
@@ -385,7 +389,11 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     default:
         break;
     }
-    state_.push(State(node, finalizedLayer < valueParser_.getLayer()));
+    if (finalizedLayer < valueParser_.getLayer()) {
+        state_.push(State::Ignore(true));
+        return;
+    }
+    state_.push(State::Modify(node));
 }
 
 void XcuParser::handlePropValue(
@@ -447,13 +455,13 @@ void XcuParser::handlePropValue(
                 css::uno::Reference< css::uno::XInterface >());
         }
         prop->setValue(valueParser_.getLayer(), css::uno::Any());
-        state_.push(State(false));
+        state_.push(State::Ignore(false));
     } else if (external.isEmpty()) {
         valueParser_.separator_ = separator;
         valueParser_.start(prop);
     } else {
         prop->setExternal(valueParser_.getLayer(), external);
-        state_.push(State(false));
+        state_.push(State::Ignore(false));
     }
 }
 
@@ -510,14 +518,14 @@ void XcuParser::handleLocpropValue(
         if (partial_ != 0 &&
             partial_->contains(path_) != Partial::CONTAINS_NODE)
         {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
     }
     NodeMap & members = locprop->getMembers();
     NodeMap::iterator i(members.find(name));
     if (i != members.end() && i->second->getLayer() > valueParser_.getLayer()) {
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     }
     if (nil && !locprop->isNillable()) {
@@ -538,7 +546,7 @@ void XcuParser::handleLocpropValue(
                         i->second.get())->setValue(
                             valueParser_.getLayer(), css::uno::Any());
                 }
-                state_.push(State(true));
+                state_.push(State::Ignore(true));
             } else {
                 valueParser_.separator_ = separator;
                 valueParser_.start(locprop, name);
@@ -558,7 +566,7 @@ void XcuParser::handleLocpropValue(
         if (i != members.end()) {
             members.erase(i);
         }
-        state_.push(State(true));
+        state_.push(State::Ignore(true));
         recordModification(false);
         break;
     default:
@@ -611,7 +619,7 @@ void XcuParser::handleGroupProp(
         if (partial_ != 0 &&
             partial_->contains(path_) != Partial::CONTAINS_NODE)
         {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
     }
@@ -660,7 +668,7 @@ void XcuParser::handleUnknownGroupProp(
             if (finalized) {
                 prop->setFinalized(valueParser_.getLayer());
             }
-            state_.push(State(prop, name, state_.top().locked));
+            state_.push(State::Insert(prop, name));
             recordModification(false);
             break;
         }
@@ -670,7 +678,7 @@ void XcuParser::handleUnknownGroupProp(
             "configmgr",
             "unknown property \"" << name << "\" in \"" << reader.getUrl()
                 << '"');
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         break;
     }
 }
@@ -683,13 +691,17 @@ void XcuParser::handlePlainGroupProp(
     PropertyNode * property = dynamic_cast< PropertyNode * >(
         propertyIndex->second.get());
     if (property->getLayer() > valueParser_.getLayer()) {
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     }
     int finalizedLayer = std::min(
         finalized ? valueParser_.getLayer() : Data::NO_LAYER,
         property->getFinalized());
     property->setFinalized(finalizedLayer);
+    if (finalizedLayer < valueParser_.getLayer()) {
+        state_.push(State::Ignore(true));
+        return;
+    }
     if (type != TYPE_ERROR && property->getStaticType() != TYPE_ANY &&
         type != property->getStaticType())
     {
@@ -702,11 +714,7 @@ void XcuParser::handlePlainGroupProp(
     case OPERATION_MODIFY:
     case OPERATION_REPLACE:
     case OPERATION_FUSE:
-        state_.push(
-            State(
-                property,
-                (state_.top().locked ||
-                 finalizedLayer < valueParser_.getLayer())));
+        state_.push(State::Modify(property));
         recordModification(false);
         break;
     case OPERATION_REMOVE:
@@ -717,7 +725,7 @@ void XcuParser::handlePlainGroupProp(
                 css::uno::Reference< css::uno::XInterface >());
         }
         group->getMembers().erase(propertyIndex);
-        state_.push(State(true)); // ignore children
+        state_.push(State::Ignore(true));
         recordModification(false);
         break;
     }
@@ -728,13 +736,17 @@ void XcuParser::handleLocalizedGroupProp(
     OUString const & name, Type type, Operation operation, bool finalized)
 {
     if (property->getLayer() > valueParser_.getLayer()) {
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     }
     int finalizedLayer = std::min(
         finalized ? valueParser_.getLayer() : Data::NO_LAYER,
         property->getFinalized());
     property->setFinalized(finalizedLayer);
+    if (finalizedLayer < valueParser_.getLayer()) {
+        state_.push(State::Ignore(true));
+        return;
+    }
     if (type != TYPE_ERROR && property->getStaticType() != TYPE_ANY &&
         type != property->getStaticType())
     {
@@ -746,11 +758,7 @@ void XcuParser::handleLocalizedGroupProp(
     switch (operation) {
     case OPERATION_MODIFY:
     case OPERATION_FUSE:
-        state_.push(
-            State(
-                property,
-                (state_.top().locked ||
-                 finalizedLayer < valueParser_.getLayer())));
+        state_.push(State::Modify(property));
         break;
     case OPERATION_REPLACE:
         {
@@ -759,11 +767,7 @@ void XcuParser::handleLocalizedGroupProp(
                     valueParser_.getLayer(), property->getStaticType(),
                     property->isNillable()));
             replacement->setFinalized(property->getFinalized());
-            state_.push(
-                State(
-                    replacement, name,
-                    (state_.top().locked ||
-                     finalizedLayer < valueParser_.getLayer())));
+            state_.push(State::Insert(replacement, name));
             recordModification(false);
         }
         break;
@@ -810,7 +814,7 @@ void XcuParser::handleGroupNode(
         path_.push_back(name);
         if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
     }
@@ -820,7 +824,7 @@ void XcuParser::handleGroupNode(
         SAL_WARN(
             "configmgr",
             "unknown node \"" << name << "\" in \"" << reader.getUrl() << '"');
-        state_.push(State(true)); // ignored
+        state_.push(State::Ignore(true));
         return;
     }
     Node::Kind kind = child->kind();
@@ -839,10 +843,11 @@ void XcuParser::handleGroupNode(
         finalized ? valueParser_.getLayer() : Data::NO_LAYER,
         child->getFinalized());
     child->setFinalized(finalizedLayer);
-    state_.push(
-        State(
-            child,
-            state_.top().locked || finalizedLayer < valueParser_.getLayer()));
+    if (finalizedLayer < valueParser_.getLayer()) {
+        state_.push(State::Ignore(true));
+        return;
+    }
+    state_.push(State::Modify(child));
 }
 
 void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
@@ -895,7 +900,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
         path_.push_back(name);
         if (partial_ != 0 && partial_->contains(path_) == Partial::CONTAINS_NOT)
         {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
     }
@@ -926,9 +931,13 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
         mandatoryLayer = std::min(mandatoryLayer, i->second->getMandatory());
         i->second->setMandatory(mandatoryLayer);
         if (i->second->getLayer() > valueParser_.getLayer()) {
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
             return;
         }
+    }
+    if (finalizedLayer < valueParser_.getLayer()) {
+        state_.push(State::Ignore(true));
+        return;
     }
     switch (op) {
     case OPERATION_MODIFY:
@@ -937,64 +946,47 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
                 "configmgr",
                 "ignoring modify of unknown set member node \"" << name
                     << "\" in \"" << reader.getUrl() << '"');
-            state_.push(State(true)); // ignored
+            state_.push(State::Ignore(true));
         } else {
-            state_.push(
-                State(
-                    i->second,
-                    (state_.top().locked ||
-                     finalizedLayer < valueParser_.getLayer())));
+            state_.push(State::Modify(i->second));
         }
         break;
     case OPERATION_REPLACE:
-        if (state_.top().locked || finalizedLayer < valueParser_.getLayer()) {
-            state_.push(State(true)); // ignored
-        } else {
+        {
             rtl::Reference< Node > member(tmpl->clone(true));
             member->setLayer(valueParser_.getLayer());
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
-            state_.push(State(member, name, false));
+            state_.push(State::Insert(member, name));
             recordModification(i == members.end());
         }
         break;
     case OPERATION_FUSE:
         if (i == members.end()) {
-            if (state_.top().locked || finalizedLayer < valueParser_.getLayer())
-            {
-                state_.push(State(true)); // ignored
-            } else {
-                rtl::Reference< Node > member(tmpl->clone(true));
-                member->setLayer(valueParser_.getLayer());
-                member->setFinalized(finalizedLayer);
-                member->setMandatory(mandatoryLayer);
-                state_.push(State(member, name, false));
-                recordModification(true);
-            }
+            rtl::Reference< Node > member(tmpl->clone(true));
+            member->setLayer(valueParser_.getLayer());
+            member->setFinalized(finalizedLayer);
+            member->setMandatory(mandatoryLayer);
+            state_.push(State::Insert(member, name));
+            recordModification(true);
         } else {
-            state_.push(
-                State(
-                    i->second,
-                    (state_.top().locked ||
-                     finalizedLayer < valueParser_.getLayer())));
+            state_.push(State::Modify(i->second));
         }
         break;
     case OPERATION_REMOVE:
         {
-            // Ignore removal of unknown members, members finalized in a lower
-            // layer, and members made mandatory in this or a lower layer;
-            // forget about user-layer removals that no longer remove anything
-            // (so that paired additions/removals in the user layer do not grow
-            // registrymodifications.xcu unbounded):
+            // Ignore removal of unknown members and members made mandatory in
+            // this or a lower layer; forget about user-layer removals that no
+            // longer remove anything (so that paired additions/removals in the
+            // user layer do not grow registrymodifications.xcu unbounded):
             bool known = i != members.end();
-            if (known && !state_.top().locked &&
-                finalizedLayer >= valueParser_.getLayer() &&
+            if (known &&
                 (mandatoryLayer == Data::NO_LAYER ||
                  mandatoryLayer > valueParser_.getLayer()))
             {
                 members.erase(i);
             }
-            state_.push(State(true));
+            state_.push(State::Ignore(true));
             if (known) {
                 recordModification(false);
             }

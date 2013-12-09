@@ -112,23 +112,27 @@ private:
         OUString name; // empty and ignored if !insert
         bool ignore;
         bool insert;
-        bool locked;
         bool pop;
 
-        inline State(bool thePop):
-            ignore(true), insert(false), locked(false), pop(thePop)
+        static State Ignore(bool thePop) { return State(thePop); }
+
+        static State Modify(rtl::Reference< Node > const & theNode)
+        { return State(theNode); }
+
+        static State Insert(
+            rtl::Reference< Node > const & theNode, OUString const & theName)
+        { return State(theNode, theName); }
+
+    private:
+        explicit State(bool thePop): ignore(true), insert(false), pop(thePop) {}
+
+        explicit State(rtl::Reference< Node > const & theNode):
+            node(theNode), ignore(false), insert(false), pop(true)
         {}
 
-        inline State(rtl::Reference< Node > const & theNode, bool theLocked):
-            node(theNode), ignore(false), insert(false), locked(theLocked),
-            pop(true)
-        {}
-
-        inline State(
-            rtl::Reference< Node > const & theNode,
-            OUString const & theName, bool theLocked):
-            node(theNode), name(theName), ignore(false), insert(true),
-            locked(theLocked), pop(true)
+        State(
+            rtl::Reference< Node > const & theNode, OUString const & theName):
+            node(theNode), name(theName), ignore(false), insert(true), pop(true)
         {}
     };
 
