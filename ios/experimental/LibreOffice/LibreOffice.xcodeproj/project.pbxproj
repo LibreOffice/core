@@ -99,6 +99,7 @@
 		BECB749A17185F48001BEB85 /* view0.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view0.cxx; path = ../../../../sw/source/ui/uiview/view0.cxx; sourceTree = "<group>"; };
 		BECB749B17185F48001BEB85 /* view1.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view1.cxx; path = ../../../../sw/source/ui/uiview/view1.cxx; sourceTree = "<group>"; };
 		BECB749C17185F48001BEB85 /* view2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = view2.cxx; path = ../../../../sw/source/ui/uiview/view2.cxx; sourceTree = "<group>"; };
+		BEDB0EFA1859C206009A6F26 /* outdev2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outdev2.cxx; path = ../../../../vcl/source/gdi/outdev2.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +145,7 @@
 			children = (
 				BE9A8D56181DBC70002A11AD /* cursor.cxx */,
 				BE954A2E1704F9500040D517 /* iosinst.cxx */,
+				BEDB0EFA1859C206009A6F26 /* outdev2.cxx */,
 				BEB752BD180C90D0005B5696 /* outmap.cxx */,
 				BE96AEB7181973DA00BD1AC4 /* salbmp.cxx */,
 				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
@@ -469,7 +471,7 @@
 				GCC_PREFIX_HEADER = "LibreOffice/LibreOffice-Prefix.pch";
 				INFOPLIST_FILE = "LibreOffice/LibreOffice-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				LIBRARY_SEARCH_PATHS = "../../../workdir/LinkTarget/Library";
+				LIBRARY_SEARCH_PATHS = ../../../workdir/LinkTarget/Library;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -482,7 +484,7 @@
 				GCC_PREFIX_HEADER = "LibreOffice/LibreOffice-Prefix.pch";
 				INFOPLIST_FILE = "LibreOffice/LibreOffice-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				LIBRARY_SEARCH_PATHS = "../../../workdir/LinkTarget/Library";
+				LIBRARY_SEARCH_PATHS = ../../../workdir/LinkTarget/Library;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

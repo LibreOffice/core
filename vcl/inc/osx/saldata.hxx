@@ -61,6 +61,9 @@ struct FrameHash : public boost::hash<sal_IntPtr>
 
 #define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
 
+// Singleton, instantiated from Application::Application() in
+// vcl/source/app/svapp.cxx through InitSalData().
+
 class SalData
 {
 public:
@@ -75,11 +78,8 @@ public:
     SystemFontList                               *mpFontList;
     NSStatusItem*                                 mpStatusItem;     // one status item that draws all our stati
                                                                     // at the moment this is only one add menu button
-
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
-    CGColorSpaceRef                               mxP50Space;
-    CGPatternRef                                  mxP50Pattern;
 
     std::vector< NSCursor* >                      maCursors;
     std::vector< NSMenuItem* >                    maFallbackMenu;

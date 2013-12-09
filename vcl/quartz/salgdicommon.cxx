@@ -25,7 +25,7 @@
 #include <osl/endian.h>
 #include <osl/file.hxx>
 
-#include "basegfx/polygon/b2dpolygon.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include "quartz/salbmp.h"
 #include "quartz/salgdi.h"
@@ -33,10 +33,12 @@
 #include "fontsubset.hxx"
 #include "sft.hxx"
 
+#ifdef IOS
+#include "saldatabasic.hxx"
+#endif
+
 using namespace vcl;
 
-
-//typedef unsigned char Boolean; // copied from MacTypes.h, should be properly included
 typedef std::vector<unsigned char> ByteVector;
 
 static const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
@@ -307,8 +309,11 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
 
     // accelerate trivial operations
     /*const*/ AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
-    const bool bSameGraphics = (this == pSrc) ||
-        (mbWindow && mpFrame && pSrc->mbWindow && (mpFrame == pSrc->mpFrame));
+    const bool bSameGraphics = (this == pSrc)
+#ifdef MACOSX
+        || (mbWindow && mpFrame && pSrc->mbWindow && (mpFrame == pSrc->mpFrame))
+#endif
+        ;
     if( bSameGraphics
     &&  (rPosAry.mnSrcWidth == rPosAry.mnDestWidth)
     &&  (rPosAry.mnSrcHeight == rPosAry.mnDestHeight))
@@ -333,6 +338,10 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
          rPosAry.mnSrcHeight == rPosAry.mnDestHeight) &&
         (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
     {
+#ifdef IOS
+        if( !CheckContext() )
+            return;
+#endif
         // in XOR mode the drawing context is redirected to the XOR mask
         // if source and target are identical then copyBits() paints onto the target context though
         CGContextRef xCopyContext = mrContext;
@@ -354,7 +363,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
             CGContextTranslateCTM( xCopyContext, 0, +mnHeight ); CGContextScaleCTM( xCopyContext, +1, -1 );
         }
         // TODO: pSrc->size() != this->size()
-        ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
+        CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
         CGContextRestoreGState( xCopyContext );
         // mark the destination rectangle as updated
         RefreshRect( aDstRect );
@@ -462,21 +471,21 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     // TODO: if( mnBitmapDepth > 0 )
     {
         const CGSize aSrcSize = CGSizeMake(nSrcWidth, nSrcHeight);
-        xSrcLayer = ::CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
+        xSrcLayer = CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
         const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
         CGPoint aSrcPoint = CGPointMake(-nSrcX, -nSrcY);
         if( IsFlipped() )
         {
-            ::CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
-            ::CGContextScaleCTM( xSrcContext, +1, -1 );
+            CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
+            CGContextScaleCTM( xSrcContext, +1, -1 );
             aSrcPoint.y = (nSrcY + nSrcHeight) - mnHeight;
         }
-        ::CGContextDrawLayerAtPoint( xSrcContext, aSrcPoint, mxLayer );
+        CGContextDrawLayerAtPoint( xSrcContext, aSrcPoint, mxLayer );
     }
 
     // draw at new destination
     const CGPoint aDstPoint = CGPointMake(+nDstX, +nDstY);
-    ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, xSrcLayer );
+    CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, xSrcLayer );
 
     // cleanup
     if( xSrcLayer != mxLayer )
@@ -488,6 +497,8 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
 
 }
 
+#ifndef IOS
+
 void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 {
     if( !rGraphics.mnRealDPIY && rGraphics.mbWindow && rGraphics.mpFrame )
@@ -498,6 +509,8 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
     mnRealDPIY = rGraphics.mnRealDPIY;
     mfFakeDPIScale = rGraphics.mfFakeDPIScale;
 }
+
+#endif
 
 bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                        const SalBitmap& rSrcBitmap,
@@ -655,6 +668,8 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     RefreshRect( aDstRect );
 }
 
+#ifndef IOS
+
 sal_Bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
                                    void* pEpsData, sal_uLong nByteCount )
 {
@@ -699,6 +714,8 @@ sal_Bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
     return bOK;
 }
+
+#endif
 
 void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
@@ -1129,7 +1146,7 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
     ApplyXorContext();
 
     QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
-    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY, !mbWindow ) )
+    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY) )
     {
         delete pBitmap;
         pBitmap = NULL;
@@ -1137,6 +1154,8 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
 
     return pBitmap;
 }
+
+#ifndef IOS
 
 SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 {
@@ -1184,8 +1203,8 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     // create a one-pixel bitmap context
     // TODO: is it worth to cache it?
     CGContextRef xOnePixelContext =
-        ::CGBitmapContextCreate( &aPixel, 1, 1, 8, sizeof(aPixel),
-                                 aCGColorSpace, aCGBmpInfo );
+        CGBitmapContextCreate( &aPixel, 1, 1, 8, sizeof(aPixel),
+                               aCGColorSpace, aCGBmpInfo );
 
     // update this graphics layer
     ApplyXorContext();
@@ -1214,6 +1233,8 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIY = static_cast<sal_Int32>(mfFakeDPIScale * mnRealDPIY);
 }
 
+#endif
+
 void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
 {
     if( !CheckContext() )
@@ -1229,6 +1250,8 @@ void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
     // reset the fill color
     CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
+
+#ifndef IOS
 
 void AquaSalGraphics::initResolution( NSWindow* )
 {
@@ -1322,6 +1345,8 @@ void AquaSalGraphics::initResolution( NSWindow* )
     mfFakeDPIScale = 1.0;
 }
 
+#endif
+
 void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( CheckContext() )
@@ -1395,19 +1420,13 @@ void AquaSalGraphics::Pattern50Fill()
 {
     static const CGFloat aFillCol[4] = { 1,1,1,1 };
     static const CGPatternCallbacks aCallback = { 0, &DrawPattern50, NULL };
-    if( ! GetSalData()->mxP50Space )
-    {
-        GetSalData()->mxP50Space = CGColorSpaceCreatePattern( GetSalData()->mxRGBSpace );
-    }
-    if( ! GetSalData()->mxP50Pattern )
-    {
-        GetSalData()->mxP50Pattern = CGPatternCreate( NULL, CGRectMake( 0, 0, 4, 4 ),
-                                                      CGAffineTransformIdentity, 4, 4,
-                                                      kCGPatternTilingConstantSpacing,
-                                                      false, &aCallback );
-    }
-    CGContextSetFillColorSpace( mrContext, GetSalData()->mxP50Space );
-    CGContextSetFillPattern( mrContext, GetSalData()->mxP50Pattern, aFillCol );
+    static const CGColorSpaceRef mxP50Space = CGColorSpaceCreatePattern( GetSalData()->mxRGBSpace );
+    static const CGPatternRef mxP50Pattern = CGPatternCreate( NULL, CGRectMake( 0, 0, 4, 4 ),
+                                                              CGAffineTransformIdentity, 4, 4,
+                                                              kCGPatternTilingConstantSpacing,
+                                                              false, &aCallback );
+    CGContextSetFillColorSpace( mrContext, mxP50Space );
+    CGContextSetFillPattern( mrContext, mxP50Pattern, aFillCol );
     CGContextFillPath( mrContext );
 }
 
@@ -1590,6 +1609,8 @@ void AquaSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
     }
 }
 
+#ifndef IOS
+
 void AquaSalGraphics::updateResolution()
 {
     DBG_ASSERT( mbWindow, "updateResolution on inappropriate graphics" );
@@ -1597,6 +1618,7 @@ void AquaSalGraphics::updateResolution()
     initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
 }
 
+#endif
 
 // -----------------------------------------------------------
 
@@ -1669,10 +1691,10 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
 
     // create a XorMask context
     m_pMaskBuffer = new sal_uLong[ m_nBufferLongs ];
-    m_xMaskContext = ::CGBitmapContextCreate( m_pMaskBuffer,
-                                              nWidth, nHeight,
-                                              nBitsPerComponent, nBytesPerRow,
-                                              aCGColorSpace, aCGBmpInfo );
+    m_xMaskContext = CGBitmapContextCreate( m_pMaskBuffer,
+                                            nWidth, nHeight,
+                                            nBitsPerComponent, nBytesPerRow,
+                                            aCGColorSpace, aCGBmpInfo );
     // reset the XOR mask to black
     memset( m_pMaskBuffer, 0, m_nBufferLongs * sizeof(sal_uLong) );
 
@@ -1684,10 +1706,10 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
     {
         // create a bitmap context matching to the target context
         m_pTempBuffer = new sal_uLong[ m_nBufferLongs ];
-        m_xTempContext = ::CGBitmapContextCreate( m_pTempBuffer,
-                                                  nWidth, nHeight,
-                                                  nBitsPerComponent, nBytesPerRow,
-                                                  aCGColorSpace, aCGBmpInfo );
+        m_xTempContext = CGBitmapContextCreate( m_pTempBuffer,
+                                                nWidth, nHeight,
+                                                nBitsPerComponent, nBytesPerRow,
+                                                aCGColorSpace, aCGBmpInfo );
     }
 
     // initialize XOR mask context for drawing

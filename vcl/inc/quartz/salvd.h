@@ -21,24 +21,16 @@
 #define INCLUDED_VCL_INC_OSX_SALVD_H
 
 #include "premac.h"
+#ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
+#else
+#include <CoreGraphics/CoreGraphics.h>
+#endif
 #include "postmac.h"
 
 #include "quartz/salgdi.h"
 
 #include "salvd.hxx"
-
-#if PRAGMA_ONCE
-    #pragma once
-#endif
-
-// =======================================================================
-
-// =======================================================================
-
-// -----------------
-// - SalVirDevData -
-// -----------------
 
 struct SalVirDevData
 {
@@ -48,13 +40,7 @@ typedef struct SalVirDevData   SalVirDevData;
 typedef SalVirDevData         *SalVirDevDataPtr;
 typedef SalVirDevDataPtr      *SalVirDevDataHandle;
 
-// =======================================================================
-
 class AquaSalGraphics;
-
-// -----------------
-// - SalVirDevData -
-// -----------------
 
 class AquaSalVirtualDevice : public SalVirtualDevice
 {
@@ -77,8 +63,6 @@ public:
     virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
     virtual void                       GetSize( long& rWidth, long& rHeight );
 };
-
-// =======================================================================
 
 #endif // INCLUDED_VCL_INC_OSX_SALVD_H
 

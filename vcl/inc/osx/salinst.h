@@ -25,7 +25,9 @@
 #include "osl/conditn.h"
 #include <vcl/solarmutex.hxx>
 
+#ifdef MACOSX
 #include "osx/osxvcltypes.h"
+#endif
 
 #include "salinst.hxx"
 
@@ -50,7 +52,6 @@ public:
 };
 
 #define YIELD_GUARD osl::Guard< comphelper::SolarMutex > aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
-
 
 class AquaSalInstance : public SalInstance
 {

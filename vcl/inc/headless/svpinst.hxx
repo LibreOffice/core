@@ -37,6 +37,10 @@
 #define VIRTUAL_DESKTOP_WIDTH 1024
 #define VIRTUAL_DESKTOP_HEIGHT 768
 
+#ifdef IOS
+#define SvpSalInstance AquaSalInstance
+#endif
+
 class SvpSalInstance;
 class SvpSalTimer : public SalTimer
 {

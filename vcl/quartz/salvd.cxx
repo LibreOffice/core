@@ -17,15 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/svapp.hxx"
 #include "vcl/sysdata.hxx"
 
-#include "osx/salvd.h"
+#include "quartz/salvd.h"
+#ifdef MACOSX
 #include "osx/salinst.h"
-#include "quartz/salgdi.h"
 #include "osx/saldata.hxx"
 #include "osx/salframe.h"
+#else
+#include "headless/svpframe.hxx"
+#include "headless/svpgdi.hxx"
+#include "headless/svpinst.hxx"
+#include "headless/svpvd.hxx"
+#endif
+#include "quartz/salgdi.h"
 
 // -----------------------------------------------------------------------
 
@@ -35,7 +41,14 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
-    return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+#ifdef IOS
+    if( pData )
+        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    else
+        return new SvpSalVirtualDevice( nBitCount );
+#else
+        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -67,7 +80,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
         mbForeignContext = false;           // the mxContext is created within VCL
         mpGraphics = new AquaSalGraphics(); // never fails
         mnBitmapDepth = nBitCount;
-
+#ifdef MACOSX
         // inherit resolution from reference device
         if( pGraphic )
         {
@@ -78,7 +91,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
                 mpGraphics->copyResolution( *pGraphic );
             }
         }
-
+#endif
         if( nDX && nDY )
             SetSize( nDX, nDY );
 
@@ -148,12 +161,21 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
+#ifdef IOS
+    (void) nDX;
+    (void) nDY;
+    assert(mbForeignContext);
+#endif
+
     if( mbForeignContext )
     {
         // Do not delete/resize mxContext that we have received from outside VCL
         return true;
     }
 
+#ifdef IOS
+    return false;
+#else
     if( mxLayer )
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
@@ -176,8 +198,8 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
         void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
-        mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
-            mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+        mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
+                                                 mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
         xCGContext = mxBitmapContext;
     }
     else
@@ -219,8 +241,8 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
 
                 void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
-                mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                           8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
+                                                         8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
                 xCGContext = mxBitmapContext;
             }
         }
@@ -239,6 +261,7 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     }
 
     return (mxLayer != NULL);
+#endif
 }
 
 // -----------------------------------------------------------------------

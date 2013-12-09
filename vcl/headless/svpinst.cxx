@@ -30,6 +30,12 @@
 #include "headless/svpframe.hxx"
 #include "headless/svpdummies.hxx"
 #include "headless/svpvd.hxx"
+#ifdef IOS
+#include "headless/svpgdi.hxx"
+#include "quartz/salbmp.h"
+#include "quartz/salgdi.h"
+#include "quartz/salvd.h"
+#endif
 #include "headless/svpbmp.hxx"
 
 #include <salframe.hxx>
@@ -211,13 +217,27 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
     delete pObject;
 }
 
-SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics*,
+SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                        long nDX, long nDY,
-                                                       sal_uInt16 nBitCount, const SystemGraphicsData* )
+                                                       sal_uInt16 nBitCount,
+                                                       const SystemGraphicsData* pData )
 {
+#ifdef IOS
+    if( pData )
+        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+    else
+    {
+        SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
+        pNew->SetSize( nDX, nDY );
+        return pNew;
+    }
+#else
+    (void) pGraphics;
+    (void) pData;
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
     pNew->SetSize( nDX, nDY );
     return pNew;
+#endif
 }
 
 void SvpSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
@@ -242,7 +262,11 @@ SalSystem* SvpSalInstance::CreateSalSystem()
 
 SalBitmap* SvpSalInstance::CreateSalBitmap()
 {
+#ifdef IOS
+    return new QuartzSalBitmap();
+#else
     return new SvpSalBitmap();
+#endif
 }
 
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )

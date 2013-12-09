@@ -75,7 +75,7 @@ QuartzSalBitmap::~QuartzSalBitmap()
 // ------------------------------------------------------------------
 
 bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
-    int nX, int nY, int nWidth, int nHeight, bool /*bMirrorVert*/ )
+    int nX, int nY, int nWidth, int nHeight )
 {
     DBG_ASSERT( xLayer, "QuartzSalBitmap::Create() from non-layered context" );
 
@@ -102,7 +102,7 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
 
     // copy layer content into the bitmap buffer
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
-    ::CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
+    CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     return true;
 }
 
@@ -239,7 +239,7 @@ bool QuartzSalBitmap::CreateContext()
 
     if( maContextBuffer.get() )
     {
-        mxGraphicContext = ::CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
+        mxGraphicContext = CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
             bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );
     }
 

@@ -266,38 +266,52 @@ AquaSalGraphics::AquaSalGraphics()
     , mbVirDev( false )
     , mbWindow( false )
 #else
-    : mrContext( NULL )
+    : mxLayer( NULL )
+    , mbForeignContext( false )
+    , mrContext( NULL )
+    , mpXorEmulation( NULL )
+    , mnXorMode( 0 )
+    , mnWidth( 0 )
+    , mnHeight( 0 )
+    , mnBitmapDepth( 0 )
     , mfFakeDPIScale( 1.0 )
+    , mxClipPath( NULL )
+    , maLineColor( COL_WHITE )
+    , maFillColor( COL_BLACK )
     , mpFontData( NULL )
     , mpTextStyle( NULL )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
+    , mbPrinter( false )
+    , mbVirDev( false )
 #endif
 {}
 
-// -----------------------------------------------------------------------
-
 AquaSalGraphics::~AquaSalGraphics()
 {
-#ifdef MACOSX
     CGPathRelease( mxClipPath );
     delete mpTextStyle;
 
     if( mpXorEmulation )
         delete mpXorEmulation;
 
+#ifdef IOS
+    if (mbForeignContext)
+        return;
+#endif
     if( mxLayer )
         CGLayerRelease( mxLayer );
-    else if( mrContext && mbWindow )
+    else if( mrContext
+#ifdef MACOSX
+             && mbWindow
+#endif
+             )
     {
         // destroy backbuffer bitmap context that we created ourself
         CGContextRelease( mrContext );
         mrContext = NULL;
     }
-#endif
 }
-
-// =======================================================================
 
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
@@ -792,6 +806,9 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 
 bool SvpSalGraphics::CheckContext()
 {
+    if (mbForeignContext)
+        return true;
+
     const basegfx::B2IVector size = m_aDevice->getSize();
     const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();
     const sal_Int32 scanlineStride = m_aDevice->getScanlineStride();

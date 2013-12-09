@@ -37,7 +37,7 @@
 #include "osx/salframe.h"
 #include "osx/salobj.h"
 #include "osx/salsys.h"
-#include "osx/salvd.h"
+#include "quartz/salvd.h"
 #include "quartz/salbmp.h"
 #include "quartz/utils.h"
 #include "osx/salprn.h"

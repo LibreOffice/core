@@ -286,6 +286,10 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 // bitmapdevice instead.
 bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 {
+#ifdef IOS
+    if (mbForeignContext)
+        return true;
+#endif
     m_aClipRegion = i_rClip;
     m_aClipMap.reset();
     if( i_rClip.IsEmpty() )
@@ -313,6 +317,8 @@ bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 
     return true;
 }
+
+#ifndef IOS
 
 void SvpSalGraphics::SetLineColor()
 {
@@ -676,6 +682,8 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     pBitmap->setBitmap( aCopy );
     return pBitmap;
 }
+
+#endif
 
 SalColor SvpSalGraphics::getPixel( long nX, long nY )
 {

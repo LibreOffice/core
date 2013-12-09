@@ -45,9 +45,10 @@ public:
     SalData();
     virtual ~SalData();
 #ifdef IOS
+    SystemFontList*               mpFontList;
     CGColorSpaceRef               mxRGBSpace;
     CGColorSpaceRef               mxGraySpace;
-    SystemFontList*               mpFontList;
+    static void ensureThreadAutoreleasePool() {};
 #endif
 };
 

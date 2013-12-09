@@ -67,6 +67,7 @@
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -1756,6 +1757,9 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     mbTiledRendering = true;
     mpOut = &rDevice;
 
+    // resizes the virtual device so to contain the entrie context
+    rDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+
     // setup the output device to draw the tile
     MapMode aMapMode(rDevice.GetMapMode());
     aMapMode.SetMapUnit(MAP_TWIP);
@@ -1768,9 +1772,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
-
-    // resizes the virtual device so to contain the entrie context
-    rDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
 
     // scroll the requested area into view if necessary
     MakeVisible(SwRect(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
@@ -1813,25 +1814,11 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     Application::AcquireSolarMutex(1);
     if (pViewShell)
     {
-        // TODO create a VirtualDevice based on SystemGraphicsData instead so
-        // that we get direct rendering; something like:
-        //
-        VirtualDevice aDevice;
-
+        SystemGraphicsData aData;
+        aData.rCGContext = (CGContextRef) context;
+        VirtualDevice aDevice(&aData, (sal_uInt16)0);
         // paint to it
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
-
-        // copy the aDevice content to mpImage
-        Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
-        BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
-        touch_lo_copy_buffer((void *) readAccess->GetBuffer(),
-                             contextWidth,
-                             contextHeight,
-                             readAccess-> GetScanlineSize(),
-                             context,
-                             contextWidth,
-                             contextHeight);
-        aBitmap.ReleaseAccess(readAccess);
     }
     Application::ReleaseSolarMutex();
 #else

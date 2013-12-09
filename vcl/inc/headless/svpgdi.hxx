@@ -22,6 +22,7 @@
 
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>
+#include <vcl/sysdata.hxx>
 
 #include "salgdi.hxx"
 #include "sallayout.hxx"
@@ -48,6 +49,7 @@ class SvpSalGraphics : public SalGraphics
     basebmp::BitmapDeviceSharedPtr       m_aDevice;
     basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;
 
+#ifndef IOS
     bool                                 m_bUseLineColor;
     basebmp::Color                       m_aLineColor;
     bool                                 m_bUseFillColor;
@@ -55,12 +57,48 @@ class SvpSalGraphics : public SalGraphics
 
     basebmp::DrawMode                    m_aDrawMode;
 
-#ifndef IOS
     // These fields are used only when we use FreeType to draw into a
     // headless backend, i.e. not on iOS.
     basebmp::Color                       m_aTextColor;
     ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
     basebmp::Format                      m_eTextFmt;
+#else
+    friend class CTLayout;
+
+    CGLayerRef                              mxLayer;
+    // mirror AquaSalVirtualDevice::mbForeignContext for SvpSalGraphics objects related to such
+    bool mbForeignContext;
+    CGContextRef                         mrContext;
+    class XorEmulation*                     mpXorEmulation;
+    int                                     mnXorMode; // 0: off 1: on 2: invert only
+    int                                     mnWidth;
+    int                                     mnHeight;
+    int                                  mnBitmapDepth;  // zero unless bitmap
+    /// some graphics implementations (e.g. AquaSalInfoPrinter) scale
+    /// everything down by a factor (see SetupPrinterGraphics for details)
+    /// so we have to compensate for it with the inverse factor
+    double                               mfFakeDPIScale;
+
+    /// path representing current clip region
+    CGMutablePathRef                        mxClipPath;
+
+    /// Drawing colors
+    /// pen color RGBA
+    RGBAColor                               maLineColor;
+    /// brush color RGBA
+    RGBAColor                               maFillColor;
+
+    // Device Font settings
+    const CoreTextFontData*                 mpFontData;
+    CoreTextStyle*                          mpTextStyle;
+    RGBAColor                               maTextColor;
+    /// allows text to be rendered without antialiasing
+    bool                                    mbNonAntialiasedText;
+
+    /// is this a printer graphics
+    bool                                    mbPrinter;
+    /// is this a virtual device graphics
+    bool                                    mbVirDev;
 #endif
 
     basebmp::BitmapDeviceSharedPtr       m_aClipMap;
@@ -81,22 +119,6 @@ private:
     void ensureClip();
 
 protected:
-
-#ifdef IOS
-    friend class CTLayout;
-
-    CGContextRef                         mrContext;
-    double                               mfFakeDPIScale;
-
-    // Device Font settings
-    const CoreTextFontData*                 mpFontData;
-    CoreTextStyle*                          mpTextStyle;
-    RGBAColor                               maTextColor;
-    /// allows text to be rendered without antialiasing
-    bool                                    mbNonAntialiasedText;
-
-#endif
-
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap );
     virtual bool drawTransformedBitmap(
         const basegfx::B2DPoint& rNull,
@@ -218,11 +240,30 @@ public:
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const;
 
 #ifdef IOS
+    void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 )
+    {
+        mxLayer = xLayer;
+        mrContext = xContext;
+        mbForeignContext = xContext != NULL;
+    };
+
     bool CheckContext();
     CGContextRef GetContext();
     bool GetRawFontData( const PhysicalFontFace* pFontData,
                          std::vector<unsigned char>& rBuffer,
                          bool* pJustCFF );
+    void                RefreshRect( const CGRect& ) { };
+    void                RefreshRect(float /* lX */, float /* lY */, float /* lWidth */, float /* lHeight */) { };
+    void                SetState();
+    void                UnsetState();
+    void                InvalidateContext();
+    bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
+    bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
+    void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
+    CGPoint*                makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry);
+    bool IsFlipped() const { return false; }
+    void ApplyXorContext();
+    void Pattern50Fill();
 #endif
 };
 

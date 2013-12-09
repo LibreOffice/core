@@ -339,6 +339,8 @@ endif
 vcl_quartz_code= \
     vcl/quartz/salbmp \
     vcl/quartz/utils \
+    vcl/quartz/salgdicommon \
+    vcl/quartz/salvd \
 
 vcl_coretext_code= \
     vcl/quartz/ctfonts \
@@ -419,12 +421,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/osx/clipboard \
     vcl/osx/service_entry \
     $(vcl_quartz_code) \
-    vcl/quartz/salgdicommon \
     vcl/quartz/salgdiutils \
     vcl/quartz/salmathutils \
     vcl/osx/salnativewidgets \
     vcl/osx/salprn \
-    vcl/osx/salvd \
     vcl/osx/salframe \
     vcl/osx/salmenu \
     vcl/osx/salobj \

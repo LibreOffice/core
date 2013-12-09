@@ -30,6 +30,7 @@
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
+#define SvpSalInstance AquaSalInstance
 #endif
 
 class SvpSalInstance;
