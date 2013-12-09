@@ -120,7 +120,6 @@
 #define HID_3D_VIEW                                         "CHART2_HID_3D_VIEW"
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
-#define HID_INSERT_TITLE                                    "CHART2_HID_INSERT_TITLE"
 #define HID_INSERT_CHART_LEGEND                             "CHART2_HID_INSERT_CHART_LEGEND"
 #define HID_INSERT_DESCRIPTION                              "CHART2_HID_INSERT_DESCRIPTION"
 

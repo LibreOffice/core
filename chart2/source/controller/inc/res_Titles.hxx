@@ -20,7 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TITLES_HXX
 
 #include "TitleDialogData.hxx"
-#include <vcl/edit.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/fixed.hxx>
 
 namespace chart
@@ -29,7 +30,7 @@ namespace chart
 class TitleResources
 {
 public:
-    TitleResources( Window* pParent, bool bShowSecondaryAxesTitle );
+    TitleResources(VclBuilderContainer& rParent, bool bShowSecondaryAxesTitle);
     virtual ~TitleResources();
 
     void writeToResources( const TitleDialogData& rInput );

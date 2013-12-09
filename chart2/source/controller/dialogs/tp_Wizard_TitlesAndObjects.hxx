@@ -36,7 +36,7 @@ namespace chart
 /**
 */
 class TitleResources;
-class oldLegendPositionResources;
+class LegendPositionResources;
 class TitlesAndObjectsTabPage : public svt::OWizardPage
 {
 public:
@@ -45,7 +45,6 @@ public:
                 ::com::sun::star::chart2::XChartDocument >& xChartModel
                 , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext );
-    virtual ~TitlesAndObjectsTabPage();
 
     virtual void        initializePage();
     virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
@@ -56,16 +55,12 @@ protected:
     DECL_LINK( ChangeHdl, void* );
 
 protected:
-    FixedText           m_aFT_TitleDescription;
-    FixedLine           m_aFL_Vertical;
+    boost::scoped_ptr< TitleResources >            m_xTitleResources;
+    boost::scoped_ptr< LegendPositionResources >   m_xLegendPositionResources;
 
-    boost::scoped_ptr< TitleResources >            m_apTitleResources;
-    boost::scoped_ptr< oldLegendPositionResources >   m_apLegendPositionResources;
-
-    FixedLine           m_aFL_Grids;
-    CheckBox            m_aCB_Grid_X;
-    CheckBox            m_aCB_Grid_Y;
-    CheckBox            m_aCB_Grid_Z;
+    CheckBox*          m_pCB_Grid_X;
+    CheckBox*          m_pCB_Grid_Y;
+    CheckBox*          m_pCB_Grid_Z;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XChartDocument >   m_xChartModel;

@@ -21,31 +21,28 @@
 #include "ResId.hxx"
 #include "TitleDialogData.hxx"
 #include <svtools/controldims.hrc>
-// for ModalDialog
-#include <vcl/dialog.hxx>
 
 namespace chart
 {
 
-TitleResources::TitleResources( Window* pWindow, bool bShowSecondaryAxesTitle )
+TitleResources::TitleResources( VclBuilderContainer& rBuilder, bool bShowSecondaryAxesTitle )
 {
-    ModalDialog* pDialog = reinterpret_cast<ModalDialog*>(pWindow);
-    pDialog->get( m_pFT_Main, "labelMainTitle" );
-    pDialog->get( m_pFT_Sub, "labelSubTitle" );
-    pDialog->get( m_pEd_Main, "maintitle" );
-    pDialog->get( m_pEd_Sub, "subtitle" );
+    rBuilder.get( m_pFT_Main, "labelMainTitle" );
+    rBuilder.get( m_pFT_Sub, "labelSubTitle" );
+    rBuilder.get( m_pEd_Main, "maintitle" );
+    rBuilder.get( m_pEd_Sub, "subtitle" );
 
-    pDialog->get( m_pFT_XAxis, "labelPrimaryXaxis" );
-    pDialog->get( m_pFT_YAxis, "labelPrimaryYaxis" );
-    pDialog->get( m_pFT_ZAxis, "labelPrimaryZaxis" );
-    pDialog->get( m_pEd_XAxis, "primaryXaxis" );
-    pDialog->get( m_pEd_YAxis, "primaryYaxis" );
-    pDialog->get( m_pEd_ZAxis, "primaryZaxis" );
+    rBuilder.get( m_pFT_XAxis, "labelPrimaryXaxis" );
+    rBuilder.get( m_pFT_YAxis, "labelPrimaryYaxis" );
+    rBuilder.get( m_pFT_ZAxis, "labelPrimaryZaxis" );
+    rBuilder.get( m_pEd_XAxis, "primaryXaxis" );
+    rBuilder.get( m_pEd_YAxis, "primaryYaxis" );
+    rBuilder.get( m_pEd_ZAxis, "primaryZaxis" );
 
-    pDialog->get( m_pFT_SecondaryXAxis, "labelSecondaryXAxis" );
-    pDialog->get( m_pFT_SecondaryYAxis, "labelSecondaryYAxis" );
-    pDialog->get( m_pEd_SecondaryXAxis, "secondaryXaxis" );
-    pDialog->get( m_pEd_SecondaryYAxis, "secondaryYaxis" );
+    rBuilder.get( m_pFT_SecondaryXAxis, "labelSecondaryXAxis" );
+    rBuilder.get( m_pFT_SecondaryYAxis, "labelSecondaryYAxis" );
+    rBuilder.get( m_pEd_SecondaryXAxis, "secondaryXaxis" );
+    rBuilder.get( m_pEd_SecondaryYAxis, "secondaryYaxis" );
 
     m_pFT_SecondaryXAxis->Show( bShowSecondaryAxesTitle );
     m_pFT_SecondaryYAxis->Show( bShowSecondaryAxesTitle );

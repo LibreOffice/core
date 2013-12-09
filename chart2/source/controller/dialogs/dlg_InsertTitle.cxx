@@ -26,20 +26,16 @@ namespace chart
 {
 
 SchTitleDlg::SchTitleDlg(Window* pWindow, const TitleDialogData& rInput )
-    : ModalDialog( pWindow, "InsertTitleDialog", "modules/schart/ui/inserttitledlg.ui" )
-    , m_apTitleResources( new TitleResources(this,true) )
+    : ModalDialog(pWindow, "InsertTitleDialog", "modules/schart/ui/inserttitledlg.ui")
+    , m_xTitleResources(new TitleResources(*this, true))
 {
-    this->SetText( ObjectNameProvider::getName(OBJECTTYPE_TITLE,true) );
-    m_apTitleResources->writeToResources( rInput );
-}
-
-SchTitleDlg::~SchTitleDlg()
-{
+    SetText( ObjectNameProvider::getName(OBJECTTYPE_TITLE, true));
+    m_xTitleResources->writeToResources( rInput );
 }
 
 void SchTitleDlg::getResult( TitleDialogData& rOutput )
 {
-    m_apTitleResources->readFromResources( rOutput );
+    m_xTitleResources->readFromResources( rOutput );
 }
 
 } //namespace chart

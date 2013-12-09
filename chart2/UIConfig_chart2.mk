@@ -45,6 +45,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/tp_SeriesToAxis \
 	chart2/uiconfig/ui/tp_Scale \
 	chart2/uiconfig/ui/tp_Trendline \
+	chart2/uiconfig/ui/wizelementspage \
 ))
 
 # vim: set noet sw=4 ts=4:

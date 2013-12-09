@@ -19,23 +19,20 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTTITLE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTTITLE_HXX
 
-#include "TitleDialogData.hxx"
+#include "res_Titles.hxx"
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-//for auto_ptr
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
-class TitleResources;
 class SchTitleDlg : public ModalDialog
 {
 private:
-    ::std::auto_ptr< TitleResources >  m_apTitleResources;
+    boost::scoped_ptr< TitleResources >  m_xTitleResources;
 
 public:
     SchTitleDlg( Window* pParent, const TitleDialogData& rInput );
-    virtual ~SchTitleDlg();
 
     void getResult( TitleDialogData& rOutput );
 };

@@ -38,42 +38,24 @@ using namespace ::com::sun::star::chart2;
 TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
         , const uno::Reference< XChartDocument >& xChartModel
         , const uno::Reference< uno::XComponentContext >& xContext )
-        : OWizardPage( pParent, SchResId(TP_WIZARD_TITLEANDOBJECTS) )
-        , m_aFT_TitleDescription( this, SchResId( FT_TITLEDESCRIPTION ) )
-        , m_aFL_Vertical( this, SchResId( FL_VERTICAL ) )
-        , m_apTitleResources( new TitleResources(this,false) )
-        , m_apLegendPositionResources( new oldLegendPositionResources(this,xContext) )
-        , m_aFL_Grids( this, SchResId( FL_GRIDS ) )
-        , m_aCB_Grid_X( this, SchResId( CB_X_SECONDARY ) )
-        , m_aCB_Grid_Y( this, SchResId( CB_Y_SECONDARY ) )
-        , m_aCB_Grid_Z( this, SchResId( CB_Z_SECONDARY ) )
-        , m_xChartModel( xChartModel )
-        , m_xCC( xContext )
-        , m_bCommitToModel( true )
+        : OWizardPage(pParent, "WizElementsPage", "modules/schart/ui/wizelementspage.ui")
+        , m_xTitleResources(new TitleResources(*this, false))
+        , m_xLegendPositionResources(new LegendPositionResources(*this, xContext))
+        , m_xChartModel(xChartModel)
+        , m_xCC(xContext)
+        , m_bCommitToModel(true)
         , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
 {
-    FreeResource();
+    get(m_pCB_Grid_X, "x");
+    get(m_pCB_Grid_Y, "y");
+    get(m_pCB_Grid_Z, "z");
 
-    this->SetText( SCH_RESSTR( STR_PAGE_CHART_ELEMENTS ) );
+    m_xTitleResources->SetUpdateDataHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
+    m_xLegendPositionResources->SetChangeHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
 
-    Font aFont( m_aFT_TitleDescription.GetControlFont() );
-    aFont.SetWeight( WEIGHT_BOLD );
-    m_aFT_TitleDescription.SetControlFont( aFont );
-
-    m_aCB_Grid_X.SetHelpId( HID_SCH_CB_XGRID );
-    m_aCB_Grid_Y.SetHelpId( HID_SCH_CB_YGRID );
-    m_aCB_Grid_Z.SetHelpId( HID_SCH_CB_ZGRID );
-
-    m_apTitleResources->SetUpdateDataHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-    m_apLegendPositionResources->SetChangeHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-
-    m_aCB_Grid_X.SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-    m_aCB_Grid_Y.SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-    m_aCB_Grid_Z.SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-}
-
-TitlesAndObjectsTabPage::~TitlesAndObjectsTabPage()
-{
+    m_pCB_Grid_X->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
+    m_pCB_Grid_Y->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
+    m_pCB_Grid_Z->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
 }
 
 void TitlesAndObjectsTabPage::initializePage()
@@ -84,12 +66,12 @@ void TitlesAndObjectsTabPage::initializePage()
     {
         TitleDialogData aTitleInput;
         aTitleInput.readFromModel( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
-        m_apTitleResources->writeToResources( aTitleInput );
+        m_xTitleResources->writeToResources( aTitleInput );
     }
 
     //init legend
     {
-        m_apLegendPositionResources->writeToResources( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
+        m_xLegendPositionResources->writeToResources( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
     }
 
     //init grid checkboxes
@@ -99,12 +81,12 @@ void TitlesAndObjectsTabPage::initializePage()
         uno::Sequence< sal_Bool > aExistenceList;
         AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, sal_False );
         AxisHelper::getAxisOrGridExcistence( aExistenceList, xDiagram, sal_False );
-        m_aCB_Grid_X.Enable( aPossibilityList[0] );
-        m_aCB_Grid_Y.Enable( aPossibilityList[1] );
-        m_aCB_Grid_Z.Enable( aPossibilityList[2] );
-        m_aCB_Grid_X.Check( aExistenceList[0] );
-        m_aCB_Grid_Y.Check( aExistenceList[1] );
-        m_aCB_Grid_Z.Check( aExistenceList[2] );
+        m_pCB_Grid_X->Enable( aPossibilityList[0] );
+        m_pCB_Grid_Y->Enable( aPossibilityList[1] );
+        m_pCB_Grid_Z->Enable( aPossibilityList[2] );
+        m_pCB_Grid_X->Check( aExistenceList[0] );
+        m_pCB_Grid_Y->Check( aExistenceList[1] );
+        m_pCB_Grid_Z->Check( aExistenceList[2] );
     }
 
     m_bCommitToModel = true;
@@ -112,7 +94,7 @@ void TitlesAndObjectsTabPage::initializePage()
 
 sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    if( m_apTitleResources->IsModified() ) //titles may have changed in the meanwhile
+    if( m_xTitleResources->IsModified() ) //titles may have changed in the meanwhile
         commitToModel();
     return sal_True;//return false if this page should not be left
 }
@@ -127,14 +109,14 @@ void TitlesAndObjectsTabPage::commitToModel()
     //commit title changes to model
     {
         TitleDialogData aTitleOutput;
-        m_apTitleResources->readFromResources( aTitleOutput );
+        m_xTitleResources->readFromResources( aTitleOutput );
         aTitleOutput.writeDifferenceToModel( xModel, m_xCC );
-        m_apTitleResources->ClearModifyFlag();
+        m_xTitleResources->ClearModifyFlag();
     }
 
     //commit legend changes to model
     {
-        m_apLegendPositionResources->writeToModel( xModel );
+        m_xLegendPositionResources->writeToModel( xModel );
     }
 
     //commit grid changes to model
@@ -143,9 +125,9 @@ void TitlesAndObjectsTabPage::commitToModel()
         uno::Sequence< sal_Bool > aOldExistenceList;
         AxisHelper::getAxisOrGridExcistence( aOldExistenceList, xDiagram, sal_False );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);
-        aNewExistenceList[0]=m_aCB_Grid_X.IsChecked();
-        aNewExistenceList[1]=m_aCB_Grid_Y.IsChecked();
-        aNewExistenceList[2]=m_aCB_Grid_Z.IsChecked();
+        aNewExistenceList[0] = m_pCB_Grid_X->IsChecked();
+        aNewExistenceList[1] = m_pCB_Grid_Y->IsChecked();
+        aNewExistenceList[2] = m_pCB_Grid_Z->IsChecked();
         AxisHelper::changeVisibilityOfGrids( xDiagram
                 , aOldExistenceList, aNewExistenceList, m_xCC );
     }
