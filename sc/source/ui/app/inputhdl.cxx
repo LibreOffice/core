@@ -2761,36 +2761,28 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             if ( pAuto )
             {
                 OUString aReplace(pAuto->GetStartDoubleQuote());
-                if (aReplace.isEmpty())
+                if( aReplace.isEmpty() )
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart();
-                if (!aReplace.startsWith("\""))
-                    aString = aString.replaceAll(
-                        aReplace,
-                        OUString("\""));
+                if( aReplace != "\"" )
+                    aString = aString.replaceAll( aReplace, "\"" );
 
                 aReplace = OUString(pAuto->GetEndDoubleQuote());
-                if (aReplace.isEmpty())
+                if( aReplace.isEmpty() )
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd();
-                if (!aReplace.startsWith("\""))
-                    aString = aString.replaceAll(
-                        aReplace,
-                        OUString("\""));
+                if( aReplace != "\"" )
+                    aString = aString.replaceAll( aReplace, "\"" );
 
                 aReplace = OUString(pAuto->GetStartSingleQuote());
-                if (aReplace.isEmpty())
+                if( aReplace.isEmpty() )
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkStart();
-                if (!aReplace.startsWith("'"))
-                    aString = aString.replaceAll(
-                        aReplace,
-                        OUString("'"));
+                if( aReplace != "'" )
+                    aString = aString.replaceAll( aReplace, "'" );
 
                 aReplace = OUString(pAuto->GetEndSingleQuote());
-                if (aReplace.isEmpty())
+                if( aReplace.isEmpty() )
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkEnd();
-                if (!aReplace.startsWith("'"))
-                    aString = aString.replaceAll(
-                        aReplace,
-                        OUString("'"));
+                if( aReplace != "'" )
+                    aString = aString.replaceAll( aReplace, "'");
             }
         }
 

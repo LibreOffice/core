@@ -2149,7 +2149,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                     if (bGetMerge)
                         bGetMerge = GetMerged(pAddresses, xTable);
                     pCellStyles->AddRangeStyleName(*pAddresses, nIndex, false, nValidationIndex, nNumberFormat);
-                    if (!sStyleName.startsWith("Default") || nValidationIndex != -1)
+                    if( sStyleName != "Default" || nValidationIndex != -1 )
                     {
                         pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
                         pSharedData->SetLastRow(nTable, pAddresses->EndRow);

@@ -1054,7 +1054,7 @@ void MigrationImpl::runServices()
                     {
                         OUString sExtension(sToolbarName.copy(nIndex));
                         OUString sToolbarResourceName(sToolbarName.copy(0, nIndex));
-                        if (!sToolbarResourceName.isEmpty() && sExtension.startsWith(".xml"))
+                        if (!sToolbarResourceName.isEmpty() && sExtension == ".xml")
                             aModuleInfo.m_vToolbars.push_back(sToolbarResourceName);
                     }
                 }

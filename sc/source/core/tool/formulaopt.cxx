@@ -73,7 +73,7 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
-    if (rLang.startsWith("ru"))
+    if (rLang == "ru")
         // Don't do automatic guess for these languages, and fall back to
         // the old separator set.
         return;
@@ -97,7 +97,7 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         cListSep = ',';
 
     // Special case for de_CH locale.
-    if (rLocale.Language.startsWith("de") && rLocale.Country.startsWith("CH"))
+    if (rLocale.Language == "de" && rLocale.Country == "CH")
         cListSep = ';';
 
     // by default, the parameter separator equals the locale-specific

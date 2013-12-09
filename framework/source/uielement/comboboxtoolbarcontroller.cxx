@@ -263,11 +263,11 @@ long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
 
 void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    if ( rControlCommand.Command.startsWith( "SetText" ))
+    if ( rControlCommand.Command == "SetText" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Text"))
+            if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 OUString aText;
                 rControlCommand.Arguments[i].Value >>= aText;
@@ -279,11 +279,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetList" ))
+    else if ( rControlCommand.Command == "SetList" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "List" ))
+            if ( rControlCommand.Arguments[i].Name == "List" )
             {
                 Sequence< OUString > aList;
                 m_pComboBox->Clear();
@@ -304,13 +304,13 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "AddEntry" ))
+    else if ( rControlCommand.Command == "AddEntry" )
     {
         sal_uInt16      nPos( COMBOBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
+            if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 if ( rControlCommand.Arguments[i].Value >>= aText )
                     m_pComboBox->InsertEntry( aText, nPos );
@@ -318,13 +318,13 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "InsertEntry" ))
+    else if ( rControlCommand.Command == "InsertEntry" )
     {
         sal_uInt16      nPos( COMBOBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
+            if ( rControlCommand.Arguments[i].Name == "Pos" )
             {
                 sal_Int32 nTmpPos = 0;
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
@@ -334,17 +334,17 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                         nPos = sal_uInt16( nTmpPos );
                 }
             }
-            else if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
+            else if ( rControlCommand.Arguments[i].Name == "Text" )
                 rControlCommand.Arguments[i].Value >>= aText;
         }
 
         m_pComboBox->InsertEntry( aText, nPos );
     }
-    else if ( rControlCommand.Command.startsWith( "RemoveEntryPos" ))
+    else if ( rControlCommand.Command == "RemoveEntryPos" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Pos" ))
+            if ( rControlCommand.Arguments[i].Name == "Pos" )
             {
                 sal_Int32 nPos( -1 );
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
@@ -356,11 +356,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "RemoveEntryText" ))
+    else if ( rControlCommand.Command == "RemoveEntryText" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Text"))
+            if ( rControlCommand.Arguments[i].Name == "Text")
             {
                 OUString aText;
                 if ( rControlCommand.Arguments[i].Value >>= aText )
@@ -369,11 +369,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetDropDownLines" ))
+    else if ( rControlCommand.Command == "SetDropDownLines" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Lines" ))
+            if ( rControlCommand.Arguments[i].Name == "Lines" )
             {
                 sal_Int32 nValue( 5 );
                 rControlCommand.Arguments[i].Value >>= nValue;
@@ -382,11 +382,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetBackgroundColor" ))
+    else if ( rControlCommand.Command == "SetBackgroundColor" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Color" ))
+            if ( rControlCommand.Arguments[i].Name == "Color" )
             {
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
@@ -398,11 +398,11 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
             }
         }
     }
-    else if ( rControlCommand.Command.startsWith( "SetTextColor" ))
+    else if ( rControlCommand.Command == "SetTextColor" )
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.startsWith( "Color" ))
+            if ( rControlCommand.Arguments[i].Name == "Color" )
             {
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )

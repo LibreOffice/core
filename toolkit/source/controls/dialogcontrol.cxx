@@ -599,7 +599,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
         Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
         sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
-        if ( bOwnModel && rEvt.PropertyName.startsWith( "ImageURL" ))
+        if ( bOwnModel && rEvt.PropertyName == "ImageURL" )
         {
             OUString aImageURL;
             Reference< graphic::XGraphic > xGraphic;

@@ -427,8 +427,8 @@ void ScXMLContentValidationContext::EndElement()
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
             // #i47525# must allow "MacroName" or "Script"
-            if ( aValues[i].Name.startsWith( "MacroName" ) ||
-                 aValues[i].Name.startsWith( "Script" ) )
+            if ( aValues[i].Name == "MacroName" ||
+                 aValues[i].Name == "Script" )
             {
                 aValues[i].Value >>= sErrorTitle;
                 break;
