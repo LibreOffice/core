@@ -2093,6 +2093,14 @@ DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.docx")
+{
+     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     if (!pXmlDoc)
+         return;
+      assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
