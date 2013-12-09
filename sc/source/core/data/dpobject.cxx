@@ -1797,7 +1797,7 @@ bool ScDPObject::ParseFilters(
                     aRemaining = comphelper::string::stripStart(aRemaining, ' ');
 
                     // field name has to be followed by item name in brackets
-                    if (!aRemaining.isEmpty() && aRemaining[0] == '[')
+                    if (aRemaining.startsWith("["))
                     {
                         bHasFieldName = true;
                         // bUsed remains false - still need the item
