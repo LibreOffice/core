@@ -264,9 +264,9 @@
 		BE82BE4318228BD200A447B5 /* virdev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
 		BE82BE4418228BD200A447B5 /* wall.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cxx; path = ../../vcl/source/gdi/wall.cxx; sourceTree = "<group>"; };
 		BE82BE4718228CA600A447B5 /* impbmp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = impbmp.hxx; path = ../../vcl/inc/impbmp.hxx; sourceTree = "<group>"; };
-		BE82BE4B1822D10F00A447B5 /* ctfonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctfonts.cxx; path = ../../vcl/coretext/ctfonts.cxx; sourceTree = "<group>"; };
-		BE82BE4D1822D10F00A447B5 /* ctlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctlayout.cxx; path = ../../vcl/coretext/ctlayout.cxx; sourceTree = "<group>"; };
-		BE82BE4E1822D10F00A447B5 /* salgdi2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi2.cxx; path = ../../vcl/coretext/salgdi2.cxx; sourceTree = "<group>"; };
+		BE82BE4B1822D10F00A447B5 /* ctfonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctfonts.cxx; path = ../../vcl/quartz/ctfonts.cxx; sourceTree = "<group>"; };
+		BE82BE4D1822D10F00A447B5 /* ctlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctlayout.cxx; path = ../../vcl/quartz/ctlayout.cxx; sourceTree = "<group>"; };
+		BE82BE4E1822D10F00A447B5 /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -484,7 +484,7 @@
 		BE82BDB51822617500A447B5 /* vcl */ = {
 			isa = PBXGroup;
 			children = (
-				BE82BE4A1822D0E900A447B5 /* coretext */,
+				BE82BE4A1822D0E900A447B5 /* quartz */,
 				BE82BDF11822626C00A447B5 /* gdi */,
 				BE82BDF01822625C00A447B5 /* headless */,
 				BE82BE4618228C6A00A447B5 /* inc */,
@@ -679,14 +679,14 @@
 			name = inc;
 			sourceTree = "<group>";
 		};
-		BE82BE4A1822D0E900A447B5 /* coretext */ = {
+		BE82BE4A1822D0E900A447B5 /* quartz */ = {
 			isa = PBXGroup;
 			children = (
 				BE82BE4B1822D10F00A447B5 /* ctfonts.cxx */,
 				BE82BE4D1822D10F00A447B5 /* ctlayout.cxx */,
-				BE82BE4E1822D10F00A447B5 /* salgdi2.cxx */,
+				BE82BE4E1822D10F00A447B5 /* salgdi.cxx */,
 			);
-			name = coretext;
+			name = quartz;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
