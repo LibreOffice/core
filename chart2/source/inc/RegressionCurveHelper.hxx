@@ -201,6 +201,18 @@ public:
     static OUString getUINameForRegressionCurve( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >& xCurve );
 
+    static OUString getRegressionCurveName(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+
+    static OUString getRegressionCurveGenericName(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+
+    static OUString getRegressionCurveSpecificName(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+
     static ::std::vector< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve > > getAllRegressionCurvesNotMeanValueLine(
                 const ::com::sun::star::uno::Reference<

@@ -43,32 +43,32 @@ String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
 
 String STR_REGRESSION_LINEAR
 {
-    Text [ en-US ] = "Linear (%SERIESNAME)" ;
+    Text [ en-US ] = "Linear" ;
 };
 String STR_REGRESSION_LOG
 {
-    Text [ en-US ] = "Logarithmic (%SERIESNAME)" ;
+    Text [ en-US ] = "Logarithmic" ;
 };
 String STR_REGRESSION_EXP
 {
-    Text [ en-US ] = "Exponential (%SERIESNAME)" ;
+    Text [ en-US ] = "Exponential" ;
 };
 String STR_REGRESSION_POWER
 {
-    Text [ en-US ] = "Power (%SERIESNAME)" ;
+    Text [ en-US ] = "Power" ;
 };
 String STR_REGRESSION_POLYNOMIAL
 {
-    Text [ en-US ] = "Polynomial (%SERIESNAME)" ;
+    Text [ en-US ] = "Polynomial" ;
 };
 String STR_REGRESSION_MOVING_AVERAGE
 {
-    Text [ en-US ] = "Moving average (%SERIESNAME)" ;
+    Text [ en-US ] = "Moving average" ;
 };
 
 String STR_REGRESSION_MEAN
 {
-    Text [ en-US ] = "Mean (%SERIESNAME)" ;
+    Text [ en-US ] = "Mean" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

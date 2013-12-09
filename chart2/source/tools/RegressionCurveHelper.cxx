@@ -78,6 +78,7 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
     }
     return aServiceName;
 }
+
 } // anonymous namespace
 
 namespace chart
@@ -609,24 +610,30 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getFirstRegressTyp
 
 OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XRegressionCurve >& xRegressionCurve )
 {
+    OUString aResult = getRegressionCurveSpecificName(xRegressionCurve);
+    if (aResult.isEmpty())
+    {
+        aResult = getRegressionCurveGenericName(xRegressionCurve);
+        if (!aResult.isEmpty())
+        {
+            aResult += " (%SERIESNAME)";
+        }
+    }
+    return aResult;
+}
+
+OUString RegressionCurveHelper::getRegressionCurveGenericName(const Reference< XRegressionCurve >& xRegressionCurve)
+{
     OUString aResult;
+    if(!xRegressionCurve.is())
+        return aResult;
+
     Reference< lang::XServiceName > xServiceName( xRegressionCurve, uno::UNO_QUERY );
     if(!xServiceName.is())
         return aResult;
 
-    Reference<XPropertySet> xProperties( xRegressionCurve, uno::UNO_QUERY );
-    if( xProperties.is() )
-    {
-        OUString aValue = OUString();
-        if(xProperties->getPropertyValue("CurveName") >>= aValue)
-        {
-            if (!aValue.isEmpty())
-                return aValue;
-        }
-    }
+    OUString aServiceName(xServiceName->getServiceName());
 
-    // Did not get the curve name
-    OUString aServiceName( xServiceName->getServiceName());
     if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {
         aResult = SCH_RESSTR(STR_REGRESSION_MEAN);
@@ -655,7 +662,30 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     {
         aResult = SCH_RESSTR(STR_REGRESSION_MOVING_AVERAGE);
     }
+    return aResult;
+}
 
+OUString RegressionCurveHelper::getRegressionCurveSpecificName(const Reference< XRegressionCurve >& xRegressionCurve)
+{
+    OUString aResult;
+
+    if(!xRegressionCurve.is())
+        return aResult;
+
+    Reference<XPropertySet> xProperties( xRegressionCurve, uno::UNO_QUERY );
+    if(!xProperties.is())
+        return aResult;
+
+    xProperties->getPropertyValue("CurveName") >>= aResult;
+
+    return aResult;
+}
+
+OUString RegressionCurveHelper::getRegressionCurveName( const Reference< XRegressionCurve >& xRegressionCurve )
+{
+    OUString aResult = getRegressionCurveSpecificName(xRegressionCurve);
+    if (aResult.isEmpty())
+        return getRegressionCurveGenericName(xRegressionCurve);
     return aResult;
 }
 
