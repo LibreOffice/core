@@ -204,8 +204,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_DROP_REGION_LINK     (FN_VIEW + 38)  /**/
 #define FN_DROP_REGION_COPY     (FN_VIEW + 39)  /**/
 
-#define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller in the scrollbar */
-#define FN_SCROLL_NEXT_PREV     (FN_VIEW + 41)  /* processes MoveType */
+#define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller */
 
 #define FN_VIEW_HIDDEN_PARA     (FN_VIEW + 42)  /* View hidden paragraphs */
 #define FN_VIEW_SMOOTH_SCROLL   (FN_VIEW + 43)
@@ -222,6 +221,10 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_HSCROLL_METRIC        (FN_VIEW + 53) /* Metric horizontal scrollbar */
 #define FN_VSCROLL_METRIC        (FN_VIEW + 54) /* Metric vertical scrollbar */
 #define FN_VIEW_NOTES            (FN_VIEW + 55)
+
+#define FN_NAVIGATION_POPUP     (FN_VIEW + 56)  /* Navigation Popup */
+#define FN_SCROLL_PREV          (FN_VIEW + 57)  /* uno:ScrollToPrevious */
+#define FN_SCROLL_NEXT          (FN_VIEW + 58)  /* uno:ScrollToNext */
 
 /*--------------------------------------------------------------------
     Region: Insert

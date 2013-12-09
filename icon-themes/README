@@ -78,7 +78,7 @@ How to add a new icon for a new command:
     </node>
 
   Here, you need to define a property named "Properties", with its value set
-  to 1.  (TODO: Check if this step is still necessary.)
+  to 1 so that the icons show up.
 
 - Now, you need to add 2 new icon images under icon-themes/galaxy/cmd/, one
   for the large size and one for the smaller size.  The name of each image
