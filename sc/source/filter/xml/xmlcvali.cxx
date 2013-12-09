@@ -257,6 +257,12 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 }
                 else if (IsXMLToken(sValue, XML_SORTED_ASCENDING))
                 {
+                    // Read old wrong value, fdo#72548
+                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+                }
+                else if (IsXMLToken(sValue, XML_SORT_ASCENDING))
+                {
+                    // Read correct value, fdo#72548
                     nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
                 }
             }
