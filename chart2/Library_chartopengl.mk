@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,chartopengl,\
 $(eval $(call gb_Library_use_externals,chartopengl,\
 	boost_headers \
 	mdds_headers \
+	glm_headers \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,chartopengl))
@@ -42,6 +43,7 @@ $(eval $(call gb_Library_add_exception_objects,chartopengl,\
     chart2/source/glew/glew \
     chart2/source/view/main/OpenglShapeFactory \
     chart2/source/view/main/DummyXShape \
+    chart2/source/view/main/OpenGLRender \
 ))
 
 ifeq ($(strip $(OS)),WNT)

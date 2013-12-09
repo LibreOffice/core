@@ -55,18 +55,14 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-
 namespace chart
 {
 
 extern "C" {
+    SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
+                              {    return new opengl::OpenglShapeFactory(xFactory);}
+    }
 
-SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory()
-{
-    return new opengl::OpenglShapeFactory();
-}
-
-}
 
 using dummy::DummyXShape;
 using dummy::DummyXShapes;
@@ -117,7 +113,14 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
     if( !xRet.is()  )
     {
         //create the root shape
+        SAL_WARN("chart2.opengl", "getOrCreateChartRootShape");
+        dummy::DummyChart *pChart = new dummy::DummyChart();
+        m_pChart = (void *)pChart;
+        xRet = pChart;
+#if 0
         xRet = new dummy::DummyChart();
+        m_pChart = (void *)((dummy::DummyChart *)xRet);
+#endif
         xDrawPage->add(uno::Reference< drawing::XShape >(xRet, uno::UNO_QUERY_THROW));
     }
     return xRet;
@@ -340,8 +343,101 @@ uno::Reference< drawing::XShape >
                     , const drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties )
 {
+    SAL_WARN("chart2.opengl", "OpenglShapeFactory::createLine2D()-----test:");
     dummy::DummyLine2D* pLine = new dummy::DummyLine2D(rPoints, pLineProperties);
     xTarget->add(pLine);
+
+    dummy::DummyChart *pChart = (dummy::DummyChart *)m_pChart;
+    if (!m_pChart)
+    {
+        SAL_WARN("chart2.opengl", "createLine2D::DummyChart = NULL");
+    }
+
+
+//create shape
+    uno::Reference< drawing::XShape > xShape(
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.PolyLineShape" ), uno::UNO_QUERY );
+//    xTarget->add(xShape);
+
+    //set properties
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
+    if( xProp.is())
+    {
+        try
+        {
+            //Polygon
+            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON
+                , uno::makeAny( rPoints ) );
+
+            if(pLineProperties)
+            {
+                //Transparency
+                if(pLineProperties->Transparence.hasValue())
+                    xProp->setPropertyValue( UNO_NAME_LINETRANSPARENCE
+                        , pLineProperties->Transparence );
+
+                //LineStyle
+                if(pLineProperties->LineStyle.hasValue())
+                    xProp->setPropertyValue( UNO_NAME_LINESTYLE
+                        , pLineProperties->LineStyle );
+
+                //LineWidth
+                if(pLineProperties->Width.hasValue())
+                    xProp->setPropertyValue( UNO_NAME_LINEWIDTH
+                        , pLineProperties->Width );
+
+                //LineColor
+                if(pLineProperties->Color.hasValue())
+                    xProp->setPropertyValue( UNO_NAME_LINECOLOR
+                        , pLineProperties->Color );
+
+                //LineDashName
+                if(pLineProperties->DashName.hasValue())
+                    xProp->setPropertyValue( "LineDashName"
+                        , pLineProperties->DashName );
+            }
+        }
+        catch( const uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+
+    }
+    //set line color
+    uno::Any co =  xProp->getPropertyValue(UNO_NAME_LINECOLOR);
+    long *colorvalue = (long*)co.getValue();
+    SAL_WARN("chart2.opengl", "*colorvalue = " << (*colorvalue));
+    sal_uInt8 R = ((*colorvalue) & 0x00FF0000) >> 16;
+    sal_uInt8 G = ((*colorvalue) & 0x0000FF00) >> 8;
+    sal_uInt8 B = ((*colorvalue) & 0x000000FF);
+    pChart->m_GLRender.SetLine2DColor(R, G, B);
+
+    SAL_WARN("chart2.opengl", "*colorvalue = " << (*colorvalue) << ", R = " << (int)R << ", G = " << (int)G << ", B = " << (int)B);
+
+    //set line width
+    uno::Any cow =  xProp->getPropertyValue(UNO_NAME_LINEWIDTH);
+    long *width = (long*)cow.getValue();
+    pChart->m_GLRender.SetLine2DWidth((int)(*width));
+
+    SAL_WARN("chart2.opengl", "width = " << (*width));
+
+    com::sun::star::uno::Sequence<drawing::PointSequence> pointss =  rPoints;
+    int pointsscount = pointss.getLength();
+    for(int i = 0; i < pointsscount; i++)
+    {
+        com::sun::star::uno::Sequence<com::sun::star::awt::Point> points = pointss[i];
+        int pointscount = points.getLength();
+        for(int j = 0; j < pointscount; j++)
+        {
+            com::sun::star::awt::Point p = points[j];
+            pChart->m_GLRender.SetLine2DShapePoint((float)p.X, (float)p.Y, pointscount);
+ //           printf("point x:%ld,y:%ld\n",p.X,p.Y);
+        }
+
+    }
+    pChart->m_GLRender.RenderLine2FBO(GL_TRUE);
     return pLine;
 }
 
@@ -418,6 +514,7 @@ void OpenglShapeFactory::createSeries( const uno::Reference<
         drawing::XShapes> & ,
         const DataSeriesState& )
 {
+    SAL_WARN("chart2.opengl", "OpenglShapeFactory::createSeries()-----test:");
 }
 
 void OpenglShapeFactory::renderSeries( const uno::Reference<
@@ -426,6 +523,12 @@ void OpenglShapeFactory::renderSeries( const uno::Reference<
         const DataSeriesState&,
         double )
 {
+    SAL_WARN("chart2.opengl", "OpenglShapeFactory::renderSeries()-----test:");
+}
+
+OpenglShapeFactory::OpenglShapeFactory()
+{
+    m_pChart = NULL;
 }
 
 } //namespace dummy

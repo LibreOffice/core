@@ -6,6 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <GL/glew.h>
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <stdlib.h>
+#include <string.h>
 
 #include "DummyXShape.hxx"
 #include "CommonConverters.hxx"
@@ -15,9 +24,12 @@
 #include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+
 #include <algorithm>
 
 using namespace com::sun::star;
+
+using namespace std;
 
 namespace chart {
 
@@ -80,14 +92,14 @@ void DummyXShape::setPropertyValue( const OUString& rName, const uno::Any& rValu
             lang::IllegalArgumentException, lang::WrappedTargetException,
             uno::RuntimeException)
 {
-    SAL_DEBUG("DummyXShape::setProperty: " << rName << " " << "Any");
+    SAL_WARN("chart2", "DummyXShape::setProperty: " << rName << " " << "Any");
     maProperties[rName] = rValue;
 }
 
 uno::Any DummyXShape::getPropertyValue( const OUString& rName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    SAL_DEBUG("DummyXShape::getPropertyValue: " << rName);
+    SAL_WARN("chart2.opengl", "DummyXShape::getPropertyValue: " << rName);
     std::map<OUString, uno::Any>::iterator itr = maProperties.find(rName);
     if(itr != maProperties.end())
         return itr->second;
@@ -482,6 +494,7 @@ bool DummyChart::initWindow()
 {
     const SystemEnvData* sysData(mpWindow->GetSystemData());
 #if defined( WNT )
+
     GLWin.hWnd = sysData->hWnd;
 #elif defined( UNX )
     GLWin.dpy = reinterpret_cast<unx::Display*>(sysData->pDisplay);
@@ -640,6 +653,7 @@ bool DummyChart::initWindow()
 
             ++pAttributeTable;
         }
+
 #endif
 
 #if defined( WNT )
@@ -694,8 +708,10 @@ int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
 
 #endif
 
+
 bool DummyChart::initOpengl()
 {
+    SAL_WARN("chart2.opengl", "DummyChart::initOpengl----start");
     initWindow();
     mpWindow->setPosSizePixel(0,0,0,0);
     GLWin.Width = 0;
@@ -737,10 +753,15 @@ bool DummyChart::initOpengl()
         0,                              // Reserved
         0, 0, 0                         // Layer Masks Ignored
     };
+
     int WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
     SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
     GLWin.hRC  = wglCreateContext(GLWin.hDC);
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
+//[Mod] GaoWei
+    m_GLRender.InitOpenGL(GLWin.hWnd, GLWin.hDC, GLWin.hRC);
+//[Mod] GaoWei end
+
 #elif defined( UNX )
     if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) )
     {
@@ -791,16 +812,20 @@ bool DummyChart::initOpengl()
     }
 #endif
 
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glClearColor (0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
+
 #if defined( WNT )
     SwapBuffers(GLWin.hDC);
+    glFlush();
 #elif defined( UNX )
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
 #endif
-
     glEnable(GL_LIGHTING);
     GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
     GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
@@ -808,13 +833,16 @@ bool DummyChart::initOpengl()
     glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
-
+    SAL_WARN("chart2.opengl", "DummyChart::initOpengl----end");
+//    mpWindow->Show(1, 1);
     return true;
 }
+
 
 DummyChart::DummyChart():
     mpWindow(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL))
 {
+    SAL_WARN("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");
     createGLContext();
 }
@@ -830,12 +858,41 @@ void DummyChart::setPosition( const awt::Point& aPosition )
     DummyXShape::setPosition(aPosition);
 }
 
+DummyChart::~DummyChart()
+{
+    m_GLRender.Release();
+}
+
 void DummyChart::setSize( const awt::Size& aSize )
     throw( beans::PropertyVetoException, uno::RuntimeException )
 {
+#if 0
     DummyXShape::setSize(aSize);
     mpWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
     pWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
+#else
+
+//[Mod] GaoWei
+    SAL_WARN("chart2.opengl", "DummyChart::setSize()---aSize.Width = " << aSize.Width << ", aSize.Height = " << aSize.Height);
+//    DummyXShape::setSize(aSize);
+//    mpWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
+//    pWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
+    int width = aSize.Width / 10;
+    int height = aSize.Height / 10;
+    width = (width + 3) & ~3;
+    height = (height + 3) & ~3;
+    awt::Size tempSize;
+    tempSize.Width = width;
+    tempSize.Height = height;
+    mpWindow->SetSizePixel(Size(width, height));
+    pWindow->SetSizePixel(Size(width, height));
+    DummyXShape::setSize(tempSize);
+    m_GLRender.SetWidth(width);
+    m_GLRender.SetHeight(height);
+    SAL_WARN("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);
+#endif
+ //[mod] by gaowei end
+
 }
 
 }
