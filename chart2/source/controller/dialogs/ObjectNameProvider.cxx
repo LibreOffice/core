@@ -552,9 +552,11 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
             aRet = SCH_RESSTR( STR_OBJECT_CURVE_WITH_PARAMETERS );
             Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ));
             Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+
             if( xCurveCnt.is())
             {
-                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ));
+                sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
+                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xCurveCnt, nCurveIndex) );
                 if( xCurve.is())
                 {
                     try

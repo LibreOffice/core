@@ -104,6 +104,13 @@ public:
             const com::sun::star::uno::Reference<
                 com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
 
+    /** Returns the regression curve found at the index provided.
+     */
+    static com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve >
+        getRegressionCurveAtIndex(
+            const com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer,
+            sal_Int32 aIndex);
+
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
