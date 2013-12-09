@@ -86,7 +86,7 @@ public:
                                            + getBlue()*getBlue()); }
 };
 
-} // namespace vigra
+} // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_COLOR_HXX */
 
