@@ -62,6 +62,14 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
             bResult = true;
         }
     }
+    else if( rStrImpValue.equals( GetXMLToken(XML_0) ) )
+    {
+        if( !m_bCrossingValue )
+        {
+            rValue <<= ::com::sun::star::chart::ChartAxisPosition_ZERO;
+            bResult = true;
+        }
+    }
     else
     {
         if( !m_bCrossingValue )
