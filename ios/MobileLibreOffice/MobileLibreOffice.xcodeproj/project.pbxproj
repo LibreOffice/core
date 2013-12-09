@@ -53,6 +53,7 @@
 		68C6FC54180AD1B9005ACB02 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC53180AD1B9005ACB02 /* QuartzCore.framework */; };
 		68C6FC56180AD1FB005ACB02 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC55180AD1FB005ACB02 /* CoreText.framework */; };
 		68C6FC58180AD28C005ACB02 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC57180AD28C005ACB02 /* MessageUI.framework */; };
+		691D78BB180C12D300D52D5E /* types.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 691D78B0180C12D300D52D5E /* types.rdb */; };
 		88E9476B180DB9B600771808 /* NSObject+MLOFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 88E9476A180DB9B600771808 /* NSObject+MLOFileUtils.m */; };
 /* End PBXBuildFile section */
 
@@ -125,6 +126,7 @@
 		68C6FC53180AD1B9005ACB02 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		68C6FC55180AD1FB005ACB02 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		68C6FC57180AD28C005ACB02 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		691D78B0180C12D300D52D5E /* types.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = types.rdb; path = resource_link/types.rdb; sourceTree = SOURCE_ROOT; };
 		88E94769180DB9B600771808 /* NSObject+MLOFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MLOFileUtils.h"; sourceTree = "<group>"; };
 		88E9476A180DB9B600771808 /* NSObject+MLOFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MLOFileUtils.m"; sourceTree = "<group>"; };
 		BE82BDB8182261AD00A447B5 /* pagechg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pagechg.cxx; path = ../../sw/source/core/layout/pagechg.cxx; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 				681D78B6180C12D300D52D5E /* share */,
 				681D78AF180C12D300D52D5E /* fundamentalrc */,
 				681D78B0180C12D300D52D5E /* offapi.rdb */,
+				691D78B0180C12D300D52D5E /* types.rdb */,
 				681D78B1180C12D300D52D5E /* oovbaapi.rdb */,
 				681D78B3180C12D300D52D5E /* rc */,
 				681D78B5180C12D300D52D5E /* services.rdb */,
@@ -776,6 +779,7 @@
 				68B99ED3180BBEE900FFEA35 /* test1.odt in Resources */,
 				681D78BA180C12D300D52D5E /* fundamentalrc in Resources */,
 				681D78BB180C12D300D52D5E /* offapi.rdb in Resources */,
+				691D78BB180C12D300D52D5E /* types.rdb in Resources */,
 				681D78BC180C12D300D52D5E /* oovbaapi.rdb in Resources */,
 				681D78BD180C12D300D52D5E /* program in Resources */,
 				681D78BE180C12D300D52D5E /* rc in Resources */,

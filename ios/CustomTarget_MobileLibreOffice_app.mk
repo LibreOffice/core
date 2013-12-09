@@ -57,6 +57,7 @@ MobileLibreOffice_setup:
 	mkdir -p $(DEST_RESOURCE)/ure
 
 	# copy rdb files
+	cp $(INSTDIR)/ure/share/misc/types.rdb 	    $(DEST_RESOURCE)
 	cp $(INSTDIR)/program/types/offapi.rdb      $(DEST_RESOURCE)
 	cp $(INSTDIR)/program/types/oovbaapi.rdb  	$(DEST_RESOURCE)
 	cp $(INSTDIR)/program/services/services.rdb $(DEST_RESOURCE)
