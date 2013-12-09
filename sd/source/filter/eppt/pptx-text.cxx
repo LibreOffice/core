@@ -129,7 +129,9 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         {
             // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
             // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
-            if ( bLast && aString[ aString.getLength() - 1 ] == ')' && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
+            if (bLast && !aString.isEmpty()
+                && aString[aString.getLength() - 1] == ')'
+                && rFontCollection.GetScriptDirection(aString) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT)
             {
                 mnTextSize++;
                 bRTL_endingParen = sal_True;
