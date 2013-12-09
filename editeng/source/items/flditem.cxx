@@ -756,8 +756,8 @@ SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
 //----------------------------------------------------------------------------
 
 SvxExtTimeField::SvxExtTimeField()
+    : m_nFixTime( Time(Time::SYSTEM).GetTime() )
 {
-    nFixTime = Time( Time::SYSTEM ).GetTime();
     eType = SVXTIMETYPE_VAR;
     eFormat = SVXTIMEFORMAT_STANDARD;
 }
@@ -765,8 +765,8 @@ SvxExtTimeField::SvxExtTimeField()
 //----------------------------------------------------------------------------
 
 SvxExtTimeField::SvxExtTimeField( const Time& rTime, SvxTimeType eT, SvxTimeFormat eF )
+    : m_nFixTime( rTime.GetTime() )
 {
-    nFixTime = rTime.GetTime();
     eType = eT;
     eFormat = eF;
 }
@@ -786,7 +786,7 @@ int SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
         return sal_False;
 
     const SvxExtTimeField& rOtherFld = (const SvxExtTimeField&) rOther;
-    return ( ( nFixTime == rOtherFld.nFixTime ) &&
+    return ((m_nFixTime == rOtherFld.m_nFixTime) &&
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
 }
@@ -797,7 +797,7 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
 {
     sal_uInt16 nType, nFormat;
 
-    rStm >> nFixTime;
+    rStm.ReadInt64(m_nFixTime);
     rStm >> nType;
     rStm >> nFormat;
 
@@ -809,7 +809,7 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
 
 void SvxExtTimeField::Save( SvPersistStream & rStm )
 {
-    rStm << nFixTime;
+    rStm.WriteInt64(m_nFixTime);
     rStm << (sal_uInt16) eType;
     rStm << (sal_uInt16) eFormat;
 }
@@ -820,7 +820,7 @@ OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageT
 {
     Time aTime( Time::EMPTY );
     if ( eType == SVXTIMETYPE_FIX )
-        aTime.SetTime( nFixTime );
+        aTime.SetTime(m_nFixTime);
     else
         aTime = Time( Time::SYSTEM ); // current time
     return GetFormatted( aTime, eFormat, rFormatter, eLang );
