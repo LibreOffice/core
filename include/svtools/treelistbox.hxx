@@ -234,8 +234,8 @@ class SVT_DLLPUBLIC SvTreeListBox
     short           nAllItemAccRoleType;
     sal_uInt16      nFirstSelTab;
     sal_uInt16      nLastSelTab;
-    long mnCheckboxItemWidth;
-    bool mbContextBmpExpanded;
+    long            mnCheckboxItemWidth;
+    bool            mbContextBmpExpanded;
 
     SvTreeListEntry*    pHdlEntry;
     SvLBoxItem*     pHdlItem;
@@ -248,6 +248,10 @@ class SVT_DLLPUBLIC SvTreeListBox
 
     SvTreeListEntry*        pEdEntry;
     SvLBoxItem*         pEdItem;
+
+    /* width can sometimes be expensive to compute, e.g. for thousands of rows,
+       and we don't always seem to need it. */
+    bool            mbIgnoreWidth;
 
 protected:
     Link            aDoubleClickHdl;
@@ -394,6 +398,8 @@ public:
     bool IsEditingActive() const { return ((nImpFlags & SVLBOX_IN_EDT) != 0); }
     void EndEditing( bool bCancel = false );
     void ForbidEmptyText();
+    bool IsIgnoreWidth() const { return mbIgnoreWidth; }
+    void SetIgnoreWidth(bool b) { mbIgnoreWidth = b; }
 
     void            Clear();
 

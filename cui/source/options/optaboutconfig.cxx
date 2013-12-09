@@ -159,6 +159,9 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSe
     aTabs[4] += aTabs[3] + 40; //rBar.GetTextWidth(rBar.GetItemText(3));
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
+
+    // makes the opening of this dialog about 10x faster
+    m_pPrefBox->SetIgnoreWidth(true);
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue)

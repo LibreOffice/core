@@ -247,7 +247,12 @@ void SvLBoxString::InitViewData(
     DBG_CHKTHIS(SvLBoxString,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
+    if (pView->IsIgnoreWidth())
+    {
+        pViewData->maSize = Size(10, pView->GetTextHeight());
+    } else {
+        pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
+    }
 }
 
 // ***************************************************************

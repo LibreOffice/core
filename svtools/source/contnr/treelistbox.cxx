@@ -402,7 +402,8 @@ SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
     eSelMode(NO_SELECTION),
-    nMinWidthInChars(0)
+    nMinWidthInChars(0),
+    mbIgnoreWidth(false)
 {
     DBG_CTOR(SvTreeListBox,0);
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
@@ -432,7 +433,8 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
     eSelMode(NO_SELECTION),
-    nMinWidthInChars(0)
+    nMinWidthInChars(0),
+    mbIgnoreWidth(false)
 {
     DBG_CTOR(SvTreeListBox,0);
     pTargetEntry = 0;
