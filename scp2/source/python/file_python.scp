@@ -131,7 +131,7 @@ End
 // python_wrapper.exe
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
-    Name = EXENAME(pyuno/python);
+    Name = EXENAME(python);
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 End
