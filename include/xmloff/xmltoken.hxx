@@ -152,6 +152,9 @@ namespace xmloff { namespace token {
         // calc extensions
         XML_NP_CALC_EXT,
         XML_N_CALC_EXT,
+        // generic LO extensions
+        XML_NP_LO_EXT,
+        XML_N_LO_EXT,
 
         // units
         XML_UNIT_MM,
