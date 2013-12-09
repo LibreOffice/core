@@ -89,7 +89,7 @@ void Svx3DPreviewControl::Construct()
     mpModel->GetItemPool().FreezeIdRanges();
 
     // Page
-    mpFmPage = new FmFormPage( *mpModel, NULL );
+    mpFmPage = new FmFormPage( *mpModel );
     mpModel->InsertPage( mpFmPage, 0 );
 
     // 3D View
