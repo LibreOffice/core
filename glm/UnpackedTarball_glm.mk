@@ -13,8 +13,14 @@ $(eval $(call gb_UnpackedTarball_set_tarball,glm,$(GLM_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,glm,1))
 
+ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,glm,\
-	glm/Wshadow.patch \
+	glm/Wshadow-windows.patch \
 ))
+else
+$(eval $(call gb_UnpackedTarball_add_patches,glm,\
+	glm/Wshadow-unix.patch \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
