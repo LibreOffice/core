@@ -733,10 +733,8 @@ sub remove_all_items_with_special_flag
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
         if ( $styles =~ /\b$flag\b/ )
         {
-            $installer::logger::Lang->printf(
-                "Attention: Removing from collector '%s' because it has flag %s\n",
-                $oneitem->{'Name'},
-                $flag);
+            my $infoline = "Attention: Removing from collector: $oneitem->{'Name'} !\n";
+            $installer::logger::Lang->print($infoline);
             if ( $flag eq "BINARYTABLE_ONLY" ) { push(@installer::globals::binarytableonlyfiles, $oneitem); }
             next;
         }
@@ -2272,9 +2270,13 @@ sub get_platform_name
     {
         $platformname = "Win32Intel";
     }
-    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
+    elsif(( $installer::globals::compiler =~ /^unxmac.i/ ))
     {
         $platformname = "MacOSXIntel";
+    }
+    elsif ( $installer::globals::compiler =~ /^unxmaccx/ )
+    {
+        $platformname = "MacOSXX86-64";
     }
     elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
     {

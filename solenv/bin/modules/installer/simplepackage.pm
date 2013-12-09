@@ -804,7 +804,7 @@ sub create_simple_package
     installer::logger::include_header_into_logfile("Registering extensions:");
     register_extensions($subfolderdir, $languagestringref, $preregdir);
 
-    if ( $installer::globals::compiler =~ /^unxmacx/ )
+    if ( $installer::globals::compiler =~ /^unxmac/ )
     {
         installer::worker::put_scpactions_into_installset("$installdir/$packagename");
     }

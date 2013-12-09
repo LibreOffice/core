@@ -44,6 +44,9 @@ my @platforms = (
         "unxsoli4",
         "wntmsci12",
         "unxmacxi",
+        "unxmacxp",
+        "unxmacci",
+        "unxmaccx",
         "unxubit8",
         "unxaixp",
         "unxbsda",
@@ -70,7 +73,6 @@ my @platforms = (
         "unxlngs390x",
         "unxlngs",
         "unxlnxi",
-        "unxmacxp",
         "unxsogi",
         "unxsogs"
     );

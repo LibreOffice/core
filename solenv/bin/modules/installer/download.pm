@@ -594,15 +594,15 @@ sub get_download_architecture
 {
     my $arch = "";
 
-    if ( $installer::globals::compiler =~ /unxlngi/ )
+    if(( $installer::globals::compiler =~ /^unxlngi/ )
+    || ( $installer::globals::compiler =~ /^unxmac.i/ )
+    || ( $installer::globals::issolarisx86build )
+    || ( $installer::globals::iswindowsbuild ))
     {
         $arch = "x86";
     }
-    elsif ( $installer::globals::compiler =~ /unxlngppc/ )
-    {
-        $arch = "PPC";
-    }
-    elsif ( $installer::globals::compiler =~ /unxlngx/ )
+    elsif(( $installer::globals::compiler =~ /^unxlngx/ )
+    ||    ( $installer::globals::compiler =~ /^unxmaccx/ ))
     {
         $arch = "x86-64";
     }
@@ -610,19 +610,8 @@ sub get_download_architecture
     {
         $arch = "Sparc";
     }
-    elsif ( $installer::globals::issolarisx86build )
-    {
-        $arch = "x86";
-    }
-    elsif ( $installer::globals::iswindowsbuild )
-    {
-        $arch = "x86";
-    }
-    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
-    {
-        $arch = "x86";
-    }
-    elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
+    elsif(( $installer::globals::compiler =~ /^unxmacxp/ )
+    ||    ( $installer::globals::compiler =~ /^unxlngppc/ ))
     {
         $arch = "PPC";
     }
@@ -856,8 +845,9 @@ sub resolve_variables_in_downloadname
     elsif ( $installer::globals::issolarissparcbuild ) { $os = "solsparc"; }
     elsif ( $installer::globals::issolarisx86build ) { $os = "solia"; }
     elsif ( $installer::globals::islinuxbuild ) { $os = "linux"; }
-    elsif ( $installer::globals::compiler =~ /unxmacxi/ ) { $os = "macosxi"; }
-    elsif ( $installer::globals::compiler =~ /unxmacxp/ ) { $os = "macosxp"; }
+    elsif ( $installer::globals::compiler =~ /unxmac.i/ ) { $os = "macosi"; }
+    elsif ( $installer::globals::compiler =~ /unxmac.x/ ) { $os = "macosx"; }
+    elsif ( $installer::globals::compiler =~ /unxmacxp/ ) { $os = "macosp"; }
     else { $os = ""; }
     $downloadname =~ s/\{os\}/$os/;
 
