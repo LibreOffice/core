@@ -253,7 +253,7 @@ sub GetUnpackedPath ($$$$$)
         $package_format,
         installer::patch::Version::ArrayToDirectoryName(
             installer::patch::Version::StringToNumberArray($version)),
-        $language);
+        installer::languages::get_normalized_language($language));
 }
 
 

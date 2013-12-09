@@ -462,4 +462,29 @@ sub get_key_language ($)
     }
 }
 
+
+
+
+=head2 get_normalized_language ($language)
+
+    Transform "..._<language>" into "<language>".
+    The ... part, if it exists, is typically en-US.
+
+    If $language does not contain a '_' then $language is returned unmodified.
+
+=cut
+sub get_normalized_language ($)
+{
+    my ($language) = @_;
+
+    if ($language =~ /^.*?_(.*)$/)
+    {
+        return $1;
+    }
+    else
+    {
+        return $language;
+    }
+}
+
 1;

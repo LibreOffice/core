@@ -51,7 +51,7 @@ sub FindAndCreate($$$$$)
     $path = installer::patch::InstallationSet::GetUnpackedExePath(
         $version,
         $is_current_version,
-        $language,
+        installer::languages::get_normalized_language($language),
         "msi",
         $product_name);
 
@@ -75,6 +75,7 @@ sub FindAndCreate($$$$$)
     If construction fails then IsValid() will return false.
 
 =cut
+
 sub new ($$$$$$)
 {
     my ($class, $filename, $version, $is_current_version, $language, $product_name) = @_;
@@ -122,6 +123,7 @@ sub IsValid ($)
     Write all modified tables back into the databse.
 
 =cut
+
 sub Commit ($)
 {
     my $self = shift;
@@ -159,6 +161,7 @@ sub Commit ($)
     call for the same table is very cheap.
 
 =cut
+
 sub GetTable ($$)
 {
     my ($self, $table_name) = @_;
@@ -197,6 +200,7 @@ sub GetTable ($$)
     Write the given table back to the databse.
 
 =cut
+
 sub PutTable ($$)
 {
     my ($self, $table) = @_;
@@ -243,6 +247,7 @@ sub PutTable ($$)
     to their last modification times (mtime).
 
 =cut
+
 sub EnsureAYoungerThanB ($$)
 {
     my ($filename_a, $filename_b) = @_;
@@ -276,6 +281,7 @@ sub EnsureAYoungerThanB ($$)
     Returns long and short name (in this order) as array.
 
 =cut
+
 sub SplitLongShortName ($)
 {
     my ($name) = @_;
@@ -300,6 +306,7 @@ sub SplitLongShortName ($)
     table.
 
 =cut
+
 sub SplitTargetSourceLongShortName ($)
 {
     my ($name) = @_;
@@ -322,6 +329,7 @@ sub SplitTargetSourceLongShortName ($)
     to hashes that contains short and long source and target names.
 
 =cut
+
 sub GetDirectoryMap ($)
 {
     my ($self) = @_;
@@ -423,6 +431,7 @@ sub GetDirectoryMap ($)
     calls but the first are cheap.
 
 =cut
+
 sub GetFileMap ($)
 {
     my ($self) = @_;
