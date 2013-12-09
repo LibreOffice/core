@@ -170,7 +170,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
-        m_isFirstRun(false),
+        m_bIsFirstRun(false),
         m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc),
         m_bInTableStyleRunProps(false),

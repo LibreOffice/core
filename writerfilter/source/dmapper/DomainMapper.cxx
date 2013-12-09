@@ -3693,7 +3693,7 @@ void DomainMapper::lcl_startParagraphGroup()
         else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
             m_pImpl->GetTopContext()->Insert( PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE) );
     }
-    m_pImpl->SetIsFirstRun();
+    m_pImpl->SetIsFirstRun(true);
     m_pImpl->clearDeferredBreaks();
 }
 
@@ -3977,7 +3977,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
 
         }
-        m_pImpl->UpdateIsFirstRun();
+        m_pImpl->SetIsFirstRun(false);
     }
     catch( const uno::RuntimeException& )
     {
