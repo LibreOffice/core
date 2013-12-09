@@ -82,8 +82,9 @@ XML_NAMESPACE_EXT( TABLE,       38U )
 XML_NAMESPACE_EXT( CHART,       39U )
 XML_NAMESPACE_EXT( DRAW,        40U )
 XML_NAMESPACE_EXT( CALC,        41U )
+XML_NAMESPACE_EXT( LO,          42U )
 
-#define _XML_OLD_NAMESPACE_BASE 42U
+#define _XML_OLD_NAMESPACE_BASE 43U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )

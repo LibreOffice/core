@@ -157,6 +157,8 @@ namespace xmloff { namespace token {
         // extension namespace for calc extensions
         TOKEN( "calcext",                         XML_NP_CALC_EXT ),
         TOKEN( "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0", XML_N_CALC_EXT ),
+        TOKEN( "loext",                           XML_NP_LO_EXT ),
+        TOKEN( "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0", XML_N_LO_EXT ),
 
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),

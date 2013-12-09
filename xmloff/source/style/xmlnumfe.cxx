@@ -532,7 +532,7 @@ void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
 void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
 {
     FinishTextElement_Impl();
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FILL_CHARACTER,
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_LO_EXT, XML_FILL_CHARACTER,
                                   sal_True, sal_False );
     rExport.Characters( OUString::valueOf( nChar ) );
 }
