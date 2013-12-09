@@ -1005,19 +1005,34 @@ void SwView::Execute(SfxRequest &rReq)
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
         }
         break;
-        case FN_SCROLL_NEXT_PREV:
-            if(pArgs && pArgs->GetItemState(FN_SCROLL_NEXT_PREV, sal_False, &pItem))
+        case FN_SCROLL_PREV:
+        case FN_SCROLL_NEXT:
+        {
+            // call the handlers of PageUp/DownButtons, only
+            bool *pbNext = new bool(true); // FN_SCROLL_NEXT
+            if (nSlot == FN_SCROLL_PREV)
+                *pbNext = false;
+            // #i75416# move the execution of the search to an asynchronously called static link
+            Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
+        }
+        break;
+        case FN_NAVIGATION_POPUP:
+        {
+            SfxViewFrame* pVFrame = GetViewFrame();
+            SfxChildWindow* pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
+            if (!pCh)
             {
-                // call the handlers of PageUp/DownButtons, only
-                bool* pbNext = new bool ( ((const SfxBoolItem*)pItem)->GetValue() );
-                // #i75416# move the execution of the search to an asynchronously called static link
-                Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
+                pVFrame->ToggleChildWindow( SID_NAVIGATOR );
+                pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
             }
-            break;
+            ((SwNavigationPI*) pCh->GetContextWindow(SW_MOD()))->CreateNavigationTool(
+                            GetVisArea(), true, &pVFrame->GetWindow());
+        }
+        break;
         case SID_JUMPTOMARK:
             if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_JUMPTOMARK, sal_False, &pItem))
                 JumpToSwMark( (( const SfxStringItem*)pItem)->GetValue() );
-            break;
+        break;
         case SID_GALLERY :
             GetViewFrame()->ChildWindowExecute(rReq);
         break;
