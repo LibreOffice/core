@@ -90,9 +90,9 @@ SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     sal_uInt32 nDate = 0;
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     rStream >> nDate;
-    rStream >> nTime;
+    rStream.ReadInt64(nTime);
     DateTime aDT(nDate, nTime);
     return new SfxDateTimeItem( Which(), aDT );
 }
@@ -103,7 +103,7 @@ SvStream& SfxDateTimeItem::Store( SvStream& rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     rStream << aDateTime.GetDate();
-    rStream << static_cast<sal_Int32>(aDateTime.GetTime());
+    rStream.WriteInt64(aDateTime.GetTime());
     return rStream;
 }
 
