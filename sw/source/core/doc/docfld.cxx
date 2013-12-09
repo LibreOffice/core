@@ -1986,7 +1986,8 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 {
     sal_Bool bIsModified = IsModified();
 
-    sal_uLong nDate, nTime;
+    sal_Int32 nDate;
+    sal_Int64 nTime;
     if( pNewDateTime )
     {
         nDate = pNewDateTime->GetDate();
