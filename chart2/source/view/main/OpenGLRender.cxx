@@ -825,9 +825,9 @@ void OpenGLRender::Release()
 #if defined( WNT )
     wglMakeCurrent(NULL, NULL);
     if (!m_iExternRC)
-        wglDeleteContext(m_hRC);
+        wglDeleteContext(glWin.m_hRC);
     if (!m_iExternDC)
-        ReleaseDC(m_hWnd, m_hDC);
+        ReleaseDC(mglWin._hWnd, mglWin._hDC);
 #elif defined( UNX )
 
     glXMakeCurrent(glWin.dpy, None, NULL);

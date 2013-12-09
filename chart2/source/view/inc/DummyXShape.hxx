@@ -92,11 +92,18 @@
         #include <GL/glxext.h>
     }
 #endif
+//[mod] by gaowei
+
+#include "OpenGLRender.hxx"
+
+//[mod] by gaowei end
+
 
 class SystemWindow;
 class SystemChildWindow;
 
 using namespace com::sun::star;
+
 
 namespace chart {
 
@@ -394,7 +401,8 @@ private:
 class DummyChart : public DummyXShapes
 {
 public:
-    DummyChart();
+    DummyChart(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage);
+    ~DummyChart();
     virtual DummyChart* getRootShape();
 
     virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw(::com::sun::star::uno::RuntimeException);
@@ -402,42 +410,16 @@ public:
 
 private:
 
-    /// Holds the information of our new child window
-    struct GLWindow
-    {
-#if defined( _WIN32 )
-        HWND                    hWnd;
-        HDC                     hDC;
-        HGLRC                   hRC;
-#elif defined( MACOSX )
-#elif defined( UNX )
-        unx::Display*           dpy;
-        int                     screen;
-        unx::Window             win;
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-        unx::GLXFBConfig        fbc;
-#endif
-        unx::XVisualInfo*       vi;
-        unx::GLXContext         ctx;
-
-        bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
-        const char*             GLXExtensions;
-#endif
-        unsigned int            bpp;
-        unsigned int            Width;
-        unsigned int            Height;
-        const GLubyte*          GLExtensions;
-
-        bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
-    } GLWin;    /// Holds the information of our new child window
+    GLWindow GLWin;    /// Holds the information of our new child window
 
     void createGLContext();
 
     bool initWindow();
     bool initOpengl();
-
     boost::scoped_ptr<Window> mpWindow;
     boost::scoped_ptr<SystemChildWindow> pWindow;
+public:
+    OpenGLRender m_GLRender;
 };
 
 class DummyGroup2D : public DummyXShapes

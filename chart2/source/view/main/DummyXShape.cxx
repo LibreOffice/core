@@ -759,7 +759,7 @@ bool DummyChart::initOpengl()
     GLWin.hRC  = wglCreateContext(GLWin.hDC);
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 //[Mod] GaoWei
-    m_GLRender.InitOpenGL(GLWin.hWnd, GLWin.hDC, GLWin.hRC);
+    m_GLRender.InitOpenGL(GLWin);
 //[Mod] GaoWei end
 
 #elif defined( UNX )
