@@ -257,7 +257,7 @@ enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT = 0,   // Set as in App
 class EDITENG_DLLPUBLIC SvxExtTimeField : public SvxFieldData
 {
 private:
-    sal_uInt32              nFixTime;
+    sal_Int64               m_nFixTime;
     SvxTimeType             eType;
     SvxTimeFormat           eFormat;
 
@@ -268,8 +268,8 @@ public:
                                 SvxTimeType eType = SVXTIMETYPE_VAR,
                                 SvxTimeFormat eFormat = SVXTIMEFORMAT_STANDARD );
 
-    sal_uInt32              GetFixTime() const { return nFixTime; }
-    void                    SetFixTime( const Time& rTime ) { nFixTime = rTime.GetTime(); }
+    sal_Int64               GetFixTime() const { return m_nFixTime; }
+    void SetFixTime( const Time& rTime ) { m_nFixTime = rTime.GetTime(); }
 
     SvxTimeType             GetType() const { return eType; }
     void                    SetType( SvxTimeType eTp ) { eType = eTp; }
