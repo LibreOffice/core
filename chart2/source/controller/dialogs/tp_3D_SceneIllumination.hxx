@@ -101,7 +101,7 @@ private:
 
     LightSourceInfo* m_pLightSourceInfoList;
 
-    ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet > m_xSceneProperties;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
 
     TimerTriggeredControllerLock    m_aTimerTriggeredControllerLock;
 
