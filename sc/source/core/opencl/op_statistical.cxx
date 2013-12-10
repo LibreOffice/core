@@ -4600,70 +4600,56 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double x,mue,sigma,c;\n";
     ss << "    int gid0=get_global_id(0);\n";
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur2);
-    FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur3);
-    ss << "    int buffer_x_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
-    ss << "    int buffer_mue_len = ";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n";
-    ss << "    int buffer_sigma_len = ";
-    ss << tmpCurDVR2->GetArrayLength();
-    ss << ";\n";
-    ss << "    int buffer_c_len = ";
-    ss << tmpCurDVR3->GetArrayLength();
-    ss << ";\n";
+    ss << "    double tmp0,tmp1,tmp2,tmp3;\n";
+    size_t i = vSubArguments.size();
+    ss <<"\n    ";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
-#ifdef ISNAN
-    ss <<"if((gid0)>=buffer_c_len || isNan(";
-    ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        c = 0;\nelse \n";
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
 #endif
-    ss << "    c = "<<vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-#ifdef ISNAN
-    ss <<"if((gid0)>=buffer_sigma_len || isNan(";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        sigma = 0;\nelse \n";
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        tmp"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        tmp"<<i<<"=\n";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n}\n";
+        }
+        else
+        {
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
 #endif
-    ss <<"        sigma = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<";\n";
-#ifdef ISNAN
-    ss <<"    if((gid0)>=buffer_mue_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        mue = 0;\nelse \n";
-#endif
-    ss <<"        mue = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<";\n";
-#ifdef ISNAN
-    ss<<"    if((gid0)>=buffer_x_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<"))\n";
-    ss<<"    x = 0;\nelse \n";
-#endif
-    ss <<"   x = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    }
+    ss << "x = tmp0;\n";
+    ss << "mue = tmp1;\n";
+    ss << "sigma = tmp2;\n";
+    ss << "c = tmp3;\n";
     ss << "double mid,tmp;\n";
     ss << "mid = (x - mue)/sigma;\n";
     ss << "if(c)\n";
     ss << "    tmp = 0.5 *erfc(-mid * 0.7071067811865475);\n";
     ss << "else \n";
-    ss <<"     tmp=(0.39894228040143268*exp(-(mid * mid)/2.0))/sigma;\n";
+    ss <<"     tmp=(0.39894228040143268*exp(-pow(mid,2)/2.0))/sigma;\n";
     ss << "return tmp;\n";
     ss << "}\n";
 }
