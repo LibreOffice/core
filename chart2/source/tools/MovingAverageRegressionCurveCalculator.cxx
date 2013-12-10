@@ -19,6 +19,8 @@
 
 #include "MovingAverageRegressionCurveCalculator.hxx"
 #include "RegressionCalculationHelper.hxx"
+#include "ResId.hxx"
+#include "Strings.hrc"
 #include "macros.hxx"
 
 #include <rtl/math.hxx>
@@ -102,6 +104,8 @@ OUString MovingAverageRegressionCurveCalculator::ImplGetRepresentation(
     ::sal_Int32 /*nNumberFormatKey*/ ) const
 {
     OUStringBuffer aBuf( "f(x) = N/A");
+
+    aBuf = SCH_RESSTR( STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS );
 
     return aBuf.makeStringAndClear();
 }
