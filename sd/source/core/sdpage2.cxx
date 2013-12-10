@@ -45,6 +45,7 @@
 
 #include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
@@ -52,6 +53,16 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::office;
 
 extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const Reference< XInterface >& xSource );
+
+static sal_uInt64 lcl_getHash( OString aString )
+{
+    sal_Int32  len = aString.getLength();
+    sal_uInt64 nHash = 0;
+
+    for( sal_Int32 i = 0; i < len; i++ )
+        nHash = (nHash << 5) - nHash + aString[i];
+    return nHash;
+}
 
 /*************************************************************************
 |*
@@ -581,6 +592,32 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
     mfTransitionDuration = fTranstionDuration;
     ActionChanged();
 }
+
+OString SdPage::stringify() const
+{
+    OStringBuffer aString(100);
+    aString.append(mePageKind).append(meAutoLayout).append(mbSelected).append(mePresChange).append(mfTime).append(mbSoundOn).append(mbExcluded).
+             append(OUStringToOString( maLayoutName, RTL_TEXTENCODING_UTF8 )).
+             append(OUStringToOString(maSoundFile, RTL_TEXTENCODING_UTF8 )).
+             append(mbLoopSound).append(mbStopSound).
+             /*append(OUStringToOString(maCreatedPageName, RTL_TEXTENCODING_UTF8)).
+             append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8)).*/
+             append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
+             append(mbScaleObjects).append(mbBackgroundFullSize).append(meCharSet).append(mnPaperBin).
+             append(meOrientation).append(mnTransitionType).append(mnTransitionSubtype).append(mbTransitionDirection).
+             append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
+
+    sal_Int32 n = GetObjCount();
+    for(sal_Int32 i = 0; i < n; i++)
+        aString.append(GetObj(i)->stringify());
+    return aString.makeStringAndClear();
+}
+
+sal_uInt64 SdPage::getHash() const
+{
+    return lcl_getHash( stringify() );
+}
+
 
 namespace sd {
 extern void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage );

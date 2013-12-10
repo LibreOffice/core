@@ -124,6 +124,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1804,6 +1805,44 @@ void SdrObject::NbcSetPoint(const Point& /*rPnt*/, sal_uInt32 /*i*/)
 bool SdrObject::HasTextEdit() const
 {
     return false;
+}
+
+OString SdrObject::stringify() const
+{
+    OStringBuffer aString(100);
+    aString.append(aAnchor.X()).
+            append(aAnchor.Y()).
+            append(aGridOffset.X()).
+            append(aGridOffset.Y()).
+            append((sal_Int32)nOrdNum).
+            append((sal_Int32)mnNavigationPosition).
+            append(mbSupportTextIndentingOnLineWidthChange).
+            append(mbLineIsOutsideGeometry).
+            append(bMarkProt).
+            append(bIs3DObj).
+            append(bIsEdge).
+            append(bClosedObj).
+            append(bNotVisibleAsMaster).
+            append(bEmptyPresObj).
+            append(mbVisible).
+            append(bNoPrint).
+            append(bSizProt).
+            append(bMovProt).
+            append(bGrouped).
+            append(bInserted).
+            append(bNetLock).
+            append(bVirtObj).
+            //append(maBLIPSizeRectangle).
+            append(mnLayerID);
+
+    SvMemoryStream aStream;
+    OString aLine;
+    SfxItemSet aSet(GetMergedItemSet());
+    aSet.InvalidateDefaultItems();
+    aSet.Store(aStream, true);
+    aString.append((const char *)aStream.GetBuffer(), aStream.GetEndOfData());
+
+    return aString.makeStringAndClear();
 }
 
 sal_Bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)

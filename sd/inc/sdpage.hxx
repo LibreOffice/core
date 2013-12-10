@@ -378,6 +378,9 @@ public:
     void removeAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     bool hasAnnotations() const { return !maAnnotations.empty(); }
+    sal_uInt64 getHash() const;
+    virtual OString stringify() const;
+
 
 private:
     bool mbIsPrecious;
