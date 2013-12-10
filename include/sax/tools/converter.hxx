@@ -166,10 +166,20 @@ public:
                                  sal_Int16 const* pTimeZoneOffset,
                                    bool bAddTimeIf0AM = false );
 
+    /** convert util::DateTime to ISO "time" or "dateTime" string */
+    static void convertTimeOrDateTime(OUStringBuffer& rBuffer,
+                            const com::sun::star::util::DateTime& rDateTime,
+                            sal_Int16 const* pTimeZoneOffset);
+
     /** convert ISO "date" or "dateTime" string to util::DateTime */
     static bool parseDateTime( com::sun::star::util::DateTime& rDateTime,
                                  boost::optional<sal_Int16> * pTimeZoneOffset,
                                  const OUString& rString );
+
+    /** convert ISO "time" or "dateTime" string to util::DateTime */
+    static bool parseTimeOrDateTime(com::sun::star::util::DateTime& rDateTime,
+                                 boost::optional<sal_Int16> * pTimeZoneOffset,
+                                 const OUString& rString);
 
     /** convert ISO "date" or "dateTime" string to util::DateTime or
         util::Date */

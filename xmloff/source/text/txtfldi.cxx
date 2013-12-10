@@ -1095,6 +1095,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_TIME_VALUE:
         {
+            // FIXME double appears unused?
             double fTmp;
             if (GetImport().GetMM100UnitConverter().
                 convertDateTime(fTmp, sAttrValue))
@@ -1103,7 +1104,8 @@ void XMLTimeFieldImportContext::ProcessAttribute(
                 bTimeOK = sal_True;
             }
 
-            if (::sax::Converter::parseDateTime(aDateTimeValue, 0, sAttrValue))
+            if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, 0,
+                        sAttrValue))
             {
                 bTimeOK = sal_True;
             }
