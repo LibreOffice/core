@@ -224,9 +224,9 @@ std::string GetFDistDecl =
 std::string GetFDist =
 "double GetFDist(double x, double fF1, double fF2)\n"
 "{\n"
-"    double arg = fF2/(fF2+fF1*x);\n"
-"    double alpha = fF2/2.0;\n"
-"    double beta = fF1/2.0;\n"
+"    double arg = fF2*pow((fF2+fF1*x),-1.0);\n"
+"    double alpha = fF2*pow(2.0,-1.0);\n"
+"    double beta = fF1*pow(2.0,-1.0);\n"
 "    return (GetBetaDist(arg, alpha, beta));\n"
 "}\n";
 std::string GetGammaInvValueDecl = "double"
