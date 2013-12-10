@@ -1855,7 +1855,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     ErrCode nErr = ERRCODE_NONE;
 
     // should a macro function be executed ( no direct API call)?
-    if ( -1 != nHashPos && nHashPos < nArgsPos )
+    if ( -1 != nHashPos && ( -1 == nArgsPos || nHashPos < nArgsPos ) )
     {
         // find BasicManager
         SfxObjectShell* pDoc = NULL;
