@@ -2809,6 +2809,25 @@ struct FindInvalidRange : public std::unary_function<ScRange, bool>
     }
 };
 
+void setGroupItemsToCache( ScDPCache& rCache, const std::set<ScDPObject*>& rRefs )
+{
+    // Go through all referencing pivot tables, and re-fill the group dimension info.
+    std::set<ScDPObject*>::const_iterator itRef = rRefs.begin(), itRefEnd = rRefs.end();
+    for (; itRef != itRefEnd; ++itRef)
+    {
+        const ScDPObject* pObj = *itRef;
+        const ScDPSaveData* pSave = pObj->GetSaveData();
+        if (!pSave)
+            continue;
+
+        const ScDPDimensionSaveData* pGroupDims = pSave->GetExistingDimensionData();
+        if (!pGroupDims)
+            continue;
+
+        pGroupDims->WriteToCache(rCache);
+    }
+}
+
 }
 
 bool ScDPCollection::SheetCaches::hasCache(const ScRange& rRange) const
@@ -2926,8 +2945,7 @@ void ScDPCollection::SheetCaches::updateReference(
     }
 }
 
-void ScDPCollection::SheetCaches::updateCache(
-    const ScRange& rRange, const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs)
+void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it == maRanges.end())
@@ -2947,12 +2965,15 @@ void ScDPCollection::SheetCaches::updateCache(
     }
 
     ScDPCache& rCache = *itCache->second;
+
+    // Update the cache with new cell values. This will clear all group dimension info.
     rCache.InitFromDoc(mpDoc, rRange);
-    if (pDimData)
-        pDimData->WriteToCache(rCache);
 
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
+
+    // Make sure to re-populate the group dimension info.
+    setGroupItemsToCache(rCache, rRefs);
 }
 
 bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
@@ -3010,8 +3031,7 @@ size_t ScDPCollection::NameCaches::size() const
 }
 
 void ScDPCollection::NameCaches::updateCache(
-    const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData,
-    std::set<ScDPObject*>& rRefs)
+    const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs)
 {
     CachesType::iterator itr = maCaches.find(rName);
     if (itr == maCaches.end())
@@ -3021,12 +3041,14 @@ void ScDPCollection::NameCaches::updateCache(
     }
 
     ScDPCache& rCache = *itr->second;
+    // Update the cache with new cell values. This will clear all group dimension info.
     rCache.InitFromDoc(mpDoc, rRange);
-    if (pDimData)
-        pDimData->WriteToCache(rCache);
 
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
+
+    // Make sure to re-populate the group dimension info.
+    setGroupItemsToCache(rCache, rRefs);
 }
 
 bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
@@ -3171,7 +3193,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
 
 void ScDPCollection::DBCaches::updateCache(
     sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
-    const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs)
+    std::set<ScDPObject*>& rRefs)
 {
     DBType aType(nSdbType, rDBName, rCommand);
     CachesType::iterator it = maCaches.find(aType);
@@ -3204,12 +3226,12 @@ void ScDPCollection::DBCaches::updateCache(
         return;
     }
 
-    if (pDimData)
-        pDimData->WriteToCache(rCache);
-
     comphelper::disposeComponent(xRowSet);
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     aRefs.swap(rRefs);
+
+    // Make sure to re-populate the group dimension info.
+    setGroupItemsToCache(rCache, rRefs);
 }
 
 bool ScDPCollection::DBCaches::remove(const ScDPCache* p)
@@ -3271,11 +3293,6 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
     if (!pDPObj)
         return STR_ERR_DATAPILOTSOURCE;
 
-    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-    const ScDPDimensionSaveData* pDimData = NULL;
-    if (pSaveData)
-        pDimData = pSaveData->GetExistingDimensionData();
-
     if (pDPObj->IsSheetData())
     {
         // data source is internal sheet.
@@ -3292,7 +3309,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
             // cache by named range
             ScDPCollection::NameCaches& rCaches = GetNameCaches();
             if (rCaches.hasCache(pDesc->GetRangeName()))
-                rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), pDimData, rRefs);
+                rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), rRefs);
             else
             {
                 // Not cached yet.  Collect all tables that use this named
@@ -3305,7 +3322,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
             // cache by cell range
             ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
             if (rCaches.hasCache(pDesc->GetSourceRange()))
-                rCaches.updateCache(pDesc->GetSourceRange(), pDimData, rRefs);
+                rCaches.updateCache(pDesc->GetSourceRange(), rRefs);
             else
             {
                 // Not cached yet.  Collect all tables that use this range as
@@ -3324,7 +3341,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
         ScDPCollection::DBCaches& rCaches = GetDBCaches();
         if (rCaches.hasCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject))
             rCaches.updateCache(
-                pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, pDimData, rRefs);
+                pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
         else
         {
             // Not cached yet.  Collect all tables that use this range as
