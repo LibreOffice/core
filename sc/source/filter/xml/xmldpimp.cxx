@@ -412,6 +412,11 @@ void ScXMLDataPilotTableContext::SetButtons()
         pDPObject->RefreshAfterLoad();
 }
 
+void ScXMLDataPilotTableContext::SetSelectedPage( const OUString& rDimName, const OUString& rSelected )
+{
+    maSelectedPages.insert(SelectedPagesType::value_type(rDimName, rSelected));
+}
+
 void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 {
     if (pDPSave)
@@ -548,8 +553,34 @@ void ScXMLDataPilotTableContext::EndElement()
     if ( pDPCollection->GetByName(pDPObject->GetName()) )
         pDPObject->SetName( OUString() );     // ignore the invalid name, create a new name in AfterXMLLoading
 
+    ProcessSelectedPages();
+
     pDPCollection->InsertNewTable(pDPObject);
     SetButtons();
+}
+
+void ScXMLDataPilotTableContext::ProcessSelectedPages()
+{
+    // Set selected pages after building all dimension members.
+    if (!pDPObject)
+        return;
+
+    pDPObject->BuildAllDimensionMembers();
+    ScDPSaveData* pSaveData = pDPObject->GetSaveData();
+    if (!pSaveData)
+        return;
+
+    SelectedPagesType::const_iterator it = maSelectedPages.begin(), itEnd = maSelectedPages.end();
+    for (; it != itEnd; ++it)
+    {
+        const OUString& rDimName = it->first;
+        const OUString& rSelected = it->second;
+        ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(rDimName);
+        if (!pDim)
+            continue;
+
+        pDim->SetCurrentPage(&rSelected);
+    }
 }
 
 void ScXMLDataPilotTableContext::SetGrandTotal(
@@ -1111,7 +1142,7 @@ void ScXMLDataPilotFieldContext::EndElement()
         pDim->SetOrientation(nOrientation);
         if (bSelectedPage)
         {
-            pDim->SetCurrentPage(&sSelectedPage);
+            pDataPilotTable->SetSelectedPage(pDim->GetName(), sSelectedPage);
         }
         pDataPilotTable->AddDimension(pDim);
         if (bIsGroupField)
