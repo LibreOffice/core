@@ -192,7 +192,9 @@ sub call_sum
 
 sub get_path_for_library
 {
-    return $ENV{'WORKDIR'} . '/LinkTarget/Library/libgetuid.so';
+    my $getuidlibrary = $ENV{'WORKDIR'} . '/LinkTarget/Library/libgetuid.so';
+    if ( ! -e $getuidlibrary ) { installer::exiter::exit_program("File $getuidlibrary does not exist!", "get_path_for_library"); }
+    return $getuidlibrary;
 }
 
 #########################################################

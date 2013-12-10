@@ -794,8 +794,9 @@ sub set_patch_state
 
 sub get_ld_preload_string
 {
-    return 'LD_PRELOAD=' . $ENV{'WORKDIR'}
-        . '/LinkTarget/Library/libgetuid.so';
+    my $getuidlibrary = $ENV{'WORKDIR'} . '/LinkTarget/Library/libgetuid.so';
+    if ( ! -e $getuidlibrary ) { installer::exiter::exit_program("File $getuidlibrary does not exist!", "get_ld_preload_string"); }
+    return 'LD_PRELOAD=' . $getuidlibrary;
 }
 
 #################################################
