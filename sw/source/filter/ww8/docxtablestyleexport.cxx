@@ -95,7 +95,8 @@ void DocxTableStyleExport::TableStyles()
 
 void DocxTableStyleExport::Impl::tableStyleTblCellMar(uno::Sequence<beans::PropertyValue>& rTblCellMar, sal_Int32 nType)
 {
-    static DocxStringTokenMap const aTblCellMarTokens[] = {
+    static DocxStringTokenMap const aTblCellMarTokens[] =
+    {
         {"left", XML_left},
         {"right", XML_right},
         {"start", XML_start},
@@ -125,7 +126,8 @@ void DocxTableStyleExport::Impl::tableStyleTblCellMar(uno::Sequence<beans::Prope
 
 void DocxTableStyleExport::Impl::tableStyleTcBorder(sal_Int32 nToken, const uno::Sequence<beans::PropertyValue>& rTcBorder)
 {
-    static DocxStringTokenMap const aTcBorderTokens[] = {
+    static DocxStringTokenMap const aTcBorderTokens[] =
+    {
         {"val", XML_val},
         {"sz", XML_sz},
         {"color", XML_color},
@@ -149,7 +151,8 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(sal_Int32 nToken, const uno:
 
 void DocxTableStyleExport::Impl::tableStyleTcBorders(uno::Sequence<beans::PropertyValue>& rTcBorders, sal_Int32 nToken)
 {
-    static DocxStringTokenMap const aTcBordersTokens[] = {
+    static DocxStringTokenMap const aTcBordersTokens[] =
+    {
         {"left", XML_left},
         {"right", XML_right},
         {"start", XML_start},
