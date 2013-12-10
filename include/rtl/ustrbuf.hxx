@@ -576,6 +576,7 @@ public:
         return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
     }
 
+    /// @cond INTERNAL
     // Pointer can be automatically converted to bool, which is unwanted here.
     // Explicitly delete all pointer append() overloads to prevent this
     // (except for char* and sal_Unicode* overloads, which are handled elsewhere).
@@ -583,6 +584,7 @@ public:
     typename internal::Enable< void,
         !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
         append( T* ) SAL_DELETED_FUNCTION;
+    /// @endcond
 
     // This overload is needed because OUString has a ctor from rtl_uString*, but
     // the bool overload above would be prefered to the conversion.

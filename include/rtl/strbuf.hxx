@@ -542,12 +542,24 @@ public:
 
         @param   b   a <code>bool</code>.
         @return  this string buffer.
+
+        @since LibreOffice 4.3
      */
     OStringBuffer & append(bool b)
     {
         sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_str_valueOfBoolean( sz, b ) );
     }
+
+    /// @cond INTERNAL
+    // Pointer can be automatically converted to bool, which is unwanted here.
+    // Explicitly delete all pointer append() overloads to prevent this
+    // (except for char* overload, which is handled elsewhere).
+    template< typename T >
+    typename internal::Enable< void,
+        !internal::CharPtrDetector< T* >::ok >::Type
+        append( T* ) SAL_DELETED_FUNCTION;
+    /// @endcond
 
     /**
         Appends the string representation of the <code>char</code>
