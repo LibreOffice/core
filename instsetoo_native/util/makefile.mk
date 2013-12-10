@@ -125,7 +125,7 @@ ALLTAR : updatepack
 # Independent of PKGFORMAT, always build a default-language openoffice product
 # also in archive format, so that tests that require an OOo installation (like
 # smoketestoo_native) have one available:
-#openoffice_$(defaultlangiso) : $$@.archive
+openoffice_$(defaultlangiso) : $$@.archive
 
 .IF "$(VERBOSE)"=="TRUE"
 VERBOSESWITCH=-verbose
@@ -161,20 +161,21 @@ aoo_srcrelease: $(SOLARENV)$/bin$/srcrelease.xml
 updatepack:
     $(PERL) -w $(SOLARENV)$/bin$/packager.pl
 
+
+# The naming schema of targets is this: target_language.package
+# where 'target' is the target base name (as openoffice or sdkoo)
+#       'language' is the language name (like en-US or fr)
+#       'package' is the package format (like msi or deb)
+
 .IF "$(alllangiso)"!=""
 
+# Add dependencies of basic targets on language specific targets.
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
-
 openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
-
 openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
-
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
-
 ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
-
 sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
-
 sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
 patch-create: $(foreach,i,$(alllangiso) patch-create_$i)
 
@@ -201,22 +202,20 @@ adddeps : local_python_files
 updatepack : local_python_files
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
+# Add dependencies on 'adddeps' where necessary.
+$(foreach,i,$(alllangiso) openoffice_$i) : adddeps
+openoffice_$(defaultlangiso).archive : adddeps
+$(foreach,i,$(alllangiso) openofficedev_$i) : adddeps
+$(foreach,i,$(alllangiso) openofficewithjre_$i) : adddeps
+$(foreach,i,$(alllangiso) ooolanguagepack_$i) : adddeps
+$(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : adddeps
+$(foreach,i,$(alllangiso) sdkoo_$i) : adddeps
+$(foreach,i,$(alllangiso) sdkoodev_$i) : adddeps
 
-$(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
-openoffice_$(defaultlangiso).archive : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) openofficedev_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
-
+# Create targets that take the package formats into account.  Together with language dependency we
+# get this transformation: target -> target_$language -> target_$language.$package
+# where $language ranges over all languages in $(alllangiso) 
+# and $package ranges over all package formats in $(PKGFORMAT)
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
@@ -249,7 +248,8 @@ GEN_UPDATE_INFO_COMMAND=					\
         --lstfile $(PRJ)$/util$/openoffice.lst		\
         --languages $(subst,$(@:s/_/ /:1)_, $(@:b))
 
-openoffice_%{$(PKGFORMAT:^".")} :
+#openoffice_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openoffice_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) 			\
         -p Apache_OpenOffice			\
         -msitemplate $(MSIOFFICETEMPLATEDIR)	\
@@ -259,7 +259,7 @@ openoffice_%{$(PKGFORMAT:^".")} :
         $(PRJ)$/util$/update.xml	\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-openoffice_%{.archive} :
+$(foreach,L,$(alllangiso) openoffice_$L.archive) :
     $(MAKE_INSTALLER_COMMAND) 		\
         -p Apache_OpenOffice		\
         -msitemplate $(MSIOFFICETEMPLATEDIR)
@@ -268,10 +268,12 @@ openoffice_%{.archive} :
         $(PRJ)$/util$/update.xml	\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-openofficewithjre_%{$(PKGFORMAT:^".")} :
+#openofficewithjre_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficewithjre_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_wJRE -msitemplate $(MSIOFFICETEMPLATEDIR)
 
-openofficedev_%{$(PKGFORMAT:^".")} :
+#openofficedev_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficedev_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND)		\
         -p Apache_OpenOffice_Dev	\
         -msitemplate $(MSIOFFICETEMPLATEDIR)
@@ -280,19 +282,23 @@ openofficedev_%{$(PKGFORMAT:^".")} :
         $(PRJ)$/util$/update.xml 		\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-ooolanguagepack_%{$(PKGFORMAT:^".")} :
+#ooolanguagepack_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) ooolanguagepack_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND)			\
         -p Apache_OpenOffice			\
         -msitemplate $(MSILANGPACKTEMPLATEDIR)	\
         -languagepack
 
-ooodevlanguagepack_%{$(PKGFORMAT:^".")} :
+#ooodevlanguagepack_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) ooodevlanguagepack_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_Dev -msitemplate $(MSILANGPACKTEMPLATEDIR) -languagepack
 
-sdkoo_%{$(PKGFORMAT:^".")} :
+#sdkoo_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) sdkoo_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_SDK -msitemplate $(MSISDKOOTEMPLATEDIR) -dontstrip
 
-sdkoodev_%{$(PKGFORMAT:^".")} :
+#sdkoodev_%{$(PKGFORMAT:^".")} :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) sdkoodev_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_Dev_SDK -msitemplate $(MSISDKOOTEMPLATEDIR) -dontstrip
 
 .ELSE			# "$(alllangiso)"!=""
