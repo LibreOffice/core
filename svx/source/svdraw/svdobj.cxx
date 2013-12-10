@@ -1836,7 +1836,6 @@ OString SdrObject::stringify() const
             append(mnLayerID);
 
     SvMemoryStream aStream;
-    OString aLine;
     SfxItemSet aSet(GetMergedItemSet());
     aSet.InvalidateDefaultItems();
     aSet.Store(aStream, true);
