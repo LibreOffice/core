@@ -82,7 +82,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 return pData;
             }
 
-            if (nFieldType != text::textfield::Type::TIME && nFieldType != text::textfield::Type::DATE)
+            if (nFieldType != text::textfield::Type::TIME)
             {
                 util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
                 Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
