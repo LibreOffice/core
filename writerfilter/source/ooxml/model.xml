@@ -989,6 +989,9 @@
         </attribute>
         <attribute name="typeface">
           <ref name="ST_TextTypeface"/>
+          <data type="string">
+            <xs:documentation>Typeface</xs:documentation>
+          </data>
           <xs:documentation>Typeface</xs:documentation>
         </attribute>
       </define>

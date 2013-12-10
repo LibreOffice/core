@@ -4035,6 +4035,8 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
         }
         break;
     case NS_ooxml::LN_THEMETABLE:
+        m_pImpl->GetThemeTable()->setThemeFontLangProperties(
+                m_pImpl->GetSettingsTable()->GetThemeFontLangProperties() );
         ref->resolve ( *m_pImpl->GetThemeTable() );
     break;
     case NS_ooxml::LN_settings_settings:

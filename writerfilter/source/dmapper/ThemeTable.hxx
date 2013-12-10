@@ -22,7 +22,9 @@
 
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <map>
 
 namespace writerfilter {
@@ -41,6 +43,7 @@ public:
 
     const OUString getFontNameForTheme(const Id id) const;
     static OUString getStringForTheme(const Id id);
+    void setThemeFontLangProperties(uno::Sequence<beans::PropertyValue> aPropSeq);
 
  private:
     // Properties
@@ -49,6 +52,10 @@ public:
 
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+
+    // Helper methods
+    OUString fromLocaleToScriptTag(OUString sLocale);
+    OUString fromLCIDToScriptTag(LanguageType lang);
 };
 typedef boost::shared_ptr< ThemeTable >          ThemeTablePtr;
 }}

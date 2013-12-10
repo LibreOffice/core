@@ -73,6 +73,7 @@ struct SettingsTable_Impl
     bool                embedSystemFonts;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bSplitPgBreakAndParaMark;
+    uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -97,6 +98,7 @@ struct SettingsTable_Impl
     , embedSystemFonts(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bSplitPgBreakAndParaMark(false)
+    , m_pThemeFontLangProps(3)
     {}
 
 };
@@ -117,12 +119,25 @@ SettingsTable::~SettingsTable()
 void SettingsTable::lcl_attribute(Id nName, Value & val)
 {
     int nIntValue = val.getInt();
+    OUString sStringValue = val.getString();
 
     switch(nName)
     {
     case NS_ooxml::LN_CT_Zoom_percent:
         m_pImpl->m_nZoomFactor = nIntValue;
     break;
+    case NS_ooxml::LN_CT_Language_val:
+        m_pImpl->m_pThemeFontLangProps[0].Name = "val";
+        m_pImpl->m_pThemeFontLangProps[0].Value <<= sStringValue;
+        break;
+    case NS_ooxml::LN_CT_Language_eastAsia:
+        m_pImpl->m_pThemeFontLangProps[1].Name = "eastAsia";
+        m_pImpl->m_pThemeFontLangProps[1].Value <<= sStringValue;
+        break;
+    case NS_ooxml::LN_CT_Language_bidi:
+        m_pImpl->m_pThemeFontLangProps[2].Name = "bidi";
+        m_pImpl->m_pThemeFontLangProps[2].Value <<= sStringValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -279,6 +294,11 @@ bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
 bool SettingsTable::GetSplitPgBreakAndParaMark() const
 {
     return m_pImpl->m_bSplitPgBreakAndParaMark;
+}
+
+uno::Sequence<beans::PropertyValue> SettingsTable::GetThemeFontLangProperties() const
+{
+    return m_pImpl->m_pThemeFontLangProps;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )

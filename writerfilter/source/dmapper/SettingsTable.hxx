@@ -71,6 +71,8 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
     bool GetDoNotUseHTMLParagraphAutoSpacing() const;
     bool GetSplitPgBreakAndParaMark() const;
 
+    uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:
