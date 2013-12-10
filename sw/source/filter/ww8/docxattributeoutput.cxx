@@ -110,6 +110,7 @@
 #include <osl/file.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -1058,7 +1059,10 @@ void DocxAttributeOutput::StartRunProperties()
     m_postponedDiagram = new std::list< PostponedDiagram >;
 
     OSL_ASSERT( m_postponedVMLDrawing == NULL );
-    m_postponedVMLDrawing = new std::list< PostponedVMLDrawing >;
+    m_postponedVMLDrawing = new std::list< PostponedDrawing >;
+
+    assert(!m_postponedDMLDrawing);
+    m_postponedDMLDrawing = new std::list< PostponedDrawing >;
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -1178,6 +1182,7 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
     //We need to write w:pict tag after the w:rPr.
     WritePostponedVMLDrawing();
+    WritePostponedDMLDrawing();
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
@@ -3316,7 +3321,7 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
     if(m_postponedVMLDrawing == NULL)
         return;
 
-    for( std::list< PostponedVMLDrawing >::iterator it = m_postponedVMLDrawing->begin();
+    for( std::list< PostponedDrawing >::iterator it = m_postponedVMLDrawing->begin();
          it != m_postponedVMLDrawing->end();
          ++it )
     {
@@ -3324,6 +3329,21 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
     }
     delete m_postponedVMLDrawing;
     m_postponedVMLDrawing = NULL;
+}
+
+void DocxAttributeOutput::WritePostponedDMLDrawing()
+{
+    if(m_postponedDMLDrawing == NULL)
+        return;
+
+    for( std::list< PostponedDrawing >::iterator it = m_postponedDMLDrawing->begin();
+         it != m_postponedDMLDrawing->end();
+         ++it )
+    {
+        WriteDMLDrawing(it->object, it->frame);
+    }
+    delete m_postponedDMLDrawing;
+    m_postponedDMLDrawing = NULL;
 }
 
 void DocxAttributeOutput::WriteDMLDrawing( const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt )
@@ -3422,11 +3442,23 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     }
                     else
                     {
-                        if ( m_postponedVMLDrawing == NULL )
-                            WriteVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft);
-                        else // we are writing out attributes, but w:pict should not be inside w:rPr,
-                        {    // so write it out later
-                             m_postponedVMLDrawing->push_back( PostponedVMLDrawing( pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft ) );
+                        SvtMiscOptions aMiscOptions;
+                        if (aMiscOptions.IsExperimentalMode())
+                        {
+                            if ( m_postponedDMLDrawing == NULL )
+                                WriteDMLDrawing( pSdrObj, &rFrame.GetFrmFmt());
+                            else
+                                // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
+                                m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
+                        }
+                        else
+                        {
+                            if ( m_postponedVMLDrawing == NULL )
+                                WriteVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft);
+                            else // we are writing out attributes, but w:pict should not be inside w:rPr,
+                            {    // so write it out later
+                                 m_postponedVMLDrawing->push_back( PostponedDrawing( pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft ) );
+                            }
                         }
                     }
                 }
@@ -6406,6 +6438,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedGraphic( NULL ),
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
+      m_postponedDMLDrawing(NULL),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),

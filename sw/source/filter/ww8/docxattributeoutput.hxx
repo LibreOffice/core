@@ -646,6 +646,7 @@ private:
     void WritePostponedDiagram();
     void WritePostponedChart();
     void WritePostponedVMLDrawing();
+    void WritePostponedDMLDrawing();
     void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
@@ -747,14 +748,15 @@ private:
     };
     std::list< PostponedDiagram >* m_postponedDiagram;
 
-    struct PostponedVMLDrawing
+    struct PostponedDrawing
     {
-        PostponedVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt* frm, const Point* pt ) : object( sdrObj ), frame( frm ), point( pt ) {};
+        PostponedDrawing( const SdrObject* sdrObj, const SwFrmFmt* frm, const Point* pt ) : object( sdrObj ), frame( frm ), point( pt ) {};
         const SdrObject* object;
         const SwFrmFmt* frame;
         const Point* point;
     };
-    std::list< PostponedVMLDrawing >* m_postponedVMLDrawing;
+    std::list< PostponedDrawing >* m_postponedVMLDrawing;
+    std::list< PostponedDrawing >* m_postponedDMLDrawing;
 
     const SwOLENode* m_postponedMath;
     const SdrObject* m_postponedChart;
