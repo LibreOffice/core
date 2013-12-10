@@ -319,6 +319,10 @@ String STR_OBJECT_CURVE_WITH_PARAMETERS
 {
     Text [ en-US ] = "Trend line %FORMULA with accuracy R² = %RSQUARED";
 };
+String STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS
+{
+    Text [ en-US ] = "Moving average trend line with period = %PERIOD";
+};
 String STR_OBJECT_AVERAGE_LINE
 {
     Text [ en-US ] = "Mean Value Line";

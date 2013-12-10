@@ -22,7 +22,7 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 297
+//next free is 303
 
 //-----------------------------------------------------------------------------
 //chart types
@@ -206,6 +206,7 @@
 
 #define STR_OBJECT_CURVE_WITH_PARAMETERS    (RID_APP_START + 264)
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS (RID_APP_START + 265)
+#define STR_OBJECT_MOVING_AVERAGE_WITH_PARAMETERS (RID_APP_START + 302)
 
 #define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
 #define STR_OBJECT_SHAPE                    (RID_APP_START + 290)

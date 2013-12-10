@@ -563,12 +563,14 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                     {
                         Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
                         sal_Int32 aDegree = 2;
+                        sal_Int32 aPeriod = 2;
                         sal_Bool aForceIntercept = false;
                         double aInterceptValue = 0.0;
                         uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                         if ( xProperties.is())
                         {
                                 xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
+                                xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
                                 xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
                                 if (aForceIntercept)
                                         xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
@@ -576,9 +578,18 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, 2);
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
+                        // change text for Moving Average
+                        OUString aWildcard( "%PERIOD" );
+                        sal_Int32 nIndex = xCalculator->getRepresentation().indexOf( aWildcard );
+                        if( nIndex != -1 )
+                        {  // replace period
+                                aRet = xCalculator->getRepresentation();
+                                aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::number(aPeriod) );
+                        }
+
                         // replace formula
-                        OUString aWildcard( "%FORMULA" );
-                        sal_Int32 nIndex = aRet.indexOf( aWildcard );
+                        aWildcard = "%FORMULA";
+                        nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                             aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), xCalculator->getRepresentation());
 
