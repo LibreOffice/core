@@ -1076,7 +1076,6 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
 ,   sPropertyAdjust(sAPI_adjust)
 ,   sPropertyIsDate(sAPI_is_date)
 ,   sPropertyIsFixedLanguage(sAPI_is_fixed_language)
-,   fTimeValue(0.0)
 ,   nAdjust(0)
 ,   nFormatKey(0)
 ,   bTimeOK(sal_False)
@@ -1095,15 +1094,6 @@ void XMLTimeFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_TIME_VALUE:
         {
-            // FIXME double appears unused?
-            double fTmp;
-            if (GetImport().GetMM100UnitConverter().
-                convertDateTime(fTmp, sAttrValue))
-            {
-                fTimeValue = fTmp;
-                bTimeOK = sal_True;
-            }
-
             if (::sax::Converter::parseTimeOrDateTime(aDateTimeValue, 0,
                         sAttrValue))
             {
@@ -1236,16 +1226,6 @@ void XMLDateFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_DATE_VALUE:
         {
-            double fTmp;
-
-            if (GetImport().GetMM100UnitConverter().
-                convertDateTime(fTmp, sAttrValue))
-            {
-                // #96457#: don't truncate in order to read date+time
-                fTimeValue = fTmp;
-                bTimeOK = sal_True;
-            }
-
             if (::sax::Converter::parseDateTime(aDateTimeValue, 0, sAttrValue))
             {
                 bTimeOK = sal_True;

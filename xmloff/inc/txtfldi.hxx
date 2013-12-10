@@ -301,7 +301,6 @@ protected:
     const OUString sPropertyIsDate;
     const OUString sPropertyIsFixedLanguage;
 
-    double fTimeValue;
     ::com::sun::star::util::DateTime aDateTimeValue;
     sal_Int32 nAdjust;
     sal_Int32 nFormatKey;
