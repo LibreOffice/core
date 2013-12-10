@@ -267,6 +267,11 @@
 		BE82BE4B1822D10F00A447B5 /* ctfonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctfonts.cxx; path = ../../vcl/quartz/ctfonts.cxx; sourceTree = "<group>"; };
 		BE82BE4D1822D10F00A447B5 /* ctlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctlayout.cxx; path = ../../vcl/quartz/ctlayout.cxx; sourceTree = "<group>"; };
 		BE82BE4E1822D10F00A447B5 /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
+		BEE68B5D185715EE0049ECE0 /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
+		BEE68B5E185715EE0049ECE0 /* salgdicommon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdicommon.cxx; path = ../../vcl/quartz/salgdicommon.cxx; sourceTree = "<group>"; };
+		BEE68B5F185715EE0049ECE0 /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
+		BEE68B60185715EE0049ECE0 /* salmathutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salmathutils.cxx; path = ../../vcl/quartz/salmathutils.cxx; sourceTree = "<group>"; };
+		BEE68B61185715EE0049ECE0 /* utils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cxx; path = ../../vcl/quartz/utils.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -685,6 +690,11 @@
 				BE82BE4B1822D10F00A447B5 /* ctfonts.cxx */,
 				BE82BE4D1822D10F00A447B5 /* ctlayout.cxx */,
 				BE82BE4E1822D10F00A447B5 /* salgdi.cxx */,
+				BEE68B5D185715EE0049ECE0 /* salbmp.cxx */,
+				BEE68B5E185715EE0049ECE0 /* salgdicommon.cxx */,
+				BEE68B5F185715EE0049ECE0 /* salgdiutils.cxx */,
+				BEE68B60185715EE0049ECE0 /* salmathutils.cxx */,
+				BEE68B61185715EE0049ECE0 /* utils.cxx */,
 			);
 			name = quartz;
 			sourceTree = "<group>";
