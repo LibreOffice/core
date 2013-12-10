@@ -85,6 +85,27 @@ extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
 
 // -----
 
+// on OSX 64bit the class_type_info classes are specified
+// in http://refspecs.linuxbase.org/cxxabi-1.86.html#rtti but
+// these details are not generally available in a public header
+// of most development environments. So we define them here.
+class __class_type_info : public std::type_info
+{
+public:
+        explicit __class_type_info( const char* pRttiName)
+        : std::type_info( pRttiName)
+        {}
+};
+
+class __si_class_type_info : public __class_type_info
+{
+        const __class_type_info* mpBaseType;
+public:
+        explicit __si_class_type_info( const char* pRttiName, __class_type_info* pBaseType)
+        : __class_type_info( pRttiName), mpBaseType( pBaseType)
+        {}
+};
+
 //==================================================================================================
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
