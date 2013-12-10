@@ -374,6 +374,8 @@ private:
 
     /// writes VML data
     void WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft );
+    /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
+    void WriteDMLDrawing( const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt );
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );

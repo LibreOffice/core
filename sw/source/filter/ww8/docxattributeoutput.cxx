@@ -2750,50 +2750,17 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
     }
 }
 
-void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj )
+void lcl_endDMLAnchorInline(sax_fastparser::FSHelperPtr pSerializer, const SwFrmFmt* pFrmFmt)
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
-    // detect mis-use of the API
-    assert(pGrfNode || (pOLEFrmFmt && pOLENode));
-    const SwFrmFmt* pFrmFmt = pGrfNode ? pGrfNode->GetFlyFmt() : pOLEFrmFmt;
-    // create the relation ID
-    OString aRelId;
-    sal_Int32 nImageType;
-    if ( pGrfNode && pGrfNode->IsLinkedFile() )
-    {
-        // linked image, just create the relation
-        OUString aFileName;
-        pGrfNode->GetFileFilterNms( &aFileName, 0 );
+    bool isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    pSerializer->endElementNS( XML_wp, isAnchor ? XML_anchor : XML_inline );
 
-        // TODO Convert the file name to relative for better interoperability
+    pSerializer->endElementNS( XML_w, XML_drawing );
+}
 
-        aRelId = m_rExport.AddRelation(
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
-                    aFileName );
-
-        nImageType = XML_link;
-    }
-    else
-    {
-        // inline, we also have to write the image itself
-        const Graphic* pGraphic = 0;
-        if (pGrfNode)
-            pGraphic = &const_cast< Graphic& >( pGrfNode->GetGrf() );
-        else
-            pGraphic = pOLENode->GetGraphic();
-
-        m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
-        OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
-
-        aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
-
-        nImageType = XML_embed;
-    }
-
-    if ( aRelId.isEmpty() )
-        return;
-
-    m_pSerializer->startElementNS( XML_w, XML_drawing, FSEND );
+void lcl_startDMLAnchorInline(sax_fastparser::FSHelperPtr pSerializer, const SwFrmFmt* pFrmFmt, const Size& rSize)
+{
+    pSerializer->startElementNS( XML_w, XML_drawing, FSEND );
 
     const SvxLRSpaceItem pLRSpaceItem = pFrmFmt->GetLRSpace(false);
     const SvxULSpaceItem pULSpaceItem = pFrmFmt->GetULSpace(false);
@@ -2801,7 +2768,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     bool isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     if( isAnchor )
     {
-        ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
+        ::sax_fastparser::FastAttributeList* attrList = pSerializer->createAttrList();
         attrList->add( XML_behindDoc, pFrmFmt->GetOpaque().GetValue() ? "0" : "1" );
         attrList->add( XML_distT, OString::number( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ) );
         attrList->add( XML_distB, OString::number( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ) );
@@ -2813,8 +2780,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         attrList->add( XML_allowOverlap, "1" ); // TODO
         if( const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
             attrList->add( XML_relativeHeight, OString::number( pObj->GetOrdNum()));
-        m_pSerializer->startElementNS( XML_wp, XML_anchor, XFastAttributeListRef( attrList ));
-        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
+        pSerializer->startElementNS( XML_wp, XML_anchor, XFastAttributeListRef( attrList ));
+        pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
         const char* relativeFromH;
         const char* relativeFromV;
         const char* alignH = NULL;
@@ -2897,49 +2864,50 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             default:
                 break;
         }
-        m_pSerializer->startElementNS( XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND );
+        pSerializer->startElementNS( XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND );
         if( alignH != NULL )
         {
-            m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
-            m_pSerializer->write( alignH );
-            m_pSerializer->endElementNS( XML_wp, XML_align );
+            pSerializer->startElementNS( XML_wp, XML_align, FSEND );
+            pSerializer->write( alignH );
+            pSerializer->endElementNS( XML_wp, XML_align );
         }
         else
         {
-            m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
-            m_pSerializer->write( TwipsToEMU( pFrmFmt->GetHoriOrient().GetPos()));
-            m_pSerializer->endElementNS( XML_wp, XML_posOffset );
+            pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
+            pSerializer->write( TwipsToEMU( pFrmFmt->GetHoriOrient().GetPos()));
+            pSerializer->endElementNS( XML_wp, XML_posOffset );
         }
-        m_pSerializer->endElementNS( XML_wp, XML_positionH );
-        m_pSerializer->startElementNS( XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND );
+        pSerializer->endElementNS( XML_wp, XML_positionH );
+        pSerializer->startElementNS( XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND );
         if( alignV != NULL )
         {
-            m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
-            m_pSerializer->write( alignV );
-            m_pSerializer->endElementNS( XML_wp, XML_align );
+            pSerializer->startElementNS( XML_wp, XML_align, FSEND );
+            pSerializer->write( alignV );
+            pSerializer->endElementNS( XML_wp, XML_align );
         }
         else
         {
-            m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
-            m_pSerializer->write( TwipsToEMU( pFrmFmt->GetVertOrient().GetPos()));
-            m_pSerializer->endElementNS( XML_wp, XML_posOffset );
+            pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
+            pSerializer->write( TwipsToEMU( pFrmFmt->GetVertOrient().GetPos()));
+            pSerializer->endElementNS( XML_wp, XML_posOffset );
         }
-        m_pSerializer->endElementNS( XML_wp, XML_positionV );
+        pSerializer->endElementNS( XML_wp, XML_positionV );
     }
     else
     {
-        m_pSerializer->startElementNS( XML_wp, XML_inline,
+        pSerializer->startElementNS( XML_wp, XML_inline,
                 XML_distT, OString::number( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ),
                 XML_distB, OString::number( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ),
                 XML_distL, OString::number( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ),
                 XML_distR, OString::number( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ),
                 FSEND );
     }
+
     // now the common parts
     // extent of the image
     OString aWidth( OString::number( TwipsToEMU( rSize.Width() ) ) );
     OString aHeight( OString::number( TwipsToEMU( rSize.Height() ) ) );
-    m_pSerializer->singleElementNS( XML_wp, XML_extent,
+    pSerializer->singleElementNS( XML_wp, XML_extent,
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
             FSEND );
@@ -2970,7 +2938,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         }
     }
 
-    m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
+    pSerializer->singleElementNS( XML_wp, XML_effectExtent,
             XML_l, aLeftExt, XML_t, aTopExt, XML_r, aRightExt, XML_b, aBottomExt,
             FSEND );
 
@@ -2979,22 +2947,69 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         switch( pFrmFmt->GetSurround().GetValue())
         {
             case SURROUND_NONE:
-                m_pSerializer->singleElementNS( XML_wp, XML_wrapTopAndBottom, FSEND );
+                pSerializer->singleElementNS( XML_wp, XML_wrapTopAndBottom, FSEND );
                 break;
             case SURROUND_THROUGHT:
-                m_pSerializer->singleElementNS( XML_wp, XML_wrapNone, FSEND );
+                pSerializer->singleElementNS( XML_wp, XML_wrapNone, FSEND );
                 break;
             case SURROUND_PARALLEL:
-                m_pSerializer->singleElementNS( XML_wp, XML_wrapSquare,
+                pSerializer->singleElementNS( XML_wp, XML_wrapSquare,
                     XML_wrapText, "bothSides", FSEND );
                 break;
             case SURROUND_IDEAL:
             default:
-                m_pSerializer->singleElementNS( XML_wp, XML_wrapSquare,
+                pSerializer->singleElementNS( XML_wp, XML_wrapSquare,
                     XML_wrapText, "largest", FSEND );
                 break;
         }
     }
+}
+
+void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj )
+{
+    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
+    // detect mis-use of the API
+    assert(pGrfNode || (pOLEFrmFmt && pOLENode));
+    const SwFrmFmt* pFrmFmt = pGrfNode ? pGrfNode->GetFlyFmt() : pOLEFrmFmt;
+    // create the relation ID
+    OString aRelId;
+    sal_Int32 nImageType;
+    if ( pGrfNode && pGrfNode->IsLinkedFile() )
+    {
+        // linked image, just create the relation
+        OUString aFileName;
+        pGrfNode->GetFileFilterNms( &aFileName, 0 );
+
+        // TODO Convert the file name to relative for better interoperability
+
+        aRelId = m_rExport.AddRelation(
+                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                    aFileName );
+
+        nImageType = XML_link;
+    }
+    else
+    {
+        // inline, we also have to write the image itself
+        const Graphic* pGraphic = 0;
+        if (pGrfNode)
+            pGraphic = &const_cast< Graphic& >( pGrfNode->GetGrf() );
+        else
+            pGraphic = pOLENode->GetGraphic();
+
+        m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
+        OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
+
+        aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
+
+        nImageType = XML_embed;
+    }
+
+    if ( aRelId.isEmpty() )
+        return;
+
+    lcl_startDMLAnchorInline(m_pSerializer, pFrmFmt, rSize);
+
     // picture description (used for pic:cNvPr later too)
     ::sax_fastparser::FastAttributeList* docPrattrList = m_pSerializer->createAttrList();
     docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
@@ -3078,6 +3093,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->singleElementNS( XML_a, XML_off,
             XML_x, "0", XML_y, "0",
             FSEND );
+    OString aWidth( OString::number( TwipsToEMU( rSize.Width() ) ) );
+    OString aHeight( OString::number( TwipsToEMU( rSize.Height() ) ) );
     m_pSerializer->singleElementNS( XML_a, XML_ext,
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
@@ -3106,6 +3123,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->endElementNS( XML_a, XML_ln );
 
     // Output effects
+    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
     if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
     {
         // Distance is measured diagonally from corner
@@ -3149,9 +3167,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     m_pSerializer->endElementNS( XML_a, XML_graphicData );
     m_pSerializer->endElementNS( XML_a, XML_graphic );
-    m_pSerializer->endElementNS( XML_wp, isAnchor ? XML_anchor : XML_inline );
-
-    m_pSerializer->endElementNS( XML_w, XML_drawing );
+    lcl_endDMLAnchorInline(m_pSerializer, pFrmFmt);
 }
 
 void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt )
@@ -3308,6 +3324,33 @@ void DocxAttributeOutput::WritePostponedVMLDrawing()
     }
     delete m_postponedVMLDrawing;
     m_postponedVMLDrawing = NULL;
+}
+
+void DocxAttributeOutput::WriteDMLDrawing( const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt )
+{
+    Size aSize(pSdrObject->GetSnapRect().GetWidth(), pSdrObject->GetSnapRect().GetHeight());
+    lcl_startDMLAnchorInline(m_pSerializer, pFrmFmt, aSize);
+
+    sax_fastparser::FastAttributeList* pDocPrAttrList = m_pSerializer->createAttrList();
+    pDocPrAttrList->add( XML_id, OString::number( m_anchorId++).getStr());
+    pDocPrAttrList->add( XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8).getStr() );
+    XFastAttributeListRef xDocPrAttrListRef( pDocPrAttrList );
+    m_pSerializer->singleElementNS( XML_wp, XML_docPr, xDocPrAttrListRef );
+
+    m_pSerializer->startElementNS( XML_a, XML_graphic,
+            FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSEND );
+    m_pSerializer->startElementNS( XML_a, XML_graphicData,
+            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+            FSEND );
+
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
+    m_rExport.OutputDML(xShape);
+
+    m_pSerializer->endElementNS( XML_a, XML_graphicData );
+    m_pSerializer->endElementNS( XML_a, XML_graphic );
+
+    lcl_endDMLAnchorInline(m_pSerializer, pFrmFmt);
 }
 
 void DocxAttributeOutput::WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft )
