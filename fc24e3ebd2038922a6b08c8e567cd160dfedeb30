@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///2Y\u003d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4183,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-10T11:55:40Z",
+      "side": 1,
+      "message": "This comment seems to have been copy-pasted along with the rest that isn\u0027t used and the comment is not applicable.",
+      "revId": "fc24e3ebd2038922a6b08c8e567cd160dfedeb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///2g\u003d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-10T11:55:40Z",
+      "side": 1,
+      "message": "This seems to be an unused variable.",
+      "revId": "fc24e3ebd2038922a6b08c8e567cd160dfedeb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///2c\u003d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4187,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-10T11:55:40Z",
+      "side": 1,
+      "message": "This seems to be an unused variable.",
+      "revId": "fc24e3ebd2038922a6b08c8e567cd160dfedeb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///2k\u003d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-10T11:55:40Z",
+      "side": 1,
+      "message": "This seems to be an unused variable.",
+      "revId": "fc24e3ebd2038922a6b08c8e567cd160dfedeb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///2s\u003d",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-10T11:55:40Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with this code, but using !IsLayoutFrm() here actually reverses the previous logic that drew a full shadow rectangle if it was a layout frame. Is this really the intention?",
+      "revId": "fc24e3ebd2038922a6b08c8e567cd160dfedeb30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
