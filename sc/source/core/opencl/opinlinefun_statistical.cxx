@@ -373,7 +373,7 @@ std::string GetChiDist =
 "   if (fX <= 0.0)\n"
 "       return  1.0;\n"
 "   else\n"
-"       return GetUpRegIGamma( fDF /2.0, fX/2.0);\n"
+"       return GetUpRegIGamma( fDF*pow(2.0,-1.0), fX*pow(2.0,-1.0));\n"
 "}\n";
 
 
@@ -592,9 +592,9 @@ std::string lcl_IterateInverseChiInv =
 "       {\n"
 "           if (fPy!=fQy && fQy!=fRy && fRy!=fPy)\n"
 "           {\n"
-"               fSx = fPx * fRy * fQy / (fRy-fPy) / (fQy-fPy)\n"
-"                   + fRx * fQy * fPy / (fQy-fRy) / (fPy-fRy)\n"
-"                   + fQx * fPy * fRy / (fPy-fQy) / (fRy-fQy);\n"
+"               fSx = fPx * fRy * fQy*pow(fRy-fPy,-1.0)*pow(fQy-fPy,-1.0)\n"
+"                   + fRx * fQy * fPy*pow(fQy-fRy,-1.0)*pow(fPy-fRy,-1.0)\n"
+"                   + fQx * fPy * fRy*pow(fPy-fQy,-1.0)*pow(fRy-fQy,-1.0);\n"
 "               bHasToInterpolate = (fAx < fSx) && (fSx < fBx);\n"
 "           }\n"
 "           else\n"
