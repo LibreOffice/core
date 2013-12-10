@@ -4832,29 +4832,58 @@ void OpPhi::GenSlidingWindowFunction(
     }
     ss << ")\n";
     ss << "{\n";
-    ss << "    double x;\n";
+    ss << "    double x,tmp0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    ss << "    int buffer_x_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
+    size_t i = vSubArguments.size();
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
-#ifdef ISNAN
-    ss <<"    if((gid0)>=buffer_x_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        x = 0;\n";
-    ss <<"    else \n";
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
 #endif
-    ss << "       x = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-    ss << "    double tmp = 0.39894228040143268 * exp(-(x * x) / 2.0);\n";
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        tmp"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        tmp"<<i<<"=\n";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n}\n";
+        }
+        else
+        {
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+#endif
+    }
+    ss << "    x = tmp0;\n";
+    ss << "    double tmp = 0.39894228040143268 * exp((-1)*pow(x,2) / 2.0);\n";
     ss << "     return tmp;\n";
     ss << "}\n";
 }
+
 void OpNorminv::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string sSymName,
     SubArguments &vSubArguments)
