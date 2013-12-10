@@ -443,7 +443,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
             {
                 sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
-                if ( ( nHashPos != -1 ) && ( nHashPos < nArgsPos ) )
+                if ( ( nHashPos != -1 ) && ( nArgsPos == -1 || nHashPos < nArgsPos ) )
                 {
                     OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
                     if ( aBasMgrName == "." )
