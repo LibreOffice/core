@@ -596,15 +596,15 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
 OString SdPage::stringify() const
 {
     OStringBuffer aString(100);
-    aString.append(mePageKind).append(meAutoLayout).append(mbSelected).append(mePresChange).append(mfTime).append(mbSoundOn).append(mbExcluded).
+    aString.append((sal_Int32)mePageKind).append((sal_Int32)meAutoLayout).append(mbSelected).append((sal_Int32)mePresChange).append(mfTime).append(mbSoundOn).append(mbExcluded).
              append(OUStringToOString( maLayoutName, RTL_TEXTENCODING_UTF8 )).
              append(OUStringToOString(maSoundFile, RTL_TEXTENCODING_UTF8 )).
              append(mbLoopSound).append(mbStopSound).
              /*append(OUStringToOString(maCreatedPageName, RTL_TEXTENCODING_UTF8)).
              append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8)).*/
              append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
-             append(mbScaleObjects).append(mbBackgroundFullSize).append(meCharSet).append(mnPaperBin).
-             append(meOrientation).append(mnTransitionType).append(mnTransitionSubtype).append(mbTransitionDirection).
+             append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append(mnPaperBin).
+             append((sal_Int32)meOrientation).append(mnTransitionType).append(mnTransitionSubtype).append(mbTransitionDirection).
              append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
 
     sal_Int32 n = GetObjCount();
