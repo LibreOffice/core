@@ -4215,7 +4215,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     {
         case SVX_SHADOW_BOTTOMRIGHT:
             {
-                if ( !IsLayoutFrm() && backgroundBrush && backgroundTransparent )
+                if ( !IsLayoutFrm()  && backgroundTransparent )
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Top( aOut.Top() + nHeight );
@@ -4243,7 +4243,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
         case SVX_SHADOW_TOPLEFT:
             {
-                if ( !IsLayoutFrm() && backgroundBrush && backgroundTransparent)
+                if ( !IsLayoutFrm() && backgroundTransparent)
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Bottom( aOut.Bottom() - nHeight );
@@ -4271,7 +4271,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
         case SVX_SHADOW_TOPRIGHT:
             {
-                if ( !IsLayoutFrm() && backgroundBrush && backgroundTransparent)
+                if ( !IsLayoutFrm() && backgroundTransparent)
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Bottom( aOut.Bottom() - nHeight);
@@ -4299,7 +4299,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
         case SVX_SHADOW_BOTTOMLEFT:
             {
-                if ( !IsLayoutFrm() && backgroundBrush && backgroundTransparent)
+                if ( !IsLayoutFrm() && backgroundTransparent)
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Top( aOut.Top() + nHeight );
