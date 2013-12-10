@@ -615,8 +615,21 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
         }
         else
         {
-            // non-verbose
-            aRet = ObjectNameProvider::getName( eObjectType, false );
+            Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(rObjectCID , xChartModel));
+            Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+            aRet += getName(eObjectType, false);
+
+            if( xCurveCnt.is())
+            {
+                sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
+                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xCurveCnt, nCurveIndex) );
+                if( xCurve.is())
+                {
+                    aRet += " (";
+                    aRet += RegressionCurveHelper::getRegressionCurveName(xCurve);
+                    aRet += " )";
+                }
+            }
         }
     }
     else if( OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType )
