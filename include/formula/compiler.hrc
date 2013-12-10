@@ -182,7 +182,6 @@
 #define SC_OPCODE_S_NORM_INV        149
 #define SC_OPCODE_GAMMA_LN          150
 #define SC_OPCODE_ERROR_TYPE        151
-#define SC_OPCODE_ERR_CELL          152
 #define SC_OPCODE_FORMULA           153
 #define SC_OPCODE_ARABIC            154
 #define SC_OPCODE_INFO              155

@@ -176,7 +176,6 @@ enum OpCodeEnum
         ocGammaLn_MS        = SC_OPCODE_GAMMA_LN_MS,
         ocGamma             = SC_OPCODE_GAMMA,
         ocErrorType         = SC_OPCODE_ERROR_TYPE,
-        ocErrCell           = SC_OPCODE_ERR_CELL,
         ocFormula           = SC_OPCODE_FORMULA,
         ocArabic            = SC_OPCODE_ARABIC,
         ocInfo              = SC_OPCODE_INFO,

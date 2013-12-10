@@ -357,8 +357,6 @@ ScMatrixRef GetMatrix();
 sc::RangeMatrix GetRangeMatrix();
 
 void ScTableOp();                                       // repeated operations
-void ScErrCell();                                       // special handling for
-                                                        // error cell
 
 // common helper functions
 

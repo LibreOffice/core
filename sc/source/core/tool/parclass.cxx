@@ -62,7 +62,6 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocClose,           {{ Bounds                                               }, 0 }},
     { ocSep,             {{ Bounds                                               }, 0 }},
     { ocNoName,          {{ Bounds                                               }, 0 }},
-    { ocErrCell,         {{ Bounds                                               }, 0 }},
     { ocStop,            {{ Bounds                                               }, 0 }},
     { ocUnion,           {{ Reference, Reference                                 }, 0 }},
     { ocRange,           {{ Reference, Reference                                 }, 0 }},
