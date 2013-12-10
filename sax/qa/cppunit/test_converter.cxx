@@ -53,6 +53,7 @@ public:
 
     void testDuration();
     void testDateTime();
+    void testTime();
     void testDouble();
     void testMeasure();
     void testBool();
@@ -64,6 +65,7 @@ public:
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
     CPPUNIT_TEST(testDateTime);
+    CPPUNIT_TEST(testTime);
     CPPUNIT_TEST(testDouble);
     CPPUNIT_TEST(testMeasure);
     CPPUNIT_TEST(testBool);
@@ -240,7 +242,7 @@ void ConverterTest::testDateTime()
     doTestDateTimeF( "0001-13-01T00:00:00" ); // invalid: M > 12
     doTestDateTimeF( "0001-01-32T00:00:00" ); // invalid: D > 31
     doTestDateTimeF( "0001-01-01T25:00:00" ); // invalid: H > 24
-    doTestDateTimeF( "0001-01-01T00:60:00" ); // invalid: H > 59
+    doTestDateTimeF( "0001-01-01T00:60:00" ); // invalid: M > 59
     doTestDateTimeF( "0001-01-01T00:00:60" ); // invalid: S > 59
     doTestDateTimeF( "0001-01-01T24:01:00" ); // invalid: H=24, but M != 0
     doTestDateTimeF( "0001-01-01T24:00:01" ); // invalid: H=24, but S != 0
@@ -251,7 +253,141 @@ void ConverterTest::testDateTime()
     doTestDateTimeF( "0001-01-02T00:00:00-14:01" ); // invalid: TZ < -14:00
     doTestDateTimeF( "2100-02-29T00:00:00-00:00" ); // invalid: no leap year
     doTestDateTimeF( "1900-02-29T00:00:00-00:00" ); // invalid: no leap year
+    doTestDateTimeF( "00:00:00" ); // invalid: no date
+    doTestDateTimeF( "T00:00:00" ); // invalid: no date
     SAL_INFO("sax.cppunit","\nSAX CONVERTER TEST END");
+}
+
+static void doTestTime(util::DateTime const & rdt, char const*const pis,
+        char const*const i_pos = 0)
+{
+    char const*const pos((i_pos) ? i_pos : pis);
+    OUString is(OUString::createFromAscii(pis));
+    util::DateTime odt;
+    SAL_INFO("sax.cppunit","about to convert '" << is << "'");
+    bool bSuccess( Converter::parseTimeOrDateTime(odt, 0, is) );
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " UTC: " << (bool)odt.IsUTC);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT(eqDateTime(rdt, odt));
+    OUStringBuffer buf;
+    Converter::convertTimeOrDateTime(buf, odt, 0);
+    SAL_INFO("sax.cppunit","" << buf.toString());
+    CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(pos),
+                         buf.makeStringAndClear());
+}
+
+static void doTestTimeF(char const*const pis)
+{
+    util::DateTime odt;
+    bool bSuccess = Converter::parseTimeOrDateTime(odt, 0,
+            OUString::createFromAscii(pis));
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
+    CPPUNIT_ASSERT(!bSuccess);
+}
+
+void ConverterTest::testTime() // time or dateTime + horrible backcompat mess
+{
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, false),
+            "0001-01-01T00:00:00" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, false),
+            "0001-01-01T00:00:00" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, true),
+            "0001-01-01T00:00:00Z" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, -1, false),
+            "-0001-01-01T00:00:00");
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, -1, true),
+            "-0001-01-01T01:00:00+01:00", "-0001-01-01T00:00:00Z");
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, -324, false),
+            "-0324-01-01T00:00:00" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, true),
+            "0001-01-01T00:00:00-00:00", "0001-01-01T00:00:00Z" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, true),
+            "0001-01-01T00:00:00+00:00", "0001-01-01T00:00:00Z" );
+    doTestTime( util::DateTime(0, 0, 0, 12, 2, 1, 1, true),
+            "0001-01-02T00:00:00-12:00", "0001-01-02T12:00:00Z" );
+    doTestTime( util::DateTime(0, 0, 0, 12, 1, 1, 1, true),
+            "0001-01-02T00:00:00+12:00", "0001-01-01T12:00:00Z"  );
+    doTestTime( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999, false),
+            "9999-12-31T23:59:59.99",  "9999-12-31T23:59:59.990000000" );
+    doTestTime( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999, true),
+            "9999-12-31T23:59:59.99Z", "9999-12-31T23:59:59.990000000Z" );
+    doTestTime( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999, false),
+            "9999-12-31T23:59:59.9999999999999999999999999999999999999",
+            "9999-12-31T23:59:59.999999999" );
+    doTestTime( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999, true),
+            "9999-12-31T23:59:59.9999999999999999999999999999999999999Z",
+            "9999-12-31T23:59:59.999999999Z" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 29, 2, 2000, true), // leap year
+            "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00Z" );
+    doTestTime( util::DateTime(0, 0, 0, 0, 29, 2, 1600, true), // leap year
+            "1600-02-29T00:00:00-00:00", "1600-02-29T00:00:00Z" );
+    doTestTime( util::DateTime(0, 0, 0, 24, 1, 1, 333, false)
+                /*(0, 0, 0, 0, 2, 1, 333)*/,
+            "0333-01-01T24:00:00"/*, "0333-01-02T00:00:00"*/ );
+    // While W3C XMLSchema specifies a minimum of 4 year digits we are lenient
+    // in what we accept.
+    doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, false),
+            "1-01-01T00:00:00", "0001-01-01T00:00:00" );
+
+    doTestTime( util::DateTime(0, 0, 0, 0, 0, 0, 0, false), "00:00:00" );
+    doTestTime( util::DateTime(0, 0, 0, 24, 0, 0, 0, false), "24:00:00" );
+    doTestTime( util::DateTime(0, 0, 59, 0, 0, 0, 0, false), "00:59:00" );
+    doTestTime( util::DateTime(0, 1, 2, 4, 0, 0, 0, true), "04:02:01Z" );
+    doTestTime( util::DateTime(0, 1, 2, 4, 0, 0, 0, true),
+            "05:02:01+01:00", "04:02:01Z" );
+    doTestTime( util::DateTime(0, 11, 12, 9, 0, 0, 0, true),
+            "05:12:11-04:00", "09:12:11Z" );
+    doTestTime( util::DateTime(990000000, 59, 59, 23, 0, 0, 0, false),
+            "23:59:59.99",  "23:59:59.990000000" );
+    doTestTime( util::DateTime(990000000, 59, 59, 23, 0, 0, 0, true),
+            "23:59:59.99Z",  "23:59:59.990000000Z" );
+    // backwards compatible: recognize invalid 0000-00-00 date (LO 3.5)
+    doTestTime( util::DateTime(0, 1, 0, 0, 0, 0, 0, false),
+            "0000-00-00T00:00:01", "00:00:01" );
+    // backwards compatible: recognize invalid 0-00-00 date (OOo)
+    doTestTime( util::DateTime(0, 0, 1, 0, 0, 0, 0, false),
+            "0-00-00T00:01:00", "00:01:00" );
+
+    doTestTimeF( "+0001-01-01T00:00:00" ); // invalid: ^+
+    doTestTimeF( "0001-1-01T00:00:00" ); // invalid: < 2 M
+    doTestTimeF( "0001-01-1T00:00:00" ); // invalid: < 2 D
+    doTestTimeF( "0001-01-01T0:00:00" ); // invalid: < 2 H
+    doTestTimeF( "0001-01-01T00:0:00" ); // invalid: < 2 M
+    doTestTimeF( "0001-01-01T00:00:0" ); // invalid: < 2 S
+    doTestTimeF( "0001-01-01T00:00:00." ); // invalid: .$
+    doTestTimeF( "0001-01-01T00:00:00+1:00" ); // invalid: < 2 TZ H
+    doTestTimeF( "0001-01-01T00:00:00+00:1" ); // invalid: < 2 TZ M
+    doTestTimeF( "0001-13-01T00:00:00" ); // invalid: M > 12
+    doTestTimeF( "0001-01-32T00:00:00" ); // invalid: D > 31
+    doTestTimeF( "0001-01-01T25:00:00" ); // invalid: H > 24
+    doTestTimeF( "0001-01-01T00:60:00" ); // invalid: M > 59
+    doTestTimeF( "0001-01-01T00:00:60" ); // invalid: S > 59
+    doTestTimeF( "0001-01-01T24:01:00" ); // invalid: H=24, but M != 0
+    doTestTimeF( "0001-01-01T24:00:01" ); // invalid: H=24, but S != 0
+    doTestTimeF( "0001-01-01T24:00:00.1" ); // invalid: H=24, but H != 0
+    doTestTimeF( "0001-01-02T00:00:00+15:00" ); // invalid: TZ > +14:00
+    doTestTimeF( "0001-01-02T00:00:00+14:01" ); // invalid: TZ > +14:00
+    doTestTimeF( "0001-01-02T00:00:00-15:00" ); // invalid: TZ < -14:00
+    doTestTimeF( "0001-01-02T00:00:00-14:01" ); // invalid: TZ < -14:00
+    doTestTimeF( "2100-02-29T00:00:00-00:00" ); // invalid: no leap year
+    doTestTimeF( "1900-02-29T00:00:00-00:00" ); // invalid: no leap year
+    doTestTimeF( "T00:00:00" ); // invalid: T
+    doTestTimeF( "0:00:00" ); // invalid: < 2 H
+    doTestTimeF( "00:0:00" ); // invalid: < 2 M
+    doTestTimeF( "00:00:0" ); // invalid: < 2 S
+    doTestTimeF( "00:00:00." ); // invalid: .$
+    doTestTimeF( "00:00:00+1:00" ); // invalid: < 2 TZ H
+    doTestTimeF( "00:00:00+00:1" ); // invalid: < 2 TZ M
+    doTestTimeF( "25:00:00" ); // invalid: H > 24
+    doTestTimeF( "00:60:00" ); // invalid: M > 59
+    doTestTimeF( "00:00:60" ); // invalid: S > 59
+    doTestTimeF( "24:01:00" ); // invalid: H=24, but M != 0
+    doTestTimeF( "24:00:01" ); // invalid: H=24, but S != 0
+    doTestTimeF( "24:00:00.1" ); // invalid: H=24, but H != 0
+    doTestTimeF( "00:00:00+15:00" ); // invalid: TZ > +14:00
+    doTestTimeF( "00:00:00+14:01" ); // invalid: TZ > +14:00
+    doTestTimeF( "00:00:00-15:00" ); // invalid: TZ < -14:00
+    doTestTimeF( "00:00:00-14:01" ); // invalid: TZ < -14:00
 }
 
 void doTestDouble(char const*const pis, double const rd,
