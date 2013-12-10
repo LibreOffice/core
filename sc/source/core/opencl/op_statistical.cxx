@@ -6805,21 +6805,26 @@ void OpBinomdist::GenSlidingWindowFunction(
             dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
             size_t nCurWindowSize = pDVR->GetRefRowSize();
             ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+            {
 #ifdef  ISNAN
                 ss << "gid0; i < " << pDVR->GetArrayLength();
                 ss << " && i < " << nCurWindowSize  << "; i++){\n";
 #else
                 ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+            }
+            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
 #ifdef  ISNAN
                 ss << "0; i < " << pDVR->GetArrayLength();
                 ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
 #else
                 ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
 #endif
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+            }
+            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
 #ifdef  ISNAN
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
                 ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
@@ -6827,7 +6832,8 @@ void OpBinomdist::GenSlidingWindowFunction(
                 ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
             }
-            else {
+            else
+            {
 #ifdef  ISNAN
                 ss << "0; i < "<< nCurWindowSize << "; i++){\n";
 #else
@@ -6881,60 +6887,67 @@ void OpBinomdist::GenSlidingWindowFunction(
     ss <<";\n    ";
 #endif
     }
-    ss << "    double rq = (0.5 - tmp1) + 0.5;\n";
-    ss << "    if (tmp2 < 0.0 || tmp0 < 0.0 || tmp0 > tmp2 ||";
-    ss << "tmp1 < 0.0 || tmp1 > 1.0)\n";
+    ss << "    tmp0 = floor(tmp0);\n";
+    ss << "    tmp1 = floor(tmp1);\n";
+    ss << "    double rq = (0.5 - tmp2) + 0.5;\n";
+    ss << "    if (tmp1 < 0.0 || tmp0 < 0.0 || tmp0 > tmp1 ||";
+    ss << "tmp2 < 0.0 || tmp2 > 1.0)\n";
     ss << "    {\n";
     ss << "        return DBL_MIN;\n";
     ss << "    }\n";
-    ss << "    if(tmp1 == 0)\n";
-    ss << "        return ( (tmp0 == 0.0 || tmp3) ? 1.0 : 0.0 );";
-    ss << "    if(tmp1 == 1.0);\n";
-    ss << "        return ( (tmp0 == tmp2) ? 1.0 : 0.0);\n";
+    ss << "    if(tmp2 == 0.0)\n";
+    ss << "        return ( (tmp0 == 0.0 || tmp3) ? 1.0 : 0.0 );\n";
+    ss << "    if(tmp2 == 1.0)\n";
+    ss << "        return ( (tmp0 == tmp1) ? 1.0 : 0.0);\n";
     ss << "    if(!tmp3)\n";
-    ss << "        return ( GetBinomDistPMF(tmp0, tmp2, tmp1));\n";
+    ss << "        return ( GetBinomDistPMF(tmp0, tmp1, tmp2));\n";
     ss << "    else \n";
     ss << "    {\n";
-    ss << "        if(tmp0 == tmp2)\n";
+    ss << "        if(tmp0 == tmp1)\n";
     ss << "            return 1.0;\n";
     ss << "        else\n";
     ss << "        {\n";
-    ss << "            double fFactor = pow(tmp1,tmp2);\n";
+    ss << "            double fFactor = pow(rq,tmp1);\n";
     ss << "            if(tmp0 == 0.0)\n";
     ss << "            return (fFactor);\n";
     ss << "            else if(fFactor <= Min)\n";
     ss << "            {\n";
-    ss << "                fFactor = pow(tmp1,tmp2);\n";
+    ss << "                fFactor = pow(tmp2,tmp1);\n";
     ss << "                if(fFactor <= Min)\n";
     ss << "                    return GetBetaDist";
-    ss << "                           (tmp1, tmp2 - tmp0, tmp0 + 1.0);\n";
+    ss << "(rq, tmp1 - tmp0, tmp0 + 1.0);\n";
     ss << "                else\n";
     ss << "                {\n";
     ss << "                    if(fFactor > fMachEps)\n";
     ss << "                    {\n";
     ss << "                        double fSum = 1.0 - fFactor;\n";
-    ss << "                        unsigned int max = ((tmp2 - tmp0)-1);\n";
+    ss << "                        unsigned int max = ";
+    ss << "(unsigned int)((tmp1 - tmp0)-1);\n";
     ss << "                        for (uint i = 0; i < max && fFactor > 0.0;";
     ss << " i++)\n";
     ss << "                        {\n";
-    ss << "                            fFactor *= (tmp2 - i)/(i + 1)*";
-    ss << "tmp1/tmp1;\n";
+    ss << "                           fFactor *= (tmp1 - i)*pow((i + 1),-1.0)*";
+    ss << "rq*pow(tmp2,-1.0);\n";
     ss << "                            fSum -= fFactor;\n";
     ss << "                        }\n";
     ss << "                         return ( (fSum < 0.0) ? 0.0 : fSum );\n";
     ss << "                    }\n";
     ss << "                    else \n";
     ss << "                        return (lcl_GetBinomDistRange";
-    ss << "(tmp2, tmp2 -  tmp1, tmp2, fFactor, rq, tmp1));\n";
+    ss << "(tmp1, tmp1 -  tmp0, tmp1, fFactor, rq, tmp2));\n";
     ss << "                }\n";
     ss << "            }\n";
     ss << "           else\n";
-    ss << "               return ( lcl_GetBinomDistRange";
-    ss << "(tmp2, 0.0, tmp0, fFactor, tmp1, rq));\n";
+    ss << "           {\n";
+    ss << "               double rtmp = ( lcl_GetBinomDistRange";
+    ss << "(tmp1, 0.0, tmp0, fFactor, tmp2, rq));\n";
+    ss << "               return rtmp;\n";
+    ss << "           }\n";
     ss << "       }\n";
     ss << "   }\n";
     ss << "}\n";
 }
+
 
 void OpChiSqDist::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)

@@ -4057,8 +4057,8 @@ void ScOpenclTest::testStatisticalFormulaChiDist()
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,0));
+        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
@@ -4630,8 +4630,8 @@ void ScOpenclTest::testStatisticalFormulaBinomDist()
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(ScAddress(4,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
