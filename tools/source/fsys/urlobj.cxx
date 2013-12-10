@@ -423,9 +423,9 @@ inline void INetURLObject::appendEscape(OUStringBuffer & rTheText,
                                         sal_Char cEscapePrefix,
                                         sal_uInt32 nOctet)
 {
-    rTheText.append(sal_Unicode(cEscapePrefix));
-    rTheText.append(sal_Unicode(INetMIME::getHexDigit(int(nOctet >> 4))));
-    rTheText.append(sal_Unicode(INetMIME::getHexDigit(int(nOctet & 15))));
+    rTheText.append( cEscapePrefix );
+    rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet >> 4)) );
+    rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet & 15)) );
 }
 
 namespace unnamed_tools_urlobj {
@@ -1637,7 +1637,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         }
         aSynAbsURIRef.append(pSchemeBegin, pSchemeEnd - pSchemeBegin);
     }
-    aSynAbsURIRef.append(sal_Unicode(':'));
+    aSynAbsURIRef.append(':');
 
     sal_Char cEscapePrefix = getEscapePrefix();
 
@@ -1705,7 +1705,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 
     if (eState == STATE_ABS_PATH)
     {
-        aSynAbsURIRef.append(sal_Unicode('/'));
+        aSynAbsURIRef.append('/');
         eState = STATE_DONE;
         while (p != pEnd)
         {
@@ -1812,7 +1812,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             }
             if (p != pEnd && *p == nSegmentDelimiter)
             {
-                aSynAbsURIRef.append(sal_Unicode('/'));
+                aSynAbsURIRef.append('/');
                 ++p;
             }
         }
@@ -1847,7 +1847,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 
     if (eState == STATE_FRAGMENT && !bIgnoreFragment)
     {
-        aSynAbsURIRef.append(sal_Unicode('#'));
+        aSynAbsURIRef.append('#');
         while (p != pEnd)
         {
             EscapeType eEscapeType;
@@ -2029,13 +2029,13 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // to the new relative URL:
     if (aSubject.m_aQuery.isPresent())
     {
-        aSynRelURIRef.append(sal_Unicode('?'));
+        aSynRelURIRef.append('?');
         aSynRelURIRef.append(aSubject.decode(aSubject.m_aQuery, cEscapePrefix,
                                          eDecodeMechanism, eCharset));
     }
     if (aSubject.m_aFragment.isPresent())
     {
-        aSynRelURIRef.append(sal_Unicode('#'));
+        aSynRelURIRef.append('#');
         aSynRelURIRef.append(aSubject.decode(aSubject.m_aFragment,
             cEscapePrefix, eDecodeMechanism, eCharset));
     }
@@ -2405,7 +2405,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
             case STATE_INITIAL:
                 if (*p == '[')
                 {
-                    aTheCanonic.append(sal_Unicode('['));
+                    aTheCanonic.append('[');
                     eState = STATE_IP6;
                 }
                 else if (rtl::isAsciiAlpha(*p) || *p == '_')
@@ -2475,9 +2475,8 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == '.')
                     if (nOctets < 4)
                     {
-                        aTheCanonic.append(
-                            OUString::number(nNumber));
-                        aTheCanonic.append(sal_Unicode('.'));
+                        aTheCanonic.append( OUString::number(nNumber) );
+                        aTheCanonic.append( '.' );
                         ++nOctets;
                         eState = STATE_IP4_DOT;
                     }
@@ -2540,7 +2539,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     eState = STATE_IP6_DONE;
                 else if (*p == ':')
                 {
-                    aTheCanonic.append(sal_Unicode(':'));
+                    aTheCanonic.append(':');
                     eState = STATE_IP6_3COLON;
                 }
                 else if (rtl::isAsciiDigit(*p))
@@ -2582,7 +2581,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 {
                     aTheCanonic.append(
                         OUString::number(nNumber, 16));
-                    aTheCanonic.append(sal_Unicode(':'));
+                    aTheCanonic.append(':');
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
                 else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
@@ -2597,7 +2596,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
             case STATE_IP6_HEXSEQ1_COLON:
                 if (*p == ':')
                 {
-                    aTheCanonic.append(sal_Unicode(':'));
+                    aTheCanonic.append(':');
                     eState = STATE_IP6_2COLON;
                 }
                 else if (rtl::isAsciiDigit(*p))
@@ -2627,7 +2626,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 {
                     aTheCanonic.append(
                         OUString::number(nNumber, 16));
-                    aTheCanonic.append(sal_Unicode(':'));
+                    aTheCanonic.append(':');
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
                 else if (*p == '.')
@@ -2636,7 +2635,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                                   + (nNumber & 15);
                     aTheCanonic.append(
                         OUString::number(nNumber));
-                    aTheCanonic.append(sal_Unicode('.'));
+                    aTheCanonic.append('.');
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
                 }
@@ -2666,7 +2665,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 {
                     aTheCanonic.append(
                         OUString::number(nNumber, 16));
-                    aTheCanonic.append(sal_Unicode(':'));
+                    aTheCanonic.append(':');
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
                 else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
@@ -2706,7 +2705,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 {
                     aTheCanonic.append(
                         OUString::number(nNumber, 16));
-                    aTheCanonic.append(sal_Unicode(':'));
+                    aTheCanonic.append(':');
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
                 else if (*p == '.')
@@ -2715,7 +2714,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                                   + (nNumber & 15);
                     aTheCanonic.append(
                         OUString::number(nNumber));
-                    aTheCanonic.append(sal_Unicode('.'));
+                    aTheCanonic.append('.');
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
                 }
@@ -2749,7 +2748,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     {
                         aTheCanonic.append(
                             OUString::number(nNumber));
-                        aTheCanonic.append(sal_Unicode('.'));
+                        aTheCanonic.append('.');
                         ++nOctets;
                         eState = STATE_IP6_IP4_DOT;
                     }
@@ -2802,7 +2801,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
             return false;
 
         case STATE_IP6_DONE:
-            aTheCanonic.append(sal_Unicode(']'));
+            aTheCanonic.append(']');
             rBegin = p;
             rCanonic = aTheCanonic.makeStringAndClear();
             return true;
@@ -2954,7 +2953,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                            PART_HTTP_PATH, '%', eCharset, true);
             }
             if (aTheSynPath.isEmpty())
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
             break;
 
         case INET_PROT_HTTP:
@@ -2975,13 +2974,13 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                            PART_HTTP_PATH, '%', eCharset, true);
             }
             if (aTheSynPath.isEmpty())
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
             break;
 
         case INET_PROT_FILE:
         {
             if (bSkippedInitialSlash)
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
             else if (pPos < pEnd
                      && *pPos != nSegmentDelimiter
                      && *pPos != nAltSegmentDelimiter)
@@ -2997,7 +2996,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     if (nUTF32 == nSegmentDelimiter
                         || nUTF32 == nAltSegmentDelimiter)
                     {
-                        aTheSynPath.append(sal_Unicode('/'));
+                        aTheSynPath.append('/');
                         continue;
                     }
                     else if (nUTF32 == '|'
@@ -3010,7 +3009,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     {
                         // A first segment of <ALPHA "|"> is translated to
                         // <ALPHA ":">:
-                        aTheSynPath.append(sal_Unicode(':'));
+                        aTheSynPath.append(':');
                         continue;
                     }
                 }
@@ -3018,7 +3017,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                            PART_PCHAR, '%', eCharset, true);
             }
             if (aTheSynPath.isEmpty())
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
             break;
         }
 
@@ -3046,7 +3045,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     || pPos[1] == nFragmentDelimiter))
             {
                 ++pPos;
-                aTheSynPath.append(sal_Unicode('*'));
+                aTheSynPath.append('*');
                 break;
             }
 
@@ -3088,7 +3087,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             if (aTheSynPath.isEmpty())
                 return false;
             ++pPos;
-            aTheSynPath.append(sal_Unicode('@'));
+            aTheSynPath.append('@');
             {
                 sal_Unicode const * p = pPos;
                 while (p < pEnd && *pPos != nQueryDelimiter
@@ -3140,7 +3139,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             if (pPos == pEnd
                 || *pPos == nQueryDelimiter
                 || *pPos == nFragmentDelimiter)
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
             else
             {
                 if (*pPos != '/')
@@ -3201,13 +3200,13 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                              '%', eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
-                    aTheSynPath.append(sal_Unicode('/'));
+                    aTheSynPath.append('/');
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                                PART_PCHAR, '%', eCharset, false);
             }
             if (aTheSynPath.isEmpty())
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
             break;
 
         case INET_PROT_VIM:
@@ -3215,7 +3214,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             sal_Unicode const * pPathEnd = pPos;
             while (pPathEnd < pEnd && *pPathEnd != nFragmentDelimiter)
                 ++pPathEnd;
-            aTheSynPath.append(sal_Unicode('/'));
+            aTheSynPath.append('/');
             if (pPos == pPathEnd)
                 break;
             else if (*pPos++ != '/')
@@ -3242,7 +3241,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 bInbox = false;
             else
                 return false;
-            aTheSynPath.append(sal_Unicode('/'));
+            aTheSynPath.append('/');
             if (pPos == pPathEnd)
                 break;
             else if (*pPos++ != '/')
@@ -3262,7 +3261,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 }
                 if (bEmpty)
                     return false;
-                aTheSynPath.append(sal_Unicode('/'));
+                aTheSynPath.append('/');
                 if (pPos == pPathEnd)
                     break;
                 else if (*pPos++ != '/')
@@ -3285,14 +3284,14 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 break;
             else if (*pPos++ != ':')
                 return false;
-            aTheSynPath.append(sal_Unicode(':'));
+            aTheSynPath.append(':');
             for (int i = 0; i < 3; ++i)
             {
                 if (i != 0)
                 {
                     if (pPos == pPathEnd || *pPos++ != '.')
                         return false;
-                    aTheSynPath.append(sal_Unicode('.'));
+                    aTheSynPath.append('.');
                 }
                 bEmpty = true;
                 while (pPos < pPathEnd && *pPos != '.')
@@ -3340,7 +3339,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     return false;
                 ++pPos;
             }
-            aTheSynPath.append(sal_Unicode('/'));
+            aTheSynPath.append('/');
             break;
 
         case INET_PROT_VND_SUN_STAR_TDOC:
@@ -3353,7 +3352,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                              '%', eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
-                    aTheSynPath.append(sal_Unicode('/'));
+                    aTheSynPath.append('/');
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                                PART_PCHAR, '%', eCharset, false);
@@ -3540,11 +3539,11 @@ bool INetURLObject::insertName(OUString const & rTheName, bool bOctets,
 
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pPrefixEnd - pPathBegin);
-    aNewPath.append(sal_Unicode('/'));
+    aNewPath.append('/');
     aNewPath.append(encodeText(rTheName, bOctets, PART_PCHAR, getEscapePrefix(),
                            eMechanism, eCharset, true));
     if (bInsertSlash) {
-        aNewPath.append(sal_Unicode('/'));
+        aNewPath.append('/');
     }
     aNewPath.append(pSuffixBegin, pPathEnd - pSuffixBegin);
 
@@ -3612,7 +3611,7 @@ bool INetURLObject::setFragment(OUString const & rTheFragment,
         m_aFragment.set(m_aAbsURIRef, aNewFragment);
     else
     {
-        m_aAbsURIRef.append(sal_Unicode('#'));
+        m_aAbsURIRef.append('#');
         m_aFragment.set(m_aAbsURIRef, aNewFragment, m_aAbsURIRef.getLength());
     }
     return true;
@@ -3754,7 +3753,7 @@ INetURLObject::getAbbreviated(
             aBuffer.append(pSchemeBegin, pSchemeEnd - pSchemeBegin);
         }
     }
-    aBuffer.append(static_cast< sal_Unicode >(':'));
+    aBuffer.append(':');
     bool bAuthority = getSchemeInfo().m_bAuthority;
     sal_Unicode const * pCoreBegin
         = m_aAbsURIRef.getStr() + (bAuthority ? getAuthorityBegin() :
@@ -3874,12 +3873,12 @@ INetURLObject::getAbbreviated(
                               eCharset));
     if (m_aQuery.isPresent())
     {
-        aBuffer.append(static_cast< sal_Unicode >('?'));
+        aBuffer.append('?');
         aBuffer.append(decode(m_aQuery, cEscapePrefix, eMechanism, eCharset));
     }
     if (m_aFragment.isPresent())
     {
-        aBuffer.append(static_cast< sal_Unicode >('#'));
+        aBuffer.append('#');
         aBuffer.
             append(decode(m_aFragment, cEscapePrefix, eMechanism, eCharset));
     }
@@ -4025,7 +4024,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         return false;
     m_aAbsURIRef.setLength(0);
     m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
-    m_aAbsURIRef.append(sal_Unicode(':'));
+    m_aAbsURIRef.append(':');
     if (getSchemeInfo().m_bAuthority)
     {
         m_aAbsURIRef.append("//");
@@ -4061,7 +4060,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         {
             if (getSchemeInfo().m_bPassword)
             {
-                m_aAbsURIRef.append(sal_Unicode(':'));
+                m_aAbsURIRef.append(':');
                 m_aAuth.set(m_aAbsURIRef,
                             encodeText(rThePassword, false,
                                        m_eScheme == INET_PROT_VIM ?
@@ -4078,7 +4077,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             }
         }
         if (bUserInfo && getSchemeInfo().m_bHost)
-            m_aAbsURIRef.append(sal_Unicode('@'));
+            m_aAbsURIRef.append('@');
         if (getSchemeInfo().m_bHost)
         {
             OUStringBuffer aSynHost(rTheHost);
@@ -4125,7 +4124,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             {
                 if (getSchemeInfo().m_bPort)
                 {
-                    m_aAbsURIRef.append(sal_Unicode(':'));
+                    m_aAbsURIRef.append(':');
                     m_aPort.set(m_aAbsURIRef,
                                 OUString::number(nThePort),
                                 m_aAbsURIRef.getLength());
@@ -4226,7 +4225,7 @@ OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
         eMechanism, eCharset));
     if (m_aPort.isPresent())
     {
-        aHostPort.append(sal_Unicode(':'));
+        aHostPort.append(':');
         aHostPort.append(decode(m_aPort, getEscapePrefix(),
             eMechanism, eCharset));
     }
@@ -4294,14 +4293,14 @@ bool INetURLObject::removeSegment(sal_Int32 nIndex, bool bIgnoreFinalSlash)
     aNewPath.append(m_aAbsURIRef.getStr() + m_aPath.getBegin(),
                        aSegment.getBegin() - m_aPath.getBegin());
     if (bIgnoreFinalSlash && aSegment.getEnd() == m_aPath.getEnd())
-        aNewPath.append(sal_Unicode('/'));
+        aNewPath.append('/');
     else
         aNewPath.append(m_aAbsURIRef.getStr() + aSegment.getEnd(),
                         m_aPath.getEnd() - aSegment.getEnd());
     if (aNewPath.isEmpty() && !aSegment.isEmpty() &&
         m_aAbsURIRef[aSegment.getBegin()] == '/')
     {
-        aNewPath.append(sal_Unicode('/'));
+        aNewPath.append('/');
     }
 
     return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
@@ -4497,7 +4496,7 @@ bool INetURLObject::setExtension(OUString const & rTheExtension,
 
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pExtension - pPathBegin);
-    aNewPath.append(sal_Unicode('.'));
+    aNewPath.append('.');
     aNewPath.append(encodeText(rTheExtension, false, PART_PCHAR,
         getEscapePrefix(), eMechanism, eCharset, true));
     aNewPath.append(p, pPathEnd - p);
@@ -4561,7 +4560,7 @@ bool INetURLObject::setFinalSlash()
 
     OUStringBuffer aNewPath;
     aNewPath.append(pPathBegin, pPathEnd - pPathBegin);
-    aNewPath.append(sal_Unicode('/'));
+    aNewPath.append('/');
 
     return setPath(aNewPath.makeStringAndClear(), false, NOT_CANONIC,
         RTL_TEXTENCODING_UTF8);
@@ -4718,7 +4717,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 p += 2;
             else
             {
-                aSynAbsURIRef.append(sal_Unicode('/'));
+                aSynAbsURIRef.append('/');
                 if (pFSysEnd - p >= 2
                     && rtl::isAsciiAlpha(p[0])
                     && p[1] == ':'
@@ -4727,7 +4726,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             }
             for (; p != pFSysEnd; ++p)
                 if (*p == '\\' || *p == nAltDelimiter)
-                    aSynAbsURIRef.append(sal_Unicode('/'));
+                    aSynAbsURIRef.append('/');
                 else
                     switch (*p)
                     {
@@ -4745,13 +4744,13 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
         }
 
         case FSYS_MAC:
-            aSynAbsURIRef.append(sal_Unicode('/'));
+            aSynAbsURIRef.append('/');
             for (sal_Unicode const * p = pFSysBegin; p != pFSysEnd; ++p)
             {
                 switch (*p)
                 {
                     case ':':
-                        aSynAbsURIRef.append(sal_Unicode('/'));
+                        aSynAbsURIRef.append('/');
                         break;
 
                     case '/':
@@ -4822,7 +4821,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                 aSynFSysPath.append(decode(m_aHost, '%', DECODE_WITH_CHARSET,
                                        RTL_TEXTENCODING_UTF8));
             else
-                aSynFSysPath.append(sal_Unicode('.'));
+                aSynFSysPath.append('.');
             aSynFSysPath.append(decode(m_aPath, '%', DECODE_WITH_CHARSET,
                                    RTL_TEXTENCODING_UTF8));
             return aSynFSysPath.makeStringAndClear();
@@ -4851,7 +4850,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                 aSynFSysPath.append("\\\\");
                 aSynFSysPath.append(decode(m_aHost, '%', DECODE_WITH_CHARSET,
                                        RTL_TEXTENCODING_UTF8));
-                aSynFSysPath.append(sal_Unicode('\\'));
+                aSynFSysPath.append('\\');
             }
             sal_Unicode const * p
                 = m_aAbsURIRef.getStr() + m_aPath.getBegin();
@@ -4866,7 +4865,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                                              RTL_TEXTENCODING_UTF8,
                                              eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
-                    aSynFSysPath.append(sal_Unicode('\\'));
+                    aSynFSysPath.append('\\');
                 else
                     aSynFSysPath.appendUtf32(nUTF32);
             }
@@ -4895,7 +4894,7 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                                              RTL_TEXTENCODING_UTF8,
                                              eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
-                    aSynFSysPath.append(sal_Unicode(':'));
+                    aSynFSysPath.append(':');
                 else
                     aSynFSysPath.appendUtf32(nUTF32);
             }

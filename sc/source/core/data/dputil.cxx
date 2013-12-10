@@ -47,7 +47,7 @@ void appendDateStr(OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pF
 OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pFormatter)
 {
     OUStringBuffer aBuffer;
-    aBuffer.append(sal_Unicode(bFirst ? '<' : '>'));
+    aBuffer.append( bFirst ? '<' : '>' );
     appendDateStr(aBuffer, fValue, pFormatter);
     return aBuffer.makeStringAndClear();
 }
@@ -206,7 +206,7 @@ OUString lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDe
     OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
 
     OUStringBuffer aBuffer;
-    aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
+    aBuffer.append( bFirst ? '<' : '>' );
     if ( bDateValues )
         lcl_AppendDateStr( aBuffer, fValue, pFormatter );
     else

@@ -301,7 +301,7 @@ OUString toRoman( sal_Int32 n )
 
     OUStringBuffer sTmp;
     while(nOver1000--)
-        sTmp.append(sal_Unicode(*coRomanArr));
+        sTmp.append(*coRomanArr);
 
     while( nMask )
     {
@@ -312,17 +312,17 @@ OUString toRoman( sal_Int32 n )
         if( 5 < nZahl )
         {
             if( nZahl < 9 )
-                sTmp.append(sal_Unicode(*(cRomanStr-1)));
+                sTmp.append(*(cRomanStr-1));
             ++nDiff;
             nZahl -= 5;
         }
         switch( nZahl )
         {
-            case 3: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
-            case 2: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
-            case 1: sTmp.append(sal_Unicode(*cRomanStr));           break;
-            case 4: sTmp.append(sal_Unicode(*cRomanStr)).append(sal_Unicode(*(cRomanStr-nDiff))); break;
-            case 5: sTmp.append(sal_Unicode(*(cRomanStr-nDiff)));   break;
+            case 3: sTmp.append(*cRomanStr);           //no break!
+            case 2: sTmp.append(*cRomanStr);           //no break!
+            case 1: sTmp.append(*cRomanStr);           break;
+            case 4: sTmp.append(*cRomanStr).append(*(cRomanStr-nDiff)); break;
+            case 5: sTmp.append(*(cRomanStr-nDiff));   break;
         }
 
         nMask /= 10;                    // to the next decade

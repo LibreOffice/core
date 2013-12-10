@@ -934,7 +934,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
     {
-        rBuffer.append(sal_Unicode('['));
+        rBuffer.append('[');
         ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
@@ -954,11 +954,11 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
             MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, true);
             if (!bSingleRef)
             {
-                rBuffer.append(sal_Unicode(':'));
+                rBuffer.append(':');
                 MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true);
             }
         }
-        rBuffer.append(sal_Unicode(']'));
+        rBuffer.append(']');
     }
 
     virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const

@@ -283,7 +283,7 @@ OUString Regexp::getRegexp(bool bReverse) const
 
             case KIND_DOMAIN:
                 aBuffer.append("[^/?#]");
-                aBuffer.append(sal_Unicode(m_bEmptyDomain ? '*' : '+'));
+                aBuffer.append( m_bEmptyDomain ? '*' : '+' );
                 if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
                 aBuffer.append("([/?#].*)?");

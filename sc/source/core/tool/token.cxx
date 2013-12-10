@@ -3212,9 +3212,9 @@ void appendDouble( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, double fV
 
 void appendString( OUStringBuffer& rBuf, const OUString& rStr )
 {
-    rBuf.append(sal_Unicode('"'));
+    rBuf.append('"');
     rBuf.append(rStr.replaceAll("\"", "\"\""));
-    rBuf.append(sal_Unicode('"'));
+    rBuf.append('"');
 }
 
 void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken, const ScAddress& rPos )
