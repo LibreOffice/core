@@ -71,6 +71,8 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
+    typedef boost::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
+
     struct GrandTotalItem
     {
         OUString maDisplayName;
@@ -114,8 +116,12 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     bool            bDrillDown:1;
     bool            bHeaderGridLayout:1;
 
+    SelectedPagesType maSelectedPages;
+
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    void ProcessSelectedPages();
 
 public:
 
@@ -151,6 +157,7 @@ public:
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
     void SetButtons();
+    void SetSelectedPage( const OUString& rDimName, const OUString& rSelected );
 };
 
 class ScXMLDPSourceSQLContext : public SvXMLImportContext
