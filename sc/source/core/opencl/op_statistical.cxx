@@ -4134,62 +4134,65 @@ void OpConfidence::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double alpha = " << GetBottom() <<";\n";
     ss << "    double sigma = " << GetBottom() <<";\n";
     ss << "    double size = " << GetBottom() <<";\n";
+    ss << "    double tmp0,tmp1,tmp2;\n";
+    size_t i = vSubArguments.size();
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
 #ifdef  ISNAN
-    FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken* >(tmpCur0);
-    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken* >(tmpCur1);
-    FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken* >(tmpCur2);
-    ss << "    int buffer_alpha_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
-    ss << "    int buffer_sigma_len = ";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n";
-    ss << "    int buffer_size_len = ";
-    ss << tmpCurDVR2->GetArrayLength();
-    ss << ";\n";
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
 #ifdef  ISNAN
-    ss << "    if((gid0)>=buffer_alpha_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << "))\n";
-    ss << "        alpha = 0;\n    else\n";
+            ss << "{\n";
 #endif
-    ss << "        alpha = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+        }
+        else
+        {
 #ifdef  ISNAN
-    ss << "    if((gid0)>=buffer_sigma_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << "))\n";
-    ss << "        sigma = 0;\n    else\n";
 #endif
-    ss << "        sigma = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+        }
 #ifdef  ISNAN
-    ss << "    if((gid0)>=buffer_size_len || isNan(";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss << "))\n";
-    ss << "        size = 0;\n    else\n";
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        tmp"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        tmp"<<i<<"=\n";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n}\n";
+        }
+        else
+        {
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
 #endif
-    ss << "        size = ";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss << ";\n";
+    }
+    ss << "    alpha = tmp0;\n";
+    ss << "    sigma = tmp1;\n";
+    ss << "    size = tmp2;\n";
     ss << "    double rn = floor(size);\n";
     ss << "    if(sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0";
     ss << "|| rn < 1.0)\n";
     ss << "        tmp = -DBL_MAX;\n";
     ss << "    else\n";
-    ss << "        tmp = gaussinv(1.0 - alpha / 2.0) * sigma / sqrt( rn );\n";
+    ss << "        tmp = gaussinv(1.0 - alpha * pow(2.0,-1.0)) * sigma ";
+    ss << "* pow(sqrt( rn ),-1);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
+
 
 void OpCritBinom::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
