@@ -321,7 +321,7 @@ namespace ucb { namespace ucp { namespace ext
             const OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
             const OUString sRootURL( ContentProvider::getRootURL() );
             OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
-            if ( !sTitle.isEmpty() && ( sTitle[ sTitle.getLength() - 1 ] == '/' ) )
+            if ( sTitle.endsWith("/") )
                 sTitle = sTitle.copy( 0, sTitle.getLength() - 1 );
             xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xContext, getResultSet()->getProperties(), sTitle );
         }

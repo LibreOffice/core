@@ -143,7 +143,7 @@ BackendImpl::PackageImpl::PackageImpl(
     initPackageHandler();
 
     sal_Int32 segmEnd = url.getLength();
-    if (!url.isEmpty() && url[ url.getLength() - 1 ] == '/')
+    if ( url.endsWith("/") )
         --segmEnd;
     sal_Int32 segmStart = (url.lastIndexOf( '/', segmEnd ) + 1);
     if (segmStart < 0)
