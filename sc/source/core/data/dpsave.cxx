@@ -164,6 +164,30 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
     }
 }
 
+#if DEBUG_PIVOT_TABLE
+
+void ScDPSaveMember::Dump(int nIndent) const
+{
+    std::string aIndent(nIndent*4, ' ');
+    cout << aIndent << "* member name: '" << aName << "'" << endl;
+
+    cout << aIndent << "    + layout name: ";
+    if (mpLayoutName)
+        cout << "'" << *mpLayoutName << "'";
+    else
+        cout << "(none)";
+    cout << endl;
+
+    cout << aIndent << "    + visibility: ";
+    if (nVisibleMode == SC_DPSAVEMODE_DONTKNOW)
+        cout << "(unknown)";
+    else
+        cout << (nVisibleMode ? "visible" : "hidden");
+    cout << endl;
+}
+
+#endif
+
 ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     aName( rName ),
     mpLayoutName(NULL),
@@ -701,6 +725,51 @@ void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
 
     maMemberList.swap(aNew);
 }
+
+#if DEBUG_PIVOT_TABLE
+
+void ScDPSaveDimension::Dump(int nIndent) const
+{
+    static const char* pOrientNames[] = { "hidden", "column", "row", "page", "data" };
+    std::string aIndent(nIndent*4, ' ');
+
+    cout << aIndent << "* dimension name: '" << aName << "'" << endl;
+
+    cout << aIndent << "    + orientation: ";
+    if (nOrientation <= 4)
+        cout << pOrientNames[nOrientation];
+    else
+        cout << "(invalid)";
+    cout << endl;
+
+    cout << aIndent << "    + layout name: ";
+    if (mpLayoutName)
+        cout << "'" << *mpLayoutName << "'";
+    else
+        cout << "(none)";
+    cout << endl;
+
+    cout << aIndent << "    + subtotal name: ";
+    if (mpSubtotalName)
+        cout << "'" << *mpSubtotalName << "'";
+    else
+        cout << "(none)";
+    cout << endl;
+
+    cout << aIndent << "    + is data layout: " << (bIsDataLayout ? "yes" : "no") << endl;
+    cout << aIndent << "    + is duplicate: " << (bDupFlag ? "yes" : "no") << endl;
+
+    MemberList::const_iterator itMem = maMemberList.begin(), itMemEnd = maMemberList.end();
+    for (; itMem != itMemEnd; ++itMem)
+    {
+        ScDPSaveMember* pMem = *itMem;
+        pMem->Dump(nIndent+1);
+    }
+
+    cout << endl; // blank line
+}
+
+#endif
 
 ScDPSaveData::ScDPSaveData() :
     pDimensionData( NULL ),
@@ -1353,6 +1422,20 @@ bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
 
     return pDim->HasInvisibleMember();
 }
+
+#if DEBUG_PIVOT_TABLE
+
+void ScDPSaveData::Dump() const
+{
+    DimsType::const_iterator itDim = aDimList.begin(), itDimEnd = aDimList.end();
+    for (; itDim != itDimEnd; ++itDim)
+    {
+        const ScDPSaveDimension& rDim = *itDim;
+        rDim.Dump();
+    }
+}
+
+#endif
 
 void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
 {

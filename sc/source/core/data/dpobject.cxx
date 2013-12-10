@@ -3640,6 +3640,34 @@ bool ScDPCollection::HasTable( const ScRange& rRange ) const
         maTables.begin(), maTables.end(), FindIntersectingTable(rRange)) != maTables.end();
 }
 
+#if DEBUG_PIVOT_TABLE
+
+namespace {
+
+struct DumpTable : std::unary_function<ScDPObject, void>
+{
+    void operator() (const ScDPObject& rObj) const
+    {
+        cout << "-- '" << rObj.GetName() << "'" << endl;
+        ScDPSaveData* pSaveData = rObj.GetSaveData();
+        if (!pSaveData)
+            return;
+
+        pSaveData->Dump();
+
+        cout << endl; // blank line
+    }
+};
+
+}
+
+void ScDPCollection::DumpTables() const
+{
+    std::for_each(maTables.begin(), maTables.end(), DumpTable());
+}
+
+#endif
+
 void ScDPCollection::RemoveCache(const ScDPCache* pCache)
 {
     if (maSheetCaches.remove(pCache))

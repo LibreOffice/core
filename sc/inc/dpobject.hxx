@@ -406,6 +406,10 @@ public:
     bool IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const;
     bool HasTable( const ScRange& rRange ) const;
 
+#if DEBUG_PIVOT_TABLE
+    void DumpTables() const;
+#endif
+
 private:
     /** Only to be called from ScDPCache::RemoveReference(). */
     void RemoveCache(const ScDPCache* pCache);
