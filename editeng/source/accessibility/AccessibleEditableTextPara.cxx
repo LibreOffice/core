@@ -2907,7 +2907,7 @@ namespace accessibility
 //        const sal_uInt16 nEEIndex = aIndex.GetEEIndex();
 
         const sal_uInt16 nEEIndex = rT.CalcEditEngineIndex( nPara, nCharIndex );
-        sal_Int32 nHLIndex = 0;
+        sal_Int32 nHLIndex = -1; //i123620
         sal_uInt16 nHyperLink = 0;
         sal_uInt16 nFields = rT.GetFieldCount( nPara );
         for ( sal_uInt16 n = 0; n < nFields; n++ )
