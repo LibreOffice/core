@@ -52,6 +52,7 @@ TextParagraphContext::TextParagraphContext( ContextHandler2Helper& rParent, Text
 : ContextHandler2( rParent )
 , mrParagraph( rPara )
 {
+    mbEnableTrimSpace = false;
 }
 
 // --------------------------------------------------------------------
