@@ -37,6 +37,10 @@
 
 #include <memory>
 
+#if DEBUG_PIVOT_TABLE
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#endif
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Exception;
@@ -1174,10 +1178,36 @@ void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsTy
         cout << "      '" << rCache.GetFormattedString(nDim, rItems[*it]) << "'" << endl;
 }
 
+const char* getGroupTypeName(sal_Int32 nType)
+{
+    static const char* pNames[] = {
+        "", "years", "quarters", "months", "days", "hours", "minutes", "seconds"
+    };
+
+    switch (nType)
+    {
+        case sheet::DataPilotFieldGroupBy::YEARS:    return pNames[1];
+        case sheet::DataPilotFieldGroupBy::QUARTERS: return pNames[2];
+        case sheet::DataPilotFieldGroupBy::MONTHS:   return pNames[3];
+        case sheet::DataPilotFieldGroupBy::DAYS:     return pNames[4];
+        case sheet::DataPilotFieldGroupBy::HOURS:    return pNames[5];
+        case sheet::DataPilotFieldGroupBy::MINUTES:  return pNames[6];
+        case sheet::DataPilotFieldGroupBy::SECONDS:  return pNames[7];
+        default:
+            ;
+    }
+
+    return pNames[0];
+}
+
 }
 
 void ScDPCache::Dump() const
 {
+    // Change these flags to fit your debugging needs.
+    bool bDumpItems = false;
+    bool bDumpSourceData = false;
+
     cout << "--- pivot cache dump" << endl;
     {
         FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
@@ -1186,15 +1216,34 @@ void ScDPCache::Dump() const
             const Field& fld = *it;
             cout << "* source dimension: " << GetDimensionName(i) << " (ID = " << i << ")" << endl;
             cout << "    item count: " << fld.maItems.size() << endl;
-            dumpItems(*this, i, fld.maItems, 0);
+            if (bDumpItems)
+                dumpItems(*this, i, fld.maItems, 0);
             if (fld.mpGroup)
             {
                 cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
-                dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
+                cout << "    group type: " << getGroupTypeName(fld.mpGroup->mnGroupType) << endl;
+                if (bDumpItems)
+                    dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
             }
 
-            cout << "    source data (re-constructed):" << endl;
-            dumpSourceData(*this, i, fld.maItems, fld.maData);
+            if (bDumpSourceData)
+            {
+                cout << "    source data (re-constructed):" << endl;
+                dumpSourceData(*this, i, fld.maItems, fld.maData);
+            }
+        }
+    }
+
+    {
+        GroupFieldsType::const_iterator it = maGroupFields.begin(), itEnd = maGroupFields.end();
+        for (size_t i = maFields.size(); it != itEnd; ++it, ++i)
+        {
+            const GroupItems& gi = *it;
+            cout << "* group dimension: (unnamed) (ID = " << i << ")" << endl;
+            cout << "    item count: " << gi.maItems.size() << endl;
+            cout << "    group type: " << getGroupTypeName(gi.mnGroupType) << endl;
+            if (bDumpItems)
+                dumpItems(*this, i, gi.maItems, 0);
         }
     }
 
@@ -1215,17 +1264,6 @@ void ScDPCache::Dump() const
             cout << "    rows " << aRange.start << "-" << aRange.end << ": " << (aRange.empty ? "empty" : "not-empty") << endl;
             aRange.start = it->first;
             aRange.empty = it->second;
-        }
-    }
-
-    {
-        GroupFieldsType::const_iterator it = maGroupFields.begin(), itEnd = maGroupFields.end();
-        for (size_t i = maFields.size(); it != itEnd; ++it, ++i)
-        {
-            const GroupItems& gi = *it;
-            cout << "* group dimension: (unnamed) (ID = " << i << ")" << endl;
-            cout << "    item count: " << gi.maItems.size() << endl;
-            dumpItems(*this, i, gi.maItems, 0);
         }
     }
 
