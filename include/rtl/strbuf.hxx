@@ -533,6 +533,23 @@ public:
     }
 
     /**
+        Appends the string representation of the <code>bool</code>
+        argument to the string buffer.
+
+        The argument is converted to a string as if by the method
+        <code>String.valueOf</code>, and the characters of that
+        string are then appended to this string buffer.
+
+        @param   b   a <code>bool</code>.
+        @return  this string buffer.
+     */
+    OStringBuffer & append(bool b)
+    {
+        sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        return append( sz, rtl_str_valueOfBoolean( sz, b ) );
+    }
+
+    /**
         Appends the string representation of the <code>char</code>
         argument to this string buffer.
 
