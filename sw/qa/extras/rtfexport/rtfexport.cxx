@@ -584,6 +584,11 @@ DECLARE_RTFEXPORT_TEST(testAbi10201, "abi10201.rtf")
     // crashtest
 }
 
+DECLARE_RTFEXPORT_TEST(testI23357, "i23357.odt")
+{
+    // crashtest
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
