@@ -288,17 +288,22 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     }
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
     // non visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id, I32S( GetNewShapeID( xShape ) ),
-                          XML_name, IDS( CustomShape ),
-                          FSEND );
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
-    WriteNonVisualProperties( xShape );
-    pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+                XML_id, I32S( GetNewShapeID( xShape ) ),
+                XML_name, IDS( CustomShape ),
+                FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+        WriteNonVisualProperties( xShape );
+        pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    }
+    else
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, FSEND);
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
@@ -322,7 +327,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, XML_sp );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     return *this;
 }
@@ -732,6 +737,8 @@ ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int3
         WriteText( xIface );
         pFS->endElementNS( nXmlNamespace, XML_txBody );
     }
+    else if (GetDocumentType() == DOCUMENT_DOCX)
+        mpFS->singleElementNS(nXmlNamespace, XML_bodyPr, FSEND);
 
     return *this;
 }
