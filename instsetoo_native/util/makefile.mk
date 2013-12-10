@@ -59,6 +59,17 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
+.IF "$(FORCE2ARCHIVE)" == "TRUE"
+PKGFORMAT = archive
+.END
+.IF "$(MAKETARGETS:e)"!=""
+PKGFORMAT+=$(MAKETARGETS:e:s/.//)
+.ENDIF
+# PKGFORMAT may contain the standard package format twice at this time.
+# Provide its content with duplicates removed.
+PACKAGE_FORMATS=$(uniq $(PKGFORMAT))
+
+
 # The help target belongs after the inclusion of target.mk to not become the default target.
 help .PHONY :
     @echo "known targets:"
@@ -73,9 +84,9 @@ help .PHONY :
     @echo "    sdkoodev"
     @echo 
     @echo "experimental targets:"
-    @echo "    patch_create           create a patch for updating an installed office (Windows only)"
-    @echo "    patch_apply            apply a previously created patch"
-    @echo "    patch_update_releases_xml"
+    @echo "    patch-create           create a patch for updating an installed office (Windows only)"
+    @echo "    patch-apply            apply a previously created patch"
+    @echo "    patch-update-releases-xml"
     @echo 
     @echo "Most targets (all except aoo_srcrelease and updatepack) accept suffixes"
     @echo "    add _<language> to build a target for one language only"
@@ -110,13 +121,6 @@ ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 .ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 
-.IF "$(FORCE2ARCHIVE)" == "TRUE"
-PKGFORMAT = archive
-.END
-
-.IF "$(MAKETARGETS:e)"!=""
-PKGFORMAT+=$(MAKETARGETS:e:s/.//)
-.ENDIF			# "$(MAKETARGETS:e)"!=""
 
 # Independent of PKGFORMAT, always build a default-language openoffice product
 # also in archive format, so that tests that require an OOo installation (like
@@ -172,6 +176,7 @@ ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
 sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
 sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
+patch-create: $(foreach,i,$(alllangiso) patch-create_$i)
 
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
@@ -219,6 +224,7 @@ $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) sdkoo_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $$@{$(PKGFORMAT:^".")}
+$(foreach,i,$(alllangiso) patch-create_$i) : $$@{$(PKGFORMAT:^".")}
 
 
 # This macro makes calling the make_installer.pl script a bit easier.
@@ -307,20 +313,25 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
 
 
 .IF "$(OS)" == "WNT"
-patch_create .PHONY : $(PRJ)$/data
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) patch-create_$L.$P)) .PHONY :
+    @echo building $@
     perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
         create								\
         --product-name Apache_OpenOffice				\
         --output-path $(OUT)						\
         --data-path $(PRJ)$/data					\
-        --lst-file $(PRJ)$/util$/openoffice.lst
-patch_apply .PHONY :
+        --lst-file $(PRJ)$/util$/openoffice.lst				\
+        --language $(subst,$(@:s/_/ /:1)_, $(@:b))			\
+        --package-format $(@:e:s/.//)
+patch-apply .PHONY :
     perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
         apply								\
         --product-name Apache_OpenOffice				\
         --output-path $(OUT)						\
-        --lst-file $(PRJ)$/util$/openoffice.lst
-patch_update_releases_xml .PHONY:
+        --lst-file $(PRJ)$/util$/openoffice.lst				\
+        --language en-US						\
+        --package-format msi
+patch-update-releases-xml .PHONY:
     perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
         update-releases-xml						\
         --product-name Apache_OpenOffice				\
@@ -331,7 +342,11 @@ patch_update_releases_xml .PHONY:
 $(PRJ)$/data :
     mkdir $@
 .ELSE
-patch .PHONY :
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) patch-create_$L.$P)) .PHONY :
+    @echo "patches can only be created on Windows at the moment"
+patch-apply .PHONY :
+    @echo "patches can only be created on Windows at the moment"
+patch-update-releases-xml .PHONY:
     @echo "patches can only be created on Windows at the moment"
 .ENDIF
 

@@ -1630,7 +1630,8 @@ sub get_source_codes ($)
 
     if ( ! defined $installer::globals::source_version)
     {
-        return;
+        $installer::logger::Lang->printf("no source version defined\n");
+        return (undef, undef);
     }
 
     my $onelanguage = installer::languages::get_key_language($languagesref);
@@ -1640,7 +1641,8 @@ sub get_source_codes ($)
         ->{$installer::globals::packageformat};
     if (defined $release_data)
     {
-        my $language_data = $release_data->{$onelanguage};
+        my $normalized_language = installer::languages::get_normalized_language($languagesref);
+        my $language_data = $release_data->{$normalized_language};
         if (defined $language_data)
         {
             $installer::logger::Lang->printf("source product code is %s\n", $language_data->{'product-code'});
@@ -1654,9 +1656,11 @@ sub get_source_codes ($)
         else
         {
             $installer::logger::Info->printf(
-                "Warning: can not access information about previous version %s and language %s\n",
+                "Warning: can not access information about previous version %s and language %s/%s/%s\n",
                 $installer::globals::source_version,
-                $onelanguage);
+                $onelanguage,
+                join(", ",@$languagesref),
+                $normalized_language);
             return (undef,undef);
         }
     }
@@ -1736,6 +1740,7 @@ sub set_global_code_variables ($$)
         # Just create two new uuids.
         $target_product_code = "{" . create_guid() . "}";
         $target_upgrade_code = "{" . create_guid() . "}";
+        $installer::logger::Lang->printf("there is no source version => created new guids\n");
     }
 
     $installer::globals::productcode = $target_product_code;
