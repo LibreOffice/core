@@ -21,7 +21,6 @@
 #define INCLUDED_WW8_FKP_HXX
 
 #include <WW8CpAndFc.hxx>
-#include "WW8StructBase.hxx"
 
 namespace writerfilter {
 namespace doctok

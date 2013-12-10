@@ -51,7 +51,6 @@
 #include &lt;resourcemodel/OutputWithDepth.hxx&gt;
 
 #include &lt;doctok/resourceids.hxx&gt;
-#include &lt;doctok/WW8StructBase.hxx&gt;
 
 namespace writerfilter {
 namespace doctok {
