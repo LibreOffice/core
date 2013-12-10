@@ -84,6 +84,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(3) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
+		--stringparam LIBO_SHARE_FOLDER $(LIBO_SHARE_FOLDER) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) \
 		$(3))
 endef
@@ -120,6 +121,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
+		--stringparam LIBO_SHARE_FOLDER $(LIBO_SHARE_FOLDER) \
 		--path $(SRCDIR)/officecfg/registry \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
@@ -155,6 +157,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--stringparam xcs $(4) \
 		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam module $(notdir $(subst -,/,$(basename $(notdir $(2))))) \
+		--stringparam LIBO_SHARE_FOLDER $(LIBO_SHARE_FOLDER) \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
 endef
@@ -251,6 +254,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam locale $(word 2,$(subst /, ,$(2))) \
+		--stringparam LIBO_SHARE_FOLDER $(LIBO_SHARE_FOLDER) \
 		--path $(SRCDIR)/officecfg/registry \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))

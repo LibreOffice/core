@@ -20,6 +20,7 @@
 $(eval $(call gb_Module_Module,wizards))
 
 $(eval $(call gb_Module_add_targets,wizards,\
+	CustomTarget_share \
 	Package_access2base \
 	Package_depot \
 	Package_euro \

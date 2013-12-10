@@ -104,7 +104,6 @@
 #define VARIABLE_BASEINSTURL                            "$(baseinsturl)"
 #define VARIABLE_USERDATAURL                            "$(userdataurl)"
 #define VARIABLE_BRANDBASEURL                           "$(brandbaseurl)"
-#define VARIABLE_SHARE_SUBDIR_NAME                      "$(share_subdir_name)"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -194,8 +193,7 @@ static const FixedVariable aFixedVarTable[] =
     // New variable of hierachy service (#i32656#)
     { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL,true                     },
     { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL,true                     },
-    { VARIABLE_BRANDBASEURL,PREDEFVAR_BRANDBASEURL, RTL_CONSTASCII_LENGTH(VARIABLE_BRANDBASEURL), true },
-    { VARIABLE_SHARE_SUBDIR_NAME,PREDEFVAR_SHARE_SUBDIR_NAME, RTL_CONSTASCII_LENGTH(VARIABLE_SHARE_SUBDIR_NAME), false }
+    { VARIABLE_BRANDBASEURL,PREDEFVAR_BRANDBASEURL, RTL_CONSTASCII_LENGTH(VARIABLE_BRANDBASEURL), true }
 };
 
 //_________________________________________________________________________________________________________________
@@ -999,8 +997,7 @@ throw ( RuntimeException )
                 bool bMatch = true;
                 if ( pIterFixed->eVariable == PREDEFVAR_LANG ||
                      pIterFixed->eVariable == PREDEFVAR_LANGID ||
-                     pIterFixed->eVariable == PREDEFVAR_VLANG ||
-                     pIterFixed->eVariable == PREDEFVAR_SHARE_SUBDIR_NAME )
+                     pIterFixed->eVariable == PREDEFVAR_VLANG )
                 {
                     // Special path variables as they can occur in the middle of a path. Only match if they
                     // describe a whole directory and not only a substring of a directory!
@@ -1117,8 +1114,6 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = "$BRAND_BASE_DIR";
     rtl::Bootstrap::expandMacros(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
-
-    aPreDefPathVariables.m_FixedVar[PREDEFVAR_SHARE_SUBDIR_NAME] = rtl::OUString(LIBO_SHARE_FOLDER);
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
