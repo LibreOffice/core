@@ -6367,7 +6367,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),
       m_postitFieldsMaxId( 0 ),
-      m_anchorId( 0 ),
+      m_anchorId( 1 ),
       m_nextFontId( 1 ),
       m_bBtLr(false),
       m_bFrameBtLr(false),
