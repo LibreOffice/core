@@ -52,6 +52,24 @@
       "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///3Y\u003d",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2013-12-10T10:38:34Z",
+      "side": 1,
+      "message": "What you mentioned is true. \n\nBut there won\u0027t be such case. Because as you can observe there are total 4 series mentioned in array sSeries[].\nvalues-first corresponds to series Open,\nvalues-max \u003d\u003e series High,\nvalues-min \u003d\u003e series Low,\nvalues-last \u003d\u003e series Close\n\nBy default its High-Low-Open (idx would be 1,2,3 and n_idxVal would be 1,2,3 too)\nIf Open is present then it will be Open-High-Low-Close (idx would be 0,1,2,3,4 and n_idxVal would be 1,2,3,4 as expected by MSOffice)\n\nThe case that you mentioned will never occur. You can also check the Stock chart types in MS Office.",
+      "parentUuid": "AAAAbH///6Q\u003d",
+      "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
