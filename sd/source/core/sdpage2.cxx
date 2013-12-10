@@ -603,8 +603,8 @@ OString SdPage::stringify() const
              /*append(OUStringToOString(maCreatedPageName, RTL_TEXTENCODING_UTF8)).
              append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8)).*/
              append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
-             append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append(mnPaperBin).
-             append((sal_Int32)meOrientation).append(mnTransitionType).append(mnTransitionSubtype).append(mbTransitionDirection).
+             append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append((sal_Int32)mnPaperBin).
+             append((sal_Int32)meOrientation).append((sal_Int32)mnTransitionType).append((sal_Int32)mnTransitionSubtype).append(mbTransitionDirection).
              append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
 
     sal_Int32 n = GetObjCount();
