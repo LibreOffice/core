@@ -55,6 +55,15 @@ interface XSidebarPanel
     /** Minimal possible width of this panel.
     */
     long getMinimalWidth();
+
+    /** Visible status of the panel
+    */
+    boolean IsExpanded();
+
+    /** Modify expand/collapse status of the panel
+    */
+    void SetExpanded ( [in] boolean bIsExpanded);
+
 } ;
 
 } ; } ; } ; } ;

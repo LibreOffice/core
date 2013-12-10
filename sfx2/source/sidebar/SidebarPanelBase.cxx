@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
@@ -242,6 +243,22 @@ sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth () throw(cssu::RuntimeExcep
         return aSize.Width();
     }
     return 0;
+}
+
+sal_Bool SAL_CALL SidebarPanelBase::IsExpanded() throw(cssu::RuntimeException)
+{
+    sal_Bool bIsExpanded = false;
+    Panel* pPanel = dynamic_cast< Panel*>(mpControl);
+    if (pPanel)
+         bIsExpanded = pPanel->IsExpanded();
+    return bIsExpanded;
+}
+
+void SAL_CALL SidebarPanelBase::SetExpanded (sal_Bool bIsExpanded) throw(cssu::RuntimeException)
+{
+    Panel* pPanel = dynamic_cast< Panel*>(mpControl);
+    if (pPanel)
+         pPanel->SetExpanded(bIsExpanded);
 }
 
 } } // end of namespace sfx2::sidebar

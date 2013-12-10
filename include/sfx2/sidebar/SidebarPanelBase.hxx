@@ -98,6 +98,10 @@ public:
         throw(cssu::RuntimeException);
     virtual sal_Int32 SAL_CALL getMinimalWidth ()
         throw(cssu::RuntimeException);
+    virtual sal_Bool SAL_CALL IsExpanded ()
+        throw(cssu::RuntimeException);
+    virtual void SAL_CALL SetExpanded (sal_Bool bIsExpanded)
+        throw(cssu::RuntimeException);
 
 protected:
     cssu::Reference<css::frame::XFrame> mxFrame;
