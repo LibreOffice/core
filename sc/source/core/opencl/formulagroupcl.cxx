@@ -1625,9 +1625,9 @@ public:
         }
     }
 private:
-    cl_mem mpClmem2;
     SubArgumentsType mvSubArguments;
     boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    cl_mem mpClmem2;
 };
 
 boost::shared_ptr<DynamicKernelArgument> SoPHelper(
@@ -1685,7 +1685,7 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
 
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(
     const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen) :
-    DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen),mpClmem2(NULL)
+    DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen), mpClmem2(NULL)
 {
     size_t nChildren = ft->Children.size();
 
