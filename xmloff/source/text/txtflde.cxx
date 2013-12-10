@@ -1261,17 +1261,17 @@ void XMLTextFieldExport::ExportFieldHelper(
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
             // no value -> current time
-            ProcessDateTime(XML_TIME_VALUE,
+            ProcessTimeOrDateTime(XML_TIME_VALUE,
                             GetDateTimeProperty(sPropertyDateTimeValue,
                                                 rPropSet),
-                            sal_False );
+                            XML_NAMESPACE_TEXT);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
             // no value -> current time
-            ProcessDateTime(XML_TIME_VALUE,
+            ProcessTimeOrDateTime(XML_TIME_VALUE,
                             GetDateTimeProperty(sPropertyDateTime,rPropSet),
-                            sal_False );
+                            XML_NAMESPACE_TEXT);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
@@ -2672,6 +2672,22 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
         ProcessDateTime(eName, (double)nMinutes / (double)(24*60),
                         bIsDate, bIsDuration, bOmitDurationIfZero, nPrefix);
     }
+}
+
+/// export a time or dateTime
+void XMLTextFieldExport::ProcessTimeOrDateTime(enum XMLTokenEnum eName,
+                                         const util::DateTime& rTime,
+                                         sal_uInt16 nPrefix)
+{
+    OUStringBuffer aBuffer;
+
+    // date/time value
+//    ::sax::Converter::convertTimeOrDateTime(aBuffer, rTime, 0);
+// NOTE: for 4.1 continue writing the invalid value that old versions can read
+    ::sax::Converter::convertDateTime(aBuffer, rTime);
+
+    // output attribute
+    ProcessString(eName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
 }
 
 
