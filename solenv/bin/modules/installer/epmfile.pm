@@ -795,7 +795,7 @@ sub set_patch_state
 sub get_ld_preload_string
 {
     return 'LD_PRELOAD=' . $ENV{'WORKDIR'}
-        . '/CustomTarget/setup_native/libgetuid.so';
+        . '/LinkTarget/Library/libgetuid.so';
 }
 
 #################################################

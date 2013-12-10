@@ -192,22 +192,7 @@ sub call_sum
 
 sub get_path_for_library
 {
-    my ($includepatharrayref) = @_;
-
-    my $getuidlibraryname = "libgetuid.so";
-
-    my $getuidlibraryref = "";
-
-    if ( $installer::globals::include_paths_read )
-    {
-        $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
-    }
-    else
-    {
-        $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$getuidlibraryname, $includepatharrayref, 0);
-    }
-
-    return $$getuidlibraryref;
+    return $ENV{'WORKDIR'} . '/LinkTarget/Library/libgetuid.so';
 }
 
 #########################################################
@@ -738,7 +723,7 @@ sub create_download_sets
 
         # getting the path of the getuid.so (only required for Solaris and Linux)
         my $getuidlibrary = "";
-        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $getuidlibrary = get_path_for_library($includepatharrayref); }
+        if (( $installer::globals::issolarisbuild ) || ( $installer::globals::islinuxbuild )) { $getuidlibrary = get_path_for_library(); }
 
         if ( $allvariableshashref->{'OOODOWNLOADNAME'} )
         {
