@@ -268,9 +268,9 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
     mpTableObj = pTable;
     mxTable = new TableModel( pTable );
     mxTable->init( nColumns, nRows );
-    mpLayouter = new TableLayouter( mxTable );
     Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
     mxTable->addModifyListener( xListener );
+    mpLayouter = new TableLayouter( mxTable );
     UpdateWritingMode();
     LayoutTable( mpTableObj->aRect, true, true );
     mpTableObj->maLogicRect = mpTableObj->aRect;
@@ -282,6 +282,8 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 {
     if (this != &rSource)
     {
+        disconnectTableStyle();
+
         if( mpLayouter )
         {
             delete mpLayouter;
@@ -307,6 +309,8 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         ApplyCellStyles();
         mpTableObj->aRect = mpTableObj->maLogicRect;
         LayoutTable( mpTableObj->aRect, false, false );
+
+        connectTableStyle();
     }
     return *this;
 }
@@ -453,8 +457,22 @@ bool SdrTableObjImpl::ApplyCellStyles()
 
 void SdrTableObjImpl::dispose()
 {
+    disconnectTableStyle();
+    mxTableStyle.clear();
+
+    if( mpLayouter )
+    {
+        delete mpLayouter;
+        mpLayouter = 0;
+    }
+
     if( mxTable.is() )
+    {
+        Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
+        mxTable->removeModifyListener( xListener );
         mxTable->dispose();
+        mxTable.clear();
+    }
 }
 
 // -----------------------------------------------------------------------------
