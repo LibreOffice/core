@@ -111,7 +111,7 @@ OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nWorksheet ) const
 void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
 {
     // convert '#SheetName!A1' to '#SheetName.A1'
-    if( !sSheetNameRef.isEmpty() && (sSheetNameRef[ 0 ] == '#') )
+    if( sSheetNameRef.startsWith("#") )
     {
         sal_Int32 nSepPos = sSheetNameRef.lastIndexOf( '!' );
         if( nSepPos > 0 )

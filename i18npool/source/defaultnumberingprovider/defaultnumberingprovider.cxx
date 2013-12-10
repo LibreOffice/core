@@ -525,7 +525,7 @@ static
 int should_ignore( OUString s )
 {
         // return true if blank or null
-        return s.equalsAscii(" ") || (!s.isEmpty() && s[0]==0);
+        return s == " " || (!s.isEmpty() && s[0]==0);
 }
 
 static

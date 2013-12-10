@@ -62,7 +62,7 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  INetURLObject::FSysStyle eStyle)
 {
     // Backwards compatibility:
-    if (!rTheRelURIRef.isEmpty() && rTheRelURIRef[0] == '#')
+    if( rTheRelURIRef.startsWith("#") )
         return rTheRelURIRef;
 
     INetURLObject aAbsURIRef;

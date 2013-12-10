@@ -629,7 +629,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     {
         rtl::OUString arg;
         rtl_getAppCommandArg(i, &arg.pData);
-        if( !arg.isEmpty() && arg[ 0 ] == '-' )
+        if( arg.startsWith("-") )
             continue;
         if( argsCount >= 3 )
         {

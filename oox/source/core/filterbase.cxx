@@ -314,7 +314,7 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
     /*  (5) handle URLs relative to current drive, e.g. the URL '/path1/file1'
         relative to the base URL 'file:///C:/path2/file2' does not result in
         the expected 'file:///C:/path1/file1', but in 'file:///path1/file1'. */
-    if( !aUrl.isEmpty() && (aUrl[ 0 ] == '/') &&
+    if( aUrl.startsWith("/") &&
         mxImpl->maFileUrl.match( aFilePrefix ) &&
         lclIsDosDrive( mxImpl->maFileUrl, nFilePrefixLen ) )
     {

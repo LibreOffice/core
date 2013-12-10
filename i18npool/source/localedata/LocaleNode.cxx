@@ -162,7 +162,7 @@ void print_OUString( const OUString& s )
 
 bool is_empty_string( const OUString& s )
 {
-     return s.isEmpty() || (s.getLength()==1 && s[0]=='\n');
+     return s.isEmpty() || s == "\n";
 }
 
 void print_indent( int depth )

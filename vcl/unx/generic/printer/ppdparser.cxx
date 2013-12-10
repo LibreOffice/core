@@ -680,7 +680,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         while( ! aStream.IsEof() )
         {
             OString aCurLine = aStream.ReadLine();
-            if (!aCurLine.isEmpty() && aCurLine[0] == '*')
+            if( aCurLine.startsWith("*") )
             {
                 if (aCurLine.matchIgnoreAsciiCase(OString("*include:")))
                 {

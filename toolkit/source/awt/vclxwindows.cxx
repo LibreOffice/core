@@ -2157,7 +2157,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
     for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
     {
         OUString aLocalizationKey( aItems[i].First );
-        if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )
+        if ( xStringResourceResolver.is() && aLocalizationKey.startsWith("&") )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
         }

@@ -132,7 +132,7 @@ OUString SdAnimationInfo::GetBookmark()
             sBookmark = pURLField->GetURL();
     }
 
-    if( (meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK) && !sBookmark.isEmpty() && (sBookmark[0] == '#') )
+    if( (meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK) && sBookmark.startsWith("#") )
         sBookmark = sBookmark.copy( 1 );
 
     return sBookmark;

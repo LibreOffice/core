@@ -1039,7 +1039,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
     OUString aUrl = aUrlBuffer.makeStringAndClear();
 
     // convert '#SheetName!A1' to '#SheetName.A1'
-    if( !aUrl.isEmpty() && (aUrl[ 0 ] == '#') )
+    if( aUrl.startsWith("#") )
     {
         sal_Int32 nSepPos = aUrl.lastIndexOf( '!' );
         if( nSepPos > 0 )

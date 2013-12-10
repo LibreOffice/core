@@ -1391,7 +1391,7 @@ static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal
         sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aTempString, nNumFmt, fDummy));
         if ( bIsNumberFormat )
             aTempString = "'" + aTempString;
-        else if ( !aTempString.isEmpty() && aTempString[0] == '\'' )
+        else if ( aTempString.startsWith("'") )
         {
             //  if the string starts with a "'", add another one because setFormula
             //  strips one (like text input, except for "text" number formats)

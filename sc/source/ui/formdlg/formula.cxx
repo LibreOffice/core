@@ -169,7 +169,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         if ( !bEdit )
         {
             OUString aNewFormula('=');
-            if ( !aFormula.isEmpty() && aFormula[0] == '=' )
+            if ( aFormula.startsWith("=") )
                 aNewFormula = aFormula;
 
             pScMod->InputReplaceSelection( aNewFormula );

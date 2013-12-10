@@ -1328,7 +1328,7 @@ void ScViewData::EditGrowY( sal_Bool bInitial )
         //  Subsequent calls with empty text might involve changed attributes (including
         //  font height), so they are treated like normal text.
         OUString aText = pEngine->GetText(  0 );
-        if ( ( aText.isEmpty() && bInitial ) || (!aText.isEmpty() && aText[0] == '=') )
+        if ( ( aText.isEmpty() && bInitial ) || aText.startsWith("=") )
             nAllowedExtra = SC_GROWY_BIG_EXTRA;
     }
 

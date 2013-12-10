@@ -747,7 +747,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
 
     // Use extension without dot!
     OUString sExt( rExt );
-    if ( !sExt.isEmpty() && ( sExt[0] == (sal_Unicode)'.' ))
+    if ( sExt.startsWith(".") )
         sExt = sExt.copy(1);
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);

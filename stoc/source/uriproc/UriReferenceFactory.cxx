@@ -185,9 +185,7 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
     OUString const & scheme, OUString const & schemeSpecificPart)
 {
     bool isAbsolute = !scheme.isEmpty();
-    bool isHierarchical
-        = !isAbsolute
-        || (!schemeSpecificPart.isEmpty() && schemeSpecificPart[0] == '/');
+    bool isHierarchical = !isAbsolute || schemeSpecificPart.startsWith("/");
     bool hasAuthority = false;
     OUString authority;
     OUString path;

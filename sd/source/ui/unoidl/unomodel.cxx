@@ -1558,7 +1558,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDo
 
     OUString aBookmark( rBookmark );
 
-    if( !rBookmark.isEmpty() && rBookmark[ 0 ] == '#' )
+    if( rBookmark.startsWith("#") )
         aBookmark = rBookmark.copy( 1 );
 
     // is the bookmark a page ?

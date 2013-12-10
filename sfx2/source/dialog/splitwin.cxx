@@ -272,7 +272,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
         OUString aTemp;
         if ( aUserItem >>= aTemp )
             aWinData = aTemp;
-        if ( !aWinData.isEmpty() && aWinData[0] == 'V' )
+        if ( aWinData.startsWith("V") )
         {
             pEmptyWin->nState = (sal_uInt16) aWinData.getToken( 1, ',' ).toInt32();
             if ( pEmptyWin->nState & 2 )

@@ -266,7 +266,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
     else
         buf.append( baseURL );
     OUString relPath(relPath_);
-    if (!relPath.isEmpty() && relPath[ 0 ] == '/')
+    if( relPath.startsWith("/") )
         relPath = relPath.copy( 1 );
     if (!relPath.isEmpty())
     {

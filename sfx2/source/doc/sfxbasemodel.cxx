@@ -290,7 +290,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             OSL_ENSURE(!uri.isEmpty(), "GetDMA: empty uri?");
             if (!uri.isEmpty() && !uri.endsWithAsciiL("/", 1))
             {
-                uri = uri + OUString("/");
+                uri = uri + "/";
             }
 
             m_xDocumentMetadata = new ::sfx2::DocumentMetadataAccess(

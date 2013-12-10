@@ -1051,7 +1051,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // make URL ready
         SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_FILE_NAME, sal_False );
         aFileName = pURLItem->GetValue();
-        if( !aFileName.isEmpty() && aFileName[0] == '#' ) // Mark without URL
+        if( aFileName.startsWith("#") ) // Mark without URL
         {
             SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : 0;
             if ( !pView )

@@ -2295,7 +2295,7 @@ void SmParser::Special()
     // conversion of symbol names for 6.0 (XML) file format
     // (name change on import / export.
     // UI uses localized names XML file format does not.)
-    if (!rName.isEmpty() && rName[0] == '%')
+    if( rName.startsWith("%") )
     {
         if (IsImportSymbolNames())
         {

@@ -1085,7 +1085,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
         if( !getFlag( mnIgnore, nMask ) )
         {
             const OUString& rFlagName = aIt->second;
-            bool bOnOff = !rFlagName.isEmpty() && rFlagName[ 0 ] == ':';
+            bool bOnOff = rFlagName.startsWith(":");
             bool bFlag = getFlag( nKey, nMask );
             if( bOnOff )
             {
@@ -1094,7 +1094,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
             }
             else
             {
-                bool bNegated = !rFlagName.isEmpty() && rFlagName[ 0 ] == '!';
+                bool bNegated = rFlagName.startsWith("!");
                 sal_Int32 nBothSep = bNegated ? rFlagName.indexOf( '!', 1 ) : -1;
                 if( bFlag )
                 {
@@ -1412,7 +1412,7 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
     if( aDataVec.size() >= 2 )
     {
         OUString aFactor = aDataVec[ 1 ];
-        bool bRecip = !aFactor.isEmpty() && aFactor[ 0 ] == '/';
+        bool bRecip = aFactor.startsWith("/");
         if( bRecip )
             aFactor = aFactor.copy( 1 );
         double fFactor;

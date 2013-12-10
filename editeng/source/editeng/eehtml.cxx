@@ -190,8 +190,7 @@ void EditHTMLParser::NextToken( int nToken )
                 StartPara( false );
 
             OUString aText = aToken;
-            if ( !aText.isEmpty() && ( aText[ 0 ] == ' ' )
-                    && ThrowAwayBlank() && !IsReadPRE() )
+            if ( aText.startsWith(" ") && ThrowAwayBlank() && !IsReadPRE() )
                 aText = aText.copy( 1 );
 
             if ( pCurAnchor )
@@ -784,7 +783,7 @@ void EditHTMLParser::AnchorStart()
         if ( !aRef.isEmpty() )
         {
             OUString aURL = aRef;
-            if ( !aURL.isEmpty() && ( aURL[ 0 ] != '#' ) )
+            if ( aURL.startsWith("#") )
             {
                 INetURLObject aTargetURL;
                 INetURLObject aRootURL( aBaseURL );

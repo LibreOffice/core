@@ -873,7 +873,7 @@ sal_Bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
         OUString aBookmark( rBookmark );
 
-        if( !rBookmark.isEmpty() && rBookmark[0] == sal_Unicode('#') )
+        if( rBookmark.startsWith("#") )
             aBookmark = rBookmark.copy( 1 );
 
         // Ist das Bookmark eine Seite?
@@ -979,7 +979,7 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
         OUString aBookmark( rBookmark );
 
-        if( !rBookmark.isEmpty() && rBookmark[0] == sal_Unicode('#') )
+        if( rBookmark.startsWith("#") )
             aBookmark = rBookmark.copy( 1 );
 
         // Ist das Bookmark eine Seite?

@@ -2021,7 +2021,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
 rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
     sal_Int32 i = 0;
     // For backwards compatibility, allow absolute paths where meaningful:
-    if (!path.isEmpty() && path[0] == '/') {
+    if( path.startsWith("/") ) {
         ++i;
         if (!getRootAccess().is()) {
             return rtl::Reference< ChildAccess >();
