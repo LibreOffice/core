@@ -385,7 +385,7 @@ std::string GetChiSqDistCDF =
 "   if (fX <= 0.0)\n"
 "       return 0.0;"
 "   else\n"
-"       return GetLowRegIGamma( fDF/2.0, fX/2.0);\n"
+"       return GetLowRegIGamma( fDF*pow(2.0,-1.0), fX*pow(2.0,-1.0));\n"
 "}\n";
 
 
@@ -412,18 +412,18 @@ std::string GetChiSqDistPDF =
 "       }\n"
 "       else\n"
 "       {\n"
-"           fValue = 1/sqrt(fX*2*F_PI);\n"
+"           fValue = pow(sqrt(fX*2*F_PI),-1.0);\n"
 "           fCount = 1.0;\n"
 "       }\n"
 "       while ( fCount < fDF)\n"
 "       {\n"
-"           fValue *= (fX / fCount);\n"
+"           fValue *= (fX *pow(fCount,-1.0));\n"
 "           fCount += 2.0;\n"
 "       }\n"
 "       if (fX>=1425.0)\n"
-"           fValue = exp(log(fValue)-fX/2);\n"
+"           fValue = exp(log(fValue)-fX*pow(2,-1.0));\n"
 "       else\n"
-"           fValue *= exp(-fX/2);\n"
+"           fValue *= exp(-fX*pow(2,-1.0));\n"
 "   }\n"
 "    return fValue;\n"
 "}\n";

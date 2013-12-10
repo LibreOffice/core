@@ -6591,8 +6591,48 @@ vSubArguments)
         {
             ss << "    int tmp2  = 1;\n";
         }
-        ss << "tmp1 = floor(tmp1);\n";
+    }
+    size_t i = vSubArguments.size();
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
+#endif
+        }
 
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        tmp"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        tmp"<<i<<"=\n";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n}\n";
+        }
+        else
+        {
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+#endif
+    }
+        ss << "    tmp1 = floor(tmp1);\n";
         ss << "    if(tmp1 < 1.0)\n";
         ss << "        result = -DBL_MAX;\n";
         ss << "    else\n";
@@ -6605,8 +6645,6 @@ vSubArguments)
         ss << "    return result;\n";
         ss << "}";
     }
-
-}
 
  void OpChiSqInv::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
@@ -6643,7 +6681,8 @@ vSubArguments)
     {
         ss << "    result = -DBL_MAX;\n";
         ss << "    return result;\n";
-    }else
+    }
+    else
     {
         GenTmpVariables(ss,vSubArguments);
         CheckAllSubArgumentIsNan(ss,vSubArguments);
