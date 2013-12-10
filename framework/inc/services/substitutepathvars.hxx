@@ -269,10 +269,6 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
                 }
             };
 
-            // heavy used string
-            const OUString          m_aVarStart;
-            const OUString          m_aVarEnd;
-
             VarNameToIndexMap            m_aPreDefVarMap;         // Mapping from pre-def variable names to enum for array access
             SubstituteVariables          m_aSubstVarMap;          // Active rule set map indexed by variable name!
             PredefinedPathVariables      m_aPreDefVars;           // All predefined variables

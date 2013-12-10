@@ -50,61 +50,6 @@
 
 #include <string.h>
 
-//_________________________________________________________________________________________________________________
-//      Defines
-//_________________________________________________________________________________________________________________
-
-#define STRPOS_NOTFOUND                  (sal_Int32)-1
-
-// Variable start/end characters
-#define SIGN_STARTVARIABLE               "$("
-#define SIGN_ENDVARIABLE                 ")"
-
-// Length of SUBSTITUTE_... to replace it with real values.
-#define REPLACELENGTH_INST               7
-#define REPLACELENGTH_PROG               7
-#define REPLACELENGTH_USER               7
-#define REPLACELENGTH_WORK               7
-#define REPLACELENGTH_HOME               7
-#define REPLACELENGTH_TEMP               7
-#define REPLACELENGTH_PATH               7
-#define REPLACELENGTH_INSTPATH          11
-#define REPLACELENGTH_PROGPATH          11
-#define REPLACELENGTH_USERPATH          11
-#define REPLACELENGTH_INSTURL           10
-#define REPLACELENGTH_PROGURL           10
-#define REPLACELENGTH_USERURL           10
-#define REPLACELENGTH_LANG               7
-#define REPLACELENGTH_LANGID             9
-#define REPLACELENGTH_VLANG              8
-#define REPLACELENGTH_WORKDIRURL        13
-// New variable of hierachy service (#i32656#)
-#define REPLACELENGTH_BASEINSTURL       14
-#define REPLACELENGTH_USERDATAURL       14
-
-// Name of the pre defined path variables
-#define VARIABLE_INST                                   "$(inst)"
-#define VARIABLE_PROG                                   "$(prog)"
-#define VARIABLE_USER                                   "$(user)"
-#define VARIABLE_WORK                                   "$(work)"
-#define VARIABLE_HOME                                   "$(home)"
-#define VARIABLE_TEMP                                   "$(temp)"
-#define VARIABLE_PATH                                   "$(path)"
-#define VARIABLE_LANG                                   "$(lang)"
-#define VARIABLE_LANGID                                 "$(langid)"
-#define VARIABLE_VLANG                                  "$(vlang)"
-#define VARIABLE_INSTPATH                               "$(instpath)"
-#define VARIABLE_PROGPATH                               "$(progpath)"
-#define VARIABLE_USERPATH                               "$(userpath)"
-#define VARIABLE_INSTURL                                "$(insturl)"
-#define VARIABLE_PROGURL                                "$(progurl)"
-#define VARIABLE_USERURL                                "$(userurl)"
-#define VARIABLE_WORKDIRURL                             "$(workdirurl)"
-// New variable of hierachy service (#i32656#)
-#define VARIABLE_BASEINSTURL                            "$(baseinsturl)"
-#define VARIABLE_USERDATAURL                            "$(userdataurl)"
-#define VARIABLE_BRANDBASEURL                           "$(brandbaseurl)"
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
@@ -121,15 +66,15 @@ namespace framework
 struct FixedVariable
 {
     const char*     pVarName;
+    sal_Int32       nStrLen;
     PreDefVariable  nEnumValue;
-    int             nStrLen;
     bool            bAbsPath;
 };
 
 struct TableEntry
 {
     const char* pOSString;
-    int         nStrLen;
+    sal_Int32   nStrLen;
 };
 
 // Table with valid operating system strings
@@ -137,11 +82,11 @@ struct TableEntry
 // of the string
 static const TableEntry aOSTable[OS_COUNT] =
 {
-    { "WINDOWS"     ,       7       },
-    { "UNIX"        ,       4       },
-    { "SOLARIS"     ,       7       },
-    { "LINUX"       ,       5       },
-    { ""            ,       0       }       // unknown
+    { RTL_CONSTASCII_STRINGPARAM("WINDOWS") },
+    { RTL_CONSTASCII_STRINGPARAM("UNIX") },
+    { RTL_CONSTASCII_STRINGPARAM("SOLARIS") },
+    { RTL_CONSTASCII_STRINGPARAM("LINUX") },
+    { RTL_CONSTASCII_STRINGPARAM("") } // unknown
 };
 
 // Table with valid environment variables
@@ -149,12 +94,12 @@ static const TableEntry aOSTable[OS_COUNT] =
 // the length of the string.
 static const TableEntry aEnvTable[ET_COUNT] =
 {
-    { "HOST"        ,       4       },
-    { "YPDOMAIN"    ,       8       },
-    { "DNSDOMAIN"   ,       9       },
-    { "NTDOMAIN"    ,       8       },
-    { "OS"          ,       2       },
-    { ""            ,       0       } // unknown
+    { RTL_CONSTASCII_STRINGPARAM("HOST") },
+    { RTL_CONSTASCII_STRINGPARAM("YPDOMAIN") },
+    { RTL_CONSTASCII_STRINGPARAM("DNSDOMAIN") },
+    { RTL_CONSTASCII_STRINGPARAM("NTDOMAIN") },
+    { RTL_CONSTASCII_STRINGPARAM("OS") },
+    { RTL_CONSTASCII_STRINGPARAM("") } // unknown
 };
 
 // Priority table for the environment types. Lower numbers define
@@ -173,27 +118,26 @@ static const sal_Int16 aEnvPrioTable[ET_COUNT] =
 // Table with all fixed/predefined variables supported.
 static const FixedVariable aFixedVarTable[] =
 {
-    { VARIABLE_INST,        PREDEFVAR_INST,         REPLACELENGTH_INST,     true                       },
-    { VARIABLE_PROG,        PREDEFVAR_PROG,         REPLACELENGTH_PROG,     true                       },
-    { VARIABLE_USER,        PREDEFVAR_USER,         REPLACELENGTH_USER,     true                       },
-    { VARIABLE_WORK,        PREDEFVAR_WORK,         REPLACELENGTH_WORK,     true                       },      // Special variable (transient)!
-    { VARIABLE_HOME,        PREDEFVAR_HOME,         REPLACELENGTH_HOME,     true                       },
-    { VARIABLE_TEMP,        PREDEFVAR_TEMP,         REPLACELENGTH_TEMP,     true                       },
-    { VARIABLE_PATH,        PREDEFVAR_PATH,         REPLACELENGTH_PATH,     true                       },
-    { VARIABLE_LANG,        PREDEFVAR_LANG,         REPLACELENGTH_LANG,     false                      },
-    { VARIABLE_LANGID,      PREDEFVAR_LANGID,       REPLACELENGTH_LANGID,   false                      },
-    { VARIABLE_VLANG,       PREDEFVAR_VLANG,        REPLACELENGTH_VLANG,    false                      },
-    { VARIABLE_INSTPATH,    PREDEFVAR_INSTPATH,     REPLACELENGTH_INSTPATH, true                       },
-    { VARIABLE_PROGPATH,    PREDEFVAR_PROGPATH,     REPLACELENGTH_PROGPATH, true                       },
-    { VARIABLE_USERPATH,    PREDEFVAR_USERPATH,     REPLACELENGTH_USERPATH, true                       },
-    { VARIABLE_INSTURL,     PREDEFVAR_INSTURL,      REPLACELENGTH_INSTURL,  true                       },
-    { VARIABLE_PROGURL,     PREDEFVAR_PROGURL,      REPLACELENGTH_PROGURL,  true                       },
-    { VARIABLE_USERURL,     PREDEFVAR_USERURL,      REPLACELENGTH_USERURL,  true                       },
-    { VARIABLE_WORKDIRURL,  PREDEFVAR_WORKDIRURL,   REPLACELENGTH_WORKDIRURL,true                      },  // Special variable (transient) and don't use for resubstitution!
-    // New variable of hierachy service (#i32656#)
-    { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL,true                     },
-    { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL,true                     },
-    { VARIABLE_BRANDBASEURL,PREDEFVAR_BRANDBASEURL, RTL_CONSTASCII_LENGTH(VARIABLE_BRANDBASEURL), true }
+    { RTL_CONSTASCII_STRINGPARAM("$(inst)"),        PREDEFVAR_INST,         true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(prog)"),        PREDEFVAR_PROG,         true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(user)"),        PREDEFVAR_USER,         true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(work)"),        PREDEFVAR_WORK,         true  },      // Special variable (transient)!
+    { RTL_CONSTASCII_STRINGPARAM("$(home)"),        PREDEFVAR_HOME,         true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(temp)"),        PREDEFVAR_TEMP,         true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(path)"),        PREDEFVAR_PATH,         true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(lang)"),        PREDEFVAR_LANG,         false },
+    { RTL_CONSTASCII_STRINGPARAM("$(langid)"),      PREDEFVAR_LANGID,       false },
+    { RTL_CONSTASCII_STRINGPARAM("$(vlang)"),       PREDEFVAR_VLANG,        false },
+    { RTL_CONSTASCII_STRINGPARAM("$(instpath)"),    PREDEFVAR_INSTPATH,     true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(progpath)"),    PREDEFVAR_PROGPATH,     true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(userpath)"),    PREDEFVAR_USERPATH,     true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(insturl)"),     PREDEFVAR_INSTURL,      true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(progurl)"),     PREDEFVAR_PROGURL,      true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(userurl)"),     PREDEFVAR_USERURL,      true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(workdirurl)"),  PREDEFVAR_WORKDIRURL,   true  },  // Special variable (transient) and don't use for resubstitution!
+    { RTL_CONSTASCII_STRINGPARAM("$(baseinsturl)"), PREDEFVAR_BASEINSTURL,  true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(userdataurl)"), PREDEFVAR_USERDATAURL,  true  },
+    { RTL_CONSTASCII_STRINGPARAM("$(brandbaseurl)"),PREDEFVAR_BRANDBASEURL, true  }
 };
 
 //_________________________________________________________________________________________________________________
@@ -562,8 +506,6 @@ DEFINE_INIT_SERVICE                     (   SubstitutePathVariables, {} )
 
 SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentContext >& xContext ) :
     ThreadHelpBase(),
-    m_aVarStart( SIGN_STARTVARIABLE ),
-    m_aVarEnd( SIGN_ENDVARIABLE ),
     m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_xContext( xContext )
 {
@@ -605,11 +547,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); ++pIter )
     {
         ReSubstUserVarOrder aUserOrderVar;
-        OUStringBuffer aStrBuffer( pIter->second.aSubstVariable.getLength() );
-        aStrBuffer.append( m_aVarStart );
-        aStrBuffer.append( pIter->second.aSubstVariable );
-        aStrBuffer.append( m_aVarEnd );
-        aUserOrderVar.aVarName        = aStrBuffer.makeStringAndClear();
+        aUserOrderVar.aVarName = "$(" + pIter->second.aSubstVariable + ")";
         aUserOrderVar.nVarValueLength = pIter->second.aSubstVariable.getLength();
         m_aReSubstUserVarOrder.push_back( aUserOrderVar );
     }
@@ -756,17 +694,17 @@ throw ( NoSuchElementException, RuntimeException )
     // Search for first occurrence of "$(...".
     sal_Int32   nDepth = 0;
     bool        bSubstitutionCompleted = false;
-    sal_Int32   nPosition       = aWorkText.indexOf( m_aVarStart );     // = first position of "$(" in string
+    sal_Int32   nPosition = aWorkText.indexOf( "$(" );
     sal_Int32   nLength = 0; // = count of letters from "$(" to ")" in string
     bool        bVarNotSubstituted = false;
 
     // Have we found any variable like "$(...)"?
-    if ( nPosition != STRPOS_NOTFOUND )
+    if ( nPosition != -1 )
     {
         // Yes; Get length of found variable.
         // If no ")" was found - nLength is set to 0 by default! see before.
-        sal_Int32 nEndPosition = aWorkText.indexOf( m_aVarEnd, nPosition );
-        if ( nEndPosition != STRPOS_NOTFOUND )
+        sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
+        if ( nEndPosition != -1 )
             nLength = nEndPosition - nPosition + 1;
     }
 
@@ -775,7 +713,7 @@ throw ( NoSuchElementException, RuntimeException )
     bool bWorkDirURLRetrieved = false;
     while ( !bSubstitutionCompleted && nDepth < nMaxRecursiveDepth )
     {
-        while ( ( nPosition != STRPOS_NOTFOUND ) && ( nLength > 3 ) ) // "$(" ")"
+        while ( ( nPosition != -1 ) && ( nLength > 3 ) ) // "$(" ")"
         {
             // YES; Get the next variable for replace.
             sal_Int32     nReplaceLength  = 0;
@@ -850,26 +788,26 @@ throw ( NoSuchElementException, RuntimeException )
             if ( nPosition + 1 > aWorkText.getLength() )
             {
                 // Position is out of range. Break loop!
-                nPosition = STRPOS_NOTFOUND;
+                nPosition = -1;
                 nLength = 0;
             }
             else
             {
                 // Else; Position is valid. Search for next variable to replace.
-                nPosition = aWorkText.indexOf( m_aVarStart, nPosition );
+                nPosition = aWorkText.indexOf( "$(", nPosition );
                 // Have we found any variable like "$(...)"?
-                if ( nPosition != STRPOS_NOTFOUND )
+                if ( nPosition != -1 )
                 {
                     // Yes; Get length of found variable. If no ")" was found - nLength must set to 0!
                     nLength = 0;
-                    sal_Int32 nEndPosition = aWorkText.indexOf( m_aVarEnd, nPosition );
-                    if ( nEndPosition != STRPOS_NOTFOUND )
+                    sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
+                    if ( nEndPosition != -1 )
                         nLength = nEndPosition - nPosition + 1;
                 }
             }
         }
 
-        nPosition = aWorkText.indexOf( m_aVarStart );
+        nPosition = aWorkText.indexOf( "$(" );
         if ( nPosition == -1 )
         {
             bSubstitutionCompleted = true;
@@ -896,8 +834,8 @@ throw ( NoSuchElementException, RuntimeException )
             aEndlessRecursiveDetector.push_back( aWorkText );
 
             // Initialize values for next
-            sal_Int32 nEndPosition = aWorkText.indexOf( m_aVarEnd, nPosition );
-            if ( nEndPosition != STRPOS_NOTFOUND )
+            sal_Int32 nEndPosition = aWorkText.indexOf( ')', nPosition );
+            if ( nEndPosition != -1 )
                 nLength = nEndPosition - nPosition + 1;
             bVarNotSubstituted = sal_False;
             ++nDepth;
@@ -971,26 +909,25 @@ throw ( RuntimeException )
         }
     }
 
-    // Due to a recursive definition this code must exchange variables with variables!
-    bool bResubstitutionCompleted = false;
-    bool bVariableFound           = false;
-
     // Get transient predefined path variable $(work) value before starting resubstitution
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_WORK ] = GetWorkVariableValue();
 
-    while ( !bResubstitutionCompleted )
+    for (;;)
     {
-        ReSubstFixedVarOrderVector::const_iterator pIterFixed;
-        for ( pIterFixed = m_aReSubstFixedVarOrder.begin(); pIterFixed != m_aReSubstFixedVarOrder.end(); ++pIterFixed )
+        bool bVariableFound = false;
+
+        for (ReSubstFixedVarOrderVector::const_iterator i(
+                 m_aReSubstFixedVarOrder.begin());
+             i != m_aReSubstFixedVarOrder.end(); ++i)
         {
-            OUString aValue = m_aPreDefVars.m_FixedVar[ (sal_Int32)pIterFixed->eVariable ];
+            OUString aValue = m_aPreDefVars.m_FixedVar[i->eVariable];
             sal_Int32 nPos = aURL.indexOf( aValue );
             if ( nPos >= 0 )
             {
                 bool bMatch = true;
-                if ( pIterFixed->eVariable == PREDEFVAR_LANG ||
-                     pIterFixed->eVariable == PREDEFVAR_LANGID ||
-                     pIterFixed->eVariable == PREDEFVAR_VLANG )
+                if ( i->eVariable == PREDEFVAR_LANG ||
+                     i->eVariable == PREDEFVAR_LANGID ||
+                     i->eVariable == PREDEFVAR_VLANG )
                 {
                     // Special path variables as they can occur in the middle of a path. Only match if they
                     // describe a whole directory and not only a substring of a directory!
@@ -1008,11 +945,9 @@ throw ( RuntimeException )
 
                 if ( bMatch )
                 {
-                    OUStringBuffer aStrBuffer( aURL.getLength() );
-                    aStrBuffer.append( aURL.copy( 0, nPos ) );
-                    aStrBuffer.append( m_aPreDefVars.m_FixedVarNames[ (sal_Int32)pIterFixed->eVariable ] ); // Get the variable name for struct var name array!
-                    aStrBuffer.append( aURL.copy( nPos + aValue.getLength(), ( aURL.getLength() - ( nPos + aValue.getLength() )) ));
-                    aURL = aStrBuffer.makeStringAndClear();
+                    aURL = aURL.replaceAt(
+                        nPos, aValue.getLength(),
+                        m_aPreDefVars.m_FixedVarNames[i->eVariable]);
                     bVariableFound = true; // Resubstitution not finished yet!
                     break;
                 }
@@ -1020,31 +955,25 @@ throw ( RuntimeException )
         }
 
         // This part can be iteratered more than one time as variables can contain variables again!
-        ReSubstUserVarOrderVector::const_iterator pIterUser;
-        for ( pIterUser = m_aReSubstUserVarOrder.begin(); pIterUser != m_aReSubstUserVarOrder.end(); ++pIterUser )
+        for (ReSubstUserVarOrderVector::const_iterator i(
+                 m_aReSubstUserVarOrder.begin());
+             i != m_aReSubstUserVarOrder.end(); ++i)
         {
-            OUString aVarValue = pIterUser->aVarName;
+            OUString aVarValue = i->aVarName;
             sal_Int32 nPos = aURL.indexOf( aVarValue );
             if ( nPos >= 0 )
             {
-                OUStringBuffer aStrBuffer( aURL.getLength() );
-                aStrBuffer.append( aURL.copy( 0, nPos ) );
-                aStrBuffer.append( m_aVarStart );
-                aStrBuffer.append( aVarValue );
-                aStrBuffer.append( m_aVarEnd );
-                aStrBuffer.append( aURL.copy( nPos +  aVarValue.getLength(), ( aURL.getLength() - ( nPos + aVarValue.getLength() )) ));
-                aURL = aStrBuffer.makeStringAndClear();
+                aURL = aURL.replaceAt(
+                    nPos, aVarValue.getLength(), "$(" + aVarValue + ")");
                 bVariableFound = true;  // Resubstitution not finished yet!
             }
         }
 
         if ( !bVariableFound )
-            bResubstitutionCompleted = true;
-        else
-            bVariableFound = sal_False; // Next resubstitution
+        {
+            return aURL;
+        }
     }
-
-    return aURL;
 }
 
 // This method support both request schemes "$("<varname>")" or "<varname>".
@@ -1053,15 +982,11 @@ throw ( NoSuchElementException, RuntimeException )
 {
     OUString aVariable;
 
-    sal_Int32 nPos = rVariable.indexOf( m_aVarStart );
+    sal_Int32 nPos = rVariable.indexOf( "$(" );
     if ( nPos == -1 )
     {
         // Prepare variable name before hash map access
-        OUStringBuffer aStrBuffer( rVariable.getLength() + m_aVarStart.getLength() + m_aVarEnd.getLength() );
-        aStrBuffer.append( m_aVarStart );
-        aStrBuffer.append( rVariable );
-        aStrBuffer.append( m_aVarEnd );
-        aVariable = aStrBuffer.makeStringAndClear();
+        aVariable = "$(" + rVariable + ")";
     }
 
     VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( ( nPos == -1 ) ? aVariable : rVariable );
