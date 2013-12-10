@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -54,6 +55,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     public static enum Type {
         WIFI, BLUETOOTH
     }
+
+    boolean mBluetoothDisabled = false;
 
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
@@ -148,7 +151,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
                 return getString(R.string.message_search_wifi);
 
             case BLUETOOTH:
-                return getString(R.string.message_search_bluetooth);
+                if (mBluetoothDisabled != true)
+                    return getString(R.string.message_search_bluetooth);
+                else
+                    return getString(R.string.message_bluetooth_disabled);
 
             default:
                 return "";
@@ -210,6 +216,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
             }
         }
 
+        mBluetoothDisabled = !BluetoothAdapter.getDefaultAdapter().isEnabled();
+
         return aComputers;
     }
 
@@ -251,16 +259,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
             return;
         }
 
-        if (!isShowingProgressMessageRequired()) {
-            return;
-        }
-
         showProgressMessage();
         showLearnMoreMessage();
-    }
-
-    private boolean isShowingProgressMessageRequired() {
-        return getProgressMessageView().getVisibility() == View.INVISIBLE;
     }
 
     private void tearDownComputersAdapter() {
@@ -330,6 +330,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SERVERS_LIST_CHANGED.equals(aIntent.getAction())) {
                 mComputersFragment.loadComputers();
+            } else if (Intents.Actions.BLUETOOTH_STATE_CHANGED.equals(aIntent.getAction())) {
+                mComputersFragment.loadComputers();
             }
         }
     }
@@ -337,7 +339,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
         aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
-
+        aIntentFilter.addAction(Intents.Actions.BLUETOOTH_STATE_CHANGED);
         return aIntentFilter;
     }
 

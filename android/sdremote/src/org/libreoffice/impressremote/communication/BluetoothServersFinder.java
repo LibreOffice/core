@@ -72,9 +72,19 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
     public void onReceive(Context aContext, Intent aIntent) {
         if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(aIntent.getAction())) {
             switch (aIntent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)) {
-                case BluetoothAdapter.STATE_ON:
+                case BluetoothAdapter.STATE_ON: {
                     BluetoothOperator.getAdapter().startDiscovery();
+                    Intent aNewIntent = Intents.buildBluetoothStateChangedIntent();
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(aNewIntent);
                     return;
+                }
+
+                case BluetoothAdapter.STATE_OFF: {
+                    mServers.clear();
+                    Intent aNewIntent = Intents.buildBluetoothStateChangedIntent();
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(aNewIntent);
+                    return;
+                }
 
                 default:
                     return;

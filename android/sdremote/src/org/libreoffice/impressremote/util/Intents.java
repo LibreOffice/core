@@ -29,6 +29,7 @@ public final class Intents {
         }
 
         public static final String SERVERS_LIST_CHANGED = "SERVERS_LIST_CHANGED";
+        public static final String BLUETOOTH_STATE_CHANGED = "BLUETOOTH_STATE_CHANGED";
 
         public static final String PAIRING_SUCCESSFUL = "PAIRING_SUCCESSFUL";
         public static final String PAIRING_VALIDATION = "PAIRING_VALIDATION";
@@ -72,6 +73,10 @@ public final class Intents {
 
     public static Intent buildServersListChangedIntent() {
         return new Intent(Actions.SERVERS_LIST_CHANGED);
+    }
+
+    public static Intent buildBluetoothStateChangedIntent() {
+        return new Intent(Actions.BLUETOOTH_STATE_CHANGED);
     }
 
     public static Intent buildPairingSuccessfulIntent() {

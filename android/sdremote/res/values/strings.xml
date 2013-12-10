@@ -90,5 +90,6 @@
     <string name="requirements_network_connection">The Android device and a computer connected to the same network.</string>
     <string name="requirements_network_ports">If you have a firewall make sure ports 1598 and 1599 are opened.</string>
     <string name="requirements_bluetooth_connection">A computer with enabled Bluetooth.</string>
+    <string name="message_bluetooth_disabled">Please enable bluetooth to connect to a bluetooth enabled computer.</string>
 
 </resources>
