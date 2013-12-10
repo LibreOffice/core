@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <time.h>
 #include "rootfrm.hxx"
@@ -2228,7 +2229,7 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
     return sal_False;
 }
 
-#ifdef DBG_UTIL
+#if HAVE_FEATURE_DESKTOP && defined DBG_UTIL
 /*************************************************************************
 |*
 |*  void SwLayIdle::SwLayIdle()
