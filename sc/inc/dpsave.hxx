@@ -33,6 +33,7 @@
 #include <sal/types.h>
 
 #include "scdllapi.h"
+#include "calcmacros.hxx"
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -85,6 +86,10 @@ public:
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xMember,
                             sal_Int32 nPosition );
+
+#if DEBUG_PIVOT_TABLE
+    void Dump(int nIndent = 0) const;
+#endif
 };
 
 
@@ -222,6 +227,10 @@ public:
     bool HasInvisibleMember() const;
 
     void RemoveObsoleteMembers(const MemberSetType& rMembers);
+
+#if DEBUG_PIVOT_TABLE
+    void Dump(int nIndent = 0) const;
+#endif
 };
 
 
@@ -356,6 +365,10 @@ public:
      * @param rDimName dimension name
      */
     SC_DLLPUBLIC bool HasInvisibleMember(const OUString& rDimName) const;
+
+#if DEBUG_PIVOT_TABLE
+    void Dump() const;
+#endif
 
 private:
     void CheckDuplicateName(ScDPSaveDimension& rDim);
