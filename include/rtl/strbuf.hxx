@@ -532,6 +532,11 @@ public:
         return append( sz, rtl_str_valueOfBoolean( sz, b ) );
     }
 
+    OStringBuffer & append(bool b)
+    {
+        return append((sal_Bool)b);
+    }
+
     /**
         Appends the string representation of the <code>char</code>
         argument to this string buffer.
