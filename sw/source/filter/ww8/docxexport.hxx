@@ -46,6 +46,7 @@ namespace oox {
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
+    namespace drawing { class XShape; }
 } } }
 
 /// Data to be written in the document settings part of the document
@@ -145,6 +146,8 @@ public:
 
     /// Returns the relationd id
     OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
+    /// Writes the shape using drawingML syntax.
+    void OutputDML( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
 

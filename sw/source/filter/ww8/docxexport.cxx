@@ -23,6 +23,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -33,6 +34,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/chartexport.hxx>
+#include <oox/export/shapes.hxx>
 
 #include <map>
 #include <algorithm>
@@ -325,6 +327,12 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
     aChartExport.ExportContent();
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+}
+
+void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
+{
+    oox::drawingml::ShapeExport aExport(XML_wps, m_pDocumentFS, 0, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX);
+    aExport.WriteShape(xShape);
 }
 
 void DocxExport::ExportDocument_Impl()
@@ -1014,6 +1022,7 @@ XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
     pAttr->add( FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main" );
     pAttr->add( FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word" );
     pAttr->add( FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" );
+    pAttr->add( FSNS( XML_xmlns, XML_wps ), "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" );
     return XFastAttributeListRef( pAttr );
 }
 
