@@ -2203,8 +2203,10 @@ namespace xmloff { namespace token {
         XML_DISPLAY_LIST,
         XML_NO,
         XML_UNSORTED,
-        XML_SORTED_ASCENDING,
         XML_FONT_INDEPENDENT_LINE_SPACING,
+
+        // Wrong! Do not write, use XML_SORT_ASCENDING instead. Only read. fdo#72548
+        XML_SORTED_ASCENDING,
 
         XML_DATABASE,
         XML_DATASOURCE,

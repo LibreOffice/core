@@ -368,7 +368,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_UNSORTED);
                     break;
                     case sheet::TableValidationVisibility::SORTEDASCENDING:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORTED_ASCENDING);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORT_ASCENDING);
                     break;
                     default:
                         OSL_FAIL("unknown ListType");

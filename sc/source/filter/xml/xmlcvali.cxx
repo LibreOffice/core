@@ -255,14 +255,13 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 {
                     nShowList = sheet::TableValidationVisibility::UNSORTED;
                 }
+                else if (IsXMLToken(sValue, XML_SORT_ASCENDING))
+                {
+                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+                }
                 else if (IsXMLToken(sValue, XML_SORTED_ASCENDING))
                 {
                     // Read old wrong value, fdo#72548
-                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
-                }
-                else if (IsXMLToken(sValue, XML_SORT_ASCENDING))
-                {
-                    // Read correct value, fdo#72548
                     nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
                 }
             }
