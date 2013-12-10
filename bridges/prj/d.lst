@@ -6,6 +6,6 @@
 ..\%__SRC%\bin\gcc3_uno.dll %_DEST%\bin%_EXT%\gcc3_uno.dll
 ..\%__SRC%\lib\libgcc2_uno.* %_DEST%\lib%_EXT%\libgcc2_uno.*
 ..\%__SRC%\lib\libgcc3_uno.* %_DEST%\lib%_EXT%\libgcc3_uno.*
-..\%__SRC%\lib\libcxx_uno.* %_DEST%\lib%_EXT%\libcxx_uno.*
+..\%__SRC%\lib\libs5abi_uno.* %_DEST%\lib%_EXT%\libs5abi_uno.*
 ..\%__SRC%\bin\gcc3_uno.* %_DEST%\bin%_EXT%\gcc3_uno.*
 ..\%__SRC%\lib\libsunpro5_uno.* %_DEST%\lib%_EXT%\libsunpro5_uno.*

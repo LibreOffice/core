@@ -24,7 +24,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=bridges
-TARGET=cxx_uno
+TARGET=$(COMNAME)_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
 

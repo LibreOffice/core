@@ -129,6 +129,11 @@ COMID=C730
 COMNAME=MipsPro
 .ENDIF
 
+.IF "$(COM)"=="CLANG"
+COMID=s5abi
+COMNAME=s5abi
+.ENDIF
+
 .IF "$(COMNAME)"==""
 
 # "EXCEPTIONSFILES" get compiled before this, but shouldn't
