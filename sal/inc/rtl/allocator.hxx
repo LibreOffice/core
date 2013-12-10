@@ -167,22 +167,5 @@ inline bool operator!= (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 
 } /* namespace rtl */
 
-//######################################################
-/** REQUIRED BY STLPort (see stlport '_alloc.h'):
-    Hack for compilers that do not support member
-    template classes (e.g. MSVC 6)
-
-    @internal
-*/
-namespace _STL
-{
-    /** @internal */
-    template<class T, class U>
-    inline ::rtl::Allocator<U> & __stl_alloc_rebind (::rtl::Allocator<T> & a, U const *)
-    {
-        return (::rtl::Allocator<U>&)(a);
-    }
-}
-
 #endif /* INCLUDED_RTL_ALLOCATOR_HXX */
 
