@@ -4995,6 +4995,21 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "return tmp;\n";
     ss << "}\n";
 }
+void OpNormsdist::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(lcl_Erfc0600Decl);
+    funs.insert(lcl_Erfc0600);
+    decls.insert(lcl_Erfc2654Decl);
+    funs.insert(lcl_Erfc2654);
+    decls.insert(lcl_Erf0065Decl);
+    funs.insert(lcl_Erf0065);
+    decls.insert(rtl_math_erf_rdDecl);
+    funs.insert(rtl_math_erf_rd);
+    decls.insert(rtl_math_erfc_rdDecl);
+    funs.insert(rtl_math_erfc_rd);
+}
+
 void OpNormsdist::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string sSymName,
     SubArguments &vSubArguments)
@@ -5009,28 +5024,58 @@ void OpNormsdist::GenSlidingWindowFunction(
     }
     ss << ")\n";
     ss << "{\n";
-    ss << "    double x;\n";
+    ss << "    double x = 0,tmp0 = 0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    ss << "int buffer_x_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
+    size_t i = vSubArguments.size();
+    ss <<"\n    ";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
-#ifdef ISNAN
-    ss <<"    if((gid0)>=buffer_x_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        x = 0;\nelse \n";
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
 #endif
-    ss << "       x = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-    ss << "    double tmp = 0.5 *erfc(-x * 0.7071067811865475);\n";
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        tmp"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        tmp"<<i<<"=\n";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n}\n";
+        }
+        else
+        {
+            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+#endif
+    }
+    ss << "    x = tmp0;\n";
+    ss << "    double tmp = 0.5 * rtl_math_erfc_rd((-1)*x * 0.7071067811865475);\n";
     ss << "    return tmp;\n";
     ss << "}\n";
 }
+
 void OpVariationen::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string sSymName,
     SubArguments &vSubArguments)
