@@ -471,8 +471,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         }
     }
 
-    const SwTableNode* pPtNd = pNd->FindTableNode();
-    const SwTableNode* pMrkNd = pNd->FindTableNode();
+    const SwTableNode* pPtNd = GetPoint()->nNode.GetNode().FindTableNode();
+    const SwTableNode* pMrkNd = GetMark()->nNode.GetNode().FindTableNode();
     // beide in keinem oder beide im gleichen TableNode
     if( ( !pMrkNd && !pPtNd ) || pPtNd == pMrkNd )
         return sal_False;
