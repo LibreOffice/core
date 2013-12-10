@@ -787,8 +787,8 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
     @descr      Every factory has his own long and short name. So we can match right enum value for internal using.
 
     @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is sal_True!
-                Algorithm:  Set out-parameter to propably value ... and check the longname.
-                            If it match with these factory - break operation and return true AND right set parameter.
+                Algorithm:  Set out-parameter to probably value ... and check the longname.
+                            If it matches with these factory - break operation and return true AND right set parameter.
                             Otherwise try next one and so on. If no factory was found return false. Out parameter eFactory
                             is set to last tried value but shouldn't be used! Because our return value is false!
 

@@ -88,7 +88,7 @@ sal_Bool SdPPTFilter::Import()
     if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
-        document is propably a PPT95 containing PPT97 */
+        document is probably a PPT95 containing PPT97 */
         SvStorageRef xDualStorage;
         OUString sDualStorage( "PP97_DUALSTORAGE"  );
         if ( pStorage->IsContained( sDualStorage ) )

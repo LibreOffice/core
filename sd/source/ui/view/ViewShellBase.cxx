@@ -998,7 +998,7 @@ OUString ViewShellBase::GetInitialViewShellType (void)
                         break;
 
                     default:
-                        // The page kind is invalid.  This is propably an
+                        // The page kind is invalid.  This is probably an
                         // error by the caller.  We use the standard type to
                         // keep things going.
                         DBG_ASSERT(sal_False, "ViewShellBase::GetInitialViewShellType: invalid page kind");

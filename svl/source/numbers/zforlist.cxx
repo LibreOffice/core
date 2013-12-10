@@ -3434,7 +3434,7 @@ inline
             {
                 return false;   // break loop
                 // even if there are more matching entries
-                // this one is propably the one we are looking for
+                // this one is probably the one we are looking for
             }
             else
             {
