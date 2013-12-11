@@ -156,7 +156,7 @@ public:
                      sal_uLong           nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
-                       true, basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
+                       true, basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA,
                        pSysParent )
     {
         enableDamageTracker();
@@ -361,7 +361,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                 CGImageCreate( aDevice->getSize().getX(), aDevice->getSize().getY(),
                                8, 32, aDevice->getScanlineStride(),
                                CGColorSpaceCreateDeviceRGB(),
-                               kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little,
+                               kCGImageAlphaNoneSkipLast,
                                provider,
                                NULL,
                                false,
@@ -403,7 +403,7 @@ touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeigh
                                     32,
                                     sourceBytesPerRow,
                                     CGColorSpaceCreateDeviceRGB(),
-                                    kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little,
+                                    kCGImageAlphaNoneSkipLast,
                                     provider,
                                     NULL,
                                     false,

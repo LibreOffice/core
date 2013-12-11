@@ -302,6 +302,7 @@ AquaSalGraphics::~AquaSalGraphics()
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
     maTextColor = RGBAColor( nSalColor );
+    // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
     if( mpTextStyle)
         mpTextStyle->SetTextColor( maTextColor );
 }
@@ -819,12 +820,26 @@ bool SvpSalGraphics::CheckContext()
                                           CGColorSpaceCreateDeviceRGB(),
                                           kCGImageAlphaNoneSkipLast);
         break;
+    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
+                                          CGColorSpaceCreateDeviceRGB(),
+                                          kCGImageAlphaNoneSkipFirst);
+        break;
     case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
         mrContext = CGBitmapContextCreate(pixelBuffer.get(),
                                           bufferSize.getX(), bufferSize.getY(),
                                           8, scanlineStride,
                                           CGColorSpaceCreateDeviceRGB(),
                                           kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little);
+        break;
+    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
+                                          CGColorSpaceCreateDeviceRGB(),
+                                          kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Little);
         break;
     default:
         SAL_WARN( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );
