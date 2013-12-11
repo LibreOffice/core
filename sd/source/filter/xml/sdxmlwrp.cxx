@@ -77,61 +77,59 @@ using namespace comphelper;
 
 extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
-#define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
+char const sXML_metaStreamName[] = "meta.xml";
+char const sXML_styleStreamName[] = "styles.xml";
+char const sXML_contentStreamName[] = "content.xml";
+char const sXML_settingsStreamName[] = "settings.xml";
 
-XML_STRING( sXML_metaStreamName, "meta.xml");
-XML_STRING( sXML_styleStreamName, "styles.xml" );
-XML_STRING( sXML_contentStreamName, "content.xml" );
-XML_STRING( sXML_settingsStreamName, "settings.xml" );
+char const sXML_export_impress_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisExporter";
+char const sXML_export_impress_meta_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisMetaExporter";
+char const sXML_export_impress_styles_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisStylesExporter";
+char const sXML_export_impress_content_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisContentExporter";
+char const sXML_export_impress_settings_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisSettingsExporter";
 
-XML_STRING( sXML_export_impress_oasis_service, "com.sun.star.comp.Impress.XMLOasisExporter" );
-XML_STRING( sXML_export_impress_meta_oasis_service, "com.sun.star.comp.Impress.XMLOasisMetaExporter" );
-XML_STRING( sXML_export_impress_styles_oasis_service, "com.sun.star.comp.Impress.XMLOasisStylesExporter" );
-XML_STRING( sXML_export_impress_content_oasis_service, "com.sun.star.comp.Impress.XMLOasisContentExporter" );
-XML_STRING( sXML_export_impress_settings_oasis_service, "com.sun.star.comp.Impress.XMLOasisSettingsExporter" );
+char const sXML_export_draw_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisExporter";
+char const sXML_export_draw_meta_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisMetaExporter";
+char const sXML_export_draw_styles_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisStylesExporter";
+char const sXML_export_draw_content_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisContentExporter";
+char const sXML_export_draw_settings_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisSettingsExporter";
 
-XML_STRING( sXML_export_draw_oasis_service, "com.sun.star.comp.Draw.XMLOasisExporter" );
-XML_STRING( sXML_export_draw_meta_oasis_service, "com.sun.star.comp.Draw.XMLOasisMetaExporter" );
-XML_STRING( sXML_export_draw_styles_oasis_service, "com.sun.star.comp.Draw.XMLOasisStylesExporter" );
-XML_STRING( sXML_export_draw_content_oasis_service, "com.sun.star.comp.Draw.XMLOasisContentExporter" );
-XML_STRING( sXML_export_draw_settings_oasis_service, "com.sun.star.comp.Draw.XMLOasisSettingsExporter" );
+char const sXML_import_impress_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisImporter";
+char const sXML_import_impress_meta_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisMetaImporter";
+char const sXML_import_impress_styles_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisStylesImporter";
+char const sXML_import_impress_content_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisContentImporter";
+char const sXML_import_impress_settings_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisSettingsImporter";
 
-XML_STRING( sXML_import_impress_oasis_service, "com.sun.star.comp.Impress.XMLOasisImporter" );
-XML_STRING( sXML_import_impress_meta_oasis_service, "com.sun.star.comp.Impress.XMLOasisMetaImporter" );
-XML_STRING( sXML_import_impress_styles_oasis_service, "com.sun.star.comp.Impress.XMLOasisStylesImporter" );
-XML_STRING( sXML_import_impress_content_oasis_service, "com.sun.star.comp.Impress.XMLOasisContentImporter" );
-XML_STRING( sXML_import_impress_settings_oasis_service, "com.sun.star.comp.Impress.XMLOasisSettingsImporter" );
-
-XML_STRING( sXML_import_draw_oasis_service, "com.sun.star.comp.Draw.XMLOasisImporter" );
-XML_STRING( sXML_import_draw_meta_oasis_service, "com.sun.star.comp.Draw.XMLOasisMetaImporter" );
-XML_STRING( sXML_import_draw_styles_oasis_service, "com.sun.star.comp.Draw.XMLOasisStylesImporter" );
-XML_STRING( sXML_import_draw_content_oasis_service, "com.sun.star.comp.Draw.XMLOasisContentImporter" );
-XML_STRING( sXML_import_draw_settings_oasis_service, "com.sun.star.comp.Draw.XMLOasisSettingsImporter" );
+char const sXML_import_draw_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisImporter";
+char const sXML_import_draw_meta_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisMetaImporter";
+char const sXML_import_draw_styles_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisStylesImporter";
+char const sXML_import_draw_content_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisContentImporter";
+char const sXML_import_draw_settings_oasis_service[] = "com.sun.star.comp.Draw.XMLOasisSettingsImporter";
 
 // OOo
-XML_STRING( sXML_export_impress_ooo_service, "com.sun.star.comp.Impress.XMLExporter" );
-XML_STRING( sXML_export_impress_meta_ooo_service, "com.sun.star.comp.Impress.XMLMetaExporter" );
-XML_STRING( sXML_export_impress_styles_ooo_service, "com.sun.star.comp.Impress.XMLStylesExporter" );
-XML_STRING( sXML_export_impress_content_ooo_service, "com.sun.star.comp.Impress.XMLContentExporter" );
-XML_STRING( sXML_export_impress_settings_ooo_service, "com.sun.star.comp.Impress.XMLSettingsExporter" );
+char const sXML_export_impress_ooo_service[] = "com.sun.star.comp.Impress.XMLExporter";
+char const sXML_export_impress_meta_ooo_service[] = "com.sun.star.comp.Impress.XMLMetaExporter";
+char const sXML_export_impress_styles_ooo_service[] = "com.sun.star.comp.Impress.XMLStylesExporter";
+char const sXML_export_impress_content_ooo_service[] = "com.sun.star.comp.Impress.XMLContentExporter";
+char const sXML_export_impress_settings_ooo_service[] = "com.sun.star.comp.Impress.XMLSettingsExporter";
 
-XML_STRING( sXML_export_draw_ooo_service, "com.sun.star.comp.Draw.XMLExporter" );
-XML_STRING( sXML_export_draw_meta_ooo_service, "com.sun.star.comp.Draw.XMLMetaExporter" );
-XML_STRING( sXML_export_draw_styles_ooo_service, "com.sun.star.comp.Draw.XMLStylesExporter" );
-XML_STRING( sXML_export_draw_content_ooo_service, "com.sun.star.comp.Draw.XMLContentExporter" );
-XML_STRING( sXML_export_draw_settings_ooo_service, "com.sun.star.comp.Draw.XMLSettingsExporter" );
+char const sXML_export_draw_ooo_service[] = "com.sun.star.comp.Draw.XMLExporter";
+char const sXML_export_draw_meta_ooo_service[] = "com.sun.star.comp.Draw.XMLMetaExporter";
+char const sXML_export_draw_styles_ooo_service[] = "com.sun.star.comp.Draw.XMLStylesExporter";
+char const sXML_export_draw_content_ooo_service[] = "com.sun.star.comp.Draw.XMLContentExporter";
+char const sXML_export_draw_settings_ooo_service[] = "com.sun.star.comp.Draw.XMLSettingsExporter";
 
-XML_STRING( sXML_import_impress_ooo_service, "com.sun.star.comp.Impress.XMLImporter" );
-XML_STRING( sXML_import_impress_meta_ooo_service, "com.sun.star.comp.Impress.XMLMetaImporter" );
-XML_STRING( sXML_import_impress_styles_ooo_service, "com.sun.star.comp.Impress.XMLStylesImporter" );
-XML_STRING( sXML_import_impress_content_ooo_service, "com.sun.star.comp.Impress.XMLContentImporter" );
-XML_STRING( sXML_import_impress_settings_ooo_service, "com.sun.star.comp.Impress.XMLSettingsImporter" );
+char const sXML_import_impress_ooo_service[] = "com.sun.star.comp.Impress.XMLImporter";
+char const sXML_import_impress_meta_ooo_service[] = "com.sun.star.comp.Impress.XMLMetaImporter";
+char const sXML_import_impress_styles_ooo_service[] = "com.sun.star.comp.Impress.XMLStylesImporter";
+char const sXML_import_impress_content_ooo_service[] = "com.sun.star.comp.Impress.XMLContentImporter";
+char const sXML_import_impress_settings_ooo_service[] = "com.sun.star.comp.Impress.XMLSettingsImporter";
 
-XML_STRING( sXML_import_draw_ooo_service, "com.sun.star.comp.Draw.XMLImporter" );
-XML_STRING( sXML_import_draw_meta_ooo_service, "com.sun.star.comp.Draw.XMLMetaImporter" );
-XML_STRING( sXML_import_draw_styles_ooo_service, "com.sun.star.comp.Draw.XMLStylesImporter" );
-XML_STRING( sXML_import_draw_content_ooo_service, "com.sun.star.comp.Draw.XMLContentImporter" );
-XML_STRING( sXML_import_draw_settings_ooo_service, "com.sun.star.comp.Draw.XMLSettingsImporter" );
+char const sXML_import_draw_ooo_service[] = "com.sun.star.comp.Draw.XMLImporter";
+char const sXML_import_draw_meta_ooo_service[] = "com.sun.star.comp.Draw.XMLMetaImporter";
+char const sXML_import_draw_styles_ooo_service[] = "com.sun.star.comp.Draw.XMLStylesImporter";
+char const sXML_import_draw_content_ooo_service[] = "com.sun.star.comp.Draw.XMLContentImporter";
+char const sXML_import_draw_settings_ooo_service[] = "com.sun.star.comp.Draw.XMLSettingsImporter";
 
 struct XML_SERVICEMAP
 {
