@@ -24,8 +24,9 @@
 #include <basic/sbdef.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
-#include <basic/sbprop.hxx>
 #include <basic/sbstar.hxx>
+
+#include "sbprop.hxx"
 
 #endif
 
