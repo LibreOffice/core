@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/transfer.hxx>
 #include "runtime.hxx"
-#include <basic/sbstdobj.hxx>
+#include "sbstdobj.hxx"
 
 #define ATTR_IMP_TYPE           1
 #define ATTR_IMP_WIDTH          2
