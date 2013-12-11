@@ -44,7 +44,6 @@ writerfilter_OOXMLNAMESPACES= \
 writerfilter_ALL = \
 	$(writerfilter_GEN_doctok_ResourceIds_hxx) \
 	$(writerfilter_GEN_doctok_Resources_cxx) \
-	$(writerfilter_GEN_doctok_Resources_hxx) \
 	$(writerfilter_GEN_doctok_QNameToStr_cxx) \
 	$(writerfilter_GEN_doctok_SprmIds_hxx) \
 	$(writerfilter_GEN_model_SprmCodeToStr_cxx) \
@@ -65,7 +64,6 @@ writerfilter_ALL = \
 writerfilter_DEP_ooxml_Namespaces_txt=$(call gb_CustomTarget_get_workdir,oox/generated)/misc/namespaces.txt
 writerfilter_GEN_doctok_ResourceIds_hxx=$(writerfilter_WORK)/doctok/resourceids.hxx
 writerfilter_GEN_doctok_Resources_cxx=$(writerfilter_WORK)/resources.cxx
-writerfilter_GEN_doctok_Resources_hxx=$(writerfilter_WORK)/doctok/resources.hxx
 writerfilter_GEN_doctok_QNameToStr_cxx=$(writerfilter_WORK)/doctok/qnametostr.cxx
 writerfilter_GEN_doctok_SprmIds_hxx=$(writerfilter_WORK)/doctok/sprmids.hxx
 writerfilter_GEN_model_SprmCodeToStr_cxx=$(writerfilter_WORK)/sprmcodetostr.cxx
@@ -90,7 +88,6 @@ writerfilter_SRC_doctok_QNameToStr_xsl=$(writerfilter_SRC)/doctok/qnametostr.xsl
 writerfilter_SRC_doctok_ResourceIds_xsl=$(writerfilter_SRC)/doctok/resourceids.xsl
 writerfilter_SRC_doctok_ResourceTools_xsl=$(writerfilter_SRC)/doctok/resourcetools.xsl
 writerfilter_SRC_doctok_ResourcesImpl_xsl=$(writerfilter_SRC)/doctok/resourcesimpl.xsl
-writerfilter_SRC_doctok_Resources_xsl=$(writerfilter_SRC)/doctok/resources.xsl
 writerfilter_SRC_doctok_SprmCodeToStr_xsl=$(writerfilter_SRC)/doctok/sprmcodetostr.xsl
 writerfilter_SRC_doctok_SprmIds_xsl=$(writerfilter_SRC)/doctok/sprmids.xsl
 writerfilter_SRC_model_NamespacePreprocess=$(writerfilter_SRC)/resourcemodel/namespace_preprocess.pl
@@ -117,10 +114,6 @@ $(writerfilter_GEN_doctok_ResourceIds_hxx) : $(writerfilter_SRC_doctok_Model) $(
 $(writerfilter_GEN_doctok_Resources_cxx) : $(writerfilter_SRC_doctok_Model) $(writerfilter_SRC_doctok_ResourcesImpl_xsl)  $(writerfilter_SRC_doctok_ResourceTools_xsl) | $(writerfilter_WORK)/doctok/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_doctok_ResourcesImpl_xsl) $(writerfilter_SRC_doctok_Model)) > $@
-
-$(writerfilter_GEN_doctok_Resources_hxx) : $(writerfilter_SRC_doctok_Model) $(writerfilter_SRC_doctok_Resources_xsl) | $(writerfilter_WORK)/doctok/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_doctok_Resources_xsl) $(writerfilter_SRC_doctok_Model)) > $@
 
 $(writerfilter_GEN_doctok_SprmIds_hxx) : $(writerfilter_SRC_doctok_Model) $(writerfilter_SRC_doctok_SprmIds_xsl) | $(writerfilter_WORK)/doctok/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)

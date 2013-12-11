@@ -24,7 +24,7 @@
 <xsl:template match="/">
   <xsl:call-template name="licenseheader"/>
   <xsl:text>
-#include &lt;doctok/resources.hxx&gt;
+#include &lt;resourcemodel/WW8ResourceModel.hxx&gt;
 
 #ifndef INCLUDED_SPRMIDS_HXX
 #include &lt;doctok/sprmids.hxx&gt;
