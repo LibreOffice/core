@@ -1478,6 +1478,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocXor:
             case ocDBMax:
             case ocDBMin:
+            case ocDBProduct:
             // Don't change the state.
             break;
             default:
