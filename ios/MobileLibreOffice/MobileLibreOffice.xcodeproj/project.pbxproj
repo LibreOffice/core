@@ -272,6 +272,9 @@
 		BEE68B5F185715EE0049ECE0 /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
 		BEE68B60185715EE0049ECE0 /* salmathutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salmathutils.cxx; path = ../../vcl/quartz/salmathutils.cxx; sourceTree = "<group>"; };
 		BEE68B61185715EE0049ECE0 /* utils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cxx; path = ../../vcl/quartz/utils.cxx; sourceTree = "<group>"; };
+		BEE68B63185746E80049ECE0 /* bitmapdevice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapdevice.cxx; path = ../../basebmp/source/bitmapdevice.cxx; sourceTree = "<group>"; };
+		BEE68B64185746E80049ECE0 /* debug.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debug.cxx; path = ../../basebmp/source/debug.cxx; sourceTree = "<group>"; };
+		BEE68B65185746E80049ECE0 /* polypolygonrenderer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polypolygonrenderer.cxx; path = ../../basebmp/source/polypolygonrenderer.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -480,6 +483,7 @@
 		BE82BDB41822616200A447B5 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
+				BEE68B62185746D20049ECE0 /* basebmp */,
 				BE82BDB61822617C00A447B5 /* sw */,
 				BE82BDB51822617500A447B5 /* vcl */,
 			);
@@ -697,6 +701,16 @@
 				BEE68B61185715EE0049ECE0 /* utils.cxx */,
 			);
 			name = quartz;
+			sourceTree = "<group>";
+		};
+		BEE68B62185746D20049ECE0 /* basebmp */ = {
+			isa = PBXGroup;
+			children = (
+				BEE68B63185746E80049ECE0 /* bitmapdevice.cxx */,
+				BEE68B64185746E80049ECE0 /* debug.cxx */,
+				BEE68B65185746E80049ECE0 /* polypolygonrenderer.cxx */,
+			);
+			name = basebmp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
