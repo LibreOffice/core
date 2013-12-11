@@ -690,7 +690,7 @@ class CopyCellsFromClipHandler
 
     void insertRefCell(SCROW nSrcRow, SCROW nDestRow)
     {
-        ScAddress aSrcPos(mnCol, nSrcRow, mnTab);
+        ScAddress aSrcPos(mnSrcCol, nSrcRow, mnSrcTab);
         ScAddress aDestPos(mnCol, nDestRow, mnTab);
         ScSingleRefData aRef;
         aRef.InitAddress(aSrcPos);

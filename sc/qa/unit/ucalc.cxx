@@ -3167,6 +3167,44 @@ void Test::testCopyPaste()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCopyPasteAsLink()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // Turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 1); // A1
+    m_pDoc->SetValue(ScAddress(0,1,0), 2); // A2
+    m_pDoc->SetValue(ScAddress(0,2,0), 3); // A3
+
+    ScRange aRange(0,0,0,0,2,0); // Copy A1:A3 to clip.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, aRange, &aClipDoc);
+
+    aRange = ScRange(1,1,1,1,3,1); // Paste to B2:B4 on Sheet2.
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    // Paste range as link.
+    m_pDoc->CopyFromClip(aRange, aMark, IDF_CONTENTS, NULL, &aClipDoc, true, true);
+
+    // Check pasted content to make sure they reference the correct cells.
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,1));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(1.0, pFC->GetValue());
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,2,1));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(2.0, pFC->GetValue());
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,3,1));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(3.0, pFC->GetValue());
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyPasteTranspose()
 {
 
