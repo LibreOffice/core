@@ -551,7 +551,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     }
                     else
                     {
-                        xChild = getAccessibleCellAt(aNewCell.Row(),aNewCell.Col());
+                        mpAccCell = GetAccessibleCellAt(aNewCell.Row(),aNewCell.Col());
+                        xChild = mpAccCell;
+                        mpAccCell->Init();
 
                         maActiveCell = aNewCell;
                         aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS;
