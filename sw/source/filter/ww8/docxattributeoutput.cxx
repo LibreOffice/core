@@ -3321,7 +3321,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
          it != m_postponedDMLDrawing->end();
          ++it )
     {
-        WriteDMLDrawing(it->object, it->frame);
+        WriteDMLAndVMLDrawing(it->object, *(it->frame), *(it->point));
     }
     delete m_postponedDMLDrawing;
     m_postponedDMLDrawing = NULL;
@@ -3352,6 +3352,23 @@ void DocxAttributeOutput::WriteDMLDrawing( const SdrObject* pSdrObject, const Sw
     m_pSerializer->endElementNS( XML_a, XML_graphic );
 
     lcl_endDMLAnchorInline(m_pSerializer, pFrmFmt);
+}
+
+void DocxAttributeOutput::WriteDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft)
+{
+    m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+
+    m_pSerializer->startElementNS(XML_mc, XML_Choice,
+            XML_Requires, "wps",
+            FSEND);
+    WriteDMLDrawing(sdrObj, &rFrmFmt);
+    m_pSerializer->endElementNS(XML_mc, XML_Choice);
+
+    m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+    WriteVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
+    m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+
+    m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
 }
 
 void DocxAttributeOutput::WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft )
@@ -3427,7 +3444,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         if (aMiscOptions.IsExperimentalMode())
                         {
                             if ( m_postponedDMLDrawing == NULL )
-                                WriteDMLDrawing( pSdrObj, &rFrame.GetFrmFmt());
+                                WriteDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft);
                             else
                                 // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
                                 m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
