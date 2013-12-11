@@ -40,8 +40,6 @@ ELF platforms (Linux, Solaris, *BSD):
 /opt/openoffice.org/ure/share/misc/types.rdb
 /opt/openoffice.org/ure/share/misc/services.rdb
 /opt/openoffice.org/ure/lib/libxml2.so.2  [external]
-/opt/openoffice.org/ure/lib/libgcc_s.so.1  [external; Linux x86 only]
-/opt/openoffice.org/ure/lib/libstdc++.so.6  [external; Linux x86 only]
 /opt/openoffice.org/ure/bin/startup.sh  [private]
 /opt/openoffice.org/ure/bin/uno.bin  [private]
 /opt/openoffice.org/ure/lib/unorc  [private]
@@ -297,17 +295,6 @@ SDK environment variable specifies a different Java VM than the Java VM that is
 used in the URE Java Framework.  See the "Installation Guide" section of the SDK
 HTML documentation to find out how to set the  OO_SDK_JAVA_HOME environment
 variable.
-
-
-GNU Compiler Collection on Linux x86
-------------------------------------
-
-On Linux x86, the URE uses libgcc_s.so.1 to run binary UNO components that were
-compiled with the GNU Compiler Collection (GCC).  The libgcc_s.so.1 corresponds
-to GCC 3.4.1 as built on a glibc 2.2.4 system.  To avoid GCC compatibility
-issues, use the same GCC version (or later) when you compile the UNO binaries.
-Otherwise, use LD_PRELOAD to replace the libgcc_s.so.1 in URE with a matching
-version.
 
 
 C++ and Java UNO Components
