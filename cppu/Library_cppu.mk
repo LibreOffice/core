@@ -43,7 +43,6 @@ $(eval $(call gb_Library_add_exception_objects,cppu,\
 	cppu/source/uno/cascade_mapping \
 	cppu/source/uno/data \
 	cppu/source/uno/EnvStack \
-	cppu/source/uno/env_subst \
 	cppu/source/uno/IdentityMapping \
 	cppu/source/uno/lbenv \
 	cppu/source/uno/lbmap \

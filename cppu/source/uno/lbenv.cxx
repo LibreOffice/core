@@ -1154,7 +1154,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
 }
 
 //##############################################################################
-void SAL_CALL uno_direct_getEnvironment(
+CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
