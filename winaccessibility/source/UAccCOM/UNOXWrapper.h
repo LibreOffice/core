@@ -49,17 +49,6 @@ public:
         return S_OK;
     }
 
-    STDMETHOD(get_XInterface)(/*[out,retval]*/hyper *pXInterface)
-    {
-        *pXInterface = reinterpret_cast<hyper>(pUNOInterface);
-        return S_OK;
-    }
-
-    STDMETHOD(get_XSubInterface)(/*[out,retval]*/hyper *)
-    {
-        return S_OK;
-    }
-
 protected:
 
     com::sun::star::accessibility::XAccessible* pUNOInterface;

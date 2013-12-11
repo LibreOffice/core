@@ -74,8 +74,6 @@ import "defines.idl";
     {
         [id(1), helpstring("method put_XInterface")] HRESULT put_XInterface(hyper pXInterface);
         [id(2), helpstring("method put_XSubInterface")] HRESULT put_XSubInterface(hyper pXSubInterface);
-        [id(3), helpstring("method get_XInterface")] HRESULT get_XInterface([out,retval]hyper* pXInterface);
-        [id(4), helpstring("method get_XSubInterface")] HRESULT get_XSubInterface([out,retval]hyper * pXSubInterface);
     };
 
 [
