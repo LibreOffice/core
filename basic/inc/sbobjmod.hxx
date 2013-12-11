@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBOBJMOD_HXX
-#define INCLUDED_BASIC_SBOBJMOD_HXX
+#ifndef INCLUDED_BASIC_INC_SBOBJMOD_HXX
+#define INCLUDED_BASIC_INC_SBOBJMOD_HXX
 
 #include <rtl/ref.hxx>
 #include <basic/sbmod.hxx>
@@ -99,6 +99,6 @@ public:
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
 };
 
-#endif
+#endif // INCLUDED_BASIC_INC_SBOBJMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

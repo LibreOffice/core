@@ -32,7 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <vcl/jobset.hxx>
-#include <basic/sbobjmod.hxx>
+#include "sbobjmod.hxx"
 #include <basic/sbuno.hxx>
 
 #include "date.hxx"

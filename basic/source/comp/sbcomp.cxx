@@ -21,7 +21,7 @@
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 #include "image.hxx"
-#include <basic/sbobjmod.hxx>
+#include "sbobjmod.hxx"
 #include <svtools/miscopt.hxx>
 #include <stdio.h>
 

@@ -35,7 +35,7 @@
 #include "sbintern.hxx"
 #include "runtime.hxx"
 #include <basic/sbuno.hxx>
-#include <basic/sbobjmod.hxx>
+#include "sbobjmod.hxx"
 #include "stdobj.hxx"
 #include "filefmt.hxx"
 #include "sb.hrc"

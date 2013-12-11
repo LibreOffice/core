@@ -41,7 +41,7 @@
 
 #include <basic/basrdll.hxx>
 #include <osl/mutex.hxx>
-#include <basic/sbobjmod.hxx>
+#include "sbobjmod.hxx"
 #include <basic/vbahelper.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <unotools/eventcfg.hxx>

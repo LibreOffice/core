@@ -87,7 +87,7 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #include <direct.h>
 #endif
 
-#include <basic/sbobjmod.hxx>
+#include "sbobjmod.hxx"
 
 #ifdef WNT
 #if defined _MSC_VER
