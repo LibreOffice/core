@@ -753,6 +753,41 @@ void DocxExport::WriteSettings()
     if( m_pAttrOutput->HasEndnotes())
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
 
+    // Has themeFontLang information
+    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( xPropSetInfo->hasPropertyByName( pName ) )
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropSet->getPropertyValue( pName ) >>= propList;
+        for( sal_Int32 i=0; i < propList.getLength(); ++i )
+        {
+            if ( propList[i].Name == "ThemeFontLangProps" )
+            {
+                uno::Sequence< beans::PropertyValue > themeFontLangProps;
+                propList[i].Value >>= themeFontLangProps;
+                OUString aValues[3];
+                for( sal_Int32 j=0; j < themeFontLangProps.getLength(); ++j )
+                {
+                    if( themeFontLangProps[j].Name == "val" )
+                        themeFontLangProps[j].Value >>= aValues[0];
+                    else if( themeFontLangProps[j].Name == "eastAsia" )
+                        themeFontLangProps[j].Value >>= aValues[1];
+                    else if( themeFontLangProps[j].Name == "bidi" )
+                        themeFontLangProps[j].Value >>= aValues[2];
+                }
+                pFS->singleElementNS( XML_w, XML_themeFontLang,
+                                      FSNS( XML_w, XML_val ), OUStringToOString( aValues[0], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                      FSNS( XML_w, XML_eastAsia ), OUStringToOString( aValues[1], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                      FSNS( XML_w, XML_bidi ), OUStringToOString( aValues[2], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                      FSEND );
+                break;
+            }
+        }
+    }
+
     pFS->endElementNS( XML_w, XML_settings );
 }
 

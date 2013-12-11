@@ -4364,6 +4364,11 @@ beans::PropertyValue DomainMapper::getInteropGrabBag()
     return aRet;
 }
 
+uno::Sequence<beans::PropertyValue> DomainMapper::GetThemeFontLangProperties() const
+{
+    return m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
+}
+
 } //namespace dmapper
 } //namespace writerfilter
 

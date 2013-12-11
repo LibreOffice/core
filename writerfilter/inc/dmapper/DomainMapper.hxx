@@ -127,6 +127,8 @@ public:
     /// Get the stored tokens and clear the internal storage.
     beans::PropertyValue getInteropGrabBag();
 
+    uno::Sequence<beans::PropertyValue> GetThemeFontLangProperties() const;
+
 private:
     // Stream
     virtual void lcl_startSectionGroup();

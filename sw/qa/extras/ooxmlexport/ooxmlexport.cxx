@@ -2047,7 +2047,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     if (!pXmlStyles)
         return;
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "asciiTheme", "minorHAnsi");
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "cstheme", "minorBidi");
 
     // check the font theme values in style definitions
     assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
@@ -2056,8 +2056,30 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
         return;
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts", "hAnsiTheme", "majorBidi");
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts", "cstheme", "majorBidi");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts", "hAnsiTheme", "majorHAnsi");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts", "asciiTheme", "majorHAnsi");
+
+    // check the themeFontLang values in settings file
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    if (!pXmlSettings)
+        return;
+    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "val", "en-US");
+    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "eastAsia", "zh-CN");
+    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "bidi", "he-IL");
+
+    // check fonts have been applied properly
+    sal_Unicode fontName[2]; //represents the string "宋体"
+    fontName[0] = 0x5b8b;
+    fontName[1] = 0x4f53;
+    CPPUNIT_ASSERT_EQUAL(OUString(fontName, 2), getProperty<OUString>(getParagraph(1), "CharFontNameAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"),
+                         getProperty<OUString>(getParagraph(2), "CharFontNameComplex"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Trebuchet MS"),
+                         getProperty<OUString>(getParagraph(3, "Default style theme font"), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial Black"),
+                         getProperty<OUString>(getRun(getParagraph(4, "Direct format font"), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Trebuchet MS"),
+                         getProperty<OUString>(getParagraph(5, "Major theme font"), "CharFontName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")

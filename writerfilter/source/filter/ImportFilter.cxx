@@ -100,7 +100,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
          m_sFilterName == "writer_OOXML" || m_sFilterName == "writer_OOXML_Text_Template" ) ?
             writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
 
-    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>()));
+    writerfilter::dmapper::DomainMapper* aDomainMapper = new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>());
+    writerfilter::Stream::Pointer_t pStream(aDomainMapper);
     //create the tokenizer and domain mapper
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
@@ -220,6 +221,38 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
          {
              SAL_WARN("writerfilter","Failed to save ActiveX dom to documents grab bag");
          }
+
+         // Adding the saved w:themeFontLang setting to the document's grab bag
+         if ( aDomainMapper->GetThemeFontLangProperties().hasElements() )
+             try
+             {
+                 uno::Reference<beans::XPropertySet> xDocProps( m_xDstDoc, uno::UNO_QUERY );
+                 if (xDocProps.is())
+                 {
+                     uno::Reference< beans::XPropertySetInfo > xPropsInfo = xDocProps->getPropertySetInfo();
+
+                     const OUString aGrabBagPropName = "InteropGrabBag";
+                     if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
+                     {
+                         uno::Sequence< beans::PropertyValue > aGrabBag;
+
+                         // We want to keep the previous items
+                         xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+                         sal_Int32 length = aGrabBag.getLength();
+                         aGrabBag.realloc( length+1 );
+
+                         beans::PropertyValue* pValue = aGrabBag.getArray();
+                         pValue[length].Name = "ThemeFontLangProps";
+                         pValue[length].Value = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
+
+                         xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
+                     }
+                 }
+             }
+             catch(const uno::Exception&)
+             {
+                 SAL_WARN("writerfilter","Failed to save themeFontLang properties to documents grab bag");
+             }
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
