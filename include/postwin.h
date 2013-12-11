@@ -19,12 +19,6 @@
 
 /* nicht geschuetz, muss als gegenstueck zu prewin.h includet werden */
 
-#ifdef WNT
-#ifdef __cplusplus
-}
-#endif
-#endif
-
 #undef Region
 #undef PolyPolygon
 #undef Polygon
@@ -228,16 +222,11 @@
 #define STRETCH_DELETESCANS     3
 #endif
 
-#ifdef WNT
 extern "C"
 {
 BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
 BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt );
 BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt );
 }
-#endif
-
-// svwin.h nicht mehr includen
-#define _SVWIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

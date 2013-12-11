@@ -28,10 +28,6 @@
 #define Folder       WIN_Folder
 #define GradientStyle_RECT  WIN_GradientStyle_RECT
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #if !defined STRICT
 #define STRICT
 #endif
