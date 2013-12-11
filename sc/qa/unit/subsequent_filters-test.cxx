@@ -1707,7 +1707,7 @@ void ScFiltersTest::testPivotTableSharedCacheGroupODS()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), pMembers->size());
     CPPUNIT_ASSERT_MESSAGE("Incorrect member visibility.", checkVisiblePageFieldMember(*pMembers, "VEN-01-1"));
 
-    // These two pivot tables shared the same data range. We should only have
+    // These two pivot tables share the same data range. We should only have
     // one pivot cache.
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
