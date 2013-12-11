@@ -1484,6 +1484,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocDBStdDevP:
             case ocDBSum:
             case ocDBVar:
+            case ocDBVarP:
             // Don't change the state.
             break;
             default:
