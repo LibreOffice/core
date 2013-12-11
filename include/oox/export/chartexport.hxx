@@ -130,6 +130,7 @@ private:
     void exportScatterChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportStockChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportSuffaceChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
+    void exportUpDownBars(com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
 
     void exportSeries( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType, sal_Int32& nAttachedAxis );
     void exportCandleStickSeries(
