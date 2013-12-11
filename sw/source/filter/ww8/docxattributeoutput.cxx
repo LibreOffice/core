@@ -511,7 +511,22 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     {
         sw::Frame* pParentFrame = &aParentFrames[i];
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-        WriteVMLTextFrame(pParentFrame);
+        SvtMiscOptions aMiscOptions;
+        if (aMiscOptions.IsExperimentalMode())
+        {
+            m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+            m_pSerializer->startElementNS(XML_mc, XML_Choice,
+                    XML_Requires, "wps",
+                    FSEND);
+            WriteDMLTextFrame(pParentFrame);
+            m_pSerializer->endElementNS(XML_mc, XML_Choice);
+            m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+            WriteVMLTextFrame(pParentFrame);
+            m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+            m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+        }
+        else
+            WriteVMLTextFrame(pParentFrame);
         m_pSerializer->endElementNS( XML_w, XML_r );
     }
 
