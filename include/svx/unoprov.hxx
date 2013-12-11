@@ -80,7 +80,7 @@ public:
 
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
-    SfxItemPropertyMapEntry const * aMapArr[SVXMAP_END];
+    SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
 public:
     SvxUnoPropertyMapProvider();

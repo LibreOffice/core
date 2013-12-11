@@ -71,27 +71,27 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
-//      { "HasLevels",                    OWN_ATTR_HASLEVELS,             ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
-        { "Style",                        OWN_ATTR_STYLE,                 ::com::sun::star::style::XStyle::static_type(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { UNO_NAME_TEXT_WRITINGMODE,      SDRATTR_TEXTDIRECTION,          ::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
-        { UNO_NAME_TEXT_HORZADJUST,       SDRATTR_TEXT_HORZADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
-        { UNO_NAME_TEXT_LEFTDIST,         SDRATTR_TEXT_LEFTDIST,          ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { UNO_NAME_TEXT_LOWERDIST,        SDRATTR_TEXT_LOWERDIST,         ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { UNO_NAME_TEXT_RIGHTDIST,        SDRATTR_TEXT_RIGHTDIST,         ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { UNO_NAME_TEXT_UPPERDIST,        SDRATTR_TEXT_UPPERDIST,         ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
-        { UNO_NAME_TEXT_VERTADJUST,       SDRATTR_TEXT_VERTADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),    0,      0},\
-        { UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          ::getBooleanCppuType(),        0,      0}, \
+//      { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
+        { MAP_CHAR_LEN("Style"),                        OWN_ATTR_STYLE,                 &::com::sun::star::style::XStyle::static_type(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          &::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        &::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_RIGHTDIST),        SDRATTR_TEXT_RIGHTDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_UPPERDIST),        SDRATTR_TEXT_UPPERDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        &::getCppuType((const ::com::sun::star::drawing::TextVerticalAdjust*)0),    0,      0},\
+        { MAP_CHAR_LEN(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          &::getBooleanCppuType(),        0,      0}, \
 
-        { "TableBorder",                  OWN_ATTR_TABLEBORDER,           ::getCppuType((const TableBorder*)0), 0, 0 }, \
-        { "TopBorder",                    SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
-        { "BottomBorder",                 SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
-        { "LeftBorder",                   SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
-        { "RightBorder",                  SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
+        { MAP_CHAR_LEN("TableBorder"),                  OWN_ATTR_TABLEBORDER,           &::getCppuType((const TableBorder*)0), 0, 0 }, \
+        { MAP_CHAR_LEN("TopBorder"),                    SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
+        { MAP_CHAR_LEN("BottomBorder"),                 SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
+        { MAP_CHAR_LEN("LeftBorder"),                   SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
+        { MAP_CHAR_LEN("RightBorder"),                  SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {}
+        {0,0,0,0,0,0}
     };
 
     static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -1006,10 +1006,10 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
 {
     Any aAny( SvxItemPropertySet_getPropertyValue( *mpPropSet, pMap, aSet ) );
 
-    if( pMap->aType != aAny.getValueType() )
+    if( *pMap->pType != aAny.getValueType() )
     {
         // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-        if( ( pMap->aType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+        if( ( *pMap->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
         {
             sal_Int32 nValue = 0;
             aAny >>= nValue;

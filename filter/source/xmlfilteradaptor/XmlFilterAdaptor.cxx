@@ -63,6 +63,9 @@ using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
+
+#define MAP_LEN(x) x, sizeof(x) - 1
+
 sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
@@ -95,8 +98,8 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     // create an XProperty set to configure the exporter for pretty printing
     PropertyMapEntry aImportInfoMap[] =
      {
-        { "BaseURI", 0, ::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
-         {}
+        { MAP_LEN( "BaseURI" ), 0, &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
+         { NULL, 0, 0, NULL, 0, 0 }
      };
 
      Reference< XPropertySet > xInfoSet(
@@ -253,10 +256,10 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         // create an XProperty set to configure the exporter for pretty printing
          PropertyMapEntry aImportInfoMap[] =
          {
-             { "UsePrettyPrinting", 0, ::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
-             { "ExportTextNumberElement", 0, ::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
-             { "BaseURI", 0, ::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
-             {}
+             { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ExportTextNumberElement" ), 0, &::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "BaseURI" ), 0, &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
+             { NULL, 0, 0, NULL, 0, 0 }
          };
 
          Reference< XPropertySet > xInfoSet(

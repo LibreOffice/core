@@ -157,14 +157,15 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
 
     while( *ppEntries )
     {
-        OInterfaceContainerHelper * pHelper = m_aListener.getContainer((*ppEntries)->maName);
+        const OUString aPropertyName( (*ppEntries)->mpName, (*ppEntries)->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+        OInterfaceContainerHelper * pHelper = m_aListener.getContainer(aPropertyName);
 
-        maAnyMap[ (*ppEntries)->maName ] = *pValues;
+        maAnyMap[ aPropertyName ] = *pValues;
 
         if ( pHelper )
         {
             PropertyChangeEvent aEvt;
-            aEvt.PropertyName = (*ppEntries)->maName;
+            aEvt.PropertyName = aPropertyName;
             aEvt.NewValue = *pValues;
             aGuard.clear();
             pHelper->notifyEach( &XPropertyChangeListener::propertyChange, aEvt );
@@ -183,7 +184,8 @@ void GenericPropertySet::_getPropertyValues( const comphelper::PropertyMapEntry*
 
     while( *ppEntries )
     {
-        *pValue = maAnyMap[ (*ppEntries)->maName ];
+        const OUString aPropertyName( (*ppEntries)->mpName, (*ppEntries)->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+        *pValue = maAnyMap[ aPropertyName ];
 
         ppEntries++;
         pValue++;

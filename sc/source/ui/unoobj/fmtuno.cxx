@@ -48,17 +48,17 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
     static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
-        {SC_UNONAME_ERRALSTY, 0,  getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
-        {SC_UNONAME_ERRMESS,  0,  getCppuType((OUString*)0),                0, 0},
-        {SC_UNONAME_ERRTITLE, 0,  getCppuType((OUString*)0),                0, 0},
-        {SC_UNONAME_IGNOREBL, 0,  getBooleanCppuType(),                          0, 0},
-        {SC_UNONAME_INPMESS,  0,  getCppuType((OUString*)0),                0, 0},
-        {SC_UNONAME_INPTITLE, 0,  getCppuType((OUString*)0),                0, 0},
-        {SC_UNONAME_SHOWERR,  0,  getBooleanCppuType(),                          0, 0},
-        {SC_UNONAME_SHOWINP,  0,  getBooleanCppuType(),                          0, 0},
-        {SC_UNONAME_SHOWLIST, 0,  getCppuType((sal_Int16*)0),                    0, 0},
-        {SC_UNONAME_TYPE,     0,  getCppuType((sheet::ValidationType*)0),        0, 0},
-        {}
+        {MAP_CHAR_LEN(SC_UNONAME_ERRALSTY), 0,  &getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ERRTITLE), 0,  &getCppuType((OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_IGNOREBL), 0,  &getBooleanCppuType(),                          0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INPMESS),  0,  &getCppuType((OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INPTITLE), 0,  &getCppuType((OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWERR),  0,  &getBooleanCppuType(),                          0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWINP),  0,  &getBooleanCppuType(),                          0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWLIST), 0,  &getCppuType((sal_Int16*)0),                    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_TYPE),     0,  &getCppuType((sheet::ValidationType*)0),        0, 0},
+        {0,0,0,0,0,0}
     };
     return aValidatePropertyMap_Impl;
 }

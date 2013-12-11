@@ -33,9 +33,10 @@
 
 struct SfxItemPropertyMapEntry
 {
-    OUString                            aName;
+    const char*                         pName;
+    sal_uInt16                          nNameLen;
     sal_uInt16                          nWID;
-    com::sun::star::uno::Type           aType;
+    const com::sun::star::uno::Type*    pType;
     long                                nFlags;
     sal_uInt8                           nMemberId;
 
@@ -44,21 +45,22 @@ struct SfxItemPropertyMapEntry
 struct SfxItemPropertySimpleEntry
 {
     sal_uInt16                          nWID;
-    com::sun::star::uno::Type           aType;
+    const com::sun::star::uno::Type*    pType;
     long                                nFlags;
     sal_uInt8                           nMemberId;
 
     SfxItemPropertySimpleEntry()
         : nWID( 0 )
+        , pType( 0 )
         , nFlags( 0 )
         , nMemberId( 0 )
         {
         }
 
-    SfxItemPropertySimpleEntry(sal_uInt16 _nWID, com::sun::star::uno::Type const & _rType,
+    SfxItemPropertySimpleEntry(sal_uInt16 _nWID, const com::sun::star::uno::Type* _pType,
                                long _nFlags, sal_uInt8 _nMemberId)
         : nWID(      _nWID )
-        , aType(     _rType )
+        , pType(     _pType )
         , nFlags(    _nFlags )
         , nMemberId( _nMemberId )
         {
@@ -66,7 +68,7 @@ struct SfxItemPropertySimpleEntry
 
     SfxItemPropertySimpleEntry( const SfxItemPropertyMapEntry* pMapEntry )
         : nWID( pMapEntry->nWID )
-        , aType( pMapEntry->aType )
+        , pType( pMapEntry->pType )
         , nFlags( pMapEntry->nFlags )
         , nMemberId( pMapEntry->nMemberId )
         {

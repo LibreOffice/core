@@ -852,6 +852,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
     else
     {
         void *pData = NULL;
+        const uno::Type* pType = pCur->pType;
         switch (pCur->nWID)
         {
             case WID_SELECTION :                pData = &aSelection;  break;
@@ -888,7 +889,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             default :
                 OSL_FAIL("unknown WID");
         }
-        Any aOld( pData, pCur->aType );
+        Any aOld( pData, *pType );
 
         bool bChanged = false;
         sal_Bool bOK = sal_True;

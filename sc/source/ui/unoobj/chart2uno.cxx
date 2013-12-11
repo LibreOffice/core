@@ -80,9 +80,9 @@ const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
-        { SC_UNONAME_INCLUDEHIDDENCELLS, 0, getBooleanCppuType(), 0, 0 },
-        { SC_UNONAME_USE_INTERNAL_DATA_PROVIDER, 0, getBooleanCppuType(), 0, 0 },
-        {}
+        { MAP_CHAR_LEN(SC_UNONAME_INCLUDEHIDDENCELLS), 0, &getBooleanCppuType(), 0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_USE_INTERNAL_DATA_PROVIDER), 0, &getBooleanCppuType(), 0, 0 },
+        {0,0,0,0,0,0}
     };
     return aDataProviderPropertyMap_Impl;
 }
@@ -91,10 +91,10 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
-        {SC_UNONAME_HIDDENVALUES, 0, getCppuType((uno::Sequence<sal_Int32>*)0 ),                 0, 0 },
-        {SC_UNONAME_ROLE, 0, getCppuType((::com::sun::star::chart2::data::DataSequenceRole*)0),                  0, 0 },
-        {SC_UNONAME_INCLUDEHIDDENCELLS, 0,        getBooleanCppuType(),                  0, 0 },
-        {}
+        {MAP_CHAR_LEN(SC_UNONAME_HIDDENVALUES), 0, &getCppuType((uno::Sequence<sal_Int32>*)0 ),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROLE), 0, &getCppuType((::com::sun::star::chart2::data::DataSequenceRole*)0),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_INCLUDEHIDDENCELLS), 0,        &getBooleanCppuType(),                  0, 0 },
+        {0,0,0,0,0,0}
     };
     return aDataSequencePropertyMap_Impl;
 }

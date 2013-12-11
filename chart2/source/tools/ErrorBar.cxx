@@ -55,22 +55,22 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
 {
     static const SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
     {
-        {"ShowPositiveError",0,getBooleanCppuType(), 0, 0},
-        {"ShowNegativeError",1,getBooleanCppuType(), 0, 0},
-        {"PositiveError",2,getCppuType((const double*)0),0,0},
-        {"NegativeError",3,getCppuType((const double*)0), 0, 0},
-        {"PercentageError",4,getCppuType((const double*)0), 0, 0},
-        {"ErrorBarStyle",5,getCppuType((sal_Int32*)0),0,0},
-        {"ErrorBarRangePositive",6,getCppuType((OUString*)0),0,0}, // read-only for export
-        {"ErrorBarRangeNegative",7,getCppuType((OUString*)0),0,0}, // read-only for export
-        {"Weight",8,getCppuType((const double*)0),0,0},
-        {"LineStyle",9,getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
-        {"LineDash",10,getCppuType((drawing::LineDash*)0),0,0},
-        {"LineWidth",11,getCppuType((sal_Int32*)0),0,0},
-        {"LineColor",12,getCppuType((com::sun::star::util::Color*)0),0,0},
-        {"LineTransparence",13,getCppuType((sal_Int16*)0),0,0},
-        {"LineJoint",14,getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
-        {}
+        {MAP_CHAR_LEN("ShowPositiveError"),0,&getBooleanCppuType(), 0, 0},
+        {MAP_CHAR_LEN("ShowNegativeError"),1,&getBooleanCppuType(), 0, 0},
+        {MAP_CHAR_LEN("PositiveError"),2,&getCppuType((const double*)0),0,0},
+        {MAP_CHAR_LEN("NegativeError"),3,&getCppuType((const double*)0), 0, 0},
+        {MAP_CHAR_LEN("PercentageError"),4,&getCppuType((const double*)0), 0, 0},
+        {MAP_CHAR_LEN("ErrorBarStyle"),5,&getCppuType((sal_Int32*)0),0,0},
+        {MAP_CHAR_LEN("ErrorBarRangePositive"),6,&getCppuType((OUString*)0),0,0}, // read-only for export
+        {MAP_CHAR_LEN("ErrorBarRangeNegative"),7,&getCppuType((OUString*)0),0,0}, // read-only for export
+        {MAP_CHAR_LEN("Weight"),8,&getCppuType((const double*)0),0,0},
+        {MAP_CHAR_LEN("LineStyle"),9,&getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
+        {MAP_CHAR_LEN("LineDash"),10,&getCppuType((drawing::LineDash*)0),0,0},
+        {MAP_CHAR_LEN("LineWidth"),11,&getCppuType((sal_Int32*)0),0,0},
+        {MAP_CHAR_LEN("LineColor"),12,&getCppuType((com::sun::star::util::Color*)0),0,0},
+        {MAP_CHAR_LEN("LineTransparence"),13,&getCppuType((sal_Int16*)0),0,0},
+        {MAP_CHAR_LEN("LineJoint"),14,&getCppuType((com::sun::star::drawing::LineJoint*)0),0,0},
+        {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
     return &aPropSet;

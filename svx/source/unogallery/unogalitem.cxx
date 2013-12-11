@@ -226,27 +226,27 @@ sal_Int8 SAL_CALL GalleryItem::getType()
     SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
-    static ::comphelper::PropertyMapEntry const aEntries[] =
+    static ::comphelper::PropertyMapEntry aEntries[] =
     {
-        { "GalleryItemType", UNOGALLERY_GALLERYITEMTYPE, ::getCppuType( (const sal_Int8*)(0)),
+        { MAP_CHAR_LEN( "GalleryItemType" ), UNOGALLERY_GALLERYITEMTYPE, &::getCppuType( (const sal_Int8*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { "URL", UNOGALLERY_URL, ::getCppuType( (const OUString*)(0)),
+        { MAP_CHAR_LEN( "URL" ), UNOGALLERY_URL, &::getCppuType( (const OUString*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { "Title", UNOGALLERY_TITLE, ::getCppuType( (const OUString*)(0)),
+        { MAP_CHAR_LEN( "Title" ), UNOGALLERY_TITLE, &::getCppuType( (const OUString*)(0)),
           0, 0 },
 
-        { "Thumbnail", UNOGALLERY_THUMBNAIL, ::getCppuType( (const uno::Reference< graphic::XGraphic >*)(0)),
+        { MAP_CHAR_LEN( "Thumbnail" ), UNOGALLERY_THUMBNAIL, &::getCppuType( (const uno::Reference< graphic::XGraphic >*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { "Graphic", UNOGALLERY_GRAPHIC, ::getCppuType( (const uno::Reference< graphic::XGraphic >*)(0)),
+        { MAP_CHAR_LEN( "Graphic" ), UNOGALLERY_GRAPHIC, &::getCppuType( (const uno::Reference< graphic::XGraphic >*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { "Drawing", UNOGALLERY_DRAWING, ::getCppuType( (const uno::Reference< lang::XComponent >*)(0) ),
+        { MAP_CHAR_LEN( "Drawing" ), UNOGALLERY_DRAWING, &::getCppuType( (const uno::Reference< lang::XComponent >*)(0) ),
           beans::PropertyAttribute::READONLY, 0 },
 
-        {}
+        { 0,0,0,0,0,0}
     };
 
     pRet->acquire();

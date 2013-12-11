@@ -134,19 +134,19 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
     comphelper::PropertyMapEntry aInfoMap[] =
     {
-        { "PrivateData", 0,
-              ::getCppuType( (Reference<XInterface> *)0 ),
+        { "PrivateData", sizeof("PrivateData")-1, 0,
+              &::getCppuType( (Reference<XInterface> *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "BaseURI", 0,
-              ::getCppuType( (OUString *)0 ),
+        { "BaseURI", sizeof("BaseURI")-1, 0,
+              &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamRelPath", 0,
-              ::getCppuType( (OUString *)0 ),
+        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
+              &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamName", 0,
-              ::getCppuType( (OUString *)0 ),
+        { "StreamName", sizeof("StreamName")-1, 0,
+              &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        {}
+        { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(

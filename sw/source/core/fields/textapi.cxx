@@ -37,15 +37,15 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {"TextField",                 EE_FEATURE_FIELD,
-            ::getCppuType((const uno::Reference< text::XTextField >*)0), beans::PropertyAttribute::READONLY, 0 },
-        {"TextPortionType",           WID_PORTIONTYPE,
-            ::getCppuType((const OUString*)0), beans::PropertyAttribute::READONLY, 0 },
-        {"TextUserDefinedAttributes", EE_CHAR_XMLATTRIBS,
-            ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0), 0, 0},
-        {"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS,
-            ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0), 0, 0},
-        {}
+        {MAP_CHAR_LEN("TextField"),                 EE_FEATURE_FIELD,
+            &::getCppuType((const uno::Reference< text::XTextField >*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN("TextPortionType"),           WID_PORTIONTYPE,
+            &::getCppuType((const OUString*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN("TextUserDefinedAttributes"), EE_CHAR_XMLATTRIBS,
+            &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0), 0, 0},
+        {MAP_CHAR_LEN("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS,
+            &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0), 0, 0},
+        {0,0,0,0,0,0}
     };
     static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap, EditEngine::GetGlobalItemPool() );
     return &aSvxTextPortionPropertySet;

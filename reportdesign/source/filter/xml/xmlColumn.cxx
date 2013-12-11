@@ -131,11 +131,11 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
         if ( pAutoStyles )
         {
             PropertySetInfo* pInfo = new PropertySetInfo();
-            static PropertyMapEntry const pMap[] =
+            static PropertyMapEntry pMap[] =
             {
-                {PROPERTY_WIDTH,  PROPERTY_ID_WIDTH,          ::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
-                {PROPERTY_HEIGHT, PROPERTY_ID_HEIGHT,         ::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
-                {}
+                {PROPERTY_WIDTH,  static_cast<sal_uInt16>(SAL_N_ELEMENTS(PROPERTY_WIDTH)-1),     PROPERTY_ID_WIDTH,          &::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
+                {PROPERTY_HEIGHT, static_cast<sal_uInt16>(SAL_N_ELEMENTS(PROPERTY_HEIGHT)-1),    PROPERTY_ID_HEIGHT,         &::getCppuType(static_cast< sal_Int32* >( NULL ))       ,PropertyAttribute::BOUND,0},
+                { NULL, 0, 0, NULL, 0, 0 }
             };
             pInfo->add(pMap);
             Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo);

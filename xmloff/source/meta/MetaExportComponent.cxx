@@ -78,12 +78,12 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         uno::Reference< uno::XComponentContext > xContext = getComponentContext();
         try
         {
-            ::comphelper::PropertyMapEntry const aInfoMap[] =
+            ::comphelper::PropertyMapEntry aInfoMap[] =
             {
-                { "Class", 0,
-                    ::getCppuType((OUString*)0),
+                { "Class", sizeof("Class")-1, 0,
+                    &::getCppuType((OUString*)0),
                     beans::PropertyAttribute::MAYBEVOID, 0},
-                {}
+                { NULL, 0, 0, NULL, 0, 0 }
             };
             uno::Reference< beans::XPropertySet > xConvPropSet(
                 ::comphelper::GenericPropertySet_CreateInstance(

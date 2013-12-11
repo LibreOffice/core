@@ -33,19 +33,19 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =
     {
-        {SC_UNO_CALCASSHOWN,  PROP_UNO_CALCASSHOWN ,  getBooleanCppuType(),          0, 0},
-        {SC_UNO_DEFTABSTOP,   PROP_UNO_DEFTABSTOP  ,  getCppuType((sal_Int16*)0),    0, 0},
-        {SC_UNO_IGNORECASE,   PROP_UNO_IGNORECASE  ,  getBooleanCppuType(),          0, 0},
-        {SC_UNO_ITERENABLED,  PROP_UNO_ITERENABLED ,  getBooleanCppuType(),          0, 0},
-        {SC_UNO_ITERCOUNT,    PROP_UNO_ITERCOUNT   ,  getCppuType((sal_Int32*)0),    0, 0},
-        {SC_UNO_ITEREPSILON,  PROP_UNO_ITEREPSILON ,  getCppuType((double*)0),       0, 0},
-        {SC_UNO_LOOKUPLABELS, PROP_UNO_LOOKUPLABELS,  getBooleanCppuType(),          0, 0},
-        {SC_UNO_MATCHWHOLE,   PROP_UNO_MATCHWHOLE  ,  getBooleanCppuType(),          0, 0},
-        {SC_UNO_NULLDATE,     PROP_UNO_NULLDATE    ,  getCppuType((util::Date*)0),   0, 0},
-        {SC_UNO_SPELLONLINE,  PROP_UNO_SPELLONLINE ,  getBooleanCppuType(),          0, 0},
-        {SC_UNO_STANDARDDEC,  PROP_UNO_STANDARDDEC ,  getCppuType((sal_Int16*)0),    0, 0},
-        {SC_UNO_REGEXENABLED, PROP_UNO_REGEXENABLED,  getBooleanCppuType(),          0, 0},
-        {}
+        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  PROP_UNO_CALCASSHOWN ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   PROP_UNO_DEFTABSTOP  ,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),   PROP_UNO_IGNORECASE  ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),  PROP_UNO_ITERENABLED ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),    PROP_UNO_ITERCOUNT   ,  &getCppuType((sal_Int32*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),  PROP_UNO_ITEREPSILON ,  &getCppuType((double*)0),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS), PROP_UNO_LOOKUPLABELS,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),   PROP_UNO_MATCHWHOLE  ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_NULLDATE),     PROP_UNO_NULLDATE    ,  &getCppuType((util::Date*)0),   0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  PROP_UNO_SPELLONLINE ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  &getBooleanCppuType(),          0, 0},
+        {0,0,0,0,0,0}
     };
     return aMap;
 }

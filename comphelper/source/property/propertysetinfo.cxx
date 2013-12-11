@@ -35,7 +35,7 @@ public:
     PropertyMapImpl() throw();
     virtual ~PropertyMapImpl() throw();
 
-    void add( PropertyMapEntry const * pMap, sal_Int32 nCount = -1 ) throw();
+    void add( PropertyMapEntry* pMap, sal_Int32 nCount = -1 ) throw();
     void remove( const OUString& aName ) throw();
 
     Sequence< Property > getProperties() throw();
@@ -59,23 +59,30 @@ PropertyMapImpl::~PropertyMapImpl() throw()
 {
 }
 
-void PropertyMapImpl::add( PropertyMapEntry const * pMap, sal_Int32 nCount ) throw()
+void PropertyMapImpl::add( PropertyMapEntry* pMap, sal_Int32 nCount ) throw()
 {
     // nCount < 0   => add all
     // nCount == 0  => add nothing
     // nCount > 0   => add at most nCount entries
 
-    while( !pMap->maName.isEmpty() && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
+    while( pMap->mpName && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
     {
+        OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+
 #ifdef DBG_UTIL
-        PropertyMap::iterator aIter = maPropertyMap.find( pMap->maName );
+        PropertyMap::iterator aIter = maPropertyMap.find( aName );
         if( aIter != maPropertyMap.end() )
         {
             OSL_FAIL( "Warning: PropertyMapEntry added twice, possible error!");
         }
 #endif
+        if( NULL == pMap->mpType )
+        {
+            OSL_FAIL( "No type in PropertyMapEntry!");
+            pMap->mpType = &::getCppuType((const sal_Int32*)0);
+        }
 
-        maPropertyMap[pMap->maName] = pMap;
+        maPropertyMap[aName] = pMap;
 
         if( maProperties.getLength() )
             maProperties.realloc( 0 );
@@ -106,11 +113,11 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
         const PropertyMap::iterator aEnd = maPropertyMap.end();
         while( aIter != aEnd )
         {
-            PropertyMapEntry const * pEntry = (*aIter).second;
+            PropertyMapEntry* pEntry = (*aIter).second;
 
-            pProperties->Name = pEntry->maName;
+            pProperties->Name = OUString( pEntry->mpName, pEntry->mnNameLen, RTL_TEXTENCODING_ASCII_US );
             pProperties->Handle = pEntry->mnHandle;
-            pProperties->Type = pEntry->maType;
+            pProperties->Type = *pEntry->mpType;
             pProperties->Attributes = pEntry->mnAttributes;
 
             ++pProperties;
@@ -133,9 +140,9 @@ Property PropertyMapImpl::getPropertyByName( const OUString& aName ) throw( Unkn
     if( maPropertyMap.end() == aIter )
         throw UnknownPropertyException( aName, NULL );
 
-    PropertyMapEntry const * pEntry = (*aIter).second;
+    PropertyMapEntry* pEntry = (*aIter).second;
 
-    return Property( aName, pEntry->mnHandle, pEntry->maType, pEntry->mnAttributes );
+    return Property( aName, pEntry->mnHandle, *pEntry->mpType, pEntry->mnAttributes );
 }
 
 sal_Bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
@@ -150,7 +157,7 @@ PropertySetInfo::PropertySetInfo() throw()
     mpMap = new PropertyMapImpl();
 }
 
-PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) throw()
+PropertySetInfo::PropertySetInfo( PropertyMapEntry* pMap ) throw()
 {
     mpMap = new PropertyMapImpl();
     mpMap->add( pMap );
@@ -161,7 +168,7 @@ PropertySetInfo::~PropertySetInfo() throw()
     delete mpMap;
 }
 
-void PropertySetInfo::add( PropertyMapEntry const * pMap ) throw()
+void PropertySetInfo::add( PropertyMapEntry* pMap ) throw()
 {
     mpMap->add( pMap );
 }

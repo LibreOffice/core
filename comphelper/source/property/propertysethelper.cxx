@@ -35,13 +35,13 @@ namespace comphelper
 class PropertySetHelperImpl
 {
 public:
-    PropertyMapEntry const * find( const OUString& aName ) const throw();
+    PropertyMapEntry* find( const OUString& aName ) const throw();
 
     PropertySetInfo* mpInfo;
 };
 }
 
-PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) const throw()
+PropertyMapEntry* PropertySetHelperImpl::find( const OUString& aName ) const throw()
 {
     PropertyMap::const_iterator aIter = mpInfo->getPropertyMap()->find( aName );
 
@@ -84,7 +84,7 @@ Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  )
 
 void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    PropertyMapEntry const * aEntries[2];
+    PropertyMapEntry* aEntries[2];
     aEntries[0] = mp->find( aPropertyName );
 
     if( NULL == aEntries[0] )
@@ -97,7 +97,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName
 
 Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    PropertyMapEntry const * aEntries[2];
+    PropertyMapEntry* aEntries[2];
     aEntries[0] = mp->find( PropertyName );
 
     if( NULL == aEntries[0] )
@@ -141,7 +141,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
 
     if( nCount )
     {
-        PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
+        PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
         pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
@@ -170,7 +170,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< O
     Sequence< Any > aValues;
     if( nCount )
     {
-        PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
+        PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
         pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
@@ -215,7 +215,7 @@ void SAL_CALL PropertySetHelper::firePropertiesChangeEvent( const Sequence< OUSt
 // XPropertyState
 PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    PropertyMapEntry const * aEntries[2];
+    PropertyMapEntry* aEntries[2];
 
     aEntries[0] = mp->find( PropertyName );
     if( aEntries[0] == NULL )
@@ -241,7 +241,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
 
         sal_Bool bUnknown = sal_False;
 
-        PropertyMapEntry const ** pEntries = new PropertyMapEntry const *[nCount+1];
+        PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
 
         sal_Int32 n;
         for( n = 0; !bUnknown && (n < nCount); n++, pNames++ )
@@ -266,7 +266,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
 
 void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    PropertyMapEntry const *pEntry  = mp->find( PropertyName );
+    PropertyMapEntry *pEntry  = mp->find( PropertyName );
     if( NULL == pEntry )
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
@@ -275,7 +275,7 @@ void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyN
 
 Any SAL_CALL PropertySetHelper::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    PropertyMapEntry const * pEntry = mp->find( aPropertyName );
+    PropertyMapEntry* pEntry = mp->find( aPropertyName );
     if( NULL == pEntry )
         throw UnknownPropertyException( aPropertyName, static_cast< XPropertySet* >( this ) );
 

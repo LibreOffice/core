@@ -49,9 +49,9 @@ namespace frm
                 SVX_UNOEDIT_CHAR_PROPERTIES,
                 SVX_UNOEDIT_FONT_PROPERTIES,
                 SVX_UNOEDIT_PARA_PROPERTIES,
-                { "TextUserDefinedAttributes", EE_CHAR_XMLATTRIBS, ::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
-                { "ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, ::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
-                {}
+                { MAP_CHAR_LEN("TextUserDefinedAttributes"), EE_CHAR_XMLATTRIBS, &::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
+                { MAP_CHAR_LEN("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, &::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
+                { NULL, 0, 0, NULL, 0, 0 }
             };
             static SvxItemPropertySet aTextEnginePropertySet( aTextEnginePropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
             return &aTextEnginePropertySet;

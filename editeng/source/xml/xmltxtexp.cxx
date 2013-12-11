@@ -382,11 +382,11 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
 //      SVX_UNOEDIT_OUTLINER_PROPERTIES,
-        {UNO_NAME_NUMBERING_RULES,        EE_PARA_NUMBULLET,  ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace>*)0), 0, 0 },
-        {UNO_NAME_NUMBERING,              EE_PARA_BULLETSTATE,::getBooleanCppuType(), 0, 0 },
-        {UNO_NAME_NUMBERING_LEVEL,        EE_PARA_OUTLLEVEL,  ::getCppuType((const sal_Int16*)0), 0, 0 },
+        {MAP_CHAR_LEN(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,&::getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN(UNO_NAME_NUMBERING_LEVEL),        EE_PARA_OUTLLEVEL,  &::getCppuType((const sal_Int16*)0), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {}
+        {0,0,0,0,0,0}
     };
     static SvxItemPropertySet aSvxXMLTextExportComponentPropertySet( SvxXMLTextExportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 

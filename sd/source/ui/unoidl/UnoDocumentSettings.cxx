@@ -50,6 +50,8 @@
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
+#define MAP_LEN(x) x, sizeof(x)-1
+
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
@@ -145,64 +147,64 @@ enum SdDocumentSettingsPropertyHandles
 
 #define MID_PRINTER 1
 
-    PropertySetInfo * createSettingsInfoImpl( sal_Bool bIsDraw )
+    PropertySetInfo* createSettingsInfoImpl( sal_Bool bIsDraw )
     {
-        static PropertyMapEntry const aImpressSettingsInfoMap[] =
+        static PropertyMapEntry aImpressSettingsInfoMap[] =
         {
-            { "IsPrintDrawing",        HANDLE_PRINTDRAWING,        ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintNotes",          HANDLE_PRINTNOTES,          ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintHandout",        HANDLE_PRINTHANDOUT,        ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintOutline",        HANDLE_PRINTOUTLINE,        ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "SlidesPerHandout",      HANDLE_SLIDESPERHANDOUT,    ::getCppuType((const sal_Int16*)0),    0,  MID_PRINTER },
-            { "HandoutsHorizontal",    HANDLE_HANDOUTHORIZONTAL,   ::getBooleanCppuType(),                0,  MID_PRINTER },
-            {}
+            { MAP_LEN("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintNotes"),          HANDLE_PRINTNOTES,          &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("SlidesPerHandout"),      HANDLE_SLIDESPERHANDOUT,    &::getCppuType((const sal_Int16*)0),    0,  MID_PRINTER },
+            { MAP_LEN("HandoutsHorizontal"),    HANDLE_HANDOUTHORIZONTAL,   &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { NULL, 0, 0, NULL, 0, 0 }
         };
 
-        static PropertyMapEntry const aDrawSettingsInfoMap[] =
+        static PropertyMapEntry aDrawSettingsInfoMap[] =
         {
-            { "MeasureUnit",           HANDLE_MEASUREUNIT,         ::getCppuType((const sal_Int16*)0),    0,  0 },
-            { "ScaleNumerator",        HANDLE_SCALE_NUM,           ::getCppuType((const sal_Int32*)0),    0,  0 },
-            { "ScaleDenominator",      HANDLE_SCALE_DOM,           ::getCppuType((const sal_Int32*)0),    0,  0 },
-            {}
+            { MAP_LEN("MeasureUnit"),           HANDLE_MEASUREUNIT,         &::getCppuType((const sal_Int16*)0),    0,  0 },
+            { MAP_LEN("ScaleNumerator"),        HANDLE_SCALE_NUM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("ScaleDenominator"),      HANDLE_SCALE_DOM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { NULL, 0, 0, NULL, 0, 0 }
         };
 
-        static PropertyMapEntry const aCommonSettingsInfoMap[] =
+        static PropertyMapEntry aCommonSettingsInfoMap[] =
         {
-            { "DefaultTabStop",        HANDLE_TABSTOP,             ::getCppuType((const sal_Int32*)0),    0,  0 },
-            { "PrinterName",           HANDLE_PRINTERNAME,         ::getCppuType((const OUString*)0),     0,  0 },
-            { "PrinterSetup",          HANDLE_PRINTERJOB,          ::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
+            { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
 
-            { "IsPrintPageName",       HANDLE_PRINTPAGENAME,       ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintDate",           HANDLE_PRINTDATE,           ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintTime",           HANDLE_PRINTTIME,           ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintHiddenPages",    HANDLE_PRINTHIDENPAGES,     ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintFitPage",        HANDLE_PRINTFITPAGE,        ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintTilePage",       HANDLE_PRINTTILEPAGE,       ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintBooklet",        HANDLE_PRINTBOOKLET,        ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintBookletFront",   HANDLE_PRINTBOOKLETFRONT,   ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "IsPrintBookletBack",    HANDLE_PRINTBOOKLETBACK,    ::getBooleanCppuType(),                0,  MID_PRINTER },
-            { "PrintQuality",          HANDLE_PRINTQUALITY,        ::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
-            { "ColorTableURL",         HANDLE_COLORTABLEURL,       ::getCppuType((const OUString*)0),     0,  0 },
-            { "DashTableURL",          HANDLE_DASHTABLEURL,        ::getCppuType((const OUString*)0),     0,  0 },
-            { "LineEndTableURL",       HANDLE_LINEENDTABLEURL,     ::getCppuType((const OUString*)0),     0,  0 },
-            { "HatchTableURL",         HANDLE_HATCHTABLEURL,       ::getCppuType((const OUString*)0),     0,  0 },
-            { "GradientTableURL",      HANDLE_GRADIENTTABLEURL,    ::getCppuType((const OUString*)0),     0,  0 },
-            { "BitmapTableURL",        HANDLE_BITMAPTABLEURL,      ::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintTime"),           HANDLE_PRINTTIME,           &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintHiddenPages"),    HANDLE_PRINTHIDENPAGES,     &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintFitPage"),        HANDLE_PRINTFITPAGE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintTilePage"),       HANDLE_PRINTTILEPAGE,       &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
+            { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("HatchTableURL"),         HANDLE_HATCHTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      &::getCppuType((const OUString*)0),     0,  0 },
 
-            { "ForbiddenCharacters",   HANDLE_FORBIDDENCHARS,      ::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
-            { "ApplyUserData",         HANDLE_APPLYUSERDATA,       ::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      &::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
+            { MAP_LEN("ApplyUserData"),         HANDLE_APPLYUSERDATA,       &::getBooleanCppuType(),                0,  0 },
 
-            { "PageNumberFormat",      HANDLE_PAGENUMFMT,          ::getCppuType((const sal_Int32*)0),    0,  0 },
-            { "ParagraphSummation",    HANDLE_PARAGRAPHSUMMATION,  ::getBooleanCppuType(),                0,  0 },
-            { "CharacterCompressionType",HANDLE_CHARCOMPRESS,      ::getCppuType((sal_Int16*)0),          0,  0 },
-            { "IsKernAsianPunctuation",HANDLE_ASIANPUNCT,          ::getBooleanCppuType(),                0,  0 },
-            { "UpdateFromTemplate",    HANDLE_UPDATEFROMTEMPLATE,  ::getBooleanCppuType(),                0,  0 },
-            { "PrinterIndependentLayout",HANDLE_PRINTER_INDEPENDENT_LAYOUT,::getCppuType((const sal_Int16*)0), 0,  0 },
+            { MAP_LEN("PageNumberFormat"),      HANDLE_PAGENUMFMT,          &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      &::getCppuType((sal_Int16*)0),          0,  0 },
+            { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
             // --> #i33095#
-            { "LoadReadonly",          HANDLE_LOAD_READONLY,       ::getBooleanCppuType(),                0,  0 },
-            { "SaveVersionOnClose",    HANDLE_SAVE_VERSION,        ::getBooleanCppuType(),                0,  0 },
-            { "EmbedFonts",            HANDLE_EMBED_FONTS,         ::getBooleanCppuType(),                0,  0 },
-            {}
+            { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("EmbedFonts"),            HANDLE_EMBED_FONTS,         &::getBooleanCppuType(),                0,  0 },
+            { NULL, 0, 0, NULL, 0, 0 }
         };
 
         PropertySetInfo* pInfo = new PropertySetInfo( aCommonSettingsInfoMap );

@@ -147,7 +147,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         SVX_UNOEDIT_FONT_PROPERTIES,
 //      SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {}
+        {0,0,0,0,0,0}
     };
     static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 

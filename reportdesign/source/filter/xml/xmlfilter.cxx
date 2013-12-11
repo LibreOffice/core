@@ -59,6 +59,9 @@
 #include <xmloff/txtprmap.hxx>
 #include "ReportDefinition.hxx"
 
+
+#define MAP_LEN(x) x, sizeof(x) - 1
+//--------------------------------------------------------------------------
 namespace rptxml
 {
 using namespace ::com::sun::star::uno;
@@ -525,14 +528,14 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),aArgs) , uno::UNO_QUERY);
 
         static const OUString s_sOld("OldFormat");
-        static comphelper::PropertyMapEntry const pMap[] =
+        static comphelper::PropertyMapEntry pMap[] =
         {
-            { "OldFormat" , 1,    ::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
-            { "StreamName", 0,    ::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            { "PrivateData",0,    ::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
-            { "BaseURI",    0,    ::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            { "StreamRelPath", 0, ::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            {}
+            { MAP_LEN( "OldFormat" ), 1,    &::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
+            { MAP_LEN( "StreamName"), 0,    &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN("PrivateData"), 0,    &::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BaseURI"),    0,    &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath"), 0, &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { NULL, 0, 0, NULL, 0, 0 }
         };
         utl::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));

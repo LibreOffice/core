@@ -89,6 +89,7 @@
 #include <list>
 
 #include <svtools/grfmgr.hxx>
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -492,11 +493,11 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
     /** property map for import info set */
-    comphelper::PropertyMapEntry const aExportInfoMap[] =
+    comphelper::PropertyMapEntry aExportInfoMap[] =
      {
-        { "BaseURI", 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamName", 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        {}
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+          { NULL, 0, 0, NULL, 0, 0 }
      };
      uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
     xInfoSet->setPropertyValue("BaseURI", uno::makeAny(_rResource.getOrDefault("URL",OUString())));
@@ -1612,10 +1613,10 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { "BaseURI", 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamName", 0, ::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "UsePrettyPrinting", 0, ::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
-        {}
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 

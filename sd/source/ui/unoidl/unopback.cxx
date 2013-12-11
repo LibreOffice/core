@@ -43,7 +43,7 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
     static const SfxItemPropertyMapEntry aPageBackgroundPropertyMap_Impl[] =
     {
         FILL_PROPERTIES
-        {}
+        {0,0,0,0,0,0}
     };
 
     static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );

@@ -56,11 +56,11 @@ const SfxItemPropertySet* getDateTimePropertySet()
 {
     static const SfxItemPropertyMapEntry aMapContent[] =
     {
-        { SC_UNONAME_DATETIME, 0, getCppuType((const util::DateTime*)0), 0, 0 },
-        { SC_UNONAME_ISFIXED,  0, getBooleanCppuType(),                  0, 0 },
-        { SC_UNONAME_ISDATE,   0, getBooleanCppuType(),                  0, 0 },
-        { SC_UNONAME_NUMFMT,   0, getCppuType((const sal_Int32*)0),      0, 0 },
-        {}
+        { MAP_CHAR_LEN(SC_UNONAME_DATETIME), 0, &getCppuType((const util::DateTime*)0), 0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_ISFIXED),  0, &getBooleanCppuType(),                  0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_ISDATE),   0, &getBooleanCppuType(),                  0, 0 },
+        { MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   0, &getCppuType((const sal_Int32*)0),      0, 0 },
+        {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aMap(aMapContent);
     return &aMap;
@@ -70,7 +70,7 @@ const SfxItemPropertySet* getEmptyPropertySet()
 {
     static const SfxItemPropertyMapEntry aMapContent[] =
     {
-        {}
+        {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aMap(aMapContent);
     return &aMap;
@@ -80,13 +80,13 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
 {
     static const SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
     {
-        {SC_UNONAME_ANCTYPE,  0,  getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_ANCTYPES, 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_REPR,     0,  getCppuType((OUString*)0),    0, 0},
-        {SC_UNONAME_TARGET,   0,  getCppuType((OUString*)0),    0, 0},
-        {SC_UNONAME_TEXTWRAP, 0,  getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_URL,      0,  getCppuType((OUString*)0),    0, 0},
-        {}
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_REPR),     0,  &getCppuType((OUString*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_TARGET),   0,  &getCppuType((OUString*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_URL),      0,  &getCppuType((OUString*)0),    0, 0},
+        {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aURLPropertySet_Impl( aURLPropertyMap_Impl );
     return &aURLPropertySet_Impl;
@@ -96,10 +96,10 @@ const SfxItemPropertySet* lcl_GetHeaderFieldPropertySet()
 {
     static const SfxItemPropertyMapEntry aHeaderFieldPropertyMap_Impl[] =
     {
-        {SC_UNONAME_ANCTYPE,  0,  getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_ANCTYPES, 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_TEXTWRAP, 0,  getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
-        {}
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
+        {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aHeaderFieldPropertySet_Impl( aHeaderFieldPropertyMap_Impl );
     return &aHeaderFieldPropertySet_Impl;
@@ -109,11 +109,11 @@ const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
 {
     static const SfxItemPropertyMapEntry aFileFieldPropertyMap_Impl[] =
     {
-        {SC_UNONAME_ANCTYPE,  0,  getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_ANCTYPES, 0,  getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_FILEFORM, 0,  getCppuType((sal_Int16*)0),        0, 0 },
-        {SC_UNONAME_TEXTWRAP, 0,  getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
-        {}
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_FILEFORM), 0,  &getCppuType((sal_Int16*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
+        {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aFileFieldPropertySet_Impl( aFileFieldPropertyMap_Impl );
     return &aFileFieldPropertySet_Impl;
