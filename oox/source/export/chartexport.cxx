@@ -1251,6 +1251,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
             XML_val, marker,
             FSEND );
 
+    exportUpDownBars(xChartType);
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
@@ -1351,38 +1352,57 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
             exportShapeProps( xStockPropSet );
             pFS->endElement( FSNS( XML_c, XML_hiLowLines ) );
         }
-        // stock updownbar
-        pFS->startElement( FSNS( XML_c, XML_upDownBars ),
-                FSEND );
-        // TODO: gapWidth
-        sal_Int32 nGapWidth = 150;
-        pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
-            XML_val, I32S( nGapWidth ),
-            FSEND );
-
-        xStockPropSet = xStockPropProvider->getUpBar();
-        if( xStockPropSet.is() )
-        {
-            pFS->startElement( FSNS( XML_c, XML_upBars ),
-                FSEND );
-            exportShapeProps( xStockPropSet );
-            pFS->endElement( FSNS( XML_c, XML_upBars ) );
-        }
-
-        xStockPropSet = xStockPropProvider->getDownBar();
-        if( xStockPropSet.is() )
-        {
-            pFS->startElement( FSNS( XML_c, XML_downBars ),
-                FSEND );
-            exportShapeProps( xStockPropSet );
-            pFS->endElement( FSNS( XML_c, XML_downBars ) );
-        }
-        pFS->endElement( FSNS( XML_c, XML_upDownBars ) );
+        exportUpDownBars(xChartType);
     }
 
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, XML_stockChart ) );
+}
+
+void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
+{
+    FSHelperPtr pFS = GetFS();
+    // export the chart property
+    Reference< ::com::sun::star::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
+    if(xChartPropProvider.is())
+    {
+        Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getMinMaxLine();
+        //  updownbar
+        pFS->startElement( FSNS( XML_c, XML_upDownBars ),
+                FSEND );
+        // TODO: gapWidth
+        sal_Int32 nGapWidth = 150;
+        pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
+                XML_val, I32S( nGapWidth ),
+                    FSEND );
+
+        xChartPropSet = xChartPropProvider->getUpBar();
+        if( xChartPropSet.is() )
+        {
+            pFS->startElement( FSNS( XML_c, XML_upBars ),
+                    FSEND );
+            // For Linechart with UpDownBars, spPr is not getting imported
+            // so no need to call the exportShapeProps() for LineChart
+            if(xChartType->getChartType().equals("com.sun.star.chart2.CandleStickChartType"))
+            {
+                exportShapeProps(xChartPropSet);
+            }
+            pFS->endElement( FSNS( XML_c, XML_upBars ) );
+        }
+        xChartPropSet = xChartPropProvider->getDownBar();
+        if( xChartPropSet.is() )
+        {
+            pFS->startElement( FSNS( XML_c, XML_downBars ),
+                    FSEND );
+            if(xChartType->getChartType().equals("com.sun.star.chart2.CandleStickChartType"))
+            {
+                exportShapeProps(xChartPropSet);
+            }
+            pFS->endElement( FSNS( XML_c, XML_downBars ) );
+        }
+        pFS->endElement( FSNS( XML_c, XML_upDownBars ) );
+    }
 }
 
 void ChartExport::exportSuffaceChart( Reference< chart2::XChartType > xChartType )
