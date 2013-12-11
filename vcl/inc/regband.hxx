@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_REGBAND_HXX
-#define INCLUDED_VCL_REGBAND_HXX
+#ifndef INCLUDED_VCL_INC_REGBAND_HXX
+#define INCLUDED_VCL_INC_REGBAND_HXX
 
 #include <tools/solar.h>
 #include <tools/poly.hxx>
@@ -142,6 +142,6 @@ public:
     ImplRegionBand*             SplitBand (const sal_Int32 nY);
 };
 
-#endif // INCLUDED_VCL_REGBAND_HXX
+#endif // INCLUDED_VCL_INC_REGBAND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

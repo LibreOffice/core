@@ -18,8 +18,9 @@
 #ifndef INCLUDED_VCL_INC_REGIONBAND_HXX
 #define INCLUDED_VCL_INC_REGIONBAND_HXX
 
-#include <vcl/regband.hxx>
 #include <vcl/region.hxx>
+
+#include "regband.hxx"
 
 #ifdef DBG_UTIL
 const char* ImplDbgTestRegionBand(const void*);

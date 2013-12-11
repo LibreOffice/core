@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <tools/helpers.hxx>
-#include <vcl/regband.hxx>
-#include <osl/diagnose.hxx>
-
 #include <algorithm>
 
+#include <tools/debug.hxx>
+#include <tools/helpers.hxx>
+#include <osl/diagnose.hxx>
+
+#include "regband.hxx"
 
 // =======================================================================
 //
