@@ -282,7 +282,7 @@ public:
         SheetCaches(ScDocument* pDoc);
         bool hasCache(const ScRange& rRange) const;
         const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
-        size_t size() const;
+        SC_DLLPUBLIC size_t size() const;
 
         void updateReference(
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
@@ -397,7 +397,7 @@ public:
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
-    SheetCaches& GetSheetCaches();
+    SC_DLLPUBLIC SheetCaches& GetSheetCaches();
     NameCaches& GetNameCaches();
     DBCaches& GetDBCaches();
 

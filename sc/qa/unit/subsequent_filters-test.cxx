@@ -45,6 +45,7 @@
 #include "editutil.hxx"
 #include "cellvalue.hxx"
 #include "attrib.hxx"
+#include "dpsave.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -138,6 +139,8 @@ public:
     void testCellAnchoredShapesODS();
 
     void testPivotTableBasicODS();
+    void testPivotTableSharedCacheGroupODS();
+
     void testFormulaDependency();
 
     void testRowHeightODS();
@@ -198,6 +201,7 @@ public:
     CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
+    CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -1642,6 +1646,72 @@ void ScFiltersTest::testPivotTableBasicODS()
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be COUNT.",
         sal_uInt16(sheet::GeneralFunction_COUNT), pDim->GetFunction());
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+bool checkVisiblePageFieldMember( const ScDPSaveDimension::MemberList& rMembers, const OUString& rVisibleMember )
+{
+    ScDPSaveDimension::MemberList::const_iterator it = rMembers.begin(), itEnd = rMembers.end();
+    bool bFound = false;
+    for (; it != itEnd; ++it)
+    {
+        const ScDPSaveMember* pMem = *it;
+        if (pMem->GetName() == rVisibleMember)
+        {
+            bFound = true;
+            if (!pMem->GetIsVisible())
+                // This member is supposed to be visible.  Fail.
+                return false;
+        }
+        else
+        {
+            if (pMem->GetIsVisible())
+                // This member is supposed to be hidden. Not good.
+                return false;
+        }
+    }
+
+    return bFound;
+}
+
+}
+
+void ScFiltersTest::testPivotTableSharedCacheGroupODS()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table-shared-cache-with-group.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Make sure that page field's visibility settings are loaded correctly.
+
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(0, 0, 1); // A1 on 2nd sheet
+    CPPUNIT_ASSERT_MESSAGE("There should be a pivot table here.", pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Save data is expected.", pSaveData);
+    ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName("Project Name");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get page field named 'Project Name'.", pDim);
+    const ScDPSaveDimension::MemberList* pMembers = &pDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), pMembers->size());
+    CPPUNIT_ASSERT_MESSAGE("Incorrect member visibility.", checkVisiblePageFieldMember(*pMembers, "APL-01-1"));
+
+    pDPObj = pDoc->GetDPAtCursor(0, 1, 2); // A2 on 3rd sheet
+    CPPUNIT_ASSERT_MESSAGE("There should be a pivot table here.", pDPObj);
+    pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("Save data is expected.", pSaveData);
+    pDim = pSaveData->GetExistingDimensionByName("Project Name");
+    CPPUNIT_ASSERT_MESSAGE("Failed to get page field named 'Project Name'.", pDim);
+    pMembers = &pDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), pMembers->size());
+    CPPUNIT_ASSERT_MESSAGE("Incorrect member visibility.", checkVisiblePageFieldMember(*pMembers, "VEN-01-1"));
+
+    // These two pivot tables shared the same data range. We should only have
+    // one pivot cache.
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
 
     xDocSh->DoClose();
 }

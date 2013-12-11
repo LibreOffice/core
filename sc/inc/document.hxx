@@ -531,7 +531,7 @@ public:
     bool HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
     SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
-    ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    SC_DLLPUBLIC ScDPObject* GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
 
     SC_DLLPUBLIC ScChartCollection* GetChartCollection() const;
