@@ -2579,17 +2579,18 @@ if test $_os = Darwin; then
         BITNESS_OVERRIDE=64
     fi
 
-    # If no --with-macosx-sdk option is given, look for 10.6, 10.7,
-    # 10.8 and 10.9 SDKs, in that order. If not found in some (old)
-    # default locations, try the xcode-select tool.
+    # If no --with-macosx-sdk option is given, look for 10.6,
+    # 10.7, 10.8 and 10.9 SDKs, in that order. If not found
+    # in some default locations, try the xcode-select tool.
+    # 10.5 must be specified explicitely to be considered
 
     # The intent is that for "most" Mac-based developers, a suitable
     # SDK will be found automatically without any configure options.
 
-    # For developers still using Xcode 3, in /Developer, either
+    # For developers still using old Xcode in /Developer, either
     # because it is the only Xcode they have, or they have that in
-    # addition to Xcode 4 in /Applications/Xcode.app, the 10.6 SDK
-    # should be found.
+    # addition to Xcode 4 in /Applications/Xcode.app, the 10.5 SDK
+    # or 10.6 SDK should be found.
 
     # For developers with a current Xcode, the lowest-numbered SDK
     # should be found.
@@ -2631,6 +2632,9 @@ if test $_os = Darwin; then
     fi
 
     case $with_macosx_sdk in
+    10.5)
+        MACOSX_SDK_VERSION=1050
+        ;;
     10.6)
         MACOSX_SDK_VERSION=1060
         ;;
@@ -2644,7 +2648,7 @@ if test $_os = Darwin; then
         MACOSX_SDK_VERSION=1090
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported value are 10.6--8])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.5--9])
         ;;
     esac
 
@@ -2654,6 +2658,20 @@ if test $_os = Darwin; then
     # happen).
     if test -z "$MACOSX_SDK_PATH"; then
         case $with_macosx_sdk in
+        10.5)
+            if test -x /usr/bin/xcode-select; then
+                xcodepath="`xcode-select -print-path`"
+                if test -d "$xcodepath/SDKs/MacOSX$with_macosx_sdk.sdk"; then
+                    MACOSX_SDK_PATH="$xcodepath/SDKs/MacOSX$with_macosx_sdk.sdk"
+                fi
+            elif test -d /Developer/SDKs/MacOSX10.5.sdk; then
+                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.5.sdk
+            elif test -d /Developer-old/SDKs/MacOSX10.5.sdk; then
+                MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX10.5.sdk
+            elif test -d /Xcode3/SDKs/MacOSX10.5.sdk; then
+                MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX10.5.sdk
+            fi
+            ;;
         10.6)
             if test -d /Developer/SDKs/MacOSX10.6.sdk; then
                 MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.6.sdk
@@ -2700,7 +2718,12 @@ if test $_os = Darwin; then
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     if test "$with_macosx_version_min_required" = ""; then
-        with_macosx_version_min_required="10.6"
+        case $with_macosx_sdk in
+        10.5)
+            with_macosx_version_min_required="10.5";;
+        *)
+            with_macosx_version_min_required="10.6";;
+        esac
     fi
 
     if test "$with_macosx_version_max_allowed" = ""; then
@@ -2715,6 +2738,9 @@ if test $_os = Darwin; then
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
     case "$with_macosx_version_min_required" in
+    10.5)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1050"
+        ;;
     10.6)
         MAC_OS_X_VERSION_MIN_REQUIRED="1060"
         ;;
@@ -2728,12 +2754,22 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MIN_REQUIRED="1090"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.6--9])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.5--9])
         ;;
     esac
 
     if test "$BITNESS_OVERRIDE" = ""; then
         case "$with_macosx_version_min_required" in
+        10.5)
+            case "$with_macosx_sdk" in
+            10.5)
+                ;;
+            *)
+                AC_MSG_WARN([Building with a SDK > 10.5 possibly breaks 10.5 compatibility.])
+                add_warning "Building with a SDK > 10.5 possibly breaks 10.5 compatibility."
+                ;;
+            esac
+            ;;
         10.6)
             case "$with_macosx_sdk" in
             10.6)
@@ -2753,9 +2789,18 @@ if test $_os = Darwin; then
 
     # If no CC and CXX environment vars, try to guess where the compiler is
     LIBTOOL=libtool
+    INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
         AC_MSG_CHECKING([what compiler to use])
         case $with_macosx_sdk in
+        10.5)
+            if test "$enable_libc__" = yes; then
+                AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
+            fi
+            CC="${gccprefix}gcc-4.2 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="${gccprefix}g++-4.2 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
+            ;;
         10.6)
             if test "$enable_libc__" = yes; then
                 AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
@@ -2796,6 +2841,9 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_max_allowed" in
+    10.5)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1050"
+        ;;
     10.6)
         MAC_OS_X_VERSION_MAX_ALLOWED="1060"
         ;;
@@ -2809,7 +2857,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MAX_ALLOWED="1090"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported value are 10.6--8])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.5--9])
         ;;
     esac
 
@@ -3239,7 +3287,18 @@ if test "$GCC" = "yes" -a -z "$COM_GCC_IS_CLANG"; then
     _gcc_version=`$CC -dumpversion`
     GCC_VERSION=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    AC_MSG_RESULT([gcc $_gcc_version])
+    if test "$_os" = "Darwin"; then
+        if test "$with_macosx_sdk" = "10.5"; then
+            # use gcc 4.2 for OS X SDK 10.5
+            if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.2"; then
+                export CC="$GCC_HOME/bin/gcc-4.2" # make CC finally available to config.guess
+            fi
+            AC_MSG_RESULT([using CC=$CC])
+        fi
+    else
+        AC_MSG_RESULT([gcc $_gcc_version])
+    fi
+
     if test "$GCC_VERSION" -lt 0401; then
         AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.1.0])
     fi
@@ -3933,6 +3992,12 @@ darwin*)
         OUTPATH=unxiosr
         OS=IOS
         SDKDIR=sdk
+        ;;
+    powerpc*)
+        CPUNAME=POWERPC
+        RTL_ARCH=PowerPC
+        PLATFORMID=macosx_powerpc
+        OUTPATH=unxmacxp
         ;;
     i*86)
         if test "$BITNESS_OVERRIDE" = 64; then
