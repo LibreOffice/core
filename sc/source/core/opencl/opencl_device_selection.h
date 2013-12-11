@@ -365,7 +365,8 @@ inline ds_status readProFile(const char* fileName, char** content, size_t* conte
     {
         return DS_FILE_ERROR;
     }
-    fread(binary, sizeof(char), size, input);
+    size_t bytesRead = fread(binary, sizeof(char), size, input);
+    (void) bytesRead; // avoid warning
     fclose(input);
 
     *contentSize = size;
