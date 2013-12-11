@@ -291,7 +291,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     DWORD       nExSysStyle = 0;
     sal_Bool        bSubFrame = FALSE;
 
-    if( getenv( "SAL_SYNCHRONIZE" ) )   // no buffering of drawing commands
+    static const char* pEnvSynchronize = getenv("SAL_SYNCHRONIZE");
+    if ( pEnvSynchronize )   // no buffering of drawing commands
         GdiSetBatchLimit( 1 );
 
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
