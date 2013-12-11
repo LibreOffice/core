@@ -10,9 +10,18 @@
 #ifndef SC_OPENCL_OP_DATABASE_HXX
 #define SC_OPENCL_OP_DATABASE_HXX
 
+#include "opbase.hxx"
+
+
 namespace sc { namespace opencl {
 
-
+class OpDmax: public CheckVariables
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+             const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "Dmax"; }
+};
 
 }}
 
