@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <math.h>
 #include <stdlib.h>
 
 #include <vcl/bmpacc.hxx>
-#include <vcl/octree.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
 
 #include <impoct.hxx>
 #include <impvect.hxx>
-#include <math.h>
+
+#include "octree.hxx"
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))

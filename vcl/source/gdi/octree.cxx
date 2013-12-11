@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <limits.h>
 
 #include <vcl/bmpacc.hxx>
-#include <vcl/octree.hxx>
 
 #include <impoct.hxx>
+
+#include "octree.hxx"
 
 // ---------
 // - pMask -

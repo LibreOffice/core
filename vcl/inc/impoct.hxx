@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_IMPOCT_HXX
 #define INCLUDED_VCL_INC_IMPOCT_HXX
 
-#include <vcl/octree.hxx>
+#include "octree.hxx"
 
 // ----------------
 // - ImpErrorQuad -
