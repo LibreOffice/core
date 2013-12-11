@@ -60,29 +60,27 @@ using ::osl::MutexGuard;
 
 namespace
 {
-#define LOCAL_CONST_STR(i, x) sal_Char const i[sizeof(x)] = x
-
-LOCAL_CONST_STR( sXML_metaStreamName,       "meta.xml");
-LOCAL_CONST_STR( sXML_styleStreamName,      "styles.xml" );
-LOCAL_CONST_STR( sXML_contentStreamName,    "content.xml" );
-LOCAL_CONST_STR( sXML_oldContentStreamName, "Content.xml" );
+char const sXML_metaStreamName[] = "meta.xml";
+char const sXML_styleStreamName[] = "styles.xml";
+char const sXML_contentStreamName[] = "content.xml";
+char const sXML_oldContentStreamName[] = "Content.xml";
 
 // soffice 6/7
-LOCAL_CONST_STR( sXML_export_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesExporter" );
-LOCAL_CONST_STR( sXML_export_chart_content_service,         "com.sun.star.comp.Chart.XMLContentExporter" );
+char const sXML_export_chart_styles_service[] = "com.sun.star.comp.Chart.XMLStylesExporter";
+char const sXML_export_chart_content_service[] = "com.sun.star.comp.Chart.XMLContentExporter";
 
-LOCAL_CONST_STR( sXML_import_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesImporter" );
-LOCAL_CONST_STR( sXML_import_chart_content_service,         "com.sun.star.comp.Chart.XMLContentImporter" );
-LOCAL_CONST_STR( sXML_import_chart_old_content_service,     "com.sun.star.office.sax.importer.Chart" );
+char const sXML_import_chart_styles_service[] = "com.sun.star.comp.Chart.XMLStylesImporter";
+char const sXML_import_chart_content_service[] = "com.sun.star.comp.Chart.XMLContentImporter";
+char const sXML_import_chart_old_content_service[] = "com.sun.star.office.sax.importer.Chart";
 
 // Oasis
-LOCAL_CONST_STR( sXML_export_chart_oasis_styles_service,    "com.sun.star.comp.Chart.XMLOasisStylesExporter" );
-LOCAL_CONST_STR( sXML_export_chart_oasis_content_service,   "com.sun.star.comp.Chart.XMLOasisContentExporter" );
-LOCAL_CONST_STR( sXML_export_chart_oasis_meta_service,      "com.sun.star.comp.Chart.XMLOasisMetaExporter" );
+char const sXML_export_chart_oasis_styles_service[] = "com.sun.star.comp.Chart.XMLOasisStylesExporter";
+char const sXML_export_chart_oasis_content_service[] = "com.sun.star.comp.Chart.XMLOasisContentExporter";
+char const sXML_export_chart_oasis_meta_service[] = "com.sun.star.comp.Chart.XMLOasisMetaExporter";
 
-LOCAL_CONST_STR( sXML_import_chart_oasis_styles_service,    "com.sun.star.comp.Chart.XMLOasisStylesImporter" );
-LOCAL_CONST_STR( sXML_import_chart_oasis_content_service,   "com.sun.star.comp.Chart.XMLOasisContentImporter" );
-LOCAL_CONST_STR( sXML_import_chart_oasis_meta_service,      "com.sun.star.comp.Chart.XMLOasisMetaImporter" );
+char const sXML_import_chart_oasis_styles_service[] = "com.sun.star.comp.Chart.XMLOasisStylesImporter";
+char const sXML_import_chart_oasis_content_service[] = "com.sun.star.comp.Chart.XMLOasisContentImporter";
+char const sXML_import_chart_oasis_meta_service[] = "com.sun.star.comp.Chart.XMLOasisMetaImporter";
 
 uno::Reference< embed::XStorage > lcl_getWriteStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
