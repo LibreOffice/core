@@ -113,6 +113,12 @@ void AccessibleTableShapeImpl::dispose()
 {
     if( mxTable.is() )
     {
+        //remove all the cell's acc object in table's dispose.
+        for( AccessibleCellMap::iterator iter( maChildMap.begin() ); iter != maChildMap.end(); iter++ )
+        {
+            (*iter).second->dispose();
+        }
+        maChildMap.clear();
         Reference< XModifyListener > xListener( this );
         mxTable->removeModifyListener( xListener );
         mxTable.clear();
