@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///zs\u003d",
+        "filename": "sw/source/core/doc/docredln.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3070,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-12-11T09:08:40Z",
+      "side": 1,
+      "message": "Why checking for null pointer here? delete handles null pointers just fine, you only add overhead here.",
+      "revId": "c5d67eb17893a44ccd28856762682612f066cef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
