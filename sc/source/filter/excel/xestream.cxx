@@ -1098,7 +1098,8 @@ bool XclExpXmlStream::exportDocument() throw()
 
     uno::Reference<task::XStatusIndicator> xStatusIndicator = getStatusIndicator();
 
-    xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), 100);
+    if (xStatusIndicator.is())
+        xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), 100);
 
     // NOTE: Don't use SotStorage or SvStream any more, and never call
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
@@ -1131,13 +1132,16 @@ bool XclExpXmlStream::exportDocument() throw()
     // destruct at the end of the block
     {
         ExcDocument aDocRoot( aRoot );
-        xStatusIndicator->setValue(10);
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(10);
         aDocRoot.ReadDoc();
-        xStatusIndicator->setValue(40);
+        if (xStatusIndicator.is())
+            xStatusIndicator->setValue(40);
         aDocRoot.WriteXml( *this );
     }
 
-    xStatusIndicator->end();
+    if (xStatusIndicator.is())
+        xStatusIndicator->end();
     mpRoot = NULL;
     return true;
 }
