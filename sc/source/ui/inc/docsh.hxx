@@ -33,15 +33,16 @@
 #include "appoptio.hxx"
 #include "formulaopt.hxx"
 #include "shellids.hxx"
-#include "refreshtimerprotector.hxx"
 #include "optutil.hxx"
 #include "docuno.hxx"
 
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 #include <config_telepathy.h>
 
+class ScRefreshTimerProtector;
 class ScEditEngineDefaulter;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
@@ -462,7 +463,7 @@ SV_IMPL_REF(ScDocShell)
 class SC_DLLPUBLIC ScDocShellModificator
 {
             ScDocShell&     rDocShell;
-    ScRefreshTimerProtector aProtector;
+    boost::scoped_ptr<ScRefreshTimerProtector> mpProtector;
             bool            bAutoCalcShellDisabled;
             bool            bIdleEnabled;
 

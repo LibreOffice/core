@@ -11,10 +11,11 @@
 #define SC_REFRESHTIMERPROTECTOR_HXX
 
 #include <sal/config.h>
+#include "scdllapi.h"
 
 class ScRefreshTimerControl;
 
-class ScRefreshTimerProtector
+class SC_DLLPUBLIC ScRefreshTimerProtector
 {
     ScRefreshTimerControl * const * ppControl;
 

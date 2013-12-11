@@ -108,6 +108,7 @@
 
 #include "docshimp.hxx"
 #include "sizedev.hxx"
+#include "refreshtimerprotector.hxx"
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
@@ -3024,7 +3025,7 @@ void ScDocShell::UseSheetSaveEntries()
 ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
         :
         rDocShell( rDS ),
-        aProtector( rDS.GetDocument()->GetRefreshTimerControlAddress() )
+        mpProtector(new ScRefreshTimerProtector(rDS.GetDocument()->GetRefreshTimerControlAddress()))
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     bAutoCalcShellDisabled = pDoc->IsAutoCalcShellDisabled();
