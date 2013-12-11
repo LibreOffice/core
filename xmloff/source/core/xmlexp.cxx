@@ -408,8 +408,6 @@ void SvXMLExport::_InitCtor()
     // Determine model type (#i51726#)
     _DetermineModelType();
 
-    mbEnableExperimentalOdfExport = getenv("ENABLE_EXPERIMENTAL_ODF_EXPORT") != NULL;
-
     // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
     if( (getExportFlags() & EXPORT_OASIS) != 0 )
     {

@@ -149,7 +149,6 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
 
     sal_uInt16  mnExportFlags;
     sal_uInt16  mnErrorFlags;
-    bool  mbEnableExperimentalOdfExport;
 
 public:
 
@@ -546,7 +545,6 @@ public:
 
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     sal_Bool writeOutlineStyleAsNormalListStyle() const;
-       bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
 
