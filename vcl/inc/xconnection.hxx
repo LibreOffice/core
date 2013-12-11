@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include "vcl/displayconnectiondispatch.hxx"
+#include "displayconnectiondispatch.hxx"
 
 #include <list>
 

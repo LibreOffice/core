@@ -26,7 +26,7 @@
 #include "com/sun/star/ui/dialogs/XFolderPicker2.hpp"
 
 #include "tools/solar.h"
-#include "vcl/displayconnectiondispatch.hxx"
+#include "displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
 
 #include "rtl/ref.hxx"
