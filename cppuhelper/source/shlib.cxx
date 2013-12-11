@@ -83,7 +83,7 @@ static void getLibEnv(oslModule                lib,
     if (!pEnv->is() && pEnvTypeName)
     {
         *pSourceEnv_name = OUString::createFromAscii(pEnvTypeName);
-        const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
+        static const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
         if (pUNO_ENV_LOG && rtl_str_getLength(pUNO_ENV_LOG) )
         {
             OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
