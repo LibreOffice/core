@@ -164,7 +164,7 @@ void SAL_CALL SdXCustomPresentation::replaceByIndex( sal_Int32 Index, const uno:
 uno::Type SAL_CALL SdXCustomPresentation::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE( drawing::XDrawPage );
+    return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
 sal_Bool SAL_CALL SdXCustomPresentation::hasElements()
@@ -462,7 +462,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName 
 uno::Type SAL_CALL SdXCustomPresentationAccess::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE( container::XIndexContainer );
+    return cppu::UnoType<container::XIndexContainer>::get();
 }
 
 sal_Bool SAL_CALL SdXCustomPresentationAccess::hasElements()

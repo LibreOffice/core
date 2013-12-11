@@ -43,9 +43,6 @@ inline void bool2any( sal_Bool bBool, ::com::sun::star::uno::Any& rAny )
 
 }
 
-#define ITYPE( xint ) \
-    ::getCppuType((const uno::Reference< xint >*)0)
-
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)

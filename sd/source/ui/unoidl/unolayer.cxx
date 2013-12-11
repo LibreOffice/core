@@ -710,7 +710,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
 uno::Type SAL_CALL SdLayerManager::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE( drawing::XLayer );
+    return cppu::UnoType<drawing::XLayer>::get();
 }
 
 sal_Bool SAL_CALL SdLayerManager::hasElements() throw(uno::RuntimeException)

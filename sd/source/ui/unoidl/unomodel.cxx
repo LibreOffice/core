@@ -263,9 +263,9 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(style::XStyleFamiliesSupplier);
     else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
     else QUERYINT(view::XRenderable);
-    else if( mbImpressDoc && rType == ITYPE(presentation::XPresentationSupplier) )
+    else if( mbImpressDoc && rType == cppu::UnoType<presentation::XPresentationSupplier>::get() )
             aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
-    else if( mbImpressDoc && rType == ITYPE(presentation::XCustomPresentationSupplier) )
+    else if( mbImpressDoc && rType == cppu::UnoType<presentation::XCustomPresentationSupplier>::get() )
             aAny <<= uno::Reference< presentation::XCustomPresentationSupplier >(this);
     else
         return SfxBaseModel::queryInterface( rType );
@@ -352,22 +352,22 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
 
-        *pTypes++ = ITYPE(beans::XPropertySet);
-        *pTypes++ = ITYPE(lang::XServiceInfo);
-        *pTypes++ = ITYPE(lang::XMultiServiceFactory);
-        *pTypes++ = ITYPE(drawing::XDrawPageDuplicator);
-        *pTypes++ = ITYPE(drawing::XLayerSupplier);
-        *pTypes++ = ITYPE(drawing::XMasterPagesSupplier);
-        *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
-        *pTypes++ = ITYPE(document::XLinkTargetSupplier);
-        *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
-        *pTypes++ = ITYPE(com::sun::star::ucb::XAnyCompareFactory);
-        *pTypes++ = ITYPE(view::XRenderable);
+        *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
+        *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+        *pTypes++ = cppu::UnoType<lang::XMultiServiceFactory>::get();
+        *pTypes++ = cppu::UnoType<drawing::XDrawPageDuplicator>::get();
+        *pTypes++ = cppu::UnoType<drawing::XLayerSupplier>::get();
+        *pTypes++ = cppu::UnoType<drawing::XMasterPagesSupplier>::get();
+        *pTypes++ = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
+        *pTypes++ = cppu::UnoType<document::XLinkTargetSupplier>::get();
+        *pTypes++ = cppu::UnoType<style::XStyleFamiliesSupplier>::get();
+        *pTypes++ = cppu::UnoType<com::sun::star::ucb::XAnyCompareFactory>::get();
+        *pTypes++ = cppu::UnoType<view::XRenderable>::get();
         if( mbImpressDoc )
         {
-            *pTypes++ = ITYPE(presentation::XPresentationSupplier);
-            *pTypes++ = ITYPE(presentation::XCustomPresentationSupplier);
-            *pTypes++ = ITYPE(presentation::XHandoutMasterSupplier);
+            *pTypes++ = cppu::UnoType<presentation::XPresentationSupplier>::get();
+            *pTypes++ = cppu::UnoType<presentation::XCustomPresentationSupplier>::get();
+            *pTypes++ = cppu::UnoType<presentation::XHandoutMasterSupplier>::get();
         }
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
@@ -2455,7 +2455,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName ) throw(un
 uno::Type SAL_CALL SdDrawPagesAccess::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE( drawing::XDrawPage );
+    return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
 sal_Bool SAL_CALL SdDrawPagesAccess::hasElements()
@@ -2657,7 +2657,7 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 uno::Type SAL_CALL SdMasterPagesAccess::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE(drawing::XDrawPage);
+    return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
 sal_Bool SAL_CALL SdMasterPagesAccess::hasElements()
@@ -2957,7 +2957,7 @@ sal_Bool SAL_CALL SdDocLinkTargets::hasByName( const OUString& aName )
 uno::Type SAL_CALL SdDocLinkTargets::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE(beans::XPropertySet);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL SdDocLinkTargets::hasElements()

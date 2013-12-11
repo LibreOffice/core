@@ -831,7 +831,7 @@ SdUnoFindAllAccess::~SdUnoFindAllAccess() throw()
 uno::Type SAL_CALL SdUnoFindAllAccess::getElementType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return ITYPE( text::XTextRange );
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SdUnoFindAllAccess::hasElements()

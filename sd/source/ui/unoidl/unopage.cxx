@@ -108,7 +108,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
 {
     static const SfxItemPropertyMapEntry aDrawPagePropertyMap_Impl[] =
     {
-        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      ITYPE( beans::XPropertySet ),                  beans::PropertyAttribute::MAYBEVOID,0},
+        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                  beans::PropertyAttribute::MAYBEVOID,0},
         { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},
@@ -118,7 +118,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { OUString(UNO_NAME_PAGE_EFFECT),           WID_PAGE_EFFECT,    ::getCppuType((const presentation::FadeEffect*)0),     0,  0},
         { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::getCppuType((const sal_Int16*)0),            0,  0},
-        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  ITYPE( awt::XBitmap),                          beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
@@ -158,7 +158,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
         { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},                                                                \
         { OUString(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    ::getCppuType((const sal_Int16*)0),            0,  0},                                                                \
-        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  ITYPE( awt::XBitmap),                          beans::PropertyAttribute::READONLY, 0},                                \
+        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},                                \
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},                                                                \
@@ -180,7 +180,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
     static const SfxItemPropertyMapEntry aDrawPageNotesHandoutPropertyMap_Impl[] =
     {
         // this must be the first two entries so they can be excluded for PK_STANDARD
-        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      ITYPE( beans::XPropertySet ),                  beans::PropertyAttribute::MAYBEVOID,0},
+        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                  beans::PropertyAttribute::MAYBEVOID,0},
         DRAW_PAGE_NOTES_PROPERTIES
     };
     static const SfxItemPropertyMapEntry aDrawPageNotesHandoutPropertyNoBackMap_Impl[] =
@@ -194,7 +194,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
         { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
         { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},                                                                             \
-        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  ITYPE(awt::XBitmap),                           beans::PropertyAttribute::READONLY, 0},                                             \
+        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},                                             \
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},                                                                             \
@@ -209,7 +209,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
 
     static const SfxItemPropertyMapEntry aGraphicPagePropertyMap_Impl[] =
     {
-        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      ITYPE( beans::XPropertySet),                   beans::PropertyAttribute::MAYBEVOID,0},
+        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                   beans::PropertyAttribute::MAYBEVOID,0},
         GRAPHIC_PAGE_PROPERTIES
     };
     static const SfxItemPropertyMapEntry aGraphicPagePropertyNoBackMap_Impl[] =
@@ -262,13 +262,13 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
 {
     static const SfxItemPropertyMapEntry aMasterPagePropertyMap_Impl[] =
     {
-        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      ITYPE(beans::XPropertySet),                    0,  0},
+        { OUString(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                    0,  0},
         { OUString(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       ::getCppuType((const sal_Int32*)0),            0,  0},
         { OUString(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    ::getCppuType((const sal_Int32*)0),            0,  0},
-        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  ITYPE(awt::XBitmap),                           beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),       WID_PAGE_LDNAME,    ::getCppuType((const OUString*)0),             beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_NUMBER),           WID_PAGE_NUMBER,    ::getCppuType((const sal_Int16*)0),            beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    ::getCppuType((const view::PaperOrientation*)0),0, 0},
@@ -528,11 +528,11 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     else QUERYINT( drawing::XShapeCombiner );
     else QUERYINT( drawing::XShapeBinder );
     else QUERYINT( beans::XMultiPropertySet );
-    else if( rType == ITYPE( office::XAnnotationAccess ) )
+    else if( rType == cppu::UnoType<office::XAnnotationAccess>::get() )
     {
         return Any( Reference< office::XAnnotationAccess >( this ) );
     }
-    else if( rType == ITYPE( XAnimationNodeSupplier ) )
+    else if( rType == cppu::UnoType<XAnimationNodeSupplier>::get() )
     {
         if( mbIsImpressDocument )
         {
@@ -1874,7 +1874,7 @@ SdPageLinkTargets::~SdPageLinkTargets() throw()
 uno::Type SAL_CALL SdPageLinkTargets::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE(beans::XPropertySet);
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
@@ -2032,7 +2032,7 @@ SdDrawPage::~SdDrawPage() throw()
 Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
-    if( rType == ITYPE( drawing::XMasterPageTarget ) )
+    if( rType == cppu::UnoType<drawing::XMasterPageTarget>::get() )
     {
         return makeAny( Reference< drawing::XMasterPageTarget >( this ) );
     }
@@ -2042,7 +2042,7 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
         {
             const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
 
-            if( ePageKind != PK_HANDOUT && rType == ITYPE( presentation::XPresentationPage ) )
+            if( ePageKind != PK_HANDOUT && rType == cppu::UnoType<presentation::XPresentationPage>::get() )
             {
                 return makeAny( Reference< presentation::XPresentationPage >( this ) );
             }
@@ -2079,21 +2079,21 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
         aTypes.reserve(13);
-        aTypes.push_back(ITYPE(drawing::XDrawPage));
-        aTypes.push_back(ITYPE(beans::XPropertySet));
-        aTypes.push_back(ITYPE(container::XNamed));
-        aTypes.push_back(ITYPE(drawing::XMasterPageTarget));
-        aTypes.push_back(ITYPE(lang::XServiceInfo));
-        aTypes.push_back(ITYPE(util::XReplaceable));
-        aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
-        aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
-        aTypes.push_back(ITYPE( drawing::XShapeBinder ));
-        aTypes.push_back(ITYPE( office::XAnnotationAccess ));
-        aTypes.push_back(ITYPE( beans::XMultiPropertySet ));
+        aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
+        aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
+        aTypes.push_back(cppu::UnoType<container::XNamed>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XMasterPageTarget>::get());
+        aTypes.push_back(cppu::UnoType<lang::XServiceInfo>::get());
+        aTypes.push_back(cppu::UnoType<util::XReplaceable>::get());
+        aTypes.push_back(cppu::UnoType<document::XLinkTargetSupplier>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeCombiner>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeBinder>::get());
+        aTypes.push_back(cppu::UnoType<office::XAnnotationAccess>::get());
+        aTypes.push_back(cppu::UnoType<beans::XMultiPropertySet>::get());
         if( bPresPage )
-            aTypes.push_back(ITYPE(presentation::XPresentationPage));
+            aTypes.push_back(cppu::UnoType<presentation::XPresentationPage>::get());
         if( bPresPage && ePageKind == PK_STANDARD )
-            aTypes.push_back(ITYPE(XAnimationNodeSupplier));
+            aTypes.push_back(cppu::UnoType<XAnimationNodeSupplier>::get());
 
         // Get types of base class.
         const Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
@@ -2689,13 +2689,13 @@ Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
 
     uno::Any aAny;
 
-    if( rType == ITYPE( container::XIndexAccess ) )
+    if( rType == cppu::UnoType<container::XIndexAccess>::get() )
         aAny <<= Reference< container::XIndexAccess >((presentation::XPresentationPage*)(this));
-    else if( rType == ITYPE( container::XElementAccess ) )
+    else if( rType == cppu::UnoType<container::XElementAccess>::get() )
         aAny <<=  Reference< container::XElementAccess >((presentation::XPresentationPage*)(this));
-    else if( rType == ITYPE( container::XNamed ) )
+    else if( rType == cppu::UnoType<container::XNamed>::get() )
         aAny <<=  Reference< container::XNamed >(this);
-    else if( rType == ITYPE( presentation::XPresentationPage ) &&
+    else if( rType == cppu::UnoType<presentation::XPresentationPage>::get() &&
              ( mbIsImpressDocument &&
                GetPage()  && GetPage()->GetPageKind() != PK_HANDOUT) )
         aAny <<= Reference< presentation::XPresentationPage >( this );
@@ -2732,20 +2732,20 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
         // Collect the types of this class.
         ::std::vector<uno::Type> aTypes;
         aTypes.reserve(12);
-        aTypes.push_back(ITYPE(drawing::XDrawPage));
-        aTypes.push_back(ITYPE(beans::XPropertySet));
-        aTypes.push_back(ITYPE(container::XNamed));
-        aTypes.push_back(ITYPE(lang::XServiceInfo));
-        aTypes.push_back(ITYPE(util::XReplaceable));
-        aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
-        aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
-        aTypes.push_back(ITYPE( drawing::XShapeBinder ));
-        aTypes.push_back(ITYPE( office::XAnnotationAccess ));
-        aTypes.push_back(ITYPE( beans::XMultiPropertySet ));
+        aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
+        aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
+        aTypes.push_back(cppu::UnoType<container::XNamed>::get());
+        aTypes.push_back(cppu::UnoType<lang::XServiceInfo>::get());
+        aTypes.push_back(cppu::UnoType<util::XReplaceable>::get());
+        aTypes.push_back(cppu::UnoType<document::XLinkTargetSupplier>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeCombiner>::get());
+        aTypes.push_back(cppu::UnoType<drawing::XShapeBinder>::get());
+        aTypes.push_back(cppu::UnoType<office::XAnnotationAccess>::get());
+        aTypes.push_back(cppu::UnoType<beans::XMultiPropertySet>::get());
         if( bPresPage )
-            aTypes.push_back(ITYPE(presentation::XPresentationPage));
+            aTypes.push_back(cppu::UnoType<presentation::XPresentationPage>::get());
         if( bPresPage && ePageKind == PK_STANDARD )
-            aTypes.push_back(ITYPE(XAnimationNodeSupplier));
+            aTypes.push_back(cppu::UnoType<XAnimationNodeSupplier>::get());
 
         // Get types of base class.
         const Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );

@@ -65,9 +65,6 @@ using namespace ::com::sun::star;
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
-#define ITYPE( xint ) \
-    ::getCppuType((const uno::Reference< xint >*)0)
-
 //-////////////////////////////////////////////////////////////////////
 
 class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
@@ -303,10 +300,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
 
-        *pTypes++ = ITYPE(lang::XServiceInfo);
-        *pTypes++ = ITYPE(lang::XMultiServiceFactory);
-        *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
-        *pTypes++ = ITYPE(com::sun::star::ucb::XAnyCompareFactory);
+        *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
+        *pTypes++ = cppu::UnoType<lang::XMultiServiceFactory>::get();
+        *pTypes++ = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
+        *pTypes++ = cppu::UnoType<com::sun::star::ucb::XAnyCompareFactory>::get();
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
@@ -653,7 +650,7 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 uno::Type SAL_CALL SvxUnoDrawPagesAccess::getElementType()
     throw(uno::RuntimeException)
 {
-    return ITYPE( drawing::XDrawPage );
+    return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
