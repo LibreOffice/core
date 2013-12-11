@@ -21,6 +21,7 @@
 #include "AccComponentBase.h"
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <vcl/svapp.hxx>
 #include "MAccessible.h"
 
 using namespace com::sun::star::accessibility;
@@ -45,6 +46,8 @@ CAccComponentBase::~CAccComponentBase()
  */
 STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
 {
+    SolarMutexGuard g;
+
     try
     {
         if (x == NULL || y == NULL)
@@ -73,6 +76,8 @@ STDMETHODIMP CAccComponentBase::get_locationInParent(long *x, long *y)
  */
 STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
 {
+    SolarMutexGuard g;
+
     try
     {
         if (x == NULL || y == NULL)
@@ -100,6 +105,8 @@ STDMETHODIMP CAccComponentBase::get_locationOnScreen(long *x, long *y)
  */
 STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (success == NULL)
@@ -124,6 +131,8 @@ STDMETHODIMP CAccComponentBase::grabFocus(boolean * success)
  */
 STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (foreground == NULL)
@@ -147,6 +156,8 @@ STDMETHODIMP CAccComponentBase::get_foreground(IA2Color * foreground)
  */
 STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (background == NULL)
@@ -170,6 +181,8 @@ STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
  */
 STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInterface)
 {
+    // internal IUNOXWrapper - no mutex meeded
+
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);

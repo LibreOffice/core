@@ -20,6 +20,9 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccHyperLink.h"
+
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include "MAccessible.h"
@@ -102,6 +105,8 @@ STDMETHODIMP CAccHyperLink::get_keyBinding(
 STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
         /* [retval][out] */ VARIANT __RPC_FAR *anchor)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -132,6 +137,8 @@ STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long index,
 STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
         /* [retval][out] */ VARIANT __RPC_FAR *anchorTarget)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -162,6 +169,8 @@ STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ long index,
 */
 STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *index)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -183,6 +192,8 @@ STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR *i
 */
 STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *index)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -209,6 +220,8 @@ STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR *ind
 */
 STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *valid)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -235,6 +248,8 @@ STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR *val
 */
 STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 {
+    // internal IUNOXWrapper - no mutex meeded
+
     ENTER_PROTECTED_BLOCK
 
     CAccActionBase::put_XInterface(pXInterface);
@@ -266,6 +281,8 @@ STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterface)
 */
 STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubInterface)
 {
+    // internal IUNOXWrapper - no mutex meeded
+
     pRXLink = reinterpret_cast<XAccessibleHyperlink*>(pXSubInterface);
     pRXAct = reinterpret_cast<XAccessibleAction*>(pXSubInterface);
 

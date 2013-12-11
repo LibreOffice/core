@@ -20,6 +20,9 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccImage.h"
+
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
@@ -33,6 +36,8 @@ using namespace com::sun::star::uno;
 */
 STDMETHODIMP CAccImage::get_description(BSTR * description)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -72,7 +77,7 @@ STDMETHODIMP CAccImage::get_imageSize(
 */
 STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 {
-
+    // internal IUNOXWrapper - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
 

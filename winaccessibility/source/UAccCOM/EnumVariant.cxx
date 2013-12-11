@@ -22,6 +22,7 @@
 #include "EnumVariant.h"
 #include "MAccessible.h"
 
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
@@ -40,6 +41,8 @@ using namespace com::sun::star::accessibility;
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *pvar,ULONG __RPC_FAR *pcElementFetched)
 {
+    SolarMutexGuard g;
+
     long l1;
     ULONG l2;
 
@@ -90,6 +93,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
 {
+    SolarMutexGuard g;
+
     m_lCurrent += cElements;
     if (m_lCurrent > (long)(m_lLBound+m_pXAccessibleSelection->getSelectedAccessibleChildCount()))
     {
@@ -108,6 +113,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Reset( void)
 {
+    SolarMutexGuard g;
+
     m_lCurrent = m_lLBound;
     return NOERROR;
 }
@@ -123,6 +130,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Reset( void)
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR *ppenum)
 {
+    SolarMutexGuard g;
+
     CEnumVariant * penum = NULL;
     HRESULT hr;
     if (ppenum == NULL)
@@ -151,6 +160,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Clone(IEnumVARIANT __RPC_FAR *__RPC_FAR 
    */
 HRESULT STDMETHODCALLTYPE CEnumVariant::Create(CEnumVariant __RPC_FAR *__RPC_FAR *ppenum)
 {
+    SolarMutexGuard g;
+
     HRESULT hr = createInstance<CEnumVariant>(IID_IEnumVariant, ppenum);
     if (S_OK != hr)
     {
@@ -179,6 +190,8 @@ long CEnumVariant::GetCountOfElements()
    */
 STDMETHODIMP CEnumVariant::ClearEnumeration()
 {
+    // internal IEnumVariant - no mutex meeded
+
     pUNOInterface = NULL;
     m_pXAccessibleSelection = NULL;
     m_lCurrent = m_lLBound;
@@ -216,6 +229,8 @@ static Reference<XAccessibleSelection> GetXAccessibleSelection(XAccessible* pXAc
    */
 STDMETHODIMP CEnumVariant::PutSelection(hyper pXSelection)
 {
+    // internal IEnumVariant - no mutex meeded
+
     pUNOInterface = reinterpret_cast<XAccessible*>(pXSelection);
     m_pXAccessibleSelection = GetXAccessibleSelection(pUNOInterface);
     return S_OK;

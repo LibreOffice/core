@@ -33,6 +33,8 @@
 #include "AccHypertext.h"
 #include "AccHyperLink.h"
 
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
@@ -243,6 +245,8 @@ m_bRequiresSave(FALSE)
 
 CMAccessible::~CMAccessible()
 {
+    SolarMutexGuard g;
+
     if(m_pszName!=NULL)
     {
         SAFE_SYSFREESTRING(m_pszName);
@@ -284,6 +288,8 @@ CMAccessible::~CMAccessible()
 */
 STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -319,6 +325,8 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
 */
 STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -351,6 +359,8 @@ STDMETHODIMP CMAccessible::get_accChildCount(long *pcountChildren)
 */
 STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChild)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -385,6 +395,8 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
 */
 STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -422,6 +434,8 @@ STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BSTR *pszName)
 */
 STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -465,6 +479,8 @@ STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, BSTR *pszValue)
 */
 STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescription)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -502,6 +518,8 @@ STDMETHODIMP CMAccessible::get_accDescription(VARIANT varChild, BSTR *pszDescrip
 */
 STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -551,6 +569,8 @@ STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 */
 STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -653,6 +673,8 @@ static void GetMnemonicChar( const ::rtl::OUString& aStr, WCHAR* wStr)
 */
 STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
 
         ISDESTROY()
@@ -806,6 +828,8 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 */
 STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -843,6 +867,8 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 */
 STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -890,6 +916,8 @@ STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarChildren)
 */
 STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -946,6 +974,8 @@ STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth
 */
 STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -986,6 +1016,8 @@ STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *p
 
 STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -1059,6 +1091,7 @@ STDMETHODIMP CMAccessible::QueryService(REFGUID guidService, REFIID riid, void**
 */
 STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BSTR szName)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1092,6 +1125,7 @@ STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BSTR szName)
 */
 STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1123,6 +1157,7 @@ STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 */
 STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
 {
+    // internal IMAccessible - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1148,6 +1183,8 @@ STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
 */
 STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 {
+    // internal IMAccessible - no mutex meeded
+
     m_iRole = pRole;
     return S_OK;
 }
@@ -1159,6 +1196,8 @@ STDMETHODIMP CMAccessible::Put_XAccRole(unsigned short pRole)
 */
 STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 {
+    // internal IMAccessible - no mutex meeded
+
     m_dState &= (~pXSate);
     return S_OK;
 }
@@ -1170,6 +1209,8 @@ STDMETHODIMP CMAccessible::DecreaseState(DWORD pXSate)
 */
 STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 {
+    // internal IMAccessible - no mutex meeded
+
     m_dState |= pXSate;
     return S_OK;
 }
@@ -1181,6 +1222,8 @@ STDMETHODIMP CMAccessible::IncreaseState(DWORD pXSate)
 */
 STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 {
+    // internal IMAccessible - no mutex meeded
+
     m_dState = pXSate;
     return S_OK;
 }
@@ -1194,6 +1237,7 @@ STDMETHODIMP CMAccessible::SetState(DWORD pXSate)
 */
 STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescription)
 {
+    // internal IMAccessible - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1220,6 +1264,7 @@ STDMETHODIMP CMAccessible::Put_XAccDescription(const OLECHAR __RPC_FAR *pszDescr
 */
 STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 {
+    // internal IMAccessible - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1245,6 +1290,7 @@ STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RPC_FAR *pszAccValue)
 */
 STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 {
+    // internal IMAccessible - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1261,6 +1307,7 @@ STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 */
 STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 {
+    // internal IMAccessible - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -1294,6 +1341,7 @@ STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 */
 STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
 {
+    // internal IMAccessible - no mutex meeded
 
     this->m_sLocation = sLocation;
     return S_OK;
@@ -1307,6 +1355,8 @@ STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
 */
 STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 {
+    // internal IMAccessible - no mutex meeded
+
     this->m_pIParent = pIParent;
 
     if(pIParent)
@@ -1322,6 +1372,7 @@ STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RPC_FAR *pIParent)
 */
 STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 {
+    // internal IMAccessible - no mutex meeded
 
     this->m_dChildID = dChildID;
     return S_OK;
@@ -1334,6 +1385,8 @@ STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 */
 STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 {
+    // internal IMAccessible - no mutex meeded
+
     g_pAgent = reinterpret_cast<AccObjectManagerAgent*>(pAgent);
     return S_OK;
 }
@@ -1347,6 +1400,7 @@ STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 */
 STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
 {
+    // internal IMAccessible - no mutex meeded
 
     m_isDestroy = isDestroy;
     m_xAccessible.clear();
@@ -1650,6 +1704,8 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 */
 STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
 
         // #CHECK#
@@ -1678,6 +1734,8 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 
 STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -1739,6 +1797,8 @@ STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation
 
 STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
 
         // #CHECK#
@@ -1797,6 +1857,8 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
 
 STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
         (*role) = m_iRole;
@@ -1809,6 +1871,7 @@ STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 
 STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
 {
+    SolarMutexGuard g;
 
     try
     {
@@ -1881,6 +1944,8 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
 
 STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __RPC_FAR *similarItemsInGroup,long __RPC_FAR *positionInGroup)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         // #CHECK#
@@ -2066,6 +2131,7 @@ STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR 
 
 STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -2082,6 +2148,7 @@ STDMETHODIMP CMAccessible:: get_uniqueID(long __RPC_FAR *uniqueID)
 
 STDMETHODIMP CMAccessible:: get_windowHandle(HWND __RPC_FAR *windowHandle)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -2260,6 +2327,8 @@ HRESULT CMAccessible::DeSelectMutipleChildren( XAccessible** pItem,int size )
 */
 STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 {
+    // internal IMAccessible - no mutex meeded
+
     m_xAccessible = reinterpret_cast<XAccessible*>(pXAcc);
     m_pEnumVar->PutSelection(/*XAccessibleSelection*/
             reinterpret_cast<hyper>(m_xAccessible.get()));
@@ -2280,6 +2349,8 @@ STDMETHODIMP CMAccessible::SetXAccessible(hyper pXAcc)
 */
 STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 {
+    SolarMutexGuard g;
+
         ENTER_PROTECTED_BLOCK
         ISDESTROY()
         if( (flagsSelect&SELFLAG_ADDSELECTION) &&
@@ -2372,7 +2443,8 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 */
 STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 {
-    // #CHECK#
+    // internal IMAccessible - no mutex meeded
+
     if(pXAcc == NULL)
         return E_INVALIDARG;
 
@@ -2387,6 +2459,8 @@ STDMETHODIMP CMAccessible::GetUNOInterface(hyper * pXAcc)
 */
 STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 {
+    // internal IMAccessible - no mutex meeded
+
     m_xAction = reinterpret_cast<XAccessibleAction*>(pAction);
     return S_OK;
 }
@@ -2400,6 +2474,7 @@ STDMETHODIMP CMAccessible::SetDefaultAction(hyper pAction)
 */
 HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, BSTR *pszDefaultAction)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -2438,6 +2513,7 @@ HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultAction(VARIANT varChild, B
 */
 HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -2472,6 +2548,7 @@ HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(VARIANT varChild)
 */
 STDMETHODIMP CMAccessible::Put_ActionDescription( const OLECHAR* szAction)
 {
+    // internal IMAccessible - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -2590,6 +2667,8 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
     {
         if (InlineIsEqualGUID(iid, *pMap->piid))
         {
+            SolarMutexGuard g;
+
             XInterface* pXI = NULL;
             BOOL bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),
                                 &pXI, pMap->XIFIndex);
@@ -3029,7 +3108,8 @@ void CMAccessible::ConvertAnyToVariant(const ::com::sun::star::uno::Any &rAnyVal
 
 STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
 {
-    // #CHECK#
+    // internal IMAccessible - no mutex meeded
+
     if(childID == NULL)
     {
         return E_FAIL;
@@ -3037,10 +3117,13 @@ STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
     *childID = m_dChildID;
     return S_OK;
 }
+
 STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
 {
-        ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    SolarMutexGuard g;
+
+    ENTER_PROTECTED_BLOCK
+    ISDESTROY()
 
     if (!m_xContext.is())
         return E_FAIL;
@@ -3207,6 +3290,7 @@ DWORD GetMSAAStateFromUNO(short xState)
 
 STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3219,6 +3303,7 @@ STDMETHODIMP CMAccessible:: get_appName( BSTR __RPC_FAR *name)
 }
 STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3230,6 +3315,7 @@ STDMETHODIMP CMAccessible:: get_appVersion(BSTR __RPC_FAR *version)
 }
 STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3241,6 +3327,7 @@ STDMETHODIMP CMAccessible:: get_toolkitName(BSTR __RPC_FAR *name)
 }
 STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 {
+    SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
         ISDESTROY()
@@ -3254,6 +3341,8 @@ STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 
 STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 {
+    SolarMutexGuard g;
+
     Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
     if( !pRContext.is() )
     {

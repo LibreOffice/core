@@ -20,6 +20,9 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccRelation.h"
+
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include "MAccessible.h"
@@ -34,6 +37,8 @@ using namespace com::sun::star::uno;
 */
 STDMETHODIMP CAccRelation::get_relationType(BSTR * relationType)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (relationType == NULL)
@@ -67,6 +72,8 @@ STDMETHODIMP CAccRelation::get_localizedRelationType(BSTR *)
 */
 STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (nTargets == NULL)
@@ -87,6 +94,8 @@ STDMETHODIMP CAccRelation::get_nTargets(long * nTargets)
 */
 STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (target == NULL)
@@ -122,6 +131,8 @@ STDMETHODIMP CAccRelation::get_target(long targetIndex, IUnknown * * target)
 */
 STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * target, long * nTargets)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -162,6 +173,7 @@ STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * target, long * nTarget
 */
 STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInterface)
 {
+    // internal IUNOXWrapper - no mutex meeded
 
     relation = *reinterpret_cast<AccessibleRelation*>(pXSubInterface);
     return S_OK;
