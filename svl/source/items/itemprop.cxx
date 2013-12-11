@@ -62,10 +62,9 @@ SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl*
 SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries ) :
     m_pImpl( new SfxItemPropertyMap_Impl )
 {
-    while( pEntries->pName )
+    while( !pEntries->aName.isEmpty() )
     {
-        OUString sEntry(pEntries->pName, pEntries->nNameLen, RTL_TEXTENCODING_ASCII_US );
-        (*m_pImpl) [ sEntry ] = pEntries;
+        (*m_pImpl) [ pEntries->aName ] = pEntries;
         ++pEntries;
     }
 }
@@ -102,8 +101,7 @@ uno::Sequence<beans::Property> SfxItemPropertyMap::getProperties() const
             const SfxItemPropertySimpleEntry* pEntry = &(*aIt).second;
             pPropArray[n].Name = (*aIt).first;
             pPropArray[n].Handle = pEntry->nWID;
-            if(pEntry->pType)
-                pPropArray[n].Type = *pEntry->pType;
+            pPropArray[n].Type = pEntry->aType;
             pPropArray[n].Attributes =
                 sal::static_int_cast< sal_Int16 >(pEntry->nFlags);
             n++;
@@ -124,8 +122,7 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString rName ) co
     beans::Property aProp;
     aProp.Name = rName;
     aProp.Handle = pEntry->nWID;
-    if(pEntry->pType)
-        aProp.Type = *pEntry->pType;
+    aProp.Type = pEntry->aType;
     aProp.Attributes = sal::static_int_cast< sal_Int16 >(pEntry->nFlags);
     return aProp;
 }
@@ -144,7 +141,7 @@ void SfxItemPropertyMap::mergeProperties( const uno::Sequence< beans::Property >
     {
         SfxItemPropertySimpleEntry aTemp(
             sal::static_int_cast< sal_Int16 >( pPropArray[nElement].Handle ), //nWID
-            &pPropArray[nElement].Type, //pType
+            pPropArray[nElement].Type, //aType
             pPropArray[nElement].Attributes, //nFlags
             0 ); //nMemberId
         (*m_pImpl)[pPropArray[nElement].Name] = aTemp;
@@ -209,11 +206,11 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
 
 
     // convert general SfxEnumItem values to specific values
-    if( rEntry.pType && TypeClass_ENUM == rEntry.pType->getTypeClass() &&
+    if( rEntry.aType.getTypeClass() == TypeClass_ENUM &&
          rAny.getValueTypeClass() == TypeClass_LONG )
     {
         sal_Int32 nTmp = *(sal_Int32*)rAny.getValue();
-        rAny.setValue( &nTmp, *rEntry.pType );
+        rAny.setValue( &nTmp, rEntry.aType );
     }
 }
 

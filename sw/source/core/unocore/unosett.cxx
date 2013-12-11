@@ -113,19 +113,19 @@ const SfxItemPropertySet* GetFootnoteSet()
 {
     static const SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_BEGIN_NOTICE),          WID_BEGIN_NOTICE,       &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_END_NOTICE),            WID_END_NOTICE ,        &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_FOOTNOTE_COUNTING),     WID_FOOTNOTE_COUNTING,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_POSITION_END_OF_DOC),   WID_POSITION_END_OF_DOC,&::getBooleanCppuType(), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_PREFIX),                WID_PREFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_START_AT),              WID_START_AT ,          &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,             &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        {0,0,0,0,0,0}
+        { OUString::createFromAscii(GetPropName(UNO_NAME_ANCHOR_CHAR_STYLE_NAME)),WID_ANCHOR_CHARACTER_STYLE, ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_BEGIN_NOTICE)),          WID_BEGIN_NOTICE,       ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_CHAR_STYLE_NAME)),       WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_END_NOTICE)),            WID_END_NOTICE ,        ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_FOOTNOTE_COUNTING)),     WID_FOOTNOTE_COUNTING,  ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_TYPE)),        WID_NUMBERING_TYPE,     ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_PAGE_STYLE_NAME)),       WID_PAGE_STYLE,         ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_PARA_STYLE_NAME)),       WID_PARAGRAPH_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_POSITION_END_OF_DOC)),   WID_POSITION_END_OF_DOC,::getBooleanCppuType(), PROPERTY_NONE,         0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_PREFIX)),                WID_PREFIX,             ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_START_AT)),              WID_START_AT ,          ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_SUFFIX)),                WID_SUFFIX,             ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
     return &aFootnoteSet_Impl;
@@ -135,15 +135,15 @@ const SfxItemPropertySet* GetEndnoteSet()
 {
     static const SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_PREFIX),                WID_PREFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_START_AT),              WID_START_AT ,          &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { SW_PROP_NAME(UNO_NAME_SUFFIX),                WID_SUFFIX,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        {0,0,0,0,0,0}
+        { OUString::createFromAscii(GetPropName(UNO_NAME_ANCHOR_CHAR_STYLE_NAME)),WID_ANCHOR_CHARACTER_STYLE, ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_CHAR_STYLE_NAME)),       WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_TYPE)),        WID_NUMBERING_TYPE,     ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_PAGE_STYLE_NAME)),       WID_PAGE_STYLE,         ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_PARA_STYLE_NAME)),       WID_PARAGRAPH_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_PREFIX)),                WID_PREFIX,     ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_START_AT)),              WID_START_AT ,          ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_SUFFIX)),                WID_SUFFIX,     ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
     return &aEndnoteSet_Impl;
@@ -153,13 +153,13 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 {
     static const SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS),       WID_IS_ABS_MARGINS, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),   WID_CONTINUOUS,     &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NAME),                      WID_RULE_NAME   ,   &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),      WID_IS_OUTLINE, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0,0}
+        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_ABSOLUTE_MARGINS)),       WID_IS_ABS_MARGINS, ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_AUTOMATIC)),              WID_IS_AUTOMATIC,   ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_CONTINUOUS_NUMBERING)),   WID_CONTINUOUS,     ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_NAME)),                      WID_RULE_NAME   ,   ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_IS_OUTLINE)),      WID_IS_OUTLINE, ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_DEFAULT_LIST_ID)),           WID_DEFAULT_LIST_ID, ::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet  aNumberingRulesSet_Impl( aNumberingRulesMap_Impl );
     return &aNumberingRulesSet_Impl;
@@ -180,18 +180,18 @@ const SfxItemPropertySet* GetLineNumberingSet()
 {
     static const SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),         WID_CHARACTER_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , &::getBooleanCppuType(),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES),   WID_COUNT_LINES_IN_FRAMES, &::getBooleanCppuType(),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_DISTANCE       ),         WID_DISTANCE       ,    &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_IS_ON),                     WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_INTERVAL  ),              WID_INTERVAL  ,       &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT ),         WID_SEPARATOR_TEXT,   &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),    WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        {0,0,0,0,0,0}
+        { OUString::createFromAscii(GetPropName(UNO_NAME_CHAR_STYLE_NAME)),         WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_COUNT_EMPTY_LINES)),       WID_COUNT_EMPTY_LINES , ::getBooleanCppuType(),PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_COUNT_LINES_IN_FRAMES)),   WID_COUNT_LINES_IN_FRAMES, ::getBooleanCppuType(),PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_DISTANCE)),                WID_DISTANCE       ,    ::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_ON)),                   WID_NUM_ON,             ::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_INTERVAL)),                WID_INTERVAL  ,       ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_SEPARATOR_TEXT)),          WID_SEPARATOR_TEXT,   ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBER_POSITION)),         WID_NUMBER_POSITION,    ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_TYPE)),          WID_NUMBERING_TYPE ,    ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_RESTART_AT_EACH_PAGE)),    WID_RESTART_AT_EACH_PAGE, ::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { OUString::createFromAscii(GetPropName(UNO_NAME_SEPARATOR_INTERVAL)),      WID_SEPARATOR_INTERVAL, ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
     return &aLineNumberingSet_Impl;

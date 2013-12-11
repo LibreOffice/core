@@ -23,8 +23,6 @@
 #include <sal/types.h>
 #include <comphelper/comphelperdllapi.h>
 
-#define CPPU_E2T(type)      ((com::sun::star::uno::Type*)type)
-
 namespace com { namespace sun { namespace star { namespace uno {
     class Type;
 } } } }

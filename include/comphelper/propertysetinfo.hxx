@@ -39,15 +39,14 @@ namespace comphelper
 
 struct PropertyMapEntry
 {
-    const sal_Char* mpName;
-    sal_uInt16 mnNameLen;
+    OUString maName;
     sal_Int32 mnHandle;
-    const com::sun::star::uno::Type* mpType;
+    com::sun::star::uno::Type maType;
     sal_Int16 mnAttributes;
     sal_uInt8 mnMemberId;
 };
 
-typedef std::map<OUString, PropertyMapEntry*> PropertyMap;
+typedef std::map<OUString, PropertyMapEntry const *> PropertyMap;
 
 class PropertyMapImpl;
 
@@ -60,7 +59,7 @@ private:
     PropertyMapImpl* mpMap;
 public:
     PropertySetInfo() throw();
-    PropertySetInfo( PropertyMapEntry* pMap ) throw();
+    PropertySetInfo( PropertyMapEntry const * pMap ) throw();
     virtual ~PropertySetInfo() throw();
 
     /** returns a stl map with all PropertyMapEntry pointer.<p>
@@ -71,7 +70,7 @@ public:
     /** adds an array of PropertyMapEntry to this instance.<p>
         The end is marked with a PropertyMapEntry where mpName equals NULL</p>
     */
-    void add( PropertyMapEntry* pMap ) throw();
+    void add( PropertyMapEntry const * pMap ) throw();
 
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const OUString& aName ) throw();

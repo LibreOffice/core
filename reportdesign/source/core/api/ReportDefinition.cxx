@@ -122,7 +122,6 @@
 #include <boost/mem_fn.hpp>
 #include <boost/utility.hpp>
 
-#define MAP_LEN(x) x, sizeof(x) - 1
 //  page styles
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
 #define SC_UNO_PAGE_RIGHTBORDER     "RightBorder"
@@ -1464,13 +1463,13 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     }
 
     /** property map for export info set */
-    comphelper::PropertyMapEntry aExportInfoMap[] =
+    comphelper::PropertyMapEntry const aExportInfoMap[] =
     {
-        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0),          beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamName")        , 0,&::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamRelPath")     , 0,&::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "BaseURI")           , 0,&::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { NULL, 0, 0, NULL, 0, 0 }
+        { OUString("UsePrettyPrinting") , 0, ::getCppuType((sal_Bool*)0),          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamName")        , 0, ::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamRelPath")     , 0, ::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("BaseURI")           , 0, ::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 

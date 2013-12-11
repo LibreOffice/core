@@ -2258,7 +2258,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 //        const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
         const SfxItemPropertyMapEntry* pPropMap(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
-        while ( pPropMap->pName )
+        while ( !pPropMap->aName.isEmpty() )
         {
             const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
             if ( pItem )
@@ -2267,7 +2267,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
                 pItem->QueryValue( aVal, pPropMap->nMemberId );
 
                 PropertyValue rPropVal;
-                rPropVal.Name = OUString::createFromAscii( pPropMap->pName );
+                rPropVal.Name = pPropMap->aName;
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
