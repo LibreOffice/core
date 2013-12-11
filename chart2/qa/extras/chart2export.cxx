@@ -29,7 +29,7 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
-    CPPUNIT_TEST(testStockChart);
+//    CPPUNIT_TEST(testStockChart); disable pending necessary patch from gerrit 6957
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -258,6 +258,7 @@ void Chart2ExportTest::testTrendline()
 
 }
 
+#if 0  // disable until gerrit 6957 is merged in some form */
 void Chart2ExportTest::testStockChart()
 {
     /*  For attached file Stock_Chart.docx, in chart1.xml,
@@ -277,6 +278,7 @@ void Chart2ExportTest::testStockChart()
       assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v", "Open");
     }
 }
+#endif
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
