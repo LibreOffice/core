@@ -797,17 +797,23 @@ gb_BUILD_HELPER_LIBS := basegfx \
 	reg \
 	sal \
 	salhelper \
+	sax \
 	store \
 	tl \
 	unoidl \
 	xmlreader \
 
 # tools libmerged depends on, so they link against gb_BUILD_HELPER_LIBS
-gb_BUILD_HELPER_TOOLS := cppumaker \
+gb_BUILD_HELPER_TOOLS := $(foreach exe,\
+	cppumaker \
 	rsc \
 	svidl \
 	unoidl-check \
 	unoidl-write \
+	, $(call gb_Executable__get_workdir_linktargetname,$(exe))) \
+	$(foreach lib,\
+	expwrap \
+	, $(call gb_Library__get_workdir_linktargetname,$(lib)))
 
 # call gb_LinkTarget__is_build_lib,linktargetname
 define gb_LinkTarget__is_build_lib
@@ -816,7 +822,7 @@ endef
 
 # call gb_LinkTarget__is_build_tool,linktargetname
 define gb_LinkTarget__is_build_tool
-$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(foreach exe,$(gb_BUILD_HELPER_TOOLS),$(call gb_Executable__get_workdir_linktargetname,$(exe)))),$(true),$(false))
+$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(call gb_BUILD_HELPER_TOOLS)),$(true),$(false))
 endef
 
 # call gb_LinkTarget_use_libraries,linktarget,libs
