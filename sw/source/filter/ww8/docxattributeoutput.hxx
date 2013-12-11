@@ -379,6 +379,9 @@ private:
     /// Writes shape in both DML and VML format.
     void WriteDMLAndVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft );
 
+    /// Writes text frame in VML format.
+    void WriteVMLTextFrame(sw::Frame* pParentFrame);
+
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );

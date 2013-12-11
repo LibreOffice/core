@@ -366,6 +366,66 @@ bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* p
     return false;
 }
 
+void DocxAttributeOutput::WriteVMLTextFrame(sw::Frame* pParentFrame)
+{
+    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
+    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(m_rExport, nStt, nEnd, pParentFrame);
+
+    // When a frame has some low height, but automatically expanded due
+    // to lots of contents, this size contains the real size.
+    const Size aSize = pParentFrame->GetSize();
+    m_pFlyFrameSize = &aSize;
+
+    m_bTextFrameSyntax = true;
+    m_pFlyAttrList = m_pSerializer->createAttrList( );
+    m_pTextboxAttrList = m_pSerializer->createAttrList();
+    m_aTextFrameStyle = "position:absolute";
+    m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
+    m_pFlyAttrList->add(XML_style, m_aTextFrameStyle.makeStringAndClear());
+    XFastAttributeListRef xFlyAttrList( m_pFlyAttrList );
+    m_pFlyAttrList = NULL;
+    m_bFrameBtLr = lcl_checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], m_pTextboxAttrList);
+    XFastAttributeListRef xTextboxAttrList(m_pTextboxAttrList);
+    m_pTextboxAttrList = NULL;
+    m_bTextFrameSyntax = false;
+    m_pFlyFrameSize = 0;
+    m_rExport.mpParentFrame = NULL;
+
+    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
+    m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
+    lcl_TextFrameShadow(m_pSerializer, rFrmFmt);
+    if (m_pFlyFillAttrList)
+    {
+        XFastAttributeListRef xFlyFillAttrList(m_pFlyFillAttrList);
+        m_pFlyFillAttrList = NULL;
+        m_pSerializer->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
+    }
+    m_pSerializer->startElementNS( XML_v, XML_textbox, xTextboxAttrList );
+    m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
+    m_rExport.WriteText( );
+    m_pSerializer->endElementNS( XML_w, XML_txbxContent );
+    m_pSerializer->endElementNS( XML_v, XML_textbox );
+
+    if (m_pFlyWrapAttrList)
+    {
+        XFastAttributeListRef xFlyWrapAttrList(m_pFlyWrapAttrList);
+        m_pFlyWrapAttrList = NULL;
+        m_pSerializer->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
+    }
+
+    m_pSerializer->endElementNS( XML_v, XML_rect );
+    m_pSerializer->endElementNS( XML_w, XML_pict );
+    m_pSerializer->endElementNS( XML_w, XML_r );
+    m_bFrameBtLr = false;
+}
+
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -379,63 +439,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     for (size_t i = 0; i < aParentFrames.size(); ++i)
     {
         sw::Frame* pParentFrame = &aParentFrames[i];
-
-        const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
-        const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
-
-        sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-        sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
-
-        //Save data here and restore when out of scope
-        ExportDataSaveRestore aDataGuard(m_rExport, nStt, nEnd, pParentFrame);
-
-        // When a frame has some low height, but automatically expanded due
-        // to lots of contents, this size contains the real size.
-        const Size aSize = pParentFrame->GetSize();
-        m_pFlyFrameSize = &aSize;
-
-        m_bTextFrameSyntax = true;
-        m_pFlyAttrList = m_pSerializer->createAttrList( );
-        m_pTextboxAttrList = m_pSerializer->createAttrList();
-        m_aTextFrameStyle = "position:absolute";
-        m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
-        m_pFlyAttrList->add(XML_style, m_aTextFrameStyle.makeStringAndClear());
-        XFastAttributeListRef xFlyAttrList( m_pFlyAttrList );
-        m_pFlyAttrList = NULL;
-        m_bFrameBtLr = lcl_checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], m_pTextboxAttrList);
-        XFastAttributeListRef xTextboxAttrList(m_pTextboxAttrList);
-        m_pTextboxAttrList = NULL;
-        m_bTextFrameSyntax = false;
-        m_pFlyFrameSize = 0;
-        m_rExport.mpParentFrame = NULL;
-
-        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-        m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
-        m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
-        lcl_TextFrameShadow(m_pSerializer, rFrmFmt);
-        if (m_pFlyFillAttrList)
-        {
-            XFastAttributeListRef xFlyFillAttrList(m_pFlyFillAttrList);
-            m_pFlyFillAttrList = NULL;
-            m_pSerializer->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
-        }
-        m_pSerializer->startElementNS( XML_v, XML_textbox, xTextboxAttrList );
-        m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
-        m_rExport.WriteText( );
-        m_pSerializer->endElementNS( XML_w, XML_txbxContent );
-        m_pSerializer->endElementNS( XML_v, XML_textbox );
-
-        if (m_pFlyWrapAttrList)
-        {
-            XFastAttributeListRef xFlyWrapAttrList(m_pFlyWrapAttrList);
-            m_pFlyWrapAttrList = NULL;
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
-        }
-
-        m_pSerializer->endElementNS( XML_v, XML_rect );
-        m_pSerializer->endElementNS( XML_w, XML_pict );
-        m_pSerializer->endElementNS( XML_w, XML_r );
-        m_bFrameBtLr = false;
+        WriteVMLTextFrame(pParentFrame);
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
