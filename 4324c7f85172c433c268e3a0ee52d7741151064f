@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///yE\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3237,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "why inflict that on non 10.5/mac ?\nbeside see below there is another test",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///x8\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5476,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "really powerpc does not have alignment requirement ?",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///x4\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8030,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "10.4 is not supported anywhere and can be in with_macosx_* at this point",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///x0\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8031,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xw\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8066,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "again 10.4 is not valid here",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xs\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8662,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xk\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9377,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "I\u0027m inclined to think that this is actually a right thing to do.. but bumping to internal opensssl for 10.6 has nothing to do with 10.5 support",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xg\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10145,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "10.4 not valid",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xY\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10518,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "convention is ENABLE_foo\u003dYES or ENABLE_foo\u003d \nno TRUE/NO/FALSE",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xc\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10535,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 1,
+      "message": "do not call AC_SUBT on a variable before you\u0027re finish setting it see 10540 below for ex.",
+      "revId": "4324c7f85172c433c268e3a0ee52d7741151064f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

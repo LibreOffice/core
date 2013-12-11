@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///yM\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 2602,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 0,
+      "message": "how removing this, admittedly hack, is related/necessary to 10.5 support ?",
+      "revId": "7b5ad4291ce6c3bc8bde7876ed1a072bf387d6e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///yI\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 2665,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 0,
+      "message": "again not related witjh 10.5 support",
+      "revId": "7b5ad4291ce6c3bc8bde7876ed1a072bf387d6e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///yA\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5306,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 0,
+      "message": "why do you need to alter the gcc requirement for non 10.5/mac build, in order to support 10.5 ?",
+      "revId": "7b5ad4291ce6c3bc8bde7876ed1a072bf387d6e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///xU\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10047,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T15:43:17Z",
+      "side": 0,
+      "message": "yes, that is wrong should be YES here",
+      "revId": "7b5ad4291ce6c3bc8bde7876ed1a072bf387d6e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
