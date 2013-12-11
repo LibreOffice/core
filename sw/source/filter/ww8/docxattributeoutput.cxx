@@ -1482,9 +1482,6 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
     OString aDate( DateTimeToOString( pRedline->GetTimeStamp() ) );
 
-    OUString sVal;
-    OString sOVal;
-
     switch( pRedline->GetType() )
     {
     case nsRedlineType_t::REDLINE_INSERT:
