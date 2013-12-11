@@ -235,7 +235,6 @@ extern "C"
     extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * deployment_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * expwrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fastsax_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * introspection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -321,7 +320,6 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "libconfigmgrlo.a", configmgr_component_getFactory },
         { "libdeployment.a", deployment_component_getFactory },
         { "libexpwraplo.a", expwrap_component_getFactory },
-        { "libfastsaxlo.a", fastsax_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },

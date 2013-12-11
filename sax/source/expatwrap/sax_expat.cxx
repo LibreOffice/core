@@ -37,7 +37,6 @@
 
 #include <expat.h>
 
-using namespace ::rtl;
 using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
@@ -50,6 +49,9 @@ using namespace ::com::sun::star::io;
 #include "factory.hxx"
 #include "attrlistimpl.hxx"
 #include "xml2utf.hxx"
+#include <sax/fastparser.hxx>
+
+#define PARSER_IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
 
 namespace sax_expatwrap {
 
@@ -195,7 +197,13 @@ Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
-
+Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
+            SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+        throw(Exception)
+{
+    ::sax_fastparser::FastSaxParser *p = new ::sax_fastparser::FastSaxParser;
+    return Reference< XInterface > ( (OWeakObject * ) p );
+}
 
 Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
 {
@@ -1083,6 +1091,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
             xRet = createSingleFactory( xSMgr, aImplementationName,
                                         SaxWriter_CreateInstance,
                                         SaxWriter_getSupportedServiceNames() );
+        }
+        else if ( aImplementationName == PARSER_IMPLEMENTATION_NAME)
+        {
+            xRet = createSingleFactory( xSMgr, aImplementationName,
+                                        FastSaxParser_CreateInstance,
+                                        sax_fastparser::FastSaxParser::getSupportedServiceNames_Static() );
         }
 
         if (xRet.is())

@@ -253,7 +253,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	evtatt \
 	exp \
 	expwrap \
-	fastsax \
 	flat \
 	file \
 	filterconfig \

@@ -39,8 +39,8 @@ $(eval $(call gb_Library_use_libraries,oox,\
     cppu \
     cppuhelper \
     editeng \
+    expwrap \
     drawinglayer \
-    fastsax \
     msfilter \
     sal \
 	i18nlangtag \
