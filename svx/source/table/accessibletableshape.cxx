@@ -132,6 +132,7 @@ void AccessibleTableShapeImpl::dispose()
         {
             (*iter).second->dispose();
         }
+        maChildMap.clear();
         Reference< XModifyListener > xListener( this );
         mxTable->removeModifyListener( xListener );
         mxTable.clear();
