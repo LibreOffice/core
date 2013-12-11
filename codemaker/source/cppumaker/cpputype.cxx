@@ -3099,8 +3099,16 @@ void EnumType::dumpDeclaration(FileStream& o)
              entity_->getMembers().begin());
          i != entity_->getMembers().end(); ++i)
     {
-        o << indent() << id_ << "_" << u2b(i->name) << " = " << i->value
-          << ",\n";
+        // FileStream has an operator<< for sal_uInt32 (but not for sal_Int32), 
+        // so the i->value is promoted to sal_uInt32 and always output as unsigned.
+        sal_uInt32 val = (sal_uInt32)(i->value);
+        if (val <= SAL_MAX_INT32) {
+            o << indent() << id_ << "_" << u2b(i->name) << " = " << val
+              << ",\n";
+        } else {
+            o << indent() << id_ << "_" << u2b(i->name) << " = " << val << "u"
+              << ",\n";
+        }
     }
 
     o << indent() << id_ << "_MAKE_FIXED_SIZE = SAL_MAX_ENUM\n";
