@@ -31,7 +31,7 @@
 #include <ctype.h>
 
 #include "sbxres.hxx"
-#include <basic/sbxbase.hxx>
+#include "sbxbase.hxx"
 #include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
 #include <svtools/svtools.hrc>
