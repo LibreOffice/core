@@ -220,6 +220,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testCopyPaste();
+    void testCopyPasteAsLink();
     void testCopyPasteTranspose();
     void testMoveBlock();
     void testCopyPasteRelativeFormula();
@@ -362,8 +363,9 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testCopyPaste);
-    CPPUNIT_TEST(testMoveBlock);
+    CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
+    CPPUNIT_TEST(testMoveBlock);
     CPPUNIT_TEST(testCopyPasteRelativeFormula);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
