@@ -129,30 +129,30 @@ static SdTypesCache gImplTypesCache;
 
 
         #define IMPRESS_MAP_ENTRIES \
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_LEGACYFRAGMENT),WID_LEGACYFRAGMENT,  &ITYPE(drawing::XShape),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       &::getBooleanCppuType(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     &::getCppuType((const presentation::ClickAction*)0),       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_PRESORDER),     WID_PRESORDER,       &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,           &ITYPE( style::XStyle),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),     WID_SOUNDFILE,       &::getCppuType((const OUString*)0),                        0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SPEED),         WID_SPEED,           &::getCppuType((const presentation::AnimationSpeed*)0),    0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN("PlaceholderText"),          WID_PLACEHOLDERTEXT, &::getCppuType((const OUString*)0),                        0, 0},\
-        { 0,0,0,0,0,0}
+        { UNO_NAME_OBJ_LEGACYFRAGMENT,WID_LEGACYFRAGMENT,  ITYPE(drawing::XShape),                                   0, 0},\
+        { UNO_NAME_OBJ_ANIMATIONPATH, WID_ANIMPATH,        ITYPE(drawing::XShape),                                   0, 0},\
+        { UNO_NAME_OBJ_BOOKMARK,      WID_BOOKMARK,        ::getCppuType((const OUString*)0),                        0, 0},\
+        { UNO_NAME_OBJ_DIMCOLOR,      WID_DIMCOLOR,        ::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { UNO_NAME_OBJ_DIMHIDE,       WID_DIMHIDE,         ::getBooleanCppuType(),                                   0, 0},\
+        { UNO_NAME_OBJ_DIMPREV,       WID_DIMPREV,         ::getBooleanCppuType(),                                   0, 0},\
+        { UNO_NAME_OBJ_EFFECT,        WID_EFFECT,          ::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
+        { UNO_NAME_OBJ_ISEMPTYPRESOBJ,WID_ISEMPTYPRESOBJ,  ::getBooleanCppuType(),                                   0, 0},\
+        { UNO_NAME_OBJ_ISPRESOBJ,     WID_ISPRESOBJ,       ::getBooleanCppuType(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
+        { UNO_NAME_OBJ_MASTERDEPENDENT,WID_MASTERDEPEND,   ::getBooleanCppuType(),                                   0, 0},\
+        { UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,     ::getCppuType((const presentation::ClickAction*)0),       0, 0},\
+        { UNO_NAME_OBJ_PLAYFULL,      WID_PLAYFULL,        ::getBooleanCppuType(),                                   0, 0},\
+        { UNO_NAME_OBJ_PRESORDER,     WID_PRESORDER,       ::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { UNO_NAME_OBJ_STYLE,         WID_STYLE,           ITYPE( style::XStyle),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
+        { UNO_NAME_OBJ_SOUNDFILE,     WID_SOUNDFILE,       ::getCppuType((const OUString*)0),                        0, 0},\
+        { UNO_NAME_OBJ_SOUNDON,       WID_SOUNDON,         ::getBooleanCppuType(),                                   0, 0},\
+        { UNO_NAME_OBJ_SPEED,         WID_SPEED,           ::getCppuType((const presentation::AnimationSpeed*)0),    0, 0},\
+        { UNO_NAME_OBJ_TEXTEFFECT,    WID_TEXTEFFECT,      ::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
+        { UNO_NAME_OBJ_BLUESCREEN,    WID_BLUESCREEN,      ::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { UNO_NAME_OBJ_VERB,          WID_VERB,            ::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { "IsAnimation",              WID_ISANIMATION,     ::getBooleanCppuType(),                                   0, 0},\
+        { "NavigationOrder",          WID_NAVORDER,        ::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { "PlaceholderText",          WID_PLACEHOLDERTEXT, ::getCppuType((const OUString*)0),                        0, 0},\
+        {}
 
 
     static const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
@@ -160,7 +160,7 @@ static SdTypesCache gImplTypesCache;
 
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
         {
-            { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+            { "ImageMap",             WID_IMAGEMAP,        ::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
             IMPRESS_MAP_ENTRIES
         };
         return aImpress_SdXShapePropertyGraphicMap_Impl;
@@ -177,11 +177,11 @@ static SdTypesCache gImplTypesCache;
     }
 
     #define DRAW_MAP_ENTRIES\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { 0,0,0,0,0,0}
+        { UNO_NAME_OBJ_BOOKMARK,      WID_BOOKMARK,       ::getCppuType((const OUString*)0),                 0, 0},\
+        { UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,    ::getCppuType((const presentation::ClickAction*)0),0, 0},\
+        { UNO_NAME_OBJ_STYLE,         WID_STYLE,          ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
+        { "NavigationOrder",          WID_NAVORDER,       ::getCppuType((const sal_Int32*)0),                       0, 0},\
+        {}
 
     static const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
     {
@@ -195,7 +195,7 @@ static SdTypesCache gImplTypesCache;
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
         {
-            { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+            { "ImageMap",             WID_IMAGEMAP,        ::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
             DRAW_MAP_ENTRIES
         };
         return aDraw_SdXShapePropertyGraphicMap_Impl;
@@ -255,7 +255,7 @@ static SdTypesCache gImplTypesCache;
     {
         static const SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
         {
-            { 0,0,0,0,0,0}
+            {}
         };
         return aEmpty_SdXShapePropertyMap_Impl;
     }

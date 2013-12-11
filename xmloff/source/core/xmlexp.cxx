@@ -1332,12 +1332,12 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     {
         try
         {
-            ::comphelper::PropertyMapEntry aInfoMap[] =
+            ::comphelper::PropertyMapEntry const aInfoMap[] =
             {
-                { "Class", sizeof("Class")-1, 0,
-                    &::getCppuType((OUString*)0),
+                { "Class", 0,
+                    ::getCppuType((OUString*)0),
                       PropertyAttribute::MAYBEVOID, 0},
-                { NULL, 0, 0, NULL, 0, 0 }
+                {}
             };
             Reference< XPropertySet > xConvPropSet(
                 ::comphelper::GenericPropertySet_CreateInstance(
@@ -2160,10 +2160,10 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     if( ! (getExportFlags() & EXPORT_OASIS) &&
         bIsChart )
     {
-        static ::comphelper::PropertyMapEntry aInfoMap[] =
+        static ::comphelper::PropertyMapEntry const aInfoMap[] =
         {
-            { "ExportTableNumberList", 21, 0, &::getBooleanCppuType(), PropertyAttribute::MAYBEVOID, 0},
-            { NULL, 0, 0, NULL, 0, 0 }
+            { "ExportTableNumberList", 0, ::getBooleanCppuType(), PropertyAttribute::MAYBEVOID, 0},
+            {}
         };
         Reference< XPropertySet > xInfoProp(
             ::comphelper::GenericPropertySet_CreateInstance(

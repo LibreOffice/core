@@ -37,8 +37,6 @@ namespace svx
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-#define CONST_CHAR( propname ) propname, sizeof(propname) - 1
-
     //====================================================================
     //= ODADescriptorImpl
     //====================================================================
@@ -54,7 +52,7 @@ namespace svx
         Sequence< PropertyValue >   m_aAsSequence;
         Reference< XPropertySet >   m_xAsSet;
 
-        typedef ::std::map< OUString, PropertyMapEntry* >    MapString2PropertyEntry;
+        typedef ::std::map< OUString, PropertyMapEntry const * >    MapString2PropertyEntry;
 
     public:
         ODADescriptorImpl();
@@ -79,7 +77,7 @@ namespace svx
     protected:
         static PropertyValue                    buildPropertyValue( const DescriptorValues::const_iterator& _rPos );
         static const MapString2PropertyEntry&   getPropertyMap( );
-        static PropertyMapEntry*                getPropertyMapEntry( const DescriptorValues::const_iterator& _rPos );
+        static PropertyMapEntry const *         getPropertyMapEntry( const DescriptorValues::const_iterator& _rPos );
     };
 
     //--------------------------------------------------------------------
@@ -187,29 +185,29 @@ namespace svx
         static MapString2PropertyEntry s_aProperties;
         if ( s_aProperties.empty() )
         {
-            static PropertyMapEntry s_aDesriptorProperties[] =
+            static PropertyMapEntry const s_aDesriptorProperties[] =
             {
-                { CONST_CHAR("ActiveConnection"),   daConnection,           &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,    &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Column"),             daColumnObject,         &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("ColumnName"),         daColumnName,           &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Command"),            daCommand,              &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("CommandType"),        daCommandType,          &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Component"),          daComponent,            &::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("ConnectionResource"), daConnectionResource,   &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Cursor"),             daCursor,               &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("DataSourceName"),     daDataSource,           &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("DatabaseLocation"),   daDatabaseLocation,     &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing,     &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Filter"),             daFilter,               &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Selection"),          daSelection,            &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { NULL, 0, 0, NULL, 0, 0 }
+                { "ActiveConnection",   daConnection,           ::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
+                { "BookmarkSelection",  daBookmarkSelection,    ::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+                { "Column",             daColumnObject,         ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
+                { "ColumnName",         daColumnName,           ::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { "Command",            daCommand,              ::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { "CommandType",        daCommandType,          ::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
+                { "Component",          daComponent,            ::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
+                { "ConnectionResource", daConnectionResource,   ::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { "Cursor",             daCursor,               ::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
+                { "DataSourceName",     daDataSource,           ::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { "DatabaseLocation",   daDatabaseLocation,     ::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { "EscapeProcessing",   daEscapeProcessing,     ::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+                { "Filter",             daFilter,               ::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { "Selection",          daSelection,            ::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                {}
             };
 
-            PropertyMapEntry* pEntry = s_aDesriptorProperties;
-            while ( pEntry->mpName )
+            PropertyMapEntry const * pEntry = s_aDesriptorProperties;
+            while ( !pEntry->maName.isEmpty() )
             {
-                s_aProperties[ OUString::createFromAscii( pEntry->mpName ) ] = pEntry;
+                s_aProperties[ pEntry->maName ] = pEntry;
                 ++pEntry;
             }
         }
@@ -218,7 +216,7 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    PropertyMapEntry* ODADescriptorImpl::getPropertyMapEntry( const DescriptorValues::const_iterator& _rPos )
+    PropertyMapEntry const * ODADescriptorImpl::getPropertyMapEntry( const DescriptorValues::const_iterator& _rPos )
     {
         const MapString2PropertyEntry& rProperties = getPropertyMap();
 
@@ -239,11 +237,11 @@ namespace svx
     PropertyValue ODADescriptorImpl::buildPropertyValue( const DescriptorValues::const_iterator& _rPos )
     {
         // the map entry
-        PropertyMapEntry* pProperty = getPropertyMapEntry( _rPos );
+        PropertyMapEntry const * pProperty = getPropertyMapEntry( _rPos );
 
         // build the property value
         PropertyValue aReturn;
-        aReturn.Name    = OUString( pProperty->mpName, pProperty->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+        aReturn.Name    = pProperty->maName;
         aReturn.Handle  = pProperty->mnHandle;
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;

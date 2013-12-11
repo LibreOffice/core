@@ -1121,16 +1121,16 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 
     static const SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_DP_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_DATADESC), 0,  &getCppuType((OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_IGNOREEMPTY), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
-        {MAP_CHAR_LEN(SC_UNO_DP_REPEATEMPTY), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
-        {MAP_CHAR_LEN(SC_UNO_DP_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ROWFIELDCOUNT),    0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_COLUMNFIELDCOUNT), 0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_DATAFIELDCOUNT),   0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_GRANDTOTAL_NAME),  0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
-        {0,0,0,0,0,0}
+        { SC_UNO_DP_COLGRAND, 0,  getBooleanCppuType(),              0, 0 },
+        { SC_UNO_DP_DATADESC, 0,  getCppuType((OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_IGNOREEMPTY, 0,  getBooleanCppuType(),              0, 0 },     // for sheet data only
+        { SC_UNO_DP_REPEATEMPTY, 0,  getBooleanCppuType(),              0, 0 },     // for sheet data only
+        { SC_UNO_DP_ROWGRAND, 0,  getBooleanCppuType(),              0, 0 },
+        { SC_UNO_DP_ROWFIELDCOUNT,    0, getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        { SC_UNO_DP_COLUMNFIELDCOUNT, 0, getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        { SC_UNO_DP_DATAFIELDCOUNT,   0, getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        { SC_UNO_DP_GRANDTOTAL_NAME,  0, getCppuType(static_cast<OUString*>(0)), 0, 0 },
+        {}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPSourceMap_Impl );
@@ -1517,21 +1517,21 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 
     static const SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_DP_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_FLAGS),    0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ISDATALAYOUT), 0,  &getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_NUMBERFO), 0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ORIENTATION), 0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ORIGINAL), 0,  &getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ORIGINAL_POS), 0, &getCppuType((sal_Int32*)0),             0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_USEDHIERARCHY), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
-        {0,0,0,0,0,0}
+        { SC_UNO_DP_FILTER,   0,  getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
+        { SC_UNO_DP_FLAGS,    0,  getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_FUNCTION, 0,  getCppuType((sheet::GeneralFunction*)0),   0, 0 },
+        { SC_UNO_DP_ISDATALAYOUT, 0,  getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_NUMBERFO, 0,  getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_ORIENTATION, 0,  getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
+        { SC_UNO_DP_ORIGINAL, 0,  getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_ORIGINAL_POS, 0, getCppuType((sal_Int32*)0),             0, 0 },
+        { SC_UNO_DP_POSITION, 0,  getCppuType((sal_Int32*)0),                0, 0 },
+        { SC_UNO_DP_REFVALUE, 0,  getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
+        { SC_UNO_DP_USEDHIERARCHY, 0,  getCppuType((sal_Int32*)0),                0, 0 },
+        { SC_UNO_DP_LAYOUTNAME, 0, getCppuType(static_cast<OUString*>(0)), 0, 0 },
+        { SC_UNO_DP_FIELD_SUBTOTALNAME, 0, getCppuType(static_cast<OUString*>(0)), 0, 0 },
+        { SC_UNO_DP_HAS_HIDDEN_MEMBER, 0, getBooleanCppuType(), 0, 0 },
+        {}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPDimensionMap_Impl );
@@ -2232,12 +2232,12 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
     static const SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
         //! change type of AutoShow/Layout/Sorting to API struct when available
-        {MAP_CHAR_LEN(SC_UNO_DP_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUT),   0,  &getCppuType((sheet::DataPilotFieldLayoutInfo*)0),       0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SHOWEMPTY), 0,  &getBooleanCppuType(),                                   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SORTING),  0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SUBTOTAL), 0,  &getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
-        {0,0,0,0,0,0}
+        { SC_UNO_DP_AUTOSHOW, 0,  getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
+        { SC_UNO_DP_LAYOUT,   0,  getCppuType((sheet::DataPilotFieldLayoutInfo*)0),       0, 0 },
+        { SC_UNO_DP_SHOWEMPTY, 0, getBooleanCppuType(),                                   0, 0 },
+        { SC_UNO_DP_SORTING,  0,  getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
+        { SC_UNO_DP_SUBTOTAL, 0,  getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
+        {}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPLevelMap_Impl );
@@ -2701,11 +2701,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 
     static const SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_DP_ISVISIBLE), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SHOWDETAILS), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
-        {0,0,0,0,0,0}
+        { SC_UNO_DP_ISVISIBLE, 0,  getBooleanCppuType(),              0, 0 },
+        { SC_UNO_DP_POSITION, 0,  getCppuType((sal_Int32*)0),        0, 0 },
+        { SC_UNO_DP_SHOWDETAILS, 0,  getBooleanCppuType(),              0, 0 },
+        { SC_UNO_DP_LAYOUTNAME, 0, getCppuType(static_cast<OUString*>(0)), 0, 0 },
+        {}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPMemberMap_Impl );

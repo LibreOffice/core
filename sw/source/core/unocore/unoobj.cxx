@@ -2141,11 +2141,11 @@ SwXTextCursor::getPropertySetInfo() throw (uno::RuntimeException)
     static uno::Reference< beans::XPropertySetInfo >  xRef;
     if(!xRef.is())
     {
-        static SfxItemPropertyMapEntry aCrsrExtMap_Impl[] =
+        static SfxItemPropertyMapEntry const aCrsrExtMap_Impl[] =
         {
-            { SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
-            { SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
-            {0,0,0,0,0,0}
+            { OUString::createFromAscii(GetPropName(UNO_NAME_IS_SKIP_HIDDEN_TEXT)), FN_SKIP_HIDDEN_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
+            { OUString::createFromAscii(GetPropName(UNO_NAME_IS_SKIP_PROTECTED_TEXT)), FN_SKIP_PROTECTED_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
+            {}
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
             m_pImpl->m_rPropSet.getPropertySetInfo();

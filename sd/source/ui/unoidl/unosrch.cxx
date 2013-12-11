@@ -42,10 +42,10 @@ const SfxItemPropertyMapEntry* ImplGetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN(UNO_NAME_SEARCH_BACKWARDS),  WID_SEARCH_BACKWARDS,   &::getBooleanCppuType(),    0,  0 },
-        { MAP_CHAR_LEN(UNO_NAME_SEARCH_CASE),       WID_SEARCH_CASE,        &::getBooleanCppuType(),    0,  0 },
-        { MAP_CHAR_LEN(UNO_NAME_SEARCH_WORDS),      WID_SEARCH_WORDS,       &::getBooleanCppuType(),    0,  0 },
-        { 0,0,0,0,0,0}
+        { UNO_NAME_SEARCH_BACKWARDS,  WID_SEARCH_BACKWARDS,   ::getBooleanCppuType(),    0,  0 },
+        { UNO_NAME_SEARCH_CASE,       WID_SEARCH_CASE,        ::getBooleanCppuType(),    0,  0 },
+        { UNO_NAME_SEARCH_WORDS,      WID_SEARCH_WORDS,       ::getBooleanCppuType(),    0,  0 },
+        {}
     };
 
     return aSearchPropertyMap_Impl;

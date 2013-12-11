@@ -109,22 +109,22 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
     // NOTE: First member must be sorted
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("AllowAnimations"),          ATTR_PRESENT_ANIMATION_ALLOWED, &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("CustomShow"),               ATTR_PRESENT_CUSTOMSHOW,        &::getCppuType((const OUString*)0),     0, 0 },
-        { MAP_CHAR_LEN("Display"),                  ATTR_PRESENT_DISPLAY,           &::getCppuType((const sal_Int32*)0),    0, 0 },
-        { MAP_CHAR_LEN("FirstPage"),                ATTR_PRESENT_DIANAME,           &::getCppuType((const OUString*)0),     0, 0 },
-        { MAP_CHAR_LEN("IsAlwaysOnTop"),            ATTR_PRESENT_ALWAYS_ON_TOP,     &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsAutomatic"),              ATTR_PRESENT_MANUEL,            &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsEndless"),                ATTR_PRESENT_ENDLESS,           &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsFullScreen"),             ATTR_PRESENT_FULLSCREEN,        &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsShowAll"),                ATTR_PRESENT_ALL,               &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsMouseVisible"),           ATTR_PRESENT_MOUSE,             &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsShowLogo"),               ATTR_PRESENT_SHOW_PAUSELOGO,    &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("IsTransitionOnClick"),      ATTR_PRESENT_CHANGE_PAGE,       &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("Pause"),                    ATTR_PRESENT_PAUSE_TIMEOUT,     &::getCppuType((const sal_Int32*)0),    0, 0 },
-        { MAP_CHAR_LEN("StartWithNavigator"),       ATTR_PRESENT_NAVIGATOR,         &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("UsePen"),                   ATTR_PRESENT_PEN,               &::getBooleanCppuType(),                0, 0 },
-        { 0,0,0,0,0,0}
+        { "AllowAnimations",          ATTR_PRESENT_ANIMATION_ALLOWED, ::getBooleanCppuType(),                0, 0 },
+        { "CustomShow",               ATTR_PRESENT_CUSTOMSHOW,        ::getCppuType((const OUString*)0),     0, 0 },
+        { "Display",                  ATTR_PRESENT_DISPLAY,           ::getCppuType((const sal_Int32*)0),    0, 0 },
+        { "FirstPage",                ATTR_PRESENT_DIANAME,           ::getCppuType((const OUString*)0),     0, 0 },
+        { "IsAlwaysOnTop",            ATTR_PRESENT_ALWAYS_ON_TOP,     ::getBooleanCppuType(),                0, 0 },
+        { "IsAutomatic",              ATTR_PRESENT_MANUEL,            ::getBooleanCppuType(),                0, 0 },
+        { "IsEndless",                ATTR_PRESENT_ENDLESS,           ::getBooleanCppuType(),                0, 0 },
+        { "IsFullScreen",             ATTR_PRESENT_FULLSCREEN,        ::getBooleanCppuType(),                0, 0 },
+        { "IsShowAll",                ATTR_PRESENT_ALL,               ::getBooleanCppuType(),                0, 0 },
+        { "IsMouseVisible",           ATTR_PRESENT_MOUSE,             ::getBooleanCppuType(),                0, 0 },
+        { "IsShowLogo",               ATTR_PRESENT_SHOW_PAUSELOGO,    ::getBooleanCppuType(),                0, 0 },
+        { "IsTransitionOnClick",      ATTR_PRESENT_CHANGE_PAGE,       ::getBooleanCppuType(),                0, 0 },
+        { "Pause",                    ATTR_PRESENT_PAUSE_TIMEOUT,     ::getCppuType((const sal_Int32*)0),    0, 0 },
+        { "StartWithNavigator",       ATTR_PRESENT_NAVIGATOR,         ::getBooleanCppuType(),                0, 0 },
+        { "UsePen",                   ATTR_PRESENT_PEN,               ::getBooleanCppuType(),                0, 0 },
+        {}
     };
 
     return aPresentationPropertyMap_Impl;

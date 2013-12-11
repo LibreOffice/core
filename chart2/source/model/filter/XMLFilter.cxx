@@ -61,7 +61,6 @@ using ::osl::MutexGuard;
 namespace
 {
 #define LOCAL_CONST_STR(i, x) sal_Char const i[sizeof(x)] = x
-#define MAP_LEN(x) x, sizeof(x) - 1
 
 LOCAL_CONST_STR( sXML_metaStreamName,       "meta.xml");
 LOCAL_CONST_STR( sXML_styleStreamName,      "styles.xml" );
@@ -340,28 +339,28 @@ sal_Int32 XMLFilter::impl_Import(
 
         // create XPropertySet with extra informatio for the filter
         /** property map for import info set */
-        comphelper::PropertyMapEntry aImportInfoMap[] =
+        comphelper::PropertyMapEntry const aImportInfoMap[] =
         {
             // necessary properties for XML progress bar at load time
-            { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "PrivateData" ), 0,
-                &::getCppuType( (Reference<XInterface> *)0 ),
+            { "ProgressRange",   0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { "ProgressMax",     0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { "ProgressCurrent", 0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { "PrivateData", 0,
+                ::getCppuType( (Reference<XInterface> *)0 ),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "BaseURI" ), 0,
-                &::getCppuType( (OUString *)0 ),
+            { "BaseURI", 0,
+                ::getCppuType( (OUString *)0 ),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamRelPath" ), 0,
-                &::getCppuType( (OUString *)0 ),
+            { "StreamRelPath", 0,
+                ::getCppuType( (OUString *)0 ),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamName" ), 0,
-                &::getCppuType( (OUString *)0 ),
+            { "StreamName", 0,
+                ::getCppuType( (OUString *)0 ),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "BuildId" ), 0,
-                &::getCppuType( (OUString *)0 ),
+            { "BuildId", 0,
+                ::getCppuType( (OUString *)0 ),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { NULL, 0, 0, NULL, 0, 0 }
+            {}
         };
         uno::Reference< beans::XPropertySet > xImportInfo(
                     comphelper::GenericPropertySet_CreateInstance(
@@ -614,14 +613,14 @@ sal_Int32 XMLFilter::impl_Export(
             m_xContext, xStorage );
 
         // property map for export info set
-        comphelper::PropertyMapEntry aExportInfoMap[] =
+        comphelper::PropertyMapEntry const aExportInfoMap[] =
         {
-            { MAP_LEN("UsePrettyPrinting"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN("BaseURI"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN("StreamRelPath"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN("StreamName"), 0, &::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN("ExportTableNumberList"), 0, &::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0 },
-            { NULL, 0, 0, NULL, 0, 0 }
+            { "UsePrettyPrinting", 0, ::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0},
+            { "BaseURI", 0, ::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { "StreamRelPath", 0, ::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { "StreamName", 0, ::getCppuType( (OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+            { "ExportTableNumberList", 0, ::getBooleanCppuType(), beans::PropertyAttribute::MAYBEVOID, 0 },
+            {}
         };
 
         uno::Reference< beans::XPropertySet > xInfoSet =

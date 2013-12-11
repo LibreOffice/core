@@ -52,11 +52,11 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),      0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),     0,  &getCppuType((OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TOKENINDEX),   0,  &getCppuType((sal_Int32*)0),                    beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ISSHAREDFMLA), 0,  &getBooleanCppuType(),                          0, 0 },
-        {0,0,0,0,0,0}
+        {SC_UNO_LINKDISPBIT,      0,  getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNO_LINKDISPNAME,     0,  getCppuType((OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNONAME_TOKENINDEX,   0,  getCppuType((sal_Int32*)0),                    beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNONAME_ISSHAREDFMLA, 0,  getBooleanCppuType(),                          0, 0 },
+        {}
     };
     return aNamedRangeMap_Impl;
 }
@@ -65,8 +65,8 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangesMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_MODIFY_BROADCAST), 0,  &getBooleanCppuType(), 0, 0 },
-        {0,0,0,0,0,0}
+        {SC_UNO_MODIFY_BROADCAST, 0,  getBooleanCppuType(), 0, 0 },
+        {}
     };
     return aNamedRangesMap_Impl;
 }

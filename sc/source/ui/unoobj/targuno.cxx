@@ -52,9 +52,9 @@ static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
 {
     static const SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((const OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {0,0,0,0,0,0}
+        {SC_UNO_LINKDISPBIT,  0,  getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
+        {SC_UNO_LINKDISPNAME, 0,  getCppuType((const OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
+        {}
     };
     return aLinkTargetMap_Impl;
 }

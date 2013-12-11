@@ -191,13 +191,12 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
-    static ::comphelper::PropertyMapEntry aEntries[] =
+    static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { MAP_CHAR_LEN( "Device" ), UNOGRAPHIC_DEVICE, &::getCppuType( (const uno::Any*)(0)), 0, 0 },
-        { MAP_CHAR_LEN( "DestinationRect" ), UNOGRAPHIC_DESTINATIONRECT, &::getCppuType( (const awt::Rectangle*)(0)), 0, 0 },
-        { MAP_CHAR_LEN( "RenderData" ), UNOGRAPHIC_RENDERDATA,  &::getCppuType( (const uno::Any*)(0)), 0, 0 },
-
-        { 0,0,0,0,0,0 }
+        { "Device", UNOGRAPHIC_DEVICE, ::getCppuType( (const uno::Any*)(0)), 0, 0 },
+        { "DestinationRect", UNOGRAPHIC_DESTINATIONRECT, ::getCppuType( (const awt::Rectangle*)(0)), 0, 0 },
+        { "RenderData", UNOGRAPHIC_RENDERDATA, ::getCppuType( (const uno::Any*)(0)), 0, 0 },
+        {}
     };
 
     pRet->acquire();

@@ -536,71 +536,67 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     // the user.
 
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry aInfoMap[] =
+    comphelper::PropertyMapEntry const aInfoMap[] =
     {
-        { "ProgressRange", sizeof("ProgressRange")-1, 0,
-              &::getCppuType((sal_Int32*)0),
+        { "ProgressRange", 0,
+              ::getCppuType((sal_Int32*)0),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { "ProgressMax", sizeof("ProgressMax")-1, 0,
-              &::getCppuType((sal_Int32*)0),
+        { "ProgressMax", 0,
+              ::getCppuType((sal_Int32*)0),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { "ProgressCurrent", sizeof("ProgressCurrent")-1, 0,
-              &::getCppuType((sal_Int32*)0),
+        { "ProgressCurrent", 0,
+              ::getCppuType((sal_Int32*)0),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { "NumberStyles", sizeof("NumberStyles")-1, 0,
-              &::getCppuType( (uno::Reference<container::XNameContainer> *) 0),
+        { "NumberStyles", 0,
+              ::getCppuType( (uno::Reference<container::XNameContainer> *) 0),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { "RecordChanges", sizeof("RecordChanges")-1, 0,
-              &::getBooleanCppuType(),
+        { "RecordChanges", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "ShowChanges", sizeof("ShowChanges")-1, 0,
-              &::getBooleanCppuType(),
+        { "ShowChanges", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "RedlineProtectionKey", sizeof("RedlineProtectionKey")-1, 0,
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-              new uno::Type(::getCppuType((Sequence<sal_Int8>*)0)),
-#else
-              &::getCppuType((Sequence<sal_Int8>*)0),
-#endif
+        { "RedlineProtectionKey", 0,
+              ::getCppuType((Sequence<sal_Int8>*)0),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "PrivateData", sizeof("PrivateData")-1, 0,
-              &::getCppuType( (uno::Reference<XInterface> *)0 ),
+        { "PrivateData", 0,
+              ::getCppuType( (uno::Reference<XInterface> *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "BaseURI", sizeof("BaseURI")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { "BaseURI", 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { "StreamRelPath", 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamName", sizeof("StreamName")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { "StreamName", 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // properties for insert modes
-        { "StyleInsertModeFamilies", sizeof("StyleInsertModeFamilies")-1, 0,
-              &::getCppuType((Sequence<OUString>*)0),
+        { "StyleInsertModeFamilies", 0,
+              ::getCppuType((Sequence<OUString>*)0),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StyleInsertModeOverwrite", sizeof("StyleInsertModeOverwrite")-1, 0,
-              &::getBooleanCppuType(),
+        { "StyleInsertModeOverwrite", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "TextInsertModeRange", sizeof("TextInsertModeRange")-1, 0,
-              &::getCppuType( (uno::Reference<text::XTextRange> *) 0),
+        { "TextInsertModeRange", 0,
+              ::getCppuType( (uno::Reference<text::XTextRange> *) 0),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { "AutoTextMode", sizeof("AutoTextMode")-1, 0,
-              &::getBooleanCppuType(),
+        { "AutoTextMode", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "OrganizerMode", sizeof("OrganizerMode")-1, 0,
-              &::getBooleanCppuType(),
+        { "OrganizerMode", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         // #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
-        { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
-              &::getBooleanCppuType(),
+        { "ShapePositionInHoriL2R", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
-        { "BuildId", sizeof("BuildId")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { "BuildId", 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
 
         // Add property, which indicates, if a text document in OpenOffice.org
@@ -609,12 +605,12 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         //       read using the OpenOffice.org file format. Thus, e.g. for text
         //       documents in StarOffice 5.2 binary file format this property
         //       will be sal_True.
-        { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
-              &::getBooleanCppuType(),
+        { "TextDocInOOoFileFormat", 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "SourceStorage", sizeof("SourceStorage")-1, 0, &embed::XStorage::static_type(),
+        { "SourceStorage", 0, embed::XStorage::static_type(),
           ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { NULL, 0, 0, NULL, 0, 0 }
+        {}
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(

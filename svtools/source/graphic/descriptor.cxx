@@ -296,18 +296,17 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
-    static ::comphelper::PropertyMapEntry aEntries[] =
+    static ::comphelper::PropertyMapEntry const aEntries[] =
     {
-        { MAP_CHAR_LEN( "GraphicType" ), UNOGRAPHIC_GRAPHICTYPE, &::getCppuType( (const sal_Int8*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "MimeType" ), UNOGRAPHIC_MIMETYPE, &::getCppuType( (const OUString*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "SizePixel" ), UNOGRAPHIC_SIZEPIXEL, &::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "Size100thMM" ), UNOGRAPHIC_SIZE100THMM,    &::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "BitsPerPixel" ), UNOGRAPHIC_BITSPERPIXEL, &::getCppuType( (const sal_uInt8*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "Transparent" ), UNOGRAPHIC_TRANSPARENT, &::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "Alpha" ), UNOGRAPHIC_ALPHA, &::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "Animated" ), UNOGRAPHIC_ANIMATED, &::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
-
-        { 0,0,0,0,0,0 }
+        { "GraphicType", UNOGRAPHIC_GRAPHICTYPE, ::getCppuType( (const sal_Int8*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "MimeType", UNOGRAPHIC_MIMETYPE, ::getCppuType( (const OUString*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "SizePixel", UNOGRAPHIC_SIZEPIXEL, ::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "Size100thMM", UNOGRAPHIC_SIZE100THMM, ::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "BitsPerPixel", UNOGRAPHIC_BITSPERPIXEL, ::getCppuType( (const sal_uInt8*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "Transparent", UNOGRAPHIC_TRANSPARENT, ::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "Alpha", UNOGRAPHIC_ALPHA, ::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { "Animated", UNOGRAPHIC_ANIMATED, ::getCppuType( (const sal_Bool*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        {}
     };
 
     pRet->acquire();

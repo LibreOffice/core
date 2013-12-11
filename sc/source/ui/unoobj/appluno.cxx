@@ -139,25 +139,25 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSettingsPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_DOAUTOCP), 0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_ENTERED),  0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_EXPREF),   0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_EXTFMT),   0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_LINKUPD),  0,  &getCppuType((sal_Int16*)0),        0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_MARKHDR),  0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_METRIC),   0,  &getCppuType((sal_Int16*)0),        0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_MOVEDIR),  0,  &getCppuType((sal_Int16*)0),        0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_MOVESEL),  0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_PRALLSH),  0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_PREMPTY),  0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_RANGEFIN), 0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_SCALE),    0,  &getCppuType((sal_Int16*)0),        0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_STBFUNC),  0,  &getCppuType((sal_Int16*)0),        0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_ULISTS),   0,  &getCppuType((uno::Sequence<OUString>*)0), 0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_PRMETRICS),0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_USETABCOL),0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_REPLWARN), 0,  &getBooleanCppuType(),              0, 0},
-        {0,0,0,0,0,0}
+        {SC_UNONAME_DOAUTOCP, 0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_ENTERED,  0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_EXPREF,   0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_EXTFMT,   0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_LINKUPD,  0,  getCppuType((sal_Int16*)0),        0, 0},
+        {SC_UNONAME_MARKHDR,  0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_METRIC,   0,  getCppuType((sal_Int16*)0),        0, 0},
+        {SC_UNONAME_MOVEDIR,  0,  getCppuType((sal_Int16*)0),        0, 0},
+        {SC_UNONAME_MOVESEL,  0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_PRALLSH,  0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_PREMPTY,  0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_RANGEFIN, 0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_SCALE,    0,  getCppuType((sal_Int16*)0),        0, 0},
+        {SC_UNONAME_STBFUNC,  0,  getCppuType((sal_Int16*)0),        0, 0},
+        {SC_UNONAME_ULISTS,   0,  getCppuType((uno::Sequence<OUString>*)0), 0, 0},
+        {SC_UNONAME_PRMETRICS,0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_USETABCOL,0,  getBooleanCppuType(),              0, 0},
+        {SC_UNONAME_REPLWARN, 0,  getBooleanCppuType(),              0, 0},
+        {}
     };
     return aSettingsPropertyMap_Impl;
 }
