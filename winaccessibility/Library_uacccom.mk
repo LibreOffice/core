@@ -21,7 +21,8 @@ $(eval $(call gb_Library_set_include,UAccCOM,\
 
 $(eval $(call gb_Library_add_defs,UAccCOM,\
 	-DUACCCOM_DLLIMPLEMENTATION \
-	-D_UNICODE=1 \
+	-D_UNICODE \
+	-DUNICODE \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,UAccCOM))
@@ -54,6 +55,7 @@ $(eval $(call gb_Library_add_ldflags,UAccCOM,\
 ))
 
 $(eval $(call gb_Library_use_libraries,UAccCOM,\
+	vcl \
 	cppu \
 	sal \
 ))

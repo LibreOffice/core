@@ -23,6 +23,9 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccEditableText.h"
+
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -47,6 +50,8 @@ using namespace std;
  */
 STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK XInterface#
@@ -72,6 +77,8 @@ STDMETHODIMP CAccEditableText::copyText(long startOffset, long endOffset)
  */
 STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if( !pRXEdtTxt.is() )
@@ -94,6 +101,8 @@ STDMETHODIMP CAccEditableText::deleteText(long startOffset, long endOffset)
  */
 STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (text == NULL)
@@ -121,6 +130,8 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
  */
 STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if( !pRXEdtTxt.is() )
@@ -142,6 +153,8 @@ STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)
  */
 STDMETHODIMP CAccEditableText::pasteText(long offset)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if( !pRXEdtTxt.is() )
@@ -165,6 +178,8 @@ STDMETHODIMP CAccEditableText::pasteText(long offset)
  */
 STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BSTR * text)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -192,6 +207,8 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
  */
 STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, BSTR * attributes)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -461,7 +478,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
  */
 STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInterface)
 {
-
+    // internal IUNOXWrapper - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
 

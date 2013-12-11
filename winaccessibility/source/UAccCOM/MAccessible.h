@@ -20,7 +20,6 @@
 #ifndef __MACCESSIBLE_H_
 #define __MACCESSIBLE_H_
 
-#include <windows.h>
 #include "resource.h"       // main symbols
 #include <map>
 #include <com/sun/star/accessibility/XAccessible.hpp>

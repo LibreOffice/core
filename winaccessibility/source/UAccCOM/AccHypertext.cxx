@@ -23,6 +23,8 @@
 #include "AccHyperLink.h"
 #include "acccommon.h"
 
+#include <vcl/svapp.hxx>
+
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
@@ -276,6 +278,8 @@ STDMETHODIMP CAccHypertext::scrollSubstringTo(long startIndex, long endIndex,enu
 */
 STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -301,6 +305,8 @@ STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
 */
 STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hyperlink)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -347,6 +353,8 @@ STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAccessibleHyperlink **hype
 */
 STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex, long *hyperlinkIndex)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -371,7 +379,7 @@ STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charIndex, long *hyperlinkIn
 */
 STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterface)
 {
-
+    // internal IUNOXWrapper - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
 

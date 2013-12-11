@@ -28,6 +28,8 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
+#include <vcl/svapp.hxx>
+
 #include "AccessibleKeyStroke.h"
 
 #ifndef __ACCCOMMON_H_
@@ -107,6 +109,8 @@ void GetDfActionByUNORole(XAccessibleContext* pRContext, BSTR* pRet)
  */
 STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -129,6 +133,8 @@ STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long* nActions)
  */
 STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if( pRXAct.is() )
@@ -148,6 +154,8 @@ STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actionIndex)
  */
 STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *description)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -195,6 +203,8 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
     /* [length_is][length_is][size_is][size_is][out] */ BSTR __RPC_FAR *__RPC_FAR *keyBinding,
     /* [retval][out] */ long __RPC_FAR *nBinding)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if( !keyBinding || !nBinding)
@@ -238,7 +248,7 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
  */
 STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
 {
-
+    // internal IUNOXWrapper - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
 

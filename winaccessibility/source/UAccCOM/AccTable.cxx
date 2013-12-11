@@ -23,6 +23,9 @@
 #include "stdafx.h"
 #include "UAccCOM.h"
 #include "AccTable.h"
+
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "MAccessible.h"
 
@@ -43,6 +46,8 @@ using namespace com::sun::star::uno;
 
 STDMETHODIMP CAccTable::get_accessibleAt(long row, long column, IUnknown * * accessible)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -112,6 +117,8 @@ STDMETHODIMP CAccTable::get_caption(IUnknown * *)
   */
 STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -143,6 +150,8 @@ STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
   */
 STDMETHODIMP CAccTable::get_columnExtentAt(long row, long column, long * nColumnsSpanned)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     XAccessibleTable    *pXAccTable = GetXInterface();
@@ -174,6 +183,8 @@ STDMETHODIMP CAccTable::get_columnExtentAt(long row, long column, long * nColumn
   */
 STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *accessibleTable, long *startingRowIndex)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -222,6 +233,8 @@ STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *
   */
 STDMETHODIMP CAccTable::get_nColumns(long * columnCount)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -245,6 +258,8 @@ STDMETHODIMP CAccTable::get_nColumns(long * columnCount)
   */
 STDMETHODIMP CAccTable::get_nRows(long * rowCount)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -268,6 +283,8 @@ STDMETHODIMP CAccTable::get_nRows(long * rowCount)
   */
 STDMETHODIMP CAccTable::get_nSelectedColumns(long * columnCount)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -292,6 +309,8 @@ STDMETHODIMP CAccTable::get_nSelectedColumns(long * columnCount)
   */
 STDMETHODIMP CAccTable::get_nSelectedRows(long * rowCount)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -317,6 +336,8 @@ STDMETHODIMP CAccTable::get_nSelectedRows(long * rowCount)
   */
 STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -349,6 +370,8 @@ STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
   */
 STDMETHODIMP CAccTable::get_rowExtentAt(long row, long column, long * nRowsSpanned)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     XAccessibleTable    *pXAccTable = GetXInterface();
@@ -381,6 +404,8 @@ STDMETHODIMP CAccTable::get_rowExtentAt(long row, long column, long * nRowsSpann
   */
 STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *accessibleTable, long *startingColumnIndex)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -431,6 +456,8 @@ STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *acc
   */
 STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -468,6 +495,8 @@ STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
   */
 STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numColumns)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -503,6 +532,8 @@ STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numCol
   */
 STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -539,6 +570,8 @@ STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible)
   */
 STDMETHODIMP CAccTable::get_isColumnSelected(long column, unsigned char * isSelected)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -563,6 +596,8 @@ STDMETHODIMP CAccTable::get_isColumnSelected(long column, unsigned char * isSele
   */
 STDMETHODIMP CAccTable::get_isRowSelected(long row, unsigned char * isSelected)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -589,6 +624,8 @@ STDMETHODIMP CAccTable::get_isRowSelected(long row, unsigned char * isSelected)
   */
 STDMETHODIMP CAccTable::get_isSelected(long row, long column, unsigned char * isSelected)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -613,6 +650,8 @@ STDMETHODIMP CAccTable::get_isSelected(long row, long column, unsigned char * is
   */
 STDMETHODIMP CAccTable::selectRow(long row)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // Check XAccessibleTable reference.
@@ -655,6 +694,8 @@ STDMETHODIMP CAccTable::selectRow(long row)
   */
 STDMETHODIMP CAccTable::selectColumn(long column)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // Check XAccessibleTable reference.
@@ -698,6 +739,8 @@ STDMETHODIMP CAccTable::selectColumn(long column)
   */
 STDMETHODIMP CAccTable::unselectRow(long row)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // Check XAccessibleTable reference.
@@ -743,6 +786,8 @@ STDMETHODIMP CAccTable::unselectRow(long row)
   */
 STDMETHODIMP CAccTable::unselectColumn(long column)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // Check XAccessibleTable reference.
@@ -786,6 +831,8 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
  */
 STDMETHODIMP CAccTable::put_XInterface(hyper pXInterface)
 {
+    // internal IUNOXWrapper - no mutex meeded
+
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);
@@ -814,6 +861,8 @@ STDMETHODIMP CAccTable::put_XInterface(hyper pXInterface)
   */
 STDMETHODIMP CAccTable::get_columnIndex(long childIndex, long * columnIndex)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -836,6 +885,8 @@ STDMETHODIMP CAccTable::get_columnIndex(long childIndex, long * columnIndex)
   */
 STDMETHODIMP CAccTable::get_rowIndex(long childIndex, long * rowIndex)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -858,6 +909,8 @@ STDMETHODIMP CAccTable::get_rowIndex(long childIndex, long * rowIndex)
   */
 STDMETHODIMP CAccTable::get_childIndex(long RowIndex , long columnIndex, long * childIndex )
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -899,6 +952,8 @@ STDMETHODIMP CAccTable::get_modelChange(IA2TableModelChange  *)
 //    Number of children currently selected
 STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCount)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#
@@ -928,6 +983,8 @@ STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCount)
 //    Length of array (not more than maxChildren)
 STDMETHODIMP CAccTable::get_selectedChildren(long, long **children, long *nChildren)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     // #CHECK#

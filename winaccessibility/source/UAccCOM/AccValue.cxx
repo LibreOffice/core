@@ -21,6 +21,9 @@
 #include "UAccCOM.h"
 #include "AccValue.h"
 #include "MAccessible.h"
+
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
@@ -35,6 +38,8 @@ using namespace com::sun::star::uno;
 
 STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (currentValue == NULL)
@@ -60,6 +65,8 @@ STDMETHODIMP CAccValue::get_currentValue(VARIANT * currentValue)
    */
 STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if ( !pRXVal.is() )
@@ -138,6 +145,8 @@ STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
    */
 STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (maximumValue == NULL)
@@ -162,6 +171,8 @@ STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumValue)
    */
 STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
 {
+    SolarMutexGuard g;
+
     ENTER_PROTECTED_BLOCK
 
     if (mininumValue == NULL)
@@ -186,7 +197,7 @@ STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
    */
 STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
 {
-
+    // internal IUNOXWrapper - no mutex meeded
 
     ENTER_PROTECTED_BLOCK
 
