@@ -381,6 +381,8 @@ private:
 
     /// Writes text frame in VML format.
     void WriteVMLTextFrame(sw::Frame* pParentFrame);
+    /// Writes text frame in DML format.
+    void WriteDMLTextFrame(sw::Frame* pParentFrame);
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -732,6 +734,7 @@ private:
 
     std::vector<sw::Frame> m_aParentFrames;
     bool m_bTextFrameSyntax;
+    bool m_bDMLTextFrameSyntax;
     OStringBuffer m_aTextFrameStyle;
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;

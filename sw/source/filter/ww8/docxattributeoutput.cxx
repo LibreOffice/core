@@ -140,6 +140,9 @@ using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 
+// TODO the whole Sdr code should be factored out to a separate class.
+void lcl_startDMLAnchorInline(sax_fastparser::FSHelperPtr pSerializer, const SwFrmFmt* pFrmFmt, const Size& rSize);
+void lcl_endDMLAnchorInline(sax_fastparser::FSHelperPtr pSerializer, const SwFrmFmt* pFrmFmt);
 
 class FFDataWriterHelper
 {
@@ -397,7 +400,6 @@ void DocxAttributeOutput::WriteVMLTextFrame(sw::Frame* pParentFrame)
     m_pFlyFrameSize = 0;
     m_rExport.mpParentFrame = NULL;
 
-    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
     m_pSerializer->startElementNS( XML_v, XML_rect, xFlyAttrList );
     lcl_TextFrameShadow(m_pSerializer, rFrmFmt);
@@ -422,8 +424,77 @@ void DocxAttributeOutput::WriteVMLTextFrame(sw::Frame* pParentFrame)
 
     m_pSerializer->endElementNS( XML_v, XML_rect );
     m_pSerializer->endElementNS( XML_w, XML_pict );
-    m_pSerializer->endElementNS( XML_w, XML_r );
     m_bFrameBtLr = false;
+}
+
+void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
+{
+    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
+    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(m_rExport, nStt, nEnd, pParentFrame);
+
+    // When a frame has some low height, but automatically expanded due
+    // to lots of contents, this size contains the real size.
+    const Size aSize = pParentFrame->GetSize();
+
+    lcl_startDMLAnchorInline(m_pSerializer, &rFrmFmt, aSize);
+
+    sax_fastparser::FastAttributeList* pDocPrAttrList = m_pSerializer->createAttrList();
+    pDocPrAttrList->add(XML_id, OString::number(m_anchorId++).getStr());
+    pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
+    XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
+    m_pSerializer->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+
+    m_pSerializer->startElementNS(XML_a, XML_graphic,
+            FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+            FSEND);
+    m_pSerializer->startElementNS(XML_a, XML_graphicData,
+            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+            FSEND);
+    m_pSerializer->startElementNS(XML_wps, XML_wsp, FSEND);
+    m_pSerializer->singleElementNS(XML_wps, XML_cNvSpPr,
+            XML_txBox, "1",
+            FSEND);
+
+    // Shape properties
+    m_pSerializer->startElementNS(XML_wps, XML_spPr, FSEND);
+    m_pSerializer->startElementNS(XML_a, XML_xfrm, FSEND);
+    m_pSerializer->singleElementNS(XML_a, XML_off,
+            XML_x, "0",
+            XML_y, "0",
+            FSEND);
+    OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
+    OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
+    m_pSerializer->singleElementNS(XML_a, XML_ext,
+            XML_cx, aWidth.getStr(),
+            XML_cy, aHeight.getStr(),
+            FSEND);
+    m_pSerializer->endElementNS(XML_a, XML_xfrm);
+    m_pSerializer->singleElementNS(XML_a, XML_prstGeom,
+            XML_prst, "rect",
+            FSEND);
+    m_bDMLTextFrameSyntax = true;
+    m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
+    m_bDMLTextFrameSyntax = false;
+    m_pSerializer->endElementNS(XML_wps, XML_spPr);
+
+    m_rExport.mpParentFrame = NULL;
+    m_pSerializer->startElementNS( XML_wps, XML_txbx, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
+    m_rExport.WriteText( );
+    m_pSerializer->endElementNS( XML_w, XML_txbxContent );
+    m_pSerializer->endElementNS( XML_wps, XML_txbx );
+    m_pSerializer->singleElementNS( XML_wps, XML_bodyPr, FSEND );
+
+    m_pSerializer->endElementNS(XML_wps, XML_wsp);
+    m_pSerializer->endElementNS(XML_a, XML_graphicData);
+    m_pSerializer->endElementNS(XML_a, XML_graphic);
+    lcl_endDMLAnchorInline(m_pSerializer, &rFrmFmt);
 }
 
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
@@ -439,7 +510,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     for (size_t i = 0; i < aParentFrames.size(); ++i)
     {
         sw::Frame* pParentFrame = &aParentFrames[i];
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         WriteVMLTextFrame(pParentFrame);
+        m_pSerializer->endElementNS( XML_w, XML_r );
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
@@ -5601,6 +5674,9 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
         m_aTextFrameStyle.append(";width:").append(double(m_pFlyFrameSize->Width()) / 20);
         m_aTextFrameStyle.append("pt;height:").append(double(m_pFlyFrameSize->Height()) / 20).append("pt");
     }
+    else if (m_bDMLTextFrameSyntax)
+    {
+    }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
@@ -5649,6 +5725,9 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     {
         m_aTextFrameStyle.append(";mso-wrap-distance-left:").append(double(rLRSpace.GetLeft()) / 20).append("pt");
         m_aTextFrameStyle.append(";mso-wrap-distance-right:").append(double(rLRSpace.GetRight()) / 20).append("pt");
+    }
+    else if (m_bDMLTextFrameSyntax)
+    {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -5705,6 +5784,9 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         m_aTextFrameStyle.append(";mso-wrap-distance-top:").append(double(rULSpace.GetUpper()) / 20).append("pt");
         m_aTextFrameStyle.append(";mso-wrap-distance-bottom:").append(double(rULSpace.GetLower()) / 20).append("pt");
+    }
+    else if (m_bDMLTextFrameSyntax)
+    {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -5826,6 +5908,9 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
                 m_pFlyWrapAttrList->add(XML_side, sSide);
         }
     }
+    else if (m_bDMLTextFrameSyntax)
+    {
+    }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
@@ -5857,6 +5942,9 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
     if (m_bTextFrameSyntax)
     {
         m_aTextFrameStyle.append(";margin-top:").append(double(rFlyVert.GetPos()) / 20).append("pt");
+    }
+    else if (m_bDMLTextFrameSyntax)
+    {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -5919,6 +6007,9 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
     if (m_bTextFrameSyntax)
     {
         m_aTextFrameStyle.append(";margin-left:").append(double(rFlyHori.GetPos()) / 20).append("pt");
+    }
+    else if (m_bDMLTextFrameSyntax)
+    {
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -6007,6 +6098,9 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
         m_pFlyAttrList->add(XML_fillcolor, "#" + sColor);
     }
+    else if (m_bDMLTextFrameSyntax)
+    {
+    }
     else if ( !m_rExport.bOutPageDescs )
     {
         m_pSerializer->singleElementNS( XML_w, XML_shd,
@@ -6072,7 +6166,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
-    if (m_bTextFrameSyntax)
+    if (m_bTextFrameSyntax || m_bDMLTextFrameSyntax)
     {
         const SvxBorderLine* pLeft = rBox.GetLeft( );
         const SvxBorderLine* pTop = rBox.GetTop( );
@@ -6086,19 +6180,42 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             editeng::SvxBorderStyle eBorderStyle = pTop->GetBorderLineStyle();
             if (eBorderStyle == table::BorderLineStyle::NONE)
             {
-                m_pFlyAttrList->add(XML_stroked, "f");
-                m_pFlyAttrList->add(XML_strokeweight, "0pt");
+                if (m_bTextFrameSyntax)
+                {
+                    m_pFlyAttrList->add(XML_stroked, "f");
+                    m_pFlyAttrList->add(XML_strokeweight, "0pt");
+                }
             }
             else
             {
-                OString sColor("#" + msfilter::util::ConvertColor(pTop->GetColor()));
-                m_pFlyAttrList->add(XML_strokecolor, sColor);
-
+                OString sColor(msfilter::util::ConvertColor(pTop->GetColor()));
                 double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
-                sal_Int32 nWidth = sal_Int32(fConverted / 20);
-                m_pFlyAttrList->add(XML_strokeweight, OString::number(nWidth) + "pt");
+
+                if (m_bTextFrameSyntax)
+                {
+                    sColor = "#" + sColor;
+                    m_pFlyAttrList->add(XML_strokecolor, sColor);
+                    sal_Int32 nWidth = sal_Int32(fConverted / 20);
+                    m_pFlyAttrList->add(XML_strokeweight, OString::number(nWidth) + "pt");
+                }
+                else
+                {
+                    OString aWidth(OString::number(TwipsToEMU(fConverted)));
+                    m_pSerializer->startElementNS(XML_a, XML_ln,
+                            XML_w, aWidth.getStr(),
+                            FSEND);
+                    m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
+                    m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
+                            XML_val, sColor,
+                            FSEND);
+                    m_pSerializer->endElementNS(XML_a, XML_solidFill);
+                    m_pSerializer->endElementNS(XML_a, XML_ln);
+                }
             }
         }
+
+        if (m_bDMLTextFrameSyntax)
+            return;
 
         // v:textbox's inset attribute: inner margin values for textbox text - write only non-default values
         double fDistanceLeftTwips = double(rBox.GetDistance(BOX_LINE_LEFT));
@@ -6442,6 +6559,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_bTextFrameSyntax( false ),
+      m_bDMLTextFrameSyntax( false ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
