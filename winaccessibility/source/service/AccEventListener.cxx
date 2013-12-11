@@ -233,14 +233,20 @@ void AccEventListener::RemoveMeFromBroadcaster()
         {
             return;
         }
-        Reference<XAccessibleEventBroadcaster> const xBroadcaster(
-                m_xAccessible->getAccessibleContext(), UNO_QUERY);
-        if (xBroadcaster.is())
+        try
         {
-            //remove the lister from accessible object
-            xBroadcaster->removeAccessibleEventListener(this);
-            pAgent->NotifyDestroy(m_xAccessible.get());
+            Reference<XAccessibleEventBroadcaster> const xBroadcaster(
+                    m_xAccessible->getAccessibleContext(), UNO_QUERY);
+            if (xBroadcaster.is())
+            {
+                //remove the lister from accessible object
+                xBroadcaster->removeAccessibleEventListener(this);
+            }
         }
+        catch (Exception const&)
+        {   // may throw if it's already disposed - ignore that
+        }
+        pAgent->NotifyDestroy(m_xAccessible.get());
         m_xAccessible.clear(); // release cyclic reference
     }
     catch(...)
