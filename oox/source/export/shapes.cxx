@@ -338,19 +338,24 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
     // TODO: arc, section, cut, connector
 
     // non visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id, I32S( GetNewShapeID( xShape ) ),
-                          XML_name, IDS( Ellipse ),
-                          FSEND );
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
-    WriteNonVisualProperties( xShape );
-    pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+                XML_id, I32S( GetNewShapeID( xShape ) ),
+                XML_name, IDS( Ellipse ),
+                FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+        WriteNonVisualProperties( xShape );
+        pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    }
+    else
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, FSEND);
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
@@ -367,7 +372,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, XML_sp );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     return *this;
 }
