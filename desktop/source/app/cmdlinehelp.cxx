@@ -124,6 +124,9 @@ namespace desktop
         "          --print-to-file --printer-name nasty_lowres_printer --outdir /home/user *.doc\n"\
         "--pidfile file\n"\
         "      Store soffice.bin pid to file.\n"\
+        "-env:<VAR>[=<VALUE>]\n"\
+        "      Set a bootstrap variable.\n"\
+        "      Eg. -env:UserInstallation=file:///tmp/test to set a non-default user profile path.\n"\
         "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
     OUString ReplaceStringHookProc(const OUString& rStr);
