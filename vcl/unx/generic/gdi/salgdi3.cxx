@@ -48,7 +48,7 @@
 
 #include <vcl/sysdata.hxx>
 #include "generic/printergfx.hxx"
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 #include "vcl/jobdata.hxx"
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/svapp.hxx"

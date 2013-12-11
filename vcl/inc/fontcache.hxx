@@ -22,8 +22,9 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/fontmanager.hxx>
 #include <boost/unordered_map.hpp>
+
+#include "fontmanager.hxx"
 
 namespace psp
 {

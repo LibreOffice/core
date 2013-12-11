@@ -25,7 +25,7 @@
 
 #include "generic/printergfx.hxx"
 #include "fontsubset.hxx"
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 
 #include <tools/gen.hxx>
 

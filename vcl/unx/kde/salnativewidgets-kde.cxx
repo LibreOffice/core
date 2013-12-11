@@ -28,7 +28,7 @@
 #include <unx/kde/kdedata.hxx>
 
 #include <vcl/settings.hxx>
-#include <vcl/fontmanager.hxx>
+#include "fontmanager.hxx"
 #include <vcl/vclenum.hxx>
 #include <rtl/ustrbuf.hxx>
 

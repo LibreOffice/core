@@ -36,7 +36,7 @@
 #include <boost/unordered_map.hpp>
 
 #include "vcl/vclenum.hxx"
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 #include <vcl/decoview.hxx>
 
 typedef struct _cairo_font_options cairo_font_options_t;

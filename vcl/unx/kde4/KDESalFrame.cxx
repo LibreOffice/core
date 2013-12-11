@@ -42,7 +42,8 @@
 
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/fontmanager.hxx>
+
+#include "fontmanager.hxx"
 
 #include <svdata.hxx>
 

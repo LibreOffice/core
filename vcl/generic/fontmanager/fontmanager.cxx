@@ -30,7 +30,7 @@
 #include "impfont.hxx"
 #include "svdata.hxx"
 #include "generic/geninst.h"
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"
 #include <vcl/embeddedfontshelper.hxx>

@@ -20,7 +20,7 @@
 
 #include "fontcache.hxx"
 #include "impfont.hxx"
-#include <vcl/fontmanager.hxx>
+#include "fontmanager.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>

@@ -24,7 +24,7 @@
 #include "glyphset.hxx"
 
 #include "generic/printergfx.hxx"
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 #include "vcl/helper.hxx"
 
 #include "osl/thread.h"

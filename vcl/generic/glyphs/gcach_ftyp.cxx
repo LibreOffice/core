@@ -63,7 +63,7 @@ typedef const FT_Vector* FT_Vector_CPtr;
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 
 // the gamma table makes artificial bold look better for CJK glyphs
 static unsigned char aGammaTable[257];

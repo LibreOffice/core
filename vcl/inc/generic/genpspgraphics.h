@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 
 
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 
 #include "vclpluginapi.h"
 #include "salgdi.hxx"

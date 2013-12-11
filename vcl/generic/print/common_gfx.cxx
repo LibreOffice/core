@@ -23,7 +23,7 @@
 
 #include "generic/printergfx.hxx"
 #include "generic/printerjob.hxx"
-#include "vcl/fontmanager.hxx"
+#include "fontmanager.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/printerinfomanager.hxx"
 
