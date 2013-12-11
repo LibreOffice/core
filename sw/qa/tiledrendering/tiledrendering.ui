@@ -46,7 +46,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">contextWidth</property>
+                    <property name="label" translatable="no">contextWidth</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -60,7 +60,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">contextHeight</property>
+                    <property name="label" translatable="no">contextHeight</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -74,7 +74,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">tilePosX</property>
+                    <property name="label" translatable="no">tilePosX</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -88,7 +88,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">tilePosY</property>
+                    <property name="label" translatable="no">tilePosY</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -102,7 +102,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">tileWidth</property>
+                    <property name="label" translatable="no">tileWidth</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -116,7 +116,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">tileHeight</property>
+                    <property name="label" translatable="no">tileHeight</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -245,7 +245,7 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="buttonChooseDocument">
-                    <property name="label" translatable="yes">choose document</property>
+                    <property name="label" translatable="no">choose document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -260,7 +260,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="buttonRenderTile">
-                    <property name="label" translatable="yes">render tile</property>
+                    <property name="label" translatable="no">render tile</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
