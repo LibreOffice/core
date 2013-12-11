@@ -37,7 +37,7 @@
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
-#include <basic/global.hxx>
+#include "global.hxx"
 #include <sbunoobj.hxx>
 #include "basrid.hxx"
 #include "sbintern.hxx"
