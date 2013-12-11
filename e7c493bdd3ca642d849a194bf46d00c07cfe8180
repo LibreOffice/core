@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///yk\u003d",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-12-11T12:49:28Z",
+      "side": 1,
+      "message": "this is wrong, as the value should be of signed sal_Int32 type in the generated output (which the \"u\" will prevent)\n\narguably better to fix FileStream::operator\u003c\u003c, either adding an additional sal_Int32 overload or replacing the sal_uInt32 one (whatever works better, didn\u0027t inspect all the relevant code)",
+      "revId": "e7c493bdd3ca642d849a194bf46d00c07cfe8180",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
