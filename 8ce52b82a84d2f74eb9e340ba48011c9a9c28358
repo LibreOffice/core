@@ -70,6 +70,24 @@
       "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///10\u003d",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T01:06:29Z",
+      "side": 1,
+      "message": "no, not \u0027won\u0027t\u0027 but \u0027shouldn\u0027t\u0027\nIf there was guaranteed 4 series, why the check xLabeledSeq.is() ?\nthe fact is that bug happen... and if a bug make one of these series missing, then the consequence of the code abouve would be to re-order the series.\nif value-max is missing for instance, then after saving (whithout error because the error case is not handled, merely stepped around) value-max contain value-min value-min contain value-last and it is value-last that appears then to be missing.\n\nimo you do not need an extra variable n_idxVAl\njust using\nsingleElement( ..... , idx+1)\nwill achieve the goal of your patch, without introducing a new behavior in corner cases...\n\nand I did look at MS doc and you\u0027ll notice that not all these series are mandatory\nhttp://office.microsoft.com/en-us/excel-help/creating-a-stock-chart-HA001117942.aspx\nnamely (and out excel importer supports it) the values-first series is optional.",
+      "parentUuid": "AAAAbH///3Y\u003d",
+      "revId": "8ce52b82a84d2f74eb9e340ba48011c9a9c28358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
