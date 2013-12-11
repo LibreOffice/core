@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///vY\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T18:26:42Z",
+      "side": 1,
+      "message": "trailing spaces...",
+      "revId": "217bf3c1ad7f3c25ef42af19868e02e2beb9699b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///vU\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3306,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-11T18:26:42Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "217bf3c1ad7f3c25ef42af19868e02e2beb9699b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
