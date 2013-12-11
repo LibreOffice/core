@@ -263,10 +263,10 @@ en-US = "Bengali (India)"
 en-US = "Installs the Bengali (India) user interface"
 
 [STR_NAME_MODULE_LANGPACK_OR]
-en-US = "Oriya"
+en-US = "Odia"
 
 [STR_DESC_MODULE_LANGPACK_OR]
-en-US = "Installs the Oriya user interface"
+en-US = "Installs the Odia user interface"
 
 [STR_NAME_MODULE_LANGPACK_MR]
 en-US = "Marathi"

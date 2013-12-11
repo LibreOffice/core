@@ -39,7 +39,7 @@ namespace vcl
             BENGALI                                     = 16,
             GURMUKHI                                    = 17,
             GUJARATI                                    = 18,
-            ORIYA                                       = 19,
+            ODIA                                        = 19,
             TAMIL                                       = 20,
             TELUGU                                      = 21,
             KANNADA                                     = 22,

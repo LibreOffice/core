@@ -538,7 +538,7 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
         case LANGUAGE_GUJARATI & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_GUJARATI);
             break;
-        case LANGUAGE_ORIYA & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_ODIA & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_ORIYA);
             break;
         case LANGUAGE_TAMIL & LANGUAGE_MASK_PRIMARY:
@@ -667,8 +667,8 @@ namespace
             fprintf(stderr, "GURMUKHI\n");
         if (rIn[vcl::UnicodeCoverage::GUJARATI])
             fprintf(stderr, "GUJARATI\n");
-        if (rIn[vcl::UnicodeCoverage::ORIYA])
-            fprintf(stderr, "ORIYA\n");
+        if (rIn[vcl::UnicodeCoverage::ODIA])
+            fprintf(stderr, "ODIA\n");
         if (rIn[vcl::UnicodeCoverage::TAMIL])
             fprintf(stderr, "TAMIL\n");
         if (rIn[vcl::UnicodeCoverage::TELUGU])
@@ -1226,7 +1226,7 @@ UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCove
         case vcl::UnicodeCoverage::GUJARATI:
             eRet = USCRIPT_GUJARATI;
             break;
-        case vcl::UnicodeCoverage::ORIYA:
+        case vcl::UnicodeCoverage::ODIA:
             eRet = USCRIPT_ORIYA;
             break;
         case vcl::UnicodeCoverage::TAMIL:

@@ -147,7 +147,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_INDIA,                LANGUAGE_URDU_INDIA,                    true    },
     { COUNTRY_INDIA,                LANGUAGE_PUNJABI,                       false   },
     { COUNTRY_INDIA,                LANGUAGE_GUJARATI,                      false   },
-    { COUNTRY_INDIA,                LANGUAGE_ORIYA,                         false   },
+    { COUNTRY_INDIA,                LANGUAGE_ODIA,                          false   },
     { COUNTRY_INDIA,                LANGUAGE_TAMIL,                         false   },
     { COUNTRY_INDIA,                LANGUAGE_TELUGU,                        false   },
     { COUNTRY_INDIA,                LANGUAGE_KANNADA,                       false   },

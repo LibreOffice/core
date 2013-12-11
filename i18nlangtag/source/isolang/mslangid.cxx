@@ -393,7 +393,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
                 case LANGUAGE_MANIPURI            & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_MARATHI             & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_NEPALI              & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_ORIYA               & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_ODIA                & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_PUNJABI             & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_SANSKRIT            & LANGUAGE_MASK_PRIMARY:
                 case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY:

@@ -303,8 +303,8 @@ VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
         case LANGUAGE_BURMESE       & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x1040 - '0';  // myanmar
             break;
-        case LANGUAGE_ORIYA         & LANGUAGE_MASK_PRIMARY:
-            nOffset = 0x0B66 - '0';  // oriya
+        case LANGUAGE_ODIA          & LANGUAGE_MASK_PRIMARY:
+            nOffset = 0x0B66 - '0';  // odia
             break;
         case LANGUAGE_TAMIL         & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0BE7 - '0';  // tamil

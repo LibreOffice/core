@@ -113,7 +113,7 @@ nso      0  1132
 ny       0  1598
 oc       0  1154   # Occitan-lengadocian
 om       0  2162
-or       0  1096   # Oriya
+or       0  1096   # Odia
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
 pap      0  2171 

@@ -1268,7 +1268,7 @@
 					<xsl:attribute name="number:transliteration-language">gu</xsl:attribute>
 					<xsl:attribute name="number:transliteration-country">IN</xsl:attribute>
 				</xsl:when>
-				<!-- Oriya (India), #08 -->
+				<!-- Odia (India), #08 -->
 				<xsl:when test="$number-shape-code = 8">
 					<xsl:attribute name="number:transliteration-language">or</xsl:attribute>
 					<xsl:attribute name="number:transliteration-country">IN</xsl:attribute>
@@ -2102,7 +2102,7 @@
 				<xsl:attribute name="number:country">NO</xsl:attribute>
 			</xsl:when>
 			<xsl:when test="$language-country-code = 1096">
-				<!-- Oriya (India), #0448 -->
+				<!-- Odia (India), #0448 -->
 				<xsl:attribute name="number:language">or</xsl:attribute>
 				<xsl:attribute name="number:country">IN</xsl:attribute>
 			</xsl:when>

@@ -217,7 +217,7 @@ sal_uInt32 decimalStringToNumber(
             value = c - 0x0C66;
         else if( c >= 0x0BE6 ) // tamil digits
             value = c - 0x0BE6;
-        else if( c >= 0x0B66 ) // oriya digits
+        else if( c >= 0x0B66 ) // odia digits
             value = c - 0x0B66;
         else if( c >= 0x0AE6 ) // gujarati digits
             value = c - 0x0AE6;

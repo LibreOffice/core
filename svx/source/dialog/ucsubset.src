@@ -103,9 +103,9 @@ Resource RID_SUBSETMAP
     {
         Text [ en-US ] = "Gujarati";
     };
-    String RID_SUBSETSTR_ORIYA
+    String RID_SUBSETSTR_ODIA
     {
-        Text [ en-US ] = "Oriya";
+        Text [ en-US ] = "Odia";
     };
     String RID_SUBSETSTR_TAMIL
     {

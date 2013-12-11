@@ -295,16 +295,16 @@ en-US = "Bengali (India)"
 en-US = "Installs Bengali (India) support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_OR]
-en-US = "Oriya"
+en-US = "Odia"
 
 [STR_DESC_MODULE_LANGPACK_OR]
-en-US = "Installs Oriya support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Odia support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_OR_IN]
-en-US = "Oriya"
+en-US = "Odia"
 
 [STR_DESC_MODULE_LANGPACK_OR_IN]
-en-US = "Installs Oriya support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Odia support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_MR]
 en-US = "Marathi"

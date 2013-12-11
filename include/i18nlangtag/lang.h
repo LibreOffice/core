@@ -310,7 +310,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_NORWEGIAN_NYNORSK          0x0814
 #define LANGUAGE_NORWEGIAN_NYNORSK_LSO      0x7814
 #define LANGUAGE_OCCITAN_FRANCE             0x0482  /* obsoletes LANGUAGE_USER_OCCITAN 0x0625 */
-#define LANGUAGE_ORIYA                      0x0448
+#define LANGUAGE_ODIA                       0x0448
 #define LANGUAGE_OROMO                      0x0472
 #define LANGUAGE_PAPIAMENTU                 0x0479
 #define LANGUAGE_PASHTO                     0x0463

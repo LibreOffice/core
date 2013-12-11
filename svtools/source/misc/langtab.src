@@ -141,7 +141,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Nepali (India)" ; LANGUAGE_NEPALI_INDIA ; > ;
         < "Norwegian, Bokmål" ; LANGUAGE_NORWEGIAN_BOKMAL ; > ;
         < "Norwegian, Nynorsk" ; LANGUAGE_NORWEGIAN_NYNORSK ; > ;
-        < "Oriya" ; LANGUAGE_ORIYA ; > ;
+        < "Odia" ; LANGUAGE_ODIA ; > ;
         < "Polish" ; LANGUAGE_POLISH ; > ;
         < "Portuguese (Angola)" ; LANGUAGE_USER_PORTUGUESE_ANGOLA ; > ;
         < "Portuguese (Portugal)" ; LANGUAGE_PORTUGUESE ; > ;

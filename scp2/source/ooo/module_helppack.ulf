@@ -257,10 +257,10 @@ en-US = "Bengali (India)"
 en-US = "Installs Bengali (India) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_OR]
-en-US = "Oriya"
+en-US = "Odia"
 
 [STR_DESC_MODULE_HELPPACK_OR]
-en-US = "Installs Oriya help in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Odia help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_MR]
 en-US = "Marathi"

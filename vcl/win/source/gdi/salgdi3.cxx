@@ -313,7 +313,7 @@ static Unicode2LangType aLangFromCodeChart[]= {
     {0x0900, 0x097F, LANGUAGE_HINDI},               // Devanagari
     {0x0980, 0x09FF, LANGUAGE_BENGALI},             // Bengali
     {0x0A80, 0x0AFF, LANGUAGE_GUJARATI},            // Gujarati
-    {0x0B00, 0x0B7F, LANGUAGE_ORIYA},               // Oriya
+    {0x0B00, 0x0B7F, LANGUAGE_ODIA},                // Odia
     {0x0B80, 0x0BFF, LANGUAGE_TAMIL},               // Tamil
     {0x0C00, 0x0C7F, LANGUAGE_TELUGU},              // Telugu
     {0x0C80, 0x0CFF, LANGUAGE_KANNADA},             // Kannada

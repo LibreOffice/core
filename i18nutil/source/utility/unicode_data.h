@@ -1567,7 +1567,7 @@ static const sal_Unicode UnicodeScriptType[][2] = {
     {0x0980, 0x09ff}, // 15. Bengali
     {0x0a00, 0x0a7f}, // 16. Gurmukhi
     {0x0a80, 0x0aff}, // 17. Gujarati
-    {0x0b00, 0x0b7f}, // 18. Oriya
+    {0x0b00, 0x0b7f}, // 18. Odia
     {0x0b80, 0x0bff}, // 19. Tamil
     {0x0c00, 0x0c7f}, // 20. Telugu
     {0x0c80, 0x0cff}, // 21. Kannada

@@ -43,7 +43,7 @@
 #define RID_SUBSETSTR_BENGALI                   (RID_SUBSET_START + 16)
 #define RID_SUBSETSTR_GURMUKHI                  (RID_SUBSET_START + 17)
 #define RID_SUBSETSTR_GUJARATI                  (RID_SUBSET_START + 18)
-#define RID_SUBSETSTR_ORIYA                     (RID_SUBSET_START + 19)
+#define RID_SUBSETSTR_ODIA                      (RID_SUBSET_START + 19)
 #define RID_SUBSETSTR_TAMIL                     (RID_SUBSET_START + 20)
 #define RID_SUBSETSTR_TELUGU                    (RID_SUBSET_START + 21)
 #define RID_SUBSETSTR_KANNADA                   (RID_SUBSET_START + 22)

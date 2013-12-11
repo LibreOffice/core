@@ -861,7 +861,7 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x0A80, 0x0AFF, RID_SUBSETSTR_GUJARATI ) );
                     break;
                 case UBLOCK_ORIYA:
-                    aAllSubsets.push_back( Subset( 0x0B00, 0x0B7F, RID_SUBSETSTR_ORIYA ) );
+                    aAllSubsets.push_back( Subset( 0x0B00, 0x0B7F, RID_SUBSETSTR_ODIA ) );
                     break;
                 case UBLOCK_TAMIL:
                     aAllSubsets.push_back( Subset( 0x0B80, 0x0BFF, RID_SUBSETSTR_TAMIL ) );

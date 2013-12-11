@@ -347,7 +347,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_KONKANI,                    "kok", "IN", 0     },
     { LANGUAGE_NEPALI,                      "ne", "NP", 0     },
     { LANGUAGE_NEPALI_INDIA,                "ne", "IN", 0     },
-    { LANGUAGE_ORIYA,                       "or", "IN", 0     },
+    { LANGUAGE_ODIA,                        "or", "IN", 0     },
     { LANGUAGE_PUNJABI,                     "pa", "IN", 0     },
     { LANGUAGE_SANSKRIT,                    "sa", "IN", 0     },
     { LANGUAGE_TAMIL,                       "ta", "IN", 0     },

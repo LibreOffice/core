@@ -755,7 +755,7 @@ namespace connectivity
                 "ne-NP", "Nepali",
                 "nl-NL", "Dutch",
                 "nn-NO", "Norwegian",
-                "or-IN", "Oriya",
+                "or-IN", "Odia",
                 "pa-IN", "Punjabi",
                 "pl-PL", "Polish",
                 "ps-AF", "Pashto",
