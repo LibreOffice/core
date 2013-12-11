@@ -60,8 +60,6 @@ $(eval $(call gb_Library_use_libraries,UAccCOM,\
 
 $(eval $(call gb_Library_use_externals,UAccCOM,\
 	boost_headers \
-	icuuc \
-	icui18n \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,UAccCOM,\
