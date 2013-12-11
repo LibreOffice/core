@@ -59,7 +59,7 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
-        {0,0,0,0,0,0}
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static sal_Bool bTwipsSet = false;
 
@@ -69,7 +69,7 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         //  (headers/footers are in twips)
 
         SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
-        while (pEntry->pName)
+        while (!pEntry->aName.isEmpty())
         {
             if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
                    pEntry->nWID == EE_CHAR_FONTHEIGHT_CJK ||

@@ -577,8 +577,8 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
 {
     static const SfxItemPropertyMapEntry aBibProps_Impl[] =
     {
-        { MAP_CHAR_LEN("BibliographyDataFieldNames"), 0, &::getCppuType((Sequence<PropertyValue>*)0), PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0,0}
+        { OUString("BibliographyDataFieldNames"), 0, ::getCppuType((Sequence<PropertyValue>*)0), PropertyAttribute::READONLY, 0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static Reference< XPropertySetInfo >  xRet =
         SfxItemPropertySet(aBibProps_Impl).getPropertySetInfo();

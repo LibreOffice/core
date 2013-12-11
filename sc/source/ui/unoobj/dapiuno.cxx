@@ -95,17 +95,17 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotDescriptorBaseMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_DP_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_GRANDTOTAL_NAME),0,&getCppuType((OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_IGNORE_EMPTYROWS),   0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_REPEATEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_ROWGRAND),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SERVICEARG),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SHOWFILTER),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SOURCESERVICE),   0,  &getCppuType((OUString*)0), 0, 0 },
-        {0,0,0,0,0,0}
+        {OUString(SC_UNO_DP_COLGRAND),     0,  getBooleanCppuType(),  0, 0 },
+        {OUString(SC_UNO_DP_DRILLDOWN),    0,  getBooleanCppuType(),  0, 0 },
+        {OUString(SC_UNO_DP_GRANDTOTAL_NAME),0,getCppuType((OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
+        {OUString(SC_UNO_DP_IGNORE_EMPTYROWS),   0,  getBooleanCppuType(),  0, 0 },
+        {OUString(SC_UNO_DP_IMPORTDESC),   0,  getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
+        {OUString(SC_UNO_DP_REPEATEMPTY),     0,  getBooleanCppuType(),  0, 0 },
+        {OUString(SC_UNO_DP_ROWGRAND),     0,  getBooleanCppuType(),  0, 0 },
+        {OUString(SC_UNO_DP_SERVICEARG),   0,  getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
+        {OUString(SC_UNO_DP_SHOWFILTER),     0,  getBooleanCppuType(),  0, 0 },
+        {OUString(SC_UNO_DP_SOURCESERVICE),   0,  getCppuType((OUString*)0), 0, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDataPilotDescriptorBaseMap_Impl;
 }
@@ -117,23 +117,23 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
     using namespace ::com::sun::star::beans::PropertyAttribute;
     static const SfxItemPropertyMapEntry aDataPilotFieldMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_AUTOSHOW),     0,  &getCppuType((DataPilotFieldAutoShowInfo*)0),   MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_FUNCTION),     0,  &getCppuType((GeneralFunction*)0),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_GROUPINFO),    0,  &getCppuType((DataPilotFieldGroupInfo*)0),      MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HASAUTOSHOW),  0,  &getBooleanCppuType(),                          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HASLAYOUTINFO),0,  &getBooleanCppuType(),                          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HASREFERENCE), 0,  &getBooleanCppuType(),                          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HASSORTINFO),  0,  &getBooleanCppuType(),                          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ISGROUP),      0,  &getBooleanCppuType(),                          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LAYOUTINFO),   0,  &getCppuType((DataPilotFieldLayoutInfo*)0),     MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ORIENT),       0,  &getCppuType((DataPilotFieldOrientation*)0),    MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_REFERENCE),    0,  &getCppuType((DataPilotFieldReference*)0),      MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SELPAGE),      0,  &getCppuType((OUString*)0),                     0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHOWEMPTY),    0,  &getBooleanCppuType(),                          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SORTINFO),     0,  &getCppuType((DataPilotFieldSortInfo*)0),       MAYBEVOID, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SUBTOTALS),    0,  &getCppuType((Sequence<GeneralFunction>*)0),    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_USESELPAGE),   0,  &getBooleanCppuType(),                          0, 0 },
-        {0,0,0,0,0,0}
+        {OUString(SC_UNONAME_AUTOSHOW),     0,  getCppuType((DataPilotFieldAutoShowInfo*)0),   MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_FUNCTION),     0,  getCppuType((GeneralFunction*)0),              0, 0 },
+        {OUString(SC_UNONAME_GROUPINFO),    0,  getCppuType((DataPilotFieldGroupInfo*)0),      MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_HASAUTOSHOW),  0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_HASLAYOUTINFO),0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_HASREFERENCE), 0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_HASSORTINFO),  0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_ISGROUP),      0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_LAYOUTINFO),   0,  getCppuType((DataPilotFieldLayoutInfo*)0),     MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_ORIENT),       0,  getCppuType((DataPilotFieldOrientation*)0),    MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_REFERENCE),    0,  getCppuType((DataPilotFieldReference*)0),      MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_SELPAGE),      0,  getCppuType((OUString*)0),                     0, 0 },
+        {OUString(SC_UNONAME_SHOWEMPTY),    0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_SORTINFO),     0,  getCppuType((DataPilotFieldSortInfo*)0),       MAYBEVOID, 0 },
+        {OUString(SC_UNONAME_SUBTOTALS),    0,  getCppuType((Sequence<GeneralFunction>*)0),    0, 0 },
+        {OUString(SC_UNONAME_USESELPAGE),   0,  getBooleanCppuType(),                          0, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDataPilotFieldMap_Impl;
 }
@@ -144,10 +144,10 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotItemMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ISHIDDEN),     0,  &getBooleanCppuType(),          0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_POS),          0,  &getCppuType((sal_Int32*)0),    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHOWDETAIL),   0,  &getBooleanCppuType(),          0, 0 },
-        {0,0,0,0,0,0}
+        {OUString(SC_UNONAME_ISHIDDEN),     0,  getBooleanCppuType(),          0, 0 },
+        {OUString(SC_UNONAME_POS),          0,  getCppuType((sal_Int32*)0),    0, 0 },
+        {OUString(SC_UNONAME_SHOWDETAIL),   0,  getBooleanCppuType(),          0, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDataPilotItemMap_Impl;
 }

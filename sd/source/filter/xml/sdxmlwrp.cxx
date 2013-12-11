@@ -77,8 +77,6 @@ using namespace comphelper;
 
 extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
-#define MAP_LEN(x) x, sizeof(x) - 1
-
 #define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
 
 XML_STRING( sXML_metaStreamName, "meta.xml");
@@ -443,35 +441,35 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     // -------------------------------------
 
     /** property map for import info set */
-    PropertyMapEntry aImportInfoMap[] =
+    PropertyMapEntry const aImportInfoMap[] =
     {
         // necessary properties for XML progress bar at load time
-        { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "Preview" ),         0, &::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "PageLayouts" ), 0, &::getCppuType((const uno::Reference< container::XNameAccess >*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
-        { MAP_LEN( "PrivateData" ), 0,
-              &::getCppuType( (Reference<XInterface> *)0 ),
+        { OUString("ProgressRange"),   0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressMax"),     0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("ProgressCurrent"), 0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("Preview"),         0, ::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("PageLayouts"), 0, ::getCppuType((const uno::Reference< container::XNameAccess >*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { OUString("PrivateData"), 0,
+              ::getCppuType( (Reference<XInterface> *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "BaseURI" ), 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("BaseURI"), 0,
+              ::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamRelPath" ), 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("StreamRelPath"), 0,
+              ::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamName" ), 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("StreamName"), 0,
+              ::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "BuildId" ), 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("BuildId"), 0,
+              ::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "OrganizerMode" ), 0,
-              &::getBooleanCppuType(),
+        { OUString("OrganizerMode"), 0,
+              ::getBooleanCppuType(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "SourceStorage" ), 0, &embed::XStorage::static_type(),
+        { OUString("SourceStorage"), 0, embed::XStorage::static_type(),
           ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { NULL, 0, 0, NULL, 0, 0 }
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
@@ -822,33 +820,32 @@ sal_Bool SdXMLFilter::Export()
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
         /** property map for export info set */
-        PropertyMapEntry aExportInfoMap[] =
+        PropertyMapEntry const aExportInfoMap[] =
         {
-            { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-            { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressRange"),   0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressMax"),     0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("ProgressCurrent"), 0, ::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { OUString("UsePrettyPrinting"),0, ::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
-            { MAP_LEN( "PageLayoutNames" ), 0, &::getCppuType((const OUString*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
-            { MAP_LEN( "BaseURI" ), 0,
-                  &::getCppuType( (OUString *)0 ),
+            { OUString("PageLayoutNames"), 0, ::getCppuType((const OUString*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+            { OUString("BaseURI"), 0,
+                  ::getCppuType( (OUString *)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamRelPath" ), 0,
-                  &::getCppuType( (OUString *)0 ),
+            { OUString("StreamRelPath"), 0,
+                  ::getCppuType( (OUString *)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamName" ), 0,
-                  &::getCppuType( (OUString *)0 ),
+            { OUString("StreamName"), 0,
+                  ::getCppuType( (OUString *)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StyleNames" ), 0,
-                  &::getCppuType( (Sequence<OUString>*)0 ),
+            { OUString("StyleNames"), 0,
+                  ::getCppuType( (Sequence<OUString>*)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StyleFamilies" ), 0,
-                  &::getCppuType( (Sequence<sal_Int32>*)0 ),
+            { OUString("StyleFamilies"), 0,
+                  ::getCppuType( (Sequence<sal_Int32>*)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "TargetStorage" ), 0, &embed::XStorage::static_type(),
+            { OUString("TargetStorage"), 0, embed::XStorage::static_type(),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-
-            { NULL, 0, 0, NULL, 0, 0 }
+            { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );

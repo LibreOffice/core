@@ -143,19 +143,19 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     // create XPropertySet with three properties for status indicator
     comphelper::PropertyMapEntry aInfoMap[] =
     {
-        { "UsePrettyPrinting", sizeof("UsePrettyPrinting")-1, 0,
-              &::getBooleanCppuType(),
+        { OUString("UsePrettyPrinting"), 0,
+              ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0},
-        { "BaseURI", sizeof("BaseURI")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("BaseURI"), 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("StreamRelPath"), 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { "StreamName", sizeof("StreamName")-1, 0,
-              &::getCppuType( (OUString *)0 ),
+        { OUString("StreamName"), 0,
+              ::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { NULL, 0, 0, NULL, 0, 0 }
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(

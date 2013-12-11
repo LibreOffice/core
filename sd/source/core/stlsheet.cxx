@@ -77,10 +77,10 @@ static SvxItemPropertySet& GetStylePropertySet()
 {
     static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM("Family"),                 WID_STYLE_FAMILY,       &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
-        { RTL_CONSTASCII_STRINGPARAM("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  &XNameContainer::static_type(), 0,     0},
-        { RTL_CONSTASCII_STRINGPARAM("DisplayName"),            WID_STYLE_DISPNAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
-        { RTL_CONSTASCII_STRINGPARAM("Hidden"),                 WID_STYLE_HIDDEN,       &::getCppuType((bool*)0),       0,     0},
+        { OUString("Family"),                 WID_STYLE_FAMILY,       ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
+        { OUString("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  XNameContainer::static_type(), 0,     0},
+        { OUString("DisplayName"),            WID_STYLE_DISPNAME,     ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
+        { OUString("Hidden"),                 WID_STYLE_HIDDEN,       ::getCppuType((bool*)0),       0,     0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTIE,
         SHADOW_PROPERTIES
@@ -91,11 +91,11 @@ static SvxItemPropertySet& GetStylePropertySet()
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
-        { MAP_CHAR_LEN("TopBorder"),                    SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
-        { MAP_CHAR_LEN("BottomBorder"),                 SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
-        { MAP_CHAR_LEN("LeftBorder"),                   SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
-        { MAP_CHAR_LEN("RightBorder"),                  SDRATTR_TABLE_BORDER,           &::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
-        {0,0,0,0,0,0}
+        { OUString("TopBorder"),                    SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, TOP_BORDER }, \
+        { OUString("BottomBorder"),                 SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, BOTTOM_BORDER }, \
+        { OUString("LeftBorder"),                   SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, LEFT_BORDER }, \
+        { OUString("RightBorder"),                  SDRATTR_TABLE_BORDER,           ::getCppuType((const BorderLine*)0), 0, RIGHT_BORDER }, \
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -1173,10 +1173,10 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             aAny = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(),pEntry, aSet );
         }
 
-        if( *pEntry->pType != aAny.getValueType() )
+        if( pEntry->aType != aAny.getValueType() )
         {
             // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( *pEntry->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( ( pEntry->aType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
             {
                 sal_Int32 nValue = 0;
                 aAny >>= nValue;

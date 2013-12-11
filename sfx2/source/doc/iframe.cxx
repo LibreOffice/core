@@ -79,15 +79,15 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
 {
     static const SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("FrameIsAutoBorder"),    WID_FRAME_IS_AUTO_BORDER,   &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameIsAutoScroll"),    WID_FRAME_IS_AUTO_SCROLL,   &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameIsBorder"),        WID_FRAME_IS_BORDER,        &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameIsScrollingMode"), WID_FRAME_IS_SCROLLING_MODE, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameMarginHeight"),    WID_FRAME_MARGIN_HEIGHT,    &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameMarginWidth"),     WID_FRAME_MARGIN_WIDTH,     &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameName"),            WID_FRAME_NAME,             &::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameURL"),             WID_FRAME_URL,              &::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
-        {0,0,0,0,0,0}
+        { OUString("FrameIsAutoBorder"),    WID_FRAME_IS_AUTO_BORDER,   ::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameIsAutoScroll"),    WID_FRAME_IS_AUTO_SCROLL,   ::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameIsBorder"),        WID_FRAME_IS_BORDER,        ::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameIsScrollingMode"), WID_FRAME_IS_SCROLLING_MODE,::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameMarginHeight"),    WID_FRAME_MARGIN_HEIGHT,    ::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameMarginWidth"),     WID_FRAME_MARGIN_WIDTH,     ::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameName"),            WID_FRAME_NAME,             ::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
+        { OUString("FrameURL"),             WID_FRAME_URL,              ::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aIFramePropertyMap_Impl;
 }

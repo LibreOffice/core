@@ -2053,10 +2053,10 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
         // Hole Wert aus ItemSet
         aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pMap, aSet );
 
-        if( *pMap->pType != aAny.getValueType() )
+        if( pMap->aType != aAny.getValueType() )
         {
             // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( *pMap->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( ( pMap->aType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
             {
                 sal_Int32 nValue = 0;
                 aAny >>= nValue;

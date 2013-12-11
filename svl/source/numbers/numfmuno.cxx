@@ -64,20 +64,20 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),   0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_LOCALE),   0, &getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_TYPE),     0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_COMMENT),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_CURREXT),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_CURRSYM),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_DECIMALS), 0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_LEADING),  0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_NEGRED),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_STDFORM),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_THOUS),    0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_USERDEF),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_CURRABB),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {0,0,0,0,0,0}
+        {OUString(PROPERTYNAME_FMTSTR),   0, getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_LOCALE),   0, getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_TYPE),     0, getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_COMMENT),  0, getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_CURREXT),  0, getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_CURRSYM),  0, getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_DECIMALS), 0, getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_LEADING),  0, getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_NEGRED),   0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_STDFORM),  0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_THOUS),    0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_USERDEF),  0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {OUString(PROPERTYNAME_CURRABB),  0, getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aNumberFormatPropertyMap_Impl;
 }
@@ -86,11 +86,11 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(PROPERTYNAME_NOZERO),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_NULLDATE), 0, &getCppuType((util::Date*)0),  beans::PropertyAttribute::BOUND, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_STDDEC),   0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_TWODIGIT), 0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND, 0},
-        {0,0,0,0,0,0}
+        {OUString(PROPERTYNAME_NOZERO),   0, getBooleanCppuType(),         beans::PropertyAttribute::BOUND, 0},
+        {OUString(PROPERTYNAME_NULLDATE), 0, getCppuType((util::Date*)0),  beans::PropertyAttribute::BOUND, 0},
+        {OUString(PROPERTYNAME_STDDEC),   0, getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND, 0},
+        {OUString(PROPERTYNAME_TWODIGIT), 0, getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND, 0},
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aNumberSettingsPropertyMap_Impl;
 }

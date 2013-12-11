@@ -58,16 +58,15 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ANCHOR), 0, &getCppuType((uno::Reference<uno::XInterface>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP), 0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VERTPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_MOVEPROTECT), 0, &getCppuType((sal_Bool*)0), 0, 0 },
+        {OUString(SC_UNONAME_ANCHOR), 0, getCppuType((uno::Reference<uno::XInterface>*)0), 0, 0 },
+        {OUString(SC_UNONAME_HORIPOS), 0, getCppuType((sal_Int32*)0), 0, 0 },
+        {OUString(SC_UNONAME_IMAGEMAP), 0, getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
+        {OUString(SC_UNONAME_VERTPOS), 0, getCppuType((sal_Int32*)0), 0, 0 },
+        {OUString(SC_UNONAME_MOVEPROTECT), 0, getCppuType((sal_Bool*)0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
-        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((OUString*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_URL), 0, &getCppuType((OUString*)0), 0, 0 },
-
-        {0,0,0,0,0,0}
+        {OUString(SC_UNONAME_HYPERLINK), 0, getCppuType((OUString*)0), 0, 0 },
+        {OUString(SC_UNONAME_URL), 0, getCppuType((OUString*)0), 0, 0 },
+        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aShapeMap_Impl;
 }

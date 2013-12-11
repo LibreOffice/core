@@ -42,9 +42,6 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imappoly.hxx>
 
-#define MAP_LEN(x) x, sizeof(x)-1
-
-
 using namespace comphelper;
 using namespace cppu;
 using namespace com::sun::star;
@@ -126,39 +123,39 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
-PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
+PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
 {
     switch( nType )
     {
     case IMAP_OBJ_POLYGON:
         {
-            static PropertyMapEntry aPolygonObj_Impl[] =
+            static PropertyMapEntry const aPolygonObj_Impl[] =
             {
-                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
-                { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     &::getCppuType((const PointSequence*)0),    0, 0 },
-                {0,0,0,0,0,0}
+                { OUString("URL"),         HANDLE_URL,         ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Title"),       HANDLE_TITLE,       ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Description"), HANDLE_DESCRIPTION, ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Target"),      HANDLE_TARGET,      ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Name"),        HANDLE_NAME,        ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),                0, 0 },
+                { OUString("Polygon"),     HANDLE_POLYGON,     ::getCppuType((const PointSequence*)0),    0, 0 },
+                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
             return new PropertySetInfo( aPolygonObj_Impl );
         }
     case IMAP_OBJ_CIRCLE:
         {
-            static PropertyMapEntry aCircleObj_Impl[] =
+            static PropertyMapEntry const aCircleObj_Impl[] =
             {
-                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Name" ),            HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "IsActive" ),        HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
-                { MAP_LEN( "Center" ),      HANDLE_CENTER,      &::getCppuType((const awt::Point*)0),   0, 0 },
-                { MAP_LEN( "Radius" ),      HANDLE_RADIUS,      &::getCppuType((const sal_Int32*)0),    0, 0 },
-                {0,0,0,0,0,0}
+                { OUString("URL"),         HANDLE_URL,         ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Title"),       HANDLE_TITLE,       ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Description"), HANDLE_DESCRIPTION, ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Target"),      HANDLE_TARGET,      ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Name"),        HANDLE_NAME,        ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),                0, 0 },
+                { OUString("Center"),      HANDLE_CENTER,      ::getCppuType((const awt::Point*)0),   0, 0 },
+                { OUString("Radius"),      HANDLE_RADIUS,      ::getCppuType((const sal_Int32*)0),    0, 0 },
+                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
             return new PropertySetInfo( aCircleObj_Impl );
@@ -166,16 +163,16 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
     case IMAP_OBJ_RECTANGLE:
     default:
         {
-            static PropertyMapEntry aRectangleObj_Impl[] =
+            static PropertyMapEntry const aRectangleObj_Impl[] =
             {
-                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0), 0, 0 },
-                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
-                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0), 0, 0 },
-                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0), 0, 0 },
-                { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0), 0, 0 },
-                { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),            0, 0 },
-                { MAP_LEN( "Boundary" ),    HANDLE_BOUNDARY,    &::getCppuType((const awt::Rectangle*)0),   0, 0 },
-                {0,0,0,0,0,0}
+                { OUString("URL"),         HANDLE_URL,         ::getCppuType((const OUString*)0), 0, 0 },
+                { OUString("Title"),       HANDLE_TITLE,       ::getCppuType((const OUString*)0),     0, 0 },
+                { OUString("Description"), HANDLE_DESCRIPTION, ::getCppuType((const OUString*)0), 0, 0 },
+                { OUString("Target"),      HANDLE_TARGET,      ::getCppuType((const OUString*)0), 0, 0 },
+                { OUString("Name"),        HANDLE_NAME,        ::getCppuType((const OUString*)0), 0, 0 },
+                { OUString("IsActive"),    HANDLE_ISACTIVE,    ::getBooleanCppuType(),            0, 0 },
+                { OUString("Boundary"),    HANDLE_BOUNDARY,    ::getCppuType((const awt::Rectangle*)0),   0, 0 },
+                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
             return new PropertySetInfo( aRectangleObj_Impl );
