@@ -176,8 +176,6 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild( sal_Int32
         xAccessibleCell->Init();
         maChildMap[xCell] = xAccessibleCell;
 
-        xAccessibleCell->Init();
-
         Reference< XAccessible > xChild( xAccessibleCell.get() );
         return xChild;
     }
