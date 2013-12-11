@@ -39,6 +39,8 @@
 #include "compiler.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
+#include "refreshtimerprotector.hxx"
+#include "globstr.hrc"
 
 #include <../../ui/inc/docsh.hxx>
 #include <../../ui/inc/viewdata.hxx>
@@ -53,6 +55,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 
+#include <com/sun/star/task/XStatusIndicator.hpp>
+
 #define DEBUG_XL_ENCRYPTION 0
 
 using ::com::sun::star::embed::XStorage;
@@ -64,6 +68,7 @@ using ::com::sun::star::uno::XInterface;
 using ::utl::OStreamWrapper;
 using ::std::vector;
 
+using namespace com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -1089,6 +1094,12 @@ bool XclExpXmlStream::exportDocument() throw()
 {
     ScDocShell* pShell = getDocShell();
     ScDocument* pDoc = pShell->GetDocument();
+    ScRefreshTimerProtector aProt(pDoc->GetRefreshTimerControlAddress());
+
+    uno::Reference<task::XStatusIndicator> xStatusIndicator = getStatusIndicator();
+
+    xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), 100);
+
     // NOTE: Don't use SotStorage or SvStream any more, and never call
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
@@ -1120,10 +1131,13 @@ bool XclExpXmlStream::exportDocument() throw()
     // destruct at the end of the block
     {
         ExcDocument aDocRoot( aRoot );
+        xStatusIndicator->setValue(10);
         aDocRoot.ReadDoc();
+        xStatusIndicator->setValue(40);
         aDocRoot.WriteXml( *this );
     }
 
+    xStatusIndicator->end();
     mpRoot = NULL;
     return true;
 }
