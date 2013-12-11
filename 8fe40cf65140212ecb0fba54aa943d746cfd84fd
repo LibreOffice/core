@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///wU\u003d",
+        "filename": "svx/source/sidebar/paragraph/ParaPropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-11T17:22:26Z",
+      "side": 1,
+      "message": "I\u0027m not entirely convinced of passing a hard coded 0 here, but apparently there doesn\u0027t exist a proper SID_... constant yet for transparency. Yes, I noticed that in ToolboxButtonColorUpdater ctor the switch for not explicitly handled SIDs defaults to transparency.\n\nI suggest to add at least a comment on master what the 0 is for.",
+      "revId": "8fe40cf65140212ecb0fba54aa943d746cfd84fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
