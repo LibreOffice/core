@@ -18,7 +18,7 @@
     <node oor:name="generic_Text" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.filters.PlainTextFilterDetect</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>csv txt</value></prop>
+        <prop oor:name="Extensions"><value>csv tsv tab txt</value></prop>
         <prop oor:name="MediaType"><value>text/plain</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="UIName">
