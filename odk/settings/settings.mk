@@ -204,10 +204,6 @@ URLPREFIX=file://
 COMID=gcc3
 CPPU_ENV=gcc3
 
-#SALLIB=-luno_sal
-#CPPULIB=-luno_cppu
-#CPPUHELPERLIB=-luno_cppuhelperC52
-#SALHELPERLIB=-luno_salhelperC52
 SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)

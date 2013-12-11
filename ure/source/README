@@ -19,7 +19,7 @@
 Overview of URE installation
 -----------------------------
 
-Linux x86, Solaris x86, and Solaris SPARC:
+ELF platforms (Linux, Solaris, *BSD):
 
 /opt/openoffice.org/ure/LICENSE
 /opt/openoffice.org/ure/THIRDPARTYLICENSEREADME.html
@@ -29,13 +29,10 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/bin/regview
 /opt/openoffice.org/ure/bin/javaldx
 /opt/openoffice.org/ure/lib/libuno_cppu.so.3
-/opt/openoffice.org/ure/lib/libuno_cppuhelpergcc3.so.3  [Linux x86 only]
-/opt/openoffice.org/ure/lib/libuno_cppuhelperC52.so.3  [Solaris only]
-/opt/openoffice.org/ure/lib/libuno_purpenvhelpergcc3.so.3  [Linux x86 only]
-/opt/openoffice.org/ure/lib/libuno_purpenvhelperC52.so.3  [Solaris only]
+/opt/openoffice.org/ure/lib/libuno_cppuhelpergcc3.so.3
+/opt/openoffice.org/ure/lib/libuno_purpenvhelpergcc3.so.3
 /opt/openoffice.org/ure/lib/libuno_sal.so.3
-/opt/openoffice.org/ure/lib/libuno_salhelpergcc3.so.3  [Linux x86 only]
-/opt/openoffice.org/ure/lib/libuno_salhelperC52.so.3  [Solaris only]
+/opt/openoffice.org/ure/lib/libuno_salhelpergcc3.so.3
 /opt/openoffice.org/ure/share/java/unoloader.jar
 /opt/openoffice.org/ure/share/java/juh.jar
 /opt/openoffice.org/ure/share/java/jurt.jar
@@ -57,8 +54,7 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/lib/libsunjavapluginlo.so  [private]
 /opt/openoffice.org/ure/lib/JREProperties.class  [private]
 /opt/openoffice.org/ure/lib/jvmfwk3rc  [private]
-/opt/openoffice.org/ure/lib/libgcc3_uno.so  [private; Linux x86 only]
-/opt/openoffice.org/ure/lib/libsunpro5_uno.so  [private; Solaris only]
+/opt/openoffice.org/ure/lib/libgcc3_uno.so  [private]
 /opt/openoffice.org/ure/lib/libjava_uno.so  [private]
 /opt/openoffice.org/ure/lib/libunsafe_uno_uno.so  [private]
 /opt/openoffice.org/ure/lib/libaffine_uno_uno.so  [private]
@@ -185,9 +181,9 @@ the SDK Developer's Guide.
 UNO type or UNO service information.  For more details, see the SDK Developer's
 Guide.
 
-- javaldx is a helper program on Linux x86, Solaris x86, and Solaris SPARC that
-enables Java executables to use a Java VM, such as the Sun JDK/JRE.  Executables
-such as uno run this helper automatically.
+- javaldx is a helper program on Linux, Solaris, and *BSD that
+enables Java executables to use a Java VM, such as OpenJDK or the Sun JDK/JRE.
+Executables such as uno run this helper automatically.
 
 - cppu, cppuhelper, purpenvhelper, sal, and salhelper are the public C++ UNO
 runtime dynamic libraries that client code can call.  For details on the
@@ -207,8 +203,8 @@ For more details, see the "Deploying a URE" section of this README.
 Deploying a URE
 ---------------
 
-By default, the URE is installed in /opt/openoffice.org/ure on Linux x86,
-Solaris x86, and Solaris SPARC, and in Program Files\URE on Windows. If you
+By default, the URE is installed in /opt/openoffice.org/ure on Linux,
+Solaris, and *BSD, and in Program Files\URE on Windows. If you
 want, you can override this location when you install the URE, for example, with
 rpm --relocate on Linux.  The URE is designed so that multiple instances of the
 URE can coexist on a single system in different locations.
@@ -232,7 +228,7 @@ the URE.
 The UNO_TYPES and UNO_SERVICES variables automatically search the following
 locations for types.rdb and services.rdb files:
 
-Linux x86, Solaris x86, and Solaris SPARC:
+Linux, Solaris, and *BSD:
 
 - <URE installation>/share/misc/ types.rdb and services.rdb, respectively
 - any URLs listed in the public deployment variables URE_MORE_TYPES and
@@ -320,8 +316,8 @@ C++ and Java UNO Components
 C++ UNO components run from within the uno executable can depend on an
 environment in which the public C++ UNO runtime dynamic libraries (cppu,
 cppuhelper, purpenvhelper, sal, salhelper) and the external dynamic libraries
-(libxml2 etc.) are already available (that is, on Linux x86, Solaris x86, and
-Solaris SPARC, a component dynamic library need not make sure that the UNO
+(libxml2 etc.) are already available (that is, on Linux, Solaris, and
+*BSD, a component dynamic library need not make sure that the UNO
 runtime dynamic libraries it needs can be found on its RPATH).
 
 Similarly, Java UNO components can depend on an environment in which the public
