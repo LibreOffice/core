@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///y0\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-11T12:33:18Z",
+      "side": 1,
+      "message": "You don\u0027t want to loop the entire array, which may contain more positions than the actual text is long. Beside that, it does not contain pointers, so using NULL is confusing, it\u0027s also not a NULL character, the array contains utf16 positions. And actually starts with 0, so the loop will never be executed.",
+      "revId": "79e6159a7ae3a47a483d7ea16481ab4eb612b6bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///yw\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-11T12:33:18Z",
+      "side": 1,
+      "message": "Looping the number of array elements to advance code points might accidentally work in Japanese if mostly one character is one word, but the wordboundary array contains word boundary positions (in utf16 offsets!) that are completely different for other languages and one boundary involves many characters.",
+      "revId": "79e6159a7ae3a47a483d7ea16481ab4eb612b6bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///ys\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-11T12:33:18Z",
+      "side": 0,
+      "message": "The basic idea here seems to be to add the number of characters in an aCache.wordboundary element to the startPos respectively endPos. That could be\n\n boundary.endPos +\u003d aCache.wordboundary[i];\n boundary.startPos +\u003d aCache.wordboundary[i-1];\n\nbut that may not work if there are surrogates (which actually is worth a check, maybe it does and using iterateCodePoints() isn\u0027t needed at this place?), so a loop that does iterateCodePoints(\u0026counter,1) until counter\u003e\u003daCache.wordboundary[i] would be correct and then boundary.endPos+\u003dcounter. Same for startPos and aCache.wordboundary[i-1].\n\nI suggest to step through this in the debugger and analyze what the code really does and what it should do.",
+      "revId": "3535fa12ddd2a0845ab13f31ab7177dc02860205",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
