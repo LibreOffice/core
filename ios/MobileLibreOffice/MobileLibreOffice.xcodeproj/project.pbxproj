@@ -267,6 +267,7 @@
 		BE82BE4B1822D10F00A447B5 /* ctfonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctfonts.cxx; path = ../../vcl/quartz/ctfonts.cxx; sourceTree = "<group>"; };
 		BE82BE4D1822D10F00A447B5 /* ctlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctlayout.cxx; path = ../../vcl/quartz/ctlayout.cxx; sourceTree = "<group>"; };
 		BE82BE4E1822D10F00A447B5 /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
+		BEC9DABC1858BA39009CCCB3 /* svdpagv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdpagv.cxx; path = ../../svx/source/svdraw/svdpagv.cxx; sourceTree = "<group>"; };
 		BEE68B5D185715EE0049ECE0 /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
 		BEE68B5E185715EE0049ECE0 /* salgdicommon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdicommon.cxx; path = ../../vcl/quartz/salgdicommon.cxx; sourceTree = "<group>"; };
 		BEE68B5F185715EE0049ECE0 /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
@@ -484,6 +485,7 @@
 			isa = PBXGroup;
 			children = (
 				BEE68B62185746D20049ECE0 /* basebmp */,
+				BEC9DABA1858B9DB009CCCB3 /* svx */,
 				BE82BDB61822617C00A447B5 /* sw */,
 				BE82BDB51822617500A447B5 /* vcl */,
 			);
@@ -701,6 +703,14 @@
 				BEE68B61185715EE0049ECE0 /* utils.cxx */,
 			);
 			name = quartz;
+			sourceTree = "<group>";
+		};
+		BEC9DABA1858B9DB009CCCB3 /* svx */ = {
+			isa = PBXGroup;
+			children = (
+				BEC9DABC1858BA39009CCCB3 /* svdpagv.cxx */,
+			);
+			name = svx;
 			sourceTree = "<group>";
 		};
 		BEE68B62185746D20049ECE0 /* basebmp */ = {
