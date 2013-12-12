@@ -22,10 +22,6 @@
 #include "nsCOMPtr.h"
 #include "nsISupports.h"
 #include "nsString.h"
-#if defined __SUNPRO_CC
-#pragma disable_warn
-    // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
-#endif
 #include "nsIRegistry.h"
 #include "nsXPIDLString.h"
 #include "nsVoidArray.h"

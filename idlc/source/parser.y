@@ -210,9 +210,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 }
 
 // Suppress any warnings from generated code:
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4273 4701 4702)
 #endif

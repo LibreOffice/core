@@ -18,12 +18,7 @@
  */
 
 #include <stddef.h>
-
-/* Solaris 8 has no C99 stdint.h, and Solaris generally seems not to miss it for
-   SIZE_MAX: */
-#if !defined __SUNPRO_C
 #include <stdint.h>
-#endif
 
 #include "system.h"
 

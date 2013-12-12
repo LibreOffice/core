@@ -41,15 +41,13 @@ namespace bridges { namespace cpp_uno { namespace shared {
 
 namespace {
 
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) \
-    || (defined(__GNUC__) && defined(__APPLE__))
+#if (defined(__GNUC__) && defined(__APPLE__))
 static OUString * s_pStaticOidPart = 0;
 #endif
 
 const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
 {
-#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) \
-    || (defined(__GNUC__) && defined(__APPLE__)))
+#if ! (defined(__GNUC__) && defined(__APPLE__))
     static OUString * s_pStaticOidPart = 0;
 #endif
     if (! s_pStaticOidPart)
@@ -66,8 +64,7 @@ const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
             {
                 aRet.append( (sal_Int32)ar[i], 16 );
             }
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) \
-    || (defined(__GNUC__) && defined(__APPLE__))
+#if (defined(__GNUC__) && defined(__APPLE__))
             s_pStaticOidPart = new OUString( aRet.makeStringAndClear() );
 #else
             static OUString s_aStaticOidPart(

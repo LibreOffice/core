@@ -22,10 +22,6 @@
 #include "nsIDirectoryService.h"
 #include "nsILocalFile.h"
 #include "nsString.h"
-#if defined __SUNPRO_CC
-#pragma disable_warn
-    // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
-#endif
 
 #include "post_include_mozilla.h"
 
