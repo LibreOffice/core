@@ -21,6 +21,10 @@
 #ifndef _SC_ACCESSIBLESPREADSHEET_HXX
 #define _SC_ACCESSIBLESPREADSHEET_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "AccessibleTableBase.hxx"
 #include "viewdata.hxx"
 
@@ -92,6 +96,7 @@ public:
     void BoundingBoxChanged();
     void VisAreaChanged();
 
+private:
     ///=====  SfxListener  =====================================================
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -135,7 +140,7 @@ public:
                     throw (::com::sun::star::uno::RuntimeException,
                             ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    ScAccessibleCell* GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
+    rtl::Reference<ScAccessibleCell> GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
     virtual sal_Bool SAL_CALL
@@ -258,7 +263,7 @@ private:
     ScRangeList*    mpMarkedRanges;
     std::vector<ScMyAddress>* mpSortedMarkedCells;
     ScAccessibleDocument* mpAccDoc;
-    ScAccessibleCell*   mpAccCell;
+    rtl::Reference<ScAccessibleCell> mpAccCell;
     Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
@@ -300,7 +305,7 @@ private:
     ScAddress m_aFormulaActiveCell;
     MAP_ADDR_XACC m_mapFormulaSelectionSend;
     VEC_MYADDR m_vecFormulaLastMyAddr;
-    ScAccessibleCell*   m_pAccFormulaCell;
+    rtl::Reference<ScAccessibleCell> m_pAccFormulaCell;
     sal_uInt16 m_nMinX;
     sal_uInt16 m_nMaxX;
     sal_Int32 m_nMinY;

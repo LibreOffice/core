@@ -26,6 +26,7 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <rtl/ref.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
@@ -46,7 +47,16 @@ class ScAccessibleCell
         public  ScAccessibleCellAttributeImpl
 {
 public:
-    //=====  internal  ========================================================
+    static rtl::Reference<ScAccessibleCell> create(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
+        ScTabViewShell* pViewShell,
+        ScAddress& rCellAddress,
+        sal_Int32 nIndex,
+        ScSplitPos eSplitPos,
+        ScAccessibleDocument* pAccDoc);
+
+private:
     ScAccessibleCell(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,

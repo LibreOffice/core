@@ -50,7 +50,19 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+rtl::Reference<ScAccessibleCell> ScAccessibleCell::create(
+        const uno::Reference<XAccessible>& rxParent,
+        ScTabViewShell* pViewShell,
+        ScAddress& rCellAddress,
+        sal_Int32 nIndex,
+        ScSplitPos eSplitPos,
+        ScAccessibleDocument* pAccDoc)
+{
+    rtl::Reference<ScAccessibleCell> x(new ScAccessibleCell(
+        rxParent, pViewShell, rCellAddress, nIndex, eSplitPos, pAccDoc));
+    x->Init();
+    return x;
+}
 
 ScAccessibleCell::ScAccessibleCell(
         const uno::Reference<XAccessible>& rxParent,
