@@ -204,7 +204,7 @@ namespace
         static const struct
         {
             const char * mpFilterName;
-            unsigned mnFilterNameLen;
+            size_t mnFilterNameLen;
         } szMSFilterNames [] =
         {
             { pFilterExcel4, strlen( pFilterExcel4 ) },
