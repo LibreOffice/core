@@ -2230,6 +2230,68 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    return product;\n";
         ss << "}";
 }
+void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
+        formula::DoubleVectorRefToken *>(tmpCur);
+    size_t nCurWindowSize = pCurDVR->GetArrayLength() <
+        pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
+        pCurDVR->GetRefRowSize() ;
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double tmp =0;\n";
+    ss << "    double count=0;\n";
+    ss << "    int i ;\n";
+    GenTmpVariables(ss,vSubArguments);
+    ss << "    for (i = ";
+    if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
+    } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
+    } else {
+        ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
+    }
+    ss << "    {\n";
+    if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+    {
+        ss << "        int doubleIndex =i+gid0;\n";
+    }else
+    {
+        ss << "        int doubleIndex =i;\n";
+    }
+    ss << "        int singleIndex =gid0;\n";
+    int m = 0;
+    CheckSubArgumentIsNan(ss,vSubArguments,0);
+    CheckSubArgumentIsNan(ss,vSubArguments,1);
+    ss << "        if ( isequal( tmp0 , tmp1 ) ) \n";
+    ss << "        {";
+    if(vSubArguments.size() == 2)
+        ss << "            tmp += tmp0;\n";
+    else
+    {
+        CheckSubArgumentIsNan(ss,vSubArguments,2);
+        ss << "            tmp += tmp2;\n";
+    }
+    ss << "            count+=1.0;\n";
+    ss << "        }\n";
+    ss << "    }\n";
+    ss << "    if(count!=0)\n";
+    ss << "        tmp=tmp/count;\n";
+    ss << "    else\n";
+    ss << "        tmp= 0 ;\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
+
 
 }}
 
