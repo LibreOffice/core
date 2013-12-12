@@ -64,7 +64,6 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,desktop,\
     StaticLibrary_winextendloaderenv \
-    StaticLibrary_winlauncher \
     Executable_crashrep.com \
     Executable_quickstart \
     Executable_sbase \
