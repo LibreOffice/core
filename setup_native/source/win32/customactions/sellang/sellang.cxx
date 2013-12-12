@@ -112,7 +112,7 @@ langid_to_string( LANGID langid )
     CASE(ne, NEPALI);
     CASE(nl, DUTCH);
     CASE(ns, SOTHO);
-    CASE(or, ODIA);
+    CASE(or, ORIYA);
     CASE(pa, PUNJABI);
     CASE(pl, POLISH);
     CASE(pt, PORTUGUESE);
