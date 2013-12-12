@@ -258,6 +258,7 @@ public:
     void testDatabaseFormulaDvar();
     void testDatabaseFormulaDvarp();
     void testMathFormulaAverageIf();
+    void testDatabaseFormulaDcount();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -447,6 +448,7 @@ public:
     CPPUNIT_TEST(testDatabaseFormulaDvar);
     CPPUNIT_TEST(testDatabaseFormulaDvarp);
     CPPUNIT_TEST(testMathFormulaAverageIf);
+    CPPUNIT_TEST(testDatabaseFormulaDcount);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5011,6 +5013,29 @@ void ScOpenclTest:: testLogicalFormulaXor()
         double fLibre = pDoc->GetValue(ScAddress(1, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(1, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-333]
+void ScOpenclTest::testDatabaseFormulaDcount()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/database/dcount.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/database/dcount.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 32; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(9,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(10,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
