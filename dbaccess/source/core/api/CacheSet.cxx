@@ -78,10 +78,13 @@ OUString OCacheSet::getIdentifierQuoteString() const
     return sQuote;
 }
 
-void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUString& /*i_sRowSetFilter*/)
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUString &i_sRowSetFilter)
 {
     SAL_INFO("dbaccess", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
+
+    m_sRowSetFilter = i_sRowSetFilter;
+
     if(_xDriverSet.is())
     {
         m_xDriverSet = _xDriverSet;
@@ -664,11 +667,6 @@ Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException,
 bool OCacheSet::isResultSetChanged() const
 {
     return false;
-}
-
-void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
-{
-    SAL_WARN("dbaccess", "Illegal call!");
 }
 
 void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)

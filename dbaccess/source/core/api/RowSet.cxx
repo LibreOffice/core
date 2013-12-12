@@ -1991,6 +1991,10 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                 aColumns,*this,m_aColumnsMutex,aNames);
         }
     }
+    else // !m_bCommandFacetsDirty
+    {
+        impl_rebuild_throw(_rClearForNotification);
+    }
     checkCache();
     // notify the rowset listeners
     notifyAllListeners(_rClearForNotification);

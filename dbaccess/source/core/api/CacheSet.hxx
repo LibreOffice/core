@@ -53,6 +53,7 @@ namespace dbaccess
         sal_Bool                                    m_bInserted;
         sal_Bool                                    m_bUpdated;
         sal_Bool                                    m_bDeleted;
+        OUString                                    m_sRowSetFilter;
 
         OCacheSet(sal_Int32 i_nMaxRows);
         virtual ~OCacheSet();
@@ -135,7 +136,7 @@ namespace dbaccess
         virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) = 0;
 
         virtual bool isResultSetChanged() const;
-        virtual void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        virtual void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet) = 0;
         virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_aChangedColumns);
         virtual bool columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow);
         virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const ::std::vector<sal_Int32>& i_aChangedColumns);

@@ -1680,7 +1680,6 @@ void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 
 sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
 {
-    OSL_ENSURE( _nNewEndPos - _nNewStartPos == m_nFetchSize, "reFillMatrix called with Start/EndPos not m_nFetchSize apart");
     const TOldRowSetRows::const_iterator aOldRowEnd = m_aOldRows.end();
     for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
     {
@@ -1724,6 +1723,7 @@ bool ORowSetCache::isResultSetChanged() const
 
 void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
 {
+    m_xSet = _xDriverSet;
     m_xMetaData.set(Reference< XResultSetMetaDataSupplier >(_xDriverSet,UNO_QUERY)->getMetaData());
     m_pCacheSet->reset(_xDriverSet);
 

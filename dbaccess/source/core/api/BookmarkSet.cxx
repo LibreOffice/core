@@ -43,6 +43,11 @@ void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const OUS
     m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
 
+void OBookmarkSet::reset(const Reference< XResultSet>& _xDriverSet)
+{
+    construct(_xDriverSet, m_sRowSetFilter);
+}
+
 Any SAL_CALL OBookmarkSet::getBookmark() throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OBookmarkSet::getBookmark" );
