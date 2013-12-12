@@ -378,8 +378,10 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
                 return S_OK;
             }
             *ppdispChild = GetChildInterface(varChild.lVal);
+            if (!(*ppdispChild))
+                return S_FALSE;
             (*ppdispChild)->AddRef();
-            return (*ppdispChild)?S_OK:S_FALSE;
+            return S_OK;
         }
         return S_FALSE;
 
