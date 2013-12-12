@@ -570,7 +570,7 @@ Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (Index
 // XElementAccess
 Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeException)
 {
-    return XShape::static_type();
+    return cppu::UnoType<XShape>::get();
 }
 
 sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  ) throw (RuntimeException)

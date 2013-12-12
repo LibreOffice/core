@@ -652,53 +652,53 @@ const struct {
         const char          *name;
         GInterfaceInitFunc   aInit;
         GetGIfaceType        aGetGIfaceType;
-        const uno::Type &  (*aGetUnoType) (void *);
+        const uno::Type &  (*aGetUnoType) ();
 } aTypeTable[] = {
 // re-location heaven:
     {
         "Comp", (GInterfaceInitFunc) componentIfaceInit,
         atk_component_get_type,
-        accessibility::XAccessibleComponent::static_type
+        cppu::UnoType<accessibility::XAccessibleComponent>::get
     },
     {
         "Act",  (GInterfaceInitFunc) actionIfaceInit,
         atk_action_get_type,
-        accessibility::XAccessibleAction::static_type
+        cppu::UnoType<accessibility::XAccessibleAction>::get
     },
     {
         "Txt",  (GInterfaceInitFunc) textIfaceInit,
         atk_text_get_type,
-        accessibility::XAccessibleText::static_type
+        cppu::UnoType<accessibility::XAccessibleText>::get
     },
     {
         "Val",  (GInterfaceInitFunc) valueIfaceInit,
         atk_value_get_type,
-        accessibility::XAccessibleValue::static_type
+        cppu::UnoType<accessibility::XAccessibleValue>::get
     },
     {
         "Tab",  (GInterfaceInitFunc) tableIfaceInit,
         atk_table_get_type,
-        accessibility::XAccessibleTable::static_type
+        cppu::UnoType<accessibility::XAccessibleTable>::get
     },
     {
         "Edt",  (GInterfaceInitFunc) editableTextIfaceInit,
         atk_editable_text_get_type,
-        accessibility::XAccessibleEditableText::static_type
+        cppu::UnoType<accessibility::XAccessibleEditableText>::get
     },
     {
         "Img",  (GInterfaceInitFunc) imageIfaceInit,
         atk_image_get_type,
-        accessibility::XAccessibleImage::static_type
+        cppu::UnoType<accessibility::XAccessibleImage>::get
     },
     {
         "Hyp",  (GInterfaceInitFunc) hypertextIfaceInit,
         atk_hypertext_get_type,
-        accessibility::XAccessibleHypertext::static_type
+        cppu::UnoType<accessibility::XAccessibleHypertext>::get
     },
     {
         "Sel",  (GInterfaceInitFunc) selectionIfaceInit,
         atk_selection_get_type,
-        accessibility::XAccessibleSelection::static_type
+        cppu::UnoType<accessibility::XAccessibleSelection>::get
     }
     // AtkDocument is a nastily broken interface (so far)
     //  we could impl. get_document_type perhaps though.
@@ -715,7 +715,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
 
     for( i = 0; i < aTypeTableSize; i++ )
     {
-        if( isOfType( pAccessible, aTypeTable[i].aGetUnoType(0) ) )
+        if( isOfType( pAccessible, aTypeTable[i].aGetUnoType() ) )
         {
             aTypeName += aTypeTable[i].name;
             bTypes[i] = TRUE;

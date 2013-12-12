@@ -52,7 +52,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return word::XHeaderFooter::static_type(0);
+        return cppu::UnoType<word::XHeaderFooter>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -104,7 +104,7 @@ uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::
 uno::Type
 SwVbaHeadersFooters::getElementType() throw (uno::RuntimeException)
 {
-    return word::XHeaderFooter::static_type(0);
+    return cppu::UnoType<word::XHeaderFooter>::get();
 }
 uno::Reference< container::XEnumeration >
 

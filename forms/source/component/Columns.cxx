@@ -155,21 +155,21 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 {
     TypeBag aTypes( OGridColumn_BASE::getTypes() );
     // erase the types which we do not support
-    aTypes.removeType( XFormComponent::static_type() );
-    aTypes.removeType( XServiceInfo::static_type() );
-    aTypes.removeType( XBindableValue::static_type() );
-    aTypes.removeType( XPropertyContainer::static_type() );
+    aTypes.removeType( cppu::UnoType<XFormComponent>::get() );
+    aTypes.removeType( cppu::UnoType<XServiceInfo>::get() );
+    aTypes.removeType( cppu::UnoType<XBindableValue>::get() );
+    aTypes.removeType( cppu::UnoType<XPropertyContainer>::get() );
 
     // but re-add their base class(es)
-    aTypes.addType( XChild::static_type() );
+    aTypes.addType( cppu::UnoType<XChild>::get() );
 
     Reference< XTypeProvider > xProv;
     if ( query_aggregation( m_xAggregate, xProv ))
         aTypes.addTypes( xProv->getTypes() );
 
-    aTypes.removeType( XTextRange::static_type() );
-    aTypes.removeType( XSimpleText::static_type() );
-    aTypes.removeType( XText::static_type() );
+    aTypes.removeType( cppu::UnoType<XTextRange>::get() );
+    aTypes.removeType( cppu::UnoType<XSimpleText>::get() );
+    aTypes.removeType( cppu::UnoType<XText>::get() );
 
     return aTypes.getTypes();
 }

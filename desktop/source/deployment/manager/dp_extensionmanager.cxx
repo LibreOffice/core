@@ -1386,7 +1386,7 @@ void ExtensionManager::checkInstall(
                 static_cast<OWeakObject *>(this), displayName));
         bool approve = false, abort = false;
         if (! dp_misc::interactContinuation(
-                request, task::XInteractionApprove::static_type(),
+                request, cppu::UnoType<task::XInteractionApprove>::get(),
                 cmdEnv, &approve, &abort ))
         {
             OSL_ASSERT( !approve && !abort );
@@ -1419,7 +1419,7 @@ void ExtensionManager::checkUpdate(
             oldExtension ) ) );
     bool replace = false, abort = false;
     if (! dp_misc::interactContinuation(
-            request, task::XInteractionApprove::static_type(),
+            request, cppu::UnoType<task::XInteractionApprove>::get(),
             xCmdEnv, &replace, &abort )) {
         OSL_ASSERT( !replace && !abort );
         throw css::deployment::DeploymentException(
@@ -1494,7 +1494,7 @@ void ExtensionManager::check()
 void ExtensionManager::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
-        util::XModifyListener::static_type() );
+        cppu::UnoType<util::XModifyListener>::get() );
     if (pContainer != 0) {
         pContainer->forEach<util::XModifyListener>(
             boost::bind(&util::XModifyListener::modified, _1,

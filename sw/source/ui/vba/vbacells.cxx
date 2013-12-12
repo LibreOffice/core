@@ -90,7 +90,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return word::XCell::static_type(0);
+        return cppu::UnoType<word::XCell>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -176,7 +176,7 @@ void SAL_CALL SwVbaCells::SetHeight( float height, sal_Int32 heightrule ) throw 
 uno::Type
 SwVbaCells::getElementType() throw (uno::RuntimeException)
 {
-    return word::XCell::static_type(0);
+    return cppu::UnoType<word::XCell>::get();
 }
 
 uno::Reference< container::XEnumeration >

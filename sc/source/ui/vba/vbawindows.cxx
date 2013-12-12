@@ -159,7 +159,7 @@ public:
     //XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return sheet::XSpreadsheetDocument::static_type(0);
+        return cppu::UnoType<sheet::XSpreadsheetDocument>::get();
     }
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
@@ -214,7 +214,7 @@ ScVbaWindows::createCollectionObject( const css::uno::Any& aSource )
 uno::Type
 ScVbaWindows::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XWindows::static_type(0);
+    return cppu::UnoType<excel::XWindows>::get();
 }
 
 

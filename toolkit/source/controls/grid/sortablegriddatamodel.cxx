@@ -272,7 +272,7 @@ namespace toolkit
     void SortableGridDataModel::impl_broadcast( void ( SAL_CALL XGridDataListener::*i_listenerMethod )( const GridDataEvent & ),
             GridDataEvent const & i_publicEvent, MethodGuard& i_instanceLock )
     {
-        ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( XGridDataListener::static_type() );
+        ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( cppu::UnoType<XGridDataListener>::get() );
         if ( pListeners == NULL )
             return;
 
@@ -717,13 +717,13 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SortableGridDataModel::addGridDataListener( const Reference< XGridDataListener >& i_listener ) throw (RuntimeException)
     {
-        rBHelper.addListener( XGridDataListener::static_type(), i_listener );
+        rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SortableGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& i_listener ) throw (RuntimeException)
     {
-        rBHelper.removeListener( XGridDataListener::static_type(), i_listener );
+        rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------

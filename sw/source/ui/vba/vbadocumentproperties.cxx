@@ -727,7 +727,7 @@ protected:
 // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return  XDocumentProperty::static_type(0);
+        return  cppu::UnoType<XDocumentProperty>::get();
     }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -754,7 +754,7 @@ SwVbaBuiltinDocumentProperties::Add( const OUString& /*Name*/, ::sal_Bool /*Link
 uno::Type SAL_CALL
 SwVbaBuiltinDocumentProperties::getElementType() throw (uno::RuntimeException)
 {
-    return  XDocumentProperty::static_type(0);
+    return  cppu::UnoType<XDocumentProperty>::get();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
@@ -852,7 +852,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return  XDocumentProperty::static_type(0);
+        return  cppu::UnoType<XDocumentProperty>::get();
     }
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)

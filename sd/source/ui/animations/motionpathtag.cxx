@@ -1279,11 +1279,11 @@ void SAL_CALL MotionPathTag::disposing( const EventObject& /*Source*/ ) throw (R
 
 Any SAL_CALL MotionPathTag::queryInterface( const ::com::sun::star::uno::Type& aType ) throw (RuntimeException)
 {
-    if( aType == XChangesListener::static_type() )
+    if( aType == cppu::UnoType<XChangesListener>::get() )
         return Any( Reference< XChangesListener >( this ) );
-    if( aType == XEventListener::static_type() )
+    if( aType == cppu::UnoType<XEventListener>::get() )
         return Any( Reference< XEventListener >( this ) );
-    if( aType == XInterface::static_type() )
+    if( aType == cppu::UnoType<XInterface>::get() )
         return Any( Reference< XInterface >( this ) );
 
     return Any();

@@ -1252,7 +1252,7 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
 
     ::cppu::OInterfaceContainerHelper *const pContainer(
         m_pImpl->m_Listeners.getContainer(
-            util::XRefreshListener::static_type()));
+            cppu::UnoType<util::XRefreshListener>::get()));
     if (pContainer)
     {
         lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
@@ -1266,7 +1266,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.addInterface(
-            util::XRefreshListener::static_type(), xListener);
+            cppu::UnoType<util::XRefreshListener>::get(), xListener);
 }
 
 void SAL_CALL SwXDocumentIndex::removeRefreshListener(
@@ -1275,7 +1275,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.removeInterface(
-            util::XRefreshListener::static_type(), xListener);
+            cppu::UnoType<util::XRefreshListener>::get(), xListener);
 }
 
 void SAL_CALL
@@ -1386,7 +1386,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.addInterface(
-            lang::XEventListener::static_type(), xListener);
+            cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
 
 void SAL_CALL
@@ -1396,7 +1396,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.removeInterface(
-            lang::XEventListener::static_type(), xListener);
+            cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
 
 OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
@@ -2518,7 +2518,7 @@ throw (uno::RuntimeException)
 uno::Type SAL_CALL
 SwXDocumentIndexes::getElementType() throw (uno::RuntimeException)
 {
-    return text::XDocumentIndex::static_type();
+    return cppu::UnoType<text::XDocumentIndex>::get();
 }
 
 sal_Bool SAL_CALL

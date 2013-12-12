@@ -240,7 +240,7 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
 
 Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    if ( _rType.equals( XScriptInvocationContext::static_type() ) )
+    if ( _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() ) )
     {
         OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::queryInterface: did not initialize this, yet!" );
         if ( !!m_aDocScriptSupport && *m_aDocScriptSupport )
@@ -269,7 +269,7 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  ) throw (RuntimeExcep
             aTypes.getConstArray(),
             aTypes.getConstArray() + aTypes.getLength(),
             aStrippedTypes.getArray(),
-            ::std::bind2nd( ::std::equal_to< Type >(), XScriptInvocationContext::static_type() )
+            ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
         );
         aTypes = aStrippedTypes;
     }

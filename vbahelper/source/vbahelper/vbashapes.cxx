@@ -105,7 +105,7 @@ ScVbaShapes::createCollectionObject( const css::uno::Any& aSource ) throw (uno::
 uno::Type
 ScVbaShapes::getElementType() throw (uno::RuntimeException)
 {
-    return ooo::vba::msforms::XShape::static_type(0);
+    return cppu::UnoType<ooo::vba::msforms::XShape>::get();
 }
 
 OUString

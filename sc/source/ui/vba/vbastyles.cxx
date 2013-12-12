@@ -62,7 +62,7 @@ ScVbaStyles::createCollectionObject(const uno::Any& aObject)
 uno::Type SAL_CALL
 ScVbaStyles::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XStyle::static_type(0);
+    return cppu::UnoType<excel::XStyle>::get();
 }
 
 class EnumWrapper : public EnumerationHelper_BASE

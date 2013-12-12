@@ -150,7 +150,7 @@ public:
     //XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return excel::XWorksheet::static_type(0);
+        return cppu::UnoType<excel::XWorksheet>::get();
     }
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)

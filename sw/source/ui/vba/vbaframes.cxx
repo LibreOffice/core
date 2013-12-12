@@ -62,7 +62,7 @@ SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent, con
 uno::Type
 SwVbaFrames::getElementType() throw (uno::RuntimeException)
 {
-    return word::XFrame::static_type(0);
+    return cppu::UnoType<word::XFrame>::get();
 }
 
 uno::Reference< container::XEnumeration >

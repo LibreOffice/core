@@ -90,7 +90,7 @@ public:
     {
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  text::XTextRange::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<text::XTextRange>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return sal_True; }
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
@@ -141,7 +141,7 @@ SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xPar
 uno::Type
 SwVbaParagraphs::getElementType() throw (uno::RuntimeException)
 {
-    return word::XParagraph::static_type(0);
+    return cppu::UnoType<word::XParagraph>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaParagraphs::createEnumeration() throw (uno::RuntimeException)

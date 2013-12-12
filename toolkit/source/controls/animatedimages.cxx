@@ -210,7 +210,7 @@ namespace toolkit
             void ( SAL_CALL XContainerListener::*i_notificationMethod )( const ContainerEvent& ),
             const sal_Int32 i_accessor, const Sequence< OUString >& i_imageURLs, const Reference< XInterface >& i_context )
         {
-            ::cppu::OInterfaceContainerHelper* pContainerListeners = i_broadcaseHelper.getContainer( XContainerListener::static_type() );
+            ::cppu::OInterfaceContainerHelper* pContainerListeners = i_broadcaseHelper.getContainer( cppu::UnoType<XContainerListener>::get() );
             if ( pContainerListeners == NULL )
                 return;
 
@@ -468,13 +468,13 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesControlModel::addContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
     {
-        BrdcstHelper.addListener( XContainerListener::static_type(), i_listener );
+        BrdcstHelper.addListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AnimatedImagesControlModel::removeContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
     {
-        BrdcstHelper.removeListener( XContainerListener::static_type(), i_listener );
+        BrdcstHelper.removeListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }
 
 //......................................................................................................................

@@ -221,8 +221,8 @@ Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (Runt
     // which already contains macros. In this case, the database document itself is not
     // allowed to contain macros, too.
     if  (   !m_bAllowDocumentScripting
-        &&  (   _rType.equals( XEmbeddedScripts::static_type() )
-            ||  _rType.equals( XScriptInvocationContext::static_type() )
+        &&  (   _rType.equals( cppu::UnoType<XEmbeddedScripts>::get() )
+            ||  _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() )
             )
         )
         return Any();
@@ -265,7 +265,7 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeExceptio
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 pStripTo,
-                ::std::bind2nd( ::std::equal_to< Type >(), XEmbeddedScripts::static_type() )
+                ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XEmbeddedScripts>::get() )
             ) - pStripTo
         );
 
@@ -276,7 +276,7 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeExceptio
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 pStripTo,
-                ::std::bind2nd( ::std::equal_to< Type >(), XScriptInvocationContext::static_type() )
+                ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
             ) - pStripTo
         );
     }

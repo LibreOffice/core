@@ -174,7 +174,7 @@ public:
         mxParaStyles.set( xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW  );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  style::XStyle::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<style::XStyle>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0; }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -281,7 +281,7 @@ SwVbaStyles::createCollectionObject(const uno::Any& aObject)
 uno::Type SAL_CALL
 SwVbaStyles::getElementType() throw (uno::RuntimeException)
 {
-    return word::XStyle::static_type(0);
+    return cppu::UnoType<word::XStyle>::get();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

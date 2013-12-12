@@ -55,7 +55,7 @@ ScVbaMenuBars::~ScVbaMenuBars()
 uno::Type SAL_CALL
 ScVbaMenuBars::getElementType() throw ( uno::RuntimeException )
 {
-    return excel::XMenuBar::static_type( 0 );
+    return cppu::UnoType<excel::XMenuBar>::get();
 }
 
 uno::Reference< container::XEnumeration >

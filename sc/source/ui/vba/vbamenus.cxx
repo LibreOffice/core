@@ -56,7 +56,7 @@ ScVbaMenus::ScVbaMenus( const uno::Reference< XHelperInterface >& xParent, const
 uno::Type SAL_CALL
 ScVbaMenus::getElementType() throw ( uno::RuntimeException )
 {
-    return excel::XMenu::static_type( 0 );
+    return cppu::UnoType<excel::XMenu>::get();
 }
 
 uno::Reference< container::XEnumeration >

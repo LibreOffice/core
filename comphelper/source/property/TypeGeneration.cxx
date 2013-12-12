@@ -218,7 +218,7 @@ namespace comphelper
             case CPPUTYPE_SEQNAMEDVALUE:    pType = &::getCppuType( (Sequence<beans::NamedValue>*)0 ); break;
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
-            case CPPUTPYE_REFEMBEDDEDOBJECT:        pType = &embed::XEmbeddedObject::static_type(); break;
+            case CPPUTPYE_REFEMBEDDEDOBJECT:        pType = &cppu::UnoType<embed::XEmbeddedObject>::get(); break;
             case CPPUTYPE_LINESTYLE:        pType = &::getCppuType( (drawing::LineStyle*)0 ); break;
             case CPPUTYPE_FILLSTYLE:        pType = &::getCppuType( (drawing::FillStyle*)0 ); break;
             case CPPUTYPE_GRADIENT:         pType = &::getCppuType( (awt::Gradient*)0 ); break;

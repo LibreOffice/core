@@ -114,7 +114,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return awt::XControl::static_type(0);
+        return cppu::UnoType<awt::XControl>::get();
     }
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
@@ -498,7 +498,7 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
 uno::Type
 ScVbaControls::getElementType() throw (uno::RuntimeException)
 {
-    return ooo::vba::msforms::XControl::static_type(0);
+    return cppu::UnoType<ooo::vba::msforms::XControl>::get();
 }
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaControls, "ooo.vba.msforms.Controls" )

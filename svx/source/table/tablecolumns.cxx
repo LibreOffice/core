@@ -113,7 +113,7 @@ Type SAL_CALL TableColumns::getElementType() throw (RuntimeException)
 {
     throwIfDisposed();
 
-    return XCellRange::static_type();
+    return cppu::UnoType<XCellRange>::get();
 }
 
 // -----------------------------------------------------------------------------

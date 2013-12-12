@@ -61,7 +61,7 @@ public:
         // Methods XElementAcess
         virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
         {
-            return drawing::XControlShape::static_type(0);
+            return cppu::UnoType<drawing::XControlShape>::get();
         }
 
         virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException)
@@ -155,7 +155,7 @@ ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex ) throw (uno::Runt
 uno::Type
 ScVbaOLEObjects::getElementType() throw (uno::RuntimeException)
 {
-    return ooo::vba::excel::XOLEObject::static_type(0);
+    return cppu::UnoType<ooo::vba::excel::XOLEObject>::get();
 }
 
 OUString

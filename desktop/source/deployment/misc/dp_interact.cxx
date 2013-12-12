@@ -134,7 +134,7 @@ bool interactContinuation( Any const & request,
                            bool * pcont, bool * pabort )
 {
     OSL_ASSERT(
-        task::XInteractionContinuation::static_type().isAssignableFrom(
+        cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(
             continuation ) );
     if (xCmdEnv.is()) {
         Reference<task::XInteractionHandler> xInteractionHandler(
@@ -146,7 +146,7 @@ bool interactContinuation( Any const & request,
             conts[ 0 ] = new InteractionContinuationImpl(
                 continuation, &cont );
             conts[ 1 ] = new InteractionContinuationImpl(
-                task::XInteractionAbort::static_type(), &abort );
+                cppu::UnoType<task::XInteractionAbort>::get(), &abort );
             xInteractionHandler->handle(
                 new InteractionRequest( request, conts ) );
             if (cont || abort) {

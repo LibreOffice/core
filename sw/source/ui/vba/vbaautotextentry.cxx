@@ -102,7 +102,7 @@ SwVbaAutoTextEntries::SwVbaAutoTextEntries( const uno::Reference< XHelperInterfa
 uno::Type
 SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 {
-    return word::XAutoTextEntry::static_type(0);
+    return cppu::UnoType<word::XAutoTextEntry>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration() throw (uno::RuntimeException)

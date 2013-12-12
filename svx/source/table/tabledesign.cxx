@@ -236,7 +236,7 @@ sal_Bool SAL_CALL TableDesignStyle::isUserDefined() throw (RuntimeException)
 sal_Bool SAL_CALL TableDesignStyle::isInUse() throw (RuntimeException)
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
-    OInterfaceContainerHelper * pContainer = rBHelper.getContainer( XModifyListener::static_type() );
+    OInterfaceContainerHelper * pContainer = rBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
     if( pContainer )
     {
         Sequence< Reference< XInterface > > aListener( pContainer->getElements() );
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )  throw(Ru
 
 Type SAL_CALL TableDesignStyle::getElementType() throw(RuntimeException)
 {
-    return XStyle::static_type();
+    return cppu::UnoType<XStyle>::get();
 }
 
 // ----------------------------------------------------------
@@ -430,7 +430,7 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
     }
     else
     {
-        rBHelper.addListener( XModifyListener::static_type(), xListener );
+        rBHelper.addListener( cppu::UnoType<XModifyListener>::get(), xListener );
     }
 }
 
@@ -438,7 +438,7 @@ void SAL_CALL TableDesignStyle::addModifyListener( const Reference< XModifyListe
 
 void SAL_CALL TableDesignStyle::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
-    rBHelper.removeListener( XModifyListener::static_type(), xListener );
+    rBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
 }
 
 //------------------------------------------------------------------------
@@ -447,7 +447,7 @@ void TableDesignStyle::notifyModifyListener()
 {
     MutexGuard aGuard( rBHelper.rMutex );
 
-    OInterfaceContainerHelper * pContainer = rBHelper.getContainer( XModifyListener::static_type() );
+    OInterfaceContainerHelper * pContainer = rBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
     if( pContainer )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
@@ -558,7 +558,7 @@ sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(Ru
 
 Type SAL_CALL TableDesignFamily::getElementType() throw(RuntimeException)
 {
-    return XStyle::static_type();
+    return cppu::UnoType<XStyle>::get();
 }
 
 // ----------------------------------------------------------

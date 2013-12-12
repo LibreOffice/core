@@ -85,7 +85,7 @@ namespace toolkit
             i_oldValue, i_newValue, m_nIndex
         );
 
-        ::cppu::OInterfaceContainerHelper* pIter = rBHelper.getContainer( XGridColumnListener::static_type() );
+        ::cppu::OInterfaceContainerHelper* pIter = rBHelper.getContainer( cppu::UnoType<XGridColumnListener>::get() );
 
         i_Guard.clear();
         if( pIter )
@@ -215,13 +215,13 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::addGridColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
     {
-        rBHelper.addListener( XGridColumnListener::static_type(), xListener );
+        rBHelper.addListener( cppu::UnoType<XGridColumnListener>::get(), xListener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL GridColumn::removeGridColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
     {
-        rBHelper.removeListener( XGridColumnListener::static_type(), xListener );
+        rBHelper.removeListener( cppu::UnoType<XGridColumnListener>::get(), xListener );
     }
 
     //------------------------------------------------------------------------------------------------------------------

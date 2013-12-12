@@ -28,8 +28,8 @@ ScVbaPages::ScVbaPages( const uno::Reference< XHelperInterface >& xParent, const
 uno::Type SAL_CALL
 ScVbaPages::getElementType() throw (uno::RuntimeException)
 {
-    // return msforms::XPage::static_type(0);
-    return uno::XInterface::static_type(0);
+    // return cppu::UnoType<msforms::XPage>::get();
+    return cppu::UnoType<uno::XInterface>::get();
 }
 
 uno::Any

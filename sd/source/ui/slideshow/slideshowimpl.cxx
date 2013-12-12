@@ -3486,7 +3486,7 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
 
 ::com::sun::star::uno::Type SAL_CALL SlideshowImpl::getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return XDrawPage::static_type();
+    return cppu::UnoType<XDrawPage>::get();
 }
 
 // --------------------------------------------------------------------

@@ -44,8 +44,8 @@ public:
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
     {
         // no Pages object yet #FIXME
-        //return msforms::XPage::static_type(0);
-        return uno::XInterface::static_type(0);
+        //return cppu::UnoType<msforms::XPage>::get();
+        return cppu::UnoType<uno::XInterface>::get();
     }
     virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException)
     {

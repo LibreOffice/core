@@ -46,7 +46,7 @@ static accessibility::XAccessibleImage*
     {
         if( !pWrap->mpImage && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleImage::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleImage>::get() );
             pWrap->mpImage = reinterpret_cast< accessibility::XAccessibleImage * > (any.pReserved);
             pWrap->mpImage->acquire();
         }

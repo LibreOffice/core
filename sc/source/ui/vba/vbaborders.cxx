@@ -339,7 +339,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return  excel::XBorder::static_type(0);
+        return  cppu::UnoType<excel::XBorder>::get();
     }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -395,7 +395,7 @@ ScVbaBorders::createCollectionObject( const css::uno::Any& aSource )
 uno::Type
 ScVbaBorders::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XBorders::static_type(0);
+    return cppu::UnoType<excel::XBorders>::get();
 }
 
 uno::Any

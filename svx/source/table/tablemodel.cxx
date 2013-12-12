@@ -390,14 +390,14 @@ void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoE
 
 void SAL_CALL TableModel::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
-    rBHelper.addListener( XModifyListener::static_type() , xListener );
+    rBHelper.addListener( cppu::UnoType<XModifyListener>::get() , xListener );
 }
 
 // -----------------------------------------------------------------------------
 
 void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
-    rBHelper.removeListener( XModifyListener::static_type() , xListener );
+    rBHelper.removeListener( cppu::UnoType<XModifyListener>::get() , xListener );
 }
 
 // -----------------------------------------------------------------------------
@@ -606,7 +606,7 @@ void TableModel::notifyModification()
     {
         mbNotifyPending = false;
 
-        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( XModifyListener::static_type() );
+        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
         if( pModifyListeners )
         {
             EventObject aSource;

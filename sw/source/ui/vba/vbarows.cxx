@@ -334,7 +334,7 @@ uno::Any SAL_CALL SwVbaRows::Item( const uno::Any& Index1, const uno::Any& /*not
 uno::Type
 SwVbaRows::getElementType() throw (uno::RuntimeException)
 {
-    return word::XRow::static_type(0);
+    return cppu::UnoType<word::XRow>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaRows::createEnumeration() throw (uno::RuntimeException)

@@ -161,7 +161,7 @@ MutableTreeDataModel::~MutableTreeDataModel()
 
 void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >* pNodes, sal_Int32 nNodes )
 {
-    ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( XTreeDataModelListener::static_type() );
+    ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( cppu::UnoType<XTreeDataModelListener>::get() );
     if( pIter )
     {
         Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -235,14 +235,14 @@ Reference< XTreeNode > SAL_CALL MutableTreeDataModel::getRoot(  ) throw (Runtime
 
 void SAL_CALL MutableTreeDataModel::addTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener ) throw (RuntimeException)
 {
-    BrdcstHelper.addListener( XTreeDataModelListener::static_type(), xListener );
+    BrdcstHelper.addListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
 }
 
 //---------------------------------------------------------------------
 
 void SAL_CALL MutableTreeDataModel::removeTreeDataModelListener( const Reference< XTreeDataModelListener >& xListener ) throw (RuntimeException)
 {
-    BrdcstHelper.removeListener( XTreeDataModelListener::static_type(), xListener );
+    BrdcstHelper.removeListener( cppu::UnoType<XTreeDataModelListener>::get(), xListener );
 }
 
 //---------------------------------------------------------------------
@@ -266,14 +266,14 @@ void SAL_CALL MutableTreeDataModel::dispose() throw (RuntimeException)
 
 void SAL_CALL MutableTreeDataModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
-    BrdcstHelper.addListener( XEventListener::static_type(), xListener );
+    BrdcstHelper.addListener( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 //---------------------------------------------------------------------
 
 void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
-    BrdcstHelper.removeListener( XEventListener::static_type(), xListener );
+    BrdcstHelper.removeListener( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 //---------------------------------------------------------------------

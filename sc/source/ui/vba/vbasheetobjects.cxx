@@ -219,7 +219,7 @@ uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScVbaObjectContainer::getElementType() throw (uno::RuntimeException)
 {
-    return drawing::XShape::static_type( 0 );
+    return cppu::UnoType<drawing::XShape>::get();
 }
 
 sal_Bool SAL_CALL ScVbaObjectContainer::hasElements() throw (uno::RuntimeException)
@@ -482,7 +482,7 @@ ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< sheet::XSpreadsheet >& rxSheet ) throw (uno::RuntimeException) :
     ScVbaControlContainer(
         rxParent, rxContext, rxModel, rxSheet,
-        excel::XButton::static_type( 0 ),
+        cppu::UnoType<excel::XButton>::get(),
         "com.sun.star.form.component.CommandButton",
         form::FormComponentType::COMMANDBUTTON )
 {

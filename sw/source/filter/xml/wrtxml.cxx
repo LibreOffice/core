@@ -150,7 +150,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { OUString("OutlineStyleAsNormalListStyle"), 0,
               ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("TargetStorage"),0, embed::XStorage::static_type(),
+        { OUString("TargetStorage"),0, cppu::UnoType<embed::XStorage>::get(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

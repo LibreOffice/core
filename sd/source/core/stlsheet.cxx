@@ -78,7 +78,7 @@ static SvxItemPropertySet& GetStylePropertySet()
     static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
         { OUString("Family"),                 WID_STYLE_FAMILY,       ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
-        { OUString("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  XNameContainer::static_type(), 0,     0},
+        { OUString("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
         { OUString("DisplayName"),            WID_STYLE_DISPNAME,     ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
         { OUString("Hidden"),                 WID_STYLE_HIDDEN,       ::getCppuType((bool*)0),       0,     0},
 
@@ -349,7 +349,7 @@ bool SdStyleSheet::IsUsed() const
     {
         MutexGuard aGuard( mrBHelper.rMutex );
 
-        OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( XModifyListener::static_type() );
+        OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
         if( pContainer )
         {
             Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
@@ -848,7 +848,7 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
     {
         if( !mpModifyListenerForewarder.get() )
             mpModifyListenerForewarder.reset( new ModifyListenerForewarder( this ) );
-        mrBHelper.addListener( XModifyListener::static_type(), xListener );
+        mrBHelper.addListener( cppu::UnoType<XModifyListener>::get(), xListener );
     }
 }
 
@@ -856,7 +856,7 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
 
 void SAL_CALL SdStyleSheet::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
-    mrBHelper.removeListener( XModifyListener::static_type(), xListener );
+    mrBHelper.removeListener( cppu::UnoType<XModifyListener>::get(), xListener );
 }
 
 //------------------------------------------------------------------------
@@ -865,7 +865,7 @@ void SdStyleSheet::notifyModifyListener()
 {
     MutexGuard aGuard( mrBHelper.rMutex );
 
-    OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( XModifyListener::static_type() );
+    OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
     if( pContainer )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );

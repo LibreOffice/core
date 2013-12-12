@@ -90,7 +90,7 @@ ScVbaCommandBars::~ScVbaCommandBars()
 uno::Type SAL_CALL
 ScVbaCommandBars::getElementType() throw ( uno::RuntimeException )
 {
-    return XCommandBar::static_type( 0 );
+    return cppu::UnoType<XCommandBar>::get();
 }
 
 uno::Reference< container::XEnumeration >

@@ -36,7 +36,7 @@ OWeakTypeObject::~OWeakTypeObject()
 
 Any SAL_CALL OWeakTypeObject::queryInterface(const Type & rType )   throw (RuntimeException)
 {
-    if( rType == XTypeProvider::static_type() )
+    if( rType == cppu::UnoType<XTypeProvider>::get() )
         return Any( Reference< XTypeProvider >(this) );
     else
         return ::cppu::OWeakObject::queryInterface( rType );

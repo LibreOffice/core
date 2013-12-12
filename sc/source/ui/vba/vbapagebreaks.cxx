@@ -80,8 +80,8 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
         if( m_bColumn )
-             return excel::XVPageBreak::static_type(0);
-        return  excel::XHPageBreak::static_type(0);
+             return cppu::UnoType<excel::XVPageBreak>::get();
+        return  cppu::UnoType<excel::XHPageBreak>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -232,7 +232,7 @@ ScVbaHPageBreaks::createCollectionObject( const css::uno::Any& aSource )
 uno::Type
 ScVbaHPageBreaks::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XHPageBreak::static_type(0);
+    return cppu::UnoType<excel::XHPageBreak>::get();
 }
 
 OUString
@@ -292,7 +292,7 @@ ScVbaVPageBreaks::createCollectionObject( const css::uno::Any& aSource )
 uno::Type
 ScVbaVPageBreaks::getElementType() throw ( uno::RuntimeException )
 {
-    return excel::XVPageBreak::static_type( 0 );
+    return cppu::UnoType<excel::XVPageBreak>::get();
 }
 
 OUString

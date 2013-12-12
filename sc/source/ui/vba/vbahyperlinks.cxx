@@ -177,7 +177,7 @@ uno::Any SAL_CALL ScVbaHlinkContainer::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScVbaHlinkContainer::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XHyperlink::static_type( 0 );
+    return cppu::UnoType<excel::XHyperlink>::get();
 }
 
 sal_Bool SAL_CALL ScVbaHlinkContainer::hasElements() throw (uno::RuntimeException)
@@ -266,7 +266,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ScVbaHyperlinks::createEnumer
 
 uno::Type SAL_CALL ScVbaHyperlinks::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XHyperlink::static_type( 0 );
+    return cppu::UnoType<excel::XHyperlink>::get();
 }
 
 // ScVbaCollectionBase --------------------------------------------------------

@@ -64,7 +64,7 @@ SwVbaAddins::SwVbaAddins( const uno::Reference< XHelperInterface >& xParent, con
 uno::Type
 SwVbaAddins::getElementType() throw (uno::RuntimeException)
 {
-    return word::XAddin::static_type(0);
+    return cppu::UnoType<word::XAddin>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaAddins::createEnumeration() throw (uno::RuntimeException)

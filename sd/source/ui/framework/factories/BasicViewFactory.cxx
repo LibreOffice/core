@@ -372,7 +372,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             }
         }
 
-        pDescriptor->mxView.set( pDescriptor->mpWrapper->queryInterface( XResource::static_type() ), UNO_QUERY_THROW );
+        pDescriptor->mxView.set( pDescriptor->mpWrapper->queryInterface( cppu::UnoType<XResource>::get() ), UNO_QUERY_THROW );
     }
 
     return pDescriptor;

@@ -1532,7 +1532,7 @@ uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) thro
 {
     uno::Reference<lang::XServiceInfo> xSI;
     if ( mxShapeAgg.is() )
-        mxShapeAgg->queryAggregation( lang::XServiceInfo::static_type() ) >>= xSI;
+        mxShapeAgg->queryAggregation( cppu::UnoType<lang::XServiceInfo>::get() ) >>= xSI;
 
     uno::Sequence< OUString > aSupported;
     if ( xSI.is() )

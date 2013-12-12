@@ -109,7 +109,7 @@ Any SAL_CALL TableRows::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsExc
 Type SAL_CALL TableRows::getElementType() throw (RuntimeException)
 {
     throwIfDisposed();
-    return XCellRange::static_type();
+    return cppu::UnoType<XCellRange>::get();
 }
 
 // -----------------------------------------------------------------------------

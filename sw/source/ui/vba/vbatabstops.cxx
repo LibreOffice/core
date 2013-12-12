@@ -93,7 +93,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return word::XTabStop::static_type(0);
+        return cppu::UnoType<word::XTabStop>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -235,7 +235,7 @@ void SAL_CALL SwVbaTabStops::ClearAll() throw (uno::RuntimeException)
 uno::Type
 SwVbaTabStops::getElementType() throw (uno::RuntimeException)
 {
-    return word::XTabStop::static_type(0);
+    return cppu::UnoType<word::XTabStop>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaTabStops::createEnumeration() throw (uno::RuntimeException)

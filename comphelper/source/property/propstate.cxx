@@ -194,8 +194,8 @@ namespace comphelper
     Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes() throw(RuntimeException)
     {
         Sequence< Type > aOwnTypes( 2 );
-        aOwnTypes[0] = XWeak::static_type();
-        aOwnTypes[1] = XTypeProvider::static_type();
+        aOwnTypes[0] = cppu::UnoType<XWeak>::get();
+        aOwnTypes[1] = cppu::UnoType<XTypeProvider>::get();
 
         return concatSequences(
             aOwnTypes,

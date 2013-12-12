@@ -98,7 +98,7 @@ public:
         cachePos = mxFormFields.begin();
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  word::XFormField::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<word::XFormField>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -159,7 +159,7 @@ SwVbaFormFields::SwVbaFormFields( const uno::Reference< XHelperInterface >& xPar
 uno::Type
 SwVbaFormFields::getElementType() throw (uno::RuntimeException)
 {
-    return word::XFormField::static_type(0);
+    return cppu::UnoType<word::XFormField>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaFormFields::createEnumeration() throw (uno::RuntimeException)

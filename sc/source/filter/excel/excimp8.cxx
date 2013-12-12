@@ -120,7 +120,7 @@ private:
     ::osl::Mutex m_aMutex;
 public:
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  container::XIndexContainer::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<container::XIndexContainer>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );

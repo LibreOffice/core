@@ -70,7 +70,7 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
 css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::uno::Type& aType )
     throw (css::uno::RuntimeException)
 {
-    if ( aType.equals( XInteractionHandler2::static_type() ) )
+    if ( aType.equals( cppu::UnoType<XInteractionHandler2>::get() ) )
     {
         ::osl::ResettableMutexGuard aLock(m_aLock);
         css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );

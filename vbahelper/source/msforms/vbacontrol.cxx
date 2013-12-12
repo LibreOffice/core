@@ -576,7 +576,7 @@ void ScVbaControl::fireChangeEvent()
 {
     script::ScriptEvent evt;
     evt.ScriptType = "VBAInterop";
-    evt.ListenerType = form::XChangeListener::static_type(0);
+    evt.ListenerType = cppu::UnoType<form::XChangeListener>::get();
     evt.MethodName = "changed";
     fireEvent( evt );
 }
@@ -585,7 +585,7 @@ void ScVbaControl::fireClickEvent()
 {
     script::ScriptEvent evt;
     evt.ScriptType = "VBAInterop";
-    evt.ListenerType = awt::XActionListener::static_type(0);
+    evt.ListenerType = cppu::UnoType<awt::XActionListener>::get();
     evt.MethodName = "actionPerformed";
     fireEvent( evt );
 }

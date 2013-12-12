@@ -105,7 +105,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return word::XSection::static_type(0);
+        return cppu::UnoType<word::XSection>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -155,7 +155,7 @@ SwVbaSections::PageSetup( ) throw (uno::RuntimeException)
 uno::Type SAL_CALL
 SwVbaSections::getElementType() throw (uno::RuntimeException)
 {
-    return word::XSection::static_type(0);
+    return cppu::UnoType<word::XSection>::get();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

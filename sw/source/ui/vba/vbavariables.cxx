@@ -45,7 +45,7 @@ SwVbaVariables::SwVbaVariables( const uno::Reference< XHelperInterface >& xParen
 uno::Type
 SwVbaVariables::getElementType() throw (uno::RuntimeException)
 {
-    return word::XVariable::static_type(0);
+    return cppu::UnoType<word::XVariable>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaVariables::createEnumeration() throw (uno::RuntimeException)

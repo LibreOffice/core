@@ -65,7 +65,7 @@ Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
 //------------------------------------------------------------------
 OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
     :FormsCollectionComponentBase( m_aMutex )
-    ,OInterfaceContainer( _rxFactory, m_aMutex, XForm::static_type() )
+    ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XForm>::get() )
     ,OFormsCollection_BASE()
 {
     DBG_CTOR(OFormsCollection, NULL);

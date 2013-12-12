@@ -106,7 +106,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
 uno::Type SAL_CALL
 ScVbaCommandBarControls::getElementType() throw ( uno::RuntimeException )
 {
-    return XCommandBarControl::static_type( 0 );
+    return cppu::UnoType<XCommandBarControl>::get();
 }
 
 uno::Reference< container::XEnumeration >
@@ -260,7 +260,7 @@ public:
         { throw lang::IndexOutOfBoundsException(); }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
-        { return XCommandBarControl::static_type( 0 ); }
+        { return cppu::UnoType<XCommandBarControl>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
         { return false; }
 };
@@ -277,7 +277,7 @@ VbaDummyCommandBarControls::VbaDummyCommandBarControls(
 // XEnumerationAccess
 uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType() throw ( uno::RuntimeException )
 {
-    return XCommandBarControl::static_type( 0 );
+    return cppu::UnoType<XCommandBarControl>::get();
 }
 
 uno::Reference< container::XEnumeration > VbaDummyCommandBarControls::createEnumeration() throw ( uno::RuntimeException )

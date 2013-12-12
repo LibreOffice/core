@@ -211,7 +211,7 @@ namespace dbaui
 
     Any SAL_CALL DBSubComponentController::queryInterface(const Type& _rType) throw (RuntimeException)
     {
-        if ( _rType.equals( XScriptInvocationContext::static_type() ) )
+        if ( _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() ) )
         {
             if ( m_pImpl->documentHasScriptSupport() )
                 return makeAny( Reference< XScriptInvocationContext >( this ) );
@@ -231,7 +231,7 @@ namespace dbaui
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 aStrippedTypes.getArray(),
-                ::std::bind2nd( ::std::equal_to< Type >(), XScriptInvocationContext::static_type() )
+                ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
             );
             aTypes = aStrippedTypes;
         }

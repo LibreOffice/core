@@ -175,7 +175,7 @@ namespace pcr
         aProps[1] = Property(
             PROPERTY_INTROSPECTEDOBJECT,
             OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
-            XPropertySet::static_type(),
+            cppu::UnoType<XPropertySet>::get(),
             PropertyAttribute::TRANSIENT | PropertyAttribute::CONSTRAINED
         );
         return new ::cppu::OPropertyArrayHelper( aProps );

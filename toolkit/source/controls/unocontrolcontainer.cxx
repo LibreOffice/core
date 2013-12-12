@@ -576,7 +576,7 @@ uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  ) th
 // container::XElementAccess
 uno::Type SAL_CALL UnoControlContainer::getElementType(  ) throw (uno::RuntimeException)
 {
-    return awt::XControlModel::static_type();
+    return cppu::UnoType<awt::XControlModel>::get();
 }
 
 ::sal_Bool SAL_CALL UnoControlContainer::hasElements(  ) throw (uno::RuntimeException)

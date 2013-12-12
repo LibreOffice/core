@@ -66,7 +66,7 @@ uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::A
 uno::Type
 SwVbaListTemplates::getElementType() throw (uno::RuntimeException)
 {
-    return word::XListTemplate::static_type(0);
+    return cppu::UnoType<word::XListTemplate>::get();
 }
 
 uno::Reference< container::XEnumeration >

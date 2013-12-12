@@ -1328,7 +1328,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException)
 
 uno::Type SAL_CALL SwXTextRange::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SwXTextRange::hasElements() throw (uno::RuntimeException)
@@ -1665,7 +1665,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 uno::Type SAL_CALL
 SwXTextRanges::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SwXTextRanges::hasElements() throw (uno::RuntimeException)

@@ -1304,7 +1304,7 @@ Sequence<Type> SAL_CALL OFormComponents::getTypes() throw(RuntimeException)
 //------------------------------------------------------------------------------
 OFormComponents::OFormComponents(const Reference<XComponentContext>& _rxFactory)
     :FormComponentsBase( m_aMutex )
-    ,OInterfaceContainer( _rxFactory, m_aMutex, XFormComponent::static_type() )
+    ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XFormComponent>::get() )
     ,OFormComponents_BASE()
 {
 }

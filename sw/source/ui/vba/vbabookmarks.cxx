@@ -114,7 +114,7 @@ SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParen
 uno::Type
 SwVbaBookmarks::getElementType() throw (uno::RuntimeException)
 {
-    return word::XBookmark::static_type(0);
+    return cppu::UnoType<word::XBookmark>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaBookmarks::createEnumeration() throw (uno::RuntimeException)

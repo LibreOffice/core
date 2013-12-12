@@ -465,7 +465,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         { OUString("OrganizerMode"), 0,
               ::getBooleanCppuType(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("SourceStorage"), 0, embed::XStorage::static_type(),
+        { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
           ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -841,7 +841,7 @@ sal_Bool SdXMLFilter::Export()
             { OUString("StyleFamilies"), 0,
                   ::getCppuType( (Sequence<sal_Int32>*)0 ),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("TargetStorage"), 0, embed::XStorage::static_type(),
+            { OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
                   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };

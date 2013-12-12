@@ -37,7 +37,7 @@ static accessibility::XAccessibleEditableText*
     {
         if( !pWrap->mpEditableText && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleEditableText::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleEditableText>::get() );
             pWrap->mpEditableText = reinterpret_cast< accessibility::XAccessibleEditableText * > (any.pReserved);
             pWrap->mpEditableText->acquire();
         }

@@ -89,7 +89,7 @@ class SheetCollectionHelper : public SheetCollectionHelper_BASE
 public:
     SheetCollectionHelper( const SheetMap& sMap ) : mSheetMap( sMap ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  sheet::XSpreadsheet::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<sheet::XSpreadsheet>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( !mSheetMap.empty() ); }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -179,7 +179,7 @@ ScVbaWorksheets::ScVbaWorksheets( const uno::Reference< XHelperInterface >& xPar
 uno::Type
 ScVbaWorksheets::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XWorksheet::static_type(0);
+    return cppu::UnoType<excel::XWorksheet>::get();
 }
 
 uno::Reference< container::XEnumeration >

@@ -330,7 +330,7 @@ public:
         return uno::makeAny( m_xRange );
     }
         // XElementAccess
-        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException){ return table::XCellRange::static_type(0); }
+        virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException){ return cppu::UnoType<table::XCellRange>::get(); }
 
         virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException) { return sal_True; }
     // XEnumerationAccess
@@ -365,7 +365,7 @@ public:
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration() throw (uno::RuntimeException);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException){ return excel::XRange::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException){ return cppu::UnoType<excel::XRange>::get(); }
 
     virtual uno::Any createCollectionObject( const uno::Any& aSource );
 
@@ -3321,7 +3321,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
 uno::Reference< table::XCellRange > processKey( const uno::Any& Key, uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
 {
     uno::Reference< excel::XRange > xKeyRange;
-    if ( Key.getValueType() == excel::XRange::static_type() )
+    if ( Key.getValueType() == cppu::UnoType<excel::XRange>::get() )
     {
         xKeyRange.set( Key, uno::UNO_QUERY_THROW );
     }

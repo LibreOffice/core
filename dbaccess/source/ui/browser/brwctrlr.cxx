@@ -597,7 +597,7 @@ void SbaXDataBrowserController::startFrameListening( const Reference< XFrame >& 
 
     Reference< XFrameActionListener >   xAggListener;
     if ( m_xFormControllerImpl.is() )
-        m_xFormControllerImpl->queryAggregation( XFrameActionListener::static_type() ) >>= xAggListener;
+        m_xFormControllerImpl->queryAggregation( cppu::UnoType<XFrameActionListener>::get() ) >>= xAggListener;
 
     if ( _rxFrame.is() && xAggListener.is() )
         _rxFrame->addFrameActionListener( xAggListener );
@@ -610,7 +610,7 @@ void SbaXDataBrowserController::stopFrameListening( const Reference< XFrame >& _
 
     Reference< XFrameActionListener >   xAggListener;
     if ( m_xFormControllerImpl.is() )
-        m_xFormControllerImpl->queryAggregation( XFrameActionListener::static_type() ) >>= xAggListener;
+        m_xFormControllerImpl->queryAggregation( cppu::UnoType<XFrameActionListener>::get() ) >>= xAggListener;
 
     if ( _rxFrame.is() && xAggListener.is() )
         _rxFrame->removeFrameActionListener( xAggListener );

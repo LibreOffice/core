@@ -97,7 +97,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
                 if( wrapper_obj && !wrapper_obj->mpText && wrapper_obj->mpContext )
                 {
-                    uno::Any any = wrapper_obj->mpContext->queryInterface( accessibility::XAccessibleText::static_type(NULL) );
+                    uno::Any any = wrapper_obj->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleText>::get() );
                     if ( typelib_TypeClass_INTERFACE == any.pType->eTypeClass &&
                          any.pReserved != 0 )
                     {

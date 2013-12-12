@@ -217,7 +217,7 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
         {
             if ( i == 0 )
             {
-                *pPtr = XInvocation::static_type( NULL );
+                *pPtr = cppu::UnoType<XInvocation>::get();
             }
             else
             {

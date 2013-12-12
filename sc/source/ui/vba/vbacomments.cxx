@@ -85,7 +85,7 @@ ScVbaComments::createCollectionObject( const css::uno::Any& aSource )
 uno::Type
 ScVbaComments::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XComment::static_type(0);
+    return cppu::UnoType<excel::XComment>::get();
 }
 
 OUString

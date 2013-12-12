@@ -363,7 +363,7 @@ void SAL_CALL ScVbaShapeRange::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::Runtime
 uno::Type SAL_CALL
 ScVbaShapeRange::getElementType() throw (uno::RuntimeException)
 {
-    return msforms::XShape::static_type(0);
+    return cppu::UnoType<msforms::XShape>::get();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

@@ -152,7 +152,7 @@ static accessibility::XAccessibleText*
     {
         if( !pWrap->mpText && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleText::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleText>::get() );
             pWrap->mpText = reinterpret_cast< accessibility::XAccessibleText * > (any.pReserved);
             pWrap->mpText->acquire();
         }
@@ -173,7 +173,7 @@ static accessibility::XAccessibleTextMarkup*
     {
         if( !pWrap->mpTextMarkup && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextMarkup::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleTextMarkup>::get() );
             /* Since this not a dedicated interface in Atk and thus has not
              * been queried during wrapper initialization, we need to check
              * the return value here.
@@ -202,7 +202,7 @@ static accessibility::XAccessibleTextAttributes*
     {
         if( !pWrap->mpTextAttributes && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleTextAttributes::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleTextAttributes>::get() );
             /* Since this not a dedicated interface in Atk and thus has not
              * been queried during wrapper initialization, we need to check
              * the return value here.
@@ -230,7 +230,7 @@ static accessibility::XAccessibleMultiLineText*
     {
         if( !pWrap->mpMultiLineText && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleMultiLineText::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleMultiLineText>::get() );
             /* Since this not a dedicated interface in Atk and thus has not
              * been queried during wrapper initialization, we need to check
              * the return value here.

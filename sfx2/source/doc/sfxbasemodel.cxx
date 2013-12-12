@@ -545,8 +545,8 @@ SfxBaseModel::~SfxBaseModel()
 
 Any SAL_CALL SfxBaseModel::queryInterface( const uno::Type& rType ) throw( RuntimeException )
 {
-    if  (   ( !m_bSupportEmbeddedScripts && rType.equals( document::XEmbeddedScripts::static_type() ) )
-        ||  ( !m_bSupportDocRecovery && rType.equals( XDocumentRecovery::static_type() ) )
+    if  (   ( !m_bSupportEmbeddedScripts && rType.equals( cppu::UnoType<document::XEmbeddedScripts>::get() ) )
+        ||  ( !m_bSupportDocRecovery && rType.equals( cppu::UnoType<XDocumentRecovery>::get() ) )
         )
         return Any();
 
@@ -603,10 +603,10 @@ Sequence< uno::Type > SAL_CALL SfxBaseModel::getTypes() throw( RuntimeException 
     Sequence< uno::Type > aTypes( SfxBaseModel_Base::getTypes() );
 
     if ( !m_bSupportEmbeddedScripts )
-        lcl_stripType( aTypes, document::XEmbeddedScripts::static_type() );
+        lcl_stripType( aTypes, cppu::UnoType<document::XEmbeddedScripts>::get() );
 
     if ( !m_bSupportDocRecovery )
-        lcl_stripType( aTypes, XDocumentRecovery::static_type() );
+        lcl_stripType( aTypes, cppu::UnoType<XDocumentRecovery>::get() );
 
     return aTypes;
 }

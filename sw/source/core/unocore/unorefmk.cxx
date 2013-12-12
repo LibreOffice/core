@@ -1231,7 +1231,7 @@ SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
 uno::Type SAL_CALL
 SwXMeta::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL

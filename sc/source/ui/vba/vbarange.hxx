@@ -268,7 +268,7 @@ public:
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException)
     {
-        return ov::excel::XRange::static_type(0);
+        return cppu::UnoType<ov::excel::XRange>::get();
 
     }
     virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException);

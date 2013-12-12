@@ -3050,7 +3050,7 @@ SwXTextCursor::createEnumeration() throw (uno::RuntimeException)
 uno::Type SAL_CALL
 SwXTextCursor::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SwXTextCursor::hasElements() throw (uno::RuntimeException)
@@ -3073,7 +3073,7 @@ uno::Any SAL_CALL
 SwXTextCursor::queryInterface(const uno::Type& rType)
 throw (uno::RuntimeException)
 {
-    return (rType == lang::XUnoTunnel::static_type())
+    return (rType == cppu::UnoType<lang::XUnoTunnel>::get())
         ? OTextCursorHelper::queryInterface(rType)
         : SwXTextCursor_Base::queryInterface(rType);
 }

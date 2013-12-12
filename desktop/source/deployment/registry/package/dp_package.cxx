@@ -697,7 +697,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
             bool approve = false;
             bool abort = false;
             if (! interactContinuation(
-                Any(licExc), task::XInteractionApprove::static_type(), xCmdEnv, &approve, &abort ))
+                Any(licExc), cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv, &approve, &abort ))
                 throw css::deployment::DeploymentException(
                     "Could not interact with user.", 0, Any());
 
@@ -871,7 +871,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         Any( lang::WrappedTargetException(
                                  "bundle item registration error!",
                                  static_cast<OWeakObject *>(this), exc ) ),
-                        task::XInteractionApprove::static_type(), xCmdEnv,
+                        cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv,
                         &approve, &abort )) {
                     OSL_ASSERT( !approve && !abort );
                     if (m_legacyBundle) // default for legacy packages: ignore
@@ -950,7 +950,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         Any( lang::WrappedTargetException(
                                  "bundle item revocation error!",
                                  static_cast<OWeakObject *>(this), exc ) ),
-                        task::XInteractionApprove::static_type(), xCmdEnv,
+                        cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv,
                         &approve, &abort )) {
                     OSL_ASSERT( !approve && !abort );
                     if (m_legacyBundle) // default for legacy packages: ignore
@@ -1053,7 +1053,7 @@ void BackendImpl::PackageImpl::exportTo(
                              static_cast<OWeakObject *>(this),
                              task::InteractionClassification_QUERY,
                              destFolderURL, title, OUString() ) ),
-                    ucb::XInteractionReplaceExistingData::static_type(), xCmdEnv,
+                    cppu::UnoType<ucb::XInteractionReplaceExistingData>::get(), xCmdEnv,
                     &replace, &abort ) || !replace) {
                 return;
             }
@@ -1383,7 +1383,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
             interactContinuation(
                 Any( lang::WrappedTargetException("bundle item error!",
                          static_cast<OWeakObject *>(this), exc ) ),
-                task::XInteractionApprove::static_type(), xCmdEnv, 0, 0 );
+                cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv, 0, 0 );
         }
     }
 

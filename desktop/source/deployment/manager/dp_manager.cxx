@@ -439,7 +439,7 @@ PackageManagerImpl::~PackageManagerImpl()
 void PackageManagerImpl::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * pContainer = rBHelper.getContainer(
-        util::XModifyListener::static_type() );
+        cppu::UnoType<util::XModifyListener>::get() );
     if (pContainer != 0) {
         pContainer->forEach<util::XModifyListener>(
             boost::bind(&util::XModifyListener::modified, _1,

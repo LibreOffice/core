@@ -370,7 +370,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         try
         {
             Reference< XPropertySet > xSourceProps( const_cast< ODatabaseForm& >( _cloneSource ).queryAggregation(
-                XPropertySet::static_type() ), UNO_QUERY_THROW );
+                cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xSourcePSI( xSourceProps->getPropertySetInfo(), UNO_SET_THROW );
             Reference< XPropertyState > xSourcePropState( xSourceProps, UNO_QUERY );
 

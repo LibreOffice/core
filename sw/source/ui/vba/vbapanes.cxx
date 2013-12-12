@@ -48,7 +48,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return word::XPane::static_type(0);
+        return cppu::UnoType<word::XPane>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -82,7 +82,7 @@ SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const
 uno::Type
 SwVbaPanes::getElementType() throw (uno::RuntimeException)
 {
-    return word::XPane::static_type(0);
+    return cppu::UnoType<word::XPane>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaPanes::createEnumeration() throw (uno::RuntimeException)

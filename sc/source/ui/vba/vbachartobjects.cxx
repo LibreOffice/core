@@ -153,7 +153,7 @@ ScVbaChartObjects::createEnumeration() throw (uno::RuntimeException)
 uno::Type
 ScVbaChartObjects::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XChartObject::static_type(0);
+    return cppu::UnoType<excel::XChartObject>::get();
 }
 
 // ScVbaCollectionBaseImpl

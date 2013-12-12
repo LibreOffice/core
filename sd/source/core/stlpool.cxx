@@ -1211,7 +1211,7 @@ Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException)
 {
     throwIfDisposed();
 
-    return XNameAccess::static_type();
+    return cppu::UnoType<XNameAccess>::get();
 }
 
 // --------------------------------------------------------------------

@@ -341,7 +341,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { OUString("ScriptConfiguration"), 0, ::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("OrganizerMode"), 0, ::getBooleanCppuType(),
                 ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("SourceStorage"), 0, embed::XStorage::static_type(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
@@ -785,7 +785,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         { OUString("StreamName"), 0, ::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StyleNames"), 0, ::getCppuType( (uno::Sequence<OUString>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StyleFamilies"), 0, ::getCppuType( (uno::Sequence<sal_Int32>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("TargetStorage"), 0, embed::XStorage::static_type(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );

@@ -115,7 +115,7 @@ uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*
 uno::Type
 SwVbaColumns::getElementType() throw (uno::RuntimeException)
 {
-    return word::XColumn::static_type(0);
+    return cppu::UnoType<word::XColumn>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaColumns::createEnumeration() throw (uno::RuntimeException)

@@ -72,7 +72,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     {
         FILL_PROPERTIES
 //      { "HasLevels",                    OWN_ATTR_HASLEVELS,             ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
-        { OUString("Style"),                        OWN_ATTR_STYLE,                 ::com::sun::star::style::XStyle::static_type(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType<::com::sun::star::style::XStyle>::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          ::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
         { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
         { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
@@ -801,16 +801,16 @@ sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell
 
 Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    if( rType == XMergeableCell::static_type() )
+    if( rType == cppu::UnoType<XMergeableCell>::get() )
         return Any( Reference< XMergeableCell >( this ) );
 
-    if( rType == XCell::static_type() )
+    if( rType == cppu::UnoType<XCell>::get() )
         return Any( Reference< XCell >( this ) );
 
-    if( rType == XLayoutConstrains::static_type() )
+    if( rType == cppu::UnoType<XLayoutConstrains>::get() )
         return Any( Reference< XLayoutConstrains >( this ) );
 
-    if( rType == XEventListener::static_type() )
+    if( rType == cppu::UnoType<XEventListener>::get() )
         return Any( Reference< XEventListener >( this ) );
 
     Any aRet( SvxUnoTextBase::queryAggregation( rType ) );
@@ -844,8 +844,8 @@ Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException)
 
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 2);
-    aTypes[nLen++] = XMergeableCell::static_type();
-    aTypes[nLen++] = XLayoutConstrains::static_type();
+    aTypes[nLen++] = cppu::UnoType<XMergeableCell>::get();
+    aTypes[nLen++] = cppu::UnoType<XLayoutConstrains>::get();
 
     return aTypes;
 }

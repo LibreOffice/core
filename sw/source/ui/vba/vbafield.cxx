@@ -520,7 +520,7 @@ SwVbaFields::getServiceImplName()
 uno::Type SAL_CALL
 SwVbaFields::getElementType() throw (uno::RuntimeException)
 {
-    return  word::XField::static_type(0);
+    return  cppu::UnoType<word::XField>::get();
 }
 
 uno::Sequence<OUString>

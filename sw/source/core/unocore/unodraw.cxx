@@ -1928,7 +1928,7 @@ void SwXShape::addPropertyChangeListener(
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
-    if ( xShapeAgg->queryAggregation( beans::XPropertySet::static_type() ) >>= xShapeProps )
+    if ( xShapeAgg->queryAggregation( cppu::UnoType<beans::XPropertySet>::get() ) >>= xShapeProps )
         xShapeProps->addPropertyChangeListener( _propertyName, _listener );
 }
 
@@ -1943,7 +1943,7 @@ void SwXShape::removePropertyChangeListener(
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
-    if ( xShapeAgg->queryAggregation( beans::XPropertySet::static_type() ) >>= xShapeProps )
+    if ( xShapeAgg->queryAggregation( cppu::UnoType<beans::XPropertySet>::get() ) >>= xShapeProps )
         xShapeProps->removePropertyChangeListener( _propertyName, _listener );
 }
 

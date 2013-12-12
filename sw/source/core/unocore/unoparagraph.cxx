@@ -1161,7 +1161,7 @@ SwXParagraph::createEnumeration() throw (uno::RuntimeException)
 
 uno::Type SAL_CALL SwXParagraph::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SwXParagraph::hasElements() throw (uno::RuntimeException)

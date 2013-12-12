@@ -434,11 +434,11 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException)
     lcl_copyTypes( aNormalizedTypes, ::connectivity::OConnectionWrapper::getTypes() );
 
     if ( !m_bSupportsViews )
-        aNormalizedTypes.erase( XViewsSupplier::static_type() );
+        aNormalizedTypes.erase( cppu::UnoType<XViewsSupplier>::get() );
     if ( !m_bSupportsUsers )
-        aNormalizedTypes.erase( XUsersSupplier::static_type() );
+        aNormalizedTypes.erase( cppu::UnoType<XUsersSupplier>::get() );
     if ( !m_bSupportsGroups )
-        aNormalizedTypes.erase( XGroupsSupplier::static_type() );
+        aNormalizedTypes.erase( cppu::UnoType<XGroupsSupplier>::get() );
 
     Sequence< Type > aSupportedTypes( aNormalizedTypes.size() );
     ::std::copy( aNormalizedTypes.begin(), aNormalizedTypes.end(), aSupportedTypes.getArray() );
@@ -454,11 +454,11 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 // com::sun::star::uno::XInterface
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
-    if ( !m_bSupportsViews && rType.equals( XViewsSupplier::static_type() ) )
+    if ( !m_bSupportsViews && rType.equals( cppu::UnoType<XViewsSupplier>::get() ) )
         return Any();
-    else if ( !m_bSupportsUsers && rType.equals( XUsersSupplier::static_type() ) )
+    else if ( !m_bSupportsUsers && rType.equals( cppu::UnoType<XUsersSupplier>::get() ) )
         return Any();
-    else if ( !m_bSupportsGroups && rType.equals( XGroupsSupplier::static_type() ) )
+    else if ( !m_bSupportsGroups && rType.equals( cppu::UnoType<XGroupsSupplier>::get() ) )
         return Any();
     Any aReturn = OSubComponent::queryInterface( rType );
     if (!aReturn.hasValue())

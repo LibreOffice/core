@@ -245,7 +245,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
         { OUString("IsMirrored"), OWN_ATTR_MIRRORED, ::getCppuBooleanType(), 0, 0},
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        { OUString("GraphicStream"), OWN_ATTR_GRAPHIC_STREAM, ::com::sun::star::io::XInputStream::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString("GraphicStream"), OWN_ATTR_GRAPHIC_STREAM, cppu::UnoType<::com::sun::star::io::XInputStream>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -726,7 +726,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
         // #i68101#
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
-        {OUString("PrivateStream"), OWN_ATTR_MEDIA_STREAM, ::com::sun::star::io::XInputStream::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        {OUString("PrivateStream"), OWN_ATTR_MEDIA_STREAM, cppu::UnoType<::com::sun::star::io::XInputStream>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         {OUString("PrivateTempFileURL"), OWN_ATTR_MEDIA_TEMPFILEURL, ::getCppuType((const OUString*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -741,7 +741,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_ZORDER),       OWN_ATTR_ZORDER, ::getCppuType((const sal_Int32*)0), 0, 0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERID),      SDRATTR_LAYERID, ::getCppuType((const sal_Int16*)0), 0,    0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERNAME),    SDRATTR_LAYERNAME, ::getCppuType((const OUString*)0), 0, 0},
-        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     OWN_ATTR_LDBITMAP, ::com::sun::star::awt::XBitmap::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_LINKDISPLAYBITMAP),     OWN_ATTR_LDBITMAP, cppu::UnoType<::com::sun::star::awt::XBitmap>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),       OWN_ATTR_LDNAME, ::getCppuType(( const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("Transformation"),               OWN_ATTR_TRANSFORMATION, ::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
@@ -750,15 +750,15 @@ SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME, ::getCppuType((const ::rtl::OUString*)0),    0,      0},
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
-        { OUString("Model"),                        OWN_ATTR_OLEMODEL               , ::com::sun::star::table::XTable::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { OUString("TableTemplate"),                OWN_ATTR_TABLETEMPLATE          , ::com::sun::star::container::XIndexAccess::static_type(), 0, 0},
+        { OUString("Model"),                        OWN_ATTR_OLEMODEL               , cppu::UnoType<::com::sun::star::table::XTable>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString("TableTemplate"),                OWN_ATTR_TABLETEMPLATE          , cppu::UnoType<::com::sun::star::container::XIndexAccess>::get(), 0, 0},
         { OUString("UseFirstRowStyle"),             OWN_ATTR_TABLETEMPLATE_FIRSTROW, ::getBooleanCppuType(),0, 0},
         { OUString("UseLastRowStyle"),              OWN_ATTR_TABLETEMPLATE_LASTROW, ::getBooleanCppuType(),0, 0},
         { OUString("UseFirstColumnStyle"),          OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN, ::getBooleanCppuType(),0, 0},
         { OUString("UseLastColumnStyle"),           OWN_ATTR_TABLETEMPLATE_LASTCOLUMN, ::getBooleanCppuType(),0, 0},
         { OUString("UseBandingRowStyle"),           OWN_ATTR_TABLETEMPLATE_BANDINGROWS, ::getBooleanCppuType(),0, 0},
         { OUString("UseBandingColumnStyle"),        OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS, ::getBooleanCppuType(),0, 0},
-        { OUString("ReplacementGraphic"),           OWN_ATTR_BITMAP, ::com::sun::star::graphic::XGraphic::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { OUString("ReplacementGraphic"),           OWN_ATTR_BITMAP, cppu::UnoType<::com::sun::star::graphic::XGraphic>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

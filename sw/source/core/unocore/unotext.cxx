@@ -195,67 +195,67 @@ uno::Any SAL_CALL
 SwXText::queryInterface(const uno::Type& rType) throw (uno::RuntimeException)
 {
     uno::Any aRet;
-    if (rType == text::XText::static_type())
+    if (rType == cppu::UnoType<text::XText>::get())
     {
         aRet <<= uno::Reference< text::XText >(this);
     }
-    else if (rType == text::XSimpleText::static_type())
+    else if (rType == cppu::UnoType<text::XSimpleText>::get())
     {
         aRet <<= uno::Reference< text::XSimpleText >(this);
     }
-    else if (rType == text::XTextRange::static_type())
+    else if (rType == cppu::UnoType<text::XTextRange>::get())
     {
         aRet <<= uno::Reference< text::XTextRange>(this);
     }
-    else if (rType == text::XTextRangeCompare::static_type())
+    else if (rType == cppu::UnoType<text::XTextRangeCompare>::get())
     {
         aRet <<= uno::Reference< text::XTextRangeCompare >(this);
     }
-    else if (rType == lang::XTypeProvider::static_type())
+    else if (rType == cppu::UnoType<lang::XTypeProvider>::get())
     {
         aRet <<= uno::Reference< lang::XTypeProvider >(this);
     }
-    else if (rType == text::XRelativeTextContentInsert::static_type())
+    else if (rType == cppu::UnoType<text::XRelativeTextContentInsert>::get())
     {
         aRet <<= uno::Reference< text::XRelativeTextContentInsert >(this);
     }
-    else if (rType == text::XRelativeTextContentRemove::static_type())
+    else if (rType == cppu::UnoType<text::XRelativeTextContentRemove>::get())
     {
         aRet <<= uno::Reference< text::XRelativeTextContentRemove >(this);
     }
-    else if (rType == beans::XPropertySet::static_type())
+    else if (rType == cppu::UnoType<beans::XPropertySet>::get())
     {
         aRet <<= uno::Reference< beans::XPropertySet >(this);
     }
-    else if (rType == lang::XUnoTunnel::static_type())
+    else if (rType == cppu::UnoType<lang::XUnoTunnel>::get())
     {
         aRet <<= uno::Reference< lang::XUnoTunnel >(this);
     }
-    else if (rType == text::XTextAppendAndConvert::static_type())
+    else if (rType == cppu::UnoType<text::XTextAppendAndConvert>::get())
     {
         aRet <<= uno::Reference< text::XTextAppendAndConvert >(this);
     }
-    else if (rType == text::XTextAppend::static_type())
+    else if (rType == cppu::UnoType<text::XTextAppend>::get())
     {
         aRet <<= uno::Reference< text::XTextAppend >(this);
     }
-    else if (rType == text::XTextPortionAppend::static_type())
+    else if (rType == cppu::UnoType<text::XTextPortionAppend>::get())
     {
         aRet <<= uno::Reference< text::XTextPortionAppend >(this);
     }
-    else if (rType == text::XParagraphAppend::static_type())
+    else if (rType == cppu::UnoType<text::XParagraphAppend>::get())
     {
         aRet <<= uno::Reference< text::XParagraphAppend >(this);
     }
-    else if (rType == text::XTextConvert::static_type() )
+    else if (rType == cppu::UnoType<text::XTextConvert>::get() )
     {
         aRet <<= uno::Reference< text::XTextConvert >(this);
     }
-    else if (rType == text::XTextContentAppend::static_type())
+    else if (rType == cppu::UnoType<text::XTextContentAppend>::get())
     {
         aRet <<= uno::Reference< text::XTextContentAppend >(this);
     }
-    else if(rType == text::XTextCopy::static_type())
+    else if(rType == cppu::UnoType<text::XTextCopy>::get())
     {
         aRet <<= uno::Reference< text::XTextCopy >( this );
     }
@@ -267,18 +267,18 @@ SwXText::getTypes() throw (uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aRet(12);
     uno::Type* pTypes = aRet.getArray();
-    pTypes[0] = text::XText::static_type();
-    pTypes[1] = text::XTextRangeCompare::static_type();
-    pTypes[2] = text::XRelativeTextContentInsert::static_type();
-    pTypes[3] = text::XRelativeTextContentRemove::static_type();
-    pTypes[4] = lang::XUnoTunnel::static_type();
-    pTypes[5] = beans::XPropertySet::static_type();
-    pTypes[6] = text::XTextPortionAppend::static_type();
-    pTypes[7] = text::XParagraphAppend::static_type();
-    pTypes[8] = text::XTextContentAppend::static_type();
-    pTypes[9] = text::XTextConvert::static_type();
-    pTypes[10] = text::XTextAppend::static_type();
-    pTypes[11] = text::XTextAppendAndConvert::static_type();
+    pTypes[0] = cppu::UnoType<text::XText>::get();
+    pTypes[1] = cppu::UnoType<text::XTextRangeCompare>::get();
+    pTypes[2] = cppu::UnoType<text::XRelativeTextContentInsert>::get();
+    pTypes[3] = cppu::UnoType<text::XRelativeTextContentRemove>::get();
+    pTypes[4] = cppu::UnoType<lang::XUnoTunnel>::get();
+    pTypes[5] = cppu::UnoType<beans::XPropertySet>::get();
+    pTypes[6] = cppu::UnoType<text::XTextPortionAppend>::get();
+    pTypes[7] = cppu::UnoType<text::XParagraphAppend>::get();
+    pTypes[8] = cppu::UnoType<text::XTextContentAppend>::get();
+    pTypes[9] = cppu::UnoType<text::XTextConvert>::get();
+    pTypes[10] = cppu::UnoType<text::XTextAppend>::get();
+    pTypes[11] = cppu::UnoType<text::XTextAppendAndConvert>::get();
 
     return aRet;
 }
@@ -2386,15 +2386,15 @@ SwXBodyText::queryAggregation(const uno::Type& rType)
 throw (uno::RuntimeException)
 {
     uno::Any aRet;
-    if (rType == container::XEnumerationAccess::static_type())
+    if (rType == cppu::UnoType<container::XEnumerationAccess>::get())
     {
         aRet <<= uno::Reference< container::XEnumerationAccess >(this);
     }
-    else if (rType == container::XElementAccess::static_type())
+    else if (rType == cppu::UnoType<container::XElementAccess>::get())
     {
         aRet <<= uno::Reference< container::XElementAccess >(this);
     }
-    else if (rType == lang::XServiceInfo::static_type())
+    else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
     {
         aRet <<= uno::Reference< lang::XServiceInfo >(this);
     }
@@ -2556,7 +2556,7 @@ throw (uno::RuntimeException)
 uno::Type SAL_CALL
 SwXBodyText::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL
@@ -2833,7 +2833,7 @@ throw (uno::RuntimeException)
 uno::Type SAL_CALL
 SwXHeadFootText::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SwXHeadFootText::hasElements() throw (uno::RuntimeException)

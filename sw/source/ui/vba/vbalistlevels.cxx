@@ -72,7 +72,7 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
 uno::Type
 SwVbaListLevels::getElementType() throw (uno::RuntimeException)
 {
-    return word::XListLevel::static_type(0);
+    return cppu::UnoType<word::XListLevel>::get();
 }
 
 uno::Reference< container::XEnumeration >

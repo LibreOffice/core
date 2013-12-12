@@ -782,7 +782,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -814,7 +814,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -848,7 +848,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -886,7 +886,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -919,7 +919,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -951,7 +951,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
@@ -1005,7 +1005,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
+                    *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);

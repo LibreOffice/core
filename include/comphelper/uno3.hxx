@@ -236,7 +236,7 @@ namespace comphelper
         if (_rxAggregate.is())
         {
             ::com::sun::star::uno::Any aCheck = _rxAggregate->queryAggregation(
-                iface::static_type());
+                cppu::UnoType<iface>::get());
             if (aCheck.hasValue())
                 _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
         }
@@ -256,7 +256,7 @@ namespace comphelper
         if (_rxObject.is())
         {
             ::com::sun::star::uno::Any aCheck = _rxObject->queryInterface(
-                iface::static_type());
+                cppu::UnoType<iface>::get());
             if(aCheck.hasValue())
             {
                 _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();

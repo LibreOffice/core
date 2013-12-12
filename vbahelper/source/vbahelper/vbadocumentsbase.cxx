@@ -167,7 +167,7 @@ public:
     //XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return frame::XModel::static_type(0);
+        return cppu::UnoType<frame::XModel>::get();
     }
 
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)

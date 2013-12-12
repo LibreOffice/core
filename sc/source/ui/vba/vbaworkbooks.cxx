@@ -169,7 +169,7 @@ ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< XHelperInterface >& xParen
 uno::Type
 ScVbaWorkbooks::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XWorkbook::static_type(0);
+    return cppu::UnoType<excel::XWorkbook>::get();
 }
 uno::Reference< container::XEnumeration >
 ScVbaWorkbooks::createEnumeration() throw (uno::RuntimeException)

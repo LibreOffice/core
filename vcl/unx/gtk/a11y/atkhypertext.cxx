@@ -201,7 +201,7 @@ static accessibility::XAccessibleHypertext*
     {
         if( !pWrap->mpHypertext && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleHypertext::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleHypertext>::get() );
             pWrap->mpHypertext = reinterpret_cast< accessibility::XAccessibleHypertext * > (any.pReserved);
             pWrap->mpHypertext->acquire();
         }

@@ -1749,7 +1749,7 @@ namespace frm
         Any aReturn = OListBoxControl_BASE::queryInterface( _rType );
 
         if  (   !aReturn.hasValue()
-            ||  _rType.equals( XTypeProvider::static_type() )
+            ||  _rType.equals( cppu::UnoType<XTypeProvider>::get() )
             )
             aReturn = OBoundControl::queryAggregation( _rType );
 

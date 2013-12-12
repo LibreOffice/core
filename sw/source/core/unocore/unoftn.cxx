@@ -500,7 +500,7 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException)
 
 uno::Type SAL_CALL SwXFootnote::getElementType() throw (uno::RuntimeException)
 {
-    return text::XTextRange::static_type();
+    return cppu::UnoType<text::XTextRange>::get();
 }
 
 sal_Bool SAL_CALL SwXFootnote::hasElements() throw (uno::RuntimeException)

@@ -63,7 +63,7 @@ ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::Runti
 uno::Type SAL_CALL
 ScVbaFormatConditions::getElementType() throw (css::uno::RuntimeException)
 {
-    return excel::XFormatCondition::static_type(0);
+    return cppu::UnoType<excel::XFormatCondition>::get();
 }
 
 

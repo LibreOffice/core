@@ -84,7 +84,7 @@ SwVbaDocuments::SwVbaDocuments( const uno::Reference< XHelperInterface >& xParen
 uno::Type
 SwVbaDocuments::getElementType() throw (uno::RuntimeException)
 {
-    return word::XDocument::static_type(0);
+    return cppu::UnoType<word::XDocument>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaDocuments::createEnumeration() throw (uno::RuntimeException)

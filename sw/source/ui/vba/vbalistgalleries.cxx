@@ -69,7 +69,7 @@ uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::A
 uno::Type
 SwVbaListGalleries::getElementType() throw (uno::RuntimeException)
 {
-    return word::XListGallery::static_type(0);
+    return cppu::UnoType<word::XListGallery>::get();
 }
 
 uno::Reference< container::XEnumeration >

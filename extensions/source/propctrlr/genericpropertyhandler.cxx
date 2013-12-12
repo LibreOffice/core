@@ -382,7 +382,7 @@ namespace pcr
         if ( !xIntrospectionAccess.is() )
             throw RuntimeException("The introspection service could not handle the given component.", *this );
 
-        m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
+        m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess
         m_xComponentIntrospectionAccess = xIntrospectionAccess;
         m_xPropertyState = m_xPropertyState.query( m_xComponent );

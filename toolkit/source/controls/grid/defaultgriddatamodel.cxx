@@ -75,7 +75,7 @@ namespace toolkit
     void DefaultGridDataModel::broadcast( GridDataEvent const & i_event,
         void ( SAL_CALL XGridDataListener::*i_listenerMethod )( GridDataEvent const & ), ::comphelper::ComponentGuard & i_instanceLock )
     {
-        ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( XGridDataListener::static_type() );
+        ::cppu::OInterfaceContainerHelper* pListeners = rBHelper.getContainer( cppu::UnoType<XGridDataListener>::get() );
         if ( !pListeners )
             return;
 
@@ -391,13 +391,13 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException)
     {
-        rBHelper.addListener( XGridDataListener::static_type(), i_listener );
+        rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException)
     {
-        rBHelper.removeListener( XGridDataListener::static_type(), i_listener );
+        rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------

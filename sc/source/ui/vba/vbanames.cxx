@@ -235,7 +235,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
 css::uno::Type
 ScVbaNames::getElementType() throw( css::uno::RuntimeException )
 {
-    return ov::excel::XName::static_type(0);
+    return cppu::UnoType<ov::excel::XName>::get();
 }
 
 uno::Reference< container::XEnumeration >

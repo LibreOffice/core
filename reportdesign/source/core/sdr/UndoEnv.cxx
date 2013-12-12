@@ -282,7 +282,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
                         m_pImpl->m_xIntrospection->inspect( makeAny( _rEvent.Source ) ),
                         UNO_SET_THROW
                     );
-                    rObjectInfo.xPropertyIntrospection.set( xIntrospection->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
+                    rObjectInfo.xPropertyIntrospection.set( xIntrospection->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
                 }
                 if ( rObjectInfo.xPropertyIntrospection.is() )
                 {

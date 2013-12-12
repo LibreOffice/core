@@ -55,7 +55,7 @@ static accessibility::XAccessibleAction*
     {
         if( !pWrap->mpAction && pWrap->mpContext )
         {
-            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleAction::static_type(NULL) );
+            uno::Any any = pWrap->mpContext->queryInterface( cppu::UnoType<accessibility::XAccessibleAction>::get() );
             pWrap->mpAction = reinterpret_cast< accessibility::XAccessibleAction * > (any.pReserved);
             pWrap->mpAction->acquire();
         }

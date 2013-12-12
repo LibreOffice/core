@@ -123,7 +123,7 @@ static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
                                ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
 {
     ::cppu::OInterfaceContainerHelper *const pContainer(rListeners.getContainer(
-            chart::XChartDataChangeEventListener::static_type()));
+            cppu::UnoType<chart::XChartDataChangeEventListener>::get()));
     if (pContainer)
     {
         lcl_SendChartEvent(rSource, *pContainer);
@@ -2414,7 +2414,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.addInterface(
-            lang::XEventListener::static_type(), xListener);
+            cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
 
 void SAL_CALL SwXTextTable::removeEventListener(
@@ -2423,7 +2423,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.removeInterface(
-            lang::XEventListener::static_type(), xListener);
+            cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
 
 uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
@@ -2924,7 +2924,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.addInterface(
-            chart::XChartDataChangeEventListener::static_type(), xListener);
+            cppu::UnoType<chart::XChartDataChangeEventListener>::get(), xListener);
 }
 
 void SAL_CALL SwXTextTable::removeChartDataChangeEventListener(
@@ -2933,7 +2933,7 @@ throw (uno::RuntimeException)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_Listeners.removeInterface(
-            chart::XChartDataChangeEventListener::static_type(), xListener);
+            cppu::UnoType<chart::XChartDataChangeEventListener>::get(), xListener);
 }
 
 sal_Bool SwXTextTable::isNotANumber(double nNumber) throw( uno::RuntimeException )

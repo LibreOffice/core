@@ -121,7 +121,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
     {
-        return excel::XAxis::static_type(0);
+        return cppu::UnoType<excel::XAxis>::get();
     }
     virtual ::sal_Bool SAL_CALL hasElements( ) throw (uno::RuntimeException)
     {
@@ -142,7 +142,7 @@ ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const un
 uno::Type SAL_CALL
 ScVbaAxes::getElementType() throw (css::uno::RuntimeException)
 {
-    return  excel::XAxes::static_type(0);
+    return  cppu::UnoType<excel::XAxes>::get();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

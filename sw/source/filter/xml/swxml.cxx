@@ -608,7 +608,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         { OUString("TextDocInOOoFileFormat"), 0,
               ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString("SourceStorage"), 0, embed::XStorage::static_type(),
+        { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
           ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

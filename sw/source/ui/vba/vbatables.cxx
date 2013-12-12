@@ -94,7 +94,7 @@ public:
         return uno::makeAny( xTable );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  text::XTextTable::static_type(0); }
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<text::XTextTable>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -218,7 +218,7 @@ SwVbaTables::getServiceImplName()
 uno::Type SAL_CALL
 SwVbaTables::getElementType() throw (uno::RuntimeException)
 {
-    return  word::XTable::static_type(0);
+    return  cppu::UnoType<word::XTable>::get();
 }
 
 uno::Sequence<OUString>

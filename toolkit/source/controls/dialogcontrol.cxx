@@ -130,7 +130,7 @@ public:
     }
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
     {
-        return T::static_type( NULL );
+        return cppu::UnoType<T>::get();
     }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException)
     {

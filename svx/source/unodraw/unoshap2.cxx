@@ -1479,7 +1479,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 }
             }
         }
-        else if( (rValue.getValueType() == awt::XBitmap::static_type()) || (rValue.getValueType() == graphic::XGraphic::static_type()))
+        else if( (rValue.getValueType() == cppu::UnoType<awt::XBitmap>::get()) || (rValue.getValueType() == cppu::UnoType<graphic::XGraphic>::get()))
         {
             Reference< graphic::XGraphic> xGraphic( rValue, UNO_QUERY );
             if( xGraphic.is() )

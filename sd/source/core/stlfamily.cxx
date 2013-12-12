@@ -305,7 +305,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
 
 Type SAL_CALL SdStyleFamily::getElementType() throw(RuntimeException)
 {
-    return XStyle::static_type();
+    return cppu::UnoType<XStyle>::get();
 }
 
 // ----------------------------------------------------------

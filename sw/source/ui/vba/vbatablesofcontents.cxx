@@ -91,7 +91,7 @@ public:
     }
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
-        return word::XTableOfContents::static_type(0);
+        return cppu::UnoType<word::XTableOfContents>::get();
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
@@ -150,7 +150,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
 uno::Type
 SwVbaTablesOfContents::getElementType() throw (uno::RuntimeException)
 {
-    return word::XTableOfContents::static_type(0);
+    return cppu::UnoType<word::XTableOfContents>::get();
 }
 uno::Reference< container::XEnumeration >
 SwVbaTablesOfContents::createEnumeration() throw (uno::RuntimeException)
