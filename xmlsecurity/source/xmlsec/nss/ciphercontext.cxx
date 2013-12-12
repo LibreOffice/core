@@ -38,11 +38,11 @@ uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANI
     xResult->m_pSlot = PK11_GetBestSlot( nNSSCipherID, NULL );
     if ( xResult->m_pSlot )
     {
-        SECItem aKeyItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aKey.getConstArray() ) ), aKey.getLength() };
+        SECItem aKeyItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aKey.getConstArray() ) ), static_cast<unsigned>(aKey.getLength()) };
         xResult->m_pSymKey = PK11_ImportSymKey( xResult->m_pSlot, nNSSCipherID, PK11_OriginDerive, bEncryption ? CKA_ENCRYPT : CKA_DECRYPT, &aKeyItem, NULL );
         if ( xResult->m_pSymKey )
         {
-            SECItem aIVItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aInitializationVector.getConstArray() ) ), aInitializationVector.getLength() };
+            SECItem aIVItem = { siBuffer, const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aInitializationVector.getConstArray() ) ), static_cast<unsigned>(aInitializationVector.getLength()) };
             xResult->m_pSecParam = PK11_ParamFromIV( nNSSCipherID, &aIVItem );
             if ( xResult->m_pSecParam )
             {
