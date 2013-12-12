@@ -1493,6 +1493,39 @@ void OpRoundUp::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpRoundDown::GenSlidingWindowFunction(std::stringstream &ss,
+             const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    int singleIndex =  gid0;\n";
+    ss << "    int intTmp;\n";
+    ss << "    double tmp;\n";
+    GenTmpVariables(ss,vSubArguments);
+    CheckAllSubArgumentIsNan(ss,vSubArguments);
+    ss << "    if(tmp1 >20 || tmp1 < -20)";
+    ss << "    {\n";
+    ss << "        tmp = NAN;\n";
+    ss << "    }else\n";
+    ss << "    {\n";
+    ss << "        for(int i=0;i<tmp1;i++)\n";
+    ss << "            tmp0 = tmp0 * 10;\n";
+    ss << "        intTmp = (int)tmp0;\n";
+    ss << "        tmp = intTmp;\n";
+    ss << "        for(int i=0;i<tmp1;i++)\n";
+    ss << "            tmp = tmp / 10;\n";
+    ss << "    }\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 void OpOdd::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName,
     SubArguments &vSubArguments)
