@@ -251,6 +251,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
         && mpGraphics->supportsOperation( OutDevSupport_B2DDraw )
+// Should iOS be included? Android? Or does this code even get invoked
+// ever for those?
 #if defined UNX && ! defined MACOSX
             && GetBitCount() > 8
 #endif
