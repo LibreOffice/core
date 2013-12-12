@@ -89,6 +89,7 @@ RequestQueue::RequestQueue (const SharedCacheContext& rpCacheContext)
 
 RequestQueue::~RequestQueue (void)
 {
+    Clear();
 }
 
 
@@ -115,7 +116,15 @@ void RequestQueue::AddRequest (
     // order.
     sal_Int32 nPriority (mpCacheContext->GetPriority(aKey));
     Request aRequest (aKey, nPriority, eRequestClass);
-    mpRequestQueue->insert(aRequest);
+
+    std::pair<Container::iterator,bool> ret = mpRequestQueue->insert(aRequest);
+    bool bInserted = ret.second == true;
+
+    if (bInserted)
+    {
+        SdrPage *pPage = const_cast<SdrPage*>(aRequest.maKey);
+        pPage->AddPageUser(*this);
+    }
 
     SSCD_SET_REQUEST_CLASS(aKey,eRequestClass);
 
@@ -126,8 +135,11 @@ void RequestQueue::AddRequest (
 #endif
 }
 
-
-
+void RequestQueue::PageInDestruction(const SdrPage& rPage)
+{
+    //remove any requests pending for this page which is going away now
+    RemoveRequest(&rPage);
+}
 
 bool RequestQueue::RemoveRequest (
     CacheKey aKey)
@@ -147,7 +159,11 @@ bool RequestQueue::RemoveRequest (
                 mnMinimumPriority++;
             else if (aRequestIterator->mnPriorityInClass == mnMaximumPriority-1)
                 mnMaximumPriority--;
+
+            SdrPage *pPage = const_cast<SdrPage*>(aRequestIterator->maKey);
+            pPage->RemovePageUser(*this);
             mpRequestQueue->erase(aRequestIterator);
+
             bRequestWasRemoved = true;
 
             if (bRequestWasRemoved)
@@ -224,7 +240,10 @@ void RequestQueue::PopFront (void)
     {
         SSCD_SET_STATUS(maRequestQueue.begin()->mpData->GetPage(),NONE);
 
-        mpRequestQueue->erase(mpRequestQueue->begin());
+        Container::const_iterator aIter(mpRequestQueue->begin());
+        SdrPage *pPage = const_cast<SdrPage*>(aIter->maKey);
+        pPage->RemovePageUser(*this);
+        mpRequestQueue->erase(aIter);
 
         // Reset the priority counter if possible.
         if (mpRequestQueue->empty())
@@ -250,6 +269,12 @@ bool RequestQueue::IsEmpty (void)
 void RequestQueue::Clear (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
+
+    for (Container::iterator aI = mpRequestQueue->begin(), aEnd = mpRequestQueue->end(); aI != aEnd; ++aI)
+    {
+        SdrPage *pPage = const_cast<SdrPage*>(aI->maKey);
+        pPage->RemovePageUser(*this);
+    }
 
     mpRequestQueue->clear();
     mnMinimumPriority = 0;
