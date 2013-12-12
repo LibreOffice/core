@@ -32,6 +32,37 @@
 
 namespace datastreams {
 
+class CallerThread : public salhelper::Thread
+{
+    DataStream *mpDataStream;
+public:
+    osl::Condition maStart;
+    bool mbTerminate;
+
+    CallerThread(DataStream *pData):
+        Thread("CallerThread")
+        ,mpDataStream(pData)
+        ,mbTerminate(false)
+    {}
+
+private:
+    virtual void execute()
+    {
+        while (!mbTerminate)
+        {
+            // wait for a small amount of time, so that
+            // painting methods have a chance to be called.
+            // And also to make UI more responsive.
+            TimeValue const aTime = {0, 100000};
+            maStart.wait();
+            maStart.reset();
+            if (!mbTerminate)
+                while (mpDataStream->ImportData())
+                    wait(aTime);
+        };
+    }
+};
+
 class ReaderThread : public salhelper::Thread
 {
     SvStream *mpStream;
@@ -188,10 +219,11 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString&
     , mbRunning(false)
     , mpLines(0)
     , mnLinesCount(0)
+    , mnRepaintCounter(0)
 {
-    SetRefreshHandler(LINK( this, DataStream, RefreshHdl ));
-    SetRefreshControl(mpScDocument->GetRefreshTimerControlAddress());
-    SetTimeout( 1 );
+    mxThread = new datastreams::CallerThread( this );
+    mxThread->launch();
+
     Decode(rURL, rRange, nLimit, rMove, nSettings);
 }
 
@@ -199,6 +231,9 @@ DataStream::~DataStream()
 {
     if (mbRunning)
         StopImport();
+    mxThread->mbTerminate = true;
+    mxThread->maStart.set();
+    mxThread->join();
     if (mxReaderThread.is())
         mxReaderThread->endThread();
     delete mpLines;
@@ -274,7 +309,7 @@ void DataStream::StartImport()
         mxReaderThread->launch();
     }
     mbRunning = true;
-    AutoTimer::Start();
+    mxThread->maStart.set();
 }
 
 void DataStream::StopImport()
@@ -282,7 +317,16 @@ void DataStream::StopImport()
     if (!mbRunning)
         return;
     mbRunning = false;
-    AutoTimer::Stop();
+    Repaint();
+}
+
+void DataStream::Repaint()
+{
+    SCROW nEndRow = mpEndRange ? mpEndRange->aEnd.Row() : MAXROW;
+    ScRange aRange(maStartRange.aStart);
+    aRange.aEnd = ScAddress(maRange.aEnd.Col(), nEndRow, maRange.aStart.Tab());
+
+    mpScDocShell->PostPaint(aRange, PAINT_GRID);
 }
 
 void DataStream::MoveData()
@@ -383,13 +427,14 @@ void DataStream::Text2Doc()
             ++nCol;
         }
         ++nRow;
+        ++mnRepaintCounter;
     }
     aDocImport.finalize();
-    mpScDocShell->PostPaint( maRange, PAINT_GRID );
 }
 
 bool DataStream::ImportData()
 {
+    SolarMutexGuard aGuard;
     if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
         return mbRunning;
 
@@ -425,7 +470,6 @@ bool DataStream::ImportData()
             mpScDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, aAddress));
         }
         aDocImport.finalize();
-        mpScDocShell->PostPaint( aRangeList, PAINT_GRID );
     }
     mpScDocShell->SetDocumentModified();
     if (meMove == NO_MOVE)
@@ -437,9 +481,12 @@ bool DataStream::ImportData()
         mpScDocShell->GetViewData()->GetView()->AlignToCursor(
                 maRange.aStart.Col(), maRange.aStart.Row(), SC_FOLLOW_JUMP);
     }
-    SCROW aEndRow = mpEndRange.get() ? mpEndRange->aEnd.Row() : MAXROW;
-    mpScDocShell->PostPaint( ScRange( maStartRange.aStart, ScAddress( maRange.aEnd.Col(),
-                    aEndRow, maRange.aStart.Tab()) ), PAINT_GRID );
+
+    if (mnRepaintCounter > 100)
+    {
+        Repaint();
+        mnRepaintCounter = 0;
+    }
 
     return mbRunning;
 }

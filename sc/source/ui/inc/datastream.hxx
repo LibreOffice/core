@@ -13,13 +13,13 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <address.hxx>
-#include <refreshtimer.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
 namespace datastreams {
+    class CallerThread;
     class ReaderThread;
 }
 class ScDocShell;
@@ -28,7 +28,7 @@ class Window;
 
 typedef std::vector<OString> LinesList;
 
-class DataStream : boost::noncopyable, public sfx2::SvBaseLink, ScRefreshTimer
+class DataStream : boost::noncopyable, public sfx2::SvBaseLink
 {
     OString ConsumeLine();
     void MoveData();
@@ -63,6 +63,9 @@ public:
     void StopImport();
 
 private:
+    void Repaint();
+
+private:
     ScDocShell *mpScDocShell;
     ScDocument *mpScDocument;
     OUString msURL;
@@ -75,9 +78,11 @@ private:
     bool mbValuesInLine;
     LinesList *mpLines;
     size_t mnLinesCount;
+    size_t mnRepaintCounter;
     ScRange maRange;
     ScRange maStartRange;
     boost::scoped_ptr<ScRange> mpEndRange;
+    rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
 };
 
