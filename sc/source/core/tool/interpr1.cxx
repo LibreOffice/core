@@ -5277,7 +5277,9 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
     }
     else
     {
-        ScMatrixRef pResMat;
+        std::vector<sal_uInt8> aResArray;
+        size_t nRowSize = 0;
+        size_t nColSize = 0;
         double fVal = 0.0;
         double fSum = 0.0;
         double fMem = 0.0;
@@ -5440,17 +5442,11 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 return 0;
 
             // initialize temporary result matrix
-            if (!pResMat)
+            if (aResArray.empty())
             {
-                SCSIZE nResC, nResR;
-                nResC = nCol2 - nCol1 + 1;
-                nResR = nRow2 - nRow1 + 1;
-                pResMat = GetNewMat(nResC, nResR, false);
-                if (!pResMat)
-                {
-                    SetError( errIllegalParameter);
-                    return 0;
-                }
+                nColSize = nCol2 - nCol1 + 1;
+                nRowSize = nRow2 - nRow1 + 1;
+                aResArray.resize(nColSize*nRowSize, 0);
             }
 
             ScQueryParam rParam;
@@ -5494,9 +5490,19 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     return 0;
                 }
 
-                // query and result matrices have same geometry, and the
                 // result matrix is filled with boolean values.
-                *pResMat += *pResultMatrix;
+                std::vector<double> aResValues;
+                pResultMatrix->GetDoubleArray(aResValues, true);
+                if (aResArray.size() != aResValues.size())
+                {
+                    SetError( errIllegalParameter);
+                    return 0;
+                }
+
+                std::vector<sal_uInt8>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<double>::const_iterator itThisRes = aResValues.begin();
+                for (; itRes != itResEnd; ++itRes, ++itThisRes)
+                    *itRes += *itThisRes;
             }
             else
             {
@@ -5507,9 +5513,9 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 {
                     do
                     {
-                        SCSIZE nC = aCellIter.GetCol() + nColDiff;
-                        SCSIZE nR = aCellIter.GetRow() + nRowDiff;
-                        pResMat->PutDouble(pResMat->GetDouble(nC, nR)+1.0, nC, nR);
+                        size_t nC = aCellIter.GetCol() + nColDiff;
+                        size_t nR = aCellIter.GetRow() + nRowDiff;
+                        ++aResArray[nC*nRowSize+nR];
                     } while ( aCellIter.GetNext() );
                 }
             }
@@ -5594,16 +5600,15 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             aAdr.SetTab( nMainTab1 );
             if (pMainMatrix)
             {
-                std::vector<double> aResValues, aMainValues;
-                pResMat->GetDoubleArray(aResValues, true);
+                std::vector<double> aMainValues;
                 pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
-                if (aResValues.size() != aMainValues.size())
+                if (aResArray.size() != aMainValues.size())
                 {
                     SetError( errIllegalArgument);
                     return 0;
                 }
 
-                std::vector<double>::const_iterator itRes = aResValues.begin(), itResEnd = aResValues.end();
+                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
                 std::vector<double>::const_iterator itMain = aMainValues.begin();
                 for (; itRes != itResEnd; ++itRes, ++itMain)
                 {
@@ -5626,13 +5631,12 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             }
             else
             {
-                SCSIZE nC, nR;
-                pResMat->GetDimensions(nC, nR);
-                for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                for (size_t nCol = 0; nCol < nColSize; ++nCol)
                 {
-                    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+                    for (size_t nRow = 0; nRow < nRowSize; ++nRow, ++itRes)
                     {
-                        if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
+                        if (*itRes == nQueryCount)
                         {
                             aAdr.SetCol( static_cast<SCCOL>(nCol) + nMainCol1);
                             aAdr.SetRow( static_cast<SCROW>(nRow) + nMainRow1);
@@ -5657,14 +5661,10 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
         }
         else
         {
-            SCSIZE nC, nR;
-            pResMat->GetDimensions(nC, nR);
-            for (SCSIZE nCol = 0; nCol < nC; ++nCol)
-            {
-                for (SCSIZE nRow = 0; nRow < nR; ++nRow)
-                    if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
-                        ++fCount;
-            }
+            std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+            for (; itRes != itResEnd; ++itRes)
+                if (*itRes == nQueryCount)
+                    ++fCount;
         }
 
         switch( eFunc )
