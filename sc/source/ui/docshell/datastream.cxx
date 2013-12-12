@@ -378,6 +378,7 @@ void DataStream::Text2Doc()
                     aDocImport.setNumericCell(aAddress, aCell.toDouble());
                 else
                     aDocImport.setStringCell(aAddress, aCell);
+                mpScDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, aAddress));
             }
             ++nCol;
         }
@@ -418,10 +419,12 @@ bool DataStream::ImportData()
             else
                 aDocImport.setStringCell(aAddress, sValue);
             aRangeList.Join(aAddress);
+            mpScDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, aAddress));
         }
         aDocImport.finalize();
         mpScDocShell->PostPaint( aRangeList, PAINT_GRID );
     }
+    mpScDocShell->SetDocumentModified();
     if (meMove == NO_MOVE)
         return mbRunning;
 
