@@ -40,7 +40,7 @@ struct _Unwind_Exception
     void * exception_cleanup;
     uintptr_t private_1;
     uintptr_t private_2;
-} __attribute__((__aligned__));
+};
 
 struct __cxa_exception
 {

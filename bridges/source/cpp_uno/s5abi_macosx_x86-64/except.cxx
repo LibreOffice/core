@@ -213,8 +213,6 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
-    if( !header->exceptionType) // TODO: remove this when getRTTI() always returns non-NULL
-        return; // NOTE: leak for now
     typelib_TypeDescription * pTD = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );
