@@ -8675,12 +8675,12 @@ if test "$with_system_curl" = "yes"; then
         curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
     fi
 
-    AC_MSG_CHECKING([whether libcurl is >= 7.13.1])
+    AC_MSG_CHECKING([whether libcurl is >= 7.19.4])
 
     case $curl_version in
     dnl brackets doubled below because Autoconf uses them as m4 quote characters,
     dnl so they need to be doubled to end up in the configure script
-    7.13.1|7.1[[4-9]].*|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
+    7.19.4|7.19.[[5-9]]|7.[[2-9]]?.*|7.???.*|[[8-9]].*|[[1-9]][[0-9]].*)
         AC_MSG_RESULT([yes, you have $curl_version])
         ;;
     *)
