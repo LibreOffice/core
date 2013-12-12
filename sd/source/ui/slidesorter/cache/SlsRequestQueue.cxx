@@ -49,11 +49,19 @@ public:
         This just establishes an order so that the STL containers are happy.
         The order is not semantically interpreted.
     */
-    class DataComparator { public:
-        DataComparator (const Request&rRequest):maKey(rRequest.maKey){}
-        DataComparator (const CacheKey aKey):maKey(aKey){}
-        bool operator() (const Request& rRequest) { return maKey == rRequest.maKey; }
-    private: const CacheKey maKey;
+    class DataComparator
+    {
+    public:
+        DataComparator (const CacheKey aKey)
+            : maKey(aKey)
+        {
+        }
+        bool operator() (const Request& rRequest) const
+        {
+            return maKey == rRequest.maKey;
+        }
+    private:
+        const CacheKey maKey;
     };
 
     CacheKey maKey;
