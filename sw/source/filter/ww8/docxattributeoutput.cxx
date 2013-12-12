@@ -702,7 +702,7 @@ void DocxAttributeOutput::EndRun()
     }
 
     // if there is some redlining in the document, output it
-    StartRedline();
+    StartRedline( m_pRedlineData );
 
     DoWriteBookmarks( );
     WriteCommentRanges();
@@ -720,7 +720,9 @@ void DocxAttributeOutput::EndRun()
     WritePendingPlaceholder();
 
     // if there is some redlining in the document, output it
-    EndRedline();
+    EndRedline( m_pRedlineData );
+
+    m_pRedlineData = NULL;
 
     if ( m_closeHyperlinkInThisRun )
     {
@@ -1592,11 +1594,10 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
 // 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
 // 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
-void DocxAttributeOutput::StartRedline()
+void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
 {
-    if ( !m_pRedlineData )
+    if ( !pRedlineData )
         return;
-    const SwRedlineData* pRedlineData = m_pRedlineData;
 
     // FIXME check if it's necessary to travel over the Next()'s in pRedlineData
 
@@ -1632,12 +1633,12 @@ void DocxAttributeOutput::StartRedline()
     }
 }
 
-void DocxAttributeOutput::EndRedline()
+void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
 {
-    if ( !m_pRedlineData )
+    if ( !pRedlineData )
         return;
 
-    switch ( m_pRedlineData->GetType() )
+    switch ( pRedlineData->GetType() )
     {
         case nsRedlineType_t::REDLINE_INSERT:
             m_pSerializer->endElementNS( XML_w, XML_ins );
@@ -1653,8 +1654,6 @@ void DocxAttributeOutput::EndRedline()
         default:
             break;
     }
-
-    m_pRedlineData = NULL;
 }
 
 void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
