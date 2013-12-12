@@ -5663,6 +5663,7 @@ wrapTopAndBottom
 wrapTrailSpaces
 wrapcoords
 writeProtection
+wpg
 wps
 wsp
 wsDr
