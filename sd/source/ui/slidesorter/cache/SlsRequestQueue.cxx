@@ -40,9 +40,14 @@ public:
         bool operator() (const Request& rRequest1, const Request& rRequest2)
         {
             if (rRequest1.meClass == rRequest2.meClass)
-                return (rRequest1.mnPriorityInClass > rRequest2.mnPriorityInClass);
-            else
-                return (rRequest1.meClass < rRequest2.meClass);
+            {
+                if (rRequest1.mnPriorityInClass == rRequest2.mnPriorityInClass)
+                {
+                    return rRequest1.maKey < rRequest2.maKey;
+                }
+                return rRequest1.mnPriorityInClass > rRequest2.mnPriorityInClass;
+            }
+            return rRequest1.meClass < rRequest2.meClass;
         }
     };
     /** Request data is compared arbitrarily by their addresses in memory.
