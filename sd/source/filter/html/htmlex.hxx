@@ -129,11 +129,11 @@ class HtmlExport
     bool mbDocColors;
 
     OUString   maHTMLExtension;
-    OUString** mpHTMLFiles;
-    OUString** mpImageFiles;
-    OUString** mpThumbnailFiles;
-    OUString** mpPageNames;
-    OUString** mpTextFiles;
+    std::vector<OUString> maHTMLFiles;
+    std::vector<OUString> maImageFiles;
+    std::vector<OUString> maThumbnailFiles;
+    std::vector<OUString> maPageNames;
+    std::vector<OUString> maTextFiles;
 
     OUString maExportPath; ///< output directory or URL.
     OUString maIndexUrl;
