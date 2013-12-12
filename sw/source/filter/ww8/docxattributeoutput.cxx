@@ -599,9 +599,6 @@ void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineD
     // Merge the marks for the ordered elements
     m_pSerializer->mergeTopMarks( );
 
-    // insert copy of <rPr>
-    m_pSerializer->copyTopMarkPop();
-
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
     if ( m_nColBreakStatus == COLBRK_WRITE )
@@ -1155,9 +1152,6 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     m_pSerializer->mergeTopMarks();
 
     m_pSerializer->endElementNS( XML_w, XML_rPr );
-
-    // Clone <rPr>...</rPr> for later re-use, in pPr
-    m_pSerializer->copyTopMarkPush();
 
     // write footnotes/endnotes if we have any
     FootnoteEndnoteReference();
