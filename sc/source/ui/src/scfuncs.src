@@ -6180,7 +6180,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Border arguments of the binomial distribution." ;
+            Text [ en-US ] = "Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value." ;
         };
         ExtraData =
         {
@@ -6220,7 +6220,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Border arguments of the binomial distribution." ;
+            Text [ en-US ] = "Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value." ;
         };
         ExtraData =
         {
