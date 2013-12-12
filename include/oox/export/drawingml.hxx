@@ -53,12 +53,24 @@ namespace io {
 }
 }}}
 
+class OutlinerParaObject;
+
 namespace oox {
 namespace core {
     class XmlFilterBase;
 }
 
 namespace drawingml {
+
+/// Interface to be implemented by the parent exporter that knows how to handle shape text.
+class OOX_DLLPUBLIC DMLTextExport
+{
+public:
+    virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
+protected:
+    DMLTextExport() {}
+    virtual ~DMLTextExport() {}
+};
 
 class OOX_DLLPUBLIC DrawingML {
 public:
@@ -69,6 +81,8 @@ private:
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
+    /// Parent exporter, used for text callback.
+    DMLTextExport* mpTextExport;
 
 protected:
     ::com::sun::star::uno::Any mAny;
@@ -87,7 +101,8 @@ protected:
     const char* GetRelationCompPrefix();
 
 public:
-    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX ) : meDocumentType( eDocumentType ), mpFS( pFS ), mpFB( pFB ) {}
+    DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
+        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }

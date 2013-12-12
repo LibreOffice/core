@@ -123,8 +123,8 @@ namespace oox { namespace drawingml {
 // not thread safe
 int ShapeExport::mnSpreadsheetCounter = 1;
 
-ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType )
-    : DrawingML( pFS, pFB, eDocumentType )
+ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport )
+    : DrawingML( pFS, pFB, eDocumentType, pTextExport )
     , mnShapeIdMax( 1 )
     , mnPictureIdMax( 1 )
     , mnXmlNamespace( nXmlNamespace )

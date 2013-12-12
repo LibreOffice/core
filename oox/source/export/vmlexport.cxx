@@ -1030,7 +1030,9 @@ sal_Int32 VMLExport::StartShape()
         if( pParaObj )
         {
             // this is reached only in case some text is attached to the shape
+            m_pSerializer->startElementNS(XML_v, XML_textbox, FSEND);
             m_pTextExport->WriteOutliner(*pParaObj);
+            m_pSerializer->endElementNS(XML_v, XML_textbox);
             if( bOwnParaObj )
                 delete pParaObj;
         }

@@ -66,6 +66,7 @@
 #include <svl/languageoptions.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
@@ -1344,6 +1345,36 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
     Reference< XEnumeration > enumeration( access->createEnumeration() );
     if( !enumeration.is() )
         return;
+
+    SdrObject* pSdrObject = GetSdrObjectFromXShape(uno::Reference<drawing::XShape>(rXIface, uno::UNO_QUERY_THROW));
+    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, pSdrObject);
+    if (pTxtObj && mpTextExport)
+    {
+        const OutlinerParaObject* pParaObj = 0;
+        bool bOwnParaObj = false;
+
+        /*
+        #i13885#
+        When the object is actively being edited, that text is not set into
+        the objects normal text object, but lives in a separate object.
+        */
+        if (pTxtObj->IsTextEditActive())
+        {
+            pParaObj = pTxtObj->GetEditOutlinerParaObject();
+            bOwnParaObj = true;
+        }
+        else
+            pParaObj = pTxtObj->GetOutlinerParaObject();
+
+        if (pParaObj)
+        {
+            // this is reached only in case some text is attached to the shape
+            mpTextExport->WriteOutliner(*pParaObj);
+            if (bOwnParaObj)
+                delete pParaObj;
+        }
+        return;
+    }
 
     while( enumeration->hasMoreElements() ) {
         Reference< XTextContent > paragraph;

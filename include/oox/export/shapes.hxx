@@ -76,7 +76,7 @@ private:
 
 public:
 
-    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = NULL, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX );
+    ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, ShapeHashMap* pShapeMap = NULL, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 );
     virtual ~ShapeExport() {}
 
     static sal_Bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface );

@@ -3800,7 +3800,6 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 
     sal_Int32 nPara = rEditObj.GetParagraphCount();
 
-    m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
     for (sal_Int32 n = 0; n < nPara; ++n)
     {
@@ -3844,7 +3843,6 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         m_pSerializer->endElementNS( XML_w, XML_p );
     }
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
-    m_pSerializer->endElementNS( XML_v, XML_textbox );
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()

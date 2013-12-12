@@ -36,6 +36,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <oox/export/vmlexport.hxx>
+#include <oox/export/drawingml.hxx>
 #include <docxtablestyleexport.hxx>
 
 class SwGrfNode;
@@ -100,7 +101,7 @@ struct PageMargins
 };
 
 /// The class that has handlers for various resource types when exporting as DOCX.
-class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport
+class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport, public oox::drawingml::DMLTextExport
 {
 public:
     /// Export the state of RTL/CJK.

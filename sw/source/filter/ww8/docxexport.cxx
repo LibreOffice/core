@@ -331,7 +331,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
 
 void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
 {
-    oox::drawingml::ShapeExport aExport(XML_wps, m_pDocumentFS, 0, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX);
+    oox::drawingml::ShapeExport aExport(XML_wps, m_pDocumentFS, 0, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX, m_pAttrOutput);
     aExport.WriteShape(xShape);
 }
 
