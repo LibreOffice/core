@@ -180,7 +180,6 @@ public class MultiMethodTest
             }
             System.out.println(" is iface: [" + testedClassName + "] testcode: [" + entry.entryName + "]");
 
-            tEnv.getTestObject();
             Object oObj = UnoRuntime.queryInterface(testedClass, tEnv.getTestObject());
 
             if (oObj == null)
@@ -200,7 +199,16 @@ public class MultiMethodTest
             }
 
             //setting the field oObj
-            setField("oObj", oObj);
+            try
+            {
+                setField("oObj", oObj);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                setSubStates(e.toString());
+                return tRes;
+            }
         }
 
         // to perform some stuff before all method tests
@@ -464,37 +472,9 @@ public class MultiMethodTest
         return clName.substring(clName.lastIndexOf('.') + 1);
     }
 
-    /**
-     * Initializes <code>fieldName</code> of the subclass with
-     * <code>value</code>.
-     *
-     * @return Status describing the result of the operation.
-     */
-    protected Status setField(String fieldName, Object value)
+    private void setField(String fieldName, Object value)
+        throws NoSuchFieldException, IllegalAccessException
     {
-        Field objField;
-
-        try
-        {
-            objField = this.getClass().getField(fieldName);
-        }
-        catch (NoSuchFieldException nsfE)
-        {
-            return Status.exception(nsfE);
-        }
-
-        try
-        {
-            objField.set(this, value);
-            return Status.passed(true);
-        }
-        catch (IllegalArgumentException iaE)
-        {
-            return Status.exception(iaE);
-        }
-        catch (IllegalAccessException iaE)
-        {
-            return Status.exception(iaE);
-        }
+        this.getClass().getField(fieldName).set(this, value);
     }
 }

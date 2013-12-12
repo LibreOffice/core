@@ -62,6 +62,8 @@ public class _XDataPilotTable2 extends MultiMethodTest
     private ArrayList<Integer> mDataFieldDims = null;
     private ArrayList<CellAddress> mResultCells = null;
 
+    public XDataPilotTable2 oObj;
+
     /**
      * exception to be thrown when obtaining a result data for a cell fails
      * (probably because the cell is not a result cell).
