@@ -105,7 +105,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="writer_all">
-                    <property name="label" translatable="yes">New _Document</property>
+                    <property name="label" translatable="yes">Writer _Document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -125,7 +125,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="calc_all">
-                    <property name="label" translatable="yes">New _Spreadsheet</property>
+                    <property name="label" translatable="yes">Calc _Spreadsheet</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -145,7 +145,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="impress_all">
-                    <property name="label" translatable="yes">New _Presentation</property>
+                    <property name="label" translatable="yes">Impress _Presentation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -165,7 +165,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="draw_all">
-                    <property name="label" translatable="yes">New D_rawing</property>
+                    <property name="label" translatable="yes">Draw D_rawing</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -185,7 +185,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="math_all">
-                    <property name="label" translatable="yes">New For_mula</property>
+                    <property name="label" translatable="yes">Math For_mula</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -205,7 +205,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="database_all">
-                    <property name="label" translatable="yes">New D_atabase</property>
+                    <property name="label" translatable="yes">Base D_atabase</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
