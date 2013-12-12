@@ -76,6 +76,7 @@
 #include <editeng/editobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svl/grabbagitem.hxx>
@@ -3433,8 +3434,9 @@ void DocxAttributeOutput::WriteDMLDrawing( const SdrObject* pSdrObject, const Sw
     m_pSerializer->startElementNS( XML_a, XML_graphic,
             FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
             FSEND );
+    const SdrObjGroup* pObjGroup = PTR_CAST(SdrObjGroup, pSdrObject);
     m_pSerializer->startElementNS( XML_a, XML_graphicData,
-            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+            XML_uri, (pObjGroup ? "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" : "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"),
             FSEND );
 
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
@@ -3450,8 +3452,9 @@ void DocxAttributeOutput::WriteDMLAndVMLDrawing(const SdrObject* sdrObj, const S
 {
     m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
+    const SdrObjGroup* pObjGroup = PTR_CAST(SdrObjGroup, sdrObj);
     m_pSerializer->startElementNS(XML_mc, XML_Choice,
-            XML_Requires, "wps",
+            XML_Requires, (pObjGroup ? "wpg" : "wps"),
             FSEND);
     WriteDMLDrawing(sdrObj, &rFrmFmt);
     m_pSerializer->endElementNS(XML_mc, XML_Choice);
