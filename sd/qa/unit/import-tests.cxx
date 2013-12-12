@@ -50,6 +50,7 @@ public:
     void testFdo71075();
     void testN828390();
     void testN828390_2();
+    void testN828390_3();
     void testFdo68594();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
@@ -61,6 +62,7 @@ public:
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390);
     CPPUNIT_TEST(testN828390_2);
+    CPPUNIT_TEST(testN828390_3);
     CPPUNIT_TEST(testFdo68594);
 
     CPPUNIT_TEST_SUITE_END();
@@ -246,6 +248,39 @@ void SdFiltersTest::testN828390_2()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT(aEdit.GetText(0) == OUString("Linux  "));
     CPPUNIT_ASSERT(aEdit.GetText(1) == OUString("Standard Platform"));
+}
+
+void SdFiltersTest::testN828390_3()
+{
+    bool bPassed = true;
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    SdrObject *pObj = pPage->GetObj(0);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    std::vector<EECharAttrib> rLst;
+    aEdit.GetCharAttribs(1, rLst);
+    for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+    {
+        const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>((*it).pAttr);
+        if(pFontEscapement)
+        {
+            if( pFontEscapement->GetEsc() != 0 )
+            {
+                bPassed = false;
+                break;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("CharEscapment not imported properly", bPassed);
 }
 
 void SdFiltersTest::testN778859()
