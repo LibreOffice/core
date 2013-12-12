@@ -42,7 +42,6 @@
 #include "AccTableEventListener.hxx"
 #include "AccObject.hxx"
 #include "unomsaaevent.hxx"
-#include "checkmt.hxx"
 
 
 using namespace std;
@@ -159,14 +158,6 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
    */
 sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
 {
-    // no idea why this checks for main thread but with this check no mutex
-    // is needed here (the test only accesses Application const member)
-
-    if (!IsInMainThread())
-    {
-        return sal_False;
-    }
-
     Reference< XAccessibleContext > pRContext;
 
     if( pXAcc == NULL)
