@@ -37,17 +37,8 @@ public:
 
 public:
     // IUNOXWrapper
-
-    STDMETHOD(put_XInterface)(hyper pXInterface)
-    {
-        pUNOInterface = (com::sun::star::accessibility::XAccessible*)pXInterface;
-        return S_OK;
-    }
-
-    STDMETHOD(put_XSubInterface)(hyper)
-    {
-        return S_OK;
-    }
+    STDMETHOD(put_XInterface)(hyper pXInterface);
+    STDMETHOD(put_XSubInterface)(hyper);
 
 protected:
 

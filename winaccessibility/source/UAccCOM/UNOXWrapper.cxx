@@ -21,7 +21,20 @@
 #include "UAccCOM.h"
 #include "UNOXWrapper.h"
 
+using namespace ::com::sun::star;
+
 /////////////////////////////////////////////////////////////////////////////
 // CUNOXWrapper
+
+STDMETHODIMP CUNOXWrapper::put_XInterface(hyper nXInterface)
+{
+    pUNOInterface = reinterpret_cast<accessibility::XAccessible*>(nXInterface);
+    return S_OK;
+}
+
+STDMETHODIMP CUNOXWrapper::put_XSubInterface(hyper)
+{
+    return S_OK;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
