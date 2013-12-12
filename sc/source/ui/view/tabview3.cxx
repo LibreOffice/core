@@ -2634,8 +2634,12 @@ void ScTabView::CheckNeedsRepaint()
             pGridWin[i]->CheckNeedsRepaint();
 }
 
-
-
-
+bool ScTabView::NeedsRepaint()
+{
+    for (size_t i = 0; i < 4; i++)
+        if (pGridWin[i] && pGridWin[i]->IsVisible() && pGridWin[i]->NeedsRepaint())
+            return true;
+    return false;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

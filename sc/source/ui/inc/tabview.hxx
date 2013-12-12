@@ -437,6 +437,7 @@ public:
     void            UpdateFormulas();
     void            InterpretVisible();
     void            CheckNeedsRepaint();
+    bool            NeedsRepaint();
 
     void            PaintRangeFinder( long nNumber = -1 );
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );

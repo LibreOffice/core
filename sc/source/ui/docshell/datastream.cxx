@@ -390,6 +390,9 @@ void DataStream::Text2Doc()
 
 bool DataStream::ImportData()
 {
+    if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
+        return mbRunning;
+
     MoveData();
     if (mbValuesInLine)
     {
