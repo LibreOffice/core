@@ -543,7 +543,7 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
     else if ( wsLanguage == L"gu" )
         usPrimaryLang = LANG_GUJARATI;                    //Gujarati
     else if ( wsLanguage == L"or" )
-        usPrimaryLang = LANG_ODIA;                        //Not supported.
+        usPrimaryLang = LANG_ORIYA;                       //Not supported.
     else if ( wsLanguage == L"ta" )
         usPrimaryLang = LANG_TAMIL;                       //Tamil
     else if ( wsLanguage == L"te" )
