@@ -129,6 +129,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( moBaseline.has() ) {
         rPropMap[ PROP_CharEscapement ] <<= sal_Int16(moBaseline.get( 0 ) / 1000);
         rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(DFLT_ESC_PROP);
+    } else {
+        rPropMap[ PROP_CharEscapement ] <<= sal_Int16(0);
+        rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(100); // 100%
     }
 
     if( !bUseOptional || moBold.has() ) {
