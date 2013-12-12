@@ -35,6 +35,7 @@ public:
     void testStockChart();
     void testBarChart();
     void testCrosses();
+    void testChartDataTable();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -43,7 +44,7 @@ public:
     CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
-
+    CPPUNIT_TEST(testChartDataTable);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -433,6 +434,16 @@ void Chart2ExportTest::testCrosses()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", "autoZero");
+}
+void Chart2ExportTest::testChartDataTable()
+{
+    load("/chart2/qa/extras/data/docx/", "testChartDataTable.docx");
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

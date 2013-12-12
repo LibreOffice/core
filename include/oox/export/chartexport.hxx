@@ -118,6 +118,7 @@ private:
     void exportTitle( com::sun::star::uno::Reference<
                           ::com::sun::star::drawing::XShape > xShape );
     void exportPlotArea( );
+    void exportDataTable( );
 
     void exportAreaChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportBarChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );

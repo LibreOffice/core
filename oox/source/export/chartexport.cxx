@@ -1080,11 +1080,48 @@ void ChartExport::exportPlotArea( )
             exportShapeProps( xWallPropSet );
         }
     }
-
+    exportDataTable();
     pFS->endElement( FSNS( XML_c, XML_plotArea ) );
 
 }
 
+void ChartExport::exportDataTable( )
+{
+    FSHelperPtr pFS = GetFS();
+    Reference< beans::XPropertySet > aPropSet( mxDiagram, uno::UNO_QUERY );
+
+    sal_Bool bShowVBorder = sal_False;
+    sal_Bool bShowHBorder = sal_False;
+    sal_Bool bShowOutline = sal_False;
+
+    if (GetProperty( aPropSet, "DataTableHBorder"))
+        mAny >>= bShowHBorder;
+    if (GetProperty( aPropSet, "DataTableVBorder"))
+        mAny >>= bShowVBorder;
+    if (GetProperty( aPropSet, "DataTableOutline"))
+        mAny >>= bShowOutline;
+
+    if (bShowVBorder || bShowHBorder || bShowOutline)
+    {
+        pFS->startElement( FSNS( XML_c, XML_dTable),
+                FSEND );
+        if (bShowHBorder)
+            pFS->singleElement( FSNS( XML_c, XML_showHorzBorder ),
+                            XML_val, "1",
+                            FSEND );
+        if (bShowVBorder)
+            pFS->singleElement( FSNS( XML_c, XML_showVertBorder ),
+                            XML_val, "1",
+                            FSEND );
+        if (bShowOutline)
+            pFS->singleElement( FSNS( XML_c, XML_showOutline ),
+                            XML_val, "1",
+                            FSEND );
+
+        pFS->endElement(  FSNS( XML_c, XML_dTable));
+    }
+
+}
 void ChartExport::exportAreaChart( Reference< chart2::XChartType > xChartType )
 {
     FSHelperPtr pFS = GetFS();
