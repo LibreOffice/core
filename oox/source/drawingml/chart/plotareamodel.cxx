@@ -48,6 +48,19 @@ WallFloorModel::~WallFloorModel()
 
 // ============================================================================
 
+DataTableModel::DataTableModel() :
+        mbShowHBorder(false),
+        mbShowVBorder(false),
+        mbShowOutline(false)
+{
+}
+
+DataTableModel::~DataTableModel()
+{
+}
+
+// ============================================================================
+
 PlotAreaModel::PlotAreaModel()
 {
 }
