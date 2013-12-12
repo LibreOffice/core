@@ -38,33 +38,24 @@ class OOO_DLLPUBLIC_CHARTTOOLS RegressionCurveHelper
 {
 public:
     /// returns a model mean-value line
-    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >
-        createMeanValueLine(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext > & xContext );
+    SAL_DLLPRIVATE static css::uno::Reference<css::chart2::XRegressionCurve>
+        createMeanValueLine(const css::uno::Reference<css::uno::XComponentContext> & xContext );
 
     /// returns a model regression curve
-    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >
+    SAL_DLLPRIVATE static css::uno::Reference<css::chart2::XRegressionCurve>
         createRegressionCurveByServiceName(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext > & xContext,
+            const css::uno::Reference<css::uno::XComponentContext> & xContext,
             OUString aServiceName );
 
     static bool hasMeanValueLine(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+        const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
 
     static bool isMeanValueLine(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve > & xRegCurve );
+        const css::uno::Reference<css::chart2::XRegressionCurve> & xRegCurve );
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >
+    static css::uno::Reference<css::chart2::XRegressionCurve>
         getMeanValueLine(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+            const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
 
     /** creates a mean-value line and adds it to the container.
 
@@ -72,16 +63,12 @@ public:
              If set, this property-set will be used to apply a line color
      */
     static void addMeanValueLine(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xSeriesProp );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt,
+        const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
     static void removeMeanValueLine(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt );
 
     enum tRegressionType
     {
@@ -99,68 +86,56 @@ public:
     /** Returns the first regression curve found that is not of type
         mean-value line
      */
-    static com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve >
+    static css::uno::Reference<com::sun::star::chart2::XRegressionCurve>
         getFirstCurveNotMeanValueLine(
-            const com::sun::star::uno::Reference<
-                com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
+            const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
     /** Returns the regression curve found at the index provided.
      */
-    static com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurve >
+    static css::uno::Reference<css::chart2::XRegressionCurve>
         getRegressionCurveAtIndex(
-            const com::sun::star::uno::Reference<com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer,
+            const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
             sal_Int32 aIndex);
 
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
     static tRegressionType getFirstRegressTypeNotMeanValueLine(
-        const com::sun::star::uno::Reference<
-            com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
+        const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
     static tRegressionType getRegressionType(
-        const com::sun::star::uno::Reference<
-            com::sun::star::chart2::XRegressionCurve >& xCurve );
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
                not null
         @param xEquationProperties is set at the new regression curve as
                equation properties if not null
     */
-    static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurve >
+    static css::uno::Reference<css::chart2::XRegressionCurve>
         addRegressionCurve(
             tRegressionType eType,
-            com::sun::star::uno::Reference<
-                com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer,
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext >& xContext,
-            const com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet >& xPropertySource =
-                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >(),
-            const com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet >& xEquationProperties =
-                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >() );
+            css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
+            const css::uno::Reference<css::uno::XComponentContext>& xContext,
+            const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
+                    css::uno::Reference<css::beans::XPropertySet>(),
+            const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
+                    css::uno::Reference<css::beans::XPropertySet>() );
 
     static bool removeAllExceptMeanValueLine(
-        com::sun::star::uno::Reference<
-            com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
     static void removeEquations(
-        com::sun::star::uno::Reference<
-            com::sun::star::chart2::XRegressionCurveContainer >& xCurveContainer );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
-    static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurve >
+    static css::uno::Reference<css::chart2::XRegressionCurve>
         changeRegressionCurveType(
             tRegressionType eType,
-            com::sun::star::uno::Reference<
-                com::sun::star::chart2::XRegressionCurveContainer > & xRegressionCurveContainer,
-            com::sun::star::uno::Reference<
-                com::sun::star::chart2::XRegressionCurve > & xRegressionCurve,
-            const com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > & xContext );
+            css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegressionCurveContainer,
+            css::uno::Reference<css::chart2::XRegressionCurve>& xRegressionCurve,
+            const css::uno::Reference<css::uno::XComponentContext>& xContext );
 
     /// returns a calculator object for regression curves (used by the view)
-    static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurveCalculator >
+    static css::uno::Reference<css::chart2::XRegressionCurveCalculator>
         createRegressionCurveCalculatorByServiceName( OUString aServiceName );
 
     /** recalculates the regression parameters according to the data given in
@@ -179,10 +154,8 @@ public:
             there is a data-sequence with role "values-x"
      */
     SAL_DLLPRIVATE static void initializeCurveCalculator(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XDataSource > & xSource,
+        const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
+        const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
         bool bUseXValuesIfAvailable = true );
 
     /** Same method as above, but uses the given XModel to determine the
@@ -191,55 +164,43 @@ public:
         also changed.
      */
     static void initializeCurveCalculator(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+        const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
+        const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
+        const css::uno::Reference<css::frame::XModel>& xModel );
 
-    static OUString getUINameForRegressionCurve( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+    static OUString getUINameForRegressionCurve(
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     static OUString getRegressionCurveName(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     static OUString getRegressionCurveGenericName(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     static OUString getRegressionCurveSpecificName(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static ::std::vector< ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve > > getAllRegressionCurvesNotMeanValueLine(
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDiagram > & xDiagram );
+    static std::vector<css::uno::Reference<css::chart2::XRegressionCurve> >
+        getAllRegressionCurvesNotMeanValueLine(
+                const css::uno::Reference<css::chart2::XDiagram>& xDiagram );
 
-    static void resetEquationPosition( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+    static void resetEquationPosition(
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /// @return the index of the given curve in the given container. -1 if not contained
     static sal_Int32 getRegressionCurveIndex(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xContainer,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+        const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xContainer,
+        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static bool hasEquation(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+    static bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
 private:
-    // not implemented
+    // instatiation not allowed
     RegressionCurveHelper();
 };
 
 } //  namespace chart
 
-// INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
-#endif
+#endif // INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
