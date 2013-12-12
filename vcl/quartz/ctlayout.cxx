@@ -64,8 +64,6 @@ private:
     // mutable members since these details are all lazy initialized
     mutable double  mfCachedWidth;          // cached value of resulting typographical width
 
-    mutable float mfAdjustedLineLength;
-
     // x-offset relative to layout origin
     // currently only used in RTL-layouts
     mutable double  mfBaseAdv;
@@ -77,7 +75,6 @@ CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
 ,   mfCachedWidth( -1 )
-,   mfAdjustedLineLength( 0 )
 ,   mfBaseAdv( 0 )
 {
 }
@@ -162,7 +159,6 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
     mfCachedWidth = nPixelWidth;
-    mfAdjustedLineLength = nPixelWidth - fTrailingSpace;
 }
 
 // When drawing right aligned text, rounding errors in the position returned by
@@ -225,36 +221,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     }
 
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
-#ifdef MACOSX
-    // For some reason on OS X the problem with text colour being out of sync
-    // does not seem to occur.
     CTLineDraw( mpCTLine, rAquaGraphics.mrContext );
-#else
-    if( CFDictionaryGetValue( mpTextStyle->GetStyleDict(), kCTFontAttributeName) )
-    {
-        // We did likely not know the correct intended colour of the
-        // text in LayoutText(), so have to redo layout and justify.
-        CFStringRef aCFText = CFAttributedStringGetString( mpAttrString );
-        CFAttributedStringRef pAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
-        CTLineRef pCTLine = CTLineCreateWithAttributedString( pAttrString );
-        CFRelease( pAttrString );
-        if( mfAdjustedLineLength > 0 )
-        {
-            CTLineRef pNewCTLine = CTLineCreateJustifiedLine( pCTLine, 1.0, mfAdjustedLineLength );
-            CFRelease( pCTLine );
-            pCTLine = pNewCTLine;
-        }
-        CTLineDraw( pCTLine, rAquaGraphics.mrContext );
-        CFRelease( pCTLine );
-    }
-    else
-    {
-        // FIXME: can the colour be wrong also the other way around:
-        // some leftover wrong colour was used in LayoutText(), but
-        // then here the style does not actually contain any colour?
-        CTLineDraw( mpCTLine, rAquaGraphics.mrContext );
-    }
-#endif
 #ifndef IOS
     // request an update of the changed window area
     if( rAquaGraphics.IsWindowGraphics() )
