@@ -3216,6 +3216,10 @@ namespace xmloff { namespace token {
         XML_RFC_LANGUAGE_TAG,
         XML_RFC_LANGUAGE_TAG_ASIAN,
         XML_RFC_LANGUAGE_TAG_COMPLEX,
+        // Chart data table properties
+        XML_CHART_DTABLE_SHOWHORZBORDER,
+        XML_CHART_DTABLE_SHOWVERTBORDER,
+        XML_CHART_DTABLE_SHOWOUTLINE,
 
         XML_TOKEN_END
     };

@@ -3216,6 +3216,9 @@ namespace xmloff { namespace token {
         TOKEN( "rfc-language-tag",          XML_RFC_LANGUAGE_TAG ),
         TOKEN( "rfc-language-tag-asian",    XML_RFC_LANGUAGE_TAG_ASIAN ),
         TOKEN( "rfc-language-tag-complex",  XML_RFC_LANGUAGE_TAG_COMPLEX ),
+        TOKEN( "data-table-show-horz-border",     XML_CHART_DTABLE_SHOWHORZBORDER ),
+        TOKEN( "data-table-show-vert-border",     XML_CHART_DTABLE_SHOWVERTBORDER ),
+        TOKEN( "data-table-show-outline",     XML_CHART_DTABLE_SHOWOUTLINE ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

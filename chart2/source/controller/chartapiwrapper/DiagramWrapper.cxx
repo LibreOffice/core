@@ -133,7 +133,10 @@ enum
     PROP_DIAGRAM_HAS_SECOND_X_AXIS_TITLE,
     PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
 
-    PROP_DIAGRAM_AUTOMATIC_SIZE
+    PROP_DIAGRAM_AUTOMATIC_SIZE,
+    PROP_DIAGRAM_DATATABLEHBORDER,
+    PROP_DIAGRAM_DATATABLEVBORDER,
+    PROP_DIAGRAM_DATATABLEOUTLINE
 };
 
 void lcl_AddPropertiesToVector(
@@ -415,6 +418,25 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( "DataTableHBorder",
+                PROP_DIAGRAM_DATATABLEHBORDER,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( "DataTableVBorder",
+                PROP_DIAGRAM_DATATABLEVBORDER,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( "DataTableOutline",
+                PROP_DIAGRAM_DATATABLEOUTLINE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
 }
 
 struct StaticDiagramWrapperPropertyArray_Initializer

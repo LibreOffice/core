@@ -71,7 +71,10 @@ enum
     PROP_DIAGRAM_ROTATION_HORIZONTAL,
     PROP_DIAGRAM_ROTATION_VERTICAL,
     PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
-    PROP_DIAGRAM_3DRELATIVEHEIGHT
+    PROP_DIAGRAM_3DRELATIVEHEIGHT,
+    PROP_DIAGRAM_DATATABLEHBORDER,
+    PROP_DIAGRAM_DATATABLEVBORDER,
+    PROP_DIAGRAM_DATATABLEOUTLINE
 };
 
 void lcl_AddPropertiesToVector(
@@ -169,6 +172,25 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_3DRELATIVEHEIGHT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
+   rOutProperties.push_back(
+       Property( "DataTableHBorder",
+               PROP_DIAGRAM_DATATABLEHBORDER,
+                 ::getBooleanCppuType(),
+                 beans::PropertyAttribute::BOUND
+                 | beans::PropertyAttribute::MAYBEDEFAULT ));
+   rOutProperties.push_back(
+       Property( "DataTableVBorder",
+               PROP_DIAGRAM_DATATABLEVBORDER,
+                 ::getBooleanCppuType(),
+                 beans::PropertyAttribute::BOUND
+                 | beans::PropertyAttribute::MAYBEDEFAULT ));
+   rOutProperties.push_back(
+       Property( "DataTableOutline",
+               PROP_DIAGRAM_DATATABLEOUTLINE,
+                 ::getBooleanCppuType(),
+                 beans::PropertyAttribute::BOUND
+                 | beans::PropertyAttribute::MAYBEDEFAULT ));
+
 }
 
 struct StaticDiagramDefaults_Initializer
@@ -188,6 +210,9 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEHBORDER, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEVBORDER, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
          ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
