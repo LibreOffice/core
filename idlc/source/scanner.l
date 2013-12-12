@@ -246,8 +246,6 @@ static void parseLineAndFile(sal_Char* pBuf)
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
-#elif defined __SUNPRO_CC
-#pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 /**/

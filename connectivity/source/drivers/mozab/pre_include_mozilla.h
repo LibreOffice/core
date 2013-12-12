@@ -52,8 +52,6 @@
     && !defined __clang__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-#elif defined __SUNPRO_CC
-    #pragma disable_warn
 #elif defined _MSC_VER
     #pragma warning(push, 1)
     #pragma warning(disable:4946 4710)

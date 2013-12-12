@@ -379,17 +379,11 @@ inline void SAL_CALL cppu_ext_getMapping(
 //##################################################################################################
 //##################################################################################################
 
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-static OUString * s_pStaticOidPart = 0;
-#endif
-
 // environment init stuff
 //--------------------------------------------------------------------------------------------------
 inline const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
 {
-#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
     static OUString * s_pStaticOidPart = 0;
-#endif
     if (! s_pStaticOidPart)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -404,12 +398,8 @@ inline const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
             {
                 aRet.append( (sal_Int32)ar[i], 16 );
             }
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-            s_pStaticOidPart = new OUString( aRet.makeStringAndClear() );
-#else
             static OUString s_aStaticOidPart( aRet.makeStringAndClear() );
             s_pStaticOidPart = &s_aStaticOidPart;
-#endif
         }
     }
     return *s_pStaticOidPart;

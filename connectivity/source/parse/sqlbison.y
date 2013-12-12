@@ -46,9 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable:4273 4701)
 #endif
@@ -4811,8 +4809,6 @@ int OSQLParser::SQLlex()
 	return s_pScanner->SQLlex();
 }
 
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(pop)
 #endif

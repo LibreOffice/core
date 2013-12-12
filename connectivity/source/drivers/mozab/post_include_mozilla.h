@@ -20,8 +20,6 @@
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
     && !defined __clang__
 #pragma GCC diagnostic pop
-#elif defined __SUNPRO_CC
-#pragma enable_warn
 #elif defined _MSC_VER
 #pragma warning(pop)
 #endif

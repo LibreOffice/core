@@ -56,13 +56,6 @@ void dso_exit(void) {
     }
 }
 
-#ifdef __SUNPRO_CC
-# pragma init(dso_init)
-# pragma fini(dso_exit)
-#endif
-
-
-
 namespace {
 
 struct InitVtableFactory {
