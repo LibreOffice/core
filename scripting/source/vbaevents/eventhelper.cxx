@@ -92,9 +92,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
-#define MAP_CHAR_LEN(x) OUString(x)
-#define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
-
 // Some constants
 const static OUString DELIM("::");
 const static sal_Int32 DELIMLEN = DELIM.getLength();
@@ -216,11 +213,11 @@ struct TypeList
     int nListLength;
 };
 
-Type typeXFixedText = GET_TYPE(awt::XFixedText);
-Type typeXTextComponent = GET_TYPE(awt::XTextComponent);
-Type typeXComboBox = GET_TYPE(awt::XComboBox);
-Type typeXRadioButton = GET_TYPE(awt::XRadioButton);
-Type typeXListBox = GET_TYPE(awt::XListBox);
+Type typeXFixedText = cppu::UnoType<awt::XFixedText>::get();
+Type typeXTextComponent = cppu::UnoType<awt::XTextComponent>::get();
+Type typeXComboBox = cppu::UnoType<awt::XComboBox>::get();
+Type typeXRadioButton = cppu::UnoType<awt::XRadioButton>::get();
+Type typeXListBox = cppu::UnoType<awt::XListBox>::get();
 
 
 TypeList fixedTextList = {&typeXFixedText, 1};
@@ -232,49 +229,49 @@ TypeList listBoxList = {&typeXListBox, 1};
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
-    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },
+    { OUString("actionPerformed"), { OUString("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },
     // actionPerformed ooo event
-    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Click"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } },
+    { OUString("actionPerformed"), { OUString("_Click"), NULL, ApproveAll, NULL } },
+    { OUString("itemStateChanged"), { OUString("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } },
     // itemStateChanged ooo event
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },
 
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&listBoxList) } },
+    { OUString("itemStateChanged"), { OUString("_Click"), NULL, ApproveType, (void*)(&listBoxList) } },
     // changed ooo event
-    { MAP_CHAR_LEN("changed"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+    { OUString("changed"), { OUString("_Change"), NULL, ApproveAll, NULL } },
 
     // focusGained ooo event
-    { MAP_CHAR_LEN("focusGained"), { MAP_CHAR_LEN("_GotFocus"), NULL, ApproveAll, NULL } },
+    { OUString("focusGained"), { OUString("_GotFocus"), NULL, ApproveAll, NULL } },
 
     // focusLost ooo event
-    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_LostFocus"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), NULL, ApproveType, (void*)(&textCompList) } }, // support VBA TextBox_Exit event
+    { OUString("focusLost"), { OUString("_LostFocus"), NULL, ApproveAll, NULL } },
+    { OUString("focusLost"), { OUString("_Exit"), NULL, ApproveType, (void*)(&textCompList) } }, // support VBA TextBox_Exit event
 
     // adjustmentValueChanged ooo event
-    { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Scroll"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+    { OUString("adjustmentValueChanged"), { OUString("_Scroll"), NULL, ApproveAll, NULL } },
+    { OUString("adjustmentValueChanged"), { OUString("_Change"), NULL, ApproveAll, NULL } },
 
     // textChanged ooo event
-    { MAP_CHAR_LEN("textChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
+    { OUString("textChanged"), { OUString("_Change"), NULL, ApproveAll, NULL } },
 
     // keyReleased ooo event
-    { MAP_CHAR_LEN("keyReleased"), { MAP_CHAR_LEN("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
+    { OUString("keyReleased"), { OUString("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
 
     // mouseReleased ooo event
-    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } },
-    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+    { OUString("mouseReleased"), { OUString("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } },
+    { OUString("mouseReleased"), { OUString("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
 
     // mousePressed ooo event
-    { MAP_CHAR_LEN("mousePressed"), { MAP_CHAR_LEN("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("mousePressed"), { MAP_CHAR_LEN("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, NULL } },
+    { OUString("mousePressed"), { OUString("_MouseDown"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+    { OUString("mousePressed"), { OUString("_DblClick"), ooMouseEvtToVBADblClick, ApproveAll, NULL } },
 
     // mouseMoved ooo event
-    { MAP_CHAR_LEN("mouseMoved"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } },
+    { OUString("mouseMoved"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
+    { OUString("mouseDragged"), { OUString("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } },
 
     // keyPressed ooo event
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } }
+    { OUString("keyPressed"), { OUString("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
+    { OUString("keyPressed"), { OUString("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } }
 };
 
 EventInfoHash& getEventTransInfo()
@@ -283,7 +280,7 @@ EventInfoHash& getEventTransInfo()
     static EventInfoHash eventTransInfo;
     if ( !initialised )
     {
-        OUString sEventInfo = MAP_CHAR_LEN("");
+        OUString sEventInfo;
         TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
         int nCount = sizeof(aTranslatePropMap_Impl) / sizeof(aTranslatePropMap_Impl[0]);
 
