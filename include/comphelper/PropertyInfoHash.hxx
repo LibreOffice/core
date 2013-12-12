@@ -42,24 +42,14 @@ namespace comphelper
         : mnMapId ( nMapId )
         , mpInfo ( pInfo ) {}
     };
-    struct eqFunc
-    {
-        sal_Bool operator()( const OUString &r1,
-                             const OUString &r2) const
-        {
-            return r1 == r2;
-        }
-    };
 }
 
 typedef boost::unordered_map < OUString,
                         ::comphelper::PropertyInfo*,
-                        OUStringHash,
-                        ::comphelper::eqFunc > PropertyInfoHash;
+                        OUStringHash > PropertyInfoHash;
 typedef boost::unordered_map < OUString,
                         ::comphelper::PropertyData*,
-                        OUStringHash,
-                        ::comphelper::eqFunc > PropertyDataHash;
+                        OUStringHash > PropertyDataHash;
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
