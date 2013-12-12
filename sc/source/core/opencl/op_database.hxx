@@ -87,6 +87,13 @@ public:
     virtual std::string BinFuncName(void) const { return "Dvarp"; }
 };
 
+class OpDcount: public CheckVariables
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+             const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "Dcount"; }
+};
 
 }}
 
