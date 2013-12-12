@@ -200,8 +200,8 @@ public:
 
     OUString      *pFuncName;              /**< Function name */
     OUString      *pFuncDesc;              /**< Description of function */
-    OUString     **ppDefArgNames;          /**< Parameter name(s) */
-    OUString     **ppDefArgDescs;          /**< Description(s) of parameter(s) */
+    std::vector<OUString> maDefArgNames;          /**< Parameter name(s) */
+    std::vector<OUString> maDefArgDescs;          /**< Description(s) of parameter(s) */
     ParameterFlags       *pDefArgFlags;           /**< Flags for each parameter */
     sal_uInt16            nFIndex;                /**< Unique function index */
     sal_uInt16            nCategory;              /**< Function category */

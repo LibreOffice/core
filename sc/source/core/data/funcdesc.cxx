@@ -66,8 +66,6 @@ public:
 ScFuncDesc::ScFuncDesc() :
         pFuncName       (NULL),
         pFuncDesc       (NULL),
-        ppDefArgNames   (NULL),
-        ppDefArgDescs   (NULL),
         pDefArgFlags    (NULL),
         nFIndex         (0),
         nCategory       (0),
@@ -90,18 +88,11 @@ void ScFuncDesc::Clear()
         nArgs -= VAR_ARGS - 1;
     if (nArgs)
     {
-        for (sal_uInt16 i=0; i<nArgs; i++ )
-        {
-            delete ppDefArgNames[i];
-            delete ppDefArgDescs[i];
-        }
-        delete [] ppDefArgNames;
-        delete [] ppDefArgDescs;
         delete [] pDefArgFlags;
     }
     nArgCount = 0;
-    ppDefArgNames = NULL;
-    ppDefArgDescs = NULL;
+    maDefArgNames.clear();
+    maDefArgDescs.clear();
     pDefArgFlags = NULL;
 
     delete pFuncName;
@@ -136,7 +127,7 @@ OUString ScFuncDesc::GetParamList() const
                 else
                 {
                     nLastAdded = i;
-                    aSig.append(*(ppDefArgNames[i]));
+                    aSig.append(maDefArgNames[i]);
                     if ( i != nArgCount-1 )
                     {
                         aSig.append(sep);
@@ -157,7 +148,7 @@ OUString ScFuncDesc::GetParamList() const
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
-                    aSig.append(*(ppDefArgNames[nArg]));
+                    aSig.append(maDefArgNames[nArg]);
                     aSig.append(sep);
                     aSig.appendAscii( " " );
                 }
@@ -166,11 +157,11 @@ OUString ScFuncDesc::GetParamList() const
              * there were, we'd have to cope with it here and above for the fix
              * parameters. For now parameters are always added, so no special
              * treatment of a trailing "; " necessary. */
-            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.append(maDefArgNames[nFix]);
             aSig.append('1');
             aSig.append(sep);
             aSig.append(' ');
-            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.append(maDefArgNames[nFix]);
             aSig.append('2');
             aSig.append(sep);
             aSig.appendAscii(" ... ");
@@ -182,23 +173,23 @@ OUString ScFuncDesc::GetParamList() const
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
-                    aSig.append(*(ppDefArgNames[nArg]));
+                    aSig.append(maDefArgNames[nArg]);
                     aSig.append(sep);
                     aSig.appendAscii( " " );
                 }
             }
 
-            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.append(maDefArgNames[nFix]);
             aSig.append('1');
             aSig.appendAscii( ", " );
-            aSig.append(*(ppDefArgNames[nFix+1]));
+            aSig.append(maDefArgNames[nFix+1]);
             aSig.append('1');
             aSig.append(sep);
             aSig.appendAscii( " " );
-            aSig.append(*(ppDefArgNames[nFix]));
+            aSig.append(maDefArgNames[nFix]);
             aSig.append('2');
             aSig.appendAscii( ", " );
-            aSig.append(*(ppDefArgNames[nFix+1]));
+            aSig.append(maDefArgNames[nFix+1]);
             aSig.append('2');
             aSig.append(sep);
             aSig.appendAscii( " ... " );
@@ -373,12 +364,12 @@ sal_uInt32 ScFuncDesc::getParameterCount() const
 
 OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
 {
-    return *(ppDefArgNames[_nPos]);
+    return maDefArgNames[_nPos];
 }
 
 OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const
 {
-    return *(ppDefArgDescs[_nPos]);
+    return maDefArgDescs[_nPos];
 }
 
 bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
@@ -483,63 +474,65 @@ ScFunctionList::ScFunctionList() :
         pDesc->nArgCount   = nArgs;
         if (nArgs)
         {
+            pDesc->maDefArgNames.clear();
+            pDesc->maDefArgNames.resize(nArgs);
+            pDesc->maDefArgDescs.clear();
+            pDesc->maDefArgDescs.resize(nArgs);
             pDesc->pDefArgFlags  = new ScFuncDesc::ParameterFlags[nArgs];
-            pDesc->ppDefArgNames = new OUString*[nArgs];
-            pDesc->ppDefArgDescs = new OUString*[nArgs];
             for (sal_uInt16 j = 0; j < nArgs; ++j)
             {
                 pDesc->pDefArgFlags[j].bOptional = false;
                 pDesc->pDefArgFlags[j].bSuppress = false;
                 pAddInFuncData->getParamDesc( aArgName, aArgDesc, j+1 );
                 if ( !aArgName.isEmpty() )
-                    pDesc->ppDefArgNames[j] = new OUString( aArgName );
+                    pDesc->maDefArgNames[j] = aArgName;
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameValue );
+                            pDesc->maDefArgNames[j] = aDefArgNameValue;
                             break;
                         case PTR_STRING:
-                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameString );
+                            pDesc->maDefArgNames[j] = aDefArgNameString;
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameValues );
+                            pDesc->maDefArgNames[j] = aDefArgNameValues;
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameStrings );
+                            pDesc->maDefArgNames[j] = aDefArgNameStrings;
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameCells );
+                            pDesc->maDefArgNames[j] = aDefArgNameCells;
                             break;
                         default:
-                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameNone );
+                            pDesc->maDefArgNames[j] = aDefArgNameNone;
                             break;
                     }
                 }
                 if ( !aArgDesc.isEmpty() )
-                    pDesc->ppDefArgDescs[j] = new OUString( aArgDesc );
+                    pDesc->maDefArgDescs[j] = aArgDesc;
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescValue );
+                            pDesc->maDefArgDescs[j] = aDefArgDescValue;
                             break;
                         case PTR_STRING:
-                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescString );
+                            pDesc->maDefArgDescs[j] = aDefArgDescString;
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescValues );
+                            pDesc->maDefArgDescs[j] = aDefArgDescValues;
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescStrings );
+                            pDesc->maDefArgDescs[j] = aDefArgDescStrings;
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescCells );
+                            pDesc->maDefArgDescs[j] = aDefArgDescCells;
                             break;
                         default:
-                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescNone );
+                            pDesc->maDefArgDescs[j] = aDefArgDescNone;
                             break;
                     }
                 }
@@ -897,12 +890,14 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 
     if (nArgs)
     {
-        pDesc->ppDefArgNames = new OUString*[nArgs];
-        pDesc->ppDefArgDescs = new OUString*[nArgs];
+        pDesc->maDefArgNames.clear();
+        pDesc->maDefArgNames.resize(nArgs);
+        pDesc->maDefArgDescs.clear();
+        pDesc->maDefArgDescs.resize(nArgs);
         for (sal_uInt16 i = 0; i < nArgs; ++i)
         {
-            pDesc->ppDefArgNames[i] = new OUString(SC_RESSTR(2*(i+1)  ));
-            pDesc->ppDefArgDescs[i] = new OUString(SC_RESSTR(2*(i+1)+1));
+            pDesc->maDefArgNames[i] = SC_RESSTR(2*(i+1)  );
+            pDesc->maDefArgDescs[i] = SC_RESSTR(2*(i+1)+1);
         }
     }
 

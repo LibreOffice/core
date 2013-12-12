@@ -797,7 +797,7 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
         pArray[3].Value <<= OUString( *rDesc.pFuncDesc );
 
     pArray[4].Name = OUString( SC_UNONAME_ARGUMENTS );
-    if (rDesc.ppDefArgNames && rDesc.ppDefArgDescs && rDesc.pDefArgFlags )
+    if (!rDesc.maDefArgNames.empty() && !rDesc.maDefArgDescs.empty() && rDesc.pDefArgFlags )
     {
         sal_uInt16 nCount = rDesc.nArgCount;
 		if (nCount >= PAIRED_VAR_ARGS)
@@ -818,13 +818,9 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
             {
                 if (!rDesc.pDefArgFlags[i].bSuppress)
                 {
-                    OUString aArgName;
-                    if (rDesc.ppDefArgNames[i]) aArgName = *rDesc.ppDefArgNames[i];
-                    OUString aArgDesc;
-                    if (rDesc.ppDefArgDescs[i]) aArgDesc = *rDesc.ppDefArgDescs[i];
                     sheet::FunctionArgument aArgument;
-                    aArgument.Name        = aArgName;
-                    aArgument.Description = aArgDesc;
+                    aArgument.Name        = rDesc.maDefArgNames[i];
+                    aArgument.Description = rDesc.maDefArgDescs[i];
                     aArgument.IsOptional  = rDesc.pDefArgFlags[i].bOptional;
                     pArgAry[j++] = aArgument;
                 }
