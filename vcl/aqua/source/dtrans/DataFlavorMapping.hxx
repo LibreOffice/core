@@ -78,14 +78,14 @@ public:
      mapping from a system data flavor to a OpenOffice data
      flavor.
   */
-  com::sun::star::datatransfer::DataFlavor systemToOpenOfficeFlavor(NSString* systemDataFlavor) const;
+  com::sun::star::datatransfer::DataFlavor systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const;
 
 
   /* Map an OpenOffice data flavor to a system data flavor.
      If there is no suiteable mapping available NULL will
      be returned.
   */
-  NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
+  const NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
 
   /* Select the best available image data type
      If there is no suiteable mapping available NULL will
@@ -96,19 +96,19 @@ public:
   /* Get a data provider which is able to provide the data 'rTransferable' offers in a format that can
      be put on to the system clipboard.
    */
-  DataProviderPtr_t getDataProvider(NSString* systemFlavor,
+  DataProviderPtr_t getDataProvider( const NSString* systemFlavor,
                                     const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > rTransferable) const;
 
 
 
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
-  DataProviderPtr_t getDataProvider(const NSString* systemFlavor, NSArray* systemData) const;
+  DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSArray* systemData) const;
 
 
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
-  DataProviderPtr_t getDataProvider(const NSString* systemFlavor, NSData* systemData) const;
+  DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSData* systemData) const;
 
 
   /* Translate a sequence of DataFlavors into a NSArray of system types.
@@ -125,7 +125,7 @@ public:
 
   /* Returns an NSArray containing all pasteboard types supported by OOo
    */
-  NSArray* DataFlavorMapper::getAllSupportedPboardTypes() const;
+  NSArray* getAllSupportedPboardTypes() const;
 
 private:
   /* Determines if the provided Mime content type is valid.
@@ -141,3 +141,4 @@ private:
 typedef boost::shared_ptr<DataFlavorMapper> DataFlavorMapperPtr_t;
 
 #endif
+

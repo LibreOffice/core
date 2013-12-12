@@ -64,7 +64,7 @@ namespace // private
 
   typedef vector<sal_Unicode> UnicodeBuffer;
 
-  OUString NSStringToOUString(NSString* cfString)
+  OUString NSStringToOUString( const NSString* cfString)
   {
     BOOST_ASSERT(cfString && "Invalid parameter");
 
@@ -113,7 +113,7 @@ namespace // private
 
   struct FlavorMap
   {
-    NSString* SystemFlavor;
+    const NSString* SystemFlavor;
     const char* OOoFlavor;
     const char* HumanPresentableName;
     Type DataType;
@@ -121,7 +121,7 @@ namespace // private
 
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
    */
-  FlavorMap flavorMap[] =
+  static const FlavorMap flavorMap[] =
     {
       { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", CPPUTYPE_OUSTRING },
       { NSRTFPboardType, "text/richtext", "Rich Text Format", CPPUTYPE_SEQINT8 },
@@ -521,13 +521,13 @@ DataFlavorMapper::~DataFlavorMapper()
     }
 }
 
-DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor) const
+DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const
 {
   DataFlavor oOOFlavor;
 
   for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
-      if ([systemDataFlavor caseInsensitiveCompare: flavorMap[i].SystemFlavor] == NSOrderedSame)
+      if ([systemDataFlavor caseInsensitiveCompare:const_cast<NSString*>(flavorMap[i].SystemFlavor)] == NSOrderedSame)
         {
           oOOFlavor.MimeType = OUString::createFromAscii( flavorMap[i].OOoFlavor);
           oOOFlavor.HumanPresentableName = OUString::createFromAscii( flavorMap[i].HumanPresentableName);
@@ -549,9 +549,10 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor
     return oOOFlavor;
 }
 
-NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor, bool& rbInternal) const
+const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oOOFlavor, bool& rbInternal) const
 {
-    NSString* sysFlavor = NULL;
+    const NSString* sysFlavor = NULL;
+    rbInternal = false;
     rbInternal = false;
 
     for( size_t i = 0; i < SIZE_FLAVOR_MAP; ++i )
@@ -583,7 +584,7 @@ NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPastebo
     return sysFlavor;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Reference<XTransferable> rTransferable) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavor, Reference<XTransferable> rTransferable) const
 {
   DataProviderPtr_t dp;
 
@@ -639,12 +640,12 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
   return dp;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* /*systemFlavor*/, NSArray* systemData) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* /*systemFlavor*/, NSArray* systemData) const
 {
   return DataProviderPtr_t(new FileListDataProvider(systemData));
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor, NSData* systemData) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavor, NSData* systemData) const
 {
   DataProviderPtr_t dp;
 
@@ -708,7 +709,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
       }
       else
       {
-          NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor);
+          const NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor);
 
           if (str != NULL)
           {

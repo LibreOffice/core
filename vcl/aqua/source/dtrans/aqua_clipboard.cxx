@@ -57,7 +57,7 @@ using namespace comphelper;
     return self;
 }
 
--(void)pasteboard:(NSPasteboard*)sender provideDataForType:(NSString*)type
+-(void)pasteboard:(NSPasteboard*)sender provideDataForType:(const NSString*)type
 {
     if( pAquaClipboard )
         pAquaClipboard->provideDataForType(sender, type);
@@ -316,7 +316,7 @@ void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> o
 }
 
 
-void AquaClipboard::provideDataForType(NSPasteboard* sender, NSString* type)
+void AquaClipboard::provideDataForType(NSPasteboard* sender, const NSString* type)
 {
     if( mXClipboardContent.is() )
     {
@@ -326,7 +326,7 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, NSString* type)
         if (dp.get() != NULL)
         {
             pBoardData = (NSData*)dp->getSystemData();
-            [sender setData: pBoardData forType: type];
+            [sender setData: pBoardData forType:const_cast<NSString*>(type)];
         }
     }
 }
@@ -347,7 +347,7 @@ void SAL_CALL AquaClipboard::flushClipboard()
 
         for (sal_uInt32 i = 0; i < nFlavors; i++)
         {
-            NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i], bInternal);
+            const NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i], bInternal);
 
             if (sysType != NULL)
             {

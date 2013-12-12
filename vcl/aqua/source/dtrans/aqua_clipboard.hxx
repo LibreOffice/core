@@ -58,7 +58,7 @@ class AquaClipboard;
 - (EventListener*)initWithAquaClipboard: (AquaClipboard*) pcb;
 
 // Promiss resolver function
-- (void)pasteboard:(NSPasteboard*)sender provideDataForType:(NSString *)type;
+- (void)pasteboard:(NSPasteboard*)sender provideDataForType:(const NSString *)type;
 
 -(void)applicationDidBecomeActive:(NSNotification*)aNotification;
 
@@ -151,7 +151,7 @@ public:
 
   void pasteboardChangedOwner();
 
-  void provideDataForType(NSPasteboard* sender, NSString* type);
+  void provideDataForType(NSPasteboard* sender, const NSString* type);
 
   void applicationDidBecomeActive(NSNotification* aNotification);
 
