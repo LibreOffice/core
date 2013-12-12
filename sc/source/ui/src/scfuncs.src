@@ -7214,7 +7214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 11 // Description of Parameter 5
         {
-            Text [ en-US ] = "Cumulated. TRUE calculates the probabilty mass function, FALSE the cumulative distribution function." ;
+            Text [ en-US ] = "Cumulated. TRUE calculates the probability mass function, FALSE the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function TVERT #*=-
