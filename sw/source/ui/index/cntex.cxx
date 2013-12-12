@@ -62,56 +62,40 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 
-
-#ifdef SW_PROP_NAME_STR
-#undef SW_PROP_NAME_STR
-#endif
-#define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
-
 static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                         const char* pPropName, const OUString& rValue)
+                         OUString const & aPropName, const OUString& rValue)
 {
-    OUString uPropName(OUString::createFromAscii(pPropName));
-    if(xInfo->hasPropertyByName(uPropName))
+    if(xInfo->hasPropertyByName(aPropName))
     {
         uno::Any aValue;
         aValue <<= OUString(rValue);
-        xProps->setPropertyValue(uPropName, aValue);
+        xProps->setPropertyValue(aPropName, aValue);
     }
 }
 
 static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                           sal_uInt16 nId, const OUString& rValue)
+                           OUString const & aPropName, sal_Int16 nValue )
 {
-    lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
-}
-
-static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
-                           uno::Reference< XPropertySet > & xProps,
-                           sal_uInt16 nId, sal_Int16 nValue )
-{
-    OUString uPropName(OUString::createFromAscii(SW_PROP_NAME_STR(nId)));
-    if(xInfo->hasPropertyByName(uPropName))
+    if(xInfo->hasPropertyByName(aPropName))
     {
         uno::Any aValue;
         aValue <<= nValue;
-        xProps->setPropertyValue(uPropName, aValue);
+        xProps->setPropertyValue(aPropName, aValue);
     }
 }
 
 static void lcl_SetBOOLProp(
                 uno::Reference< beans::XPropertySetInfo > & xInfo,
                 uno::Reference< beans::XPropertySet > & xProps,
-                sal_uInt16 nId, sal_Bool bValue )
+                OUString const & aPropName, sal_Bool bValue )
 {
-    OUString uPropName(OUString::createFromAscii(SW_PROP_NAME_STR(nId)));
-    if(xInfo->hasPropertyByName(uPropName))
+    if(xInfo->hasPropertyByName(aPropName))
     {
         uno::Any aValue;
         aValue.setValue(&bValue, ::getCppuBooleanType());
-        xProps->setPropertyValue(uPropName, aValue);
+        xProps->setPropertyValue(aPropName, aValue);
     }
 }
 
@@ -204,7 +188,6 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
          uno::Reference< text::XTextRange >  xRg(xCrsr, uno::UNO_QUERY);
             xCrsr->getText()->insertTextContent(xRg, xContent, sal_False);
         }
-        OUString uIsVisible(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_VISIBLE)));
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
         {
          uno::Reference< beans::XPropertySet >  xSectPr(pxIndexSectionsArr[i]->xContainerSection, uno::UNO_QUERY);
@@ -214,7 +197,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             {
                 sal_Bool bTemp = i == nTOXIndex;
                 aVal.setValue(&bTemp, ::getBooleanCppuType());
-                xSectPr->setPropertyValue(uIsVisible, aVal);
+                xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, aVal);
             }
         }
         // set properties
@@ -230,10 +213,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             //stylenames
             sal_uInt16  nContentOptions = rDesc.GetContentOptions();
-            if(xInfo->hasPropertyByName(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))))
+            if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_PARAGRAPH_STYLES))
             {
                 sal_Bool bOn = 0!=(nContentOptions&nsSwTOXElement::TOX_TEMPLATE    );
-                uno::Any aStyleNames(xIdxProps->getPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))));
+                uno::Any aStyleNames(xIdxProps->getPropertyValue(UNO_NAME_LEVEL_PARAGRAPH_STYLES));
                 uno::Reference< container::XIndexReplace >  xAcc;
                 aStyleNames >>= xAcc;
 
@@ -306,7 +289,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 nEndLevel = pForm->GetFormMax() - 1;
             }
 
-            if(xInfo->hasPropertyByName(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT))))
+            if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_FORMAT))
             {
                 for(sal_uInt16 nCurrLevel = nStartLevel; nCurrLevel <= nEndLevel; nCurrLevel++)
                 {
@@ -394,7 +377,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     }
                     aSequPropVals.realloc(nTokenIndex);
 
-                    uno::Any aFormatAccess = xIdxProps->getPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
+                    uno::Any aFormatAccess = xIdxProps->getPropertyValue(UNO_NAME_LEVEL_FORMAT);
                     OSL_ENSURE(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
                         "wrong property type");
 
@@ -427,11 +410,9 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             }
             for(sal_uInt16 i = 1; i < nEndLevel; i++)
             {
-                OUString sPropName("ParaStyleLevel");
-                sPropName += OUString::number( i );
                 lcl_SetProp(xInfo,
                     xIdxProps,
-                    OUStringToOString(sPropName, RTL_TEXTENCODING_ASCII_US).getStr(),
+                    "ParaStyleLevel" + OUString::number( i ),
                     pForm->GetTemplate(i + nOffset));
             }
         }

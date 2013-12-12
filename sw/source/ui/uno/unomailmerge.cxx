@@ -451,28 +451,28 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         const Any &rValue       = pArguments[i].Value;
 
         sal_Bool bOK = sal_True;
-        if (rName.equalsAscii( GetPropName( UNO_NAME_SELECTION ) ))
+        if (rName == UNO_NAME_SELECTION)
             bOK = rValue >>= aCurSelection;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_RESULT_SET ) ))
+        else if (rName == UNO_NAME_RESULT_SET)
             bOK = rValue >>= xCurResultSet;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_CONNECTION ) ))
+        else if (rName == UNO_NAME_CONNECTION)
             bOK = rValue >>= xCurConnection;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_MODEL ) ))
+        else if (rName == UNO_NAME_MODEL)
             throw PropertyVetoException("Property is read-only: " + rName, static_cast < cppu::OWeakObject * > ( this ) );
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_DATA_SOURCE_NAME ) ))
+        else if (rName == UNO_NAME_DATA_SOURCE_NAME)
             bOK = rValue >>= aCurDataSourceName;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_DAD_COMMAND ) ))
+        else if (rName == UNO_NAME_DAD_COMMAND)
             bOK = rValue >>= aCurDataCommand;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_FILTER ) ))
+        else if (rName == UNO_NAME_FILTER)
             bOK = rValue >>= aCurFilter;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_DOCUMENT_URL ) ))
+        else if (rName == UNO_NAME_DOCUMENT_URL)
         {
             bOK = rValue >>= aCurDocumentURL;
             if (!aCurDocumentURL.isEmpty()
                 && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, false ))
                 throw RuntimeException("Failed to create document from URL: " + aCurDocumentURL, static_cast < cppu::OWeakObject * > ( this ) );
         }
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_OUTPUT_URL ) ))
+        else if (rName == UNO_NAME_OUTPUT_URL)
         {
             bOK = rValue >>= aCurOutputURL;
             if (!aCurOutputURL.isEmpty())
@@ -483,49 +483,49 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                     throw IllegalArgumentException("URL is read-only: " + aCurOutputURL, static_cast < cppu::OWeakObject * > ( this ), 0 );
             }
         }
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_FILE_NAME_PREFIX ) ))
+        else if (rName == UNO_NAME_FILE_NAME_PREFIX)
             bOK = rValue >>= aCurFileNamePrefix;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_DAD_COMMAND_TYPE ) ))
+        else if (rName == UNO_NAME_DAD_COMMAND_TYPE)
             bOK = rValue >>= nCurDataCommandType;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_OUTPUT_TYPE ) ))
+        else if (rName == UNO_NAME_OUTPUT_TYPE)
             bOK = rValue >>= nCurOutputType;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_ESCAPE_PROCESSING ) ))
+        else if (rName == UNO_NAME_ESCAPE_PROCESSING)
             bOK = rValue >>= bCurEscapeProcessing;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SINGLE_PRINT_JOBS ) ))
+        else if (rName == UNO_NAME_SINGLE_PRINT_JOBS)
             bOK = rValue >>= bCurSinglePrintJobs;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_FILE_NAME_FROM_COLUMN ) ))
+        else if (rName == UNO_NAME_FILE_NAME_FROM_COLUMN)
             bOK = rValue >>= bCurFileNameFromColumn;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SUBJECT ) ))
+        else if (rName == UNO_NAME_SUBJECT)
             bOK = rValue >>= sSubject;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_ADDRESS_FROM_COLUMN ) ))
+        else if (rName == UNO_NAME_ADDRESS_FROM_COLUMN)
             bOK = rValue >>= sAddressFromColumn;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SEND_AS_HTML ) ))
+        else if (rName == UNO_NAME_SEND_AS_HTML)
             bOK = rValue >>= bSendAsHTML;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_MAIL_BODY ) ))
+        else if (rName == UNO_NAME_MAIL_BODY)
             bOK = rValue >>= sMailBody;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_ATTACHMENT_NAME ) ))
+        else if (rName == UNO_NAME_ATTACHMENT_NAME)
             bOK = rValue >>= sAttachmentName;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_ATTACHMENT_FILTER ) ))
+        else if (rName == UNO_NAME_ATTACHMENT_FILTER)
             bOK = rValue >>= sAttachmentFilter;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_COPIES_TO ) ))
+        else if (rName == UNO_NAME_COPIES_TO)
             bOK = rValue >>= aCopiesTo;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_BLIND_COPIES_TO ) ))
+        else if (rName == UNO_NAME_BLIND_COPIES_TO)
             bOK = rValue >>= aBlindCopiesTo;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SEND_AS_ATTACHMENT ) ))
+        else if (rName == UNO_NAME_SEND_AS_ATTACHMENT)
             bOK = rValue >>= bSendAsAttachment;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_PRINT_OPTIONS ) ))
+        else if (rName == UNO_NAME_PRINT_OPTIONS)
             bOK = rValue >>= aPrintSettings;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_AS_SINGLE_FILE ) ))
+        else if (rName == UNO_NAME_SAVE_AS_SINGLE_FILE)
             bOK = rValue >>= bSaveAsSingleFile;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER ) ))
+        else if (rName == UNO_NAME_SAVE_FILTER)
             bOK = rValue >>= sSaveFilter;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER_OPTIONS ) ))
+        else if (rName == UNO_NAME_SAVE_FILTER_OPTIONS)
             bOK = rValue >>= sSaveFilterOptions;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER_DATA ) ))
+        else if (rName == UNO_NAME_SAVE_FILTER_DATA)
             bOK = rValue >>= aSaveFilterData;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_IN_SERVER_PASSWORD ) ))
+        else if (rName == UNO_NAME_IN_SERVER_PASSWORD)
             bOK = rValue >>= sInServerPassword;
-        else if (rName.equalsAscii( GetPropName( UNO_NAME_OUT_SERVER_PASSWORD ) ))
+        else if (rName == UNO_NAME_OUT_SERVER_PASSWORD)
             bOK = rValue >>= sOutServerPassword;
         else
             throw UnknownPropertyException( OUString( "Property is unknown: " ) + rName, static_cast < cppu::OWeakObject * > ( this ) );

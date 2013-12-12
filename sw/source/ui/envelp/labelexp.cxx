@@ -37,11 +37,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 
-#ifdef SW_PROP_NAME_STR
-#undef SW_PROP_NAME_STR
-#endif
-#define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
-
 void SwVisitingCardPage::InitFrameControl()
 {
     Link aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
@@ -57,7 +52,6 @@ void SwVisitingCardPage::InitFrameControl()
 
     uno::Sequence<OUString> aNames = m_xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();
-    OUString uTitleName( OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
 
     for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
     {
@@ -70,7 +64,7 @@ void SwVisitingCardPage::InitFrameControl()
             if(!xIdxAcc.is() || xIdxAcc->getCount())
             {
                 uno::Reference< beans::XPropertySet >  xPrSet(xGroup, uno::UNO_QUERY);
-                uno::Any aTitle = xPrSet->getPropertyValue( uTitleName );
+                uno::Any aTitle = xPrSet->getPropertyValue( UNO_NAME_TITLE );
                 OUString uTitle;
                 aTitle >>= uTitle;
                 sal_uInt16 nEntry = m_pAutoTextGroupLB->InsertEntry(uTitle);
@@ -222,13 +216,11 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     try
     {
-        OUString sFldName("com.sun.star.text.FieldMaster.User.");
-        OUString uCntName( OUString::createFromAscii( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {
-            OUString sCurFldName( sFldName );
-            sCurFldName += OUString::createFromAscii(p->pName);
-            OUString uFldName( sCurFldName );
+            OUString uFldName(
+                "com.sun.star.text.FieldMaster.User."
+                + OUString::createFromAscii(p->pName));
             if( xFldMasters->hasByName( uFldName ))
             {
                 uno::Any aFirstName = xFldMasters->getByName( uFldName );
@@ -236,7 +228,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
                 aFirstName >>= xFld;
                 uno::Any aContent;
                 aContent <<= rItem.*p->pValue;
-                xFld->setPropertyValue( uCntName, aContent );
+                xFld->setPropertyValue( UNO_NAME_CONTENT, aContent );
             }
         }
     }

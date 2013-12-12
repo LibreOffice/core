@@ -539,8 +539,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
-        if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE)) ||
-            rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
+        if (rPropertyName == UNO_NAME_START_REDLINE ||
+            rPropertyName == UNO_NAME_END_REDLINE)
         {
             //redline can only be returned if it's a living object
             if (!m_pImpl->m_bIsDescriptor)
@@ -548,8 +548,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet = SwXText::getPropertyValue(rPropertyName);
             }
         }
-        else if (rPropertyName.equalsAsciiL(
-                    SW_PROP_NAME(UNO_NAME_REFERENCE_ID)))
+        else if (rPropertyName == UNO_NAME_REFERENCE_ID)
         {
             SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
             if (pFmt)

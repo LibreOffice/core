@@ -557,7 +557,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if(pType)
     {
         bool bSetValue = true;
-        if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
+        if( rPropertyName == UNO_NAME_SUB_TYPE )
         {
             const ::std::vector<OUString>& rExtraArr(
                     SwStyleNameMapper::GetExtraUINameArray());
@@ -593,8 +593,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
-    else if (!pType && m_pImpl->m_pDoc &&
-        (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME))))
+    else if (!pType && m_pImpl->m_pDoc && rPropertyName == UNO_NAME_NAME)
     {
         OUString uTmp;
         rValue >>= uTmp;
@@ -664,15 +663,15 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         switch (m_pImpl->m_nResTypeId)
         {
         case RES_USERFLD:
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)))
+            if(rPropertyName == UNO_NAME_CONTENT)
                 rValue >>= m_pImpl->m_sParam1;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
+            else if(rPropertyName == UNO_NAME_VALUE)
             {
                 if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
                     throw lang::IllegalArgumentException();
                 rValue >>= m_pImpl->m_fParam1;
             }
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
+            else if(rPropertyName == UNO_NAME_IS_EXPRESSION)
             {
                 if(rValue.getValueType() != ::getBooleanCppuType())
                     throw lang::IllegalArgumentException();
@@ -681,15 +680,15 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
             break;
         case RES_DBFLD:
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+            if(rPropertyName == UNO_NAME_DATA_BASE_NAME)
                 rValue >>= m_pImpl->m_sParam1;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
+            else if(rPropertyName == UNO_NAME_DATA_TABLE_NAME)
                 rValue >>= m_pImpl->m_sParam2;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
+            else if(rPropertyName == UNO_NAME_DATA_COLUMN_NAME)
                 rValue >>= m_pImpl->m_sParam3;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)))
+            else if(rPropertyName == UNO_NAME_DATA_COMMAND_TYPE)
                 rValue >>= m_pImpl->m_nParam2;
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+            if(rPropertyName == UNO_NAME_DATA_BASE_URL)
                 rValue >>= m_pImpl->m_sParam5;
 
             if (  (   !m_pImpl->m_sParam1.isEmpty()
@@ -701,17 +700,17 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             }
             break;
         case  RES_SETEXPFLD:
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
+            if(rPropertyName == UNO_NAME_NUMBERING_SEPARATOR)
                 rValue >>= m_pImpl->m_sParam1;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
+            else if(rPropertyName == UNO_NAME_CHAPTER_NUMBERING_LEVEL)
                 rValue >>= m_pImpl->m_nParam1;
             break;
         case RES_DDEFLD:
             {
-                sal_uInt16 nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
-                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
-                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
-                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
+                sal_uInt16 nPart = rPropertyName == UNO_NAME_DDE_COMMAND_TYPE ? 0 :
+                        rPropertyName == UNO_NAME_DDE_COMMAND_FILE ? 1 :
+                        rPropertyName == UNO_NAME_DDE_COMMAND_ELEMENT ? 2 :
+                        rPropertyName == UNO_NAME_IS_AUTOMATIC_UPDATE ? 3 : USHRT_MAX;
                 if(nPart  < 3 )
                 {
                     if (m_pImpl->m_sParam1.isEmpty())
@@ -788,7 +787,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFieldType* pType = GetFldType(true);
-    if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
+    if( rPropertyName == UNO_NAME_INSTANCE_NAME )
     {
         OUString sName;
         if(pType)
@@ -797,11 +796,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     else if(pType)
     {
-        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME) ))
+        if(rPropertyName == UNO_NAME_NAME)
         {
             aRet <<= SwXFieldMaster::GetProgrammaticName(*pType, *m_pImpl->m_pDoc);
         }
-        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
+        else if(rPropertyName == UNO_NAME_DEPENDENT_TEXT_FIELDS)
         {
             //fill all text fields into a sequence
             SwDependentFields aFldArr;
@@ -839,8 +838,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             }
             pType->QueryValue( aRet, nMId );
 
-            if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-                rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+            if (rPropertyName == UNO_NAME_DATA_BASE_NAME ||
+                rPropertyName == UNO_NAME_DATA_BASE_URL)
             {
                 OUString aDataSource;
                 aRet >>= aDataSource;
@@ -851,9 +850,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 INetURLObject aObj;
                 aObj.SetURL( aDataSource );
                 bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-                if (bIsURL && rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                if (bIsURL && rPropertyName == UNO_NAME_DATA_BASE_URL)
                     pStr = &aDataSource;        // DataBaseURL
-                else if (!bIsURL && rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                else if (!bIsURL && rPropertyName == UNO_NAME_DATA_BASE_NAME)
                     pStr = &aDataSource;        // DataBaseName
 
                 if (pStr)
@@ -862,15 +861,15 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         }
         else
         {
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
+            if(rPropertyName == UNO_NAME_DATA_COMMAND_TYPE)
                 aRet <<= m_pImpl->m_nParam2;
         }
     }
     else
     {
-        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
+        if(rPropertyName == UNO_NAME_DATA_COMMAND_TYPE)
             aRet <<= m_pImpl->m_nParam2;
-        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
+        else if(rPropertyName == UNO_NAME_DEPENDENT_TEXT_FIELDS )
         {
             uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(0);
             aRet <<= aRetSeq;
@@ -880,43 +879,43 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             switch (m_pImpl->m_nResTypeId)
             {
             case RES_USERFLD:
-                if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
+                if( rPropertyName == UNO_NAME_CONTENT )
                     aRet <<= m_pImpl->m_sParam1;
-                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
+                else if(rPropertyName == UNO_NAME_VALUE)
                     aRet <<= m_pImpl->m_fParam1;
-                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
+                else if(rPropertyName == UNO_NAME_IS_EXPRESSION)
                     aRet.setValue(&m_pImpl->m_bParam1, ::getBooleanCppuType());
                 break;
             case RES_DBFLD:
-                if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-                   rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                if(rPropertyName == UNO_NAME_DATA_BASE_NAME ||
+                   rPropertyName == UNO_NAME_DATA_BASE_URL)
                 {
                      // only one of these properties returns a non-empty string.
                     INetURLObject aObj;
                     aObj.SetURL(m_pImpl->m_sParam5); // SetSmartURL
                     bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-                    if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                    if (bIsURL && rPropertyName == UNO_NAME_DATA_BASE_URL)
                         aRet <<= m_pImpl->m_sParam5; // DataBaseURL
-                    else if ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                    else if ( rPropertyName == UNO_NAME_DATA_BASE_NAME)
                         aRet <<= m_pImpl->m_sParam1; // DataBaseName
                 }
-                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
+                else if(rPropertyName == UNO_NAME_DATA_TABLE_NAME)
                     aRet <<= m_pImpl->m_sParam2;
-                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
+                else if(rPropertyName == UNO_NAME_DATA_COLUMN_NAME)
                     aRet <<= m_pImpl->m_sParam3;
                 break;
             case RES_SETEXPFLD:
-                if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
+                if(rPropertyName == UNO_NAME_NUMBERING_SEPARATOR)
                     aRet <<= m_pImpl->m_sParam1;
-                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
+                else if(rPropertyName == UNO_NAME_CHAPTER_NUMBERING_LEVEL)
                     aRet <<= m_pImpl->m_nParam1;
                 break;
             case RES_DDEFLD:
                 {
-                    sal_uInt16 nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
-                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE)) ? 1 :
-                            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
-                            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
+                    sal_uInt16 nPart = rPropertyName == UNO_NAME_DDE_COMMAND_TYPE  ? 0 :
+                        rPropertyName == UNO_NAME_DDE_COMMAND_FILE ? 1 :
+                            rPropertyName == UNO_NAME_DDE_COMMAND_ELEMENT  ? 2 :
+                            rPropertyName == UNO_NAME_IS_AUTOMATIC_UPDATE ? 3 : USHRT_MAX;
                     if(nPart  < 3 )
                         aRet <<= m_pImpl->m_sParam1.getToken(nPart, sfx2::cTokenSeparator);
                     else if(3 == nPart)
@@ -2050,10 +2049,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         // special treatment for mail merge fields
         sal_uInt16 nWhich = pField->Which();
         if( RES_DBFLD == nWhich &&
-            (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))||
-            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
-            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
+            (rPropertyName == UNO_NAME_DATA_BASE_NAME ||
+            rPropertyName == UNO_NAME_DATA_BASE_URL||
+            rPropertyName == UNO_NAME_DATA_TABLE_NAME||
+            rPropertyName == UNO_NAME_DATA_COLUMN_NAME))
         {
             // here a new field type must be created and the field must
             // be registered at the new type

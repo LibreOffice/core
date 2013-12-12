@@ -273,17 +273,17 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_FRAME:         pRet = "Frame";break;
                 case PORTION_FOOTNOTE:      pRet = "Footnote";break;
                 case PORTION_REFMARK_START:
-                case PORTION_REFMARK_END:   pRet = SW_PROP_NAME_STR(UNO_NAME_REFERENCE_MARK);break;
+                case PORTION_REFMARK_END:   pRet = UNO_NAME_REFERENCE_MARK;break;
                 case PORTION_TOXMARK_START:
-                case PORTION_TOXMARK_END:   pRet = SW_PROP_NAME_STR(UNO_NAME_DOCUMENT_INDEX_MARK);break;
+                case PORTION_TOXMARK_END:   pRet = UNO_NAME_DOCUMENT_INDEX_MARK;break;
                 case PORTION_BOOKMARK_START :
-                case PORTION_BOOKMARK_END : pRet = SW_PROP_NAME_STR(UNO_NAME_BOOKMARK);break;
+                case PORTION_BOOKMARK_END : pRet = UNO_NAME_BOOKMARK;break;
                 case PORTION_REDLINE_START:
                 case PORTION_REDLINE_END:   pRet = "Redline";break;
                 case PORTION_RUBY_START:
                 case PORTION_RUBY_END:      pRet = "Ruby";break;
                 case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
-                case PORTION_META:          pRet = SW_PROP_NAME_STR(UNO_NAME_META); break;
+                case PORTION_META:          pRet = UNO_NAME_META; break;
                 case PORTION_FIELD_START:pRet = "TextFieldStart";break;
                 case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
                 case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;

@@ -1142,12 +1142,6 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
 
-        OUString sFileName(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_FILE_NAME)));
-        OUString sCopyCount(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_COPY_COUNT)));
-        OUString sCollate(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_COLLATE)));
-        OUString sSort(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT)));
-        OUString sPages(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_PAGES)));
-
         for ( int n = 0; n < xOptions.getLength(); ++n )
         {
             // get Property-Value from options
@@ -1155,7 +1149,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             Any aValue( rProp.Value );
 
             // FileName-Property?
-            if ( rProp.Name == sFileName )
+            if ( rProp.Name == UNO_NAME_FILE_NAME )
             {
                 OUString sFileURL;
                 if ( (rProp.Value >>= sFileURL ) )
@@ -1170,7 +1164,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             }
 
             // CopyCount-Property
-            else if ( rProp.Name == sCopyCount )
+            else if ( rProp.Name == UNO_NAME_COPY_COUNT )
             {
                 sal_Int32 nCopies = 0;
                 aValue >>= nCopies;
@@ -1178,7 +1172,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             }
 
             // Collate-Property
-            else if ( rProp.Name == sCollate )
+            else if ( rProp.Name == UNO_NAME_COLLATE )
             {
                 if ( rProp.Value.getValueType() == ::getBooleanCppuType())
 
@@ -1188,7 +1182,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             }
 
             // Sort-Property
-            else if ( rProp.Name == sSort )
+            else if ( rProp.Name == UNO_NAME_SORT )
             {
                 if ( rProp.Value.getValueType() == ::getBooleanCppuType() )
                     aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *(sal_Bool*)rProp.Value.getValue() ) );
@@ -1197,7 +1191,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             }
 
             // Pages-Property
-            else if ( rProp.Name == sPages )
+            else if ( rProp.Name == UNO_NAME_PAGES )
             {
                 OUString sTmp;
                 if ( rProp.Value >>= sTmp )
@@ -3706,11 +3700,11 @@ Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
-    if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
+    if( rPropertyName == UNO_LINK_DISPLAY_NAME )
     {
         aRet <<= OUString(sLinkDisplayName);
     }
-    else if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_BITMAP)))
+    else if( rPropertyName == UNO_LINK_DISPLAY_BITMAP )
     {
         aRet = lcl_GetDisplayBitmap(sLinkSuffix);
     }
@@ -3793,7 +3787,7 @@ Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
-    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
+    if(rPropertyName == UNO_LINK_DISPLAY_NAME)
         aRet <<= OUString(sOutlineText);
     else
         throw UnknownPropertyException();

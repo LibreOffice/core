@@ -3045,7 +3045,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
         {
             switch(pEntry->nWID)
             {
-                case UNO_NAME_TABLE_NAME :
+                case FN_UNO_TABLE_NAME :
                 {
                     OUString sName;
                     aValue >>= sName;
@@ -3291,7 +3291,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
         {
             switch(pEntry->nWID)
             {
-                case UNO_NAME_TABLE_NAME:
+                case FN_UNO_TABLE_NAME:
                 {
                     aRet <<= getName();
                 }

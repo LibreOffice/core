@@ -452,7 +452,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
-        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
+        if(rPropertyName == UNO_LINK_DISPLAY_NAME)
         {
             aRet <<= getName();
         }

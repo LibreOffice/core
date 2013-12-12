@@ -113,18 +113,18 @@ const SfxItemPropertySet* GetFootnoteSet()
 {
     static const SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
-        { OUString::createFromAscii(GetPropName(UNO_NAME_ANCHOR_CHAR_STYLE_NAME)),WID_ANCHOR_CHARACTER_STYLE, ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_BEGIN_NOTICE)),          WID_BEGIN_NOTICE,       ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_CHAR_STYLE_NAME)),       WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_END_NOTICE)),            WID_END_NOTICE ,        ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_FOOTNOTE_COUNTING)),     WID_FOOTNOTE_COUNTING,  ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_TYPE)),        WID_NUMBERING_TYPE,     ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_PAGE_STYLE_NAME)),       WID_PAGE_STYLE,         ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_PARA_STYLE_NAME)),       WID_PARAGRAPH_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_POSITION_END_OF_DOC)),   WID_POSITION_END_OF_DOC,::getBooleanCppuType(), PROPERTY_NONE,         0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_PREFIX)),                WID_PREFIX,             ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_START_AT)),              WID_START_AT ,          ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_SUFFIX)),                WID_SUFFIX,             ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_BEGIN_NOTICE),          WID_BEGIN_NOTICE,       ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_END_NOTICE),            WID_END_NOTICE ,        ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_FOOTNOTE_COUNTING),     WID_FOOTNOTE_COUNTING,  ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_POSITION_END_OF_DOC),   WID_POSITION_END_OF_DOC,::getBooleanCppuType(), PROPERTY_NONE,         0},
+        { OUString(UNO_NAME_PREFIX),                WID_PREFIX,             ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_START_AT),              WID_START_AT ,          ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString(UNO_NAME_SUFFIX),                WID_SUFFIX,             ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet aFootnoteSet_Impl(aFootnoteMap_Impl);
@@ -135,14 +135,14 @@ const SfxItemPropertySet* GetEndnoteSet()
 {
     static const SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
-        { OUString::createFromAscii(GetPropName(UNO_NAME_ANCHOR_CHAR_STYLE_NAME)),WID_ANCHOR_CHARACTER_STYLE, ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_CHAR_STYLE_NAME)),       WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_TYPE)),        WID_NUMBERING_TYPE,     ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_PAGE_STYLE_NAME)),       WID_PAGE_STYLE,         ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_PARA_STYLE_NAME)),       WID_PARAGRAPH_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_PREFIX)),                WID_PREFIX,     ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_START_AT)),              WID_START_AT ,          ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_SUFFIX)),                WID_SUFFIX,     ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_ANCHOR_CHAR_STYLE_NAME),WID_ANCHOR_CHARACTER_STYLE, ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_CHAR_STYLE_NAME),       WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_NUMBERING_TYPE),        WID_NUMBERING_TYPE,     ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString(UNO_NAME_PAGE_STYLE_NAME),       WID_PAGE_STYLE,         ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_PARA_STYLE_NAME),       WID_PARAGRAPH_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_PREFIX),                WID_PREFIX,     ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_START_AT),              WID_START_AT ,          ::getCppuType((const sal_Int16*)0), PROPERTY_NONE,         0},
+        { OUString(UNO_NAME_SUFFIX),                WID_SUFFIX,     ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet aEndnoteSet_Impl(aEndnoteMap_Impl);
@@ -153,12 +153,12 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 {
     static const SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
-        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_ABSOLUTE_MARGINS)),       WID_IS_ABS_MARGINS, ::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_AUTOMATIC)),              WID_IS_AUTOMATIC,   ::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_CONTINUOUS_NUMBERING)),   WID_CONTINUOUS,     ::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_NAME)),                      WID_RULE_NAME   ,   ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_IS_OUTLINE)),      WID_IS_OUTLINE, ::getBooleanCppuType(),            PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_DEFAULT_LIST_ID)),           WID_DEFAULT_LIST_ID, ::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
+        { OUString(UNO_NAME_IS_ABSOLUTE_MARGINS),       WID_IS_ABS_MARGINS, ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_IS_CONTINUOUS_NUMBERING),   WID_CONTINUOUS,     ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_NAME),                      WID_RULE_NAME   ,   ::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
+        { OUString(UNO_NAME_NUMBERING_IS_OUTLINE),      WID_IS_OUTLINE, ::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, ::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet  aNumberingRulesSet_Impl( aNumberingRulesMap_Impl );
@@ -180,17 +180,17 @@ const SfxItemPropertySet* GetLineNumberingSet()
 {
     static const SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {
-        { OUString::createFromAscii(GetPropName(UNO_NAME_CHAR_STYLE_NAME)),         WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_COUNT_EMPTY_LINES)),       WID_COUNT_EMPTY_LINES , ::getBooleanCppuType(),PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_COUNT_LINES_IN_FRAMES)),   WID_COUNT_LINES_IN_FRAMES, ::getBooleanCppuType(),PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_DISTANCE)),                WID_DISTANCE       ,    ::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_IS_ON)),                   WID_NUM_ON,             ::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_INTERVAL)),                WID_INTERVAL  ,       ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_SEPARATOR_TEXT)),          WID_SEPARATOR_TEXT,   ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBER_POSITION)),         WID_NUMBER_POSITION,    ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_NUMBERING_TYPE)),          WID_NUMBERING_TYPE ,    ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_RESTART_AT_EACH_PAGE)),    WID_RESTART_AT_EACH_PAGE, ::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { OUString::createFromAscii(GetPropName(UNO_NAME_SEPARATOR_INTERVAL)),      WID_SEPARATOR_INTERVAL, ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_CHAR_STYLE_NAME),         WID_CHARACTER_STYLE,    ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_COUNT_EMPTY_LINES),       WID_COUNT_EMPTY_LINES , ::getBooleanCppuType(),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_COUNT_LINES_IN_FRAMES),   WID_COUNT_LINES_IN_FRAMES, ::getBooleanCppuType(),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_DISTANCE),                WID_DISTANCE       ,    ::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_IS_ON),                   WID_NUM_ON,             ::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_INTERVAL),                WID_INTERVAL  ,       ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_SEPARATOR_TEXT),          WID_SEPARATOR_TEXT,   ::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_RESTART_AT_EACH_PAGE),    WID_RESTART_AT_EACH_PAGE, ::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, ::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const SfxItemPropertySet aLineNumberingSet_Impl(aLineNumberingMap_Impl);
@@ -1249,7 +1249,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         {
             SwNumFmt aFmt(aNumRule.Get( i ));
             if (!m_sNewCharStyleNames[i].isEmpty() &&
-                !m_sNewCharStyleNames[i].equalsAscii(SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)) &&
+                m_sNewCharStyleNames[i] != UNO_NAME_CHARACTER_FORMAT_NONE &&
                 (!aFmt.GetCharFmt() || aFmt.GetCharFmt()->GetName()!= m_sNewCharStyleNames[i]))
             {
                 SwCharFmt* pCharFmt = 0;
@@ -1396,17 +1396,17 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     {
         //leftmargin
         sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetAbsLSpace());
-        pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN), ::getCppuType((const sal_Int32*)0));
+        pData = new PropValData((void*)&nINT32, UNO_NAME_LEFT_MARGIN, ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         //chartextoffset
         nINT32 = TWIP_TO_MM100(rFmt.GetCharTextDistance());
-        pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE), ::getCppuType((const sal_Int32*)0));
+        pData = new PropValData((void*)&nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE, ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         //firstlineoffset
         nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineOffset());
-        pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET), ::getCppuType((const sal_Int32*)0));
+        pData = new PropValData((void*)&nINT32, UNO_NAME_FIRST_LINE_OFFSET, ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
     }
 
@@ -1417,7 +1417,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         nINT16 = PositionAndSpaceMode::LABEL_ALIGNMENT;
     }
     pData = new PropValData( (void*)&nINT16,
-                             SW_PROP_NAME_STR(UNO_NAME_POSITION_AND_SPACE_MODE),
+                             UNO_NAME_POSITION_AND_SPACE_MODE,
                              ::getCppuType((const sal_Int16*)0) );
     aPropertyValues.push_back(pData);
 
@@ -1434,28 +1434,28 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             nINT16 = LabelFollow::NOTHING;
         }
         pData = new PropValData( (void*)&nINT16,
-                                 SW_PROP_NAME_STR(UNO_NAME_LABEL_FOLLOWED_BY),
+                                 UNO_NAME_LABEL_FOLLOWED_BY,
                                  ::getCppuType((const sal_Int16*)0) );
         aPropertyValues.push_back(pData);
 
         // ListtabStopPosition
         sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetListtabPos());
         pData = new PropValData( (void*)&nINT32,
-                                 SW_PROP_NAME_STR(UNO_NAME_LISTTAB_STOP_POSITION),
+                                 UNO_NAME_LISTTAB_STOP_POSITION,
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         // FirstLineIndent
         nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineIndent());
         pData = new PropValData( (void*)&nINT32,
-                                 SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),
+                                 UNO_NAME_FIRST_LINE_INDENT,
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
 
         // IndentAt
         nINT32 = TWIP_TO_MM100(rFmt.GetIndentAt());
         pData = new PropValData( (void*)&nINT32,
-                                 SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),
+                                 UNO_NAME_INDENT_AT,
                                  ::getCppuType((const sal_Int32*)0));
         aPropertyValues.push_back(pData);
     }
@@ -1491,7 +1491,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             {
                  awt::FontDescriptor aDesc;
                 SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
-                pData = new PropValData((void*)&aDesc, SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), ::getCppuType((const awt::FontDescriptor*)0));
+                pData = new PropValData((void*)&aDesc, UNO_NAME_BULLET_FONT, ::getCppuType((const awt::FontDescriptor*)0));
                 aPropertyValues.push_back(pData);
             }
         }
@@ -1507,7 +1507,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             }
             else
                 aUString = OUString();
-            pData = new PropValData((void*)&aUString, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL), ::getCppuType((const OUString*)0));
+            pData = new PropValData((void*)&aUString, UNO_NAME_GRAPHIC_URL, ::getCppuType((const OUString*)0));
             aPropertyValues.push_back(pData);
 
             //graphicbitmap
@@ -1517,7 +1517,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             if(pGraphic)
             {
                 uno::Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
-                pData = new PropValData((void*)&xBmp, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP),
+                pData = new PropValData((void*)&xBmp, UNO_NAME_GRAPHIC_BITMAP,
                                 ::getCppuType((const uno::Reference<awt::XBitmap>*)0));
                 aPropertyValues.push_back(pData);
             }
@@ -1525,13 +1525,13 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
             awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
-            pData = new PropValData((void*)&aAwtSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            pData = new PropValData((void*)&aAwtSize, UNO_NAME_GRAPHIC_SIZE, ::getCppuType((const awt::Size*)0));
             aPropertyValues.push_back(pData);
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
             if(pOrient)
             {
-                pData = new PropValData((void*)0, SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT), ::getCppuType((const sal_Int16*)0));
+                pData = new PropValData((void*)0, UNO_NAME_VERT_ORIENT, ::getCppuType((const sal_Int16*)0));
                 ((const SfxPoolItem*)pOrient)->QueryValue(pData->aVal, MID_VERTORIENT_ORIENT);
                 aPropertyValues.push_back(pData);
             }
@@ -1567,7 +1567,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         aUString = OUString();
         SwStyleNameMapper::FillProgName(sValue, aUString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
 
-        pData = new PropValData((void*)&aUString, SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), ::getCppuType((const OUString*)0));
+        pData = new PropValData((void*)&aUString, UNO_NAME_HEADING_STYLE_NAME, ::getCppuType((const OUString*)0));
         aPropertyValues.push_back(pData);
     }
 
@@ -1616,27 +1616,27 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         "Suffix",                               //3
         "CharStyleName",                        //4
         "StartWith",                            //5
-        SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN),                   //6
-        SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE),          //7
-        SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET),             //8
-        SW_PROP_NAME_STR(UNO_NAME_POSITION_AND_SPACE_MODE), //9
-        SW_PROP_NAME_STR(UNO_NAME_LABEL_FOLLOWED_BY),       //10
-        SW_PROP_NAME_STR(UNO_NAME_LISTTAB_STOP_POSITION),   //11
-        SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_INDENT),       //12
-        SW_PROP_NAME_STR(UNO_NAME_INDENT_AT),               //13
+        UNO_NAME_LEFT_MARGIN,                   //6
+        UNO_NAME_SYMBOL_TEXT_DISTANCE,          //7
+        UNO_NAME_FIRST_LINE_OFFSET,             //8
+        UNO_NAME_POSITION_AND_SPACE_MODE, //9
+        UNO_NAME_LABEL_FOLLOWED_BY,       //10
+        UNO_NAME_LISTTAB_STOP_POSITION,   //11
+        UNO_NAME_FIRST_LINE_INDENT,       //12
+        UNO_NAME_INDENT_AT,               //13
         "NumberingType",                        //14
-        SW_PROP_NAME_STR(UNO_NAME_PARAGRAPH_STYLE_NAME), //15
+        UNO_NAME_PARAGRAPH_STYLE_NAME, //15
         // these are not in chapter numbering
         "BulletId",                             //16
-        SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), //17
+        UNO_NAME_BULLET_FONT, //17
         "BulletFontName",                       //18
         "BulletChar",                           //19
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL),    //20
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP), //21
-        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),   //22
-        SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),    //23
+        UNO_NAME_GRAPHIC_URL,    //20
+        UNO_NAME_GRAPHIC_BITMAP, //21
+        UNO_NAME_GRAPHIC_SIZE,   //22
+        UNO_NAME_VERT_ORIENT,    //23
         // these are only in chapter numbering
-        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), //24
+        UNO_NAME_HEADING_STYLE_NAME, //24
         // these two are accepted but ignored for some reason
         "BulletRelSize",                         // 25
         "BulletColor"                            // 26
@@ -1729,8 +1729,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     pData->aVal >>= uTmp;
                     OUString sCharFmtName;
                     SwStyleNameMapper::FillUIName( uTmp, sCharFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                    if (sCharFmtName.equalsAscii(
-                            SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)))
+                    if (sCharFmtName == UNO_NAME_CHARACTER_FORMAT_NONE)
                     {
                         m_sNewCharStyleNames[(sal_uInt16)nIndex] = aInvalidStyle;
                         aFmt.SetCharFmt(0);
@@ -2160,37 +2159,37 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     if(!pNumRule && !pDocRule && !pCreatedRule)
         throw RuntimeException();
 
-    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
+    if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
         sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
+    else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
         sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME)))
+    else if(rPropertyName == UNO_NAME_NAME)
     {
         delete pDocRule;
         throw IllegalArgumentException();
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
+    else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
         sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
+    else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
         sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
+    else if(rPropertyName == UNO_NAME_DEFAULT_LIST_ID)
     {
         delete pDocRule;
         throw IllegalArgumentException();
@@ -2221,29 +2220,29 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     if(!pRule)
         throw RuntimeException();
 
-    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
+    if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
         sal_Bool bVal = pRule->IsAutoRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
+    else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
         sal_Bool bVal = pRule->IsContinusNum();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME)))
+    else if(rPropertyName == UNO_NAME_NAME)
         aRet <<= OUString(pRule->GetName());
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
+    else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
         sal_Bool bVal = pRule->IsAbsSpaces();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
+    else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
         sal_Bool bVal = pRule->IsOutlineRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
+    else if(rPropertyName == UNO_NAME_DEFAULT_LIST_ID)
     {
         OSL_ENSURE( !pRule->GetDefaultListId().isEmpty(),
                 "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );

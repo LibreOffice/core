@@ -562,16 +562,16 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 
         pRet[n].realloc(5);
         PropertyValue* pValues = pRet[n].getArray();
-        pValues[0].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_BASE_TEXT));
+        pValues[0].Name = UNO_NAME_RUBY_BASE_TEXT;
         pValues[0].Value <<= OUString(rEntryText);
-        pValues[1].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
+        pValues[1].Name = UNO_NAME_RUBY_TEXT;
         pValues[1].Value <<= OUString(rAttr.GetText());
-        pValues[2].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
+        pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
         SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         pValues[2].Value <<= aString;
-        pValues[3].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
+        pValues[3].Name = UNO_NAME_RUBY_ADJUST;
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
-        pValues[4].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
+        pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
         sal_Bool bVal = !rAttr.GetPosition();
         pValues[4].Value.setValue(&bVal, ::getBooleanCppuType());
     }
@@ -604,20 +604,17 @@ void SAL_CALL SwXTextView::setRubyList(
         OUString sTmp;
         for(sal_Int32 nProp = 0; nProp < pRubyList[nPos].getLength(); nProp++)
         {
-            if(pProperties[nProp].Name.equalsAsciiL(
-                                    SW_PROP_NAME(UNO_NAME_RUBY_BASE_TEXT)))
+            if(pProperties[nProp].Name == UNO_NAME_RUBY_BASE_TEXT)
             {
                 pProperties[nProp].Value >>= sTmp;
                 pEntry->SetText(sTmp);
             }
-            else if(pProperties[nProp].Name.equalsAsciiL(
-                                    SW_PROP_NAME(UNO_NAME_RUBY_TEXT)))
+            else if(pProperties[nProp].Name == UNO_NAME_RUBY_TEXT)
             {
                 pProperties[nProp].Value >>= sTmp;
                 pEntry->GetRubyAttr().SetText(sTmp);
             }
-            else if(pProperties[nProp].Name.equalsAsciiL(
-                                    SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME)))
+            else if(pProperties[nProp].Name == UNO_NAME_RUBY_CHAR_STYLE_NAME)
             {
                 if((pProperties[nProp].Value >>= sTmp))
                 {
@@ -631,15 +628,13 @@ void SAL_CALL SwXTextView::setRubyList(
                     pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
                 }
             }
-            else if(pProperties[nProp].Name.equalsAsciiL(
-                                    SW_PROP_NAME(UNO_NAME_RUBY_ADJUST)))
+            else if(pProperties[nProp].Name == UNO_NAME_RUBY_ADJUST)
             {
                 sal_Int16 nTmp = 0;
                 if((pProperties[nProp].Value >>= nTmp))
                     pEntry->GetRubyAttr().SetAdjustment(nTmp);
             }
-            else if(pProperties[nProp].Name.equalsAsciiL(
-                                    SW_PROP_NAME(UNO_NAME_RUBY_IS_ABOVE)))
+            else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)
             {
                 sal_Bool bValue = pProperties[nProp].Value.hasValue() ?
                     *(sal_Bool*)pProperties[nProp].Value.getValue() : sal_True;

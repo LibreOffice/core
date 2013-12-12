@@ -781,11 +781,11 @@ bool ::sw::GetDefaultTextContentValue(
 {
     if(!nWID)
     {
-        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE)))
+        if(rPropertyName == UNO_NAME_ANCHOR_TYPE)
             nWID = FN_UNO_ANCHOR_TYPE;
-        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES)))
+        else if(rPropertyName == UNO_NAME_ANCHOR_TYPES)
             nWID = FN_UNO_ANCHOR_TYPES;
-        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_TEXT_WRAP)))
+        else if(rPropertyName == UNO_NAME_TEXT_WRAP)
             nWID = FN_UNO_TEXT_WRAP;
         else
             return sal_False;
@@ -984,9 +984,9 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 
     SwPosition aPos( rTxtNode );
     SwCursor aCursor( aPos, 0, false );
-    if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE))  ||
-        rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES)) ||
-        rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_TEXT_WRAP)))
+    if (rPropertyName == UNO_NAME_ANCHOR_TYPE  ||
+        rPropertyName == UNO_NAME_ANCHOR_TYPES ||
+        rPropertyName == UNO_NAME_TEXT_WRAP)
     {
         return;
     }

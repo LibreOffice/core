@@ -1281,8 +1281,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
             }
         }
-        else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
-            || rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME)))
+        else if(0 != (bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
+            || rPropertyName == UNO_NAME_CHAIN_PREV_NAME)
         {
             OUString sChainName;
             aValue >>= sChainName;
@@ -1640,7 +1640,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             aAny <<= OUString(pFlyFmt->GetObjDescription());
         }
         else if(eType == FLYCNTTYPE_GRF &&
-                (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE))))
+                (rPropertyName == UNO_NAME_ACTUAL_SIZE))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1949,12 +1949,12 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
                 aSet.SetParent(&pFmt->GetAttrSet());
                 aSet.ClearItem(pEntry->nWID);
-                if(!rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE)))
+                if(rPropertyName != UNO_NAME_ANCHOR_TYPE)
                     pFmt->SetFmtAttr(aSet);
             }
         }
-        else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
-                || rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME)))
+        else if(0 != (bNextFrame = (rPropertyName == UNO_NAME_CHAIN_NEXT_NAME))
+                || rPropertyName == UNO_NAME_CHAIN_PREV_NAME)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             if(bNextFrame)
@@ -2271,19 +2271,19 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
             const ::uno::Any* pSurroundContour;
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
-                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
+                setPropertyValue(UNO_NAME_SURROUND_CONTOUR, *pSurroundContour);
             const ::uno::Any* pContourOutside;
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
-                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
+                setPropertyValue(UNO_NAME_CONTOUR_OUTSIDE, *pContourOutside);
             const ::uno::Any* pContourPoly;
             if(pProps->GetProperty(FN_PARAM_COUNTOUR_PP, 0, pContourPoly))
-                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
+                setPropertyValue(UNO_NAME_CONTOUR_POLY_POLYGON, *pContourPoly);
             const ::uno::Any* pPixelContour;
             if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
-                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
+                setPropertyValue(UNO_NAME_IS_PIXEL_CONTOUR, *pPixelContour);
             const ::uno::Any* pAutoContour;
             if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
-                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
+                setPropertyValue(UNO_NAME_IS_AUTOMATIC_CONTOUR, *pAutoContour);
         }
         else
         {
@@ -2417,21 +2417,21 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             GetOrCreateSdrObject( pFmt );
         const ::uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
-            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
+            setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);
         const ::uno::Any* pReplacement;
         if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
-            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
+            setPropertyValue(UNO_NAME_GRAPHIC, *pReplacement);
         // new attribute Title
         const ::uno::Any* pTitle;
         if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
         {
-            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)), *pTitle);
+            setPropertyValue(UNO_NAME_TITLE, *pTitle);
         }
         // new attribute Description
         const ::uno::Any* pDescription;
         if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
         {
-            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_DESCRIPTION)), *pDescription);
+            setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
         }
     }
     else
@@ -2786,8 +2786,8 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
 {
     SolarMutexGuard aGuard;
     ::uno::Any aRet;
-    if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
-            rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
+    if(rPropertyName == UNO_NAME_START_REDLINE||
+            rPropertyName == UNO_NAME_END_REDLINE)
     {
         //redline can only be returned if it's a living object
         if(!IsDescriptor())

@@ -1247,21 +1247,19 @@ uno::Sequence< OUString > getAttributeNames()
         // sorted list of strings
         sal_Int32 i = 0;
 
-#define STR(x) pStrings[i++] = OUString::createFromAscii(x)
-        STR( GetPropName( UNO_NAME_CHAR_BACK_COLOR ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_COLOR ).pName );
-           STR( GetPropName( UNO_NAME_CHAR_CONTOURED ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_EMPHASIS ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_ESCAPEMENT ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_FONT_NAME ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_HEIGHT ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_POSTURE ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_SHADOWED ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_STRIKEOUT ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_UNDERLINE ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_UNDERLINE_COLOR ).pName );
-        STR( GetPropName( UNO_NAME_CHAR_WEIGHT ).pName );
-#undef STR
+        pStrings[i++] = UNO_NAME_CHAR_BACK_COLOR;
+        pStrings[i++] = UNO_NAME_CHAR_COLOR;
+        pStrings[i++] = UNO_NAME_CHAR_CONTOURED;
+        pStrings[i++] = UNO_NAME_CHAR_EMPHASIS;
+        pStrings[i++] = UNO_NAME_CHAR_ESCAPEMENT;
+        pStrings[i++] = UNO_NAME_CHAR_FONT_NAME;
+        pStrings[i++] = UNO_NAME_CHAR_HEIGHT;
+        pStrings[i++] = UNO_NAME_CHAR_POSTURE;
+        pStrings[i++] = UNO_NAME_CHAR_SHADOWED;
+        pStrings[i++] = UNO_NAME_CHAR_STRIKEOUT;
+        pStrings[i++] = UNO_NAME_CHAR_UNDERLINE;
+        pStrings[i++] = UNO_NAME_CHAR_UNDERLINE_COLOR;
+        pStrings[i++] = UNO_NAME_CHAR_WEIGHT;
         DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
         if( i != pSeq->getLength() )
             pSeq->realloc( i );
@@ -1283,17 +1281,15 @@ uno::Sequence< OUString > getSupplementalAttributeNames()
         // sorted list of strings
         sal_Int32 i = 0;
 
-#define STR(x) pStrings[i++] = OUString::createFromAscii(x)
-        STR( GetPropName( UNO_NAME_NUMBERING_LEVEL ).pName );
-        STR( GetPropName( UNO_NAME_NUMBERING_RULES ).pName );
-        STR( GetPropName( UNO_NAME_PARA_ADJUST ).pName );
-        STR( GetPropName( UNO_NAME_PARA_BOTTOM_MARGIN ).pName );
-        STR( GetPropName( UNO_NAME_PARA_FIRST_LINE_INDENT ).pName );
-        STR( GetPropName( UNO_NAME_PARA_LEFT_MARGIN ).pName );
-        STR( GetPropName( UNO_NAME_PARA_LINE_SPACING ).pName );
-        STR( GetPropName( UNO_NAME_PARA_RIGHT_MARGIN ).pName );
-        STR( GetPropName( UNO_NAME_TABSTOPS ).pName );
-#undef STR
+        pStrings[i++] = UNO_NAME_NUMBERING_LEVEL;
+        pStrings[i++] = UNO_NAME_NUMBERING_RULES;
+        pStrings[i++] = UNO_NAME_PARA_ADJUST;
+        pStrings[i++] = UNO_NAME_PARA_BOTTOM_MARGIN;
+        pStrings[i++] = UNO_NAME_PARA_FIRST_LINE_INDENT;
+        pStrings[i++] = UNO_NAME_PARA_LEFT_MARGIN;
+        pStrings[i++] = UNO_NAME_PARA_LINE_SPACING;
+        pStrings[i++] = UNO_NAME_PARA_RIGHT_MARGIN;
+        pStrings[i++] = UNO_NAME_TABSTOPS;
         DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
         if( i != pSeq->getLength() )
             pSeq->realloc( i );
@@ -1937,13 +1933,10 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         // add property value entry for the paragraph style
         if ( !bOnlyCharAttrs && pTxtNode->GetTxtColl() )
         {
-            const OUString sParaStyleName =
-                    OUString::createFromAscii(
-                            GetPropName( UNO_NAME_PARA_STYLE_NAME ).pName );
-            if ( aDefAttrSeq.find( sParaStyleName ) == aDefAttrSeq.end() )
+            if ( aDefAttrSeq.find( UNO_NAME_PARA_STYLE_NAME ) == aDefAttrSeq.end() )
             {
                 PropertyValue rPropVal;
-                rPropVal.Name = sParaStyleName;
+                rPropVal.Name = UNO_NAME_PARA_STYLE_NAME;
                 uno::Any aVal( uno::makeAny( pTxtNode->GetTxtColl()->GetName() ) );
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
@@ -1957,10 +1950,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         // resolve value text::WritingMode2::PAGE of property value entry WritingMode
         if ( !bOnlyCharAttrs && GetFrm() )
         {
-            const OUString sWritingMode =
-                    OUString::createFromAscii(
-                            GetPropName( UNO_NAME_WRITING_MODE ).pName );
-            tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( sWritingMode );
+            tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( UNO_NAME_WRITING_MODE );
             if ( aIter != aDefAttrSeq.end() )
             {
                 PropertyValue rPropVal( aIter->second );
@@ -2321,19 +2311,19 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         switch( aChangeAttr.nItemId )
         {
         case SID_ATTR_CHAR_WEIGHT:
-            ChangeAttr.Name = OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_WEIGHT).pName );
+            ChangeAttr.Name = UNO_NAME_CHAR_WEIGHT;
             ChangeAttr.Value <<= awt::FontWeight::BOLD;
             break;
         case SID_ATTR_CHAR_POSTURE:
-            ChangeAttr.Name = OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_POSTURE).pName );
+            ChangeAttr.Name = UNO_NAME_CHAR_POSTURE;
             ChangeAttr.Value <<= awt::FontSlant_ITALIC; //char posture
             break;
         case SID_ATTR_CHAR_STRIKEOUT:
-            ChangeAttr.Name = OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_STRIKEOUT).pName );
+            ChangeAttr.Name = UNO_NAME_CHAR_STRIKEOUT;
             ChangeAttr.Value <<= awt::FontStrikeout::SINGLE; //char strikeout
             break;
         case SID_ATTR_CHAR_UNDERLINE:
-            ChangeAttr.Name = OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_UNDERLINE).pName );
+            ChangeAttr.Name = UNO_NAME_CHAR_UNDERLINE;
             ChangeAttr.Value <<= aChangeAttr.nAttr; //underline line
             break;
         }
@@ -2341,7 +2331,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             if( aChangeAttr.nItemId == SID_ATTR_BRUSH )
             {
-                ChangeAttrColor.Name = OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_BACK_COLOR).pName );
+                ChangeAttrColor.Name = UNO_NAME_CHAR_BACK_COLOR;
                 if( aChangeAttr.nColor == COL_TRANSPARENT )//char backcolor
                     ChangeAttrColor.Value <<= COL_BLUE;
                 else
@@ -2349,7 +2339,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             }
             else
             {
-                ChangeAttrColor.Name = OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_COLOR ).pName );
+                ChangeAttrColor.Name = UNO_NAME_CHAR_COLOR;
                 if( aChangeAttr.nColor == COL_TRANSPARENT )//char color
                     ChangeAttrColor.Value <<= COL_BLUE;
                 else
@@ -2380,7 +2370,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         //back color
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_BACK_COLOR ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_CHAR_BACK_COLOR)
         {
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crBack = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
@@ -2397,7 +2387,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         //char color
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_COLOR ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_CHAR_COLOR)
         {
             if( GetPortionData().IsInGrayPortion( nIndex ) )
                  rValue.Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
@@ -2418,7 +2408,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         // UnderLine
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_UNDERLINE ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_CHAR_UNDERLINE)
         {
             //misspelled word
             SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -2439,7 +2429,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         // UnderLineColor
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_UNDERLINE_COLOR ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_CHAR_UNDERLINE_COLOR)
         {
             //misspelled word
             SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -2475,7 +2465,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         //tab stop
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_TABSTOPS ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_TABSTOPS)
         {
             com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs = GetCurrentTabStop( nIndex );
             if( !tabs.hasElements() )
@@ -2498,7 +2488,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         //number bullet
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_NUMBERING_RULES ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_NUMBERING_RULES)
         {
             if ( pTxtNode->HasBullet() || pTxtNode->HasNumber() )
             {
@@ -2515,7 +2505,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
 
         //footnote & endnote
-        if (rValue.Name.compareTo(OUString::createFromAscii( GetPropName( UNO_NAME_CHAR_ESCAPEMENT ).pName ) )==0)
+        if (rValue.Name == UNO_NAME_CHAR_ESCAPEMENT)
         {
             if ( GetPortionData().IsIndexInFootnode(nIndex) )
             {

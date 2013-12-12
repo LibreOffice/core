@@ -667,7 +667,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
 
     Any aZoom;
     aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
-    m_xViewProperties->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+    m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
 
     const SwFmtFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
@@ -691,9 +691,9 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
         }
         Any aZoom;
         aZoom <<= eType;
-        m_xViewProperties->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+        m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
         aZoom <<= nZoom;
-        m_xViewProperties->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
+        m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
 
     }
     return 0;

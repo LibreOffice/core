@@ -2168,7 +2168,7 @@ lcl_MergeCells(::std::vector<VerticallyMergedCell> & rMergedCells)
             while (aCellIter != aMergedIter->aCells.end())
             {
                 (*aCellIter)->setPropertyValue(
-                    OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ROW_SPAN)),
+                    UNO_NAME_ROW_SPAN,
                     uno::makeAny(nCellCount));
                 if (bFirstCell)
                 {

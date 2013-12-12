@@ -392,16 +392,14 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
         {
             Sequence<PropertyValues> aRet(m_SortKeyArr.size());
             PropertyValues* pValues = aRet.getArray();
-            OUString sProp1( OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
-                     sProp2( OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
             for(sal_uInt16 i = 0; i < m_SortKeyArr.size(); i++)
             {
                 const SwTOXSortKey* pKey = &m_SortKeyArr[i];
                 pValues[i].realloc(2);
                 PropertyValue* pValue = pValues[i].getArray();
-                pValue[0].Name = sProp1;
+                pValue[0].Name = UNO_NAME_SORT_KEY;
                 pValue[0].Value <<= sal_Int16(pKey->eField);
-                pValue[1].Name = sProp2;
+                pValue[1].Name = UNO_NAME_IS_SORT_ASCENDING;
                 pValue[1].Value.setValue(&pKey->bSortAscending, ::getBooleanCppuType());
             }
             rVal <<= aRet;
@@ -465,7 +463,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                     SwTOXSortKey* pSortKey = new SwTOXSortKey;
                     for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
                     {
-                        if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_SORT_KEY)))
+                        if(pValue[j].Name == UNO_NAME_SORT_KEY)
                         {
                             sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
                             if(nVal >= 0 && nVal < AUTH_FIELD_END)
@@ -473,7 +471,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                             else
                                 bRet = false;
                         }
-                        else if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SORT_ASCENDING)))
+                        else if(pValue[j].Name == UNO_NAME_IS_SORT_ASCENDING)
                         {
                             pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
                         }

@@ -1937,8 +1937,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                 rMap.getByName( pNames[i] );
         if(!pEntry)
         {
-            if (pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
-                pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+            if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
+                pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
             {
                 pStates[i] = beans::PropertyState_DEFAULT_VALUE;
                 continue;
@@ -2143,8 +2143,8 @@ SwXTextCursor::getPropertySetInfo() throw (uno::RuntimeException)
     {
         static SfxItemPropertyMapEntry const aCrsrExtMap_Impl[] =
         {
-            { OUString::createFromAscii(GetPropName(UNO_NAME_IS_SKIP_HIDDEN_TEXT)), FN_SKIP_HIDDEN_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
-            { OUString::createFromAscii(GetPropName(UNO_NAME_IS_SKIP_PROTECTED_TEXT)), FN_SKIP_PROTECTED_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
+            { OUString(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
+            { OUString(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, ::getBooleanCppuType(), PROPERTY_NONE,     0},
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
@@ -2169,7 +2169,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)))
+    if (rPropertyName == UNO_NAME_IS_SKIP_HIDDEN_TEXT)
     {
         sal_Bool bSet(sal_False);
         if (!(rValue >>= bSet))
@@ -2178,8 +2178,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         rUnoCursor.SetSkipOverHiddenSections(bSet);
     }
-    else if (rPropertyName.equalsAsciiL(
-                SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+    else if (rPropertyName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
     {
         sal_Bool bSet(sal_False);
         if (!(rValue >>= bSet))
@@ -2205,13 +2204,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     uno::Any aAny;
-    if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)))
+    if (rPropertyName == UNO_NAME_IS_SKIP_HIDDEN_TEXT)
     {
         const sal_Bool bSet = rUnoCursor.IsSkipOverHiddenSections();
         aAny <<= bSet;
     }
-    else if (rPropertyName.equalsAsciiL(
-                SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+    else if (rPropertyName == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
     {
         const sal_Bool bSet = rUnoCursor.IsSkipOverProtectSections();
         aAny <<= bSet;
@@ -2330,10 +2328,8 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
     uno::Sequence< beans::PropertyValue > aPropertyValues( aValues.getLength() );
     for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
     {
-        if ( aPropertyNames[ i ].equalsAsciiL(
-                SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
-             aPropertyNames[ i ].equalsAsciiL(
-                SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)) )
+        if ( aPropertyNames[ i ] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
+             aPropertyNames[ i ] == UNO_NAME_IS_SKIP_PROTECTED_TEXT )
         {
             // the behaviour of these is hard to model in a group
             OSL_ASSERT("invalid property name for batch setting");
@@ -2456,10 +2452,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                 m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
             if (!pEntry)
             {
-                if (pNames[i].equalsAsciiL(
-                        SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
-                    pNames[i].equalsAsciiL(
-                        SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+                if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
+                    pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
                 {
                     continue;
                 }
@@ -2528,10 +2522,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
             if (!pEntry)
             {
-                if (pNames[i].equalsAsciiL(
-                        SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
-                    pNames[i].equalsAsciiL(
-                        SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+                if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
+                    pNames[i] == UNO_NAME_IS_SKIP_PROTECTED_TEXT)
                 {
                     continue;
                 }

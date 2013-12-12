@@ -2282,7 +2282,7 @@ void SAL_CALL SwChartDataSequence::setPropertyValue(
     if (bDisposed)
         throw lang::DisposedException();
 
-    if (rPropertyName.equalsAscii( SW_PROP_NAME_STR( UNO_NAME_ROLE )))
+    if (rPropertyName == UNO_NAME_ROLE)
     {
         if ( !(rValue >>= aRole) )
             throw lang::IllegalArgumentException();
@@ -2300,7 +2300,7 @@ uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
         throw lang::DisposedException();
 
     uno::Any aRes;
-    if (rPropertyName.equalsAscii( SW_PROP_NAME_STR( UNO_NAME_ROLE )))
+    if (rPropertyName == UNO_NAME_ROLE)
         aRes <<= aRole;
     else
         throw beans::UnknownPropertyException();

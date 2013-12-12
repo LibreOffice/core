@@ -384,15 +384,15 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
             {
                 const OUString sName = pArray[i].Name;
                 sal_Bool bVal = *(sal_Bool*)pVal->getValue();
-                if( sName.equalsAscii(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)))
+                if( sName == UNO_NAME_OVERWRITE_STYLES )
                     bLoadStyleOverwrite = bVal;
-                else if( sName.equalsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)))
+                else if( sName == UNO_NAME_LOAD_NUMBERING_STYLES )
                     bLoadStyleNumbering = bVal;
-                else if( sName.equalsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)))
+                else if( sName == UNO_NAME_LOAD_PAGE_STYLES )
                     bLoadStylePage = bVal;
-                else if( sName.equalsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)))
+                else if( sName == UNO_NAME_LOAD_FRAME_STYLES )
                     bLoadStyleFrame = bVal;
-                else if( sName.equalsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)))
+                else if( sName == UNO_NAME_LOAD_TEXT_STYLES )
                     bLoadStyleText = bVal;
             }
 
@@ -420,15 +420,15 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
     uno::Any aVal;
     sal_Bool bTemp = sal_True;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[0] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[0] = beans::PropertyValue(UNO_NAME_LOAD_TEXT_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[1] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[1] = beans::PropertyValue(UNO_NAME_LOAD_FRAME_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[2] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[2] = beans::PropertyValue(UNO_NAME_LOAD_PAGE_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[3] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[3] = beans::PropertyValue(UNO_NAME_LOAD_NUMBERING_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[4] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[4] = beans::PropertyValue(UNO_NAME_OVERWRITE_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     return aSeq;
 }
 
@@ -2108,7 +2108,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
 
         if(!pEntry ||
-           (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
+           (!bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
             throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
@@ -2384,7 +2384,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
         if(!pEntry ||
-           (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
+           (!bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
             throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(pBasePool)
         {

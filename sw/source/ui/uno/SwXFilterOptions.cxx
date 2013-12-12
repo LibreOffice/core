@@ -83,7 +83,7 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
         const beans::PropertyValue& rProp = pPropArray[i];
         OUString aPropName = rProp.Name;
 
-        if ( aPropName.equalsAscii( SW_PROP_NAME_STR(UNO_NAME_FILTER_NAME) ) )
+        if ( aPropName == UNO_NAME_FILTER_NAME )
             rProp.Value >>= sFilterName;
         else if ( aPropName == FILTER_OPTIONS_NAME )
             rProp.Value >>= sFilterOptions;
