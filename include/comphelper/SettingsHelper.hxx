@@ -27,8 +27,6 @@
 
 namespace comphelper
 {
-    class MasterPropertySet;
-    class MasterPropertySetInfo;
     class ChainablePropertySet;
     class ChainablePropertySetInfo;
 
@@ -95,12 +93,6 @@ namespace comphelper
             throw(::com::sun::star::uno::RuntimeException)
         { ComphelperBase::firePropertiesChangeEvent ( aPropertyNames, xListener ); }
     };
-    typedef comphelper::SettingsHelperNoState
-    <
-        ::comphelper::MasterPropertySet,
-        ::comphelper::MasterPropertySetInfo
-    >
-    MasterHelperNoState;
     typedef comphelper::SettingsHelperNoState
     <
         ::comphelper::ChainablePropertySet,
