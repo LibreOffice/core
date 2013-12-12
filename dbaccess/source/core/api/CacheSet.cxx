@@ -79,10 +79,13 @@ OUString OCacheSet::getIdentifierQuoteString() const
     return sQuote;
 }
 
-void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUString& /*i_sRowSetFilter*/)
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUString &i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
+
+    m_sRowSetFilter = i_sRowSetFilter;
+
     if(_xDriverSet.is())
     {
         m_xDriverSet = _xDriverSet;
@@ -665,11 +668,6 @@ Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException,
 bool OCacheSet::isResultSetChanged() const
 {
     return false;
-}
-
-void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
-{
-    OSL_FAIL("Illegal call!");
 }
 
 void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)

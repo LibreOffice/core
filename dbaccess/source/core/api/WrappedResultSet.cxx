@@ -46,6 +46,11 @@ void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const
     m_xUpdRow.set(_xDriverSet,UNO_QUERY_THROW);
 }
 
+void WrappedResultSet::reset(const Reference< XResultSet>& _xDriverSet)
+{
+    construct(_xDriverSet, m_sRowSetFilter);
+}
+
 Any SAL_CALL WrappedResultSet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::getBookmark" );

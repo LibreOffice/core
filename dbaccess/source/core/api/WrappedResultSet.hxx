@@ -43,6 +43,7 @@ namespace dbaccess
         }
 
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter);
+        virtual void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
         // ::com::sun::star::sdbcx::XRowLocate
         virtual ::com::sun::star::uno::Any SAL_CALL getBookmark() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
