@@ -369,117 +369,83 @@ void OpDISC::GenSlidingWindowFunction(std::stringstream& ss,
 void OpINTRATE::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetYearDiffDecl);decls.insert(GetDiffDateDecl);
-    decls.insert(DaysToDateDecl);decls.insert(GetNullDateDecl);
+    decls.insert(GetYearDiff_newDecl);decls.insert(GetDiffDate_newDecl);
+    decls.insert(DaysToDate_newDecl);decls.insert(GetNullDateDecl);
     decls.insert(DateToDaysDecl);decls.insert(DaysInMonthDecl);
     decls.insert(IsLeapYearDecl);
-    funs.insert(GetYearDiff);funs.insert(GetDiffDate);
-    funs.insert(DaysToDate);funs.insert(GetNullDate);
+    funs.insert(GetYearDiff_new);funs.insert(GetDiffDate_new);
+    funs.insert(DaysToDate_new);funs.insert(GetNullDate);
     funs.insert(DateToDays);funs.insert(DaysInMonth);
     funs.insert(IsLeapYear);
 }
 
-void OpINTRATE::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+void OpINTRATE::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
 {
     ss << "\ndouble " << sSymName;
-    ss << "_"<< BinFuncName() <<"(";
+    ss << "_" << BinFuncName() << "(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "double tmp = " << GetBottom() <<";\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "double settle = " << GetBottom() <<";\n\t";
-    ss << "double maturity = " << GetBottom() <<";\n\t";
-    ss << "double price = " << GetBottom() <<";\n\t";
-    ss << "double redemp = " << GetBottom() <<";\n\t";
-    ss << "int mode = " << GetBottom() <<";\n\t";
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() << ";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double arg0 = " << GetBottom() << ";\n";
+    ss << "    double arg1 = " << GetBottom() << ";\n";
+    ss << "    double arg2 = " << GetBottom() << ";\n";
+    ss << "    double arg3 = " << GetBottom() << ";\n";
+    ss << "    double arg4 = " << GetBottom() << ";\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
 #ifdef  ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur2);
-    FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur3);
-    FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur4);
-    ss << "int buffer_settle_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
-    ss << "int buffer_maturity_len = ";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
-    ss << "int buffer_price_len = ";
-    ss << tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
-    ss << "int buffer_redemp_len = ";
-    ss << tmpCurDVR3->GetArrayLength();
-    ss << ";\n\t";
-    ss << "int buffer_mode_len = ";
-    ss << tmpCurDVR4->GetArrayLength();
-    ss << ";\n\t";
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
 #ifdef  ISNAN
-    ss << "if((gid0)>=buffer_settle_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "settle = 0;\n\telse \n\t\t";
+            ss << "    {\n";
 #endif
-    ss << "settle = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
+        }
 #ifdef  ISNAN
-    ss << "if((gid0)>=buffer_maturity_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "maturity = 0;\n\telse \n\t\t";
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg" << i << " = 0;\n";
+            ss << "        else\n";
+            ss << "            arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+            ss << "    }\n";
+        }
+        else
+        {
+            ss << "    arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+        }
+#else
+        ss << "    arg" << i;
+        ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
 #endif
-    ss << "maturity = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-#ifdef  ISNAN
-    ss << "if((gid0)>=buffer_price_len || isNan(";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "price = 0;\n\telse \n\t\t";
-#endif
-    ss << "price = ";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-#ifdef  ISNAN
-    ss << "if((gid0)>=buffer_redemp_len || isNan(";
-    ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "redemp = 0;\n\telse \n\t\t";
-#endif
-    ss << "redemp = ";
-    ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-#ifdef  ISNAN
-    ss << "if((gid0)>=buffer_mode_len || isNan(";
-    ss << vSubArguments[4]->GenSlidingWindowDeclRef();
-    ss << "))\n\t\t";
-    ss << "mode = 0;\n\telse \n\t\t";
-#endif
-    ss << "mode = ";
-    ss << vSubArguments[4]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-    ss << "int nNullDate = GetNullDate();\n\t";
-    ss << "tmp = (redemp / price - 1.0) / GetYearDiff(nNullDate, settle, maturity, mode);\n\t";
-    ss << "return tmp;\n";
+    }
+    ss << "    int nNullDate = GetNullDate();\n";
+    ss << "    tmp = arg3 * pow(arg2,-1) - 1.0;\n";
+    ss << "    tmp = tmp * pow(GetYearDiff_new(nNullDate, (int)arg0,";
+    ss << " (int)arg1,(int)arg4),-1);\n";
+    ss << "    return tmp;\n";
     ss << "}";
 }
+
 void OpFV::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {

@@ -1488,6 +1488,82 @@ std::string DaysToDate_new =
 "    }\n"
 "}\n";
 
+std::string GetYearDiff_newDecl=
+"double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
+"int nMode);\n";
+
+std::string GetYearDiff_new=
+"double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
+"int nMode )\n"
+"{\n"
+"    int   nDays1stYear;\n"
+"    int   nTotalDays = GetDiffDate_new( nNullDate, nStartDate, nEndDate,"
+"nMode, &"
+"nDays1stYear );\n"
+"    return (double)(nTotalDays)* pow((double)nDays1stYear,-1);\n"
+"}\n";
+
+std::string GetDiffDate_newDecl=
+"int GetDiffDate_new( int nNullDate, int nStartDate, int nEndDate, int nMode,"
+"    int* pOptDaysIn1stYear );\n";
+
+std::string GetDiffDate_new=
+"int GetDiffDate_new( int nNullDate, int nStartDate, int nEndDate, int nMode,"
+"    int* pOptDaysIn1stYear )\n"
+"{\n"
+"    bool    bNeg = nStartDate > nEndDate;\n"
+"    if( bNeg )\n"
+"    {\n"
+"        int   n = nEndDate;\n"
+"        nEndDate = nStartDate;\n"
+"        nStartDate = n;\n"
+"    }\n"
+"    int       nRet;\n"
+"    switch( nMode )\n"
+"    {\n"
+"    case 0:   \n"
+"    case 4:   \n"
+"        {\n"
+"        int      nD1, nM1, nY1, nD2, nM2, nY2;\n"
+"        nStartDate += nNullDate;\n"
+"        nEndDate += nNullDate;\n"
+"        DaysToDate_new( nStartDate, &nD1, &nM1, &nY1 );\n"
+"        DaysToDate_new( nEndDate, &nD2, &nM2, &nY2 );\n"
+"        bool        bLeap = IsLeapYear( nY1 );\n"
+"        int       nDays, nMonths;\n"
+"        nMonths = nM2 - nM1;\n"
+"        nDays = nD2 - nD1;\n"
+"        nMonths += ( nY2 - nY1 ) * 12;\n"
+"        nRet = nMonths * 30 + nDays;\n"
+"        if( nMode == 0 && nM1 == 2 && nM2 != 2 && nY1 == nY2 )\n"
+"            nRet -= bLeap? 1 : 2;\n"
+"        if( pOptDaysIn1stYear )\n"
+"            *pOptDaysIn1stYear = 360;\n"
+"        }\n"
+"        break;\n"
+"    case 1:    \n"
+"        if( pOptDaysIn1stYear )\n"
+"        {\n"
+"            int      nD, nM, nY;\n"
+"            DaysToDate_new( nStartDate + nNullDate, &nD, &nM, &nY );\n"
+"            *pOptDaysIn1stYear = IsLeapYear( nY )? 366 : 365;\n"
+"        }\n"
+"        nRet = nEndDate - nStartDate;\n"
+"        break;\n"
+"    case 2:      \n"
+"        nRet = nEndDate - nStartDate;\n"
+"        if( pOptDaysIn1stYear )\n"
+"            *pOptDaysIn1stYear = 360;\n"
+"        break;\n"
+"    case 3:        \n"
+"        nRet = nEndDate - nStartDate;\n"
+"        if( pOptDaysIn1stYear )\n"
+"            *pOptDaysIn1stYear = 365;\n"
+"        break;\n"
+"    }\n"
+"    return bNeg? -nRet : nRet;\n"
+"}\n";
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
