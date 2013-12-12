@@ -51,10 +51,6 @@ typedef struct CGContext *CGContextRef;
 #endif
 #endif
 
-// -----------------
-// - SystemEnvData -
-// -----------------
-
 struct SystemEnvData
 {
     unsigned long       nSize;          // size in bytes of this structure
@@ -72,7 +68,7 @@ struct SystemEnvData
     void*               pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
-    int             nScreen;        // the current screen of the window
+    int                 nScreen;        // the current screen of the window
     int                 nDepth;         // depth of said visual
     long                aColormap;      // the colormap being used
     void*               pAppContext;    // the application context in use
@@ -80,10 +76,6 @@ struct SystemEnvData
     void*               pShellWidget;   // the frame's shell widget
 #endif
 };
-
-// --------------------
-// - SystemParentData -
-// --------------------
 
 struct SystemParentData
 {
@@ -103,10 +95,6 @@ struct SystemParentData
 #endif
 };
 
-// --------------------
-// - SystemMenuData -
-// --------------------
-
 struct SystemMenuData
 {
     unsigned long   nSize;          // size in bytes of this structure
@@ -122,10 +110,6 @@ struct SystemMenuData
     long            aMenu;          // ???
 #endif
 };
-
-// --------------------
-// - SystemGraphicsData -
-// --------------------
 
 struct SystemGraphicsData
 {
@@ -169,11 +153,6 @@ struct SystemGraphicsData
     { }
 };
 
-
-// --------------------
-// - SystemWindowData -
-// --------------------
-
 struct SystemWindowData
 {
     unsigned long   nSize;          // size in bytes of this structure
@@ -189,11 +168,6 @@ struct SystemWindowData
 #endif
 };
 
-
-// --------------------
-// - SystemGlyphData -
-// --------------------
-
 struct SystemGlyphData
 {
     unsigned long        index;
@@ -202,10 +176,6 @@ struct SystemGlyphData
     int                  fallbacklevel;
 };
 
-
-// --------------------
-// - SystemFontData -
-// --------------------
 struct SystemFontData
 {
     unsigned long   nSize;          // size in bytes of this structure
@@ -237,10 +207,6 @@ struct SystemFontData
     {
     }
 };
-
-// --------------------
-// - SystemTextLayoutData -
-// --------------------
 
 typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
 
