@@ -165,7 +165,6 @@ private:
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
-    bool mbIsBIDI;
     bool mbIsSplitPara;
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };
