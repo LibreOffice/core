@@ -141,7 +141,7 @@ public:
     virtual void StartParagraphProperties();
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData );
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted );
 
     /// Start of the text run.
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );
@@ -193,13 +193,13 @@ public:
     /// Output redlining.
     ///
     /// Start of the tag that encloses the run, fills the info according to
-    /// the value of m_pRedlineData.
-    void StartRedline();
+    /// the value of pRedlineData.
+    void StartRedline( const SwRedlineData * pRedlineData );
 
     /// Output redlining.
     ///
     /// End of the tag that encloses the run.
-    void EndRedline();
+    void EndRedline( const SwRedlineData * pRedlineData );
 
     virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner );
 

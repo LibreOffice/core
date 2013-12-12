@@ -676,13 +676,28 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
-void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData )
+void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted )
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
     Redline( pRedlineData );
 
     WriteCollectedParagraphProperties();
+
+    // Write 'Paragraph Mark' properties
+    bool bIsParagraphMarkProperties = false; // In future - get the 'paragraph marker' properties as a parameter
+    if (bIsParagraphMarkProperties || pRedlineParagraphMarkerDeleted)
+    {
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+
+        if ( pRedlineParagraphMarkerDeleted )
+        {
+            StartRedline( pRedlineParagraphMarkerDeleted );
+            EndRedline( pRedlineParagraphMarkerDeleted );
+        }
+
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+    }
 
     // Merge the marks for the ordered elements
     m_pSerializer->mergeTopMarks( );
@@ -793,7 +808,7 @@ void DocxAttributeOutput::EndRun()
     }
 
     // if there is some redlining in the document, output it
-    StartRedline();
+    StartRedline( m_pRedlineData );
 
     DoWriteBookmarks( );
     WriteCommentRanges();
@@ -811,7 +826,9 @@ void DocxAttributeOutput::EndRun()
     WritePendingPlaceholder();
 
     // if there is some redlining in the document, output it
-    EndRedline();
+    EndRedline( m_pRedlineData );
+
+    m_pRedlineData = NULL;
 
     if ( m_closeHyperlinkInThisRun )
     {
@@ -1551,17 +1568,17 @@ void DocxAttributeOutput::FieldVanish( const OUString& rTxt, ww::eField eType )
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
 // 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
 // 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
-void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
+void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 {
-    if ( !pRedline )
+    if ( !pRedlineData )
         return;
 
-    OString aId( OString::number( pRedline->GetSeqNo() ) );
-    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
+    OString aId( OString::number( pRedlineData->GetSeqNo() ) );
+    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
-    OString aDate( DateTimeToOString( pRedline->GetTimeStamp() ) );
+    OString aDate( DateTimeToOString( pRedlineData->GetTimeStamp() ) );
 
-    switch( pRedline->GetType() )
+    switch( pRedlineData->GetType() )
     {
     case nsRedlineType_t::REDLINE_INSERT:
         break;
@@ -1577,9 +1594,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
                 FSEND );
 
         // Check if there is any extra data stored in the redline object
-        if (pRedline->GetExtraData())
+        if (pRedlineData->GetExtraData())
         {
-            const SwRedlineExtraData* pExtraData = pRedline->GetExtraData();
+            const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
             const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
 
             // Check if the extra data is of type 'formatting changes'
@@ -1633,9 +1650,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
                 FSEND );
 
         // Check if there is any extra data stored in the redline object
-        if (pRedline->GetExtraData())
+        if (pRedlineData->GetExtraData())
         {
-            const SwRedlineExtraData* pExtraData = pRedline->GetExtraData();
+            const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
             const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
 
             // Check if the extra data is of type 'formatting changes'
@@ -1679,7 +1696,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
         break;
 
     default:
-        SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedline->GetType());
+        SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedlineData->GetType());
         break;
     }
 }
@@ -1687,11 +1704,10 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
 // 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
 // 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
-void DocxAttributeOutput::StartRedline()
+void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
 {
-    if ( !m_pRedlineData )
+    if ( !pRedlineData )
         return;
-    const SwRedlineData* pRedlineData = m_pRedlineData;
 
     // FIXME check if it's necessary to travel over the Next()'s in pRedlineData
 
@@ -1727,12 +1743,12 @@ void DocxAttributeOutput::StartRedline()
     }
 }
 
-void DocxAttributeOutput::EndRedline()
+void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
 {
-    if ( !m_pRedlineData )
+    if ( !pRedlineData )
         return;
 
-    switch ( m_pRedlineData->GetType() )
+    switch ( pRedlineData->GetType() )
     {
         case nsRedlineType_t::REDLINE_INSERT:
             m_pSerializer->endElementNS( XML_w, XML_ins );
@@ -1748,8 +1764,6 @@ void DocxAttributeOutput::EndRedline()
         default:
             break;
     }
-
-    m_pRedlineData = NULL;
 }
 
 void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
