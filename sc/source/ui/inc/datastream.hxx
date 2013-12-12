@@ -7,78 +7,101 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_DATASTREAM_HXX
+#define SC_DATASTREAM_HXX
+
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <sfx2/lnkbase.hxx>
 #include <address.hxx>
-#include <refreshtimer.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
-namespace datastreams {
-    class ReaderThread;
-}
+#include <documentstreamaccess.hxx>
+
 class ScDocShell;
 class ScDocument;
 class Window;
 
+namespace sc {
+
+namespace datastreams {
+    class CallerThread;
+    class ReaderThread;
+}
+
 typedef std::vector<OString> LinesList;
 
-class DataStream : boost::noncopyable, public sfx2::SvBaseLink, ScRefreshTimer
+class DataStream : boost::noncopyable
 {
     OString ConsumeLine();
     void MoveData();
     void Text2Doc();
-    DECL_LINK( RefreshHdl, void* );
 
 public:
-    enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
+    enum MoveType { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
     enum { SCRIPT_STREAM = 1, VALUES_IN_LINE = 2 };
 
     static void MakeToolbarVisible();
-    static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
-            sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
+    static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
+            sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
 
-    DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
-            sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
-    virtual ~DataStream();
-    // sfx2::SvBaseLink
-    virtual sfx2::SvBaseLink::UpdateResult DataChanged(
-            const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
-    virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
+    static MoveType ToMoveType( const OUString& rMoveStr );
 
-    const ScRange& GetRange() const { return maRange; }
+    DataStream(
+        ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
+        sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
+
+    ~DataStream();
+
+    ScRange GetRange() const;
     const OUString& GetURL() const { return msURL; }
     const sal_Int32& GetLimit() const { return mnLimit; }
-    const OUString& GetMove() const { return msMove; }
+    MoveType GetMove() const;
     const sal_uInt32& GetSettings() const { return mnSettings; }
-    void Decode(const OUString& rURL, const OUString& rRange, sal_Int32 nLimit,
-            const OUString& rMove, const sal_uInt32 nSettings);
+    bool IsRefreshOnEmptyLine() const;
+
+    void Decode(
+        const OUString& rURL, const ScRange& rRange, sal_Int32 nLimit,
+        MoveType eMove, const sal_uInt32 nSettings);
+
     bool ImportData();
     void StartImport();
     void StopImport();
 
+    void SetRefreshOnEmptyLine( bool bVal );
+
 private:
-    ScDocShell *mpScDocShell;
-    ScDocument *mpScDocument;
+    void Refresh();
+
+private:
+    ScDocShell* mpDocShell;
+    ScDocument* mpDoc;
+    DocumentStreamAccess maDocAccess;
     OUString msURL;
-    OUString msRange;
-    OUString msMove;
     sal_Int32 mnLimit;
     sal_uInt32 mnSettings;
-    MoveEnum meMove;
+    MoveType meOrigMove; // Initial move setting. This one gets saved to file.
+    MoveType meMove; // move setting during streaming, which may change in the middle.
     bool mbRunning;
     bool mbValuesInLine;
-    LinesList *mpLines;
+    bool mbRefreshOnEmptyLine;
+    LinesList* mpLines;
     size_t mnLinesCount;
-    ScRange maRange;
+    size_t mnLinesSinceRefresh;
+    double mfLastRefreshTime;
+    SCROW mnCurRow;
     ScRange maStartRange;
-    boost::scoped_ptr<ScRange> mpEndRange;
+    ScRange maEndRange;
+    rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
 };
+
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

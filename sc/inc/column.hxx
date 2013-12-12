@@ -55,6 +55,7 @@ struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 class EditTextIterator;
 struct NoteEntry;
+class DocumentStreamAccess;
 
 }
 
@@ -138,6 +139,7 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
+friend class sc::DocumentStreamAccess;
 friend class sc::SingleColumnSpanSet;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;

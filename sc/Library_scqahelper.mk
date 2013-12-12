@@ -18,10 +18,14 @@ $(eval $(call gb_Library_set_include,scqahelper,\
 $(eval $(call gb_Library_use_externals,scqahelper, \
 	boost_headers \
 	mdds_headers \
-	orcus \
-	orcus-parser \
 	cppunit \
 ))
+
+ifeq ($(SYSTEM_LIBORCUS),YES)
+$(eval $(call gb_Library_use_externals,scqahelper,orcus))
+else
+$(eval $(call gb_Library_use_externals,scqahelper,orcus-parser))
+endif
 
 $(eval $(call gb_Library_add_defs,scqahelper,\
 	-DSCQAHELPER_DLLIMPLEMENTATION \

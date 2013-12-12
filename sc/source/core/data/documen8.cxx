@@ -86,7 +86,6 @@
 #include "columniterator.hxx"
 #include "globalnames.hxx"
 #include "stringutil.hxx"
-#include <datastream.hxx>
 
 #include <memory>
 #include <boost/scoped_ptr.hpp>
@@ -1194,7 +1193,7 @@ bool ScDocument::HasAreaLinks() const
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
-            if ((*rLinks[i])->ISA(ScAreaLink) || (*rLinks[i])->ISA(DataStream))
+            if ((*rLinks[i])->ISA(ScAreaLink))
                 return true;
     }
 
@@ -1209,7 +1208,7 @@ void ScDocument::UpdateAreaLinks()
         for (sal_uInt16 i=0; i<rLinks.size(); i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink) || (*rLinks[i])->ISA(DataStream))
+            if (pBase->ISA(ScAreaLink))
                 pBase->Update();
         }
     }

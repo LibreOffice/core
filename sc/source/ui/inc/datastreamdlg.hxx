@@ -13,9 +13,13 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 
-class DataStream;
+#include <datastream.hxx>
+
 class ScDocShell;
 class SvtURLBox;
+class ScRange;
+
+namespace sc {
 
 class DataStreamDlg : public ModalDialog
 {
@@ -23,13 +27,16 @@ class DataStreamDlg : public ModalDialog
 
     SvtURLBox*      m_pCbUrl;
     PushButton*     m_pBtnBrowse;
+    RadioButton*    m_pRBDirectData;
     RadioButton*    m_pRBScriptData;
     RadioButton*    m_pRBValuesInLine;
     RadioButton*    m_pRBAddressValue;
+    CheckBox*       m_pCBRefreshOnEmpty;
     RadioButton*    m_pRBDataDown;
     RadioButton*    m_pRBRangeDown;
     RadioButton*    m_pRBNoMove;
     RadioButton*    m_pRBMaxLimit;
+    RadioButton*    m_pRBUnlimited;
     Edit*           m_pEdRange;
     Edit*           m_pEdLimit;
     OKButton*       m_pBtnOk;
@@ -40,13 +47,16 @@ class DataStreamDlg : public ModalDialog
     DECL_LINK(BrowseHdl, void *);
 
     void UpdateEnable();
+    ScRange GetStartRange();
 
 public:
     DataStreamDlg(ScDocShell *pDocShell, Window* pParent);
-    ~DataStreamDlg() {}
-    void Init(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
-            const OUString& rMove, const sal_uInt32 nSettings);
-    void StartStream(DataStream *pStream = 0);
+
+    void Init( const DataStream& rStrm );
+
+    void StartStream();
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

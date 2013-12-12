@@ -373,6 +373,7 @@ public:
 
     void            StopMarking();
     void            UpdateInputContext();
+    bool            NeedsRepaint() { return bNeedsRepaint; }
 
     void            CheckInverted()     { if (nPaintCount) bNeedsRepaint = true; }
 

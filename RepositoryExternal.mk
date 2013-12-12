@@ -2624,6 +2624,10 @@ endef
 
 define gb_LinkTarget__use_orcus-parser
 $(call gb_LinkTarget_use_external_project,$(1),liborcus)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,liborcus/include) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs/liborcus-parser-0.6$(gb_StaticLibrary_PLAINEXT) \
 )

@@ -12,7 +12,10 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/layout.hxx>
-#include <datastream.hxx>
+#include <address.hxx>
+#include <docsh.hxx>
+
+namespace sc {
 
 DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     : ModalDialog(pParent, "DataStreamDialog", "modules/scalc/ui/datastreams.ui")
@@ -20,13 +23,16 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
 {
     get(m_pCbUrl, "url");
     get(m_pBtnBrowse, "browse");
+    get(m_pRBDirectData, "directdata");
     get(m_pRBScriptData, "scriptdata");
     get(m_pRBValuesInLine, "valuesinline");
     get(m_pRBAddressValue, "addressvalue");
+    get(m_pCBRefreshOnEmpty, "refresh_ui");
     get(m_pRBDataDown, "datadown");
     get(m_pRBRangeDown, "rangedown");
     get(m_pRBNoMove, "nomove");
     get(m_pRBMaxLimit, "maxlimit");
+    get(m_pRBUnlimited, "unlimited");
     get(m_pEdRange, "range");
     get(m_pEdLimit, "limit");
     get(m_pBtnOk, "ok");
@@ -35,6 +41,11 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
 
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
+    m_pRBAddressValue->Enable(false);
+    m_pRBScriptData->Enable(false);
+    m_pRBDirectData->Hide();
+    m_pRBScriptData->Hide();
+    m_pRBNoMove->Hide();
     m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamDlg, BrowseHdl ) );
@@ -63,7 +74,6 @@ void DataStreamDlg::UpdateEnable()
     bool bOk = !m_pCbUrl->GetURL().isEmpty();
     if (m_pRBAddressValue->IsChecked())
     {
-        m_pRBNoMove->Check();
         m_pVclFrameLimit->Disable();
         m_pVclFrameMove->Disable();
         m_pEdRange->Disable();
@@ -73,33 +83,85 @@ void DataStreamDlg::UpdateEnable()
         m_pVclFrameLimit->Enable();
         m_pVclFrameMove->Enable();
         m_pEdRange->Enable();
-        bOk = bOk && !m_pEdRange->GetText().isEmpty();
+        if (bOk)
+        {
+            // Check the given range to make sure it's valid.
+            ScRange aTest = GetStartRange();
+            if (!aTest.IsValid())
+                bOk = false;
+        }
     }
     m_pBtnOk->Enable(bOk);
     setOptimalLayoutSize();
 }
 
-void DataStreamDlg::Init(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
-        const OUString& rMove, const sal_uInt32 nSettings)
+ScRange DataStreamDlg::GetStartRange()
 {
-    m_pEdLimit->SetText(OUString::number(nLimit));
-    m_pCbUrl->SetText(rURL);
-    if (nSettings & DataStream::SCRIPT_STREAM)
-        m_pRBScriptData->Check();
-    if (!(nSettings & DataStream::VALUES_IN_LINE))
-        m_pRBAddressValue->Check();
-    m_pEdRange->SetText(rRange);
-    if (rMove == "NO_MOVE")
-        m_pRBNoMove->Check();
-    else if (rMove == "RANGE_DOWN")
-        m_pRBRangeDown->Check();
-    else if (rMove == "MOVE_DOWN")
-        m_pRBDataDown->Check();
+    OUString aStr = m_pEdRange->GetText();
+    ScDocument* pDoc = mpDocShell->GetDocument();
+    ScRange aRange;
+    sal_uInt16 nRes = aRange.Parse(aStr, pDoc);
+    if ((nRes & SCA_VALID) != SCA_VALID || !aRange.IsValid())
+    {
+        // Invalid range.
+        aRange.SetInvalid();
+        return aRange;
+    }
+
+    // Make sure it's only one row tall.
+    if (aRange.aStart.Row() != aRange.aEnd.Row())
+        aRange.SetInvalid();
+
+    return aRange;
+}
+
+void DataStreamDlg::Init( const DataStream& rStrm )
+{
+    m_pCbUrl->SetText(rStrm.GetURL());
+
+    ScRange aRange = rStrm.GetRange();
+    ScRange aTopRange = aRange;
+    aTopRange.aEnd.SetRow(aTopRange.aStart.Row());
+    OUString aStr = aTopRange.Format(SCA_VALID);
+    m_pEdRange->SetText(aStr);
+    SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
+
+    if (aRange.aEnd.Row() == MAXROW)
+        m_pRBUnlimited->Check();
+    else
+    {
+        m_pRBMaxLimit->Check();
+        m_pEdLimit->SetText(OUString::number(nRows));
+    }
+
+    DataStream::MoveType eMove = rStrm.GetMove();
+    switch (eMove)
+    {
+        case DataStream::MOVE_DOWN:
+            m_pRBDataDown->Check();
+        break;
+        break;
+        case DataStream::RANGE_DOWN:
+            m_pRBRangeDown->Check();
+        break;
+        case DataStream::MOVE_UP:
+        case DataStream::NO_MOVE:
+        default:
+            ;
+    }
+
+    m_pCBRefreshOnEmpty->Check(rStrm.IsRefreshOnEmptyLine());
+
     UpdateEnable();
 }
 
-void DataStreamDlg::StartStream(DataStream *pStream)
+void DataStreamDlg::StartStream()
 {
+    ScRange aStartRange = GetStartRange();
+    if (!aStartRange.IsValid())
+        // Don't start the stream without a valid range.
+        return;
+
     sal_Int32 nLimit = 0;
     if (m_pRBMaxLimit->IsChecked())
         nLimit = m_pEdLimit->GetText().toInt32();
@@ -109,24 +171,16 @@ void DataStreamDlg::StartStream(DataStream *pStream)
        nSettings |= DataStream::SCRIPT_STREAM;
     if (m_pRBValuesInLine->IsChecked())
        nSettings |= DataStream::VALUES_IN_LINE;
-    if (pStream)
-    {
-        pStream->Decode(rURL, m_pEdRange->GetText(), nLimit,
-                m_pRBNoMove->IsChecked() ? OUString("NO_MOVE") : m_pRBRangeDown->IsChecked()
-                    ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN"),
-                nSettings);
-        return;
-    }
-    pStream = DataStream::Set( mpDocShell,
-            rURL,
-            m_pEdRange->GetText(),
-            nLimit,
-            m_pRBNoMove->IsChecked() ? OUString("NO_MOVE") : m_pRBRangeDown->IsChecked()
-                ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN")
-            , nSettings
-            );
+
+    DataStream::MoveType eMove =
+        m_pRBRangeDown->IsChecked() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
+
+    DataStream* pStream = DataStream::Set(mpDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
+    pStream->SetRefreshOnEmptyLine(m_pCBRefreshOnEmpty->IsChecked());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

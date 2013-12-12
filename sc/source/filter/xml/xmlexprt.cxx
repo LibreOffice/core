@@ -62,6 +62,7 @@
 #include "editattributemap.hxx"
 #include <arealink.hxx>
 #include <datastream.hxx>
+#include <documentlinkmgr.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -109,6 +110,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -834,18 +836,6 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
                 aAreaLink.sFilterOptions = pLink->GetOptions();
                 aAreaLink.sURL = pLink->GetFile();
                 aAreaLink.nRefresh = pLink->GetTimeout();
-                rAreaLinks.AddNewAreaLink( aAreaLink );
-            }
-            DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i])));
-            if (pStream)
-            {
-                ScMyAreaLink aAreaLink;
-                ScUnoConversion::FillApiRange( aAreaLink.aDestRange, pStream->GetRange() );
-                aAreaLink.sSourceStr = pStream->GetMove();
-                aAreaLink.sFilter = OUString::number(pStream->GetLimit());
-                aAreaLink.sFilterOptions = "DataStream";
-                aAreaLink.sURL = pStream->GetURL();
-                aAreaLink.nRefresh = pStream->GetSettings();
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
         }
@@ -1955,6 +1945,7 @@ void ScXMLExport::_ExportContent()
     }
     WriteExternalRefCaches();
     WriteNamedExpressions();
+    WriteDataStream();
     aExportDatabaseRanges.WriteDatabaseRanges();
     ScXMLExportDataPilot aExportDataPilot(*this);
     aExportDataPilot.WriteDataPilots(xSpreadDoc);
@@ -4049,6 +4040,49 @@ void ScXMLExport::WriteNamedExpressions()
         return;
     ScRangeName* pNamedRanges = pDoc->GetRangeName();
     WriteNamedRange(pNamedRanges);
+}
+
+void ScXMLExport::WriteDataStream()
+{
+    if (!pDoc)
+        return;
+
+    SvtMiscOptions aMiscOptions;
+    if (!aMiscOptions.IsExperimentalMode())
+        // Export this only in experimental mode.
+        return;
+
+    if (getDefaultVersion() <= SvtSaveOptions::ODFVER_012)
+        // Export this only for 1.2 extended and above.
+        return;
+
+    const sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+    const sc::DataStream* pStrm = rMgr.getDataStream();
+    if (!pStrm)
+        // No data stream.
+        return;
+
+    // Source URL
+    AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(pStrm->GetURL()));
+
+    // Streamed range
+    ScRange aRange = pStrm->GetRange();
+    OUString aRangeStr;
+    ScRangeStringConverter::GetStringFromRange(
+        aRangeStr, aRange, pDoc, formula::FormulaGrammar::CONV_OOO);
+    AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aRangeStr);
+
+    // Empty line refresh option.
+    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_EMPTY_LINE_REFRESH, pStrm->IsRefreshOnEmptyLine() ? XML_TRUE : XML_FALSE);
+
+    // New data insertion position. Either top of bottom. Default to bottom.
+    xmloff::token::XMLTokenEnum eInsertPosition = XML_BOTTOM;
+    if (pStrm->GetMove() == sc::DataStream::MOVE_DOWN)
+        eInsertPosition = XML_TOP;
+
+    AddAttribute(XML_NAMESPACE_CALC_EXT, XML_INSERTION_POSITION, eInsertPosition);
+
+    SvXMLElementExport aElem(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE, true, true);
 }
 
 void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)

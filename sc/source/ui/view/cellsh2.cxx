@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <basic/sbxcore.hxx>
@@ -62,6 +61,7 @@
 #include "datastreamdlg.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+#include <documentlinkmgr.hxx>
 
 #include <config_orcus.h>
 
@@ -742,36 +742,36 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
         case SID_DATA_STREAMS:
-            {
-                DataStreamDlg aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
-                if (aDialog.Execute() == RET_OK)
-                    aDialog.StartStream();
-            }
-            break;
+        {
+            sc::DataStreamDlg aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            ScDocument *pDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            sc::DataStream* pStrm = rMgr.getDataStream();
+            if (pStrm)
+                aDialog.Init(*pStrm);
+
+            if (aDialog.Execute() == RET_OK)
+                aDialog.StartStream();
+        }
+        break;
         case SID_DATA_STREAMS_PLAY:
-            {
-                ScDocument *pDoc = GetViewData()->GetDocument();
-                if (pDoc->GetLinkManager())
-                {
-                    const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
-                    for (size_t i = 0; i < rLinks.size(); i++)
-                        if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
-                            pStream->StartImport();
-                }
-            }
-            break;
+        {
+            ScDocument *pDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            sc::DataStream* pStrm = rMgr.getDataStream();
+            if (pStrm)
+                pStrm->StartImport();
+        }
+        break;
         case SID_DATA_STREAMS_STOP:
-            {
-                ScDocument *pDoc = GetViewData()->GetDocument();
-                if (pDoc->GetLinkManager())
-                {
-                    const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
-                    for (size_t i = 0; i < rLinks.size(); i++)
-                        if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
-                            pStream->StopImport();
-                }
-            }
-            break;
+        {
+            ScDocument *pDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            sc::DataStream* pStrm = rMgr.getDataStream();
+            if (pStrm)
+                pStrm->StopImport();
+        }
+        break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();
         break;

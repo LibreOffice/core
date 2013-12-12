@@ -145,6 +145,8 @@ public:
     ColumnBlockPositionSet(ScDocument& rDoc);
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
+
+    void clear();
 };
 
 ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );

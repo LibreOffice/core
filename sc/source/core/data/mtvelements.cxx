@@ -67,6 +67,12 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
     return &it->second;
 }
 
+void ColumnBlockPositionSet::clear()
+{
+    osl::MutexGuard aGuard(&maMtxTables);
+    maTables.clear();
+}
+
 ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
 {
     switch (itPos->type)

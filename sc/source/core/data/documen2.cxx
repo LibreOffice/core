@@ -92,6 +92,7 @@
 #include "refreshtimerprotector.hxx"
 #include "scopetools.hxx"
 #include "formulagroup.hxx"
+#include "documentlinkmgr.hxx"
 
 using namespace com::sun::star;
 
@@ -262,6 +263,19 @@ sfx2::LinkManager*  ScDocument::GetLinkManager()  const
     return pLinkManager;
 }
 
+sc::DocumentLinkManager& ScDocument::GetDocLinkManager()
+{
+    if (!mpDocLinkMgr)
+        mpDocLinkMgr.reset(new sc::DocumentLinkManager);
+    return *mpDocLinkMgr;
+}
+
+const sc::DocumentLinkManager& ScDocument::GetDocLinkManager() const
+{
+    if (!mpDocLinkMgr)
+        mpDocLinkMgr.reset(new sc::DocumentLinkManager);
+    return *mpDocLinkMgr;
+}
 
 void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 {

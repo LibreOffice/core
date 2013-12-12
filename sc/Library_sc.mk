@@ -45,6 +45,12 @@ $(eval $(call gb_Library_use_externals,sc,\
     mdds_headers \
 ))
 
+ifeq ($(SYSTEM_LIBORCUS),YES)
+$(eval $(call gb_Library_use_externals,sc,orcus))
+else
+$(eval $(call gb_Library_use_externals,sc,orcus-parser))
+endif
+
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sc,tubes))
 
@@ -118,6 +124,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/documen9 \
     sc/source/core/data/document \
     sc/source/core/data/documentimport \
+    sc/source/core/data/documentstreamaccess \
     sc/source/core/data/dpdimsave \
     sc/source/core/data/dpfilteredcache \
     sc/source/core/data/dpglobal \
@@ -262,6 +269,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/userlist \
     sc/source/core/tool/viewopti \
     sc/source/core/tool/zforauto \
+    sc/source/filter/xml/datastreamimport \
     sc/source/filter/xml/XMLCalculationSettingsContext \
     sc/source/filter/xml/XMLCellRangeSourceContext \
     sc/source/filter/xml/XMLChangeTrackingExportHelper \
@@ -317,6 +325,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/filter/xml/xmltabi \
     sc/source/filter/xml/xmlwrap \
     sc/source/filter/chart/chart_imp \
+    sc/source/filter/importfilterdata \
     sc/source/ui/Accessibility/AccessibilityHints \
     sc/source/ui/Accessibility/AccessibleCell \
     sc/source/ui/Accessibility/AccessibleCellBase \
@@ -397,6 +406,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/docshell/docsh6 \
     sc/source/ui/docshell/docsh7 \
     sc/source/ui/docshell/docsh8 \
+    sc/source/ui/docshell/documentlinkmgr \
     sc/source/ui/docshell/editable \
     sc/source/ui/docshell/externalrefmgr \
     sc/source/ui/docshell/impex \
