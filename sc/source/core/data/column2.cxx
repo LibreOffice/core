@@ -611,7 +611,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
     sc::SingleColumnSpanSet aSpanSet;
     sc::SingleColumnSpanSet::SpansType aMarkedSpans;
-    if (pMarkData)
+    if (pMarkData && (pMarkData->IsMarked() || pMarkData->IsMultiMarked()))
     {
         aSpanSet.scan(*pMarkData, nTab, nCol);
         aSpanSet.getSpans(aMarkedSpans);
