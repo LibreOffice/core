@@ -559,6 +559,10 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
     size_t i = XResIdAccList.erase(accObj.GetResID());
     assert(i != 0);
     DeleteFromHwndXAcc(pXAcc);
+    if (DOCUMENT == accObj.GetRole())
+    {
+        XHWNDDocList.erase(accObj.GetParentHWND());
+    }
     XIdAccList.erase(pXAcc); // note: this invalidates accObj so do it last!
 }
 
