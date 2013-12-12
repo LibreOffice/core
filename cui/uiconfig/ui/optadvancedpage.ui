@@ -326,6 +326,7 @@
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="experimental">
                     <property name="label" translatable="yes">Enable experimental features</property>
@@ -361,10 +362,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="expertconfig">
-                    <property name="label" translatable="yes">Expert Config Page</property>
+                    <property name="label" translatable="yes">Expert Configuration</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
