@@ -121,7 +121,7 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
 
 Size CuiCustomMultilineEdit::GetOptimalSize() const
 {
-    return LogicToPixel(Size(150,30),MAP_APPFONT);
+    return LogicToPixel(Size(150, GetTextHeight()), MAP_APPFONT);
 }
 
 Size CuiAboutConfigTabPage::GetOptimalSize() const
