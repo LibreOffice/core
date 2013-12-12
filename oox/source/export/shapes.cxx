@@ -738,9 +738,11 @@ ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int3
     {
         FSHelperPtr pFS = GetFS();
 
-        pFS->startElementNS( nXmlNamespace, XML_txBody, FSEND );
-        WriteText( xIface );
-        pFS->endElementNS( nXmlNamespace, XML_txBody );
+        pFS->startElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx), FSEND );
+        WriteText( xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), /*bText=*/true );
+        pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
+        if (GetDocumentType() == DOCUMENT_DOCX)
+            WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
     }
     else if (GetDocumentType() == DOCUMENT_DOCX)
         mpFS->singleElementNS(nXmlNamespace, XML_bodyPr, FSEND);

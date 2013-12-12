@@ -1242,7 +1242,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
     mpFS->endElementNS( XML_a, XML_p );
 }
 
-void DrawingML::WriteText( Reference< XInterface > rXIface  )
+void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool bText, sal_Int32 nXmlNamespace )
 {
     Reference< XText > xXText( rXIface, UNO_QUERY );
     Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
@@ -1325,19 +1325,20 @@ void DrawingML::WriteText( Reference< XInterface > rXIface  )
         bHasWrap = sal_True;
     }
 
-    mpFS->singleElementNS( XML_a, XML_bodyPr,
-                           XML_wrap, bHasWrap && !bWrap ? "none" : NULL,
-                           XML_lIns, (nLeft != DEFLRINS) ? IS( MM100toEMU( nLeft ) ) : NULL,
-                           XML_rIns, (nRight != DEFLRINS) ? IS( MM100toEMU( nRight ) ) : NULL,
-                           XML_tIns, (nTop != DEFTBINS) ? IS( MM100toEMU( nTop ) ) : NULL,
-                           XML_bIns, (nBottom != DEFTBINS) ? IS( MM100toEMU( nBottom ) ) : NULL,
-                           XML_anchor, sVerticalAlignment,
-                           XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
-                           XML_vert, sWritingMode,
-                           FSEND );
+    if (bBodyPr)
+        mpFS->singleElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
+                               XML_wrap, bHasWrap && !bWrap ? "none" : NULL,
+                               XML_lIns, (nLeft != DEFLRINS) ? IS( MM100toEMU( nLeft ) ) : NULL,
+                               XML_rIns, (nRight != DEFLRINS) ? IS( MM100toEMU( nRight ) ) : NULL,
+                               XML_tIns, (nTop != DEFTBINS) ? IS( MM100toEMU( nTop ) ) : NULL,
+                               XML_bIns, (nBottom != DEFTBINS) ? IS( MM100toEMU( nBottom ) ) : NULL,
+                               XML_anchor, sVerticalAlignment,
+                               XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
+                               XML_vert, sWritingMode,
+                               FSEND );
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
-    if( !access.is() )
+    if( !access.is() || !bText )
         return;
 
     Reference< XEnumeration > enumeration( access->createEnumeration() );

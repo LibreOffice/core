@@ -118,7 +118,7 @@ public:
     void WriteTransformation( const Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
-    void WriteText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > rXIface );
+    void WriteText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > rXIface, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
     void WriteParagraph( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > rParagraph );
     void WriteParagraphProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > rParagraph );
     void WriteParagraphNumbering( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
