@@ -783,7 +783,7 @@ void EditHTMLParser::AnchorStart()
         if ( !aRef.isEmpty() )
         {
             OUString aURL = aRef;
-            if ( aURL.startsWith("#") )
+            if ( !aURL.isEmpty() && ( aURL[ 0 ] != '#' ) )
             {
                 INetURLObject aTargetURL;
                 INetURLObject aRootURL( aBaseURL );
