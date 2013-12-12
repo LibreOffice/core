@@ -243,6 +243,25 @@ ShapeExport& ShapeExport::WriteOpenBezierShape( Reference< XShape > xShape )
     return WriteBezierShape( xShape, sal_False );
 }
 
+ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape)
+{
+    FSHelperPtr pFS = GetFS();
+    pFS->startElementNS(mnXmlNamespace, XML_wgp, FSEND);
+
+    // non visual properties
+    pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr, FSEND);
+
+    // visual properties
+    pFS->startElementNS(mnXmlNamespace, XML_grpSpPr, FSEND);
+    WriteShapeTransformation(xShape, XML_a);
+    pFS->endElementNS(mnXmlNamespace, XML_grpSpPr);
+
+    // TODO: children
+
+    pFS->endElementNS(mnXmlNamespace, XML_wgp);
+    return *this;
+}
+
 ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 {
     DBG(printf("write custom shape\n"));
@@ -679,7 +698,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
 typedef boost::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::CStringEqual> NameToConvertMapType;
 
-static const NameToConvertMapType& lcl_GetConverters()
+static const NameToConvertMapType& lcl_GetConverters(DrawingML::DocumentType eDocumentType)
 {
     static bool shape_map_inited = false;
     static NameToConvertMapType shape_converters;
@@ -712,6 +731,8 @@ static const NameToConvertMapType& lcl_GetConverters()
     shape_converters[ "com.sun.star.presentation.OutlinerShape" ]       = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.SlideNumberShape" ]    = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.TitleTextShape" ]      = &ShapeExport::WriteTextShape;
+    if (eDocumentType == DrawingML::DOCUMENT_DOCX)
+        shape_converters[ "com.sun.star.drawing.GroupShape" ] = &ShapeExport::WriteGroupShape;
     shape_map_inited = true;
 
     return shape_converters;
@@ -721,8 +742,8 @@ ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
 {
     OUString sShapeType = xShape->getShapeType();
     DBG( printf( "write shape: %s\n", USS( sShapeType ) ) );
-    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters().find( USS( sShapeType ) );
-    if( aConverter == lcl_GetConverters().end() )
+    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters(GetDocumentType()).find( USS( sShapeType ) );
+    if( aConverter == lcl_GetConverters(GetDocumentType()).end() )
     {
         DBG( printf( "unknown shape\n" ) );
         return WriteUnknownShape( xShape );
