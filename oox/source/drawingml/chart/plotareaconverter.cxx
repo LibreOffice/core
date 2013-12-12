@@ -299,6 +299,28 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 
 // ============================================================================
 
+DataTableConverter::DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel ) :
+        ConverterBase< DataTableModel >( rParent, rModel )
+{
+}
+
+DataTableConverter::~DataTableConverter()
+{
+}
+
+void DataTableConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
+{
+    PropertySet aPropSet( rxDiagram );
+    if (mrModel.mbShowHBorder)
+        aPropSet.setProperty( PROP_DataTableHBorder, mrModel.mbShowHBorder );
+    if (mrModel.mbShowVBorder)
+        aPropSet.setProperty( PROP_DataTableVBorder, mrModel.mbShowVBorder);
+    if (mrModel.mbShowOutline)
+        aPropSet.setProperty( PROP_DataTableOutline, mrModel.mbShowOutline );
+}
+
+// ============================================================================
+
 PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel ) :
     ConverterBase< PlotAreaModel >( rParent, rModel ),
     mb3dChart( false ),
@@ -398,6 +420,8 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         }
     }
 
+    DataTableConverter dataTableConverter (*this, mrModel.mxDataTable.getOrCreate());
+    dataTableConverter.convertFromModel(xDiagram);
     // plot area formatting
     if( xDiagram.is() && !mb3dChart )
     {
