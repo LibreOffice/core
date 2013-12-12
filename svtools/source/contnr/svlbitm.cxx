@@ -247,7 +247,25 @@ void SvLBoxString::InitViewData(
     DBG_CHKTHIS(SvLBoxString,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
+
+    // fdo#72125: GetTextWidth() can get very expensive; let's just count
+    // an approximate width using a cached value when we have many entries
+    long nTextWidth;
+    if (pView->GetEntryCount() > 100)
+    {
+        static SvTreeListBox *pPreviousView = NULL;
+        static float fApproximateCharWidth = 0.0;
+        if (pPreviousView != pView)
+        {
+            pPreviousView = pView;
+            fApproximateCharWidth = pView->approximate_char_width();
+        }
+        nTextWidth = maText.getLength() * fApproximateCharWidth;
+    }
+    else
+        nTextWidth = pView->GetTextWidth(maText);
+
+    pViewData->maSize = Size(nTextWidth, pView->GetTextHeight());
 }
 
 // ***************************************************************
