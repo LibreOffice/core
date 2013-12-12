@@ -1545,6 +1545,20 @@ DECLARE_OOXMLIMPORT_TEST(testLOCrash,"file_crash.docx")
     //The problem was libreoffice crash while opening the file.
     getParagraph(1,"Contents");
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFdo72560, "fdo72560.docx")
+{
+    // The problem was libreoffice confuse when there RTL default style for paragraph
+    uno::Reference<uno::XInterface> xParaLeftRTL(getParagraph( 1, "RTL LEFT"));
+    uno::Reference<uno::XInterface> xParaRightLTR(getParagraph( 2, "LTR RIGHT"));
+
+    // this will test the text direction and alignment for paragraphs
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaLeftRTL, "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaLeftRTL, "ParaAdjust" ));
+
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaRightLTR, "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( xParaRightLTR, "ParaAdjust" ));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
