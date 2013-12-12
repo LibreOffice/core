@@ -147,7 +147,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { OUString("TransitionFadeColor"),          WID_TRANSITION_FADE_COLOR, ::getCppuType((const sal_Int32*)0),         0,  0},
         { OUString("TransitionDuration"),           WID_TRANSITION_DURATION, ::getCppuType((const double*)0),          0,  0},
         { OUString("LoopSound"),                    WID_LOOP_SOUND, ::getBooleanCppuType(),                    0, 0},
-        { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<::com::sun::star::container::XIndexAccess>::get(),0,  0},
+        { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -174,7 +174,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { OUString("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, ::getBooleanCppuType(),                    0, 0},                                                                 \
         { OUString("DateTimeText"),                 WID_PAGE_DATETIMETEXT, ::getCppuType((const OUString*)0),              0,  0},                                                            \
         { OUString("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, ::getCppuType((const sal_Int32*)0),           0,  0},                                                            \
-        { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<::com::sun::star::container::XIndexAccess>::get(),0,  0},                                                            \
+        { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                            \
         { OUString(), 0, css::uno::Type(), 0, 0 }
 
     static const SfxItemPropertyMapEntry aDrawPageNotesHandoutPropertyMap_Impl[] =
@@ -204,7 +204,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { OUString(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, ::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},                          \
         { OUString(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  ::getCppuType((const OUString*)0),             0,  0},                                                                             \
         { OUString("IsBackgroundDark"),             WID_PAGE_ISDARK,    ::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},                                             \
-        { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<::com::sun::star::container::XIndexAccess>::get(),0,  0},                                                                         \
+        { OUString("NavigationOrder"),              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                                         \
         { OUString(), 0, css::uno::Type(), 0, 0 }
 
     static const SfxItemPropertyMapEntry aGraphicPagePropertyMap_Impl[] =
