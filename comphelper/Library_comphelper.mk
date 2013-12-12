@@ -133,7 +133,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/property/propertystatecontainer \
     comphelper/source/property/propmultiplex \
     comphelper/source/property/propstate \
-    comphelper/source/property/TypeGeneration \
     comphelper/source/streaming/basicio \
     comphelper/source/streaming/memorystream \
     comphelper/source/streaming/oslfile2streamwrap \
