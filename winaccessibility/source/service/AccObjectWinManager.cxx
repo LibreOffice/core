@@ -556,9 +556,10 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
     {
         accObj.GetIMAccessible()->Release();
     }
-    XIdAccList.erase( pXAcc );
-    XResIdAccList.erase( accObj.GetResID() );
+    size_t i = XResIdAccList.erase(accObj.GetResID());
+    assert(i != 0);
     DeleteFromHwndXAcc(pXAcc);
+    XIdAccList.erase(pXAcc); // note: this invalidates accObj so do it last!
 }
 
 /**
