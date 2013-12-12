@@ -23,6 +23,7 @@
 #include "optjava.hxx"
 #include <dialmgr.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <svtools/miscopt.hxx>
 
 #include <cuires.hrc>
@@ -183,6 +184,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
 
     m_pExpertConfigBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ExpertConfigHdl_Impl) );
+    if (!officecfg::Office::Common::Security::EnableExpertConfiguration::get())
+        m_pExpertConfigBtn->Disable();
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 

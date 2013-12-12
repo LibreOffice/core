@@ -2417,6 +2417,13 @@
       <info>
         <desc>Contains security specific Office settings.</desc>
       </info>
+      <prop oor:name="EnableExpertConfiguration" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if the user has access to the entire
+          configuration via the Expert Configuration button.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <group oor:name="Scripting">
         <info>
           <desc>Contains security settings regarding Basic scripts.</desc>
