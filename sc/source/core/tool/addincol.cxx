@@ -1265,22 +1265,24 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
         bool bMultiple = false;
         const ScAddInArgDesc* pArgs = rFuncData.GetArguments();
 
-        rDesc.ppDefArgNames = new OUString*[nArgCount];
-        rDesc.ppDefArgDescs = new OUString*[nArgCount];
+        rDesc.maDefArgNames.clear();
+        rDesc.maDefArgNames.resize(nArgCount);
+        rDesc.maDefArgDescs.clear();
+        rDesc.maDefArgDescs.resize(nArgCount);
         rDesc.pDefArgFlags   = new ScFuncDesc::ParameterFlags[nArgCount];
         for ( long nArg=0; nArg<nArgCount; nArg++ )
         {
-            rDesc.ppDefArgNames[nArg] = new OUString( pArgs[nArg].aName );
-            rDesc.ppDefArgDescs[nArg] = new OUString( pArgs[nArg].aDescription );
+            rDesc.maDefArgNames[nArg] = pArgs[nArg].aName;
+            rDesc.maDefArgDescs[nArg] = pArgs[nArg].aDescription;
             rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
             rDesc.pDefArgFlags[nArg].bSuppress = false;
 
             // no empty names...
-            if ( rDesc.ppDefArgNames[nArg]->isEmpty() )
+            if ( rDesc.maDefArgNames[nArg].isEmpty() )
             {
                 OUString aDefName("arg");
                 aDefName += OUString::number( nArg+1 );
-                *rDesc.ppDefArgNames[nArg] = aDefName;
+                rDesc.maDefArgNames[nArg] = aDefName;
             }
 
             //  last argument repeated?

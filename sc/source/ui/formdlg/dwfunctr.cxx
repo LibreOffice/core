@@ -865,7 +865,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
             {
                 // NOTE: Theoretically the first parameter could have the
                 // suppress flag as well, but practically it doesn't.
-                aFirstArgStr = *(pDesc->ppDefArgNames[0]);
+                aFirstArgStr = pDesc->maDefArgNames[0];
                 aFirstArgStr = comphelper::string::strip(aFirstArgStr, ' ');
                 aFirstArgStr = aFirstArgStr.replaceAll(" ", "_");
                 aArgStr = aFirstArgStr;
@@ -885,7 +885,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                         if (!pDesc->pDefArgFlags[nArg].bSuppress)
                         {
                             aArgStr += aArgSep;
-                            OUString sTmp(*(pDesc->ppDefArgNames[nArg]));
+                            OUString sTmp = pDesc->maDefArgNames[nArg];
                             sTmp = comphelper::string::strip(sTmp, ' ');
                             sTmp = sTmp.replaceAll(" ", "_");
                             aArgStr += sTmp;
