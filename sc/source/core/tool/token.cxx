@@ -1489,6 +1489,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocDBCount:
             case ocDBCount2:
             case ocDeg:
+            case ocRoundUp:
             // Don't change the state.
             break;
             default:

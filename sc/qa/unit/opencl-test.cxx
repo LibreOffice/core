@@ -261,6 +261,7 @@ public:
     void testDatabaseFormulaDcount();
     void testDatabaseFormulaDcountA();
     void testMathFormulaDegrees();
+    void testMathFormulaRoundUp();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -453,6 +454,7 @@ public:
     CPPUNIT_TEST(testDatabaseFormulaDcount);
     CPPUNIT_TEST(testDatabaseFormulaDcountA);
     CPPUNIT_TEST(testMathFormulaDegrees);
+    CPPUNIT_TEST(testMathFormulaRoundUp);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5287,6 +5289,30 @@ void ScOpenclTest::testDatabaseFormulaDvarp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-351]
+void ScOpenclTest::testMathFormulaRoundUp()
+{
+    if (!detectOpenCLDevice())
+        return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/roundup.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/roundup.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
 //AMLOEXT-356
 void ScOpenclTest::testMathFormulaDegrees()
 {
