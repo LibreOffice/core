@@ -482,16 +482,6 @@ bool OptimisticSet::isResultSetChanged() const
     return bOld;
 }
 
-void OptimisticSet::reset(const Reference< XResultSet>& _xDriverSet)
-{
-    OCacheSet::construct(_xDriverSet,OUString());
-    m_bRowCountFinal = sal_False;
-    m_aKeyMap.clear();
-    OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
-    m_aKeyIter = m_aKeyMap.begin();
-}
-
 void OptimisticSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_aChangedColumns)
 {
     o_aChangedColumns.push_back(i_nColumnIndex);

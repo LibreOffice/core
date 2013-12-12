@@ -106,7 +106,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         const OUString                                   m_sUpdateTableName;
-        OUString                                         m_sRowSetFilter;
         ::std::vector< OUString >                        m_aFilterColumns;
         sal_Int32&                                              m_rRowCount;
 
@@ -161,6 +160,7 @@ namespace dbaccess
 
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter);
+        virtual void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

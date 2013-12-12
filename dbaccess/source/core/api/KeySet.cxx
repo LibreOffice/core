@@ -300,7 +300,6 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
 
     initColumns();
-    m_sRowSetFilter = i_sRowSetFilter;
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer, UNO_QUERY);
@@ -338,6 +337,16 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
     // without extra variable to be set
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
     m_aKeyMap.insert(OKeySetMatrix::value_type(0, keySetValue));
+    m_aKeyIter = m_aKeyMap.begin();
+}
+
+void OKeySet::reset(const Reference< XResultSet>& _xDriverSet)
+{
+    OCacheSet::construct(_xDriverSet, m_sRowSetFilter);
+    m_bRowCountFinal = sal_False;
+    m_aKeyMap.clear();
+    OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
 }
 

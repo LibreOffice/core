@@ -44,6 +44,11 @@ void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const OUS
     m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
 
+void OBookmarkSet::reset(const Reference< XResultSet>& _xDriverSet)
+{
+    construct(_xDriverSet, m_sRowSetFilter);
+}
+
 Any SAL_CALL OBookmarkSet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::getBookmark" );
