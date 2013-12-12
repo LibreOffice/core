@@ -221,7 +221,7 @@ if test -n "$with_android_ndk"; then
     # Set up a lot of pre-canned defaults
 
     if test ! -f $ANDROID_NDK_HOME/RELEASE.TXT; then
-        AC_MSG_ERROR([Unrecognized Android NDK. Only r8* versions supported.])
+        AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT file in $ANDROID_NDK_HOME.])
     fi
     ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
 
