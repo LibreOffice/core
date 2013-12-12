@@ -49,6 +49,7 @@ public:
     void testFdo64512();
     void testFdo71075();
     void testN828390();
+    void testN828390_2();
     void testFdo68594();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390);
+    CPPUNIT_TEST(testN828390_2);
     CPPUNIT_TEST(testFdo68594);
 
     CPPUNIT_TEST_SUITE_END();
@@ -225,6 +227,25 @@ void SdFiltersTest::testN828390()
         }
     }
     CPPUNIT_ASSERT_MESSAGE("Subscript not exported properly", bPassed);
+}
+
+void SdFiltersTest::testN828390_2()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n828390_2.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    SdrObject *pObj = pPage->GetObj(0);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    CPPUNIT_ASSERT(aEdit.GetText(0) == OUString("Linux  "));
+    CPPUNIT_ASSERT(aEdit.GetText(1) == OUString("Standard Platform"));
 }
 
 void SdFiltersTest::testN778859()
