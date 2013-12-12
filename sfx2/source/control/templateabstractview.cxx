@@ -248,32 +248,23 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
 {
     BitmapEx aImg = rImg;
 
-    if ( !rImg.IsEmpty() )
+    if (!rImg.IsEmpty())
     {
+        Size aSize = rImg.GetSizePixel();
 
-        const Size& aImgSize = aImg.GetSizePixel();
-        double nRatio = double(aImgSize.getWidth()) / double(aImgSize.getHeight());
+        if (aSize.Width() == 0)
+            aSize.Width() = 1;
 
-        long nDestWidth = aImgSize.getWidth();
-        long nDestHeight = aImgSize.getHeight();
+        if (aSize.Height() == 0)
+            aSize.Height() = 1;
 
-        // Which one side is the overflowing most?
-        long nDistW = aImgSize.getWidth() - width;
-        long nDistH = aImgSize.getHeight() - height;
+        // make the picture fit the given width/height constraints
+        double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));
 
-        // Use the biggest overflow side to make it fit the destination
-        if ( nDistW >= nDistH && nDistW > 0 )
-        {
-            nDestWidth = width;
-            nDestHeight = width / nRatio;
-        }
-        else if ( nDistW < nDistH && nDistH > 0 )
-        {
-            nDestHeight = height;
-            nDestWidth = height * nRatio;
-        }
+        // don't up-scale
+        nRatio = std::min(nRatio, 1.0);
 
-        aImg.Scale(Size(nDestWidth,nDestHeight));
+        aImg.Scale(Size(aSize.Width() * nRatio, aSize.Height() * nRatio));
     }
 
     return aImg;
