@@ -67,7 +67,6 @@ class CUPSManager : public PrinterInfoManager
     void runDests();
     OString threadedCupsGetPPD(const char* pPrinter);
 public:
-    /// public for stub
     static void runDestThread(void* pMgr);
 
     static CUPSManager* tryLoadCUPS();

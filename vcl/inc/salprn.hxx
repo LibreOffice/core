@@ -86,7 +86,7 @@ public:
 
 class VCL_PLUGIN_PUBLIC SalPrinter
 {
-public:                     // public for Sal Implementation
+public:
     SalPrinter() {}
     virtual ~SalPrinter();
 

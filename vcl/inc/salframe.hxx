@@ -102,7 +102,7 @@ class VCL_PLUGIN_PUBLIC SalFrame : public vcl::DeletionNotifier
     Window*                 m_pWindow;
     SALFRAMEPROC            m_pProc;
 
-public:                     // public for Sal Implementation
+public:
     SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
     virtual ~SalFrame();
 
