@@ -369,11 +369,6 @@ HtmlExport::HtmlExport(
         mbUserAttr(false),
         mbDocColors(false),
         maHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
-        mpHTMLFiles(NULL),
-        mpImageFiles(NULL),
-        mpThumbnailFiles(NULL),
-        mpPageNames(NULL),
-        mpTextFiles(NULL),
         maIndexUrl("index"),
         meScript( SCRIPT_ASP ),
         maHTMLHeader(
@@ -407,26 +402,6 @@ HtmlExport::HtmlExport(
 
 HtmlExport::~HtmlExport()
 {
-    // ------------------------------------------------------------------
-    // delete lists
-    // ------------------------------------------------------------------
-    if(mpImageFiles && mpHTMLFiles && mpThumbnailFiles && mpPageNames && mpTextFiles )
-    {
-        for ( sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
-        {
-            delete mpImageFiles[nSdPage];
-            delete mpHTMLFiles[nSdPage];
-            delete mpThumbnailFiles[nSdPage];
-            delete mpPageNames[nSdPage];
-            delete mpTextFiles[nSdPage];
-        }
-    }
-
-    delete[] mpImageFiles;
-    delete[] mpHTMLFiles;
-    delete[] mpThumbnailFiles;
-    delete[] mpPageNames;
-    delete[] mpTextFiles;
 }
 
 /** get common export parameters from item set */
@@ -985,9 +960,9 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 
             OUString aFull(maExportPath);
             if (bThumbnail)
-                aFull += *mpThumbnailFiles[nSdPage];
+                aFull += maThumbnailFiles[nSdPage];
             else
-                aFull += *mpImageFiles[nSdPage];
+                aFull += maImageFiles[nSdPage];
 
 
             aDescriptor[0].Value <<= aFull;
@@ -1065,7 +1040,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
-        aStr.append(StringToHTMLString(*mpPageNames[nSdPage]));
+        aStr.append(StringToHTMLString(maPageNames[nSdPage]));
         aStr.append("</title>\r\n");
         aStr.append("</head>\r\n");
         aStr.append(CreateBodyTag());
@@ -1103,7 +1078,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 // clsoe page
         aStr.append("</body>\r\n</html>");
 
-        bOk = WriteHtml(*mpTextFiles[nSdPage], false, aStr.makeStringAndClear());
+        bOk = WriteHtml(maTextFiles[nSdPage], false, aStr.makeStringAndClear());
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -1491,7 +1466,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 // HTML Head
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
-        aStr.append("  <title>" + StringToHTMLString(*mpPageNames[nSdPage]) + "</title>\r\n");
+        aStr.append("  <title>" + StringToHTMLString(maPageNames[nSdPage]) + "</title>\r\n");
 
 // insert timing information
         pPage = maPages[ nSdPage ];
@@ -1525,7 +1500,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                     if( nPage == mnSdPageCount )
                         nPage = 0;
 
-                    aStr.append(*mpHTMLFiles[nPage]);
+                    aStr.append(maHTMLFiles[nPage]);
 
                     aStr.append("\">\r\n");
                 }
@@ -1546,7 +1521,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 // Image
         aStr.append("<center>");
         aStr.append("<img src=\"");
-        aStr.append(*mpImageFiles[nSdPage]);
+        aStr.append(maImageFiles[nSdPage]);
         aStr.append("\" alt=\"\"");
 
         if (!aClickableObjects.empty())
@@ -1798,7 +1773,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         aStr.append("</body>\r\n</html>");
 
-        bOk = WriteHtml(*mpHTMLFiles[nSdPage], false, aStr.makeStringAndClear());
+        bOk = WriteHtml(maHTMLFiles[nSdPage], false, aStr.makeStringAndClear());
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -1819,7 +1794,7 @@ bool HtmlExport::CreateContentPage()
     OUStringBuffer aStr(maHTMLHeader);
     aStr.append(CreateMetaCharset());
     aStr.append("  <title>");
-    aStr.append(StringToHTMLString(*mpPageNames[0]));
+    aStr.append(StringToHTMLString(maPageNames[0]));
     aStr.append("</title>\r\n</head>\r\n");
     aStr.append(CreateBodyTag());
 
@@ -1840,7 +1815,7 @@ bool HtmlExport::CreateContentPage()
         aStr.append(CreateLink(maFramePage,
                                RESTOHTML(STR_HTMLEXP_CLICKSTART)));
     else
-        aStr.append(CreateLink(StringToHTMLString(*mpHTMLFiles[0]),
+        aStr.append(CreateLink(StringToHTMLString(maHTMLFiles[0]),
                                RESTOHTML(STR_HTMLEXP_CLICKSTART)));
 
     aStr.append("</h2>\r\n</center>\r\n");
@@ -1855,12 +1830,12 @@ bool HtmlExport::CreateContentPage()
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
-        OUString aPageName = *mpPageNames[nSdPage];
+        OUString aPageName = maPageNames[nSdPage];
         aStr.append("<div align=\"left\">");
         if(mbFrames)
             aStr.append(StringToHTMLString(aPageName));
         else
-            aStr.append(CreateLink(*mpHTMLFiles[nSdPage], aPageName));
+            aStr.append(CreateLink(maHTMLFiles[nSdPage], aPageName));
         aStr.append("</div>\r\n");
     }
     aStr.append("</td>\r\n");
@@ -1921,12 +1896,12 @@ bool HtmlExport::CreateContentPage()
     {
         OUString aText(
             "<img src=\"" +
-            *mpThumbnailFiles[nSdPage] +
+            maThumbnailFiles[nSdPage] +
             "\" width=\"256\" height=\"192\" alt=\"" +
-            StringToHTMLString(*mpPageNames[nSdPage]) +
+            StringToHTMLString(maPageNames[nSdPage]) +
             "\">");
 
-        aStr.append(CreateLink(*mpHTMLFiles[nSdPage], aText));
+        aStr.append(CreateLink(maHTMLFiles[nSdPage], aText));
         aStr.append("\r\n");
     }
 
@@ -1961,7 +1936,7 @@ bool HtmlExport::CreateNotesPages()
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
-        aStr.append(StringToHTMLString(*mpPageNames[0]));
+        aStr.append(StringToHTMLString(maPageNames[0]));
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
@@ -2001,7 +1976,7 @@ bool HtmlExport::CreateOutlinePages()
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
-        aStr.append(StringToHTMLString(*mpPageNames[0]));
+        aStr.append(StringToHTMLString(maPageNames[0]));
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
@@ -2016,7 +1991,7 @@ bool HtmlExport::CreateOutlinePages()
 
             OUString aTitle = CreateTextForTitle(pOutliner, pPage, maBackColor);
             if (aTitle.isEmpty())
-                aTitle = *mpPageNames[nSdPage];
+                aTitle = maPageNames[nSdPage];
 
             aStr.append("<p style=\"");
             aStr.append(getParagraphStyle(pOutliner, 0));
@@ -2050,67 +2025,57 @@ bool HtmlExport::CreateOutlinePages()
 void HtmlExport::CreateFileNames()
 {
     // create lists with new file names
-    mpHTMLFiles = new OUString*[mnSdPageCount];
-    mpImageFiles = new OUString*[mnSdPageCount];
-    mpThumbnailFiles = new OUString*[mnSdPageCount];
-    mpPageNames = new OUString*[mnSdPageCount];
-    mpTextFiles = new OUString*[mnSdPageCount];
+    maHTMLFiles.resize(mnSdPageCount);
+    maImageFiles.resize(mnSdPageCount);
+    maThumbnailFiles.resize(mnSdPageCount);
+    maPageNames.resize(mnSdPageCount);
+    maTextFiles.resize(mnSdPageCount);
 
     mbHeader = false;   // headline on overview page?
 
     for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
-        OUString* pName;
+        OUString aHTMLFileName;
         if(nSdPage == 0 && !mbContentsPage && !mbFrames )
-            pName = new OUString(maIndex);
+            aHTMLFileName = maIndex;
         else
         {
-            pName = new OUString("img");
-            *pName += OUString::number(nSdPage);
-            *pName += maHTMLExtension;
+            aHTMLFileName = "img" + OUString::number(nSdPage) + maHTMLExtension;
         }
 
-        mpHTMLFiles[nSdPage] = pName;
+        maHTMLFiles[nSdPage] = aHTMLFileName;
 
-        pName = new OUString("img");
-        *pName += OUString::number(nSdPage);
+        OUString aImageFileName = "img" + OUString::number(nSdPage);
         if( meFormat==FORMAT_GIF )
-            *pName += ".gif";
+            aImageFileName += ".gif";
         else if( meFormat==FORMAT_JPG )
-            *pName += ".jpg";
+            aImageFileName += ".jpg";
         else
-            *pName += ".png";
+            aImageFileName += ".png";
 
-        mpImageFiles[nSdPage] = pName;
+        maImageFiles[nSdPage] = aImageFileName;
 
-        pName = new OUString("thumb");
-        *pName += OUString::number(nSdPage);
+        OUString aThumbnailFileName = "thumb" + OUString::number(nSdPage);
         if( meFormat!=FORMAT_JPG )
-            *pName += ".png";
+            aThumbnailFileName += ".png";
         else
-            *pName += ".jpg";
+            aThumbnailFileName += ".jpg";
 
-        mpThumbnailFiles[nSdPage] = pName;
+        maThumbnailFiles[nSdPage] = aThumbnailFileName;
 
-        pName = new OUString("text");
-        *pName += OUString::number(nSdPage);
-        *pName += maHTMLExtension;
-        mpTextFiles[nSdPage] = pName;
+        maTextFiles[nSdPage] = "text" + OUString::number(nSdPage) + maHTMLExtension;
 
         SdPage* pSdPage = maPages[ nSdPage ];
 
         // get slide title from page name
-        OUString* pPageTitle = new OUString();
-        *pPageTitle = pSdPage->GetName();
-        mpPageNames[nSdPage] = pPageTitle;
+        maPageNames[nSdPage] = pSdPage->GetName();
     }
 
     if(!mbContentsPage && mbFrames)
         maFramePage = maIndex;
     else
     {
-        maFramePage = "siframes";
-        maFramePage += maHTMLExtension;
+        maFramePage = "siframes" + maHTMLExtension;
     }
 }
 
@@ -2216,7 +2181,7 @@ bool HtmlExport::CreateFrames()
 
     aStr.append(CreateMetaCharset());
     aStr.append("  <title>");
-    aStr.append(StringToHTMLString(*mpPageNames[0]));
+    aStr.append(StringToHTMLString(maPageNames[0]));
     aStr.append("</title>\r\n");
 
     aStr.append("<script type=\"text/javascript\">\r\n<!--\r\n");
@@ -2285,7 +2250,7 @@ bool HtmlExport::CreateFrames()
     aStr.append("\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
 
     aStr.append("    <frame src=\"");
-    aStr.append(*mpHTMLFiles[0]);
+    aStr.append(maHTMLFiles[0]);
     aStr.append("\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n");
 
     if(mbNotes)
@@ -2334,7 +2299,7 @@ bool HtmlExport::CreateNavBarFrames()
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
-        aStr.append(StringToHTMLString(*mpPageNames[0]));
+        aStr.append(StringToHTMLString(maPageNames[0]));
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
         aStr.append("<center>\r\n");
@@ -2434,7 +2399,7 @@ bool HtmlExport::CreateNavBarFrames()
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
-        aStr.append(StringToHTMLString(*mpPageNames[0]));
+        aStr.append(StringToHTMLString(maPageNames[0]));
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
@@ -2457,7 +2422,7 @@ bool HtmlExport::CreateNavBarFrames()
         OUStringBuffer aStr(maHTMLHeader);
         aStr.append(CreateMetaCharset());
         aStr.append("  <title>");
-        aStr.append(StringToHTMLString(*mpPageNames[0]));
+        aStr.append(StringToHTMLString(maPageNames[0]));
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
@@ -2531,31 +2496,31 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 
     // first page
     if(nSdPage > 0)
-        aStr.append(CreateLink( bIsText?*mpTextFiles[0]:*mpHTMLFiles[0],aStrNavFirst));
+        aStr.append(CreateLink( bIsText ? maTextFiles[0] : maHTMLFiles[0],aStrNavFirst));
     else
         aStr.append(aStrNavFirst);
     aStr.append(' ');
 
     // to Previous page
     if(nSdPage > 0)
-        aStr.append(CreateLink( bIsText?*mpTextFiles[nSdPage-1]:
-                                       *mpHTMLFiles[nSdPage-1], aStrNavPrev));
+        aStr.append(CreateLink( bIsText ? maTextFiles[nSdPage-1]
+                                        : maHTMLFiles[nSdPage-1], aStrNavPrev));
     else
         aStr.append(aStrNavPrev);
     aStr.append(' ');
 
     // to Next page
     if(nSdPage < mnSdPageCount-1)
-        aStr.append(CreateLink( bIsText?*mpTextFiles[nSdPage+1]:
-                                        *mpHTMLFiles[nSdPage+1], aStrNavNext));
+        aStr.append(CreateLink( bIsText ? maTextFiles[nSdPage+1]
+                                        : maHTMLFiles[nSdPage+1], aStrNavNext));
     else
         aStr.append(aStrNavNext);
     aStr.append(' ');
 
     // to Last page
     if(nSdPage < mnSdPageCount-1)
-        aStr.append(CreateLink( bIsText?*mpTextFiles[mnSdPageCount-1]:
-                                        *mpHTMLFiles[mnSdPageCount-1],
+        aStr.append(CreateLink( bIsText ? maTextFiles[mnSdPageCount-1]
+                                        : maHTMLFiles[mnSdPageCount-1],
                                 aStrNavLast));
     else
         aStr.append(aStrNavLast);
@@ -2571,8 +2536,8 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
     // Text/Graphics
     if(mbImpress)
     {
-        aStr.append(CreateLink( bIsText?(mbFrames?maFramePage:*mpHTMLFiles[nSdPage]):
-                                        *mpTextFiles[nSdPage], aStrNavText));
+        aStr.append(CreateLink( bIsText ? (mbFrames ? maFramePage : maHTMLFiles[nSdPage])
+                                        : maTextFiles[nSdPage], aStrNavText));
 
     }
 
@@ -2805,7 +2770,7 @@ OUString HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
                         OUString::number(nPgNum) + ")");
     }
     else
-        return *mpHTMLFiles[nPgNum];
+        return maHTMLFiles[nPgNum];
 }
 
 bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, const OUString& rDest, bool bUnix /* = false */ )
@@ -2933,7 +2898,7 @@ bool HtmlExport::CreateImageFileList()
         aStr.append(OUString::number(nSdPage + 1));
         aStr.append(';');
         aStr.append(maURLPath);
-        aStr.append(*mpImageFiles[nSdPage]);
+        aStr.append(maImageFiles[nSdPage]);
         aStr.append("\r\n");
     }
 
@@ -3041,11 +3006,11 @@ bool HtmlExport::checkForExistingFiles()
         sal_uInt16 nSdPage;
         for( nSdPage = 0; !bFound && (nSdPage < mnSdPageCount); nSdPage++)
         {
-            if( (mpImageFiles[nSdPage] && checkFileExists( xFA, *mpImageFiles[nSdPage] )) ||
-                (mpHTMLFiles[nSdPage] && checkFileExists( xFA, *mpHTMLFiles[nSdPage] )) ||
-                (mpThumbnailFiles[nSdPage] && checkFileExists( xFA, *mpThumbnailFiles[nSdPage] )) ||
-                (mpPageNames[nSdPage] && checkFileExists( xFA, *mpPageNames[nSdPage] )) ||
-                (mpTextFiles[nSdPage] && checkFileExists( xFA, *mpTextFiles[nSdPage] )) )
+            if( checkFileExists( xFA, maImageFiles[nSdPage] ) ||
+                checkFileExists( xFA, maHTMLFiles[nSdPage] ) ||
+                checkFileExists( xFA, maThumbnailFiles[nSdPage] ) ||
+                checkFileExists( xFA, maPageNames[nSdPage] ) ||
+                checkFileExists( xFA, maTextFiles[nSdPage] ) )
             {
                 bFound = true;
             }
