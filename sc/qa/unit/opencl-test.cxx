@@ -260,6 +260,7 @@ public:
     void testMathFormulaAverageIf();
     void testDatabaseFormulaDcount();
     void testDatabaseFormulaDcountA();
+    void testMathFormulaDegrees();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -451,6 +452,7 @@ public:
     CPPUNIT_TEST(testMathFormulaAverageIf);
     CPPUNIT_TEST(testDatabaseFormulaDcount);
     CPPUNIT_TEST(testDatabaseFormulaDcountA);
+    CPPUNIT_TEST(testMathFormulaDegrees);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5285,7 +5287,28 @@ void ScOpenclTest::testDatabaseFormulaDvarp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
+//AMLOEXT-356
+void ScOpenclTest::testMathFormulaDegrees()
+{
+    if (!detectOpenCLDevice())
+            return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/degrees.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/degrees.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 200; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
 
 ScOpenclTest::ScOpenclTest()
