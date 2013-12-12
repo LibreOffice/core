@@ -435,7 +435,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>
-#include <comphelper/TypeGeneration.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>

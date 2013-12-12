@@ -21,31 +21,30 @@
 #define INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
 
 #include <rtl/ustring.hxx>
-#include <comphelper/TypeGeneration.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <boost/unordered_map.hpp>
 namespace comphelper
 {
     struct PropertyInfo
     {
-        const sal_Char* mpName;
-        sal_uInt16 mnNameLen;
+        OUString maName;
         sal_Int32 mnHandle;
-        CppuTypes meCppuType;
+        css::uno::Type maType;
         sal_Int16 mnAttributes;
         sal_uInt8 mnMemberId;
     };
     struct PropertyData
     {
         sal_uInt8 mnMapId;
-        PropertyInfo *mpInfo;
-        PropertyData ( sal_uInt8 nMapId, PropertyInfo *pInfo )
+        PropertyInfo const *mpInfo;
+        PropertyData ( sal_uInt8 nMapId, PropertyInfo const *pInfo )
         : mnMapId ( nMapId )
         , mpInfo ( pInfo ) {}
     };
 }
 
 typedef boost::unordered_map < OUString,
-                        ::comphelper::PropertyInfo*,
+                        ::comphelper::PropertyInfo const *,
                         OUStringHash > PropertyInfoHash;
 typedef boost::unordered_map < OUString,
                         ::comphelper::PropertyData*,

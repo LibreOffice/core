@@ -18,10 +18,8 @@
  */
 
 #include <comphelper/ChainablePropertySetInfo.hxx>
-#include <comphelper/TypeGeneration.hxx>
 
 using ::comphelper::PropertyInfo;
-using ::comphelper::GenerateCppuType;
 using ::comphelper::ChainablePropertySetInfo;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Type;
@@ -33,7 +31,7 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
-ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo* pMap )
+ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo const * pMap )
     throw()
 {
     add ( pMap );
@@ -44,7 +42,7 @@ ChainablePropertySetInfo::~ChainablePropertySetInfo()
 {
 }
 
-void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
+void ChainablePropertySetInfo::add( PropertyInfo const * pMap, sal_Int32 nCount )
     throw()
 {
     // nCount < 0   => add all
@@ -53,16 +51,15 @@ void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
 
-    while( pMap->mpName && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
+    while( !pMap->maName.isEmpty() && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
     {
-        OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
-
 #ifdef DBG_UTIL
-        PropertyInfoHash::iterator aIter = maMap.find( aName );
+        PropertyInfoHash::iterator aIter = maMap.find( pMap->maName );
         if( aIter != maMap.end() )
             OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
 #endif
-        maMap[aName] = pMap++;
+        maMap[pMap->maName] = pMap;
+        ++pMap;
     }
 }
 
@@ -85,13 +82,11 @@ Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
 
         for (PropertyInfoHash::const_iterator aIter(maMap.begin()), aEnd(maMap.end()); aIter != aEnd; ++aIter, ++pProperties)
         {
-            PropertyInfo* pInfo = (*aIter).second;
+            PropertyInfo const * pInfo = (*aIter).second;
 
-            pProperties->Name = OUString( pInfo->mpName, pInfo->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+            pProperties->Name = pInfo->maName;
             pProperties->Handle = pInfo->mnHandle;
-            const Type* pType;
-            GenerateCppuType ( pInfo->meCppuType, pType);
-            pProperties->Type = *pType;
+            pProperties->Type = pInfo->maType;
             pProperties->Attributes = pInfo->mnAttributes;
         }
     }
@@ -106,13 +101,11 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& r
     if ( maMap.end() == aIter )
         throw UnknownPropertyException( rName, *this );
 
-    PropertyInfo *pInfo = (*aIter).second;
+    PropertyInfo const *pInfo = (*aIter).second;
     Property aProperty;
-    aProperty.Name   = OUString( pInfo->mpName, pInfo->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+    aProperty.Name   = pInfo->maName;
     aProperty.Handle = pInfo->mnHandle;
-    const Type* pType = &aProperty.Type;
-    GenerateCppuType ( pInfo->meCppuType, pType );
-    aProperty.Type = *pType;
+    aProperty.Type = pInfo->maType;
     aProperty.Attributes = pInfo->mnAttributes;
     return aProperty;
 }

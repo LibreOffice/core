@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/TypeGeneration.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
@@ -36,11 +35,11 @@ namespace comphelper
         PropertyDataHash maMap;
         com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
     public:
-        MasterPropertySetInfo( PropertyInfo * pMap )
+        MasterPropertySetInfo( PropertyInfo const * pMap )
             throw();
         virtual ~MasterPropertySetInfo()
             throw();
-        void add( PropertyInfo* pMap, sal_Int32 nCount = -1, sal_uInt8 nMapId = 0 )
+        void add( PropertyInfo const * pMap, sal_Int32 nCount = -1, sal_uInt8 nMapId = 0 )
             throw();
         void add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
             throw();

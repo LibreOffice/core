@@ -18,10 +18,8 @@
  */
 
 #include <comphelper/MasterPropertySetInfo.hxx>
-#include <comphelper/TypeGeneration.hxx>
 
 using ::comphelper::PropertyInfo;
-using ::comphelper::GenerateCppuType;
 using ::comphelper::MasterPropertySetInfo;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Type;
@@ -33,7 +31,7 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
-MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo* pMap )
+MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
     throw()
 {
     add ( pMap );
@@ -50,7 +48,7 @@ MasterPropertySetInfo::~MasterPropertySetInfo()
     }
 }
 
-void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8 nMapId )
+void MasterPropertySetInfo::add( PropertyInfo const * pMap, sal_Int32 nCount, sal_uInt8 nMapId )
     throw()
 {
     // nCount < 0   => add all
@@ -59,16 +57,14 @@ void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
 
-    for ( ; pMap->mpName && ( ( nCount < 0 ) || ( nCount > 0 ) ); --nCount, ++pMap )
+    for ( ; !pMap->maName.isEmpty() && ( ( nCount < 0 ) || ( nCount > 0 ) ); --nCount, ++pMap )
     {
-        OUString aName( pMap->mpName, pMap->mnNameLen, RTL_TEXTENCODING_ASCII_US );
-
 #ifdef DBG_UTIL
-        PropertyDataHash::iterator aIter = maMap.find( aName );
+        PropertyDataHash::iterator aIter = maMap.find( pMap->maName );
         if( aIter != maMap.end() )
             OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
 #endif
-        maMap[aName] = new PropertyData ( nMapId, pMap );
+        maMap[pMap->maName] = new PropertyData ( nMapId, pMap );
     }
 }
 
@@ -102,13 +98,11 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
 
         for (PropertyDataHash::const_iterator aIter(maMap.begin()), aEnd(maMap.end()) ; aIter != aEnd; ++aIter, ++pProperties)
         {
-            PropertyInfo* pInfo = (*aIter).second->mpInfo;
+            PropertyInfo const * pInfo = (*aIter).second->mpInfo;
 
-            pProperties->Name = OUString( pInfo->mpName, pInfo->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+            pProperties->Name = pInfo->maName;
             pProperties->Handle = pInfo->mnHandle;
-            const Type* pType;
-            GenerateCppuType ( pInfo->meCppuType, pType);
-            pProperties->Type = *pType;
+            pProperties->Type = pInfo->maType;
             pProperties->Attributes = pInfo->mnAttributes;
         }
     }
@@ -123,13 +117,11 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rNam
     if ( maMap.end() == aIter )
         throw UnknownPropertyException( rName, *this );
 
-    PropertyInfo *pInfo = (*aIter).second->mpInfo;
+    PropertyInfo const *pInfo = (*aIter).second->mpInfo;
     Property aProperty;
-    aProperty.Name   = OUString( pInfo->mpName, pInfo->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+    aProperty.Name   = pInfo->maName;
     aProperty.Handle = pInfo->mnHandle;
-    const Type* pType;
-    GenerateCppuType ( pInfo->meCppuType, pType );
-    aProperty.Type = *pType;
+    aProperty.Type = pInfo->maType;
 
     aProperty.Attributes = pInfo->mnAttributes;
     return aProperty;
