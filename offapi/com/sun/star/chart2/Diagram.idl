@@ -97,6 +97,12 @@ service Diagram
 
     [optional, property] boolean                    RightAngledAxes;
 
+    /** Chart Datatable flags
+    */
+    [optional, property] boolean                    DataTableHBorder;
+    [optional, property] boolean                    DataTableVBorder;
+    [optional, property] boolean                    DataTableOutline;
+
     /** Perspective of 3D charts ( [0,100] ).
      */
     [optional, property] long                       Perspective;
