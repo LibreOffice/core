@@ -328,7 +328,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
 
     DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
 
-    const CGPoint aDstPoint = { static_cast<CGFloat>(+rPosAry.mnDestX - rPosAry.mnSrcX), static_cast<CGFloat>(rPosAry.mnDestY - rPosAry.mnSrcY) };
+    const CGPoint aDstPoint = CGPointMake(+rPosAry.mnDestX - rPosAry.mnSrcX, rPosAry.mnDestY - rPosAry.mnSrcY);
     if( (rPosAry.mnSrcWidth == rPosAry.mnDestWidth &&
          rPosAry.mnSrcHeight == rPosAry.mnDestHeight) &&
         (!mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth) ) // workaround a Quartz crasher
@@ -344,7 +344,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
             }
         }
         CGContextSaveGState( xCopyContext );
-        const CGRect aDstRect = { { static_cast<CGFloat>(rPosAry.mnDestX), static_cast<CGFloat>(rPosAry.mnDestY) }, { static_cast<CGFloat>(rPosAry.mnDestWidth), static_cast<CGFloat>(rPosAry.mnDestHeight) } };
+        const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
         CGContextClipToRect( xCopyContext, aDstRect );
 
         // draw at new destination
@@ -461,10 +461,10 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     CGLayerRef xSrcLayer = mxLayer;
     // TODO: if( mnBitmapDepth > 0 )
     {
-        const CGSize aSrcSize = { static_cast<CGFloat>(nSrcWidth), static_cast<CGFloat>(nSrcHeight) };
+        const CGSize aSrcSize = CGSizeMake(nSrcWidth, nSrcHeight);
         xSrcLayer = ::CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
         const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
-        CGPoint aSrcPoint = { static_cast<CGFloat>(-nSrcX), static_cast<CGFloat>(-nSrcY) };
+        CGPoint aSrcPoint = CGPointMake(-nSrcX, -nSrcY);
         if( IsFlipped() )
         {
             ::CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
@@ -475,7 +475,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     }
 
     // draw at new destination
-    const CGPoint aDstPoint = { static_cast<CGFloat>(+nDstX), static_cast<CGFloat>(+nDstY) };
+    const CGPoint aDstPoint = CGPointMake(+nDstX, +nDstY);
     ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, xSrcLayer );
 
     // cleanup
@@ -526,7 +526,7 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     }
     if ( CheckContext() )
     {
-        const CGRect aDstRect = { { static_cast<CGFloat>(rTR.mnDestX), static_cast<CGFloat>(rTR.mnDestY) }, { static_cast<CGFloat>(rTR.mnDestWidth), static_cast<CGFloat>(rTR.mnDestHeight) } };
+        const CGRect aDstRect = CGRectMake( rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
         CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
         RefreshRect( aDstRect );
     }
@@ -566,7 +566,7 @@ bool AquaSalGraphics::drawTransformedBitmap(
     CGContextConcatCTM( mrContext, aCGMat );
 
     // draw the transformed image
-    const CGRect aSrcRect = {{0,0}, {static_cast<CGFloat>(aSize.Width()), static_cast<CGFloat>(aSize.Height())}};
+    const CGRect aSrcRect = CGRectMake(0, 0, aSize.Width(), aSize.Height());
     CGContextDrawImage( mrContext, aSrcRect, xImage );
     CGImageRelease( xImage );
     // restore the Quartz graphics state
@@ -590,7 +590,7 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     CGContextSaveGState( mrContext );
     CGContextSetAlpha( mrContext, (100-nTransparency) * (1.0/100) );
 
-    CGRect aRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nWidth-1), static_cast<CGFloat>(nHeight-1) } };
+    CGRect aRect = CGRectMake(nX, nY, nWidth-1, nHeight-1);
     if( IsPenVisible() )
     {
         aRect.origin.x += 0.5;
@@ -620,8 +620,8 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     {
         return;
     }
-    const CGRect aDstRect = { { static_cast<CGFloat>(rPosAry.mnDestX), static_cast<CGFloat>(rPosAry.mnDestY) },
-                              { static_cast<CGFloat>(rPosAry.mnDestWidth), static_cast<CGFloat>(rPosAry.mnDestHeight) } };
+
+    const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     CGContextDrawImage( mrContext, aDstRect, xImage );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
@@ -648,8 +648,8 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     {
         return;
     }
-    const CGRect aDstRect = { { static_cast<CGFloat>(rPosAry.mnDestX), static_cast<CGFloat>(rPosAry.mnDestY)},
-                              { static_cast<CGFloat>(rPosAry.mnDestWidth), static_cast<CGFloat>(rPosAry.mnDestHeight) } };
+
+    const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
     CGImageRelease( xMaskedImage );
     RefreshRect( aDstRect );
@@ -686,7 +686,7 @@ sal_Bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
     [NSGraphicsContext setCurrentContext: pDrawNSCtx];
 
     // draw the EPS
-    const NSRect aDstRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) } };
+    const NSRect aDstRect = NSMakeRect( nX, nY, nWidth, nHeight);
     const BOOL bOK = [xEpsImage drawInRect: aDstRect];
 
     // restore the NSGraphicsContext
@@ -736,8 +736,8 @@ void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSal
     {
         return;
     }
-    const CGRect aDstRect = { { static_cast<CGFloat>(rPosAry.mnDestX), static_cast<CGFloat>(rPosAry.mnDestY) },
-                              { static_cast<CGFloat>(rPosAry.mnDestWidth), static_cast<CGFloat>(rPosAry.mnDestHeight) } };
+
+    const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     CGContextDrawImage( mrContext, aDstRect, xImage );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
@@ -1195,7 +1195,7 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     {
         nY = mnHeight - nY;
     }
-    const CGPoint aCGPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
+    const CGPoint aCGPoint = CGPointMake(-nX, -nY);
     CGContextDrawLayerAtPoint( xOnePixelContext, aCGPoint, mxLayer );
     CGContextRelease( xOnePixelContext );
 
@@ -1223,7 +1223,7 @@ void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
     // overwrite the fill color
     CGContextSetFillColor( mrContext, rColor.AsArray() );
     // draw 1x1 rect, there is no pixel drawing in Quartz
-    CGRect aDstRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, {1,1}};
+    const CGRect aDstRect = CGRectMake(nX, nY, 1, 1);
     CGContextFillRect( mrContext, aDstRect );
     RefreshRect( aDstRect );
     // reset the fill color
@@ -1509,7 +1509,7 @@ bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
 
                 if(nH)
                 {
-                    CGRect aRect = {{ (CGFloat) aRectIter->Left(), (CGFloat) aRectIter->Top() }, { (CGFloat) nW, (CGFloat) nH }};
+                    const CGRect aRect = CGRectMake( aRectIter->Left(), aRectIter->Top(), nW, nH);
                     CGPathAddRect( mxClipPath, NULL, aRect );
                 }
             }
@@ -1739,7 +1739,7 @@ bool XorEmulation::UpdateTarget()
         const int nWidth  = (int)CGImageGetWidth( xXorImage );
         const int nHeight = (int)CGImageGetHeight( xXorImage );
         // TODO: update minimal changerect
-        const CGRect aFullRect = { {0, 0}, { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) } };
+        const CGRect aFullRect = CGRectMake(0, 0, nWidth, nHeight);
         CGContextDrawImage( m_xTargetContext, aFullRect, xXorImage );
         CGImageRelease( xXorImage );
     }
