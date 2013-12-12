@@ -36,14 +36,38 @@
 
 namespace com { namespace sun { namespace star { namespace uno {
 
-bool operator <(TypeDescription const & left, TypeDescription const & right) {
-    OSL_ASSERT(left.is() && right.is());
-    typelib_TypeClass tc1 = left.get()->eTypeClass;
-    typelib_TypeClass tc2 = right.get()->eTypeClass;
-    return tc1 < tc2 ||
-        (tc1 == tc2 &&
-         (rtl::OUString(left.get()->pTypeName) <
-          rtl::OUString(right.get()->pTypeName)));
+bool operator<( const TypeDescription& rLeft, const TypeDescription& rRight) {
+    OSL_ASSERT( rLeft.is() && rRight.is());
+    const typelib_TypeDescription& rA = *rLeft.get();
+    const typelib_TypeDescription& rB = *rRight.get();
+    if( rA.eTypeClass != rA.eTypeClass)
+        return (rA.eTypeClass < rB.eTypeClass);
+    const sal_Int32 nCmp = rtl_ustr_compare_WithLength(
+            rA.pTypeName->buffer, rA.pTypeName->length,
+            rB.pTypeName->buffer, rB.pTypeName->length);
+    return (nCmp < 0);
+}
+
+bool TypeDescEqual::operator()( const TypeDescription& rLeft, const TypeDescription& rRight) const
+{
+    OSL_ASSERT( rLeft.is() && rRight.is());
+    const typelib_TypeDescription& rA = *rLeft.get();
+    const typelib_TypeDescription& rB = *rRight.get();
+    if( rA.eTypeClass != rB.eTypeClass)
+        return false;
+    const sal_Int32 nCmp = rtl_ustr_compare_WithLength(
+            rA.pTypeName->buffer, rA.pTypeName->length,
+            rB.pTypeName->buffer, rB.pTypeName->length);
+    return (nCmp == 0);
+}
+
+sal_Int32 TypeDescHash::operator()( const TypeDescription& rTD) const
+{
+    OSL_ASSERT( rTD.is());
+    const typelib_TypeDescription& rA = *rTD.get();
+    sal_Int32 h = rtl_ustr_hashCode_WithLength( rA.pTypeName->buffer, rA.pTypeName->length);
+    h ^= static_cast<sal_Int32>(rA.eTypeClass);
+    return h;
 }
 
 } } } }
@@ -51,8 +75,8 @@ bool operator <(TypeDescription const & left, TypeDescription const & right) {
 namespace rtl {
 
 bool operator <(ByteSequence const & left, ByteSequence const & right) {
-    for (sal_Int32 i = 0; i != std::min(left.getLength(), right.getLength());
-         ++i)
+    const sal_Int32 nLen = std::min( left.getLength(), right.getLength());
+    for( sal_Int32 i = 0; i < nLen; ++i )
     {
         if (left[i] < right[i]) {
             return true;
@@ -65,3 +89,4 @@ bool operator <(ByteSequence const & left, ByteSequence const & right) {
 }
 
 }
+
