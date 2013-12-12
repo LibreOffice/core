@@ -358,4 +358,16 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
     SAL_INFO("dbaccess", "OStaticSet::moveToCurrentRow" );
 }
 
+void OStaticSet::reset(const Reference< XResultSet> &_xDriverSet)
+{
+    OCacheSet::construct(_xDriverSet, m_sRowSetFilter);
+    {
+        ORowSetMatrix t;
+        m_aSet.swap(t);
+    }
+    m_aSetIter = m_aSet.end();
+    m_bEnd = sal_False;
+    m_aSet.push_back(NULL); // this is the beforefirst record
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
