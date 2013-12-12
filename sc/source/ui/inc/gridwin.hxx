@@ -376,7 +376,6 @@ public:
     void            StopMarking();
     void            UpdateInputContext();
 
-    void            CheckInverted()     { if (nPaintCount) bNeedsRepaint = true; }
     bool            NeedsRepaint() { return bNeedsRepaint; }
 
     void            DoInvertRect( const Rectangle& rPixel );
