@@ -121,7 +121,7 @@ struct SystemGraphicsData
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
-    // Nothing
+    CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
@@ -136,11 +136,11 @@ struct SystemGraphicsData
 #if defined( WNT )
         , hDC( 0 )
 #elif defined( MACOSX )
-    // Nothing
+        , rCGContext( NULL )
 #elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
-    // Nothing
+        , rCGContext( NULL )
 #elif defined( UNX )
         , pDisplay( NULL )
         , hDrawable( 0 )
