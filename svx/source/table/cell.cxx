@@ -72,7 +72,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     {
         FILL_PROPERTIES
 //      { "HasLevels",                    OWN_ATTR_HASLEVELS,             ::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
-        { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType<::com::sun::star::style::XStyle>::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("Style"),                        OWN_ATTR_STYLE,                 cppu::UnoType< ::com::sun::star::style::XStyle >::get(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          ::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
         { OUString(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        ::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
         { OUString(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          ::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
