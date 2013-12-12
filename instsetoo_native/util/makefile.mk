@@ -259,14 +259,14 @@ $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openoffice_$L.$P)) .PHO
         $(PRJ)$/util$/update.xml	\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-$(foreach,L,$(alllangiso) openoffice_$L.archive) :
-    $(MAKE_INSTALLER_COMMAND) 		\
-        -p Apache_OpenOffice		\
-        -msitemplate $(MSIOFFICETEMPLATEDIR)
-    $(GEN_UPDATE_INFO_COMMAND)		\
-        --product Apache_OpenOffice	\
-        $(PRJ)$/util$/update.xml	\
-        > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+#$(foreach,L,$(alllangiso) openoffice_$L.archive) :
+#	$(MAKE_INSTALLER_COMMAND) 		\
+#		-p Apache_OpenOffice		\
+#		-msitemplate $(MSIOFFICETEMPLATEDIR)
+#	$(GEN_UPDATE_INFO_COMMAND)		\
+#		--product Apache_OpenOffice	\
+#		$(PRJ)$/util$/update.xml	\
+#		> $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
 #openofficewithjre_%{$(PKGFORMAT:^".")} :
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficewithjre_$L.$P)) .PHONY :
