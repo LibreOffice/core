@@ -160,7 +160,7 @@ public:
     virtual void StartParagraphProperties() = 0;
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData ) = 0;
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted ) = 0;
 
     /// Empty paragraph.
     virtual void EmptyParagraph() = 0;
@@ -631,6 +631,9 @@ public:
 
     /// Exports the definition (image, size) of a single numbering picture bullet.
     virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}
+
+    // Returns whether or not the 'SwTxtNode' has a paragraph marker deleted (using 'track changes')
+    virtual const SwRedlineData* IsParagraphMarkerDeleted( const SwTxtNode& rNode );
 
 };
 

@@ -588,13 +588,28 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
-void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData )
+void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted )
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
     Redline( pRedlineData );
 
     WriteCollectedParagraphProperties();
+
+    // Write 'Paragraph Mark' properties
+    bool bIsParagraphMarkProperties = false; // In future - get the 'paragraph marker' properties as a parameter
+    if (bIsParagraphMarkProperties || pRedlineParagraphMarkerDeleted)
+    {
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+
+        if ( pRedlineParagraphMarkerDeleted )
+        {
+            StartRedline( pRedlineParagraphMarkerDeleted );
+            EndRedline( pRedlineParagraphMarkerDeleted );
+        }
+
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+    }
 
     // Merge the marks for the ordered elements
     m_pSerializer->mergeTopMarks( );

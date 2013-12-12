@@ -5375,4 +5375,48 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
     }
 }
 
+/*
+ * This function is used to check if the current SwTxtNode (paragraph) has a redline object
+ * that signals that the paragraph marker is deleted.
+ * This is done by checking if the range (SwPaM) of the redline is :
+ * - Start = the last character of the current paragraph
+ * - End = the first character of the next paragraph
+ */
+const SwRedlineData* AttributeOutputBase::IsParagraphMarkerDeleted( const SwTxtNode& rNode )
+{
+    // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
+    for( sal_uInt16 nRedlinePos = 0; nRedlinePos < GetExport().pDoc->GetRedlineTbl().size(); ++nRedlinePos )
+    {
+        const SwRedline* pRedl = GetExport().pDoc->GetRedlineTbl()[ nRedlinePos ];
+
+        // Only check redlines that are of type 'Delete'
+        if ( pRedl->GetRedlineData().GetType() != nsRedlineType_t::REDLINE_DELETE )
+            continue;
+
+        const SwPosition* pCheckedStt = pRedl->Start();
+        const SwPosition* pCheckedEnd = pRedl->End();
+
+        if( pCheckedStt->nNode == rNode )
+        {
+            if ( !pCheckedEnd )
+                continue;
+
+            sal_uLong uStartNodeIndex = pCheckedStt->nNode.GetIndex();
+            sal_uLong uStartCharIndex = pCheckedStt->nContent.GetIndex();
+            sal_uLong uEndNodeIndex   = pCheckedEnd->nNode.GetIndex();
+            sal_uLong uEndCharIndex   = pCheckedEnd->nContent.GetIndex();
+
+            // Maybe add here a check that also the start & end of the redline is the entire paragraph
+            if ( ( uStartNodeIndex == uEndNodeIndex - 1 ) &&
+                 ( uStartCharIndex == (sal_uLong)rNode.Len() ) &&
+                 ( uEndCharIndex == 0)
+               )
+            {
+                return &( pRedl->GetRedlineData() );
+            }
+        }
+    }
+    return NULL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
