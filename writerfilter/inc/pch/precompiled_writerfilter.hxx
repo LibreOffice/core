@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "doctok/resources.hxx"
 #include "ooxml/OOXMLFastTokens.hxx"
 #include <algorithm>
 #include <boost/optional.hpp>
@@ -162,7 +161,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <doctok/resourceids.hxx>
-#include <doctok/resources.hxx>
 #include <doctok/sprmids.hxx>
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/escherex.hxx>
