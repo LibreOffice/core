@@ -28,9 +28,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <vector>
 
-// UNO III - Implementation
-#define MAP_CHAR_LEN(cchar) cchar, sizeof(cchar) - 1
-
 struct SfxItemPropertyMapEntry
 {
     OUString                            aName;
