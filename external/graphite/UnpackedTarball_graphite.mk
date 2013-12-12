@@ -11,10 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,graphite))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,graphite,$(GRAPHITE_TARBALL)))
 
-# http://projects.palaso.org/issues/1030
 # http://projects.palaso.org/issues/1115
 $(eval $(call gb_UnpackedTarball_add_patches,graphite,\
-	external/graphite/graphite2.patch \
 	external/graphite/graphite2.issue1115.patch.1 \
 ))
 
