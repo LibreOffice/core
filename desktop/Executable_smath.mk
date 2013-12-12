@@ -15,16 +15,17 @@ $(eval $(call gb_Executable_add_defs,smath,\
     -DUNICODE \
 ))
 
+$(eval $(call gb_Executable_add_ldflags,smath,\
+    /ENTRY:wWinMainCRTStartup \
+))
+
 $(eval $(call gb_Executable_use_libraries,smath,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_libs,smath,\
-    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
+$(eval $(call gb_Executable_use_static_libraries,smath,\
+    winlauncher \
 ))
-
-$(call gb_Executable_get_target,smath) : \
-    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
 $(eval $(call gb_Executable_add_exception_objects,smath,\
     desktop/win32/source/applauncher/smath \
