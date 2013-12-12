@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SD_INC_CUSTOMANIMATIONPRESET_HXX
 #define INCLUDED_SD_INC_CUSTOMANIMATIONPRESET_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
