@@ -899,24 +899,12 @@ STDMETHODIMP CAccTextBase::get_oldText( IA2TextSegment *)
 */
 STDMETHODIMP CAccTextBase::scrollSubstringToPoint(long, long, IA2CoordinateType, long, long )
 {
-
-
-    ENTER_PROTECTED_BLOCK
-
     return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
 {
-
-
-    ENTER_PROTECTED_BLOCK
-
     return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /**

@@ -100,13 +100,7 @@ STDMETHODIMP CAccTable::get_accessibleAt(long row, long column, IUnknown * * acc
   */
 STDMETHODIMP CAccTable::get_caption(IUnknown * *)
 {
-
-
-    ENTER_PROTECTED_BLOCK
-
     return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -934,16 +928,11 @@ STDMETHODIMP CAccTable::get_rowColumnExtentsAtIndex(long,
         long  *,
         boolean  *)
 {
-    ENTER_PROTECTED_BLOCK
-
     return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 STDMETHODIMP CAccTable::get_modelChange(IA2TableModelChange  *)
 {
-
     return E_NOTIMPL;
 }
 

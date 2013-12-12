@@ -1904,22 +1904,12 @@ STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
 
 STDMETHODIMP CMAccessible:: scrollToPoint(enum IA2CoordinateType, long, long)
 {
-
-    ENTER_PROTECTED_BLOCK
-    ISDESTROY()
     return E_NOTIMPL;
-    LEAVE_PROTECTED_BLOCK
-
 }
+
 STDMETHODIMP CMAccessible:: scrollTo(enum IA2ScrollType)
 {
-
-    ENTER_PROTECTED_BLOCK
-    ISDESTROY()
-
     return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
@@ -2122,12 +2112,7 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
 
 STDMETHODIMP CMAccessible:: get_extendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
 {
-        ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-
-        return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
+    return E_NOTIMPL;
 }
 
 
@@ -3161,42 +3146,23 @@ STDMETHODIMP CMAccessible:: get_states(AccessibleStates __RPC_FAR *states )
 // return the UNO roles
 STDMETHODIMP CMAccessible:: get_extendedRole( BSTR __RPC_FAR *  )
 {
-        ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-
-        return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
+    return E_NOTIMPL;
 }
 
 STDMETHODIMP CMAccessible:: get_localizedExtendedRole( BSTR __RPC_FAR *  )
 {
-
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-        return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
+    return E_NOTIMPL;
 }
+
 STDMETHODIMP CMAccessible:: get_nExtendedStates( long __RPC_FAR * )
 {
-        ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-
-        return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
+    return E_NOTIMPL;
 }
 
 
 STDMETHODIMP CMAccessible:: get_localizedExtendedStates( long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
 {
-
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
-        return E_NOTIMPL;
-
-    LEAVE_PROTECTED_BLOCK
+    return E_NOTIMPL;
 }
 
 
