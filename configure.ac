@@ -9948,6 +9948,15 @@ if test $build_os = cygwin; then
 fi
 
 dnl ===================================================================
+dnl We need touch with -h option support.
+dnl ===================================================================
+AC_PATH_PROG(TOUCH, touch)
+test -z "$TOUCH" && AC_MSG_ERROR([touch is required])
+if ! "$TOUCH" -h /dev/null 2>/dev/null > /dev/null; then
+    AC_MSG_ERROR([touch version with -h option support is required to build, please install it and make sure it is the one found first in PATH],,)
+fi
+
+dnl ===================================================================
 dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
