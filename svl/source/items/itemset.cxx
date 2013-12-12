@@ -1790,7 +1790,23 @@ SfxAllItemSet::SfxAllItemSet(const SfxItemSet &rCopy)
 
 // -----------------------------------------------------------------------
 
+void SfxItemSet::InvalidateDefaultItems()
+{
+    DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
+    sal_uInt16* pPtr = _pWhichRanges;
+    SfxItemArray ppFnd = _aItems;
 
+    while( *pPtr )
+    {
+        for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
+            if ( *ppFnd && *ppFnd != (SfxPoolItem *)-1 && **ppFnd == _pPool->GetDefaultItem( nWhich ) )
+            {
+                _pPool->Remove( **ppFnd );
+                *ppFnd = (SfxPoolItem*)-1;
+            }
+        pPtr += 2;
+    }
+}
 
 SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 :   SfxItemSet(rCopy),

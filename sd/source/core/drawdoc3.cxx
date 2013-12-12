@@ -72,12 +72,12 @@ class InsertBookmarkAsPage_FindDuplicateLayouts
 public:
     InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
-    void operator()( SdDrawDocument&, SdPage* );
+    void operator()( SdDrawDocument&, SdPage*, bool, SdDrawDocument* );
 private:
     std::vector<rtl::OUString> &mrLayoutsToTransfer;
 };
 
-void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
+void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
 {
     // now check for duplicate masterpage and layout names
     // ===================================================
@@ -105,7 +105,17 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         rtl::OUString aTest(aFullTest);
 
         if (aTest == aLayout)
-            bFound = true;
+        {
+            if( bRenameDuplicates && pTestPage->getHash() != pBMMPage->getHash() )
+            {
+                pBookmarkDoc->RenameLayoutTemplate( pBMMPage->GetLayoutName(), OUString(pBMMPage->GetName())+=OUString("_") );
+                aLayout = pBMMPage->GetName();
+
+                break;
+            }
+            else
+                bFound = true;
+        }
     }
 
     if (!bFound)
@@ -120,7 +130,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
 
 static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
                                const std::vector<rtl::OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
-                               InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator )
+                               InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator, bool bRenameDuplicates = false )
 {
     //
     // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
@@ -180,7 +190,7 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
         if( pBMMPage )
         {
             // yes, call functor
-            rPageIterator( rDoc, pBMMPage );
+            rPageIterator( rDoc, pBMMPage, bRenameDuplicates, pBookmarkDoc );
         }
     }
 }
@@ -498,7 +508,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     //
     std::vector<rtl::OUString> aLayoutsToTransfer;
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
-    lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor );
+    lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor, ( rBookmarkList.empty() && pBookmarkDoc != this ) );
 
 
     /**************************************************************************
