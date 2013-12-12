@@ -2291,6 +2291,57 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpDeg::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double arg0 = 0.0f;\n";
+    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken*tmpCurDVR=
+                dynamic_cast
+                <const formula::SingleVectorRefToken *>(tmpCur);
+            ss << "    arg0 = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "    { arg0 = 0.0f; }\n";
+#endif
+        }
+        else if(tmpCur->GetType() == formula::svDouble)
+        {
+            ss << "    arg0=";
+            ss << tmpCur->GetDouble() << ";\n";
+        }
+    }
+    else
+    {
+        ss << "        arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+    ss << "    return arg0 * pown(M_PI, -1) * 180;;\n";
+    ss << "}";
+}
 
 
 }}
