@@ -15,16 +15,17 @@ $(eval $(call gb_Executable_add_defs,sbase,\
     -DUNICODE \
 ))
 
+$(eval $(call gb_Executable_add_ldflags,sbase,\
+    /ENTRY:wWinMainCRTStartup \
+))
+
 $(eval $(call gb_Executable_use_libraries,sbase,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_libs,sbase,\
-    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
+$(eval $(call gb_Executable_use_static_libraries,sbase,\
+    winlauncher \
 ))
-
-$(call gb_Executable_get_target,sbase) : \
-    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
 $(eval $(call gb_Executable_add_exception_objects,sbase,\
     desktop/win32/source/applauncher/sbase \
