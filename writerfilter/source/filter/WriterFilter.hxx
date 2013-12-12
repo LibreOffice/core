@@ -77,6 +77,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
+private:
+    void putPropertiesToDocumentGrabBag( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
+
 };
 
 

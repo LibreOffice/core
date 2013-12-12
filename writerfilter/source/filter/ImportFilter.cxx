@@ -119,140 +119,30 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         pDocument->resolve(*pStream);
 
-        // Adding the saved Theme DOM to the document's grab bag
-        try
-        {
-            uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
-            if (xDocProps.is())
-            {
-                uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+        // Adding some properties to the document's grab bag for interoperability purposes:
+        uno::Sequence<beans::PropertyValue> aGrabBagProperties(6);
 
-                const OUString aGrabBagPropName = "InteropGrabBag";
-                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
-                {
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
+        // Adding the saved Theme DOM
+        aGrabBagProperties[0].Name = "OOXTheme";
+        aGrabBagProperties[0].Value = uno::makeAny( pDocument->getThemeDom() );
 
-                    // We want to keep the previous items
-                    xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-                    sal_Int32 length = aGrabBag.getLength();
-                    aGrabBag.realloc(length+1);
+        // Adding the saved custom xml DOM
+        aGrabBagProperties[1].Name = "OOXCustomXml";
+        aGrabBagProperties[1].Value = uno::makeAny( pDocument->getCustomXmlDomList() );
+        aGrabBagProperties[2].Name = "OOXCustomXmlProps";
+        aGrabBagProperties[2].Value = uno::makeAny( pDocument->getCustomXmlDomPropsList() );
 
-                    uno::Reference<xml::dom::XDocument> aThemeDom = pDocument->getThemeDom();
+        // Adding the saved ActiveX DOM
+        aGrabBagProperties[3].Name = "OOXActiveX";
+        aGrabBagProperties[3].Value = uno::makeAny( pDocument->getActiveXDomList() );
+        aGrabBagProperties[4].Name = "OOXActiveXBin";
+        aGrabBagProperties[4].Value = uno::makeAny( pDocument->getActiveXBinList() );
 
-                    beans::PropertyValue* pValue = aGrabBag.getArray();
-                    pValue[length].Name = "OOXTheme";
-                    pValue[length].Value = uno::makeAny( aThemeDom );
+        // Adding the saved w:themeFontLang setting
+        aGrabBagProperties[5].Name = "ThemeFontLangProps";
+        aGrabBagProperties[5].Value = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
 
-                    xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
-                }
-            }
-        }
-        catch(const uno::Exception&)
-        {
-            SAL_WARN("writerfilter","Failed to save theme dom to documents grab bag");
-        }
-
-        // Adding the saved custom xml DOM to the document's grab bag
-        try
-        {
-              uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
-              if (xDocProps.is())
-              {
-                  uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-
-                  const OUString aGrabBagPropName = "InteropGrabBag";
-                  if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
-                  {
-                      uno::Sequence<beans::PropertyValue> aGrabBag;
-
-                      // We want to keep the previous items
-                      xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-                      sal_Int32 length = aGrabBag.getLength();
-                      aGrabBag.realloc(length+2);
-
-                      beans::PropertyValue* pValue = aGrabBag.getArray();
-                      pValue[length].Name = "OOXCustomXml";
-                      pValue[length].Value = uno::makeAny( pDocument->getCustomXmlDomList() );
-
-                      pValue[length+1].Name = "OOXCustomXmlProps";
-                      pValue[length+1].Value = uno::makeAny( pDocument->getCustomXmlDomPropsList() );
-
-                      xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
-
-
-                  }
-              }
-        }
-        catch(const uno::Exception&)
-        {
-            SAL_WARN("writerfilter","Failed to save custom xml dom to documents grab bag");
-        }
-
-        // Adding the saved ActiveX DOM to the document's grab bag
-        try
-        {
-            uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
-            if (xDocProps.is())
-            {
-                uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
-
-                const OUString aGrabBagPropName = "InteropGrabBag";
-                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
-                {
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
-
-                    // We want to keep the previous items
-                    xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-                    sal_Int32 length = aGrabBag.getLength();
-                    aGrabBag.realloc(length+2);
-
-                    beans::PropertyValue* pValue = aGrabBag.getArray();
-                    pValue[length].Name = "OOXActiveX";
-                    pValue[length].Value = uno::makeAny( pDocument->getActiveXDomList() );
-
-                    pValue[length+1].Name = "OOXActiveXBin";
-                    pValue[length+1].Value = uno::makeAny( pDocument->getActiveXBinList() );
-
-                    xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
-                 }
-             }
-         }
-         catch(const uno::Exception&)
-         {
-             SAL_WARN("writerfilter","Failed to save ActiveX dom to documents grab bag");
-         }
-
-         // Adding the saved w:themeFontLang setting to the document's grab bag
-         if ( aDomainMapper->GetThemeFontLangProperties().hasElements() )
-             try
-             {
-                 uno::Reference<beans::XPropertySet> xDocProps( m_xDstDoc, uno::UNO_QUERY );
-                 if (xDocProps.is())
-                 {
-                     uno::Reference< beans::XPropertySetInfo > xPropsInfo = xDocProps->getPropertySetInfo();
-
-                     const OUString aGrabBagPropName = "InteropGrabBag";
-                     if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
-                     {
-                         uno::Sequence< beans::PropertyValue > aGrabBag;
-
-                         // We want to keep the previous items
-                         xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-                         sal_Int32 length = aGrabBag.getLength();
-                         aGrabBag.realloc( length+1 );
-
-                         beans::PropertyValue* pValue = aGrabBag.getArray();
-                         pValue[length].Name = "ThemeFontLangProps";
-                         pValue[length].Value = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
-
-                         xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
-                     }
-                 }
-             }
-             catch(const uno::Exception&)
-             {
-                 SAL_WARN("writerfilter","Failed to save themeFontLang properties to documents grab bag");
-             }
+        putPropertiesToDocumentGrabBag( aGrabBagProperties );
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
@@ -391,6 +281,44 @@ sal_Bool WriterFilter::supportsService( const OUString& rServiceName ) throw (un
 uno::Sequence< OUString > WriterFilter::getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     return WriterFilter_getSupportedServiceNames();
+}
+
+void WriterFilter::putPropertiesToDocumentGrabBag( const uno::Sequence< beans::PropertyValue >& aProperties )
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
+        if( xDocProps.is() )
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            const OUString aGrabBagPropName = "InteropGrabBag";
+            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
+            {
+                // get existing grab bag
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+                sal_Int32 length = aGrabBag.getLength();
+
+                // update grab bag size to contain the new items
+                aGrabBag.realloc( length + aProperties.getLength() );
+
+                // put the new items
+                for( sal_Int32 i=0; i < aProperties.getLength(); ++i )
+                {
+                    aGrabBag[length + i].Name = aProperties[i].Name;
+                    aGrabBag[length + i].Value = aProperties[i].Value;
+                }
+
+                // put it back to the document
+                xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
+            }
+        }
+    }
+    catch(const uno::Exception&)
+    {
+        SAL_WARN("writerfilter","Failed to save documents grab bag");
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
