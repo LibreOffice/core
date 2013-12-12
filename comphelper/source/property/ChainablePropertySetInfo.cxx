@@ -32,9 +32,14 @@ using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
 ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo const * pMap )
-    throw()
 {
-    add ( pMap );
+    for( ; !pMap->maName.isEmpty(); ++pMap )
+    {
+        SAL_WARN_IF(
+            maMap.find(pMap->maName) != maMap.end(),
+            "comphelper", "Duplicate property name \"" << pMap->maName << "\"");
+        maMap[pMap->maName] = pMap;
+    }
 }
 
 ChainablePropertySetInfo::~ChainablePropertySetInfo()
@@ -42,29 +47,7 @@ ChainablePropertySetInfo::~ChainablePropertySetInfo()
 {
 }
 
-void ChainablePropertySetInfo::add( PropertyInfo const * pMap, sal_Int32 nCount )
-    throw()
-{
-    // nCount < 0   => add all
-    // nCount == 0  => add nothing
-    // nCount > 0   => add at most nCount entries
-    if( maProperties.getLength() )
-        maProperties.realloc( 0 );
-
-    while( !pMap->maName.isEmpty() && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
-    {
-#ifdef DBG_UTIL
-        PropertyInfoHash::iterator aIter = maMap.find( pMap->maName );
-        if( aIter != maMap.end() )
-            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
-#endif
-        maMap[pMap->maName] = pMap;
-        ++pMap;
-    }
-}
-
 void ChainablePropertySetInfo::remove( const OUString& aName )
-    throw()
 {
     maMap.erase ( aName );
     if ( maProperties.getLength() )

@@ -37,21 +37,13 @@ namespace comphelper
         public ::cppu::WeakImplHelper1<
         ::com::sun::star::beans::XPropertySetInfo >
     {
-        friend class ChainablePropertySet;
-        friend class MasterPropertySet;
-    protected:
-        PropertyInfoHash maMap;
-        com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
     public:
-        ChainablePropertySetInfo( PropertyInfo const * pMap )
-            throw();
+        ChainablePropertySetInfo( PropertyInfo const * pMap );
 
+        void remove( const OUString& aName );
+
+    private:
         virtual ~ChainablePropertySetInfo()
-            throw();
-
-        void add( PropertyInfo const * pMap, sal_Int32 nCount = -1 )
-            throw();
-        void remove( const OUString& aName )
             throw();
 
         // XPropertySetInfo
@@ -61,6 +53,12 @@ namespace comphelper
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
+
+        PropertyInfoHash maMap;
+        com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
+
+        friend class ChainablePropertySet;
+        friend class MasterPropertySet;
     };
 }
 #endif

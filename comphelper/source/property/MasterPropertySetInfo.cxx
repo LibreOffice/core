@@ -32,9 +32,14 @@ using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
 MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
-    throw()
 {
-    add ( pMap );
+    for ( ; !pMap->maName.isEmpty(); ++pMap )
+    {
+        SAL_WARN_IF(
+            maMap.find(pMap->maName) != maMap.end(),
+            "comphelper", "Duplicate property name \"" << pMap->maName << "\"");
+        maMap[pMap->maName] = new PropertyData ( 0, pMap );
+    }
 }
 
 MasterPropertySetInfo::~MasterPropertySetInfo()
@@ -48,28 +53,7 @@ MasterPropertySetInfo::~MasterPropertySetInfo()
     }
 }
 
-void MasterPropertySetInfo::add( PropertyInfo const * pMap, sal_Int32 nCount, sal_uInt8 nMapId )
-    throw()
-{
-    // nCount < 0   => add all
-    // nCount == 0  => add nothing
-    // nCount > 0   => add at most nCount entries
-    if( maProperties.getLength() )
-        maProperties.realloc( 0 );
-
-    for ( ; !pMap->maName.isEmpty() && ( ( nCount < 0 ) || ( nCount > 0 ) ); --nCount, ++pMap )
-    {
-#ifdef DBG_UTIL
-        PropertyDataHash::iterator aIter = maMap.find( pMap->maName );
-        if( aIter != maMap.end() )
-            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
-#endif
-        maMap[pMap->maName] = new PropertyData ( nMapId, pMap );
-    }
-}
-
 void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
-    throw()
 {
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
@@ -77,11 +61,9 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
 
     while ( aIter != aEnd )
     {
-#ifdef DBG_UTIL
-        PropertyDataHash::iterator aDebugIter = maMap.find( (*aIter).first );
-        if( aDebugIter != maMap.end() )
-            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
-#endif
+        SAL_WARN_IF(
+            maMap.find(aIter->first) != maMap.end(),
+            "comphelper", "Duplicate property name \"" << aIter->first << "\"");
         maMap[(*aIter).first] = new PropertyData ( nMapId, (*aIter).second );
         ++aIter;
     }
