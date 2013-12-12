@@ -2,21 +2,6 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkImage" id="calc_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/ods_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="database_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="draw_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_32_8.png</property>
-  </object>
   <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
     <child>
@@ -25,7 +10,7 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="border_width">6</property>
+        <property name="border_width">1</property>
         <child>
           <object class="GtkBox" id="all_buttons_box">
             <property name="visible">True</property>
@@ -373,6 +358,21 @@
         <property name="position">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkImage" id="calc_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/ods_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="database_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odb_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="draw_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odg_32_8.png</property>
   </object>
   <object class="GtkImage" id="impress_all_image">
     <property name="visible">True</property>
