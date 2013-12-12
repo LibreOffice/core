@@ -1455,20 +1455,20 @@ void DocxAttributeOutput::FieldVanish( const OUString& rTxt, ww::eField eType )
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
 // 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
 // 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
-void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
+void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 {
-    if ( !pRedline )
+    if ( !pRedlineData )
         return;
 
-    OString aId( OString::number( pRedline->GetSeqNo() ) );
-    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
+    OString aId( OString::number( pRedlineData->GetSeqNo() ) );
+    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
-    OString aDate( DateTimeToOString( pRedline->GetTimeStamp() ) );
+    OString aDate( DateTimeToOString( pRedlineData->GetTimeStamp() ) );
 
     OUString sVal;
     OString sOVal;
 
-    switch( pRedline->GetType() )
+    switch( pRedlineData->GetType() )
     {
     case nsRedlineType_t::REDLINE_INSERT:
         break;
@@ -1484,9 +1484,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
                 FSEND );
 
         // Check if there is any extra data stored in the redline object
-        if (pRedline->GetExtraData())
+        if (pRedlineData->GetExtraData())
         {
-            const SwRedlineExtraData* pExtraData = pRedline->GetExtraData();
+            const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
             const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
 
             // Check if the extra data is of type 'formatting changes'
@@ -1540,9 +1540,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
                 FSEND );
 
         // Check if there is any extra data stored in the redline object
-        if (pRedline->GetExtraData())
+        if (pRedlineData->GetExtraData())
         {
-            const SwRedlineExtraData* pExtraData = pRedline->GetExtraData();
+            const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
             const SwRedlineExtraData_FormattingChanges* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormattingChanges*>(pExtraData);
 
             // Check if the extra data is of type 'formatting changes'
@@ -1586,7 +1586,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
         break;
 
     default:
-        SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedline->GetType());
+        SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedlineData->GetType());
         break;
     }
 }
