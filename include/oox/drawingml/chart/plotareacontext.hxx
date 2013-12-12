@@ -59,6 +59,21 @@ public:
 
 // ============================================================================
 
+struct DataTableModel;
+
+/** Handler for a data table context (c:dTable element).
+ */
+class DataTableContext : public ContextBase< DataTableModel >
+{
+public:
+    explicit            DataTableContext( ::oox::core::ContextHandler2Helper& rParent, DataTableModel& rModel );
+    virtual             ~DataTableContext();
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
 struct PlotAreaModel;
 
 /** Handler for a chart plot area context (c:plotArea element).

@@ -110,6 +110,41 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
     return 0;
 }
 
+
+// ============================================================================
+
+DataTableContext::DataTableContext( ContextHandler2Helper& rParent, DataTableModel& rModel ) :
+    ContextBase< DataTableModel >( rParent, rModel )
+{
+}
+
+DataTableContext::~DataTableContext()
+{
+}
+
+ContextHandlerRef DataTableContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs)
+{
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( dTable ):
+            switch( nElement )
+            {
+                case C_TOKEN( showHorzBorder ):
+                        mrModel.mbShowHBorder = rAttribs.getBool( XML_val, false );
+                        break;
+                case C_TOKEN( showVertBorder ):
+                        mrModel.mbShowVBorder = rAttribs.getBool( XML_val, false );
+                        break;
+                case C_TOKEN( showOutline ):
+                        mrModel.mbShowOutline = rAttribs.getBool( XML_val, false );
+                        break;
+            }
+        break;
+    }
+    return 0;
+}
+
+// ============================================================================
 // ============================================================================
 
 PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel& rModel ) :
@@ -166,6 +201,8 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
                     return new LayoutContext( *this, mrModel.mxLayout.create() );
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+                case C_TOKEN(dTable):
+                    return new DataTableContext( *this, mrModel.mxDataTable.create() );
             }
         break;
     }

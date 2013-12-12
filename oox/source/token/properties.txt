@@ -120,6 +120,9 @@ D3DScenePerspective
 D3DSceneShadeMode
 DDELinks
 DatabaseRanges
+DataTableHBorder
+DataTableVBorder
+DataTableOutline
 Decoration
 DefaultScrollValue
 DefaultSpinValue

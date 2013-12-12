@@ -60,17 +60,30 @@ struct WallFloorModel
 
 // ============================================================================
 
+struct DataTableModel
+{
+    bool                mbShowHBorder;      /// Show Horizontal Border
+    bool                mbShowVBorder;      /// Show Verticle Border
+    bool                mbShowOutline;      /// Show outline
+    explicit            DataTableModel();
+                        ~DataTableModel();
+};
+
+// ============================================================================
+
 struct PlotAreaModel
 {
     typedef ModelVector< TypeGroupModel >   TypeGroupVector;
     typedef ModelVector< AxisModel >        AxisVector;
     typedef ModelRef< Shape >               ShapeRef;
     typedef ModelRef< LayoutModel >         LayoutRef;
+    typedef ModelRef< DataTableModel >         DataTableRef;
 
     TypeGroupVector     maTypeGroups;       /// All chart type groups contained in the chart.
     AxisVector          maAxes;             /// All axes contained in the chart.
     ShapeRef            mxShapeProp;        /// Plot area frame formatting.
     LayoutRef           mxLayout;           /// Layout/position of the plot area.
+    DataTableRef        mxDataTable;        /// Data table of the plot area.
 
     explicit            PlotAreaModel();
                         ~PlotAreaModel();

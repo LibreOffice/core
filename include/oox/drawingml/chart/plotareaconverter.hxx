@@ -65,6 +65,21 @@ public:
 
 // ============================================================================
 
+struct DataTableModel;
+
+class DataTableConverter : public ConverterBase< DataTableModel >
+{
+public:
+    explicit            DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel );
+    virtual             ~DataTableConverter();
+
+    /** Converts the OOXML data table model to a chart2 diagram. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram);
+};
+
+// ============================================================================
+
 struct PlotAreaModel;
 
 class PlotAreaConverter : public ConverterBase< PlotAreaModel >
