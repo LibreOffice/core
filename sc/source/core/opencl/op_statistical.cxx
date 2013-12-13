@@ -9189,6 +9189,192 @@ vSubArguments)
     ss << "    return nCount;\n";
     ss << "}\n";
 }
+void OpMaxA::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
+{
+    int isMixed = 0;
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double tmp0 = 2.22507e-308;\n";
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            if(pDVR->GetArrays()[0].mpNumericArray
+                && pDVR->GetArrays()[0].mpStringArray)
+                isMixed = svDoubleVectorRefDoubleString;
+            else if(pDVR->GetArrays()[0].mpNumericArray)
+                isMixed = svDoubleVectorRefDouble;
+            else if(pDVR->GetArrays()[0].mpStringArray)
+                isMixed = svDoubleVectorRefString;
+            else
+                isMixed = svDoubleVectorRefNULL;
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " && i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+
+            if(pSVR->GetArray().mpNumericArray
+                && pSVR->GetArray().mpStringArray)
+                isMixed = svSingleVectorRefDoubleString;
+            else if(pSVR->GetArray().mpNumericArray)
+                isMixed = svSingleVectorRefDouble;
+            else if(pSVR->GetArray().mpStringArray)
+                isMixed = svSingleVectorRefString;
+            else
+                isMixed = svSingleVectorRefNULL;
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#else
+            nItems += 1;
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    {\n";
+            isMixed = svDoubleDouble;
+#endif
+            nItems += 1;
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+            nItems += 1;
+        }
+
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            if(isMixed == svDoubleVectorRefDoubleString
+                || isMixed == svSingleVectorRefDoubleString)
+            {
+                ss << "        if (!isNan(";
+                ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                ss << "))\n";
+                ss << "            tmp0 = tmp0 < ";
+                ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                ss << " ? ";
+                ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                ss << " : tmp0;\n";
+                ss << "        else if(isNan(";
+                ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                ss << ") && ";
+                ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                ss << " != 0)\n";
+                ss << "            tmp0 = tmp0 < 0.0 ? 0.0 : tmp0;\n";
+                ss << "    }\n";
+            }
+            else if(isMixed == svDoubleVectorRefDouble
+                || isMixed == svSingleVectorRefDouble)
+            {
+                ss << "        if (!isNan(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << "))\n";
+                ss << "            tmp0 = tmp0 < ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " ? " << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " : tmp0;";
+                ss <<"\n    }\n";
+            }
+            else if(isMixed == svDoubleVectorRefString)
+            {
+                ss << "        if(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " == 0)\n            continue;\n";
+                ss << "        tmp0 = tmp0 < 0.0 ? 0.0 : tmp0;\n";
+                ss << "    }\n";
+            }
+            else if(isMixed == svSingleVectorRefString)
+            {
+                ss << "        if(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " != 0)\n";
+                ss << "            tmp0 = tmp0 < 0.0 ? 0.0 : tmp0;\n";
+                ss << "    }\n";
+            }
+            else if(isMixed == svDoubleDouble)
+            {
+                ss << "        tmp0 = tmp0 < ";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " ? " << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " : tmp0;\n    }\n";
+            }
+            else
+            {
+                ss << "    }\n";
+            }
+        }
+        else
+        {
+            ss << "        tmp0 = tmp0 < ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << " ? " << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << " : tmp0;";
+            ss <<"\n    }\n";
+        }
+#else
+        ss << "        tmp0 = tmp0 < ";
+        ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+        ss << " ? " << vSubArguments[i]->GenSlidingWindowDeclRef();
+        ss << " : tmp0;";
+        ss <<"\n    }\n";
+#endif
+    }
+    ss << "    return tmp0 == 2.22507e-308 ? 0.0 : tmp0;\n";
+    ss << "}\n";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
