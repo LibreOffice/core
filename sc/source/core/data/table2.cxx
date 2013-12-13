@@ -3656,7 +3656,7 @@ sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
 
 ScColumn* ScTable::GetColumnByIndex(sal_Int32 index)
 {
-    if( index <= MAXCOL && index >= 0 )
+    if (ValidCol(index))
     {
         return &(aCol[index]);
     }
