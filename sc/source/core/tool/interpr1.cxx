@@ -5631,7 +5631,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             }
             else
             {
-                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin();
                 for (size_t nCol = 0; nCol < nColSize; ++nCol)
                 {
                     for (size_t nRow = 0; nRow < nRowSize; ++nRow, ++itRes)
