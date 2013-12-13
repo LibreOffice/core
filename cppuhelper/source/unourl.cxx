@@ -239,7 +239,7 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
         sal_Unicode c = rUrl[j];
         if (!isAlphanum(c) && c != 0x21 && c != 0x24 // '!', '$'
             && c != 0x26 && c != 0x27 && c != 0x28 // '&', ''', '('
-            && c != 0x28 && c != 0x2A && c != 0x2B // ')', '*', '+'
+            && c != 0x29 && c != 0x2A && c != 0x2B // ')', '*', '+'
             && c != 0x2C && c != 0x2D && c != 0x2E // ',', '-', '.'
             && c != 0x2F && c != 0x3A && c != 0x3D // '/', ':', '='
             && c != 0x3F && c != 0x40 && c != 0x5F // '?', '@', '_'
