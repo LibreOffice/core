@@ -15,15 +15,15 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.TimePicker;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 
-public class TimerEditingDialog extends SherlockDialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener {
+public class TimerEditingDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener {
     public static final String TAG = "TIMER_EDITING";
 
     private static final boolean IS_24_HOUR_VIEW = true;

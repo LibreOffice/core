@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="SectionHeader">
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textAllCaps" tools:targetApi="14">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/background_header</item>
         <item name="android:drawableBottom">@drawable/underline_header</item>
