@@ -529,7 +529,6 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
 void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 {
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
-    static OUString sStylesWithEffects("http://schemas.microsoft.com/office/2007/relationships/stylesWithEffects");
     static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
     static OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
     static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
