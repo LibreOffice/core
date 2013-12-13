@@ -605,7 +605,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                   }
                   catch (uno::Exception const& e)
                   {
-                      SAL_INFO("writerfilter glossary grab bag", "importSubStream: exception while "
+                      SAL_INFO("writerfilter", "importSubStream: exception while "
                       "parsing stream of Type" << nType << " : " << e.Message);
                       return;
                   }
