@@ -1756,7 +1756,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
         if( !aInitials.isEmpty() )
         {
-            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_TEXT,
+            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
                                               XML_SENDER_INITIALS, sal_True,
                                               sal_False );
             GetExport().Characters(aInitials);
@@ -2226,10 +2226,20 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
     if (eElementName != XML_TOKEN_INVALID)
     {
         // Element
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                  eElementName, bAddSpace, bAddSpace );
-        // export content
-        GetExport().Characters(sContent);
+        if (eElementName == XML_SENDER_INITIALS)
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                                      eElementName, bAddSpace, bAddSpace );
+            // export content
+            GetExport().Characters(sContent);
+        }
+        else
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                      eElementName, bAddSpace, bAddSpace );
+            // export content
+            GetExport().Characters(sContent);
+        }
     } else {
         // always export content
         GetExport().Characters(sContent);
