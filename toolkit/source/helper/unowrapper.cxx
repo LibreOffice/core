@@ -205,38 +205,6 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 
 }
 
-// It was once called in the Window-CTOR to make listeners of the Container
-// to react. This didn't really work, as the interface within the Window-CTOR
-// was not ready.
-// => Call only the listener, when created through ::com::sun::star::awt::Toolkit
-
-/*
-void ImplSmartWindowCreated( Window* pNewWindow )
-{
-    UNOWindowData* pParentUNOData = pNewWindow->GetParent() ?
-                            pNewWindow->GetParent()->GetUNOData() : NULL;
-
-    if ( pParentUNOData && pParentUNOData->GetListeners( EL_CONTAINER ) )
-    {
-        UNOWindowData* pUNOData = pNewWindow->GetUNOData();
-        if ( !pUNOData )
-            pUNOData = ImplSmartCreateUNOData( pNewWindow );
-
-        ::com::sun::star::awt::VclContainerEvent aEvent;
-        aEvent.Source = (UsrObject*)pParentUNOData->GetWindowPeer();
-        aEvent.Id = VCLCOMPONENT_ADDED;
-        aEvent.Child = (UsrObject*)pUNOData->GetWindowPeer();
-
-        EventList* pLst = pParentUNOData->GetListeners( EL_CONTAINER );
-        for ( sal_uInt32 n = 0; n < pLst->Count(); n++ )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > * pRef = pLst->GetObject( n );
-            ((::com::sun::star::awt::XVclContainerListener*)(::com::sun::star::lang::XEventListener*)*pRef)->windowAdded( aEvent );
-        }
-    }
-}
-*/
-
 static sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
 {
     Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : NULL;

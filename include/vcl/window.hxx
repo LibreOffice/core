@@ -67,7 +67,6 @@ class SystemWindow;
 class SalFrame;
 class SalObject;
 class MenuFloatingWindow;
-class UNOWindowData;
 // Nur fuer ExecuteDrag:
 struct IDataObject;
 class VCLXWindow;
