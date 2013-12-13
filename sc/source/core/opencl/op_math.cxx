@@ -2160,50 +2160,84 @@ void OpKombin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double num_chosen = " << GetBottom() << ";\n";
-    ss << "    double result = " << GetBottom() << ";\n";
-#ifdef ISNAN
+    ss << "    double result = -1.0;\n";
     FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVRNum=
-        dynamic_cast<const formula::SingleVectorRefToken *>(iNum);
     FormulaToken *iNumChosen = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVRNumChosen=
-        dynamic_cast<const formula::SingleVectorRefToken *>(iNumChosen);
-    ss << "    int buffer_num_len = ";
-    ss << tmpCurDVRNum->GetArrayLength() << ";\n";
-    ss << "    int buffer_num_chosen_len = ";
-    ss << tmpCurDVRNumChosen->GetArrayLength() << ";\n";
 
-    ss << "    if((gid0)>=buffer_num_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num = " << GetBottom() << ";\n";
-    ss << "    else\n    ";
-#endif
-    ss << "    num = floor(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
+    assert(iNum);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        if(iNum->GetType() == formula::svSingleVectorRef &&
+            iNumChosen->GetType() == formula::svSingleVectorRef)
+        {
 #ifdef ISNAN
-    ss << "    if((gid0)>=buffer_num_chosen_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        num_chosen = " << GetBottom() << ";\n";
-    ss << "    else\n    ";
+            const formula::SingleVectorRefToken* tmpCurDVRNum=
+                dynamic_cast<const formula::SingleVectorRefToken *>(iNum);
+            const formula::SingleVectorRefToken* tmpCurDVRNumChosen=
+                dynamic_cast<const formula::SingleVectorRefToken *>(iNumChosen);
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+            ss << "        num = " << GetBottom() << ";\n";
+            ss << "    else\n    ";
 #endif
-    ss << "    num_chosen = floor(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
-    ss << "    if (num < num_chosen)                 \n";
-    ss << "        result = 0;                       \n";
-    ss << "    else if (num_chosen == 0)             \n";
-    ss << "        result = 1;                       \n";
-    ss << "    else{                                 \n";
-    ss << "        result = num / num_chosen;        \n";
-    ss << "        num = num - 1.0;                  \n";
-    ss << "        num_chosen = num_chosen - 1.0;    \n";
-    ss << "        while (num_chosen > 0){           \n";
-    ss << "            result *= num / num_chosen;   \n";
-    ss << "            num = num - 1.0;              \n";
-    ss << "            num_chosen = num_chosen - 1.0;\n";
-    ss << "        }                                 \n";
-    ss << "    }                                     \n";
-    ss << "    return result;                        \n";
-    ss << "}                                         \n";
+            ss << "    num = floor(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
+#ifdef ISNAN
+            ss << "    if(isNan(";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+            ss << "        num_chosen = " << GetBottom() << ";\n";
+            ss << "    else\n    ";
+#endif
+            ss << "    num_chosen = floor(";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+        }
+        else if(iNum->GetType() == formula::svDouble &&
+            iNumChosen->GetType() == formula::svDouble)
+        {
+            ss << "    num = floor(" << iNum->GetDouble() << ");\n";
+            ss << "    num_chosen = floor("<< iNumChosen->GetDouble()<< ");\n";
+        }
+    }
+    else
+    {
+        ss << "    num = floor(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
+        ss << "    num_chosen = floor(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
+    }
+    ss << "    result = select(result, 0.0, (ulong)(num < num_chosen));\n";
+    ss << "    result = select(result, 1.0, (ulong)(num_chosen == 0.0));\n";
+    ss << "    if(result == 0 || result ==1)\n";
+    ss << "        return result;\n";
+    ss << "    double4 db4num;\n";
+    ss << "    double4 db4num_chosen;\n";
+    ss << "    double4 db4result;\n";
+    ss << "    double2 db2result;\n";
+    ss << "    result = 1.0;\n";
+    ss << "    int loop = num_chosen/4;\n";
+    ss << "    for(int i=0; i<loop; i++)\n";
+    ss << "    {\n";
+    ss << "        db4num = (double4){num,\n";
+    ss << "            num-1.0,\n";
+    ss << "            num-2.0,\n";
+    ss << "            num-3.0};\n";
+    ss << "        db4num_chosen = (double4){num_chosen,\n";
+    ss << "            num_chosen-1.0,\n";
+    ss << "            num_chosen-2.0,\n";
+    ss << "            num_chosen-3.0};\n";
+    ss << "        db4result = db4num * pown(db4num_chosen, -1);\n";
+    ss << "        db2result = db4result.xy * db4result.zw;\n";
+    ss << "        result *=  db2result.x * db2result.y;\n";
+    ss << "        num = num - 4.0;\n";
+    ss << "        num_chosen = num_chosen - 4.0;\n";
+    ss << "    }\n";
+    ss << "    while ( num_chosen > 0){\n";
+    ss << "        result *= num / num_chosen;\n";
+    ss << "        num = num - 1.0;\n";
+    ss << "        num_chosen = num_chosen - 1.0;\n";
+    ss << "    }\n";
+    ss << "    return result;\n";
+    ss << "}\n";
 }
 void OpConvert::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName,
