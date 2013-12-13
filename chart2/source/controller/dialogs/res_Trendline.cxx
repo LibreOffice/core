@@ -54,8 +54,8 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
     pTabPage->get(m_pNF_Degree,"degree");
     pTabPage->get(m_pNF_Period,"period");
     pTabPage->get(m_pEE_Name,"entry_name");
-    pTabPage->get(m_pNF_ExtrapolateForward,"extrapolateForward");
-    pTabPage->get(m_pNF_ExtrapolateBackward,"extrapolateBackward");
+    pTabPage->get(m_pFmtFld_ExtrapolateForward,"extrapolateForward");
+    pTabPage->get(m_pFmtFld_ExtrapolateBackward,"extrapolateBackward");
     pTabPage->get(m_pCB_SetIntercept,"setIntercept");
     pTabPage->get(m_pFmtFld_InterceptValue,"interceptValue");
     pTabPage->get(m_pCB_ShowEquation,"showEquation");
@@ -80,11 +80,6 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
     m_pNF_Degree->SetModifyHdl( aLink );
     m_pNF_Period->SetModifyHdl( aLink );
     m_pFmtFld_InterceptValue->SetModifyHdl( aLink );
-
-    m_pNF_ExtrapolateForward->SetMin( SAL_MIN_INT64 );
-    m_pNF_ExtrapolateForward->SetMax( SAL_MAX_INT64 );
-    m_pNF_ExtrapolateBackward->SetMin( SAL_MIN_INT64 );
-    m_pNF_ExtrapolateBackward->SetMax( SAL_MAX_INT64 );
 
     Reset( rInAttrs );
     UpdateControlStates();
@@ -159,27 +154,21 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_pNF_Period->SetValue( 2 );
     }
 
+    double nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
-        double nValue = static_cast< const SvxDoubleItem * >( pPoolItem )->GetValue() * 100;
-        m_pNF_ExtrapolateForward->SetValue( (sal_Int64) nValue );
+        nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
     }
-    else
-    {
-        m_pNF_ExtrapolateForward->SetValue( 0 );
-    }
+    lcl_setValue( *m_pFmtFld_ExtrapolateForward, nValue );
 
+    nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
-        double nValue = static_cast< const SvxDoubleItem * >( pPoolItem )->GetValue() * 100;
-        m_pNF_ExtrapolateBackward->SetValue( (sal_Int64) nValue );
+        nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
     }
-    else
-    {
-        m_pNF_ExtrapolateBackward->SetValue( 0 );
-    }
+    lcl_setValue( *m_pFmtFld_ExtrapolateBackward, nValue );
 
-    double nValue = 0.0;;
+    nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
         nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
@@ -273,19 +262,21 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
     sal_Int32 aPeriod = m_pNF_Period->GetValue();
     rOutAttrs.Put(SfxInt32Item( SCHATTR_REGRESSION_PERIOD, aPeriod ) );
 
-    double aExtrapolateForwardValue = m_pNF_ExtrapolateForward->GetValue() / 100.0;
-    rOutAttrs.Put(SvxDoubleItem( aExtrapolateForwardValue, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) );
+    sal_uInt32 nIndex = 0;
+    double aValue = 0.0;
+    m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateForward->GetText(),nIndex,aValue);
+    rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) );
 
-    double aExtrapolateBackwardValue = m_pNF_ExtrapolateBackward->GetValue() / 100.0;
-    rOutAttrs.Put(SvxDoubleItem( aExtrapolateBackwardValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
+    aValue = 0.0;
+    m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateBackward->GetText(),nIndex,aValue);
+    rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
 
     if( m_pCB_SetIntercept->GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_pCB_SetIntercept->IsChecked() ));
 
-    double aInterceptValue = 0.0;
-    sal_uInt32 nIndex = 0;
-    m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aInterceptValue);
-    rOutAttrs.Put(SvxDoubleItem( aInterceptValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
+    aValue = 0.0;
+    m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aValue);
+    rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
 
     return sal_True;
 }
@@ -304,8 +295,8 @@ void TrendlineResources::UpdateControlStates()
 {
     bool bMovingAverage = ( m_eTrendLineType == CHREGRESS_MOVING_AVERAGE );
     bool bInterceptAvailable = ( m_eTrendLineType == CHREGRESS_LINEAR ) || ( m_eTrendLineType == CHREGRESS_POLYNOMIAL );
-    m_pNF_ExtrapolateForward->Enable(!bMovingAverage);
-    m_pNF_ExtrapolateBackward->Enable(!bMovingAverage);
+    m_pFmtFld_ExtrapolateForward->Enable(!bMovingAverage);
+    m_pFmtFld_ExtrapolateBackward->Enable(!bMovingAverage);
     m_pCB_SetIntercept->Enable( bInterceptAvailable );
     m_pFmtFld_InterceptValue->Enable( bInterceptAvailable );
     if(bMovingAverage)
@@ -348,6 +339,8 @@ IMPL_LINK( TrendlineResources, ChangeValue, void *, pNumericField)
 void TrendlineResources::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     m_pNumFormatter = pFormatter;
+    m_pFmtFld_ExtrapolateForward->SetFormatter( m_pNumFormatter );
+    m_pFmtFld_ExtrapolateBackward->SetFormatter( m_pNumFormatter );
     m_pFmtFld_InterceptValue->SetFormatter( m_pNumFormatter );
 }
 

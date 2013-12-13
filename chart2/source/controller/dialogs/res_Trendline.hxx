@@ -63,8 +63,8 @@ private:
     NumericField* m_pNF_Degree;
     NumericField* m_pNF_Period;
     Edit*         m_pEE_Name;
-    NumericField* m_pNF_ExtrapolateForward;
-    NumericField* m_pNF_ExtrapolateBackward;
+    FormattedField* m_pFmtFld_ExtrapolateForward;
+    FormattedField* m_pFmtFld_ExtrapolateBackward;
     CheckBox*     m_pCB_SetIntercept;
     FormattedField* m_pFmtFld_InterceptValue;
     CheckBox*     m_pCB_ShowEquation;
