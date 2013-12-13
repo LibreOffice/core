@@ -307,19 +307,22 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                             SFX_CALLMODE_STANDARD,
                             &aSearchItem, 0L );
-                    SvxSearchDialog* pSearchDlg =
-                        ((SvxSearchDialog*)(SfxViewFrame::Current()->GetChildWindow(
-                        SvxSearchDialogWrapper::GetChildWindowId())->GetWindow()));
-                    if( pSearchDlg )
+                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                            SvxSearchDialogWrapper::GetChildWindowId());
+                    if (pChildWindow)
                     {
-                        ScTabView* pTabView = GetViewData()->GetView();
-                        if( pTabView )
+                        SvxSearchDialog* pSearchDlg = (SvxSearchDialog*)(pChildWindow->GetWindow());
+                        if( pSearchDlg )
                         {
-                            Window* pWin = pTabView->GetActiveWin();
-                            if( pWin )
+                            ScTabView* pTabView = GetViewData()->GetView();
+                            if( pTabView )
                             {
-                                pSearchDlg->SetDocWin( pWin );
-                                pSearchDlg->SetSrchFlag();
+                                Window* pWin = pTabView->GetActiveWin();
+                                if( pWin )
+                                {
+                                    pSearchDlg->SetDocWin( pWin );
+                                    pSearchDlg->SetSrchFlag();
+                                }
                             }
                         }
                     }
