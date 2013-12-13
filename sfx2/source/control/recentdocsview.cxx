@@ -46,7 +46,8 @@ RecentDocsView::RecentDocsView( Window* pParent )
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
     , maWelcomeImage(SfxResId(IMG_WELCOME))
-    , maWelcomeText(SfxResId(STR_WELCOME))
+    , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
+    , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
 {
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
@@ -254,17 +255,25 @@ void RecentDocsView::Paint( const Rectangle &aRect )
         aNewFont.SetHeight(20);
         SetFont(aNewFont);
 
-        long nTextWidth = GetTextWidth(maWelcomeText);
         long nTextHeight = GetTextHeight();
+
+        long nTextWidth1 = GetTextWidth(maWelcomeLine1);
+        long nTextWidth2 = GetTextWidth(maWelcomeLine2);
+
         const Size & rImgSize = maWelcomeImage.GetSizePixel();
-        const Size & rScreenSize = GetSizePixel();
-        const int nX = (rScreenSize.Width() - rImgSize.Width())/2;
-        const int nY = (rScreenSize.Height() - nTextHeight*1.5 - rImgSize.Height())/2;
+
+        const Size & rSize = GetSizePixel();
+
+        const int nX = (rSize.Width() - rImgSize.Width())/2;
+        const int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
+
         Point aImgPoint(nX, nY);
-        Point aStrPoint((rScreenSize.Width() - nTextWidth)/2, nY + rImgSize.Height() + nTextHeight/2);
+        Point aStr1Point((rSize.Width() - nTextWidth1)/2, nY + rImgSize.Height() + nTextHeight/2);
+        Point aStr2Point((rSize.Width() - nTextWidth2)/2, nY + rImgSize.Height() + nTextHeight + nTextHeight/2);
 
         DrawImage(aImgPoint, rImgSize, maWelcomeImage, IMAGE_DRAW_SEMITRANSPARENT);
-        DrawText(aStrPoint, maWelcomeText);
+        DrawText(aStr1Point, maWelcomeLine1);
+        DrawText(aStr2Point, maWelcomeLine2);
 
         SetFont(aOldFont);
     }

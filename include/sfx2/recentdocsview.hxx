@@ -72,7 +72,8 @@ protected:
     long    mnItemMaxTextLength;
 
     Image   maWelcomeImage;
-    OUString maWelcomeText;
+    OUString maWelcomeLine1;
+    OUString maWelcomeLine2;
 };
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEW_HXX
