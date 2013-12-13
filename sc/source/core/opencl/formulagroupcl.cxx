@@ -2448,6 +2448,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpIsEven));
                 break;
+            case ocIsOdd:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i],new OpIsOdd));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
@@ -2653,6 +2657,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpIsEven));
+                }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getIsodd"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpIsOdd));
                 }
                 break;
 
