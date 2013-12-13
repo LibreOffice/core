@@ -33,6 +33,10 @@ namespace cppu
     fully qualified libname or single lib name.  The libname need not be pre/postfixed
     (e.g. xxx.dll).
 
+    @deprecated
+    This should never have been put into the URE interface.  Do not call it from
+    client code.
+
     @param uri URI of the library
     @param rPath deprecated, must be empty
     @param rImplName implementation to be retrieved from the library
@@ -55,6 +59,10 @@ SAL_CALL loadSharedLibComponentFactory(
     (e.g. xxx.dll).  An optional 'prefix' parameter is used to determine the symbol
     name of the entry point in the library.
 
+    @deprecated
+    This should never have been put into the URE interface.  Do not call it from
+    client code.
+
     @param uri URI of the library
     @param rPath deprecated, must be empty
     @param rImplName implementation to be retrieved from the library
@@ -64,6 +72,8 @@ SAL_CALL loadSharedLibComponentFactory(
     @return
     factory instance (com::sun::star::lang::XSingleComponentFactory or legacy
     com::sun::star::lang::XSingleServiceFactory)
+
+    @since LibreOffice 3.4
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
@@ -78,7 +88,10 @@ SAL_CALL loadSharedLibComponentFactory(
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
     (e.g. xxx.dll).
 
-    @deprecated component_writeInfo should no longer be used in new components
+    @deprecated
+    This should never have been put into the URE interface.  Do not call it from
+    client code.  Also, this functionality is not needed for passively
+    registered components, only for actively registered legacy ones.
 
     @param uri URI of the library
     @param rPath deprecated, must be empty
