@@ -2,6 +2,11 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkImage" id="calc_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/ods_32_8.png</property>
+  </object>
   <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
     <child>
@@ -23,9 +28,10 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
                 <child>
                   <object class="GtkButton" id="open_all">
-                    <property name="label" translatable="yes">_Open</property>
+                    <property name="label" translatable="yes">_Open File</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -61,13 +67,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="create_label">
+                  <object class="GtkSeparator" id="separator1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
-                    <property name="margin_top">12</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Create</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -76,11 +80,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator1">
+                  <object class="GtkLabel" id="create_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">6</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin_left">12</property>
+                    <property name="margin_bottom">6</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Create:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -358,11 +364,6 @@
         <property name="position">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="calc_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/ods_32_8.png</property>
   </object>
   <object class="GtkImage" id="database_all_image">
     <property name="visible">True</property>
