@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///m8\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T16:17:39Z",
+      "side": 1,
+      "message": "As said and explained in the review of the previous patch, please don\u0027t use non-ASCII comments.",
+      "revId": "3058b7936e56a379f01d8dfd65231ed9989a35a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///m4\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T16:17:39Z",
+      "side": 1,
+      "message": "There is no surrogate character in this text, which was the original problem. So what is this test actually good for?\n\nWouldn\u0027t it be better to have https://bugs.freedesktop.org/attachment.cgi?id\u003d90155 of fdo#72219 as a testcase then?\n\nBut, however, actually we should better test this as a unit test in i18npool instead of a Writer export test. See i18npool/qa/cppunit/test_breakiterator.cxx you\u0027ll also find a lot of examples already there.",
+      "revId": "3058b7936e56a379f01d8dfd65231ed9989a35a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
