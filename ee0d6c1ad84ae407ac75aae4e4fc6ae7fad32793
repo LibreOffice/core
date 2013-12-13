@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///n4\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "The loop will never be entered because counter\u003d\u003daCache.wordboundary[i]",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///n0\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "We don\u0027t want to start at a position of the aCache.wordboundary[i] value, but at boundary.endPos instead.",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///nk\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "This might work by accident because effectively it is\n\n boundary.endPos +\u003d aCache.wordboundary[i]\n\nThat\u0027s the situation I described in an earlier comment to a patch. I believe this is sufficient and the loops are not needed, but you should verify in a debugger and check with different strings.",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///nw\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///ns\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "ditto, but with boundary.startPos instead of endPos",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///ng\u003d",
+        "filename": "i18npool/source/breakiterator/xdictionary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///no\u003d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T14:21:33Z",
+      "side": 1,
+      "message": "As seen in other cases already, don\u0027t use non-ASCII comments, the MSVC compiler bails out on them if the Windows system code page is something different than utf-8",
+      "revId": "ee0d6c1ad84ae407ac75aae4e4fc6ae7fad32793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
