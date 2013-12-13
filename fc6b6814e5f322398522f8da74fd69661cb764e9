@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAbH///pE\u003d",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-13T13:01:29Z",
+      "side": 1,
+      "message": "How to do this ? I don\u0027t understand.\nThis is general code, not #ifdef-ed, so we can\u0027t link against the functions.",
+      "parentUuid": "AAAAbH///qg\u003d",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAbH///qk\u003d",
         "filename": "cppuhelper/source/shlib.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-12-13T11:11:21Z",
       "side": 1,
       "message": "why do you need a second list?",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///o8\u003d",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-13T13:01:29Z",
+      "side": 1,
+      "message": "thanks, there was an error, to be fixed in next commit.\nIn theory, I don\u0027t need second list, but I have to compare the non_app_specific_map[i].lib (which has confusing name now, but I will change it later) with rImplName instead of uri.",
+      "parentUuid": "AAAAbH///qk\u003d",
       "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAbH///o4\u003d",
+        "filename": "sax/source/expatwrap/sax_expat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-13T13:01:29Z",
+      "side": 1,
+      "message": "true",
+      "parentUuid": "AAAAbH///qY\u003d",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAbH///qU\u003d",
         "filename": "sax/source/expatwrap/sax_expat.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-12-13T11:11:21Z",
       "side": 1,
       "message": "createSingleFactory never returns null",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///o0\u003d",
+        "filename": "sax/source/expatwrap/sax_expat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-12-13T13:01:29Z",
+      "side": 1,
+      "message": "ok, thanks, I\u0027ve moved it to cppuhelper in next commit",
+      "parentUuid": "AAAAbH///qU\u003d",
       "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
