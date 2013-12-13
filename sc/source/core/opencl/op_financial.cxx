@@ -2417,13 +2417,13 @@ void OpSLN::GenSlidingWindowFunction(std::stringstream &ss,
  void OpYieldmat::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetYearFracDecl);decls.insert(GetNullDateDecl);
-    decls.insert(DateToDaysDecl);decls.insert(DaysToDateDecl);
+    decls.insert(GetYearFrac_newDecl);decls.insert(GetNullDateDecl);
+    decls.insert(DateToDaysDecl);decls.insert(DaysToDate_newDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
     decls.insert(GetYieldmatDecl);
 
-    funs.insert(GetYearFrac);funs.insert(GetNullDate);
-    funs.insert(DateToDays);funs.insert(DaysToDate);
+    funs.insert(GetYearFrac_new);funs.insert(GetNullDate);
+    funs.insert(DateToDays);funs.insert(DaysToDate_new);
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
     funs.insert(GetYieldmat);
 }
