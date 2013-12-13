@@ -96,7 +96,7 @@ void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
 
         if (pItem->mbVisible && !rMEvt.IsLeaveWindow() && pItem->getDrawArea().IsInside(aPoint))
         {
-            aHelp = pItem->maTitle;
+            aHelp = pItem->getHelpText();
 
             if (!pItem->isHighlighted())
                 bNeedsPaint = true;

@@ -146,6 +146,11 @@ void ThumbnailViewItem::setHighlight (bool state)
     mbHover = state;
 }
 
+OUString ThumbnailViewItem::getHelpText() const
+{
+    return maTitle;
+}
+
 void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
 {
     mbEditTitle = edit;

@@ -19,6 +19,9 @@ public:
         const OUString &rTitle, sal_uInt16 nId);
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
 
+    /// Text to be used for the tooltip.
+    virtual OUString getHelpText() const;
+
     OUString maURL;
 };
 
