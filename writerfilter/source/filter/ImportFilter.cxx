@@ -28,7 +28,6 @@
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilter.hxx>
-#include <doctok/WW8Document.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 #ifdef DEBUG_IMPORT
 #include <iostream>
