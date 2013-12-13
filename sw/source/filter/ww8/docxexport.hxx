@@ -38,6 +38,7 @@ class SwTableNode;
 class SwTxtNode;
 class SwGrfNode;
 class SwOLENode;
+class DocxSdrExport;
 
 namespace oox {
     namespace drawingml { class DrawingML; }
@@ -88,6 +89,9 @@ class DocxExport : public MSWordExportBase
 
     /// Exporter of the VML shapes.
     oox::vml::VMLExport *m_pVMLExport;
+
+    /// Exporter of drawings.
+    DocxSdrExport* m_pSdrExport;
 
     DocxSettingsData settings;
 
@@ -241,6 +245,9 @@ public:
 
     /// Reference to the VMLExport instance for the main document.
     oox::vml::VMLExport& VMLExporter();
+
+    /// Reference to the DocxSdrExport instance for the main document.
+    DocxSdrExport& SdrExporter();
 
     /// Set the document default tab stop.
     void setDefaultTabStop( int stop ) { settings.defaultTabStop = stop; }

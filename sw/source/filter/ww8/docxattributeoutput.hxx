@@ -388,15 +388,6 @@ private:
 
     /// checks whether the current component is a diagram
     bool IsDiagram (const SdrObject* sdrObject);
-    /// writes a diagram
-    void WriteDiagram(const SdrObject* sdrObject, const Size& size);
-
-    /// writes VML data
-    void WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft );
-    /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
-    void WriteDMLDrawing( const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt );
-    /// Writes shape in both DML and VML format.
-    void WriteDMLAndVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft );
 
     /// Writes text frame in VML format.
     void WriteVMLTextFrame(sw::Frame* pParentFrame);

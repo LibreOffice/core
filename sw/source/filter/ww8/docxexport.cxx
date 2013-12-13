@@ -20,6 +20,7 @@
 #include "docxexport.hxx"
 #include "docxexportfilter.hxx"
 #include "docxattributeoutput.hxx"
+#include "docxsdrexport.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -629,6 +630,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     // switch the serializer to redirect the output to word/styles.xml
     m_pAttrOutput->SetSerializer( pFS );
     m_pVMLExport->SetFS( pFS );
+    m_pSdrExport->setSerializer(pFS);
     m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
@@ -636,6 +638,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     m_pVMLExport->SetFS( m_pDocumentFS );
+    m_pSdrExport->setSerializer(m_pDocumentFS);
 
     // close the tag
     sal_Int32 nReference;
@@ -1076,6 +1079,11 @@ VMLExport& DocxExport::VMLExporter()
     return *m_pVMLExport;
 }
 
+DocxSdrExport& DocxExport::SdrExporter()
+{
+    return *m_pSdrExport;
+}
+
 boost::optional<const SvxBrushItem*> DocxExport::getBackground()
 {
     boost::optional<const SvxBrushItem*> oRet;
@@ -1201,7 +1209,8 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_nHeaders( 0 ),
       m_nFooters( 0 ),
       m_nHeadersFootersInSection(0),
-      m_pVMLExport( NULL )
+      m_pVMLExport( NULL ),
+      m_pSdrExport( NULL )
 {
     // Write the document properies
     WriteProperties( );
@@ -1222,10 +1231,14 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
 
     // the related VMLExport
     m_pVMLExport = new VMLExport( m_pDocumentFS, m_pAttrOutput );
+
+    // the related drawing export
+    m_pSdrExport = new DocxSdrExport( *this, m_pDocumentFS, m_pDrawingML );
 }
 
 DocxExport::~DocxExport()
 {
+    delete m_pSdrExport, m_pSdrExport = NULL;
     delete m_pVMLExport, m_pVMLExport = NULL;
     delete m_pAttrOutput, m_pAttrOutput = NULL;
     delete m_pDrawingML, m_pDrawingML = NULL;
