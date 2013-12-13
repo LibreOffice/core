@@ -83,27 +83,38 @@ ThumbnailView::~ThumbnailView()
     ImplDeleteItems();
 }
 
-void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
+void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
 {
-    if ( !mbShowTooltips )
-        return;
+    size_t nItemCount = mFilteredItemList.size();
+    Point aPoint = GetPointerState().maPos;
+    OUString aHelp;
 
-    (void) rMEvt; // unused parameter
-    size_t      nItemCount = mFilteredItemList.size();
-    Point       aPoint = GetPointerState().maPos;
-    OUString    aHelp;
-
-    for ( size_t i = 0; i < nItemCount; i++ )
+    for (size_t i = 0; i < nItemCount; i++)
     {
+        bool bNeedsPaint = false;
         ThumbnailViewItem *pItem = mFilteredItemList[i];
-        if ( pItem->mbVisible && pItem->getDrawArea().IsInside(aPoint) )
+
+        if (pItem->mbVisible && !rMEvt.IsLeaveWindow() && pItem->getDrawArea().IsInside(aPoint))
         {
             aHelp = pItem->maTitle;
-            break;
+
+            if (!pItem->isHighlighted())
+                bNeedsPaint = true;
+            pItem->setHighlight(true);
         }
+        else
+        {
+            if (pItem->isHighlighted())
+                bNeedsPaint = true;
+            pItem->setHighlight(false);
+        }
+
+        if (bNeedsPaint && IsReallyVisible() && IsUpdateMode())
+            Invalidate(pItem->getDrawArea());
     }
 
-    SetQuickHelpText(aHelp);
+    if (mbShowTooltips)
+        SetQuickHelpText(aHelp);
 }
 
 void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)

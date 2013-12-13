@@ -37,6 +37,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -245,15 +246,25 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 {
     BColor aFillColor = pAttrs->aFillColor;
     drawinglayer::primitive2d::Primitive2DSequence aSeq(4);
+    double fTransparence = 0.0;
 
     // Draw background
-    if ( mbSelected || mbHover )
+    if (mbSelected || mbHover)
         aFillColor = pAttrs->aHighlightColor;
 
+    if (mbHover)
+    {
+        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+        fTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
+    }
+
     sal_uInt32 nPrimitive = 0;
-    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
-                                               aFillColor));
+                                               aFillColor,
+                                               fTransparence,
+                                               0.0,
+                                               true));
 
     // Draw thumbnail
     Point aPos = maPrev1Pos;
