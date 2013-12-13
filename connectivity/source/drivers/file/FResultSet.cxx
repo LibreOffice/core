@@ -1428,6 +1428,7 @@ sal_Bool OResultSet::OpenImpl()
             else
             {
                 sal_Bool bDistinct = sal_False;
+                assert(m_pParseTree != 0);
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
 
                 assert(m_aOrderbyColumnNumber.size() ==
