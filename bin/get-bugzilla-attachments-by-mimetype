@@ -290,7 +290,11 @@ rss_bugzillas = {
     'kde': 'http://bugs.kde.org/buglist.cgi', # added for koffice/calligra
     'mandriva': 'https://qa.mandriva.com/buglist.cgi',
     'moz': 'https://bugzilla.mozilla.org/buglist.cgi',
-    'novell': 'https://bugzilla.novell.com/buglist.cgi',
+    # It seems something has changed and it is no longer possible to
+    # download any files from there.
+    # NOTE: I am leaving it in the list, commented out, just so someone
+    # does not add it back immediately .-)
+    # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
     'ooo': 'https://issues.apache.org/ooo/buglist.cgi',
 }
 
