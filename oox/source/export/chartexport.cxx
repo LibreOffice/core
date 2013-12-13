@@ -1246,13 +1246,13 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
 
     if( !mbIs3DChart )
     {
+        exportUpDownBars(xChartType);
         const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
         pFS->singleElement( FSNS( XML_c, XML_marker ),
                 XML_val, marker,
                 FSEND );
     }
 
-    exportUpDownBars(xChartType);
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
