@@ -22,7 +22,7 @@
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #define TRANSLITERATION_casemapping
@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 typedef sal_uInt32 UPT_FLAG_TYPE;
 
-class cclass_Unicode : public cppu::WeakImplHelper1 < XCharacterClassification >
+class cclass_Unicode : public cppu::WeakImplHelper2 < XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
     cclass_Unicode(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
