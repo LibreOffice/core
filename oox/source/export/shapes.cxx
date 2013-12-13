@@ -256,7 +256,18 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
     WriteShapeTransformation(xShape, XML_a);
     pFS->endElementNS(mnXmlNamespace, XML_grpSpPr);
 
-    // TODO: children
+    uno::Reference<drawing::XShapes> xGroupShape(xShape, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xParent = m_xParent;
+    m_xParent = xShape;
+    for (sal_Int32 i = 0; i < xGroupShape->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShape> xChild(xGroupShape->getByIndex(i), uno::UNO_QUERY_THROW);
+        sal_Int32 nSavedNamespace = mnXmlNamespace;
+        mnXmlNamespace = XML_wps;
+        WriteShape(xChild);
+        mnXmlNamespace = nSavedNamespace;
+    }
+    m_xParent = xParent;
 
     pFS->endElementNS(mnXmlNamespace, XML_wgp);
     return *this;

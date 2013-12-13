@@ -88,6 +88,8 @@ protected:
     ::com::sun::star::uno::Any mAny;
     ::sax_fastparser::FSHelperPtr mpFS;
     ::oox::core::XmlFilterBase* mpFB;
+    /// If set, this is the parent of the currently handled shape.
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xParent;
 
     bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString aName );
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,

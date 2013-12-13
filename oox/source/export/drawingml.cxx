@@ -670,6 +670,13 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
+    if (m_xParent.is())
+    {
+        awt::Point aParentPos = m_xParent->getPosition();
+        aPos.X -= aParentPos.X;
+        aPos.Y -= aParentPos.Y;
+    }
+
     if ( aSize.Width < 0 )
         aSize.Width = 1000;
     if ( aSize.Height < 0 )
