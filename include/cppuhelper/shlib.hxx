@@ -54,36 +54,6 @@ SAL_CALL loadSharedLibComponentFactory(
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
     SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
 
-/** Loads a shared library component and gets the factory out of it.  You can give either a
-    fully qualified libname or single lib name.  The libname need not be pre/postfixed
-    (e.g. xxx.dll).  An optional 'prefix' parameter is used to determine the symbol
-    name of the entry point in the library.
-
-    @deprecated
-    This should never have been put into the URE interface.  Do not call it from
-    client code.
-
-    @param uri URI of the library
-    @param rPath deprecated, must be empty
-    @param rImplName implementation to be retrieved from the library
-    @param xMgr service manager to be provided to the component
-    @param xKey deprecated, must be null
-    @param rPrefix optional component prefix
-    @return
-    factory instance (com::sun::star::lang::XSingleComponentFactory or legacy
-    com::sun::star::lang::XSingleServiceFactory)
-
-    @since LibreOffice 3.4
-*/
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL loadSharedLibComponentFactory(
-    ::rtl::OUString const & uri, ::rtl::OUString const & rPath,
-    ::rtl::OUString const & rImplName,
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
-    ::rtl::OUString const & rPrefix )
-    SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
-
 /** Invokes component_writeInfo() function of specified component library.  You can give either
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
     (e.g. xxx.dll).

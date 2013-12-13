@@ -27,6 +27,8 @@
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 
+#include <loadsharedlibcomponentfactory.hxx>
+
 #include <stdio.h>
 
 #ifdef ANDROID
@@ -44,12 +46,11 @@ using namespace ::com::sun::star::uno;
 using rtl::OString;
 using rtl::OUString;
 
-namespace cppu
-{
+namespace {
 
 #ifndef DISABLE_DYNLOADING
 
-static void getLibEnv(oslModule                lib,
+void getLibEnv(oslModule                lib,
                       uno::Environment       * pEnv,
                       OUString               * pSourceEnv_name,
                       uno::Environment const & cTargetEnv,
@@ -104,7 +105,7 @@ static void getLibEnv(oslModule                lib,
 
 #endif
 
-extern "C" {static void s_getFactory(va_list * pParam)
+extern "C" void s_getFactory(va_list * pParam)
 {
     component_getFactoryFunc         pSym      = va_arg(*pParam, component_getFactoryFunc);
     OString                  const * pImplName = va_arg(*pParam, OString const *);
@@ -113,7 +114,12 @@ extern "C" {static void s_getFactory(va_list * pParam)
     void                          ** ppSSF     = va_arg(*pParam, void **);
 
     *ppSSF = pSym(pImplName->getStr(), pSMgr, pKey);
-}}
+}
+
+}
+
+namespace cppu
+{
 
 /* For backwards compatibility */
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
@@ -122,7 +128,14 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     Reference< registry::XRegistryKey > const & xKey )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
-    return loadSharedLibComponentFactory( uri, rPath, rImplName, xMgr, xKey, rtl::OUString() );
+    assert(rPath.isEmpty());
+    assert(!xKey.is());
+    (void) rPath;
+    (void) xKey;
+    return cppuhelper::detail::loadSharedLibComponentFactory(
+        uri, "", rImplName, xMgr);
+}
+
 }
 
 namespace
@@ -255,17 +268,12 @@ extern "C"
 }
 #endif
 
-Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
-    OUString const & uri, OUString const & rPath, OUString const & rImplName,
-    Reference< lang::XMultiServiceFactory > const & xMgr,
-    Reference< registry::XRegistryKey > const & xKey,
-    OUString const & rPrefix )
-    SAL_THROW( (loader::CannotActivateFactoryException) )
+namespace cppuhelper { namespace detail {
+
+css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
+    OUString const & uri, OUString const & rPrefix, OUString const & rImplName,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr)
 {
-    assert(rPath.isEmpty());
-    assert(!xKey.is());
-    (void) rPath;
-    (void) xKey;
 #ifndef DISABLE_DYNLOADING
     OUString moduleUri(uri);
 
@@ -387,6 +395,8 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     return xRet;
 }
 
+} }
+
 #ifndef DISABLE_DYNLOADING
 
 //==============================================================================
@@ -400,6 +410,8 @@ extern "C" { static void s_writeInfo(va_list * pParam)
     *pbRet = pSym(pSMgr, pKey);
 
 }}
+
+namespace cppu {
 
 void SAL_CALL writeSharedLibComponentInfo(
     OUString const & uri, OUString const & rPath,
@@ -502,8 +514,8 @@ void SAL_CALL writeSharedLibComponentInfo(
     }
 }
 
-#endif // DISABLE_DYNLOADING
-
 }
+
+#endif // DISABLE_DYNLOADING
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,6 +41,8 @@
 #include "rtl/strbuf.hxx"
 #include "sal/log.hxx"
 
+#include <loadsharedlibcomponentfactory.hxx>
+
 using rtl::OUString;
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -652,9 +654,8 @@ void cppuhelper::ServiceManager::loadImplementation(
         if (!prefix.isEmpty()) {
             prefix += "_";
         }
-        f0 = cppu::loadSharedLibComponentFactory(
-            uri, rtl::OUString(), info->name, this,
-            css::uno::Reference< css::registry::XRegistryKey >(), prefix);
+        f0 = cppuhelper::detail::loadSharedLibComponentFactory(
+            uri, prefix, info->name, this);
     } else {
         SAL_WARN_IF(
             !info->prefix.isEmpty(), "cppuhelper",

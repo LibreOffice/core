@@ -103,6 +103,17 @@ invokeStaticComponentFactory(
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT css::uno::Reference<css::uno::XInterface> SAL_CALL
+loadSharedLibComponentFactory(
+    rtl::OUString const &, rtl::OUString const &, rtl::OUString const &,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &,
+    css::uno::Reference<css::registry::XRegistryKey> const &,
+    rtl::OUString const &)
+    SAL_THROW((css::loader::CannotActivateFactoryException))
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
