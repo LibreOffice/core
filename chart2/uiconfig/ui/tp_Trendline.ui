@@ -398,15 +398,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="extrapolateForward">
+                  <object class="svtlo-FormattedField" id="extrapolateForward">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
                     <property name="caps_lock_warning">False</property>
                     <property name="input_purpose">number</property>
-                    <property name="adjustment">adjustmentForwardBacward</property>
-                    <property name="digits">2</property>
-                    <property name="numeric">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -416,12 +413,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="extrapolateBackward">
+                  <object class="svtlo-FormattedField" id="extrapolateBackward">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
-                    <property name="adjustment">adjustmentForwardBacward</property>
-                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
