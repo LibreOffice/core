@@ -1037,6 +1037,13 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
            sToken = sToken.replaceAll("NNNN", "dddd");
            sToken = sToken.replaceAll("NN", "ddd");
         }
+
+        if(rInfos.eType == ww::eTOC)
+        {
+            sToken = "PAGEREF " + m_hyperLinkAnchor;
+            m_hyperLinkAnchor = "";
+        }
+
         // Write the Field command
         DoWriteCmd( sToken );
 
@@ -1494,6 +1501,8 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
     OUString sUrl;
 
     bool bBookmarkOnly = AnalyzeURL( rUrl, rTarget, &sUrl, &sMark );
+
+    m_hyperLinkAnchor = sMark;
 
     if ( !sMark.isEmpty() && !bBookmarkOnly )
     {
@@ -6556,6 +6565,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFlyWrapAttrList( NULL ),
       m_pTextboxAttrList( NULL ),
       m_pFlyFrameSize(0),
+      m_hyperLinkAnchor(""),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
