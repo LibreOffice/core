@@ -265,6 +265,7 @@ public:
     void testMathFormulaRoundDown();
     void testMathFormulaInt();
     void testMathFormulaRadians();
+    void testMathFormulaCountIf();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -461,6 +462,7 @@ public:
     CPPUNIT_TEST(testMathFormulaRoundDown);
     CPPUNIT_TEST(testMathFormulaInt);
     CPPUNIT_TEST(testMathFormulaRadians);
+    CPPUNIT_TEST(testMathFormulaCountIf);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5409,7 +5411,28 @@ void ScOpenclTest::testMathFormulaDegrees()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
+//[AMLOEXT-360]
+void ScOpenclTest::testMathFormulaCountIf()
+{
+    if (!detectOpenCLDevice())
+            return;
+    ScDocShellRef xDocSh = loadDoc("opencl/math/countif.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/countif.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 26; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
