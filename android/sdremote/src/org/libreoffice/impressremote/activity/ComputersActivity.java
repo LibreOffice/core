@@ -14,11 +14,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.adapter.ComputersPagerAdapter;
 import org.libreoffice.impressremote.fragment.ComputersFragment;
 import org.libreoffice.impressremote.util.BluetoothOperator;
@@ -28,7 +28,7 @@ import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.util.Preferences;
 import org.libreoffice.impressremote.util.SavedStates;
 
-public class ComputersActivity extends SherlockFragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+public class ComputersActivity extends ActionBarActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
     private boolean mBluetoothWasEnabled;
 
     @Override
@@ -183,7 +183,7 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
 
     @Override
     public boolean onCreateOptionsMenu(Menu aMenu) {
-        getSupportMenuInflater().inflate(R.menu.menu_action_bar_computers, aMenu);
+        getMenuInflater().inflate(R.menu.menu_action_bar_computers, aMenu);
 
         return true;
     }

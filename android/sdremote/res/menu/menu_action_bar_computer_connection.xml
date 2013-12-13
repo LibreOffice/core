@@ -16,12 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:compat="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_reconnect"
         android:title="@string/menu_reconnect"
         android:icon="@drawable/ic_action_reconnect"
-        android:showAsAction="always"/>
+        compat:showAsAction="always"/>
 
 </menu>

@@ -10,13 +10,13 @@ package org.libreoffice.impressremote.activity;
 
 import android.content.ContentResolver;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.R;
 
-public class LicensesActivity extends SherlockActivity {
+public class LicensesActivity extends ActionBarActivity {
     private static final String SCHEME = ContentResolver.SCHEME_FILE;
     private static final String AUTHORITY = "android_asset";
     private static final String PATH = "licenses.html";

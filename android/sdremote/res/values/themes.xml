@@ -16,49 +16,48 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar.ForceOverflow">
-        <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
+    <style name="Theme.ImpressRemote" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle" tools:targetApi="11">@style/Theme.ImpressRemote.ActionBar</item>
         <item name="actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
 
-        <item name="android:actionBarTabStyle">@style/Theme.ImpressRemote.ActionBar.Tab</item>
+        <item name="android:actionBarTabStyle" tools:targetApi="11">@style/Theme.ImpressRemote.ActionBar.Tab</item>
         <item name="actionBarTabStyle">@style/Theme.ImpressRemote.ActionBar.Tab</item>
     </style>
 
-    <style name="Theme.ImpressRemote.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    <style name="Theme.ImpressRemote.ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/bg_action_bar</item>
-        <item name="background">@drawable/bg_action_bar</item>
 
-        <item name="android:displayOptions">showTitle|showHome|homeAsUp|useLogo</item>
+        <item name="android:displayOptions" tools:targetApi="11">showTitle|showHome|homeAsUp|useLogo</item>
         <item name="displayOptions">showTitle|showHome|homeAsUp|useLogo</item>
     </style>
 
-    <style name="Theme.ImpressRemote.ActionBar.Tab" parent="Widget.Sherlock.Light.ActionBar.TabView.Inverse">
+    <style name="Theme.ImpressRemote.ActionBar.Tab" parent="Widget.AppCompat.Light.ActionBar.TabView.Inverse">
         <item name="android:background">@drawable/bg_action_bar_tab</item>
-        <item name="background">@drawable/bg_action_bar_tab</item>
     </style>
 
     <style name="Theme.ImpressRemote.Computers" parent="Theme.ImpressRemote">
-        <item name="android:actionBarStyle">@style/Theme.ImpressRemote.Computers.ActionBar</item>
+        <item name="android:actionBarStyle" tools:targetApi="11">@style/Theme.ImpressRemote.Computers.ActionBar</item>
         <item name="actionBarStyle">@style/Theme.ImpressRemote.Computers.ActionBar</item>
     </style>
 
     <style name="Theme.ImpressRemote.Computers.ActionBar" parent="Theme.ImpressRemote.ActionBar">
-        <item name="android:navigationMode">tabMode</item>
+        <item name="android:navigationMode" tools:targetApi="11">tabMode</item>
         <item name="navigationMode">tabMode</item>
 
-        <item name="android:displayOptions">showHome|useLogo</item>
+        <item name="android:displayOptions" tools:targetApi="11">showHome|useLogo</item>
         <item name="displayOptions">showHome|useLogo</item>
     </style>
 
     <style name="Theme.ImpressRemote.ComputerCreation" parent="Theme.ImpressRemote">
-        <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ComputerCreation.ActionBar</item>
+        <item name="android:actionBarStyle" tools:targetApi="11">@style/Theme.ImpressRemote.ComputerCreation.ActionBar</item>
         <item name="actionBarStyle">@style/Theme.ImpressRemote.ComputerCreation.ActionBar</item>
     </style>
 
     <style name="Theme.ImpressRemote.ComputerCreation.ActionBar" parent="Theme.ImpressRemote.ActionBar">
-        <item name="android:displayOptions">showCustom</item>
+        <item name="android:displayOptions" tools:targetApi="11">showCustom</item>
         <item name="displayOptions">showCustom</item>
     </style>
 

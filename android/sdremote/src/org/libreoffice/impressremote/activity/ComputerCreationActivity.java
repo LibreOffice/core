@@ -12,6 +12,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -22,12 +24,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 
-public class ComputerCreationActivity extends SherlockFragmentActivity implements View.OnClickListener, TextView.OnEditorActionListener {
+public class ComputerCreationActivity extends ActionBarActivity implements View.OnClickListener, TextView.OnEditorActionListener {
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);

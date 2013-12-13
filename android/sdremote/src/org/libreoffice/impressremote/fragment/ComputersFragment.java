@@ -22,13 +22,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -38,8 +38,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.adapter.ComputersAdapter;
 import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
@@ -48,7 +46,7 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.util.SavedStates;
 
-public class ComputersFragment extends SherlockListFragment implements ServiceConnection, Runnable {
+public class ComputersFragment extends ListFragment implements ServiceConnection, Runnable {
     private static final int SHOWING_PROGRESS_MESSAGE_DELAY_IN_SECONDS = 3;
 
     public static enum Type {

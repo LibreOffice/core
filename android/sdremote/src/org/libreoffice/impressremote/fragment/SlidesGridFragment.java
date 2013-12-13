@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import org.libreoffice.impressremote.activity.SlideShowActivity;
 import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.util.Intents;
@@ -31,7 +31,7 @@ import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.adapter.SlidesGridAdapter;
 import org.libreoffice.impressremote.communication.CommunicationService;
 
-public class SlidesGridFragment extends SherlockFragment implements ServiceConnection, AdapterView.OnItemClickListener {
+public class SlidesGridFragment extends Fragment implements ServiceConnection, AdapterView.OnItemClickListener {
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
 
