@@ -197,14 +197,14 @@ std::string DaysToDate =
 "        }\n"
 "    }\n"
 "    while ( bCalc );\n"
-
-"    *rMonth = 1;\n"
-"    while ( (int)nTempDays > DaysInMonth( *rMonth, *rYear ) )\n"
-"    {\n"
-"        nTempDays -= DaysInMonth( *rMonth, *rYear );\n"
-"        *rMonth+=1;\n"
-"    }\n"
-"    *rDay = (int)nTempDays;\n"
+"     if(nTempDays!=0){\n"
+"      for (*rMonth = 1; (int)nTempDays > DaysInMonth( *rMonth, *rYear );"
+"*rMonth+=1)\n"
+"      {\n"
+"       nTempDays -= DaysInMonth( *rMonth, *rYear );\n"
+"      }\n"
+"      *rDay = (int)nTempDays;\n"
+"     }\n"
 "}\n";
 
 std::string DateToDaysDecl=
@@ -604,6 +604,45 @@ std::string lcl_Getcoupdaybs=
 "sbLastDay, sb30Days, sbUSMode, snDay);\n"
 "}\n";
 
+std::string lcl_Getcoupdaybs_newDecl=
+"int lcl_Getcoupdaybs_new(int nNullDate,int nSettle,int nMat,int nFreq,"
+"int nBase);\n";
+
+std::string lcl_Getcoupdaybs_new=
+"int lcl_Getcoupdaybs_new(int nNullDate,int nSettle,int nMat,int nFreq,"
+"int nBase)\n"
+"{\n"
+"    int aDate = nMat;\n"
+"    int rDay=0,rMonth=0, rYear=0,rbLastDayMode=0, rbLastDay=0,rb30Days=0,"
+"rbUSMode=0,rnDay=0;\n"
+"    int sDay=0,sMonth=0, sYear=0,sbLastDayMode=0, sbLastDay=0,sb30Days=0,"
+"sbUSMode=0,snDay=0;\n"
+"    ScaDate( nNullDate,nSettle,nBase,&sDay,&sMonth,&sYear,&sbLastDayMode,"
+"&sbLastDay,&sb30Days,&sbUSMode,&snDay);\n"
+"    ScaDate( nNullDate,aDate,nBase,&rDay,&rMonth,&rYear,&rbLastDayMode,"
+"&rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
+"    rYear=sYear;\n"
+"    setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
+"    aDate=DateToDays_new( rnDay,rMonth,rYear);\n"
+"    if(checklessthan(rYear,sYear,rMonth,sMonth,rnDay,snDay,rbLastDay,"
+"sbLastDay,rDay,sDay))\n"
+"    {\n"
+"        rYear+=1;\n"
+"        setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
+"        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
+"    }\n"
+"    while(checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
+"rbLastDay,sDay,rDay))\n"
+"    {\n"
+"        double d = -1*(12/nFreq);\n"
+"        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,d,&rYear);\n"
+"        aDate=DateToDays_new( rnDay,rMonth,rYear );\n"
+"    }\n"
+"    return getDiff( aDate,nSettle+nNullDate,rDay,rMonth,rYear,rbLastDayMode,"
+"rbLastDay,rb30Days,rbUSMode,rnDay,sDay,sMonth,sYear,sbLastDayMode,sbLastDay,"
+"sb30Days,sbUSMode, snDay);\n"
+"}\n";
+
 std::string lcl_GetcoupdaysDecl=
 "int lcl_Getcoupdays(int nNullDate,int nSettle, "
 "int nMat,int nFreq,int nBase);\n";
@@ -785,6 +824,16 @@ std::string coupdaybs=
 "{\n"
 "    int nNullDate=GetNullDate();\n"
 "    return lcl_Getcoupdaybs(nNullDate, nSettle, nMat,nFreq, nBase);\n"
+"}\n";
+
+std::string coupdaybs_newDecl=
+"double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase);\n";
+
+std::string coupdaybs_new=
+"double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase)\n"
+"{\n"
+"    int nNullDate=GetNullDate_new();\n"
+"    return lcl_Getcoupdaybs_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "}\n";
 
 std::string coupdaysncDecl=
