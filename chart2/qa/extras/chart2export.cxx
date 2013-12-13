@@ -37,7 +37,7 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
-    CPPUNIT_TEST(testStockChart); disable pending necessary patch from gerrit 6957
+    CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
 
     CPPUNIT_TEST_SUITE_END();
