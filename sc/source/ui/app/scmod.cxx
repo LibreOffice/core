@@ -1123,7 +1123,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if ( rOptSet.HasItem(SID_ATTR_GRID_OPTIONS,&pItem) )
     {
-        ScGridOptions aNewGridOpt( (const SvxOptionsGrid&)((const SvxGridItem&)*pItem) );
+        ScGridOptions aNewGridOpt( (const SvxGridItem&)*pItem) );
 
         if ( pViewSh )
         {
