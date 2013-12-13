@@ -16,18 +16,16 @@
 
 RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
     const OUString &rTitle, sal_uInt16 nId)
-    : ThumbnailViewItem(rView, nId)
+    : ThumbnailViewItem(rView, nId),
+      maURL(rURL)
 {
+    OUString aTitle(rTitle);
+    INetURLObject aURLObj(rURL);
     RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
     long nThumbnailSize = rRecentView.GetThumbnailSize();
-    OUString aTitle = rTitle;
 
-    if( !aTitle.getLength() )
-    {
-        // If we have no title, get filename from the URL
-        INetURLObject aURLObj(rURL);
+    if (aTitle.isEmpty())
         aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);
-    }
 
     BitmapEx aThumbnail = ThumbnailView::readThumbnail(rURL);
     if( aThumbnail.IsEmpty() )
@@ -57,7 +55,6 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
                 &aExt);
     }
 
-    maURL = rURL;
     maTitle = aTitle;
     maPreview1 = TemplateAbstractView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }
