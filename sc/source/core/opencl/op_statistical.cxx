@@ -8312,7 +8312,7 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
     "            tmp = 1.0;\n"
     "            return tmp;\n"
     "        }\n"
-    "        arg0 = (arg0-arg3)/fScale;\n"
+    "        arg0 = (arg0-arg3)*pow(fScale,-1);\n"
     "        tmp =  GetBetaDist(arg0, arg1, arg2);\n"
     "    }\n"
     "    else\n"
@@ -8322,8 +8322,8 @@ void OpBetaDist::GenSlidingWindowFunction(std::stringstream &ss,
     "            tmp = 0.0;\n"
     "            return tmp;\n"
     "        }\n"
-    "        arg0 = (arg0 - arg3)/fScale;\n"
-    "        tmp = GetBetaDistPDF(arg0, arg1, arg2)/fScale;\n"
+    "        arg0 = (arg0 - arg3)*pow(fScale,-1);\n"
+    "        tmp = GetBetaDistPDF(arg0, arg1, arg2)*pow(fScale,-1);\n"
     "    }\n";
     ss << "    return tmp;\n";
     ss << "}\n";

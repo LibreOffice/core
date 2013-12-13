@@ -207,7 +207,7 @@ std::string GetBetaDist =
 "    if (fA > 1.0 && fB > 1.0 && fP < 0.97 && fQ < 0.97)\n"
 "        fResult *= GetBetaDistPDF(fX,fA,fB)*fX*fY;\n"
 "    else\n"
-"        fResult *= exp(fA*flnX + fB*flnY - GetLogBeta(fA,fB));\n"
+"        fResult *= pow(exp(1.0),(fA*flnX + fB*flnY - GetLogBeta(fA,fB)));\n"
 "    if (bReflect)\n"
 "        fResult = 0.5 - fResult + 0.5;\n"
 "    if (fResult > 1.0)\n"
@@ -359,7 +359,7 @@ std::string GetLogGamma =
 "   if (fZ >= 1.0)\n"
 "       return log(lcl_GetGammaHelper(fZ));\n"
 "   if (fZ >= 0.5)\n"
-"       return log( lcl_GetGammaHelper(fZ+1) / fZ);\n"
+"       return log( lcl_GetGammaHelper(fZ+1) *pow(fZ,-1.0));\n"
 "   return lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log(fZ);\n"
 "}\n";
 
@@ -1076,7 +1076,7 @@ std::string GetBeta =
 "    double fLanczos = lcl_getLanczosSum(fA)*lcl_getLanczosSum(fB)\n"
 "        *pow(lcl_getLanczosSum(fAB),-1.0);\n"
 "    fLanczos *= sqrt(((fAB + fgm)*pow(fA + fgm,-1.0))*pow(fB + fgm,-1.0));\n"
-"    return fLanczos * exp(-fA*log1p(fB*pow(fA + fgm,-1.0))\n"
+"    return fLanczos * pow(exp(1.0),(-fA*log1p(fB*pow(fA + fgm,-1.0)))"
 "                    - fB*log1p(fA*pow(fB + fgm,-1.0)) - fgm);\n"
 "}\n";
 
