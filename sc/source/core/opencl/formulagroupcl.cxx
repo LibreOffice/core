@@ -2444,6 +2444,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpCountIf));
                  break;
+            case ocIsEven:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i],new OpIsEven));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
@@ -2644,8 +2648,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpConvert));
+                }else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getIseven"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpIsEven));
                 }
                 break;
+
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");
         };
