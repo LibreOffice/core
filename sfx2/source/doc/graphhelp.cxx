@@ -314,7 +314,7 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
     Point       aBackPosPix;
     Rectangle   aOverlayRect;
 
-    // calculate addigtional positions and sizes if an overlay image is used
+    // calculate additional positions and sizes if an overlay image is used
     if (  pOverlay )
     {
         aFullSize = Size( nMaximumExtent, nMaximumExtent );
@@ -334,11 +334,16 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
     }
 
     // draw image(s) into VDev and get resulting image
-    if ( aVDev.SetOutputSizePixel( aFullSize ) )
+    // do it 4x larger to be able to scale it down & get beautiful antialias
+    Size aAntialiasSize(aFullSize.Width() * 4, aFullSize.Height() * 4);
+    if (aVDev.SetOutputSizePixel(aAntialiasSize))
     {
+        // antialias: provide 4x larger size, and then scale down the result
+        Size aAntialias(aDrawSize.Width() * 4, aDrawSize.Height() * 4);
+
         // draw metafile into VDev
         const_cast< GDIMetaFile& >( rMtf ).WindStart();
-        const_cast< GDIMetaFile& >( rMtf ).Play( &aVDev, aBackPosPix, aDrawSize );
+        const_cast< GDIMetaFile& >( rMtf ).Play( &aVDev, aBackPosPix, aAntialias );
 
         // draw overlay if necessary
         if ( pOverlay )
@@ -350,6 +355,9 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
         // assure that we have a true color image
         if ( aBmp.GetBitCount() != 24 )
             aBmp.Convert( BMP_CONVERSION_24BIT );
+
+        // downsize, to get the antialiased picture
+        aBmp.Scale(aDrawSize, BMP_SCALE_BESTQUALITY);
 
         rBmpEx = BitmapEx( aBmp );
     }
