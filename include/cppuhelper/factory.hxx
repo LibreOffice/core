@@ -171,6 +171,22 @@ createOneInstanceComponentFactory(
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager );
 
+/** Get a single service factory, ready to be returned by foo_component_getFactory()
+
+    @param pServiceManager      the service manager used by the implementation.
+    @param sImplementation      the implementation name.
+    @param pCreateFunction      the function pointer to create an object.
+    @param rServiceNames        the service supported by the implementation.
+    @return a factory that support the interfaces XServiceProvider, XServiceInfo
+    XSingleServiceFactory and XComponent.
+*/
+CPPUHELPER_DLLPUBLIC void * SAL_CALL
+getSingleServiceFactory(
+    void *pServiceManager,
+    const ::rtl::OUString& sImplementation,
+    ComponentInstantiation pCreateFunction,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames );
+
 /** Deprecated.  Creates a single service factory.
 
     @param rServiceManager      the service manager used by the implementation.

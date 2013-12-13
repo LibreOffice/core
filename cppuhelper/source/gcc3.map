@@ -430,6 +430,12 @@ global:
     _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, rtl::OUString const&)
 } UDK_3.8;
 
+LIBO_UDK_4.0 { # LibO 4.3
+global:
+    _ZN4cppu23getSingleServiceFactoryEPvRKN3rtl8OUStringEPFN3com3sun4star3uno9ReferenceINS8_10XInterfaceEEERKNS9_INS7_4lang20XMultiServiceFactoryEEEERKNS8_8SequenceIS2_EE;
+} LIBO_UDK_3.9;
+
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

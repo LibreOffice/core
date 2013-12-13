@@ -977,6 +977,20 @@ sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(::com::sun:
     return sal_True;
 }
 
+void * SAL_CALL getSingleServiceFactory(
+        void *pServiceManager,
+        const OUString& sImplementation,
+        ComponentInstantiation pCreateFunction,
+        const Sequence< OUString > & rServiceNames)
+{
+    Reference< XSingleServiceFactory > xFactory;
+    xFactory = new OFactoryComponentHelper(
+            reinterpret_cast< css::lang::XMultiServiceFactory * >( pServiceManager ),
+            sImplementation, pCreateFunction, 0, &rServiceNames );
+    xFactory->acquire();
+    return xFactory.get();
+}
+
 // global function
 Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,

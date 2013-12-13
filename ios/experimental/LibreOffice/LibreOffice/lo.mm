@@ -28,7 +28,6 @@ extern "C" {
     extern void * embobj_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * emboleobj_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * expwrap_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * frm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fsstorage_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -90,7 +89,6 @@ lo_get_libmap(void)
         { "libembobj.a", embobj_component_getFactory },
         { "libemboleobj.a", emboleobj_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
-        { "libexpwraplo.a", expwrap_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
         { "libfsstoragelo.a", fsstorage_component_getFactory },
