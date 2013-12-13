@@ -19,15 +19,6 @@ public class SettingsActivity extends PreferenceActivity {
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
 
-        setUpPreferences();
-    }
-
-    private void setUpPreferences() {
-        // This action is deprecated
-        // but we still need to target pre-Honeycomb devices.
-
-        // TODO: try to use a fragment depending on platform version
-
         addPreferencesFromResource(R.xml.preferences);
     }
 
@@ -35,16 +26,12 @@ public class SettingsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
             case android.R.id.home:
-                navigateUp();
+                finish();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(aMenuItem);
         }
-    }
-
-    private void navigateUp() {
-        finish();
     }
 }
 

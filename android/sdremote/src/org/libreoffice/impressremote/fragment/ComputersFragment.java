@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,8 +23,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.ContextMenu;
@@ -76,10 +79,6 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
 
-        setUpActionBar();
-    }
-
-    private void setUpActionBar() {
         setHasOptionsMenu(true);
     }
 
@@ -92,21 +91,8 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onViewStateRestored(Bundle aSavedInstanceState) {
         super.onViewStateRestored(aSavedInstanceState);
 
-        if (!isSavedInstanceValid(aSavedInstanceState)) {
-            return;
-        }
-
-        loadProgressMessage(aSavedInstanceState);
-    }
-
-    private boolean isSavedInstanceValid(Bundle aSavedInstanceState) {
-        return aSavedInstanceState != null;
-    }
-
-    private void loadProgressMessage(Bundle aSavedInstanceState) {
-        boolean aProgressMessageDisplayed = aSavedInstanceState.getBoolean(SavedStates.Keys.PROGRESS_MESSAGE);
-
-        if (aProgressMessageDisplayed) {
+        if (aSavedInstanceState != null
+                && aSavedInstanceState.getBoolean(SavedStates.Keys.PROGRESS_MESSAGE)) {
             showProgressMessage();
             showLearnMoreMessage();
         }
@@ -127,17 +113,13 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     }
 
     private void showLearnMoreMessage() {
-        TextView learnMoreView = getLearnMoreView();
+        TextView learnMoreView = (TextView) getView().findViewById(R.id.text_learn_more);
         Animation aFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
 
         learnMoreView.setMovementMethod(LinkMovementMethod.getInstance());
 
         learnMoreView.startAnimation(aFadeInAnimation);
         learnMoreView.setVisibility(View.VISIBLE);
-    }
-
-    private TextView getLearnMoreView() {
-        return (TextView) getView().findViewById(R.id.text_learn_more);
     }
 
     private String getProgressMessage() {
@@ -161,11 +143,9 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onActivityCreated(Bundle aSavedInstanceState) {
         super.onActivityCreated(aSavedInstanceState);
 
-        bindService();
-    }
-
-    private void bindService() {
         Intent aServiceIntent = Intents.buildCommunicationServiceIntent(getActivity());
+        // use startService to not kill it on config changes like rotating the screen
+        getActivity().startService(aServiceIntent);
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -187,15 +167,22 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
             return;
         }
 
-        if (getComputers().isEmpty()) {
-            hideComputersList();
+        List<Server> computerList = getComputers();
+        if (computerList.isEmpty()) {
+            setCurrentView(R.id.layout_progress);
+
             setUpProgressMessage();
-            tearDownComputersAdapter();
-        }
-        else {
-            setUpComputersAdapter();
-            fillComputersAdapter();
-            showComputersList();
+
+            setListAdapter(null);
+        } else {
+            if (getComputersAdapter() == null) {
+                setListAdapter(new ComputersAdapter(getActivity()));
+            }
+
+            getComputersAdapter().clear();
+            getComputersAdapter().add(computerList);
+
+            setCurrentView(android.R.id.list);
         }
     }
 
@@ -222,10 +209,6 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
             default:
                 return false;
         }
-    }
-
-    private void hideComputersList() {
-        setCurrentView(R.id.layout_progress);
     }
 
     private void setCurrentView(int aViewId) {
@@ -261,33 +244,8 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         return getProgressMessageView().getVisibility() == View.INVISIBLE;
     }
 
-    private void tearDownComputersAdapter() {
-        setListAdapter(null);
-    }
-
-    private void setUpComputersAdapter() {
-        if (isComputersAdapterExist()) {
-            return;
-        }
-
-        setListAdapter(new ComputersAdapter(getActivity()));
-    }
-
-    private boolean isComputersAdapterExist() {
-        return getComputersAdapter() != null;
-    }
-
     private ComputersAdapter getComputersAdapter() {
         return (ComputersAdapter) getListAdapter();
-    }
-
-    private void fillComputersAdapter() {
-        getComputersAdapter().clear();
-        getComputersAdapter().add(getComputers());
-    }
-
-    private void showComputersList() {
-        setCurrentView(android.R.id.list);
     }
 
     @Override
@@ -302,7 +260,7 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         registerIntentsReceiver();
         setUpContextMenu();
 
-        if (!isServiceBound()) {
+        if (mCommunicationService == null) {
             return;
         }
 
@@ -312,7 +270,9 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
 
     private void registerIntentsReceiver() {
         mIntentsReceiver = new IntentsReceiver(this);
-        IntentFilter aIntentFilter = buildIntentsReceiverFilter();
+        IntentFilter aIntentFilter = new IntentFilter();
+        aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
+        aIntentFilter.addAction(Intents.Actions.BT_DISCOVERY_CHANGED);
 
         getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
     }
@@ -328,15 +288,10 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SERVERS_LIST_CHANGED.equals(aIntent.getAction())) {
                 mComputersFragment.loadComputers();
+            } else if (Intents.Actions.BT_DISCOVERY_CHANGED.equals(aIntent.getAction())) {
+                ActivityCompat.invalidateOptionsMenu(mComputersFragment.getActivity());
             }
         }
-    }
-
-    private IntentFilter buildIntentsReceiverFilter() {
-        IntentFilter aIntentFilter = new IntentFilter();
-        aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
-
-        return aIntentFilter;
     }
 
     private LocalBroadcastManager getBroadcastManager() {
@@ -390,15 +345,17 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
     }
 
-    private boolean isServiceBound() {
-        return mCommunicationService != null;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
             case R.id.menu_add_computer:
                 callComputerCreationActivity();
+                return true;
+
+            case R.id.menu_start_discovery:
+                if (BluetoothAdapter.getDefaultAdapter().startDiscovery()) {
+                    MenuItemCompat.setActionView(aMenuItem, R.layout.progress);
+                }
                 return true;
 
             default:
@@ -451,20 +408,6 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onStop() {
         super.onStop();
 
-        stopComputersSearch();
-
-        unregisterIntentsReceiver();
-    }
-
-    private void stopComputersSearch() {
-        if (!isServiceBound()) {
-            return;
-        }
-
-        mCommunicationService.stopServersSearch();
-    }
-
-    private void unregisterIntentsReceiver() {
         try {
             getBroadcastManager().unregisterReceiver(mIntentsReceiver);
         } catch (IllegalArgumentException e) {
@@ -477,10 +420,6 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
 
-        saveProgressMessage(aOutState);
-    }
-
-    private void saveProgressMessage(Bundle aOutState) {
         boolean aProgressMessageDisplayed = !TextUtils.isEmpty(getProgressMessageView().getText().toString());
 
         aOutState.putBoolean(SavedStates.Keys.PROGRESS_MESSAGE, aProgressMessageDisplayed);
@@ -490,10 +429,9 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onDestroy() {
         super.onDestroy();
 
-        unbindService();
-    }
-
-    private void unbindService() {
+        if(getActivity().isFinishing()) {
+            getActivity().stopService(Intents.buildCommunicationServiceIntent(getActivity()));
+        }
         getActivity().unbindService(this);
     }
 }

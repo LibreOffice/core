@@ -37,6 +37,7 @@
     <string name="menu_requirements">Requirements</string>
     <string name="menu_reconnect">Reconnect</string>
     <string name="menu_add_computer">Add computer</string>
+    <string name="menu_start_discovery">Start Discovery</string>
     <string name="menu_remove_computer">Remove</string>
     <string name="menu_slides_grid">Slides grid</string>
     <string name="menu_slides_pager">Slides pager</string>

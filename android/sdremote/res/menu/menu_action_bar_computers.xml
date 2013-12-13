@@ -24,6 +24,11 @@
         android:title="@string/menu_add_computer"
         android:icon="@drawable/ic_action_add_computer"
         compat:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_start_discovery"
+        android:title="@string/menu_start_discovery"
+        android:icon="@drawable/ic_action_bluetooth_searching"
+        compat:showAsAction="always"/>
 
     <item
         android:id="@+id/menu_settings"
