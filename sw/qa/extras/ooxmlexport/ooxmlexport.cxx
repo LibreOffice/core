@@ -2128,12 +2128,25 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
     // crashtest
 }
 
+
 DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
 {
         xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
     if (!pXmlDoc)
         return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(testFdo72563, "FDO72563.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.startsWith("PAGEREF __RefHeading__"));
 }
 
 #endif

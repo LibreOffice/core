@@ -684,6 +684,7 @@ private:
     ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;
+    OUString m_hyperLinkAnchor;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
