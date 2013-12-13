@@ -1807,10 +1807,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
             if (LocaleDataWrapper::areChecksEnabled() &&
                     rCode.Index != NF_CURRENCY_1000DEC2_CCC )
             {
-                OUString aMsg(OUString("SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index ") +
-                              OUString::number( rCode.Index) +
-                              OUString(":\n") +
-                              rCode.Code);
+                OUString aMsg = "SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index " +
+                                OUString::number( rCode.Index) +
+                                ":\n" +
+                                rCode.Code;
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
             }
         }
@@ -1827,10 +1827,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            OUString aMsg( OUString("SvNumberFormatter::ImpInsertFormat: bad format code, index " ) +
-                           OUString::number( rCode.Index ) +
-                           OUString("\n") +
-                           rCode.Code);
+            OUString aMsg = "SvNumberFormatter::ImpInsertFormat: bad format code, index " +
+                            OUString::number( rCode.Index ) +
+                            "\n" +
+                            rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
         delete pFormat;

@@ -454,12 +454,12 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
             //map mailing lists as views
             _rStrings->push_back( aTableName ); // Table name
             if (!bIsMailList) {
-                OUString aTableType(OUString("TABLE"));
+                OUString aTableType("TABLE");
                 _rTypes->push_back( aTableType ); // Table type
             }
             else
             {
-                OUString aTableType(OUString("VIEW"));
+                OUString aTableType("VIEW");
                 _rTypes->push_back( aTableType ); // Table type
             }
         }

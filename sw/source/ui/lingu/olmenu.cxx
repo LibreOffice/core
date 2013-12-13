@@ -330,7 +330,7 @@ SwSpellPopup::SwSpellPopup(
         }
     }
 
-    OUString aIgnoreSelection( OUString( SW_RES( STR_IGNORE_SELECTION ) ) );
+    OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );

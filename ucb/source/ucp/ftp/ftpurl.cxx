@@ -165,8 +165,7 @@ void FTPURL::parse(const OUString& url)
         *p1++ = ch;
     *p1 = 0;
 
-    OUString aExpr(OUString(buffer,strlen(buffer),
-                                      RTL_TEXTENCODING_UTF8));
+    OUString aExpr(buffer, strlen(buffer), RTL_TEXTENCODING_UTF8);
 
     sal_Int32 l = aExpr.indexOf('@');
     m_aHost = aExpr.copy(1+l);

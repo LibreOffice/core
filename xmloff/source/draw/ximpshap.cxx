@@ -3834,7 +3834,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
             {
                 try
                 {
-                    const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                    const OUString sAPIPropertyName( pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US );
                     xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i] ) );
                 }
                 catch(const Exception&)

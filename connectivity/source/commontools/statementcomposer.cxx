@@ -169,7 +169,7 @@ namespace dbtools
                         xComposer->setElementaryQuery( sStatement );
 
                         // the sort order
-                        const OUString sPropOrder( OUString( "Order" ) );
+                        const OUString sPropOrder( "Order" );
                         if ( ::comphelper::hasProperty( sPropOrder, xQuery ) )
                         {
                             OUString sOrder;

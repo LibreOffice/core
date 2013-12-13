@@ -248,7 +248,6 @@ namespace
     OUString generateColumnNames(const Reference<XIndexAccess>& _xColumns,const Reference<XDatabaseMetaData>& _xMetaData)
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        static const OUString sComma(OUString(","));
 
         const OUString sQuote(_xMetaData->getIdentifierQuoteString());
         OUString sSql( " (" );
@@ -259,7 +258,7 @@ namespace
         {
             if ( (_xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
                 sSql += ::dbtools::quoteName(sQuote,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))))
-                        + sComma;
+                        + ",";
         }
 
         if ( nColCount )

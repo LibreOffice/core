@@ -107,7 +107,7 @@ void Desktop::InitApplicationServiceManager()
     SAL_INFO( "desktop.app", "desktop (cd100003) ::createApplicationServiceManager" );
     Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
-    OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
+    OUString aUnoRc( "file:///assets/program/unorc" );
     sm.set(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);

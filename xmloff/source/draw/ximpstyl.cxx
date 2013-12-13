@@ -1219,7 +1219,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     {
         uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
         OUString sPrefix(rMaster.GetDisplayName());
-        sPrefix += OUString('-');
+        sPrefix += "-";
         ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
     }
     catch (const uno::Exception&)
@@ -1235,7 +1235,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        const OUString sGraphicStyleName(OUString("graphics"));
+        const OUString sGraphicStyleName("graphics");
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, OUString());
@@ -1250,7 +1250,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        const OUString sCellStyleName(OUString("cell"));
+        const OUString sCellStyleName("cell");
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, OUString());

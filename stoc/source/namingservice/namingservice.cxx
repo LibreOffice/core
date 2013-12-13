@@ -52,7 +52,7 @@ namespace stoc_namingservice
 static Sequence< OUString > ns_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(SERVICENAME);
+    seqNames.getArray()[0] = SERVICENAME;
     return seqNames;
 }
 
@@ -100,7 +100,7 @@ public:
     throw(::com::sun::star::uno::RuntimeException);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static()
     {
-        OUString aStr( OUString(SERVICENAME) );
+        OUString aStr( SERVICENAME );
         return Sequence< OUString >( &aStr, 1 );
     }
 

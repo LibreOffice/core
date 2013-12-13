@@ -256,7 +256,7 @@ OUString SAL_CALL SvUnoAttributeContainer::getImplementationName(void) throw( un
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    OUString aSN( OUString( "com.sun.star.xml.AttributeContainer" ) );
+    OUString aSN( "com.sun.star.xml.AttributeContainer" );
     uno::Sequence< OUString > aNS( &aSN, 1L );
     return aNS;
 }

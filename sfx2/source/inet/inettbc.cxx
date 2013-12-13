@@ -102,7 +102,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*
     if ( xDispatchProvider.is() )
     {
         URL             aTargetURL;
-        OUString aTarget( OUString("_default"));
+        OUString aTarget( "_default" );
 
         aTargetURL.Complete = aName;
 

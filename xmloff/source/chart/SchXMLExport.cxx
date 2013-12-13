@@ -2308,7 +2308,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
     bool bExportContent )
 {
-    static const OUString sNumFormat( OUString( "NumberFormat" ));
+    static const OUString sNumFormat( "NumberFormat" );
     std::vector< XMLPropertyState > aPropertyStates;
     SvXMLElementExport* pAxis = NULL;
 

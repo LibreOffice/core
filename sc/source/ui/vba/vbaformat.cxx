@@ -318,7 +318,7 @@ ScVbaFormat<Ifc1>::getWrapText(  ) throw (script::BasicErrorException, uno::Runt
     uno::Any aWrap = aNULL();
     try
     {
-        OUString aPropName( OUString( SC_UNONAME_WRAP ) );
+        OUString aPropName( SC_UNONAME_WRAP );
         if (!isAmbiguous( aPropName ))
         {
             aWrap = mxPropertySet->getPropertyValue(aPropName);

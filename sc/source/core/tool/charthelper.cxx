@@ -247,7 +247,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
     try
     {
-        OUString aPropertyNameRole( OUString("Role") );
+        OUString aPropertyNameRole( "Role" );
 
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;

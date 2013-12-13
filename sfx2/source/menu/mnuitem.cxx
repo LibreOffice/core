@@ -435,7 +435,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
         xDisp = xDesktop->queryDispatch( aTargetURL, OUString(), 0 );
     else
     {
-        OUString aTargetFrame( OUString("_blank") );
+        OUString aTargetFrame( "_blank" );
         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 

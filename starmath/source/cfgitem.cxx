@@ -444,7 +444,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     sal_Int32 nProps = aNames.getLength();
 
-    OUString aDelim( OUString( (sal_Unicode) '/' ) );
+    OUString aDelim( "/" );
     OUString *pName = aNames.getArray();
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
@@ -580,7 +580,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     PropertyValue *pValues = aValues.getArray();
 
     PropertyValue *pVal = pValues;
-    OUString aDelim( OUString( (sal_Unicode) '/' ) );
+    OUString aDelim( "/" );
     std::vector< SmSym >::const_iterator aIt( rNewSymbols.begin() );
     std::vector< SmSym >::const_iterator aEnd( rNewSymbols.end() );
     while (aIt != aEnd)
@@ -670,7 +670,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     sal_Int32 nProps = aNames.getLength();
 
-    OUString aDelim( OUString( (sal_Unicode) '/' ) );
+    OUString aDelim( "/" );
     OUString *pName = aNames.getArray();
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
@@ -746,7 +746,7 @@ void SmMathConfig::SaveFontFormatList()
     PropertyValue *pValues = aValues.getArray();
 
     PropertyValue *pVal = pValues;
-    OUString aDelim( OUString( (sal_Unicode) '/' ) );
+    OUString aDelim( "/" );
     for (size_t i = 0;  i < nCount;  ++i)
     {
         OUString aFntFmtId( rFntFmtList.GetFontFormatId( i ) );

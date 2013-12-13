@@ -110,7 +110,7 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
 
     Reference< XMultiServiceFactory > xCfgProv = theDefaultProvider::get( xContext );
 
-    OUString sTree(OUString("/org.openoffice.") + rSubTree);
+    OUString sTree = "/org.openoffice." + rSubTree;
     if ( ImpIsTreeAvailable(xCfgProv, sTree) )
     {
         Any aAny;

@@ -156,7 +156,7 @@ namespace dbtools
                 // get the format key of our bound field
                 Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_QUERY_THROW );
                 bool bHaveFieldFormat = false;
-                const OUString sFormatKeyProperty( OUString( "FormatKey" ) );
+                const OUString sFormatKeyProperty( "FormatKey" );
                 if ( xPSI->hasPropertyByName( sFormatKeyProperty ) )
                 {
                     bHaveFieldFormat = ( _rxColumn->getPropertyValue( sFormatKeyProperty ) >>= _rData.m_nFormatKey );

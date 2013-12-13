@@ -4769,7 +4769,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                             try
                             {
                                 sal_Bool bBool = sal_False;
-                                const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                                const OUString sAPIPropertyName( pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US );
 
                                 xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
                                 if( bBool )

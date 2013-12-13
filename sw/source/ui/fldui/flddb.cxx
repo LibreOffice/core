@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SwFldDBPage, ModifyHdl)
 
 void    SwFldDBPage::FillUserData()
 {
-    OUString sData(OUString(USER_DATA_VERSION));
+    OUString sData(USER_DATA_VERSION);
     sData += ";";
     sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
 

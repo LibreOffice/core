@@ -191,7 +191,7 @@ void SAL_CALL ConfigHandler::startElement(const OUString& aName, const Reference
 
     if( !pElement.get() )
     {
-        OUString aMessage( OUString( "unknown config element: ") );
+        OUString aMessage( "unknown config element: " );
         aMessage += aName;
         errorThrow( aMessage  );
     }

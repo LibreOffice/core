@@ -353,7 +353,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         {
                             if( maChartTypeServiceName == "com.sun.star.chart2.PieChartType" || maChartTypeServiceName == "com.sun.star.chart2.DonutChartType" )
                             {
-                                OUString aPropName( OUString("StartingAngle") );
+                                OUString aPropName( "StartingAngle" );
                                 uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
                                 if( !aAStartingAngle.hasValue() )
                                     xProp->setPropertyValue( aPropName, uno::makeAny(sal_Int32(0)) ) ;

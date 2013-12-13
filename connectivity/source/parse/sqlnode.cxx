@@ -1747,7 +1747,7 @@ sal_Bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNode
             SQL_ISTOKEN(pODBCNodeChild, T) ||
             SQL_ISTOKEN(pODBCNodeChild, TS) ))
         {
-            OUString suQuote(OUString("'"));
+            OUString suQuote("'");
             if (rParam.bPredicate)
             {
                  if (rParam.aMetaData.shouldEscapeDateTime())
