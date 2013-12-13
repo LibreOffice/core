@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///og\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-13T13:19:01Z",
+      "side": 1,
+      "message": "This should be ocLogNormDist_MS.\nWhen saving LOGNORM.DIST as .xls and reloading you\u0027ll see that it will become #MACRO? error.",
+      "revId": "f9d564220223aa490adb61d9794ebb337bcd2b3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
