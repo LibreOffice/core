@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///nM\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6568,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-12-13T15:44:19Z",
+      "side": 1,
+      "message": "No need for this, OUString constructor sets empty string by default.",
+      "revId": "0b5dd2a594ab9699abcbb64150a7ce869ba0fbb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
