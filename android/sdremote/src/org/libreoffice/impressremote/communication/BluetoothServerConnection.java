@@ -14,10 +14,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-
-import org.libreoffice.impressremote.util.BluetoothOperator;
 
 class BluetoothServerConnection implements ServerConnection {
     // Standard UUID for the Serial Port Profile.
@@ -32,7 +31,7 @@ class BluetoothServerConnection implements ServerConnection {
 
     private BluetoothSocket buildServerConnection(Server aServer) {
         try {
-            BluetoothDevice aBluetoothServer = BluetoothOperator.getAdapter()
+            BluetoothDevice aBluetoothServer = BluetoothAdapter.getDefaultAdapter()
                 .getRemoteDevice(aServer.getAddress());
 
             return aBluetoothServer.createRfcommSocketToServiceRecord(
