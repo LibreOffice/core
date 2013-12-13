@@ -59,6 +59,7 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
+const int nButtonsFontSize = 15;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
 
@@ -234,6 +235,9 @@ void BackingWindow::initControls()
 
     // setup nice colors
     mpCreateLabel->SetControlForeground(aButtonsText);
+    Font aFont(mpCreateLabel->GetControlFont());
+    aFont.SetHeight(nButtonsFontSize);
+    mpCreateLabel->SetControlFont(aFont);
 
     mpHelpButton->SetControlForeground(aButtonsText);
     mpExtensionsButton->SetControlForeground(aButtonsText);
@@ -261,7 +265,7 @@ void BackingWindow::setupButton( PushButton* pButton )
 {
     // the buttons should have a bit bigger font
     Font aFont(pButton->GetControlFont());
-    aFont.SetHeight(15);
+    aFont.SetHeight(nButtonsFontSize);
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
