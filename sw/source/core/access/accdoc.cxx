@@ -206,8 +206,10 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void)
 OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     OUString sAccName = GetResource( STR_ACCESS_DOC_WORDPROCESSING );
-    SwDoc *pDoc = GetShell()->GetDoc();
+    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : 0;
     if ( pDoc )
     {
         OUString sFileName = pDoc->getDocAccTitle();
@@ -571,6 +573,8 @@ void SwAccessibleDocument::deselectAccessibleChild(
 void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::document::EventObject& Event )
             throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if ( Event.EventName.equalsAscii( "FirstPageShows" ) )
     {
         FireStateChangedEvent( AccessibleStateType::FOCUSED,sal_True );
@@ -602,8 +606,10 @@ void SAL_CALL SwAccessibleDocument::disposing( const ::com::sun::star::lang::Eve
 uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     uno::Any anyAtrribute;
-    SwDoc *pDoc = GetShell()->GetDoc();
+    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : 0;
 
     if (!pDoc)
         return anyAtrribute;
@@ -851,6 +857,8 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
         SAL_CALL SwAccessibleDocument::get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
         throw ( ::com::sun::star::uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     const sal_Int32 FORSPELLCHECKFLOWTO = 1;
     const sal_Int32 FORFINDREPLACEFLOWTO = 2;
     SwAccessibleMap* pAccMap = GetMap();
