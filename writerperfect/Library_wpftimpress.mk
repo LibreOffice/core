@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_static_libraries,wpftimpress,\
 ))
 
 $(eval $(call gb_Library_use_externals,wpftimpress,\
+	boost_headers \
 	etonyek \
 	odfgen \
 	wpd \
