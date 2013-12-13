@@ -3529,22 +3529,27 @@ void OpCoupdaybs::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
     decls.insert(IsLeapYearDecl); decls.insert(DaysInMonthDecl);
-    decls.insert(DaysToDateDecl); decls.insert(DateToDaysDecl);
-    decls.insert(GetNullDateDecl); decls.insert(ScaDateDecl);
+    decls.insert(DaysToDateDecl); decls.insert(DateToDays_newDecl);
+    decls.insert(GetNullDate_newDecl); decls.insert(ScaDateDecl);
     decls.insert(addMonthsDecl); decls.insert(getDaysInMonthRangeDecl);
     decls.insert(GetDaysInYearsDecl);
     decls.insert(getDaysInYearRangeDecl); decls.insert(getDiffDecl);
-    decls.insert(lcl_GetcoupdaybsDecl);
+    decls.insert(setDayDecl);decls.insert(checklessthanDecl);
+    decls.insert(lcl_Getcoupdaybs_newDecl);
+    decls.insert(coupdaybs_newDecl);
     funs.insert(IsLeapYear);funs.insert(DaysInMonth);
-    funs.insert(DaysToDate);funs.insert(DateToDays);
-    funs.insert(GetNullDate);funs.insert(ScaDate);
+    funs.insert(DaysToDate);funs.insert(DateToDays_new);
+    funs.insert(GetNullDate_new);funs.insert(ScaDate);
     funs.insert(addMonths);funs.insert(getDaysInMonthRange);
     funs.insert(GetDaysInYears);
     funs.insert(getDaysInYearRange);funs.insert(getDiff);
-    funs.insert(lcl_Getcoupdaybs);
+    funs.insert(setDay);funs.insert(checklessthan);
+    funs.insert(lcl_Getcoupdaybs_new);
+    funs.insert(coupdaybs_new);
 }
 void OpCoupdaybs::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -3554,78 +3559,73 @@ void OpCoupdaybs::GenSlidingWindowFunction(
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "double tmp = " << GetBottom() <<";\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "int nSettle,nMat,nFreq,nBase;\n\t";
+    ss << ") {\n";
+    ss << "    double tmp = 0;\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    int nSettle,nMat,nFreq,nBase;\n";
 #ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
+    FormulaToken* tmpCur3 = vSubArguments[3]->GetFormulaToken();
+#endif
+#ifdef ISNAN
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
     const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
     formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+    ss <<"    if(isNan("<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR0->GetArrayLength()<<"))\n";
+    ss <<"        nSettle = 0;\n    else\n";
+    }
+#endif
+    ss <<"        nSettle=(int)";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    if(tmpCur1->GetType() == formula::svSingleVectorRef)
+    {
     const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+        formula::SingleVectorRefToken *>(tmpCur1);
+    ss <<"    if(isNan("<<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR1->GetArrayLength()<<"))\n";
+    ss <<"        nMat = 0;\n    else\n";
+    }
+#endif
+    ss <<"        nMat=(int)";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<";\n";
+#ifdef ISNAN
+    if(tmpCur2->GetType() == formula::svSingleVectorRef)
+    {
     const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
     formula::SingleVectorRefToken *>(tmpCur2);
-    FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur3);
-    ss<< "int buffer_nSettle_len = ";
-    ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_nMat_len = ";
-    ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_nFreq_len = ";
-    ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
-    ss<< "int buffer_nBase_len = ";
-    ss<< tmpCurDVR3->GetArrayLength();
-    ss << ";\n\t";
+    ss <<"    if(isNan("<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR2->GetArrayLength()<<"))\n";
+    ss <<"        nFreq = 0;\n    else\n";
+    }
 #endif
-#ifdef ISNAN
-    ss <<"if(gid0 >= buffer_nSettle_len || isNan(";
-    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"nSettle = 0;\n\telse\n\t\t";
-#endif
-   ss << "nSettle=(int)";
-   ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-   ss <<";\n\t";
-#ifdef ISNAN
-    ss <<"if(gid0 >= buffer_nMat_len || isNan(";
-    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"nMat = 0;\n\telse\n\t\t";
-#endif
-    ss << "nMat=(int)";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-#ifdef ISNAN
-    ss <<"if(gid0 >= buffer_nFreq_len || isNan(";
-    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"nFreq = 0;\n\telse\n\t\t";
-#endif
-    ss << "nFreq=(int)";
+    ss << "        nFreq=(int)";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<";\n\t";
+    ss <<";\n";
 #ifdef ISNAN
-    ss <<"if(gid0 >= buffer_nBase_len || isNan(";
-    ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<"))\n\t\t";
-    ss <<"nBase = 0;\n\telse\n\t\t";
+    if(tmpCur3->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur3);
+    ss <<"    if(isNan(" <<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR3->GetArrayLength()<<"))\n";
+    ss <<"        nBase = 0;\n    else\n";
+    }
 #endif
-    ss << "nBase=(int)";
+    ss << "        nBase=(int)";
     ss << vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss << ";\n\t";
-    ss <<"int nNullDate=GetNullDate();\n\t";
-    ss <<"tmp = lcl_Getcoupdaybs(nNullDate,";
-    ss <<"nSettle, nMat,nFreq,nBase);\n\t";
-    ss << "return tmp;\n";
-    ss << "}";
+    ss << ";\n";
+    ss <<"    tmp = coupdaybs_new(nSettle,nMat,nFreq,nBase);\n";
+    ss <<"    return tmp;\n";
+    ss <<"}";
 }
+
 void OpCoupdays::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
