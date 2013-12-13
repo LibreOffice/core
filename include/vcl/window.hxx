@@ -42,13 +42,11 @@
 class VirtualDevice;
 struct ImplDelData;
 struct ImplWinData;
-struct ImplOverlapData;
 struct ImplFrameData;
 struct ImplCalcToTopData;
 struct SystemEnvData;
 struct SystemParentData;
 class ImplBorderWindow;
-class VirtualDevice;
 class Timer;
 class Cursor;
 class DockingManager;
@@ -65,12 +63,8 @@ class DataChangedEvent;
 class NotifyEvent;
 class SystemWindow;
 class SalFrame;
-class SalObject;
 class MenuFloatingWindow;
-// Nur fuer ExecuteDrag:
-struct IDataObject;
 class VCLXWindow;
-struct ImplAccessibleInfos;
 
 namespace com {
 namespace sun {
