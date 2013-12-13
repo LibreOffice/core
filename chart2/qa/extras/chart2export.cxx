@@ -90,6 +90,7 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rStreamName, const OUStr
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInputStream.is());
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
     pStream->Seek(STREAM_SEEK_TO_END);
     sal_Size nSize = pStream->Tell();
