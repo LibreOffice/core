@@ -136,7 +136,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
     else
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        OUStringBuffer aSql( OUString("CREATE "));
+        OUStringBuffer aSql( "CREATE " );
         OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         OUString aDot( "." );
 

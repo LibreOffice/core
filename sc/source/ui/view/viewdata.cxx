@@ -2612,7 +2612,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     {
         sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
         pSettings[SC_VIEW_ID].Name = OUString(SC_VIEWID);
-        OUStringBuffer sBuffer(OUString(SC_VIEW));
+        OUStringBuffer sBuffer(SC_VIEW);
         ::sax::Converter::convertNumber(sBuffer,
                 static_cast<sal_Int32>(nViewID));
         pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();

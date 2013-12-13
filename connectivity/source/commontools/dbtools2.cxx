@@ -206,7 +206,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
 
 OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
 {
-    OUStringBuffer aSql(OUString("CREATE TABLE "));
+    OUStringBuffer aSql("CREATE TABLE ");
     OUString sCatalog,sSchema,sTable,sComposedName;
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();

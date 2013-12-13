@@ -4661,7 +4661,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
             break;
     }
 
-    OUStringBuffer aSynAbsURIRef(OUString("file://"));
+    OUStringBuffer aSynAbsURIRef("file://");
 
     switch (eStyle)
     {

@@ -951,7 +951,7 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     {
         sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
         pSeq[0].Name = OUString(SC_VIEWID);
-        OUStringBuffer sBuffer(OUString(SC_VIEW));
+        OUStringBuffer sBuffer(SC_VIEW);
         ::sax::Converter::convertNumber(sBuffer,
                 static_cast<sal_Int32>(nViewID));
         pSeq[0].Value <<= sBuffer.makeStringAndClear();

@@ -750,7 +750,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     OUStringBuffer aSql( "INSERT INTO " + m_aComposedTableName + " ( ");
 
     // set values and column names
-    OUStringBuffer aValues(OUString(" VALUES ( "));
+    OUStringBuffer aValues(" VALUES ( ");
     static OUString aPara("?,");
     OUString aQuote = getIdentifierQuoteString();
     static OUString aComma(",");

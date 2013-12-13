@@ -131,7 +131,7 @@ void SwMacrosTest::testVba()
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-        OUStringBuffer sMsg( OUString("Failed to load ") );
+        OUStringBuffer sMsg( "Failed to load " );
         sMsg.append ( aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 

@@ -1011,7 +1011,7 @@ OUString ORowSetValue::getString( ) const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 {
-                    OUStringBuffer sVal(OUString("0x"));
+                    OUStringBuffer sVal("0x");
                     Sequence<sal_Int8> aSeq(getSequence());
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();

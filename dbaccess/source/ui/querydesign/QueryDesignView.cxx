@@ -2880,7 +2880,7 @@ OUString OQueryDesignView::getStatement()
         aCriteriaListStr = aTmp;
     }
     // ----------------- construct statement  ----------------------
-    OUStringBuffer aSqlCmd(OUString("SELECT "));
+    OUStringBuffer aSqlCmd("SELECT ");
     if(rController.isDistinct())
         aSqlCmd.append(" DISTINCT ");
     aSqlCmd.append(aFieldListStr);
