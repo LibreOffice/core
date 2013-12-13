@@ -353,7 +353,7 @@ namespace
 
         virtual void endText()
         {
-            m_aTextOut.append( OUString("\n") );
+            m_aTextOut.append( "\n" );
         }
 
         virtual void drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,

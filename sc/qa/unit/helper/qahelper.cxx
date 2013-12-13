@@ -524,8 +524,8 @@ void ScBootstrapFixture::createFileURL(
 void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
 {
     OUStringBuffer aBuffer( getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(OUString("/contentCSV/"));
-    aBuffer.append(aFileBase).append(OUString("csv"));
+    aBuffer.append(m_aBaseString).append("/contentCSV/");
+    aBuffer.append(aFileBase).append("csv");
     rCSVPath = aBuffer.makeStringAndClear();
 }
 

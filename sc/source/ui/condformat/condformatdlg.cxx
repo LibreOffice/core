@@ -369,7 +369,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     mpLastEdit(NULL)
 {
     OUStringBuffer aTitle( GetText() );
-    aTitle.append(OUString(" "));
+    aTitle.append(" ");
     OUString aRangeString;
     rRange.Format(aRangeString, SCA_VALID, pDoc, pDoc->GetAddressConvention());
     aTitle.append(aRangeString);

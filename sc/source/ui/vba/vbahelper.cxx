@@ -597,11 +597,11 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                 start++;
                 break;
             case '*':
-                sResult.append(OUString(".*"));
+                sResult.append(".*");
                 start++;
                 break;
             case '#':
-                sResult.append(OUString("[0-9]"));
+                sResult.append("[0-9]");
                 start++;
                 break;
             case '~':

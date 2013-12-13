@@ -2882,14 +2882,14 @@ OUString OQueryDesignView::getStatement()
     // ----------------- construct statement  ----------------------
     OUStringBuffer aSqlCmd(OUString("SELECT "));
     if(rController.isDistinct())
-        aSqlCmd.append(OUString(" DISTINCT "));
+        aSqlCmd.append(" DISTINCT ");
     aSqlCmd.append(aFieldListStr);
-    aSqlCmd.append(OUString(" FROM "));
+    aSqlCmd.append(" FROM ");
     aSqlCmd.append(aTableListStr);
 
     if (!aCriteriaListStr.isEmpty())
     {
-        aSqlCmd.append(OUString(" WHERE "));
+        aSqlCmd.append(" WHERE ");
         aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
     }
     Reference<XDatabaseMetaData> xMeta;
@@ -2903,7 +2903,7 @@ OUString OQueryDesignView::getStatement()
     // ----------------- construct GroupBy and attachen ------------
     if(!aHavingStr.isEmpty())
     {
-        aSqlCmd.append(OUString(" HAVING "));
+        aSqlCmd.append(" HAVING ");
         aSqlCmd.append(aHavingStr.makeStringAndClear());
     }
     // ----------------- construct sorting and attach ------------

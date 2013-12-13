@@ -126,13 +126,13 @@ OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, c
                     else
                     {
                         aBuffer.append(getTextForType(CONDITION));
-                        aBuffer.append(OUString(" "));
+                        aBuffer.append(" ");
                         aBuffer.append(getExpression(static_cast<sal_Int32>(eMode)));
-                        aBuffer.append(OUString(" "));
+                        aBuffer.append(" ");
                         if(eMode == SC_COND_BETWEEN || eMode == SC_COND_NOTBETWEEN)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
-                            aBuffer.append(OUString(" and "));
+                            aBuffer.append(" and ");
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
                         else if(eMode <= SC_COND_NOTEQUAL || eMode >= SC_COND_BEGINS_WITH)
@@ -169,7 +169,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
         OUString aStr1, OUString aStr2 )
 {
     OUStringBuffer aBuffer(getTextForType(eType));
-    aBuffer.append(OUString(" "));
+    aBuffer.append(" ");
     if(eType == CONDITION)
     {
         // workaround missing FORMULA option in the conditions case

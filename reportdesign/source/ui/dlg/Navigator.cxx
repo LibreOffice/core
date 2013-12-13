@@ -89,7 +89,7 @@ OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
     uno::Reference< report::XReportControlModel> xReportModel(_xElement,uno::UNO_QUERY);
     if ( xFixedText.is() )
     {
-        sName.append(OUString(" : "));
+        sName.append(" : ");
         sName.append(xFixedText->getLabel());
     }
     else if ( xReportModel.is() && _xElement->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
@@ -97,7 +97,7 @@ OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
         ReportFormula aFormula( xReportModel->getDataField() );
         if ( aFormula.isValid() )
         {
-            sName.append(OUString(" : "));
+            sName.append(" : ");
             sName.append( aFormula.getUndecoratedContent() );
         }
     }

@@ -246,7 +246,7 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
 
     OUStringBuffer buf(120);
     buf.append(m_sBaseURI);
-    buf.append(OUString("/"));
+    buf.append("/");
     buf.append(getLanguagePath(sLanguagePart));
 
     OUString result = buf.makeStringAndClear();

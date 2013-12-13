@@ -459,7 +459,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         if (nCount == 2)
         {
             if ( rParam.aMetaData.generateASBeforeCorrelationName() )
-                rString.append(OUString(" AS "));
+                rString.append(" AS ");
             m_aChildren[1]->impl_parseNodeToString_throw( rString, rParam, false );
         }
         bHandled = true;

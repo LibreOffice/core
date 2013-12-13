@@ -993,7 +993,7 @@ void SmXMLExport::ExportBlank(const SmNode *pNode, int /*nLevel*/)
         // (see SmBlankNode::IncreaseBy for how pTemp->nNum is set).
         OUStringBuffer sStrBuf;
         ::sax::Converter::convertDouble(sStrBuf, pTemp->GetBlankNum() * .5);
-        sStrBuf.append(OUString("em"));
+        sStrBuf.append("em");
         AddAttribute(XML_NAMESPACE_MATH, XML_WIDTH, sStrBuf.getStr());
     }
 

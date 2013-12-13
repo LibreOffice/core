@@ -597,7 +597,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
         aVal.setLength( nX + 2 );
         aVal[nX] = nSeparator;
     }
-    aVal.append( OUString(" MB") );
+    aVal.append( " MB" );
     return aVal.makeStringAndClear();
 }
 

@@ -4248,14 +4248,14 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 break;
                             case SC_COND_BETWEEN:
-                                aCond.append(OUString("between("));
+                                aCond.append("between(");
                                 aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 aCond.append(',');
                                 aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 aCond.append(')');
                                 break;
                             case SC_COND_NOTBETWEEN:
-                                aCond.append(OUString("not-between("));
+                                aCond.append("not-between(");
                                 aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 aCond.append(',');
                                 aCond.append(pEntry->GetExpression(aPos, 1, 0, formula::FormulaGrammar::GRAM_ODFF));

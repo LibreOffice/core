@@ -144,9 +144,9 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                 {
                     OUStringBuffer sBuf( OUString("Your Presentation has been minimized from:") );
                     sBuf.append( OUString::number( nFileSizeSource >> 10 ) );
-                    sBuf.append( OUString("KB to ") );
+                    sBuf.append( "KB to " );
                     sBuf.append( OUString::number( nFileSizeDest >> 10 ) );
-                    sBuf.append( OUString("KB.") );
+                    sBuf.append( "KB." );
                     OUString sResult( sBuf.makeStringAndClear() );
                     SAL_INFO("sdext.minimizer", sResult );
                 }

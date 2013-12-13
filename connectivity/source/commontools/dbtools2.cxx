@@ -156,7 +156,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( !aDefault.isEmpty() )
     {
-        aSql.append(OUString(" DEFAULT "));
+        aSql.append(" DEFAULT ");
         aSql.append(sPreFix);
         aSql.append(aDefault);
         aSql.append(sPostFix);
@@ -188,7 +188,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     aSql.append(createStandardTypePart(xColProp, _xConnection, _sCreatePattern));
 
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
-        aSql.append(OUString(" NOT NULL"));
+        aSql.append(" NOT NULL");
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
@@ -221,7 +221,7 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
     aSql.append(sComposedName);
-    aSql.append(OUString(" ("));
+    aSql.append(" (");
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -301,7 +301,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(OUString(" PRIMARY KEY "));
+                    aSql.append(" PRIMARY KEY ");
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
@@ -311,7 +311,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(OUString(" UNIQUE "));
+                    aSql.append(" UNIQUE ");
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
@@ -323,7 +323,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(OUString(" FOREIGN KEY "));
+                    aSql.append(" FOREIGN KEY ");
                     OUString sRefTable = getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     ::dbtools::qualifiedNameComponents(xMetaData,
                                                         sRefTable,
@@ -342,16 +342,16 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql.append(OUString(" ON DELETE CASCADE "));
+                            aSql.append(" ON DELETE CASCADE ");
                             break;
                         case KeyRule::RESTRICT:
-                            aSql.append(OUString(" ON DELETE RESTRICT "));
+                            aSql.append(" ON DELETE RESTRICT ");
                             break;
                         case KeyRule::SET_NULL:
-                            aSql.append(OUString(" ON DELETE SET NULL "));
+                            aSql.append(" ON DELETE SET NULL ");
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql.append(OUString(" ON DELETE SET DEFAULT "));
+                            aSql.append(" ON DELETE SET DEFAULT ");
                             break;
                         default:
                             ;
