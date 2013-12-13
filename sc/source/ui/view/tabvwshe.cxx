@@ -237,7 +237,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                     ScGlobal::SetSearchItem( *pSearchItem );
                     sal_Bool bSuccess = SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
-                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                    const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
                     {
@@ -307,7 +307,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                             SFX_CALLMODE_STANDARD,
                             &aSearchItem, 0L );
-                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                    const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
                     {
