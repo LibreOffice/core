@@ -1501,7 +1501,7 @@ bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
           rOne.IsAbsSpaces() == rTwo.IsAbsSpaces() &&
           rOne.GetPoolFmtId() == rTwo.GetPoolFmtId() &&
           rOne.GetPoolHelpId() == rTwo.GetPoolHelpId() &&
-          rTwo.GetPoolHlpFileId() == rTwo.GetPoolHlpFileId()
+          rOne.GetPoolHlpFileId() == rTwo.GetPoolHlpFileId()
         );
 
     if (bRet)
