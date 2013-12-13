@@ -920,6 +920,13 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
            sToken = sToken.replaceAll("NNNN", "dddd");
            sToken = sToken.replaceAll("NN", "ddd");
         }
+
+        if(rInfos.eType == ww::eTOC && m_hyperLinkAnchor != "")
+        {
+            sToken = "PAGEREF " + m_hyperLinkAnchor;
+            m_hyperLinkAnchor = "";
+        }
+
         // Write the Field command
         DoWriteCmd( sToken );
 
@@ -1383,6 +1390,8 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 
     bool bBookmarkOnly = AnalyzeURL( rUrl, rTarget, &sUrl, &sMark );
 
+    m_hyperLinkAnchor = sMark;
+
     if ( !sMark.isEmpty() && !bBookmarkOnly )
     {
         m_rExport.OutputField( NULL, ww::eHYPERLINK, sUrl );
@@ -1442,6 +1451,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 bool DocxAttributeOutput::EndURL()
 {
     m_closeHyperlinkInThisRun = true;
+    m_hyperLinkAnchor = "";
     return true;
 }
 
