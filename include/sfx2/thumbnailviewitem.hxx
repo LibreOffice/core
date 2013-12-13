@@ -89,6 +89,9 @@ public:
 
     void setHighlight (bool state);
 
+    /// Text to be used for the tooltip.
+    virtual OUString getHelpText() const;
+
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
     void updateTitleEditSize ();
     virtual void setTitle (const OUString& rTitle);

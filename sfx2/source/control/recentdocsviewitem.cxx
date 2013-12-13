@@ -69,4 +69,9 @@ void RecentDocsViewItem::setEditTitle (bool edit, bool bChangeFocus)
     (void)bChangeFocus;
 }
 
+OUString RecentDocsViewItem::getHelpText() const
+{
+    return maURL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
