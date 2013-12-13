@@ -3532,7 +3532,7 @@ void DbGridControl::DisconnectFromFields()
         return;
 
     ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
-    while (pListeners->size())
+    while (!pListeners->empty())
     {
 #ifdef DBG_UTIL
         sal_Int32 nOldSize = pListeners->size();

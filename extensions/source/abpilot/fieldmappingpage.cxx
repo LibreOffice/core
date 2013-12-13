@@ -81,7 +81,7 @@ namespace abp
     {
         const AddressSettings& rSettings = getSettings();
         OUString sHint;
-        if ( 0 == rSettings.aFieldMapping.size() )
+        if ( rSettings.aFieldMapping.empty() )
             sHint = ModuleRes(RID_STR_NOFIELDSASSIGNED).toString();
         m_aHint.SetText( sHint );
     }
