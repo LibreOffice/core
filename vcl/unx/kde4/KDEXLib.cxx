@@ -115,7 +115,7 @@ void KDEXLib::Init()
             "3.6.0",
             ki18n( "LibreOffice with KDE Native Widget Support." ),
             KAboutData::License_File,
-            ki18n("Copyright (c) 2000 - 2012 LibreOffice contributors and/or their affiliates" ),
+            ki18n("Copyright (c) 2000, 2014 LibreOffice contributors" ),
             ki18n( "LibreOffice is an office suite.\n" ),
             "http://libreoffice.org",
             "libreoffice@lists.freedesktop.org");

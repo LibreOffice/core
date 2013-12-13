@@ -8,18 +8,16 @@ or an MPLv2 on ALv2 header (from the bottom).
 	If the new module you created is based in any way on an
 existing module, then:
 
-	a) if that module has an LGPLv3+ header - please retain that
-	   in the new code, it will get updated when that module is
-	   re-based.
-
-	b) if that module has an MPLv2 on ALv2 header - please use
+	a) if that module has an MPLv2 on ALv2 header - please use
 	   this option or
 
-	c) if the module is entirely your own work, and/or based on an
+	b) if the module is entirely your own work, and/or based on an
 	   existing MPLv2 header - please use that header.
 
+	Otherwise, use the pure MPLv2 header for new code.
+
 	For any questions please contact me directly:
-			    michael.meeks@suse.com.
+			    michael.meeks@collabora.com.
 
 	Thanks !
 

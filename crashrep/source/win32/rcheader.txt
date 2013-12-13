@@ -64,7 +64,7 @@ VS_VERSION_INFO versioninfo
                 VALUE "ProductName",      "LibreOffice\0"
                 VALUE "OriginalFilename", PPS(RES_APP_NAME) ".exe\0"
                 VALUE "InternalName",     PPS(RES_APP_NAME) "\0"
-                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
+                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors. All rights reserved.\0"
 			}
 		}
 

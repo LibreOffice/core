@@ -55,7 +55,7 @@ VS_VERSION_INFO VERSIONINFO
                 VALUE "FileDescription",  "LibreOffice Plug-in handles all its documents\0"
                 VALUE "OriginalFilename", "npsoplugin.dll\0"
                 VALUE "InternalName",     "npsoplugin\0"
-                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
+                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors. All rights reserved.\0"
                 VALUE "FileExtents",      "sxc|stc|sxd|std|sxi|sti|sxm|sxw|sxg|stw|"
                                           "odt|ott|odm|oth|ods|ots|odg|otg|odp|otp|odf|"
                                           "fodt|fods|fogd|fodp|"

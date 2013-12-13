@@ -49,7 +49,7 @@ VS_VERSION_INFO VERSIONINFO
                 VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
                 VALUE "OriginalFilename", PPS(ORG_NAME) "\0"
                 VALUE "InternalName",     PPS(INTERNAL_NAME) "\0"
-                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
+                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors. All rights reserved.\0"
                 ADDITIONAL_VERINFO1
                 ADDITIONAL_VERINFO2
                 ADDITIONAL_VERINFO3

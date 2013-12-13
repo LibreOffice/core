@@ -1,10 +1,11 @@
+
                        Licensing and Legal information
 
-   This product is made available subject to the terms of GNU Lesser
-   General Public License Version 3. A copy of the LGPL license can be
+   This product is made available subject to the terms of the Mozilla
+   Public License, v. 2.0. A copy of the MPL Version 2 license can be
    found below.
 
-   See LGPL Version 3 below
+   See MPL Version 2 below
 
    Third Party Code Additional copyright notices and license terms
    applicable to portions of the Software can be found below in this
@@ -13,8 +14,10 @@
    All trademarks and registered trademarks mentioned herein are the
    property of their respective owners.
 
-   Copyright (c) 2000, 2010 Oracle, and/or its affiliates. All rights
-   reserved.
+   Copyright © 2000, 2014 LibreOffice contributors. All rights reserved.
+
+   This product is based on OpenOffice.org. Portions of this software are
+   copyright © 2000-2011, Oracle and/or its affiliates.
 
    This product has been created by The Document Foundation, incorporating
    many modifications from different contributors, see
@@ -22,6 +25,42 @@
 
    Note: Do not translate or localize this document. Only English version
    is legally binding.
+
+   Contents
+
+   Libraries
+
+   Extensions
+
+   Fonts
+
+   Dictionaries
+
+   Artwork
+
+   Miscellaneous
+
+   GNU Lesser General Public License Version 3
+
+   GNU Lesser General Public License Version 2.1
+
+   GNU Library General Public License Version 2
+
+   GNU General Public License Version 3
+
+   GNU General Public License Version 2
+
+   Mozilla Public License Version 1.1
+
+   Mozilla Public License Version 2.0
+
+   SIL Open Font License Version 1.1 – 26 February 2007
+
+   Apache License
+
+   The LaTeX Project Public License
+
+   Creative Commons Attribution-ShareAlike 3.0 Unported
 
        Third Party Code Additional Copyright Notices and License Terms
 
@@ -718,6 +757,56 @@ Hyphen
    See LGPL Version 2.1 below
 
    See MPL Version 1.1 below
+
+IAccessible2
+
+   The following software may be included in this product: IAccessible2
+   API.
+
+   IAccessible2 IDL Specification
+
+   Copyright (c) 2007, 2013 Linux Foundation
+   Copyright (c) 2006 IBM Corporation
+   Copyright (c) 2000, 2006 Sun Microsystems, Inc.
+   All rights reserved.
+
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions are
+   met:
+    1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+
+    1. Redistributions in binary form must reproduce the above copyright
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the
+       distribution.
+
+    1. Neither the name of the Linux Foundation nor the names of its
+       contributors may be used to endorse or promote products derived
+       from this software without specific prior written permission.
+
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+   IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+   TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+   PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+   HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+   This BSD License conforms to the Open Source Initiative "Simplified BSD
+   License" as published at:
+   http://www.opensource.org/licenses/bsd-license.php
+
+   IAccessible2 is a trademark of the Linux Foundation. The IAccessible2
+   mark may be used in accordance with the Linux Foundation Trademark
+   Policy to indicate compliance with the IAccessible2 specification.
+
+   Find out more about IAccessible2 at
+   http://accessibility.linuxfoundation.org/.
 
 ICU
 
@@ -2061,7 +2150,8 @@ Raptor RDF Parser Library
    the license below:
 
    Copyright (C) 2000-2008 David Beckett
-   Copyright (C) 2000-2005 University of Bristol. All Rights Reserved.
+   Copyright (C) 2000-2005 University of Bristol. All Rights
+   Reserved.
 
    All the licenses below are alternatives and if you select one license,
    that one alone applies.
@@ -3451,7 +3541,7 @@ Croatian
 
    These patterns were manually converted from TeX hyphenation patterns
    using the guide at
-   http://wiki.openoffice.org/wiki/Documentation/SL/Using_Te
+   http://wiki.services.openoffice.org/wiki/Documentation/SL/Using_Te
    X_hyphenation_patterns_in_OpenOffice.org
 
    Original version:
