@@ -750,7 +750,7 @@ sub find_missing_directories ($$)
     {
         my $new_directory_item = {
             'uniquename' => $source_directory_item->{'unique_name'},
-            'uniqueparentname' => $source_directory_item->{'parent'},
+            'uniqueparentname' => $source_directory_item->{'parent_name'},
             'defaultdir' => $source_directory_item->{'default_dir'},
             'HostName' => $source_directory_item->{'full_target_long_name'},
             'componentname' => $source_directory_item->{'component_name'},

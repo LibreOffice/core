@@ -363,78 +363,140 @@ sub add_uniquekey
 # Feature Feature_Parent Title Description Display Level Directory_ Attributes
 #################################################################################
 
-sub create_feature_table
+sub prepare_feature_table ($$$)
 {
-    my ($modulesref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
+    my ($modules, $language, $variables) = @_;
 
-    for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
+    my $features = [];
+
+    foreach my $onefeature (@$modules)
     {
-        my $onelanguage = ${$languagesarrayref}[$m];
+        # Java and Ada only, if the correct settings are set
+        my $styles = $onefeature->{'Styles'} // "";
+        if (( $styles =~ /\bJAVAMODULE\b/ ) && ( ! ($variables->{'JAVAPRODUCT'} ))) { next; }
 
-        my $infoline;
+        # Controlling the language!
+        # Only language independent feature or feature with the correct language will be included into the table
 
-        my @featuretable = ();
+        next if $onefeature->{'ismultilingual'} && ($onefeature->{'specificlanguage'} ne $language);
 
-        installer::windows::idtglobal::write_idt_header(\@featuretable, "feature");
+        my $feature_gid =get_feature_gid($onefeature);
 
-        for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+        my $feature = {
+            'Feature' => $feature_gid,
+            'Feature_Parent' => get_feature_parent($onefeature),
+            'Title' => $onefeature->{'Name'},
+            'Description' => $onefeature->{'Description'},
+            'Display' => get_feature_display($onefeature),
+            'Level' => get_feature_level($onefeature),
+            'Directory_' => get_feature_directory($onefeature),
+            'Attributes' => get_feature_attributes($onefeature)
+        };
+        push @$features, $feature;
+
+        # collecting all feature in global feature collector (so that properties can be set in property table)
+        $installer::globals::featurecollector{$feature_gid} = 1;
+
+        # collecting all language feature in feature collector for check of language selection
+        if (( $styles =~ /\bSHOW_MULTILINGUAL_ONLY\b/ ) && $onefeature->{'ParentID'} ne $installer::globals::rootmodulegid)
         {
-            my $onefeature = ${$modulesref}[$i];
-
-            # Java and Ada only, if the correct settings are set
-            my $styles = "";
-            if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
-            if (( $styles =~ /\bJAVAMODULE\b/ ) && ( ! ($allvariableshashref->{'JAVAPRODUCT'} ))) { next; }
-            if (( $styles =~ /\bADAMODULE\b/ ) && ( ! ($allvariableshashref->{'ADAPRODUCT'} ))) { next; }
-
-            # Controlling the language!
-            # Only language independent feature or feature with the correct language will be included into the table
-
-            if (! (!(( $onefeature->{'ismultilingual'} )) || ( $onefeature->{'specificlanguage'} eq $onelanguage )) )  { next; }
-
-            my %feature = ();
-
-            $feature{'feature'} = get_feature_gid($onefeature);
-            $feature{'feature_parent'} = get_feature_parent($onefeature);
-            # if ( $onefeature->{'ParentID'} eq "" ) { $feature{'feature_parent'} = ""; }   # Root has no parent
-            $feature{'Title'} = $onefeature->{'Name'};
-            $feature{'Description'} = $onefeature->{'Description'};
-            $feature{'Display'} = get_feature_display($onefeature);
-            $feature{'Level'} = get_feature_level($onefeature);
-            $feature{'Directory_'} = get_feature_directory($onefeature);
-            $feature{'Attributes'} = get_feature_attributes($onefeature);
-
-            my $oneline = $feature{'feature'} . "\t" . $feature{'feature_parent'} . "\t" . $feature{'Title'} . "\t"
-                    . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
-                    . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
-
-            push(@featuretable, $oneline);
-
-            # collecting all feature in global feature collector (so that properties can be set in property table)
-            if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
-            {
-                push(@installer::globals::featurecollector, $feature{'feature'});
-            }
-
-            # collecting all language feature in feature collector for check of language selection
-            if (( $styles =~ /\bSHOW_MULTILINGUAL_ONLY\b/ ) && ( $onefeature->{'ParentID'} ne $installer::globals::rootmodulegid ))
-            {
-                $installer::globals::multilingual_only_modules{$feature{'feature'}} = 1;
-            }
-
-            # collecting all application feature in global feature collector for check of application selection
-            if ( $styles =~ /\bAPPLICATIONMODULE\b/ )
-            {
-                $installer::globals::application_modules{$feature{'feature'}} = 1;
-            }
+            $installer::globals::multilingual_only_modules{$feature_gid} = 1;
         }
 
-        # Saving the file
-
-        my $featuretablename = $basedir . $installer::globals::separator . "Feature.idt" . "." . $onelanguage;
-        installer::files::save_file($featuretablename ,\@featuretable);
-        $installer::logger::Lang->printf("Created idt file: %s\n", $featuretablename);
+        # collecting all application feature in global feature collector for check of application selection
+        if ( $styles =~ /\bAPPLICATIONMODULE\b/ )
+        {
+            $installer::globals::application_modules{$feature_gid} = 1;
+        }
     }
+
+    return $features;
+}
+
+
+
+
+=head add_missing_features($features)
+
+    When we are building a release, then there may be features missing
+    that where present in the source release.  As missing features
+    would prevent patches from being created, we add the missing
+    features.
+
+    The returned feature hash is either identical to the given
+    $features or is a copy with the missing features added.
+
+=cut
+
+sub add_missing_features ($)
+{
+    my ($features) = @_;
+
+    return $features if ! $installer::globals::is_release;
+
+    # Aquire the feature list of the source release.
+    my $source_feature_table = $installer::globals::source_msi->GetTable("Feature");
+    my $feature_column_index = $source_feature_table->GetColumnIndex("Feature");
+
+    # Prepare fast lookup of the target features.
+    my %target_feature_map = map {$_->{'Feature'} => $_} @$features;
+
+    # Find missing features.
+    my @missing_features = ();
+    foreach my $source_feature_row (@{$source_feature_table->GetAllRows()})
+    {
+        my $feature_gid = $source_feature_row->GetValue($feature_column_index);
+        if ( ! defined $target_feature_map{$feature_gid})
+        {
+            push @missing_features, $source_feature_row;
+        }
+    }
+
+    # Return when there are no missing features.
+    return $features if scalar @missing_features==0;
+
+    # Process the missing features.
+    my $extended_features = [@$features];
+    foreach my $missing_feature_row (@missing_features)
+    {
+        my %feature = map
+            {$_ => $missing_feature_row->GetValue($_)}
+            ('Feature', 'Feature_Parent', 'Title', 'Description', 'Display', 'Level', 'Directory_', 'Attributes');
+        push @$extended_features, \%feature;
+
+        $installer::logger::Lang->printf("added missing feature %s\n", $feature->{'Feature'});
+    }
+    return $extended_features;
+}
+
+
+
+
+sub create_feature_table ($$$)
+{
+    my ($basedir, $language, $features) = @_;
+
+    my @feature_table = ();
+    installer::windows::idtglobal::write_idt_header(\@feature_table, "feature");
+
+    foreach my $feature (@$features)
+    {
+        my $line = join("\t",
+            $feature->{'Feature'},
+            $feature->{'Feature_Parent'},
+            $feature->{'Title'},
+            $feature->{'Description'},
+            $feature->{'Display'},
+            $feature->{'Level'},
+            $feature->{'Directory_'},
+            $feature->{'Attributes'}) . "\n";
+
+        push(@feature_table, $line);
+    }
+
+    my $filename = $basedir . $installer::globals::separator . "Feature.idt" . "." . $language;
+    installer::files::save_file($filename ,\@feature_table);
+    $installer::logger::Lang->printf("Created idt file: %s\n", $filename);
 }
 
 1;

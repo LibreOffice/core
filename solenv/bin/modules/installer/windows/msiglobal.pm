@@ -131,25 +131,6 @@ sub make_relative_ddf_path
     return $sourcepath;
 }
 
-##########################################################################
-# Returning the order of the sequences in the files array.
-##########################################################################
-
-sub get_sequenceorder
-{
-    my ($filesref) = @_;
-
-    my %order = ();
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        if ( ! $onefile->{'assignedsequencenumber'} ) { installer::exiter::exit_program("ERROR: No sequence number assigned to $onefile->{'gid'} ($onefile->{'uniquename'})!", "get_sequenceorder"); }
-        $order{$onefile->{'assignedsequencenumber'}} = $i;
-    }
-
-    return \%order;
-}
 
 ##########################################################################
 # Generation the list, in which the source of the files is connected
@@ -157,183 +138,85 @@ sub get_sequenceorder
 # to be included into a cab file, this has to be done via ddf files.
 ##########################################################################
 
-sub generate_cab_file_list
+sub generate_cab_file_list ($$$$)
 {
     my ($filesref, $installdir, $ddfdir, $allvariables) = @_;
 
-    my @cabfilelist = ();
-
     installer::logger::include_header_into_logfile("Generating ddf files");
 
-    $installer::logger::Lang->add_timestamp("Performance Info: ddf file generation start");
-
-    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
-
-    if ( $installer::globals::fix_number_of_cab_files )
+    if ( $^O =~ /cygwin/i )
     {
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        installer::worker::generate_cygwin_pathes($filesref);
+    }
+
+    # Make sure that all files point to the same cabinet file.
+    # Multiple cabinet files are not supported anymore.
+    my $cabinetfile = $filesref->[0]->{'cabinet'};
+    foreach my $onefile (@$filesref)
+    {
+        if ($onefile->{'cabinet'} ne $cabinetfile)
         {
-            my $onefile = ${$filesref}[$i];
-            my $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-
-            # all files with the same cabinetfile are directly behind each other in the files collector
-
-            my @ddffile = ();
-
-            write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
-
-            my $nextfile = ${$filesref}[$i+1];
-            my $nextcabinetfile = "";
-
-            if ( $nextfile->{'cabinet'} ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
-
-            while ( $nextcabinetfile eq $cabinetfile )
-            {
-                $sourcepath =  $nextfile->{'sourcepath'};
-                if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
-                # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-                $uniquename =  $nextfile->{'uniquename'};
-                my $localdoinclude = 1;
-                my $nextfilestyles = "";
-                if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
-                if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-                if ( $localdoinclude ) { push(@ddffile, $ddfline); }
-                $i++;                                           # increasing the counter!
-                $nextfile = ${$filesref}[$i+1];
-                if ( $nextfile ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
-                else { $nextcabinetfile = "_lastfile_"; }
-            }
-
-            # creating the DDF file
-
-            my $ddffilename = $cabinetfile;
-            $ddffilename =~ s/.cab/.ddf/;
-            $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
-            $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-            installer::files::save_file($ddffilename ,\@ddffile);
-            my $infoline = "Created ddf file: $ddffilename\n";
-            $installer::logger::Lang->print($infoline);
-
-            # lines in ddf files must not be longer than 256 characters
-            check_ddf_file(\@ddffile, $ddffilename);
-
-            # Writing the makecab system call
-
-            my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-
-            push(@cabfilelist, $oneline);
-
-            # collecting all ddf files
-            push(@installer::globals::allddffiles, $ddffilename);
+            installer::exiter::exit_program(
+                "ERROR: multiple cabinet files are not supported",
+                "generate_cab_file_list");
         }
     }
-    elsif ( $installer::globals::one_cab_file )
+
+    # Sort files on the sequence number.
+    my @sorted_files = sort {$a->{'sequencenumber'} <=> $b->{'sequencenumber'}} @$filesref;
+
+    my @ddffile = ();
+    write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
+    foreach my $onefile (@sorted_files)
     {
-        my @ddffile = ();
-
-        my $cabinetfile = "";
-
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        my $styles = $onefile->{'Styles'} // "";
+        if ($styles =~ /\bDONT_PACK\b/)
         {
-            my $onefile = ${$filesref}[$i];
-            $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-
-            if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
+            $installer::logger::Lang->printf("    excluding '%s' from ddf\n", $onefile->{'uniquename'});
         }
 
-        # creating the DDF file
-
-        my $ddffilename = $cabinetfile;
-        $ddffilename =~ s/.cab/.ddf/;
-        $ddfdir =~ s/[\/\\]\s*$//;
-        $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-        installer::files::save_file($ddffilename ,\@ddffile);
-        my $infoline = "Created ddf file: $ddffilename\n";
-        $installer::logger::Lang->print($infoline);
-
-        # lines in ddf files must not be longer than 256 characters
-        check_ddf_file(\@ddffile, $ddffilename);
-
-        # Writing the makecab system call
-
-        my $oneline = "makecab.exe /F " . $ddffilename . "\n";
-
-        push(@cabfilelist, $oneline);
-
-        # collecting all ddf files
-        push(@installer::globals::allddffiles, $ddffilename);
-    }
-    else
-    {
-        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
-    }
-
-    $installer::logger::Lang->add_timestamp("Performance Info: ddf file generation end");
-
-    return \@cabfilelist;   # contains all system calls for packaging process
-}
-
-########################################################################
-# Returning the file sequence of a specified file.
-########################################################################
-
-sub get_file_sequence
-{
-    my ($filesref, $uniquefilename) = @_;
-
-    my $sequence = "";
-    my $found_sequence = 0;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
         my $uniquename = $onefile->{'uniquename'};
-
-        if ( $uniquename eq $uniquefilename )
+        my $sourcepath = $onefile->{'sourcepath'};
+        if ( $^O =~ /cygwin/i )
         {
-            $sequence = $onefile->{'sequencenumber'};
-            $found_sequence = 1;
-            last;
+            $sourcepath = $onefile->{'cyg_sourcepath'};
         }
+
+        # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+        if ($allvariables->{'RELATIVE_PATHES_IN_DDF'})
+        {
+            $sourcepath = make_relative_ddf_path($sourcepath);
+        }
+
+        my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+        push(@ddffile, $ddfline);
+
+        $installer::logger::Lang->printf("    adding '%s' with sequence %d to ddf\n",
+            $onefile->{'uniquename'},
+            $onefile->{'sequencenumber'});
     }
+    # creating the DDF file
 
-    if ( ! $found_sequence ) { installer::exiter::exit_program("ERROR: No sequence found for $uniquefilename !", "get_file_sequence"); }
+    my $ddffilename = $cabinetfile;
+    $ddffilename =~ s/.cab/.ddf/;
+    $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
+    $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
 
-    return $sequence;
+    installer::files::save_file($ddffilename ,\@ddffile);
+    $installer::logger::Lang->print("Created ddf file: %s\n", $ddffilename);
+
+    # lines in ddf files must not be longer than 256 characters
+    check_ddf_file(\@ddffile, $ddffilename);
+
+    # collecting all ddf files
+    push(@installer::globals::allddffiles, $ddffilename);
+
+    # Writing the makecab system call
+    # Return a list with all system calls for packaging process.
+    my @cabfilelist = ("makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n");
+    return \@cabfilelist;
 }
+
 
 
 #################################################################

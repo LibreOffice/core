@@ -513,7 +513,7 @@ sub get_component_data ($$$$)
         }
         else
         {
-            $guid = installer::windows::msiglobal::create_guid();
+            $guid = "{" . installer::windows::msiglobal::create_guid() . "}";
             $installer::logger::Lang->printf("    creating new guid %s\n", $guid);
         }
         $target_data{$name}->{'component_id'} = $guid;
@@ -521,28 +521,33 @@ sub get_component_data ($$$$)
 
     # Add values for the KeyPath column.
     $installer::logger::Lang->printf("preparing Component->KeyPath values\n");
-    foreach my $name (@$file_component_names,@$registry_component_names)
+    foreach my $component_name (@$file_component_names,@$registry_component_names)
     {
         # Determine the key path.
         my $key_path = $installer::globals::is_release
-            ? $source_data{$name}->{'key_path'}
+            ? $source_data{$component_name}->{'key_path'}
             : undef;
         if (defined $key_path)
         {
-            $installer::logger::Lang->printf("    reusing key path %s\n", $key_path);
+            $installer::logger::Lang->printf("    reusing key path %s for component %s\n",
+                $key_path,
+                $component_name);
         }
         else
         {
-            if ($target_data{$name}->{'is_file'})
+            if ($target_data{$component_name}->{'is_file'})
             {
-                $key_path = get_component_keypath($name, $files);
+                $key_path = get_component_keypath($component_name, $files);
             }
             else
             {
-                $key_path = get_component_keypath($name, $registry_entries);
+                $key_path = get_component_keypath($component_name, $registry_entries);
             }
+            $installer::logger::Lang->printf("    created key path %s for component %s\n",
+                $key_path,
+                $component_name);
         }
-        $target_data{$name}->{'key_path'} = $key_path;
+        $target_data{$component_name}->{'key_path'} = $key_path;
     }
 
     return \%target_data;

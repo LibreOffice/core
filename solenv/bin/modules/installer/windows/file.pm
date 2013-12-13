@@ -635,19 +635,19 @@ sub assign_missing_sequence_numbers ($)
 
 sub create_items_for_missing_files ($$$)
 {
-    my ($missing_items, $msi, $directory_list) = @_;
+    my ($missing_items, $source_msi, $directory_list) = @_;
 
     # For creation of the FeatureComponent table (in a later step) we
     # have to provide references from the file to component and
     # modules (ie features).  Note that Each file belongs to exactly
     # one component but one component can belong to multiple features.
-    my $component_to_features_map = create_feature_component_map($msi);
+    my $component_to_features_map = create_feature_component_map($source_msi);
 
     my @new_files = ();
     foreach my $row (@$missing_items)
     {
         $installer::logger::Info->printf("creating new file item for '%s'\n", $row->GetValue('File'));
-        my $file_item = create_script_item_for_deleted_file($row, $msi, $component_to_features_map);
+        my $file_item = create_script_item_for_deleted_file($row, $source_msi, $component_to_features_map);
         push @new_files, $file_item;
     }
 
@@ -657,26 +657,53 @@ sub create_items_for_missing_files ($$$)
 
 
 
+=head2 create_script_item_for_deleted_file (($file_row, $source_msi, $component_to_features_map)
+
+    Create a new script item for a file that was present in the
+    previous release but isn't anymore.  Most of the necessary
+    information is taken from the 'File' table of the source release.
+
+    The values of 'sourcepath' and 'cyg_sourcepath' will point to the
+    respective file in the unpacked source release.  An alternative
+    would be to let them point to an empty file.  That, however, might
+    make the patch bigger (diff between identical file contents is
+    (almost) empty, diff between file and empty file is the 'inverse'
+    of the file).
+
+=cut
+
+my $use_source_files_for_missing_files = 1;
+
 sub create_script_item_for_deleted_file ($$$)
 {
-    my ($file_row, $msi, $component_to_features_map) = @_;
+    my ($file_row, $source_msi, $component_to_features_map) = @_;
 
     my $uniquename = $file_row->GetValue('File');
 
-    my $file_map = $msi->GetFileMap();
+    my $file_map = $source_msi->GetFileMap();
 
-    my $directory_item = $file_map->{$uniquename}->{'directory'};
+    my $file_item = $file_map->{$uniquename};
+    my $directory_item = $file_item->{'directory'};
     my $source_path = $directory_item->{'full_source_long_name'};
     my $target_path = $directory_item->{'full_target_long_name'};
-    my $full_source_name = File::Spec->catfile(
-        installer::patch::InstallationSet::GetUnpackedCabPath(
-            $msi->{'version'},
-            $msi->{'is_current_version'},
-            $msi->{'language'},
-            $msi->{'package_format'},
-            $msi->{'product_name'}),
-        $source_path,
-        $uniquename);
+    my $full_source_name = undef;
+    if ($use_source_files_for_missing_files)
+    {
+        $full_source_name = File::Spec->catfile(
+            installer::patch::InstallationSet::GetUnpackedCabPath(
+                $source_msi->{'version'},
+                $source_msi->{'is_current_version'},
+                $source_msi->{'language'},
+                $source_msi->{'package_format'},
+                $source_msi->{'product_name'}),
+            $source_path,
+            $file_item->{'long_name'});
+    }
+    else
+    {
+        $full_source_name = "/c/tmp/missing/".$uniquename;
+        installer::patch::Tools::touch($full_source_name);
+    }
     my ($long_name, undef) = installer::patch::Msi::SplitLongShortName($file_row->GetValue("FileName"));
     my $target_name = File::Spec->catfile($target_path, $long_name);
     if ( ! -f $full_source_name)

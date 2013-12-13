@@ -47,7 +47,10 @@ sub get_registry_component_name
     my $componentname = "";
     my $isrootmodule = 0;
 
-    if ( $registryref->{'ModuleID'} ) { $componentname = $registryref->{'ModuleID'}; }
+    if ($registryref->{'ModuleID'})
+    {
+        $componentname = $registryref->{'ModuleID'};
+    }
 
     $componentname =~ s/\\/\_/g;
     $componentname =~ s/\//\_/g;
@@ -56,7 +59,10 @@ sub get_registry_component_name
 
     $componentname = lc($componentname);    # componentnames always lowercase
 
-    if ( $componentname eq "gid_module_root" ) { $isrootmodule = 1; }
+    if ( $componentname eq "gid_module_root" )
+    {
+        $isrootmodule = 1;
+    }
 
     # Attention: Maximum length for the componentname is 72
 
@@ -69,20 +75,36 @@ sub get_registry_component_name
 
     # This componentname must be more specific
     my $addon = "_";
-    if ( $allvariables->{'PRODUCTNAME'} ) { $addon = $addon . $allvariables->{'PRODUCTNAME'}; }
-    if ( $allvariables->{'PRODUCTVERSION'} ) { $addon = $addon . $allvariables->{'PRODUCTVERSION'}; }
+    if ($allvariables->{'PRODUCTNAME'})
+    {
+        $addon .= $allvariables->{'PRODUCTNAME'};
+    }
+
+    # Append the version number.
+    # Previously that was the full version number as provided by 'PRODUCTVERSION'.
+    # But MSI patches introduce the restriction that component names must not change.
+    # Use just the major version number.
+    my $version = $allvariables->{"BRANDPACKAGEVERSION"} // "";
+    $addon .= $version;
     $addon = lc($addon);
     $addon =~ s/ //g;
     $addon =~ s/-//g;
     $addon =~ s/\.//g;
 
-    my $styles = "";
-    if ( $registryref->{'Styles'} ) { $styles = $registryref->{'Styles'}; }
-
     $componentname = $componentname . $addon;
 
-    if (( $styles =~ /\bLANGUAGEPACK\b/ ) && ( $installer::globals::languagepack )) { $componentname = $componentname . "_lang"; }
-    if ( $styles =~ /\bALWAYS_REQUIRED\b/ ) { $componentname = $componentname . "_forced"; }
+    my $styles = $registryref->{'Styles'};
+    if (defined $styles)
+    {
+        if (($styles =~ /\bLANGUAGEPACK\b/) && $installer::globals::languagepack)
+        {
+            $componentname .= "_lang";
+        }
+        if ($styles =~ /\bALWAYS_REQUIRED\b/)
+        {
+            $componentname .= "_forced";
+        }
+    }
 
     # Attention: Maximum length for the componentname is 72
     # %installer::globals::allregistrycomponents_in_this_database_ : resetted for each database
@@ -92,10 +114,13 @@ sub get_registry_component_name
 
     my $fullname = $componentname;  # This can be longer than 72
 
-    if (( exists($installer::globals::allregistrycomponents_{$fullname}) ) && ( ! exists($installer::globals::allregistrycomponents_in_this_database_{$fullname}) ))
+    if (exists($installer::globals::allregistrycomponents_{$fullname})
+        && ! exists($installer::globals::allregistrycomponents_in_this_database_{$fullname}))
     {
         # This is not allowed: One component cannot be installed with different packages.
-        installer::exiter::exit_program("ERROR: Windows registry component \"$fullname\" is already included into another package. This is not allowed.", "get_registry_component_name");
+        installer::exiter::exit_program(
+            "ERROR: Windows registry component \"$fullname\" is already included into another package. This is not allowed.",
+            "get_registry_component_name");
     }
 
     if ( exists($installer::globals::allregistrycomponents_{$fullname}) )
@@ -113,7 +138,10 @@ sub get_registry_component_name
         $installer::globals::allregistrycomponents_in_this_database_{$fullname} = 1;
     }
 
-    if ( $isrootmodule ) { $installer::globals::registryrootcomponent = $componentname; }
+    if ( $isrootmodule )
+    {
+        $installer::globals::registryrootcomponent = $componentname;
+    }
 
     return $componentname;
 }

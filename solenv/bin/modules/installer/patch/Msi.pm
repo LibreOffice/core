@@ -76,7 +76,7 @@ sub FindAndCreate($$$$$)
 
 =cut
 
-sub new ($$$$$$)
+sub new ($$;$$$$)
 {
     my ($class, $filename, $version, $is_current_version, $language, $product_name) = @_;
 
@@ -101,6 +101,22 @@ sub new ($$$$$$)
         'is_valid' => -f $filename
     };
     bless($self, $class);
+
+    # Fill in some missing values from the 'Properties' table.
+    if ( ! (defined $version && defined $language && defined $product_name))
+    {
+        my $property_table = $self->GetTable("Property");
+
+        $self->{'version'} = $property_table->GetValue("Property", "DEFINEDVERSION", "Value")
+            unless defined $self->{'version'};
+        $self->{'product_name'} = $property_table->GetValue("Property", "DEFINEDPRODUCT", "Value")
+            unless defined $self->{'product_name'};
+
+        my $language = $property_table->GetValue("Property", "ProductLanguage", "Value");
+        # TODO: Convert numerical language id to language name.
+        $self->{'language'} = $language
+            unless defined $self->{'language'};
+    }
 
     return $self;
 }
@@ -181,7 +197,6 @@ sub GetTable ($$)
                 "-f", installer::patch::Tools::ToEscapedWindowsPath($self->{'tmpdir'}),
                 "-e", $table_name);
             my $result = qx($command);
-            print $result;
         }
 
         # Read table into memory.
@@ -323,6 +338,48 @@ sub SplitTargetSourceLongShortName ($)
 }
 
 
+
+
+sub SetupFullNames ($$);
+sub SetupFullNames ($$)
+{
+    my ($item, $directory_map) = @_;
+
+    # Don't process any item twice.
+    return if defined $item->{'full_source_name'};
+
+    my $parent = $item->{'parent'};
+    if (defined $parent)
+    {
+        # Process the parent first.
+        if ( ! defined $parent->{'full_source_long_name'})
+        {
+            SetupFullNames($parent, $directory_map);
+        }
+
+        # Prepend the full names of the parent to our names.
+        $item->{'full_source_long_name'}
+            = $parent->{'full_source_long_name'} . "/" . $item->{'source_long_name'};
+        $item->{'full_source_short_name'}
+            = $parent->{'full_source_short_name'} . "/" . $item->{'source_short_name'};
+        $item->{'full_target_long_name'}
+            = $parent->{'full_target_long_name'} . "/" . $item->{'target_long_name'};
+        $item->{'full_target_short_name'}
+            = $parent->{'full_target_short_name'} . "/" . $item->{'target_short_name'};
+    }
+    else
+    {
+        # Directory has no parent => full names are the same as the name.
+        $item->{'full_source_long_name'} = $item->{'source_long_name'};
+        $item->{'full_source_short_name'} = $item->{'source_short_name'};
+        $item->{'full_target_long_name'} = $item->{'target_long_name'};
+        $item->{'full_target_short_name'} = $item->{'target_short_name'};
+    }
+}
+
+
+
+
 =head2 GetDirectoryMap($self)
 
     Return a map that maps directory unique names (column 'Directory' in table 'Directory')
@@ -339,17 +396,18 @@ sub GetDirectoryMap ($)
         return $self->{'DirectoryMap'};
     }
 
+    # Initialize the directory map.
     my $directory_table = $self->GetTable("Directory");
-    my %dir_map = ();
+    my $directory_map = ();
     foreach my $row (@{$directory_table->GetAllRows()})
     {
         my ($target_long_name, $target_short_name, $source_long_name, $source_short_name)
             = installer::patch::Msi::SplitTargetSourceLongShortName($row->GetValue("DefaultDir"));
         my $unique_name = $row->GetValue("Directory");
-        $dir_map{$unique_name} =
+        $directory_map->{$unique_name} =
         {
             'unique_name' => $unique_name,
-            'parent' => $row->GetValue("Directory_Parent"),
+            'parent_name' => $row->GetValue("Directory_Parent"),
             'default_dir' => $row->GetValue("DefaultDir"),
             'source_long_name' => $source_long_name,
             'source_short_name' => $source_short_name,
@@ -358,49 +416,20 @@ sub GetDirectoryMap ($)
         };
     }
 
-    # Set up full names for all directories.
-    my @todo = map {$_} (keys %dir_map);
-    while (scalar @todo > 0)
+    # Add references to parent directories.
+    foreach my $item (values %$directory_map)
     {
-        my $key = shift @todo;
-        my $item = $dir_map{$key};
-        next if defined $item->{'full_source_name'};
-
-        if ($item->{'parent'} eq "")
-        {
-            # Directory has no parent => full names are the same as the name.
-            $item->{'full_source_long_name'} = $item->{'source_long_name'};
-            $item->{'full_source_short_name'} = $item->{'source_short_name'};
-            $item->{'full_target_long_name'} = $item->{'target_long_name'};
-            $item->{'full_target_short_name'} = $item->{'target_short_name'};
-        }
-        else
-        {
-            my $parent = $dir_map{$item->{'parent'}};
-            if ( defined $parent->{'full_source_long_name'})
-            {
-                # Parent aleady has full names => we can create the full name of the current item.
-                $item->{'full_source_long_name'}
-                    = $parent->{'full_source_long_name'} . "/" . $item->{'source_long_name'};
-                $item->{'full_source_short_name'}
-                    = $parent->{'full_source_short_name'} . "/" . $item->{'source_short_name'};
-                $item->{'full_target_long_name'}
-                    = $parent->{'full_target_long_name'} . "/" . $item->{'target_long_name'};
-                $item->{'full_target_short_name'}
-                    = $parent->{'full_target_short_name'} . "/" . $item->{'target_short_name'};
-            }
-            else
-            {
-                # Parent has to be processed before the current item can be processed.
-                # Push both to the head of the list.
-                unshift @todo, $key;
-                unshift @todo, $item->{'parent'};
-            }
-        }
+        $item->{'parent'} = $directory_map->{$item->{'parent_name'}};
     }
 
-    # Postprocess the path names for cleanup.
-    foreach my $item (values %dir_map)
+    # Set up full names for all directories.
+    foreach my $item (values %$directory_map)
+    {
+        SetupFullNames($item, $directory_map);
+    }
+
+    # Cleanup the names.
+    foreach my $item (values %$directory_map)
     {
         foreach my $id (
             'full_source_long_name',
@@ -414,7 +443,7 @@ sub GetDirectoryMap ($)
         }
     }
 
-    $self->{'DirectoryMap'} = \%dir_map;
+    $self->{'DirectoryMap'} = $directory_map;
     return $self->{'DirectoryMap'};
 }
 
@@ -455,14 +484,20 @@ sub GetFileMap ($)
     my $file_map = {};
     my $file_component_index = $file_table->GetColumnIndex("Component_");
     my $file_file_index = $file_table->GetColumnIndex("File");
+    my $file_filename_index = $file_table->GetColumnIndex("FileName");
     foreach my $file_row (@{$file_table->GetAllRows()})
     {
         my $component_name = $file_row->GetValue($file_component_index);
         my $directory_name = $component_to_directory_map{$component_name};
         my $unique_name = $file_row->GetValue($file_file_index);
+        my $file_name = $file_row->GetValue($file_filename_index);
+        my ($long_name, $short_name) = SplitLongShortName($file_name);
         $file_map->{$unique_name} = {
             'directory' => $dir_map->{$directory_name},
-            'component_name' => $component_name
+            'component_name' => $component_name,
+            'file_name' => $file_name,
+            'long_name' => $long_name,
+            'short_name' => $short_name
         };
     }
 

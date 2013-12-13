@@ -32,7 +32,7 @@ use Getopt::Long;
 use Pod::Usage;
 use Digest;
 
-use Carp::Always;
+#use Carp::Always;
 
 use strict;
 

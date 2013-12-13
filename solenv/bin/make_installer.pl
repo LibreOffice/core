@@ -303,11 +303,18 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
     $modulesinproductlanguageresolvedarrayref = installer::windows::feature::sort_feature(
         $modulesinproductlanguageresolvedarrayref);
 
-    installer::windows::feature::create_feature_table(
-        $modulesinproductlanguageresolvedarrayref,
-        $newidtdir,
-        $languagesarrayref,
-        $allvariableshashref);
+    foreach my $onelanguage (@$languagesarrayref)
+    {
+        my $features = installer::windows::feature::prepare_feature_table(
+            $modulesinproductlanguageresolvedarrayref,
+            $onelanguage,
+            $allvariableshashref);
+        $features = installer::windows::feature::add_missing_features($features);
+        installer::windows::feature::create_feature_table(
+            $newidtdir,
+            $onelanguage,
+            $features);
+    }
 
     installer::windows::featurecomponent::create_featurecomponent_table(
         $filesinproductlanguageresolvedarrayref,

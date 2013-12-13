@@ -479,13 +479,20 @@ sub get_normalized_language ($)
 
     if (ref($language) eq "ARRAY")
     {
-        if (scalar @$language > 1 && $language->[0] eq "en-US")
+        if (scalar @$language > 1)
         {
-            return $language->[1];
+            if ($language->[0] eq "en-US")
+            {
+                return $language->[1];
+            }
+            else
+            {
+                return $language->[0];
+            }
         }
         else
         {
-            return $language;
+            return join("_", @$language);
         }
     }
     elsif ($language =~ /^.*?_(.*)$/)

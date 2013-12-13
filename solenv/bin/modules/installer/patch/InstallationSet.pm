@@ -27,21 +27,8 @@ use installer::logger;
 
 use strict;
 
-# TODO: Detect the location of 7z.exe
-my $Unpacker = "/c/Program\\ Files/7-Zip/7z.exe";
-
-
-
-# TODO: Is there a touch in a standard library?
-sub touch ($)
-{
-    my ($filename) = @_;
-
-    open my $out, ">", $filename;
-    close $out;
-}
-
-
+# Call Get7Zip() to get access to the filename of the 7z executable.
+my $SevenZip = undef;
 
 
 =head1 NAME
@@ -56,6 +43,70 @@ sub touch ($)
 
 =cut
 
+
+
+
+=head2 Detect7ZipOnWindows ()
+
+    7Zip seems to be the only program able to unpack an NSIS installer.
+    Search for it.
+
+=cut
+
+sub Detect7ZipOnWindows ()
+{
+    # Use 'reg query' to read registry entry from Windows registry.
+    my $registry_key = "HKEY_CURRENT_USER\\\\Software\\\\7-Zip";
+    my $registry_value_name = "Path";
+    my $command = sprintf("reg query %s /v %s", $registry_key, $registry_value_name);
+    my $response = qx($command);
+
+    # Process the response.
+    my $path_to_7zip = undef;
+    if ($response =~ /\s+REG_SZ\s+([^\r\n]*)/m)
+    {
+        $path_to_7zip = $1;
+    }
+
+    # If that failed, then make an educated guess.
+    if ( ! defined $path_to_7zip)
+    {
+        $path_to_7zip = "c:\\Program Files\\7-Zip\\";
+    }
+
+    # Check if the executable exists and is, well, executable.
+    return undef unless -d $path_to_7zip;
+    my $fullname = File::Spec->catfile($path_to_7zip, "7z.exe");
+    return undef unless -f $fullname;
+    return undef unless -x $fullname;
+
+    return $fullname;
+}
+
+
+
+
+sub Get7Zip ()
+{
+    if ( ! defined $SevenZip)
+    {
+        if ($ENV{'OS'} eq "WNT")
+        {
+            $SevenZip = Detect7ZipOnWindows();
+        }
+        if ( ! defined $SevenZip)
+        {
+            # Use an empty string to avoid repeated (and failing) detections of a missing 7z.
+            $SevenZip = "";
+        }
+    }
+
+    return $SevenZip eq "" ? undef : $SevenZip;
+}
+
+
+
+
 sub UnpackExe ($$)
 {
     my ($filename, $destination_path) = @_;
@@ -69,12 +120,18 @@ sub UnpackExe ($$)
     my $windows_filename = installer::patch::Tools::ToEscapedWindowsPath($filename);
     my $windows_destination_path = installer::patch::Tools::ToEscapedWindowsPath($destination_path);
     my $command = join(" ",
-        $Unpacker,
+        "\"".Get7Zip()."\"",
         "x",
         "-y",
         "-o".$windows_destination_path,
         $windows_filename);
     my $result = qx($command);
+    if ( ! $result)
+    {
+        installer::exiter::exit_program(
+            "ERROR: can not unpack downloadable installation set: ".$!,
+            "installer::patch::InstallationSet::UnpackExe");
+    }
 
     # Check the existence of the .cab files.
     my $cab_filename = File::Spec->catfile($destination_path, "openoffice1.cab");
@@ -119,6 +176,7 @@ sub UnpackCab ($$$)
     if ( -d $temporary_destination_path)
     {
         # Temporary directory already exists => cab file has already been unpacked (flat), nothing to do.
+        printf("%s exists\n", $temporary_destination_path);
         $installer::logger::Info->printf("cab file has already been unpacked to flat structure\n");
     }
     else
@@ -130,22 +188,30 @@ sub UnpackCab ($$$)
     # Move the files to their destinations.
     File::Path::make_path($destination_path);
     $installer::logger::Info->printf("moving files to their directories\n");
+    my $directory_map = $msi->GetDirectoryMap();
+    my $office_menu_folder_name = $directory_map->{'INSTALLLOCATION'}->{'target_long_name'};
     my $count = 0;
     foreach my $file_row (@{$file_table->GetAllRows()})
     {
         my $unique_name = $file_row->GetValue('File');
-        my $directory_item = $file_map->{$unique_name}->{'directory'};
-        my $source_full_name = $directory_item->{'full_source_long_name'};
-
+        my $file_item = $file_map->{$unique_name};
+        my $directory_item = $file_item->{'directory'};
+        my $long_file_name = $file_item->{'long_name'};
+        my $full_name = $directory_item->{'full_source_long_name'};
+        # Strip away the leading OfficeMenuFolder part.
+        $full_name =~ s/^$office_menu_folder_name\///;
         my $flat_filename = File::Spec->catfile($temporary_destination_path, $unique_name);
-        my $dir_path = File::Spec->catfile($destination_path, $source_full_name);
-        my $dir_filename = File::Spec->catfile($dir_path, $unique_name);
+        my $dir_path = File::Spec->catfile($destination_path, $full_name);
+        my $dir_filename = File::Spec->catfile($dir_path, $long_file_name);
 
         if ( ! -d $dir_path)
         {
             File::Path::make_path($dir_path);
         }
-        File::Copy::move($flat_filename, $dir_filename);
+
+        $installer::logger::Lang->printf("moving %s to %s\n", $flat_filename, $dir_filename);
+        File::Copy::move($flat_filename, $dir_filename)
+            || die("can not move file ".$flat_filename.":".$!);
 
         ++$count;
     }
@@ -180,7 +246,7 @@ sub UnpackCabFlat ($$$)
     my $windows_cab_filename = installer::patch::Tools::ToEscapedWindowsPath($cab_filename);
     my $windows_destination_path = installer::patch::Tools::ToEscapedWindowsPath($destination_path);
     my $command = join(" ",
-        $Unpacker,
+        "\"".Get7Zip()."\"",
         "x", "-o".$windows_destination_path,
         $windows_cab_filename,
         "-y");
@@ -449,6 +515,7 @@ sub ProvideDownloadSet ($$$)
     my ($version, $language, $package_format) = @_;
 
     my $release_item = installer::patch::ReleasesList::Instance()->{$version}->{$package_format}->{$language};
+    return undef unless defined $release_item;
 
     # Get basename of installation set from URL.
     $release_item->{'URL'} =~ /^(.*)\/([^\/]+)$/;
@@ -558,7 +625,7 @@ sub ProvideUnpackedExe ($$$$$)
         $file_count,
         $directory_count);
 
-        touch($unpacked_exe_flag_filename);
+        installer::patch::Tools::touch($unpacked_exe_flag_filename);
 
         return 1;
     }
@@ -580,7 +647,7 @@ sub ProvideUnpackedExe ($$$$$)
                 $installer::logger::Info->printf("downloadable installation set has been unpacked to\n");
                 $installer::logger::Info->printf("    %s\n", $unpacked_exe_path);
 
-                touch($unpacked_exe_flag_filename);
+                installer::patch::Tools::touch($unpacked_exe_flag_filename);
 
                 return 1;
             }
@@ -774,7 +841,7 @@ sub ProvideUnpackedCab ($$$$$)
             $installer::logger::Info->printf("unpacked cab file '%s'\n", $cab_filename);
             $installer::logger::Info->printf("    to '%s'\n", $unpacked_cab_path);
 
-            touch($unpacked_cab_flag_filename);
+            installer::patch::Tools::touch($unpacked_cab_flag_filename);
 
             return 1;
         }

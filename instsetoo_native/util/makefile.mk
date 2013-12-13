@@ -87,6 +87,7 @@ help .PHONY :
     @echo "    patch-create           create a patch for updating an installed office (Windows only)"
     @echo "    patch-apply            apply a previously created patch"
     @echo "    patch-update-releases-xml"
+    @echo "    patch-check            check if patch can be created (part of patch-create)"
     @echo 
     @echo "Most targets (all except aoo_srcrelease and updatepack) accept suffixes"
     @echo "    add _<language> to build a target for one language only"
@@ -162,12 +163,17 @@ updatepack:
     $(PERL) -w $(SOLARENV)$/bin$/packager.pl
 
 
-# The naming schema of targets is this: target_language.package
-# where 'target' is the target base name (as openoffice or sdkoo)
-#       'language' is the language name (like en-US or fr)
-#       'package' is the package format (like msi or deb)
 
-.IF "$(alllangiso)"!=""
+.IF "$(alllangiso)"==""
+openoffice:
+    @echo no languages specified => aborting packing
+
+.ELSE	# "$(alllangiso)"==""
+
+# The naming schema of targets is this: <target>_<language>.<package>
+# where <target> is the target base name (like openoffice or sdkoo)
+#       <language> is the language name (like en-US or fr)
+#       <package> is the package format (like archive, msi, deb, rpm, dmg)
 
 # Add dependencies of basic targets on language specific targets.
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
@@ -259,15 +265,6 @@ $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openoffice_$L.$P)) .PHO
         $(PRJ)$/util$/update.xml	\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-#$(foreach,L,$(alllangiso) openoffice_$L.archive) :
-#	$(MAKE_INSTALLER_COMMAND) 		\
-#		-p Apache_OpenOffice		\
-#		-msitemplate $(MSIOFFICETEMPLATEDIR)
-#	$(GEN_UPDATE_INFO_COMMAND)		\
-#		--product Apache_OpenOffice	\
-#		$(PRJ)$/util$/update.xml	\
-#		> $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
 #openofficewithjre_%{$(PKGFORMAT:^".")} :
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficewithjre_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_wJRE -msitemplate $(MSIOFFICETEMPLATEDIR)
@@ -301,11 +298,7 @@ $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) sdkoo_$L.$P)) .PHONY :
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) sdkoodev_$L.$P)) .PHONY :
     $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_Dev_SDK -msitemplate $(MSISDKOOTEMPLATEDIR) -dontstrip
 
-.ELSE			# "$(alllangiso)"!=""
-openoffice:
-    @echo cannot pack nothing...
-
-.ENDIF			# "$(alllangiso)"!=""
+.ENDIF	# "$(alllangiso)"==""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     $(COPY) $< $@
@@ -344,6 +337,16 @@ patch-update-releases-xml .PHONY:
         --output-path $(OUT)						\
         --lst-file $(PRJ)$/util$/openoffice.lst\
         --target-version 4.0.1
+$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) patch-check_$L.$P)) .PHONY :
+    @echo building $@
+    perl -I $(SOLARENV)$/bin/modules $(SOLARENV)$/bin$/patch_tool.pl	\
+        check								\
+        --product-name Apache_OpenOffice				\
+        --output-path $(OUT)						\
+        --data-path $(PRJ)$/data					\
+        --lst-file $(PRJ)$/util$/openoffice.lst				\
+        --language $(subst,$(@:s/_/ /:1)_, $(@:b))			\
+        --package-format $(@:e:s/.//)
 
 $(PRJ)$/data :
     mkdir $@

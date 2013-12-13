@@ -441,7 +441,7 @@ BEGIN
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @languagepackfeature =();
-    @featurecollector =();
+    %featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
     $macinstallfilename = "macinstall.ulf";

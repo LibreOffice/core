@@ -59,4 +59,18 @@ sub ToWindowsPath ($)
     return $windows_path;
 }
 
+
+# TODO: Is there a touch in a standard library?
+sub touch ($)
+{
+    my ($filename) = @_;
+
+    open my $out, ">", $filename;
+    close $out;
+}
+
+
+
+
+
 1;
