@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,chartopengl,\
     cppu \
     cppuhelper \
     sal \
+	svxcore \
     vcl \
     $(gb_UWINAPI) \
 ))

@@ -46,6 +46,7 @@
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/unoshape.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -95,7 +96,7 @@ uno::Reference< drawing::XShapes > getChartShape(
                 xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
                 if( aRet.equals("com.sun.star.chart2.shapes") )
                 {
-                    xRet = uno::Reference< drawing::XShapes >( xShape, uno::UNO_QUERY );
+                    xRet = dynamic_cast<SvxDummyShapeContainer*>(xShape.get())->getWrappedShape();
                     break;
                 }
             }
@@ -119,12 +120,13 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
                 "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
         dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
         m_pChart = (void *)pChart;
+        SvxDummyShapeContainer* pContainer = new SvxDummyShapeContainer(pChart);
         xRet = pChart;
 #if 0
         xRet = new dummy::DummyChart();
         m_pChart = (void *)((dummy::DummyChart *)xRet);
 #endif
-        xDrawPage->add(uno::Reference< drawing::XShape >(xRet, uno::UNO_QUERY_THROW));
+        xDrawPage->add(pContainer);
     }
     return xRet;
 }

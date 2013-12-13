@@ -943,4 +943,12 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
     }
 }
 
+SvxDummyShapeContainer::SvxDummyShapeContainer(uno::Reference< drawing::XShapes > xObject):
+    m_xDummyObject(xObject)
+{
+}
+
+SvxDummyShapeContainer::~SvxDummyShapeContainer() throw()
+{
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
