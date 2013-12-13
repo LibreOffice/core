@@ -1752,14 +1752,17 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().Characters(aBuffer.makeStringAndClear());
         }
 
-        // initials
-        OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
-        if( !aInitials.isEmpty() )
+        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
-            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                                              XML_SENDER_INITIALS, sal_True,
-                                              sal_False );
-            GetExport().Characters(aInitials);
+            // initials
+            OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
+            if( !aInitials.isEmpty() )
+            {
+                SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                        XML_SENDER_INITIALS, sal_True,
+                        sal_False );
+                GetExport().Characters(aInitials);
+            }
         }
 
         com::sun::star::uno::Reference < com::sun::star::text::XText > xText;
@@ -2228,10 +2231,13 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
         // Element
         if (eElementName == XML_SENDER_INITIALS)
         {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                                      eElementName, bAddSpace, bAddSpace );
-            // export content
-            GetExport().Characters(sContent);
+            if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+            {
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                        eElementName, bAddSpace, bAddSpace );
+                // export content
+                GetExport().Characters(sContent);
+            }
         }
         else
         {
