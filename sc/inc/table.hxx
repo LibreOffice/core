@@ -1069,7 +1069,7 @@ private:
     };
 
 public :
-    ScColumn* GetColumnByIndex(sal_Int32 index);
+    ScColumn* GetColumnByIndex( sal_Int32 nIndex );
 };
 
 

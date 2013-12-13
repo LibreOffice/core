@@ -3654,11 +3654,11 @@ sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
     return n;
 }
 
-ScColumn* ScTable::GetColumnByIndex(sal_Int32 index)
+ScColumn* ScTable::GetColumnByIndex( sal_Int32 nIndex )
 {
-    if (ValidCol(index))
+    if (ValidCol(nIndex))
     {
-        return &(aCol[index]);
+        return &(aCol[nIndex]);
     }
     return NULL;
 }
