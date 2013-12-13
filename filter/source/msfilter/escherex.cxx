@@ -4368,7 +4368,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 else if ( eBlibType == PEG )
                     rPicOutStrm << (sal_uInt16)0x0505;
             }
-            // #69607 do not compress WMF files if we are in OOXML export
+            // fdo#69607 do not compress WMF files if we are in OOXML export
             if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) ||
                     ( ( ( eBlibType == WMF ) || ( eBlibType == EMF ) ) && bOOxmlExport ) )
             {
