@@ -34,6 +34,11 @@ public:
     void testTrendline();
     void testStockChart();
     void testBarChart();
+    void testDoughnutChart();
+    void testUpDownBars();
+    void testCrosses();
+    void testChartDataTable();
+    void testAreaChartLoad();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -41,7 +46,11 @@ public:
     CPPUNIT_TEST(testTrendline);
     CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
-
+    CPPUNIT_TEST(testDoughnutChart);
+    CPPUNIT_TEST(testUpDownBars);
+    CPPUNIT_TEST(testCrosses);
+    CPPUNIT_TEST(testChartDataTable);
+    CPPUNIT_TEST(testAreaChartLoad);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -423,6 +432,64 @@ void Chart2ExportTest::testBarChart()
        return;
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", "col");
+}
+
+void Chart2ExportTest::testDoughnutChart()
+{
+    load("/chart2/qa/extras/data/docx/", "doughnutChart.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+           return;
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
+    }
+}
+
+void Chart2ExportTest::testUpDownBars()
+{
+    load("/chart2/qa/extras/data/docx/", "UpDownBars.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+           return;
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
+    }
+}
+
+void Chart2ExportTest::testCrosses()
+{
+    load("/chart2/qa/extras/data/docx/", "Bar_horizontal_cone.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+           return;
+      assertXPath(pXmlDoc, "/c:chartspace/c:chart/c:plotarea/c:catAx/c:crosses", "val", "autoZero");
+    }
+}
+
+void Chart2ExportTest::testChartDataTable()
+{
+    load("/chart2/qa/extras/data/docx/", "testChartDataTable.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+           return;
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", "1");
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", "1");
+      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
+    }
+}
+
+void Chart2ExportTest::testAreaChartLoad()
+{
+    load ("/chart2/qa/extras/data/docx/", "FDO72217.docx");
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+        if (!pXmlDoc)
+            return;
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls", "showVal", "1");
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", "0");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
