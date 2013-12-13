@@ -1494,6 +1494,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocInt:
             case ocRad:
             case ocCountIf:
+            case ocIsEven:
             // Don't change the state.
             break;
             default:
