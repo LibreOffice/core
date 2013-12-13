@@ -6013,7 +6013,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     if ( m_pFontsAttrList )
     {
         OUString sFontName;
-        for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
+        for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
         {
             if ( i->first == "CharThemeFontNameCs" )
             {
@@ -6038,7 +6038,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 
     // save theme attributes back to the run properties
     OUString str;
-    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
+    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
     {
         if ( i->first == "CharThemeNameAscii" && bWriteAsciiTheme )
         {

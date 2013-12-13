@@ -954,7 +954,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
             {
                 uno::Sequence< uno::Any > aRet(vFrmList.size());
                 std::vector<SwFrm*>::iterator aIter = vFrmList.begin();
-                for ( sal_Int32 nIndex = 0; aIter != vFrmList.end(); aIter++, nIndex++ )
+                for ( sal_Int32 nIndex = 0; aIter != vFrmList.end(); ++aIter, nIndex++ )
                 {
                     uno::Reference< XAccessible > xAcc = pAccMap->GetContext(*aIter, sal_False);
                     if ( xAcc.is() )

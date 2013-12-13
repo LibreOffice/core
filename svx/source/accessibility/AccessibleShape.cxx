@@ -1552,7 +1552,7 @@ throw (uno::RuntimeException)
     std::vector< uno::Reference<drawing::XShape> >::iterator aIter;
     //we start counting position from 1
     sal_Int32 nPos = 1;
-    for ( aIter = vXShapes.begin(); aIter != vXShapes.end(); aIter++, nPos++ )
+    for ( aIter = vXShapes.begin(); aIter != vXShapes.end(); ++aIter, nPos++ )
     {
         if ( (*aIter).get() == mxShape.get() )
         {
