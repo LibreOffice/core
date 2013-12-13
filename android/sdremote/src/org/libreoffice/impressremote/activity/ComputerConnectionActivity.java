@@ -10,15 +10,15 @@ package org.libreoffice.impressremote.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.fragment.ComputerConnectionFragment;
 import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server;
 
-public class ComputerConnectionActivity extends SherlockFragmentActivity {
+public class ComputerConnectionActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);

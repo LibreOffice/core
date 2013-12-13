@@ -16,17 +16,17 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
@@ -34,7 +34,7 @@ import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.util.SavedStates;
 
-public class ComputerConnectionFragment extends SherlockFragment implements ServiceConnection {
+public class ComputerConnectionFragment extends Fragment implements ServiceConnection {
     public static enum Result {
         CONNECTED, NOT_CONNECTED
     }
@@ -268,7 +268,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void refreshActionBarMenu() {
-        getSherlockActivity().supportInvalidateOptionsMenu();
+        getActivity().supportInvalidateOptionsMenu();
     }
 
     @Override

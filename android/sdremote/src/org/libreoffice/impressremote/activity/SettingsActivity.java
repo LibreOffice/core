@@ -9,25 +9,19 @@
 package org.libreoffice.impressremote.activity;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.R;
 
-public class SettingsActivity extends SherlockPreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
 
-        setUpHomeButton();
         setUpPreferences();
     }
 
-    private void setUpHomeButton() {
-        getSupportActionBar().setHomeButtonEnabled(true);
-    }
-
-    @SuppressWarnings("deprecation")
     private void setUpPreferences() {
         // This action is deprecated
         // but we still need to target pre-Honeycomb devices.

@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,14 +28,13 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextSwitcher;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.adapter.SlidesPagerAdapter;
 import org.libreoffice.impressremote.communication.CommunicationService;
 
-public class SlidesPagerFragment extends SherlockFragment implements ServiceConnection, ViewPager.OnPageChangeListener, View.OnClickListener {
+public class SlidesPagerFragment extends Fragment implements ServiceConnection, ViewPager.OnPageChangeListener, View.OnClickListener {
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
 

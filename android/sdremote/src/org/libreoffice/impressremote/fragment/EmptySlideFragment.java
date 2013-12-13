@@ -9,14 +9,14 @@
 package org.libreoffice.impressremote.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import org.libreoffice.impressremote.R;
 
-public class EmptySlideFragment extends SherlockFragment {
+public class EmptySlideFragment extends Fragment {
     public static EmptySlideFragment newInstance() {
         return new EmptySlideFragment();
     }

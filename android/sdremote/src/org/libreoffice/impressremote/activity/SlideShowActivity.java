@@ -20,12 +20,12 @@ import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow;
@@ -40,7 +40,7 @@ import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.util.Preferences;
 import org.libreoffice.impressremote.util.SavedStates;
 
-public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
+public class SlideShowActivity extends ActionBarActivity implements ServiceConnection {
     public static enum Mode {
         PAGER, GRID, EMPTY
     }
@@ -368,7 +368,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
     @Override
     public boolean onCreateOptionsMenu(Menu aMenu) {
-        getSupportMenuInflater().inflate(R.menu.menu_action_bar_slide_show, aMenu);
+        getMenuInflater().inflate(R.menu.menu_action_bar_slide_show, aMenu);
 
         return true;
     }

@@ -9,12 +9,12 @@
 package org.libreoffice.impressremote.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.R;
 
-public class RequirementsActivity extends SherlockActivity {
+public class RequirementsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
