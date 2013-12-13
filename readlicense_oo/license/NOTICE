@@ -5,8 +5,8 @@ For a more complete license statement please see the associated
 documentation
 ____
 
-Apache OpenOffice
-Copyright 2011, 2012 The Apache Software Foundation
+Apache OpenOffice (http://www.openoffice.org)
+Copyright 2011, 2013 The Apache Software Foundation
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
@@ -16,12 +16,14 @@ ____
 
 Portions of this software copyright (c) 2000-2011, Oracle and/or its affiliates  <http://www.oracle.com/>.
 
+Portions of this software (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
+
 ____
 
 As part of the base system this product also includes code from the following
 Apache projects:
 - Apache Lucene
-- Apache Portable Runtime 
+- Apache Portable Runtime
 - Apache Portable Runtime Utility Library
 - Apache Commons - used by MediaWiki Publisher extension
 - Apache Jakarta HttpClient - used by MediaWiki Publisher extension

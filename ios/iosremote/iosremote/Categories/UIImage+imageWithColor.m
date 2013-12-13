@@ -1,9 +1,11 @@
 //
-//  UIImage+imageWithColor.m
-//  iosremote
+// This file is part of the LibreOffice project.
 //
-//  Created by Siqi Liu on 10/5/13.
-//  Copyright (c) 2013 libreoffice. All rights reserved.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+//  UIImage+imageWithColor.m
 //
 
 #import "UIImage+imageWithColor.h"
@@ -14,13 +16,13 @@
 {
     UIGraphicsBeginImageContext(size);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+
     CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextFillRect(context, (CGRect){.size = size});
-    
+
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+
     return image;
 }
 

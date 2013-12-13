@@ -183,7 +183,7 @@
                         <property name="margin_left">12</property>
                         <property name="margin_right">12</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Copyright © 2000 - 2013 LibreOffice contributors and/or their affiliates.</property>
+                        <property name="label" translatable="yes">Copyright © 2000 - 2014 LibreOffice contributors.</property>
                         <property name="justify">center</property>
                         <property name="wrap">True</property>
                       </object>

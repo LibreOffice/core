@@ -17,8 +17,8 @@ endif
 
 $(eval $(call gb_Package_add_file,readlicense_oo_files,NOTICE,NOTICE))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.odt,LICENSE.odt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,CREDITS.odt,CREDITS.odt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.fodt,LICENSE.fodt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,CREDITS.fodt,CREDITS.fodt))
 
 $(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.html,LICENSE.html))
 

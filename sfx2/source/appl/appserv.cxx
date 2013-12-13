@@ -194,7 +194,7 @@ namespace
         }
     }
 }
-/// Find the correct location of the document (LICENSE.odt, etc.), and return
+/// Find the correct location of the document (LICENSE.fodt, etc.), and return
 /// it in rURL if found.
 static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
 {
@@ -223,9 +223,9 @@ static void showDocument( const char* pBaseName )
         args[1].Value <<= sal_True;
 
         OUString aURL;
-        if ( checkURL ( pBaseName, ".odt", aURL ) ||
-                checkURL ( pBaseName, ".html", aURL ) ||
-                checkURL ( pBaseName, "", aURL ) ) {
+        if ( checkURL ( pBaseName, ".fodt", aURL ) ||
+             checkURL ( pBaseName, ".html", aURL ) ||
+             checkURL ( pBaseName, "", aURL ) ) {
             xDesktop->loadComponentFromURL( aURL, OUString("_blank"), 0, args );
         }
     } catch (const ::com::sun::star::uno::Exception &) {

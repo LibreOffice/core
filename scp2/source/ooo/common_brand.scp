@@ -1432,7 +1432,7 @@ File gid_License_Odt
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
-    Name = "LICENSE.odt";
+    Name = "LICENSE.fodt";
     Styles = (PACKED);
 End
 
@@ -1445,7 +1445,7 @@ File gid_Credits_Odt
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
-    Name = "CREDITS.odt";
+    Name = "CREDITS.fodt";
     Styles = (PACKED);
 End
 
