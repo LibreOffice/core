@@ -27,8 +27,11 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     if (aTitle.isEmpty())
         aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);
 
-    BitmapEx aThumbnail = ThumbnailView::readThumbnail(rURL);
-    if( aThumbnail.IsEmpty() )
+    BitmapEx aThumbnail;
+    if (aURLObj.GetProtocol() == INET_PROT_FILE)
+        aThumbnail = ThumbnailView::readThumbnail(rURL);
+
+    if (aThumbnail.IsEmpty())
     {
         // Use the default thumbnail if we have nothing else
         BitmapEx aExt(RecentDocsView::getDefaultThumbnail(rURL));
