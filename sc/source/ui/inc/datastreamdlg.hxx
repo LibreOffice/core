@@ -35,7 +35,6 @@ class DataStreamDlg : public ModalDialog
     OKButton*       m_pBtnOk;
     VclFrame*       m_pVclFrameLimit;
     VclFrame*       m_pVclFrameMove;
-    VclFrame*       m_pVclFrameRange;
 
     DECL_LINK(UpdateHdl, void *);
     DECL_LINK(BrowseHdl, void *);

@@ -32,7 +32,6 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     get(m_pBtnOk, "ok");
     get(m_pVclFrameLimit, "framelimit");
     get(m_pVclFrameMove, "framemove");
-    get(m_pVclFrameRange, "framerange");
 
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
@@ -65,16 +64,15 @@ void DataStreamDlg::UpdateEnable()
     if (m_pRBAddressValue->IsChecked())
     {
         m_pRBNoMove->Check();
-        m_pVclFrameLimit->Hide();
-        m_pVclFrameMove->Hide();
-        m_pVclFrameRange->Hide();
-        m_pEdRange->SetText("");
+        m_pVclFrameLimit->Disable();
+        m_pVclFrameMove->Disable();
+        m_pEdRange->Disable();
     }
     else
     {
-        m_pVclFrameLimit->Show();
-        m_pVclFrameMove->Show();
-        m_pVclFrameRange->Show();
+        m_pVclFrameLimit->Enable();
+        m_pVclFrameMove->Enable();
+        m_pEdRange->Enable();
         bOk = bOk && !m_pEdRange->GetText().isEmpty();
     }
     m_pBtnOk->Enable(bOk);
