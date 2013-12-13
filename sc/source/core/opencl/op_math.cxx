@@ -1570,6 +1570,27 @@ void OpRadians::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpIsEven::GenSlidingWindowFunction(std::stringstream &ss,
+             const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    int singleIndex =  gid0;\n";
+    ss << "    double tmp;\n";
+    GenTmpVariables(ss,vSubArguments);
+    CheckAllSubArgumentIsNan(ss,vSubArguments);
+    ss << "    tmp = (fmod(floor(fabs(tmp0)), 2.0)<0.5);\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 void OpOdd::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName,
     SubArguments &vSubArguments)
