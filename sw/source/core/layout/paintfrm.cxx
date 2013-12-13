@@ -4488,8 +4488,10 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     ///     Status Quo:
     ///         SwLayoutFrm can have transparent drawn backgrounds. Thus,
     ///         "asked" their frame format.
+	
+	//fdo #69407 (FIXED): FILE OPEN: DOC frame background are transparent,shadow comes in foreground.
     const bool bDrawFullShadowRectangle =
-            ( IsLayoutFrm() &&
+            ( !IsLayoutFrm() &&
               (static_cast<const SwLayoutFrm*>(this))->GetFmt()->IsBackgroundTransparent()
             );
 
