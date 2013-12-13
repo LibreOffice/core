@@ -53,6 +53,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 
 // Graphite Libraries (must be after vcl headers on windows)
+#include <graphite_static.hxx>
 #include <graphite2/Segment.h>
 
 #include <graphite_layout.hxx>
