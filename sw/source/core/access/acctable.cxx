@@ -44,7 +44,6 @@
 #include <access.hrc>
 #include <acctable.hxx>
 
-#include <rowfrm.hxx>
 #include <layfrm.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 

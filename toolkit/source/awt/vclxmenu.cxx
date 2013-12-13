@@ -31,8 +31,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/image.hxx>
-#include <vcl/keycod.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 

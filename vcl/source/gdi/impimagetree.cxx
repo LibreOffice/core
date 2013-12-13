@@ -45,7 +45,6 @@
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include "impimagetree.hxx"
-#include <vcl/dibtools.hxx>
 
 namespace {
 

@@ -27,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 

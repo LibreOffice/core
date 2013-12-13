@@ -35,7 +35,6 @@
 #include "accframebase.hxx"
 
 #include <crsrsh.hxx>
-#include "fesh.hxx"
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <dcontact.hxx>

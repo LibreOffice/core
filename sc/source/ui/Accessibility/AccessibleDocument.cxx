@@ -76,8 +76,6 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/AccessibleControlShape.hxx>
-#include <svx/AccessibleShape.hxx>
-#include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/editview.hxx>

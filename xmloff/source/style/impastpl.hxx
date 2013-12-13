@@ -32,7 +32,6 @@
 #include <xmloff/xmlexppr.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class SvXMLAutoStylePoolP;

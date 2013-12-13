@@ -53,7 +53,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/svdpage.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
