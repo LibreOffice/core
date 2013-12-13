@@ -4412,9 +4412,9 @@ namespace osl_File
         //create directory $TEMP/tmpname/tmpdir
         createTestDirectory( aTmpName8 );
         //move directory $TEMP/tmpname to $TEMP/tmpname/tmpdir/tmpname
-        rtl::OUString newName = aTmpName8 + OUString("/tmpname");
+        rtl::OUString newName = aTmpName8 + "/tmpname";
         nError1 = ::osl::File::move( aTmpName3, newName );
-        //deleteTestDirectory( newName + OUString("/tmpname") );
+        //deleteTestDirectory( newName + "/tmpname" );
         //deleteTestDirectory( newName );
         deleteTestDirectory( aTmpName8 );
         deleteTestDirectory( aTmpName6 );
@@ -5899,7 +5899,7 @@ namespace osl_Directory
             osl_setFileAttributes(aTmpDir.pData, 0); //no access allowed now
 
             //Shouldn't be possible now to create a dir underneath it
-            rtl::OUString aTmpSubLevel = aTmpDir + OUString("/notallowedhere");
+            rtl::OUString aTmpSubLevel = aTmpDir + "/notallowedhere";
             nError1 = ::osl::Directory::create(aTmpSubLevel);
 
             //allow removal

@@ -1656,22 +1656,22 @@ namespace
                     case SQL_NODE_LESS:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString(">");
+                        aCondition += ">";
                         break;
                     case SQL_NODE_LESSEQ:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString(">=");
+                        aCondition += ">=";
                         break;
                     case SQL_NODE_GREAT:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString("<");
+                        aCondition += "<";
                         break;
                     case SQL_NODE_GREATEQ:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString("<=");
+                        aCondition += "<=";
                         break;
                     default:
                         break;

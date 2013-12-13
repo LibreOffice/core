@@ -466,9 +466,9 @@ void getJavaPropsFromSafetySettings(
             sal_Bool val= (sal_Bool) key_CheckSecurity->getLongValue();
             OUString sProperty("stardiv.security.disableSecurity=");
             if( val)
-                sProperty= sProperty + OUString("false");
+                sProperty= sProperty + "false";
             else
-                sProperty= sProperty + OUString("true");
+                sProperty= sProperty + "true";
             pjvm->pushProp( sProperty);
         }
     }

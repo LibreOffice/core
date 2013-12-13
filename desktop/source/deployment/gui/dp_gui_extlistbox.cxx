@@ -625,7 +625,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     if ( !pEntry->m_sErrorText.isEmpty() )
     {
         if ( pEntry->m_bActive )
-            sDescription = pEntry->m_sErrorText + OUString("\n") + pEntry->m_sDescription;
+            sDescription = pEntry->m_sErrorText + "\n" + pEntry->m_sDescription;
         else
             sDescription = pEntry->m_sErrorText;
     }

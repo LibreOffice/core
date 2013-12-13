@@ -230,8 +230,7 @@ OUString findPlugin(
     }
     OUString retVal;
     OUString sProgDir = getExecutableDirectory();
-    sUrl = sProgDir + OUString("/")
-        + plugin;
+    sUrl = sProgDir + "/" + plugin;
     jfw::FileStatus s = checkFileURL(sUrl);
     if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
     {

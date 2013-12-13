@@ -262,7 +262,7 @@ OUString URLParameter::get_the_jar()
         return m_aJar;
     }
     else
-        return get_module() + OUString(".jar");
+        return get_module() + ".jar";
 }
 
 

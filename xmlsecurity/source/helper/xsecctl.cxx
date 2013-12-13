@@ -915,14 +915,14 @@ void XSecController::exportSignature(
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
                         OUString(ATTR_XMLNS)
-                            +OUString(":")
-                            +OUString(NSTAG_DC),
+                            + ":"
+                            + OUString(NSTAG_DC),
                         OUString(NS_DC));
 
                     xDocumentHandler->startElement(
                         OUString(NSTAG_DC)
-                            +OUString(":")
-                            +tag_Date,
+                            + ":"
+                            + tag_Date,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList));
 
                     OUStringBuffer buffer;
@@ -940,8 +940,8 @@ void XSecController::exportSignature(
 
                     xDocumentHandler->endElement(
                         OUString(NSTAG_DC)
-                            +OUString(":")
-                            +tag_Date);
+                            + ":"
+                            + tag_Date);
                 }
                 xDocumentHandler->endElement( tag_SignatureProperty );
             }

@@ -132,13 +132,13 @@ Databases::Databases( sal_Bool showBasic,
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
-      newProdName(OUString( "$[officename]" ) ),
-      newProdVersion(OUString( "$[officeversion]" ) ),
-      prodName( OUString( "%PRODUCTNAME" ) ),
-      prodVersion( OUString( "%PRODUCTVERSION" ) ),
-      vendName( OUString( "%VENDORNAME" ) ),
-      vendVersion( OUString( "%VENDORVERSION" ) ),
-      vendShort( OUString( "%VENDORSHORT" ) ),
+      newProdName( "$[officename]" ),
+      newProdVersion( "$[officeversion]" ),
+      prodName( "%PRODUCTNAME" ),
+      prodVersion( "%PRODUCTVERSION" ),
+      vendName( "%VENDORNAME" ),
+      vendVersion( "%VENDORVERSION" ),
+      vendShort( "%VENDORSHORT" ),
       m_aImagesZipPaths( imagesZipPaths ),
       m_aSymbolsStyleName( "" )
 {
@@ -434,7 +434,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OUString key = processLang(Language) + OUString( "/" ) + Module;
+    OUString key = processLang(Language) + "/" + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
         m_aModInfo.insert( ModInfoTable::value_type( key,(StaticModuleInformation*)0 ) );
@@ -443,9 +443,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
 
     if( aPair.second && ! it->second )
     {
-        osl::File cfgFile( getInstallPathAsURL() +
-                           key +
-                           OUString( ".cfg" ) );
+        osl::File cfgFile( getInstallPathAsURL() + key + ".cfg" );
 
         if( osl::FileBase::E_None != cfgFile.open( osl_File_OpenFlag_Read ) )
             it->second = 0;
@@ -836,7 +834,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OUString key = processLang(Language) + OUString( "/" ) + Database;
+    OUString key = processLang(Language) + "/" + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
         m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,(KeywordInfo*)0 ) );
@@ -1113,14 +1111,14 @@ void Databases::cascadingStylesheet( const OUString& Language,
                 fileURL =
                     getInstallPathAsURL()  +
                     processLang( Language )       +
-                    OUString( "/" ) +
+                    "/" +
                     aCSS +
-                    OUString( ".css" );
+                    ".css";
             else if( retry == 1 )
                 fileURL =
                     getInstallPathAsURL()  +
                     aCSS +
-                    OUString( ".css" );
+                    ".css";
 
             osl::DirectoryItem aDirItem;
             osl::File aFile( fileURL );
@@ -1889,7 +1887,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
             bool bIsWriteAccess = false;
             try
             {
-                OUString aCreateTestFolder = aLangURL + OUString( "CreateTestFolder" );
+                OUString aCreateTestFolder = aLangURL + "CreateTestFolder";
                 m_xSFA->createFolder( aCreateTestFolder );
                 if( m_xSFA->isFolder( aCreateTestFolder  ) )
                     bIsWriteAccess = true;
@@ -1942,7 +1940,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 if( bIsWriteAccess )
                     aIndexFolder = implGetFileFromPackage( OUString( ".idxl" ), xPackage );
                 else
-                    aIndexFolder = aZipDir + OUString( "/help.idxl" );
+                    aIndexFolder = aZipDir + "/help.idxl";
             }
             catch (const Exception &)
             {

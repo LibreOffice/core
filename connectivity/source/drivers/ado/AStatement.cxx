@@ -354,7 +354,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
     OUString aBatchSql;
     sal_Int32 nLen = 0;
     for(::std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
-        aBatchSql = aBatchSql + *i + OUString(";");
+        aBatchSql = aBatchSql + *i + ";";
 
 
     if ( m_RecordSet.IsValid() )

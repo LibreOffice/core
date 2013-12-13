@@ -81,7 +81,7 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
     : SfxStyleDialog(pParent,
                     OString("TemplateDialog") + OString::number(nRegion),
                     OUString("modules/swriter/ui/templatedialog") +
-                        OUString::number(nRegion) + OUString(".ui"),
+                        OUString::number(nRegion) + ".ui",
                     rBase)
     , nType(nRegion)
     , pWrtShell(pActShell)

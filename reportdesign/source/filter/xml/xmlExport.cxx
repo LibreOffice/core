@@ -1572,7 +1572,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             xCountFunction->setInitialFormula(beans::Optional< OUString>(sal_True,OUString("rpt:0")));
                             OUString sCountName = sFunction + "_count_" + sExpression;
                             xCountFunction->setName(sCountName);
-                            xCountFunction->setFormula(OUString("rpt:[") + sCountName + OUString("] + 1"));
+                            xCountFunction->setFormula( "rpt:[" + sCountName + "] + 1" );
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
@@ -1587,7 +1587,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         ;
                 }
                 if ( sFunctionName.isEmpty() )
-                    sFunctionName = sFunction + OUString("_") + sExpression;
+                    sFunctionName = sFunction + "_" + sExpression;
                 if ( !sFunction.isEmpty() )
                 {
                     sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};

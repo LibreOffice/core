@@ -1843,7 +1843,7 @@ void UCBStorage_Impl::ReadContent()
                 else if ( bIsOfficeDocument )
                 {
                     // streams can be external OLE objects, so they are now folders, but storages!
-                    OUString aName( m_aURL + OUString("/") + xRow->getString(1));
+                    OUString aName( m_aURL + "/" + xRow->getString(1));
 
                     Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
                     if ( m_bRepairPackage )

@@ -99,7 +99,7 @@ PrinterJob::CreateSpoolFile (const OUString& rName, const OUString& rExtension)
     osl::File::RC nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
     if (nError != osl::File::E_None)
         return NULL;
-    aFileURL = maSpoolDirName + OUString("/") + aFileURL;
+    aFileURL = maSpoolDirName + "/" + aFileURL;
 
     pFile = new osl::File (aFileURL);
     nError = pFile->open (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
@@ -587,7 +587,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     InitPaperSize (rJobSetup);
 
     OUString aPageNo = OUString::number ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
-    OUString aExt    = aPageNo + OUString(".ps");
+    OUString aExt    = aPageNo + ".ps";
 
     osl::File* pPageHeader = CreateSpoolFile ( OUString("psp_pghead"), aExt);
     osl::File* pPageBody   = CreateSpoolFile ( OUString("psp_pgbody"), aExt);

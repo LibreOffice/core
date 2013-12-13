@@ -520,7 +520,7 @@ void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException
             OUString sComposedName;
             sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName
-                 + OUString(" TO ");
+                 + " TO ";
             sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName;
 

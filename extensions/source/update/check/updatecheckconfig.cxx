@@ -199,7 +199,7 @@ OUString UpdateCheckConfig::getDesktopDirectory()
     // This should become a desktop specific setting in some system backend ..
     OUString aHomeDir;
     osl::Security().getHomeDir( aHomeDir );
-    aRet = aHomeDir + OUString("/Desktop");
+    aRet = aHomeDir + "/Desktop";
 
     // Set path to home directory when there is no /Desktop directory
     osl::Directory aDocumentsDir( aRet );

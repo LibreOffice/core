@@ -557,7 +557,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 multiLabelString = CFStringToOUString(localizedMultiLabel);
                 CFRelease(multiLabel);
                 CFRelease(localizedMultiLabel);
-                headerNameString = multiPropertyString + OUString(": ") + fixLabel(multiLabelString);
+                headerNameString = multiPropertyString + ": " + fixLabel(multiLabelString);
                 headerNames[i] = new macabfield;
                 headerNames[i]->value = OUStringToCFString(headerNameString);
                 headerNames[i]->type = multiType;
@@ -608,7 +608,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     if(multiValue && multiLabel)
                     {
                         localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
-                        multiLabelString = multiPropertyString + OUString(": ") + fixLabel(CFStringToOUString(localizedMultiLabel));
+                        multiLabelString = multiPropertyString + ": " + fixLabel(CFStringToOUString(localizedMultiLabel));
                         CFRelease(multiLabel);
                         CFRelease(localizedMultiLabel);
                         multiLabel = OUStringToCFString(multiLabelString);
@@ -696,7 +696,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 dictType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
                 localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                 dictKeyString = CFStringToOUString(localizedDictKey);
-                dictLabelString = propertyNameString + OUString(": ") + fixLabel(dictKeyString);
+                dictLabelString = propertyNameString + ": " + fixLabel(dictKeyString);
                 dictLabel = OUStringToCFString(dictLabelString);
                 dictHeaders[i] = createHeaderForProperty(dictType, dictValues[i], dictLabel);
                 if (!dictHeaders[i])
@@ -942,7 +942,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
              * property into the record.
              */
             sal_Bool bPlaced = sal_False;
-            OUString columnName = OUString(_propertyName);
+            OUString columnName = _propertyName;
             sal_Int32 i = 1;
 
             // A big safeguard to prevent two fields from having the same name.
@@ -957,7 +957,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     {
                         bPlaced = sal_False;
                         i++;
-                        columnName = OUString(_propertyName) + OUString(" (") + OUString::number(i) + OUString(")");
+                        columnName = _propertyName + " (" + OUString::number(i) + ")";
                     }
 
                     // success!
@@ -1029,7 +1029,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                     dictKeyString = CFStringToOUString(localizedDictKey);
                     CFRelease(localizedDictKey);
-                    newPropertyName = _propertyName + OUString(": ") + fixLabel(dictKeyString);
+                    newPropertyName = _propertyName + ": " + fixLabel(dictKeyString);
                     insertPropertyIntoMacabRecord(_abrecord, _header, newPropertyName, dictValues[i]);
                 }
 
@@ -1072,7 +1072,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
 
                     localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
                     multiLabelString = CFStringToOUString(localizedMultiLabel);
-                    newPropertyName = _propertyName + OUString(": ") + fixLabel(multiLabelString);
+                    newPropertyName = _propertyName + ": " + fixLabel(multiLabelString);
                     insertPropertyIntoMacabRecord(multiType, _abrecord, _header, newPropertyName, multiValue);
 
                     /* free our variables */

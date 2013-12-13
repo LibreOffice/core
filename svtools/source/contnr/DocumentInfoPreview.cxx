@@ -129,7 +129,7 @@ void ODocumentInfoPreview::insertEntry(
     if (!m_pEditWin.GetText().isEmpty()) {
         m_pEditWin.InsertText(OUString("\n\n"));
     }
-    OUString caption(title + OUString(":\n"));
+    OUString caption(title + ":\n");
     m_pEditWin.InsertText(caption);
     m_pEditWin.SetAttrib(
         TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin.GetParagraphCount() - 2,

@@ -334,7 +334,7 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< OUString>& _
                 SvTreeListEntry* pParent = rTree.GetParent(pEntry);
                 while(pParent)
                 {
-                    sName = rTree.GetEntryText(pParent) + OUString("/") + sName;
+                    sName = rTree.GetEntryText(pParent) + "/" + sName;
                     pParent = rTree.GetParent(pParent);
                 }
                 _rNames.push_back(sName);
@@ -472,7 +472,7 @@ OUString OAppDetailPageHelper::getQualifiedName( SvTreeListEntry* _pEntry ) cons
         SvTreeListEntry* pParent = rTree.GetParent(pEntry);
         while(pParent)
         {
-            sComposedName = rTree.GetEntryText(pParent) + OUString("/") + sComposedName;
+            sComposedName = rTree.GetEntryText(pParent) + "/" + sComposedName;
             pParent = rTree.GetParent(pParent);
         }
     }

@@ -762,7 +762,7 @@ namespace svt
 
         if ( mpID )
         {
-            OUString aIDText = OUString::number( ( _nIndex + 1 ) ) +  OUString( "." );
+            OUString aIDText = OUString::number( _nIndex + 1 ) + ".";
              mpID->SetText( aIDText );
         }
 

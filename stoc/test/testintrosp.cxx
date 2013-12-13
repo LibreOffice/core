@@ -969,7 +969,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     {
                         OUString aStr;
                         aPropVal >>= aStr;
-                        aStr = aStr + OUString(" (Modified!)");
+                        aStr += " (Modified!)";
                         aNewVal <<= aStr;
                         break;
                     }

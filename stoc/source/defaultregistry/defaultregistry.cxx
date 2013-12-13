@@ -987,7 +987,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
         if ( lastIndex == 0 )
             resolvedName = m_name + aLinkName;
         else
-            resolvedName = m_name + OUString( "/" ) + aLinkName;
+            resolvedName = m_name + "/" + aLinkName;
     }
 
     if ( m_localKey.is() && m_localKey->isValid() )
@@ -1043,7 +1043,7 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
         if ( lastIndex == 0 )
             resolvedName = m_name + rLinkName;
         else
-            resolvedName = m_name + OUString( "/" ) + rLinkName;
+            resolvedName = m_name + "/" + rLinkName;
     }
 
     if ( m_localKey.is() && m_localKey->isValid() &&
@@ -1089,7 +1089,7 @@ OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
         if ( lastIndex == 0 )
             resolvedName = m_name + rLinkName;
         else
-            resolvedName = m_name + OUString( "/" ) + rLinkName;
+            resolvedName = m_name + "/" + rLinkName;
     }
 
     OUString linkTarget;

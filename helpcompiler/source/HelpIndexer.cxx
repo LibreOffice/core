@@ -125,11 +125,11 @@ bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
         rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
 
     // Add the caption as a field.
-    OUString captionPath = d_captionDir + OUString("/") + sEscapedFileName;
+    OUString captionPath = d_captionDir + "/" + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
     // Add the content as a field.
-    OUString contentPath = d_contentDir + OUString("/") + sEscapedFileName;
+    OUString contentPath = d_contentDir + "/" + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
     return true;

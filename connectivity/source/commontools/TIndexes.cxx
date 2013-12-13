@@ -232,9 +232,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName
             OUString sIndexName,sTemp;
             sIndexName = dbtools::composeTableName( m_pTable->getMetaData(), sTemp, aSchema, aName, sal_True, ::dbtools::eInIndexDefinitions );
 
-            aSql += sIndexName
-                    + OUString(" ON ")
-                        + aComposedName;
+            aSql += sIndexName + " ON " + aComposedName;
 
             Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
             if ( xStmt.is() )

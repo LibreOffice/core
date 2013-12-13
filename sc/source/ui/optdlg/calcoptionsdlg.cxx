@@ -47,7 +47,7 @@ void OptionString::InitViewData(
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    OUString aDesc = maDesc + OUString(": ");
+    OUString aDesc = maDesc + ": ";
     Size aDescSize(pView->GetTextWidth(aDesc), pView->GetTextHeight());
 
     Font aOldFont = pView->GetFont();
@@ -66,7 +66,7 @@ void OptionString::InitViewData(
 void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     Point aPos = rPos;
-    OUString aDesc = maDesc + OUString(": ");
+    OUString aDesc = maDesc + ": ";
     rDev.DrawText(aPos, aDesc);
 
     aPos.X() += rDev.GetTextWidth(aDesc);

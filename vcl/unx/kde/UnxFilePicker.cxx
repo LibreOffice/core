@@ -768,7 +768,7 @@ void UnxFilePicker::sendCommand( const OUString &rCommand )
     if ( m_nFilePickerWrite < 0 )
         return;
 
-    OString aUtfString = OUStringToOString( rCommand + OUString( "\n" ), RTL_TEXTENCODING_UTF8 );
+    OString aUtfString = OUStringToOString( rCommand + "\n", RTL_TEXTENCODING_UTF8 );
 
 #if OSL_DEBUG_LEVEL > 0
     ::std::cerr << "UnxFilePicker sent: \"" << aUtfString.getStr() << "\"" << ::std::endl;

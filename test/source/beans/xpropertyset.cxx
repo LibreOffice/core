@@ -149,7 +149,7 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         {
             // string type
             OUString aOld = any.get<OUString>();
-            OUString aNew = aOld + OUString("foo");
+            OUString aNew = aOld + "foo";
             xPropSet->setPropertyValue(rName, makeAny(aNew));
         }
         else if (type == getCppuType<util::DateTime>())

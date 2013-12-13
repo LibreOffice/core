@@ -217,14 +217,14 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         OUString aLicensePath =
             aBaseInstallPath + OUString::createFromAscii(szLicensePath)
             + OUString::createFromAscii(szWNTLicenseName)
-            + OUString("_")
+            + "_"
             + aLangString
             + OUString::createFromAscii(szWNTLicenseExt);
 #else
         OUString aLicensePath =
             aBaseInstallPath + OUString::createFromAscii(szLicensePath)
             + OUString::createFromAscii(szUNXLicenseName)
-            + OUString("_")
+            + "_"
             + aLangString
             + OUString::createFromAscii(szUNXLicenseExt);
 #endif

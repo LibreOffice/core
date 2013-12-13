@@ -67,7 +67,7 @@ Reference< XComponentContext > createInitialComponentContext(
             inst_dir.pData, &file_url.pData );
         OSL_ASSERT( osl_File_E_None == rc );
 
-        OUString unorc = file_url + OUString("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("uno") );
+        OUString unorc = file_url + ("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("uno") );
 
         return defaultBootstrap_InitialComponentContext( unorc );
     }

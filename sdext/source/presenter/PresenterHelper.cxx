@@ -31,12 +31,12 @@ using namespace ::com::sun::star::presentation;
 namespace sdext { namespace presenter {
 
 const OUString PresenterHelper::msPaneURLPrefix( "private:resource/pane/");
-const OUString PresenterHelper::msCenterPaneURL( msPaneURLPrefix + OUString("CenterPane"));
-const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + OUString("FullScreenPane"));
+const OUString PresenterHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
+const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 
 const OUString PresenterHelper::msViewURLPrefix( "private:resource/view/");
-const OUString PresenterHelper::msPresenterScreenURL( msViewURLPrefix + OUString("PresenterScreen"));
-const OUString PresenterHelper::msSlideSorterURL( msViewURLPrefix + OUString("SlideSorter"));
+const OUString PresenterHelper::msPresenterScreenURL( msViewURLPrefix + "PresenterScreen");
+const OUString PresenterHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 
 const OUString PresenterHelper::msResourceActivationEvent( "ResourceActivation");
 const OUString PresenterHelper::msResourceDeactivationEvent( "ResourceDeactivation");

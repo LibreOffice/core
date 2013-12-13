@@ -162,9 +162,9 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
 
     try
     {
-        const OUString sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + OUString("."));
+        const OUString sSourceName = ::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + ".";
         const OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
-        const OUString sTargetNameTemp = (sTargetName + OUString("."));
+        const OUString sTargetNameTemp = sTargetName + ".";
 
         OUString sStatement = "SELECT * FROM " + sTargetName + " WHERE 0=1";
 

@@ -45,7 +45,7 @@ OUString toAbsoluteFileUrl(OUString const & relativePathname) {
         throw css::uno::RuntimeException(
             (OUString("osl::FileBase::getFileURLFromSystemPath(") +
              relativePathname +
-             OUString(") failed with ") +
+             ") failed with " +
              OUString::number(e2)),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -54,8 +54,8 @@ OUString toAbsoluteFileUrl(OUString const & relativePathname) {
     if (e2 != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
             (OUString("osl::FileBase::getAbsoluteFileURL(") +
-             cwd + OUString(", ") + url +
-             OUString(") failed with ") +
+             cwd + ", " + url +
+             ") failed with " +
              OUString::number(e2)),
             css::uno::Reference< css::uno::XInterface >());
     }

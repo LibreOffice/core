@@ -124,7 +124,7 @@ getLocalizedDatTimeStr(
         = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
 
     pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
-    aDateTimeStr = aTmpStr + OUString(" ");
+    aDateTimeStr = aTmpStr + " ";
 
     nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
     pNumberFormatter->GetOutputString(

@@ -127,8 +127,8 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         OUString path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
         SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
         SAL_INFO("connectivity.mork", "ProfilePath: " << path);
-        abook = path + OUString( "/abook.mab" );
-        history = path + OUString( "/history.mab" );
+        abook = path + "/abook.mab";
+        history = path + "/history.mab";
         SAL_INFO("connectivity.mork", "AdressbookPath (abook): " << abook);
         SAL_INFO("connectivity.mork", "AdressbookPath (history): " << history);
     }

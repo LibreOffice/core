@@ -1587,7 +1587,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
                     Reference<XContent> xContent(xContainer,UNO_QUERY);
                     if ( xContent.is() )
                     {
-                        sName = xContent->getIdentifier()->getContentIdentifier() + OUString("/") + sName;
+                        sName = xContent->getIdentifier()->getContentIdentifier() + "/" + sName;
                     }
                 }
                 break;
@@ -1631,7 +1631,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                         Reference<XContent> xContent(xContainer,UNO_QUERY);
                         if ( xContent.is() )
                         {
-                            sName = xContent->getIdentifier()->getContentIdentifier() + OUString("/") + sName;
+                            sName = xContent->getIdentifier()->getContentIdentifier() + "/" + sName;
                         }
                     }
                     break;

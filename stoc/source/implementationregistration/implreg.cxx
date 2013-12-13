@@ -640,7 +640,7 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
         OUString linkTarget = xKey->getLinkTarget(relativKey);
         OUString linkName(xKey->getKeyName().copy(xUnoKey->getKeyName().getLength()));
 
-        linkName = linkName + OUString("/") + relativKey;
+        linkName = linkName + "/" + relativKey;
 
         if (bRegister)
         {

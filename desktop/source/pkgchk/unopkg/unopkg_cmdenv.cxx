@@ -369,9 +369,9 @@ void CommandEnvironmentImpl::update_( Any const & Status )
     }
 
     if (bUseErr)
-        dp_misc::writeConsoleError(msg + OUString("\n"));
+        dp_misc::writeConsoleError(msg + "\n");
     else
-        dp_misc::writeConsole(msg + OUString("\n"));
+        dp_misc::writeConsole(msg + "\n");
 }
 
 //______________________________________________________________________________

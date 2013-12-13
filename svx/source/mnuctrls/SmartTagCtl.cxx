@@ -105,7 +105,7 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
         // sub-menu starts with smart tag caption and separator
-        const OUString aSmartTagCaption2 = aSmartTagCaption + OUString(": ") + aRangeText;
+        const OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MIB_NOSELECT, OString(), nSubMenuPos++);
         pSbMenu->InsertSeparator(OString(), nSubMenuPos++);

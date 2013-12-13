@@ -259,7 +259,7 @@ sal_Bool MigrationImpl::doMigration()
                 continue;
 
             uno::Sequence< uno::Any > lArgs(2);
-            OUString aOldCfgDataPath = m_aInfo.userdata + OUString("/user/config/soffice.cfg/modules/");
+            OUString aOldCfgDataPath = m_aInfo.userdata + "/user/config/soffice.cfg/modules/";
             lArgs[0] <<= aOldCfgDataPath + vModulesInfo[i].sModuleShortName;
             lArgs[1] <<= embed::ElementModes::READ;
 

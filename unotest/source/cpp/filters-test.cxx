@@ -130,13 +130,13 @@ void FiltersTest::testDir(const OUString &rFilter,
 {
     fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
     recursiveScan(test::pass, rFilter,
-        rURL + OUString("pass"),
+        rURL + "pass",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion);
     recursiveScan(test::fail, rFilter,
-        rURL + OUString("fail"),
+        rURL + "fail",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion);
     recursiveScan(test::indeterminate, rFilter,
-        rURL + OUString("indeterminate"),
+        rURL + "indeterminate",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion);
 }
 

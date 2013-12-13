@@ -316,7 +316,7 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
                 {
                     Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
                     if ( xContent.is() )
-                        sOldName = xContent->getIdentifier()->getContentIdentifier() + OUString("/") + sOldName;
+                        sOldName = xContent->getIdentifier()->getContentIdentifier() + "/" + sOldName;
                 }
 
                 getContainer()->elementReplaced( eType , sOldName, sNewName );

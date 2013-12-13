@@ -120,10 +120,10 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             }
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sText += s_sStringConcat + OUString(" PageNumber()");
+            m_sText += s_sStringConcat + " PageNumber()";
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sText += s_sStringConcat + OUString(" PageCount()");
+            m_sText += s_sStringConcat + " PageCount()";
             break;
         case XML_TOK_FORMATTED_TEXT:
             {

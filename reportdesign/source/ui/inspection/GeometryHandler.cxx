@@ -131,9 +131,7 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, OUStrin
 // -----------------------------------------------------------------------------
 OUString lcl_getQuotedFunctionName(const OUString& _sFunction)
 {
-    OUString sQuotedFunctionName("[");
-    sQuotedFunctionName += _sFunction + OUString("]");
-    return sQuotedFunctionName;
+    return "[" + _sFunction + "]";
 }
 // -----------------------------------------------------------------------------
 OUString lcl_getQuotedFunctionName(const uno::Reference< report::XFunction>& _xFunction)

@@ -72,7 +72,7 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
     OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + OUString(" @\"%\" ");
+                + " @\"%\" ";
     OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( !sPassword.isEmpty() )

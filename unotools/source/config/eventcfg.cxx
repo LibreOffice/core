@@ -174,8 +174,8 @@ void GlobalEventConfig_Impl::Commit()
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
-    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString("BindingType['"));
-    static const OUString sPostfix(OUString("']") + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
+    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + "BindingType['");
+    static const OUString sPostfix("']" + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
     //step through the list of events
     for(int i=0;it!=it_end;++it,++i)
     {

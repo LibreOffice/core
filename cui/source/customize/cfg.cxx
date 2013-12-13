@@ -5362,7 +5362,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     {
         OUString aSourcePath( rPaths[0] );
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + OUString("/"  );
+            aSourcePath = rPaths[0] + "/";
 
         for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
@@ -5414,7 +5414,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         OUString newLine("\n");
         OUString fPath;
         if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + OUString("/"  );
+              fPath = rPaths[0].copy(8) + "/";
         for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
             message += fPath + rejected[i];

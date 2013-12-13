@@ -56,7 +56,7 @@ namespace
         aSecurity.getHomeDir( aConfigPath );
     #endif
 
-        return aConfigPath + OUString("/");
+        return aConfigPath + "/";
     }
 
     // -------------------------------------------------------------------

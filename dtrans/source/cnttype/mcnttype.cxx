@@ -72,7 +72,7 @@ OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 {
-    return m_MediaType + OUString("/") + m_MediaSubtype;
+    return m_MediaType + "/" + m_MediaSubtype;
 }
 
 //------------------------------------------------------------------------
