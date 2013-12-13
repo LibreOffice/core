@@ -563,7 +563,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
               OUString gTarget(aSeq[2].Second);
               OUString contentType;
 
-              OOXMLStream::StreamType_t nType;
+              OOXMLStream::StreamType_t nType(OOXMLStream::UNKNOWN);
               bool bFound = true;
               if(gType.compareTo(sSettingsType) == 0)
               {
