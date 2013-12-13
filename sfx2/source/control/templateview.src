@@ -23,9 +23,14 @@ FixedText FT_NAME
     Size = MAP_APPFONT( 238, 12 );
 };
 
-String STR_WELCOME
+String STR_WELCOME_LINE1
 {
-    Text [ en-US ] = "Welcome to %PRODUCTNAME. Use the sidebar to open or create a file.";
+    Text [ en-US ] = "Welcome to %PRODUCTNAME.";
+};
+
+String STR_WELCOME_LINE2
+{
+    Text [ en-US ] = "Use the sidebar to open or create a file.";
 };
 
 Image IMG_WELCOME
