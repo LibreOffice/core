@@ -9,6 +9,7 @@
 
 #include <sfx2/recentdocsviewitem.hxx>
 
+#include <i18nutil/paper.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/recentdocsview.hxx>
 #include <tools/urlobj.hxx>
@@ -32,7 +33,28 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     if( aThumbnail.IsEmpty() )
     {
         // Use the default thumbnail if we have nothing else
-        aThumbnail = RecentDocsView::getDefaultThumbnail(rURL);
+        BitmapEx aExt(RecentDocsView::getDefaultThumbnail(rURL));
+        Size aExtSize(aExt.GetSizePixel());
+
+        // attempt to make it appear as if it is on a piece of paper
+        static PaperInfo aInfo(PaperInfo::getSystemDefaultPaper());
+        double ratio = double(nThumbnailSize) / double(std::max(aInfo.getWidth(), aInfo.getHeight()));
+        Size aThumbnailSize(aInfo.getWidth() * ratio, aInfo.getHeight() * ratio);
+
+        if (aExtSize.Width() > aThumbnailSize.Width() || aExtSize.Height() > aThumbnailSize.Height())
+        {
+            aExt = TemplateAbstractView::scaleImg(aExt, aThumbnailSize.Width(), aThumbnailSize.Height());
+            aExtSize = aExt.GetSizePixel();
+        }
+
+        // create empty, and copy the default thumbnail in
+        sal_uInt8 nAlpha = 255;
+        aThumbnail = BitmapEx(Bitmap(aThumbnailSize, 24), AlphaMask(aThumbnailSize, &nAlpha));
+
+        aThumbnail.CopyPixel(
+                Rectangle(Point((aThumbnailSize.Width() - aExtSize.Width()) / 2, (aThumbnailSize.Height() - aExtSize.Height()) / 2), aExtSize),
+                Rectangle(Point(0, 0), aExtSize),
+                &aExt);
     }
 
     maURL = rURL;

@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     drawinglayer \
     fwe \
     i18nlangtag \
+    i18nutil \
     sal \
     sax \
     sb \
