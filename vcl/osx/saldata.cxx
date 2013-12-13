@@ -44,8 +44,6 @@ SalData::SalData()
     mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
-    mxP50Space( NULL ),
-    mxP50Pattern( NULL ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
 #if !HAVE_FEATURE_MACOSX_SANDBOX
@@ -61,8 +59,6 @@ SalData::SalData()
 
 SalData::~SalData()
 {
-    CGPatternRelease( mxP50Pattern );
-    CGColorSpaceRelease( mxP50Space );
     CGColorSpaceRelease( mxRGBSpace );
     CGColorSpaceRelease( mxGraySpace );
     for( unsigned int i = 0; i < maCursors.size(); i++ )
