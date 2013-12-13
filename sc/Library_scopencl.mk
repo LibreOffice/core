@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_exception_objects,scopencl,\
         sc/source/core/opencl/op_statistical \
         sc/source/core/opencl/op_array \
         sc/source/core/opencl/op_logical \
+        sc/source/core/opencl/op_spreadsheet \
         sc/source/core/opencl/clcc/clew \
 ))
 
