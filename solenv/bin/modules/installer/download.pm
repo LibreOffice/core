@@ -32,6 +32,8 @@ use installer::pathanalyzer;
 use installer::remover;
 use installer::systemactions;
 
+use strict;
+
 BEGIN { # This is needed so that cygwin's perl evaluates ACLs
     # (needed for correctly evaluating the -x test.)
     if( $^O =~ /cygwin/i ) {
@@ -157,7 +159,7 @@ sub call_md5sum
 {
     my ($filename) = @_;
 
-    $md5sumfile = "/usr/bin/md5sum";
+    my $md5sumfile = "/usr/bin/md5sum";
 
     if ( ! -f $md5sumfile ) { installer::exiter::exit_program("ERROR: No file /usr/bin/md5sum", "call_md5sum"); }
 
@@ -191,7 +193,7 @@ sub call_md5sum
 
 sub get_md5sum
 {
-    ($md5sumoutput) = @_;
+    my ($md5sumoutput) = @_;
 
     my $md5sum;
 
@@ -357,7 +359,7 @@ sub create_tar_gz_file_from_package
     }
 
     $alldirs = installer::systemactions::get_all_directories($installdir);
-    $packagename = ${$alldirs}[0]; # only taking the first Solaris package
+    my $packagename = ${$alldirs}[0]; # only taking the first Solaris package
     if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
 
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$packagename);
@@ -368,8 +370,8 @@ sub create_tar_gz_file_from_package
     my $ldpreloadstring = "";
     if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
 
-    $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename | gzip > $targzname";
-    print "... $systemcall ...\n";
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename | gzip > $targzname";
+    $installer::logger::Info->printf("... %s ...\n", $systemcall);
 
     my $returnvalue = system($systemcall);
 
@@ -799,7 +801,7 @@ sub create_tar_gz_file_from_directory
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;
     my $targzname = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
 
-    $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
+    my $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
 
     my $returnvalue = system($systemcall);
 
@@ -827,16 +829,13 @@ sub resolve_variables_in_downloadname
 
     # Typical name: soa-{productversion}-{extension}-bin-{os}-{languages}
 
-    my $productversion = "";
-    if ( $allvariables->{'PRODUCTVERSION'} ) { $productversion = $allvariables->{'PRODUCTVERSION'}; }
+    my $productversion = $allvariables->{'PRODUCTVERSION'} // "";
     $downloadname =~ s/\{productversion\}/$productversion/;
 
-    my $ppackageversion = "";
-    if ( $allvariables->{'PACKAGEVERSION'} ) { $packageversion = $allvariables->{'PACKAGEVERSION'}; }
+    my $packageversion = $allvariables->{'PACKAGEVERSION'} // "";
     $downloadname =~ s/\{packageversion\}/$packageversion/;
 
-    my $extension = "";
-    if ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) { $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
+    my $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'} // "";
     $extension = lc($extension);
     $downloadname =~ s/\{extension\}/$extension/;
 
@@ -1046,11 +1045,11 @@ sub put_setup_ico_into_template
 # Windows: Including the publisher into nsi template
 ##################################################################
 
-sub put_publisher_into_template
+sub put_publisher_into_template ($$)
 {
-    my ($templatefile) = @_;
+    my ($templatefile, $variables) = @_;
 
-    my $publisher = "Sun Microsystems, Inc.";
+    my $publisher = $variables->{'OOOVENDOR'} // "";
 
     replace_one_variable($templatefile, "PUBLISHERPLACEHOLDER", $publisher);
 }
@@ -1059,11 +1058,11 @@ sub put_publisher_into_template
 # Windows: Including the web site into nsi template
 ##################################################################
 
-sub put_website_into_template
+sub put_website_into_template ($$)
 {
-    my ($templatefile) = @_;
+    my ($templatefile, $variables) = @_;
 
-    my $website = "http\:\/\/www\.openoffice\.org";
+    my $website = $variables->{'STARTCENTER_INFO_URL'} // "";
 
     replace_one_variable($templatefile, "WEBSITEPLACEHOLDER", $website);
 }
@@ -1506,7 +1505,8 @@ sub convert_utf16_to_utf8
 #   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
 #   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
     open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
-    while ( $line = <IN> ) {
+    while ( my $line = <IN> )
+    {
         push @localfile, $line;
     }
     close( IN );
@@ -1535,7 +1535,8 @@ sub convert_utf8_to_utf16
     installer::systemactions::copy_one_file($filename, $savfilename);
 
     open( IN, "<:utf8", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf8_to_utf16");
-    while ( $line = <IN> ) {
+    while (my  $line = <IN>)
+    {
         push @localfile, $line;
     }
     close( IN );
@@ -1701,27 +1702,36 @@ sub get_path_to_nsis_sdk
     my $file;
     my $nsispath = "";
 
-    if ( $ENV{'NSIS_PATH'} ) {
+    if ( $ENV{'NSIS_PATH'} )
+    {
         $nsispath = $ENV{'NSIS_PATH'};
-    } elsif ( $ENV{'SOLARROOT'} ) {
+    }
+    elsif ( $ENV{'SOLARROOT'} )
+    {
         $nsispath = $ENV{'SOLARROOT'} . $installer::globals::separator . "NSIS";
-    } else {
+    }
+    else
+    {
         # do we have nsis already in path ?
-        @paths = split(/:/, $ENV{'PATH'});
-        foreach $paths (@paths) {
-            $paths =~ s/[\/\\]+$//; # remove trailing slashes;
-            $nsispath = $paths . "/nsis";
+        my @paths = split(/:/, $ENV{'PATH'});
+        foreach my $path (@paths)
+        {
+            $path =~ s/[\/\\]+$//; # remove trailing slashes;
+            $nsispath = $path . "/nsis";
 
-            if ( -x $nsispath ) {
-                $nsispath = $paths;
+            if ( -x $nsispath )
+            {
+                $nsispath = $path;
                 last;
             }
-            else {
+            else
+            {
                 $nsispath = "";
             }
         }
     }
-    if ( $ENV{'NSISSDK_SOURCE'} ) {
+    if ( $ENV{'NSISSDK_SOURCE'} )
+    {
         installer::logger::print_warning( "NSISSDK_SOURCE is deprecated. use NSIS_PATH instead.\n" );
         $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
     }
@@ -1807,7 +1817,7 @@ sub replace_variables
 {
     my ($translationfile, $variableshashref) = @_;
 
-    foreach $key (keys %{$variableshashref})
+    foreach my $key (keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
 
@@ -2053,8 +2063,8 @@ sub create_download_sets
         put_banner_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
         put_welcome_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
         put_setup_ico_into_template($templatefile, $includepatharrayref, $allvariableshashref);
-        put_publisher_into_template($templatefile);
-        put_website_into_template($templatefile);
+        put_publisher_into_template($templatefile, $allvariableshashref);
+        put_website_into_template($templatefile, $allvariableshashref);
         put_javafilename_into_template($templatefile, $allvariableshashref);
         put_windows_productversion_into_template($templatefile, $allvariableshashref);
         put_windows_productpath_into_template($templatefile, $allvariableshashref, $languagestringref, $localnsisdir);
