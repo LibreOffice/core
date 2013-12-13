@@ -2665,7 +2665,77 @@ void OpDeg::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-
+void OpFact::GenSlidingWindowFunction(std::stringstream& ss,
+    const std::string sSymName, SubArguments& vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_" << BinFuncName() << "(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    double tmp = " << GetBottom() << ";\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double arg0 = " << GetBottom() << ";\n";
+    FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
+    assert(pCur);
+    if (pCur->GetType() == formula::svSingleVectorRef)
+    {
+#ifdef  ISNAN
+        const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+        ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#endif
+    }
+    else if (pCur->GetType() == formula::svDouble)
+    {
+#ifdef  ISNAN
+        ss << "    {\n";
+#endif
+    }
+#ifdef  ISNAN
+    if(ocPush==vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        ss << "        if (isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << "))\n";
+        ss << "            arg0 = 0;\n";
+        ss << "        else\n";
+        ss << "            arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+        ss << "    arg0 = floor(arg0);\n";
+        ss << "    if (arg0 < 0.0)\n";
+        ss << "        return 0.0;\n";
+        ss << "    else if (arg0 == 0.0)\n";
+        ss << "        return 1.0;\n";
+        ss << "    else if (arg0 <= 170.0)\n";
+        ss << "    {\n";
+        ss << "        double fTemp = arg0;\n";
+        ss << "        while (fTemp > 2.0)\n";
+        ss << "        {\n";
+        ss << "            fTemp = fTemp - 1;\n";
+        ss << "            arg0 = arg0 * fTemp;\n";
+        ss << "        }\n";
+        ss << "    }\n";
+        ss << "    else\n";
+        ss << "        return -DBL_MAX;\n";
+        ss << "    }\n";
+    }
+    else
+    {
+        ss << "    arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+    }
+#else
+    ss << "    arg0 = ";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#endif
+    ss << "    return arg0;\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
