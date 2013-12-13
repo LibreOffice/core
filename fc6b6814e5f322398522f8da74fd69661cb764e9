@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///qg\u003d",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-12-13T11:11:21Z",
+      "side": 1,
+      "message": "given that we control the impl names that we want to mark _special, we should simply mandate that they are legal C function names to begin with and not fix them up here (which would always be incomplete for \"creative\" impl names containing other chars than just \".\" anyway)",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///qk\u003d",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-12-13T11:11:21Z",
+      "side": 1,
+      "message": "why do you need a second list?",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///qY\u003d",
+        "filename": "sax/source/expatwrap/sax_expat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-12-13T11:11:21Z",
+      "side": 1,
+      "message": "this should be a function, not a macro",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///qU\u003d",
+        "filename": "sax/source/expatwrap/sax_expat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-12-13T11:11:21Z",
+      "side": 1,
+      "message": "createSingleFactory never returns null",
+      "revId": "fc6b6814e5f322398522f8da74fd69661cb764e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
