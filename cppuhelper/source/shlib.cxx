@@ -245,7 +245,6 @@ extern "C"
     extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * deployment_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * expwrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * introspection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -263,6 +262,10 @@ extern "C"
     extern void * utl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * vcl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xstor_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+
+    extern void * com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory( const char * , void * , void * );
+    extern void * com_sun_star_extensions_xml_sax_Writer_component_getFactory( const char * , void * , void * );
+    extern void * com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory( const char * , void * , void * );
 }
 #endif
 
@@ -310,13 +313,15 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
         aFullPrefix += "_";
     }
     OUString aGetFactoryName = aFullPrefix + COMPONENT_GETFACTORY;
+    if (rPrefix == "direct")
+        aGetFactoryName = rImplName.replace('.', '_') + "_" + COMPONENT_GETFACTORY;
 
     oslGenericFunction pSym = NULL;
 
 #ifdef DISABLE_DYNLOADING
 
     // First test library names that aren't app-specific.
-    static lib_to_component_mapping non_app_specific_map[] = {
+    static lib_to_component_mapping components_mapping[] = {
         // Sigh, the name under which the bootstrap component is looked for
         // varies a lot? Or then I just have been confused by some mixed-up
         // incremental build.
@@ -330,7 +335,6 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
         { "libcomphelper.a", comphelp_component_getFactory },
         { "libconfigmgrlo.a", configmgr_component_getFactory },
         { "libdeployment.a", deployment_component_getFactory },
-        { "libexpwraplo.a", expwrap_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libi18npoollo.a", i18npool_component_getFactory },
@@ -347,9 +351,26 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
         { "libxstor.a", xstor_component_getFactory },
         { NULL, NULL }
     };
+    static lib_to_component_mapping direct_components_mapping[] = {
+        { "com.sun.star.comp.extensions.xml.sax.ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory },
+        { "com.sun.star.extensions.xml.sax.Writer", com_sun_star_extensions_xml_sax_Writer_component_getFactory },
+        { "com.sun.star.comp.extensions.xml.sax.FastParser", com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory },
+        { NULL, NULL }
+    };
+    lib_to_component_mapping *non_app_specific_map = components_mapping;
+    OString sName;
+    if (rPrefix == "direct")
+    {
+        sName = OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US);
+        non_app_specific_map = direct_components_mapping;
+    }
+    else
+    {
+        sName = OUStringToOString(uri, RTL_TEXTENCODING_ASCII_US);
+    }
     for (int i = 0; pSym == NULL && non_app_specific_map[i].lib != NULL; ++i)
     {
-        if ( uri.equalsAscii( non_app_specific_map[i].lib ) )
+        if ( sName == non_app_specific_map[i].lib )
             pSym = (oslGenericFunction) non_app_specific_map[i].component_getFactory_function;
     }
 

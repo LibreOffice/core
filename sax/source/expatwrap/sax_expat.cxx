@@ -51,8 +51,6 @@ using namespace ::com::sun::star::io;
 #include "xml2utf.hxx"
 #include <sax/fastparser.hxx>
 
-#define PARSER_IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
-
 namespace sax_expatwrap {
 
 // Useful macros for correct String conversion depending on the choosen expat-mode
@@ -1061,54 +1059,54 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 }
 
 }
+
+static void * getSingleFactory(
+        void *pServiceManager,
+        const OUString& sImplementation,
+        ComponentInstantiation pCreateFunction,
+        const Sequence< OUString > & rServiceNames)
+{
+    Reference< XSingleServiceFactory > xFactory;
+    Reference< XMultiServiceFactory > xSMgr =
+        reinterpret_cast< XMultiServiceFactory * >( pServiceManager );
+    xFactory = createSingleFactory( xSMgr,
+            sImplementation, pCreateFunction, rServiceNames );
+    xFactory->acquire();
+    return xFactory.get();
+}
+
 using namespace sax_expatwrap;
 
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL expwrap_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager,
-    SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory(
+    const char * , void *pServiceManager, void * )
 {
-    void * pRet = 0;
-
-    if (pServiceManager )
-    {
-        Reference< XSingleServiceFactory > xRet;
-        Reference< XMultiServiceFactory > xSMgr =
-            reinterpret_cast< XMultiServiceFactory * > ( pServiceManager );
-
-        OUString aImplementationName = OUString::createFromAscii( pImplName );
-
-        if ( aImplementationName == IMPLEMENTATION_NAME  )
-        {
-            xRet = createSingleFactory( xSMgr, aImplementationName,
-                                        SaxExpatParser_CreateInstance,
-                                        SaxExpatParser::getSupportedServiceNames_Static() );
-        }
-        else if ( aImplementationName == SaxWriter_getImplementationName() )
-        {
-            xRet = createSingleFactory( xSMgr, aImplementationName,
-                                        SaxWriter_CreateInstance,
-                                        SaxWriter_getSupportedServiceNames() );
-        }
-        else if ( aImplementationName == PARSER_IMPLEMENTATION_NAME)
-        {
-            xRet = createSingleFactory( xSMgr, aImplementationName,
-                                        FastSaxParser_CreateInstance,
-                                        sax_fastparser::FastSaxParser::getSupportedServiceNames_Static() );
-        }
-
-        if (xRet.is())
-        {
-            xRet->acquire();
-            pRet = xRet.get();
-        }
-    }
-
-    return pRet;
+    return getSingleFactory( pServiceManager,
+            "com.sun.star.comp.extensions.xml.sax.ParserExpat",
+            SaxExpatParser_CreateInstance,
+            SaxExpatParser::getSupportedServiceNames_Static() );
 }
 
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL com_sun_star_extensions_xml_sax_Writer_component_getFactory(
+    const char * , void *pServiceManager, void * )
+{
+    return getSingleFactory( pServiceManager,
+            "com.sun.star.extensions.xml.sax.Writer",
+            SaxWriter_CreateInstance,
+            SaxWriter_getSupportedServiceNames() );
+}
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory(
+    const char * , void *pServiceManager, void * )
+{
+    return getSingleFactory( pServiceManager,
+            "com.sun.star.comp.extensions.xml.sax.FastParser",
+            FastSaxParser_CreateInstance,
+            sax_fastparser::FastSaxParser::getSupportedServiceNames_Static() );
+}
 
 }
 
