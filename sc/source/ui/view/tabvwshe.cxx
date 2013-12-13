@@ -237,19 +237,22 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                     ScGlobal::SetSearchItem( *pSearchItem );
                     sal_Bool bSuccess = SearchAndReplace( pSearchItem, sal_True, rReq.IsAPI() );
-                    SvxSearchDialog* pSearchDlg =
-                        ((SvxSearchDialog*)(SfxViewFrame::Current()->GetChildWindow(
-                        SvxSearchDialogWrapper::GetChildWindowId())->GetWindow()));
-                    if( pSearchDlg )
+                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+                            SvxSearchDialogWrapper::GetChildWindowId());
+                    if (pChildWindow)
                     {
-                        ScTabView* pTabView = GetViewData()->GetView();
-                        if( pTabView )
+                        SvxSearchDialog* pSearchDlg = (SvxSearchDialog*)(pChildWindow->GetWindow());
+                        if( pSearchDlg )
                         {
-                            Window* pWin = pTabView->GetActiveWin();
-                            if( pWin )
+                            ScTabView* pTabView = GetViewData()->GetView();
+                            if( pTabView )
                             {
-                                pSearchDlg->SetDocWin( pWin );
-                                pSearchDlg->SetSrchFlag( bSuccess );
+                                Window* pWin = pTabView->GetActiveWin();
+                                if( pWin )
+                                {
+                                    pSearchDlg->SetDocWin( pWin );
+                                    pSearchDlg->SetSrchFlag( bSuccess );
+                                }
                             }
                         }
                     }
