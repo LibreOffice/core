@@ -448,6 +448,11 @@ common_noncore_mimetypes = {
 
 for (prefix, uri) in rss_bugzillas.items():
     for (mimetype,extension) in mimetypes.items():
+        # It seems that bugzilla has problems returing that many results
+        # (10000 results is probably a limit set somewhere) so we always
+        # end processing the complete list.
+        if mimetype == 'text/html' and prefix == 'moz':
+                continue
         get_through_rss_query(uri, mimetype, prefix, extension)
 
 for (mimetype,extension) in mimetypes.items():
