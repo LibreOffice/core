@@ -137,11 +137,11 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
 		vcl/vcl.windows \
+		$(if $(ENABLE_JAVA), \
+			accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
+		) \
 		$(if $(ENABLE_IA2), \
 			winaccessibility/source/service/winaccessibility, \
-			$(if $(ENABLE_JAVA), \
-			    accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
-			) \
 		) \
 	) \
 	$(if $(ENABLE_HEADLESS), \
