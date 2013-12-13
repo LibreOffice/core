@@ -41,7 +41,7 @@ using namespace com::sun::star::beans;
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(TYPE_NONE)
-    , mnItemMaxSize(100)
+    , mnItemMaxSize(256)
     , mnTextHeight(30)
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)

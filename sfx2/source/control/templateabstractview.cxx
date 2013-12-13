@@ -261,9 +261,6 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
         // make the picture fit the given width/height constraints
         double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));
 
-        // don't up-scale
-        nRatio = std::min(nRatio, 1.0);
-
         aImg.Scale(Size(aSize.Width() * nRatio, aSize.Height() * nRatio));
     }
 
