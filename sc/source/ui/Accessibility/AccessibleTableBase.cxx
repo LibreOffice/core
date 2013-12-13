@@ -146,12 +146,19 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 
     if (mpDoc)
     {
-        SCROW nEndRow(0);
-        SCCOL nEndCol(0);
-        mpDoc->FetchTable(maRange.aStart.Tab())->GetColumnByIndex(nColumn)->
-            ExtendMerge( static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow), nRow, nEndCol, nEndRow, sal_False );
-        if (nEndRow > nRow)
-               nCount = nEndRow - nRow + 1;
+        ScTable* pTab = mpDoc->FetchTable(maRange.aStart.Tab());
+        if (pTab)
+        {
+            SCROW nStartRow = static_cast<SCROW>(nRow);
+            SCROW nEndRow   = nStartRow;
+            SCCOL nStartCol = static_cast<SCCOL>(nColumn);
+            SCCOL nEndCol   = nStartCol;
+            if (pTab->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, false))
+            {
+                if (nEndRow > nStartRow)
+                    nCount = nEndRow - nStartRow + 1;
+            }
+        }
     }
 
     return nCount;
@@ -173,12 +180,19 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
 
     if (mpDoc)
     {
-        SCROW nEndRow(0);
-        SCCOL nEndCol(0);
-        mpDoc->FetchTable(maRange.aStart.Tab())->GetColumnByIndex(nColumn)->
-            ExtendMerge( static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow), nRow, nEndCol, nEndRow, sal_False );
-        if (nEndCol > nColumn)
-                nCount = nEndCol - nColumn + 1;
+        ScTable* pTab = mpDoc->FetchTable(maRange.aStart.Tab());
+        if (pTab)
+        {
+            SCROW nStartRow = static_cast<SCROW>(nRow);
+            SCROW nEndRow   = nStartRow;
+            SCCOL nStartCol = static_cast<SCCOL>(nColumn);
+            SCCOL nEndCol   = nStartCol;
+            if (pTab->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, false))
+            {
+                if (nEndCol > nStartCol)
+                    nCount = nEndCol - nStartCol + 1;
+            }
+        }
     }
 
     return nCount;

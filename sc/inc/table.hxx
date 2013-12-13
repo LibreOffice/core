@@ -1068,8 +1068,6 @@ private:
         SCROW mnUBound;
     };
 
-public :
-    ScColumn* GetColumnByIndex( sal_Int32 nIndex );
 };
 
 

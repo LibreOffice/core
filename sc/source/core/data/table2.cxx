@@ -3654,13 +3654,4 @@ sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
     return n;
 }
 
-ScColumn* ScTable::GetColumnByIndex( sal_Int32 nIndex )
-{
-    if (ValidCol(nIndex))
-    {
-        return &(aCol[nIndex]);
-    }
-    return NULL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
