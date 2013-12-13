@@ -1583,9 +1583,11 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( rIStream.GetError() )
                 nStatus = GRFILTER_FORMATERROR;
             else
+            {
                 rGraphic.SetDefaultType();
                 rIStream.Seek( STREAM_SEEK_TO_END );
                 eLinkType = GFX_LINK_TYPE_NATIVE_MOV;
+            }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_WMF ) ||
                 aFilterName.equalsIgnoreAsciiCase( IMP_EMF ) )
