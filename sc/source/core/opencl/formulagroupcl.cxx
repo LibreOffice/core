@@ -26,6 +26,7 @@
 #include "op_logical.hxx"
 #include "op_statistical.hxx"
 #include "op_array.hxx"
+#include "op_spreadsheet.hxx"
 /// CONFIGURATIONS
 // Comment out this to turn off FMIN and FMAX intrinsics
 #define USE_FMIN_FMAX 1
@@ -2293,6 +2294,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocAnd:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpAnd));
+                 break;
+            case ocVLookup:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i], new OpVLookup));
                  break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
