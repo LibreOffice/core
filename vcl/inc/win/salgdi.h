@@ -31,7 +31,8 @@
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
-#include <graphite2/Font.h>
+#  include <graphite_static.hxx>
+#  include <graphite2/Font.h>
 #endif
 
 class FontSelectPattern;
