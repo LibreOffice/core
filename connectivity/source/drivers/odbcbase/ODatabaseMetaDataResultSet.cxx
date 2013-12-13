@@ -999,7 +999,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN.getStr(),
                 *pCOL = aCOL.getStr();
 
