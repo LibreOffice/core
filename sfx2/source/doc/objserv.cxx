@@ -897,6 +897,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if (  QueryBox( NULL, SfxResId( RID_QUERY_CANCELCHECKOUT ) ).Execute( ) == RET_YES )
             {
                 CancelCheckOut( );
+
+                // Reload the document as we may still have local changes
+                SfxViewFrame *pFrame = GetFrame();
+                if ( pFrame )
+                    pFrame->GetDispatcher()->Execute(SID_RELOAD);
             }
             break;
         }

@@ -2519,7 +2519,8 @@ void SAL_CALL SfxBaseModel::checkOut(  ) throw ( RuntimeException )
             OUString sURL;
             aResult >>= sURL;
 
-            m_pData->m_pObjectShell->GetMedium( )->SwitchDocumentToFile( sURL );
+            m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
+            m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
             m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
             Sequence< beans::PropertyValue > aSequence ;
             TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
@@ -2550,14 +2551,7 @@ void SAL_CALL SfxBaseModel::cancelCheckOut(  ) throw ( RuntimeException )
             OUString sURL;
             aResult >>= sURL;
 
-            m_pData->m_pObjectShell->GetMedium( )->SwitchDocumentToFile( sURL );
-            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-            Sequence< beans::PropertyValue > aSequence ;
-            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
-            attachResource( sURL, aSequence );
-
-            // Reload the CMIS properties
-            loadCmisProperties( );
+            m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
         }
         catch ( const Exception & e )
         {
