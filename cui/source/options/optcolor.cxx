@@ -598,7 +598,9 @@ void ColorConfigWindow_Impl::SetAppearance ()
     Wallpaper const aBackWall(aBackColor);
     for (size_t i = 0; i != vChapters.size(); ++i)
         vChapters[i]->Show(aBackWall);
-    SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
+    Wallpaper aBack(rStyleSettings.GetFieldColor());
+    SetBackground(aBack);
+    m_pGrid->SetBackground(aBack);
 
     // #104195# when the window color is the same as the text color it has to be changed
     Color aWinCol = rStyleSettings.GetWindowColor();
