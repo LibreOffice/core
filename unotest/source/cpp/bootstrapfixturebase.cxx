@@ -68,6 +68,11 @@ OUString test::BootstrapFixtureBase::getURLFromSrc( const char *pPath )
     return m_aSrcRootURL + OUString::createFromAscii( pPath );
 }
 
+OUString test::BootstrapFixtureBase::getURLFromSrc( const OUString& rPath )
+{
+    return m_aSrcRootURL + rPath;
+}
+
 OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
 {
     return m_aSrcRootPath + OUString::createFromAscii( pPath );

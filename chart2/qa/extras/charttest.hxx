@@ -50,15 +50,10 @@ using namespace com::sun::star::uno;
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
-    ChartTest()
-        : mServiceName(),
-          m_bExported(false)
-    {
-    }
-    void load( const char* pDir, const char* pName );
-    utl::TempFile reload( const OUString& rFilterName );
+    void load( const OUString& rDir, const OUString& rFileName );
+    utl::TempFile reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
-    OUString getFileExtension( const char* pName );
+    OUString getFileExtension( const OUString& rFileName );
 
     void loadDocx(const char* pDir, const char* pName);
     utl::TempFile reloadDocx();
@@ -67,29 +62,29 @@ public:
 
 protected:
     Reference< lang::XComponent > mxComponent;
-     const char* mServiceName;
-    bool m_bExported; ///< Does m_aTempFile already contain something useful?
-
+    OUString maServiceName;
 };
-OUString ChartTest::getFileExtension( const char* pName )
-{
-    OUString fileName = OUString::createFromAscii(pName);
-    sal_Int32 dotLocation = fileName.lastIndexOf(L'.');
-    return fileName.copy(dotLocation);
-}
-void ChartTest::load( const char* pDir, const char* pName )
-{
-    OUString extension = getFileExtension(pName);
-    if(extension.equals("ods"))
-    {
-        mServiceName = "com.sun.star.sheet.SpreadsheetDocument";
-    }
-    else if(extension.equals("docx"))
-    {
-         mServiceName = "com.sun.star.text.TextDocument";
 
+OUString ChartTest::getFileExtension( const OUString& aFileName )
+{
+    sal_Int32 nDotLocation = aFileName.lastIndexOf('.');
+    CPPUNIT_ASSERT(nDotLocation != -1);
+    return aFileName.copy(nDotLocation);
+}
+
+void ChartTest::load( const OUString& aDir, const OUString& aName )
+{
+    OUString extension = getFileExtension(aName);
+    if(extension == "ods")
+    {
+        maServiceName = "com.sun.star.sheet.SpreadsheetDocument";
     }
-    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), mServiceName);
+    else if(extension == "docx")
+    {
+        maServiceName = "com.sun.star.text.TextDocument";
+    }
+
+    mxComponent = loadFromDesktop(getURLFromSrc(aDir) + aName, maServiceName);
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
@@ -103,7 +98,7 @@ utl::TempFile ChartTest::reload(const OUString& rFilterName)
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
     mxComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), mServiceName);
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), maServiceName);
     std::cout << aTempFile.GetURL();
     CPPUNIT_ASSERT(mxComponent.is());
     return aTempFile;

@@ -19,7 +19,7 @@ using namespace com::sun::star;
 
 namespace unotest {
 
-uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(const OUString& rURL, const char* pDocService)
+uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService)
 {
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
     uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, uno::UNO_QUERY );
@@ -31,12 +31,12 @@ uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(c
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
-    if (pDocService)
+    if (!rDocService.isEmpty())
     {
         args.realloc(2);
         args[1].Name = "DocumentService";
         args[1].Handle = -1;
-        args[1].Value <<= OUString::createFromAscii(pDocService);
+        args[1].Value <<= rDocService;
         args[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
     }
 

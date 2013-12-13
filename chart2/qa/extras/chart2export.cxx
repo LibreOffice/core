@@ -49,7 +49,7 @@ protected:
      * xml stream, and asserting an XPath expression. This method returns the
      * xml stream, so that you can do the asserting.
      */
-    xmlDocPtr parseExport(const OUString& rStreamName);
+    xmlDocPtr parseExport(const OUString& rStreamName, const OUString& rFilterFormat);
 
     /**
      * Helper method to return nodes represented by rXPath.
@@ -83,11 +83,9 @@ void Chart2ExportTest::test()
     reload("Calc Office Open XML");
 }
 
-xmlDocPtr Chart2ExportTest::parseExport(const OUString& rStreamName)
+xmlDocPtr Chart2ExportTest::parseExport(const OUString& rStreamName, const OUString& rFilterFormat)
 {
-    if (!m_bExported)
-        return 0;
-    utl::TempFile aTempFile = reload("Office Open XML Text");
+    utl::TempFile aTempFile = reload(rFilterFormat);
 
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
@@ -374,7 +372,7 @@ void Chart2ExportTest::testStockChart()
      */
     load("/chart2/qa/extras/data/docx/", "testStockChart.docx");
 
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml", "Office Open XML Text");
     if (!pXmlDoc)
        return;
 
@@ -386,9 +384,9 @@ void Chart2ExportTest::testStockChart()
 void Chart2ExportTest::testBarChart()
 {
     load("/chart2/qa/extras/data/docx/", "testBarChart.docx");
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml", "Office Open XML Text");
     if (!pXmlDoc)
-        return;
+       return;
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", "col");
 }

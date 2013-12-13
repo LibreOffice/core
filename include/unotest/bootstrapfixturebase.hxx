@@ -57,6 +57,7 @@ public:
 
   // return a URL to a given c-str path from the source directory
   OUString getURLFromSrc( const char *pPath );
+  OUString getURLFromSrc( const OUString& rPath );
 
   // return a Path to a given c-str path from the source directory
   OUString getPathFromSrc( const char *pPath );
