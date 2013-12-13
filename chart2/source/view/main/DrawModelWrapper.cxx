@@ -235,7 +235,9 @@ uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
         }
     }
     //ensure that additional shapes are in front of the chart objects so create the chart root before
-    AbstractShapeFactory::getOrCreateShapeFactory(this->getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
+    // let us disable this call for now
+    // TODO:moggi
+    // AbstractShapeFactory::getOrCreateShapeFactory(this->getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
     return m_xMainDrawPage;
 }
 uno::Reference< drawing::XDrawPage > DrawModelWrapper::getHiddenDrawPage()
