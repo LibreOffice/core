@@ -964,13 +964,13 @@ std::string GetYieldmat=
     "double GetYieldmat( int nNullDate, int nSettle, int nMat, int nIssue,\n"
         "double fRate, double fPrice, int nBase )\n"
 "{\n"
-"    double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );\n"
-"    double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );\n"
-"    double      fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );\n"
+"    double      fIssMat = GetYearFrac_new( nNullDate, nIssue, nMat, nBase );\n"
+"    double      fIssSet = GetYearFrac_new( nNullDate, nIssue, nSettle, nBase );\n"
+"    double      fSetMat = GetYearFrac_new( nNullDate, nSettle, nMat, nBase );\n"
 "    double      y = 1.0 + fIssMat * fRate;\n"
-"    y /= fPrice / 100.0 + fIssSet * fRate;\n"
+"    y =y * pow( (fPrice / 100.0 + fIssSet * fRate),-1);\n"
 "    y-=1.0;\n"
-"    y /= fSetMat;\n"
+"    y = y * pow(fSetMat,-1);\n"
 "    return y;\n"
 "}\n";
 
