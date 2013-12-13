@@ -1246,6 +1246,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
 
     if( !mbIs3DChart )
     {
+        exportHiLowLines();
         exportUpDownBars(xChartType);
         const char* marker = nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE? "0":"1";
         pFS->singleElement( FSNS( XML_c, XML_marker ),
@@ -1347,21 +1348,32 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
     Reference< ::com::sun::star::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
     if( xStockPropProvider.is())
     {
-        // stock-range-line
-        Reference< beans::XPropertySet > xStockPropSet = xStockPropProvider->getMinMaxLine();
-        if( xStockPropSet.is() )
-        {
-            pFS->startElement( FSNS( XML_c, XML_hiLowLines ),
-                FSEND );
-            exportShapeProps( xStockPropSet );
-            pFS->endElement( FSNS( XML_c, XML_hiLowLines ) );
-        }
+        exportHiLowLines();
         exportUpDownBars(xChartType);
     }
 
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, XML_stockChart ) );
+}
+
+void ChartExport::exportHiLowLines()
+{
+    FSHelperPtr pFS = GetFS();
+    // export the chart property
+    Reference< ::com::sun::star::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
+
+    if (!xChartPropProvider.is())
+        return;
+
+    Reference< beans::XPropertySet > xStockPropSet = xChartPropProvider->getMinMaxLine();
+    if( xStockPropSet.is() )
+    {
+        pFS->startElement( FSNS( XML_c, XML_hiLowLines ),
+                FSEND );
+        exportShapeProps( xStockPropSet );
+        pFS->endElement( FSNS( XML_c, XML_hiLowLines ) );
+    }
 }
 
 void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
