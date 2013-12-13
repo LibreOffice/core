@@ -355,6 +355,8 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkIndex( sal_Int32 )
 
 AccessibleRelation SwAccessibleNoTextFrame::makeRelation( sal_Int16 nType, const SwFlyFrm* pFrm )
 {
+    SolarMutexGuard g;
+
     uno::Sequence<uno::Reference<XInterface> > aSequence(1);
     aSequence[0] = GetMap()->GetContext( pFrm );
     return AccessibleRelation( nType, aSequence );

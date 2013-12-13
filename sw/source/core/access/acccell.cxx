@@ -424,6 +424,8 @@ static OUString ReplaceFourChar(OUString oldOUString)
 ::com::sun::star::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     ::com::sun::star::uno::Any strRet;
     SwFrmFmt *pFrmFmt = GetTblBoxFormat();
     DBG_ASSERT(pFrmFmt,"Must be Valid");
@@ -442,6 +444,8 @@ static OUString ReplaceFourChar(OUString oldOUString)
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
         throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     const SvxBrushItem &rBack = GetFrm()->GetAttrSet()->GetBackground();
     sal_uInt32 crBack = rBack.GetColor().GetColor();
 

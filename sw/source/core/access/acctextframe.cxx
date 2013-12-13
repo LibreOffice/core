@@ -186,6 +186,8 @@ void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )
 sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     uno::Reference<XAccessible> xAcc = getAccessibleChild( nChildIndex );
     uno::Reference<XAccessibleContext> xContext;
     if( xAcc.is() )
@@ -237,6 +239,8 @@ sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
 uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if ( nSelectedChildIndex > getSelectedAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();
     sal_Int32 i1, i2;

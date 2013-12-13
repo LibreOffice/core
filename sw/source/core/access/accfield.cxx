@@ -88,6 +88,7 @@ sal_Int32 SAL_CALL SwAccessibleField::getAccessibleIndexInParent (void)
 sal_Int16 SAL_CALL SwAccessibleField::getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
     return m_nRole;
 }
 

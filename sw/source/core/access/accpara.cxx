@@ -3561,6 +3561,8 @@ sal_Bool SAL_CALL SwAccessibleParagraph::scrollToPosition( const ::com::sun::sta
 sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     sal_Int32 nSeleted = 0;
     SwPaM* pCrsr = GetCursor( true );
     if( pCrsr != NULL )
@@ -3626,6 +3628,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSeletedPositionEnd( sal_Int32 nSele
 sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionIndex )
     throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if(selectionIndex < 0) return sal_False;
 
     sal_Bool bRet = sal_False;
@@ -4076,6 +4080,8 @@ sal_Bool SwAccessibleParagraph::GetSelectionAtIndex(
 
 sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     //Get the real heading level, Heading1 ~ Heading10
     if (nHeadingLevel > 0)
     {
@@ -4155,6 +4161,8 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     uno::Any Ret;
     OUString strHeading("heading-level:");
     if( nHeadingLevel >= 0 )

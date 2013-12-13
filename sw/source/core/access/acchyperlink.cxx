@@ -149,6 +149,8 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
         sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     uno::Any aRet;
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
@@ -162,6 +164,8 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
             sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
     const SwTxtAttr *pTxtAttr = GetTxtAttr();

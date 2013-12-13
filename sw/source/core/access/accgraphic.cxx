@@ -79,6 +79,8 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
 sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
 
     if (aURL.GetMap())

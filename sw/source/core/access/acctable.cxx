@@ -1794,6 +1794,8 @@ void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell ,sa
 sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if( isAccessibleColumnSelected( row ) )
         return sal_True;
 
@@ -1810,6 +1812,8 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
 sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if( isAccessibleColumnSelected( column ) )
         return sal_True;
 
@@ -1826,6 +1830,8 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
 sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if( isAccessibleSelected( row , 0 ) &&  isAccessibleSelected( row , getAccessibleColumnCount()-1 ) )
     {
         SwCrsrShell* pCrsrShell = GetCrsrShell();
@@ -1842,6 +1848,8 @@ sal_Bool SAL_CALL SwAccessibleTable::unselectRow( sal_Int32 row )
 sal_Bool SAL_CALL SwAccessibleTable::unselectColumn( sal_Int32 column )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     if( isAccessibleSelected( 0 , column ) &&  isAccessibleSelected( getAccessibleRowCount()-1,column))
     {
         SwCrsrShell* pCrsrShell = GetCrsrShell();

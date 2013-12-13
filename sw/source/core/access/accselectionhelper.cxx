@@ -382,6 +382,8 @@ void SwAccessibleSelectionHelper::deselectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
+    SolarMutexGuard g;
+
     if( nChildIndex < 0 ||
         nChildIndex >= rContext.GetChildCount( *(rContext.GetMap()) ) )
         throwIndexOutOfBoundsException();

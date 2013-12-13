@@ -45,6 +45,8 @@ SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFram
 sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionCount()
         throw (RuntimeException)
 {
+    SolarMutexGuard g;
+
     SwFmtURL aURL( GetFmt()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
@@ -102,6 +104,8 @@ OUString SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionDescription(
         sal_Int32 nIndex )
         throw (IndexOutOfBoundsException, RuntimeException)
 {
+    SolarMutexGuard g;
+
     OUString sDesc;
 
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
@@ -127,6 +131,8 @@ Reference< XAccessibleKeyBinding > SAL_CALL
     SwAccessibleNoTextHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
+    SolarMutexGuard g;
+
     Reference< XAccessibleKeyBinding > xKeyBinding;
 
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
@@ -166,6 +172,8 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
         sal_Int32 nIndex )
         throw (IndexOutOfBoundsException, RuntimeException)
 {
+    SolarMutexGuard g;
+
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
 
@@ -182,6 +190,8 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionObject(
             sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
+    SolarMutexGuard g;
+
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
 
@@ -217,6 +227,8 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getEndIndex()
 sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     SwFmtURL aURL( GetFmt()->GetURL() );
 
     if( aURL.GetMap() || !aURL.GetURL().isEmpty() )

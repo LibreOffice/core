@@ -111,6 +111,8 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
 ::com::sun::star::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     ::com::sun::star::uno::Any strRet;
     OUString style;
     SwFlyFrm* pFFrm = getFlyFrm();
