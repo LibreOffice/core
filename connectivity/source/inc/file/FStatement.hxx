@@ -69,7 +69,6 @@ namespace connectivity
             ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
             ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> m_xDBMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
 
@@ -115,10 +114,8 @@ namespace connectivity
             virtual OSQLAnalyzer* createAnalyzer();
 
             void reset () throw( ::com::sun::star::sdbc::SQLException);
-            void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
-            void disposeResultSet();
             void GetAssignValues();
             void SetAssignValue(const OUString& aColumnName,
                                    const OUString& aValue,

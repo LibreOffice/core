@@ -55,7 +55,6 @@ DBG_NAME( file_OPreparedStatement )
 // -------------------------------------------------------------------------
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection)
     : OStatement_BASE2( _pConnection )
-    ,m_pResultSet(NULL)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::OPreparedStatement" );
     DBG_CTOR( file_OPreparedStatement, NULL );
@@ -74,14 +73,7 @@ void OPreparedStatement::disposing()
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::disposing" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    clearMyResultSet();
     OStatement_BASE2::disposing();
-
-    if(m_pResultSet)
-    {
-        m_pResultSet->release();
-        m_pResultSet = NULL;
-    }
 
     m_xParamColumns = NULL;
     m_xMetaData.clear();
@@ -90,8 +82,6 @@ void OPreparedStatement::disposing()
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
     }
-
-
 }
 // -------------------------------------------------------------------------
 void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, RuntimeException)
@@ -115,12 +105,17 @@ void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, Run
 
     OValueRefRow aTemp;
     OResultSet::setBoundedColumns(m_aEvaluateRow,aTemp,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
-
-    m_pResultSet = createResultSet();
-    m_pResultSet->acquire();
-    m_xResultSet = Reference<XResultSet>(m_pResultSet);
-    initializeResultSet(m_pResultSet);
 }
+
+Reference<XResultSet> OPreparedStatement::makeResultSet()
+{
+    OResultSet *pResultSet = createResultSet();
+    Reference<XResultSet> xRS(pResultSet);
+    initializeResultSet(pResultSet);
+    initResultSet(pResultSet);
+    return xRS;
+}
+
 // -------------------------------------------------------------------------
 
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
@@ -160,9 +155,6 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::close" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    clearMyResultSet();
 }
 // -------------------------------------------------------------------------
 
@@ -172,7 +164,12 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    initResultSet();
+    Reference<XResultSet> xRS(makeResultSet());
+
+    // since we don't support the XMultipleResults interface, nobody will ever get that ResultSet...
+    Reference< XComponent > xComp(xRS, UNO_QUERY);
+    if (xComp.is())
+        xComp->dispose();
 
     return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
 }
@@ -184,9 +181,20 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    initResultSet();
-
-    return m_pResultSet ? m_pResultSet->getRowCountResult() : sal_Int32(0);
+    Reference<XResultSet> xRS(makeResultSet());
+    if(xRS.is())
+    {
+        assert(dynamic_cast<OResultSet*>(xRS.get()));
+        const sal_Int32 res(static_cast<OResultSet*>(xRS.get())->getRowCountResult());
+        // nobody will ever get that ResultSet...
+        Reference< XComponent > xComp(xRS, UNO_QUERY);
+        assert(xComp.is());
+        if (xComp.is())
+            xComp->dispose();
+        return res;
+    }
+    else
+        return 0;
 }
 // -------------------------------------------------------------------------
 
@@ -213,7 +221,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return initResultSet();
+    return makeResultSet();
 }
 // -------------------------------------------------------------------------
 
@@ -408,21 +416,17 @@ OResultSet* OPreparedStatement::createResultSet()
     return new OResultSet(this,m_aSQLIterator);
 }
 // -----------------------------------------------------------------------------
-Reference<XResultSet> OPreparedStatement::initResultSet()
+void OPreparedStatement::initResultSet(OResultSet *pResultSet)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::initResultSet" );
-    m_pResultSet->clear();
-    Reference<XResultSet> xRs(m_pResultSet);
 
     // check if we got enough parameters
     if ( (m_aParameterRow.is() && ( m_aParameterRow->get().size() -1 ) < m_xParamColumns->get().size()) ||
          (m_xParamColumns.is() && !m_aParameterRow.is() && !m_aParameterRow->get().empty()) )
          m_pConnection->throwGenericSQLException(STR_INVALID_PARA_COUNT,*this);
 
-    m_pResultSet->OpenImpl();
-    m_pResultSet->setMetaData(getMetaData());
-
-    return xRs;
+    pResultSet->OpenImpl();
+    pResultSet->setMetaData(getMetaData());
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::acquire() throw()
@@ -554,13 +558,13 @@ void OPreparedStatement::describeParameter()
     }
 }
 // -----------------------------------------------------------------------------
-void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
+void OPreparedStatement::initializeResultSet(OResultSet* pRS)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OPreparedStatement::initializeResultSet" );
-    OStatement_Base::initializeResultSet(_pResult);
+    OStatement_Base::initializeResultSet(pRS);
 
-    m_pResultSet->setParameterColumns(m_xParamColumns);
-    m_pResultSet->setParameterRow(m_aParameterRow);
+    pRS->setParameterColumns(m_xParamColumns);
+    pRS->setParameterRow(m_aParameterRow);
 
     // Substitute parameter (AssignValues and criteria):
     if (!m_xParamColumns->get().empty())

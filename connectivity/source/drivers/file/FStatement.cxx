@@ -102,21 +102,9 @@ OStatement_Base::~OStatement_Base()
     DBG_DTOR( file_OStatement_Base, NULL );
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::disposeResultSet()
-{
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::disposeResultSet" );
-    // free the cursor if alive
-    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
-    if (xComp.is())
-        xComp->dispose();
-    m_xResultSet.clear();
-}
-//------------------------------------------------------------------------------
 void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
-    disposeResultSet();
 
     if(m_pSQLAnalyzer)
         m_pSQLAnalyzer->dispose();
@@ -203,32 +191,8 @@ void OStatement_Base::reset() throw (SQLException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
     clearWarnings ();
 
-    if (m_xResultSet.get().is())
-        clearMyResultSet();
-}
-//--------------------------------------------------------------------
-// clearMyResultSet
-// If a ResultSet was created for this Statement, close it
-//--------------------------------------------------------------------
-
-void OStatement_Base::clearMyResultSet () throw (SQLException)
-{
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearMyResultSet " );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    try
-    {
-        Reference<XCloseable> xCloseable;
-        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
-            xCloseable->close();
-    }
-    catch( const DisposedException& ) { }
-
-    m_xResultSet.clear();
 }
 
 // -------------------------------------------------------------------------
@@ -304,7 +268,6 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
     OResultSet* pResult = createResultSet();
     xRS = pResult;
     initializeResultSet(pResult);
-    m_xResultSet = Reference<XResultSet>(pResult);
 
     pResult->OpenImpl();
 

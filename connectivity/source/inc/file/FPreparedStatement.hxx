@@ -49,12 +49,12 @@ namespace connectivity
             OValueRefRow                                        m_aParameterRow;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
-            OResultSet*                                         m_pResultSet;
             ::rtl::Reference<connectivity::OSQLColumns>             m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
             virtual OResultSet* createResultSet();
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> initResultSet();
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > makeResultSet();
+            void initResultSet(OResultSet*);
 
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);

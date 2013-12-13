@@ -166,12 +166,7 @@ void OResultSet::disposing(void)
         m_pTable->release();
         m_pTable = NULL;
     }
-    clear();
-}
-// -----------------------------------------------------------------------------
-void OResultSet::clear()
-{
-    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OResultSet::clear" );
+
     m_pFileSet = NULL;
     DELETEZ(m_pSortIndex);
 

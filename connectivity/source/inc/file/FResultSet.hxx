@@ -292,8 +292,6 @@ namespace connectivity
             inline void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)             { m_pEvaluationKeySet = _pEvaluationKeySet; }
             inline void setMetaData(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
-            // clears the resultset so it can be reused by a preparedstatement
-            void clear();
             static void setBoundedColumns(const OValueRefRow& _rRow,
                                     const OValueRefRow& _rSelectRow,
                                     const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
