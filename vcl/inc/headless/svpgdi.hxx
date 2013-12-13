@@ -226,6 +226,6 @@ public:
 #endif
 };
 
-#endif
+#endif // INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

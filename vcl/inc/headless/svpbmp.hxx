@@ -61,6 +61,6 @@ public:
     static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );
 };
 
-#endif
+#endif // INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

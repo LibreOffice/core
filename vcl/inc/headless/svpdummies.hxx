@@ -18,6 +18,7 @@
  */
 
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
+#define INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
 
 #include <vcl/sysdata.hxx>
 #include <generic/gensys.h>
@@ -75,6 +76,6 @@ public:
 };
 
 
-#endif // _SVP_SVPDUMMIES_H
+#endif // INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
