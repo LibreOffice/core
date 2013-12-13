@@ -2093,6 +2093,15 @@ DECLARE_OOXMLEXPORT_TEST(testcolumnbreak, "columnbreak.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableInsideHeader, "testTableInsideHeader.docx")
+{
+    xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
+    if (!pXmlHeader)
+        return;
+
+    assertXPath(pXmlHeader, "/w:hdr/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:pStyle","val","Header");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
