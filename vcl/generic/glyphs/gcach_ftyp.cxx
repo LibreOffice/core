@@ -26,8 +26,9 @@
 #include <config_features.h>
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
-#include <graphite2/Font.h>
-#include <graphite_layout.hxx>
+#  include <graphite_static.hxx>
+#  include <graphite2/Font.h>
+#  include <graphite_layout.hxx>
 #endif
 #include <unotools/fontdefs.hxx>
 

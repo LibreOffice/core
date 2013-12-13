@@ -23,6 +23,7 @@
 // 1001=1&2002=2&fav1=0
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <graphite_static.hxx>
 #include <graphite2/Font.h>
 
 namespace grutils
