@@ -2775,8 +2775,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
 
-    SdrObject* pObj;
-    SdrPageView* pPV;
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
     // button down event. Otherwise we would crash (context menu has been
@@ -3090,6 +3088,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // only if no position to size was hit.
                                 if (!bHitHandle)
                                 {
+                                    SdrObject* pObj;
+                                    SdrPageView* pPV;
                                     if (pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
                                     {
                                         pSdrView->UnmarkAllObj();
