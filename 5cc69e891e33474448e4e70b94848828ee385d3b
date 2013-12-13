@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///r4\u003d",
+        "filename": "chart2/CppunitTest_chart2_export.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-12-13T10:08:52Z",
+      "side": 1,
+      "message": "This is wrong. We can\u0027t use any writer headers here.",
+      "revId": "5cc69e891e33474448e4e70b94848828ee385d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///r0\u003d",
+        "filename": "chart2/CppunitTest_chart2_import.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-12-13T10:08:52Z",
+      "side": 1,
+      "message": "We can\u0027t use any writer headers here.",
+      "revId": "5cc69e891e33474448e4e70b94848828ee385d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///ro\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-12-13T10:08:52Z",
+      "side": 1,
+      "message": "Please don\u0027t use any writer default values. Make these values explicit in the tests.",
+      "revId": "5cc69e891e33474448e4e70b94848828ee385d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///rw\u003d",
+        "filename": "chart2/qa/extras/charttest.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-12-13T10:08:52Z",
+      "side": 1,
+      "message": "Please use OString and OUString instead of char and std::string.",
+      "revId": "5cc69e891e33474448e4e70b94848828ee385d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///rs\u003d",
+        "filename": "chart2/qa/extras/charttest.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-12-13T10:08:52Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "5cc69e891e33474448e4e70b94848828ee385d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
