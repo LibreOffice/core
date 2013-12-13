@@ -355,7 +355,7 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
 
 bool SdrTableObjImpl::ApplyCellStyles()
 {
-    if( !mxTable.is() || !mxTable.is() || !mxTableStyle.is() )
+    if( !mxTable.is() || !mxTableStyle.is() )
         return false;
 
     bool bChanges = false;
