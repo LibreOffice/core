@@ -238,7 +238,7 @@ std::string GetGammaInvValue =
 "        return 0.0;\n"
 "    else\n"
 "    {\n"
-"        double fX=fX1/fBeta;\n"
+"        double fX=fX1*pow(fBeta,-1.0);\n"
 "        double fLnFactor = fAlpha * log(fX) - fX - lgamma(fAlpha);\n"
 "        double fFactor = exp(fLnFactor);\n"
 "        if (fX>fAlpha+1.0)\n"
