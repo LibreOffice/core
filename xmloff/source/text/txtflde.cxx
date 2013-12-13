@@ -1752,14 +1752,17 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().Characters(aBuffer.makeStringAndClear());
         }
 
-        // initials
-        OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
-        if( !aInitials.isEmpty() )
+        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
-            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_TEXT,
-                                              XML_SENDER_INITIALS, sal_True,
-                                              sal_False );
-            GetExport().Characters(aInitials);
+            // initials
+            OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
+            if( !aInitials.isEmpty() )
+            {
+                SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_TEXT,
+                        XML_SENDER_INITIALS, sal_True,
+                        sal_False );
+                GetExport().Characters(aInitials);
+            }
         }
 
         com::sun::star::uno::Reference < com::sun::star::text::XText > xText;
@@ -2226,10 +2229,23 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
     if (eElementName != XML_TOKEN_INVALID)
     {
         // Element
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                  eElementName, bAddSpace, bAddSpace );
-        // export content
-        GetExport().Characters(sContent);
+        if (eElementName == XML_SENDER_INITIALS)
+        {
+            if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+            {
+                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                        eElementName, bAddSpace, bAddSpace );
+                // export content
+                GetExport().Characters(sContent);
+            }
+        }
+        else
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                                      eElementName, bAddSpace, bAddSpace );
+            // export content
+            GetExport().Characters(sContent);
+        }
     } else {
         // always export content
         GetExport().Characters(sContent);
