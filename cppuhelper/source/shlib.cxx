@@ -188,46 +188,56 @@ Reference< XInterface > invokeComponentFactory(
             fprintf(stderr, "invokeComponentFactory envDcp:%s implName:%s modPath:%s\n", envDcp.getStr(), implName.getStr(), modPath.getStr());
         }
 #endif
-
-        Mapping aCurrent2Env( currentEnv, env );
-        Mapping aEnv2Current( env, currentEnv );
-
-        if (aCurrent2Env.is() && aEnv2Current.is())
+        if (env.get() == currentEnv.get())
         {
-            void * pSMgr = aCurrent2Env.mapInterface(
-                xMgr.get(), ::getCppuType( &xMgr ) );
-
-            void * pSSF = NULL;
-
-            env.invoke(s_getFactory, pGetter, &aImplName, pSMgr, 0, &pSSF);
-
-            if (pSMgr)
-            {
-                (*env.get()->pExtEnv->releaseInterface)(
-                    env.get()->pExtEnv, pSMgr );
-            }
-
-            if (pSSF)
-            {
-                aEnv2Current.mapInterface(
-                    reinterpret_cast< void ** >( &xRet ),
-                    pSSF, ::getCppuType( &xRet ) );
-                (env.get()->pExtEnv->releaseInterface)(
-                    env.get()->pExtEnv, pSSF );
-            }
-            else
-            {
-                rExcMsg = rModulePath +
-                          ": cannot get factory of " +
-                          "demanded implementation: " +
-                          OStringToOUString(
-                        aImplName, RTL_TEXTENCODING_ASCII_US );
-            }
+            xRet.set(
+                static_cast<css::uno::XInterface *>(
+                    (*reinterpret_cast<component_getFactoryFunc>(pGetter))(
+                        aImplName.getStr(), xMgr.get(), 0)),
+                SAL_NO_ACQUIRE);
         }
         else
         {
-            rExcMsg =
-                "cannot get uno mappings: C++ <=> UNO!";
+            Mapping aCurrent2Env( currentEnv, env );
+            Mapping aEnv2Current( env, currentEnv );
+
+            if (aCurrent2Env.is() && aEnv2Current.is())
+            {
+                void * pSMgr = aCurrent2Env.mapInterface(
+                    xMgr.get(), ::getCppuType( &xMgr ) );
+
+                void * pSSF = NULL;
+
+                env.invoke(s_getFactory, pGetter, &aImplName, pSMgr, 0, &pSSF);
+
+                if (pSMgr)
+                {
+                    (*env.get()->pExtEnv->releaseInterface)(
+                        env.get()->pExtEnv, pSMgr );
+                }
+
+                if (pSSF)
+                {
+                    aEnv2Current.mapInterface(
+                        reinterpret_cast< void ** >( &xRet ),
+                        pSSF, ::getCppuType( &xRet ) );
+                    (env.get()->pExtEnv->releaseInterface)(
+                        env.get()->pExtEnv, pSSF );
+                }
+                else
+                {
+                    rExcMsg = rModulePath +
+                        ": cannot get factory of " +
+                        "demanded implementation: " +
+                        OStringToOUString(
+                            aImplName, RTL_TEXTENCODING_ASCII_US );
+                }
+            }
+            else
+            {
+                rExcMsg =
+                    "cannot get uno mappings: C++ <=> UNO!";
+            }
         }
     }
     else
