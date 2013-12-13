@@ -261,15 +261,14 @@ void RecentDocsView::Paint( const Rectangle &aRect )
         long nTextWidth2 = GetTextWidth(maWelcomeLine2);
 
         const Size & rImgSize = maWelcomeImage.GetSizePixel();
-
         const Size & rSize = GetSizePixel();
 
         const int nX = (rSize.Width() - rImgSize.Width())/2;
         const int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
 
         Point aImgPoint(nX, nY);
-        Point aStr1Point((rSize.Width() - nTextWidth1)/2, nY + rImgSize.Height() + nTextHeight/2);
-        Point aStr2Point((rSize.Width() - nTextWidth2)/2, nY + rImgSize.Height() + nTextHeight + nTextHeight/2);
+        Point aStr1Point((rSize.Width() - nTextWidth1)/2, nY + rImgSize.Height() + 0.7 * nTextHeight);
+        Point aStr2Point((rSize.Width() - nTextWidth2)/2, nY + rImgSize.Height() + 1.7 * nTextHeight);
 
         DrawImage(aImgPoint, rImgSize, maWelcomeImage, IMAGE_DRAW_SEMITRANSPARENT);
         DrawText(aStr1Point, maWelcomeLine1);
