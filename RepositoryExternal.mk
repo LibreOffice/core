@@ -399,9 +399,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 ifeq ($(COM),MSC)
-$(call gb_LinkTarget_use_package,$(1),\
-	mythes \
-)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	mythes \
 )

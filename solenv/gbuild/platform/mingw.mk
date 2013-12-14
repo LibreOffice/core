@@ -307,8 +307,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(RCFILE) )
 endef
 
-gb_WinResTarget_WinResTarget_platform :=
-
 $(eval $(call gb_Helper_make_dep_targets,\
 	WinResTarget \
 ))

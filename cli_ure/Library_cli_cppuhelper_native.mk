@@ -34,10 +34,6 @@ $(eval $(call gb_Library_use_internal_bootstrap_api,cli_cppuhelper,\
 	udkapi \
 ))
 
-$(eval $(call gb_Library_use_packages,cli_cppuhelper,\
-	cli_ure_cliuno \
-))
-
 $(eval $(call gb_Library_use_libraries,cli_cppuhelper,\
 	cppu \
 	cppuhelper \
