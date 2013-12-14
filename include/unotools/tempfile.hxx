@@ -49,6 +49,10 @@ class UNOTOOLS_DLLPUBLIC TempFile
     TempFile_Impl*  pImp;
     bool            bKillingFileEnabled;
 
+    // prevent copy c'tor
+    TempFile( const TempFile& );
+    TempFile& operator=(const TempFile&);
+
 protected:
 
 public:

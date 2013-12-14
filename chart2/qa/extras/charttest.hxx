@@ -43,6 +43,9 @@
 #include <libxml/xmlwriter.h>
 #include <libxml/xpath.h>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
@@ -51,7 +54,7 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     void load( const OUString& rDir, const OUString& rFileName );
-    utl::TempFile reload( const OUString& rFileName );
+    boost::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
     OUString getFileExtension( const OUString& rFileName );
 
@@ -88,20 +91,20 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
-utl::TempFile ChartTest::reload(const OUString& rFilterName)
+boost::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aArgs(1);
     aArgs[0].Name = "FilterName";
     aArgs[0].Value <<= rFilterName;
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+    boost::shared_ptr<utl::TempFile> pTempFile = boost::make_shared<utl::TempFile>();
+    pTempFile->EnableKillingFile();
+    xStorable->storeToURL(pTempFile->GetURL(), aArgs);
     mxComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL(), maServiceName);
-    std::cout << aTempFile.GetURL();
+    mxComponent = loadFromDesktop(pTempFile->GetURL(), maServiceName);
+    std::cout << pTempFile->GetURL();
     CPPUNIT_ASSERT(mxComponent.is());
-    return aTempFile;
+    return pTempFile;
 }
 
 void ChartTest::setUp()
