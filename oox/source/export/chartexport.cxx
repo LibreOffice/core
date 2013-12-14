@@ -85,6 +85,8 @@
 #include "ColorPropertySet.hxx"
 #include <set>
 
+#include <rtl/math.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
@@ -1819,7 +1821,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
             FSEND );
         pFS->startElement( FSNS( XML_c, XML_v ),
             FSEND );
-        if (aValues[i] == aValues[i])
+        if (!rtl::math::isNan(aValues[i]))
             pFS->write( aValues[i] );
         pFS->endElement( FSNS( XML_c, XML_v ) );
         pFS->endElement( FSNS( XML_c, XML_pt ) );
