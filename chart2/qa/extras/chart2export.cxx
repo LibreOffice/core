@@ -20,6 +20,8 @@
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
 
+#include <algorithm>
+
 using uno::Reference;
 using beans::XPropertySet;
 
@@ -49,7 +51,7 @@ protected:
      * xml stream, and asserting an XPath expression. This method returns the
      * xml stream, so that you can do the asserting.
      */
-    xmlDocPtr parseExport(const OUString& rStreamName, const OUString& rFilterFormat);
+    xmlDocPtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 
     /**
      * Helper method to return nodes represented by rXPath.
@@ -83,13 +85,44 @@ void Chart2ExportTest::test()
     reload("Calc Office Open XML");
 }
 
-xmlDocPtr Chart2ExportTest::parseExport(const OUString& rStreamName, const OUString& rFilterFormat)
+struct CheckForChartName
+{
+private:
+    OUString aDir;
+
+public:
+    CheckForChartName( const OUString& rDir ):
+        aDir(rDir) {}
+
+    bool operator()(const OUString& rName)
+    {
+        if(!rName.startsWith(aDir))
+            return false;
+
+        if(!rName.endsWith(".xml"))
+            return false;
+
+        return true;
+    }
+};
+
+OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > xNames )
+{
+    uno::Sequence<OUString> rNames = xNames->getElementNames();
+    OUString* pElement = std::find_if(rNames.begin(), rNames.end(), CheckForChartName(rDir));
+
+    CPPUNIT_ASSERT(pElement);
+    CPPUNIT_ASSERT(pElement != rNames.end());
+    return *pElement;
+}
+
+xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
 {
     boost::shared_ptr<utl::TempFile> pTempFile = reload(rFilterFormat);
 
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), pTempFile->GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
     pStream->Seek(STREAM_SEEK_TO_END);
@@ -373,7 +406,7 @@ void Chart2ExportTest::testStockChart()
      */
     load("/chart2/qa/extras/data/docx/", "testStockChart.docx");
 
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml", "Office Open XML Text");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     if (!pXmlDoc)
        return;
 
@@ -385,7 +418,7 @@ void Chart2ExportTest::testStockChart()
 void Chart2ExportTest::testBarChart()
 {
     load("/chart2/qa/extras/data/docx/", "testBarChart.docx");
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml", "Office Open XML Text");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     if (!pXmlDoc)
        return;
 
