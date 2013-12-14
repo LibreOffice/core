@@ -16,6 +16,24 @@
       "revId": "05c5f9290176219b4ce7bb8fdae1282ae07db08f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///lk\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-12-14T15:45:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAbH///mc\u003d",
+      "revId": "05c5f9290176219b4ce7bb8fdae1282ae07db08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
