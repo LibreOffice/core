@@ -32,17 +32,13 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 			$(call gb_Executable_get_target,$(exe))) \
 		$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,odk_cli)) \
 		$(call gb_Package_get_target,odk_config) \
-		$(if $(filter WNT,$(OS)),\
-			$(call gb_Package_get_target,odk_config_win),\
-			$(call gb_Package_get_target,odk_config_notwin) \
-		) \
+		$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,odk_config_win)) \
 		$(call gb_Package_get_target,odk_docs) \
 		$(call gb_Package_get_target,odk_html) \
 		$(if $(ENABLE_JAVA),$(call gb_Package_get_target,odk_javadoc)) \
 		$(call gb_Package_get_target,odk_lib) \
 		$(call gb_Package_get_target,odk_settings) \
 		$(call gb_Package_get_target,odk_settings_generated) \
-		$(call gb_Package_get_target,odk_uno_loader_classes) \
 		$(if $(ENABLE_JAVA),$(call gb_Package_get_target,odk_unowinreg))
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	$(call gb_Helper_print_on_error,\
