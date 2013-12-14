@@ -39,8 +39,8 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
-    //CPPUNIT_TEST(testStockChart);
-    //CPPUNIT_TEST(testBarChart);
+    CPPUNIT_TEST(testStockChart);
+    CPPUNIT_TEST(testBarChart);
 
     CPPUNIT_TEST_SUITE_END();
 
