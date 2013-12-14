@@ -428,7 +428,7 @@ static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUStri
     return bRet;
 }
 
-sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
+sal_Bool SwTxtNode::IsSymbol( const sal_Int32 nBegin ) const
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
@@ -819,7 +819,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
  * changing this method very likely requires changing of "GetMinMaxSize"
  *************************************************************************/
 
-sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
+sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     const
 {
     SwViewShell* pSh = NULL;
@@ -863,8 +863,8 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
             return 100;
         }
 
-        nStt = (xub_StrLen)aBound.startPos;
-        nEnd = (xub_StrLen)aBound.endPos;
+        nStt = aBound.startPos;
+        nEnd = aBound.endPos;
 
         if ( nStt == nEnd )
         {
@@ -885,7 +885,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
     aAttr.SetPriorityAttr( sal_True );
     rAH.PushAndChg( aAttr, *(aIter.GetFnt()) );
 
-    xub_StrLen nIdx = nStt;
+    sal_Int32 nIdx = nStt;
 
     sal_uLong nWidth = 0;
     sal_uLong nProWidth = 0;
@@ -895,12 +895,9 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
         aIter.SeekAndChgAttrIter( nIdx, pOut );
 
         // scan for end of portion
-        xub_StrLen nNextChg = aIter.GetNextAttr();
-        xub_StrLen nStop = aScriptInfo.NextScriptChg( nIdx );
-        if( nNextChg > nStop )
-            nNextChg = nStop;
+        const sal_Int32 nNextChg = std::max(aIter.GetNextAttr(), aScriptInfo.NextScriptChg( nIdx ));
 
-        nStop = nIdx;
+        sal_Int32 nStop = nIdx;
         sal_Unicode cChar = CH_BLANK;
         SwTxtAttr* pHint = NULL;
 

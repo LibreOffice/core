@@ -2161,7 +2161,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
                 // Reset DontExpand-Flags before exchange, to retrigger expansion
                 pTNd->DontExpandFmt( aIdx, false, false );
                 aIdx = 0;
-                pTNd->EraseText( aIdx, STRING_LEN,
+                pTNd->EraseText( aIdx, SAL_MAX_INT32,
                         IDocumentContentOperations::INS_EMPTYEXPAND );
                 pTNd->InsertText( sTmp, aIdx,
                         IDocumentContentOperations::INS_EMPTYEXPAND );

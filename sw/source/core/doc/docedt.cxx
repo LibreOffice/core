@@ -714,7 +714,8 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
 
     SwTxtNode *pNode = rPt.nNode.GetNode().GetTxtNode();
     if (!pNode || ( static_cast<size_t>(rStr.getLength()) // worst case: no erase
-                  + static_cast<size_t>(pNode->GetTxt().getLength()) > TXTNODE_MAX))
+                  + static_cast<size_t>(pNode->GetTxt().getLength())
+                  > static_cast<size_t>(TXTNODE_MAX)))
     {
         return false;
     }

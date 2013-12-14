@@ -343,7 +343,7 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
     if( pSttTxtNd )
     {
         bool bOneNode = nSttNode == nEndNode;
-        xub_StrLen nLen = bOneNode ? nEndCntnt - nSttCntnt
+        sal_Int32 nLen = bOneNode ? nEndCntnt - nSttCntnt
                                 : pSttTxtNd->GetTxt().getLength() - nSttCntnt;
         SwRegHistory aRHst( *pSttTxtNd, pHistory );
         // always save all text atttibutes because of possibly overlapping

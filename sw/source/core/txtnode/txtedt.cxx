@@ -371,7 +371,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 
 void SwTxtNode::RstTxtAttr(
     const SwIndex &rIdx,
-    const xub_StrLen nLen,
+    const sal_Int32 nLen,
     const sal_uInt16 nWhich,
     const SfxItemSet* pSet,
     const sal_Bool bInclRefToxMark )
@@ -651,7 +651,7 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
  * Wenn dieses erste Wort nur aus Whitespaces besteht, returnen wir
  * einen leeren String.
  *************************************************************************/
-OUString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
+OUString SwTxtNode::GetCurWord( sal_Int32 nPos ) const
 {
     assert(nPos <= m_Text.getLength()); // invalid index
 
@@ -682,7 +682,7 @@ OUString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 
     // check if word was found and if it uses a symbol font, if so
     // enforce returning an empty string
-    if (aBndry.endPos != aBndry.startPos && IsSymbol( (xub_StrLen)aBndry.startPos ))
+    if (aBndry.endPos != aBndry.startPos && IsSymbol( aBndry.startPos ))
         aBndry.endPos = aBndry.startPos;
 
     // can have -1 as start/end of bounds not found
@@ -1618,8 +1618,8 @@ namespace
 {
     struct swTransliterationChgData
     {
-        xub_StrLen              nStart;
-        xub_StrLen              nLen;
+        sal_Int32               nStart;
+        sal_Int32               nLen;
         OUString                sChanged;
         Sequence< sal_Int32 >   aOffsets;
     };
@@ -1628,7 +1628,7 @@ namespace
 // change text to Upper/Lower/Hiragana/Katagana/...
 void SwTxtNode::TransliterateText(
     utl::TransliterationWrapper& rTrans,
-    xub_StrLen nStt, xub_StrLen nEnd,
+    sal_Int32 nStt, sal_Int32 nEnd,
     SwUndoTransliterate* pUndo )
 {
     if (nStt < nEnd && g_pBreakIt->GetBreakIter().is())
@@ -1686,9 +1686,9 @@ void SwTxtNode::TransliterateText(
             Boundary aCurWordBndry( aSttBndry );
             while (aCurWordBndry.startPos <= aEndBndry.startPos)
             {
-                nStt = (xub_StrLen)aCurWordBndry.startPos;
-                nEnd = (xub_StrLen)aCurWordBndry.endPos;
-                sal_Int32 nLen = nEnd - nStt;
+                nStt = aCurWordBndry.startPos;
+                nEnd = aCurWordBndry.endPos;
+                const sal_Int32 nLen = nEnd - nStt;
                 OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 
                 Sequence <sal_Int32> aOffsets;
@@ -1812,8 +1812,8 @@ void SwTxtNode::TransliterateText(
             else
                 pIter = 0;
 
-            xub_StrLen nEndPos;
-            sal_uInt16 nLang;
+            sal_Int32 nEndPos = 0;
+            sal_uInt16 nLang = LANGUAGE_NONE;
             do {
                 if( pIter )
                 {
@@ -1827,7 +1827,7 @@ void SwTxtNode::TransliterateText(
                     nLang = LANGUAGE_SYSTEM;
                     nEndPos = nEnd;
                 }
-                xub_StrLen nLen = nEndPos - nStt;
+                const sal_Int32 nLen = nEndPos - nStt;
 
                 Sequence <sal_Int32> aOffsets;
                 OUString const sChgd( rTrans.transliterate(
@@ -1860,8 +1860,8 @@ void SwTxtNode::TransliterateText(
                 // call to ReplaceTextOnly
                 swTransliterationChgData & rData =
                     aChanges[ aChanges.size() - 1 - i ];
-                nSum = nSum + rData.sChanged.getLength() - rData.nLen;
-                if (nSum > TXTNODE_MAX)
+                nSum += rData.sChanged.getLength() - rData.nLen;
+                if (nSum > static_cast<size_t>(TXTNODE_MAX))
                 {
                     SAL_WARN("sw.core", "SwTxtNode::ReplaceTextOnly: "
                             "node text with insertion > TXTNODE_MAX.");
@@ -1875,7 +1875,7 @@ void SwTxtNode::TransliterateText(
     }
 }
 
-void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
+void SwTxtNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
                                 const OUString & rText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
@@ -1886,14 +1886,14 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
     sal_Int32 nTLen = rText.getLength();
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indizies!
-    xub_StrLen nI, nMyOff;
-    for( nI = 0, nMyOff = nPos; nI < nTLen; ++nI, ++nMyOff )
+    sal_Int32 nMyOff = nPos;
+    for( sal_Int32 nI = 0; nI < nTLen; ++nI )
     {
-        xub_StrLen nOff = (xub_StrLen)pOffsets[ nI ];
+        const sal_Int32 nOff = pOffsets[ nI ];
         if( nOff < nMyOff )
         {
             // something is inserted
-            xub_StrLen nCnt = 1;
+            sal_Int32 nCnt = 1;
             while( nI + nCnt < nTLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
@@ -1908,6 +1908,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
             Update( SwIndex( this, nMyOff+1 ), nOff - nMyOff, sal_True );
             nMyOff = nOff;
         }
+        ++nMyOff;
     }
     if( nMyOff < nLen )
         // something is deleted at the end
@@ -1924,7 +1925,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 // the return values allows us to see if we did the heavy-
 // lifting required to actually break and count the words.
 bool SwTxtNode::CountWords( SwDocStat& rStat,
-                            xub_StrLen nStt, xub_StrLen nEnd ) const
+                            sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     if( nStt > nEnd )
     {   // bad call

@@ -633,8 +633,8 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         if (pTxtNode != NULL)
         {
             SwFmtFlyCnt aFmt( pFmt );
-            bool const bSuccess( pTxtNode->InsertItem(aFmt, nStt, nStt) );
-            if (!bSuccess) // may fail if there's no space left or header/ftr
+            // may fail if there's no space left or header/ftr
+            if (!pTxtNode->InsertItem(aFmt, nStt, nStt))
             {   // pFmt is dead now
                 return 0;
             }
@@ -925,10 +925,8 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     {
         const sal_Int32 nStt = rRg.GetPoint()->nContent.GetIndex();
         SwFmtFlyCnt aFmt( pFmt );
-        bool const bSuccess( // may fail if there's no space left
-            rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(
-                    aFmt, nStt, nStt));
-        if (!bSuccess)
+        // may fail if there's no space left
+        if (!rRg.GetPoint()->nNode.GetNode().GetTxtNode()->InsertItem(aFmt, nStt, nStt))
         {   // pFmt is dead now
             return 0;
         }
@@ -1385,7 +1383,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         {
             aTxt += rSeparator;
         }
-        sal_Int32 nSepIdx = aTxt.getLength();
+        const sal_Int32 nSepIdx = aTxt.getLength();
         aTxt += rTxt;
 
         // Insert string
@@ -1677,7 +1675,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         }
         sal_Int32 nIdx = aTxt.getLength();
         aTxt += rSeparator;
-        sal_Int32 nSepIdx = aTxt.getLength();
+        const sal_Int32 nSepIdx = aTxt.getLength();
         aTxt += rTxt;
 
         // insert text

@@ -95,7 +95,7 @@ namespace
         , aPosition ( rPosition )
         {
         }
-        sal_uLong getIndex ()
+        sal_Int32 getIndex ()
         {
             return aPosition.nContent.GetIndex();
         }
@@ -503,7 +503,7 @@ lcl_ExportBookmark(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwXBookmarkPortion_ImplList& rBkmArr, const sal_uLong nIndex)
+    SwXBookmarkPortion_ImplList& rBkmArr, const sal_Int32 nIndex)
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end();
           aIter != aEnd; )
@@ -545,7 +545,7 @@ lcl_ExportSoftPageBreak(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwSoftPageBreakList& rBreakArr, const sal_uLong nIndex)
+    SwSoftPageBreakList& rBreakArr, const sal_Int32 nIndex)
 {
     for ( SwSoftPageBreakList::iterator aIter = rBreakArr.begin(),
           aEnd = rBreakArr.end();
@@ -576,7 +576,7 @@ struct SwXRedlinePortion_Impl
     {
     }
 
-    sal_uLong getRealIndex ()
+    sal_Int32 getRealIndex ()
     {
         return m_bStart ? m_pRedline->Start()->nContent.GetIndex()
                         : m_pRedline->End()  ->nContent.GetIndex();
@@ -971,7 +971,7 @@ lcl_ExportRedline(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwXRedlinePortion_ImplList& rRedlineArr, const sal_uLong nIndex)
+    SwXRedlinePortion_ImplList& rRedlineArr, const sal_Int32 nIndex)
 {
 
     // MTG: 23/11/05: We want this loop to iterate over all red lines in this
@@ -980,7 +980,7 @@ lcl_ExportRedline(
           aIter != aEnd; )
     {
         SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
-        sal_uLong nRealIndex = pPtr->getRealIndex();
+        sal_Int32 nRealIndex = pPtr->getRealIndex();
         // MTG: 23/11/05: If there are elements before nIndex, remove them
         if ( nIndex > nRealIndex )
             rRedlineArr.erase ( aIter++ );
@@ -1005,7 +1005,7 @@ lcl_ExportBkmAndRedline(
     SwXBookmarkPortion_ImplList& rBkmArr,
     SwXRedlinePortion_ImplList& rRedlineArr,
     SwSoftPageBreakList& rBreakArr,
-    const sal_uLong nIndex)
+    const sal_Int32 nIndex)
 {
     if (!rBkmArr.empty())
         lcl_ExportBookmark(rPortions, xParent, pUnoCrsr, rBkmArr, nIndex);

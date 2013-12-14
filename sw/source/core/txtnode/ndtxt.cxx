@@ -1249,7 +1249,7 @@ lcl_GetTxtAttrs(
 }
 
 ::std::vector<SwTxtAttr *>
-SwTxtNode::GetTxtAttrsAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+SwTxtNode::GetTxtAttrsAt(sal_Int32 const nIndex, RES_TXTATR const nWhich,
                         enum GetTxtAttrMode const eMode) const
 {
     ::std::vector<SwTxtAttr *> ret;
@@ -1258,7 +1258,7 @@ SwTxtNode::GetTxtAttrsAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
 }
 
 SwTxtAttr *
-SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+SwTxtNode::GetTxtAttrAt(sal_Int32 const nIndex, RES_TXTATR const nWhich,
                         enum GetTxtAttrMode const eMode) const
 {
     assert(    (nWhich == RES_TXTATR_META)
@@ -1290,7 +1290,7 @@ const SwTxtInputFld* SwTxtNode::GetOverlappingInputFld( const SwTxtAttr& rTxtAtt
 }
 
 SwTxtFld* SwTxtNode::GetFldTxtAttrAt(
-    const xub_StrLen nIndex,
+    const sal_Int32 nIndex,
     const bool bIncludeInputFldAtStart ) const
 {
     SwTxtFld* pTxtFld = NULL;
@@ -1456,8 +1456,8 @@ void lcl_CopyHint(
 |*                  gesetzt werden sollen.
 *************************************************************************/
 
-void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
-                          const xub_StrLen nOldPos )
+void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
+                          const sal_Int32 nOldPos )
 {
     if ( HasHints() )    // keine Attribute, keine Kekse
     {
@@ -1519,7 +1519,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
 // introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rStart,
-                      const xub_StrLen nLen,
+                      const sal_Int32 nLen,
                       const bool bForceCopyOfAllAttrs )
 {
     SwIndex const aIdx( pDest, pDest->m_Text.getLength() );
@@ -1530,7 +1530,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rDestStart,
                       const SwIndex &rStart,
-                      xub_StrLen nLen,
+                      sal_Int32 nLen,
                       const bool bForceCopyOfAllAttrs )
 {
     sal_Int32 nTxtStartIdx = rStart.GetIndex();
@@ -1644,7 +1644,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // Del-Array fuer alle RefMarks ohne Ausdehnung
     SwpHts aRefMrkArr;
 
-    sal_uInt16 nDeletedDummyChars(0);
+    sal_Int32 nDeletedDummyChars(0);
     //Achtung: kann ungueltig sein!!
     for (sal_uInt16 n = 0; ( n < nSize ); ++n)
     {
@@ -1920,7 +1920,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 *************************************************************************/
 
 void SwTxtNode::CutText( SwTxtNode * const pDest,
-            const SwIndex & rStart, const xub_StrLen nLen )
+            const SwIndex & rStart, const sal_Int32 nLen )
 {
     if(pDest)
     {
@@ -1937,7 +1937,7 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
 
 
 void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
-         const SwIndex & rStart, xub_StrLen nLen, const bool bUpdate )
+         const SwIndex & rStart, sal_Int32 nLen, const bool bUpdate )
 {
     if(!pDest)
     {
@@ -2286,13 +2286,13 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 }
 
 
-void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
+void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
         const IDocumentContentOperations::InsertFlags nMode )
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
 
     const sal_Int32 nStartIdx = rIdx.GetIndex();
-    const sal_Int32 nCnt = (STRING_LEN == nCount)
+    const sal_Int32 nCnt = (nCount==SAL_MAX_INT32)
                       ? m_Text.getLength() - nStartIdx : nCount;
     const sal_Int32 nEndIdx = nStartIdx + nCnt;
     m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
@@ -2697,7 +2697,7 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
  *************************************************************************/
 
 SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
-    const xub_StrLen nIndex,
+    const sal_Int32 nIndex,
     const RES_TXTATR nWhich ) const
 {
     if ( HasHints() )
@@ -2705,7 +2705,7 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
         for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); ++i )
         {
             SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(i);
-            const xub_StrLen nStartPos = *pHint->GetStart();
+            const sal_Int32 nStartPos = *pHint->GetStart();
             if ( nIndex < nStartPos )
             {
                 return 0;
@@ -3174,7 +3174,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*m_pSwpHints)[i];
-            const xub_StrLen nAttrStartIdx = *pHt->GetStart();
+            const sal_Int32 nAttrStartIdx = *pHt->GetStart();
             const sal_uInt16 nWhich = pHt->Which();
             if (nIdx + nLen <= nAttrStartIdx)
                 break;      // ueber das Textende
@@ -3212,7 +3212,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                             SAL_INFO_IF(ins.getLength() != aExpand.getLength(),
                                     "sw.core", "GetExpandTxt lossage");
                             aDestIdx = nInsPos + nAttrStartIdx;
-                            nInsPos = nInsPos + ins.getLength();
+                            nInsPos += ins.getLength();
                         }
                         rDestNd.EraseText( aDestIdx, 1 );
                         --nInsPos;
@@ -3247,7 +3247,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 SAL_INFO_IF(ins.getLength() != sExpand.getLength(),
                                         "sw.core", "GetExpandTxt lossage");
                                 aDestIdx = nInsPos + nAttrStartIdx;
-                                nInsPos = nInsPos + ins.getLength();
+                                nInsPos += ins.getLength();
                             }
                         }
                         rDestNd.EraseText( aDestIdx, 1 );
@@ -3308,7 +3308,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     return true;
 }
 
-OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
+OUString SwTxtNode::GetRedlineTxt( sal_Int32 nIdx, sal_Int32 nLen,
                                 sal_Bool bExpandFlds, sal_Bool bWithNum ) const
 {
     std::vector<sal_Int32> aRedlArr;
@@ -3358,7 +3358,8 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                 ? GetTxt().copy(nIdx)
                 : GetTxt().copy(nIdx, nLen));
 
-    sal_Int32 nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.getLength();
+    sal_Int32 nTxtStt = nIdx;
+    sal_Int32 nIdxEnd = nIdx + aTxt.getLength();
     for( size_t n = 0; n < aRedlArr.size(); n += 2 )
     {
         sal_Int32 nStt = aRedlArr[ n ];
@@ -3371,7 +3372,7 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
             const sal_Int32 nDelCnt = nEnd - nStt;
             aTxt.remove(nStt - nTxtStt, nDelCnt);
             Replace0xFF(*this, aTxt, nTxtStt, nStt - nTxtStt, bExpandFlds);
-            nTxtStt = nTxtStt + nDelCnt;
+            nTxtStt += nDelCnt;
         }
         else if( nStt >= nIdxEnd )
             break;
@@ -3387,7 +3388,7 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
  *                        SwTxtNode::ReplaceText
  *************************************************************************/
 
-void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
+void SwTxtNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
                              const OUString & rStr)
 {
     assert( rStart.GetIndex() < m_Text.getLength()     // index out of bounds
@@ -4912,7 +4913,7 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
 }
 
 
-sal_uInt32 SwTxtNode::GetRsid( xub_StrLen nStt, xub_StrLen nEnd ) const
+sal_uInt32 SwTxtNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     SfxItemSet aSet( (SfxItemPool&) (GetDoc()->GetAttrPool()), RES_CHRATR_RSID, RES_CHRATR_RSID );
     if ( GetAttr(aSet, nStt, nEnd) )
@@ -4938,8 +4939,8 @@ bool SwTxtNode::CompareParRsid( const SwTxtNode &rTxtNode ) const
     return nThisRsid == nRsid;
 }
 
-bool SwTxtNode::CompareRsid( const SwTxtNode &rTxtNode, xub_StrLen nStt1, xub_StrLen nStt2,
-                            xub_StrLen nEnd1,  xub_StrLen nEnd2 ) const
+bool SwTxtNode::CompareRsid( const SwTxtNode &rTxtNode, sal_Int32 nStt1, sal_Int32 nStt2,
+                            sal_Int32 nEnd1, sal_Int32 nEnd2 ) const
 
 {
     sal_uInt32 nThisRsid = GetRsid( nStt1, nEnd1 ? nEnd1 : nStt1 );

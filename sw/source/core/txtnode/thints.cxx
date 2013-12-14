@@ -1200,7 +1200,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
 SwTxtAttr*
 SwTxtNode::InsertItem( SfxPoolItem& rAttr,
-      const xub_StrLen nStart, const xub_StrLen nEnd, const SetAttrMode nMode )
+      const sal_Int32 nStart, const sal_Int32 nEnd, const SetAttrMode nMode )
 {
    // character attributes will be inserted as automatic styles:
     OSL_ENSURE( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
@@ -1242,7 +1242,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         : IDocumentContentOperations::INS_EMPTYEXPAND;
 
     // need this after TryInsertHint, when pAttr may be deleted
-    const xub_StrLen nStart( *pAttr->GetStart() );
+    const sal_Int32 nStart( *pAttr->GetStart() );
     const bool bDummyChar( pAttr->HasDummyChar() );
     if (bDummyChar)
     {
@@ -1475,7 +1475,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
     }
 
     // handle attributes which provide content
-    xub_StrLen nEnd = nStart;
+    sal_Int32 nEnd = nStart;
     bool bInputFieldStartCharInserted = false;
     bool bInputFieldEndCharInserted = false;
     const bool bHasContent( pAttr->HasContent() );
@@ -1668,8 +1668,8 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
 //FIXME: this does NOT respect SORT NUMBER (for CHARFMT)!
 void SwTxtNode::DeleteAttributes(
     const sal_uInt16 nWhich,
-    const xub_StrLen nStart,
-    const xub_StrLen nEnd )
+    const sal_Int32 nStart,
+    const sal_Int32 nEnd )
 {
     if ( !HasHints() )
         return;
@@ -1743,12 +1743,17 @@ void SwTxtNode::DeleteAttributes(
  *                      SwTxtNode::DelSoftHyph()
  *************************************************************************/
 
-void SwTxtNode::DelSoftHyph( const xub_StrLen nStt, const xub_StrLen nEnd )
+void SwTxtNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
 {
-    sal_Int32 nFndPos = nStt, nEndPos = nEnd;
-    while ((-1 != (nFndPos = m_Text.indexOf(CHAR_SOFTHYPHEN, nFndPos))) &&
-            nFndPos < nEndPos )
+    sal_Int32 nFndPos = nStt;
+    sal_Int32 nEndPos = nEnd;
+    for (;;)
     {
+        nFndPos = m_Text.indexOf(CHAR_SOFTHYPHEN, nFndPos);
+        if (nFndPos<0 || nFndPos>=nEndPos )
+        {
+            break;
+        }
         const SwIndex aIdx( this, nFndPos );
         EraseText( aIdx, 1 );
         --nEndPos;
@@ -1829,8 +1834,8 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
 // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
 sal_Bool SwTxtNode::SetAttr(
     const SfxItemSet& rSet,
-    const xub_StrLen nStt,
-    const xub_StrLen nEnd,
+    const sal_Int32 nStt,
+    const sal_Int32 nEnd,
     const SetAttrMode nMode )
 {
     if( !rSet.Count() )
@@ -2047,7 +2052,7 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
 }
 
 // erfrage die Attribute vom TextNode ueber den Bereich
-sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
+sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                          sal_Bool bOnlyTxtAttr, sal_Bool bGetFromChrFmt,
                          const bool bMergeIndentValuesOfNumRule ) const
 {

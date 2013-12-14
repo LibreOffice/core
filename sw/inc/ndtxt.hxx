@@ -67,12 +67,11 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
 } } }
 
-typedef std::set< xub_StrLen > SwSoftPageBreakList;
+typedef std::set< sal_Int32 > SwSoftPageBreakList;
 
 // do not fill the String up to the max - need to be able to have a
 // SwPosition "behind" the last character, i.e., at index TXTNODE_MAX + 1
-// (also STRING_LEN is often used for "not found")
-const xub_StrLen TXTNODE_MAX = STRING_LEN - 2;
+static const sal_Int32 TXTNODE_MAX = SAL_MAX_INT32 - 2;
 
 /// SwTxtNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
@@ -124,14 +123,14 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
                              const SfxItemSet* pAutoAttr = 0 );
 
     /// Copies the attributes at nStart to pDest.
-    SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const xub_StrLen nStart, const xub_StrLen nOldPos);
+    SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
     SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, sal_Bool bNext = sal_True,
                                 sal_Bool bChgFollow = sal_True );
 
     SW_DLLPRIVATE void CutImpl(
           SwTxtNode * const pDest, const SwIndex & rDestStart,
-          const SwIndex & rStart, /*const*/ xub_StrLen nLen,
+          const SwIndex & rStart, /*const*/ sal_Int32 nLen,
           const bool bUpdate = true );
 
     /// Move all comprising hard attributes to the AttrSet of the paragraph.
@@ -251,7 +250,7 @@ public:
         ATTENTION: must not be called with a range that overlaps the start of
                    an attribute with both extent and dummy char
      */
-    void EraseText ( const SwIndex &rIdx, const xub_StrLen nCount = STRING_LEN,
+    void EraseText ( const SwIndex &rIdx, const sal_Int32 nCount = SAL_MAX_INT32,
                      const enum IDocumentContentOperations::InsertFlags nMode
                          = IDocumentContentOperations::INS_DEFAULT );
 
@@ -268,7 +267,7 @@ public:
      */
     void RstTxtAttr(
         const SwIndex &rIdx,
-        const xub_StrLen nLen,
+        const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
         const SfxItemSet* pSet = 0,
         const sal_Bool bInclRefToxMark = sal_False );
@@ -286,13 +285,13 @@ public:
     /// create new text attribute from rAttr and insert it
     /// @return     inserted hint; 0 if not sure the hint is inserted
     SwTxtAttr* InsertItem( SfxPoolItem& rAttr,
-                  const xub_StrLen nStart, const xub_StrLen nEnd,
+                  const sal_Int32 nStart, const sal_Int32 nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
 
     /** Set these attributes at TextNode. If the whole range is comprised
        set them only in AutoAttrSet (SwCntntNode::SetAttr). */
     sal_Bool SetAttr( const SfxItemSet& rSet,
-                  xub_StrLen nStt, xub_StrLen nEnd,
+                  sal_Int32 nStt, sal_Int32 nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
     /** Query the attributes of textnode over the range.
        Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
@@ -301,7 +300,7 @@ public:
        the requested item set as a LR-SPACE item, if <bOnlyTxtAttr> == sal_False,
        corresponding node has not its own indent attributes and the
        position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT. */
-    sal_Bool GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
+    sal_Bool GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                   sal_Bool bOnlyTxtAttr  = sal_False,
                   sal_Bool bGetFromChrFmt = sal_True,
                   const bool bMergeIndentValuesOfNumRule = false ) const;
@@ -311,7 +310,7 @@ public:
 
     /// delete all attributes of type nWhich at nStart (opt. end nEnd)
     void DeleteAttributes( const sal_uInt16 nWhich,
-                  const xub_StrLen nStart, const xub_StrLen nEnd = 0 );
+                  const sal_Int32 nStart, const sal_Int32 nEnd = 0 );
     /// delete the attribute pTxtAttr
     void DeleteAttribute ( SwTxtAttr * const pTxtAttr );
 
@@ -319,25 +318,25 @@ public:
        introduce optional parameter to control, if all attributes have to be copied. */
     void CopyText( SwTxtNode * const pDest,
                const SwIndex &rStart,
-               const xub_StrLen nLen,
+               const sal_Int32 nLen,
                const bool bForceCopyOfAllAttrs = false );
     void CopyText( SwTxtNode * const pDest,
                const SwIndex &rDestStart,
                const SwIndex &rStart,
-               xub_StrLen nLen,
+               sal_Int32 nLen,
                const bool bForceCopyOfAllAttrs = false );
 
     void        CutText(SwTxtNode * const pDest,
-                    const SwIndex & rStart, const xub_StrLen nLen);
+                    const SwIndex & rStart, const sal_Int32 nLen);
     inline void CutText(SwTxtNode * const pDest, const SwIndex &rDestStart,
-                    const SwIndex & rStart, const xub_StrLen nLen);
+                    const SwIndex & rStart, const sal_Int32 nLen);
 
     /// replace nDelLen characters at rStart with rText
     /// in case the replacement does not fit, it is partially inserted up to
     /// TXTNODE_MAX
-    void ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
+    void ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
-    void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
+    void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             const OUString& rText,
             const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
@@ -368,7 +367,7 @@ public:
         RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
      */
     SwTxtAttr *GetTxtAttrAt(
-        xub_StrLen const nIndex,
+        sal_Int32 const nIndex,
         RES_TXTATR const nWhich,
         enum GetTxtAttrMode const eMode = DEFAULT ) const;
 
@@ -377,7 +376,7 @@ public:
         @param eMode    the predicate for matching (@see GetTxtAttrMode).
      */
     ::std::vector<SwTxtAttr *> GetTxtAttrsAt(
-        xub_StrLen const nIndex,
+        sal_Int32 const nIndex,
         RES_TXTATR const nWhich,
         enum GetTxtAttrMode const eMode = DEFAULT ) const;
 
@@ -389,14 +388,14 @@ public:
         @return the text attribute at nIndex of type nWhich, if it exists
     */
     SwTxtAttr *GetTxtAttrForCharAt(
-        const xub_StrLen nIndex,
+        const sal_Int32 nIndex,
         const RES_TXTATR nWhich = RES_TXTATR_END ) const;
 
     SwTxtFld* GetFldTxtAttrAt(
-        const xub_StrLen nIndex,
+        const sal_Int32 nIndex,
         const bool bIncludeInputFldAtStart = false ) const;
 
-    OUString GetCurWord(xub_StrLen) const;
+    OUString GetCurWord(sal_Int32) const;
     sal_uInt16 Spell(SwSpellArgs*);
     sal_uInt16 Convert( SwConversionArgs & );
 
@@ -665,12 +664,12 @@ public:
                     sal_uInt16 nScript = 0 ) const;
 
     /// in ndcopy.cxx
-    sal_Bool IsSymbol( const xub_StrLen nBegin ) const; // In itratr.cxx.
+    sal_Bool IsSymbol( const sal_Int32 nBegin ) const; // In itratr.cxx.
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     /// Interactive hyphenation: we find TxtFrm and call its CalcHyph.
     sal_Bool Hyphenate( SwInterHyphInfo &rHyphInf );
-    void DelSoftHyph( const xub_StrLen nStart, const xub_StrLen nEnd );
+    void DelSoftHyph( const sal_Int32 nStart, const sal_Int32 nEnd );
 
     /** add 4th optional parameter <bAddSpaceAfterListLabelStr> indicating,
        when <bWithNum = true> that a space is inserted after the string for
@@ -689,8 +688,8 @@ public:
                            bool bWithNum = false, bool bWithFtn = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 
-    OUString GetRedlineTxt( xub_StrLen nIdx = 0,
-                          xub_StrLen nLen = STRING_LEN,
+    OUString GetRedlineTxt( sal_Int32 nIdx = 0,
+                          sal_Int32 nLen = SAL_MAX_INT32,
                           sal_Bool bExpandFlds = sal_False,
                           sal_Bool bWithNum = sal_False ) const;
 
@@ -742,11 +741,11 @@ public:
 
     /// change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
-                            xub_StrLen nStart, xub_StrLen nEnd,
+                            sal_Int32 nStart, sal_Int32 nEnd,
                             SwUndoTransliterate* pUndo = 0 );
 
     /// count words in given range - returns true if we refreshed out count
-    bool CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
+    bool CountWords( SwDocStat& rStat, sal_Int32 nStart, sal_Int32 nEnd ) const;
 
     /** Checks some global conditions like loading or destruction of document
        to economize notifications */
@@ -772,7 +771,7 @@ public:
 
     bool IsFirstOfNumRule() const;
 
-    sal_uInt16 GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
+    sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
 
     SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextContent> const& GetXParagraph() const
@@ -793,11 +792,11 @@ public:
 
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
 
-    sal_uInt32 GetRsid( xub_StrLen nStt, xub_StrLen nEnd ) const;
+    sal_uInt32 GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const;
     sal_uInt32 GetParRsid() const;
 
-    bool CompareRsid( const SwTxtNode &rTxtNode, xub_StrLen nStt1, xub_StrLen nStt2,
-            xub_StrLen nEnd1 = 0,  xub_StrLen nEnd2 = 0 ) const;
+    bool CompareRsid( const SwTxtNode &rTxtNode, sal_Int32 nStt1, sal_Int32 nStt2,
+            sal_Int32 nEnd1 = 0,  sal_Int32 nEnd2 = 0 ) const;
     bool CompareParRsid( const SwTxtNode &rTxtNode ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
@@ -851,7 +850,7 @@ inline const SwTxtNode *SwNode::GetTxtNode() const
 
 inline void
 SwTxtNode::CutText(SwTxtNode * const pDest, const SwIndex & rDestStart,
-                    const SwIndex & rStart, const xub_StrLen nLen)
+                    const SwIndex & rStart, const sal_Int32 nLen)
 {
     CutImpl( pDest, rDestStart, rStart, nLen, true );
 }

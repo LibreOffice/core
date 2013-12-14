@@ -1648,7 +1648,7 @@ static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
     }
     size_t const nSum(static_cast<const SwTxtNode&>(rPrev).GetTxt().getLength()
                     + static_cast<const SwTxtNode&>(rNext).GetTxt().getLength());
-    return (nSum <= TXTNODE_MAX);
+    return (nSum <= static_cast<size_t>(TXTNODE_MAX));
 }
 
 /// Can we join two Nodes?

@@ -129,7 +129,7 @@ static void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
         (FLY_AS_CHAR == rAnchor.GetAnchorId()))
     {
         rNodePos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
-        xub_StrLen nCntntPos = 0;
+        sal_Int32 nCntntPos = 0;
 
         if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         {
@@ -166,7 +166,7 @@ static void lcl_RestoreAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
         (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
         (FLY_AS_CHAR == rAnchor.GetAnchorId()))
     {
-        xub_StrLen nCntntPos = rAnchor.GetPageNum();
+        const sal_Int32 nCntntPos = rAnchor.GetPageNum();
         SwNodes& rNds = pFmt->GetDoc()->GetNodes();
 
         SwNodeIndex aIdx( rNds, rNodePos );
