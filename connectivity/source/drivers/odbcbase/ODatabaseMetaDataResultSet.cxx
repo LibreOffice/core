@@ -865,7 +865,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
     aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN.getStr();
 
 
@@ -965,7 +965,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN.getStr(),
                 *pCOL = aCOL.getStr();
 
@@ -1067,7 +1067,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
     aCOL = OUStringToOString(columnNamePattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN.getStr(),
                 *pCOL = aCOL.getStr();
 
@@ -1101,7 +1101,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
     aPKN = OUStringToOString(procedureNamePattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN.getStr();
 
 
@@ -1144,7 +1144,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
     aPKN = OUStringToOString(table,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN.getStr();
 
 
@@ -1231,7 +1231,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
     aPKO = OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
@@ -1260,7 +1260,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
     aPKO = OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
 
 
@@ -1290,7 +1290,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
     aPKO = OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && !pSchemaPat->isEmpty() && !aPKO.isEmpty() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
