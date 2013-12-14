@@ -849,7 +849,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
     OString aPKQ,aPKO,aPKN,aCOL;
     const OUString *pSchemaPat = NULL;
 
-    if(schemaPattern.toChar() != '%')
+    if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
         pSchemaPat = NULL;
@@ -946,7 +946,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schema.toChar() != '%')
+    if(schema != "%")
         pSchemaPat = &schema;
     else
         pSchemaPat = NULL;
@@ -981,7 +981,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schemaPattern.toChar() != '%')
+    if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
         pSchemaPat = NULL;
@@ -1049,7 +1049,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schemaPattern.toChar() != '%')
+    if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
         pSchemaPat = NULL;
@@ -1083,7 +1083,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schemaPattern.toChar() != '%')
+    if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
         pSchemaPat = NULL;
@@ -1127,7 +1127,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
 
     const OUString *pSchemaPat = NULL;
 
-    if(schema.toChar() != '%')
+    if(schema != "%")
         pSchemaPat = &schema;
     else
         pSchemaPat = NULL;
@@ -1214,7 +1214,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schema.toChar() != '%')
+    if(schema != "%")
         pSchemaPat = &schema;
     else
         pSchemaPat = NULL;
@@ -1243,7 +1243,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schemaPattern.toChar() != '%')
+    if(schemaPattern != "%")
         pSchemaPat = &schemaPattern;
     else
         pSchemaPat = NULL;
@@ -1273,7 +1273,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
 {
     const OUString *pSchemaPat = NULL;
 
-    if(schema.toChar() != '%')
+    if(schema != "%")
         pSchemaPat = &schema;
     else
         pSchemaPat = NULL;
