@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///ls\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-12-14T10:46:26Z",
+      "side": 1,
+      "message": "Does this test really make sense? If I understand the bug repport correctly this was about a import problem in MSO.\nThis test just loads the document but does not check for any changes in the exported file.",
+      "revId": "54e9f54562ecce0b0d5f1ffc16fdd9f013357a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
