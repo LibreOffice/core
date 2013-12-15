@@ -15,37 +15,26 @@ import android.support.v4.app.FragmentPagerAdapter;
 import org.libreoffice.impressremote.fragment.ComputersFragment;
 
 public class ComputersPagerAdapter extends FragmentPagerAdapter {
-    private static final int PAGER_SIZE = 2;
-
-    public static final class PagesIndices {
-        private PagesIndices() {
-        }
-
-        public static final int BLUETOOTH = 0;
-        public static final int WIFI = 1;
-    }
+    private int pager_size = 0;
+    private ComputersFragment.Type tabs[] = new ComputersFragment.Type[2];
 
     public ComputersPagerAdapter(FragmentManager aFragmentManager) {
         super(aFragmentManager);
     }
 
+    public void addFragment(ComputersFragment.Type type) {
+        tabs[pager_size] = type;
+        pager_size++;
+    }
+
     @Override
     public Fragment getItem(int aPosition) {
-        switch (aPosition) {
-            case PagesIndices.BLUETOOTH:
-                return ComputersFragment.newInstance(ComputersFragment.Type.BLUETOOTH);
-
-            case PagesIndices.WIFI:
-                return ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
-
-            default:
-                return null;
-        }
+        return ComputersFragment.newInstance(tabs[aPosition]);
     }
 
     @Override
     public int getCount() {
-        return PAGER_SIZE;
+        return pager_size;
     }
 }
 
