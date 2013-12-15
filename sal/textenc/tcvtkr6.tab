@@ -340,7 +340,7 @@ static ImplUniToDBCSHighTab const aKSC5601DBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x2D */
     {    1,    0, NULL },                                       /* 0x2E */
     {    1,    0, NULL },                                       /* 0x2F */
-    { 0x00, 0xF7, aImplUniToDBCSTab_KSC5601_30 },               /* 0x30 */
+    { 0x00, 0xF6, aImplUniToDBCSTab_KSC5601_30 },               /* 0x30 */
     { 0x31, 0xFE, aImplUniToDBCSTab_KSC5601_31 },               /* 0x31 */
     { 0x00, 0x7F, aImplUniToDBCSTab_KSC5601_32 },               /* 0x32 */
     { 0x80, 0xDD, aImplUniToDBCSTab_KSC5601_33 },               /* 0x33 */
@@ -972,7 +972,7 @@ static ImplUniToDBCSHighTab const aJOHABDBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x2D */
     {    1,    0, NULL },                                       /* 0x2E */
     {    1,    0, NULL },                                       /* 0x2F */
-    { 0x00, 0xF7, aImplUniToDBCSTab_JOHAB_30 },                 /* 0x30 */
+    { 0x00, 0xF6, aImplUniToDBCSTab_JOHAB_30 },                 /* 0x30 */
     { 0x31, 0x8E, aImplUniToDBCSTab_JOHAB_31 },                 /* 0x31 */
     { 0x00, 0x7F, aImplUniToDBCSTab_JOHAB_32 },                 /* 0x32 */
     { 0x80, 0xDD, aImplUniToDBCSTab_JOHAB_33 },                 /* 0x33 */
