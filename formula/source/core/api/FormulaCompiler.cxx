@@ -1275,6 +1275,14 @@ void FormulaCompiler::Factor()
                     eOp = Expression();
                 }
             }
+// fdo69552 nSepCount is not enough, CEILING_ODF(value;;) results in a nSepCount of 3, we need to know the presence/absence of the middle argument
+            if ( ( eMyLastOp == ocCeil_ODF || eMyLastOp == ocFloor_ODF ) )
+                SAL_WARN( "fdo69552", "Factor(), MyLasteOp = " << eMyLastOp << ", nSepCount = " << (int) nSepCount );
+// fdo69552 next 2 lines should not be neccessary once writing _ODF is handled...
+            if ( ( eMyLastOp == ocCeil_ODF || eMyLastOp == ocFloor_ODF ) && nSepCount >= 2 )
+                pFacToken->NewOpCode( ( eMyLastOp == ocCeil_ODF ? ocCeil : ocFloor ), FormulaToken::PrivateAccess() );
+            if ( ( eMyLastOp == ocCeil || eMyLastOp == ocFloor ) && nSepCount < 2 )
+                pFacToken->NewOpCode( ( eMyLastOp == ocCeil ? ocCeil_ODF : ocFloor_ODF ), FormulaToken::PrivateAccess() );
             if (bBadName)
                 ;   // nothing, keep current token for return
             else if (eOp != ocClose)
@@ -1789,7 +1797,10 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
     else if( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
         rBuffer.appendAscii( pInternal[ eOp - ocInternalBegin ] );
     else if( (sal_uInt16) eOp < mxSymbols->getSymbolCount())        // Keyword:
+    {
         rBuffer.append( mxSymbols->getSymbol( eOp));
+// SAL_WARN( "fdo69552", "CreateStringFromToken, eOp = " << eOp );
+    }
     else
     {
         SAL_WARN( "formula.core","unknown OpCode");

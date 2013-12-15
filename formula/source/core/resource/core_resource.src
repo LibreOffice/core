@@ -147,7 +147,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
+    String SC_OPCODE_CEIL_ODF { Text = "CEILING_ODF" ; };
     String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
+    String SC_OPCODE_FLOOR_ODF { Text = "FLOOR_ODF" ; };
     String SC_OPCODE_ROUND { Text = "ROUND" ; };
     String SC_OPCODE_ROUND_UP { Text = "ROUNDUP" ; };
     String SC_OPCODE_ROUND_DOWN { Text = "ROUNDDOWN" ; };
@@ -899,7 +901,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
+    String SC_OPCODE_CEIL_ODF { Text = "CEILING_ODF" ; };
     String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
+    String SC_OPCODE_FLOOR_ODF { Text = "FLOOR_ODF" ; };
     String SC_OPCODE_ROUND { Text = "ROUND" ; };
     String SC_OPCODE_ROUND_UP { Text = "ROUNDUP" ; };
     String SC_OPCODE_ROUND_DOWN { Text = "ROUNDDOWN" ; };
@@ -1572,9 +1576,17 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "CEILING" ;
     };
+    String SC_OPCODE_CEIL_ODF
+    {
+        Text [ en-US ] = "CEILING_ODF" ;
+    };
     String SC_OPCODE_FLOOR
     {
         Text [ en-US ] = "FLOOR" ;
+    };
+    String SC_OPCODE_FLOOR_ODF
+    {
+        Text [ en-US ] = "FLOOR_ODF" ;
     };
     String SC_OPCODE_ROUND
     {
