@@ -2037,15 +2037,6 @@ void ChartExport::_exportAxis(
 
     pFS->startElement( FSNS( XML_c, XML_scaling ),
             FSEND );
-    // orientation: minMax, maxMin
-    sal_Bool bReverseDirection = sal_False;
-    if(GetProperty( xAxisProp, "ReverseDirection" ) )
-        mAny >>= bReverseDirection;
-
-    const char* orientation = bReverseDirection ? "maxMin":"minMax";
-    pFS->singleElement( FSNS( XML_c, XML_orientation ),
-            XML_val, orientation,
-            FSEND );
     // logBase, min, max
     if(GetProperty( xAxisProp, "Logarithmic" ) )
     {
@@ -2060,6 +2051,17 @@ void ChartExport::_exportAxis(
                 FSEND );
         }
     }
+
+    // orientation: minMax, maxMin
+    sal_Bool bReverseDirection = sal_False;
+    if(GetProperty( xAxisProp, "ReverseDirection" ) )
+        mAny >>= bReverseDirection;
+
+    const char* orientation = bReverseDirection ? "maxMin":"minMax";
+    pFS->singleElement( FSNS( XML_c, XML_orientation ),
+            XML_val, orientation,
+            FSEND );
+
     sal_Bool bAutoMax = sal_False;
     if(GetProperty( xAxisProp, "AutoMax" ) )
         mAny >>= bAutoMax;
