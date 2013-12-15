@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,8 +23,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.ContextMenu;
@@ -141,6 +144,8 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         super.onActivityCreated(aSavedInstanceState);
 
         Intent aServiceIntent = Intents.buildCommunicationServiceIntent(getActivity());
+        // use startService to not kill it on config changes like rotating the screen
+        getActivity().startService(aServiceIntent);
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -267,6 +272,7 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         mIntentsReceiver = new IntentsReceiver(this);
         IntentFilter aIntentFilter = new IntentFilter();
         aIntentFilter.addAction(Intents.Actions.SERVERS_LIST_CHANGED);
+        aIntentFilter.addAction(Intents.Actions.BT_DISCOVERY_CHANGED);
 
         getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
     }
@@ -282,6 +288,8 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SERVERS_LIST_CHANGED.equals(aIntent.getAction())) {
                 mComputersFragment.loadComputers();
+            } else if (Intents.Actions.BT_DISCOVERY_CHANGED.equals(aIntent.getAction())) {
+                ActivityCompat.invalidateOptionsMenu(mComputersFragment.getActivity());
             }
         }
     }
@@ -342,6 +350,12 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
         switch (aMenuItem.getItemId()) {
             case R.id.menu_add_computer:
                 callComputerCreationActivity();
+                return true;
+
+            case R.id.menu_start_discovery:
+                if (BluetoothAdapter.getDefaultAdapter().startDiscovery()) {
+                    MenuItemCompat.setActionView(aMenuItem, R.layout.progress);
+                }
                 return true;
 
             default:
@@ -415,6 +429,9 @@ public class ComputersFragment extends ListFragment implements ServiceConnection
     public void onDestroy() {
         super.onDestroy();
 
+        if(getActivity().isFinishing()) {
+            getActivity().stopService(Intents.buildCommunicationServiceIntent(getActivity()));
+        }
         getActivity().unbindService(this);
     }
 }

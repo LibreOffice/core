@@ -29,6 +29,7 @@ public final class Intents {
         }
 
         public static final String SERVERS_LIST_CHANGED = "SERVERS_LIST_CHANGED";
+        public static final String BT_DISCOVERY_CHANGED = "BT_DISCOVERY_CHANGED";
 
         public static final String PAIRING_SUCCESSFUL = "PAIRING_SUCCESSFUL";
         public static final String PAIRING_VALIDATION = "PAIRING_VALIDATION";

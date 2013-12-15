@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
@@ -124,6 +125,13 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     public boolean onPrepareOptionsMenu(Menu aMenu) {
         aMenu.findItem(R.id.menu_add_computer)
             .setVisible(getSupportActionBar().getSelectedTab().equals(wifiTab));
+
+        MenuItem btDiscovery = aMenu.findItem(R.id.menu_start_discovery);
+        if( btAdapter != null && btAdapter.isDiscovering()) {
+            btDiscovery.setEnabled(false);
+            MenuItemCompat.setActionView(btDiscovery, R.layout.progress);
+        }
+        btDiscovery.setVisible(getSupportActionBar().getSelectedTab().equals(btTab));
 
         return super.onPrepareOptionsMenu(aMenu);
     }
