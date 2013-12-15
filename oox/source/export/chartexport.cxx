@@ -1594,7 +1594,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         exportErrorBar(xErrorBarXProps, false);
 
                     // export categories
-                    if( mxCategoriesValues.is() )
+                    if( eChartType != chart::TYPEID_SCATTER && mxCategoriesValues.is() )
                         exportSeriesCategory( mxCategoriesValues );
 
                     if( (eChartType == chart::TYPEID_SCATTER)
