@@ -59,7 +59,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JOHAB_00[] =
          0,      0,      0,      0,      0,      0, 0xDD31,      0, /* 0xE0 */
          0,      0,      0,      0,      0,      0,      0,      0, /* 0xE0 */
     0xDD33,      0,      0,      0,      0,      0,      0, 0xD950, /* 0xF0 */
-    0xDD3A,      0,      0,      0,      0,      0, 0xDD3D          /* 0xF0 */
+    0xDD3A,      0,      0,      0,      0,      0, 0xDD3D,     0  /* 0xF0 */
 };
 
 /* ----------------------------------------------------------------------- */
@@ -348,7 +348,7 @@ static sal_uInt16 const aImplUniToDBCSTab_JOHAB_30[] =
     0xDE68, 0xDE69, 0xDE6A, 0xDE6B, 0xDE6C, 0xDE6D, 0xDE6E, 0xDE6F, /* 0xD0 */
     0xDE70, 0xDE71, 0xDE72, 0xDE73, 0xDE74, 0xDE75, 0xDE76, 0xDE77, /* 0xE0 */
     0xDE78, 0xDE79, 0xDE7A, 0xDE7B, 0xDE7C, 0xDE7D, 0xDE7E, 0xDE91, /* 0xE0 */
-    0xDE92, 0xDE93, 0xDE94, 0xDE95, 0xDE96, 0xDE97, 0xDE98          /* 0xF0 */
+    0xDE92, 0xDE93, 0xDE94, 0xDE95, 0xDE96, 0xDE97, 0xDE98,      0  /* 0xF0 */
 };
 
 /* ----------------------------------------------------------------------- */
