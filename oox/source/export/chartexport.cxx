@@ -1004,66 +1004,66 @@ void ChartExport::exportPlotArea( )
             // note: if xDSCnt.is() then also aCTSeq[nCTIdx]
             OUString aChartType( xChartType->getChartType());
             sal_Int32 eChartType = lcl_getChartType( aChartType );
-    switch( eChartType )
-    {
-        case chart::TYPEID_BAR:
-        {
-            exportBarChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_AREA:
-        {
-            exportAreaChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_LINE:
-        {
-            exportLineChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_BUBBLE:
-        {
-            exportBubbleChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_OFPIE:
-        {
-            exportOfPieChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_DOUGHNUT:
-        case chart::TYPEID_PIE:
-        {
-            exportPieChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_RADARLINE:
-        case chart::TYPEID_RADARAREA:
-        {
-            exportRadarChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_SCATTER:
-        {
-            exportScatterChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_STOCK:
-        {
-            exportStockChart( xChartType );
-            break;
-        }
-        case chart::TYPEID_SURFACE:
-        {
-            exportSuffaceChart( xChartType );
-            break;
-        }
-        default:
-        {
-            OSL_TRACE("ChartExport::exportPlotArea -- not support chart type");
-            break;
-        }
-    }
+            switch( eChartType )
+            {
+                case chart::TYPEID_BAR:
+                    {
+                        exportBarChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_AREA:
+                    {
+                        exportAreaChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_LINE:
+                    {
+                        exportLineChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_BUBBLE:
+                    {
+                        exportBubbleChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_OFPIE:
+                    {
+                        exportOfPieChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_DOUGHNUT:
+                case chart::TYPEID_PIE:
+                    {
+                        exportPieChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_RADARLINE:
+                case chart::TYPEID_RADARAREA:
+                    {
+                        exportRadarChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_SCATTER:
+                    {
+                        exportScatterChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_STOCK:
+                    {
+                        exportStockChart( xChartType );
+                        break;
+                    }
+                case chart::TYPEID_SURFACE:
+                    {
+                        exportSuffaceChart( xChartType );
+                        break;
+                    }
+                default:
+                    {
+                        OSL_TRACE("ChartExport::exportPlotArea -- not support chart type");
+                        break;
+                    }
+            }
 
         }
     }
