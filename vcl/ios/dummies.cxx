@@ -21,17 +21,6 @@
 #include "headless/svpgdi.hxx"
 #include "headless/svpinst.hxx"
 
-sal_Bool SvpSalGraphics::CreateFontSubset( const OUString&    /* rToFile */,
-                                           const PhysicalFontFace* /* pFontData */,
-                                           sal_Int32*              /* pGlyphIDs */,
-                                           sal_uInt8*              /* pEncoding */,
-                                           sal_Int32*              /* pGlyphWidths */,
-                                           int                     /* nGlyphCount */,
-                                           FontSubsetInfo&         /* rInfo */ )
-{
-    return sal_False;
-}
-
 SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
     return NULL;
