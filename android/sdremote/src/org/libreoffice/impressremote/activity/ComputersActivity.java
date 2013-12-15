@@ -36,10 +36,24 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
         super.onCreate(aSavedInstanceState);
 
         saveBluetoothState(aSavedInstanceState);
-        enableBluetooth();
+        BluetoothOperator.enable();
 
-        setUpTitle();
-        setUpContent();
+        // Looks hacky but it seems to be the best way to set activity’s title
+        // different to application’s label. The other way is setting title
+        // to intents filter but it shows wrong label for recent apps screen then.
+
+        ActionBar aActionBar = getSupportActionBar();
+
+        aActionBar.setTitle(R.string.title_computers);
+        aActionBar.setDisplayShowTitleEnabled(true);
+
+        if (BluetoothOperator.isAvailable()) {
+            setUpComputersLists();
+        }
+        else {
+            Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
+            Fragments.Operator.add(this, aComputersFragment);
+        }
     }
 
     private void saveBluetoothState(Bundle aSavedInstanceState) {
@@ -63,50 +77,22 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
         return aSavedInstanceState.getBoolean(SavedStates.Keys.BLUETOOTH_ENABLED);
     }
 
-    private void enableBluetooth() {
-        BluetoothOperator.enable();
-    }
-
-    private void setUpTitle() {
-        // Looks hacky but it seems to be the best way to set activity’s title
-        // different to application’s label. The other way is setting title
-        // to intents filter but it shows wrong label for recent apps screen then.
-
-        ActionBar aActionBar = getSupportActionBar();
-
-        aActionBar.setTitle(R.string.title_computers);
-        aActionBar.setDisplayShowTitleEnabled(true);
-    }
-
-    private void setUpContent() {
-        if (areMultipleComputersTypesAvailable()) {
-            setUpComputersLists();
-        }
-        else {
-            setUpComputersList();
-        }
-    }
-
-    private boolean areMultipleComputersTypesAvailable() {
-        return BluetoothOperator.isAvailable();
-    }
-
     private void setUpComputersLists() {
         setContentView(R.layout.activity_computers);
 
-        setUpTabs();
-        setUpComputersPager();
-
-        setUpSavedTab();
-    }
-
-    private void setUpTabs() {
         ActionBar aActionBar = getSupportActionBar();
 
         aActionBar.addTab(buildActionBarTab(
             R.string.title_bluetooth), ComputersPagerAdapter.PagesIndices.BLUETOOTH);
         aActionBar.addTab(buildActionBarTab(
             R.string.title_wifi), ComputersPagerAdapter.PagesIndices.WIFI);
+
+        ViewPager aComputersPager = getComputersPager();
+
+        aComputersPager.setAdapter(new ComputersPagerAdapter(getSupportFragmentManager()));
+        aComputersPager.setOnPageChangeListener(this);
+
+        getSupportActionBar().setSelectedNavigationItem(loadTabIndex());
     }
 
     private ActionBar.Tab buildActionBarTab(int aTitleResourceId) {
@@ -122,15 +108,11 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     public void onTabSelected(ActionBar.Tab aTab, FragmentTransaction aTransaction) {
         getComputersPager().setCurrentItem(aTab.getPosition());
 
-        refreshActionBarMenu();
+        supportInvalidateOptionsMenu();
     }
 
     private ViewPager getComputersPager() {
         return (ViewPager) findViewById(R.id.pager_computers);
-    }
-
-    private void refreshActionBarMenu() {
-        supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -139,17 +121,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
 
     @Override
     public void onTabReselected(ActionBar.Tab aTab, FragmentTransaction aTransaction) {
-    }
-
-    private void setUpComputersPager() {
-        ViewPager aComputersPager = getComputersPager();
-
-        aComputersPager.setAdapter(buildComputersPagerAdapter());
-        aComputersPager.setOnPageChangeListener(this);
-    }
-
-    private PagerAdapter buildComputersPagerAdapter() {
-        return new ComputersPagerAdapter(getSupportFragmentManager());
     }
 
     @Override
@@ -165,20 +136,10 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     public void onPageScrollStateChanged(int aPosition) {
     }
 
-    private void setUpSavedTab() {
-        getSupportActionBar().setSelectedNavigationItem(loadTabIndex());
-    }
-
     private int loadTabIndex() {
         Preferences aPreferences = Preferences.getApplicationStatesInstance(this);
 
         return aPreferences.getInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX);
-    }
-
-    private void setUpComputersList() {
-        Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
-
-        Fragments.Operator.add(this, aComputersFragment);
     }
 
     @Override
@@ -190,7 +151,7 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
 
     @Override
     public boolean onPrepareOptionsMenu(Menu aMenu) {
-        if (!areMultipleComputersTypesAvailable()) {
+        if (!BluetoothOperator.isAvailable()) {
             return super.onPrepareOptionsMenu(aMenu);
         }
 
@@ -250,10 +211,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     protected void onStop() {
         super.onStop();
 
-        saveTabIndex();
-    }
-
-    private void saveTabIndex() {
         Preferences aPreferences = Preferences.getApplicationStatesInstance(this);
         int aTabIndex = getSupportActionBar().getSelectedNavigationIndex();
 
@@ -264,10 +221,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     protected void onSaveInstanceState(Bundle aSavedInstanceState) {
         super.onSaveInstanceState(aSavedInstanceState);
 
-        rememberBluetoothState(aSavedInstanceState);
-    }
-
-    private void rememberBluetoothState(Bundle aSavedInstanceState) {
         aSavedInstanceState.putBoolean(SavedStates.Keys.BLUETOOTH_ENABLED, mBluetoothWasEnabled);
     }
 
@@ -275,10 +228,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     protected void onDestroy() {
         super.onDestroy();
 
-        restoreBluetoothState();
-    }
-
-    private void restoreBluetoothState() {
         if (!BluetoothOperator.isAvailable()) {
             return;
         }
@@ -287,10 +236,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
             return;
         }
 
-        disableBluetooth();
-    }
-
-    private void disableBluetooth() {
         BluetoothOperator.disable();
     }
 }

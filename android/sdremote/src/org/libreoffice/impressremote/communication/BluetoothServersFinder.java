@@ -89,8 +89,7 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
         if (BluetoothDevice.ACTION_FOUND.equals(aIntent.getAction())) {
             BluetoothDevice aBluetoothDevice = aIntent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-            addServer(buildServer(aBluetoothDevice));
-            callUpdatingServersList();
+            addServer(aBluetoothDevice);
         }
     }
 
@@ -111,17 +110,16 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
     public void run() {
         BluetoothOperator.getAdapter().startDiscovery();
     }
-
-    private void addServer(Server aServer) {
-        mServers.put(aServer.getAddress(), aServer);
-    }
-
-    private Server buildServer(BluetoothDevice aBluetoothDevice) {
+    private void addServer(BluetoothDevice aBluetoothDevice) {
         Server.Type aServerType = buildServerType(aBluetoothDevice);
         String aServerAddress = aBluetoothDevice.getAddress();
         String aServerName = aBluetoothDevice.getName();
 
-        return Server.newBluetoothInstance(aServerType, aServerAddress, aServerName);
+        Server aServer = Server.newBluetoothInstance(aServerType, aServerAddress, aServerName);
+        mServers.put(aServer.getAddress(), aServer);
+
+        Intent bIntent = Intents.buildServersListChangedIntent();
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(bIntent);
     }
 
     private Server.Type buildServerType(BluetoothDevice aBluetoothDevice) {
@@ -139,29 +137,20 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
         }
     }
 
-    private void callUpdatingServersList() {
-        Intent aIntent = Intents.buildServersListChangedIntent();
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-    }
-
     @Override
     public void stopSearch() {
         if (!BluetoothOperator.isAvailable()) {
             return;
         }
 
-        tearDownBluetoothActionsReceiver();
-
-        BluetoothOperator.getAdapter().cancelDiscovery();
-    }
-
-    private void tearDownBluetoothActionsReceiver() {
         try {
             mContext.unregisterReceiver(this);
         } catch (IllegalArgumentException e) {
             // Receiver not registered.
             // Fixed in Honeycomb: Android’s issue #6191.
         }
+
+        BluetoothOperator.getAdapter().cancelDiscovery();
     }
 
     @Override
