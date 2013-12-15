@@ -327,8 +327,8 @@ void SAL_CALL AccessibleTableShapeImpl::disposing( const EventObject& /*Source*/
 
 AccessibleTableShape::AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
 : AccessibleTableShape_Base(rShapeInfo, rShapeTreeInfo)
-, mxImpl( new AccessibleTableShapeImpl( maShapeTreeInfo ) )
 , mnPreviousSelectionCount(0)
+, mxImpl( new AccessibleTableShapeImpl( maShapeTreeInfo ) )
 {
 }
 
