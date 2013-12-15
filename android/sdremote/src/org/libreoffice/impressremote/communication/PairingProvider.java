@@ -8,13 +8,15 @@
  */
 package org.libreoffice.impressremote.communication;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Build;
 
-import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Preferences;
 
 final class PairingProvider {
+    private static final BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+
     private final Preferences mAuthorizedServersPreferences;
 
     private PairingProvider(Context aContext) {
@@ -58,15 +60,11 @@ final class PairingProvider {
     }
 
     private String getPairingDeviceName() {
-        if (!BluetoothOperator.isAvailable()) {
+        if (btAdapter == null || btAdapter.getName() == null) {
             return Build.MODEL;
         }
 
-        if (BluetoothOperator.getAdapter().getName() == null) {
-            return Build.MODEL;
-        }
-
-        return BluetoothOperator.getAdapter().getName();
+        return btAdapter.getName();
     }
 }
 
