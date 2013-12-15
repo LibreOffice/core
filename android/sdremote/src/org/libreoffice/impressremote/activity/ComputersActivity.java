@@ -8,36 +8,40 @@
  */
 package org.libreoffice.impressremote.activity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.libreoffice.impressremote.adapter.ComputersPagerAdapter;
-import org.libreoffice.impressremote.fragment.ComputersFragment;
-import org.libreoffice.impressremote.util.BluetoothOperator;
-import org.libreoffice.impressremote.util.Fragments;
+import org.libreoffice.impressremote.fragment.ComputersFragment.Type;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
-import org.libreoffice.impressremote.util.Preferences;
-import org.libreoffice.impressremote.util.SavedStates;
 
 public class ComputersActivity extends ActionBarActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-    private boolean mBluetoothWasEnabled;
+    private static final int REQUEST_ENABLE_BT = 0;
+    private static final String SELECT_BLUETOOTH = "SELECT_BLUETOOTH";
+    private static final BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+    private static boolean disableBTOnQuit = btAdapter != null && !btAdapter.isEnabled();
+    private static Tab btTab;
+    private static Tab wifiTab;
+    private boolean isInitializing;
+    private ComputersPagerAdapter computersPagerAdapter = new ComputersPagerAdapter(getSupportFragmentManager());
 
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
+        isInitializing = true;
 
-        saveBluetoothState(aSavedInstanceState);
-        BluetoothOperator.enable();
-
+        setContentView(R.layout.activity_computers);
         // Looks hacky but it seems to be the best way to set activity’s title
         // different to application’s label. The other way is setting title
         // to intents filter but it shows wrong label for recent apps screen then.
@@ -47,72 +51,45 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
         aActionBar.setTitle(R.string.title_computers);
         aActionBar.setDisplayShowTitleEnabled(true);
 
-        if (BluetoothOperator.isAvailable()) {
-            setUpComputersLists();
-        }
-        else {
-            Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
-            Fragments.Operator.add(this, aComputersFragment);
-        }
-    }
+        btTab = aActionBar.newTab().setTabListener(this)
+                .setText(R.string.title_bluetooth);
+        wifiTab = aActionBar.newTab().setTabListener(this)
+                .setText(R.string.title_wifi);
 
-    private void saveBluetoothState(Bundle aSavedInstanceState) {
-        // In more ideal world this work should be done at the service.
-        // Unfortunately service cannot save or restore its state.
-        // On other hand we should remember Bluetooth state exactly
-        // after the app’s start and pass it during recreation cycle.
-
-        if (!BluetoothOperator.isAvailable()) {
-            return;
+        if (btAdapter != null) {
+            computersPagerAdapter.addFragment(Type.BLUETOOTH);
+            aActionBar.addTab(btTab);
         }
 
-        mBluetoothWasEnabled = wasBluetoothEnabled(aSavedInstanceState);
-    }
+        computersPagerAdapter.addFragment(Type.WIFI);
+        aActionBar.addTab(wifiTab, true);
 
-    private boolean wasBluetoothEnabled(Bundle aSavedInstanceState) {
-        if (aSavedInstanceState == null) {
-            return BluetoothOperator.getAdapter().isEnabled();
-        }
-
-        return aSavedInstanceState.getBoolean(SavedStates.Keys.BLUETOOTH_ENABLED);
-    }
-
-    private void setUpComputersLists() {
-        setContentView(R.layout.activity_computers);
-
-        ActionBar aActionBar = getSupportActionBar();
-
-        aActionBar.addTab(buildActionBarTab(
-            R.string.title_bluetooth), ComputersPagerAdapter.PagesIndices.BLUETOOTH);
-        aActionBar.addTab(buildActionBarTab(
-            R.string.title_wifi), ComputersPagerAdapter.PagesIndices.WIFI);
-
-        ViewPager aComputersPager = getComputersPager();
-
-        aComputersPager.setAdapter(new ComputersPagerAdapter(getSupportFragmentManager()));
+        ViewPager aComputersPager = (ViewPager) findViewById(R.id.pager_computers);
+        aComputersPager.setAdapter(computersPagerAdapter);
         aComputersPager.setOnPageChangeListener(this);
 
-        getSupportActionBar().setSelectedNavigationItem(loadTabIndex());
+        isInitializing = false;
     }
 
-    private ActionBar.Tab buildActionBarTab(int aTitleResourceId) {
-        ActionBar.Tab aTab = getSupportActionBar().newTab();
-
-        aTab.setTabListener(this);
-        aTab.setText(aTitleResourceId);
-
-        return aTab;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode != RESULT_OK) {
+                getSupportActionBar().selectTab(wifiTab);
+            }
+        }
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab aTab, FragmentTransaction aTransaction) {
-        getComputersPager().setCurrentItem(aTab.getPosition());
-
+    public void onTabSelected(Tab aTab, FragmentTransaction aTransaction) {
+        ((ViewPager) findViewById(R.id.pager_computers)).setCurrentItem(aTab
+                .getPosition());
         supportInvalidateOptionsMenu();
-    }
-
-    private ViewPager getComputersPager() {
-        return (ViewPager) findViewById(R.id.pager_computers);
+        if (isInitializing) { return; }
+        if (aTab.equals(btTab) && !btAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
     }
 
     @Override
@@ -136,12 +113,6 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     public void onPageScrollStateChanged(int aPosition) {
     }
 
-    private int loadTabIndex() {
-        Preferences aPreferences = Preferences.getApplicationStatesInstance(this);
-
-        return aPreferences.getInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu aMenu) {
         getMenuInflater().inflate(R.menu.menu_action_bar_computers, aMenu);
@@ -151,23 +122,8 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
 
     @Override
     public boolean onPrepareOptionsMenu(Menu aMenu) {
-        if (!BluetoothOperator.isAvailable()) {
-            return super.onPrepareOptionsMenu(aMenu);
-        }
-
-        MenuItem aComputerAddingMenuItem = aMenu.findItem(R.id.menu_add_computer);
-
-        switch (getSupportActionBar().getSelectedNavigationIndex()) {
-            case ComputersPagerAdapter.PagesIndices.BLUETOOTH:
-                aComputerAddingMenuItem.setVisible(false);
-                break;
-
-            case ComputersPagerAdapter.PagesIndices.WIFI:
-                aComputerAddingMenuItem.setVisible(true);
-
-            default:
-                break;
-        }
+        aMenu.findItem(R.id.menu_add_computer)
+            .setVisible(getSupportActionBar().getSelectedTab().equals(wifiTab));
 
         return super.onPrepareOptionsMenu(aMenu);
     }
@@ -211,32 +167,29 @@ public class ComputersActivity extends ActionBarActivity implements ActionBar.Ta
     protected void onStop() {
         super.onStop();
 
-        Preferences aPreferences = Preferences.getApplicationStatesInstance(this);
-        int aTabIndex = getSupportActionBar().getSelectedNavigationIndex();
-
-        aPreferences.setInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX, aTabIndex);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(SELECT_BLUETOOTH, getSupportActionBar()
+                .getSelectedTab().equals(btTab));
+        editor.commit();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle aSavedInstanceState) {
-        super.onSaveInstanceState(aSavedInstanceState);
+    protected void onStart() {
+        super.onStart();
 
-        aSavedInstanceState.putBoolean(SavedStates.Keys.BLUETOOTH_ENABLED, mBluetoothWasEnabled);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        if (sharedPref.getBoolean(SELECT_BLUETOOTH, btAdapter != null)) {
+            getSupportActionBar().selectTab(btTab);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (!BluetoothOperator.isAvailable()) {
-            return;
+        if (isFinishing() && disableBTOnQuit) {
+            btAdapter.disable();
         }
-
-        if (mBluetoothWasEnabled) {
-            return;
-        }
-
-        BluetoothOperator.disable();
     }
 }
 
