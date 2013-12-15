@@ -1064,7 +1064,7 @@ lcl_GetNextIndex(
     }
     if(!rBreakArr.empty())
     {
-        if(nRet < 0 || *rBreakArr.begin() < static_cast<sal_uInt32>(nRet))
+        if(nRet < 0 || *rBreakArr.begin() < nRet)
             nRet = *rBreakArr.begin();
     }
     return nRet;
