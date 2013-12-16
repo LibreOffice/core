@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAbH///cs\u003d",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-12-16T16:51:42Z",
+      "side": 1,
+      "message": "No, there is no need to either check for empty() or PutEmpty(). The matrix is always initialized with all empty elements in this code path, and putValues() are never called when the storage is empty.  So, you can skip the initial empty check to save some cycles.",
+      "parentUuid": "AAAAbH///eE\u003d",
+      "revId": "b039278618d8a4276adfae3f0d5908171952ab5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAbH///d4\u003d",
         "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-12-16T15:28:29Z",
       "side": 1,
       "message": "ditto, but I think this would need PutEmpty() anyway.",
+      "revId": "b039278618d8a4276adfae3f0d5908171952ab5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///co\u003d",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-12-16T16:51:42Z",
+      "side": 1,
+      "message": "Some comment applies here as well.",
+      "parentUuid": "AAAAbH///d4\u003d",
       "revId": "b039278618d8a4276adfae3f0d5908171952ab5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
