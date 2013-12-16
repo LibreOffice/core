@@ -72,7 +72,7 @@ AccessibleGridControlBase::~AccessibleGridControlBase()
 
 void SAL_CALL AccessibleGridControlBase::disposing()
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
 
     if ( getClientId( ) )
     {
@@ -90,7 +90,8 @@ void SAL_CALL AccessibleGridControlBase::disposing()
 Reference< XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return m_xParent;
 }
@@ -98,7 +99,8 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent
 sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     ensureIsAlive();
 
     // -1 for child not found/no parent (according to specification)
@@ -133,7 +135,8 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return m_aDescription;
 }
@@ -141,7 +144,8 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return m_aName;
 }
@@ -150,6 +154,8 @@ Reference< XAccessibleRelationSet > SAL_CALL
 AccessibleGridControlBase::getAccessibleRelationSet()
     throw ( uno::RuntimeException )
 {
+   SolarMutexGuard g;
+
    ensureIsAlive();
    // GridControl does not have relations.
    return new utl::AccessibleRelationSetHelper;
@@ -160,7 +166,7 @@ AccessibleGridControlBase::getAccessibleStateSet()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     // don't check whether alive -> StateSet may contain DEFUNC
     return implCreateStateSetHelper();
 }
@@ -168,7 +174,8 @@ AccessibleGridControlBase::getAccessibleStateSet()
 lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
     throw ( IllegalAccessibleComponentStateException, uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     ensureIsAlive();
     if( m_xParent.is() )
     {
@@ -216,7 +223,7 @@ sal_Bool SAL_CALL AccessibleGridControlBase::isShowing()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     return implIsShowing();
 }
@@ -244,7 +251,8 @@ void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
 {
     if ( _rxListener.is() )
     {
-        ::osl::MutexGuard aGuard( getOslMutex() );
+        SolarMutexGuard g;
+
         if ( !getClientId( ) )
             setClientId( AccessibleEventNotifier::registerClient( ) );
 
@@ -258,7 +266,8 @@ void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
 {
     if( _rxListener.is() && getClientId( ) )
     {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+        SolarMutexGuard g;
+
         sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
     if ( !nListenerCount )
     {
@@ -339,6 +348,7 @@ sal_Bool AccessibleGridControlBase::implIsShowing()
 
 sal_Bool AccessibleGridControlBase::isAlive() const
 {
+    ::osl::MutexGuard g(m_aMutex); // guards rBHelper members
     return !rBHelper.bDisposed && !rBHelper.bInDispose && &m_aTable;
 }
 
@@ -353,7 +363,6 @@ Rectangle AccessibleGridControlBase::getBoundingBox()
     throw ( lang::DisposedException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
@@ -367,7 +376,6 @@ Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
     throw ( lang::DisposedException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
@@ -380,7 +388,8 @@ Rectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
 void AccessibleGridControlBase::commitEvent(
         sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
-    ::osl::ClearableMutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     if ( !getClientId( ) )
             // if we don't have a client id for the notifier, then we don't have listeners, then
             // we don't need to notify anything
@@ -441,7 +450,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint
 sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
 
     sal_Int32 nColor = 0;
@@ -466,7 +475,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
 sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     sal_Int32 nColor = 0;
     Window* pInst = m_aTable.GetWindowInstance();
@@ -498,6 +507,8 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridControlAccessibleElement, AccessibleGridCo
 
 Reference< XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return this;
 }

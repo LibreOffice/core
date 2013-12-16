@@ -58,7 +58,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     sal_Int32 nChildren = 0;
     if(m_eObjType == TCTYPE_ROWHEADERBAR)
@@ -73,6 +73,8 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()
 sal_Int16 SAL_CALL AccessibleGridControlTableBase::getAccessibleRole()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return AccessibleRole::TABLE;
 }
@@ -83,7 +85,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowCount()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     return  m_aTable.GetRowCount();
 }
@@ -92,7 +94,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnCount()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     return m_aTable.GetColumnCount();
 }
@@ -102,7 +104,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowExtentAt(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     return 1;   // merged cells not supported
@@ -113,7 +115,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     return 1;   // merged cells not supported
@@ -122,6 +124,8 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleCaption()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return NULL;    // not supported
 }
@@ -129,6 +133,8 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleC
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleSummary()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return NULL;    // not supported
 }
@@ -138,7 +144,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleIndex(
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     return implGetChildIndex( nRow, nColumn );
@@ -148,7 +154,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRow( sal_Int32 n
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     return implGetRow( nChildIndex );
@@ -158,7 +164,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumn( sal_Int3
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     return implGetColumn( nChildIndex );

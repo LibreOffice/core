@@ -87,7 +87,7 @@ AccessibleGridControl::~AccessibleGridControl()
 
 void SAL_CALL AccessibleGridControl::disposing()
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
 
     m_pImpl->m_pTable       = NULL;
     m_pImpl->m_pColumnHeaderBar = NULL;
@@ -122,7 +122,6 @@ sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     return m_aTable.GetAccessibleControlCount();
 }
@@ -133,7 +132,6 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -177,6 +175,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
 sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return AccessibleRole::PANEL;
 }
@@ -189,7 +189,6 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
     Reference< XAccessible > xChild;
@@ -220,7 +219,6 @@ void SAL_CALL AccessibleGridControl::grabFocus()
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
         m_aTable.GrabFocus();
 }
@@ -229,6 +227,8 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 Any SAL_CALL AccessibleGridControl::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return Any();
 }
@@ -422,7 +422,7 @@ AccessibleGridControlAccess::~AccessibleGridControlAccess()
 // -----------------------------------------------------------------------------
 void AccessibleGridControlAccess::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard g;
 
     m_pContext = NULL;
     ::comphelper::disposeComponent( m_xContext );
@@ -431,7 +431,7 @@ void AccessibleGridControlAccess::dispose()
 // -----------------------------------------------------------------------------
 Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessibleContext() throw ( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard g;
 
     OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "accessibility/extended/AccessibleGridControlAccess::getAccessibleContext: inconsistency!" );

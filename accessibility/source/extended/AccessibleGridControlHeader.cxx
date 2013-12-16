@@ -64,7 +64,6 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -100,7 +99,7 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
 
     sal_Int32 nRow = 0;
@@ -132,7 +131,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidRow( nRow );
     return OUString();  // no headers in headers
@@ -142,7 +141,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( s
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
+
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
     return OUString();  // no headers in headers
@@ -151,6 +150,8 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( s
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleRowHeaders()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return NULL;        // no headers in headers
 }
@@ -158,6 +159,8 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleColumnHeaders()
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard g;
+
     ensureIsAlive();
     return NULL;        // no headers in headers
 }
