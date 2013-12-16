@@ -330,7 +330,7 @@ public:
     // as "undefined character"
     virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
-                                              long* pGlyphIDs,
+                                              sal_GlyphId* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
@@ -366,8 +366,8 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc );
     virtual int             GetMinKashidaWidth();
 
-    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
-    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& );
+    virtual bool            GetGlyphOutline( sal_GlyphId, ::basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );

@@ -32,7 +32,7 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
+    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
                         sal_Int32* pGlyphAdvances, int* pCharIndexes,
                         const PhysicalFontFace** pFallbackFonts ) const;
 
@@ -235,7 +235,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextRestoreGState( rAquaGraphics.mrContext );
 }
 
-int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
+int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int& nStart,
     sal_Int32* pGlyphAdvances, int* pCharIndexes,
     const PhysicalFontFace** pFallbackFonts ) const
 {
@@ -325,7 +325,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
         for(; (--nLen >= 0) && (nSubIndex < nGlyphsInRun); ++nSubIndex, ++nStart )
         {
             // convert glyph details for VCL
-            *(pGlyphIDs++) = pCGGlyphIdx[ nSubIndex ];
+            *(pOutGlyphIds++) = pCGGlyphIdx[ nSubIndex ];
             if( pGlyphAdvances )
                 *(pGlyphAdvances++) = lrint(pCGGlyphAdvs[ nSubIndex ].width);
             if( pCharIndexes )

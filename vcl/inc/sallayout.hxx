@@ -36,6 +36,7 @@ typedef unsigned short LanguageType;
 
 // for typedef sal_UCS4
 #include <vcl/vclenum.hxx>
+#include "salglyphid.hxx"
 
 class SalGraphics;
 class PhysicalFontFace;
@@ -133,28 +134,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
 bool IsDiacritic( sal_UCS4 );
 int GetVerticalFlags( sal_UCS4 );
 sal_UCS4 GetVerticalChar( sal_UCS4 );
-
-typedef sal_uInt32 sal_GlyphId;
-
-// Glyph Flags
-#define GF_NONE     0x00000000
-#define GF_FLAGMASK 0xFF800000
-#define GF_IDXMASK  ~GF_FLAGMASK
-#define GF_ISCHAR   0x00800000
-#define GF_ROTL     0x01000000
-// caution !!!
-#define GF_VERT     0x02000000
-// GF_VERT is only for windows implementation
-// (win/source/gdi/salgdi3.cxx, win/source/gdi/winlayout.cxx)
-// don't use this elsewhere !!!
-#define GF_ROTR     0x03000000
-#define GF_ROTMASK  0x03000000
-#define GF_UNHINTED 0x04000000
-#define GF_GSUB     0x08000000
-#define GF_FONTMASK 0xF0000000
-#define GF_FONTSHIFT 28
-
-#define GF_DROPPED  0xFFFFFFFF
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
@@ -310,26 +289,26 @@ struct GlyphItem
     int     mnOrigWidth;    // original glyph width
     int     mnNewWidth;     // width after adjustments
     int     mnXOffset;
-    sal_GlyphId mnGlyphIndex;
+    sal_GlyphId maGlyphId;
     Point   maLinearPos;    // absolute position of non rotated string
 
 public:
             GlyphItem() {}
 
-            GlyphItem( int nCharPos, sal_GlyphId nGlyphIndex, const Point& rLinearPos,
+            GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(0),
-                mnGlyphIndex(nGlyphIndex), maLinearPos(rLinearPos)
+                maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
-            GlyphItem( int nCharPos, sal_GlyphId nGlyphIndex, const Point& rLinearPos,
+            GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth, int nXOffset )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(nXOffset),
-                mnGlyphIndex(nGlyphIndex), maLinearPos(rLinearPos)
+                maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
 

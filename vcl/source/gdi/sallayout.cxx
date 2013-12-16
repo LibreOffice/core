@@ -1283,7 +1283,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         if( !pG->IsRTLGlyph() )
             continue;
         // no kashida-injection for blank justified expansion either
-        if( IsSpacingGlyph( pG->mnGlyphIndex ) )
+        if( IsSpacingGlyph( pG->maGlyphId) )
             continue;
 
         // calculate gap, ignore if too small
@@ -1401,12 +1401,12 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
     long nYPos = pG->maLinearPos.Y();
-    long nOldFlags = pG->mnGlyphIndex;
+    long nOldFlags = pG->maGlyphId;
     for(;;)
     {
         // update return data with glyph info
         ++nCount;
-        *(pGlyphs++) = pG->mnGlyphIndex;
+        *(pGlyphs++) = pG->maGlyphId;
         if( pCharPosAry )
             *(pCharPosAry++) = pG->mnCharPos;
         if( pGlyphAdvAry )
@@ -1445,10 +1445,10 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
             break;
 
         // stop when glyph flags change
-        if( (nOldFlags ^ pG->mnGlyphIndex) & GF_FLAGMASK )
+        if( (nOldFlags ^ pG->maGlyphId) & GF_FLAGMASK )
             break;
 
-        nOldFlags = pG->mnGlyphIndex; // &GF_FLAGMASK not needed for test above
+        nOldFlags = pG->maGlyphId; // &GF_FLAGMASK not needed for test above
     }
 
     aRelativePos.X() /= mnUnitsPerPixel;
@@ -1494,7 +1494,7 @@ void GenericSalLayout::DropGlyph( int nStart )
 
     GlyphVector::iterator pG = m_GlyphItems.begin();
     pG += nStart;
-    pG->mnGlyphIndex = GF_DROPPED;
+    pG->maGlyphId = GF_DROPPED;
     pG->mnCharPos = -1;
 }
 
@@ -1508,7 +1508,7 @@ void GenericSalLayout::Simplify( bool bIsBase )
     size_t j = 0;
     for(size_t i = 0; i < m_GlyphItems.size(); i++ )
     {
-        if( m_GlyphItems[i].mnGlyphIndex == nDropMarker )
+        if( m_GlyphItems[i].maGlyphId == nDropMarker )
             continue;
 
         if( i != j )

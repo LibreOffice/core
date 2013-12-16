@@ -134,9 +134,9 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 
 // -----------------------------------------------------------------------
 
-bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect ) const
+bool CoreTextStyle::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) const
 {
-    CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK;
+    CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
     // XXX: this is broken if the glyph came from fallback font
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
@@ -192,11 +192,11 @@ static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
     }
 }
 
-bool CoreTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rResult ) const
+bool CoreTextStyle::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rResult ) const
 {
     rResult.clear();
 
-    CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK;
+    CGGlyph nCGGlyph = aGlyphId & GF_IDXMASK;
     // XXX: this is broken if the glyph came from fallback font
     CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );

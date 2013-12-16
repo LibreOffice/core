@@ -30,6 +30,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include "salglyphid.hxx"
 
 #include <vector>
 
@@ -475,7 +476,7 @@ public:
     bool createFontSubset( FontSubsetInfo&,
                            fontID nFont,
                            const OUString& rOutFile,
-                           sal_Int32* pGlyphIDs,
+                           sal_GlyphId* pGlyphIDs,
                            sal_uInt8* pNewEncoding,
                            sal_Int32* pWidths,
                            int nGlyphs,

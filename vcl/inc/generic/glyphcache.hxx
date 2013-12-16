@@ -203,20 +203,20 @@ public:
     const ImplFontCharMap* GetImplFontCharMap() const;
     bool                GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    GlyphData&                  GetGlyphData( int nGlyphIndex );
-    const GlyphMetric&          GetGlyphMetric( int nGlyphIndex )
-                                { return GetGlyphData( nGlyphIndex ).GetMetric(); }
+    GlyphData&                  GetGlyphData( sal_GlyphId );
+    const GlyphMetric&          GetGlyphMetric( sal_GlyphId aGlyphId )
+                                { return GetGlyphData( aGlyphId ).GetMetric(); }
 #if ENABLE_GRAPHITE
     virtual GraphiteFaceWrapper* GetGraphiteFace() const;
 #endif
 
-    int                 GetGlyphIndex( sal_UCS4 ) const;
-    int                 GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
-    int                 FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
-    bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
+    sal_GlyphId         GetGlyphIndex( sal_UCS4 ) const;
+    sal_GlyphId         GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
+    sal_GlyphId         FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
+    bool                GetGlyphOutline( sal_GlyphId aGlyphId, ::basegfx::B2DPolyPolygon& ) const;
     bool                GetAntialiasAdvice( void ) const;
-    bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
-    bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
+    bool                GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& ) const;
+    bool                GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& ) const;
 
 private:
     friend class GlyphCache;
@@ -229,7 +229,7 @@ private:
     long                        Release() const;
     sal_uLong                       GetByteCount() const { return mnBytesUsed; }
 
-    void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
+    void                InitGlyphData( sal_GlyphId, GlyphData& ) const;
     void                GarbageCollect( long );
     void                        ReleaseFromGarbageCollect();
 

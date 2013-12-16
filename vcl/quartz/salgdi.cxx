@@ -420,17 +420,17 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    const bool bRC = mpTextStyle->GetGlyphOutline( nGlyphId, rPolyPoly );
+    const bool bRC = mpTextStyle->GetGlyphOutline( aGlyphId, rPolyPoly );
     return bRC;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect )
+bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
-    const bool bRC = mpTextStyle->GetGlyphBoundRect( nGlyphId, rRect );
+    const bool bRC = mpTextStyle->GetGlyphBoundRect( aGlyphId, rRect );
     return bRC;
 }
 

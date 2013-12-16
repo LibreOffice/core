@@ -615,18 +615,18 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
+bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
-    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return false;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return false;
 
-    nGlyphIndex &= GF_IDXMASK;
-    const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
+    aGlyphId &= GF_IDXMASK;
+    const GlyphMetric& rGM = pSF->GetGlyphMetric(aGlyphId);
     Rectangle aRect( rGM.GetOffset(), rGM.GetSize() );
 
     if ( pSF->mnCos != 0x10000 && pSF->mnSin != 0 )
@@ -642,27 +642,27 @@ sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& 
     else
         rRect = aRect;
 
-    return sal_True;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
+bool X11SalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return false;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return false;
 
-    nGlyphIndex &= GF_IDXMASK;
-    if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
-        return sal_True;
+    aGlyphId &= GF_IDXMASK;
+    if( pSF->GetGlyphOutline( aGlyphId, rPolyPoly ) )
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 //--------------------------------------------------------------------------
@@ -719,7 +719,7 @@ SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
 sal_Bool X11SalGraphics::CreateFontSubset(
                                    const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
-                                   sal_Int32* pGlyphIDs,
+                                   sal_GlyphId* pGlyphIds,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
                                    int nGlyphCount,
@@ -737,7 +737,7 @@ sal_Bool X11SalGraphics::CreateFontSubset(
     bool bSuccess = rMgr.createFontSubset( rInfo,
                                  aFont,
                                  rToFile,
-                                 pGlyphIDs,
+                                 pGlyphIds,
                                  pEncoding,
                                  pWidths,
                                  nGlyphCount );

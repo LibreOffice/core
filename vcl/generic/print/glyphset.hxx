@@ -49,7 +49,7 @@ private:
 
     typedef boost::unordered_map< sal_Unicode, sal_uInt8 > char_map_t;
     typedef std::list< char_map_t > char_list_t;
-    typedef boost::unordered_map< sal_uInt32, sal_uInt8 > glyph_map_t;
+    typedef boost::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
 
     char_list_t     maCharList;
@@ -71,11 +71,11 @@ private:
     sal_Bool        AddCharID (sal_Unicode nChar,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
-    sal_Bool        GetGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
+    sal_Bool        GetGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    sal_Bool        LookupGlyphID (sal_uInt32 nGlyph,
+    sal_Bool        LookupGlyphID (sal_GlyphId nGlyphId,
                                    unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    sal_Bool        AddGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
+    sal_Bool        AddGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
     void            AddNotdef (char_map_t &rCharMap);
@@ -109,7 +109,7 @@ public:
                               const sal_Int32* pDeltaArray = NULL);
     void            DrawGlyphs (PrinterGfx& rGfx,
                                 const Point& rPoint,
-                                const sal_uInt32* pGlyphIds,
+                                const sal_GlyphId* pGlyphIds,
                                 const sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
                                 const sal_Int32* pDeltaArray,

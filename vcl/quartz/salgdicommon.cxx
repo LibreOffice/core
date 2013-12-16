@@ -143,7 +143,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
 
 sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
                                             const PhysicalFontFace* pFontData,
-                                            sal_Int32* pGlyphIDs, sal_uInt8* pEncoding,
+                                            sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
                                             sal_Int32* pGlyphWidths, int nGlyphCount,
                                             FontSubsetInfo& rInfo )
 {
@@ -176,12 +176,12 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 #ifdef __LP64__
         long *pLongGlyphIDs = (long*)alloca(nGlyphCount * sizeof(long));
         for (int i = 0; i < nGlyphCount; i++)
-            pLongGlyphIDs[i] = pGlyphIDs[i];
+            pLongGlyphIDs[i] = pGlyphIds[i];
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
             pLongGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
 #else
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
-            pGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
+            pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
 #endif
         fclose( pOutFile );
         return bRC;
@@ -229,21 +229,21 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     for( int i = 0; i < nGlyphCount; ++i )
     {
         aTempEncs[i] = pEncoding[i];
-        sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-        if( pGlyphIDs[i] & GF_ISCHAR )
+        sal_GlyphId aGlyphId(pGlyphIds[i] & GF_IDXMASK);
+        if( pGlyphIds[i] & GF_ISCHAR )
         {
-            bool bVertical = (pGlyphIDs[i] & GF_ROTMASK) != 0;
-            nGlyphIdx = ::MapChar( pSftFont, static_cast<sal_uInt16>(nGlyphIdx), bVertical );
-            if( nGlyphIdx == 0 && pFontData->IsSymbolFont() )
+            bool bVertical = (pGlyphIds[i] & GF_ROTMASK) != 0;
+            aGlyphId = ::MapChar( pSftFont, static_cast<sal_uInt16>(aGlyphId), bVertical );
+            if( aGlyphId == 0 && pFontData->IsSymbolFont() )
             {
                 // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
-                nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-                nGlyphIdx = (nGlyphIdx & 0xF000) ? (nGlyphIdx & 0x00FF) : (nGlyphIdx | 0xF000 );
-                nGlyphIdx = ::MapChar( pSftFont, static_cast<sal_uInt16>(nGlyphIdx), bVertical );
+                aGlyphId = pGlyphIds[i] & GF_IDXMASK;
+                aGlyphId = (aGlyphId & 0xF000) ? (aGlyphId & 0x00FF) : (aGlyphId | 0xF000 );
+                aGlyphId = ::MapChar( pSftFont, static_cast<sal_uInt16>(aGlyphId), bVertical );
             }
         }
-        aShortIDs[i] = static_cast<sal_uInt16>( nGlyphIdx );
-        if( !nGlyphIdx )
+        aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
+        if( !aGlyphId )
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
     }

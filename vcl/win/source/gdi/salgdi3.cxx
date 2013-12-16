@@ -2258,7 +2258,7 @@ void WinSalGraphics::ClearDevFontCache()
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& rRect )
+bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
     HDC hDC = getHDC();
 
@@ -2268,14 +2268,14 @@ sal_Bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& rRect
     aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
 
     UINT nGGOFlags = GGO_METRICS;
-    if( !(nIndex & GF_ISCHAR) )
+    if( !(aGlyphId & GF_ISCHAR) )
         nGGOFlags |= GGO_GLYPH_INDEX;
-    nIndex &= GF_IDXMASK;
+    aGlyphId &= GF_IDXMASK;
 
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
+    DWORD nSize = ::GetGlyphOutlineW( hDC, aGlyphId, nGGOFlags, &aGM, 0, NULL, &aMat );
     if( nSize == GDI_ERROR )
         return false;
 
@@ -2290,7 +2290,7 @@ sal_Bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& rRect
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::GetGlyphOutline( sal_GlyphId nIndex,
+bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     rB2DPolyPoly.clear();
@@ -2303,23 +2303,23 @@ sal_Bool WinSalGraphics::GetGlyphOutline( sal_GlyphId nIndex,
     aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
 
     UINT nGGOFlags = GGO_NATIVE;
-    if( !(nIndex & GF_ISCHAR) )
+    if( !(aGlyphId & GF_ISCHAR) )
         nGGOFlags |= GGO_GLYPH_INDEX;
-    nIndex &= GF_IDXMASK;
+    aGlyphId &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
-    const DWORD nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
+    const DWORD nSize1 = ::GetGlyphOutlineW( hDC, aGlyphId, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
     if( !nSize1 )       // blank glyphs are ok
-        return TRUE;
+        return true;
     else if( nSize1 == GDI_ERROR )
-        return FALSE;
+        return false;
 
-    BYTE*   pData = new BYTE[ nSize1 ];
-    const DWORD nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
+    BYTE* pData = new BYTE[ nSize1 ];
+    const DWORD nSize2 = ::GetGlyphOutlineW( hDC, aGlyphId, nGGOFlags,
               &aGlyphMetrics, nSize1, pData, &aMat );
 
     if( nSize1 != nSize2 )
-        return FALSE;
+        return false;
 
     // TODO: avoid tools polygon by creating B2DPolygon directly
     int     nPtSize = 512;
@@ -2469,7 +2469,7 @@ sal_Bool WinSalGraphics::GetGlyphOutline( sal_GlyphId nIndex,
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
-    return TRUE;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2533,7 +2533,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
 }
 
 sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
-    const PhysicalFontFace* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
+    const PhysicalFontFace* pFont, sal_GlyphId* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // TODO: use more of the central font-subsetting code, move stuff there if needed
@@ -2576,18 +2576,18 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
         const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
         pCharMap->AddReference();
 
-        long nRealGlyphIds[ 256 ];
+        sal_GlyphId aRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
         {
             // TODO: remap notdef glyph if needed
             // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
-            sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-            if( pGlyphIDs[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
-                nGlyphIdx = pCharMap->GetGlyphIndex( nGlyphIdx );
-            if( (pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
+            sal_GlyphId aGlyphId = pGlyphIds[i] & GF_IDXMASK;
+            if( pGlyphIds[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
+                aGlyphId = pCharMap->GetGlyphIndex( aGlyphId );
+            if( (pGlyphIds[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
                 {/*####*/}
 
-            nRealGlyphIds[i] = nGlyphIdx;
+            aRealGlyphIds[i] = aGlyphId;
         }
 
         pCharMap->DeReference(); // TODO: and and use a RAII object
@@ -2596,7 +2596,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
         rInfo.LoadFont( FontSubsetInfo::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
-                nRealGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
+                aRealGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
         return bRC;
     }
@@ -2636,21 +2636,21 @@ sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     for( i = 0; i < nGlyphCount; ++i )
     {
         aTempEncs[i] = pEncoding[i];
-        sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-        if( pGlyphIDs[i] & GF_ISCHAR )
+        sal_GlyphId aGlyphId = pGlyphIds[i] & GF_IDXMASK;
+        if( pGlyphIds[i] & GF_ISCHAR )
         {
-            sal_Unicode cChar = static_cast<sal_Unicode>(nGlyphIdx); // TODO: sal_UCS4
-            const bool bVertical = ((pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0);
-            nGlyphIdx = ::MapChar( aSftTTF.get(), cChar, bVertical );
-            if( (nGlyphIdx == 0) && pFont->IsSymbolFont() )
+            sal_Unicode cChar = static_cast<sal_Unicode>(aGlyphId); // TODO: sal_UCS4
+            const bool bVertical = ((pGlyphIds[i] & (GF_ROTMASK|GF_GSUB)) != 0);
+            aGlyphId = ::MapChar( aSftTTF.get(), cChar, bVertical );
+            if( (aGlyphId == 0) && pFont->IsSymbolFont() )
             {
                 // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
                 cChar = (cChar & 0xF000) ? (cChar & 0x00FF) : (cChar | 0xF000);
-                nGlyphIdx = ::MapChar( aSftTTF.get(), cChar, bVertical );
+                aGlyphId = ::MapChar( aSftTTF.get(), cChar, bVertical );
             }
         }
-        aShortIDs[i] = static_cast<sal_uInt16>( nGlyphIdx );
-        if( !nGlyphIdx )
+        aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
+        if( !aGlyphId )
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
     }
