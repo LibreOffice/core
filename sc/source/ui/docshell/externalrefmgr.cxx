@@ -1392,13 +1392,13 @@ inline T ColumnBatch<T>::getValue(ScRefCellValue& raCell) const
 template<>
 inline void ColumnBatch<svl::SharedString>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 {
-    xMat->PutString(maStorage.data(), maStorage.size(), nCol, mnRowStart);
+    xMat->PutString(&maStorage.front(), maStorage.size(), nCol, mnRowStart);
 }
 
 template<class T>
 inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 {
-    xMat->PutDouble(maStorage.data(), maStorage.size(), nCol, mnRowStart);
+    xMat->PutDouble(&maStorage.front(), maStorage.size(), nCol, mnRowStart);
 }
 
 static ScTokenArray* convertToTokenArray(
