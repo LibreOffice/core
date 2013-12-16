@@ -162,6 +162,9 @@ public:
 
     // set by user through printer properties subdialog of printer settings dialog
     Size                                                        maDefaultPageSize;
+    // set by user through printer properties subdialog of print dialog.
+    // if set, pages are centered and trimmed onto the fixed page
+    Size                                                        maFixedPageSize;
     // set by user through printer properties subdialog of printer settings dialog
     sal_Int32                                                   mnDefaultPaperBin;
     // Set by user through printer properties subdialog of print dialog.
@@ -779,6 +782,7 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     mpImplData->maDefaultPageSize = mpImplData->mpPrinter->GetPaperSize();
     mpImplData->mpPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
+    mpImplData->maFixedPageSize = Size();
 }
 
 void PrinterController::resetPrinterOptions( bool i_bFileOutput )
@@ -799,6 +803,9 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         // get current data
         Size aPaperSize(mpImplData->mpPrinter->GetPaperSize());
         sal_uInt16 nPaperBin = mpImplData->mpPrinter->GetPaperBin();
+        // reset paper size back to last configured size, not
+        // whatever happens to be the current page
+        resetPaperToLastConfigured();
 
         // reset paper size back to last configured size, not
         // whatever happens to be the current page
@@ -815,7 +822,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
             // configured to use the driver papersize
             if (aNewPaperSize != mpImplData->maDefaultPageSize)
             {
-                mpImplData->maDefaultPageSize = aNewPaperSize;
+                mpImplData->maFixedPageSize = aNewPaperSize;
                 bInvalidateCache = getPapersizeFromSetup();
             }
 
@@ -828,6 +835,11 @@ bool PrinterController::setupPrinter( Window* i_pParent )
             }
 
             if (bInvalidateCache)
+            {
+                mpImplData->maPageCache.invalidate();
+            }
+
+            if( aNewPaperSize != aPaperSize || nNewPaperBin != nPaperBin )
             {
                 mpImplData->maPageCache.invalidate();
             }
@@ -915,11 +927,14 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 //print dialog
 void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
+    Size aPaperSize(maDefaultPageSize);
+    if (maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0)
+        aPaperSize = maFixedPageSize;
     mpPrinter->Push();
     mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
     Size aCurSize(mpPrinter->GetPaperSize());
-    if (aCurSize != maDefaultPageSize)
-        mpPrinter->SetPaperSizeUser(maDefaultPageSize, !isFixedPageSize());
+    if (aPaperSize != aCurSize)
+        mpPrinter->SetPaperSizeUser(aPaperSize, !isFixedPageSize());
     mpPrinter->Pop();
 }
 
