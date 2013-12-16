@@ -565,8 +565,14 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     /// Are we inside a <text:deletion> element (deleted redline section)
     bool m_bInsideDeleteContext : 1;
 
+    // fdo#64146
+    // Mark special case: inserting a file beginning with a list
+    bool m_bFirstList;
+    bool m_bMergeListWithPrevious;
+
     typedef ::std::pair< OUString, OUString> field_name_type_t;
     typedef ::std::pair< OUString, OUString > field_param_t;
+
     typedef ::std::vector< field_param_t > field_params_t;
     typedef ::std::pair< field_name_type_t, field_params_t > field_stack_item_t;
     typedef ::std::stack< field_stack_item_t > field_stack_t;
@@ -606,6 +612,8 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
         ,   m_bOrganizerMode( bOrganizerMode )
         ,   m_bBodyContentStarted( true )
         ,   m_bInsideDeleteContext( false )
+        ,   m_bFirstList( true )
+        ,   m_bMergeListWithPrevious( true )
     {
     }
 
@@ -1559,8 +1567,20 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 // gracefully.
                 try
                 {
-                    xPropSet->setPropertyValue(
-                        s_NumberingRules, makeAny(xNewNumRules) );
+                    // fdo#64146 : do not override NumRules and ListId
+                    if (m_pImpl->m_bMergeListWithPrevious &&
+                        xPropSetInfo->hasPropertyByName(s_PropNameListId)) {
+                        uno::Any any = xPropSet->getPropertyValue(s_PropNameListId);
+                        OUString sValue;
+                        any >>= sValue;
+
+                        if (!sValue.isEmpty()) {
+                            sListId = "";
+                            bApplyNumRules = false;
+                        }
+                    }
+                    if (bApplyNumRules)
+                        xPropSet->setPropertyValue(s_NumberingRules, makeAny(xNewNumRules) );
                 }
                 catch(const Exception&)
                 {
@@ -1600,8 +1620,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if (xPropSetInfo->hasPropertyByName(s_PropNameListId))
             {
                 if (!sListId.isEmpty()) {
-                    xPropSet->setPropertyValue(s_PropNameListId,
-                        makeAny(sListId) );
+                    xPropSet->setPropertyValue(s_PropNameListId, makeAny(sListId) );
                 }
             }
 
@@ -2179,6 +2198,19 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                         rImport, nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_TEXT_LIST:
+        // fdo#64146
+        // If inserted document starts with a list, mark it.
+        // This flag is used later with one purpose: merge this list
+        // with an existing one.
+        if (m_pImpl->m_bFirstList)
+        {
+            m_pImpl->m_bFirstList = false;
+            m_pImpl->m_bMergeListWithPrevious = m_pImpl->m_bInsertMode;
+        }
+        else
+        {
+            m_pImpl->m_bMergeListWithPrevious = false;
+        }
         pContext = new XMLTextListBlockContext( rImport, *this,
                                                 nPrefix, rLocalName,
                                                 xAttrList );
@@ -2325,6 +2357,13 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
     }
 
+    // If document doesn't start with a list, no need to try to mark the list
+    if ( bContent &&
+        m_pImpl->m_bMergeListWithPrevious &&
+        m_pImpl->m_bFirstList )
+    {
+        m_pImpl->m_bMergeListWithPrevious = m_pImpl->m_bFirstList = false;
+    }
     // handle open redlines
     if ( (XML_TOK_TEXT_CHANGE != nToken) &&
          (XML_TOK_TEXT_CHANGE_END != nToken) &&
