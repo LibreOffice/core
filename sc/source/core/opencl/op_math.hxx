@@ -30,6 +30,14 @@ public:
 
     virtual std::string BinFuncName(void) const { return "Sec"; }
 };
+class OpSecH: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+
+    virtual std::string BinFuncName(void) const { return "SecH"; }
+};
 class OpCsc: public Normal
 {
 public:
