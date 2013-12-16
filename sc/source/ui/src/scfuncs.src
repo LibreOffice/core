@@ -1529,7 +1529,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
+            Text [ en-US ] = "The start period. The first period to be taken into account. S = 1 denotes the very first period." ;
         };
         String 10 // Name of Parameter 5
         {
@@ -1593,7 +1593,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
+            Text [ en-US ] = "The start period. The first period to be taken into account. S = 1 denotes the very first period." ;
         };
         String 10 // Name of Parameter 5
         {
