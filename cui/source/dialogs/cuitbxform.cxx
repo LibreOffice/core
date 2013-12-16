@@ -30,25 +30,16 @@
 #include "cuitbxform.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include "fmsearch.hrc"
-
-//========================================================================
-// class FmInputRecordNoDialog
-//========================================================================
 
 FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
-    :ModalDialog( pParent, CUI_RES(RID_SVX_DLG_INPUTRECORDNO))
-    ,m_aLabel(this, CUI_RES(1))
-    ,m_aRecordNo(this, CUI_RES(1))
-    ,m_aOk(this, CUI_RES(1))
-    ,m_aCancel(this, CUI_RES(1))
+    : ModalDialog( pParent, "RecordNumberDialog", "cui/ui/recordnumberdialog.ui")
 {
-    m_aRecordNo.SetMin(1);
-    m_aRecordNo.SetMax(0x7FFFFFFF);
-    m_aRecordNo.SetStrictFormat(sal_True);
-    m_aRecordNo.SetDecimalDigits(0);
+    get(m_pRecordNo, "entry-nospin");
 
-    FreeResource();
+    m_pRecordNo->SetMin(1);
+    m_pRecordNo->SetMax(0x7FFFFFFF);
+    m_pRecordNo->SetStrictFormat(sal_True);
+    m_pRecordNo->SetDecimalDigits(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,7 +43,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/showcols.src \
     cui/source/dialogs/srchxtra.src \
     cui/source/dialogs/svuidlg.src \
-    cui/source/dialogs/tbxform.src \
     cui/source/options/certpath.src \
     cui/source/options/connpooloptions.src \
     cui/source/options/dbregister.src \
