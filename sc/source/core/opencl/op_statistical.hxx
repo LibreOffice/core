@@ -487,6 +487,15 @@ public:
     virtual bool takeString() const { return true; }
     virtual bool takeNumeric() const { return true; }
 };
+class OpVarA: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "OpVarA"; }
+    virtual bool takeString() const { return true; }
+    virtual bool takeNumeric() const { return true; }
+};
 class OpAverageA: public Normal
 {
 public:
