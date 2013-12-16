@@ -167,7 +167,7 @@ void SwTableBox::setDummyFlag( bool bDummy )
 static OUString& lcl_TabToBlankAtSttEnd( OUString& rTxt )
 {
     sal_Unicode c;
-    xub_StrLen n;
+    sal_Int32 n;
 
     for( n = 0; n < rTxt.getLength() && ' ' >= ( c = rTxt[n] ); ++n )
         if( '\x9' == c )
@@ -2536,7 +2536,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
                 // Flys/fields/...
                 if( pHts )
                 {
-                    xub_StrLen nNextSetField = 0;
+                    sal_Int32 nNextSetField = 0;
                     for( sal_uInt16 n = 0; n < pHts->Count(); ++n )
                     {
                         const SwTxtAttr* pAttr = (*pHts)[ n ];
