@@ -416,8 +416,7 @@ void Chart2ExportTest::testStockChart()
     load("/chart2/qa/extras/data/docx/", "testStockChart.docx");
 
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:idx", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:order", "val", "1");
@@ -427,9 +426,9 @@ void Chart2ExportTest::testStockChart()
 void Chart2ExportTest::testBarChart()
 {
     load("/chart2/qa/extras/data/docx/", "testBarChart.docx");
+
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", "col");
 }
@@ -437,59 +436,49 @@ void Chart2ExportTest::testBarChart()
 void Chart2ExportTest::testDoughnutChart()
 {
     load("/chart2/qa/extras/data/docx/", "doughnutChart.docx");
-    {
-        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-        if (!pXmlDoc)
-           return;
-      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
-    }
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart", "1");
 }
 
 void Chart2ExportTest::testUpDownBars()
 {
     load("/chart2/qa/extras/data/docx/", "UpDownBars.docx");
-    {
-        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-        if (!pXmlDoc)
-           return;
-      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
-    }
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars");
 }
 
 void Chart2ExportTest::testCrosses()
 {
     load("/chart2/qa/extras/data/docx/", "Bar_horizontal_cone.docx");
-    {
-        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-        if (!pXmlDoc)
-           return;
-      assertXPath(pXmlDoc, "/c:chartspace/c:chart/c:plotarea/c:catAx/c:crosses", "val", "autoZero");
-    }
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartspace/c:chart/c:plotarea/c:catAx/c:crosses", "val", "autoZero");
 }
 
 void Chart2ExportTest::testChartDataTable()
 {
     load("/chart2/qa/extras/data/docx/", "testChartDataTable.docx");
-    {
-        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-        if (!pXmlDoc)
-           return;
-      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", "1");
-      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", "1");
-      assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
-    }
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
 }
 
 void Chart2ExportTest::testAreaChartLoad()
 {
     load ("/chart2/qa/extras/data/docx/", "FDO72217.docx");
-    {
-        xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
-        if (!pXmlDoc)
-            return;
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls", "showVal", "1");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", "0");
-    }
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls", "showVal", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
