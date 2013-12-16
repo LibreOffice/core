@@ -51,8 +51,7 @@ sal_Int32 SwAccessibleFrame::GetChildCount( SwAccessibleMap& rAccMap,
 {
     sal_Int32 nCount = 0;
 
-    // const SwAccessibleChildSList aVisList( rVisArea, *pFrm, rAccMap );
-    const SwAccessibleChildSList aVisList( pFrm->PaintArea(), *pFrm, rAccMap );
+    const SwAccessibleChildSList aVisList( rVisArea, *pFrm, rAccMap );
 
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
@@ -155,7 +154,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
         // We need a sorted list here
-        const SwAccessibleChildMap aVisMap( rFrm.PaintArea(), rFrm, rAccMap );
+        const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
         SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
         while( aIter != aVisMap.end() && !bFound )
         {
@@ -182,7 +181,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
         // The unsorted list is sorted enough, because it returns lower
         // frames in the correct order.
 
-        const SwAccessibleChildSList aVisList( rFrm.PaintArea(), rFrm, rAccMap );
+        const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
         while( aIter != aVisList.end() && !bFound )
         {
