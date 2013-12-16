@@ -126,7 +126,6 @@ private:
     rtl::OUString attrLoader_;
     rtl::OUString attrUri_;
     rtl::OUString attrPrefix_;
-    rtl::OUString attrImplementation_;
     boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         implementation_;
 };
@@ -326,19 +325,19 @@ void Parser::handleComponent() {
 }
 
 void Parser::handleImplementation() {
-    attrImplementation_ = getNameAttribute();
+    OUString name(getNameAttribute());
     implementation_.reset(
         new cppuhelper::ServiceManager::Data::Implementation(
-            attrImplementation_, attrLoader_, attrUri_, attrPrefix_,
-            alienContext_, reader_.getUrl()));
+            name, attrLoader_, attrUri_, attrPrefix_, alienContext_,
+            reader_.getUrl()));
     if (!data_->namedImplementations.insert(
             cppuhelper::ServiceManager::Data::NamedImplementations::value_type(
-                attrImplementation_, implementation_)).
+                name, implementation_)).
         second)
     {
         throw css::registry::InvalidRegistryException(
-            (reader_.getUrl() + ": duplicate <implementation name=\""
-             + attrImplementation_ + "\">"),
+            (reader_.getUrl() + ": duplicate <implementation name=\"" + name
+             + "\">"),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
