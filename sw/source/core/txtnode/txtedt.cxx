@@ -1854,17 +1854,17 @@ void SwTxtNode::TransliterateText(
         {
             // now apply the changes from end to start to leave the offsets of the
             // yet unchanged text parts remain the same.
-            size_t nSum(m_Text.getLength());
+            size_t nSum(0);
             for (size_t i = 0; i < aChanges.size(); ++i)
             {   // check this here since AddChanges cannot be moved below
                 // call to ReplaceTextOnly
                 swTransliterationChgData & rData =
                     aChanges[ aChanges.size() - 1 - i ];
                 nSum += rData.sChanged.getLength() - rData.nLen;
-                if (nSum > static_cast<size_t>(TXTNODE_MAX))
+                if (nSum > static_cast<size_t>(GetSpaceLeft()))
                 {
                     SAL_WARN("sw.core", "SwTxtNode::ReplaceTextOnly: "
-                            "node text with insertion > TXTNODE_MAX.");
+                            "node text with insertion > node capacity.");
                     return;
                 }
                 if (pUndo)
@@ -1879,7 +1879,7 @@ void SwTxtNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
                                 const OUString & rText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
-    assert(m_Text.getLength() + rText.getLength() - nLen <= TXTNODE_MAX);
+    assert(rText.getLength() - nLen <= GetSpaceLeft());
 
     m_Text = m_Text.replaceAt(nPos, nLen, rText);
 
