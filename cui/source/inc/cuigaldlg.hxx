@@ -185,22 +185,15 @@ public:
 class GalleryIdDialog : public ModalDialog
 {
 private:
-
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    FixedLine       aFLId;
-    ListBox         aLbResName;
+    OKButton* m_pBtnOk;
+    ListBox* m_pLbResName;
     GalleryTheme*   pThm;
 
-                    DECL_LINK( ClickOkHdl, void* );
-                    DECL_LINK( ClickResNameHdl, void* );
-
+    DECL_LINK( ClickOkHdl, void* );
+    DECL_LINK( ClickResNameHdl, void* );
 public:
-
-                    GalleryIdDialog( Window* pParent, GalleryTheme* pThm );
-                    ~GalleryIdDialog() {}
-
-    sal_uLong           GetId() const { return aLbResName.GetSelectEntryPos(); }
+    GalleryIdDialog( Window* pParent, GalleryTheme* pThm );
+    sal_uLong GetId() const { return m_pLbResName->GetSelectEntryPos(); }
 };
 
 class GalleryThemeProperties : public SfxTabDialog

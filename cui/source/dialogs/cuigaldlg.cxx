@@ -521,7 +521,7 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 }
 
 TitleDialog::TitleDialog(Window* pParent, const OUString& rOldTitle)
-    : ModalDialog (pParent, "GalleryTitleDialog", "cui/ui/gallerytitledialog.ui")
+    : ModalDialog(pParent, "GalleryTitleDialog", "cui/ui/gallerytitledialog.ui")
 {
     get(m_pEdit, "entry");
     m_pEdit->SetText( rOldTitle );
@@ -532,24 +532,21 @@ TitleDialog::TitleDialog(Window* pParent, const OUString& rOldTitle)
 // - GalleryIdDialog -
 // -------------------
 
-GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
-            ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_THEMEID ) ),
-            aBtnOk      ( this, CUI_RES( BTN_OK ) ),
-            aBtnCancel  ( this, CUI_RES( BTN_CANCEL ) ),
-            aFLId      ( this, CUI_RES( FL_ID ) ),
-            aLbResName  ( this, CUI_RES( LB_RESNAME ) ),
-            pThm        ( _pThm )
+GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm )
+    : ModalDialog(pParent, "GalleryThemeIDDialog", "cui/ui/gallerythemeiddialog.ui")
+    , pThm(_pThm )
 {
-    FreeResource();
+    get(m_pBtnOk, "ok");
+    get(m_pLbResName, "entry");
 
-    aLbResName.InsertEntry( OUString( "!!! No Id !!!" ) );
+    m_pLbResName->InsertEntry( OUString( "!!! No Id !!!" ) );
 
-    GalleryTheme::InsertAllThemes( aLbResName );
+    GalleryTheme::InsertAllThemes(*m_pLbResName);
 
-    aLbResName.SelectEntryPos( (sal_uInt16) pThm->GetId() );
-    aLbResName.GrabFocus();
+    m_pLbResName->SelectEntryPos( (sal_uInt16) pThm->GetId() );
+    m_pLbResName->GrabFocus();
 
-    aBtnOk.SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
+    m_pBtnOk->SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -574,7 +571,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 
             InfoBox aBox( this, aStr );
             aBox.Execute();
-            aLbResName.GrabFocus();
+            m_pLbResName->GrabFocus();
             bDifferentThemeExists = sal_True;
         }
     }
