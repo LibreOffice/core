@@ -3018,6 +3018,15 @@ ScAddress ScViewData::GetCurPos() const
     return ScAddress( GetCurX(), GetCurY(), GetTabNo() );
 }
 
+void ScViewData::SetRefStart( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
+{
+    nRefStartX = nNewX; nRefStartY = nNewY; nRefStartZ = nNewZ;
+}
+
+void ScViewData::SetRefEnd( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
+{
+    nRefEndX = nNewX; nRefEndY = nNewY; nRefEndZ = nNewZ;
+}
 
 void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
         SCROW nEndRow, double nPPTY, const ScDocument * pDoc, SCTAB nTabNo )

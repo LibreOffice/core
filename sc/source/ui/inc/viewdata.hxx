@@ -375,10 +375,8 @@ public:
     void            SetRefMode( bool bNewMode, ScRefType eNewType )
                                     { bIsRefMode = bNewMode; eRefType = eNewType; }
 
-    void            SetRefStart( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
-                            { nRefStartX = nNewX; nRefStartY = nNewY; nRefStartZ = nNewZ; }
-    void            SetRefEnd( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
-                            { nRefEndX = nNewX; nRefEndY = nNewY; nRefEndZ = nNewZ; }
+    void            SetRefStart( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ );
+    void            SetRefEnd( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ );
 
     void            ResetDelMark()                          { bDelMarkValid = false; }
     void            SetDelMark( const ScRange& rRange )
