@@ -147,6 +147,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::uno::XComponentContext >& _
     ,m_bUseEscapeProcessing(sal_True)
     ,m_bApplyFilter(sal_False)
     ,m_bCommandFacetsDirty( sal_True )
+    ,m_bParametersDirty( true )
     ,m_bModified(sal_False)
     ,m_bRebuildConnOnExecute(sal_False)
     ,m_bIsBookmarkable(sal_True)
@@ -1511,6 +1512,9 @@ Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  ) throw (RuntimeExce
         }
     }
 
+    // our caller could change our parameters at any time
+    m_bParametersDirty = true;
+
     return m_pParameters.get();
 }
 
@@ -1620,12 +1624,11 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
     _rxStatement->setPropertyValue( PROPERTY_RESULTSETCONCURRENCY, makeAny( nResultSetConcurrency ) );
 }
 
-Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
+void ORowSet::impl_makeNewStatement_throw()
 {
     OUString sCommandToExecute;
-    sal_Bool bUseEscapeProcessing = impl_initComposer_throw( sCommandToExecute );
+    impl_initComposer_throw( sCommandToExecute );
 
-    Reference< XResultSet> xResultSet;
     try
     {
         m_xStatement = m_xActiveConnection->prepareStatement( sCommandToExecute );
@@ -1648,28 +1651,16 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
             // this exception doesn't matter here because when we catch an exception
             // then the driver doesn't support this feature
         }
-        m_aParameterValueForCache.get().resize(1);
-        Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
-        size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
-        for ( size_t i=1; i<=nParamCount; ++i )
-        {
-            ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
-            ::dbtools::setObjectWithInfo( xParam, i, rParamValue.makeAny(), rParamValue.getTypeKind() );
-            m_aParameterValueForCache.get().push_back(rParamValue);
-        }
-
-        xResultSet = m_xStatement->executeQuery();
     }
     catch( const SQLException& )
     {
         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-        OSL_ENSURE( aError.isValid(), "ORowSet::impl_prepareAndExecute_throw: caught an SQLException which we cannot analyze!" );
+        OSL_ENSURE( aError.isValid(), "ORowSet::impl_makeNewStatement_throw: caught an SQLException which we cannot analyze!" );
 
         // append information about what we were actually going to execute
         try
         {
-            OUString sQuery = bUseEscapeProcessing && m_xComposer.is() ? m_xComposer->getQuery() : m_aActiveCommand;
-            OUString sInfo(DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sQuery )  );
+            OUString sInfo(DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sCommandToExecute )  );
             aError.append( SQLExceptionInfo::SQL_CONTEXT, sInfo );
         }
         catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
@@ -1677,6 +1668,41 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         // propagate
         aError.doThrow();
     }
+}
+
+Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
+{
+    if(m_bCommandFacetsDirty)
+        impl_makeNewStatement_throw();
+
+    m_aParameterValueForCache.get().resize(1);
+    Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
+    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
+    for ( size_t i=1; i<=nParamCount; ++i )
+    {
+        ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
+        ::dbtools::setObjectWithInfo( xParam, i, rParamValue.makeAny(), rParamValue.getTypeKind() );
+        m_aParameterValueForCache.get().push_back(rParamValue);
+    }
+    m_bParametersDirty = false;
+
+    Reference< XResultSet > xResultSet(m_xStatement->executeQuery());
+
+    OUString aComposedUpdateTableName;
+    if ( !m_aUpdateTableName.isEmpty() )
+        aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
+
+    SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
+    m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter,m_nMaxRows );
+    if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
+    {
+        m_nPrivileges = Privilege::SELECT;
+        m_pCache->m_nPrivileges = Privilege::SELECT;
+    }
+    m_pCache->setFetchSize(m_nFetchSize);
+    m_aCurrentRow   = m_pCache->createIterator(this);
+    m_bIsInsertRow  = sal_False;
+    m_aOldRow       = m_pCache->registerOldRow();
 
     return xResultSet;
 }
@@ -1788,24 +1814,6 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         m_aWarnings.clearWarnings();
         // let the warnings container know about the new "external warnings"
         m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
-
-        OUString aComposedUpdateTableName;
-        if ( !m_aUpdateTableName.isEmpty() )
-            aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
-
-        {
-            SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
-            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter,m_nMaxRows );
-            if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
-            {
-                m_nPrivileges = Privilege::SELECT;
-                m_pCache->m_nPrivileges = Privilege::SELECT;
-            }
-            m_pCache->setFetchSize(m_nFetchSize);
-            m_aCurrentRow   = m_pCache->createIterator(this);
-            m_bIsInsertRow  = sal_False;
-            m_aOldRow       = m_pCache->registerOldRow();
-        }
 
         // get the locale
         Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();
@@ -2460,6 +2468,7 @@ void SAL_CALL ORowSet::setNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/ 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
     getParameterStorage( parameterIndex ).setNull();
+    m_bParametersDirty = true;
 }
 
 void SAL_CALL ORowSet::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
@@ -2472,6 +2481,7 @@ void ORowSet::setParameter(sal_Int32 parameterIndex, const ORowSetValue& x)
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
     getParameterStorage( parameterIndex ) = x;
+    m_bParametersDirty = true;
 }
 
 void SAL_CALL ORowSet::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
@@ -2544,6 +2554,7 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
         Sequence <sal_Int8> aData;
         x->readBytes(aData, length);
         rParamValue = aData;
+        m_bParametersDirty = true;
         x->closeInput();
     }
     catch( Exception& )
@@ -2564,6 +2575,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         sal_Int32 nSize = x->readBytes(aData, length * sizeof(sal_Unicode));
         if (nSize / sizeof(sal_Unicode))
             aDataStr = OUString((sal_Unicode*)aData.getConstArray(), nSize / sizeof(sal_Unicode));
+        m_bParametersDirty = true;
         rParamValue = aDataStr;
         rParamValue.setTypeKind( DataType::LONGVARCHAR );
         x->closeInput();
@@ -2576,7 +2588,11 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
 
 void SAL_CALL ORowSet::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    if ( !::dbtools::implSetObject( this, parameterIndex, x ) )
+    if ( ::dbtools::implSetObject( this, parameterIndex, x ) )
+    {
+        m_bParametersDirty = true;
+    }
+    else
     {   // there is no other setXXX call which can handle the value in x
         throw SQLException();
     }
@@ -2710,9 +2726,17 @@ void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
 
 void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
 {
-    Reference< XResultSet > xResultSet( m_xStatement->executeQuery() );
+    Reference< XResultSet > xResultSet;
+    if(m_bParametersDirty)
+    {
+        xResultSet = impl_prepareAndExecute_throw();
+    }
+    else
+    {
+        xResultSet = m_xStatement->executeQuery();
+        m_pCache->reset(xResultSet);
+    }
     m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
-    m_pCache->reset(xResultSet);
     notifyAllListeners(_rGuard);
 }
 

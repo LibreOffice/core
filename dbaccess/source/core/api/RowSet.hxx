@@ -128,6 +128,7 @@ namespace dbaccess
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
         sal_Bool                    m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
+        bool                        m_bParametersDirty; // parameters changed since execute
         sal_Bool                    m_bModified ;
         sal_Bool                    m_bRebuildConnOnExecute ;
         sal_Bool                    m_bIsBookmarkable ;
@@ -197,6 +198,7 @@ namespace dbaccess
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
                         impl_prepareAndExecute_throw();
+        void            impl_makeNewStatement_throw();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
         // free clones and ParseTree. Plus, if _bComplete is <TRUE/>, *all* other associated resources
