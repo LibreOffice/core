@@ -99,6 +99,7 @@ certain functionality.
 @li @c desktop.migration
 @li @c desktop.offacc
 @li @c desktop.splash
+@li @c desktop.test
 
 @section Draw
 

@@ -630,6 +630,7 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
+	active_native \
 	mysqlc \
 	passive_native \
 ))
@@ -676,6 +677,7 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 
 $(eval $(call gb_Helper_register_jars,OXT, \
 	EvolutionarySolver \
+	active_java \
 	mediawiki \
 	nlpsolver \
 	passive_java \

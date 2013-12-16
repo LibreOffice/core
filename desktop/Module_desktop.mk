@@ -108,6 +108,14 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 endif
 
+ifneq (,$(filter Extension_test-active,$(MAKECMDGOALS)))
+$(eval $(call gb_Module_add_targets,desktop, \
+    Extension_test-active \
+    Jar_active_java \
+    Library_active_native \
+))
+endif
+
 ifneq (,$(filter Extension_test-passive,$(MAKECMDGOALS)))
 $(eval $(call gb_Module_add_targets,desktop, \
     Extension_test-passive \
