@@ -2229,11 +2229,14 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                         if( !sStyle.isEmpty() )
                                         {
                                             SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
-                                            if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                            if (pColl)
                                             {
-                                                if( !sTOption.isEmpty() )
-                                                    sTOption += ",";
-                                                sTOption += sStyle + sLvl;
+                                                if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                                {
+                                                    if( !sTOption.isEmpty() )
+                                                        sTOption += ",";
+                                                    sTOption += sStyle + sLvl;
+                                                }
                                             }
                                         }
                                     } while( -1 != nPos );
