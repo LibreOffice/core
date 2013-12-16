@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///g0\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-12-16T09:59:15Z",
+      "side": 1,
+      "message": "Here it would be better to use oox::getBaseToken() instead of manual masking.",
+      "revId": "61cf93f9253e638d2780a17c6fa369b884f412f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
