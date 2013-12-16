@@ -50,7 +50,7 @@ void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
     while( pIter != maSentence.end() )
     {
         if( *pIter >= nEnd )
-            *pIter += *pIter;
+            *pIter += nDiff;
         else
             *pIter = nPos;
         ++pIter;
