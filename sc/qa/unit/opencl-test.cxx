@@ -277,6 +277,7 @@ public:
     void testStatisticalFormulaVarPA();
     void testStatisticalFormulaStDevA();
     void testStatisticalFormulaStDevPA();
+    void testMathFormulaSEC();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -484,6 +485,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaVarPA);
     CPPUNIT_TEST(testStatisticalFormulaStDevA);
     CPPUNIT_TEST(testStatisticalFormulaStDevPA);
+    CPPUNIT_TEST(testMathFormulaSEC);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5703,6 +5705,29 @@ void ScOpenclTest::testMathFormulaFact()
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 18; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//AMLOEXT-367
+void ScOpenclTest::testMathFormulaSEC()
+{
+    if (!detectOpenCLDevice())
+        return;
+
+    ScDocShellRef xDocSh = loadDoc("opencl/math/sec.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    enableOpenCL();
+    pDoc->CalcAll();
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/sec.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(1,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
