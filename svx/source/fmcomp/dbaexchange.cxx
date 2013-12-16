@@ -464,15 +464,8 @@ namespace svx
                 break;
         }
 
-        sal_Int32 nDescriptorLen = m_sCompatibleObjectDescription.getLength();
-        if (nDescriptorLen)
-        {
-            if (m_sCompatibleObjectDescription[nDescriptorLen] == 11)
-                m_sCompatibleObjectDescription = m_sCompatibleObjectDescription.copy(0, nDescriptorLen - 1);
-
-            if (nDescriptorLen)
-                AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
-        }
+        if (!m_sCompatibleObjectDescription.isEmpty())
+            AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
     }
 
     // -----------------------------------------------------------------------------
