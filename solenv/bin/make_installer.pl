@@ -213,11 +213,15 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
     installer::systemactions::create_directory($newidtdir);
 
     # Collecting all files with flag "BINARYTABLE"
-    my $binarytablefiles = installer::worker::collect_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE");
+    my $binarytablefiles = installer::worker::collect_all_items_with_special_flag(
+        $filesinproductlanguageresolvedarrayref,
+        "BINARYTABLE");
 
     # Removing all files with flag "BINARYTABLE_ONLY"
     @installer::globals::binarytableonlyfiles = ();
-    $filesinproductlanguageresolvedarrayref = installer::worker::remove_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE_ONLY");
+    $filesinproductlanguageresolvedarrayref = installer::worker::remove_all_items_with_special_flag(
+        $filesinproductlanguageresolvedarrayref,
+        "BINARYTABLE_ONLY");
 
     # Collecting all profileitems with flag "INIFILETABLE" for table "IniFile"
     my $inifiletableentries = installer::worker::collect_all_items_with_special_flag($profileitemsinproductlanguageresolvedarrayref ,"INIFILETABLE");
@@ -400,7 +404,14 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
 
         installer::logger::include_header_into_logfile("Copying idt files to $languageidtdir:");
 
-        installer::windows::idtglobal::prepare_language_idt_directory($languageidtdir, $newidtdir, $onelanguage, $filesinproductlanguageresolvedarrayref, \@iconfilecollector, $binarytablefiles, $allvariableshashref);
+        installer::windows::idtglobal::prepare_language_idt_directory(
+            $languageidtdir,
+            $newidtdir,
+            $onelanguage,
+            $filesinproductlanguageresolvedarrayref,
+            \@iconfilecollector,
+            $binarytablefiles,
+            $allvariableshashref);
 
         if (( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'NOLANGUAGESELECTIONPRODUCT'} ))
         {
@@ -513,7 +524,10 @@ sub MakeWindowsBuild ($$$$$$$$$$$$$$$$$$$$)
         installer::windows::property::update_checkbox_table($languageidtdir, $allvariableshashref);
 
         # adding the files from the binary directory into the binary table
-        installer::windows::binary::update_binary_table($languageidtdir, $filesinproductlanguageresolvedarrayref, $binarytablefiles);
+        installer::windows::binary::update_binary_table(
+            $languageidtdir,
+            $filesinproductlanguageresolvedarrayref,
+            $binarytablefiles);
 
         # setting patch codes to detect installed products
 

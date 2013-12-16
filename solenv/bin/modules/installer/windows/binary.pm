@@ -19,13 +19,13 @@
 #
 #**************************************************************
 
-
-
 package installer::windows::binary;
 
 use installer::existence;
 use installer::files;
 use installer::globals;
+
+use strict;
 
 ###########################################################################################################
 # Updating the table Binary dynamically with all files from $binarytablefiles
@@ -45,22 +45,15 @@ sub update_binary_table
     # Only the iconfiles, that are used in the shortcut table for the
     # FolderItems (entries in Windows startmenu) are added into the icon table.
 
-    for ( my $i = 0; $i <= $#{$binarytablefiles}; $i++ )
+    foreach my $binaryfile (@$binarytablefiles)
     {
-        my $binaryfile = ${$binarytablefiles}[$i];
         my $binaryfilename = $binaryfile->{'Name'};
         my $binaryfiledata = $binaryfilename;
 
-        $binaryfilename =~ s/\.//g;  # removing "." in filename: "abc.dll" to "abcdll" in name column
+        # removing "." in filename: "abc.dll" to "abcdll" in name column
+        $binaryfilename =~ s/\.//g;
 
-        my %binary = ();
-
-        $binary{'Name'} = $binaryfilename;
-        $binary{'Data'} = $binaryfiledata;
-
-        my $oneline = $binary{'Name'} . "\t" . $binary{'Data'} . "\n";
-
-        push(@{$binaryidttable}, $oneline);
+        push @$binaryidttable, $binaryfilename . "\t" . $binaryfiledata . "\n";
     }
 
     # Saving the file

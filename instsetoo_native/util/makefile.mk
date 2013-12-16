@@ -443,7 +443,23 @@ MSI_LANGPACK_TEMPLATE_FILES=		\
     components.txt			\
     ooo_patchcodes.txt		\
     ooodev_patchcodes.txt		\
-    Binary/Banner.bmp
+    Binary/Banner.bmp		\
+    Binary/Image.bmp		\
+    Binary/caution.ico		\
+    Binary/dontinstall.ico		\
+    Binary/install.ico		\
+    Binary/installfirstuse.ico	\
+    Binary/installpartial.ico	\
+    Binary/installstatemenu.ico	\
+    Binary/networkinstall.ico	\
+    Binary/newfolder.ico		\
+    Binary/openfolder.ico		\
+    Binary/setup.ico		\
+    Binary/setupcomplete.ico	\
+    Binary/setuppartial.ico		\
+    Binary/setuprepair.ico		\
+    Binary/trashcan.ico		\
+    Binary/up.ico
 
 MSI_SDK_TEMPLATE_FILES=			\
     ActionTe.idt			\
