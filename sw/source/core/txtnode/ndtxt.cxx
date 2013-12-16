@@ -1796,10 +1796,9 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 
     const sal_Int32 aPos = rIdx.GetIndex();
     sal_Int32 nLen = m_Text.getLength() - aPos;
-    sal_Int32 const nOverflow(
-            m_Text.getLength() + rStr.getLength() - TXTNODE_MAX);
+    sal_Int32 const nOverflow(rStr.getLength() - GetUllage());
     SAL_WARN_IF(nOverflow > 0, "sw.core",
-            "SwTxtNode::InsertText: node text with insertion > TXTNODE_MAX.");
+            "SwTxtNode::InsertText: node text with insertion > capacity.");
     OUString const sInserted(
         (nOverflow > 0) ? rStr.copy(0, rStr.getLength() - nOverflow) : rStr);
     if (sInserted.isEmpty())
@@ -1807,7 +1806,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         return sInserted;
     }
     m_Text = m_Text.replaceAt(aPos, 0, sInserted);
-    assert(m_Text.getLength() <= TXTNODE_MAX);
+    assert(GetUllage()>=0);
     nLen = m_Text.getLength() - aPos - nLen;
     assert(nLen != 0);
 
@@ -2088,7 +2087,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
                             m_Text.copy(nTxtStartIdx, nLen));
         m_Text = m_Text.replaceAt(nTxtStartIdx, nLen, "");
-        if (m_Text.getLength() > TXTNODE_MAX)
+        if (GetUllage()<0)
         {   // FIXME: could only happen when called from SwRedline::Show.
             // unfortunately can't really do anything here to handle that...
             abort();
@@ -3394,10 +3393,9 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
     assert( rStart.GetIndex() < m_Text.getLength()     // index out of bounds
          && rStart.GetIndex() + nDelLen <= m_Text.getLength());
 
-    long const nOverflow(
-            m_Text.getLength() + rStr.getLength() - nDelLen - TXTNODE_MAX);
+    sal_Int32 const nOverflow(rStr.getLength() - nDelLen - GetUllage());
     SAL_WARN_IF(nOverflow > 0, "sw.core",
-            "SwTxtNode::ReplaceText: node text with insertion > TXTNODE_MAX.");
+            "SwTxtNode::ReplaceText: node text with insertion > node capacity.");
     OUString const sInserted(
         (nOverflow > 0) ? rStr.copy(0, rStr.getLength() - nOverflow) : rStr);
     if (sInserted.isEmpty() && 0 == nDelLen)

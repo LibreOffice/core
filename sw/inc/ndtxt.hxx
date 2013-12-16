@@ -69,10 +69,6 @@ namespace com { namespace sun { namespace star {
 
 typedef std::set< sal_Int32 > SwSoftPageBreakList;
 
-// do not fill the String up to the max - need to be able to have a
-// SwPosition "behind" the last character, i.e., at index TXTNODE_MAX + 1
-static const sal_Int32 TXTNODE_MAX = SAL_MAX_INT32 - 2;
-
 /// SwTxtNode is a paragraph in the document model.
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
@@ -215,6 +211,9 @@ public:
 
     const OUString& GetTxt() const { return m_Text; }
 
+    // returns the maximum number of characters that can still be added to the node
+    inline sal_Int32 GetUllage() const;
+
     /// getters for SwpHints
     inline       SwpHints &GetSwpHints();
     inline const SwpHints &GetSwpHints() const;
@@ -239,8 +238,8 @@ public:
     virtual sal_uInt16 ResetAllAttr();
 
     /// insert text content
-    /// @param rStr text to insert; in case it does not fit into the limit of
-    ///             TXTNODE_MAX, the longest prefix that fits is inserted
+    /// @param rStr text to insert; in case it does not fit into the capacity
+    ///             of the node, the longest prefix that fits is inserted
     /// @return the prefix of rStr that was actually inserted
     OUString InsertText( const OUString & rStr, const SwIndex & rIdx,
                      const enum IDocumentContentOperations::InsertFlags nMode
@@ -333,7 +332,7 @@ public:
 
     /// replace nDelLen characters at rStart with rText
     /// in case the replacement does not fit, it is partially inserted up to
-    /// TXTNODE_MAX
+    /// the capacity of the node
     void ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
@@ -853,6 +852,14 @@ SwTxtNode::CutText(SwTxtNode * const pDest, const SwIndex & rDestStart,
                     const SwIndex & rStart, const sal_Int32 nLen)
 {
     CutImpl( pDest, rDestStart, rStart, nLen, true );
+}
+
+inline sal_Int32 SwTxtNode::GetUllage() const
+{
+    // do not fill the String up to the max - need to be able to have a
+    // SwPosition "behind" the last character, i.e., at index TXTNODE_MAX + 1
+    const sal_Int32 TXTNODE_MAX = SAL_MAX_INT32 - 2;
+    return TXTNODE_MAX-m_Text.getLength();
 }
 
 #endif
