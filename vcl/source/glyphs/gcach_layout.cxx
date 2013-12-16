@@ -99,7 +99,7 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
     FreetypeServerFont& rFont = static_cast<FreetypeServerFont&>(rLayout.GetServerFont());
 
     Point aNewPos( 0, 0 );
-    int nOldGlyphId = -1;
+    sal_GlyphId nOldGlyphId( GF_DROPPED);
     int nGlyphWidth = 0;
     GlyphItem aPrevItem;
     bool bRightToLeft;
@@ -116,9 +116,9 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
 
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
-        int nGlyphIndex = rFont.GetGlyphIndex( cChar );
+        sal_GlyphId aGlyphId = rFont.GetGlyphIndex( cChar );
         // when glyph fallback is needed update LayoutArgs
-        if( !nGlyphIndex ) {
+        if( !aGlyphId ) {
             rArgs.NeedFallback( nCharPos, bRightToLeft );
         if( cChar >= 0x10000 ) // handle surrogate pairs
                 rArgs.NeedFallback( nCharPos+1, bRightToLeft );
@@ -127,26 +127,26 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
         // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
-            int nKernValue = rFont.GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
+            int nKernValue = rFont.GetGlyphKernValue( nOldGlyphId, aGlyphId );
             nGlyphWidth += nKernValue;
             aPrevItem.mnNewWidth = nGlyphWidth;
         }
 
         // finish previous glyph
-        if( nOldGlyphId >= 0 )
+        if( nOldGlyphId != GF_DROPPED )
             rLayout.AppendGlyph( aPrevItem );
         aNewPos.X() += nGlyphWidth;
 
         // prepare GlyphItem for appending it in next round
-        nOldGlyphId = nGlyphIndex;
-        const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
+        nOldGlyphId = aGlyphId;
+        const GlyphMetric& rGM = rFont.GetGlyphMetric( aGlyphId );
         nGlyphWidth = rGM.GetCharWidth();
         int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
-        aPrevItem = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+        aPrevItem = GlyphItem( nCharPos, aGlyphId, aNewPos, nGlyphFlags, nGlyphWidth );
     }
 
     // append last glyph item if any
-    if( nOldGlyphId >= 0 )
+    if( nOldGlyphId != GF_DROPPED )
         rLayout.AppendGlyph( aPrevItem );
 
     return true;

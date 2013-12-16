@@ -3155,12 +3155,12 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
 
         OUString aTmpName;
         osl_createTempFile( NULL, NULL, &aTmpName.pData );
-        sal_Int32 pGlyphIDs[ 256 ];
+        sal_GlyphId aGlyphIds[ 256 ];
         sal_uInt8 pEncoding[ 256 ];
         sal_Ucs   pUnicodes[ 256 ];
         sal_Int32 pDuWidths[ 256 ];
 
-        memset( pGlyphIDs, 0, sizeof( pGlyphIDs ) );
+        memset( aGlyphIds, 0, sizeof( aGlyphIds ) );
         memset( pEncoding, 0, sizeof( pEncoding ) );
         memset( pUnicodes, 0, sizeof( pUnicodes ) );
         memset( pDuWidths, 0, sizeof( pDuWidths ) );
@@ -3169,12 +3169,12 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
         {
             pUnicodes[c] = c;
             pEncoding[c] = c;
-            pGlyphIDs[c] = 0;
+            aGlyphIds[c] = 0;
             if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
                 pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
         }
 
-        m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, pFont, pGlyphIDs, pEncoding, pDuWidths, 256, aInfo );
+        m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
         osl_removeFile( aTmpName.pData );
     }
     else
@@ -4051,7 +4051,7 @@ bool PDFWriterImpl::emitFonts()
     {
         for( FontEmitList::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
         {
-            sal_Int32 pGlyphIDs[ 256 ];
+            sal_GlyphId aGlyphIds[ 256 ];
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ];
             sal_Int32 pEncToUnicodeIndex[ 256 ];
@@ -4062,7 +4062,7 @@ bool PDFWriterImpl::emitFonts()
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
 
-            rtl_zeroMemory( pGlyphIDs, sizeof( pGlyphIDs ) );
+            rtl_zeroMemory( aGlyphIds, sizeof( aGlyphIds ) );
             rtl_zeroMemory( pEncoding, sizeof( pEncoding ) );
             rtl_zeroMemory( pUnicodesPerGlyph, sizeof( pUnicodesPerGlyph ) );
             rtl_zeroMemory( pEncToUnicodeIndex, sizeof( pEncToUnicodeIndex ) );
@@ -4070,10 +4070,10 @@ bool PDFWriterImpl::emitFonts()
             {
                 sal_uInt8 nEnc = fit->second.getGlyphId();
 
-                DBG_ASSERT( pGlyphIDs[nEnc] == 0 && pEncoding[nEnc] == 0, "duplicate glyph" );
+                DBG_ASSERT( aGlyphIds[nEnc] == 0 && pEncoding[nEnc] == 0, "duplicate glyph" );
                 DBG_ASSERT( nEnc <= lit->m_aMapping.size(), "invalid glyph encoding" );
 
-                pGlyphIDs[ nEnc ] = fit->first;
+                aGlyphIds[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
                 pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aUnicodes.size());
                 pUnicodesPerGlyph[ nEnc ] = fit->second.countCodes();
@@ -4089,7 +4089,7 @@ bool PDFWriterImpl::emitFonts()
                 }
             }
             FontSubsetInfo aSubsetInfo;
-            if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, pGlyphIDs, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
+            if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
                 // create font stream
                 oslFileHandle aFontFile;
@@ -7575,11 +7575,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             sal_Int32 nWidth = 0, nAdvance=0;
             for( int nStart = 0;;)
             {
-                sal_GlyphId nGlyphIndex;
-                if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+                sal_GlyphId aGlyphId;
+                if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                     break;
 
-                if( !rLayout.IsSpacingGlyph( nGlyphIndex ) )
+                if( !rLayout.IsSpacingGlyph( aGlyphId ) )
                 {
                     if( !nWidth )
                         aStartPt = aPos;
@@ -7674,12 +7674,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         for( int nStart = 0;;)
         {
             Point aPos;
-            sal_GlyphId nGlyphIndex;
+            sal_GlyphId aGlyphId;
             sal_Int32 nAdvance;
-            if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+            if( !rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                 break;
 
-            if( !rLayout.IsSpacingGlyph( nGlyphIndex ) )
+            if( !rLayout.IsSpacingGlyph( aGlyphId ) )
             {
                 Point aAdjOffset = aOffset;
                 aAdjOffset.X() += (nAdvance - nEmphWidth) / 2;

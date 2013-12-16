@@ -603,7 +603,7 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     mbVertical = ((rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0);
 
     long nUnitsPerPixel = 1;
-    int nOldGlyphId = -1;
+    sal_GlyphId aOldGlyphId( GF_DROPPED);
     long nGlyphWidth = 0;
     int nCharPos = -1;
     Point aNewPos( 0, 0 );
@@ -622,7 +622,7 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( aFontEnc == RTL_TEXTENCODING_SYMBOL )
             if( cChar < 256 )
                 cChar += 0xf000;
-        int nGlyphIndex = cChar;  // printer glyphs = unicode
+        sal_GlyphId aGlyphId( cChar);  // printer glyphs = unicode
 
         // update fallback_runs if needed
         psp::CharacterMetric aMetric;
@@ -633,13 +633,13 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
-            if( nOldGlyphId > 0 )
+            if( aOldGlyphId > 0 )
             {
                 const std::list< KernPair >& rKernPairs = mrPrinterGfx.getKernPairs(mbVertical);
                 for( std::list< KernPair >::const_iterator it = rKernPairs.begin();
                      it != rKernPairs.end(); ++it )
                 {
-                    if( it->first == nOldGlyphId && it->second == nGlyphIndex )
+                    if( (it->first == aOldGlyphId) && (it->second == aGlyphId) )
                     {
                         int nTextScale = mrPrinterGfx.GetFontWidth();
                         if( ! nTextScale )
@@ -654,25 +654,25 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         // finish previous glyph
-        if( nOldGlyphId >= 0 )
+        if( aOldGlyphId != GF_DROPPED )
             AppendGlyph( aPrevItem );
-        nOldGlyphId = nGlyphIndex;
+        aOldGlyphId = aGlyphId;
         aNewPos.X() += nGlyphWidth;
 
         // prepare GlyphItem for appending it in next round
         nUnitsPerPixel = mrPrinterGfx.GetCharWidth( cChar, cChar, &nGlyphWidth );
         int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
-        nGlyphIndex |= GF_ISCHAR;
-        aPrevItem = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+        aGlyphId |= GF_ISCHAR;
+        aPrevItem = GlyphItem( nCharPos, aGlyphId, aNewPos, nGlyphFlags, nGlyphWidth );
     }
 
     // append last glyph item if any
-    if( nOldGlyphId >= 0 )
+    if( aOldGlyphId != GF_DROPPED )
         AppendGlyph( aPrevItem );
 
     SetOrientation( mrPrinterGfx.GetFontAngle() );
     SetUnitsPerPixel( nUnitsPerPixel );
-    return (nOldGlyphId >= 0);
+    return (aOldGlyphId != GF_DROPPED);
 }
 
 class PspServerFontLayout : public ServerFontLayout
@@ -721,7 +721,7 @@ void PspServerFontLayout::InitFont() const
 static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx, bool bIsPspServerFontLayout )
 {
     const int nMaxGlyphs = 200;
-    sal_uInt32 aGlyphAry[ nMaxGlyphs ]; // TODO: use sal_GlyphId
+    sal_GlyphId aGlyphAry[ nMaxGlyphs ];
     sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
@@ -769,15 +769,15 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
         {
             nXOffset += aWidthAry[ i ];
             aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
-            sal_Int32 nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
+            sal_GlyphId aGlyphId = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
             if( pText )
                 aUnicodes[i] = (aCharPosAry[i] >= nMinCharPos && aCharPosAry[i] <= nMaxCharPos) ? pText[ aCharPosAry[i] ] : 0;
             else
-                aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
-            aGlyphAry[i] = nGlyphIdx;
+                aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? aGlyphId : 0;
+            aGlyphAry[i] = aGlyphId;
         }
 
-        rGfx.DrawGlyphs( aPos, (sal_uInt32 *)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
+        rGfx.DrawGlyphs( aPos, aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
     }
 }
 
@@ -964,38 +964,36 @@ sal_uLong PspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPa
     return nHavePairs;
 }
 
-sal_Bool PspGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+bool PspGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
-    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return false;
 
     ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return false;
 
-    nGlyphIndex &= ~GF_FONTMASK;
-    const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
+    aGlyphId &= ~GF_FONTMASK;
+    const GlyphMetric& rGM = pSF->GetGlyphMetric( aGlyphId );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
-    return sal_True;
+    return true;
 }
 
-sal_Bool PspGraphics::GetGlyphOutline( long nGlyphIndex,
+bool PspGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return false;
 
     ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return false;
 
-    nGlyphIndex &= ~GF_FONTMASK;
-    if( pSF->GetGlyphOutline( nGlyphIndex, rB2DPolyPoly ) )
-        return sal_True;
-
-    return sal_False;
+    aGlyphId &= ~GF_FONTMASK;
+    bool bOK = pSF->GetGlyphOutline( aGlyphId, rB2DPolyPoly );
+    return bOK;
 }
 
 SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
@@ -1037,7 +1035,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 sal_Bool PspGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
                                    const ImplFontData* pFont,
-                                   sal_Int32* pGlyphIDs,
+                                   sal_GlyphId* pGlyphIds,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
                                    int nGlyphCount,
@@ -1055,7 +1053,7 @@ sal_Bool PspGraphics::CreateFontSubset(
     bool bSuccess = rMgr.createFontSubset( rInfo,
                                  aFont,
                                  rToFile,
-                                 pGlyphIDs,
+                                 pGlyphIds,
                                  pEncoding,
                                  pWidths,
                                  nGlyphCount );

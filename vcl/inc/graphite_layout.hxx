@@ -48,12 +48,6 @@
 #include <vcl/dllapi.h>
 // Module
 
-// For backwards compatibility with 2.4.x
-#if (SUPD == 680)
-typedef sal_Int32 sal_GlyphId;
-#endif
-
-
 // Module type definitions and forward declarations.
 //
 class TextSourceAdaptor;

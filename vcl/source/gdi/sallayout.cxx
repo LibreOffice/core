@@ -949,10 +949,10 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
 
 // -----------------------------------------------------------------------
 
-const ImplFontData* SalLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
+const ImplFontData* SalLayout::GetFallbackFontData( sal_GlyphId /*aGlyphId*/ ) const
 {
 #if 0
-    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT
+    int nFallbackLevel = (aGlyphId & GF_FONTMASK) >> GF_FONTSHIFT
     assert( nFallbackLevel == 0 );
 #endif
     return NULL;
@@ -1363,7 +1363,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         if( !pG1->IsRTLGlyph() )
             continue;
         // no kashida-injection for blank justified expansion either
-        if( IsSpacingGlyph( pG1->mnGlyphIndex ) )
+        if( IsSpacingGlyph( pG1->maGlyphId ) )
             continue;
 
         // calculate gap, ignore if too small
@@ -1391,7 +1391,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         if( !pG1->IsRTLGlyph() )
             continue;
         // no kashida-injection for blank justified expansion either
-        if( IsSpacingGlyph( pG1->mnGlyphIndex ) )
+        if( IsSpacingGlyph( pG1->maGlyphId ) )
             continue;
 
         // calculate gap, skip if too small
@@ -1513,12 +1513,12 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
     long nYPos = pG->maLinearPos.Y();
-    long nOldFlags = pG->mnGlyphIndex;
+    long nOldFlags = pG->maGlyphId;
     for(;;)
     {
         // update return data with glyph info
         ++nCount;
-        *(pGlyphs++) = pG->mnGlyphIndex;
+        *(pGlyphs++) = pG->maGlyphId;
         if( pCharPosAry )
             *(pCharPosAry++) = pG->mnCharPos;
         if( pGlyphAdvAry )
@@ -1557,10 +1557,10 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
             break;
 
         // stop when glyph flags change
-        if( (nOldFlags ^ pG->mnGlyphIndex) & GF_FLAGMASK )
+        if( (nOldFlags ^ pG->maGlyphId) & GF_FLAGMASK )
             break;
 
-        nOldFlags = pG->mnGlyphIndex; // &GF_FLAGMASK not needed for test above
+        nOldFlags = pG->maGlyphId; // &GF_FLAGMASK not needed for test above
     }
 
     aRelativePos.X() /= mnUnitsPerPixel;
@@ -1601,7 +1601,7 @@ void GenericSalLayout::DropGlyph( int nStart )
     if( nStart >= mnGlyphCount )
         return;
     GlyphItem* pG = mpGlyphItems + nStart;
-    pG->mnGlyphIndex = GF_DROPPED;
+    pG->maGlyphId = GF_DROPPED;
     pG->mnCharPos = -1;
 }
 
@@ -1617,7 +1617,7 @@ void GenericSalLayout::Simplify( bool bIsBase )
     const GlyphItem* pGEnd = mpGlyphItems + mnGlyphCount;
     for(; pGSrc < pGEnd; ++pGSrc )
     {
-        if( pGSrc->mnGlyphIndex == nDropMarker )
+        if( pGSrc->maGlyphId == nDropMarker )
             continue;
         if( pGDst != pGSrc )
             *pGDst = *pGSrc;
@@ -2097,9 +2097,9 @@ void MultiSalLayout::InitFont() const
 
 // -----------------------------------------------------------------------
 
-const ImplFontData* MultiSalLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
+const ImplFontData* MultiSalLayout::GetFallbackFontData( sal_GlyphId aGlyphId ) const
 {
-    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+    int nFallbackLevel = (aGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
     return mpFallbackFonts[ nFallbackLevel ];
 }
 

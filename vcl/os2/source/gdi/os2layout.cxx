@@ -507,7 +507,7 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-int Os2SalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int& nStart,
+int Os2SalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPos, int& nStart,
     sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
 {
     // return zero if no more glyph found
@@ -527,29 +527,29 @@ int Os2SalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, in
     int nCount = 0;
     while( nCount < nLen )
     {
-        // update return values {nGlyphIndex,nCharPos,nGlyphAdvance}
-        long nGlyphIndex = mpOutGlyphs[ nStart ];
+        // update return values {aGlyphId,nCharPos,nGlyphAdvance}
+        sal_GlyphId aGlyphId = mpOutGlyphs[ nStart ];
         if( mbDisableGlyphs )
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
             {
-                sal_Unicode cChar = (sal_Unicode)(nGlyphIndex & GF_IDXMASK);
+                sal_Unicode cChar = (sal_Unicode)(aGlyphId & GF_IDXMASK);
 #ifdef GNG_VERT_HACK
                 if( mrOs2FontData.HasGSUBstitutions( mhPS )
                 &&  mrOs2FontData.IsGSUBstituted( cChar ) )
-                    nGlyphIndex |= GF_ROTL | GF_GSUB;
+                    aGlyphId |= GF_ROTL | GF_GSUB;
                 else
 #endif // GNG_VERT_HACK
                 {
-                    nGlyphIndex |= GetVerticalFlags( cChar );
-                    if( !(nGlyphIndex & GF_ROTMASK) )
-                        nGlyphIndex |= GF_VERT;
+                    aGlyphId |= GetVerticalFlags( cChar );
+                    if( !(aGlyphId & GF_ROTMASK) )
+                        aGlyphId |= GF_VERT;
                 }
             }
-            nGlyphIndex |= GF_ISCHAR;
+            aGlyphId |= GF_ISCHAR;
         }
         ++nCount;
-        *(pGlyphs++) = nGlyphIndex;
+        *(pGlyphIds++) = aGlyphId;
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = mpGlyphAdvances[ nStart ];
         if( pCharIndexes )

@@ -3626,7 +3626,7 @@ bool PrintFontManager::createFontSubset(
                                         FontSubsetInfo& rInfo,
                                         fontID nFont,
                                         const OUString& rOutFile,
-                                        sal_Int32* pGlyphIDs,
+                                        sal_GlyphId* pGlyphIds,
                                         sal_uInt8* pNewEncoding,
                                         sal_Int32* pWidths,
                                         int nGlyphs,
@@ -3666,11 +3666,11 @@ bool PrintFontManager::createFontSubset(
         }
         else
         {
-            DBG_ASSERT( !(pGlyphIDs[i] & 0x007f0000), "overlong glyph id" );
+            DBG_ASSERT( !(pGlyphIds[i] & 0x007f0000), "overlong glyph id" );
             DBG_ASSERT( (int)pNewEncoding[i] < nGlyphs, "encoding wrong" );
             DBG_ASSERT( pEnc[pNewEncoding[i]] == 0 && pGID[pNewEncoding[i]] == 0, "duplicate encoded glyph" );
             pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
-            pGID[ pNewEncoding[i] ] = (sal_uInt16)pGlyphIDs[ i ];
+            pGID[ pNewEncoding[i] ] = (sal_uInt16)pGlyphIds[ i ];
             pOldIndex[ pNewEncoding[i] ] = i;
             nChar++;
         }
@@ -3700,9 +3700,9 @@ bool PrintFontManager::createFontSubset(
     {
         rInfo.LoadFont( FontSubsetInfo::CFF_FONT, pCffBytes, nCffLength );
 #if 1 // TODO: remove 16bit->long conversion when related methods handle non-16bit glyphids
-        long aRequestedGlyphs[256];
+        sal_GlyphId aRequestedGlyphIds[256];
         for( int i = 0; i < nGlyphs; ++i )
-            aRequestedGlyphs[i] = pGID[i];
+            aRequestedGlyphIds[i] = pGID[i];
 #endif
         // create subset file at requested path
         FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
@@ -3711,7 +3711,7 @@ bool PrintFontManager::createFontSubset(
         const bool bOK = rInfo.CreateFontSubset(
             FontSubsetInfo::TYPE1_PFB,
             pOutFile, pGlyphSetName,
-            aRequestedGlyphs, pEnc, nGlyphs, pWidths );
+            aRequestedGlyphIds, pEnc, nGlyphs, pWidths );
         fclose( pOutFile );
         // cleanup before early return
         CloseTTFont( pTTFont );
@@ -3820,9 +3820,9 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                             break;
 #endif
                         // get the matching glyph index
-                        const sal_uInt32 nGlyphId = aCharMap.GetGlyphIndex( c );
+                        const sal_GlyphId aGlyphId = aCharMap.GetGlyphIndex( c );
                         // update the requested map
-                        rUnicodeEnc[ (sal_Unicode)c ] = nGlyphId;
+                        rUnicodeEnc[ (sal_Unicode)c ] = aGlyphId;
                     }
                 }
             }

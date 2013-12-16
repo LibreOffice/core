@@ -251,7 +251,7 @@ public:
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData*,
-                                              sal_Int32* pGlyphIDs,
+                                              sal_GlyphId* pGlyphIds,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
@@ -268,8 +268,8 @@ public:
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
-    virtual sal_Bool            GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual bool            GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual bool            GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
     virtual bool            supportsOperation( OutDevSupportType ) const;

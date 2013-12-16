@@ -121,7 +121,7 @@ GlyphSet::GetCharID (
 
 sal_Bool
 GlyphSet::GetGlyphID (
-                      sal_uInt32 nGlyph,
+                      sal_GlyphId nGlyph,
                       sal_Unicode nUnicode,
                       sal_uChar* nOutGlyphID,
                       sal_Int32* nOutGlyphSetID
@@ -164,7 +164,7 @@ GlyphSet::LookupCharID (
 
 sal_Bool
 GlyphSet::LookupGlyphID (
-                        sal_uInt32 nGlyph,
+                        sal_GlyphId nGlyph,
                         sal_uChar* nOutGlyphID,
                         sal_Int32* nOutGlyphSetID
                         )
@@ -298,7 +298,7 @@ GlyphSet::AddCharID (
 
 sal_Bool
 GlyphSet::AddGlyphID (
-                     sal_uInt32 nGlyph,
+                     sal_GlyphId nGlyph,
                      sal_Unicode nUnicode,
                      sal_uChar* nOutGlyphID,
                      sal_Int32* nOutGlyphSetID
@@ -494,7 +494,7 @@ GlyphSet::GetReencodedFontName (sal_Int32 nGlyphSetID)
 void GlyphSet::DrawGlyphs(
                           PrinterGfx& rGfx,
                           const Point& rPoint,
-                          const sal_uInt32* pGlyphIds,
+                          const sal_GlyphId* pGlyphIds,
                           const sal_Unicode* pUnicodes,
                           sal_Int16 nLen,
                           const sal_Int32* pDeltaArray )
@@ -814,7 +814,7 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     std::stable_sort( aSorted.begin(), aSorted.end() );
 
     std::vector< sal_uChar > aEncoding( nGlyphCount );
-    std::vector< long > aRequestedGlyphs( nGlyphCount );
+    std::vector< sal_GlyphId> aRequestedGlyphs( nGlyphCount );
 
     for( int i = 0; i < nGlyphCount; i++ )
     {

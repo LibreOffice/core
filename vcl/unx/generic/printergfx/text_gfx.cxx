@@ -164,7 +164,7 @@ PrinterGfx::SetFallbackFont ( sal_Int32 nFontID )
 
 void PrinterGfx::drawGlyphs(
                             const Point& rPoint,
-                            sal_uInt32* pGlyphIds,
+                            sal_GlyphId* pGlyphIds,
                             sal_Unicode* pUnicodes,
                             sal_Int16 nLen,
                             sal_Int32* pDeltaArray
@@ -233,7 +233,7 @@ void PrinterGfx::DrawGlyphs(
         // vertical glyphs can have an additional rotation ... sigh.
         // so break up text in chunks of normal glyphs and print out
         // specially rotated glyphs extra
-        sal_uInt32* pTempGlyphIds = (sal_uInt32*)alloca(sizeof(sal_Int32)*nLen);
+        sal_GlyphId* pTempGlyphIds = (sal_GlyphId*)alloca(sizeof(sal_Int32)*nLen);
         sal_Int32* pTempDelta = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
         sal_Unicode* pTempUnicodes = (sal_Unicode*)alloca(sizeof(sal_Unicode)*nLen);
         sal_Int16 nTempLen = 0;

@@ -1852,7 +1852,7 @@ static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
     return eStatus;
 }
 
-sal_Bool AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rPolyPoly;
@@ -1860,7 +1860,7 @@ sal_Bool AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygo
 
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback when CWS pdffix02 is integrated
     OSStatus eGgoStatus = noErr;
-    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, nGlyphId,
+    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, aGlyphId,
         GgoMoveToProc, GgoLineToProc, GgoCurveToProc, GgoClosePathProc,
         &aGgoData, &eGgoStatus );
     if( (eStatus != noErr) ) // TODO: why is (eGgoStatus!=noErr) when curves are involved?
@@ -1894,13 +1894,13 @@ long AquaSalGraphics::GetGraphicsWidth() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
+bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
-    GlyphID aGlyphId = nGlyphId;
     ATSGlyphScreenMetrics aGlyphMetrics;
+    GlyphID nAtsGlyphId = aGlyphId;
     OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
-        1, &aGlyphId, 0, FALSE, !mbNonAntialiasedText, &aGlyphMetrics );
+        1, &nAtsGlyphId, 0, FALSE, !mbNonAntialiasedText, &aGlyphMetrics );
     if( eStatus != noErr )
         return false;
 
@@ -2248,7 +2248,7 @@ static bool GetRawFontData( const ImplFontData* pFontData,
 }
 
 sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
-    const ImplFontData* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
+    const ImplFontData* pFontData, sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // TODO: move more of the functionality here into the generic subsetter code
@@ -2278,7 +2278,7 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         // make the subsetter provide the requested subset
         FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
-            pGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
+            pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
         return bRC;
     }
@@ -2324,21 +2324,21 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     for( int i = 0; i < nGlyphCount; ++i )
     {
         aTempEncs[i] = pEncoding[i];
-        sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-        if( pGlyphIDs[i] & GF_ISCHAR )
+        sal_GlyphId aGlyphId( pGlyphIds[i] & GF_IDXMASK);
+        if( pGlyphIds[i] & GF_ISCHAR )
         {
-            bool bVertical = (pGlyphIDs[i] & GF_ROTMASK) != 0;
-            nGlyphIdx = ::MapChar( pSftFont, static_cast<sal_uInt16>(nGlyphIdx), bVertical );
-            if( nGlyphIdx == 0 && pFontData->IsSymbolFont() )
+            bool bVertical = (pGlyphIds[i] & GF_ROTMASK) != 0;
+            aGlyphId = ::MapChar( pSftFont, static_cast<sal_uInt16>(aGlyphId), bVertical );
+            if( aGlyphId == 0 && pFontData->IsSymbolFont() )
             {
                 // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
-                nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
-                nGlyphIdx = (nGlyphIdx & 0xF000) ? (nGlyphIdx & 0x00FF) : (nGlyphIdx | 0xF000 );
-                nGlyphIdx = ::MapChar( pSftFont, static_cast<sal_uInt16>(nGlyphIdx), bVertical );
+                aGlyphId = pGlyphIds[i] & GF_IDXMASK;
+                aGlyphId = (aGlyphId & 0xF000) ? (aGlyphId & 0x00FF) : (aGlyphId | 0xF000 );
+                aGlyphId = ::MapChar( pSftFont, static_cast<sal_uInt16>(aGlyphId), bVertical );
             }
         }
-        aShortIDs[i] = static_cast<sal_uInt16>( nGlyphIdx );
-        if( !nGlyphIdx )
+        aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
+        if( !aGlyphId )
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
     }

@@ -4165,12 +4165,12 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
         for( int nStart = 0;;)
         {
             // iterate through the layouted glyphs
-            sal_GlyphId nGlyphIndex;
-            if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
+            sal_GlyphId aGlyphId;
+            if( !rSalLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart, &nAdvance ) )
                 break;
 
             // calculate the boundaries of each word
-            if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
+            if( !rSalLayout.IsSpacingGlyph( aGlyphId ) )
             {
                 if( !nWidth )
                 {
@@ -4490,14 +4490,14 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        sal_GlyphId nGlyphIndex;
-        if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart ) )
+        sal_GlyphId aGlyphId;
+        if( !rSalLayout.GetNextGlyphs( 1, &aGlyphId, aOutPoint, nStart ) )
             break;
 
-        if( !mpGraphics->GetGlyphBoundRect( nGlyphIndex, aRectangle ) )
+        if( !mpGraphics->GetGlyphBoundRect( aGlyphId, aRectangle ) )
             continue;
 
-        if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
+        if( !rSalLayout.IsSpacingGlyph( aGlyphId ) )
         {
             Point aAdjPoint = aOffset;
             aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;

@@ -52,12 +52,12 @@ class SvpGlyphPeer
 public:
     SvpGlyphPeer() {}
 
-    BitmapDeviceSharedPtr GetGlyphBmp( ServerFont&, int nGlyphIndex,
+    BitmapDeviceSharedPtr GetGlyphBmp( ServerFont&, sal_GlyphId,
                             sal_uInt32 nBmpFormat, B2IPoint& rTargetPos );
 
 protected:
     virtual void    RemovingFont( ServerFont& );
-    virtual void    RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
+    virtual void    RemovingGlyph( ServerFont&, GlyphData&, sal_GlyphId );
 
     class SvpGcpHelper
     {
@@ -90,9 +90,9 @@ SvpGlyphCache& SvpGlyphCache::GetInstance()
 // ===========================================================================
 
 BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
-    int nGlyphIndex, sal_uInt32 nBmpFormat, B2IPoint& rTargetPos )
+    sal_GlyphId aGlyphId, sal_uInt32 nBmpFormat, B2IPoint& rTargetPos )
 {
-    GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
+    GlyphData& rGlyphData = rServerFont.GetGlyphData( aGlyphId );
     SvpGcpHelper* pGcpHelper = (SvpGcpHelper*)rGlyphData.ExtDataRef().mpData;
 
     // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
@@ -107,10 +107,10 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         switch( nBmpFormat )
         {
             case Format::ONE_BIT_LSB_GREY:
-                bFound = rServerFont.GetGlyphBitmap1( nGlyphIndex, pGcpHelper->maRawBitmap );
+                bFound = rServerFont.GetGlyphBitmap1( aGlyphId, pGcpHelper->maRawBitmap );
                 break;
             case Format::EIGHT_BIT_GREY:
-                bFound = rServerFont.GetGlyphBitmap8( nGlyphIndex, pGcpHelper->maRawBitmap );
+                bFound = rServerFont.GetGlyphBitmap8( aGlyphId, pGcpHelper->maRawBitmap );
                 break;
             default:
                 DBG_ERROR( "SVP GCP::GetGlyphBmp(): illegal scanline format");
@@ -121,7 +121,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         }
 
         // return .notdef glyph if needed
-        if( !bFound && (nGlyphIndex != 0) )
+        if( !bFound && (aGlyphId != 0) )
         {
             delete pGcpHelper;
             return GetGlyphBmp( rServerFont, 0, nBmpFormat, rTargetPos );
@@ -152,7 +152,7 @@ void SvpGlyphPeer::RemovingFont( ServerFont& )
 
 //--------------------------------------------------------------------------
 
-void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
+void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, sal_GlyphId /*aGlyphId*/ )
 {
     if( rGlyphData.ExtDataRef().mpData != Format::NONE )
     {
@@ -338,7 +338,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 sal_Bool SvpSalGraphics::CreateFontSubset(
     const rtl::OUString& rToFile,
     const ImplFontData* pFont,
-    sal_Int32* pGlyphIDs,
+    sal_GlyphId* pGlyphIds,
     sal_uInt8* pEncoding,
     sal_Int32* pWidths,
     int nGlyphCount,
@@ -356,7 +356,7 @@ sal_Bool SvpSalGraphics::CreateFontSubset(
     bool bSuccess = rMgr.createFontSubset( rInfo,
                                  aFont,
                                  rToFile,
-                                 pGlyphIDs,
+                                 pGlyphIds,
                                  pEncoding,
                                  pWidths,
                                  nGlyphCount );
@@ -418,39 +418,37 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
-    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return false;
 
     ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return false;
 
-    nGlyphIndex &= ~GF_FONTMASK;
-    const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
+    aGlyphId &= ~GF_FONTMASK;
+    const GlyphMetric& rGM = pSF->GetGlyphMetric( aGlyphId );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
-    return sal_True;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
+bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId, B2DPolyPolygon& rPolyPoly )
 {
-    int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+    const int nLevel = aGlyphId >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return sal_False;
+        return false;
 
     const ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return sal_False;
+        return false;
 
-    nGlyphIndex &= ~GF_FONTMASK;
-    if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
-        return sal_True;
-
-    return sal_False;
+    aGlyphId &= ~GF_FONTMASK;
+    bool bOK = pSF->GetGlyphOutline( aGlyphId, rPolyPoly );
+    return bOK;
 }
 
 // ---------------------------------------------------------------------------
@@ -471,21 +469,21 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
 {
     // iterate over all glyphs in the layout
     Point aPos;
-    sal_GlyphId nGlyphIndex;
+    sal_GlyphId aGlyphId;
     SvpGlyphPeer& rGlyphPeer = SvpGlyphCache::GetInstance().GetPeer();
-    for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ); )
+    for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
     {
-        int nLevel = nGlyphIndex >> GF_FONTSHIFT;
+        int nLevel = aGlyphId >> GF_FONTSHIFT;
         DBG_ASSERT( nLevel < MAX_FALLBACK, "SvpGDI: invalid glyph fallback level" );
         ServerFont* pSF = m_pServerFont[ nLevel ];
         if( !pSF )
             continue;
 
         // get the glyph's alpha mask and adjust the drawing position
-        nGlyphIndex &= ~GF_FONTMASK;
+        aGlyphId &= ~GF_FONTMASK;
         B2IPoint aDstPoint( aPos.X(), aPos.Y() );
         BitmapDeviceSharedPtr aAlphaMask
-            = rGlyphPeer.GetGlyphBmp( *pSF, nGlyphIndex, m_eTextFmt, aDstPoint );
+            = rGlyphPeer.GetGlyphBmp( *pSF, aGlyphId, m_eTextFmt, aDstPoint );
         if( !aAlphaMask )   // ignore empty glyphs
             continue;
 

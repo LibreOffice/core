@@ -32,6 +32,8 @@ struct _XTrap; // on some older systems this is not declared within Xrender.h
 #include <vcl/salgtype.hxx>
 #include <osl/module.h>
 
+typedef Glyph XRenderGlyph;
+
 class XRenderPeer
 {
 public:
@@ -70,9 +72,9 @@ public:
 
     GlyphSet    CreateGlyphSet() const;
     void        FreeGlyphSet( GlyphSet ) const;
-    void        AddGlyph( GlyphSet, Glyph nGlyphId, const XGlyphInfo&,
+    void        AddGlyph( GlyphSet, XRenderGlyph nXRGlyph, const XGlyphInfo&,
                     const char* pBuffer, int nBufSize ) const;
-    void        FreeGlyph( GlyphSet, Glyph nGlyphId ) const;
+    void        FreeGlyph( GlyphSet, XRenderGlyph nXRGlyphId ) const;
     void        CompositeString32( Picture aSrc, Picture aDst, GlyphSet,
                     int nDstX, int nDstY, const unsigned* pText, int nTextLen ) const;
     void        FillRectangle( int nOp, Picture aDst, const XRenderColor*,
@@ -253,21 +255,21 @@ inline void XRenderPeer::FreeGlyphSet( GlyphSet aGS ) const
 #endif
 }
 
-inline void XRenderPeer::AddGlyph( GlyphSet aGS, Glyph nGlyphId,
+inline void XRenderPeer::AddGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph,
     const XGlyphInfo& rGI, const char* pBuffer, int nBufSize ) const
 {
 #ifdef XRENDER_LINK
-    XRenderAddGlyphs( mpDisplay, aGS, &nGlyphId, &rGI, 1,
+    XRenderAddGlyphs( mpDisplay, aGS, &nXRGlyph, &rGI, 1,
                       const_cast<char*>(pBuffer), nBufSize );
 #else
-    (*mpXRenderAddGlyphs)( mpDisplay, aGS, &nGlyphId, &rGI, 1,
+    (*mpXRenderAddGlyphs)( mpDisplay, aGS, &nXRGlyph, &rGI, 1,
         const_cast<char*>(pBuffer), nBufSize );
 #endif
 }
 
-inline void XRenderPeer::FreeGlyph( GlyphSet aGS, Glyph nGlyphId ) const
+inline void XRenderPeer::FreeGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph ) const
 {
-    (void)aGS; (void)nGlyphId;
+    (void)aGS; (void)nXRGlyph;
 
     // XRenderFreeGlyphs not implemented yet for version<=0.2
     // #108209# disabled because of crash potential,
@@ -277,9 +279,9 @@ inline void XRenderPeer::FreeGlyph( GlyphSet aGS, Glyph nGlyphId ) const
     if( mnRenderVersion >= 0x05 )
     {
 #ifdef XRENDER_LINK
-        XRenderFreeGlyphs( mpDisplay, aGS, &nGlyphId, 1 );
+        XRenderFreeGlyphs( mpDisplay, aGS, &nXRGlyph, 1 );
 #else
-        (*mpXRenderFreeGlyphs)( mpDisplay, aGS, &nGlyphId, 1 );
+        (*mpXRenderFreeGlyphs)( mpDisplay, aGS, &nXRGlyph, 1 );
 #endif
     }
 #endif

@@ -1080,13 +1080,13 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 // -----------------------------------------------------------------------
 
-static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyphIndex, int& nGlyphFlags )
+static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, sal_GlyphId& rGlyphId, int& nGlyphFlags )
 {
-    nGlyphFlags = nGlyphIndex & GF_FLAGMASK;
-    nGlyphIndex &= GF_IDXMASK;
+    nGlyphFlags = rGlyphId & GF_FLAGMASK;
+    rGlyphId &= GF_IDXMASK;
 
-    if( nGlyphIndex & GF_ISCHAR )
-        nGlyphIndex = rFont.GetRawGlyphIndex( nGlyphIndex );
+    if( rGlyphId & GF_ISCHAR )
+        rGlyphId = rFont.GetRawGlyphIndex( rGlyphId );
 }
 
 // -----------------------------------------------------------------------
@@ -1174,7 +1174,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
+sal_GlyphId FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
 {
     if( mpFontInfo->IsSymbolFont() )
     {
@@ -1232,12 +1232,12 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
         mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
 
-    return nGlyphIndex;
+    return sal_GlyphId( nGlyphIndex);
 }
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
+sal_GlyphId FreetypeServerFont::FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 aChar ) const
 {
     int nGlyphFlags = GF_NONE;
 
@@ -1246,21 +1246,21 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
     if( GetFontSelData().mbVertical )
     {
         // TODO: rethink when GSUB is used for non-vertical case
-        GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
+        GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( aGlyphId );
         if( it == maGlyphSubstitution.end() )
         {
-            int nTemp = GetVerticalChar( aChar );
+            sal_GlyphId nTemp = GetVerticalChar( aChar );
             if( nTemp ) // is substitution possible
                 nTemp = GetRawGlyphIndex( nTemp );
             if( nTemp ) // substitute manually if sensible
-                nGlyphIndex = nTemp | (GF_GSUB | GF_ROTL);
+                aGlyphId = nTemp | (GF_GSUB | GF_ROTL);
             else
                 nGlyphFlags |= GetVerticalFlags( aChar );
         }
         else
         {
             // for vertical GSUB also compensate for nOrientation=2700
-            nGlyphIndex = (*it).second;
+            aGlyphId = (*it).second;
             nGlyphFlags |= GF_GSUB | GF_ROTL;
         }
     }
@@ -1276,20 +1276,20 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
     }
 #endif
 
-    if( nGlyphIndex != 0 )
-        nGlyphIndex |= nGlyphFlags;
+    if( aGlyphId != 0 )
+        aGlyphId |= nGlyphFlags;
 
-    return nGlyphIndex;
+    return aGlyphId;
 }
 
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetGlyphIndex( sal_UCS4 aChar ) const
+sal_GlyphId FreetypeServerFont::GetGlyphIndex( sal_UCS4 aChar ) const
 {
-    int nGlyphIndex = GetRawGlyphIndex( aChar );
-    nGlyphIndex = FixupGlyphIndex( nGlyphIndex, aChar );
-    return nGlyphIndex;
+    sal_GlyphId aGlyphId = GetRawGlyphIndex( aChar );
+    aGlyphId = FixupGlyphIndex( aGlyphId, aChar );
+    return aGlyphId;
 }
 
 // -----------------------------------------------------------------------
@@ -1313,13 +1313,13 @@ static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFl
 
 // -----------------------------------------------------------------------
 
-void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
+void FreetypeServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
 
     int nGlyphFlags;
-    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, aGlyphId, nGlyphFlags );
 
     int nLoadFlags = mnLoadFlags;
 
@@ -1332,7 +1332,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
+        rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags|FT_LOAD_NO_HINTING );
         if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=FT_GLYPH_FORMAT_BITMAP) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
@@ -1340,7 +1340,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
     if( rc != FT_Err_Ok )
 #endif
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+        rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
 
     if( rc != FT_Err_Ok )
     {
@@ -1393,13 +1393,13 @@ bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
+bool FreetypeServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
 
     int nGlyphFlags;
-    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, aGlyphId, nGlyphFlags );
 
     FT_Int nLoadFlags = mnLoadFlags;
     // #i70930# force mono-hinting for monochrome text
@@ -1428,7 +1428,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
+        rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags|FT_LOAD_NO_HINTING );
         if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format != FT_GLYPH_FORMAT_BITMAP) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
@@ -1436,7 +1436,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( rc != FT_Err_Ok )
 #endif
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+        rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
 
@@ -1567,13 +1567,13 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
+bool FreetypeServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
 
     int nGlyphFlags;
-    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, aGlyphId, nGlyphFlags );
 
     FT_Int nLoadFlags = mnLoadFlags;
 
@@ -1597,7 +1597,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
+        rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags|FT_LOAD_NO_HINTING );
         if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format != FT_GLYPH_FORMAT_BITMAP) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
         nLoadFlags |= FT_LOAD_NO_BITMAP;
@@ -1605,7 +1605,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( rc != FT_Err_Ok )
 #endif
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+        rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
 
     if( rc != FT_Err_Ok )
         return false;
@@ -2273,7 +2273,7 @@ static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3,
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
+bool FreetypeServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
 {
     if( maSizeFT )
@@ -2282,7 +2282,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     rB2DPolyPoly.clear();
 
     int nGlyphFlags;
-    SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
+    SplitGlyphFlags( *this, aGlyphId, nGlyphFlags );
 
     FT_Int nLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
@@ -2292,7 +2292,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
         nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
 

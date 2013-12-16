@@ -32,6 +32,7 @@
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
+#include "salglyphid.hxx"
 
 #include "com/sun/star/lang/Locale.hpp"
 
@@ -643,7 +644,7 @@ public:
     bool createFontSubset( FontSubsetInfo&,
                            fontID nFont,
                            const rtl::OUString& rOutFile,
-                           sal_Int32* pGlyphIDs,
+                           sal_GlyphId* pGlyphIds,
                            sal_uInt8* pNewEncoding,
                            sal_Int32* pWidths,
                            int nGlyphs,

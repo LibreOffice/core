@@ -38,6 +38,7 @@ typedef unsigned short LanguageType;
 
 // for typedef sal_UCS4
 #include <vcl/vclenum.hxx>
+#include "salglyphid.hxx"
 
 class SalGraphics;
 class ImplFontData;
@@ -145,28 +146,6 @@ VCL_PLUGIN_PUBLIC const char* GetAutofallback( sal_UCS4 ) ;
 // -------------
 // - SalLayout -
 // -------------
-
-typedef sal_uInt32 sal_GlyphId;
-
-// Glyph Flags
-#define GF_NONE     0x00000000
-#define GF_FLAGMASK 0xFF800000
-#define GF_IDXMASK  ~GF_FLAGMASK
-#define GF_ISCHAR   0x00800000
-#define GF_ROTL     0x01000000
-// caution !!!
-#define GF_VERT     0x02000000
-// GF_VERT is only for windows implementation
-// (win/source/gdi/salgdi3.cxx, win/source/gdi/winlayout.cxx)
-// don't use this elsewhere !!!
-#define GF_ROTR     0x03000000
-#define GF_ROTMASK  0x03000000
-#define GF_UNHINTED 0x04000000
-#define GF_GSUB     0x08000000
-#define GF_FONTMASK 0xF0000000
-#define GF_FONTSHIFT 28
-
-#define GF_DROPPED  0xFFFFFFFF
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
@@ -306,17 +285,17 @@ struct GlyphItem
     int     mnCharPos;      // index in string
     int     mnOrigWidth;    // original glyph width
     int     mnNewWidth;     // width after adjustments
-    sal_GlyphId mnGlyphIndex;
+    sal_GlyphId maGlyphId;
     Point   maLinearPos;    // absolute position of non rotated string
 
 public:
             GlyphItem() {}
 
-            GlyphItem( int nCharPos, sal_GlyphId nGlyphIndex, const Point& rLinearPos,
+            GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
-                mnGlyphIndex(nGlyphIndex), maLinearPos(rLinearPos)
+                maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
     enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };

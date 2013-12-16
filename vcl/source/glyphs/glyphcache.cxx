@@ -384,9 +384,9 @@ void GlyphCache::GrowNotify()
 
 // -----------------------------------------------------------------------
 
-inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGlyphIndex )
+inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, sal_GlyphId aGlyphId )
 {
-    mrPeer.RemovingGlyph( rSF, rGD, nGlyphIndex );
+    mrPeer.RemovingGlyph( rSF, rGD, aGlyphId );
     mnBytesUsed -= sizeof( GlyphData );
     --mnGlyphCount;
 }
@@ -451,10 +451,10 @@ long ServerFont::Release() const
 
 // -----------------------------------------------------------------------
 
-GlyphData& ServerFont::GetGlyphData( int nGlyphIndex )
+GlyphData& ServerFont::GetGlyphData( sal_GlyphId aGlyphId )
 {
     // usually the GlyphData is cached
-    GlyphList::iterator it = maGlyphList.find( nGlyphIndex );
+    GlyphList::iterator it = maGlyphList.find( aGlyphId );
     if( it != maGlyphList.end() ) {
         GlyphData& rGlyphData = it->second;
         GlyphCache::GetInstance().UsingGlyph( *this, rGlyphData );
@@ -462,9 +462,9 @@ GlyphData& ServerFont::GetGlyphData( int nGlyphIndex )
     }
 
     // sometimes not => we need to create and initialize it ourselves
-    GlyphData& rGlyphData = maGlyphList[ nGlyphIndex ];
+    GlyphData& rGlyphData = maGlyphList[ aGlyphId ];
     mnBytesUsed += sizeof( GlyphData );
-    InitGlyphData( nGlyphIndex, rGlyphData );
+    InitGlyphData( aGlyphId, rGlyphData );
     GlyphCache::GetInstance().AddedGlyph( *this, rGlyphData );
     return rGlyphData;
 }
@@ -503,7 +503,7 @@ Point ServerFont::TransformPoint( const Point& rPoint ) const
     return Point( nX, nY );
 }
 
-bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
+bool ServerFont::IsGlyphInvisible( sal_GlyphId aGlyphId )
 {
     if (!mbCollectedZW)
     {
@@ -512,9 +512,9 @@ bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
         mbCollectedZW = true;
     }
 
-    if( !nGlyphIndex ) // don't hide the NotDef glyph
+    if( !aGlyphId ) // don't hide the NotDef glyph
         return false;
-    if( (nGlyphIndex == mnZWNJ) || (nGlyphIndex == mnZWJ) )
+    if( (aGlyphId == mnZWNJ) || (aGlyphId == mnZWJ) )
         return true;
 
     return false;

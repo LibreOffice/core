@@ -29,6 +29,7 @@
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 #include "vcl/salgtype.hxx"
+#include "salglyphid.hxx"
 #include "vos/thread.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salnativewidgets.hxx"
@@ -264,7 +265,7 @@ public:
     // as "undefined character"
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData* pFont,
-                                              sal_Int32* pGlyphIDs,
+                                              sal_GlyphId* pGlyphIds,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
@@ -306,8 +307,8 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& ) = 0;
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& ) = 0;
+    virtual bool                    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) = 0;
+    virtual bool                    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) = 0;
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
     virtual void                     DrawServerFontLayout( const ServerFontLayout& ) = 0;
