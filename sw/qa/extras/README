@@ -32,6 +32,21 @@ once after the initial import -- so you can see if the export fails due to an
 import problem in fact -- and once after the export and import.  The test
 method should still assert the document model only, as discussed above.
 
+=== Direct XPath assertions
+
+An other alternative is to assert the resulted export document directly.
+Currently this is only implemented for DOCX, which is a zipped XML, so it's
+possible to evaluate XPath checks. A check looks like this:
+
+xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+if (!pXmlDoc)
+    return;
+assertXPath(pXmlDoc, <xpath selecting the node>, <attribute>, <value>);
+
+It's important to check for the NULL pointer here, it's expected that it'll be
+NULL when the test runs first (after the first import), as there is nothing
+exported yet.
+
 == Helper methods
 
 When two or more tests do the same (for example determine the number of
@@ -51,6 +66,9 @@ Figuring out the UNO API just by reading the idl files under `offapi/` is not
 that productive. Xray can help in this case. Download it from:
 
 http://bernard.marcelly.perso.sfr.fr/index2.html
+
+(Mirror in case a new version behaves in a strange way:
+http://people.freedesktop.org/~vmiklos/2013/XrayTool52_en.sxw)
 
 It's an SXW file, start Writer, Tools -> Options -> LibreOffice -> Security,
 Macro Security, and there choose Low. Then open the SXW, and click `Install
