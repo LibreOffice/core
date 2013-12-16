@@ -23,6 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 
 //-------------------------------------------------------------------------
 namespace svtools {
@@ -34,21 +35,17 @@ namespace svtools {
 class QueryFolderNameDialog : public ModalDialog
 {
 private:
-    FixedText       aNameText;
-    Edit            aNameEdit;
-    FixedLine       aNameLine;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
+    Edit*     m_pNameEdit;
+    VclFrame* m_pNameLine;
+    OKButton* m_pOKBtn;
 
     DECL_LINK( OKHdl, void * );
     DECL_LINK( NameHdl, void * );
 
 public:
-                    QueryFolderNameDialog(  Window* _pParent,
-                                            const OUString& rTitle,
-                                            const OUString& rDefaultText,
-                                            OUString* pGroupName = NULL );
-    OUString        GetName() const { return aNameEdit.GetText(); }
+    QueryFolderNameDialog(Window* _pParent, const OUString& rTitle,
+        const OUString& rDefaultText, OUString* pGroupName = NULL);
+    OUString GetName() const { return m_pNameEdit->GetText(); }
 };
 
 }

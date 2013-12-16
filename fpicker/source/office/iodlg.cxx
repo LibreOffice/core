@@ -3336,37 +3336,29 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
 
 namespace svtools {
 
-QueryFolderNameDialog::QueryFolderNameDialog
-(
-    Window* _pParent,
-    const OUString& rTitle,
-    const OUString& rDefaultText,
-    OUString* pGroupName
-) :
-    ModalDialog( _pParent, SvtResId( DLG_FPICKER_QUERYFOLDERNAME ) ),
-
-    aNameText   ( this, SvtResId( FT_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
-    aNameEdit   ( this, SvtResId( ED_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
-    aNameLine   ( this, SvtResId( FL_SVT_QUERYFOLDERNAME_DLG_NAME ) ),
-    aOKBtn      ( this, SvtResId( BT_SVT_QUERYFOLDERNAME_DLG_OK ) ),
-    aCancelBtn  ( this, SvtResId( BT_SVT_QUERYFOLDERNAME_DLG_CANCEL ) )
+QueryFolderNameDialog::QueryFolderNameDialog(Window* _pParent,
+    const OUString& rTitle, const OUString& rDefaultText, OUString* pGroupName)
+    : ModalDialog(_pParent, "FolderNameDialog", "fps/ui/foldernamedialog.ui")
 {
-    FreeResource();
-    SetText( rTitle );
-    aNameEdit.SetText( rDefaultText );
-    aNameEdit.SetSelection( Selection( 0, rDefaultText.getLength() ) );
-    aOKBtn.SetClickHdl( LINK( this, QueryFolderNameDialog, OKHdl ) );
-    aNameEdit.SetModifyHdl( LINK( this, QueryFolderNameDialog, NameHdl ) );
+    get(m_pNameEdit, "entry");
+    get(m_pNameLine, "frame");
+    get(m_pOKBtn, "ok");
 
-    if ( pGroupName )
-        aNameLine.SetText( *pGroupName );
+    SetText( rTitle );
+    m_pNameEdit->SetText( rDefaultText );
+    m_pNameEdit->SetSelection( Selection( 0, rDefaultText.getLength() ) );
+    m_pOKBtn->SetClickHdl( LINK( this, QueryFolderNameDialog, OKHdl ) );
+    m_pNameEdit->SetModifyHdl( LINK( this, QueryFolderNameDialog, NameHdl ) );
+
+    if (pGroupName)
+        m_pNameLine->set_label( *pGroupName );
 };
 
 // -----------------------------------------------------------------------
 IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 {
     // trim the strings
-    aNameEdit.SetText(comphelper::string::strip(aNameEdit.GetText(), ' '));
+    m_pNameEdit->SetText(comphelper::string::strip(m_pNameEdit->GetText(), ' '));
     EndDialog( RET_OK );
     return 1;
 }
@@ -3375,16 +3367,16 @@ IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
 {
     // trim the strings
-    OUString aName = comphelper::string::strip(aNameEdit.GetText(), ' ');
+    OUString aName = comphelper::string::strip(m_pNameEdit->GetText(), ' ');
     if ( !aName.isEmpty() )
     {
-        if ( !aOKBtn.IsEnabled() )
-            aOKBtn.Enable( sal_True );
+        if ( !m_pOKBtn->IsEnabled() )
+            m_pOKBtn->Enable( sal_True );
     }
     else
     {
-        if ( aOKBtn.IsEnabled() )
-            aOKBtn.Enable( sal_False );
+        if ( m_pOKBtn->IsEnabled() )
+            m_pOKBtn->Enable( sal_False );
     }
 
     return 0;

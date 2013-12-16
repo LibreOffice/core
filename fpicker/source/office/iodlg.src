@@ -240,51 +240,6 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
     };
 };
 
-// QueryFolderNameDialog ----------------------------------------------------------
-
-ModalDialog DLG_FPICKER_QUERYFOLDERNAME
-{
-    HelpID = "fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME";
-    Border = TRUE ;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text = "Ordner" ;
-    Size = MAP_APPFONT ( 215 , 45 ) ;
-    FixedText FT_SVT_QUERYFOLDERNAME_DLG_NAME
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 138 , 10 ) ;
-        Text [ en-US ] = "Na~me" ;
-    };
-    Edit ED_SVT_QUERYFOLDERNAME_DLG_NAME
-    {
-        HelpID = "fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME";
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 138 , 12 ) ;
-        Border = TRUE ;
-        Left = TRUE ;
-    };
-    FixedLine FL_SVT_QUERYFOLDERNAME_DLG_NAME
-    {
-        Group = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ en-US ] = "Create new folder" ;
-    };
-    OKButton BT_SVT_QUERYFOLDERNAME_DLG_OK
-    {
-        Pos = MAP_APPFONT ( 162 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_SVT_QUERYFOLDERNAME_DLG_CANCEL
-    {
-        Pos = MAP_APPFONT ( 162 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
-
 // strings *******************************************************************
 
 String RID_FILEOPEN_NOTEXISTENTFILE

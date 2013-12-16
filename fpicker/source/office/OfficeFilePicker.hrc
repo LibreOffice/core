@@ -12,7 +12,7 @@
 #include <vcl/fpicker.hrc>
 
 #define DLG_FPICKER_EXPLORERFILE                    (RID_FPICKER_START+14)
-#define DLG_FPICKER_QUERYFOLDERNAME                 (RID_FPICKER_START+15)
+
 #define DLG_FPICKER_PLACE_EDIT                      (RID_FPICKER_START+16)
 
 #define RID_FILEPICKER_IMAGES                       (RID_FPICKER_START+17)

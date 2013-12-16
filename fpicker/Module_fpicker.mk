@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,fpicker))
 
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_office \
+	UIConfig_fps \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,fpicker,\
