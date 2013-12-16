@@ -726,29 +726,16 @@ Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServi
     return FontworkCharacterSpacingControl_getSupportedServiceNames();
 }
 
-// ========================================================================
-// FontworkCharacterSpacingDialog
-// ========================================================================
-
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale )
-:   ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_CHARSPACING ) ),
-    maFLScale( this, SVX_RES( FT_VALUE ) ),
-    maMtrScale( this, SVX_RES( MF_VALUE ) ),
-    maOKButton( this, SVX_RES( BTN_OK ) ),
-    maCancelButton( this, SVX_RES( BTN_CANCEL ) ),
-    maHelpButton( this, SVX_RES( BTN_HELP ) )
+:   ModalDialog( pParent, "FontworkSpacingDialog" , "svx/ui/fontworkspacingdialog.ui" )
 {
-    maMtrScale.SetValue( nScale );
-    FreeResource();
-}
-
-FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
-{
+    get(m_pMtrScale, "entry");
+    m_pMtrScale->SetValue( nScale );
 }
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {
-    return (sal_Int32)maMtrScale.GetValue();
+    return (sal_Int32)m_pMtrScale->GetValue();
 }
 
 }

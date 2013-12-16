@@ -22,8 +22,6 @@
 #define CTL_FAVORITES   2
 #define BTN_OK          3
 #define BTN_CANCEL      4
-#define MF_VALUE        7
-#define FT_VALUE        8
 #define BTN_HELP        9
 
 #define STR_CLICK_TO_ADD_TEXT   1

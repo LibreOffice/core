@@ -66,15 +66,10 @@ public:
 
 class FontworkCharacterSpacingDialog : public ModalDialog
 {
-    FixedText           maFLScale;
-    MetricField         maMtrScale;
-    OKButton            maOKButton;
-    CancelButton        maCancelButton;
-    HelpButton          maHelpButton;
+    MetricField* m_pMtrScale;
 
 public:
     FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale );
-    ~FontworkCharacterSpacingDialog();
 
     sal_Int32 getScale() const;
 };

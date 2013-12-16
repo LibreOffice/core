@@ -19,8 +19,9 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/deleteheaderdialog \
 	svx/uiconfig/ui/deletefooterdialog \
 	svx/uiconfig/ui/extrustiondepthdialog \
-	svx/uiconfig/ui/headfootformatpage \
 	svx/uiconfig/ui/findreplacedialog \
+	svx/uiconfig/ui/fontworkspacingdialog \
+	svx/uiconfig/ui/headfootformatpage \
 	svx/uiconfig/ui/linkwarndialog \
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/passwd \
