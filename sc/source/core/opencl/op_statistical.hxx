@@ -460,6 +460,15 @@ class OpBetainv:public Normal{
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
     virtual std::string BinFuncName(void) const { return "OpBetainv"; }
 };
+class OpMinA: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "OpMinA"; }
+    virtual bool takeString() const { return true; }
+    virtual bool takeNumeric() const { return true; }
+};
 }}
 
 #endif

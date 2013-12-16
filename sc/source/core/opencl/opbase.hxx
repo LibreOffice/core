@@ -154,6 +154,14 @@ public:
     /// When referenced in a sliding window function
     virtual std::string GenSlidingWindowDeclRef(bool=false) const = 0;
 
+    /// When Mix, it will be called
+    virtual std::string GenDoubleSlidingWindowDeclRef(bool=false) const
+    { return std::string(""); }
+
+    /// When Mix, it will be called
+    virtual std::string GenStringSlidingWindowDeclRef(bool=false) const
+    { return std::string(""); }
+
     /// Generate use/references to the argument
     virtual void GenDeclRef(std::stringstream &ss) const;
 

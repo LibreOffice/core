@@ -434,6 +434,18 @@ public:
         ss << ")";
         return ss.str();
     }
+    virtual std::string GenDoubleSlidingWindowDeclRef(bool=false) const
+    {
+        std::stringstream ss;
+        ss << VectorRef::GenSlidingWindowDeclRef();
+        return ss.str();
+    }
+    virtual std::string GenStringSlidingWindowDeclRef(bool=false) const
+    {
+        std::stringstream ss;
+        ss << mStringArgument.GenSlidingWindowDeclRef();
+        return ss.str();
+    }
     virtual size_t Marshal(cl_kernel k, int argno, int vw, cl_program p)
     {
         int i = VectorRef::Marshal(k, argno, vw, p);
@@ -668,6 +680,68 @@ protected:
     boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
     // controls whether to invoke the reduction kernel during marshaling or not
     cl_mem mpClmem2;
+};
+
+/// A mixed string/numberic vector
+class DynamicKernelMixedSlidingArgument : public VectorRef
+{
+public:
+    DynamicKernelMixedSlidingArgument(const std::string &s,
+        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase> &CodeGen,
+        int index = 0):
+        VectorRef(s, ft),
+        mDoubleArgument(s, ft, CodeGen, index),
+        mStringArgument(s+"s", ft, CodeGen, index) {}
+    virtual void GenSlidingWindowDecl(std::stringstream& ss) const
+    {
+        mDoubleArgument.GenSlidingWindowDecl(ss);
+        ss << ", ";
+        mStringArgument.GenSlidingWindowDecl(ss);
+    }
+    virtual void GenSlidingWindowFunction(std::stringstream &) {}
+    /// Generate declaration
+    virtual void GenDecl(std::stringstream &ss) const
+    {
+        mDoubleArgument.GenDecl(ss);
+        ss << ", ";
+        mStringArgument.GenDecl(ss);
+    }
+    virtual void GenDeclRef(std::stringstream &ss) const
+    {
+        mDoubleArgument.GenDeclRef(ss);
+        ss << ",";
+        mStringArgument.GenDeclRef(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef(bool) const
+    {
+        std::stringstream ss;
+        ss << "(!isNan(" << mDoubleArgument.GenSlidingWindowDeclRef();
+        ss << ")?" << mDoubleArgument.GenSlidingWindowDeclRef();
+        ss << ":" << mStringArgument.GenSlidingWindowDeclRef();
+        ss << ")";
+        return ss.str();
+    }
+    virtual std::string GenDoubleSlidingWindowDeclRef(bool=false) const
+    {
+        std::stringstream ss;
+        ss << mDoubleArgument.GenSlidingWindowDeclRef();
+        return ss.str();
+    }
+    virtual std::string GenStringSlidingWindowDeclRef(bool=false) const
+    {
+        std::stringstream ss;
+        ss << mStringArgument.GenSlidingWindowDeclRef();
+        return ss.str();
+    }
+    virtual size_t Marshal(cl_kernel k, int argno, int vw, cl_program p)
+    {
+        int i = mDoubleArgument.Marshal(k, argno, vw, p);
+        i += mStringArgument.Marshal(k, argno + i, vw, p);
+        return i;
+    }
+protected:
+    DynamicKernelSlidingArgument<VectorRef> mDoubleArgument;
+    DynamicKernelSlidingArgument<DynamicKernelStringArgument> mStringArgument;
 };
 
 /// Handling a Double Vector that is used as a sliding window input
@@ -1772,9 +1846,24 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                         if (pDVR->GetArrays()[j].mpNumericArray ||
                             (pDVR->GetArrays()[j].mpNumericArray == NULL &&
                             pDVR->GetArrays()[j].mpStringArray == NULL ))
-                            mvSubArguments.push_back(
+                        {
+                            if(pDVR->GetArrays()[j].mpNumericArray &&
+                                pCodeGen->takeNumeric() &&
+                                pDVR->GetArrays()[j].mpStringArray &&
+                                pCodeGen->takeString())
+                            {
+                                mvSubArguments.push_back(
+                                    SubArgument(
+                                    new DynamicKernelMixedSlidingArgument(
+                                    ts, ft->Children[i], mpCodeGen, j)));
+                            }
+                            else
+                            {
+                                mvSubArguments.push_back(
                                     SubArgument(VectorRefFactory<VectorRef>(
-                                            ts, ft->Children[i], mpCodeGen, j)));
+                                    ts, ft->Children[i], mpCodeGen, j)));
+                            }
+                        }
                         else
                             mvSubArguments.push_back(
                                     SubArgument(VectorRefFactory
@@ -2455,6 +2544,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocFact:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpFact));
+                 break;
+            case ocMinA:
+                mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i], new OpMinA));
                  break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
