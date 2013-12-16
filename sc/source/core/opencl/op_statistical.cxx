@@ -10826,6 +10826,428 @@ void OpStDevA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return sqrt(vSum * pow(fCount - 1.0,-1.0));\n";
     ss << "}\n";
 }
+void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    int isMixedDV = 0;
+    int isMixedSV = 0;
+    ss << "\ndouble " << sSymName;
+    ss << "_" << BinFuncName() << "(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << "){\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double fSum = 0.0;\n";
+    ss << "    double fMean = 0.0;\n";
+    ss << "    double vSum = 0.0;\n";
+    ss << "    double fCount = 0.0;\n";
+    ss << "    double arg = 0.0;\n";
+    unsigned i = vSubArguments.size();
+    while (i--)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+
+        if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            if (pCur->GetType() == formula::svDoubleVectorRef)
+            {
+                const formula::DoubleVectorRefToken* pDVR =
+                    dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+                if(pDVR->GetArrays()[0].mpNumericArray
+                    && pDVR->GetArrays()[0].mpStringArray)
+                    isMixedDV = svDoubleVectorRefDoubleString;
+                else if(pDVR->GetArrays()[0].mpNumericArray)
+                    isMixedDV = svDoubleVectorRefDouble;
+                else if(pDVR->GetArrays()[0].mpStringArray)
+                    isMixedDV = svDoubleVectorRefString;
+                else
+                    isMixedDV = svDoubleVectorRefNULL;
+
+                size_t nCurWindowSize = pDVR->GetRefRowSize();
+                ss << "    for (int i = ";
+                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "gid0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "gid0; i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < gid0+" << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else
+                {
+#ifdef  ISNAN
+                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+
+                if(isMixedDV == svDoubleVectorRefDoubleString)
+                {
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                    ss << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (isNan(arg) && ";
+                    ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                    ss << " == 0)\n";
+                    ss << "            continue;\n";
+                    ss << "        if(isNan(arg) && ";
+                    ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                    ss << " != 0)\n";
+                    ss << "        {\n";
+                    ss << "            fCount = fCount + 1.0;\n";
+                    ss << "            continue;\n";
+                    ss << "        }\n";
+#endif
+                    ss << "        fSum += arg;\n";
+                    ss << "        fCount = fCount + 1.0;\n";
+                    ss << "    }\n";
+                }
+                else if(isMixedDV == svDoubleVectorRefDouble)
+                {
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (isNan(arg))\n";
+                    ss << "            continue;\n";
+#endif
+                    ss << "        fSum += arg;\n";
+                    ss << "        fCount = fCount + 1.0;\n";
+                    ss << "    }\n";
+                }
+                else if(isMixedDV == svDoubleVectorRefString)
+                {
+                    ss << "        if (";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << " == 0)\n";
+                    ss << "            continue;\n";
+                    ss << "        fCount = fCount + 1.0;\n";
+                    ss << "    }\n";
+                }
+                else
+                {
+                    ss << "        continue;\n";
+                    ss << "    }\n";
+                }
+
+            }
+            else if (pCur->GetType() == formula::svSingleVectorRef)
+            {
+                const formula::SingleVectorRefToken* pSVR =
+                    dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+                assert(pSVR);
+                if(pSVR->GetArray().mpNumericArray
+                    && pSVR->GetArray().mpStringArray)
+                    isMixedSV = svSingleVectorRefDoubleString;
+                else if(pSVR->GetArray().mpNumericArray)
+                    isMixedSV = svSingleVectorRefDouble;
+                else if(pSVR->GetArray().mpStringArray)
+                    isMixedSV = svSingleVectorRefString;
+                else
+                    isMixedSV = svSingleVectorRefNULL;
+
+                if(isMixedSV == svSingleVectorRefDoubleString)
+                {
+#ifdef  ISNAN
+                    ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                    ss << "    {\n";
+#endif
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                    ss << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (!isNan(arg))\n";
+                    ss << "        {\n";
+#endif
+                    ss << "            fSum += arg;\n";
+                    ss << "            fCount = fCount + 1.0;\n";
+#ifdef ISNAN
+                    ss << "        }\n";
+                    ss << "        if (isNan(arg) && ";
+                    ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                    ss << " != 0)\n";
+                    ss << "            fCount = fCount + 1.0;\n";
+                    ss << "    }\n";
+#endif
+                }
+                else if(isMixedSV == svSingleVectorRefDouble)
+                {
+#ifdef  ISNAN
+                    ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                    ss << "    {\n";
+#endif
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+                    ss << "        if (!isNan(arg))\n";
+                    ss << "        {\n";
+#endif
+                    ss << "            fSum += arg;\n";
+                    ss << "            fCount += 1.0;\n";
+#ifdef ISNAN
+                    ss << "        }\n";
+                    ss << "    }\n";
+#endif
+                }
+                else if(isMixedSV == svSingleVectorRefString)
+                {
+
+                    ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                    ss << "    {\n";
+                    ss << "        if (";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << " != 0)\n";
+                    ss << "            fCount = fCount + 1.0;\n";
+                    ss << "    }\n";
+                }
+                else
+                {
+                    ss << "    arg =0.0;\n";
+                }
+            }
+            else
+            {
+                ss << "    arg = " << pCur->GetDouble() << ";\n";
+                ss << "    fSum += arg;\n";
+                ss << "    fCount = fCount + 1.0;\n";
+            }
+        }
+        else
+        {
+            ss << "    arg = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+            ss << "    fSum += arg;\n";
+            ss << "    fCount = fCount + 1.0;\n";
+        }
+        if (i == 0)
+        {
+            ss << "    fMean = fSum * pow(fCount,-1.0);\n";
+        }
+    }
+    i = vSubArguments.size();
+    while (i--)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            if (pCur->GetType() == formula::svDoubleVectorRef)
+            {
+                const formula::DoubleVectorRefToken* pDVR =
+                    dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+                size_t nCurWindowSize = pDVR->GetRefRowSize();
+                ss << "    for (int i = ";
+                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "gid0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < " << nCurWindowSize  << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "gid0; i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < gid0+" << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+                {
+#ifdef  ISNAN
+                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                    ss << " &&  i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < " << nCurWindowSize << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                else
+                {
+#ifdef  ISNAN
+                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
+                    ss << "    {\n";
+#else
+                    ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
+                    ss << "    {\n";
+#endif
+                }
+                if(isMixedDV == svDoubleVectorRefDoubleString)
+                {
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                    ss << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (isNan(arg) && ";
+                    ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                    ss << " == 0)\n";
+                    ss << "            continue;\n";
+                    ss << "        if(isNan(arg) && ";
+                    ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                    ss << " != 0)\n";
+                    ss << "            arg = 0.0;\n";
+#endif
+                    ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
+                    ss << "    }\n";
+
+                }
+                else if(isMixedDV == svDoubleVectorRefDouble)
+                {
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (isNan(arg))\n";
+                    ss << "            continue;\n";
+#endif
+                    ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
+                    ss << "    }\n";
+
+                }
+                else if(isMixedDV == svDoubleVectorRefString)
+                {
+                    ss << "        if (";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << " == 0)\n";
+                    ss << "            continue;\n";
+                    ss << "        arg = 0.0;\n";
+                    ss << "        vSum += (arg - fMean) * (arg - fMean);\n";
+                    ss << "    }\n";
+                }
+                else
+                {
+                    ss << "        continue;\n";
+                    ss << "    }\n";
+                }
+            }
+            else if (pCur->GetType() == formula::svSingleVectorRef)
+            {
+                const formula::SingleVectorRefToken* pSVR =
+                    dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+                assert(pSVR);
+                if(isMixedSV == svSingleVectorRefDoubleString)
+                {
+#ifdef  ISNAN
+                    ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                    ss << "    {\n";
+#endif
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                    ss << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (!isNan(arg))\n";
+#endif
+                    ss << "            vSum += (arg - fMean)*(arg - fMean);\n";
+#ifdef ISNAN
+                    ss << "        if (isNan(arg) && ";
+                    ss << vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                    ss << " != 0)\n";
+                    ss << "        {\n";
+                    ss << "            arg = 0.0;\n";
+                    ss << "            vSum += (arg - fMean)*(arg - fMean);\n";
+                    ss << "        }\n";
+                    ss << "    }\n";
+#endif
+                }
+                else if(isMixedSV == svSingleVectorRefDouble)
+                {
+#ifdef  ISNAN
+                    ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                   ss << "    {\n";
+#endif
+                    ss << "        arg = ";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef  ISNAN
+                    ss << "        if (!isNan(arg))\n";
+                    ss << "        {\n";
+#endif
+                    ss << "            vSum += (arg - fMean)*(arg - fMean);\n";
+#ifdef ISNAN
+                    ss << "        }\n";
+                   ss << "    }\n";
+#endif
+                }
+                else if(isMixedSV == svSingleVectorRefString)
+                {
+                    ss << "    if (gid0 < " << pSVR->GetArrayLength() << ")\n";
+                    ss << "    {\n";
+                    ss << "        if (";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << " != 0)\n";
+                    ss << "        {\n";
+                    ss << "            arg = 0.0;\n";
+                    ss << "            vSum += (arg - fMean)*(arg - fMean);\n";
+                    ss << "        }\n";
+                    ss << "    }\n";
+                }
+                else
+                {
+                    ss << "    arg = 0.0;\n";
+                }
+            }
+            else
+            {
+                ss << "    arg = " << pCur->GetDouble() << ";\n";
+                ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
+            }
+        }
+        else
+        {
+            ss << "    arg = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+            ss << "    vSum += (arg - fMean) * (arg - fMean);\n";
+        }
+    }
+    ss << "    if (fCount == 1.0)\n";
+    ss << "        return DBL_MAX;\n";
+    ss << "    else\n";
+    ss << "        return sqrt(vSum * pow(fCount,-1.0));\n";
+    ss << "}\n";
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
