@@ -14,7 +14,6 @@ Import filter for docx, doc and rtf.
  * doctok: incomplete and unused ww8 (.doc) tokenizer
  * filter: the UNO filter service implementations, invoked by UNO and calling
    the dmapper + one of the tokenizers
- * odiapi
  * ooxml: the docx tokenizer
  * resourcemodel
  * rtftok: the rtf tokenizer
