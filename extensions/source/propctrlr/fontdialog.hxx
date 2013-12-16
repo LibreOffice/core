@@ -63,6 +63,8 @@ namespace pcr
 
     protected:
         virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage);
+    private:
+        sal_uInt16 m_nCharsId;
     };
 //............................................................................
 }   // namespace pcr

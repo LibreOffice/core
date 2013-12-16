@@ -284,11 +284,6 @@
 #define RID_DLG_NEW_DATA_TYPE               ( RID_PROPCONTROLLER_START +  4 )
 
 // -----------------------------------------------------------------------
-// - tab dialogs
-
-#define RID_TABDLG_FONTDIALOG               ( RID_PROPCONTROLLER_START +  0 )
-
-// -----------------------------------------------------------------------
 // - ImageLists
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )

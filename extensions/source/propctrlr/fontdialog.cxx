@@ -170,13 +170,14 @@ namespace pcr
     //========================================================================
     //------------------------------------------------------------------------
     ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
-        :SfxTabDialog(_pParent, PcrRes(RID_TABDLG_FONTDIALOG), &_rCoreSet)
+        : SfxTabDialog(_pParent, "ControlFontDialog",
+            "modules/spropctrlr/ui/controlfontdialog.ui", &_rCoreSet)
+        , m_nCharsId(0)
     {
-        FreeResource();
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "CreateFactory fail!");
-        AddTabPage(TABPAGE_CHARACTERS, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );
-        AddTabPage(TABPAGE_CHARACTERS_EXT, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );
+        assert(pFact); //CreateFactory fail!
+        m_nCharsId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );
+        AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );
     }
 
     //------------------------------------------------------------------------
@@ -583,7 +584,7 @@ namespace pcr
     void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        if ( _nId == TABPAGE_CHARACTERS ) {
+        if ( _nId == m_nCharsId ) {
             aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
             aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
             _rPage.PageCreated(aSet);
