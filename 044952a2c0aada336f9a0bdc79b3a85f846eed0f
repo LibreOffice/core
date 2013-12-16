@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///iI\u003d",
+        "filename": "sw/source/core/unocore/unocrsrhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-12-16T09:09:14Z",
+      "side": 1,
+      "message": "None of the surrounding code uses opengrok for references, better to strip away the \"http://opengrok.libreoffice.org/xref/core/\" prefix if an other indexer tool will be used in the future.",
+      "revId": "044952a2c0aada336f9a0bdc79b3a85f846eed0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
