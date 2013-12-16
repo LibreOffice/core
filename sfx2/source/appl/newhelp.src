@@ -346,58 +346,6 @@ String STR_HELP_MENU_TEXT_COPY
     Text [ en-US ] = "~Copy" ;
 };
 
-ModalDialog DLG_HELP_ADDBOOKMARK
-{
-    HelpID = "sfx2:ModalDialog:DLG_HELP_ADDBOOKMARK";
-    Size = MAP_APPFONT ( 208 , 43 ) ;
-    Text [ en-US ] = "Add to Bookmarks";
-    MOVEABLE = TRUE ;
-    CLOSEABLE = TRUE ;
-    OUTPUTSIZE = TRUE ;
-    SVLOOK = TRUE ;
-    FixedText FT_BOOKMARK_TITLE
-    {
-        PosSize = MAP_APPFONT ( 6 , 6 , 140 , 10 ) ;
-        Text [ en-US ] = "Bookmark:" ;
-        TABSTOP = FALSE ;
-        GROUP = TRUE ;
-        LEFT = TRUE ;
-    };
-    Edit ED_BOOKMARK_TITLE
-    {
-        HelpID = "sfx2:Edit:DLG_HELP_ADDBOOKMARK:ED_BOOKMARK_TITLE";
-        PosSize = MAP_APPFONT ( 6 , 19 , 140 , 12 ) ;
-        TABSTOP = TRUE ;
-        BORDER = TRUE ;
-    };
-    OKButton PB_BOOKMARK_OK
-    {
-        PosSize = MAP_APPFONT ( 152 , 6 , 50 , 14 ) ;
-        HIDE = FALSE ;
-        TABSTOP = TRUE ;
-        GROUP = TRUE ;
-        Disable = FALSE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_BOOKMARK_CANCEL
-    {
-        PosSize = MAP_APPFONT ( 152 , 23 , 50 , 14 ) ;
-        TABSTOP = TRUE ;
-        GROUP = TRUE ;
-    };
-    HelpButton PB_BOOKMARK_HELP
-    {
-        PosSize = MAP_APPFONT ( 152 , 43 , 50 , 14 ) ;
-        TABSTOP = TRUE ;
-        GROUP = TRUE ;
-        Hide = TRUE;
-    };
-    String STR_BOOKMARK_RENAME
-    {
-        Text [ en-US ] = "Rename Bookmark";
-    };
-};
-
 Menu MENU_HELP_BOOKMARKS
 {
     ItemList =

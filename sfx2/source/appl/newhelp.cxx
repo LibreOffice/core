@@ -3388,35 +3388,20 @@ sal_Bool SfxHelpWindow_Impl::HasHistorySuccessor() const
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 
-SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl( Window* pParent, sal_Bool bRename ) :
-
-    ModalDialog( pParent, SfxResId( DLG_HELP_ADDBOOKMARK ) ),
-
-    aTitleFT    ( this, SfxResId( FT_BOOKMARK_TITLE ) ),
-    aTitleED    ( this, SfxResId( ED_BOOKMARK_TITLE ) ),
-    aOKBtn      ( this, SfxResId( PB_BOOKMARK_OK ) ),
-    aEscBtn     ( this, SfxResId( PB_BOOKMARK_CANCEL ) ),
-    aHelpBtn    ( this, SfxResId( PB_BOOKMARK_HELP ) )
-
+SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(Window* pParent, sal_Bool bRename)
+    : ModalDialog( pParent, "BookmarkDialog", "sfx/ui/bookmarkdialog.ui")
 {
-    if ( bRename )
-        SetText( SfxResId(STR_BOOKMARK_RENAME).toString() );
-
-    FreeResource();
-}
-
-// -----------------------------------------------------------------------
-
-SfxAddHelpBookmarkDialog_Impl::~SfxAddHelpBookmarkDialog_Impl()
-{
+    get(m_pTitleED, "entry");
+    if (bRename)
+        SetText(get<FixedText>("alttitle")->GetText());
 }
 
 // -----------------------------------------------------------------------
 
 void SfxAddHelpBookmarkDialog_Impl::SetTitle( const OUString& rTitle )
 {
-    aTitleED.SetText( rTitle );
-    aTitleED.SetSelection( Selection( 0, rTitle.getLength() ) );
+    m_pTitleED->SetText( rTitle );
+    m_pTitleED->SetSelection( Selection( 0, rTitle.getLength() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

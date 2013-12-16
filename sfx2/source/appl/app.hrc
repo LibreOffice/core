@@ -46,7 +46,7 @@
 #define TP_HELP_INDEX                           (RID_SFX_APP_START+101)
 #define TP_HELP_SEARCH                          (RID_SFX_APP_START+102)
 #define TP_HELP_BOOKMARKS                       (RID_SFX_APP_START+103)
-#define DLG_HELP_ADDBOOKMARK                    (RID_SFX_APP_START+104)
+
 #define MENU_HELP_BOOKMARKS                     (RID_SFX_APP_START+105)
 #define RID_INFO_NOSEARCHRESULTS                (RID_SFX_APP_START+106)
 #define RID_INFO_NOSEARCHTEXTFOUND              (RID_SFX_APP_START+107)

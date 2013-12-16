@@ -582,18 +582,12 @@ public:
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
 {
 private:
-    FixedText       aTitleFT;
-    Edit            aTitleED;
-    OKButton        aOKBtn;
-    CancelButton    aEscBtn;
-    HelpButton      aHelpBtn;
-
+    Edit* m_pTitleED;
 public:
     SfxAddHelpBookmarkDialog_Impl( Window* pParent, sal_Bool bRename = sal_True );
-    ~SfxAddHelpBookmarkDialog_Impl();
 
-    void            SetTitle( const OUString& rTitle );
-    inline OUString GetTitle() const { return aTitleED.GetText(); }
+    void SetTitle( const OUString& rTitle );
+    OUString GetTitle() const { return m_pTitleED->GetText(); }
 };
 
 /// Appends ?Language=xy&System=abc to the help URL in rURL
