@@ -1131,7 +1131,7 @@ void SAL_CALL
             ScViewData *pViewData = mpViewShell->GetViewData();
             mpViewShell->InitRefMode( 0, 0, pViewData->GetTabNo(), SC_REFTYPE_REF );
             pViewData->SetRefStart(0,0,pViewData->GetTabNo());
-            pViewData->SetRefStart(MAXCOL,MAXROW,pViewData->GetTabNo());
+            pViewData->SetRefEnd(MAXCOL,MAXROW,pViewData->GetTabNo());
             mpViewShell->UpdateRef(MAXCOL, MAXROW, pViewData->GetTabNo());
         }
         else
@@ -1559,6 +1559,10 @@ void ScAccessibleSpreadsheet::FireFirstCellFocus()
 void ScAccessibleSpreadsheet::NotifyRefMode()
 {
     ScViewData *pViewData = mpViewShell->GetViewData();
+    if (!pViewData->IsRefMode())
+        // Not in reference mode. Bail out.
+        return;
+
     sal_uInt16 nRefStartX =pViewData->GetRefStartX();
     sal_Int32 nRefStartY=pViewData->GetRefStartY();
     sal_uInt16 nRefEndX=pViewData->GetRefEndX();
