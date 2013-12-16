@@ -650,12 +650,8 @@ void cppuhelper::ServiceManager::loadImplementation(
     if (!info->alienContext.is()
         && info->loader == "com.sun.star.loader.SharedLibrary")
     {
-        rtl::OUString prefix(info->prefix);
-        if (!prefix.isEmpty()) {
-            prefix += "_";
-        }
         f0 = cppuhelper::detail::loadSharedLibComponentFactory(
-            uri, prefix, info->name, this);
+            uri, info->prefix, info->name, this);
     } else {
         SAL_WARN_IF(
             !info->prefix.isEmpty(), "cppuhelper",

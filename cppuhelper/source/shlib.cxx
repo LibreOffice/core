@@ -316,7 +316,11 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
 
     OUString aExcMsg;
 
-    OUString aGetFactoryName = rPrefix + COMPONENT_GETFACTORY;
+    OUString aFullPrefix(rPrefix);
+    if (!aFullPrefix.isEmpty()) {
+        aFullPrefix += "_";
+    }
+    OUString aGetFactoryName = aFullPrefix + COMPONENT_GETFACTORY;
 
     oslGenericFunction pSym = NULL;
 
@@ -383,7 +387,7 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
 
     if (pSym != 0)
     {
-        xRet = invokeComponentFactory( pSym, lib, moduleUri, rImplName, xMgr, rPrefix, aExcMsg );
+        xRet = invokeComponentFactory( pSym, lib, moduleUri, rImplName, xMgr, aFullPrefix, aExcMsg );
     }
     else
     {
