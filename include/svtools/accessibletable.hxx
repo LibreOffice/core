@@ -139,7 +139,7 @@ public:
 
     /** disposes the accessible implementation, so that it becomes defunc
     */
-    virtual void dispose() = 0;
+    virtual void DisposeAccessImpl() = 0;
 
     /** checks whether the accessible implementation, and its context, are still alive
         @return  <TRUE/>, if the object is not disposed or disposing.

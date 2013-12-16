@@ -421,7 +421,7 @@ AccessibleGridControlAccess::~AccessibleGridControlAccess()
 }
 
 // -----------------------------------------------------------------------------
-void AccessibleGridControlAccess::dispose()
+void AccessibleGridControlAccess::DisposeAccessImpl()
 {
     SolarMutexGuard g;
 

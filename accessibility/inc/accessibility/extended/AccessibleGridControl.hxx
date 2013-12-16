@@ -228,7 +228,7 @@ protected:
     {
         return this;
     }
-    void dispose();
+    void DisposeAccessImpl() SAL_OVERRIDE;
     virtual sal_Bool isAlive() const
     {
         return isContextAlive();
