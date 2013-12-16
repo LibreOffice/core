@@ -767,9 +767,9 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
         return;
 
     SwNodeIndex aStartNode(pStt->nNode, -1);
-    sal_uInt16 nStartIdx = pStt->nContent.GetIndex();
+    const sal_Int32 nStartIdx = pStt->nContent.GetIndex();
     SwNodeIndex aEndNode(pEnd->nNode, -1);
-    sal_uInt16 nEndIdx = pEnd->nContent.GetIndex();
+    const sal_Int32 nEndIdx = pEnd->nContent.GetIndex();
 
     //We don't support deleting content that is over one node, or removing a node.
     OSL_ENSURE(aEndNode == aStartNode, "nodes must be the same, or this method extended");
@@ -817,7 +817,7 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
             continue;
         }
 
-        xub_StrLen nCntntDiff = nEndIdx - nStartIdx;
+        const sal_Int32 nCntntDiff = nEndIdx - nStartIdx;
 
         //to be adjusted
         if (bEntryStartAfterSelStart)
