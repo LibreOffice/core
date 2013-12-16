@@ -49,7 +49,7 @@
 #include "iodlgimp.hxx"
 #include "svtools/inettbc.hxx"
 #include "unotools/syslocale.hxx"
-#include "svtools/QueryFolderName.hxx"
+#include "QueryFolderName.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
@@ -773,7 +773,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    svtools::QueryFolderNameDialog aDlg( pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER) );
+    QueryFolderNameDialog aDlg( pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER) );
     sal_Bool bHandled = sal_False;
 
     while ( !bHandled )
@@ -3332,10 +3332,6 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
     return 0;
 }
 
-// QueryFolderNameDialog -------------------------------------------------------
-
-namespace svtools {
-
 QueryFolderNameDialog::QueryFolderNameDialog(Window* _pParent,
     const OUString& rTitle, const OUString& rDefaultText, OUString* pGroupName)
     : ModalDialog(_pParent, "FolderNameDialog", "fps/ui/foldernamedialog.ui")
@@ -3380,8 +3376,6 @@ IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
     }
 
     return 0;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
