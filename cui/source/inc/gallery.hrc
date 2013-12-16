@@ -20,7 +20,6 @@
 
 // Gallery TabDialogs/TabPages
 #define RID_SVXTABDLG_GALLERYTHEME              (RID_CUI_GALLERY_START + 2)
-#define RID_SVXDLG_GALLERY_TITLE                (RID_CUI_GALLERY_START + 82)
 
 #define RID_SVXTABPAGE_GALLERY_GENERAL          (RID_CUI_GALLERY_START + 1)
 #define RID_SVXTABPAGE_GALLERYTHEME_FILES       (RID_CUI_GALLERY_START + 4)
@@ -70,8 +69,6 @@
 #define FT_ACTUALIZE_FILE 1
 #define FL_ID                  1
 #define LB_RESNAME      1
-#define EDT_TITLE       20
-#define FL_TITLE               21
 
 // Gallery-TabDialog
 #define FI_MS_IMAGE 1

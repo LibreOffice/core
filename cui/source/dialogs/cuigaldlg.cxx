@@ -520,21 +520,12 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
     return 0;
 }
 
-// ---------------
-// - TitleDialog -
-// ---------------
-
-TitleDialog::TitleDialog( Window* pParent, const OUString& rOldTitle ) :
-    ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_TITLE ) ),
-    maOk        ( this, CUI_RES( BTN_OK ) ),
-    maCancel    ( this, CUI_RES( BTN_CANCEL ) ),
-    maHelp      ( this, CUI_RES( BTN_HELP ) ),
-    maFL       ( this, CUI_RES( FL_TITLE ) ),
-    maEdit      ( this, CUI_RES( EDT_TITLE ) )
+TitleDialog::TitleDialog(Window* pParent, const OUString& rOldTitle)
+    : ModalDialog (pParent, "GalleryTitleDialog", "cui/ui/gallerytitledialog.ui")
 {
-    FreeResource();
-    maEdit.SetText( rOldTitle );
-    maEdit.GrabFocus();
+    get(m_pEdit, "entry");
+    m_pEdit->SetText( rOldTitle );
+    m_pEdit->GrabFocus();
 }
 
 // -------------------

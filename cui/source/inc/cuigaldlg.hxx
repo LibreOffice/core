@@ -176,17 +176,10 @@ public:
 class TitleDialog : public ModalDialog
 {
 private:
-
-    OKButton            maOk;
-    CancelButton        maCancel;
-    HelpButton          maHelp;
-    FixedLine           maFL;
-    Edit                maEdit;
-
+    Edit* m_pEdit;
 public:
-
-                        TitleDialog( Window* pParent, const OUString& rOldText );
-    OUString            GetTitle() const { return maEdit.GetText(); }
+    TitleDialog(Window* pParent, const OUString& rOldText);
+    OUString GetTitle() const { return m_pEdit->GetText(); }
 };
 
 class GalleryIdDialog : public ModalDialog

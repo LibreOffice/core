@@ -219,53 +219,6 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
 
 /******************************************************************************/
 
-ModalDialog RID_SVXDLG_GALLERY_TITLE
-{
-    HelpId = HID_GALLERY_TITLE;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 63 ) ;
-    Text [ en-US ] = "Enter Title" ;
-    Moveable = TRUE ;
-
-    OkButton BTN_OK
-    {
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 112 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 112 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 112 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-
-    FixedLine FL_TITLE
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ en-US ] = "Title" ;
-    };
-    Edit EDT_TITLE
-    {
-        HelpId = HID_GALLERY_TITLE_EDIT;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 18 ) ;
-        Size = MAP_APPFONT ( 88, 12 ) ;
-    };
-};
-
-/******************************************************************************/
-
 ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
 {
     HelpId = HID_GALLERY_SEARCH ;
