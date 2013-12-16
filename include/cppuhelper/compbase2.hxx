@@ -25,12 +25,6 @@
 namespace cppu
 {
 
-// Suppress warnings about hidden functions in case any of the IfcN has
-// functions named dispose, addEventListener, or removeEventListener:
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#endif
-
     /** Implementation helper supporting com::sun::star::lang::XTypeProvider and
         com::sun::star::lang::XComponent.
 
@@ -73,10 +67,6 @@ namespace cppu
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
-
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#endif
 
     /** Same as WeakComponentImplHelper2, except doesn't implement
         addEventListener, removeEventListener and dispose.

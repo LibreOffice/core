@@ -88,7 +88,7 @@ typedef unsigned char       sal_uInt8;
     #define SAL_PRIuUINT64 "I64u"
     #define SAL_PRIxUINT64 "I64x"
     #define SAL_PRIXUINT64 "I64X"
-#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (sgi)
+#elif defined (__GNUC__) || defined (sgi)
     #if SAL_TYPES_SIZEOFLONG == 8
         typedef signed long int         sal_Int64;
         typedef unsigned long int       sal_uInt64;
@@ -250,19 +250,7 @@ typedef void *                   sal_Handle;
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
 #elif defined SAL_UNX
-#   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
-#     define SAL_DLLPUBLIC_EXPORT  __global
-#     define SAL_JNI_EXPORT        __global
-#     define SAL_DLLPUBLIC_IMPORT
-#     define SAL_DLLPRIVATE        __hidden
-#     define SAL_DLLPUBLIC_TEMPLATE
-#   elif defined(__SUNPRO_C ) && (__SUNPRO_C  >= 0x550)
-#     define SAL_DLLPUBLIC_EXPORT  __global
-#     define SAL_JNI_EXPORT        __global
-#     define SAL_DLLPUBLIC_IMPORT
-#     define SAL_DLLPRIVATE        __hidden
-#     define SAL_DLLPUBLIC_TEMPLATE
-#   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#   if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
 #     if defined(DISABLE_DYNLOADING)
 #       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("hidden")))
 #       define SAL_JNI_EXPORT        __attribute__ ((visibility("default")))

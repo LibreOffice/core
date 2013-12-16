@@ -77,9 +77,6 @@ namespace comphelper {
 
 // Suppress warnings about hidden functions in case any of the IfcN has
 // functions named dispose, addEventListener, or removeEventListener:
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#endif
 
 namespace detail {
 

@@ -259,8 +259,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #endif
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wwrite-strings"
-#elif defined __SUNPRO_CC
-#pragma disable_warn
 #endif
 %}
 

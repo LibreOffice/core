@@ -32,11 +32,6 @@
 #elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
 # define CPPUHELPER_TEST_COMPONENT_EXPORT extern __attribute__ ((weak))
 
-#elif defined(__SUNPRO_CC)
-# define CPPUHELPER_TEST_COMPONENT_EXPORT extern
-  extern rtl::OUString g_envDcp;
-# pragma weak  g_envDcp
-
 #else
 # define CPPUHELPER_TEST_COMPONENT_EXPORT SAL_DLLPUBLIC_IMPORT
 
