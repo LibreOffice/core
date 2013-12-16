@@ -1498,6 +1498,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocIsOdd:
             case ocFact:
             case ocAverageA:
+            case ocVarA:
             // Don't change the state.
             break;
             default:
