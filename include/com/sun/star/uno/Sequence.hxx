@@ -259,17 +259,11 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
         & ::com::sun::star::uno::Sequence< E >::s_pType );
 }
 
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
-#endif
-
 // char sequence
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType() SAL_THROW(())
 {
-#if !( defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
     static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
-#endif
     if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCharCppuType();

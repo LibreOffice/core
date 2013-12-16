@@ -157,11 +157,10 @@ inline bool Any::has() const
         (uno_QueryInterfaceFunc) cpp_queryInterface,
         (uno_ReleaseFunc) cpp_release );
 }
-#if ! defined(__SUNPRO_CC)
+
 // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
 template <>
 bool Any::has<sal_uInt16>() const;
-#endif // ! defined(__SUNPRO_CC)
 
 //__________________________________________________________________________________________________
 inline sal_Bool Any::operator == ( const Any & rAny ) const SAL_THROW(())

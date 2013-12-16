@@ -78,9 +78,7 @@ class heap_ptr
     typedef T               element_type;       /// Provided for generic programming.
     typedef heap_ptr<T>     self;
 
-#ifndef __SUNPRO_CC
     typedef T * (self::*    safe_bool )();
-#endif
 
     /// Now, pass_heapObject is owned by this.
     explicit            heap_ptr(
@@ -98,13 +96,7 @@ class heap_ptr
     const T *           operator->() const;
     T *                 operator->();
 
-    /// True, if pHeapObject != 0.
-#ifndef __SUNPRO_CC
                         operator safe_bool() const;
-#else // workaround opt bug of Sun C++ compiler, when compiling with -xO3
-                        operator bool() const;
-#endif
-
 
     /** This deletes any prevoiusly existing ->pHeapObject.
         Now, pass_heapObject, if != 0, is owned by this.
@@ -224,8 +216,6 @@ heap_ptr<T>::operator->()
     return pHeapObject;
 }
 
-#ifndef __SUNPRO_CC
-
 template <class T>
 inline
 heap_ptr<T>::operator typename heap_ptr<T>::safe_bool() const
@@ -234,18 +224,6 @@ heap_ptr<T>::operator typename heap_ptr<T>::safe_bool() const
             ? safe_bool(&self::get)
             : safe_bool(0);
 }
-
-#else
-
-template <class T>
-inline heap_ptr<T>::operator bool() const
-{
-    return is();
-}
-
-#endif // !defined(__SUNPRO_CC)
-
-
 
 template <class T>
 void

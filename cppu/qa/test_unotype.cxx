@@ -224,9 +224,7 @@ void Test::testUnoType() {
         ::rtl::OUString(
                 "com.sun.star.beans.PropertyChangeEvent"),
         t.getTypeName());
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedStruct2 >::get() == t);
-#endif
     t = ::cppu::UnoType< css::beans::Optional< ::sal_Int8 > >::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_STRUCT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
@@ -243,9 +241,7 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString("com.sun.star.uno.RuntimeException"),
         t.getTypeName());
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedException2 >::get() == t);
-#endif
     t = ::cppu::UnoType< css::uno::XInterface >::get();
     CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_INTERFACE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
@@ -266,12 +262,10 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT(
         ::cppu::UnoType<
         css::uno::Reference< css::uno::XComponentContext > >::get() == t);
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedInterface2 >::get() == t);
     CPPUNIT_ASSERT(
         ::cppu::UnoType< css::uno::Reference< DerivedInterface2 > >::get() ==
         t);
-#endif
 }
 
 void Test::testGetTypeFavourUnsigned() {
@@ -467,14 +461,12 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::beans::PropertyChangeEvent * >(0)) ==
         ::getCppuType(static_cast< css::beans::PropertyChangeEvent * >(0)));
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedStruct2 * >(0)) ==
         ::cppu::UnoType< css::beans::PropertyChangeEvent >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedStruct2 * >(0)) ==
         ::getCppuType(static_cast< DerivedStruct2 * >(0)));
-#endif
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::beans::Optional< ::sal_Int8 > * >(0)) ==
@@ -505,14 +497,12 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::uno::RuntimeException * >(0)) ==
         ::getCppuType(static_cast< css::uno::RuntimeException * >(0)));
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedException2 * >(0)) ==
         ::cppu::UnoType< css::uno::RuntimeException >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedException2 * >(0)) ==
         ::getCppuType(static_cast< DerivedException2 * >(0)));
-#endif
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::uno::XInterface * >(0)) ==
@@ -549,7 +539,6 @@ void Test::testGetTypeFavourUnsigned() {
         ::getCppuType(
             static_cast<
             css::uno::Reference< css::uno::XComponentContext > * >(0)));
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourUnsigned(static_cast< DerivedInterface2 * >(0)) ==
         ::cppu::UnoType< css::uno::XComponentContext >::get());
@@ -557,7 +546,6 @@ void Test::testGetTypeFavourUnsigned() {
         ::cppu::getTypeFavourUnsigned(
             static_cast< css::uno::Reference< DerivedInterface2 > * >(0)) ==
         ::cppu::UnoType< css::uno::XComponentContext >::get());
-#endif
 }
 
 void Test::testGetTypeFavourChar() {
@@ -723,14 +711,12 @@ void Test::testGetTypeFavourChar() {
         ::cppu::getTypeFavourChar(
             static_cast< css::beans::PropertyChangeEvent * >(0)) ==
         ::getCppuType< css::beans::PropertyChangeEvent >());
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(static_cast< DerivedStruct2 * >(0)) ==
         ::cppu::UnoType< css::beans::PropertyChangeEvent >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(static_cast< DerivedStruct2 * >(0)) ==
         ::getCppuType< DerivedStruct2 >());
-#endif
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(
             static_cast< css::beans::Optional< ::sal_Int8 > * >(0)) ==
@@ -759,14 +745,12 @@ void Test::testGetTypeFavourChar() {
         ::cppu::getTypeFavourChar(
             static_cast< css::uno::RuntimeException * >(0)) ==
         ::getCppuType< css::uno::RuntimeException >());
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(static_cast< DerivedException2 * >(0)) ==
         ::cppu::UnoType< css::uno::RuntimeException >::get());
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(static_cast< DerivedException2 * >(0)) ==
         ::getCppuType< DerivedException2 >());
-#endif
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(
             static_cast< css::uno::XInterface * >(0)) ==
@@ -800,7 +784,6 @@ void Test::testGetTypeFavourChar() {
             static_cast<
             css::uno::Reference< css::uno::XComponentContext > * >(0)) ==
         ::getCppuType< css::uno::Reference< css::uno::XComponentContext > >());
-#if !(defined __SUNPRO_CC && __SUNPRO_CC <= 0x550) // erroneous ambiguity stated
     CPPUNIT_ASSERT(
         ::cppu::getTypeFavourChar(static_cast< DerivedInterface2 * >(0)) ==
         ::cppu::UnoType< css::uno::XComponentContext >::get());
@@ -808,7 +791,6 @@ void Test::testGetTypeFavourChar() {
         ::cppu::getTypeFavourChar(
             static_cast< css::uno::Reference< DerivedInterface2 > * >(0)) ==
         ::cppu::UnoType< css::uno::XComponentContext >::get());
-#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

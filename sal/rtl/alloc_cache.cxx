@@ -617,11 +617,6 @@ rtl_cache_depot_enqueue (
     depot->m_mag_count++;
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_cache_depot_enqueue)
-#endif /* __SUNPRO_C */
-
-
 /** rtl_cache_depot_dequeue()
  *
  *  @precond cache->m_depot_lock acquired.
@@ -650,11 +645,6 @@ rtl_cache_depot_dequeue (
     }
     return (mag);
 }
-
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_cache_depot_dequeue)
-#endif /* __SUNPRO_C */
-
 
 /** rtl_cache_depot_exchange_alloc()
  *
@@ -709,11 +699,6 @@ rtl_cache_depot_exchange_free (
 
     return (empty);
 }
-
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_cache_depot_exchange_free)
-#endif /* __SUNPRO_C */
-
 
 /** rtl_cache_depot_populate()
  *
