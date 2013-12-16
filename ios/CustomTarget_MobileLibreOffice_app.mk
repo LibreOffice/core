@@ -8,7 +8,6 @@
 
 #- Env ------------------------------------------------------------------------
 
-LO_XCCONFIG 	:= lo.xcconfig
 DEST_RESOURCE 	:= MobileLibreOffice/resource_link
 BUILDID			:=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 
@@ -30,7 +29,8 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/MobileLibreOffice))
 
 #==============================================================================
 # Build
-$(call gb_CustomTarget_get_target,ios/MobileLibreOffice): MobileLibreOffice_setup
+# Depend on the custom target that sets up lo.xcconfig
+$(call gb_CustomTarget_get_target,ios/MobileLibreOffice): $(call gb_CustomTarget_get_target,ios/Lo_Xcconfig) MobileLibreOffice_setup
 #==============================================================================
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	$(call MobileLibreOfficeXcodeBuild, clean build)
@@ -40,16 +40,6 @@ $(call gb_CustomTarget_get_target,ios/MobileLibreOffice): MobileLibreOffice_setu
 MobileLibreOffice_setup:
 #==============================================================================
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-
-	# Libs #
-	# Create the link flags in the xcconfig for Xcode linkage
-	all_libs=`$(SRCDIR)/bin/lo-all-static-libs`; \
-	sed -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_libs|" < $(BUILDDIR)/ios/$(LO_XCCONFIG) > $(BUILDDIR)/ios/$(LO_XCCONFIG).new && mv $(BUILDDIR)/ios/$(LO_XCCONFIG).new $(BUILDDIR)/ios/$(LO_XCCONFIG)
-
-	# Copy lo.xcconfig to source dir for the Xcode projects
-	if test $(SRCDIR) != $(BUILDDIR); then \
-		cp $(BUILDDIR)/ios/$(LO_XCCONFIG) $(SRCDIR)/ios; \
-	fi
 
 	# Resources #
 	rm -rf $(DEST_RESOURCE) 2>/dev/null
