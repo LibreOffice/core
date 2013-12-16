@@ -196,7 +196,7 @@ private:
     ::osl::Mutex                m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                         m_xParent;
-    ::svt::table::IAccessibleTable&    m_rTable;
+    ::svt::table::IAccessibleTable *    m_pTable;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                                 m_xContext;
