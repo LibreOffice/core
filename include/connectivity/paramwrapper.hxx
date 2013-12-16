@@ -118,7 +118,7 @@ namespace param
     };
 
     //====================================================================
-    //= ParameterWrapperContainer
+    //= ParameterWrapper
     //====================================================================
     typedef ::std::vector< ::rtl::Reference< ParameterWrapper > >   Parameters;
 
