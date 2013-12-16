@@ -283,76 +283,27 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
 
 #ifdef DISABLE_DYNLOADING
 
-    // First test library names that aren't app-specific.
-    static lib_to_component_mapping components_mapping[] = {
-        { "libintrospectionlo.a", introspection_component_getFactory },
-        { "libreflectionlo.a", reflection_component_getFactory },
-        { "libstocserviceslo.a", stocservices_component_getFactory },
-        { "libcomphelper.a", comphelp_component_getFactory },
-        { "libconfigmgrlo.a", configmgr_component_getFactory },
-        { "libdeployment.a", deployment_component_getFactory },
-        { "libfilterconfiglo.a", filterconfig1_component_getFactory },
-        { "libfwklo.a", fwk_component_getFactory },
-        { "libi18npoollo.a", i18npool_component_getFactory },
-        { "liblocalebe1lo.a", localebe1_component_getFactory },
-        { "libpackage2.a", package2_component_getFactory },
-        { "libsfxlo.a", sfx_component_getFactory },
-        { "libsvllo.a", svl_component_getFactory },
-        { "libtklo.a", tk_component_getFactory },
-        { "libucb1.a", ucb_component_getFactory },
-        { "libucpexpand1lo.a", ucpexpand1_component_getFactory },
-        { "libucpfile1.a", ucpfile_component_getFactory },
-        { "libutllo.a", utl_component_getFactory },
-        { "libvcllo.a", vcl_component_getFactory },
-        { "libxstor.a", xstor_component_getFactory },
-        { NULL, NULL }
-    };
-    static lib_to_component_mapping direct_components_mapping[] = {
-        { "com.sun.star.comp.extensions.xml.sax.ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory },
-        { "com.sun.star.comp.extensions.xml.sax.FastParser", com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory },
-        { "com.sun.star.comp.stoc.DLLComponentLoader.component.getFactory", com_sun_star_comp_stoc_DLLComponentLoader_component_getFactory },
-        { "com.sun.star.comp.stoc.ImplementationRegistration.component.getFactory", com_sun_star_comp_stoc_ImplementationRegistration_component_getFactory },
-        { "com.sun.star.comp.stoc.NestedRegistry.component.getFactory", com_sun_star_comp_stoc_NestedRegistry_component_getFactory },
-        { "com.sun.star.comp.stoc.ORegistryServiceManager.component.getFactory", com_sun_star_comp_stoc_ORegistryServiceManager_component_getFactory },
-        { "com.sun.star.comp.stoc.OServiceManager.component.getFactory", com_sun_star_comp_stoc_OServiceManager_component_getFactory },
-        { "com.sun.star.comp.stoc.OServiceManagerWrapper.component.getFactory", com_sun_star_comp_stoc_OServiceManagerWrapper_component_getFactory },
-        { "com.sun.star.comp.stoc.SimpleRegistry.component.getFactory", com_sun_star_comp_stoc_SimpleRegistry_component_getFactory },
-        { "com.sun.star.extensions.xml.sax.Writer", com_sun_star_extensions_xml_sax_Writer_component_getFactory },
-        { "com.sun.star.security.comp.stoc.AccessController.component.getFactory", com_sun_star_security_comp_stoc_AccessController_component_getFactory },
-        { "com.sun.star.security.comp.stoc.FilePolicy.component.getFactory", com_sun_star_security_comp_stoc_FilePolicy_component_getFactory },
-        { NULL, NULL }
-    };
-    lib_to_component_mapping *non_app_specific_map = components_mapping;
     OString sName;
+    const lib_to_component_mapping *map = NULL;
     if (rPrefix == "direct")
     {
         sName = OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US);
-        non_app_specific_map = direct_components_mapping;
+        map = lo_get_implementation_map();
     }
     else
     {
         sName = OUStringToOString(uri, RTL_TEXTENCODING_ASCII_US);
+        map = lo_get_library_map();
     }
-    for (int i = 0; pSym == NULL && non_app_specific_map[i].lib != NULL; ++i)
+    for (int i = 0; pSym == NULL && map[i].name != NULL; ++i)
     {
-        if ( sName == non_app_specific_map[i].lib )
-            pSym = (oslGenericFunction) non_app_specific_map[i].component_getFactory_function;
+        if ( sName == map[i].name )
+            pSym = (oslGenericFunction) map[i].component_getFactory_function;
     }
-
-    if ( pSym == NULL)
+    if ( pSym == NULL )
     {
-        // The call the app-specific lo_get_libmap() to get a mapping for the rest
-        const lib_to_component_mapping *map = lo_get_libmap();
-        for (int i = 0; pSym == NULL && map[i].lib != NULL; ++i)
-        {
-            if ( uri.equalsAscii( map[i].lib ) )
-                pSym = (oslGenericFunction) map[i].component_getFactory_function;
-        }
-        if ( pSym == NULL )
-        {
-            fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( uri, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            assert( !"Attempt to load unknown library" );
-        }
+        fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( uri, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        assert( !"Attempt to load unknown library" );
     }
 #else
 

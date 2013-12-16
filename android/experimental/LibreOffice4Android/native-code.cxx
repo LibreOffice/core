@@ -12,9 +12,10 @@
 extern "C"
 __attribute__ ((visibility("default")))
 const lib_to_component_mapping *
-lo_get_libmap(void)
+lo_get_library_map(void)
 {
     static lib_to_component_mapping map[] = {
+        NON_APP_SPECIFIC_COMPONENT_MAP
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libbasprov.uno.a", basprov_component_getFactory },
@@ -71,6 +72,19 @@ lo_get_libmap(void)
         { "libxmlsecurity.a", xmlsecurity_component_getFactory },
         { "libxoflo.a", xof_component_getFactory },
         { "libxolo.a", xo_component_getFactory },
+        { NULL, NULL }
+    };
+
+    return map;
+}
+
+extern "C"
+__attribute__ ((visibility("default")))
+const lib_to_component_mapping *
+lo_get_implementation_map(void)
+{
+    static lib_to_component_mapping map[] = {
+        NON_APP_SPECIFIC_DIRECT_COMPONENT_MAP
         { NULL, NULL }
     };
 

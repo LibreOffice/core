@@ -24,10 +24,11 @@
 
 extern "C"
 const lib_to_component_mapping *
-lo_get_libmap(void)
+lo_get_library_map(void)
 {
     static lib_to_component_mapping map[] = {
-        
+        NON_APP_SPECIFIC_COMPONENT_MAP
+
         //from IOS
         
         //MAP_LIB_LO(analysis), //MAP_LIB_LO(animcore), //MAP_LIB_LO(sm),
@@ -68,10 +69,21 @@ lo_get_libmap(void)
         
         { NULL, NULL }
     };
-    
+
     return map;
 }
 
+extern "C"
+const lib_to_component_mapping *
+lo_get_implementation_map(void)
+{
+    static lib_to_component_mapping map[] = {
+        NON_APP_SPECIFIC_DIRECT_COMPONENT_MAP
+        { NULL, NULL }
+    };
+
+    return map;
+}
 
 NSString * createPaths(NSString * base,NSString * appRootEscaped,NSArray * fileNames){
     NSString * prefix = @"file://";
