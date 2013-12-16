@@ -42,7 +42,8 @@
         <org.libreoffice.impressremote.view.CapsTextView
             style="@style/SectionHeader"
             android:text="@string/header_notes"
-            android:paddingTop="@dimen/padding_header"/>
+            android:paddingTop="@dimen/padding_header"
+            android:textSize="@dimen/text_size_notes"/>
 
         <ScrollView
             android:id="@+id/scroll_notes"
@@ -62,11 +63,13 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_notes"/>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_notes"/>
 
             </TextSwitcher>
 

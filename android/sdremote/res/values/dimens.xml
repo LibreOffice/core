@@ -18,6 +18,8 @@
 -->
 <resources>
 
+    <dimen name="text_size_notes">12sp</dimen>
+
     <!-- It is a good practice to follow official design metrics. -->
     <!-- http://developer.android.com/design/style/metrics-grids.html -->
 
