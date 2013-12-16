@@ -21,11 +21,11 @@ $(eval $(call gb_Module_Module,svtools))
 
 $(eval $(call gb_Module_add_targets,svtools,\
     Library_svt \
-    UIConfig_svt \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,svtools,\
     AllLangResTarget_svt \
+    UIConfig_svt \
 ))
 
 ifneq ($(CROSS_COMPILING),YES)

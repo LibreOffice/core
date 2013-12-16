@@ -15,11 +15,11 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
-	UIConfig_scalc \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sc,\
 	AllLangResTarget_sc \
+	UIConfig_scalc \
 ))
 
 ifneq (,$(ENABLE_OPENCL))

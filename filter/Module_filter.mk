@@ -61,7 +61,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Package_docbook \
 	Package_xhtml \
 	Package_xslt \
-	UIConfig_xsltdlg \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,filter,\
@@ -69,6 +68,7 @@ $(eval $(call gb_Module_add_l10n_targets,filter,\
 	AllLangResTarget_pdffilter \
 	AllLangResTarget_t602filter \
 	AllLangResTarget_xsltdlg \
+	UIConfig_xsltdlg \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

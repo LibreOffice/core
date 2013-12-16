@@ -26,6 +26,10 @@ $(eval $(call gb_Module_add_targets,sw,\
 	Library_sw \
 	Library_swd \
 	Library_swui \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,sw,\
+    AllLangResTarget_sw \
 	UIConfig_sglobal \
 	UIConfig_sweb \
 	UIConfig_swform \
@@ -33,10 +37,6 @@ $(eval $(call gb_Module_add_targets,sw,\
 	UIConfig_swriter \
 	UIConfig_swxform \
 	UIConfig_qa \
-))
-
-$(eval $(call gb_Module_add_l10n_targets,sw,\
-    AllLangResTarget_sw \
 ))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)
