@@ -333,15 +333,31 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 
 //------------------------------------------------------------------------
 
-void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     // #i105988 keep reference to this object
     rtl::Reference< SvxTextEditSourceImpl > xThis( this );
 
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
     const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
+    const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
 
-    if( pViewHint )
+    if (pSimpleHint)
+    {
+        if (SFX_HINT_DYING == pSimpleHint->GetId())
+        {
+            if (&rBC == mpView)
+            {
+                mpView = 0;
+                if (mpViewForwarder)
+                {
+                    delete mpViewForwarder;
+                    mpViewForwarder = 0;
+                }
+            }
+        }
+    }
+    else if( pViewHint )
     {
         switch( pViewHint->GetHintType() )
         {
