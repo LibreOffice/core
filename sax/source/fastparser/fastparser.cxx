@@ -45,9 +45,6 @@
 #include <cstring>
 #include <expat.h>
 
-#define PARSER_IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.FastParser"
-#define PARSER_SERVICE_NAME        "com.sun.star.xml.sax.FastParser"
-
 using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
@@ -56,8 +53,17 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace com::sun::star;
+using namespace sax_fastparser;
 
-namespace sax_fastparser {
+static uno::Sequence<OUString> FastSaxParser_getSupportedServiceNames()
+    throw (uno::RuntimeException)
+{
+    Sequence<OUString> seq(1);
+    seq.getArray()[0] = OUString("com.sun.star.xml.sax.FastParser");
+    return seq;
+}
+
+namespace {
 
 struct Event;
 class FastLocatorImpl;
@@ -186,18 +192,15 @@ struct Entity : public ParserData
     Event& getEvent( CallbackType aType );
 };
 
-// --------------------------------------------------------------------
-// FastSaxParser implementation
-// --------------------------------------------------------------------
+} // namespace
+
+namespace sax_fastparser {
 
 class FastSaxParserImpl
 {
 public:
     FastSaxParserImpl( FastSaxParser* pFront );
     ~FastSaxParserImpl();
-
-    // The implementation details
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void);
 
     // XFastParser
     void parseStream( const ::com::sun::star::xml::sax::InputSource& aInputSource ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -208,11 +211,6 @@ public:
     void setErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
     void setEntityResolver( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >& Resolver ) throw (::com::sun::star::uno::RuntimeException);
     void setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    OUString getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const XML_Char* name, const XML_Char** atts );
@@ -262,6 +260,10 @@ private:
     FastTokenLookup maTokenLookup;
 };
 
+} // namespace sax_fastparser
+
+namespace {
+
 class ParserThread: public salhelper::Thread
 {
     FastSaxParserImpl *mpParser;
@@ -282,25 +284,23 @@ private:
     }
 };
 
-}
-
 extern "C" {
 
 static void call_callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts)
 {
-    sax_fastparser::FastSaxParserImpl* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParserImpl*>( userData );
+    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackStartElement( name, atts );
 }
 
 static void call_callbackEndElement(void *userData, const XML_Char *name)
 {
-    sax_fastparser::FastSaxParserImpl* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParserImpl*>( userData );
+    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackEndElement( name );
 }
 
 static void call_callbackCharacters( void *userData , const XML_Char *s , int nLen )
 {
-    sax_fastparser::FastSaxParserImpl* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParserImpl*>( userData );
+    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackCharacters( s, nLen );
 }
 
@@ -309,7 +309,7 @@ static void call_callbackEntityDecl(void *userData, const XML_Char *entityName,
         const XML_Char *base, const XML_Char *systemId,
         const XML_Char *publicId, const XML_Char *notationName)
 {
-    sax_fastparser::FastSaxParserImpl* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParserImpl*>(userData);
+    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>(userData);
     pFastParser->callbackEntityDecl(entityName, is_parameter_entity, value,
             value_length, base, systemId, publicId, notationName);
 }
@@ -317,17 +317,11 @@ static void call_callbackEntityDecl(void *userData, const XML_Char *entityName,
 static int call_callbackExternalEntityRef( XML_Parser parser,
         const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId )
 {
-    sax_fastparser::FastSaxParserImpl* pFastParser = reinterpret_cast<sax_fastparser::FastSaxParserImpl*>( XML_GetUserData( parser ) );
+    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( XML_GetUserData( parser ) );
     return pFastParser->callbackExternalEntityRef( parser, openEntityNames, base, systemId, publicId );
 }
 
 }
-
-namespace sax_fastparser {
-
-// --------------------------------------------------------------------
-// FastLocatorImpl
-// --------------------------------------------------------------------
 
 class FastLocatorImpl : public WeakImplHelper1< XLocator >
 {
@@ -346,19 +340,6 @@ public:
 private:
     FastSaxParserImpl *mpParser;
 };
-
-// --------------------------------------------------------------------
-// FastSaxParser
-// --------------------------------------------------------------------
-
-//---------------------------------------------
-// the implementation part
-//---------------------------------------------
-
-
-// --------------------------------------------------------------------
-// FastLocatorImpl implementation
-// --------------------------------------------------------------------
 
 sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeException)
 {
@@ -545,6 +526,10 @@ Event& Entity::getEvent( CallbackType aType )
     rEvent.maType = aType;
     return rEvent;
 }
+
+} // namespace
+
+namespace sax_fastparser {
 
 FastSaxParserImpl::FastSaxParserImpl( FastSaxParser* pFront ) : mpFront(pFront)
 {
@@ -870,44 +855,7 @@ void FastSaxParserImpl::setLocale( const Locale & Locale ) throw (RuntimeExcepti
     maData.maLocale = Locale;
 }
 
-Sequence< OUString > FastSaxParserImpl::getSupportedServiceNames_Static(void)
-{
-    Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( PARSER_SERVICE_NAME );
-    return aRet;
-}
-
-// XServiceInfo
-OUString FastSaxParserImpl::getImplementationName() throw (RuntimeException)
-{
-    return OUString( PARSER_IMPLEMENTATION_NAME );
-}
-
-// XServiceInfo
-sal_Bool FastSaxParserImpl::supportsService(const OUString& ServiceName) throw (RuntimeException)
-{
-    return cppu::supportsService(mpFront, ServiceName);
-}
-
-// XServiceInfo
-Sequence< OUString > FastSaxParserImpl::getSupportedServiceNames(void) throw (RuntimeException)
-{
-
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString( PARSER_SERVICE_NAME );
-    return seq;
-}
-
-
-/*---------------------------------------
-*
-* Helper functions and classes
-*
-*-------------------------------------------*/
-
-namespace {
-
-OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
+static OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
 {
     const sal_Char* pMessage = "";
     switch( xmlE )
@@ -947,8 +895,6 @@ OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int3
     aBuffer.append( " error" );
     return aBuffer.makeStringAndClear();
 }
-
-} // namespace
 
 void FastSaxParserImpl::deleteUsedEvents()
 {
@@ -1404,11 +1350,6 @@ FastSaxParser::~FastSaxParser()
     delete mpImpl;
 }
 
-uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames_Static()
-{
-    return FastSaxParserImpl::getSupportedServiceNames_Static();
-}
-
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
     throw (xml::sax::SAXException, io::IOException, uno::RuntimeException)
 {
@@ -1460,19 +1401,19 @@ void FastSaxParser::setLocale( const lang::Locale& rLocale )
 OUString FastSaxParser::getImplementationName()
     throw (uno::RuntimeException)
 {
-    return mpImpl->getImplementationName();
+    return OUString("com.sun.star.comp.extensions.xml.sax.FastParser");
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return mpImpl->supportsService(ServiceName);
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    return mpImpl->getSupportedServiceNames();
+    return FastSaxParser_getSupportedServiceNames();
 }
 
 bool FastSaxParser::hasNamespaceURL( const OUString& rPrefix ) const
@@ -1482,12 +1423,27 @@ bool FastSaxParser::hasNamespaceURL( const OUString& rPrefix ) const
 
 } // namespace sax_fastparser
 
-Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
+static Reference< XInterface > FastSaxParser_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
     throw(Exception)
 {
-    sax_fastparser::FastSaxParser *p = new sax_fastparser::FastSaxParser;
+    FastSaxParser *p = new FastSaxParser;
     return Reference< XInterface > ( (OWeakObject * ) p );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
+com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory(
+    const char * , void *pServiceManager, void * )
+{
+    Reference< XSingleServiceFactory > xFactory;
+    Reference< XMultiServiceFactory > xSMgr =
+        reinterpret_cast< XMultiServiceFactory * >( pServiceManager );
+    xFactory = createSingleFactory( xSMgr,
+            "com.sun.star.comp.extensions.xml.sax.FastParser",
+            FastSaxParser_CreateInstance,
+            FastSaxParser_getSupportedServiceNames() );
+    xFactory->acquire();
+    return xFactory.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

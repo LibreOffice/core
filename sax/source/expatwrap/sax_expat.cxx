@@ -46,12 +46,10 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
-#include "factory.hxx"
 #include "attrlistimpl.hxx"
 #include "xml2utf.hxx"
-#include <sax/fastparser.hxx>
 
-namespace sax_expatwrap {
+namespace {
 
 // Useful macros for correct String conversion depending on the choosen expat-mode
 #ifdef XML_UNICODE
@@ -128,11 +126,15 @@ OUString XmlChar2OUString( const XML_Char *p )
     }\
     ((void)0)
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.extensions.xml.sax.ParserExpat"
-#define SERVICE_NAME        "com.sun.star.xml.sax.Parser"
 
 class SaxExpatParser_Impl;
 
+static Sequence< OUString > SaxExpatParser_getSupportedServiceNames(void)
+{
+    Sequence<OUString> seq(1);
+    seq[0] = OUString("com.sun.star.xml.sax.Parser");
+    return seq;
+}
 
 // This class implements the external Parser interface
 class SaxExpatParser
@@ -145,12 +147,6 @@ public:
     SaxExpatParser();
     ~SaxExpatParser();
 
-public:
-
-    // The implementation details
-    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw ();
-
-public:
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(Sequence<Any> const& rArguments)
         throw (RuntimeException, Exception);
@@ -183,45 +179,13 @@ private:
 
 };
 
-//--------------------------------------
-// the extern interface
-//---------------------------------------
-Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
-    throw(Exception)
-{
-    SaxExpatParser *p = new SaxExpatParser;
-
-    return Reference< XInterface > ( (OWeakObject * ) p );
-}
-
-Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance(
-            SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
-        throw(Exception)
-{
-    ::sax_fastparser::FastSaxParser *p = new ::sax_fastparser::FastSaxParser;
-    return Reference< XInterface > ( (OWeakObject * ) p );
-}
-
-Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
-{
-    Sequence<OUString> aRet(1);
-    aRet[0] = SERVICE_NAME;
-    return aRet;
-}
-
-
-//---------------------------------------------
-// the implementation part
-//---------------------------------------------
-
 
 // Entity binds all information neede for a single file
 struct Entity
 {
     InputSource         structSource;
     XML_Parser          pParser;
-    XMLFile2UTFConverter converter;
+    sax_expatwrap::XMLFile2UTFConverter converter;
 };
 
 
@@ -242,7 +206,7 @@ public: // module scope
 
 
     Reference < XAttributeList >    rAttrList;
-    AttributeList   *pAttrList;
+    sax_expatwrap::AttributeList   *pAttrList;
 
     // External entity stack
     vector<struct Entity>   vecEntity;
@@ -450,7 +414,7 @@ SaxExpatParser::SaxExpatParser(  )
 
     // performance-improvement. Reference is needed when calling the startTag callback.
     // Handing out the same object with every call is allowed (see sax-specification)
-    m_pImpl->pAttrList = new AttributeList;
+    m_pImpl->pAttrList = new sax_expatwrap::AttributeList;
     m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );
 
     m_pImpl->bExceptionWasThrown = false;
@@ -630,7 +594,7 @@ void SaxExpatParser::setLocale( const Locale & locale ) throw (RuntimeException)
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName() throw ()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
 }
 
 // XServiceInfo
@@ -642,10 +606,7 @@ sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw ()
 // XServiceInfo
 Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw ()
 {
-
-    Sequence<OUString> seq(1);
-    seq[0] = SERVICE_NAME;
-    return seq;
+    return SaxExpatParser_getSupportedServiceNames();
 }
 
 
@@ -1058,56 +1019,29 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(pImpl,rExtendedDocumentHandler->endCDATA() );
 }
 
+} // namespace
+
+static Reference< XInterface > SaxExpatParser_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
+    throw(Exception)
+{
+    SaxExpatParser *p = new SaxExpatParser;
+    return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
-static void * getSingleFactory(
-        void *pServiceManager,
-        const OUString& sImplementation,
-        ComponentInstantiation pCreateFunction,
-        const Sequence< OUString > & rServiceNames)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
+com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory(
+    const char * , void *pServiceManager, void * )
 {
     Reference< XSingleServiceFactory > xFactory;
     Reference< XMultiServiceFactory > xSMgr =
         reinterpret_cast< XMultiServiceFactory * >( pServiceManager );
     xFactory = createSingleFactory( xSMgr,
-            sImplementation, pCreateFunction, rServiceNames );
-    xFactory->acquire();
-    return xFactory.get();
-}
-
-using namespace sax_expatwrap;
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory(
-    const char * , void *pServiceManager, void * )
-{
-    return getSingleFactory( pServiceManager,
             "com.sun.star.comp.extensions.xml.sax.ParserExpat",
             SaxExpatParser_CreateInstance,
-            SaxExpatParser::getSupportedServiceNames_Static() );
-}
-
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL com_sun_star_extensions_xml_sax_Writer_component_getFactory(
-    const char * , void *pServiceManager, void * )
-{
-    return getSingleFactory( pServiceManager,
-            "com.sun.star.extensions.xml.sax.Writer",
-            SaxWriter_CreateInstance,
-            SaxWriter_getSupportedServiceNames() );
-}
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory(
-    const char * , void *pServiceManager, void * )
-{
-    return getSingleFactory( pServiceManager,
-            "com.sun.star.comp.extensions.xml.sax.FastParser",
-            FastSaxParser_CreateInstance,
-            sax_fastparser::FastSaxParser::getSupportedServiceNames_Static() );
-}
-
+            SaxExpatParser_getSupportedServiceNames() );
+    xFactory->acquire();
+    return xFactory.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
