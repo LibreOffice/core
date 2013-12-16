@@ -407,10 +407,11 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 // ============================================================================
 
 // -----------------------------------------------------------------------------
-AccessibleGridControlAccess::AccessibleGridControlAccess( const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable )
-        :m_xParent( _rxParent )
-        ,m_rTable( _rTable )
-        ,m_pContext( NULL )
+AccessibleGridControlAccess::AccessibleGridControlAccess(
+        const Reference< XAccessible >& rxParent, IAccessibleTable& rTable )
+    : m_xParent( rxParent )
+    , m_pTable( & rTable )
+    , m_pContext( 0 )
 {
 }
 
@@ -424,6 +425,7 @@ void AccessibleGridControlAccess::dispose()
 {
     SolarMutexGuard g;
 
+    m_pTable = 0;
     m_pContext = NULL;
     ::comphelper::disposeComponent( m_xContext );
 }
@@ -441,8 +443,9 @@ Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessi
     if ( m_pContext && !m_pContext->isAlive() )
         m_xContext = m_pContext = NULL;
 
-    if ( !m_xContext.is() )
-        m_xContext = m_pContext = new AccessibleGridControl( m_xParent, this, m_rTable );
+    if (!m_xContext.is() && m_pTable)
+        m_xContext = m_pContext =
+            new AccessibleGridControl(m_xParent, this, *m_pTable);
 
     return m_xContext;
 }
