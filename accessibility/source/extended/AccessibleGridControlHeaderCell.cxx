@@ -45,7 +45,6 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
 */
 ::utl::AccessibleStateSetHelper* AccessibleGridControlHeaderCell::implCreateStateSetHelper()
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
     ::utl::AccessibleStateSetHelper*
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
@@ -55,7 +54,6 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
-        SolarMutexGuard aSolarGuard;
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
@@ -163,7 +161,8 @@ Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
 sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
     throw ( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslMutex() );
+    SolarMutexGuard g;
+
     ensureIsAlive();
     sal_Int32 nIndex = m_nColumnRowId;
     return nIndex;

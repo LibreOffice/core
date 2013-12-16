@@ -286,11 +286,6 @@ protected:
     void ensureIsAlive() const
         throw ( ::com::sun::star::lang::DisposedException );
 
-    /** @return  The ::osl::Mutex member provided by the class OBaseMutex. */
-    inline ::osl::Mutex& getOslMutex();
-    /** @return  Pointer to the global ::osl::Mutex. */
-    static inline ::osl::Mutex* getOslGlobalMutex();
-
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
     inline void implSetName( const OUString& rName );
@@ -311,13 +306,6 @@ protected:
 
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
-
-public:
-    // public versions of internal helper methods, with access control
-    struct TC_AccessControl { friend class TC_SolarMethodGuard; private: TC_AccessControl() { } };
-
-    inline ::osl::Mutex&    getMutex( const TC_AccessControl& ) { return getOslMutex(); }
-    inline void             ensureIsAlive( const TC_AccessControl& ) { ensureIsAlive(); }
 
 protected:
     // members ----------------------------------------------------------------
@@ -387,38 +375,11 @@ private:
     GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ); // never implemented
 };
 
-// ============================================================================
-// a helper class for protecting methods which need to lock the solar mutex in addition to the own mutex
-
-typedef ::osl::MutexGuard OslMutexGuard;
-
-class TC_SolarMethodGuard : public SolarMutexGuard, public OslMutexGuard
-{
-public:
-    inline TC_SolarMethodGuard( AccessibleGridControlBase& _rOwner, bool _bEnsureAlive = true )
-        : SolarMutexGuard(),
-        OslMutexGuard( _rOwner.getMutex( AccessibleGridControlBase::TC_AccessControl() ) )
-    {
-        if ( _bEnsureAlive )
-            _rOwner.ensureIsAlive( AccessibleGridControlBase::TC_AccessControl() );
-    }
-};
-
 // inlines --------------------------------------------------------------------
 
 inline ::svt::table::AccessibleTableControlObjType AccessibleGridControlBase::getType() const
 {
     return m_eObjType;
-}
-
-inline ::osl::Mutex& AccessibleGridControlBase::getOslMutex()
-{
-    return m_aMutex;
-}
-
-inline ::osl::Mutex* AccessibleGridControlBase::getOslGlobalMutex()
-{
-    return ::osl::Mutex::getGlobalMutex();
 }
 
 inline void AccessibleGridControlBase::implSetName(
