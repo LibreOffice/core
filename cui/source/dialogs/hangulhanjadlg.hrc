@@ -115,19 +115,6 @@
 #define HHO_ROW_a4                  (HHO_ROW_a3+14)
 #define HHO_ROW_a5                  (HHO_ROW_a4+4)
 
-
-// Hangul / Hanja New Dictonary Dialog
-#define FL_NEWDICT                  1
-
-#define FT_DICTNAME                 1
-
-#define ED_DICTNAME                 1
-
-#define PB_NEWDICT_OK               1
-#define PB_NEWDICT_ESC              2
-#define PB_NEWDICT_HLP              3
-
-
 // Hangul Hanja Edit Custom Dictionary Dialog
 #define MAXNUM_SUGGESTIONS          50
 

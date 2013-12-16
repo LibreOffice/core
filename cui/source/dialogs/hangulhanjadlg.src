@@ -272,58 +272,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
 
 };
 
-
-ModalDialog RID_SVX_MDLG_HANGULHANJA_NEWDICT
-{
-    HelpId = HID_HANGULHANJA_NEWDICT_DLG;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 213 , 66 ) ;
-    Moveable = TRUE ;
-
-    Text [ en-US ] = "New Dictionary" ;
-
-    FixedLine FL_NEWDICT
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 145 , 8 ) ;
-        Text [ en-US ] = "Dictionary" ;
-    };
-    FixedText FT_DICTNAME
-    {
-        Pos = MAP_APPFONT ( 11 , 15 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "~Name" ;
-    };
-    Edit ED_DICTNAME
-    {
-        HelpID = "cui:Edit:RID_SVX_MDLG_HANGULHANJA_NEWDICT:ED_DICTNAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 14 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
-        MaxTextLength = 32 ;
-    };
-    OKButton PB_NEWDICT_OK
-    {
-        Pos = MAP_APPFONT ( 157 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Disable = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_NEWDICT_ESC
-    {
-        Pos = MAP_APPFONT ( 157 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton PB_NEWDICT_HLP
-    {
-        Pos = MAP_APPFONT ( 157 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
-
-
 ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
 {
     OutputSize = TRUE ;

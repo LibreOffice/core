@@ -238,23 +238,17 @@ namespace svx
     class HangulHanjaNewDictDialog : public ModalDialog
     {
     private:
-        FixedLine           m_aNewDictFL;
-        FixedText           m_aDictNameFT;
-        Edit                m_aDictNameED;
-        OKButton            m_aOkBtn;
-        CancelButton        m_aCancelBtn;
-        HelpButton          m_aHelpBtn;
+        Edit* m_pDictNameED;
+        OKButton* m_pOkBtn;
 
-        bool                m_bEntered;
+        bool m_bEntered;
 
         DECL_LINK( OKHdl, void* );
         DECL_LINK( ModifyHdl, void* );
-    protected:
     public:
-                            HangulHanjaNewDictDialog( Window* _pParent );
-        virtual             ~HangulHanjaNewDictDialog();
+        HangulHanjaNewDictDialog( Window* _pParent );
 
-        bool                GetName( OUString& _rRetName ) const;
+        bool GetName( OUString& _rRetName ) const;
     };
 
 

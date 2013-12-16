@@ -1181,11 +1181,11 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
     {
-        OUString  aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
+        OUString  aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
 
         m_bEntered = !aName.isEmpty();
         if( m_bEntered )
-            m_aDictNameED.SetText( aName );     // do this in case of trailing chars have been deleted
+            m_pDictNameED->SetText( aName );     // do this in case of trailing chars have been deleted
 
         EndDialog( RET_OK );
         return 0;
@@ -1193,39 +1193,28 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl)
     {
-        OUString aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
+        OUString aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
 
-        m_aOkBtn.Enable( !aName.isEmpty() );
+        m_pOkBtn->Enable( !aName.isEmpty() );
 
         return 0;
     }
 
-    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog( Window* _pParent )
-        :ModalDialog    ( _pParent, CUI_RES( RID_SVX_MDLG_HANGULHANJA_NEWDICT ) )
-        ,m_aNewDictFL   ( this, CUI_RES( FL_NEWDICT ) )
-        ,m_aDictNameFT  ( this, CUI_RES( FT_DICTNAME ) )
-        ,m_aDictNameED  ( this, CUI_RES( ED_DICTNAME ) )
-        ,m_aOkBtn       ( this, CUI_RES( PB_NEWDICT_OK ) )
-        ,m_aCancelBtn   ( this, CUI_RES( PB_NEWDICT_ESC ) )
-        ,m_aHelpBtn     ( this, CUI_RES( PB_NEWDICT_HLP ) )
-
-        ,m_bEntered     ( false )
+    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog(Window* pParent)
+        : ModalDialog(pParent, "HangulHanjaAddDialog", "cui/ui/hangulhanjaadddialog.ui")
+        , m_bEntered(false)
     {
-        m_aOkBtn.SetClickHdl( LINK( this, HangulHanjaNewDictDialog, OKHdl ) );
+        get(m_pOkBtn, "ok");
+        get(m_pDictNameED, "entry");
 
-        m_aDictNameED.SetModifyHdl( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
-
-        FreeResource();
-    }
-
-    HangulHanjaNewDictDialog::~HangulHanjaNewDictDialog()
-    {
+        m_pOkBtn->SetClickHdl( LINK( this, HangulHanjaNewDictDialog, OKHdl ) );
+        m_pDictNameED->SetModifyHdl( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
     }
 
     bool HangulHanjaNewDictDialog::GetName( OUString& _rRetName ) const
     {
         if( m_bEntered )
-            _rRetName = comphelper::string::stripEnd(m_aDictNameED.GetText(), ' ');
+            _rRetName = comphelper::string::stripEnd(m_pDictNameED->GetText(), ' ');
 
         return m_bEntered;
     }
