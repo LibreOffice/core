@@ -21,7 +21,10 @@
 
 #include <sal/types.h>
 
-/** Namespace name for compiler/ platform, e.g. gcc3, msci */
+/** Namespace name for compiler/ platform, e.g. gcc3, msci
+
+    @deprecated implementation detail, not to be used by client code
+*/
 #define CPPU_CURRENT_NAMESPACE CPPU_ENV
 
 /// @cond INTERNAL
