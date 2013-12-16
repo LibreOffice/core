@@ -937,15 +937,16 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
 
-    sal_uLong nCount = 0;
+    //if _pParent is 0, then pEntry is the first root of the root.
     SvTreeListEntry* pEntry = FirstChild( _pParent );
-    while ( pEntry )
-    {
-        ++nCount;
-        pEntry = NextSibling( pEntry );
-    }
 
-    return nCount;
+    if( !pEntry )//there is only root, root don't have children
+        return 0;
+
+    if( !_pParent )//root and children of root
+        return pEntry->pParent->maChildren.size();
+
+    return _pParent->maChildren.size();
 }
 
 SvViewDataEntry* SvTreeListBox::GetViewDataEntry( SvTreeListEntry* pEntry ) const
