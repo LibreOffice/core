@@ -4381,11 +4381,7 @@ void OpHarMean::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string sSymName, SubArguments &
 vSubArguments)
 {
-    FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
-    assert(pCur);
-    const formula::DoubleVectorRefToken* pCurDVR =
-        dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-    size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"( ";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -4394,23 +4390,27 @@ vSubArguments)
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n";
+    ss << ")\n";
+    ss <<"{\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double nVal=0.0;\n";
-    ss << "    int length="<<nCurWindowSize<<";\n";
     ss << "    double tmp = 0;\n";
+    ss << "    int length;\n";
+    ss << "    int totallength=0;\n";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        pCur = vSubArguments[i]->GetFormulaToken();
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
         if (pCur->GetType() == formula::svDoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            nCurWindowSize = pDVR->GetRefRowSize();
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    length="<<nCurWindowSize;
+            ss << ";\n";
             ss << "    for (int i = ";
-#ifdef  ISNAN
-            ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+            ss << "    {\n";
             ss << "        double arg"<<i<<" = ";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << ";\n";
@@ -4423,24 +4423,35 @@ vSubArguments)
             ss << "            continue;\n";
             ss << "        }\n";
 #endif
-            ss << "        nVal += pow(arg"<<i<<",-1);\n";
+            ss << "        nVal += (1.0 *pow(";
+            ss << " arg"<<i<<",-1));\n";
             ss << "    }\n";
-#endif
+            ss << "    totallength +=length;\n";
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
-#ifdef  ISNAN
-            ss << "return HUGE_VAL";
+            ss << "    double arg0 = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(isNan(arg0))\n";
+            ss << "    {\n";
+            ss << "        continue;\n";
+            ss << "    }\n";
 #endif
+            ss << "    nVal += (1.0 * pow( arg0,-1));\n";
+            ss << "    totallength +=1;\n";
         }
         else if (pCur->GetType() == formula::svDouble)
         {
-#ifdef  ISNAN
-            ss << "return HUGE_VAL";
-#endif
+           ss << "    double arg0 = ";
+           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+           ss << ";\n";
+           ss << "    nVal += (1.0 *pow( arg0,-1));\n";
+           ss << "    totallength +=1;\n";
         }
     }
-    ss << "    tmp = length/nVal;\n\t";
+    ss << "    tmp = totallength*pow(nVal,-1);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
