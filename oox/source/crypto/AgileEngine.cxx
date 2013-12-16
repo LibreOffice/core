@@ -106,7 +106,7 @@ bool AgileEngine::calculateHashFinal(const OUString& rPassword, vector<sal_uInt8
 
     vector<sal_uInt8> data(mInfo.hashSize + 4, 0);
 
-    for (int i = 0; i < mInfo.spinCount; i++)
+    for (sal_Int32 i = 0; i < mInfo.spinCount; i++)
     {
         ByteOrderConverter::writeLittleEndian( &data[0], i );
         std::copy(hash.begin(), hash.end(), data.begin() + 4);
