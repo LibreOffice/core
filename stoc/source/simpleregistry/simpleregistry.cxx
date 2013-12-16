@@ -34,6 +34,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include <cppuhelper/factory.hxx>
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
@@ -49,9 +50,13 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include "bootstrapservices.hxx"
-
 namespace {
+
+static css::uno::Sequence< OUString > SimpleRegistry_getSupportedServiceNames() {
+    css::uno::Sequence< OUString > names(1);
+    names[0] = "com.sun.star.registry.SimpleRegistry";
+    return names;
+}
 
 class SimpleRegistry:
     public cppu::WeakImplHelper2<
@@ -96,7 +101,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
-    { return stoc_bootstrap::simreg_getImplementationName(); }
+    { return OUString("com.sun.star.comp.stoc.SimpleRegistry"); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -104,7 +109,7 @@ private:
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return stoc_bootstrap::simreg_getSupportedServiceNames(); }
+    { return SimpleRegistry_getSupportedServiceNames(); }
 
     Registry registry_;
 };
@@ -1120,24 +1125,24 @@ void SimpleRegistry::mergeKey(
 
 }
 
-namespace stoc_bootstrap {
-
-css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
+static css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
 {
     return static_cast< cppu::OWeakObject * >(new SimpleRegistry);
 }
 
-css::uno::Sequence< OUString > simreg_getSupportedServiceNames() {
-    css::uno::Sequence< OUString > names(1);
-    names[0] = "com.sun.star.registry.SimpleRegistry";
-    return names;
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
+com_sun_star_comp_stoc_SimpleRegistry_component_getFactory(
+    const char * , void * , void * )
+{
+    css::uno::Reference< css::lang::XSingleComponentFactory > xFactory;
+    xFactory = cppu::createSingleComponentFactory(
+            SimpleRegistry_CreateInstance,
+            "com.sun.star.comp.stoc.SimpleRegistry",
+            SimpleRegistry_getSupportedServiceNames() );
+    xFactory->acquire();
+    return xFactory.get();
 }
 
-OUString simreg_getImplementationName() {
-    return OUString("com.sun.star.comp.stoc.SimpleRegistry");
-}
-
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -247,12 +247,6 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
 {
 #ifndef DISABLE_DYNLOADING
     OUString moduleUri(uri);
-
-#ifdef ANDROID
-    if ( uri == "bootstrap.uno" SAL_DLLEXTENSION )
-        moduleUri = "libbootstrap.uno" SAL_DLLEXTENSION;
-#endif
-
     oslModule lib = osl_loadModule(
         moduleUri.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
@@ -291,13 +285,6 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
 
     // First test library names that aren't app-specific.
     static lib_to_component_mapping components_mapping[] = {
-        // Sigh, the name under which the bootstrap component is looked for
-        // varies a lot? Or then I just have been confused by some mixed-up
-        // incremental build.
-        { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
-        { "bootstrap.uno.a", bootstrap_component_getFactory },
-        { "libbootstraplo.a", bootstrap_component_getFactory },
-
         { "libintrospectionlo.a", introspection_component_getFactory },
         { "libreflectionlo.a", reflection_component_getFactory },
         { "libstocserviceslo.a", stocservices_component_getFactory },
@@ -322,8 +309,17 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
     };
     static lib_to_component_mapping direct_components_mapping[] = {
         { "com.sun.star.comp.extensions.xml.sax.ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory },
-        { "com.sun.star.extensions.xml.sax.Writer", com_sun_star_extensions_xml_sax_Writer_component_getFactory },
         { "com.sun.star.comp.extensions.xml.sax.FastParser", com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory },
+        { "com.sun.star.comp.stoc.DLLComponentLoader.component.getFactory", com_sun_star_comp_stoc_DLLComponentLoader_component_getFactory },
+        { "com.sun.star.comp.stoc.ImplementationRegistration.component.getFactory", com_sun_star_comp_stoc_ImplementationRegistration_component_getFactory },
+        { "com.sun.star.comp.stoc.NestedRegistry.component.getFactory", com_sun_star_comp_stoc_NestedRegistry_component_getFactory },
+        { "com.sun.star.comp.stoc.ORegistryServiceManager.component.getFactory", com_sun_star_comp_stoc_ORegistryServiceManager_component_getFactory },
+        { "com.sun.star.comp.stoc.OServiceManager.component.getFactory", com_sun_star_comp_stoc_OServiceManager_component_getFactory },
+        { "com.sun.star.comp.stoc.OServiceManagerWrapper.component.getFactory", com_sun_star_comp_stoc_OServiceManagerWrapper_component_getFactory },
+        { "com.sun.star.comp.stoc.SimpleRegistry.component.getFactory", com_sun_star_comp_stoc_SimpleRegistry_component_getFactory },
+        { "com.sun.star.extensions.xml.sax.Writer", com_sun_star_extensions_xml_sax_Writer_component_getFactory },
+        { "com.sun.star.security.comp.stoc.AccessController.component.getFactory", com_sun_star_security_comp_stoc_AccessController_component_getFactory },
+        { "com.sun.star.security.comp.stoc.FilePolicy.component.getFactory", com_sun_star_security_comp_stoc_FilePolicy_component_getFactory },
         { NULL, NULL }
     };
     lib_to_component_mapping *non_app_specific_map = components_mapping;

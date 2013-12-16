@@ -99,7 +99,16 @@ void * xstor_component_getFactory( const char * , void * , void * );
 
 void * com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory( const char * , void * , void * );
 void * com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_DLLComponentLoader_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_ImplementationRegistration_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_NestedRegistry_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_ORegistryServiceManager_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_OServiceManager_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_OServiceManagerWrapper_component_getFactory( const char * , void * , void * );
+void * com_sun_star_comp_stoc_SimpleRegistry_component_getFactory( const char * , void * , void * );
 void * com_sun_star_extensions_xml_sax_Writer_component_getFactory( const char * , void * , void * );
+void * com_sun_star_security_comp_stoc_AccessController_component_getFactory( const char * , void * , void * );
+void * com_sun_star_security_comp_stoc_FilePolicy_component_getFactory( const char * , void * , void * );
 
 #ifdef __cplusplus
 }

@@ -37,8 +37,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
-#include <bootstrapservices.hxx>
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
@@ -46,29 +44,15 @@ using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
 
-#define SERVICENAME "com.sun.star.registry.NestedRegistry"
-#define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"
-
-namespace stoc_bootstrap
-{
-Sequence< OUString > defreg_getSupportedServiceNames()
+static Sequence< OUString > NestedRegistryImpl_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(SERVICENAME);
+    seqNames.getArray()[0] = OUString("com.sun.star.registry.NestedRegistry");
     return seqNames;
 }
 
-OUString defreg_getImplementationName()
-{
-    return OUString(IMPLNAME);
-}
-}
+namespace {
 
-namespace stoc_defreg
-{
-//*************************************************************************
-// NestedRegistryImpl
-//*************************************************************************
 class NestedKeyImpl;
 
 class NestedRegistryImpl    : public WeakAggImplHelper4 < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
@@ -1211,7 +1195,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  ) throw (RuntimeException)
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    return stoc_bootstrap::defreg_getImplementationName();
+    return OUString("com.sun.star.comp.stoc.NestedRegistry");
 }
 
 sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceName )
@@ -1223,7 +1207,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    return stoc_bootstrap::defreg_getSupportedServiceNames();
+    return NestedRegistryImpl_getSupportedServiceNames();
 }
 
 //*************************************************************************
@@ -1368,17 +1352,15 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
         m_state++;
     }
 }
-} // namespace stco_defreg
 
-namespace stoc_bootstrap
-{
-//*************************************************************************
-Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance(
+} // namespace
+
+static Reference<XInterface> NestedRegistry_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference<XComponentContext>& )
     throw(Exception)
 {
     Reference<XInterface>   xRet;
-    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new stoc_defreg::NestedRegistryImpl;
+    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new NestedRegistryImpl;
 
     if (pRegistry)
     {
@@ -1388,6 +1370,17 @@ Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance(
     return xRet;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
+com_sun_star_comp_stoc_NestedRegistry_component_getFactory(
+    const char * , void * , void * )
+{
+    Reference< XSingleComponentFactory > xFactory;
+    xFactory = createSingleComponentFactory(
+            NestedRegistry_CreateInstance,
+            "com.sun.star.comp.stoc.NestedRegistry",
+            NestedRegistryImpl_getSupportedServiceNames() );
+    xFactory->acquire();
+    return xFactory.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
