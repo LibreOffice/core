@@ -421,7 +421,7 @@ AccessibleGridControlAccess::~AccessibleGridControlAccess()
 }
 
 // -----------------------------------------------------------------------------
-void AccessibleGridControlAccess::dispose()
+void AccessibleGridControlAccess::DisposeAccessImpl()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

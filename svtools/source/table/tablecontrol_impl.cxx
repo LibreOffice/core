@@ -2727,7 +2727,7 @@ namespace svt { namespace table
     void TableControl_Impl::disposeAccessible()
     {
         if ( m_pAccessibleTable )
-            m_pAccessibleTable->dispose();
+            m_pAccessibleTable->DisposeAccessImpl();
         m_pAccessibleTable = NULL;
     }
 
