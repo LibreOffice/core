@@ -70,7 +70,6 @@
 #include "sal/types.h"
 #include "uno/current_context.hxx"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 #include "jvmfwk/framework.h"
 #include "jni.h"
 

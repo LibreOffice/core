@@ -24,7 +24,6 @@
 
 #include "uno/environment.hxx"
 #include "uno/mapping.hxx"
-#include "uno/lbnames.h"
 #include "typelib/typedescription.h"
 
 #include "current.hxx"

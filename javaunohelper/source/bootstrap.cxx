@@ -25,6 +25,7 @@
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
 
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include "uno/environment.hxx"
 

@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <uno/environment.h>
+#include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 

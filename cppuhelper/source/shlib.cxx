@@ -21,6 +21,7 @@
 
 #include "osl/module.hxx"
 #include "uno/environment.h"
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/shlib.hxx"

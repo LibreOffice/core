@@ -20,7 +20,6 @@
 #ifndef INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_SPELL_SSPELLIMP_HXX
 #define INCLUDED_LINGUCOMPONENT_SOURCE_SPELLCHECK_SPELL_SSPELLIMP_HXX
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

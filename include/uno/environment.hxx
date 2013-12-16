@@ -55,7 +55,7 @@ public:
                           respectively to current C++ Environment.
         @since UDK 3.2.7
     */
-    inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_STRINGIFY(CPPU_ENV))) SAL_THROW(());
+    inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_CURRENT_LANGUAGE_BINDING_NAME)) SAL_THROW(());
 
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.

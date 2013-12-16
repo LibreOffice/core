@@ -42,7 +42,6 @@
 #include "osl/thread.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "uno/lbnames.h"
 
 #include <iostream>
 

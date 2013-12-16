@@ -20,8 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_INC_IPRCACHE_HXX
 #define INCLUDED_LINGUISTIC_INC_IPRCACHE_HXX
 
-
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/uno/Reference.h>

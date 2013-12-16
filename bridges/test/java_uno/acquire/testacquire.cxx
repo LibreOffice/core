@@ -46,7 +46,6 @@
 #include "test/javauno/acquire/XDerived.hpp"
 #include "test/javauno/acquire/XTest.hpp"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 #include <iostream>
 #include <cstdlib>

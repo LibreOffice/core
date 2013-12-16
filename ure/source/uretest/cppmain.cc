@@ -68,7 +68,6 @@
 #include "salhelper/simplereferenceobject.hxx"
 #include "uno/current_context.hxx"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 #include "test/types/CppTest.hpp"
 #include "test/types/JavaTest.hpp"

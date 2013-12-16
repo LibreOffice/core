@@ -20,7 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_LNGSVCMGR_HXX
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 

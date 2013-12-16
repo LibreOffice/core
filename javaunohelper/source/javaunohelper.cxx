@@ -23,6 +23,7 @@
 #include <osl/module.h>
 
 #include <uno/environment.hxx>
+#include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>

@@ -21,15 +21,16 @@
 
 /* I assume "LB" means "Language Binding" */
 
+#include <sal/config.h>
+
+#include <sal/macros.h>
+
 #ifdef __cplusplus
 
 #ifdef CPPU_ENV
 
-#define CPPU_STRINGIFY_EX( x ) #x
-#define CPPU_STRINGIFY( x ) CPPU_STRINGIFY_EX( x )
-
 /** Name for C++ compiler/ platform, e.g. "gcc3", "msci" */
-#define CPPU_CURRENT_LANGUAGE_BINDING_NAME CPPU_STRINGIFY( CPPU_ENV )
+#define CPPU_CURRENT_LANGUAGE_BINDING_NAME SAL_STRINGIFY( CPPU_ENV )
 
 #else
 

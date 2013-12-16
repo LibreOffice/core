@@ -47,7 +47,6 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "uno/lbnames.h"
 
 namespace com { namespace sun { namespace star {
     class XEventListener;

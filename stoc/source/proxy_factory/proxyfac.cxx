@@ -25,6 +25,7 @@
 #include "rtl/ref.hxx"
 #include "uno/dispatcher.hxx"
 #include "uno/data.h"
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include "uno/environment.hxx"
 #include "typelib/typedescription.hxx"

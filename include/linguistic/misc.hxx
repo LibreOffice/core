@@ -31,7 +31,6 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/pathoptions.hxx>
 #include <i18nlangtag/lang.h>

@@ -20,6 +20,7 @@
 
 #include <rtl/bootstrap.hxx>
 
+#include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
@@ -198,7 +199,7 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
                                                         s_get_service_names() ));
 
     uno::Environment curr_env(Environment::getCurrent());
-    uno::Environment target_env(rtl::OUString(CPPU_STRINGIFY(CPPU_ENV)));
+    uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 
     uno::Mapping target2curr(target_env, curr_env);
 

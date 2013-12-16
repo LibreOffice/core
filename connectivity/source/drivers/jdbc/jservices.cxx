@@ -19,6 +19,7 @@
 
 #include "java/sql/Driver.hxx"
 #include <cppuhelper/factory.hxx>
+#include <uno/lbnames.h>
 
 using namespace connectivity;
 using ::com::sun::star::uno::Reference;

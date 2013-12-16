@@ -20,7 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_LNGOPT_HXX
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

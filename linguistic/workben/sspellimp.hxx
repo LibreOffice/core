@@ -20,7 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_WORKBEN_SSPELLIMP_HXX
 #define INCLUDED_LINGUISTIC_WORKBEN_SSPELLIMP_HXX
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -28,6 +28,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 
+#include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -746,7 +747,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
     SAL_THROW(())
 {
     uno::Environment curr_env(Environment::getCurrent());
-    uno::Environment target_env(rtl::OUString(CPPU_STRINGIFY(CPPU_ENV)));
+    uno::Environment target_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 
     uno::Mapping curr2target(curr_env, target_env);
 

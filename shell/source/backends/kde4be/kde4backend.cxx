@@ -48,7 +48,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "uno/current_context.hxx"
-#include "uno/lbnames.h"
 
 #include "kde4access.hxx"
 

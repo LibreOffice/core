@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-
+#include <uno/lbnames.h>
 
 namespace CPPU_CURRENT_NAMESPACE
 {

@@ -24,7 +24,6 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "sal/types.h"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 #include <stdio.h>
 

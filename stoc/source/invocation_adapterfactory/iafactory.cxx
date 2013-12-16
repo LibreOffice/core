@@ -28,6 +28,7 @@
 #include <uno/dispatcher.h>
 #include <uno/data.h>
 #include <uno/any2.h>
+#include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>

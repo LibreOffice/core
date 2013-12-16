@@ -21,7 +21,6 @@
 #ifndef _LINGU2_HYPHENIMP_HXX_
 #define _LINGU2_HYPHENIMP_HXX_
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -20,7 +20,6 @@
 #include "SwXFilterOptions.hxx"
 #include "sal/types.h"
 #include <osl/diagnose.h>
-#include <uno/lbnames.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 

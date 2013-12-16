@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.h>

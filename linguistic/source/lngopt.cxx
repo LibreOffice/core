@@ -25,7 +25,6 @@
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 
 #include <cppuhelper/factory.hxx>

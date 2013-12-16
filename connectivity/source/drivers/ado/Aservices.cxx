@@ -19,6 +19,7 @@
 
 #include "ado/ADriver.hxx"
 #include <cppuhelper/factory.hxx>
+#include <uno/lbnames.h>
 
 using namespace connectivity::ado;
 using ::com::sun::star::uno::Reference;

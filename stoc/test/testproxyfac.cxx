@@ -22,6 +22,7 @@
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 #include "uno/environment.hxx"
+#include <uno/lbnames.h>
 #include "cppuhelper/servicefactory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"

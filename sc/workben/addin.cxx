@@ -30,7 +30,6 @@
 #include <svl/itemprop.hxx>
 #include <usr/proptypehlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/util/date.hpp>

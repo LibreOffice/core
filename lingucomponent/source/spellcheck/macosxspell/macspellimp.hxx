@@ -20,7 +20,6 @@
 #ifndef _MACSPELLIMP_H_
 #define _MACSPELLIMP_H_
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase6.hxx>
 

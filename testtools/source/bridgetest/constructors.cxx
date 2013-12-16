@@ -45,7 +45,6 @@
 #include "test/testtools/bridgetest/TestPolyStruct.hpp"
 #include "test/testtools/bridgetest/TestPolyStruct2.hpp"
 #include "test/testtools/bridgetest/XMultiBase1.hpp"
-#include "uno/lbnames.h"
 
 namespace {
 

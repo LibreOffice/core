@@ -30,6 +30,7 @@
 #include <rtl/string.hxx>
 
 #include <uno/current_context.h>
+#include <uno/lbnames.h>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/compbase3.hxx>

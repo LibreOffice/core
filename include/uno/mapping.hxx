@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppu/unotype.hxx>
 #include <uno/environment.hxx>
+#include <uno/lbnames.h>
 
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;

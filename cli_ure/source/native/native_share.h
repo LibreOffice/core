@@ -21,6 +21,7 @@
 #using "cli_uretypes.dll"
 
 #include "rtl/ustring.hxx"
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 
 #include <vcclr.h>

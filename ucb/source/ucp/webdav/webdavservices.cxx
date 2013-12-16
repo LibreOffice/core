@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <uno/lbnames.h>
 #include "webdavprovider.hxx"
 
 using namespace com::sun::star;

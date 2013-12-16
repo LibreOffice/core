@@ -229,7 +229,6 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "cppuhelper/factory.hxx"
-#include "uno/lbnames.h"
 #include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
 #include "sidebar/PanelFactory.hxx"
 

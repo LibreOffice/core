@@ -21,7 +21,6 @@
 #define INCLUDED_LINGUISTIC_LNGPROPHELP_HXX
 
 #include <tools/solar.h>
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

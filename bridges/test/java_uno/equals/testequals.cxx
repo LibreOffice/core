@@ -45,7 +45,6 @@
 #include "test/java_uno/equals/XDerived.hpp"
 #include "test/java_uno/equals/XTestInterface.hpp"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 namespace {
 

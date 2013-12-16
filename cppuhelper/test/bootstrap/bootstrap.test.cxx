@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include "uno/environment.hxx"
+#include <uno/lbnames.h>
 #include "cppu/EnvDcp.hxx"
 #include "cppu/EnvGuards.hxx"
 

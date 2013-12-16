@@ -20,6 +20,7 @@
 
 #include "jni.h"
 
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include "uno/environment.hxx"
 #include "jvmaccess/virtualmachine.hxx"

@@ -24,7 +24,6 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "sal/types.h"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

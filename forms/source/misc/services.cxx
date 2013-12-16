@@ -20,7 +20,6 @@
 #include "services.hxx"
 #include "frm_module.hxx"
 #include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
 #include <osl/diagnose.h>
 #include <uno/mapping.hxx>
 

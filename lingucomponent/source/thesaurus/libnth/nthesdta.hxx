@@ -25,7 +25,6 @@
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 
 

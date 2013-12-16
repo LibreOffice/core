@@ -23,8 +23,6 @@
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "cppuhelper/factory.hxx"
-#include "uno/lbnames.h"
-
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

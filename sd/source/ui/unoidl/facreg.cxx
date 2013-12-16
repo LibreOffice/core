@@ -22,7 +22,6 @@
 #include "sddll.hxx"
 
 #include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
 #include <sfx2/sfxmodelfactory.hxx>
 #include "osl/diagnose.h"
 #include "sal/types.h"

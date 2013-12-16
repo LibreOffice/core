@@ -20,6 +20,7 @@
 #define INCLUDED_UNO_CURRENT_CONTEXT_HXX
 
 #include <uno/current_context.h>
+#include <uno/lbnames.h>
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
 

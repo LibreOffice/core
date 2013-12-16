@@ -28,7 +28,6 @@
 #include <osl/diagnose.h>
 
 #include <cppuhelper/factory.hxx>
-#include <uno/lbnames.h>
 #include <xmloff/xmlreg.hxx>
 
 using namespace com::sun::star;

@@ -40,6 +40,7 @@
 #include "cppu/EnvDcp.hxx"
 
 #include <uno/environment.hxx>
+#include <uno/lbnames.h>
 
 using namespace ::com::sun::star;
 
@@ -222,7 +223,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT  void SAL_CALL component_getImplementationEnviro
     else
     {
         char buff[256];
-        strcpy(buff, CPPU_STRINGIFY(CPPU_ENV));
+        strcpy(buff, CPPU_CURRENT_LANGUAGE_BINDING_NAME);
         strcat(buff, purpose.getStr());
 
         *envTypeName = strdup(buff);

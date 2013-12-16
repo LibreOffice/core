@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include "typelib/typedescription.hxx"
 #include <uno/dispatcher.hxx>
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include <uno/data.h>
 #include "uno/environment.hxx"

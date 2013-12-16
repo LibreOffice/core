@@ -34,7 +34,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 #include "test/types/Data.hpp"
 #include "test/types/XServer.hpp"

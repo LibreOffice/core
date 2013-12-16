@@ -20,6 +20,7 @@
 #include "osl/interlck.h"
 #include "rtl/ustring.hxx"
 #include "uno/environment.hxx"
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include "uno/dispatcher.h"
 

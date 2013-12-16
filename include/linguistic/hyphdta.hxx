@@ -23,7 +23,6 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
 #include <tools/solar.h>
-#include <uno/lbnames.h>
 #include <cppuhelper/implbase1.hxx>
 #include <linguistic/lngdllapi.h>
 

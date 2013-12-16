@@ -32,7 +32,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "uno/environment.h"
-#include "uno/lbnames.h"
 
 #include "test/types/TestException.hpp"
 #include "test/types/XTest.hpp"

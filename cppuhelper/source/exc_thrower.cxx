@@ -23,6 +23,7 @@
 #include "osl/doublecheckedlocking.h"
 #include "osl/mutex.hxx"
 #include "uno/dispatcher.hxx"
+#include <uno/lbnames.h>
 #include "uno/mapping.hxx"
 #include "cppuhelper/detail/XExceptionThrower.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"

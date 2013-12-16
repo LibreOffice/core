@@ -20,7 +20,6 @@
 #define INCLUDED_CPPU_MACROS_HXX
 
 #include <sal/types.h>
-#include <uno/lbnames.h>
 
 /** Namespace name for compiler/ platform, e.g. gcc3, msci */
 #define CPPU_CURRENT_NAMESPACE CPPU_ENV
