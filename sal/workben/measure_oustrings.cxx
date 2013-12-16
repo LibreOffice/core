@@ -33,8 +33,6 @@ int COUNT = 10000000;
 
 #ifdef HAVE_CXX_Ox
 #  define SAL_DECLARE_UTF16(str) u ## str
-#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
-#  define SAL_DECLARE_UTF16(str) U ## str
 #elif __SIZEOF_WCHAR_T__ == 2
 #  define SAL_DECLARE_UTF16(str) L ## str
 #endif

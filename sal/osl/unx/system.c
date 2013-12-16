@@ -305,9 +305,6 @@ int osl_isSingleCPU = 0;
 #if defined(_SC_NPROCESSORS_CONF) /* i.e. MACOSX for Intel doesn't have this */
 #if defined(__GNUC__)
 void osl_interlockedCountCheckForSingleCPU(void)  __attribute__((constructor));
-#elif defined(__SUNPRO_C)
-void osl_interlockedCountCheckForSingleCPU(void);
-#pragma init (osl_interlockedCountCheckForSingleCPU)
 #endif
 
 void osl_interlockedCountCheckForSingleCPU(void)

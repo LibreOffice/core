@@ -1181,13 +1181,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
                 aContext.URL = aPDFUrl;
 
                 // create and initialize PDFWriter
-                #if defined __SUNPRO_CC
-                #pragma disable_warn
-                #endif
                 pWriter.reset( new vcl::PDFWriter( aContext, uno::Reference< beans::XMaterialHolder >() ) );
-                #if defined __SUNPRO_CC
-                #pragma enable_warn
-                #endif
             }
 
             pWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),

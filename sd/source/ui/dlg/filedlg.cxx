@@ -49,10 +49,6 @@
 class SdFileDialog_Imp : public sfx2::FileDialogHelper
 {
 private:
-#if defined __SUNPRO_CC
-    using sfx2::FileDialogHelper::Execute;
-#endif
-
     friend class SdOpenSoundFileDialog;
 
     css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;

@@ -27,9 +27,7 @@
 
 #include <boost/shared_array.hpp>
 
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 
@@ -44,9 +42,7 @@
 #include "UTF8.h"
 #endif
 
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(pop)
 #endif
 
