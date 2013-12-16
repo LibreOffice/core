@@ -238,37 +238,6 @@ Reference< XInterface > invokeComponentFactory(
 
 } // namespace
 
-#ifdef DISABLE_DYNLOADING
-extern "C"
-{
-    extern void * bootstrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * deployment_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * introspection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * localebe1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * package2_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * reflection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sfx_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * svl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * tk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * stocservices_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * ucpexpand1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * utl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * vcl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * xstor_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-
-    extern void * com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory( const char * , void * , void * );
-    extern void * com_sun_star_extensions_xml_sax_Writer_component_getFactory( const char * , void * , void * );
-    extern void * com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory( const char * , void * , void * );
-}
-#endif
-
 namespace cppuhelper { namespace detail {
 
 css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
