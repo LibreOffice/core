@@ -9017,6 +9017,178 @@ void OpMinA::GenSlidingWindowFunction(
     ss << "    return tmp0 == 1.79769e+308 ? 0.0 : tmp0;\n";
     ss << "}\n";
 }
+void OpCountA::GenSlidingWindowFunction(
+    std::stringstream &ss, const std::string sSymName, SubArguments &
+vSubArguments)
+{
+    int isMixed = 0;
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double nCount = 0.0;\n";
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            if(pDVR->GetArrays()[0].mpNumericArray
+                && pDVR->GetArrays()[0].mpStringArray)
+                isMixed = svDoubleVectorRefDoubleString;
+            else if(pDVR->GetArrays()[0].mpNumericArray)
+                isMixed = svDoubleVectorRefDouble;
+            else if(pDVR->GetArrays()[0].mpStringArray)
+                isMixed = svDoubleVectorRefString;
+            else
+                isMixed = svDoubleVectorRefNULL;
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
+#endif
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " && i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            else {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+
+            if(pSVR->GetArray().mpNumericArray
+                && pSVR->GetArray().mpStringArray)
+                isMixed = svSingleVectorRefDoubleString;
+            else if(pSVR->GetArray().mpNumericArray)
+                isMixed = svSingleVectorRefDouble;
+            else if(pSVR->GetArray().mpStringArray)
+                isMixed = svSingleVectorRefString;
+            else
+                isMixed = svSingleVectorRefNULL;
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#else
+            nItems += 1;
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    {\n";
+            isMixed = svDoubleDouble;
+#endif
+            nItems += 1;
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+            nItems += 1;
+        }
+
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            if(isMixed == svDoubleVectorRefDoubleString
+                || isMixed == svSingleVectorRefDoubleString)
+            {
+                ss << "        if (!isNan(";
+                ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                ss << ")){\n";
+                ss << "            nCount+=1.0;\n";
+                ss << "    }\n";
+                ss << "        else if(isNan(";
+                ss << vSubArguments[i]->GenDoubleSlidingWindowDeclRef();
+                ss << ") && ";
+                ss<< vSubArguments[i]->GenStringSlidingWindowDeclRef();
+                ss << " != 0)\n";
+                ss << "            nCount+=1.0;\n";
+                ss << "    }\n";
+            }
+            else if(isMixed == svDoubleVectorRefDouble
+                || isMixed == svSingleVectorRefDouble)
+            {
+                ss << "        if (!isNan(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << ")){\n";
+                ss << "            nCount+=1.0;\n";
+                ss <<"}\n    }\n";
+            }
+            else if(isMixed == svDoubleVectorRefString)
+            {
+                ss << "        if (!isNan(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << "))\n";
+                ss << "            nCount+=1.0;\n";
+                ss <<"\n    }\n";
+            }
+            else if(isMixed == svSingleVectorRefString)
+            {
+                ss << "        if(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << " != 0)\n";
+                ss << "            nCount+=1.0;\n";
+                ss << "    }\n";
+            }
+            else if(isMixed == svDoubleDouble)
+            {
+                ss << "            nCount+=1.0;\n";
+                ss << "    }\n";
+            }
+            else
+            {
+                ss << "    }\n";
+            }
+        }
+        else
+        {
+                ss << "            nCount+=1.0;\n";
+                ss << "    }\n";
+        }
+#else
+        ss << "            nCount+=1.0;\n";
+        ss << "    }\n";
+#endif
+    }
+    ss << "    return nCount;\n";
+    ss << "}\n";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
