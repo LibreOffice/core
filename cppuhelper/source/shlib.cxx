@@ -19,6 +19,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "osl/module.hxx"
 #include "uno/environment.h"
 #include <uno/lbnames.h>
@@ -49,11 +51,33 @@ using rtl::OUString;
 
 namespace {
 
+uno::Environment getEnvironment(
+    OUString const & name, OUString const & cImplName)
+{
+    OUString n(name);
+    static const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
+    if (pUNO_ENV_LOG && rtl_str_getLength(pUNO_ENV_LOG) )
+    {
+        OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
+        OString aEnv( pUNO_ENV_LOG );
+        sal_Int32 nIndex = 0;
+        do
+        {
+            const OString aStr( aEnv.getToken( 0, ';', nIndex ) );
+            if ( aStr.equals(implName) )
+            {
+                n += ::rtl::OUString(":log");
+                break;
+            }
+        } while( nIndex != -1 );
+    }
+    return uno::Environment(n);
+}
+
 #ifndef DISABLE_DYNLOADING
 
 void getLibEnv(oslModule                lib,
                       uno::Environment       * pEnv,
-                      OUString               * pSourceEnv_name,
                       uno::Environment const & cTargetEnv,
                       OUString         const & cImplName = OUString(),
                       OUString         const & rPrefix = OUString())
@@ -84,23 +108,8 @@ void getLibEnv(oslModule                lib,
 
     if (!pEnv->is() && pEnvTypeName)
     {
-        *pSourceEnv_name = OUString::createFromAscii(pEnvTypeName);
-        static const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
-        if (pUNO_ENV_LOG && rtl_str_getLength(pUNO_ENV_LOG) )
-        {
-            OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
-            OString aEnv( pUNO_ENV_LOG );
-            sal_Int32 nIndex = 0;
-            do
-            {
-                const OString aStr( aEnv.getToken( 0, ';', nIndex ) );
-                if ( aStr.equals(implName) )
-                {
-                    *pSourceEnv_name += ::rtl::OUString(":log");
-                    break;
-                }
-            } while( nIndex != -1 );
-        }
+        *pEnv = getEnvironment(
+            OUString::createFromAscii(pEnvTypeName), cImplName);
     }
 }
 
@@ -134,7 +143,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     (void) rPath;
     (void) xKey;
     return cppuhelper::detail::loadSharedLibComponentFactory(
-        uri, "", rImplName, xMgr);
+        uri, "", "", rImplName, xMgr);
 }
 
 }
@@ -143,40 +152,18 @@ namespace
 {
 
 Reference< XInterface > invokeComponentFactory(
+    uno::Environment const & env,
     oslGenericFunction pGetter,
-    oslModule lib,
     OUString const & rModulePath,
     OUString const & rImplName,
     Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    OUString const & rPrefix,
     OUString &rExcMsg )
 {
     Reference< XInterface > xRet;
     uno::Environment currentEnv(Environment::getCurrent());
-    uno::Environment env;
-    OUString aEnvTypeName;
-
-#ifdef DISABLE_DYNLOADING
-    (void) lib;
-    (void) rPrefix;
-    // It seems that the only UNO components that have
-    // component_getImplementationEnvironment functions are the JDBC
-    // and ADO (whatever that is) database connectivity thingies
-    // neither of which make sense on iOS and Android (which are the
-    // only platforms for which DISABLE_DYNLOADING is intended,
-    // really). So we can simply bypass the getLibEnv() stuff and
-    // don't need to wonder how to find out what function to call at
-    // this point if statically linked.
-    aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-#else
-    getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
-#endif
 
     OString aImplName(
         OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
-    if (!env.is())
-        env = uno::Environment(aEnvTypeName);
 
     if (env.is() && currentEnv.is())
     {
@@ -282,7 +269,8 @@ extern "C"
 namespace cppuhelper { namespace detail {
 
 css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
-    OUString const & uri, OUString const & rPrefix, OUString const & rImplName,
+    OUString const & uri, OUString const & rEnvironment,
+    OUString const & rPrefix, OUString const & rImplName,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr)
 {
 #ifndef DISABLE_DYNLOADING
@@ -388,7 +376,22 @@ css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
 
     if (pSym != 0)
     {
-        xRet = invokeComponentFactory( pSym, lib, moduleUri, rImplName, xMgr, aFullPrefix, aExcMsg );
+        uno::Environment env;
+        if (rEnvironment.isEmpty()) {
+#if defined DISABLE_DYNLOADING
+            //TODO: assert(false); // this cannot happen
+            env = getEnvironment(CPPU_CURRENT_LANGUAGE_BINDING_NAME, rImplName);
+
+#else
+            getLibEnv(
+                lib, &env, Environment::getCurrent(), rImplName, aFullPrefix);
+#endif
+        } else {
+            env = getEnvironment(rEnvironment, rImplName);
+        }
+
+        xRet = invokeComponentFactory(
+            env, pSym, moduleUri, rImplName, xMgr, aExcMsg );
     }
     else
     {
@@ -451,18 +454,14 @@ void SAL_CALL writeSharedLibComponentInfo(
     uno::Environment currentEnv(Environment::getCurrent());
     uno::Environment env;
 
-    OUString aEnvTypeName;
     OUString aExcMsg;
 
-    getLibEnv(lib, &env, &aEnvTypeName, currentEnv);
+    getLibEnv(lib, &env, currentEnv);
 
     OUString aWriteInfoName = COMPONENT_WRITEINFO;
     oslGenericFunction pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
     if (pSym != 0)
     {
-        if (!env.is())
-            env = uno::Environment(aEnvTypeName);
-
         if (env.is() && currentEnv.is())
         {
             Mapping aCurrent2Env( currentEnv, env );

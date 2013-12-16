@@ -23,8 +23,8 @@ namespace rtl { class OUString; }
 namespace cppuhelper { namespace detail {
 
 css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
-    rtl::OUString const & uri, rtl::OUString const & prefix,
-    rtl::OUString const & rImplName,
+    rtl::OUString const & uri, rtl::OUString const & environment,
+    rtl::OUString const & prefix, rtl::OUString const & rImplName,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr);
 
 } }

@@ -17,7 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="jdbc"
+<!-- Recent Java 6 VMs make calls to JNI Attach/DetachCurrentThread (which this
+     code does extensively) very expensive.  A follow-up JVM fix reduced the
+     overhead significantly again for all threads but the main thread.  So a
+     quick hack to improve performance of this component again is to confine it
+     in the affine apartment (where all code will run on a single, dedicated
+     thread that is guaranteed no to be the main thread).  However, a better fix
+     would still be to redesign the code so that it does not call
+     Attach/DetachCurrentThread so frequently:
+-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    environment="@CPPU_ENV@:affine" prefix="jdbc"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.sdbc.JDBCDriver">
     <service name="com.sun.star.sdbc.Driver"/>

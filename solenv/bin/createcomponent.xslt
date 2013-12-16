@@ -22,6 +22,7 @@
     xmlns="http://openoffice.org/2010/uno-components"
     xmlns:uc="http://openoffice.org/2010/uno-components">
   <xsl:param name="uri"/>
+  <xsl:param name="cppu_env"/>
   <xsl:strip-space elements="*"/>
   <xsl:template match="uc:component">
     <components>
@@ -40,7 +41,36 @@
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
+  <xsl:template match="@environment">
+    <xsl:attribute name="environment">
+      <xsl:call-template name="replace">
+        <xsl:with-param name="input" select="current()"/>
+        <xsl:with-param name="pattern" select="'@CPPU_ENV@'"/>
+        <xsl:with-param name="replace" select="$cppu_env"/>
+      </xsl:call-template>
+    </xsl:attribute>
+  </xsl:template>
   <xsl:template match="@*">
     <xsl:copy/>
+  </xsl:template>
+  <xsl:template name="replace">
+    <xsl:param name="input"/>
+    <xsl:param name="pattern"/>
+    <xsl:param name="replace"/>
+    <xsl:choose>
+      <xsl:when test="contains($input, $pattern)">
+        <xsl:value-of select="substring-before($input, $pattern)"/>
+        <xsl:value-of select="$replace"/>
+        <xsl:call-template name="replace">
+          <xsl:with-param
+              name="input" select="substring-after($input, $pattern)"/>
+          <xsl:with-param name="pattern" select="$pattern"/>
+          <xsl:with-param name="replace" select="$replace"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$input"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>

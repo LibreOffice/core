@@ -30,8 +30,9 @@ $(call gb_Output_announce,$(3),$(true),CMP,1)
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam uri \
-		'$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' -o $(1) \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
+		--stringparam uri '$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' \
+		--stringparam cppu_env $(gb_CPPU_ENV) -o $(1) \
 		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 endef
 

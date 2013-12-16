@@ -53,13 +53,15 @@ public:
         struct ImplementationInfo: private boost::noncopyable {
             ImplementationInfo(
                 rtl::OUString const & theName, rtl::OUString const & theLoader,
-                rtl::OUString const & theUri, rtl::OUString const & thePrefix,
+                rtl::OUString const & theUri,
+                rtl::OUString const & theEnvironment,
+                rtl::OUString const & thePrefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     theAlienContext,
                 rtl::OUString const & theRdbFile):
                 name(theName), loader(theLoader), uri(theUri),
-                prefix(thePrefix), alienContext(theAlienContext),
-                rdbFile(theRdbFile)
+                environment(theEnvironment), prefix(thePrefix),
+                alienContext(theAlienContext), rdbFile(theRdbFile)
             {}
 
             explicit ImplementationInfo(rtl::OUString const & theName):
@@ -68,6 +70,7 @@ public:
             rtl::OUString const name;
             rtl::OUString const loader;
             rtl::OUString const uri;
+            rtl::OUString const environment;
             rtl::OUString const prefix;
             css::uno::Reference< css::uno::XComponentContext > const
                 alienContext;
@@ -79,13 +82,15 @@ public:
         struct Implementation: private boost::noncopyable {
             Implementation(
                 rtl::OUString const & name, rtl::OUString const & loader,
-                rtl::OUString const & uri, rtl::OUString const & prefix,
+                rtl::OUString const & uri, rtl::OUString const & environment,
+                rtl::OUString const & prefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     alienContext,
                 rtl::OUString const & rdbFile):
                 info(
                     new ImplementationInfo(
-                        name, loader, uri, prefix, alienContext, rdbFile)),
+                        name, loader, uri, environment, prefix, alienContext,
+                        rdbFile)),
                 loaded(false)
             {}
 
