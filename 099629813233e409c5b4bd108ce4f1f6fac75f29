@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///h4\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-12-16T09:15:46Z",
+      "side": 1,
+      "message": "It\u0027s a good idea to start such comments with \"///\" so doxygen can recognize them and advertise e.g. at http://docs.libreoffice.org/writerfilter/html/classes.html",
+      "revId": "099629813233e409c5b4bd108ce4f1f6fac75f29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
