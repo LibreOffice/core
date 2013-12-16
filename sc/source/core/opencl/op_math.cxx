@@ -111,6 +111,76 @@ void OpSecH::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return pow(cosh(arg0),-1 );\n";
     ss << "}";
 }
+void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ", ";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss<<") {\n";
+    ss<<"    double tmp = 0;\n";
+    ss<<"    int gid0 = get_global_id(0);\n";
+    ss<<"    double arg0=0;\n";
+    ss<<"    double arg1=0;\n";
+    ss <<"\n    ";
+    //while (i-- > 1)
+    for (size_t i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+            const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#else
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
+#endif
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "        tmp=";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "        if (isNan(tmp))\n";
+            ss << "            arg"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            arg"<<i<<"=tmp;\n";
+            ss << "    }\n";
+        }
+        else
+        {
+            ss<<"    arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss<<";\n";
+        }
+#else
+        ss<<"arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
+        ss<<";\n";
+#endif
+    }
+    ss<<"    if(arg1==0)\n";
+    ss<<"        return arg1;\n";
+    ss<<"    tmp=arg1 * round(arg0 * pow(arg1,-1));\n";
+    ss<<"    return tmp;\n";
+    ss<<"}";
+}
 void OpCosh::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
