@@ -661,7 +661,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
     sal_Int32 nRadius = 0;
 
@@ -677,6 +677,8 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     }
 
     // non visual shape properties
+    if (GetDocumentType() == DOCUMENT_DOCX)
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
     pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id, I32S( GetNewShapeID( xShape ) ),
@@ -701,7 +703,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, XML_sp );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     return *this;
 }
