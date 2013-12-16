@@ -121,6 +121,7 @@ $(call gb_Extension_get_target,$(1)) : FILES := META-INF description.xml
 $(call gb_Extension_get_target,$(1)) : LICENSE :=
 $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_Extension_get_target,$(1)) : PLATFORM := $(PLATFORMID)
+$(call gb_Extension_get_target,$(1)) : $(SRCDIR)/$(2)/META-INF/manifest.xml
 $(call gb_Extension_get_workdir,$(1))/description.xml : \
 	$(SRCDIR)/$(2)/description.xml
 $(call gb_Extension_get_workdir,$(1))/description.xml :| \
