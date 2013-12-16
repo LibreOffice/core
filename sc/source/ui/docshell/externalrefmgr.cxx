@@ -1392,13 +1392,17 @@ inline T ColumnBatch<T>::getValue(ScRefCellValue& raCell) const
 template<>
 inline void ColumnBatch<svl::SharedString>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 {
-    xMat->PutString(maStorage.data(), maStorage.size(), nCol, mnRowStart);
+    /*if (!maStorage.empty())*/ // there is no need to check for empty()
+                                // matrix is always initialized with all empty elements in this code path
+                                // skip the initial empty check to save some cycles
+    xMat->PutString(&maStorage.front(), maStorage.size(), nCol, mnRowStart);
 }
 
 template<class T>
 inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 {
-    xMat->PutDouble(maStorage.data(), maStorage.size(), nCol, mnRowStart);
+    /*if (!maStorage.empty())*/ // there is no need to check for empty(): see above
+    xMat->PutDouble(&maStorage.front(), maStorage.size(), nCol, mnRowStart);
 }
 
 static ScTokenArray* convertToTokenArray(
