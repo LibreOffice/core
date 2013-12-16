@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///eE\u003d",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-16T15:28:29Z",
+      "side": 1,
+      "message": "I\u0027d rather see this transformed to \u0026maStorage.front() instead.\n\nPlus, I think if maStorage is empty then we need to put an empty string, or even use PutEmpty()?\n\nKohei?",
+      "revId": "b039278618d8a4276adfae3f0d5908171952ab5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///d4\u003d",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-16T15:28:29Z",
+      "side": 1,
+      "message": "ditto, but I think this would need PutEmpty() anyway.",
+      "revId": "b039278618d8a4276adfae3f0d5908171952ab5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
