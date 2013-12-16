@@ -53,14 +53,14 @@ namespace {
 // </item>
 //
 // Another example:
-// [HKEY_LOCAL_MACHINE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\AboutConfig/#fuse\Hide]
+// [HKEY_LOCAL_MACHINE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\Java/#fuse\Hide]
 // "Value"="true"
 // becomes the following in configuration:
-// <!-- Hide Tools - Options - LibreOffice - Expert Config panel -->
+// <!-- Hide Tools - Options - LibreOffice - Advanced panel -->
 // <item oor:path="/org.openoffice.Office.OptionsDialog/OptionsDialogGroups">
 //     <node oor:name="ProductName" oor:op="fuse">
 //         <node oor:name="Pages">
-//             <node oor:name="AboutConfig" oor:op="fuse">
+//             <node oor:name="Java" oor:op="fuse">
 //                 <prop oor:name="Hide">
 //                     <value>true</value>
 //                 </prop>
