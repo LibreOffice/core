@@ -2271,9 +2271,7 @@ VCLXDialog::VCLXDialog()
 
 VCLXDialog::~VCLXDialog()
 {
-#ifndef __SUNPRO_CC
     OSL_TRACE ("%s", __FUNCTION__);
-#endif
 }
 
 // ::com::sun::star::uno::XInterface
@@ -4197,9 +4195,7 @@ VCLXComboBox::VCLXComboBox()
 
 VCLXComboBox::~VCLXComboBox()
 {
-#ifndef __SUNPRO_CC
     OSL_TRACE ("%s", __FUNCTION__);
-#endif
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()

@@ -29,10 +29,6 @@
 
 using namespace http_dav_ucp;
 
-# if defined __SUNPRO_CC
-# pragma enable_warn
-#endif
-
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------

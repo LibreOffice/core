@@ -50,9 +50,7 @@ VCLXTabPageContainer::VCLXTabPageContainer() :
 
 VCLXTabPageContainer::~VCLXTabPageContainer()
 {
-#ifndef __SUNPRO_CC
     OSL_TRACE ("%s", __FUNCTION__);
-#endif
 }
 
 void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(RuntimeException)

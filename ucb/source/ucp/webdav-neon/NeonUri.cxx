@@ -40,11 +40,8 @@
 
 using namespace webdav_ucp;
 
-# if defined __SUNPRO_CC
 // FIXME: not sure whether initializing a ne_uri statically is supposed to work
 // the string fields of ne_uri are char*, not const char*
-# pragma disable_warn
-# endif
 
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wwrite-strings"
@@ -74,10 +71,6 @@ const ne_uri g_sUriDefaultsFTP   = { (char *) "ftp",
                                      NULL,
                                      NULL };
 } // namespace
-
-# if defined __SUNPRO_CC
-# pragma enable_warn
-#endif
 
 NeonUri::NeonUri( const ne_uri * inUri )
     throw ( DAVException )

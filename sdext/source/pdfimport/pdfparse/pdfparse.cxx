@@ -18,9 +18,7 @@
  */
 
 
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 
@@ -38,9 +36,7 @@
 #include <rtl/alloc.h>
 
 // disable warnings again because someone along the line has enabled them
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 
@@ -681,9 +677,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #endif // WIN32
 }
 
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(pop)
 #endif
 
