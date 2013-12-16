@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///fg\u003d",
+        "filename": "sw/source/filter/ww8/attributeoutputbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-12-16T11:35:08Z",
+      "side": 1,
+      "message": "I find the naming a bit confusing, IsFoo methods typically return a bool. Maybe rename to GetDeletedParagraphMarker() in a follow-up patch?",
+      "revId": "fa75717151df37bec8bfe9b124752d4cf47f8391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
