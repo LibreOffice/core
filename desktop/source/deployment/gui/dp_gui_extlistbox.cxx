@@ -1224,7 +1224,13 @@ void ExtensionBox_Impl::checkEntries()
                 if ( nPos < m_nActive )
                     m_nActive -= 1;
                 else if ( ( nPos == m_nActive ) && ( nPos == (long) m_vEntries.size() - 1 ) )
+                {
                     m_nActive -= 1;
+                    if (m_nActive == -1)
+                    {
+                        m_bHasActive = false;
+                    }
+                }
                 m_vRemovedEntries.push_back( *iIndex );
                 m_vEntries.erase( iIndex );
                 iIndex = m_vEntries.begin() + nPos;
