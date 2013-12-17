@@ -53,13 +53,13 @@ class XMLPropertyHandler;
 */
 struct XMLPropertySetMapperEntry_Impl
 {
-    OUString sXMLAttributeName;
-    OUString sAPIPropertyName;
-    sal_Int32  nType;
-    sal_uInt16 nXMLNameSpace;
-    sal_Int16  nContextId;
-    SvtSaveOptions::ODFDefaultVersion   nEarliestODFVersionForExport;
-    const XMLPropertyHandler *pHdl;
+    OUString                           sXMLAttributeName;
+    OUString                           sAPIPropertyName;
+    sal_Int32                          nType;
+    sal_uInt16                         nXMLNameSpace;
+    sal_Int16                          nContextId;
+    SvtSaveOptions::ODFDefaultVersion  nEarliestODFVersionForExport;
+    const XMLPropertyHandler          *pHdl;
 
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertyMapEntry& rMapEntry,
