@@ -39,8 +39,8 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     sXMLAttributeName( GetXMLToken(rMapEntry.meXMLName) ),
     sAPIPropertyName( OUString(rMapEntry.msApiName, rMapEntry.nApiNameLength,
                                RTL_TEXTENCODING_ASCII_US ) ),
-    nXMLNameSpace( rMapEntry.mnNameSpace ),
     nType( rMapEntry.mnType ),
+    nXMLNameSpace( rMapEntry.mnNameSpace ),
     nContextId( rMapEntry.mnContextId ),
     nEarliestODFVersionForExport( rMapEntry.mnEarliestODFVersionForExport ),
     pHdl( rFactory->GetPropertyHandler( rMapEntry.mnType & MID_FLAG_MASK ) )
@@ -51,8 +51,8 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
         const XMLPropertySetMapperEntry_Impl& rEntry ) :
     sXMLAttributeName( rEntry.sXMLAttributeName),
     sAPIPropertyName( rEntry.sAPIPropertyName),
-    nXMLNameSpace( rEntry.nXMLNameSpace),
     nType( rEntry.nType),
+    nXMLNameSpace( rEntry.nXMLNameSpace),
     nContextId( rEntry.nContextId),
     nEarliestODFVersionForExport( rEntry.nEarliestODFVersionForExport ),
     pHdl( rEntry.pHdl)
