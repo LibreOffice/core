@@ -30,6 +30,8 @@
 
 #include <queue>
 
+namespace sc {
+
 namespace datastreams {
 
 class CallerThread : public salhelper::Thread
@@ -528,5 +530,7 @@ void DataStream::Edit(Window* pWindow, const Link& )
             StartImport();
     }
 }
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

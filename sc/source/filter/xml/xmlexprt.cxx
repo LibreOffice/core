@@ -836,7 +836,7 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
                 aAreaLink.nRefresh = pLink->GetTimeout();
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
-            DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i])));
+            sc::DataStream *pStream = dynamic_cast<sc::DataStream*>(&(*(*rLinks[i])));
             if (pStream)
             {
                 ScMyAreaLink aAreaLink;

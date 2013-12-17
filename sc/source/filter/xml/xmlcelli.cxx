@@ -1005,7 +1005,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
             SvtMiscOptions aMiscOptions;
             if (aMiscOptions.IsExperimentalMode() && pCellRangeSource->sFilterOptions == "DataStream")
             {
-                DataStream::Set( dynamic_cast<ScDocShell*>(pDoc->GetDocumentShell())
+                sc::DataStream::Set( dynamic_cast<ScDocShell*>(pDoc->GetDocumentShell())
                         , pCellRangeSource->sURL // rURL
                         , sRangeStr // rRange
                         , sFilterName.toInt32() // nLimit

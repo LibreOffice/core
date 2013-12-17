@@ -14,6 +14,8 @@
 #include <vcl/layout.hxx>
 #include <datastream.hxx>
 
+namespace sc {
+
 DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     : ModalDialog(pParent, "DataStreamDialog", "modules/scalc/ui/datastreams.ui")
     , mpDocShell(pDocShell)
@@ -127,6 +129,8 @@ void DataStreamDlg::StartStream(DataStream *pStream)
             );
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

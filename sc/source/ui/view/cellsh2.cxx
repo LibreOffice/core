@@ -738,7 +738,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
         case SID_DATA_STREAMS:
             {
-                DataStreamDlg aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+                sc::DataStreamDlg aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
                 if (aDialog.Execute() == RET_OK)
                     aDialog.StartStream();
             }
@@ -750,7 +750,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
                     for (size_t i = 0; i < rLinks.size(); i++)
-                        if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
+                        if (sc::DataStream *pStream = dynamic_cast<sc::DataStream*>(&(*(*rLinks[i]))))
                             pStream->StartImport();
                 }
             }
@@ -762,7 +762,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     const sfx2::SvBaseLinks& rLinks = pDoc->GetLinkManager()->GetLinks();
                     for (size_t i = 0; i < rLinks.size(); i++)
-                        if (DataStream *pStream = dynamic_cast<DataStream*>(&(*(*rLinks[i]))))
+                        if (sc::DataStream *pStream = dynamic_cast<sc::DataStream*>(&(*(*rLinks[i]))))
                             pStream->StopImport();
                 }
             }

@@ -13,9 +13,12 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 
-class DataStream;
 class ScDocShell;
 class SvtURLBox;
+
+namespace sc {
+
+class DataStream;
 
 class DataStreamDlg : public ModalDialog
 {
@@ -48,5 +51,7 @@ public:
             const OUString& rMove, const sal_uInt32 nSettings);
     void StartStream(DataStream *pStream = 0);
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

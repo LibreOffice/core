@@ -20,13 +20,16 @@
 
 #include <rangelst.hxx>
 
+class ScDocShell;
+class ScDocument;
+class Window;
+
+namespace sc {
+
 namespace datastreams {
     class CallerThread;
     class ReaderThread;
 }
-class ScDocShell;
-class ScDocument;
-class Window;
 
 typedef std::vector<OString> LinesList;
 
@@ -89,5 +92,7 @@ private:
     rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
