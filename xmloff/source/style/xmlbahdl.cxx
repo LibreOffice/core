@@ -879,7 +879,7 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
         lcl_xmloff_setAny( rValue, nValue, 2 );
     else if( rStrImpValue == GetXMLToken( XML_AUTO ) )
     {
-        rValue <<= (sal_Int16)nValue;
+        rValue.clear(); // void
         bRet = true;
     }
     return bRet;
@@ -891,7 +891,8 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue, con
     sal_Int32 nValue = 0;
     lcl_xmloff_getAny( rValue, nValue, 2 );
 
-    if( 0 == nValue )
+    // FIXME: 0 is not a valid value - write "auto" instead
+    if (0 == nValue || !rValue.hasValue())
         rStrExpValue = GetXMLToken( XML_AUTO );
     else
     {
