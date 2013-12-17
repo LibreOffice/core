@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <uno/lbnames.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -202,6 +203,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 {
     return ::cppu::component_getFactoryHelper(
         implName, xMgr, xRegistry, ::my_sc_impl::s_component_entries );
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 }
