@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -29,14 +29,11 @@
 
 typedef std::vector < com::sun::star::uno::Reference < com::sun::star::frame::XStatusListener > > StatusListeners;
 
-typedef boost::unordered_map < ::rtl::OUString,
-                               StatusListeners,
-                               rtl::OUStringHash,
-                               std::equal_to< rtl::OUString > > ListenerMap;
+typedef std::map < ::rtl::OUString, StatusListeners > ListenerMap;
 
 // For every frame there is *one* Dispatch object for all possible commands
 // this struct contains an array of listeners for every supported command
-// these arrays are accessed by a boost::unordered_map (with the command string as index)
+// these arrays are accessed by a std::map (with the command string as index)
 struct ListenerItem
 {
     ListenerMap aContainer;
