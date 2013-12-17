@@ -1645,9 +1645,13 @@ static bool lcl_parseDateTime(
             }
             if (bSuccess)
             {
-                const sal_Int32 nDigits = std::min<sal_Int32>(nPos - nStart, 9);
-                OSL_ENSURE(nDigits > 0, "bad code monkey");
-                nNanoSeconds=static_cast<double>(nTemp)*(1000000000.0/pow(10.0,nDigits));
+                sal_Int32 nDigits = std::min<sal_Int32>(nPos - nStart, 9);
+                assert(nDigits > 0);
+                for (; nDigits < 9; ++nDigits)
+                {
+                    nTemp *= 10;
+                }
+                nNanoSeconds = nTemp;
             }
         }
 
