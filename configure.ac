@@ -2973,10 +2973,10 @@ if test $_os = iOS; then
 
     if test "$enable_ios_simulator" = yes; then
         if test "$BITNESS_OVERRIDE" = 64; then
-            arch=x86_64
+            XCODE_ARCHS=x86_64
             versionmin=-mios-simulator-version-min=7.0
         else
-            arch=i386
+            XCODE_ARCHS=i386
             case $sdkver in
             7.*)
                 versionmin=-mios-simulator-version-min=6.1
@@ -2989,10 +2989,10 @@ if test $_os = iOS; then
     else
         platform=iPhoneOS
         if test "$BITNESS_OVERRIDE" = 64; then
-            arch=arm64
+            XCODE_ARCHS=arm64
             versionmin=-miphoneos-version-min=7.0
         else
-            arch=armv7
+            XCODE_ARCHS=armv7
             versionmin=-miphoneos-version-min=6.1
         fi
     fi
@@ -3023,8 +3023,8 @@ if test $_os = iOS; then
 
     stdlib="-stdlib=$XCODE_CLANG_CXX_LIBRARY"
 
-    CC="`xcrun -find clang` -arch $arch -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $arch -fvisibility=hidden $stdlib -isysroot $sysroot $lto $versionmin"
+    CC="`xcrun -find clang` -arch $XCODE_ARCHS -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $XCODE_ARCHS -fvisibility=hidden $stdlib -isysroot $sysroot $lto $versionmin"
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
@@ -3035,6 +3035,7 @@ if test $_os = iOS; then
 fi
 
 AC_SUBST(XCODE_CLANG_CXX_LIBRARY)
+AC_SUBST(XCODE_ARCHS)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 

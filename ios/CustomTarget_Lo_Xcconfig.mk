@@ -15,10 +15,16 @@ $(call gb_CustomTarget_get_target,ios/Lo_Xcconfig): $(LO_XCCONFIG)
 .PHONY : $(LO_XCCONFIG)
 
 $(LO_XCCONFIG) :
-    # Edit in the list of all our (static) libs in the Xcode
-    # configuration file.
+    # Edit the Xcode configuration file:
+    # - the list of all our (static) libs
+    # - compiler flags
+    #
 	all_libs=`$(SRCDIR)/bin/lo-all-static-libs`; \
-	sed -e "s|^\(LINK_LDFLAGS =\).*$$|\1 $$all_libs|" < $(LO_XCCONFIG) > $(LO_XCCONFIG).new && mv $(LO_XCCONFIG).new $(LO_XCCONFIG)
+	\
+	sed -e "s,^\(LINK_LDFLAGS =\).*$$,\1 $$all_libs," \
+		-e "s,^\(OTHER_CFLAGS =\).*$$,\1 $(gb_GLOBALDEFS)," \
+		-e "s,^\(OTHER_CPLUSPLUSFLAGS =\).*$$,\1 $(gb_GLOBALDEFS)," \
+			< $(LO_XCCONFIG) > $(LO_XCCONFIG).new && mv $(LO_XCCONFIG).new $(LO_XCCONFIG)
 
     # When SRCDIR!=BUILDDIR, Xcode is used on the project in the
     # *source* tree (because that is where the source files are). Copy
