@@ -6216,6 +6216,15 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             m_pColorAttrList->add( FSNS( XML_w, XML_themeColor ),
                                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
         }
+        else if ( i->first == "CharThemeColorShade" )
+        {
+            i->second >>= str;
+            if( !m_pColorAttrList )
+                m_pColorAttrList = m_pSerializer->createAttrList();
+
+            m_pColorAttrList->add( FSNS( XML_w, XML_themeShade ),
+                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+        }
         else if( i->first == "CharThemeFontNameCs"   ||
                 i->first == "CharThemeFontNameAscii" ||
                 i->first == "CharThemeFontNameEastAsia" ||

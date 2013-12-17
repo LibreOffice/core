@@ -3110,6 +3110,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                     m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_ORIGINAL_COLOR, aIter->Value, true, CHAR_GRAB_BAG);
                 else if (aIter->Name == "themeColor")
                     m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR, aIter->Value, true, CHAR_GRAB_BAG);
+                else if (aIter->Name == "themeShade")
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_SHADE, aIter->Value, true, CHAR_GRAB_BAG);
             }
             if (m_pImpl->m_aInteropGrabBagName == "TempColorPropsGrabBag")
             {
