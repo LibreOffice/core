@@ -148,6 +148,7 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/aclocal.m4 \
         $(BUILDDIR)/autom4te.cache \
         $(BUILDDIR)/config.log \
+        $(BUILDDIR)/config.Build.log \
         $(BUILDDIR)/config.status \
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_host.mk \
