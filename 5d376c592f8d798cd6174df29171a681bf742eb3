@@ -52,6 +52,24 @@
       "revId": "5d376c592f8d798cd6174df29171a681bf742eb3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///Xg\u003d",
+        "filename": "sw/inc/ndtxt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-12-17T14:02:48Z",
+      "side": 1,
+      "message": "Google was my friend, honestly, I had never heard that word before yesterday and I hoped that it was enough widespread. I\u0027ll go with \"GetSpaceLeft\" and amend this commit as soon as I have time. Or, I can push it directly in case the rest is OK for you.",
+      "parentUuid": "AAAAbH///Xw\u003d",
+      "revId": "5d376c592f8d798cd6174df29171a681bf742eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
