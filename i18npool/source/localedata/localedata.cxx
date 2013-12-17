@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -31,7 +31,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
-
 
 static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
 
@@ -1622,11 +1621,10 @@ LocaleDataImpl::getImplementationName() throw( RuntimeException )
     return OUString(clocaledata);
 }
 
-sal_Bool SAL_CALL
-LocaleDataImpl::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL LocaleDataImpl::supportsService(const OUString& rServiceName)
         throw( RuntimeException )
 {
-    return rServiceName == clocaledata;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

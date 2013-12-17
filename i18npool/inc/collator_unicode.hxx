@@ -21,7 +21,8 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCollator.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase2.hxx>
 #include <osl/module.h>
 
 #include <unicode/tblcoll.h>
@@ -32,7 +33,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class Collator_Unicode : public cppu::WeakImplHelper1 < XCollator >
+class Collator_Unicode : public cppu::WeakImplHelper2 < XCollator, com::sun::star::lang::XServiceInfo >
 {
 public:
     // Constructors

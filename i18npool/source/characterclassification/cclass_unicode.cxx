@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cclass_unicode.hxx>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <unicode/uchar.h>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <breakiteratorImpl.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -267,10 +267,9 @@ OUString SAL_CALL cclass_Unicode::getImplementationName() throw( RuntimeExceptio
     return OUString::createFromAscii(cClass);
 }
 
-
 sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cClass);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( RuntimeException )

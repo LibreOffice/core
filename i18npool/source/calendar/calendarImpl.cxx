@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "calendarImpl.hxx"
 #include "localedata.hxx"
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -40,7 +40,6 @@ CalendarImpl::~CalendarImpl()
         delete lookupTable[l];
     lookupTable.clear();
 }
-
 
 void SAL_CALL
 CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeException)
@@ -344,19 +343,17 @@ CalendarImpl::getImplementationName(void) throw( RuntimeException )
     return OUString("com.sun.star.i18n.CalendarImpl");
 }
 
-const sal_Char cCalendar[] = "com.sun.star.i18n.LocaleCalendar";
-
 sal_Bool SAL_CALL
 CalendarImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cCalendar);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
 CalendarImpl::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cCalendar);
+    aRet[0] = "com.sun.star.i18n.LocaleCalendar";
     return aRet;
 }
 

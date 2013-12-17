@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <assert.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <textconversion.hxx>
 
 using namespace com::sun::star::uno;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -79,7 +78,7 @@ TextConversion::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 TextConversion::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(implementationName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

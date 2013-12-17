@@ -27,6 +27,7 @@
 #include <collator_unicode.hxx>
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -250,7 +251,7 @@ Collator_Unicode::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 Collator_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(implementationName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

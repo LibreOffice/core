@@ -18,12 +18,10 @@
  */
 
 #include "unoscripttypedetector.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 
-//      ----------------------------------------------------
 //      class UnoScriptTypeDetector
-//      ----------------------------------------------------;
-
 sal_Int16 SAL_CALL
 UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -74,7 +72,7 @@ UnoScriptTypeDetector::getImplementationName() throw( ::com::sun::star::uno::Run
 sal_Bool SAL_CALL
 UnoScriptTypeDetector::supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException )
 {
-    return ServiceName != sDetector;
+    return cppu::supportsService(this, ServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL

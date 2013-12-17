@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <indexentrysupplier.hxx>
 #include <localedata.hxx>
 
@@ -184,7 +185,7 @@ IndexEntrySupplier::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 IndexEntrySupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(implementationName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

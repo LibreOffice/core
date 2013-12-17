@@ -21,6 +21,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <string.h>
 #include "ordinalsuffix.hxx"
 
@@ -142,7 +143,7 @@ OUString SAL_CALL OrdinalSuffix::getImplementationName(void) throw( RuntimeExcep
 
 sal_Bool SAL_CALL OrdinalSuffix::supportsService( const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cOrdinalSuffix);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) throw( RuntimeException )
