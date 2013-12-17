@@ -43,7 +43,9 @@ public:
         //Clipboard id for SfxFilter
         unsigned int nClipboardID = 0,
         //additional filter version for SfxFilter
-        unsigned int nFilterVersion = 0);
+        unsigned int nFilterVersion = 0,
+        //export or import?
+        bool bExport = false);
 
     virtual bool load(
         const OUString &rFilter,
@@ -52,6 +54,17 @@ public:
         unsigned int nFilterFlags,
         unsigned int nClipboardID,
         unsigned int nFilterVersion) = 0;
+
+    virtual bool save(
+        const OUString &/*rFilter*/,
+        const OUString &/*rURL*/,
+        const OUString &/*rUserData*/,
+        unsigned int /*nFilterFlags*/,
+        unsigned int /*nClipboardID*/,
+        unsigned int /*nFilterVersion*/)
+    {
+        return true;
+    }
 
 protected:
     ~FiltersTest() {}
@@ -63,7 +76,8 @@ protected:
         const OUString &rUserData,
         unsigned int nFilterFlags,
         unsigned int nClipboardID,
-        unsigned int nFilterVersion);
+        unsigned int nFilterVersion,
+        bool bExport);
 };
 
 }

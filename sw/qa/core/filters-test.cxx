@@ -21,6 +21,7 @@
 #include <sfx2/sfxsids.hrc>
 
 #include <svl/stritem.hxx>
+#include <unotools/tempfile.hxx>
 
 #include "init.hxx"
 #include "iodetect.hxx"
@@ -45,6 +46,9 @@ public:
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
         unsigned int nClipboardID, unsigned int nFilterVersion);
+    virtual bool save( const OUString &rFilter, const OUString &rURL,
+        const OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     virtual void setUp();
 
     // Ensure CVEs remain unbroken
@@ -55,12 +59,29 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    bool filter( const OUString &rFilter, const OUString &rURL,
+        const OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion, bool bExport);
     uno::Reference<uno::XInterface> m_xWriterComponent;
 };
 
 bool SwFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
         unsigned int nClipboardID, unsigned int nFilterVersion)
+{
+    return filter(rFilter, rURL, rUserData, nFilterFlags, nClipboardID, nFilterVersion, false);
+}
+
+bool SwFiltersTest::save(const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion)
+{
+    return filter(rFilter, rURL, rUserData, nFilterFlags, nClipboardID, nFilterVersion, true);
+}
+
+bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
     SfxFilter* pFilter = new SfxFilter(
         rFilter, OUString(), nFilterFlags,
@@ -79,9 +100,21 @@ bool SwFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     }
 
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
+    if (!bExport)
+    {
+        if (xDocShRef.Is())
+            xDocShRef->DoClose();
+        return bLoaded;
+    }
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    SfxMedium aDstMed(aTempFile.GetURL(), STREAM_STD_WRITE);
+    aDstMed.SetFilter(pFilter);
+    bool bSaved = xDocShRef->DoSaveAs(aDstMed);
     if (xDocShRef.Is())
         xDocShRef->DoClose();
-    return bLoaded;
+    return bSaved;
 }
 
 #define isstorage 1
@@ -125,6 +158,14 @@ void SwFiltersTest::testCVEs()
     testDir(OUString("HTML"),
             getURLFromSrc("/sw/qa/core/data/html/"),
             OUString(sHTML));
+
+    testDir("Rich Text Format",
+            getURLFromSrc("/sw/qa/core/exportdata/rtf/"),
+            OUString(),
+            SFX_FILTER_STARONEFILTER,
+            0,
+            0,
+            /*bExport=*/true);
 }
 
 void SwFiltersTest::setUp()

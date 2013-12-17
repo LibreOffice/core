@@ -53,7 +53,7 @@ void decode(const OUString& rIn, const OUString &rOut)
 void FiltersTest::recursiveScan(filterStatus nExpected,
     const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-    unsigned int nClipboardID, unsigned int nFilterVersion)
+    unsigned int nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
     osl::Directory aDir(rURL);
 
@@ -67,7 +67,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
         {
             recursiveScan(nExpected, rFilter, sURL, rUserData,
-                nFilterFlags, nClipboardID, nFilterVersion);
+                nFilterFlags, nClipboardID, nFilterVersion, bExport);
         }
         else
         {
@@ -106,8 +106,13 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
             //the hanging input file is visible
             fprintf(stderr, "%s,", aRes.getStr());
             sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes = load(rFilter, sURL, rUserData, nFilterFlags,
-                nClipboardID, nFilterVersion);
+            bool bRes;
+            if (!bExport)
+                bRes = load(rFilter, sURL, rUserData, nFilterFlags,
+                            nClipboardID, nFilterVersion);
+            else
+                bRes = save(rFilter, sURL, rUserData, nFilterFlags,
+                            nClipboardID, nFilterVersion);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
 
             if (bEncrypted)
@@ -126,18 +131,18 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
 void FiltersTest::testDir(const OUString &rFilter,
     const OUString &rURL, const OUString &rUserData,
     unsigned int nFilterFlags, unsigned int nClipboardID,
-    unsigned int nFilterVersion)
+    unsigned int nFilterVersion, bool bExport)
 {
     fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
     recursiveScan(test::pass, rFilter,
         rURL + "pass",
-        rUserData, nFilterFlags, nClipboardID, nFilterVersion);
+        rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
     recursiveScan(test::fail, rFilter,
         rURL + "fail",
-        rUserData, nFilterFlags, nClipboardID, nFilterVersion);
+        rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
     recursiveScan(test::indeterminate, rFilter,
         rURL + "indeterminate",
-        rUserData, nFilterFlags, nClipboardID, nFilterVersion);
+        rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
 }
 
 }
