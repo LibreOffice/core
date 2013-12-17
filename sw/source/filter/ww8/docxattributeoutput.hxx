@@ -682,6 +682,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pFlyWrapAttrList;
     /// Attributes of the next v:textbox element.
     ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
+    /// Attributes of the run color
+    ::sax_fastparser::FastAttributeList *m_pColorAttrList;
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;
 

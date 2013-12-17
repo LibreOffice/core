@@ -2060,6 +2060,9 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts", "hAnsiTheme", "majorHAnsi");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts", "asciiTheme", "majorHAnsi");
 
+    // check theme font color value has been preserved
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeColor", "accent3");
+
     // check the themeFontLang values in settings file
     xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
     if (!pXmlSettings)

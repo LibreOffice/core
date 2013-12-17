@@ -1234,6 +1234,14 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
     }
 
+    if ( m_pColorAttrList )
+    {
+        XFastAttributeListRef xAttrList( m_pColorAttrList );
+        m_pColorAttrList = NULL;
+
+        m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
+    }
+
     if ( m_pEastAsianLayoutAttrList )
     {
         XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList );
@@ -3490,6 +3498,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
             // Write run properties.
             m_pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
             aAttrIter.OutAttr(nAktPos);
+            WriteCollectedRunProperties();
             m_pSerializer->endElementNS(XML_w, XML_rPr);
 
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
@@ -4342,8 +4351,10 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
 
     aColorString = msfilter::util::ConvertColor( aColor );
 
-    m_pSerializer->singleElementNS( XML_w, XML_color,
-            FSNS( XML_w, XML_val ), aColorString.getStr(), FSEND );
+    if( !m_pColorAttrList )
+        m_pColorAttrList = m_pSerializer->createAttrList();
+
+    m_pColorAttrList->add( FSNS( XML_w, XML_val ), aColorString.getStr() );
 }
 
 void DocxAttributeOutput::CharContour( const SvxContourItem& rContour )
@@ -6128,6 +6139,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     sal_Bool bWriteCSTheme = sal_True;
     sal_Bool bWriteAsciiTheme = sal_True;
     sal_Bool bWriteEastAsiaTheme = sal_True;
+    sal_Bool bWriteThemeFontColor = sal_True;
     OUString sOriginalValue;
     for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
     {
@@ -6148,6 +6160,12 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             if ( i->second >>= sOriginalValue )
                 bWriteEastAsiaTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sOriginalValue );
+        }
+        else if ( m_pColorAttrList && i->first == "CharThemeOriginalColor" )
+        {
+            if ( i->second >>= sOriginalValue )
+                bWriteThemeFontColor =
+                        ( m_pColorAttrList->getOptionalValue( FSNS( XML_w, XML_val ) ) == sOriginalValue );
         }
     }
 
@@ -6189,9 +6207,19 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             m_pFontsAttrList->add( FSNS( XML_w, XML_hAnsiTheme ),
                                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
         }
+        else if ( i->first == "CharThemeColor" && bWriteThemeFontColor )
+        {
+            i->second >>= str;
+            if( !m_pColorAttrList )
+                m_pColorAttrList = m_pSerializer->createAttrList();
+
+            m_pColorAttrList->add( FSNS( XML_w, XML_themeColor ),
+                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+        }
         else if( i->first == "CharThemeFontNameCs"   ||
                 i->first == "CharThemeFontNameAscii" ||
-                i->first == "CharThemeFontNameEastAsia" )
+                i->first == "CharThemeFontNameEastAsia" ||
+                i->first == "CharThemeOriginalColor" )
         {
             // just skip these, they were processed before
         }
@@ -6214,6 +6242,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFlyFillAttrList( NULL ),
       m_pFlyWrapAttrList( NULL ),
       m_pTextboxAttrList( NULL ),
+      m_pColorAttrList( NULL ),
       m_pFlyFrameSize(0),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
@@ -6269,6 +6298,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pFlyAttrList, m_pFlyAttrList = NULL;
     delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
+    delete m_pColorAttrList, m_pColorAttrList = NULL;
 
     delete m_pFootnotesList, m_pFootnotesList = NULL;
     delete m_pEndnotesList, m_pEndnotesList = NULL;

@@ -326,6 +326,8 @@ enum PropertyIds
         ,PROP_CHAR_THEME_FONT_NAME_CS
         ,PROP_CHAR_THEME_FONT_NAME_H_ANSI
         ,PROP_CHAR_THEME_FONT_NAME_EAST_ASIA
+        ,PROP_CHAR_THEME_COLOR
+        ,PROP_CHAR_THEME_ORIGINAL_COLOR
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
