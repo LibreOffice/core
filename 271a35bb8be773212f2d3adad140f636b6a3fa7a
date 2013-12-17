@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///aY\u003d",
+        "filename": "sd/util/sd.component",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-12-17T07:44:03Z",
+      "side": 1,
+      "message": "this change looks dodgy",
+      "revId": "271a35bb8be773212f2d3adad140f636b6a3fa7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///aU\u003d",
+        "filename": "sd/util/sd.component",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-12-17T07:44:03Z",
+      "side": 1,
+      "message": "I don\u0027t think you can use the animcore prefix here, since it has not been declared in the component tag at the top.\nYou may need to keep these in a separate .component file.\nTry chatting to Stephan Bergman on IRC - he knows this stuff and is very helpful.",
+      "revId": "271a35bb8be773212f2d3adad140f636b6a3fa7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
