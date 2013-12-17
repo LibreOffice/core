@@ -129,6 +129,26 @@
 		691D78B0180C12D300D52D5E /* types.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = types.rdb; path = resource_link/types.rdb; sourceTree = SOURCE_ROOT; };
 		88E94769180DB9B600771808 /* NSObject+MLOFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MLOFileUtils.h"; sourceTree = "<group>"; };
 		88E9476A180DB9B600771808 /* NSObject+MLOFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MLOFileUtils.m"; sourceTree = "<group>"; };
+		BE0898FE1860D5580021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
+		BE0898FF1860D5580021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
+		BE0899001860D5580021A679 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
+		BE0899011860D5580021A679 /* help.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = help.cxx; path = ../../vcl/source/app/help.cxx; sourceTree = "<group>"; };
+		BE0899021860D5580021A679 /* i18nhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = i18nhelp.cxx; path = ../../vcl/source/app/i18nhelp.cxx; sourceTree = "<group>"; };
+		BE0899031860D5580021A679 /* idlemgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = idlemgr.cxx; path = ../../vcl/source/app/idlemgr.cxx; sourceTree = "<group>"; };
+		BE0899041860D5580021A679 /* salvtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salvtables.cxx; path = ../../vcl/source/app/salvtables.cxx; sourceTree = "<group>"; };
+		BE0899051860D5580021A679 /* session.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = session.cxx; path = ../../vcl/source/app/session.cxx; sourceTree = "<group>"; };
+		BE0899061860D5580021A679 /* settings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cxx; path = ../../vcl/source/app/settings.cxx; sourceTree = "<group>"; };
+		BE0899071860D5580021A679 /* solarmutex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solarmutex.cxx; path = ../../vcl/source/app/solarmutex.cxx; sourceTree = "<group>"; };
+		BE0899081860D5580021A679 /* sound.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cxx; path = ../../vcl/source/app/sound.cxx; sourceTree = "<group>"; };
+		BE0899091860D5580021A679 /* stdtext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdtext.cxx; path = ../../vcl/source/app/stdtext.cxx; sourceTree = "<group>"; };
+		BE08990A1860D5580021A679 /* svapp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
+		BE08990B1860D5580021A679 /* svdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdata.cxx; path = ../../vcl/source/app/svdata.cxx; sourceTree = "<group>"; };
+		BE08990C1860D5580021A679 /* svmain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
+		BE08990D1860D5580021A679 /* svmainhook.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmainhook.cxx; path = ../../vcl/source/app/svmainhook.cxx; sourceTree = "<group>"; };
+		BE08990E1860D5580021A679 /* timer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cxx; path = ../../vcl/source/app/timer.cxx; sourceTree = "<group>"; };
+		BE08990F1860D5580021A679 /* unohelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unohelp.cxx; path = ../../vcl/source/app/unohelp.cxx; sourceTree = "<group>"; };
+		BE0899101860D5580021A679 /* unohelp2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unohelp2.cxx; path = ../../vcl/source/app/unohelp2.cxx; sourceTree = "<group>"; };
+		BE0899111860D5580021A679 /* vclevent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclevent.cxx; path = ../../vcl/source/app/vclevent.cxx; sourceTree = "<group>"; };
 		BE82BDB8182261AD00A447B5 /* pagechg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pagechg.cxx; path = ../../sw/source/core/layout/pagechg.cxx; sourceTree = "<group>"; };
 		BE82BDBA182261E900A447B5 /* pagepreviewlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pagepreviewlayout.cxx; path = ../../sw/source/core/view/pagepreviewlayout.cxx; sourceTree = "<group>"; };
 		BE82BDBB182261E900A447B5 /* printdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = printdata.cxx; path = ../../sw/source/core/view/printdata.cxx; sourceTree = "<group>"; };
@@ -482,6 +502,33 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		BE0898FC1860D5380021A679 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				BE0898FE1860D5580021A679 /* brand.cxx */,
+				BE0898FF1860D5580021A679 /* dbggui.cxx */,
+				BE0899001860D5580021A679 /* dndhelp.cxx */,
+				BE0899011860D5580021A679 /* help.cxx */,
+				BE0899021860D5580021A679 /* i18nhelp.cxx */,
+				BE0899031860D5580021A679 /* idlemgr.cxx */,
+				BE0899041860D5580021A679 /* salvtables.cxx */,
+				BE0899051860D5580021A679 /* session.cxx */,
+				BE0899061860D5580021A679 /* settings.cxx */,
+				BE0899071860D5580021A679 /* solarmutex.cxx */,
+				BE0899081860D5580021A679 /* sound.cxx */,
+				BE0899091860D5580021A679 /* stdtext.cxx */,
+				BE08990A1860D5580021A679 /* svapp.cxx */,
+				BE08990B1860D5580021A679 /* svdata.cxx */,
+				BE08990C1860D5580021A679 /* svmain.cxx */,
+				BE08990D1860D5580021A679 /* svmainhook.cxx */,
+				BE08990E1860D5580021A679 /* timer.cxx */,
+				BE08990F1860D5580021A679 /* unohelp.cxx */,
+				BE0899101860D5580021A679 /* unohelp2.cxx */,
+				BE0899111860D5580021A679 /* vclevent.cxx */,
+			);
+			name = app;
+			sourceTree = "<group>";
+		};
 		BE82BDB41822616200A447B5 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +543,7 @@
 		BE82BDB51822617500A447B5 /* vcl */ = {
 			isa = PBXGroup;
 			children = (
+				BE0898FC1860D5380021A679 /* app */,
 				BE82BE4A1822D0E900A447B5 /* quartz */,
 				BE82BDF11822626C00A447B5 /* gdi */,
 				BE82BDF01822625C00A447B5 /* headless */,

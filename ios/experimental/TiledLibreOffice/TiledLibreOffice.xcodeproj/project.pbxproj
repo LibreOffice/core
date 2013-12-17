@@ -1,0 +1,497 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BE82BD7618218E2E00A447B5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7518218E2E00A447B5 /* Foundation.framework */; };
+		BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */; };
+		BE82BD7A18218E2E00A447B5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7918218E2E00A447B5 /* UIKit.framework */; };
+		BE82BD8018218E2E00A447B5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BE82BD7E18218E2E00A447B5 /* InfoPlist.strings */; };
+		BE82BD8218218E2E00A447B5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BD8118218E2E00A447B5 /* main.m */; };
+		BE82BD8618218E2E00A447B5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BD8518218E2E00A447B5 /* AppDelegate.m */; };
+		BE82BD8C18218E2E00A447B5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BD8B18218E2E00A447B5 /* ViewController.m */; };
+		BE82BD8E18218E2E00A447B5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE82BD8D18218E2E00A447B5 /* Images.xcassets */; };
+		BE82BDAC182190E400A447B5 /* TiledView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BDAB182190E400A447B5 /* TiledView.m */; };
+		BE82BDAF1821A1D000A447B5 /* View.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82BDAE1821A1D000A447B5 /* View.m */; };
+		BECAB372186054DE00F814F9 /* lo.mm in Sources */ = {isa = PBXBuildFile; fileRef = BECAB371186054DE00F814F9 /* lo.mm */; };
+		BEEE02D11860ABDB00FBDE67 /* program in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CE1860ABB700FBDE67 /* program */; };
+		BEEE02D21860ABDB00FBDE67 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CF1860ABB700FBDE67 /* share */; };
+		BEEE02D31860ABDB00FBDE67 /* ure in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02D01860ABB700FBDE67 /* ure */; };
+		BEEEF9641860740400FBDE67 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEEF9631860740400FBDE67 /* libiconv.dylib */; };
+		BEEEF9661860741400FBDE67 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEEF9651860741400FBDE67 /* libz.dylib */; };
+		BEEEF96A1860A25400FBDE67 /* test1.odt in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9691860A25400FBDE67 /* test1.odt */; };
+		BEEEFE011860A89100FBDE67 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96D1860A82900FBDE67 /* fundamentalrc */; };
+		BEEEFE021860A89100FBDE67 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96E1860A82900FBDE67 /* offapi.rdb */; };
+		BEEEFE031860A89100FBDE67 /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */; };
+		BEEEFE041860A89100FBDE67 /* rc in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9AA1860A82900FBDE67 /* rc */; };
+		BEEEFE051860A89100FBDE67 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9AB1860A82900FBDE67 /* services.rdb */; };
+		BEEEFE061860A89100FBDE67 /* types.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEFDFD1860A82C00FBDE67 /* types.rdb */; };
+		BEEEFE071860A89100FBDE67 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = BEEEFDFE1860A82C00FBDE67 /* unorc */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BE0898E81860D42B0021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
+		BE0898E91860D42B0021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
+		BE0898EA1860D42B0021A679 /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../../../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
+		BE0898EB1860D42B0021A679 /* help.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = help.cxx; path = ../../../vcl/source/app/help.cxx; sourceTree = "<group>"; };
+		BE0898EC1860D42B0021A679 /* i18nhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = i18nhelp.cxx; path = ../../../vcl/source/app/i18nhelp.cxx; sourceTree = "<group>"; };
+		BE0898ED1860D42B0021A679 /* idlemgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = idlemgr.cxx; path = ../../../vcl/source/app/idlemgr.cxx; sourceTree = "<group>"; };
+		BE0898EE1860D42B0021A679 /* salvtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salvtables.cxx; path = ../../../vcl/source/app/salvtables.cxx; sourceTree = "<group>"; };
+		BE0898EF1860D42B0021A679 /* session.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = session.cxx; path = ../../../vcl/source/app/session.cxx; sourceTree = "<group>"; };
+		BE0898F01860D42B0021A679 /* settings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cxx; path = ../../../vcl/source/app/settings.cxx; sourceTree = "<group>"; };
+		BE0898F11860D42B0021A679 /* solarmutex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solarmutex.cxx; path = ../../../vcl/source/app/solarmutex.cxx; sourceTree = "<group>"; };
+		BE0898F21860D42B0021A679 /* sound.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cxx; path = ../../../vcl/source/app/sound.cxx; sourceTree = "<group>"; };
+		BE0898F31860D42B0021A679 /* stdtext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdtext.cxx; path = ../../../vcl/source/app/stdtext.cxx; sourceTree = "<group>"; };
+		BE0898F41860D42B0021A679 /* svapp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
+		BE0898F51860D42B0021A679 /* svdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdata.cxx; path = ../../../vcl/source/app/svdata.cxx; sourceTree = "<group>"; };
+		BE0898F61860D42B0021A679 /* svmain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
+		BE0898F71860D42B0021A679 /* svmainhook.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmainhook.cxx; path = ../../../vcl/source/app/svmainhook.cxx; sourceTree = "<group>"; };
+		BE0898F81860D42B0021A679 /* timer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cxx; path = ../../../vcl/source/app/timer.cxx; sourceTree = "<group>"; };
+		BE0898F91860D42B0021A679 /* unohelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unohelp.cxx; path = ../../../vcl/source/app/unohelp.cxx; sourceTree = "<group>"; };
+		BE0898FA1860D42B0021A679 /* unohelp2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unohelp2.cxx; path = ../../../vcl/source/app/unohelp2.cxx; sourceTree = "<group>"; };
+		BE0898FB1860D42B0021A679 /* vclevent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclevent.cxx; path = ../../../vcl/source/app/vclevent.cxx; sourceTree = "<group>"; };
+		BE0899141860F6450021A679 /* ctfonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctfonts.cxx; path = ../../../vcl/quartz/ctfonts.cxx; sourceTree = "<group>"; };
+		BE0899151860F6450021A679 /* ctlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctlayout.cxx; path = ../../../vcl/quartz/ctlayout.cxx; sourceTree = "<group>"; };
+		BE0899161860F6450021A679 /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
+		BE0899171860F6450021A679 /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
+		BE0899181860F6450021A679 /* salgdicommon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdicommon.cxx; path = ../../../vcl/quartz/salgdicommon.cxx; sourceTree = "<group>"; };
+		BE0899191860F6450021A679 /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
+		BE08991A1860F6450021A679 /* salmathutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salmathutils.cxx; path = ../../../vcl/quartz/salmathutils.cxx; sourceTree = "<group>"; };
+		BE08991B1860F6450021A679 /* salvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salvd.cxx; path = ../../../vcl/quartz/salvd.cxx; sourceTree = "<group>"; };
+		BE08991C1860F6450021A679 /* utils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cxx; path = ../../../vcl/quartz/utils.cxx; sourceTree = "<group>"; };
+		BE82BD7218218E2E00A447B5 /* TiledLibreOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiledLibreOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE82BD7518218E2E00A447B5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BE82BD7918218E2E00A447B5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BE82BD7D18218E2E00A447B5 /* TiledLibreOffice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TiledLibreOffice-Info.plist"; sourceTree = "<group>"; };
+		BE82BD7F18218E2E00A447B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BE82BD8118218E2E00A447B5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BE82BD8318218E2E00A447B5 /* TiledLibreOffice-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TiledLibreOffice-Prefix.pch"; sourceTree = "<group>"; };
+		BE82BD8418218E2E00A447B5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BE82BD8518218E2E00A447B5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BE82BD8A18218E2E00A447B5 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BE82BD8B18218E2E00A447B5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BE82BD8D18218E2E00A447B5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		BE82BD9418218E2E00A447B5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		BE82BDAA182190E400A447B5 /* TiledView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledView.h; sourceTree = "<group>"; };
+		BE82BDAB182190E400A447B5 /* TiledView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiledView.m; sourceTree = "<group>"; };
+		BE82BDAD1821A1D000A447B5 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
+		BE82BDAE1821A1D000A447B5 /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
+		BECAB371186054DE00F814F9 /* lo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lo.mm; sourceTree = "<group>"; };
+		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../../lo.xcconfig; sourceTree = "<group>"; };
+		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = Resources/program; sourceTree = SOURCE_ROOT; };
+		BEEE02CF1860ABB700FBDE67 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = Resources/share; sourceTree = SOURCE_ROOT; };
+		BEEE02D01860ABB700FBDE67 /* ure */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ure; path = Resources/ure; sourceTree = SOURCE_ROOT; };
+		BEEEF9631860740400FBDE67 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		BEEEF9651860741400FBDE67 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		BEEEF9691860A25400FBDE67 /* test1.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test1.odt; path = ../../../../odk/examples/java/DocumentHandling/test/test1.odt; sourceTree = "<group>"; };
+		BEEEF96D1860A82900FBDE67 /* fundamentalrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = fundamentalrc; path = Resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
+		BEEEF96E1860A82900FBDE67 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = Resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
+		BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = Resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
+		BEEEF9AA1860A82900FBDE67 /* rc */ = {isa = PBXFileReference; lastKnownFileType = text; name = rc; path = Resources/rc; sourceTree = SOURCE_ROOT; };
+		BEEEF9AB1860A82900FBDE67 /* services.rdb */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = services.rdb; path = Resources/services.rdb; sourceTree = SOURCE_ROOT; };
+		BEEEFDFD1860A82C00FBDE67 /* types.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = types.rdb; path = Resources/types.rdb; sourceTree = SOURCE_ROOT; };
+		BEEEFDFE1860A82C00FBDE67 /* unorc */ = {isa = PBXFileReference; lastKnownFileType = text; name = unorc; path = Resources/unorc; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BE82BD6F18218E2E00A447B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEEEF9661860741400FBDE67 /* libz.dylib in Frameworks */,
+				BEEEF9641860740400FBDE67 /* libiconv.dylib in Frameworks */,
+				BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */,
+				BE82BD7A18218E2E00A447B5 /* UIKit.framework in Frameworks */,
+				BE82BD7618218E2E00A447B5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BE0898E61860D3CD0021A679 /* LibreOffice source files */ = {
+			isa = PBXGroup;
+			children = (
+				BE0898E71860D3DA0021A679 /* vcl */,
+			);
+			name = "LibreOffice source files";
+			sourceTree = "<group>";
+		};
+		BE0898E71860D3DA0021A679 /* vcl */ = {
+			isa = PBXGroup;
+			children = (
+				BE0899121860D78B0021A679 /* app */,
+				BE0899131860F6100021A679 /* quartz */,
+			);
+			name = vcl;
+			sourceTree = "<group>";
+		};
+		BE0899121860D78B0021A679 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				BE0898E81860D42B0021A679 /* brand.cxx */,
+				BE0898E91860D42B0021A679 /* dbggui.cxx */,
+				BE0898EA1860D42B0021A679 /* dndhelp.cxx */,
+				BE0898EB1860D42B0021A679 /* help.cxx */,
+				BE0898EC1860D42B0021A679 /* i18nhelp.cxx */,
+				BE0898ED1860D42B0021A679 /* idlemgr.cxx */,
+				BE0898EE1860D42B0021A679 /* salvtables.cxx */,
+				BE0898EF1860D42B0021A679 /* session.cxx */,
+				BE0898F01860D42B0021A679 /* settings.cxx */,
+				BE0898F11860D42B0021A679 /* solarmutex.cxx */,
+				BE0898F21860D42B0021A679 /* sound.cxx */,
+				BE0898F31860D42B0021A679 /* stdtext.cxx */,
+				BE0898F41860D42B0021A679 /* svapp.cxx */,
+				BE0898F51860D42B0021A679 /* svdata.cxx */,
+				BE0898F61860D42B0021A679 /* svmain.cxx */,
+				BE0898F71860D42B0021A679 /* svmainhook.cxx */,
+				BE0898F81860D42B0021A679 /* timer.cxx */,
+				BE0898F91860D42B0021A679 /* unohelp.cxx */,
+				BE0898FA1860D42B0021A679 /* unohelp2.cxx */,
+				BE0898FB1860D42B0021A679 /* vclevent.cxx */,
+			);
+			name = app;
+			sourceTree = "<group>";
+		};
+		BE0899131860F6100021A679 /* quartz */ = {
+			isa = PBXGroup;
+			children = (
+				BE0899141860F6450021A679 /* ctfonts.cxx */,
+				BE0899151860F6450021A679 /* ctlayout.cxx */,
+				BE0899161860F6450021A679 /* salbmp.cxx */,
+				BE0899171860F6450021A679 /* salgdi.cxx */,
+				BE0899181860F6450021A679 /* salgdicommon.cxx */,
+				BE0899191860F6450021A679 /* salgdiutils.cxx */,
+				BE08991A1860F6450021A679 /* salmathutils.cxx */,
+				BE08991B1860F6450021A679 /* salvd.cxx */,
+				BE08991C1860F6450021A679 /* utils.cxx */,
+			);
+			name = quartz;
+			sourceTree = "<group>";
+		};
+		BE82BD6918218E2E00A447B5 = {
+			isa = PBXGroup;
+			children = (
+				BE0898E61860D3CD0021A679 /* LibreOffice source files */,
+				BE82BD7B18218E2E00A447B5 /* TiledLibreOffice */,
+				BEEEF9681860A21F00FBDE67 /* Resources */,
+				BE82BD7418218E2E00A447B5 /* Frameworks */,
+				BE82BD7318218E2E00A447B5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BE82BD7318218E2E00A447B5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BE82BD7218218E2E00A447B5 /* TiledLibreOffice.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BE82BD7418218E2E00A447B5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BEEEF9651860741400FBDE67 /* libz.dylib */,
+				BEEEF9631860740400FBDE67 /* libiconv.dylib */,
+				BE82BD7518218E2E00A447B5 /* Foundation.framework */,
+				BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */,
+				BE82BD7918218E2E00A447B5 /* UIKit.framework */,
+				BE82BD9418218E2E00A447B5 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BE82BD7B18218E2E00A447B5 /* TiledLibreOffice */ = {
+			isa = PBXGroup;
+			children = (
+				BECAB371186054DE00F814F9 /* lo.mm */,
+				BE82BD8418218E2E00A447B5 /* AppDelegate.h */,
+				BE82BD8518218E2E00A447B5 /* AppDelegate.m */,
+				BE82BDAA182190E400A447B5 /* TiledView.h */,
+				BE82BDAB182190E400A447B5 /* TiledView.m */,
+				BE82BDAD1821A1D000A447B5 /* View.h */,
+				BE82BDAE1821A1D000A447B5 /* View.m */,
+				BE82BD8A18218E2E00A447B5 /* ViewController.h */,
+				BE82BD8B18218E2E00A447B5 /* ViewController.m */,
+				BE82BD8D18218E2E00A447B5 /* Images.xcassets */,
+				BE82BD7C18218E2E00A447B5 /* Supporting Files */,
+			);
+			path = TiledLibreOffice;
+			sourceTree = "<group>";
+		};
+		BE82BD7C18218E2E00A447B5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BEDB0F08185B7537009A6F26 /* lo.xcconfig */,
+				BE82BD7D18218E2E00A447B5 /* TiledLibreOffice-Info.plist */,
+				BE82BD7E18218E2E00A447B5 /* InfoPlist.strings */,
+				BE82BD8118218E2E00A447B5 /* main.m */,
+				BE82BD8318218E2E00A447B5 /* TiledLibreOffice-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BEEEF9681860A21F00FBDE67 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BEEEF96D1860A82900FBDE67 /* fundamentalrc */,
+				BEEEF96E1860A82900FBDE67 /* offapi.rdb */,
+				BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */,
+				BEEE02CE1860ABB700FBDE67 /* program */,
+				BEEEF9AA1860A82900FBDE67 /* rc */,
+				BEEEF9AB1860A82900FBDE67 /* services.rdb */,
+				BEEE02CF1860ABB700FBDE67 /* share */,
+				BEEEFDFD1860A82C00FBDE67 /* types.rdb */,
+				BEEEFDFE1860A82C00FBDE67 /* unorc */,
+				BEEE02D01860ABB700FBDE67 /* ure */,
+				BEEEF9691860A25400FBDE67 /* test1.odt */,
+			);
+			name = Resources;
+			path = TiledLibreOffice;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BE82BD7118218E2E00A447B5 /* TiledLibreOffice */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE82BDA418218E2E00A447B5 /* Build configuration list for PBXNativeTarget "TiledLibreOffice" */;
+			buildPhases = (
+				BE82BD6E18218E2E00A447B5 /* Sources */,
+				BE82BD6F18218E2E00A447B5 /* Frameworks */,
+				BE82BD7018218E2E00A447B5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TiledLibreOffice;
+			productName = TiledLibreOffice;
+			productReference = BE82BD7218218E2E00A447B5 /* TiledLibreOffice.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BE82BD6A18218E2E00A447B5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = BE82BD6D18218E2E00A447B5 /* Build configuration list for PBXProject "TiledLibreOffice" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BE82BD6918218E2E00A447B5;
+			productRefGroup = BE82BD7318218E2E00A447B5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BE82BD7118218E2E00A447B5 /* TiledLibreOffice */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BE82BD7018218E2E00A447B5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE82BD8E18218E2E00A447B5 /* Images.xcassets in Resources */,
+				BE82BD8018218E2E00A447B5 /* InfoPlist.strings in Resources */,
+				BEEEFE011860A89100FBDE67 /* fundamentalrc in Resources */,
+				BEEEFE021860A89100FBDE67 /* offapi.rdb in Resources */,
+				BEEEFE031860A89100FBDE67 /* oovbaapi.rdb in Resources */,
+				BEEE02D11860ABDB00FBDE67 /* program in Resources */,
+				BEEEFE041860A89100FBDE67 /* rc in Resources */,
+				BEEEFE051860A89100FBDE67 /* services.rdb in Resources */,
+				BEEE02D21860ABDB00FBDE67 /* share in Resources */,
+				BEEEFE061860A89100FBDE67 /* types.rdb in Resources */,
+				BEEEFE071860A89100FBDE67 /* unorc in Resources */,
+				BEEE02D31860ABDB00FBDE67 /* ure in Resources */,
+				BEEEF96A1860A25400FBDE67 /* test1.odt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BE82BD6E18218E2E00A447B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BECAB372186054DE00F814F9 /* lo.mm in Sources */,
+				BE82BDAF1821A1D000A447B5 /* View.m in Sources */,
+				BE82BDAC182190E400A447B5 /* TiledView.m in Sources */,
+				BE82BD8C18218E2E00A447B5 /* ViewController.m in Sources */,
+				BE82BD8618218E2E00A447B5 /* AppDelegate.m in Sources */,
+				BE82BD8218218E2E00A447B5 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BE82BD7E18218E2E00A447B5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BE82BD7F18218E2E00A447B5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BE82BDA218218E2E00A447B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEDB0F08185B7537009A6F26 /* lo.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(LO_BUILDDIR)/config_host",
+					"$(LO_SRCDIR)/include",
+					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
+					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		BE82BDA318218E2E00A447B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEDB0F08185B7537009A6F26 /* lo.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(LO_BUILDDIR)/config_host",
+					$LO_SRCDIR/include,
+					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
+					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BE82BDA518218E2E00A447B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TiledLibreOffice/TiledLibreOffice-Prefix.pch";
+				INFOPLIST_FILE = "TiledLibreOffice/TiledLibreOffice-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BE82BDA618218E2E00A447B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TiledLibreOffice/TiledLibreOffice-Prefix.pch";
+				INFOPLIST_FILE = "TiledLibreOffice/TiledLibreOffice-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BE82BD6D18218E2E00A447B5 /* Build configuration list for PBXProject "TiledLibreOffice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE82BDA218218E2E00A447B5 /* Debug */,
+				BE82BDA318218E2E00A447B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE82BDA418218E2E00A447B5 /* Build configuration list for PBXNativeTarget "TiledLibreOffice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE82BDA518218E2E00A447B5 /* Debug */,
+				BE82BDA618218E2E00A447B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BE82BD6A18218E2E00A447B5 /* Project object */;
+}

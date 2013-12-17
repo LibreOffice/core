@@ -293,6 +293,13 @@ static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_
 
 void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGraphics )
 {
+#ifdef IOS
+    // Horrible horrible this is all crack, mxLayer is always NULL on iOS,
+    // all this stuff should be rewritten anyway for iOS
+    if( !mxLayer )
+        return;
+#endif
+
     if( !pSrcGraphics )
     {
         pSrcGraphics = this;
@@ -452,6 +459,11 @@ void AquaSalGraphics::ApplyXorContext()
 void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
                                 long nSrcWidth, long nSrcHeight, sal_uInt16 /*nFlags*/ )
 {
+#ifdef IOS
+    if( !mxLayer )
+        return;
+#endif
+
     ApplyXorContext();
 
     DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" );

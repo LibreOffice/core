@@ -1807,7 +1807,14 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     // open, we need to add a documentHandle that would hold the right
     // document shell in the iOS / Android impl, and we would get it as a
     // parameter.
-    SwWrtShell *pViewShell = GetActiveWrtShell();
+
+    SwWrtShell *pViewShell;
+
+    // FIXME: make sure this is not called before we have a document...
+    while (!(pViewShell = GetActiveWrtShell()))
+    {
+        sleep(1);
+    }
 
     // Creation, use and destruction of a VirtualDevice needs to be
     // protected by the SolarMutex, it seems.
@@ -1833,7 +1840,13 @@ extern "C"
 MLODpxSize touch_lo_get_content_size()
 {
 #ifdef IOS
-    SwWrtShell *pViewShell = GetActiveWrtShell();
+    SwWrtShell *pViewShell;
+    // FIXME: make sure this is not called before we have a document...
+    while (!(pViewShell = GetActiveWrtShell()))
+    {
+        sleep(1);
+    }
+
     if (pViewShell)
     {
         static const MLORip WIDTH_ADDITION  = 6L * DOCUMENTBORDER;

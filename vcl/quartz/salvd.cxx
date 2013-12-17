@@ -69,9 +69,23 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
     if( pGraphic && pData && pData->rCGContext )
     {
         // Create virtual device based on existing SystemGraphicsData
-        // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData
+        // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
+        // WTF does the above mean, SystemGraphicsData has no size field(s).
         mbForeignContext = true;        // the mxContext is from pData
         mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
+#ifdef IOS
+        // Note: we should *not* create a CGLayer and assign it to
+        // mxLayer here. Don't confuse CGLayer and CALayer. A CGLayer
+        // is basically a fancy off-screen bitmap not related to
+        // anything being displayed at all. The CGContext passed in
+        // here refers to something actively part of the compositor
+        // stack and being dislayed on the device, and *there*
+        // CALayers are involved, sure. The use of mxLayer in this
+        // code is for "traditional" LO virtual devices, off-screen
+        // bitmaps. I think. On the other hand, the use of
+        // VirtualDevice with a "foreign" CGContext for OS X is
+        // actually dead code...
+#endif
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
     else
