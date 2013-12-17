@@ -26,28 +26,9 @@ static const BOOL
 #define LOG_RECT(RECT,NAME)  NSLog(@"%@: w:%d, h:%d, origin:(%d,%d)",NAME, (int) RECT.size.width, (int) RECT.size.height, (int) RECT.origin.x, (int) RECT.origin.y)
 #define IGNORE_ARG(X) ((void) X)
 
-#define ARM
-#define ARM32
-#define BOOST_DETAIL_NO_CONTAINER_FWD
 #define CPPU_ENV gcc3
-#define DBG_UTIL
-#define DISABLE_DYNLOADING
-#define DISABLE_SCRIPTING
-#define ENABLE_READONLY_INSTALLSET
-#define IOS
-#define LIBO_INTERNAL_ONLY
-#define NO_PTHREAD_PRIORITY
 #define OSL_DEBUG_LEVEL 1
-#define SAL_LOG_INFO
-#define SAL_LOG_WARN
-#define SUPD 410
-#define UNIX
-#define UNX
-#define _DEBUG
-#define _PTHREADS
-#define _REENTRANT
 #define RTL_USING
-#define SYSTEM_ZLIB
 #define HAVE_GCC_VISIBILITY_FEATURE
 
 #import "time.h"
