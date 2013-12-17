@@ -80,12 +80,9 @@ public:
 class SearchProgress : public ModalDialog
 {
 private:
-
-    FixedText           aFtSearchDir;
-    FixedLine           aFLSearchDir;
-    FixedText           aFtSearchType;
-    FixedLine           aFLSearchType;
-    CancelButton        aBtnCancel;
+    FixedText*          m_pFtSearchDir;
+    FixedText*          m_pFtSearchType;
+    CancelButton*       m_pBtnCancel;
     Window * parent_;
     INetURLObject startUrl_;
     rtl::Reference< SearchThread > maSearchThread;
@@ -101,8 +98,8 @@ public:
 
     virtual short       Execute();
     virtual void        StartExecuteModal( const Link& rEndDialogHdl );
-    void                SetFileType( const OUString& rType ) { aFtSearchType.SetText( rType ); }
-    void                SetDirectory( const INetURLObject& rURL ) { aFtSearchDir.SetText( GetReducedString( rURL, 30 ) ); }
+    void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
+    void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
 };
 
 class TakeThread: public salhelper::Thread

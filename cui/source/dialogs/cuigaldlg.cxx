@@ -204,17 +204,16 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 // - SearchProgress -
 // ------------------
 
-SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL ) :
-    ModalDialog     ( pParent, CUI_RES(RID_SVXDLG_GALLERY_SEARCH_PROGRESS ) ),
-    aFtSearchDir    ( this, CUI_RES( FT_SEARCH_DIR ) ),
-    aFLSearchDir   ( this, CUI_RES( FL_SEARCH_DIR ) ),
-    aFtSearchType   ( this, CUI_RES( FT_SEARCH_TYPE ) ),
-    aFLSearchType  ( this, CUI_RES( FL_SEARCH_TYPE ) ),
-    aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    parent_(pParent), startUrl_(rStartURL)
+SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL )
+    : ModalDialog(pParent, "GallerySearchProgress", "cui/ui/gallerysearchprogress.ui")
+    , parent_(pParent)
+    , startUrl_(rStartURL)
 {
-    FreeResource();
-    aBtnCancel.SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
+    get(m_pFtSearchDir, "dir");
+    get(m_pFtSearchType, "file");
+    m_pFtSearchType->set_width_request(m_pFtSearchType->get_preferred_size().Width());
+    get(m_pBtnCancel, "cancel");
+    m_pBtnCancel->SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
 }
 
 // ------------------------------------------------------------------------

@@ -219,47 +219,6 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
 
 /******************************************************************************/
 
-ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
-{
-    HelpId = HID_GALLERY_SEARCH ;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 124 , 86 ) ;
-    Text [ en-US ] = "Find" ;
-    Moveable = TRUE ;
-    FixedLine FL_SEARCH_DIR
-    {
-        Pos = MAP_APPFONT ( 6 , 33 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "Directory" ;
-    };
-    FixedText FT_SEARCH_DIR
-    {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 37 , 66 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedLine FL_SEARCH_TYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "File type" ;
-    };
-    FixedText FT_SEARCH_TYPE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-};
-
-/******************************************************************************/
-
 ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
 {
     HelpId = HID_GALLERY_APPLY ;
