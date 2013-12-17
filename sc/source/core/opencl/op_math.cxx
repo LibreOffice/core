@@ -2386,24 +2386,17 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double bAbs = 0;\n";
 #ifdef ISNAN
     FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVRNum=
-        dynamic_cast<const formula::SingleVectorRefToken*>(iNum);
     FormulaToken *iSignificance = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken* tmpCurDVRSignificance=
-        dynamic_cast<const formula::SingleVectorRefToken*>(iSignificance);
-    ss << "    int buffer_num_len = "<<tmpCurDVRNum->GetArrayLength() << ";\n";
-    ss << "    int buffer_significance_len = ";
-    ss << tmpCurDVRSignificance->GetArrayLength() << ";\n";
-    ss << "    if((gid0)>=buffer_num_len || isNan(";
+    ss << "    if(isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num = " << GetBottom() << ";\n";
     ss << "    else\n    ";
 #endif
     ss << "    num = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
 #ifdef ISNAN
-    ss << "    if((gid0)>=buffer_significance_len || isNan(";
+    ss << "    if(isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
-    ss << "        significance = " << GetBottom() << ";\n";
+    ss << "        return 0.0;\n";
     ss << "    else\n    ";
 #endif
     ss << "    significance = ";
@@ -2435,6 +2428,8 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
 #endif
         ss << "    bAbs = "<<vSubArguments[2]->GenSlidingWindowDeclRef()<<";\n";
     }
+    ss << "    if(significance == 0.0)\n";
+    ss << "        return 0.0;\n";
     ss << "    return ";
     ss << "( !(int)bAbs && num < 0.0 ? floor( num / significance ) : ";
     ss << "ceil( num / significance ) )";
