@@ -75,8 +75,8 @@ namespace unocontrols{
 #define CONTROLNAME_BUTTON                              "Button"                                                //              -||-
 #define CONTROLNAME_PROGRESSBAR                         "ProgressBar"                                           //              -||-
 #define DEFAULT_BUTTONLABEL                             "Abbrechen"
-#define PROGRESSMONITOR_DEFAULT_TOPIC                   "\0"
-#define PROGRESSMONITOR_DEFAULT_TEXT                    "\0"
+#define PROGRESSMONITOR_DEFAULT_TOPIC                   ""
+#define PROGRESSMONITOR_DEFAULT_TEXT                    ""
 #define PROGRESSMONITOR_BACKGROUNDCOLOR                 TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lighgray
 #define PROGRESSMONITOR_LINECOLOR_BRIGHT                TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
 #define PROGRESSMONITOR_LINECOLOR_SHADOW                TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
