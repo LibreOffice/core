@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="unordf"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="unordf" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="CBlankNode">
     <service name="com.sun.star.rdf.BlankNode"/>
   </implementation>

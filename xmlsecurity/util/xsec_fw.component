@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="xsec_fw"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="xsec_fw" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.xml.security.framework.DecryptorImpl">
     <service name="com.sun.star.xml.crypto.sax.Decryptor"/>
   </implementation>

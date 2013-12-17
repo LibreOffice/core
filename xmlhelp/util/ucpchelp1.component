@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="ucpchelp"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="ucpchelp" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="CHelpContentProvider">
     <service name="com.sun.star.help.XMLHelp"/>
     <service name="com.sun.star.ucb.HelpContentProvider"/>

@@ -8,8 +8,8 @@
  *
 -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="firebird_sdbc"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="firebird_sdbc" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.sdbc.firebird.Driver">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>

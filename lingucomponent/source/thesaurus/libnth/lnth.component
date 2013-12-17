@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="lnth"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="lnth" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.lingu.new.Thesaurus">
     <service name="com.sun.star.linguistic2.Thesaurus"/>
   </implementation>

@@ -7,9 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<component xmlns="http://openoffice.org/2010/uno-components"
-        loader="com.sun.star.loader.SharedLibrary"
-	prefix="pptminimizer">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+	prefix="pptminimizer" xmlns="http://openoffice.org/2010/uno-components">
     <implementation name="com.sun.star.comp.PresentationMinimizerImp">
         <service name="com.sun.star.comp.PresentationMinimizer"/>
     </implementation>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<component xmlns="http://openoffice.org/2010/uno-components"
-        loader="com.sun.star.loader.SharedLibrary" prefix="presenter">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+        prefix="presenter" xmlns="http://openoffice.org/2010/uno-components">
     <implementation name="org.libreoffice.comp.PresenterScreenJob"/>
     <implementation name="org.libreoffice.comp.PresenterScreenProtocolHandler">
         <service name="com.sun.star.frame.ProtocolHandler"/>

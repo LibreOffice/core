@@ -8,8 +8,8 @@
  *
 -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="postgresql_sdbc"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="postgresql_sdbc" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.comp.connectivity.pq.Driver.noext">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="pythonloader"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="pythonloader" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.comp.pyuno.Loader">
     <service name="com.sun.star.loader.Python"/>
   </implementation>

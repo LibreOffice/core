@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="mysql"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="mysql" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.comp.drivers.MySQL.Driver">
     <service name="com.sun.star.sdbc.Driver"/>
     <service name="com.sun.star.sdbcx.Driver"/>

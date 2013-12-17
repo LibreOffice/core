@@ -7,9 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<component xmlns="http://openoffice.org/2010/uno-components"
-        loader="com.sun.star.loader.SharedLibrary"
-	prefix="pdfimport">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+	prefix="pdfimport" xmlns="http://openoffice.org/2010/uno-components">
     <implementation name="org.libreoffice.comp.documents.HybridPDFImport">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="expwrap"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="expwrap" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.extensions.xml.sax.ParserExpat">
     <service name="com.sun.star.xml.sax.Parser"/>
   </implementation>

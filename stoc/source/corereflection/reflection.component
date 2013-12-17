@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" prefix="reflection"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="reflection" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.stoc.CoreReflection">
     <service name="com.sun.star.reflection.CoreReflection"/>
     <singleton name="com.sun.star.reflection.theCoreReflection"/>
