@@ -86,14 +86,6 @@ void ConverterTest::tearDown()
 {
 }
 
-static bool eqDuration(util::Duration a, util::Duration b) {
-    return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
-        && a.Hours == b.Hours && a.Minutes == b.Minutes
-        && a.Seconds == b.Seconds
-        && a.NanoSeconds == b.NanoSeconds
-        && a.Negative == b.Negative;
-}
-
 static void doTest(util::Duration const & rid, char const*const pis,
         char const*const i_pos = 0)
 {
@@ -104,7 +96,14 @@ static void doTest(util::Duration const & rid, char const*const pis,
     bool bSuccess = Converter::convertDuration(od, is);
     SAL_INFO("sax.cppunit","" << (od.Negative ? "-" : "+")  << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");
     CPPUNIT_ASSERT(bSuccess);
-    CPPUNIT_ASSERT(eqDuration(rid, od));
+    CPPUNIT_ASSERT_EQUAL(rid.Years, od.Years);
+    CPPUNIT_ASSERT_EQUAL(rid.Months, od.Months);
+    CPPUNIT_ASSERT_EQUAL(rid.Days, od.Days);
+    CPPUNIT_ASSERT_EQUAL(rid.Hours, od.Hours);
+    CPPUNIT_ASSERT_EQUAL(rid.Minutes, od.Minutes);
+    CPPUNIT_ASSERT_EQUAL(rid.Seconds, od.Seconds);
+    CPPUNIT_ASSERT_EQUAL(rid.NanoSeconds, od.NanoSeconds);
+    CPPUNIT_ASSERT_EQUAL(rid.Negative, od.Negative);
     OUStringBuffer buf;
     Converter::convertDuration(buf, od);
     SAL_INFO("sax.cppunit","" << buf.toString());
