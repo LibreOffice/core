@@ -221,10 +221,8 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
 
 void SearchProgress::Terminate()
 {
-    if (maSearchThread.is()) {
+    if (maSearchThread.is())
         maSearchThread->terminate();
-        maSearchThread->join();
-    }
 }
 
 // ------------------------------------------------------------------------
@@ -239,7 +237,11 @@ IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn)
 
 IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
 {
+    if (maSearchThread.is())
+        maSearchThread->join();
+
     EndDialog( RET_OK );
+
     delete this;
     return 0L;
 }
@@ -353,10 +355,8 @@ TakeProgress::TakeProgress( Window* pWindow ) :
 
 void TakeProgress::Terminate()
 {
-    if (maTakeThread.is()) {
+    if (maTakeThread.is())
         maTakeThread->terminate();
-        maTakeThread->join();
-    }
 }
 
 // ------------------------------------------------------------------------
@@ -371,6 +371,9 @@ IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn)
 
 IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 {
+    if (maTakeThread.is())
+        maTakeThread->join();
+
     TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
     ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
     ::std::vector< OUString >   aRemainingVector;
