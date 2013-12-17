@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///bE\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2013-12-17T06:00:42Z",
+      "side": 1,
+      "message": "Gerrit Review Link : https://gerrit.libreoffice.org/#/c/6924/",
+      "revId": "1cafc503bc11133e84de9eb6a57341c0df26b416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///bA\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2013-12-17T06:00:42Z",
+      "side": 1,
+      "message": "Gerrit Review Link : https://gerrit.libreoffice.org/#/c/7032/",
+      "revId": "1cafc503bc11133e84de9eb6a57341c0df26b416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///a8\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2013-12-17T06:00:42Z",
+      "side": 1,
+      "message": "Gerrit Review Link : https://gerrit.libreoffice.org/#/c/7002/",
+      "revId": "1cafc503bc11133e84de9eb6a57341c0df26b416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///a4\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2013-12-17T06:00:42Z",
+      "side": 1,
+      "message": "Gerrit Review Link : https://gerrit.libreoffice.org/#/c/7048/",
+      "revId": "1cafc503bc11133e84de9eb6a57341c0df26b416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///a0\u003d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2013-12-17T06:00:42Z",
+      "side": 1,
+      "message": "Gerrit Review Link : https://gerrit.libreoffice.org/#/c/7000/3",
+      "revId": "1cafc503bc11133e84de9eb6a57341c0df26b416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
