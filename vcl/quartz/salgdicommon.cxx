@@ -1229,8 +1229,8 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
         initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
     }
 
-    rDPIX = static_cast<sal_Int32>(mfFakeDPIScale * mnRealDPIX);
-    rDPIY = static_cast<sal_Int32>(mfFakeDPIScale * mnRealDPIY);
+    rDPIX = lrint( mfFakeDPIScale * mnRealDPIX);
+    rDPIY = lrint( mfFakeDPIScale * mnRealDPIY);
 }
 
 #endif

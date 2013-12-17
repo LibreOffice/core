@@ -277,7 +277,7 @@ public:
     // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
-    virtual void            GetResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     // get the depth of the device
     virtual sal_uInt16          GetBitCount() const;
     // get the width of the device
