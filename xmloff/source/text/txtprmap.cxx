@@ -31,13 +31,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 #define _M_E( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010 }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010, false }
 
 #define _M_EV( a, p, l, t, c, v ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v, false }
 
 #define _M_ED( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010 }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010, false }
 
 // text properties
 #define MT_E( a, p, l, t, c ) \
@@ -70,7 +70,7 @@ using namespace ::xmloff::token;
     _M_E( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
 #define M_END() \
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
+    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
@@ -90,7 +90,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaTopMarginRelative",  FO, MARGIN_TOP,         XML_TYPE_PERCENT16, CTF_PARATOPMARGIN_REL ),
     MP_E( "ParaBottomMargin",       FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
     MP_E( "ParaBottomMarginRelative",FO,    MARGIN_BOTTOM,      XML_TYPE_PERCENT16, CTF_PARABOTTOMMARGIN_REL ),
-    { "ParaContextMargin", sizeof("ParaContextMargin")-1, XML_NAMESPACE_STYLE, XML_CONTEXTUAL_SPACING, XML_TYPE_BOOL|XML_TYPE_PROP_PARAGRAPH, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT },
+    { "ParaContextMargin", sizeof("ParaContextMargin")-1, XML_NAMESPACE_STYLE, XML_CONTEXTUAL_SPACING, XML_TYPE_BOOL|XML_TYPE_PROP_PARAGRAPH, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
     // RES_CHRATR_CASEMAP
     MT_E( "CharCaseMap",        FO,     FONT_VARIANT,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     MT_E( "CharCaseMap",        FO,     TEXT_TRANSFORM,     XML_TYPE_TEXT_CASEMAP,  0 ),
@@ -140,9 +140,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_CHRATR_WEIGHT
     MT_E( "CharWeight",     FO,     FONT_WEIGHT,        XML_TYPE_TEXT_WEIGHT, 0 ),
 	// RES_CHRATR_RSID
-    { "Rsid", sizeof("Rsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT },
+    { "Rsid", sizeof("Rsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
 	// RES_PARATR_RSID
-    { "ParRsid", sizeof("ParRsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT },
+    { "ParRsid", sizeof("ParRsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
     // RES_CHRATR_WORDLINEMODE
     MT_E( "CharWordMode",   STYLE,  TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MT_E( "CharWordMode",   STYLE,  TEXT_OVERLINE_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -463,9 +463,9 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_WEIGHT
     MT_E( "CharWeight",     FO,     FONT_WEIGHT,        XML_TYPE_TEXT_WEIGHT, 0 ),
 	// RES_CHRATR_RSID
-    { "Rsid", sizeof("Rsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT },
+    { "Rsid", sizeof("Rsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_RSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
 	// RES_PARATR_RSID
-    { "ParRsid", sizeof("ParRsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT },
+    { "ParRsid", sizeof("ParRsid")-1, XML_NAMESPACE_OFFICE_EXT, XML_PARRSID, XML_TYPE_HEX|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
     // RES_CHRATR_WORDLINEMODE
     MT_E( "CharWordMode",   STYLE,  TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MT_E( "CharWordMode",   STYLE,  TEXT_OVERLINE_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -481,7 +481,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_BACKGROUND
     MT_E( "CharBackColor",  FO, BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
     MT_E( "CharBackTransparent",    FO, BACKGROUND_COLOR, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-    { "CharShadingValue", sizeof("CharShadingValue")-1, XML_NAMESPACE_LO_EXT, XML_CHAR_SHADING_VALUE, XML_TYPE_NUMBER|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT },
+    { "CharShadingValue", sizeof("CharShadingValue")-1, XML_NAMESPACE_LO_EXT, XML_CHAR_SHADING_VALUE, XML_TYPE_NUMBER|XML_TYPE_PROP_TEXT, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
     MT_E( "CharBackColor",  FO, TEXT_BACKGROUND_COLOR, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_CHRATR_CJK_FONT
     MT_ED( "CharFontNameAsian", STYLE,  FONT_NAME_ASIAN,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),

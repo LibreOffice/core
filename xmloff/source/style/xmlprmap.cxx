@@ -43,6 +43,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     nXMLNameSpace( rMapEntry.mnNameSpace ),
     nContextId( rMapEntry.mnContextId ),
     nEarliestODFVersionForExport( rMapEntry.mnEarliestODFVersionForExport ),
+    bImportOnly( rMapEntry.mbImportOnly),
     pHdl( rFactory->GetPropertyHandler( rMapEntry.mnType & MID_FLAG_MASK ) )
 {
 }
@@ -55,6 +56,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     nXMLNameSpace( rEntry.nXMLNameSpace),
     nContextId( rEntry.nContextId),
     nEarliestODFVersionForExport( rEntry.nEarliestODFVersionForExport ),
+    bImportOnly( rEntry.bImportOnly),
     pHdl( rEntry.pHdl)
 {
     DBG_ASSERT( pHdl, "Unknown XML property type handler!" );

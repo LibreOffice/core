@@ -59,6 +59,7 @@ struct XMLPropertySetMapperEntry_Impl
     sal_uInt16                         nXMLNameSpace;
     sal_Int16                          nContextId;
     SvtSaveOptions::ODFDefaultVersion  nEarliestODFVersionForExport;
+    bool                               bImportOnly;
     const XMLPropertyHandler          *pHdl;
 
     XMLPropertySetMapperEntry_Impl(
