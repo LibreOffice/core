@@ -6124,33 +6124,30 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 {
     const std::map< OUString, com::sun::star::uno::Any >& rMap = rItem.GetGrabBag();
 
-    // get original font names and check if they have changed during the edition
+    // get original values of theme-derived properties to check if they have changed during the edition
     sal_Bool bWriteCSTheme = sal_True;
     sal_Bool bWriteAsciiTheme = sal_True;
     sal_Bool bWriteEastAsiaTheme = sal_True;
-    if ( m_pFontsAttrList )
+    OUString sOriginalValue;
+    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
     {
-        OUString sFontName;
-        for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
+        if ( m_pFontsAttrList && i->first == "CharThemeFontNameCs" )
         {
-            if ( i->first == "CharThemeFontNameCs" )
-            {
-                if ( i->second >>= sFontName )
-                    bWriteCSTheme =
-                            ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_cs ) ) == sFontName );
-            }
-            else if ( i->first == "CharThemeFontNameAscii" )
-            {
-                if ( i->second >>= sFontName )
-                    bWriteAsciiTheme =
-                            ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sFontName );
-            }
-            else if ( i->first == "CharThemeFontNameEastAsia" )
-            {
-                if ( i->second >>= sFontName )
-                    bWriteEastAsiaTheme =
-                            ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sFontName );
-            }
+            if ( i->second >>= sOriginalValue )
+                bWriteCSTheme =
+                        ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_cs ) ) == sOriginalValue );
+        }
+        else if ( m_pFontsAttrList && i->first == "CharThemeFontNameAscii" )
+        {
+            if ( i->second >>= sOriginalValue )
+                bWriteAsciiTheme =
+                        ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sOriginalValue );
+        }
+        else if ( m_pFontsAttrList && i->first == "CharThemeFontNameEastAsia" )
+        {
+            if ( i->second >>= sOriginalValue )
+                bWriteEastAsiaTheme =
+                        ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sOriginalValue );
         }
     }
 
