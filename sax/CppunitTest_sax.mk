@@ -7,16 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,sax_cpputest))
+$(eval $(call gb_CppunitTest_CppunitTest,sax))
 
-$(eval $(call gb_CppunitTest_use_api,sax_cpputest,\
+$(eval $(call gb_CppunitTest_use_api,sax,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sax_cpputest,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sax,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_libraries,sax_cpputest, \
+$(eval $(call gb_CppunitTest_use_libraries,sax, \
     sax \
     sal \
     comphelper \
@@ -24,7 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_cpputest, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sax_cpputest, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sax, \
     sax/qa/cppunit/test_converter \
 ))
 
