@@ -461,6 +461,13 @@ public:
     virtual std::string GetBottom(void) { return "0.0"; }
     virtual std::string BinFuncName(void) const { return "Fact"; }
 };
+class OpSeriesSum: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "SeriesSum"; }
+};
 class OpQuotient: public Normal
 {
 public:
