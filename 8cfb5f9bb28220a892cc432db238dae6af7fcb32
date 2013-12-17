@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///Zk\u003d",
+        "filename": "filter/source/msfilter/mscodec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-17T11:49:31Z",
+      "side": 1,
+      "message": "that does not do the same thing.\nthe code before would pad correctly up to 16 bytes _after_\nthe existing key.. so if sizeof(mpnKey) \u003d 32\nand nLen \u003d 16... you still pad bytes 17-32\nwith your new version bytes 17-32 are not padded.\n\nwhat you need is a for loop on i \u003d 0 to sizeof(spnFillChars) and nIndex + i \u003c sizeof(mpnKey) or something in that vein",
+      "revId": "8cfb5f9bb28220a892cc432db238dae6af7fcb32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
