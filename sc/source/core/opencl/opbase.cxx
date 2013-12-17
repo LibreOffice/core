@@ -9,8 +9,6 @@
 
 #include "opbase.hxx"
 
-#include "formula/vectortoken.hxx"
-
 using namespace formula;
 
 namespace sc { namespace opencl {
@@ -222,6 +220,69 @@ void CheckVariables::CheckAllSubArgumentIsNan(
     {
         CheckSubArgumentIsNan(ss,vSubArguments,i);
     }
+}
+
+void CheckVariables::UnrollDoubleVector( std::stringstream & ss,
+std::stringstream & unrollstr,const formula::DoubleVectorRefToken* pCurDVR,
+int nCurWindowSize)
+{
+    int unrollSize = 16;
+    if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "    loop = ("<<nCurWindowSize<<" - gid0)/";
+        ss << unrollSize<<";\n";
+    } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        ss << "    loop = ("<<nCurWindowSize<<" + gid0)/";
+        ss << unrollSize<<";\n";
+
+    } else {
+        ss << "    loop = "<<nCurWindowSize<<"/"<< unrollSize<<";\n";
+    }
+
+    ss << "    for ( int j = 0;j< loop; j++)\n";
+    ss << "    {\n";
+    ss << "        int i = ";
+    if (!pCurDVR->IsStartFixed()&& pCurDVR->IsEndFixed()) {
+       ss << "gid0 + j * "<< unrollSize <<";\n";
+    }else {
+       ss << "j * "<< unrollSize <<";\n";
+    }
+
+    if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+    {
+       ss << "        int doubleIndex = i+gid0;\n";
+    }else
+    {
+       ss << "        int doubleIndex = i;\n";
+    }
+
+    for(int j =0;j < unrollSize;j++)
+    {
+        ss << unrollstr.str();
+        ss << "i++;\n";
+        ss << "doubleIndex++;\n";
+    }
+     ss << "    }\n";
+     ss << "    for (int i = ";
+     if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+        ss << "gid0 + loop *"<<unrollSize<<"; i < ";
+        ss << nCurWindowSize <<"; i++)\n";
+     } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+        ss << "0 + loop *"<<unrollSize<<"; i < gid0+";
+        ss << nCurWindowSize <<"; i++)\n";
+     } else {
+        ss << "0 + loop *"<<unrollSize<<"; i < ";
+        ss << nCurWindowSize <<"; i++)\n";
+     }
+     ss << "    {\n";
+     if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+     {
+        ss << "        int doubleIndex = i+gid0;\n";
+     }else
+     {
+        ss << "        int doubleIndex = i;\n";
+     }
+     ss << unrollstr.str();
+     ss << "    }\n";
 }
 
 }}
