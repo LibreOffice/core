@@ -2203,9 +2203,9 @@ sub UpdateReleasesXML($$)
 sub main ()
 {
     my $context = ProcessCommandline();
-    installer::logger::starttime();
-    $installer::logger::Global->add_timestamp("starting logging");
-#    installer::logger::SetupSimpleLogging(undef);
+#    installer::logger::starttime();
+#    $installer::logger::Global->add_timestamp("starting logging");
+    installer::logger::SetupSimpleLogging(undef);
 
     die "ERROR: list file is not defined, please use --lst-file option"
         unless defined $context->{'lst-file'};
@@ -2222,15 +2222,19 @@ sub main ()
 
     if ($context->{'command'} =~ /create|check/)
     {
-        $installer::logger::Lang->set_filename(
-            File::Spec->catfile(
-                $context->{'output-path'},
-                $context->{'product-name'},
-                "msp",
-                $context->{'source-version-dash'} . "_" . $context->{'target-version-dash'},
-                $context->{'language'},
-                "log",
-                "patch-creation.log"));
+        my $filename = File::Spec->catfile(
+            $context->{'output-path'},
+            $context->{'product-name'},
+            "msp",
+            $context->{'source-version-dash'} . "_" . $context->{'target-version-dash'},
+            $context->{'language'},
+            "log",
+            "patch-creation.log");
+        my $dirname = dirname($filename);
+        File::Path::make_path($dirname) unless -d $dirname;
+        printf("directing output to $filename\n");
+
+        $installer::logger::Lang->set_filename($filename);
         $installer::logger::Lang->copy_lines_from($installer::logger::Global);
         $installer::logger::Lang->set_forward(undef);
         $installer::logger::Info->set_forward($installer::logger::Lang);
