@@ -1974,13 +1974,16 @@ void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
             ss << ";\n";
         }
     }
+    ss << "    double argm = arg[0];\n";
     ss << "    int n = (int)arg[1];\n";
-    ss << "    int nn = 1;\n";
-    ss << "    for(int i=0; i<n; ++i)\n";
-    ss << "        nn *= 10;\n";
-    ss << "    n = (int)(arg[0] * nn);\n";
-    ss << "    arg[0] = (double)n / nn;\n";
-    ss << "    return arg[0];\n";
+    ss << "    double nn = 1.0f;\n";
+    ss << "    for(int i = 0; i < n; ++i)\n";
+    ss << "    {\n";
+    ss << "        argm = argm * 10;\n";
+    ss << "        nn = nn * 10;\n";
+    ss << "    }\n";
+    ss << "    modf(argm, &argm);\n";
+    ss << "    return argm / nn;\n";
     ss << "}";
 }
 void OpFloor::GenSlidingWindowFunction(
