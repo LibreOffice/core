@@ -327,6 +327,13 @@ void DataStream::Repaint()
     aRange.aEnd = ScAddress(maRange.aEnd.Col(), nEndRow, maRange.aStart.Tab());
 
     mpScDocShell->PostPaint(aRange, PAINT_GRID);
+    mnRepaintCounter = 0;
+}
+
+void DataStream::Broadcast()
+{
+    mpScDocument->BroadcastCells(maBroadcastRanges, SC_HINT_DATACHANGED);
+    maBroadcastRanges.RemoveAll();
 }
 
 void DataStream::MoveData()
@@ -342,7 +349,7 @@ void DataStream::MoveData()
             mpScDocument->InsertRow(*mpEndRange);
             break;
         case MOVE_DOWN:
-            if (mpEndRange.get())
+            if (mpEndRange)
                 mpScDocument->DeleteRow(*mpEndRange);
             mpScDocument->InsertRow(maRange);
             break;
@@ -422,14 +429,17 @@ void DataStream::Text2Doc()
                     aDocImport.setNumericCell(aAddress, aCell.toDouble());
                 else
                     aDocImport.setStringCell(aAddress, aCell);
-                mpScDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, aAddress));
             }
             ++nCol;
         }
         ++nRow;
         ++mnRepaintCounter;
     }
+
     aDocImport.finalize();
+
+    ScRange aBCRange(nStartCol, nStartRow, maRange.aStart.Tab(), nEndCol, nEndRow, maRange.aStart.Tab());
+    maBroadcastRanges.Join(aBCRange);
 }
 
 bool DataStream::ImportData()
@@ -446,7 +456,6 @@ bool DataStream::ImportData()
     }
     else
     {
-        ScRangeList aRangeList;
         ScDocumentImport aDocImport(*mpScDocument);
         // read more lines at once but not too much
         for (int i = 0; i < 10; ++i)
@@ -466,8 +475,7 @@ bool DataStream::ImportData()
                 aDocImport.setNumericCell(aAddress, sValue.toDouble());
             else
                 aDocImport.setStringCell(aAddress, sValue);
-            aRangeList.Join(aAddress);
-            mpScDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, aAddress));
+            maBroadcastRanges.Join(aAddress);
         }
         aDocImport.finalize();
     }
@@ -483,10 +491,7 @@ bool DataStream::ImportData()
     }
 
     if (mnRepaintCounter > 100)
-    {
         Repaint();
-        mnRepaintCounter = 0;
-    }
 
     return mbRunning;
 }

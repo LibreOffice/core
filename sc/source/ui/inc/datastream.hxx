@@ -18,6 +18,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
+#include <rangelst.hxx>
+
 namespace datastreams {
     class CallerThread;
     class ReaderThread;
@@ -64,6 +66,7 @@ public:
 
 private:
     void Repaint();
+    void Broadcast();
 
 private:
     ScDocShell *mpScDocShell;
@@ -81,6 +84,7 @@ private:
     size_t mnRepaintCounter;
     ScRange maRange;
     ScRange maStartRange;
+    ScRangeList maBroadcastRanges;
     boost::scoped_ptr<ScRange> mpEndRange;
     rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;

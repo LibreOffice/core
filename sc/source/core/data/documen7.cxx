@@ -104,6 +104,33 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 }
 
+void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
+{
+    // TODO : For now, this simply makes multiple Broadcast() calls one cell
+    // at a time.  In the future, we should add a more efficient way to
+    // make a range of cell broadcasts.
+
+    ScHint aHint(nHint, rRange.aStart);
+
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            aHint.GetAddress().SetCol(nCol);
+            aHint.GetAddress().SetRow(nRow);
+            Broadcast(aHint);
+        }
+    }
+}
+
+void ScDocument::BroadcastCells( const ScRangeList& rRanges, sal_uLong nHint )
+{
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange* p = rRanges[i];
+        BroadcastCells(*p, nHint);
+    }
+}
 
 void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
