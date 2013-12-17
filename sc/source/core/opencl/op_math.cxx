@@ -2858,6 +2858,39 @@ void OpFact::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    return arg0;\n";
     ss << "}";
 }
+void OpQuotient::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i) ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double num1 = 1.0;\n";
+    ss << "    double num2 = 1.0;\n";
+#ifdef ISNAN
+    FormulaToken *iNum1 = vSubArguments[0]->GetFormulaToken();
+    FormulaToken *iNum2 = vSubArguments[1]->GetFormulaToken();
+    ss << "    if(isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        num1 = 1.0;\n";
+    ss << "    else \n    ";
+#endif
+    ss << "    num1 = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
+#ifdef ISNAN
+    ss << "    if(isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
+    ss << "        num2 = 1.0;\n";
+    ss << "    else \n    ";
+#endif
+    ss << "    num2 = " << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
+    ss << "    return trunc(num1/num2);\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
