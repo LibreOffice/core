@@ -5834,40 +5834,98 @@ void OpChiDist::GenSlidingWindowFunction(
     }
     ss << ")\n";
     ss << "{\n";
-    ss << "    double fx,fDF,tmp;\n";
+    ss << "    double fx,fDF,tmp=0,tmp0=0,tmp1=0;\n";
     ss << "    int gid0=get_global_id(0);\n";
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-    ss << "    int buffer_fx_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
-    ss << "     int buffer_fDF_len = ";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n";
+
+    size_t i = vSubArguments.size();
+    size_t nItems = 0;
+    ss <<"\n";
+    for (i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+            {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; i++){\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
-#ifdef ISNAN
-    ss <<"    if((gid0)>=buffer_fx_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fx = 0;\n";
-    ss <<"    else \n";
+            }
+            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
 #endif
-    ss <<"         fx ="<<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-#ifdef ISNAN
-    ss <<"    if((gid0)>=buffer_fDF_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fDF = 0;\n";
-    ss <<"    else \n";
+            }
+            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
 #endif
-    ss <<"        fDF ="<<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<";\n";
+            }
+            else
+            {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+#endif
+            }
+            nItems += nCurWindowSize;
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+#ifdef  ISNAN
+                const formula::SingleVectorRefToken* pSVR =
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
+#else
+            nItems += 1;
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "{\n";
+#endif
+            nItems += 1;
+        }
+        else
+        {
+#ifdef  ISNAN
+#endif
+            nItems += 1;
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "    if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "        tmp"<<i<<"= 0;\n";
+            ss << "    else\n";
+            ss << "        tmp"<<i<<"=\n";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n}\n";
+        }
+#endif
+    }
+    ss << "    fx = tmp0;\n";
+    ss << "    fDF = floor(tmp1);\n";
     ss << "    if(fDF < 1.0)\n";
     ss << "    {\n";
     ss << "        return DBL_MIN;\n";
