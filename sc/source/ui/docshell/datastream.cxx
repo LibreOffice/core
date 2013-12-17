@@ -175,9 +175,13 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
     // There can be only one ScAreaLink / DataStream per cell.
     // So - if we don't need range (DataStream with mbValuesInLine == false),
     // just find a free cell for now.
-    sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
     ScRange aDestArea;
-    aDestArea.Parse(rRange, pShell->GetDocument());
+    sal_uInt16 nRes = aDestArea.Parse(rRange, pShell->GetDocument());
+    if ((nRes & SCA_VALID) != SCA_VALID)
+        // Invalid range string.
+        return NULL;
+
+    sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
     sal_uInt16 nLinkPos = 0;
     while (nLinkPos < pLinkManager->GetLinks().size())
     {
@@ -207,10 +211,9 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
             ++nLinkPos;
     }
 
-    sfx2::SvBaseLink *pLink = 0;
-    pLink = new DataStream( pShell, rURL, aDestArea, nLimit, rMove, nSettings );
+    DataStream* pLink = new DataStream(pShell, rURL, aDestArea, nLimit, rMove, nSettings);
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
-    return dynamic_cast<DataStream*>(pLink);
+    return pLink;
 }
 
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
