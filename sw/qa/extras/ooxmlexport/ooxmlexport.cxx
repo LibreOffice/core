@@ -2063,7 +2063,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     // check theme font color value has been preserved
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeColor", "accent3");
     OUString sThemeShade = getXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeShade");
-    CPPUNIT_ASSERT_EQUAL(sThemeShade.toInt32(16), 0xbf);
+    CPPUNIT_ASSERT_EQUAL(sThemeShade.toInt32(16), sal_Int32(0xbf));
 
     // check the themeFontLang values in settings file
     xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
