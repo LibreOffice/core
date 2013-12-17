@@ -1123,8 +1123,8 @@ bool Converter::convertDuration(util::Duration& rDuration,
                         if (-1 != nTemp)
                         {
                             nNanoSeconds = nTemp;
-                            sal_Int32 nDigits = nPos - nStart;
-                            assert(nDigits >= 0 && nDigits <= 9);
+                            sal_Int32 nDigits = std::min<sal_Int32>(nPos - nStart, 9);
+                            assert(nDigits >= 0);
                             for (; nDigits < 9; ++nDigits)
                             {
                                 nNanoSeconds *= 10;
