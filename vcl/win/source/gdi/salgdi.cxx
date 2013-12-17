@@ -1395,7 +1395,7 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1444,7 +1444,7 @@ void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1531,7 +1531,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly
@@ -1548,7 +1548,7 @@ sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* 
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly

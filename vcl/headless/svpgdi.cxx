@@ -438,7 +438,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     if( m_bUseLineColor && nPoints )
     {
@@ -453,7 +453,7 @@ void SvpSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     if( ( m_bUseLineColor || m_bUseFillColor ) && nPoints )
     {
@@ -476,7 +476,7 @@ void SvpSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
+void SvpSalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
                                       const sal_uInt32* pPointCounts,
                                       PCONSTSALPOINT*   pPtAry )
 {
@@ -525,14 +525,14 @@ bool SvpSalGraphics::drawPolyLine(
         return false;
 }
 
-sal_Bool SvpSalGraphics::drawPolyLineBezier( sal_uLong,
+sal_Bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
                                              const SalPoint*,
                                              const sal_uInt8* )
 {
     return sal_False;
 }
 
-sal_Bool SvpSalGraphics::drawPolygonBezier( sal_uLong,
+sal_Bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
                                             const SalPoint*,
                                             const sal_uInt8* )
 {
@@ -704,7 +704,7 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
+void SvpSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
 {
     // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     basegfx::B2DPolygon aPoly;

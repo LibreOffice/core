@@ -100,8 +100,8 @@ protected:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
-    virtual void            drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
-    virtual void            drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
     virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&,
@@ -109,8 +109,8 @@ protected:
                                           const ::basegfx::B2DVector& rLineWidths,
                                           basegfx::B2DLineJoin,
                                           com::sun::star::drawing::LineCap) = 0;
-    virtual sal_Bool        drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
-    virtual sal_Bool        drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual sal_Bool        drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual sal_Bool        drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
     virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -135,8 +135,8 @@ protected:
     virtual SalColor    getPixel( long nX, long nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
-    virtual void            invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
+    virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
+    virtual void        invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
 
     virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) = 0;
 
@@ -368,8 +368,8 @@ public:
     void                    DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev );
     void                    DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev );
     void                    DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
-    void                    DrawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
-    void                    DrawPolygon( sal_uLong nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                    DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                    DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
     void                    DrawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry,
@@ -383,11 +383,11 @@ public:
                                           com::sun::star::drawing::LineCap i_eLineCap,
                                           const OutputDevice* i_pOutDev);
 
-    sal_Bool                DrawPolyLineBezier( sal_uLong nPoints,
+    sal_Bool                DrawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry,
                                                 const OutputDevice *pOutDev );
-    sal_Bool                DrawPolygonBezier( sal_uLong nPoints,
+    sal_Bool                DrawPolygonBezier( sal_uInt32 nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry,
                                                const OutputDevice *pOutDev );
@@ -436,7 +436,7 @@ public:
                                     SalInvert nFlags,
                                     const OutputDevice *pOutDev );
 
-    void                    Invert( sal_uLong nPoints,
+    void                    Invert( sal_uInt32 nPoints,
                                     const SalPoint* pPtAry,
                                     SalInvert nFlags,
                                     const OutputDevice *pOutDev );
