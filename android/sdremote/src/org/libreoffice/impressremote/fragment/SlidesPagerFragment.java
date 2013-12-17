@@ -18,11 +18,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -34,9 +37,10 @@ import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.adapter.SlidesPagerAdapter;
 import org.libreoffice.impressremote.communication.CommunicationService;
 
-public class SlidesPagerFragment extends Fragment implements ServiceConnection, ViewPager.OnPageChangeListener, View.OnClickListener {
+public class SlidesPagerFragment extends Fragment implements ServiceConnection, ViewPager.OnPageChangeListener, View.OnTouchListener {
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
+    private GestureDetectorCompat mDetector;
 
     public static SlidesPagerFragment newInstance() {
         return new SlidesPagerFragment();
@@ -44,6 +48,7 @@ public class SlidesPagerFragment extends Fragment implements ServiceConnection, 
 
     @Override
     public View onCreateView(LayoutInflater aInflater, ViewGroup aContainer, Bundle aSavedInstanceState) {
+        mDetector = new GestureDetectorCompat(aContainer.getContext(), new MyGestureListener());
         return aInflater.inflate(R.layout.fragment_slides_pager, aContainer, false);
     }
 
@@ -94,24 +99,6 @@ public class SlidesPagerFragment extends Fragment implements ServiceConnection, 
         SlideShow aSlideShow = mCommunicationService.getSlideShow();
 
         return new SlidesPagerAdapter(getActivity(), aSlideShow, this);
-    }
-
-    @Override
-    public void onClick(View aView) {
-        if (!isLastSlideDisplayed()) {
-            showNextTransition();
-        }
-    }
-
-    private boolean isLastSlideDisplayed() {
-        int aCurrentSlideIndex = mCommunicationService.getSlideShow().getHumanCurrentSlideIndex();
-        int aSlidesCount = mCommunicationService.getSlideShow().getSlidesCount();
-
-        return aCurrentSlideIndex == aSlidesCount;
-    }
-
-    private void showNextTransition() {
-        mCommunicationService.getCommandsTransmitter().performNextTransition();
     }
 
     private int getSlidesMargin() {
@@ -346,6 +333,32 @@ public class SlidesPagerFragment extends Fragment implements ServiceConnection, 
     private boolean isServiceBound() {
         return mCommunicationService != null;
     }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return mDetector.onTouchEvent(event);
+    }
+
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent event) {
+            // down is the start for everything, we want that..
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+            mCommunicationService.getCommandsTransmitter().performNextTransition();
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent event) {
+            mCommunicationService.getCommandsTransmitter().performPreviousTransition();
+            return true;
+        }
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
