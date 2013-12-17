@@ -351,20 +351,31 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
 
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
 {
-    m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+    // Depending on the shape type, we actually don't write the shape as DML.
+    OUString sShapeType;
+    sal_uInt32 nMirrorFlags = 0;
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
+    MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType(xShape, nMirrorFlags, sShapeType);
 
-    const SdrObjGroup* pObjGroup = PTR_CAST(SdrObjGroup, sdrObj);
-    m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
-                                           XML_Requires, (pObjGroup ? "wpg" : "wps"),
-                                           FSEND);
-    m_pImpl->writeDMLDrawing(sdrObj, &rFrmFmt, nAnchorId);
-    m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Choice);
+    if (eShapeType != ESCHER_ShpInst_TextPlainText)
+    {
+        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
-    m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-    writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
-    m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+        const SdrObjGroup* pObjGroup = PTR_CAST(SdrObjGroup, sdrObj);
+        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
+                                               XML_Requires, (pObjGroup ? "wpg" : "wps"),
+                                               FSEND);
+        m_pImpl->writeDMLDrawing(sdrObj, &rFrmFmt, nAnchorId);
+        m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
-    m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+        writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
+        m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+
+        m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+    }
+    else
+        writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
 }
 
 void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
