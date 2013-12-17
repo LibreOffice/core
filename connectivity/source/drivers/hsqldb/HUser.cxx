@@ -229,7 +229,7 @@ void SAL_CALL OHSQLUser::grantPrivileges( const OUString& objName, sal_Int32 obj
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         OUString sGrant = "GRANT " +  sPrivs +
             " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation) +
-            " TO " + m_Name;
+            " TO " + ::dbtools::quoteName(xMeta->getIdentifierQuoteString(), m_Name);
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
         if(xStmt.is())
@@ -255,7 +255,7 @@ void SAL_CALL OHSQLUser::revokePrivileges( const OUString& objName, sal_Int32 ob
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         OUString sGrant = "REVOKE " + sPrivs +
             " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation) +
-            " FROM " + m_Name;
+            " FROM " + ::dbtools::quoteName(xMeta->getIdentifierQuoteString(), m_Name);
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
         if(xStmt.is())
@@ -269,8 +269,12 @@ void SAL_CALL OHSQLUser::changePassword( const OUString& /*oldPassword*/, const 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
+
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+
     OUString sAlterPwd = "SET PASSWORD FOR " +
-        m_Name + "@\"%\" = PASSWORD('" + newPassword + "')";
+        ::dbtools::quoteName(xMeta->getIdentifierQuoteString(), m_Name) +
+        "@\"%\" = PASSWORD('" + newPassword + "')";
 
 
     Reference<XStatement> xStmt = m_xConnection->createStatement();
