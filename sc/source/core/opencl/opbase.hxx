@@ -13,7 +13,7 @@
 #include "clcc/clew.h"
 
 #include "formula/token.hxx"
-
+#include "formula/vectortoken.hxx"
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <set>
@@ -202,6 +202,9 @@ public:
     // only check isNan
     void CheckSubArgumentIsNan2(std::stringstream &ss,
             SubArguments &vSubArguments, int argumentNum, std::string p);
+    void UnrollDoubleVector(std::stringstream &ss,
+    std::stringstream &unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
+    int nCurWindowSize);
 };
 
 }}

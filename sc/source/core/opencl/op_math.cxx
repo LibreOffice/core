@@ -394,48 +394,38 @@ void OpCountIfs::GenSlidingWindowFunction(std::stringstream &ss,
     }
     ss << ")\n    {\n";
     ss <<"    int gid0=get_global_id(0);\n";
-    ss << "    double tmp =0;\n";
-    ss << "    int i ;\n";
+    ss << "    int tmp =0;\n";
+    ss << "    int loop;\n";
     GenTmpVariables(ss,vSubArguments);
-    ss << "    for (i = ";
-     if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-        ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-     } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-        ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-     } else {
-        ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-     }
-     ss << "    {\n";
-     if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-     {
-        ss<< "    int doubleIndex =i+gid0;\n";
-     }else
-     {
-        ss<< "    int doubleIndex =i;\n";
-     }
+
      ss<< "    int singleIndex =gid0;\n";
      int m=0;
+
+     std::stringstream tmpss;
+
      for(unsigned j=0;j<vSubArguments.size();j+=2,m++)
      {
-        CheckSubArgumentIsNan(ss,vSubArguments,j);
+        CheckSubArgumentIsNan(tmpss,vSubArguments,j);
         CheckSubArgumentIsNan(ss,vSubArguments,j+1);
-        ss <<"    if(isequal(";
-        ss <<"tmp";
-        ss <<j;
-        ss <<" , ";
-        ss << "tmp";
-        ss << j+1;
-        ss << ")){\n";
+        tmpss <<"    if(isequal(";
+        tmpss <<"tmp";
+        tmpss <<j;
+        tmpss <<" , ";
+        tmpss << "tmp";
+        tmpss << j+1;
+        tmpss << ")){\n";
      }
-    ss << "    tmp =tmp +1;\n";
-    for(unsigned j=0;j<=vSubArguments.size();j+=2,m--)
+    tmpss << "    tmp ++;\n";
+    for(unsigned j=0;j<vSubArguments.size();j+=2,m--)
      {
          for(int n = 0;n<m+1;n++)
         {
-            ss << "    ";
+            tmpss << "    ";
         }
-        ss<< "}\n";
+        tmpss<< "}\n";
      }
+     UnrollDoubleVector(ss,tmpss,pCurDVR,nCurWindowSize);
+
     ss << "return tmp;\n";
     ss << "}";
 }
