@@ -16,6 +16,24 @@
       "revId": "5d376c592f8d798cd6174df29171a681bf742eb3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///X4\u003d",
+        "filename": "sw/inc/ndtxt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-12-17T13:15:19Z",
+      "side": 1,
+      "message": "Unfilled space between contained substance and top of container (used mainly for liquids).\nI\u0027m not aware of standard names for this and my English vocabulary is limited, so I\u0027m open to better proposals :)",
+      "parentUuid": "AAAAbH///ZU\u003d",
+      "revId": "5d376c592f8d798cd6174df29171a681bf742eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
