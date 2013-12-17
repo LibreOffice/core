@@ -19,6 +19,7 @@
 #include <vector>
 
 #include <rangelst.hxx>
+#include <documentstreamaccess.hxx>
 
 class ScDocShell;
 class ScDocument;
@@ -72,8 +73,9 @@ private:
     void Broadcast();
 
 private:
-    ScDocShell *mpScDocShell;
-    ScDocument *mpScDocument;
+    ScDocShell *mpDocShell;
+    ScDocument *mpDoc;
+    DocumentStreamAccess maDocAccess;
     OUString msURL;
     OUString msRange;
     OUString msMove;

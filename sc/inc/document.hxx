@@ -69,6 +69,7 @@ struct RefUpdateContext;
 class EditTextIterator;
 struct NoteEntry;
 struct FormulaGroupContext;
+class DocumentStreamAccess;
 
 }
 
@@ -247,6 +248,7 @@ friend class ScTable;
 friend class ScColumn;
 friend struct ScRefCellValue;
 friend class ScDocumentImport;
+friend class sc::DocumentStreamAccess;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 

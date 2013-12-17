@@ -214,14 +214,15 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
 }
 
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
-        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings)
-    : mpScDocShell(pShell)
-    , mpScDocument(mpScDocShell->GetDocument())
-    , meMove(NO_MOVE)
-    , mbRunning(false)
-    , mpLines(0)
-    , mnLinesCount(0)
-    , mnRepaintCounter(0)
+        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings) :
+    mpDocShell(pShell),
+    mpDoc(mpDocShell->GetDocument()),
+    maDocAccess(*mpDoc),
+    meMove(NO_MOVE),
+    mbRunning(false),
+    mpLines(0),
+    mnLinesCount(0),
+    mnRepaintCounter(0)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
@@ -328,13 +329,13 @@ void DataStream::Repaint()
     ScRange aRange(maStartRange.aStart);
     aRange.aEnd = ScAddress(maRange.aEnd.Col(), nEndRow, maRange.aStart.Tab());
 
-    mpScDocShell->PostPaint(aRange, PAINT_GRID);
+    mpDocShell->PostPaint(aRange, PAINT_GRID);
     mnRepaintCounter = 0;
 }
 
 void DataStream::Broadcast()
 {
-    mpScDocument->BroadcastCells(maBroadcastRanges, SC_HINT_DATACHANGED);
+    mpDoc->BroadcastCells(maBroadcastRanges, SC_HINT_DATACHANGED);
     maBroadcastRanges.RemoveAll();
 }
 
@@ -347,13 +348,14 @@ void DataStream::MoveData()
                 meMove = MOVE_UP;
             break;
         case MOVE_UP:
-            mpScDocument->DeleteRow(maStartRange);
-            mpScDocument->InsertRow(*mpEndRange);
+            // Remove the top row and shift the remaining rows upward.
+            mpDoc->DeleteRow(maStartRange);
+            mpDoc->InsertRow(*mpEndRange);
             break;
         case MOVE_DOWN:
             if (mpEndRange)
-                mpScDocument->DeleteRow(*mpEndRange);
-            mpScDocument->InsertRow(maRange);
+                mpDoc->DeleteRow(*mpEndRange);
+            mpDoc->InsertRow(maRange);
             break;
         case NO_MOVE:
             break;
@@ -400,7 +402,7 @@ void DataStream::Text2Doc()
     SCROW nEndRow = maRange.aEnd.Row();
     OUString aCell;
     SCROW nRow = nStartRow;
-    ScDocumentImport aDocImport(*mpScDocument);
+    ScDocumentImport aDocImport(*mpDoc);
     while (nRow <= nEndRow)
     {
         SCCOL nCol = nStartCol;
@@ -458,7 +460,7 @@ bool DataStream::ImportData()
     }
     else
     {
-        ScDocumentImport aDocImport(*mpScDocument);
+        ScDocumentImport aDocImport(*mpDoc);
         // read more lines at once but not too much
         for (int i = 0; i < 10; ++i)
         {
@@ -469,7 +471,7 @@ bool DataStream::ImportData()
             OUString sAddress( sLine.copy(0, sLine.indexOf(',')) );
             OUString sValue( sLine.copy(sLine.indexOf(',') + 1) );
             ScAddress aAddress;
-            aAddress.Parse(sAddress, mpScDocument);
+            aAddress.Parse(sAddress, mpDoc);
             if (!aAddress.IsValid())
                 continue;
 
@@ -481,14 +483,14 @@ bool DataStream::ImportData()
         }
         aDocImport.finalize();
     }
-    mpScDocShell->SetDocumentModified();
+    mpDocShell->SetDocumentModified();
     if (meMove == NO_MOVE)
         return mbRunning;
 
     if (meMove == RANGE_DOWN)
     {
         maRange.Move(0, maRange.aEnd.Row() - maRange.aStart.Row() + 1, 0);
-        mpScDocShell->GetViewData()->GetView()->AlignToCursor(
+        mpDocShell->GetViewData()->GetView()->AlignToCursor(
                 maRange.aStart.Col(), maRange.aStart.Row(), SC_FOLLOW_JUMP);
     }
 
@@ -519,7 +521,7 @@ sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
 
 void DataStream::Edit(Window* pWindow, const Link& )
 {
-    DataStreamDlg aDialog(mpScDocShell, pWindow);
+    DataStreamDlg aDialog(mpDocShell, pWindow);
     aDialog.Init(msURL, msRange, mnLimit, msMove, mnSettings);
     if (aDialog.Execute() == RET_OK)
     {
