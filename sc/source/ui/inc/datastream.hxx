@@ -59,7 +59,7 @@ public:
             const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
     virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
 
-    const ScRange& GetRange() const { return maRange; }
+    ScRange GetRange() const;
     const OUString& GetURL() const { return msURL; }
     const sal_Int32& GetLimit() const { return mnLimit; }
     const OUString& GetMove() const { return msMove; }
@@ -91,7 +91,7 @@ private:
     LinesList *mpLines;
     size_t mnLinesCount;
     size_t mnRepaintCounter;
-    ScRange maRange;
+    SCROW mnCurRow;
     ScRange maStartRange;
     ScRangeList maBroadcastRanges;
     boost::scoped_ptr<ScRange> mpEndRange;

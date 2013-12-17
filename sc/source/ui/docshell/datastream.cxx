@@ -188,9 +188,9 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
         sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[nLinkPos];
         if (rRange.isEmpty())
         {
-            if ( (pBase->ISA(ScAreaLink) && dynamic_cast<ScAreaLink*>
+            if ( (pBase->ISA(ScAreaLink) && static_cast<ScAreaLink*>
                         (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
-                || (pBase->ISA(DataStream) && dynamic_cast<DataStream*>
+                || (pBase->ISA(DataStream) && static_cast<DataStream*>
                         (&(*pBase))->GetRange().aStart == aDestArea.aStart) )
             {
                 aDestArea.Move(0, 1, 0);
@@ -200,9 +200,9 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
             else
                 ++nLinkPos;
         }
-        else if ( (pBase->ISA(ScAreaLink) && dynamic_cast<ScAreaLink*>
+        else if ( (pBase->ISA(ScAreaLink) && static_cast<ScAreaLink*>
                     (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
-                || (pBase->ISA(DataStream) && dynamic_cast<DataStream*>
+                || (pBase->ISA(DataStream) && static_cast<DataStream*>
                     (&(*pBase))->GetRange().aStart == aDestArea.aStart) )
         {
             pLinkManager->Remove( pBase );
@@ -225,7 +225,8 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mbRunning(false),
     mpLines(0),
     mnLinesCount(0),
-    mnRepaintCounter(0)
+    mnRepaintCounter(0),
+    mnCurRow(0)
 {
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
@@ -270,6 +271,14 @@ OString DataStream::ConsumeLine()
     return mpLines->at(mnLinesCount++);
 }
 
+ScRange DataStream::GetRange() const
+{
+    ScRange aRange = maStartRange;
+    if (mpEndRange)
+        aRange.aEnd = mpEndRange->aEnd;
+    return aRange;
+}
+
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, const OUString& rMove, const sal_uInt32 nSettings)
 {
@@ -288,15 +297,17 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
     else if (msMove == "MOVE_DOWN")
         meMove = MOVE_DOWN;
 
-    maRange = rRange;
-    if (maRange.aStart.Row() != maRange.aEnd.Row())
-        // We only allow this range to be one row tall.
-        maRange.aEnd.SetRow(maRange.aStart.Row());
+    mnCurRow = rRange.aStart.Row();
 
-    maStartRange = maRange;
-    if (nLimit && maRange.aStart.Row() + nLimit - 1 < MAXROW)
+    ScRange aRange = rRange;
+    if (aRange.aStart.Row() != aRange.aEnd.Row())
+        // We only allow this range to be one row tall.
+        aRange.aEnd.SetRow(aRange.aStart.Row());
+
+    maStartRange = aRange;
+    if (nLimit && aRange.aStart.Row() + nLimit - 1 < MAXROW)
     {
-        mpEndRange.reset( new ScRange(maRange) );
+        mpEndRange.reset(new ScRange(aRange));
         mpEndRange->Move(0, nLimit-1, 0);
     }
 }
@@ -331,7 +342,7 @@ void DataStream::Repaint()
 {
     SCROW nEndRow = mpEndRange ? mpEndRange->aEnd.Row() : MAXROW;
     ScRange aRange(maStartRange.aStart);
-    aRange.aEnd = ScAddress(maRange.aEnd.Col(), nEndRow, maRange.aStart.Tab());
+    aRange.aEnd = ScAddress(maStartRange.aEnd.Col(), nEndRow, maStartRange.aStart.Tab());
 
     mpDocShell->PostPaint(aRange, PAINT_GRID);
     mnRepaintCounter = 0;
@@ -345,25 +356,22 @@ void DataStream::Broadcast()
 
 void DataStream::MoveData()
 {
+    if (!mpEndRange)
+        return;
+
     switch (meMove)
     {
         case RANGE_DOWN:
-            if (maRange.aStart == mpEndRange->aStart)
+            if (mnCurRow == mpEndRange->aStart.Row())
                 meMove = MOVE_UP;
             break;
         case MOVE_UP:
-            if (!mpEndRange)
-                break;
-
             // Remove the top row and shift the remaining rows upward. Then
             // insert a new row at the end row position.
             mpDoc->DeleteRow(maStartRange);
             mpDoc->InsertRow(*mpEndRange);
             break;
         case MOVE_DOWN:
-            if (!mpEndRange)
-                break;
-
             // Remove the end row and shift the remaining rows downward by
             // inserting a new row at the top row.
             mpDoc->DeleteRow(*mpEndRange);
@@ -408,53 +416,47 @@ void DataStream::Text2Doc()
 {
     sal_Unicode cSep(',');
     sal_Unicode cStr('"');
-    SCCOL nStartCol = maRange.aStart.Col();
-    SCROW nStartRow = maRange.aStart.Row();
-    SCCOL nEndCol = maRange.aEnd.Col();
-    SCROW nEndRow = maRange.aEnd.Row();
+    SCCOL nStartCol = maStartRange.aStart.Col();
+    SCCOL nEndCol = maStartRange.aEnd.Col();
     OUString aCell;
-    SCROW nRow = nStartRow;
     ScDocumentImport aDocImport(*mpDoc);
-    while (nRow <= nEndRow)
+
+    SCCOL nCol = nStartCol;
+    OUString sLine( OStringToOUString(ConsumeLine(), RTL_TEXTENCODING_UTF8) );
+    const sal_Unicode* p = sLine.getStr();
+    while (*p)
     {
-        SCCOL nCol = nStartCol;
-        OUString sLine( OStringToOUString(ConsumeLine(), RTL_TEXTENCODING_UTF8) );
-        const sal_Unicode* p = sLine.getStr();
-        while (*p)
+        aCell = "";
+        const sal_Unicode* q = p;
+        while (*p && *p != cSep)
         {
-            aCell = "";
-            const sal_Unicode* q = p;
-            while (*p && *p != cSep)
-            {
-                // Always look for a pairing quote and ignore separator in between.
-                while (*p && *p == cStr)
-                    q = p = lcl_ScanString(p, aCell, cStr);
-                // All until next separator or quote.
-                while (*p && *p != cSep && *p != cStr)
-                    ++p;
-                if (aCell.getLength() + (p - q) <= STRING_MAXLEN)
-                    aCell += OUString( q, sal::static_int_cast<sal_Int32>( p - q ) );
-                q = p;
-            }
-            if (*p)
+            // Always look for a pairing quote and ignore separator in between.
+            while (*p && *p == cStr)
+                q = p = lcl_ScanString(p, aCell, cStr);
+            // All until next separator or quote.
+            while (*p && *p != cSep && *p != cStr)
                 ++p;
-            if (nCol <= nEndCol && nRow <= nEndRow)
-            {
-                ScAddress aAddress(nCol, nRow, maRange.aStart.Tab());
-                if (aCell == "0" || ( aCell.indexOf(':') == -1 && aCell.toDouble() ))
-                    aDocImport.setNumericCell(aAddress, aCell.toDouble());
-                else
-                    aDocImport.setStringCell(aAddress, aCell);
-            }
-            ++nCol;
+            if (aCell.getLength() + (p - q) <= STRING_MAXLEN)
+                aCell += OUString( q, sal::static_int_cast<sal_Int32>( p - q ) );
+            q = p;
         }
-        ++nRow;
-        ++mnRepaintCounter;
+        if (*p)
+            ++p;
+        if (nCol <= nEndCol)
+        {
+            ScAddress aAddress(nCol, mnCurRow, maStartRange.aStart.Tab());
+            if (aCell == "0" || ( aCell.indexOf(':') == -1 && aCell.toDouble() ))
+                aDocImport.setNumericCell(aAddress, aCell.toDouble());
+            else
+                aDocImport.setStringCell(aAddress, aCell);
+        }
+        ++nCol;
     }
+    ++mnRepaintCounter;
 
     aDocImport.finalize();
 
-    ScRange aBCRange(nStartCol, nStartRow, maRange.aStart.Tab(), nEndCol, nEndRow, maRange.aStart.Tab());
+    ScRange aBCRange(nStartCol, mnCurRow, maStartRange.aStart.Tab(), nEndCol, mnCurRow, maStartRange.aStart.Tab());
     maBroadcastRanges.Join(aBCRange);
 }
 
@@ -501,9 +503,9 @@ bool DataStream::ImportData()
 
     if (meMove == RANGE_DOWN)
     {
-        maRange.Move(0, maRange.aEnd.Row() - maRange.aStart.Row() + 1, 0);
+        ++mnCurRow;
         mpDocShell->GetViewData()->GetView()->AlignToCursor(
-                maRange.aStart.Col(), maRange.aStart.Row(), SC_FOLLOW_JUMP);
+                maStartRange.aStart.Col(), mnCurRow, SC_FOLLOW_JUMP);
     }
 
     if (mnRepaintCounter > 100)
