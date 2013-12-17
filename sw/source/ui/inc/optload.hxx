@@ -69,11 +69,10 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-class SwCaptionOptDlg : public SfxNoLayoutSingleTabDialog
+class SwCaptionOptDlg : public SfxSingleTabDialog
 {
 public:
-     SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet);
-    ~SwCaptionOptDlg();
+    SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet);
 };
 
 class CaptionComboBox : public SwComboBox

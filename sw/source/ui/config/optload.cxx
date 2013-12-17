@@ -312,15 +312,12 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
     return 0;
 }
 
-SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
+SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet)
+    : SfxSingleTabDialog(pParent, rSet, "CaptionDialog",
+        "modules/swriter/ui/captiondialog.ui")
 {
     // create TabPage
-    SetTabPage((SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet));
-}
-
-SwCaptionOptDlg::~SwCaptionOptDlg()
-{
+    setTabPage(SwCaptionOptPage::Create(get_content_area(), rSet));
 }
 
 SwCaptionPreview::SwCaptionPreview( Window* pParent, WinBits nStyle )
