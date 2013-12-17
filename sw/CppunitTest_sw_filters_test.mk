@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
+	starmath/util/sm \
     svtools/util/svt \
     sw/util/msword \
     sw/util/sw \

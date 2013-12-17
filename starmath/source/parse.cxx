@@ -872,24 +872,30 @@ void SmParser::NextToken()
                     break;
                 case '.':
                     {
-                        // for compatibility with SO5.2
-                        // texts like .34 ...56 ... h ...78..90
-                        // will be treated as numbers
-                        m_aCurToken.eType     = TNUMBER;
-                        m_aCurToken.cMathChar = '\0';
-                        m_aCurToken.nGroup       = 0;
-                        m_aCurToken.nLevel    = 5;
-
-                        sal_Int32 nTxtStart = m_nBufferIndex;
-                        sal_Unicode cChar;
-                        do
+                        // Only one character? Then it can't be a number.
+                        if (m_nBufferIndex < m_aBufferString.getLength() - 1)
                         {
-                            cChar = m_aBufferString[ ++m_nBufferIndex ];
-                        }
-                        while ( cChar == '.' || rtl::isAsciiDigit( cChar ) );
+                            // for compatibility with SO5.2
+                            // texts like .34 ...56 ... h ...78..90
+                            // will be treated as numbers
+                            m_aCurToken.eType     = TNUMBER;
+                            m_aCurToken.cMathChar = '\0';
+                            m_aCurToken.nGroup       = 0;
+                            m_aCurToken.nLevel    = 5;
 
-                        m_aCurToken.aText = m_aBufferString.copy( nTxtStart, m_nBufferIndex - nTxtStart );
-                        aRes.EndPos = m_nBufferIndex;
+                            sal_Int32 nTxtStart = m_nBufferIndex;
+                            sal_Unicode cChar;
+                            do
+                            {
+                                cChar = m_aBufferString[ ++m_nBufferIndex ];
+                            }
+                            while ( cChar == '.' || rtl::isAsciiDigit( cChar ) );
+
+                            m_aCurToken.aText = m_aBufferString.copy( nTxtStart, m_nBufferIndex - nTxtStart );
+                            aRes.EndPos = m_nBufferIndex;
+                        }
+                        else
+                            bHandled = false;
                     }
                     break;
                 case '/':
