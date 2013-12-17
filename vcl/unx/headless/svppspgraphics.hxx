@@ -139,8 +139,8 @@ public:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
-    virtual void            drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
-    virtual void            drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
+    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual bool            drawPolyLine(
         const ::basegfx::B2DPolygon&,
@@ -151,10 +151,10 @@ public:
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
-    virtual sal_Bool        drawPolyLineBezier( sal_uLong nPoints,
+    virtual sal_Bool        drawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry );
-    virtual sal_Bool        drawPolygonBezier( sal_uLong nPoints,
+    virtual sal_Bool        drawPolygonBezier( sal_uInt32 nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry );
     virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
@@ -185,7 +185,7 @@ public:
     virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight );
     virtual SalColor        getPixel( long nX, long nY );
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags );
-    virtual void            invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+    virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize );
     virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );

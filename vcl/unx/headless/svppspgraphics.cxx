@@ -335,20 +335,18 @@ void PspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
     m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
-void PspGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
+void PspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     m_pPrinterGfx->DrawPolyLine (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
+void PspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
     m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
-                                   const sal_uInt32   *pPoints,
-                                   PCONSTSALPOINT  *pPtAry )
+void PspGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
 {
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
 }
@@ -364,13 +362,13 @@ bool PspGraphics::drawPolyLine(
         return false;
 }
 
-sal_Bool PspGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool PspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolyLineBezier (nPoints, (Point*)pPtAry, pFlgAry);
     return sal_True;
 }
 
-sal_Bool PspGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool PspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolygonBezier (nPoints, (Point*)pPtAry, pFlgAry);
     return sal_True;
@@ -392,7 +390,7 @@ bool PspGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTra
     return false;
 }
 
-void PspGraphics::invert( sal_uLong /*nPoints*/,
+void PspGraphics::invert( sal_uInt32 /*nPoints*/,
                           const SalPoint* /*pPtAry*/,
                           SalInvert /*nFlags*/ )
 {
