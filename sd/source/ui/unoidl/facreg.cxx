@@ -22,6 +22,7 @@
 #include "sddll.hxx"
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <uno/lbnames.h>
 #include <sfx2/sfxmodelfactory.hxx>
 #include "osl/diagnose.h"
@@ -32,8 +33,12 @@
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-using namespace com::sun::star;
-
+using namespace ::rtl;
+using namespace ::cppu;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
 
 // Forward declarations of the factories.
 
@@ -66,7 +71,56 @@ extern uno::Sequence< OUString >  SlideLayoutController_getSupportedServiceNames
 extern uno::Reference< uno::XInterface > SAL_CALL InsertSlideController_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
 extern OUString InsertSlideController_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( uno::RuntimeException );
-}
+
+
+} //namespace sd
+
+namespace animcore
+{
+
+#define DECL_NODE_FACTORY(N)\
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance_##N( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rSMgr ) throw (::com::sun::star::uno::Exception);\
+extern OUString getImplementationName_##N();\
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_##N(void)
+
+DECL_NODE_FACTORY( PAR );
+DECL_NODE_FACTORY( SEQ );
+DECL_NODE_FACTORY( ITERATE );
+DECL_NODE_FACTORY( ANIMATE );
+DECL_NODE_FACTORY( SET );
+DECL_NODE_FACTORY( ANIMATECOLOR );
+DECL_NODE_FACTORY( ANIMATEMOTION );
+DECL_NODE_FACTORY( ANIMATETRANSFORM );
+DECL_NODE_FACTORY( TRANSITIONFILTER );
+DECL_NODE_FACTORY( AUDIO );
+DECL_NODE_FACTORY( COMMAND );
+DECL_NODE_FACTORY( TargetPropertiesCreator );
+
+#define IMPLEMENTATION_ENTRY(N)\
+{\
+        createInstance_##N, getImplementationName_##N ,\
+        getSupportedServiceNames_##N, createSingleComponentFactory ,\
+        0, 0\
+}\
+
+static const struct cppu::ImplementationEntry g_entries[] =
+{
+    IMPLEMENTATION_ENTRY( PAR ),
+    IMPLEMENTATION_ENTRY( SEQ ),
+    IMPLEMENTATION_ENTRY( ITERATE ),
+    IMPLEMENTATION_ENTRY( ANIMATE ),
+    IMPLEMENTATION_ENTRY( SET ),
+    IMPLEMENTATION_ENTRY( ANIMATECOLOR ),
+    IMPLEMENTATION_ENTRY( ANIMATEMOTION ),
+    IMPLEMENTATION_ENTRY( ANIMATETRANSFORM ),
+    IMPLEMENTATION_ENTRY( TRANSITIONFILTER ),
+    IMPLEMENTATION_ENTRY( AUDIO ),
+    IMPLEMENTATION_ENTRY( COMMAND ),
+//    IMPLEMENTATION_ENTRY( TargetPropertiesCreator ),
+    { 0, 0, 0, 0, 0, 0 }
+};
+
+} //namespace animcore
 
 namespace sd { namespace framework {
 
@@ -275,7 +329,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
     const sal_Char * pImplName,
     void           * pServiceManager,
-    void           *  )
+    void           * pRegistryKey)
 {
     void * pRet = 0;
 
@@ -455,6 +509,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
                 default:
                     break;
             }
+
             if (xComponentFactory.is())
             {
                 xComponentFactory->acquire();
@@ -464,6 +519,10 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
             {
                 xFactory->acquire();
                 pRet = xFactory.get();
+            }
+            else
+            {
+                pRet = ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , animcore::g_entries );
             }
         }
     }

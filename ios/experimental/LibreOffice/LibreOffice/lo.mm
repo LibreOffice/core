@@ -18,7 +18,6 @@
 
 extern "C" {
     extern void * analysis_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * chartcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * cui_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -80,7 +79,6 @@ lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
         { "libanalysislo.a", analysis_component_getFactory },
-        { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libchartcorelo.a", chartcore_component_getFactory },
         { "libcuilo.a", cui_component_getFactory },

@@ -8,6 +8,7 @@
  */
 
 #include "sdmodeltestbase.hxx"
+#include "animationnodehelper.hxx"
 
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -19,7 +20,6 @@
 #include <rsc/rscsfx.hxx>
 
 #include <svx/svdotext.hxx>
-#include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -351,7 +351,7 @@ void SdFiltersTest::testFdo64512()
     uno::Reference< animations::XAnimationNode > xRootNode(
         xAnimNodeSupplier->getAnimationNode() );
     std::vector< uno::Reference< animations::XAnimationNode > > aAnimVector;
-    anim::create_deep_vector(xRootNode, aAnimVector);
+    animcore::create_deep_vector(xRootNode, aAnimVector);
     CPPUNIT_ASSERT_MESSAGE( "not 8 animation nodes", aAnimVector.size() == 8 );
 
     uno::Reference< animations::XAnimate > xNode(

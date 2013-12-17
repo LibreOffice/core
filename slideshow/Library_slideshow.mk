@@ -140,6 +140,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/transitions/veewipe \
     slideshow/source/engine/transitions/waterfallwipe \
     slideshow/source/engine/transitions/zigzagwipe \
+    slideshow/source/engine/targetpropertiescreator \
     slideshow/source/engine/unoviewcontainer \
     slideshow/source/engine/usereventqueue \
     slideshow/source/engine/waitsymbol \

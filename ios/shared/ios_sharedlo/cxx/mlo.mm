@@ -28,7 +28,6 @@ extern "C" {
     //from iOS
     
     //ADD_LIB(analysis);        // Exotic calc functionality 
-    //ADD_LIB(animcore);        // animation support lib
     //ADD_LIB(avmedia);         // video support lib *
     //ADD_LIB(dba);             // dbaccess lib
     //ADD_LIB(date);            // Extra calc functionallty
@@ -126,7 +125,7 @@ lo_get_libmap(void)
         
         //from IOS
         
-        //MAP_LIB_LO(analysis), //MAP_LIB_LO(animcore), //MAP_LIB_LO(sm),
+        //MAP_LIB_LO(analysis), //MAP_LIB_LO(sm),
         //MAP_LIB_LO(avmedia),  //MAP_LIB_LO(dba),      //MAP_LIB_LO(date),
         //MAP_LIB_LO(fwk),      //MAP_LIB_LO(fwm),      //MAP_LIB_LO(frm),
         //MAP_LIB_LO(pricing),  //MAP_LIB_LO(scd),      //MAP_LIB_LO(scfilt),

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
-#define INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
+#ifndef SD_INC_ANIMATIONNODEHELPER_HXX
+#define SD_INC_ANIMATIONNODEHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -29,57 +29,8 @@
 
 /* Declaration and definition of AnimationNode helper */
 
-namespace anim
+namespace animcore
 {
-    // TODO(Q1): this could possibly be implemented with a somewhat
-    // more lightweight template, by having the actual worker receive
-    // only a function pointer, and a thin templated wrapper around
-    // that which converts member functions into that.
-
-    /** Apply given functor to every animation node child.
-
-        @param xNode
-        Parent node
-
-        @param rFunctor
-        Functor to apply. The functor must have an appropriate
-        operator()( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XAnimationNode >& ) member.
-
-        @return true, if the functor was successfully applied to
-        all children, false otherwise.
-    */
-    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&    xNode,
-                                                          Functor&                                                                                  rFunctor )
-    {
-        try
-        {
-            // get an XEnumerationAccess to the children
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode,
-                                      ::com::sun::star::uno::UNO_QUERY_THROW );
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-                  xEnumeration( xEnumerationAccess->createEnumeration(),
-                                ::com::sun::star::uno::UNO_QUERY_THROW );
-
-            while( xEnumeration->hasMoreElements() )
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
-                      xChildNode( xEnumeration->nextElement(),
-                                  ::com::sun::star::uno::UNO_QUERY_THROW );
-
-                rFunctor( xChildNode );
-            }
-
-            return true;
-        }
-        catch( ::com::sun::star::uno::Exception& )
-        {
-            return false;
-        }
-    }
-
-
     /** pushes the given node to the given vector and recursivly calls itself for each child node.
     */
     inline void create_deep_vector( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
@@ -119,6 +70,6 @@ namespace anim
     }
 }
 
-#endif /* INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX */
+#endif /* SD_INC_ANIMATIONNODEHELPER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

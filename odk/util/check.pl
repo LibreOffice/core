@@ -235,7 +235,6 @@ if (-d "$SdkDir") {
         }
 
         my @idl_dirlist = ( "accessibility",
-                    "animations",
                     "auth",
                     "awt",
                     "awt/tab",

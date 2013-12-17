@@ -40,7 +40,7 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
-#include <animations/animationnodehelper.hxx>
+#include "animationnodehelper.hxx"
 
 // header for class SdrObjListIter
 #include <svx/svditer.hxx>
@@ -117,8 +117,8 @@ namespace sd
             }
 
             // create a dictionary to map source to cloned nodes
-            ::anim::create_deep_vector( xSourceNode, maSourceNodeVector );
-            ::anim::create_deep_vector( xCloneNode, maCloneNodeVector );
+            animcore::create_deep_vector( xSourceNode, maSourceNodeVector );
+            animcore::create_deep_vector( xCloneNode, maCloneNodeVector );
 
             transformNode( xCloneNode );
 

@@ -175,7 +175,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,tde, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
-	animcore \
 	placeware \
 	PresenterScreen \
 	PresentationMinimizer \

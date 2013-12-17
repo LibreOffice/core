@@ -14,7 +14,6 @@ $(eval $(call gb_Module_Module,libreoffice))
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
-	animations \
 	apple_remote \
 	avmedia \
 	basctl \

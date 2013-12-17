@@ -11,7 +11,6 @@
 
 extern "C"
 {
-    extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -57,7 +56,6 @@ const lib_to_component_mapping *
 lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
-        { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },

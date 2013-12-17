@@ -84,7 +84,43 @@
   <implementation name="com.sun.star.comp.sd.SlideLayoutController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="sd::RandomAnimationNode">
+  <implementation name="animcore::RandomAnimationNode">
     <service name="com.sun.star.comp.sd.RandomAnimationNode"/>
+  </implementation>
+  <implementation name="animcore::Animate">
+    <service name="com.sun.star.animations.Animate"/>
+  </implementation>
+  <implementation name="animcore::AnimateColor">
+    <service name="com.sun.star.animations.AnimateColor"/>
+  </implementation>
+  <implementation name="animcore::AnimateMotion">
+    <service name="com.sun.star.animations.AnimateMotion"/>
+  </implementation>
+  <implementation name="animcore::AnimateSet">
+    <service name="com.sun.star.animations.AnimateSet"/>
+  </implementation>
+  <implementation name="animcore::AnimateTransform">
+    <service name="com.sun.star.animations.AnimateTransform"/>
+  </implementation>
+  <implementation name="animcore::Audio">
+    <service name="com.sun.star.animations.Audio"/>
+  </implementation>
+  <implementation name="animcore::Command">
+    <service name="com.sun.star.animations.Command"/>
+  </implementation>
+  <implementation name="animcore::IterateContainer">
+    <service name="com.sun.star.animations.IterateContainer"/>
+  </implementation>
+  <implementation name="::ParallelTimeContainer">
+    <service name="com.sun.star.animations.ParallelTimeContainer"/>
+  </implementation>
+  <implementation name="animcore::SequenceTimeContainer">
+    <service name="com.sun.star.animations.SequenceTimeContainer"/>
+  </implementation>
+  <implementation name="animcore::TargetPropertiesCreator">
+    <service name="com.sun.star.animations.TargetPropertiesCreator"/>
+  </implementation>
+  <implementation name="animcore::TransitionFilter">
+    <service name="com.sun.star.animations.TransitionFilter"/>
   </implementation>
 </component>

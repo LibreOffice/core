@@ -68,7 +68,6 @@ $(eval $(call gb_CppunitTest_use_ure,chart2_import))
 
 $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     basic/util/sb \
-    animations/source/animcore/animcore \
     chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
     comphelper/util/comphelp \

@@ -10,7 +10,6 @@
 $(eval $(call gb_Rdb_Rdb_install,services))
 
 $(eval $(call gb_Rdb_add_components,services,\
-	animations/source/animcore/animcore \
 	avmedia/util/avmedia \
 	chart2/source/controller/chartcontroller \
 	chart2/source/chartcore \
