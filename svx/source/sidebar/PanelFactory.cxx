@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "sidebar/PanelFactory.hxx"
 
 #include "text/TextPropertyPanel.hxx"
 #include "paragraph/ParaPropertyPanel.hxx"
@@ -37,68 +37,56 @@
 #include <vcl/window.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
-
+namespace cssu = ::com::sun::star::uno;
 using namespace css;
 using namespace cssu;
-using ::rtl::OUString;
+using namespace svx::sidebar;
 
-
-namespace svx { namespace sidebar {
-
+/* Why this is not used ? Doesn't it need to inherit from XServiceInfo ?
 #define IMPLEMENTATION_NAME "org.apache.openoffice.comp.svx.sidebar.PanelFactory"
 #define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
+*/
 
+namespace {
 
-::rtl::OUString SAL_CALL PanelFactory::getImplementationName (void)
+typedef ::cppu::WeakComponentImplHelper1 <
+    css::ui::XUIElementFactory > PanelFactoryInterfaceBase;
+
+class PanelFactory
+    : private ::boost::noncopyable,
+      private ::cppu::BaseMutex,
+      public PanelFactoryInterfaceBase
 {
-    return OUString(IMPLEMENTATION_NAME);
-}
+public:
+    PanelFactory (void);
+    virtual ~PanelFactory (void);
 
-
-
-
-cssu::Reference<cssu::XInterface> SAL_CALL PanelFactory::createInstance (
-    const uno::Reference<lang::XMultiServiceFactory>& rxFactory)
-{
-    (void)rxFactory;
-
-    ::rtl::Reference<PanelFactory> pPanelFactory (new PanelFactory());
-    cssu::Reference<cssu::XInterface> xService (static_cast<XWeak*>(pPanelFactory.get()), cssu::UNO_QUERY);
-    return xService;
-}
-
-
-
-
-cssu::Sequence<OUString> SAL_CALL PanelFactory::getSupportedServiceNames (void)
-{
-    cssu::Sequence<OUString> aServiceNames (1);
-    aServiceNames[0] = SERVICE_NAME;
-    return aServiceNames;
-
-}
-
-
-
+    // XUIElementFactory
+    cssu::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
+        const ::rtl::OUString& rsResourceURL,
+        const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+        throw(
+            css::container::NoSuchElementException,
+            css::lang::IllegalArgumentException,
+            cssu::RuntimeException);
+};
 
 PanelFactory::PanelFactory (void)
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
 
-
-
-
 PanelFactory::~PanelFactory (void)
 {
 }
-
-
-
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,
@@ -208,6 +196,18 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         return Reference<ui::XUIElement>();
 }
 
-} } // end of namespace svx::sidebar
+}
 
-// eof
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+org_apache_openoffice_comp_svx_sidebar_PanelFactory_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new PanelFactory));
+    x->acquire();
+    return x.get();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

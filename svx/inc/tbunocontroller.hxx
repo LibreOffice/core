@@ -25,8 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-namespace svx
-{
+namespace {
 
 class SvxFontSizeBox_Impl;
 class FontHeightToolBoxControl : public svt::ToolboxController,
@@ -46,13 +45,6 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
-
-        static OUString getImplementationName_Static() throw()
-        {
-            return OUString("com.sun.star.svx.FontHeightToolBoxController");
-        }
-
-        static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -74,8 +66,6 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         SvxFontSizeBox_Impl*                  m_pBox;
         ::com::sun::star::awt::FontDescriptor m_aCurrentFont;
 };
-
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance( const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
 }
 

@@ -40,8 +40,7 @@
 #include <map>
 #include <vector>
 
-namespace svx
-{
+namespace {
 
 class FindTextFieldControl : public ComboBox
 {
@@ -105,13 +104,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    static OUString getImplementationName_Static() throw()
-    {
-        return OUString("com.sun.star.svx.FindTextToolboxController");
-    }
-
-    static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
 
@@ -153,13 +145,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    static OUString getImplementationName_Static( ) throw()
-    {
-        return OUString( "com.sun.star.svx.ExitFindbarToolboxController" );
-    }
-
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
 
@@ -191,14 +176,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
-
-    static OUString getImplementationName_Static( Type eType ) throw()
-    {
-        return eType == UP? OUString( "com.sun.star.svx.UpSearchToolboxController" ) :
-                            OUString( "com.sun.star.svx.DownSearchToolboxController" );
-    }
-
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
@@ -233,13 +210,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    static OUString getImplementationName_Static( ) throw()
-    {
-        return OUString( "com.sun.star.svx.MatchCaseToolboxController" );
-    }
-
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
 
@@ -273,13 +243,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
-
-    static OUString getImplementationName_Static( ) throw()
-    {
-        return OUString( "com.sun.star.svx.FindAllToolboxController" );
-    }
-
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
@@ -317,13 +280,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-    static OUString getImplementationName_Static() throw()
-    {
-        return OUString("com.sun.star.comp.svx.Impl.FindbarDispatcher");
-    }
-
-    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
-
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException );
 
@@ -341,15 +297,6 @@ private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
 };
-
-// createInstance
-css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
-css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
-css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
-css::uno::Reference< css::uno::XInterface > SAL_CALL MatchCaseToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
-css::uno::Reference< css::uno::XInterface > SAL_CALL FindAllToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
-css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
-css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 
 }
 

@@ -28,8 +28,7 @@
 #include "docrecovery.hxx"
 
 
-namespace svx
-{
+namespace {
 
 namespace svxdr = ::svx::DocRecovery;
 
@@ -109,13 +108,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
                                                    const css::util::URL&                                     aURL     )
             throw(css::uno::RuntimeException);
 
-        //---------------------------------------
-        // XServiceInfo helper
-
-        static OUString st_getImplementationName();
-        static css::uno::Sequence< OUString > st_getSupportedServiceNames();
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
-
     //-------------------------------------------
     // helper
     private:
@@ -132,7 +124,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
 
 };
 
-} // namespace svx
+}
 
 #endif // INCLUDED_SVX_SOURCE_INC_RECOVERYUI_HXX
 

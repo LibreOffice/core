@@ -39,8 +39,7 @@
 
 using namespace ::com::sun::star;
 
-namespace svx
-{
+namespace {
 
 class FontHeightToolBoxControl;
 class SvxFontSizeBox_Impl : public FontSizeBox
@@ -284,17 +283,11 @@ throw(uno::RuntimeException)
 OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
 throw( uno::RuntimeException )
 {
-    return getImplementationName_Static();
+    return OUString("com.sun.star.svx.FontHeightToolBoxController");
 }
 
 uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
 throw( uno::RuntimeException )
-{
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > FontHeightToolBoxControl::getSupportedServiceNames_Static()
-throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
@@ -404,12 +397,18 @@ void FontHeightToolBoxControl::dispatchCommand(
     }
 }
 
-uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-{
-    return *new FontHeightToolBoxControl( comphelper::getComponentContext(rSMgr) );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory(
+    css::uno::XComponentContext *rxContext,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new FontHeightToolBoxControl(rxContext)));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

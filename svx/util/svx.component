@@ -18,62 +18,80 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="svx" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.GraphicExporter">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.Draw.GraphicExporter"
+      constructor="com_sun_star_comp_Draw_GraphicExporter_implementation_getFactory">
     <service name="com.sun.star.drawing.GraphicExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper">
+  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper"
+      constructor="com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory">
     <service name="com.sun.star.document.BinaryStreamResolver"/>
     <service name="com.sun.star.document.GraphicObjectResolver"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper">
+  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper"
+      constructor="com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory">
     <service name="com.sun.star.document.BinaryStreamResolver"/>
     <service name="com.sun.star.document.GraphicObjectResolver"/>
   </implementation>
-  <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider">
+  <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider"
+      constructor="com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory">
     <service name="com.sun.star.gallery.GalleryThemeProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D">
+  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D"
+      constructor="com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory">
     <service name="com.sun.star.graphic.PrimitiveFactory2D"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.Impl.FindbarDispatcher">
+  <implementation name="com.sun.star.comp.svx.Impl.FindbarDispatcher"
+      constructor="com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory">
     <service name="com.sun.star.comp.svx.FindbarDispatcher"/>
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svx.RecoveryUI">
+  <implementation name="com.sun.star.comp.svx.RecoveryUI"
+      constructor="com_sun_star_comp_svx_RecoveryUI_implementation_getFactory">
     <service name="com.sun.star.dialog.RecoveryUI"/>
   </implementation>
-  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine">
+  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine"
+      constructor="com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory">
     <service name="com.sun.star.drawing.CustomShapeEngine"/>
   </implementation>
-  <implementation name="com.sun.star.drawing.SvxShapeCollection">
+  <implementation name="com.sun.star.drawing.SvxShapeCollection"
+      constructor="com_sun_star_drawing_SvxShapeCollection_implementation_getFactory">
     <service name="com.sun.star.drawing.ShapeCollection"/>
   </implementation>
-  <implementation name="com.sun.star.drawing.SvxUnoColorTable">
+  <implementation name="com.sun.star.drawing.SvxUnoColorTable"
+      constructor="com_sun_star_drawing_SvxUnoColorTable_implementation_getFactory">
     <service name="com.sun.star.drawing.ColorTable"/>
   </implementation>
-  <implementation name="com.sun.star.svx.DownSearchToolboxController">
+  <implementation name="com.sun.star.svx.DownSearchToolboxController"
+      constructor="com_sun_star_svx_DownSearchToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.FindTextToolboxController">
+  <implementation name="com.sun.star.svx.FindTextToolboxController"
+      constructor="com_sun_star_svx_FindTextToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.MatchCaseToolboxController">
+  <implementation name="com.sun.star.svx.MatchCaseToolboxController"
+      constructor="com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.FindAllToolboxController">
+  <implementation name="com.sun.star.svx.FindAllToolboxController"
+      constructor="com_sun_star_svx_FindAllToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.FontHeightToolBoxController">
+  <implementation name="com.sun.star.svx.FontHeightToolBoxController"
+      constructor="com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.UpSearchToolboxController">
+  <implementation name="com.sun.star.svx.UpSearchToolboxController"
+      constructor="com_sun_star_svx_UpSearchToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.ExitFindbarToolboxController">
+  <implementation name="com.sun.star.svx.ExitFindbarToolboxController"
+      constructor="com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="org.apache.openoffice.comp.svx.sidebar.PanelFactory">
+  <implementation name="org.apache.openoffice.comp.svx.sidebar.PanelFactory"
+      constructor="org_apache_openoffice_comp_svx_sidebar_PanelFactory_implementation_getFactory">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
 </component>

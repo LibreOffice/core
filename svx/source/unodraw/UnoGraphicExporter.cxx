@@ -83,15 +83,14 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
-#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 
 // #i102251#
 #include <editeng/editstat.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace svx
-{
+namespace {
+
     struct ExportSettings
     {
         OUString maFilterName;
@@ -179,26 +178,6 @@ namespace svx
         SdrPage*            mpCurrentPage;
         SdrModel*           mpDoc;
     };
-
-    SVX_DLLPUBLIC Reference< XInterface > SAL_CALL GraphicExporter_createInstance(const Reference< XMultiServiceFactory > & )
-        throw( Exception )
-    {
-        return (XWeak*)new GraphicExporter();
-    }
-
-    SVX_DLLPUBLIC Sequence< OUString > SAL_CALL GraphicExporter_getSupportedServiceNames()
-        throw()
-    {
-        Sequence< OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = "com.sun.star.drawing.GraphicExportFilter";
-        return aSupportedServiceNames;
-    }
-
-    SVX_DLLPUBLIC OUString SAL_CALL GraphicExporter_getImplementationName()
-        throw()
-    {
-        return OUString( "com.sun.star.comp.Draw.GraphicExporter" );
-    }
 
     /** creates a bitmap that is optionaly transparent from a metafile
     */
@@ -300,7 +279,6 @@ namespace svx
 
         return &aOutSize;
     }
-}
 
 class ImplExportCheckVisisbilityRedirector : public ::sdr::contact::ViewObjectContactRedirector
 {
@@ -351,7 +329,7 @@ drawinglayer::primitive2d::Primitive2DSequence ImplExportCheckVisisbilityRedirec
     }
 }
 
-using namespace ::svx;
+// using namespace ::svx;
 
 GraphicExporter::GraphicExporter()
 : mpUnoPage( NULL ), mnPageNumber(-1), mpCurrentPage(0), mpDoc( NULL )
@@ -1224,7 +1202,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 OUString SAL_CALL GraphicExporter::getImplementationName(  )
     throw(RuntimeException)
 {
-    return GraphicExporter_getImplementationName();
+    return OUString( "com.sun.star.comp.Draw.GraphicExporter" );
 }
 
 sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
@@ -1236,7 +1214,9 @@ sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    return GraphicExporter_getSupportedServiceNames();
+    Sequence< OUString > aSupportedServiceNames( 1 );
+    aSupportedServiceNames[0] = "com.sun.star.drawing.GraphicExportFilter";
+    return aSupportedServiceNames;
 }
 
 // XMimeTypeInfo
@@ -1284,6 +1264,8 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) thr
     return aSeq;
 }
 
+}
+
 Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
 {
     Graphic aGraphic;
@@ -1300,6 +1282,18 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
         OSL_FAIL("SvxGetGraphicForShape(), exception caught!");
     }
     return aGraphic;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_Draw_GraphicExporter_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new GraphicExporter));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,8 +35,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <officecfg/Office/Recovery.hxx>
 
-namespace svx
-{
+namespace {
 
 namespace svxdr = ::svx::DocRecovery;
 
@@ -57,7 +56,7 @@ RecoveryUI::~RecoveryUI()
 OUString SAL_CALL RecoveryUI::getImplementationName()
     throw(css::uno::RuntimeException)
 {
-    return RecoveryUI::st_getImplementationName();
+    return OUString("com.sun.star.comp.svx.RecoveryUI");
 }
 
 sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
@@ -69,7 +68,9 @@ sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
 {
-    return RecoveryUI::st_getSupportedServiceNames();
+    css::uno::Sequence< OUString > lServiceNames(1);
+    lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
+    return lServiceNames;
 }
 
 css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL& aURL,
@@ -130,24 +131,6 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
 {
     // TODO
     OSL_FAIL("RecoveryUI::removeStatusListener()\nNot implemented yet!");
-}
-
-OUString RecoveryUI::st_getImplementationName()
-{
-    return OUString("com.sun.star.comp.svx.RecoveryUI");
-}
-
-css::uno::Sequence< OUString > RecoveryUI::st_getSupportedServiceNames()
-{
-    css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
-    return lServiceNames;
-}
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    RecoveryUI* pNew = new RecoveryUI(comphelper::getComponentContext(xSMGR));
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XServiceInfo* >(pNew));
 }
 
 static OUString GetCrashConfigDir()
@@ -342,6 +325,17 @@ void RecoveryUI::impl_showAllRecoveredDocs()
     }
 }
 
-} // namespace svx
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svx_RecoveryUI_implementation_getFactory(
+    css::uno::XComponentContext *context, uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new RecoveryUI(context)));
+    x->acquire();
+    return x.get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

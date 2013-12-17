@@ -18,8 +18,9 @@
  */
 
 #include <com/sun/star/document/EventObject.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "svx/unoshcol.hxx"
+#include <svx/unoshcol.hxx>
 #include <svx/unoprov.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -210,11 +211,6 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 OUString SAL_CALL SvxShapeCollection::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return getImplementationName_Static();
-}
-
-OUString SvxShapeCollection::getImplementationName_Static()
-{
     return OUString("com.sun.star.drawing.SvxShapeCollection");
 }
 
@@ -226,20 +222,22 @@ sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames_Static()
-{
     uno::Sequence< OUString > aSeq(2);
     aSeq.getArray()[0] = "com.sun.star.drawing.Shapes";
     aSeq.getArray()[1] = "com.sun.star.drawing.ShapeCollection";
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL SvxShapeCollection_createInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_drawing_SvxShapeCollection_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
 {
-    return *( new SvxShapeCollection() );
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new SvxShapeCollection));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
