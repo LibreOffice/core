@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 // Cyrillic upper case
 #define C_CYR_A "\xD0\x90"
@@ -1052,7 +1053,7 @@ OUString DefaultNumberingProvider::getImplementationName(void)
 sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cDefaultNumberingProvider);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)

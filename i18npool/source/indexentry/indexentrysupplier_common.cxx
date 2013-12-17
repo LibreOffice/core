@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <indexentrysupplier_common.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -126,7 +126,7 @@ IndexEntrySupplier_Common::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 IndexEntrySupplier_Common::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(implementationName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

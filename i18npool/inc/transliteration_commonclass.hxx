@@ -21,13 +21,17 @@
 
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class transliteration_commonclass : public cppu::WeakImplHelper1< com::sun::star::i18n::XExtendedTransliteration >
+class transliteration_commonclass : public cppu::WeakImplHelper2<
+                                                                  com::sun::star::i18n::XExtendedTransliteration,
+                                                                  com::sun::star::lang::XServiceInfo
+                                                                >
 {
 public:
         transliteration_commonclass();

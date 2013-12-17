@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #define TRANSLITERATION_casemapping
 #include <transliteration_body.hxx>

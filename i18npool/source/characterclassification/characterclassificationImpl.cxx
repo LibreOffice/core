@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include <characterclassificationImpl.hxx>
 #include <localedata.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -205,7 +204,7 @@ sal_Bool SAL_CALL
 CharacterClassificationImpl::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cClass);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

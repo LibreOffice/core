@@ -24,11 +24,11 @@
 #include <localedata.hxx>
 #include <data/numberchar.h>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
-
 
 typedef struct {
     sal_Int16 number;
@@ -898,7 +898,7 @@ OUString SAL_CALL NativeNumberSupplier::getImplementationName() throw( RuntimeEx
 sal_Bool SAL_CALL
 NativeNumberSupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(implementationName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

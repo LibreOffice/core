@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <numberformatcode.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
-
-
+#include <cppuhelper/supportsservice.hxx>
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
             const ::com::sun::star::uno::Reference <
@@ -269,20 +267,17 @@ NumberFormatCodeMapper::getImplementationName(void)
     return OUString("com.sun.star.i18n.NumberFormatCodeMapper");
 }
 
-const sal_Char cNumFormat[] = "com.sun.star.i18n.NumberFormatMapper";
-
-sal_Bool SAL_CALL
-NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
                 throw( ::com::sun::star::uno::RuntimeException )
 {
-    return rServiceName.equalsAscii(cNumFormat);
+    return cppu::supportsService(this, rServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL
 NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cNumFormat);
+    aRet[0] = "com.sun.star.i18n.NumberFormatMapper";
     return aRet;
 }
 

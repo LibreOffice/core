@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // prevent internal compiler error with MSVC6SP3
 #include <utility>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <chaptercollator.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
@@ -85,7 +85,7 @@ ChapterCollator::getImplementationName() throw( RuntimeException )
 sal_Bool SAL_CALL
 ChapterCollator::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cChapCollator);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

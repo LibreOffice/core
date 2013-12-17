@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <inputsequencechecker.hxx>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -142,7 +142,7 @@ InputSequenceCheckerImpl::getImplementationName(void) throw( RuntimeException )
 sal_Bool SAL_CALL
 InputSequenceCheckerImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(serviceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

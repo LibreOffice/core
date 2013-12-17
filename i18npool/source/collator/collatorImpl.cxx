@@ -17,18 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <collatorImpl.hxx>
 #include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -215,17 +214,15 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
 
 const sal_Char cCollator[] = "com.sun.star.i18n.Collator";
 
-OUString SAL_CALL
-CollatorImpl::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL CollatorImpl::getImplementationName() throw( RuntimeException )
 {
     return OUString::createFromAscii(cCollator);
 }
 
-sal_Bool SAL_CALL
-CollatorImpl::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL CollatorImpl::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cCollator);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

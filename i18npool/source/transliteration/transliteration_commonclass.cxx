@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <transliteration_commonclass.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -137,17 +137,15 @@ OUString SAL_CALL transliteration_commonclass::getImplementationName() throw( Ru
     return OUString::createFromAscii(implementationName);
 }
 
-const sal_Char cTrans[] = "com.sun.star.i18n.Transliteration.l10n";
-
 sal_Bool SAL_CALL transliteration_commonclass::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cTrans);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL transliteration_commonclass::getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cTrans);
+    aRet[0] = "com.sun.star.i18n.Transliteration.l10n";
     return aRet;
 }
 

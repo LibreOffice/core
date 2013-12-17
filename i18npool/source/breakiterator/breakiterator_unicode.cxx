@@ -18,6 +18,7 @@
  */
 
 #include <breakiterator_unicode.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
@@ -439,8 +440,6 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
     return lbr;
 }
 
-
-
 OUString SAL_CALL
 BreakIterator_Unicode::getImplementationName(void) throw( uno::RuntimeException )
 {
@@ -450,7 +449,7 @@ BreakIterator_Unicode::getImplementationName(void) throw( uno::RuntimeException 
 sal_Bool SAL_CALL
 BreakIterator_Unicode::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName.equalsAscii(cBreakIterator);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

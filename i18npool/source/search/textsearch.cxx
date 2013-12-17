@@ -33,6 +33,7 @@
 #include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 
 #ifdef _MSC_VER
@@ -1046,11 +1047,10 @@ TextSearch::getImplementationName()
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL
-TextSearch::supportsService(const OUString& rServiceName)
+sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return rServiceName == cSearchName;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
