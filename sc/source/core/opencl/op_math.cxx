@@ -1527,7 +1527,7 @@ void OpBitAnd::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    else \n    ";
 #endif
     ss << "    num2 = " << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-    ss << "    return (int)num1 & (int)num2;\n";
+    ss << "    return (long)num1 & (long)num2;\n";
     ss << "}";
 }
 void OpLn::GenSlidingWindowFunction(
