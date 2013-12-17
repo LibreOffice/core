@@ -247,7 +247,7 @@ def get_launchpad_bugs(prefix):
 
     #since searching bugs having attachments with specific mimetypes is not available in launchpad API
     #we're iterating over all bugs of the most interesting source packages
-    for pkg in ["libreoffice", "openoffice.org", "abiword", "gnumeric", "koffice", "calligra"]:
+    for pkg in ["libreoffice", "openoffice.org", "abiword", "gnumeric", "koffice", "calligra", "inkscape", "sk1"]:
         srcpkg = ubuntu.getSourcePackage(name=pkg)
         pkgbugs = srcpkg.searchTasks(status=["New", "Fix Committed", "Invalid", "Won't Fix", "Confirmed", "Triaged", "In Progress", "Incomplete", "Incomplete (with response)", "Incomplete (without response)", "Fix Released", "Opinion", "Expired"])
 
