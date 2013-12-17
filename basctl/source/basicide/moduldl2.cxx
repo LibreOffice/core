@@ -150,7 +150,7 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
                 && xDlgLibContainer->isLibraryReadOnly(aLibName));
     }
     if (bReadOnly)
-        rDev.DrawCtrlText(rPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE);
+        rDev.DrawCtrlText(rPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
     else
         rDev.DrawText(rPos, GetText());
 }

@@ -7567,7 +7567,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
                 int nChars = 1;
-                aUnicodes.push_back( rText[ sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) ] );
+                aUnicodes.push_back( rText[ pCharPosAry[i] ] );
                 pUnicodesPerGlyph[i] = 1;
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
@@ -7581,7 +7581,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                         nChars = 1;
                     pUnicodesPerGlyph[i] = nChars;
                     for( int n = 1; n < nChars; n++ )
-                        aUnicodes.push_back( rText[ sal::static_int_cast<xub_StrLen>(pCharPosAry[i]+n) ] );
+                        aUnicodes.push_back( rText[ pCharPosAry[i] + n ] );
                 }
                 // #i36691# hack that is needed because currently the pGlyphs[]
                 // argument is ignored for embeddable fonts and so the layout

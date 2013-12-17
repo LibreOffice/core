@@ -3138,7 +3138,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
-        DrawCtrlText( aPos, pItem->maText, 0, STRING_LEN, TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
+        DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
         if ( bClip )
             SetClipRegion();
         SetFont( aOldFont );
@@ -3307,7 +3307,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
         DrawCtrlText( Point( nTextOffX, nTextOffY ), pItem->maText,
-                      0, STRING_LEN, nTextStyle, pVector, pDisplayText );
+                      0, pItem->maText.getLength(), nTextStyle, pVector, pDisplayText );
         if ( bRotate )
             SetFont( aOldFont );
     }

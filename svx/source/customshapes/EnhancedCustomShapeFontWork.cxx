@@ -283,9 +283,9 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 {
                     FWCharacterData aCharacterData;
                     OUString aCharText( (sal_Unicode)rText[ i ] );
-                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, STRING_LEN, sal_True, nWidth, pDXArry ) )
+                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, sal_True, nWidth, pDXArry ) )
                     {
-                        sal_Int32 nTextWidth = aVirDev.GetTextWidth( aCharText, 0, STRING_LEN );
+                        sal_Int32 nTextWidth = aVirDev.GetTextWidth( aCharText);
                         std::vector< PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
                         std::vector< PolyPolygon >::iterator aOutlineIEnd = aCharacterData.vOutlines.end();
                         if ( aOutlineIter == aOutlineIEnd )
@@ -335,13 +335,13 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
                     pDXArry = new sal_Int32[ rText.getLength() ];
-                    aVirDev.GetTextArray( rText, pDXArry, 0, STRING_LEN );
+                    aVirDev.GetTextArray( rText, pDXArry);
                     FontMetric aFontMetric( aVirDev.GetFontMetric() );
                     aFont.SetWidth( (sal_Int32)( (double)aFontMetric.GetWidth() * ( (double)100 / (double)nCharScaleWidth ) ) );
                     aVirDev.SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, STRING_LEN, sal_True, nWidth, pDXArry ) )
+                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, sal_True, nWidth, pDXArry ) )
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }

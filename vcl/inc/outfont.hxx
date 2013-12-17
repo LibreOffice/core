@@ -367,20 +367,25 @@ class ImplTextLineInfo
 {
 private:
     long        mnWidth;
-    xub_StrLen  mnIndex;
-    xub_StrLen  mnLen;
+    sal_Int32   mnIndex;
+    sal_Int32   mnLen;
 
 public:
-                ImplTextLineInfo( long nWidth, xub_StrLen nIndex, xub_StrLen nLen )
-                {
-                    mnWidth = nWidth;
-                    mnIndex = nIndex;
-                    mnLen   = nLen;
-                }
+               ImplTextLineInfo( long nWidth, sal_Int32 nIndex, sal_Int32 nLen )
+               {
+                   if(nIndex == -1 || nIndex == 0x0FFFF || nLen == -1 || nLen == 0x0FFFF)
+                   {
+                        SAL_INFO("sal.rtl.xub",
+                                 "ImplTextLine Info Suspicious arguments nIndex:" << nIndex << " nLen:" << nLen);
+                   }
+                   mnWidth = nWidth;
+                   mnIndex = nIndex;
+                   mnLen   = nLen;
+               }
 
-    long        GetWidth() const { return mnWidth; }
-    xub_StrLen  GetIndex() const { return mnIndex; }
-    xub_StrLen  GetLen() const { return mnLen; }
+    long       GetWidth() const { return mnWidth; }
+    sal_Int32  GetIndex() const { return mnIndex; }
+    sal_Int32  GetLen() const { return mnLen; }
 };
 
 #define MULTITEXTLINEINFO_RESIZE    16
@@ -390,8 +395,8 @@ class ImplMultiTextLineInfo
 {
 private:
     PImplTextLineInfo*  mpLines;
-    xub_StrLen          mnLines;
-    xub_StrLen          mnSize;
+    sal_Int32           mnLines;
+    sal_Int32           mnSize;
 
 public:
                         ImplMultiTextLineInfo();
@@ -402,7 +407,7 @@ public:
 
     ImplTextLineInfo*   GetLine( sal_uInt16 nLine ) const
                             { return mpLines[nLine]; }
-    xub_StrLen          Count() const { return mnLines; }
+    sal_Int32           Count() const { return mnLines; }
 
 private:
                             ImplMultiTextLineInfo( const ImplMultiTextLineInfo& );

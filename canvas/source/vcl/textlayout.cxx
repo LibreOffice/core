@@ -128,9 +128,9 @@ namespace vclcanvas
         if (aVDev.GetTextOutlines(
             aOutlines,
             maText.Text,
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
+            maText.StartPosition,
+            maText.StartPosition,
+            maText.Length,
             sal_False,
             0,
             aOffsets.get()))

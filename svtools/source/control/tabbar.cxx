@@ -1197,8 +1197,8 @@ public:
         if (mbEnabled)
             mrParent.DrawText(aPos, aText);
         else
-            mrParent.DrawCtrlText(
-                aPos, aText, 0, STRING_LEN, (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
+            mrParent.DrawCtrlText( aPos, aText, 0, aText.getLength(),
+                                   (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
     }
 
     void drawOverTopBorder(bool b3DTab)

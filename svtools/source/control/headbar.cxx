@@ -515,7 +515,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         if ( IsEnabled() )
             pDev->DrawText( Point( nTxtPos, nTxtPosY ), pItem->maOutText );
         else
-            pDev->DrawCtrlText( Point( nTxtPos, nTxtPosY ), pItem->maOutText, 0, STRING_LEN, TEXT_DRAW_DISABLE );
+            pDev->DrawCtrlText( Point( nTxtPos, nTxtPosY ), pItem->maOutText, 0, pItem->maOutText.getLength(), TEXT_DRAW_DISABLE );
         if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
             pDev->Pop();
     }

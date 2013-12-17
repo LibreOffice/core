@@ -847,7 +847,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TEXTARRAY_ACTION ):
                 {
                     sal_Int32*  pDXAry = NULL;
-                    sal_Int32       nIndex, nLen, nAryLen;
+                    sal_Int32   nIndex, nLen, nAryLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
@@ -875,7 +875,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 {
                                     sal_Int32* pTmpAry = new sal_Int32[nStrLen];
 
-                                    aFontVDev.GetTextArray( aStr, pTmpAry, (sal_uInt16) nIndex, (sal_uInt16) nLen );
+                                    aFontVDev.GetTextArray( aStr, pTmpAry, nIndex, nLen );
 
                                     // now, the difference between the
                                     // last and the second last DX array

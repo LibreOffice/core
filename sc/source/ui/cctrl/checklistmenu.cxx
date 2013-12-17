@@ -355,7 +355,8 @@ void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
     DecorationView aDecoView(this);
     long nXOffset = 5;
     long nYOffset = (aSize.Height() - maLabelFont.GetHeight())/2;
-    DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0, STRING_LEN,
+    DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0,
+                 maMenuItems[nPos].maText.getLength(),
                  maMenuItems[nPos].mbEnabled ? TEXT_DRAW_MNEMONIC : TEXT_DRAW_DISABLE);
 
     if (maMenuItems[nPos].mpSubMenuWin)

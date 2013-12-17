@@ -5327,10 +5327,20 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
 }
 
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
-                             xub_StrLen nIndex, xub_StrLen nLen,
+                             sal_Int32 nIndex, sal_Int32 nLen,
                              MetricVector* pVector, OUString* pDisplayText
                              )
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetTextOutlines Suspicious arguments nLen:" << nLen);
+    }
+    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
+
     if( mpOutDevData && mpOutDevData->mpRecordLayout )
     {
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
@@ -5439,9 +5449,17 @@ float OutputDevice::approximate_char_width() const
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const sal_Int32* pDXAry,
-                                  xub_StrLen nIndex, xub_StrLen nLen )
+                                  sal_Int32 nIndex, sal_Int32 nLen )
 {
-
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "DrawTextArray Suspicious arguments nLen:" << nLen);
+    }
+    if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
 
@@ -5469,13 +5487,19 @@ long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     // MEM: default nLen = STRING_LENGTH
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetTextArray Suspicious arguments nLen:" << nLen);
+    }
 
     if( nIndex >= rStr.getLength() )
         return 0;
 
-    if( nLen < 0 || nIndex+nLen >= rStr.getLength() )
+    if( nLen < 0 || nIndex + nLen >= rStr.getLength() )
+    {
         nLen = rStr.getLength() - nIndex;
-
+    }
     // do layout
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
     if( !pSalLayout )
@@ -5577,8 +5601,17 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                     const OUString& rStr,
-                                    xub_StrLen nIndex, xub_StrLen nLen )
+                                    sal_Int32 nIndex, sal_Int32 nLen )
 {
+    if(nIndex < 0 || nIndex == 0x0FFFF || nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "DrawStretchText Suspicious arguments nIndex:" << nIndex << " nLen:" << nLen);
+    }
+    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaStretchTextAction( rStartPt, nWidth, rStr, nIndex, nLen ) );
@@ -6097,14 +6130,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         OUString                aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
-        xub_StrLen              i;
-        xub_StrLen              nLines;
-        xub_StrLen              nFormatLines;
+        sal_Int32               i;
+        sal_Int32               nLines;
+        sal_Int32               nFormatLines;
 
         if ( nTextHeight )
         {
             long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
-            nLines = (xub_StrLen)(nHeight/nTextHeight);
+            nLines = (sal_Int32)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
                 nLines = 1;
@@ -6168,8 +6201,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     aPos.X() += nWidth-pLineInfo->GetWidth();
                 else if ( nStyle & TEXT_DRAW_CENTER )
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
-                xub_StrLen nIndex   = pLineInfo->GetIndex();
-                xub_StrLen nLineLen = pLineInfo->GetLen();
+                sal_Int32 nIndex   = pLineInfo->GetIndex();
+                sal_Int32 nLineLen = pLineInfo->GetLen();
                 _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
                 if ( bDrawMnemonics )
                 {
@@ -6375,7 +6408,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
 {
 
     Rectangle           aRect = rRect;
-    xub_StrLen          nLines;
+    sal_Int32           nLines;
     long                nWidth = rRect.GetWidth();
     long                nMaxWidth;
     long                nTextHeight = GetTextHeight();
@@ -6388,8 +6421,8 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     {
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
-        xub_StrLen              nFormatLines;
-        xub_StrLen              i;
+        sal_Int32               nFormatLines;
+        sal_Int32               i;
 
         nMaxWidth = 0;
         DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
@@ -6631,9 +6664,19 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
 }
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
-                                 xub_StrLen nIndex, xub_StrLen nLen,
+                                 sal_Int32 nIndex, sal_Int32 nLen,
                                  sal_uInt16 nStyle, MetricVector* pVector, OUString* pDisplayText )
 {
+
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "DrawCtrlText Suspicious arguments nLen:" << nLen);
+    }
+    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
 
     if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.getLength()) )
         return;
@@ -6649,9 +6692,11 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
     if( nIndex >= rStr.getLength() )
         return;
-    if( (sal_Int32)nIndex+nLen >= rStr.getLength() )
-        nLen = rStr.getLength() - nIndex;
 
+    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
     OUString   aStr = rStr;
     sal_Int32  nMnemonicPos = -1;
 
@@ -6664,8 +6709,10 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         if ( nMnemonicPos != -1 )
         {
             if( nMnemonicPos < nIndex )
+            {
                 --nIndex;
-            else if( nLen < STRING_LEN )
+            }
+            else
             {
                 if( nMnemonicPos < (nIndex+nLen) )
                     --nLen;
@@ -6760,9 +6807,19 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 }
 
 long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
-                                     xub_StrLen nIndex, xub_StrLen nLen,
+                                     sal_Int32 nIndex, sal_Int32 nLen,
                                      sal_uInt16 nStyle ) const
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetCtrlTextWidth Suspicious arguments nLen:" << nLen);
+    }
+    /* defensive code */
+    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
 
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
@@ -6772,8 +6829,7 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
         {
             if ( nMnemonicPos < nIndex )
                 nIndex--;
-            else if ( (nLen < STRING_LEN) &&
-                      (nMnemonicPos >= nIndex) && ((sal_uLong)nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
+            else if ( (nMnemonicPos >= nIndex) && ((sal_uLong)nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
                 nLen--;
         }
         return GetTextWidth( aStr, nIndex, nLen );
@@ -7018,9 +7074,18 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
  *
  * @return SystemTextLayoutData
  **/
-SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const OUString& rStr, xub_StrLen nIndex, xub_StrLen nLen,
+SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
                                                         const sal_Int32* pDXAry) const
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetSysTextLayoutData Suspicious arguments nLen:" << nLen);
+    }
+    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
+    {
+        nLen = rStr.getLength() - nIndex;
+    }
 
     SystemTextLayoutData aSysLayoutData;
     aSysLayoutData.nSize = sizeof(aSysLayoutData);
@@ -7100,7 +7165,7 @@ xub_StrLen OutputDevice::ValidateKashidas ( const OUString& rTxt,
 }
 
 sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
-    int nIndex, int nLen, int nBase, MetricVector& rVector )
+                                           int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
 
     rVector.clear();
@@ -7111,7 +7176,7 @@ sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString&
     Rectangle aRect;
     for( int i = 0; i < nLen; i++ )
     {
-        if( !GetTextBoundRect( aRect, rStr, sal::static_int_cast<xub_StrLen>(nBase), sal::static_int_cast<xub_StrLen>(nIndex+i), 1 ) )
+        if( !GetTextBoundRect( aRect, rStr, nBase, nIndex + i, 1 ) )
             break;
         aRect.Move( rOrigin.X(), rOrigin.Y() );
         rVector.push_back( aRect );
@@ -7121,9 +7186,15 @@ sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString&
 }
 
 sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
-    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    sal_uLong nLayoutWidth, const sal_Int32* pDXAry ) const
+                                         const OUString& rStr, sal_Int32 nBase,
+                                         sal_Int32 nIndex, sal_Int32 nLen,
+                                         sal_uLong nLayoutWidth, const sal_Int32* pDXAry ) const
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetTextBoundRect Suspicious arguments nLen:" << nLen);
+    }
 
     sal_Bool bRet = sal_False;
     rRect.SetEmpty();
@@ -7134,8 +7205,8 @@ sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     long nXOffset = 0;
     if( nBase != nIndex )
     {
-        xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
+        sal_Int32 nStart = std::min( nBase, nIndex );
+        sal_Int32 nOfsLen = std::max( nBase, nIndex ) - nStart;
         pSalLayout = ImplLayout( rStr, nStart, nOfsLen, aPoint, nLayoutWidth, pDXAry );
         if( pSalLayout )
         {
@@ -7295,9 +7366,15 @@ sal_Bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
 }
 
 sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
-    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+                                        const OUString& rStr, sal_Int32 nBase,
+                                        sal_Int32 nIndex, sal_Int32 nLen,
+                                        sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetTextOutlines Suspicious arguments nLen:" << nLen);
+    }
     // the fonts need to be initialized
     if( mbNewFont )
         ImplNewFont();
@@ -7308,8 +7385,10 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
 
     sal_Bool bRet = sal_False;
     rVector.clear();
-    if( nLen == STRING_LEN )
+    if( nLen < 0 )
+    {
         nLen = rStr.getLength() - nIndex;
+    }
     rVector.reserve( nLen );
 
     // we want to get the Rectangle in logical units, so to
@@ -7327,8 +7406,8 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     long nXOffset = 0;
     if( nBase != nIndex )
     {
-        xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
+        sal_Int32 nStart = std::min( nBase, nIndex );
+        sal_Int32 nOfsLen = std::max( nBase, nIndex ) - nStart;
         pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nTWidth, pDXArray );
         if( pSalLayout )
         {
@@ -7432,8 +7511,8 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
     nXOffset = 0;
     if( nBase != nIndex )
     {
-        xub_StrLen nStart  = ((nBase < nIndex) ? nBase : nIndex);
-        xub_StrLen nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
+        sal_Int32 nStart  = ((nBase < nIndex) ? nBase : nIndex);
+        sal_Int32 nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
         pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point(0,0), nTWidth, pDXArray );
         if( pSalLayout )
         {
@@ -7455,7 +7534,7 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout( rStr, static_cast< xub_StrLen >(nCharPos), 1, Point(0,0), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout( rStr, nCharPos, 1, Point(0,0), nTWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
@@ -7522,9 +7601,16 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
 }
 
 sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
-    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+                                        const OUString& rStr, sal_Int32 nBase,
+                                        sal_Int32 nIndex, sal_Int32 nLen, sal_Bool bOptimize,
+                                        sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetTextOutlines Suspicious arguments  nLen:" << nLen);
+    }
+
     rResultVector.clear();
 
     // get the basegfx polypolygon vector
@@ -7542,10 +7628,15 @@ sal_Bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     return sal_True;
 }
 
-sal_Bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
-    const OUString& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
+sal_Bool OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly, const OUString& rStr,
+                                       sal_Int32 nBase, sal_Int32 nIndex, sal_Int32 nLen,
+                                       sal_Bool bOptimize, sal_uLong nTWidth, const sal_Int32* pDXArray ) const
 {
+    if(nLen == 0x0FFFF)
+    {
+        SAL_INFO("sal.rtl.xub",
+                 "GetTextOutline Suspicious arguments nLen:" << nLen);
+    }
     rPolyPoly.Clear();
 
     // get the basegfx polypolygon vector

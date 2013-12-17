@@ -652,7 +652,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
     if (pUserData->m_bIsConfigurable)
         rDevice.DrawText(aPos, GetText());
     else
-        rDevice.DrawCtrlText(aPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE);
+        rDevice.DrawCtrlText(aPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
 
 }
 
