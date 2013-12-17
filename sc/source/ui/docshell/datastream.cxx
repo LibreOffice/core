@@ -208,12 +208,12 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
     }
 
     sfx2::SvBaseLink *pLink = 0;
-    pLink = new DataStream( pShell, rURL, rRange, nLimit, rMove, nSettings );
+    pLink = new DataStream( pShell, rURL, aDestArea, nLimit, rMove, nSettings );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
     return dynamic_cast<DataStream*>(pLink);
 }
 
-DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
+DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings) :
     mpDocShell(pShell),
     mpDoc(mpDocShell->GetDocument()),
@@ -267,11 +267,10 @@ OString DataStream::ConsumeLine()
     return mpLines->at(mnLinesCount++);
 }
 
-void DataStream::Decode(const OUString& rURL, const OUString& rRange,
+void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, const OUString& rMove, const sal_uInt32 nSettings)
 {
     msURL = rURL;
-    msRange = rRange;
     mnLimit = nLimit;
     msMove = rMove;
     mnSettings = nSettings;
@@ -286,14 +285,16 @@ void DataStream::Decode(const OUString& rURL, const OUString& rRange,
     else if (msMove == "MOVE_DOWN")
         meMove = MOVE_DOWN;
 
-    maRange.Parse(msRange);
+    maRange = rRange;
+    if (maRange.aStart.Row() != maRange.aEnd.Row())
+        // We only allow this range to be one row tall.
+        maRange.aEnd.SetRow(maRange.aStart.Row());
+
     maStartRange = maRange;
-    sal_Int32 nHeight = maRange.aEnd.Row() - maRange.aStart.Row() + 1;
-    nLimit = nHeight * (nLimit / nHeight);
     if (nLimit && maRange.aStart.Row() + nLimit - 1 < MAXROW)
     {
         mpEndRange.reset( new ScRange(maRange) );
-        mpEndRange->Move(0, nLimit - nHeight, 0);
+        mpEndRange->Move(0, nLimit-1, 0);
     }
 }
 
@@ -519,10 +520,10 @@ sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
     return SUCCESS;
 }
 
-void DataStream::Edit(Window* pWindow, const Link& )
+void DataStream::Edit( Window* pWindow, const Link& )
 {
     DataStreamDlg aDialog(mpDocShell, pWindow);
-    aDialog.Init(msURL, msRange, mnLimit, msMove, mnSettings);
+    aDialog.Init(msURL, maStartRange, mnLimit, msMove, mnSettings);
     if (aDialog.Execute() == RET_OK)
     {
         bool bWasRunning = mbRunning;

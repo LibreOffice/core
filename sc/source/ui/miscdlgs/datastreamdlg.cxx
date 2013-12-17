@@ -13,6 +13,8 @@
 #include <svtools/inettbc.hxx>
 #include <vcl/layout.hxx>
 #include <datastream.hxx>
+#include <address.hxx>
+#include <docsh.hxx>
 
 namespace sc {
 
@@ -75,14 +77,41 @@ void DataStreamDlg::UpdateEnable()
         m_pVclFrameLimit->Enable();
         m_pVclFrameMove->Enable();
         m_pEdRange->Enable();
-        bOk = bOk && !m_pEdRange->GetText().isEmpty();
+        if (bOk)
+        {
+            // Check the given range to make sure it's valid.
+            ScRange aTest = GetStartRange();
+            if (!aTest.IsValid())
+                bOk = false;
+        }
     }
     m_pBtnOk->Enable(bOk);
     setOptimalLayoutSize();
 }
 
-void DataStreamDlg::Init(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
-        const OUString& rMove, const sal_uInt32 nSettings)
+ScRange DataStreamDlg::GetStartRange()
+{
+    OUString aStr = m_pEdRange->GetText();
+    ScDocument* pDoc = mpDocShell->GetDocument();
+    ScRange aRange;
+    sal_uInt16 nRes = aRange.Parse(aStr, pDoc);
+    if ((nRes & SCA_VALID) != SCA_VALID || !aRange.IsValid())
+    {
+        // Invalid range.
+        aRange.SetInvalid();
+        return aRange;
+    }
+
+    // Make sure it's only one row tall.
+    if (aRange.aStart.Row() != aRange.aEnd.Row())
+        aRange.SetInvalid();
+
+    return aRange;
+}
+
+void DataStreamDlg::Init(
+    const OUString& rURL, const ScRange& rRange, const sal_Int32 nLimit,
+    const OUString& rMove, const sal_uInt32 nSettings)
 {
     m_pEdLimit->SetText(OUString::number(nLimit));
     m_pCbUrl->SetText(rURL);
@@ -90,7 +119,10 @@ void DataStreamDlg::Init(const OUString& rURL, const OUString& rRange, const sal
         m_pRBScriptData->Check();
     if (!(nSettings & DataStream::VALUES_IN_LINE))
         m_pRBAddressValue->Check();
-    m_pEdRange->SetText(rRange);
+
+    OUString aStr = rRange.Format(SCA_VALID);
+    m_pEdRange->SetText(aStr);
+
     if (rMove == "NO_MOVE")
         m_pRBNoMove->Check();
     else if (rMove == "RANGE_DOWN")
@@ -102,6 +134,11 @@ void DataStreamDlg::Init(const OUString& rURL, const OUString& rRange, const sal
 
 void DataStreamDlg::StartStream(DataStream *pStream)
 {
+    ScRange aStartRange = GetStartRange();
+    if (!aStartRange.IsValid())
+        // Don't start the stream without a valid range.
+        return;
+
     sal_Int32 nLimit = 0;
     if (m_pRBMaxLimit->IsChecked())
         nLimit = m_pEdLimit->GetText().toInt32();
@@ -113,7 +150,7 @@ void DataStreamDlg::StartStream(DataStream *pStream)
        nSettings |= DataStream::VALUES_IN_LINE;
     if (pStream)
     {
-        pStream->Decode(rURL, m_pEdRange->GetText(), nLimit,
+        pStream->Decode(rURL, aStartRange, nLimit,
                 m_pRBNoMove->IsChecked() ? OUString("NO_MOVE") : m_pRBRangeDown->IsChecked()
                     ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN"),
                 nSettings);

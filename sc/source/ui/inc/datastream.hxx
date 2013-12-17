@@ -49,8 +49,10 @@ public:
     static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
             sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
 
-    DataStream(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
-            sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
+    DataStream(
+        ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
+        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
+
     virtual ~DataStream();
     // sfx2::SvBaseLink
     virtual sfx2::SvBaseLink::UpdateResult DataChanged(
@@ -62,8 +64,11 @@ public:
     const sal_Int32& GetLimit() const { return mnLimit; }
     const OUString& GetMove() const { return msMove; }
     const sal_uInt32& GetSettings() const { return mnSettings; }
-    void Decode(const OUString& rURL, const OUString& rRange, sal_Int32 nLimit,
-            const OUString& rMove, const sal_uInt32 nSettings);
+
+    void Decode(
+        const OUString& rURL, const ScRange& rRange, sal_Int32 nLimit,
+        const OUString& rMove, const sal_uInt32 nSettings);
+
     bool ImportData();
     void StartImport();
     void StopImport();
@@ -77,7 +82,6 @@ private:
     ScDocument *mpDoc;
     DocumentStreamAccess maDocAccess;
     OUString msURL;
-    OUString msRange;
     OUString msMove;
     sal_Int32 mnLimit;
     sal_uInt32 mnSettings;

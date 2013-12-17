@@ -15,6 +15,7 @@
 
 class ScDocShell;
 class SvtURLBox;
+class ScRange;
 
 namespace sc {
 
@@ -43,12 +44,15 @@ class DataStreamDlg : public ModalDialog
     DECL_LINK(BrowseHdl, void *);
 
     void UpdateEnable();
+    ScRange GetStartRange();
 
 public:
     DataStreamDlg(ScDocShell *pDocShell, Window* pParent);
-    ~DataStreamDlg() {}
-    void Init(const OUString& rURL, const OUString& rRange, const sal_Int32 nLimit,
-            const OUString& rMove, const sal_uInt32 nSettings);
+
+    void Init(
+        const OUString& rURL, const ScRange& rRange, const sal_Int32 nLimit,
+        const OUString& rMove, const sal_uInt32 nSettings);
+
     void StartStream(DataStream *pStream = 0);
 };
 
