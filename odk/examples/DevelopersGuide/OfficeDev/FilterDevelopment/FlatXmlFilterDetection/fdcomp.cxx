@@ -37,6 +37,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <uno/lbnames.h>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
@@ -70,6 +71,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         }
     }
     return pRet;
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 }

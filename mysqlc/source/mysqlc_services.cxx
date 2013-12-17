@@ -22,6 +22,7 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <uno/lbnames.h>
 
 using namespace connectivity::mysqlc;
 using ::com::sun::star::uno::Reference;
@@ -102,6 +103,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
 };
 /* }}} */
 
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
 
 /*
  * Local variables:

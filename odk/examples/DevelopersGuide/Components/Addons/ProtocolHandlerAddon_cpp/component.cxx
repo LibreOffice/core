@@ -35,6 +35,7 @@
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
+#include <uno/lbnames.h>
 #include <cppuhelper/queryinterface.hxx> // helper for queryInterface() impl
 #include <cppuhelper/factory.hxx> // helper for component factory
 // generated c++ interfaces
@@ -83,6 +84,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_C
     }
 
     return pRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,6 +37,7 @@
 #include "SDriver.hxx"
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
+#include <uno/lbnames.h>
 
 using namespace connectivity::skeleton;
 using ::rtl::OUString;
@@ -143,5 +144,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     return pRet;
 };
 
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
