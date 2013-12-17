@@ -327,7 +327,7 @@ OString CppuOptions::prepareHelp()
     help += "    -L         = UNO type functions are generated lightweight, that means only\n";
     help += "                 the name and typeclass are given and everything else is retrieved\n";
     help += "                 from the type library dynamically. The default is that UNO type\n";
-    help += "                 functions provides enough type information for boostrapping C++.\n";
+    help += "                 functions provides enough type information for bootstrapping C++.\n";
     help += "                 '-L' should be the default for external components.\n";
     help += "    -C         = UNO type functions are generated comprehensive that means all\n";
     help += "                 necessary information is available for bridging the type in UNO.\n";
