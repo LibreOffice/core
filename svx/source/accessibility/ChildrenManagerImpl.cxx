@@ -490,7 +490,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
                         AccessibleEventId::CHILD,
                         aNewShape,
                         uno::Any());
-                    RegisterAsDisposeListener (rDescriptor.mxShape);
+                    RegisterAsDisposeListener(rxShape);
                 }
         }
     }
