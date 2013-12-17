@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///ZM\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-17T12:09:29Z",
+      "side": 1,
+      "message": "Can we _please_ use short-log message a bit more\nuseful that this.\nimagine how nice it is to have this kind a message when\nsearching for a candidate for a regression in 200+ commits",
+      "revId": "14ca42784875e49d13f1666eeeee337339ed178c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
