@@ -34,6 +34,24 @@
       "revId": "5d376c592f8d798cd6174df29171a681bf742eb3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///Xw\u003d",
+        "filename": "sw/inc/ndtxt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-12-17T13:50:06Z",
+      "side": 1,
+      "message": "actually your vocabulary is not limited enough for me :-)\nI did not know that term...\nanyhow GetFreeSpace() or GetSpaceLeft()  would be more\naccessible to someone with apparently limited vocabulary like me :-)",
+      "parentUuid": "AAAAbH///X4\u003d",
+      "revId": "5d376c592f8d798cd6174df29171a681bf742eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
