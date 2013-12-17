@@ -151,13 +151,16 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void Os2SalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     // since OOo asks for DPI, I will query FONT_RES, which seems to be
     // more correct than _RESOLUTION fields (on my wide screen lcd)
     // and does not require conversion
-    DevQueryCaps( mhDC, CAPS_HORIZONTAL_FONT_RES, 1, &rDPIX );
-    DevQueryCaps( mhDC, CAPS_VERTICAL_FONT_RES, 1, &rDPIY );
+    long nDPIX = 72, nDPIY = 72;
+    DevQueryCaps( mhDC, CAPS_HORIZONTAL_FONT_RES, 1, &nDPIX );
+    DevQueryCaps( mhDC, CAPS_VERTICAL_FONT_RES, 1, &nDPIY );
+    rDPIX = nDPIX;
+    rDPIY = nDPIY;
 }
 
 // -----------------------------------------------------------------------

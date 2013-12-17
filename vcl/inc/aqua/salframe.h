@@ -179,7 +179,7 @@ public:
     NSView* getNSView() const { return mpNSView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
 
-    void getResolution( long& o_rDPIX, long& o_rDPIY );
+    void getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY );
 
     // actually the follwing methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system

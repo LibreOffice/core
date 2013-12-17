@@ -1219,7 +1219,7 @@ static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
     return aResult;
 }
 
-void AquaSalFrame::getResolution( long& o_rDPIX, long& o_rDPIY )
+void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
 {
     if( ! mpGraphics )
     {
@@ -1264,7 +1264,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // get the system font settings
     Font aAppFont = aStyleSettings.GetAppFont();
-    long nDPIX = 72, nDPIY = 72;
+    sal_Int32 nDPIX = 72, nDPIY = 72;
     getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 

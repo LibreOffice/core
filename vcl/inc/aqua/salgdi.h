@@ -248,7 +248,7 @@ public:
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     // get device resolution
-    virtual void            GetResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     // get the depth of the device
     virtual sal_uInt16          GetBitCount();
     // get the width of the device

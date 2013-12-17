@@ -791,7 +791,7 @@ WinSalGraphics::~WinSalGraphics()
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
     rDPIY = GetDeviceCaps( getHDC(), LOGPIXELSY );
