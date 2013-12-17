@@ -787,8 +787,8 @@ namespace oglcanvas
                     aVDev.GetTextOutlines(rAct.maPolyPolys,
                                           rTxt.Text,
                                           0,
-                                          (xub_StrLen)rTxt.StartPosition,
-                                          (xub_StrLen)rTxt.Length,
+                                          rTxt.StartPosition,
+                                          rTxt.Length,
                                           true,
                                           0,
                                           pDXArray.get() );
@@ -799,8 +799,8 @@ namespace oglcanvas
                     aVDev.GetTextOutlines(rAct.maPolyPolys,
                                           rTxt.Text,
                                           0,
-                                          (xub_StrLen)rTxt.StartPosition,
-                                          (xub_StrLen)rTxt.Length );
+                                          rTxt.StartPosition,
+                                          rTxt.Length );
                 }
 
                 // own copy, for thread safety

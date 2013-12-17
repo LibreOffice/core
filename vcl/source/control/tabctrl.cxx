@@ -1009,8 +1009,8 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         if( ! pItem->mbEnabled )
             nStyle |= TEXT_DRAW_DISABLE;
         DrawCtrlText( Point( nXPos + aImageSize.Width(), nYPos ),
-                      pItem->maFormatText,
-                      0, STRING_LEN, nStyle,
+                      pItem->maFormatText, 0,
+                      pItem->maFormatText.getLength(), nStyle,
                       bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
                       bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
                       );

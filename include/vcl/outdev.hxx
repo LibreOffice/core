@@ -570,7 +570,7 @@ public:
                                       sal_Bool bUnderlineAbove = sal_False );
 
     void                DrawText( const Point& rStartPt, const OUString& rStr,
-                                  xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                   MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
     long                GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
     /// Height where any character of the current font fits; in logic coordinates.
@@ -578,8 +578,8 @@ public:
     float               approximate_char_width() const;
     void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        const sal_Int32* pDXAry = NULL,
-                                       xub_StrLen nIndex = 0,
-                                       xub_StrLen nLen = STRING_LEN );
+                                       sal_Int32 nIndex = 0,
+                                       sal_Int32 nLen = -1 );
     long                GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
     bool                GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
@@ -588,7 +588,7 @@ public:
                                       sal_Bool bCellBreaking = sal_True ) const;
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                          const OUString& rStr,
-                                         xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
+                                         sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
     sal_Int32           GetTextBreak( const OUString& rStr, long nTextWidth,
                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                       long nCharExtra = 0 ) const;
@@ -619,29 +619,29 @@ public:
     OUString            GetEllipsisString( const OUString& rStr, long nMaxWidth,
                                            sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const OUString& rStr,
-                                      xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                       sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
-    long                GetCtrlTextWidth( const OUString& rStr, xub_StrLen nIndex = 0,
-                                          xub_StrLen nLen = STRING_LEN,
+    long                GetCtrlTextWidth( const OUString& rStr, sal_Int32 nIndex = 0,
+                                          sal_Int32 nLen = -1,
                                           sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;
     static OUString    GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
     static OUString    GetNonMnemonicString( const OUString& rStr )
                             { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
-                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                            const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutline( PolyPolygon&,
-                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
+                            const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
+                            sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutlines( PolyPolyVector&,
-                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
+                            const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
+                            sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetTextOutlines( ::basegfx::B2DPolyPolygonVector&,
-                            const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0,
-                            xub_StrLen nLen = STRING_LEN, sal_Bool bOptimize = sal_True,
+                            const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
+                            sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
     sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                             int nLen, int nBase, MetricVector& rVector );
@@ -901,7 +901,7 @@ public:
 
     SystemFontData        GetSysFontData( int nFallbacklevel ) const;
     SystemTextLayoutData  GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                                                sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                 const sal_Int32* pDXAry = NULL ) const;
 
     void                SetTextColor( const Color& rColor );

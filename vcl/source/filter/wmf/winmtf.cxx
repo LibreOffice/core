@@ -1546,7 +1546,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXAr
             pDX = new sal_Int32[ rText.getLength() ];
             aVDev.SetMapMode( MAP_100TH_MM );
             aVDev.SetFont( maLatestFont );
-            aVDev.GetTextArray( rText, pDX, 0, STRING_LEN );
+            aVDev.GetTextArray( rText, pDX, 0, rText.getLength());
         }
         mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, STRING_LEN ) );
         if ( !pDXArry )     // this means we have created our own array

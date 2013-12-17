@@ -2268,7 +2268,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                 aTxtPos.X() += aImageRect.Right()+8;
                 aTxtPos.Y() += (rSize.Height()-nTextHeight)/2;
             }
-            pDev->DrawCtrlText( aTxtPos, aText, 0, STRING_LEN, TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
+            pDev->DrawCtrlText( aTxtPos, aText, 0, aText.getLength(), TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
         }
 
         rMouseRect = aImageRect;

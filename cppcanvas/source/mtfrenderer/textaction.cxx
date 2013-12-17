@@ -200,8 +200,7 @@ namespace cppcanvas
                 ::boost::scoped_array< sal_Int32 > pCharWidths( new sal_Int32[nLen] );
 
                 rVDev.GetTextArray( rText, pCharWidths.get(),
-                                    static_cast<sal_uInt16>(nStartPos),
-                                    static_cast<sal_uInt16>(nLen) );
+                                    nStartPos, nLen );
 
                 return setupDXArray( pCharWidths.get(), nLen, rState );
             }
