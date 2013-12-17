@@ -1120,9 +1120,13 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     {
                         if (-1 != nTemp)
                         {
-                            const sal_Int32 nDigits = std::min<sal_Int32>(nPos - nStart, 9);
-                            OSL_ENSURE(nDigits > 0, "bad code monkey: negative digits");
-                            nNanoSeconds=static_cast<double>(nTemp)*(1000000000.0/pow(10.0,nDigits));
+                            nNanoSeconds = nTemp;
+                            sal_Int32 nDigits = nPos - nStart;
+                            assert(nDigits >= 0);
+                            for (; nDigits < 9; ++nDigits)
+                            {
+                                nNanoSeconds *= 10;
+                            }
                             nTemp=-1;
                             if (sal_Unicode('S') == string[nPos])
                             {
