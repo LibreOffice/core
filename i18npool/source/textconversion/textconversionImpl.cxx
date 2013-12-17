@@ -17,15 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <assert.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <textconversionImpl.hxx>
 #include <localedata.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -123,7 +122,7 @@ sal_Bool SAL_CALL
 TextConversionImpl::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cTextConversion);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

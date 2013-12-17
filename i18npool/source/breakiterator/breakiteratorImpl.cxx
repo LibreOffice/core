@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <breakiteratorImpl.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unicode/uchar.h>
 #include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -616,7 +616,7 @@ BreakIteratorImpl::getImplementationName(void) throw( RuntimeException )
 sal_Bool SAL_CALL
 BreakIteratorImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cBreakIterator);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

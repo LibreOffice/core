@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 
 #include <stdio.h>
@@ -1174,7 +1175,7 @@ Calendar_gregorian::getImplementationName(void) throw( RuntimeException )
 sal_Bool SAL_CALL
 Calendar_gregorian::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cCalendar);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL

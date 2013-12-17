@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
@@ -639,11 +640,10 @@ TransliterationImpl::getImplementationName() throw( RuntimeException )
     return OUString::createFromAscii(cTrans);
 }
 
-
 sal_Bool SAL_CALL
 TransliterationImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii(cTrans);
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
