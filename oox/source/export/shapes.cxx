@@ -446,7 +446,12 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, XML_pic, FSEND );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+        pFS->startElementNS( mnXmlNamespace, XML_pic, FSEND );
+    else
+        pFS->startElementNS( mnXmlNamespace, XML_pic,
+                             FSNS(XML_xmlns, XML_pic), "http://schemas.openxmlformats.org/drawingml/2006/picture",
+                             FSEND );
 
     pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
 

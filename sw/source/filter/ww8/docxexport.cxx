@@ -334,8 +334,12 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
 void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
-    bool bGroupShape = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape");
-    oox::drawingml::ShapeExport aExport((bGroupShape ? XML_wpg : XML_wps), m_pAttrOutput->GetSerializer(), 0, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX, m_pAttrOutput);
+    sal_Int32 nNamespace = XML_wps;
+    if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        nNamespace = XML_wpg;
+    else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        nNamespace = XML_pic;
+    oox::drawingml::ShapeExport aExport(nNamespace, m_pAttrOutput->GetSerializer(), 0, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX, m_pAttrOutput);
     aExport.WriteShape(xShape);
 }
 

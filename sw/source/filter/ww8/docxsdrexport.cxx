@@ -332,15 +332,20 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
     sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
+    const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
+    if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
+    else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
     pFS->startElementNS(XML_a, XML_graphic,
                         FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
                         FSEND);
-    const SdrObjGroup* pObjGroup = PTR_CAST(SdrObjGroup, pSdrObject);
     pFS->startElementNS(XML_a, XML_graphicData,
-                        XML_uri, (pObjGroup ? "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" : "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"),
+                        XML_uri, pNamespace,
                         FSEND);
 
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
     m_rExport.OutputDML(xShape);
 
     pFS->endElementNS(XML_a, XML_graphicData);
