@@ -199,10 +199,22 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 
         if( aPath.getLength() > nMaxLen )
         {
-            aReduced = aPath.copy( 0, nMaxLen - aName.getLength() - 4 );
-            aReduced += "...";
-            aReduced += OUString(aDelimiter);
-            aReduced += aName;
+            sal_Int32 nPathPrefixLen = nMaxLen - aName.getLength() - 4;
+
+            if (nPathPrefixLen >= 0)
+            {
+                aReduced = aPath.copy(0, nPathPrefixLen);
+                aReduced += "...";
+                aReduced += OUString(aDelimiter);
+                aReduced += aName;
+            }
+            else
+            {
+                aReduced += "...";
+                aReduced += OUString(aDelimiter);
+                aReduced += "...";
+                aReduced += aName.copy( aName.getLength() - (nMaxLen - 7) );
+            }
         }
         else
             aReduced = aPath;
