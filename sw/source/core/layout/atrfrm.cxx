@@ -710,7 +710,11 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_PAGEDESC_PAGENUMOFFSET:
         {
             sal_Int16 nOffset = 0;
-            if(rVal >>= nOffset)
+            if (!rVal.hasValue())
+            {
+                SetNumOffset(boost::none);
+            }
+            else if (rVal >>= nOffset)
                 SetNumOffset( nOffset );
             else
                 bRet = false;
