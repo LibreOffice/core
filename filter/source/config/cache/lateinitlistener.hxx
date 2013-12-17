@@ -27,6 +27,9 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <cppuhelper/implbase1.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 namespace filter{
     namespace config{

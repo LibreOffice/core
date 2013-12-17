@@ -39,6 +39,10 @@
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 namespace desktop {
 
 class  Acceptor

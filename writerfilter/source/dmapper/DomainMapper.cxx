@@ -57,6 +57,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <filter/msfilter/util.hxx>

@@ -18,6 +18,8 @@
  */
 
 #include "PresenterTimer.hxx"
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/doublecheckedlocking.h>
 #include <osl/thread.hxx>
 #include <boost/bind.hpp>

@@ -30,6 +30,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/link.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 namespace framework{
 
 /** @short  internal helper to bind e.g. MAC-Menu events to our internal dispatch API.

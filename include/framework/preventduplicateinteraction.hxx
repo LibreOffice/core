@@ -29,6 +29,10 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 namespace framework{
 
 /**

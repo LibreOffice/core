@@ -32,6 +32,10 @@
 #include <CRC32.hxx>
 #include <mutexholder.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 #define UNBUFF_STREAM_DATA          0
 #define UNBUFF_STREAM_RAW           1
 #define UNBUFF_STREAM_WRAPPEDRAW    2

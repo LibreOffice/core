@@ -29,6 +29,10 @@
 
 #include <sot/exchange.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */
 class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >

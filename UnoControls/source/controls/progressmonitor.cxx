@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>

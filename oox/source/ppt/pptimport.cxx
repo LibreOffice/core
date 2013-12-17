@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "oox/ppt/pptimport.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"

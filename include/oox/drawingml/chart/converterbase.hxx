@@ -29,6 +29,7 @@ namespace com { namespace sun { namespace star {
     namespace chart2 { class XChartDocument; }
     namespace chart2 { class XTitle; }
     namespace drawing { class XShape; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox { namespace core {

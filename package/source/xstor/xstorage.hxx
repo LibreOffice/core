@@ -50,6 +50,10 @@
 
 #include "mutexholder.hxx"
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 #define RELINFO_NO_INIT             1
 #define RELINFO_READ                2
 #define RELINFO_CHANGED             3

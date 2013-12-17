@@ -32,6 +32,10 @@
 
 #include "securityengine.hxx"
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 class EncryptionEngine : public cppu::ImplInheritanceHelper1
 <
     SecurityEngine,

@@ -18,6 +18,9 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase1.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 class ResMgr;
 
 namespace extensions { namespace resource

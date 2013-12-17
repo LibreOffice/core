@@ -37,6 +37,7 @@
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "oox/helper/helper.hxx"
 #include "oox/core/xmlfilterbase.hxx"

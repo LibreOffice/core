@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <unotools/mediadescriptor.hxx>

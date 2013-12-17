@@ -15,6 +15,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>

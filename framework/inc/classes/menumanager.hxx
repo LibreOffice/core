@@ -34,6 +34,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 namespace framework
 {
 

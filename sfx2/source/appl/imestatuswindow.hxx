@@ -28,6 +28,7 @@
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace sfx2 { namespace appl {
