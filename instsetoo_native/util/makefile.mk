@@ -90,10 +90,12 @@ help .PHONY :
     @echo "    patch-check            check if patch can be created (part of patch-create)"
     @echo 
     @echo "Most targets (all except aoo_srcrelease and updatepack) accept suffixes"
-    @echo "    add _<language> to build a target for one language only"
+    @echo "    append _<language> to build a target for one language only"
     @echo "        the default set of languages is alllangiso=$(alllangiso)"
-    @echo "    add .<package_format> to build a target for one package format only"
+    @echo "    append .<package_format> to build a target for one package format only"
     @echo "        the default set of package formats is archive and PKGFORMAT=$(PKGFORMAT)"
+    @echo "        known package formats are: "
+    @echo "        archive, bsd, deb, dmg, installed, msi, native, osx, pkg, portable, rpm"
 
 
 LOCALPYFILES=			\
