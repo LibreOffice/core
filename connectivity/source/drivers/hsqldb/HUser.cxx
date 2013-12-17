@@ -272,10 +272,13 @@ void SAL_CALL OHSQLUser::changePassword( const OUString& /*oldPassword*/, const 
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
 
-    OUString sAlterPwd = "SET PASSWORD FOR " +
-        ::dbtools::quoteName(xMeta->getIdentifierQuoteString(), m_Name) +
-        "@\"%\" = PASSWORD('" + newPassword + "')";
+    if( m_Name != xMeta->getUserName() )
+    {
+        ::dbtools::throwGenericSQLException("HSQLDB can only change password of the current user.", *this);
+    }
 
+    OUString sAlterPwd = "SET PASSWORD " +
+        ::dbtools::quoteName(xMeta->getIdentifierQuoteString(), newPassword);
 
     Reference<XStatement> xStmt = m_xConnection->createStatement();
     if ( xStmt.is() )
