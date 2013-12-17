@@ -55,8 +55,8 @@ struct XMLPropertySetMapperEntry_Impl
 {
     OUString sXMLAttributeName;
     OUString sAPIPropertyName;
-    sal_uInt16 nXMLNameSpace;
     sal_Int32  nType;
+    sal_uInt16 nXMLNameSpace;
     sal_Int16  nContextId;
     SvtSaveOptions::ODFDefaultVersion   nEarliestODFVersionForExport;
     const XMLPropertyHandler *pHdl;
