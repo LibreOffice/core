@@ -352,14 +352,22 @@ void DataStream::MoveData()
                 meMove = MOVE_UP;
             break;
         case MOVE_UP:
-            // Remove the top row and shift the remaining rows upward.
+            if (!mpEndRange)
+                break;
+
+            // Remove the top row and shift the remaining rows upward. Then
+            // insert a new row at the end row position.
             mpDoc->DeleteRow(maStartRange);
             mpDoc->InsertRow(*mpEndRange);
             break;
         case MOVE_DOWN:
-            if (mpEndRange)
-                mpDoc->DeleteRow(*mpEndRange);
-            mpDoc->InsertRow(maRange);
+            if (!mpEndRange)
+                break;
+
+            // Remove the end row and shift the remaining rows downward by
+            // inserting a new row at the top row.
+            mpDoc->DeleteRow(*mpEndRange);
+            mpDoc->InsertRow(maStartRange);
             break;
         case NO_MOVE:
             break;
