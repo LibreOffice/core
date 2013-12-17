@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <uno/lbnames.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -337,6 +338,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         }
     }
     return pRet;
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 } // extern "C"
