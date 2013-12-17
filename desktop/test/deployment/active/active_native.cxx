@@ -54,6 +54,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/log.hxx"
 #include "sal/types.h"
+#include "uno/lbnames.h"
 
 namespace {
 
@@ -249,6 +250,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 {
     return cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, services);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(

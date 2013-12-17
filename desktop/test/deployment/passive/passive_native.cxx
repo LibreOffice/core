@@ -51,6 +51,7 @@
 #include "cppuhelper/weak.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "uno/lbnames.h"
 
 namespace {
 
@@ -246,6 +247,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 {
     return cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, services);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
