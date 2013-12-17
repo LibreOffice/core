@@ -74,6 +74,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/bulletsandnumbering \
 	sw/uiconfig/swriter/ui/businessdatapage \
 	sw/uiconfig/swriter/ui/cannotsavelabeldialog \
+	sw/uiconfig/swriter/ui/captiondialog \
 	sw/uiconfig/swriter/ui/captionoptions \
 	sw/uiconfig/swriter/ui/cardformatpage \
 	sw/uiconfig/swriter/ui/cardmediumpage \
