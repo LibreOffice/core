@@ -1025,9 +1025,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     // initialize user interface language selection
     SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
-    const OUString aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
+    m_sSystemDefaultString = pLanguageTable->GetString( LANGUAGE_SYSTEM );
 
-    OUString aUILang = aStr +
+    OUString aUILang = m_sSystemDefaultString +
                        " - " +
                        pLanguageTable->GetString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
 
@@ -1100,7 +1100,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
-    OUString aDefaultCurr = aStr + " - " + rCurr.GetBankSymbol();
+    OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
     m_pCurrencyLB->InsertEntry( aDefaultCurr );
     // all currencies
     OUString aTwoSpace( "  " );
@@ -1633,13 +1633,15 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
         SupportHdl( m_pAsianSupportCB );
     }
 
-    sal_uInt16 nPos;
-    if ( eLang == LANGUAGE_USER_SYSTEM_CONFIG )
-        nPos = m_pCurrencyLB->GetEntryPos( (void*) NULL );
-    else
+    const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry(
+            ((eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang));
+    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( (void*) NULL );
+    if (pCurr)
     {
-        const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry( eLang );
-        nPos = m_pCurrencyLB->GetEntryPos( (void*) pCurr );
+        // Update the "Default ..." currency.
+        m_pCurrencyLB->RemoveEntry( nPos );
+        OUString aDefaultCurr = m_sSystemDefaultString + " - " + pCurr->GetBankSymbol();
+        nPos = m_pCurrencyLB->InsertEntry( aDefaultCurr );
     }
     m_pCurrencyLB->SelectEntryPos( nPos );
 
