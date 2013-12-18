@@ -73,6 +73,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     svtools/util/svt \
     sw/util/msword \
     sw/util/sw \
+	sw/util/swd \
+	uui/util/uui \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

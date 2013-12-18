@@ -91,7 +91,18 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->SetFilter(pFilter);
+
+    const SfxFilter* pImportFilter = 0;
+    SfxFilter* pExportFilter = 0;
+    if (bExport)
+    {
+        SFX_APP()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SFX_FILTER_IMPORT, 0);
+        pExportFilter = pFilter;
+    }
+    else
+        pImportFilter = pFilter;
+
+    pSrcMed->SetFilter(pImportFilter);
 
     if (rUserData == FILTER_TEXT_DLG)
     {
@@ -107,10 +118,14 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
         return bLoaded;
     }
 
+    // How come an error may be set, and still DoLoad() returns success? Strange...
+    if (bLoaded)
+        xDocShRef->ResetError();
+
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     SfxMedium aDstMed(aTempFile.GetURL(), STREAM_STD_WRITE);
-    aDstMed.SetFilter(pFilter);
+    aDstMed.SetFilter(pExportFilter);
     bool bSaved = xDocShRef->DoSaveAs(aDstMed);
     if (xDocShRef.Is())
         xDocShRef->DoClose();
