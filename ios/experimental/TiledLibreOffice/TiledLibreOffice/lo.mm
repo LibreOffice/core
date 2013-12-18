@@ -16,69 +16,12 @@
 #include <osl/process.h>
 #include <touch/touch.h>
 
-extern "C" {
-    extern void * analysis_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * chartcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * cui_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * date_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * embobj_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * emboleobj_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * expwrap_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * filterconfig1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * frm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fsstorage_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fwk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fwl_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fwm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * hwp_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * hyphen_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * lng_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * lnth_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * oox_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * pricing_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * scd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * scfilt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sdd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * smd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sot_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * spell_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * spl_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * svgfilter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * svt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * svx_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * svxcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * sw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * tk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * ucppkg1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * unordf_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * uui_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * wpftdraw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * wpftwriter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * writerfilter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * xmlfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * xmlsecurity_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * xo_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * xof_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-
-}
-
 extern "C"
 const lib_to_component_mapping *
-lo_get_libmap(void)
+lo_get_library_map(void)
 {
     static lib_to_component_mapping map[] = {
+        NON_APP_SPECIFIC_COMPONENT_MAP
         { "libanalysislo.a", analysis_component_getFactory },
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
@@ -90,7 +33,6 @@ lo_get_libmap(void)
         { "libembobj.a", embobj_component_getFactory },
         { "libemboleobj.a", emboleobj_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
-        { "libexpwraplo.a", expwrap_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
         { "libfsstoragelo.a", fsstorage_component_getFactory },
@@ -133,6 +75,18 @@ lo_get_libmap(void)
         { "libxmlsecurity.a", xmlsecurity_component_getFactory },
         { "libxoflo.a", xof_component_getFactory },
         { "libxolo.a", xo_component_getFactory },
+        { NULL, NULL }
+    };
+
+    return map;
+}
+
+extern "C"
+const lib_to_component_mapping *
+lo_get_implementation_map(void)
+{
+    static lib_to_component_mapping map[] = {
+        NON_APP_SPECIFIC_DIRECT_COMPONENT_MAP
         { NULL, NULL }
     };
 
