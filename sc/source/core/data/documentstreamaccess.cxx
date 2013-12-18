@@ -31,6 +31,27 @@ struct DocumentStreamAccessImpl
 DocumentStreamAccess::DocumentStreamAccess( ScDocument& rDoc ) :
     mpImpl(new DocumentStreamAccessImpl(rDoc)) {}
 
+void DocumentStreamAccess::setNumericCell( const ScAddress& rPos, double fVal )
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    // Set the numeric value.
+    CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), fVal);
+
+    // Be sure to set the corresponding text attribute to the default value.
+    CellTextAttrStoreType& rAttrs = pTab->aCol[rPos.Col()].maCellTextAttrs;
+    pBlockPos->miCellTextAttrPos = rAttrs.set(pBlockPos->miCellTextAttrPos, rPos.Row(), CellTextAttr());
+}
+
 void DocumentStreamAccess::setStringCell( const ScAddress& rPos, const OUString& rStr )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());

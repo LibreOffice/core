@@ -33,6 +33,7 @@ class DocumentStreamAccess
 public:
     DocumentStreamAccess( ScDocument& rDoc );
 
+    void setNumericCell( const ScAddress& rPos, double fVal );
     void setStringCell( const ScAddress& rPos, const OUString& rStr );
 
     /**

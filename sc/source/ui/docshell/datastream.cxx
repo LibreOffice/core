@@ -27,6 +27,7 @@
 #include <rangelst.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
+#include <stringutil.hxx>
 
 #include <config_orcus.h>
 
@@ -438,7 +439,12 @@ public:
     {
         if (maPos.Col() <= mnEndCol)
         {
-            mrDoc.setStringCell(maPos, OUString(p, n, RTL_TEXTENCODING_UTF8));
+            OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
+            double fVal;
+            if (ScStringUtil::parseSimpleNumber(aStr, '.', ',', fVal))
+                mrDoc.setNumericCell(maPos, fVal);
+            else
+                mrDoc.setStringCell(maPos, aStr);
         }
         maPos.IncCol();
     }
@@ -511,11 +517,11 @@ bool DataStream::ImportData()
     if (meMove == RANGE_DOWN)
     {
         ++mnCurRow;
-        mpDocShell->GetViewData()->GetView()->AlignToCursor(
-                maStartRange.aStart.Col(), mnCurRow, SC_FOLLOW_JUMP);
+//      mpDocShell->GetViewData()->GetView()->AlignToCursor(
+//              maStartRange.aStart.Col(), mnCurRow, SC_FOLLOW_JUMP);
     }
 
-    if (mnRepaintCounter > 100)
+    if (mnRepaintCounter > 200)
         Repaint();
 
     return mbRunning;
