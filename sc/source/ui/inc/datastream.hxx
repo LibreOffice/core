@@ -79,8 +79,7 @@ public:
     void StopImport();
 
 private:
-    void Repaint();
-    void Broadcast();
+    void Refresh();
 
 private:
     ScDocShell* mpDocShell;
@@ -97,7 +96,6 @@ private:
     size_t mnRepaintCounter;
     SCROW mnCurRow;
     ScRange maStartRange;
-    ScRangeList maBroadcastRanges;
     boost::scoped_ptr<ScRange> mpEndRange;
     rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;

@@ -370,23 +370,19 @@ void DataStream::StopImport()
         return;
 
     mbRunning = false;
-    Repaint();
+    Refresh();
 }
 
-void DataStream::Repaint()
+void DataStream::Refresh()
 {
     SCROW nEndRow = mpEndRange ? mpEndRange->aEnd.Row() : MAXROW;
     ScRange aRange(maStartRange.aStart);
     aRange.aEnd = ScAddress(maStartRange.aEnd.Col(), nEndRow, maStartRange.aStart.Tab());
 
-    mpDocShell->PostPaint(aRange, PAINT_GRID);
     mnRepaintCounter = 0;
-}
 
-void DataStream::Broadcast()
-{
-    mpDoc->BroadcastCells(maBroadcastRanges, SC_HINT_DATACHANGED);
-    maBroadcastRanges.RemoveAll();
+    // Hard recalc will repaint the grid area.
+    mpDocShell->DoHardRecalc(true);
 }
 
 void DataStream::MoveData()
@@ -541,7 +537,7 @@ bool DataStream::ImportData()
     }
 
     if (mnRepaintCounter > 200)
-        Repaint();
+        Refresh();
 
     return mbRunning;
 }
