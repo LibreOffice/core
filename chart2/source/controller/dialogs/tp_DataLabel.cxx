@@ -26,18 +26,19 @@ namespace chart
 {
 
 DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs) :
-        SfxTabPage(pWindow, SchResId(TP_DATA_DESCR), rInAttrs),
-        m_aDataLabelResources(this, rInAttrs)
+        SfxTabPage(pWindow
+        , "tp_DataLabel"
+        , "modules/schart/ui/tp_DataLabel.ui"
+        , rInAttrs)
+        , m_aDataLabelResources(this, rInAttrs)
 {
-    FreeResource();
 }
 
 DataLabelsTabPage::~DataLabelsTabPage()
 {
 }
 
-SfxTabPage* DataLabelsTabPage::Create(Window* pWindow,
-                                        const SfxItemSet& rOutAttrs)
+SfxTabPage* DataLabelsTabPage::Create(Window* pWindow, const SfxItemSet& rOutAttrs)
 {
     return new DataLabelsTabPage(pWindow, rOutAttrs);
 }

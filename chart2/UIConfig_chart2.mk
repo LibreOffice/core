@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/tp_3D_SceneIllumination \
 	chart2/uiconfig/ui/tp_axisLabel \
 	chart2/uiconfig/ui/tp_AxisPositions \
+	chart2/uiconfig/ui/tp_DataLabel \
 	chart2/uiconfig/ui/tp_LegendPosition \
 	chart2/uiconfig/ui/tp_SeriesToAxis \
 	chart2/uiconfig/ui/tp_Scale \
