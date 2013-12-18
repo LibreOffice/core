@@ -5387,12 +5387,12 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
 
 /*
  * This function is used to check if the current SwTxtNode (paragraph) has a redline object
- * that signals that the paragraph marker is deleted.
+ * that is attached to the paragraph marker.
  * This is done by checking if the range (SwPaM) of the redline is :
  * - Start = the last character of the current paragraph
  * - End = the first character of the next paragraph
  */
-const SwRedlineData* AttributeOutputBase::GetDeletedParagraphMarker( const SwTxtNode& rNode )
+const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTxtNode& rNode, RedlineType_t aRedlineType)
 {
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
     for( sal_uInt16 nRedlinePos = 0; nRedlinePos < GetExport().pDoc->GetRedlineTbl().size(); ++nRedlinePos )
@@ -5400,7 +5400,7 @@ const SwRedlineData* AttributeOutputBase::GetDeletedParagraphMarker( const SwTxt
         const SwRedline* pRedl = GetExport().pDoc->GetRedlineTbl()[ nRedlinePos ];
 
         // Only check redlines that are of type 'Delete'
-        if ( pRedl->GetRedlineData().GetType() != nsRedlineType_t::REDLINE_DELETE )
+        if ( pRedl->GetRedlineData().GetType() != aRedlineType )
             continue;
 
         const SwPosition* pCheckedStt = pRedl->Start();

@@ -2427,9 +2427,10 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
-    const SwRedlineData* pRedlineParagraphMarkerDeleted = AttrOutput().GetDeletedParagraphMarker( rNode );
+    const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
+    const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
     const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
-    AttrOutput().EndParagraphProperties( pParagraphRedlineData, pRedlineParagraphMarkerDeleted );
+    AttrOutput().EndParagraphProperties( pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert );
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 

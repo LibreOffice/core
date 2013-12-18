@@ -42,7 +42,7 @@ public:
     virtual void StartParagraphProperties() {}
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SwRedlineData* /*pRedlineData*/, const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/ ) {}
+    virtual void EndParagraphProperties( const SwRedlineData* /*pRedlineData*/, const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/, const SwRedlineData* /*pRedlineParagraphMarkerInserted*/ ) {}
 
     /// Empty paragraph.
     virtual void EmptyParagraph();
