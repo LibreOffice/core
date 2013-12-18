@@ -176,10 +176,11 @@ void OUserAdmin::FillUserNames()
                     m_LB_USER.InsertEntry(*pBegin);
 
                 m_LB_USER.SelectEntryPos(0);
-                if(m_xUsers->hasByName(m_UserName))
+                OUString aUserFind = m_UserName.replaceAll("'", "");
+                if(m_xUsers->hasByName(aUserFind))
                 {
                     Reference<XAuthorizable> xAuth;
-                    m_xUsers->getByName(m_UserName) >>= xAuth;
+                    m_xUsers->getByName(aUserFind) >>= xAuth;
                     m_TableCtrl.setGrantUser(xAuth);
                 }
 
