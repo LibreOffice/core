@@ -100,7 +100,8 @@ void OMySQLCatalog::refreshUsers()
 {
     TStringVector aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery(OUString("select User from mysql.user group by User"));
+    //Reference< XResultSet >  xResult = xStmt->executeQuery(OUString("select User from mysql.user group by User"));
+    Reference< XResultSet >  xResult = xStmt->executeQuery(OUString("SELECT grantee FROM information_schema.user_privileges GROUP BY grantee"));
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
