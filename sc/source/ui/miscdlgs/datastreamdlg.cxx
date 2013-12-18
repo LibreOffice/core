@@ -12,7 +12,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/inettbc.hxx>
 #include <vcl/layout.hxx>
-#include <datastream.hxx>
 #include <address.hxx>
 #include <docsh.hxx>
 
@@ -111,7 +110,7 @@ ScRange DataStreamDlg::GetStartRange()
 
 void DataStreamDlg::Init(
     const OUString& rURL, const ScRange& rRange, const sal_Int32 nLimit,
-    const OUString& rMove, const sal_uInt32 nSettings)
+    DataStream::MoveType eMove, const sal_uInt32 nSettings)
 {
     m_pEdLimit->SetText(OUString::number(nLimit));
     m_pCbUrl->SetText(rURL);
@@ -123,12 +122,22 @@ void DataStreamDlg::Init(
     OUString aStr = rRange.Format(SCA_VALID);
     m_pEdRange->SetText(aStr);
 
-    if (rMove == "NO_MOVE")
-        m_pRBNoMove->Check();
-    else if (rMove == "RANGE_DOWN")
-        m_pRBRangeDown->Check();
-    else if (rMove == "MOVE_DOWN")
-        m_pRBDataDown->Check();
+    switch (eMove)
+    {
+        case DataStream::MOVE_DOWN:
+            m_pRBDataDown->Check();
+        break;
+        case DataStream::NO_MOVE:
+            m_pRBNoMove->Check();
+        break;
+        case DataStream::RANGE_DOWN:
+            m_pRBRangeDown->Check();
+        break;
+        case DataStream::MOVE_UP:
+        default:
+            ;
+    }
+
     UpdateEnable();
 }
 
@@ -148,22 +157,18 @@ void DataStreamDlg::StartStream(DataStream *pStream)
        nSettings |= DataStream::SCRIPT_STREAM;
     if (m_pRBValuesInLine->IsChecked())
        nSettings |= DataStream::VALUES_IN_LINE;
+
+    DataStream::MoveType eMove =
+        m_pRBNoMove->IsChecked() ? DataStream::NO_MOVE : m_pRBRangeDown->IsChecked()
+            ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
+
     if (pStream)
     {
-        pStream->Decode(rURL, aStartRange, nLimit,
-                m_pRBNoMove->IsChecked() ? OUString("NO_MOVE") : m_pRBRangeDown->IsChecked()
-                    ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN"),
-                nSettings);
+        pStream->Decode(rURL, aStartRange, nLimit, eMove, nSettings);
         return;
     }
-    pStream = DataStream::Set( mpDocShell,
-            rURL,
-            m_pEdRange->GetText(),
-            nLimit,
-            m_pRBNoMove->IsChecked() ? OUString("NO_MOVE") : m_pRBRangeDown->IsChecked()
-                ? OUString("RANGE_DOWN") : OUString("MOVE_DOWN")
-            , nSettings
-            );
+
+    pStream = DataStream::Set(mpDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
 }

@@ -1005,13 +1005,19 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
             SvtMiscOptions aMiscOptions;
             if (aMiscOptions.IsExperimentalMode() && pCellRangeSource->sFilterOptions == "DataStream")
             {
-                sc::DataStream::Set( dynamic_cast<ScDocShell*>(pDoc->GetDocumentShell())
-                        , pCellRangeSource->sURL // rURL
-                        , sRangeStr // rRange
-                        , sFilterName.toInt32() // nLimit
-                        , sSourceStr // rMove
-                        , pCellRangeSource->nRefresh // nSettings
-                        );
+                ScRange aRange;
+                sal_uInt16 nRes = aRange.Parse(sRangeStr, pDoc);
+                if ((nRes & SCA_VALID) == SCA_VALID)
+                {
+                    sc::DataStream::MoveType eMove = sc::DataStream::ToMoveType(sSourceStr);
+                    sc::DataStream::Set( dynamic_cast<ScDocShell*>(pDoc->GetDocumentShell())
+                            , pCellRangeSource->sURL // rURL
+                            , aRange
+                            , sFilterName.toInt32() // nLimit
+                            , eMove
+                            , pCellRangeSource->nRefresh // nSettings
+                            );
+                }
                 return;
             }
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,

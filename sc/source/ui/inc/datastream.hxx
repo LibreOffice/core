@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_DATASTREAM_HXX
+#define SC_DATASTREAM_HXX
+
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
@@ -42,16 +45,18 @@ class DataStream : boost::noncopyable, public sfx2::SvBaseLink
     DECL_LINK( RefreshHdl, void* );
 
 public:
-    enum MoveEnum { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
+    enum MoveType { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
     enum { SCRIPT_STREAM = 1, VALUES_IN_LINE = 2 };
 
     static void MakeToolbarVisible();
-    static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
-            sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
+    static DataStream* Set(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
+            sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
+
+    static MoveType ToMoveType( const OUString& rMoveStr );
 
     DataStream(
         ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
-        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings);
+        sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
 
     virtual ~DataStream();
     // sfx2::SvBaseLink
@@ -62,12 +67,12 @@ public:
     ScRange GetRange() const;
     const OUString& GetURL() const { return msURL; }
     const sal_Int32& GetLimit() const { return mnLimit; }
-    const OUString& GetMove() const { return msMove; }
+    OUString GetMove() const;
     const sal_uInt32& GetSettings() const { return mnSettings; }
 
     void Decode(
         const OUString& rURL, const ScRange& rRange, sal_Int32 nLimit,
-        const OUString& rMove, const sal_uInt32 nSettings);
+        MoveType eMove, const sal_uInt32 nSettings);
 
     bool ImportData();
     void StartImport();
@@ -82,10 +87,9 @@ private:
     ScDocument* mpDoc;
     DocumentStreamAccess maDocAccess;
     OUString msURL;
-    OUString msMove;
     sal_Int32 mnLimit;
     sal_uInt32 mnSettings;
-    MoveEnum meMove;
+    MoveType meMove;
     bool mbRunning;
     bool mbValuesInLine;
     LinesList* mpLines;
@@ -100,5 +104,7 @@ private:
 };
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

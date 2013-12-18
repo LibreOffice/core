@@ -13,13 +13,13 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 
+#include <datastream.hxx>
+
 class ScDocShell;
 class SvtURLBox;
 class ScRange;
 
 namespace sc {
-
-class DataStream;
 
 class DataStreamDlg : public ModalDialog
 {
@@ -51,7 +51,7 @@ public:
 
     void Init(
         const OUString& rURL, const ScRange& rRange, const sal_Int32 nLimit,
-        const OUString& rMove, const sal_uInt32 nSettings);
+        DataStream::MoveType eMove, const sal_uInt32 nSettings);
 
     void StartStream(DataStream *pStream = 0);
 };

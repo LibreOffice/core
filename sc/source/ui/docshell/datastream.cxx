@@ -178,25 +178,24 @@ void DataStream::MakeToolbarVisible()
     }
 }
 
-DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUString& rRange,
-        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings)
+DataStream* DataStream::Set(
+    ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
+    sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings)
 {
     // Each DataStream needs a destination area in order to be exported.
     // There can be only one ScAreaLink / DataStream per cell.
     // So - if we don't need range (DataStream with mbValuesInLine == false),
     // just find a free cell for now.
     ScRange aDestArea;
-    sal_uInt16 nRes = aDestArea.Parse(rRange, pShell->GetDocument());
-    if ((nRes & SCA_VALID) != SCA_VALID)
-        // Invalid range string.
-        return NULL;
+    if (rRange.IsValid())
+        aDestArea = rRange;
 
     sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
     sal_uInt16 nLinkPos = 0;
     while (nLinkPos < pLinkManager->GetLinks().size())
     {
         sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[nLinkPos];
-        if (rRange.isEmpty())
+        if (!rRange.IsValid())
         {
             if ( (pBase->ISA(ScAreaLink) && static_cast<ScAreaLink*>
                         (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
@@ -221,13 +220,25 @@ DataStream* DataStream::Set(ScDocShell *pShell, const OUString& rURL, const OUSt
             ++nLinkPos;
     }
 
-    DataStream* pLink = new DataStream(pShell, rURL, aDestArea, nLimit, rMove, nSettings);
+    DataStream* pLink = new DataStream(pShell, rURL, aDestArea, nLimit, eMove, nSettings);
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
     return pLink;
 }
 
+DataStream::MoveType DataStream::ToMoveType( const OUString& rMoveStr )
+{
+    if (rMoveStr == "RANGE_DOWN")
+        return RANGE_DOWN;
+    if (rMoveStr == "MOVE_DOWN")
+        return MOVE_DOWN;
+    if (rMoveStr == "MOVE_UP")
+        return MOVE_UP;
+
+    return NO_MOVE; // default
+}
+
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
-        sal_Int32 nLimit, const OUString& rMove, sal_uInt32 nSettings) :
+        sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings) :
     mpDocShell(pShell),
     mpDoc(mpDocShell->GetDocument()),
     maDocAccess(*mpDoc),
@@ -241,7 +252,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mxThread = new datastreams::CallerThread( this );
     mxThread->launch();
 
-    Decode(rURL, rRange, nLimit, rMove, nSettings);
+    Decode(rURL, rRange, nLimit, eMove, nSettings);
 }
 
 DataStream::~DataStream()
@@ -289,23 +300,34 @@ ScRange DataStream::GetRange() const
     return aRange;
 }
 
+OUString DataStream::GetMove() const
+{
+    switch (meMove)
+    {
+        case MOVE_DOWN:
+            return OUString("MOVE_DOWN");
+        case MOVE_UP:
+            return OUString("MOVE_UP");
+        case NO_MOVE:
+            return OUString("NO_MOVE");
+        case RANGE_DOWN:
+            return OUString("RANGE_DOWN");
+        default:
+            ;
+    }
+    return OUString();
+}
+
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
-        sal_Int32 nLimit, const OUString& rMove, const sal_uInt32 nSettings)
+        sal_Int32 nLimit, MoveType eMove, const sal_uInt32 nSettings)
 {
     msURL = rURL;
     mnLimit = nLimit;
-    msMove = rMove;
+    meMove = eMove;
     mnSettings = nSettings;
     mpEndRange.reset( NULL );
 
     mbValuesInLine = mnSettings & VALUES_IN_LINE;
-
-    if (msMove == "NO_MOVE")
-        meMove = NO_MOVE;
-    else if (msMove == "RANGE_DOWN")
-        meMove = RANGE_DOWN;
-    else if (msMove == "MOVE_DOWN")
-        meMove = MOVE_DOWN;
 
     mnCurRow = rRange.aStart.Row();
 
@@ -549,7 +571,7 @@ sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
 void DataStream::Edit( Window* pWindow, const Link& )
 {
     DataStreamDlg aDialog(mpDocShell, pWindow);
-    aDialog.Init(msURL, maStartRange, mnLimit, msMove, mnSettings);
+    aDialog.Init(msURL, maStartRange, mnLimit, meMove, mnSettings);
     if (aDialog.Execute() == RET_OK)
     {
         bool bWasRunning = mbRunning;
