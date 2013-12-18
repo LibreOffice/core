@@ -99,8 +99,8 @@ public:
      */
     inline storeError create (
         storeFileHandle       hFile,
-        OUString const & rPath,
-        OUString const & rName,
+        rtl::OUString const & rPath,
+        rtl::OUString const & rName,
         storeAccessMode       eMode) SAL_THROW(())
     {
         if (m_hImpl)
@@ -264,8 +264,8 @@ public:
      */
     inline storeError create (
         storeFileHandle       hFile,
-        OUString const & rPath,
-        OUString const & rName,
+        rtl::OUString const & rPath,
+        rtl::OUString const & rName,
         storeAccessMode       eMode) SAL_THROW(())
     {
         if (m_hImpl)
@@ -429,7 +429,7 @@ public:
         @see store_openFile()
      */
     inline storeError create (
-        OUString const & rFilename,
+        rtl::OUString const & rFilename,
         storeAccessMode       eAccessMode,
         sal_uInt16            nPageSize = STORE_DEFAULT_PAGESIZE) SAL_THROW(())
     {
@@ -504,8 +504,8 @@ public:
         @see store_attrib()
      */
     inline storeError attrib (
-        OUString const & rPath,
-        OUString const & rName,
+        rtl::OUString const & rPath,
+        rtl::OUString const & rName,
         sal_uInt32            nMask1,
         sal_uInt32            nMask2,
         sal_uInt32          & rnAttrib) SAL_THROW(())
@@ -520,8 +520,8 @@ public:
         @see store_attrib()
      */
     inline storeError attrib (
-        OUString const & rPath,
-        OUString const & rName,
+        rtl::OUString const & rPath,
+        rtl::OUString const & rName,
         sal_uInt32            nMask1,
         sal_uInt32            nMask2) SAL_THROW(())
     {
@@ -535,8 +535,8 @@ public:
         @see store_link()
      */
     inline storeError link (
-        OUString const & rSrcPath, OUString const & rSrcName,
-        OUString const & rDstPath, OUString const & rDstName) SAL_THROW(())
+        rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
+        rtl::OUString const & rDstPath, rtl::OUString const & rDstName) SAL_THROW(())
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -549,8 +549,8 @@ public:
         @see store_symlink()
      */
     inline storeError symlink (
-        OUString const & rSrcPath, OUString const & rSrcName,
-        OUString const & rDstPath, OUString const & rDstName) SAL_THROW(())
+        rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
+        rtl::OUString const & rDstPath, rtl::OUString const & rDstName) SAL_THROW(())
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -562,8 +562,8 @@ public:
         @see store_rename()
      */
     inline storeError rename (
-        OUString const & rSrcPath, OUString const & rSrcName,
-        OUString const & rDstPath, OUString const & rDstName) SAL_THROW(())
+        rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
+        rtl::OUString const & rDstPath, rtl::OUString const & rDstName) SAL_THROW(())
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -575,7 +575,7 @@ public:
         @see store_remove()
      */
     inline storeError remove (
-        OUString const & rPath, OUString const & rName) SAL_THROW(())
+        rtl::OUString const & rPath, rtl::OUString const & rName) SAL_THROW(())
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;

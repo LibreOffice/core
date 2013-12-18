@@ -80,7 +80,7 @@ namespace rtl
         /** Opens a bootstrap argment container
             @see rtl_bootstrap_args_open()
          */
-        inline Bootstrap(const OUString & iniName);
+        inline Bootstrap(const rtl::OUString & iniName);
 
         /** Closes a bootstrap argument container
             @see rtl_bootstrap_args_close()
@@ -180,7 +180,7 @@ namespace rtl
         _handle = 0;
     }
 
-    inline Bootstrap::Bootstrap(const OUString & iniName)
+    inline Bootstrap::Bootstrap(const rtl::OUString & iniName)
     {
         if(!iniName.isEmpty())
             _handle = rtl_bootstrap_args_open(iniName.pData);
