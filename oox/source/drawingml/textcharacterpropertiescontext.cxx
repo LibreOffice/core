@@ -56,6 +56,8 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moUnderline = aAttribs.getToken( XML_u );
     if ( aAttribs.hasAttribute( XML_strike ) )
         mrTextCharacterProperties.moStrikeout = aAttribs.getToken( XML_strike );
+    if ( aAttribs.hasAttribute( XML_baseline ) )
+        mrTextCharacterProperties.moBaseline = aAttribs.getInteger( XML_baseline );
 
 //  mrTextCharacterProperties.moCaseMap     = aAttribs.getToken( XML_cap );
     if ( aAttribs.hasAttribute( XML_b ) )

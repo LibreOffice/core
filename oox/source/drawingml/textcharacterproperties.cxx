@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <editeng/escapementitem.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -52,6 +53,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moHeight.assignIfUsed( rSourceProps.moHeight );
     moSpacing.assignIfUsed( rSourceProps.moSpacing );
     moUnderline.assignIfUsed( rSourceProps.moUnderline );
+    moBaseline.assignIfUsed( rSourceProps.moBaseline );
     moStrikeout.assignIfUsed( rSourceProps.moStrikeout );
     moCaseMap.assignIfUsed( rSourceProps.moCaseMap );
     moBold.assignIfUsed( rSourceProps.moBold );
@@ -123,6 +125,11 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
     rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
     rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
+
+    if( moBaseline.has() ) {
+        rPropMap[ PROP_CharEscapement ] <<= sal_Int16(moBaseline.get( 0 ) / 1000);
+        rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(DFLT_ESC_PROP);
+    }
 
     if( !bUseOptional || moBold.has() ) {
         float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
