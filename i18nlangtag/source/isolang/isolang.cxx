@@ -659,7 +659,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "CS", 0     },   // Serbian Latin in Serbia and Montenegro; note that not all applications may know about the 'CS' reusage mess, see https://en.wikipedia.org/wiki/ISO_3166-2:CS
     { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "YU", 0     },   // legacy Serbian Latin in Yugoslavia
     { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr-Latn", ""  , 0     },
-    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr-Latn", ""  , 0     },   // MS lists this as 'sr' only, what a mess
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr-Latn", ""  , LANGUAGE_SERBIAN_LATIN_LSO },  // MS lists this as 'sr' only, what a mess
     { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr-Cyrl", "RS", kSAME },   // MS
     { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr-Cyrl", "ME", kSAME },   // MS
     { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr-Cyrl", "BA", kSAME },   // MS
