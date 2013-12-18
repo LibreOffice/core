@@ -1250,6 +1250,13 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     LanguageType eOldLocale = (!sLang.isEmpty() ?
         LanguageTag::convertToLanguageTypeWithFallback( sLang ) : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
+
+    // If the "Default ..." entry was selected that means SYSTEM, the actual
+    // eNewLocale value is temporary for the dialog only, do not resolve to
+    // what system currently is.
+    if (eNewLocale == LANGUAGE_USER_SYSTEM_CONFIG)
+        eNewLocale = LANGUAGE_SYSTEM;
+
     if ( eOldLocale != eNewLocale )
     {
         // an empty string denotes SYSTEM locale
