@@ -711,14 +711,14 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     sal_Int32 nSize = 1800;
     sal_Int32 nCharEscapement = 0;
 
-    if( GETAD( CharHeight ) )
+    if( GETA( CharHeight ) )
         nSize = (sal_Int32) (100*(*((float*) mAny.getValue())));
 
-    if ( ( bComplex && GETAD( CharWeightComplex ) ) || GETAD( CharWeight ) )
+    if ( ( bComplex && GETA( CharWeightComplex ) ) || GETA( CharWeight ) )
         if ( *((float*) mAny.getValue()) >= awt::FontWeight::SEMIBOLD )
             bold = "1";
 
-    if ( ( bComplex && GETAD( CharPostureComplex ) ) || GETAD( CharPosture ) )
+    if ( ( bComplex && GETA( CharPostureComplex ) ) || GETA( CharPosture ) )
         switch ( *((awt::FontSlant*) mAny.getValue()) )
         {
             case awt::FontSlant_OBLIQUE :
@@ -827,7 +827,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         WriteSolidFill( color );
     }
 
-    if( GETAD( CharFontName ) ) {
+    if( GETA( CharFontName ) ) {
         const char* pitch = NULL;
         const char* charset = NULL;
         OUString usTypeface;
