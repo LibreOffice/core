@@ -3380,24 +3380,11 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     }
                     else
                     {
-                        SvtMiscOptions aMiscOptions;
-                        if (aMiscOptions.IsExperimentalMode())
-                        {
-                            if ( m_postponedDMLDrawing == NULL )
-                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
-                            else
-                                // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
-                                m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
-                        }
+                        if ( m_postponedDMLDrawing == NULL )
+                            m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
                         else
-                        {
-                            if ( m_postponedVMLDrawing == NULL )
-                                m_rExport.SdrExporter().writeVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft);
-                            else // we are writing out attributes, but w:pict should not be inside w:rPr,
-                            {    // so write it out later
-                                 m_postponedVMLDrawing->push_back( PostponedDrawing( pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft ) );
-                            }
-                        }
+                            // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
+                            m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
                     }
                 }
             }

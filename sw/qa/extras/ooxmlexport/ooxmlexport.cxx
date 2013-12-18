@@ -1748,7 +1748,7 @@ DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
     if (!pXmlDoc)
         return;
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect", "stroked").match("f"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "stroked").match("f"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
@@ -1758,7 +1758,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
     if (!pXmlDoc)
         return;
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
@@ -1788,13 +1788,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
 
     // get styles of the four shapes
     OUString aStyles[4];
-    aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[1]/v:rect", "style");
+    aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.6pt;margin-top:165pt;width:283.4pt;height:141.7pt;rotation:285"
-    aStyles[1] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[2]/v:rect", "style");
+    aStyles[1] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.6pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:255"
-    aStyles[2] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[3]/v:rect", "style");
+    aStyles[2] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.5pt;margin-top:164.9pt;width:283.4pt;height:141.7pt;rotation:105"
-    aStyles[3] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[4]/v:rect", "style");
+    aStyles[3] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.55pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:75"
 
     //check the size and position of each of the shapes
