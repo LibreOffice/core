@@ -2,7 +2,7 @@
 <office:marker-table xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script">
   <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z" />
   <draw:marker draw:name="Square" svg:viewBox="0 0 10 10" svg:d="M0 0h10v10h-10z" />
-  <draw:marker draw:name="Small Arrow" svg:viewBox="0 0 1321 3493" svg:d="M1321 3493h-1321l702-3493z" />
+  <draw:marker draw:name="Small Arrow" svg:viewBox="0 0 1321 3493" svg:d="M1321 3493h-1321l661-3493z" />
   <draw:marker draw:name="Dimension Lines" svg:viewBox="0 0 836 110" svg:d="M0 0h278 278 280v36 36 38h-278-278-280v-36-36z" />
   <draw:marker draw:name="Double Arrow" svg:viewBox="0 0 1131 1918" svg:d="M737 1131h394l-564-1131-567 1131h398l-398 787h1131z" />
   <draw:marker draw:name="Rounded short Arrow" svg:viewBox="0 0 1013 1130" svg:d="M1009 1050l-449-1008-22-30-29-12-34 12-21 26-449 1012-5 13v8l5 21 12 21 17 13 21 4h903l21-4 21-13 9-21 4-21v-8z" />
