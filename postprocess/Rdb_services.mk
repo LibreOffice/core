@@ -135,7 +135,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
 		vcl/vcl.windows \
-		winaccessibility/source/service/winaccessibility \
 	) \
 	$(if $(ENABLE_HEADLESS), \
 		vcl/vcl.headless \
@@ -148,6 +147,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 			embeddedobj/source/msole/emboleobj.windows \
 			embedserv/util/emser \
 			extensions/source/ole/oleautobridge \
+			winaccessibility/source/service/winaccessibility \
 		) \
 	) \
 	$(if $(DISABLE_NEON),, \
