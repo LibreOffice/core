@@ -154,7 +154,7 @@ endif
 #
 ###########################################################################
 ifneq (,$(findstring solaris,$(PLATFORM)))
-# Settings for Solaris using Sun Workshop compiler
+# Settings for Solaris using GCC
 
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OO_SDK_URE_HOME)/lib/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
 
@@ -177,9 +177,9 @@ endif
 OS=SOLARIS
 PS=/
 ICL=\$$
-CC=CC
-LINK=CC
-LIB=CC
+CC=g++
+LINK=g++
+LIB=g++
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat
@@ -213,33 +213,26 @@ PURPENVHELPERLIB=-luno_purpenvhelper$(COMID)
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
+# -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
 OPT_FLAGS=-g
+else
+OPT_FLAGS=-O
 endif
-#CC_FLAGS_JNI=-c -KPIC $(OPT_FLAGS)
-#CC_FLAGS=-c -KPIC -xldscope=hidden $(OPT_FLAGS)
 CC_FLAGS_JNI=-c -fpic $(OPT_FLAGS)
 CC_FLAGS=-c -fpic -fvisibility=hidden $(OPT_FLAGS)
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/solaris"
 
 # define for used compiler necessary for UNO
-# -DCPPU_ENV=sunpro5 -- sunpro cc 5.x solaris sparc/intel
 
-#CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=sunpro5
 CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=$(CPPU_ENV) -DGCC
-#CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5  -DHAVE_GCC_VISIBILITY_FEATURE
 CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=$(CPPU_ENV)  -DHAVE_GCC_VISIBILITY_FEATURE -DGCC
 CC_OUTPUT_SWITCH=-o 
 
 LIBO_SDK_LDFLAGS_STDLIBS =
 
-#LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
 LIBRARY_LINK_FLAGS=-w -mt -z combreloc -fPIC -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
-# means if used CC is lower then version 5.5 use option -instance=static
-ifeq ($(OO_SDK_CC_55_OR_HIGHER),)
-LIBRARY_LINK_FLAGS+=-instances=static
-endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs

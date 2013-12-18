@@ -77,12 +77,6 @@ $main::OO_SDK_SED_HOME_SUGGESTION = searchprog("sed");
 $main::OO_SDK_CPP_HOME = "";
 $main::cppName = "gcc";
 $main::cppVersion = "4.0.1";
-if ( $main::operatingSystem =~ m/solaris/ )
-{
-    $main::cppName = "CC";
-    $main::cppVersion = "5.2";
-}
-$main::OO_SDK_CC_55_OR_HIGHER = "";
 $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
 $main::OO_SDK_JAVA_HOME = "";
@@ -418,39 +412,6 @@ while ( (!$main::correctVersion) &&
                         }
 
                         $main::OO_SDK_CPP_HOME = "";
-                    }
-                }
-            } else
-            {
-                # for Solaris we have to check the version too
-                open(FILE, "$OO_SDK_CPP_HOME/$main::cppName -V 2>&1 |");
-                my @lines = <FILE>;
-                my $testVersion = $lines[0];
-                if ( $testVersion eq "")
-                {
-                    print " The '$main::cppName' command found at $main::OO_SDK_CPP_HOME/$main::cppName is not a ";
-                    print " Solaris C++ compiler.\nSet the environment variable OO_SDK_CPP_HOME to your Solaris C++ compiler directory.\n";
-                } else
-                {
-                    if ($testVersion =~ m#((\d+\.)+\d+)# )
-                    {
-                        $testVersion = $1;
-                    }
-                    $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName", 1);
-                    if ( !$main::correctVersion )
-                    {
-                        print " The '$main::cppName' command found at '$main::OO_SDK_CPP_HOME' has a wrong version\n";
-                        if ( skipChoice("C++ compiler") == 1 )
-                        {
-                            $main::correctVersion = 1;
-                        }
-
-                        $main::OO_SDK_CPP_HOME = "";
-                    } else {
-                        $main::correctVersion = testVersion("5.5", $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName", 2);
-                        if ( $main::correctVersion ) {
-                            $main::OO_SDK_CC_55_OR_HIGHER = $testVersion;
-                        }
                     }
                 }
             }
@@ -857,7 +818,6 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_CAT_HOME\@#$main::OO_SDK_CAT_HOME#go;
         $_ =~ s#\@OO_SDK_SED_HOME\@#$main::OO_SDK_SED_HOME#go;
         $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
-        $_ =~ s#\@OO_SDK_CC_55_OR_HIGHER\@#$main::OO_SDK_CC_55_OR_HIGHER#go;
         $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
         $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
         $_ =~ s#\@OO_SDK_OUTPUT_DIR\@#$main::OO_SDK_OUTPUT_DIR#go;

@@ -58,9 +58,6 @@ OO_SDK_SED_HOME=@OO_SDK_SED_HOME@
 # Example: OO_SDK_CPP_HOME=/usr/bin
 OO_SDK_CPP_HOME=@OO_SDK_CPP_HOME@
 
-# Solaris only
-OO_SDK_CC_55_OR_HIGHER=@OO_SDK_CC_55_OR_HIGHER@
-
 # Directory of the Java SDK.
 # Example: OO_SDK_JAVA_HOME=/usr/jdk/jdk1.6.0_10
 OO_SDK_JAVA_HOME=@OO_SDK_JAVA_HOME@
@@ -155,8 +152,8 @@ case ${sdk_platform} in
         directoryname=solintel
 	platform='Solaris x86'
     fi
-    comid=C52
-    pltfrm=sunpro
+    comid=gcc3
+    pltfrm=gcc
     soext=so
     exampleout=SOLARISexample.out
     LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
@@ -261,11 +258,6 @@ if [ -n "${OO_SDK_CPP_HOME}" ]
 then
     PATH=${OO_SDK_CPP_HOME}:${PATH}
     export OO_SDK_CPP_HOME
-
-    if [ -n "${OO_SDK_CC_55_OR_HIGHER}" ]
-    then
-	export OO_SDK_CC_55_OR_HIGHER
-    fi
 fi
 
 # Add directory of the Java tools to the path, if necessary.
