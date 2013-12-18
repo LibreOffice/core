@@ -74,11 +74,6 @@ clean: android_version_setup properties
 # Build / link the single .so for this app
 #
 
-# Sigh, it's sad that now with solver dying we have to list the
-# locations of each needed bundled 3rd-party lib like this. Maybe we
-# really should try to make these experimental Android apps (and the
-# iOS one) buildable with gbuild.
-
 LIBS = \
   -Wl,--start-group \
   $(shell $(SRCDIR)/bin/lo-all-static-libs) \
