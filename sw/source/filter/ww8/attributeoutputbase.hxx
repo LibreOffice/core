@@ -31,6 +31,7 @@
 #include <swtypes.hxx>
 #include <wrtswtbl.hxx>
 #include <fldbas.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 #include <vector>
 
@@ -160,7 +161,7 @@ public:
     virtual void StartParagraphProperties() = 0;
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted ) = 0;
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted ) = 0;
 
     /// Empty paragraph.
     virtual void EmptyParagraph() = 0;
@@ -635,9 +636,8 @@ public:
     /// Exports the definition (image, size) of a single numbering picture bullet.
     virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}
 
-    // Returns whether or not the 'SwTxtNode' has a paragraph marker deleted (using 'track changes')
-    virtual const SwRedlineData* GetDeletedParagraphMarker( const SwTxtNode& rNode );
-
+    // Returns whether or not the 'SwTxtNode' has a paragraph marker inserted \ deleted (using 'track changes')
+    virtual const SwRedlineData* GetParagraphMarkerRedline( const SwTxtNode& rNode, RedlineType_t aRedlineType );
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX

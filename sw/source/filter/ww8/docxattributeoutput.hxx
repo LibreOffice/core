@@ -141,7 +141,7 @@ public:
     virtual void StartParagraphProperties();
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted );
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted );
 
     /// Start of the text run.
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );
