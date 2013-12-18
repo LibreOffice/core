@@ -10447,10 +10447,10 @@ dnl =================================================
 AC_MSG_CHECKING([whether to build with the OpenCL support.])
 ENABLE_OPENCL=
 
-if test $_os != iOS -a $_os != Android -a "x$enable_opencl" != "xno"; then
+if test $_os != iOS -a $_os != Android -a "x$enable_opencl" != "xno" \
+        -a ! \( $_os = Darwin -a $with_macosx_sdk = 10.5 \); then
     AC_MSG_RESULT([yes])
-    enable_opencl=yes
-    ENABLE_OPENCL=TRUE
+    ENABLE_OPENCL=YES
     AC_DEFINE(HAVE_FEATURE_OPENCL)
 else
     AC_MSG_RESULT([no])
