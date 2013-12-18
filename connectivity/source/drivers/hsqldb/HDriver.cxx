@@ -208,7 +208,6 @@ namespace connectivity
 
                 OUString sSystemPath;
                 osl_getSystemPathFromFileURL( sURL.pData, &sSystemPath.pData );
-                sal_Int32 nIndex = sSystemPath.lastIndexOf('.');
                 if ( sURL.isEmpty() || sSystemPath.isEmpty() )
                 {
                     ::connectivity::SharedResources aResources;
@@ -221,8 +220,7 @@ namespace connectivity
                 ::comphelper::NamedValueCollection aProperties;
 
                 // properties for accessing the embedded storage
-                OUString sConnPartURL = sSystemPath.copy( 0, ::std::max< sal_Int32 >( nIndex, sSystemPath.getLength() ) );
-                OUString sKey = StorageContainer::registerStorage( xStorage, sConnPartURL );
+                OUString sKey = StorageContainer::registerStorage( xStorage, sSystemPath );
                 aProperties.put( "storage_key", sKey );
                 aProperties.put( "storage_class_name",
                     OUString(  "com.sun.star.sdbcx.comp.hsqldb.StorageAccess"  ) );
@@ -335,7 +333,7 @@ namespace connectivity
 
                 OUString sConnectURL("jdbc:hsqldb:");
 
-                sConnectURL += sConnPartURL;
+                sConnectURL += sSystemPath;
                 Reference<XConnection> xOrig;
                 try
                 {
