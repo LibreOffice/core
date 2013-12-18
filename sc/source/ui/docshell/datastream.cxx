@@ -443,10 +443,7 @@ class CSVHandler
 {
     DocumentStreamAccess& mrDoc;
     ScAddress maPos;
-    SCROW mnRow;
-    SCCOL mnCol;
     SCCOL mnEndCol;
-    SCTAB mnTab;
 
 public:
     CSVHandler( DocumentStreamAccess& rDoc, const ScAddress& rPos, SCCOL nEndCol ) :
