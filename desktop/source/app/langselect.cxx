@@ -197,7 +197,7 @@ bool prepareLocale() {
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
     OUString setupSysLoc(officecfg::Setup::L10N::ooSetupSystemLocale::get());
-    MsLangId::setConfiguredSystemLanguage(
+    LanguageTag::setConfiguredSystemLanguage(
         setupSysLoc.isEmpty()
         ? MsLangId::getSystemLanguage()
         : LanguageTag(setupSysLoc).getLanguageType(false));
