@@ -27,6 +27,7 @@ import re
 import os, os.path
 import stat
 import sys
+import threading, Queue
 try:
     from urllib.request import urlopen
 except:
@@ -450,14 +451,57 @@ common_noncore_mimetypes = {
     'application/pdf': 'pdf',
 }
 
-for (prefix, uri) in rss_bugzillas.items():
+class manage_threads(threading.Thread):
+    def run(self):
+        count = 0
+        while 1:
+            # Try to receive a job from queue
+            try:
+                # Get job from queue
+                # Use job parameters to call our query
+                # Then let the queue know we are done with this job
+                job = jobs.get(True,5)
+                get_through_rss_query(job[0], job[1], job[2], job[3]) # [0] = uri; [1] = mimetype; [2] = prefix; [3] = extension
+                print("Successfully called our query searching for " + job[1] + "in bugtracker " + job[3])
+                jobs.task_done()
+            except:
+                count += 1
+                if count == 5:
+                    print("Already looked " + str(count) + "times for a job, lets kill this thread")
+                    break
+
+def generate_multi_threading():
     for (mimetype,extension) in mimetypes.items():
-        # It seems that bugzilla has problems returing that many results
-        # (10000 results is probably a limit set somewhere) so we always
-        # end processing the complete list.
-        if mimetype == 'text/html' and prefix == 'moz':
-                continue
-        get_through_rss_query(uri, mimetype, prefix, extension)
+
+        # Initialize threads
+        for i in xrange(max_threads):
+            manage_threads().start()
+        
+        # Create a job for every bugzilla for a particular mimetype
+        # In this case we spread our requests over multiple servers
+        # Which hopefully will result in less load on this servers
+        for (prefix, uri) in rss_bugzillas.items():
+        
+            # It seems that bugzilla has problems returing that many results
+            # (10000 results is probably a limit set somewhere) so we always
+            # end processing the complete list.
+            if mimetype == 'text/html' and prefix == 'moz':
+                    continue
+
+            try:
+                jobs.put([uri, mimetype, prefix, extension], block=True, timeout=3)
+                print("successfully placed a job in the queue searching for " + mimetype + "in bugtracker " + prefix)
+            except:
+                print("Queue full")
+
+        # Continue when all bug trackers are parsed for a particular mimetype
+        jobs.join()
+
+max_threads = 8 # Number of threads to create, (1 = without multi-threading)
+jobs = Queue.Queue(10)
+#threadlock = threading.Lock()
+
+generate_multi_threading()
 
 for (mimetype,extension) in mimetypes.items():
     get_through_rpc_query(redhatrpc, redhatbug, mimetype, "rhbz", extension)
