@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///Ss\u003d",
+        "filename": "sd/source/filter/html/htmlex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-12-18T16:04:52Z",
+      "side": 1,
+      "message": "it looks like it\u0027s just assigned to [nSdPage] in empty vector?",
+      "revId": "e90447ca8f1bcb28e652ead196428552634733db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///So\u003d",
+        "filename": "sd/source/filter/html/htmlex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3004,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-12-18T16:04:52Z",
+      "side": 1,
+      "message": "should this perhaps check if the string is \"empty\"?",
+      "revId": "e90447ca8f1bcb28e652ead196428552634733db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

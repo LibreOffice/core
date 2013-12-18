@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///Sw\u003d",
+        "filename": "sd/source/filter/html/htmlex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2057,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-12-18T16:04:52Z",
+      "side": 0,
+      "message": "where are the vectors sized to mnSdPageCount?",
+      "revId": "2ac31b06ae4895fe5d9be51403774a96b89919af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
