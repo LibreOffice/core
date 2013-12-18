@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///SU\u003d",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-12-18T16:27:15Z",
+      "side": 1,
+      "message": "I would like to print also the thread-number, currently we can\u0027t know which thread did print it out",
+      "revId": "140aea2af7906ea1ea59a2aee0d60f5abf532f90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///SY\u003d",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-12-18T16:27:15Z",
+      "side": 1,
+      "message": "I\u0027m initializing threads here in a loop. What I would like to implement is a \u0027thread-number\u0027. So It\u0027s easier for debugging. (see comment above)",
+      "revId": "140aea2af7906ea1ea59a2aee0d60f5abf532f90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
