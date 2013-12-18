@@ -11,12 +11,14 @@ $(eval $(call gb_Module_Module,winaccessibility))
 
 ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
+ifeq ($(DISABLE_ATL),)
 $(eval $(call gb_Module_add_targets,winaccessibility,\
 	WinResTarget_uacccom \
 	CustomTarget_ia2_idl \
 	Library_uacccom \
 	Library_winaccessibility \
 ))
+endif # !DISABLE_ATL
 endif # COM=MSC
 endif # WNT
 
