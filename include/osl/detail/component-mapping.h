@@ -44,25 +44,43 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
 #endif
 
 #define NON_APP_SPECIFIC_FACTORY_MAP \
+    { "libembobj.a", embobj_component_getFactory }, \
+    { "libemboleobj.a", emboleobj_component_getFactory }, \
     { "libintrospectionlo.a", introspection_component_getFactory }, \
     { "libreflectionlo.a", reflection_component_getFactory }, \
     { "libstocserviceslo.a", stocservices_component_getFactory }, \
     { "libcomphelper.a", comphelp_component_getFactory }, \
     { "libconfigmgrlo.a", configmgr_component_getFactory }, \
     { "libdeployment.a", deployment_component_getFactory }, \
+    { "libevtattlo.a", evtatt_component_getFactory }, \
     { "libfilterconfiglo.a", filterconfig1_component_getFactory }, \
+    { "libfsstoragelo.a", fsstorage_component_getFactory }, \
     { "libfwklo.a", fwk_component_getFactory }, \
+    { "libfwllo.a", fwl_component_getFactory }, \
+    { "libhyphenlo.a", hyphen_component_getFactory }, \
     { "libi18npoollo.a", i18npool_component_getFactory }, \
+    { "liblnglo.a", lng_component_getFactory }, \
+    { "liblnthlo.a", lnth_component_getFactory }, \
     { "liblocalebe1lo.a", localebe1_component_getFactory }, \
+    { "libooxlo.a", oox_component_getFactory }, \
     { "libpackage2.a", package2_component_getFactory }, \
     { "libsfxlo.a", sfx_component_getFactory }, \
+    { "libsotlo.a", sot_component_getFactory }, \
+    { "libspelllo.a", spell_component_getFactory }, \
     { "libsvllo.a", svl_component_getFactory }, \
+    { "libsvtlo.a", svt_component_getFactory }, \
+    { "libsvxlo.a", svx_component_getFactory }, \
     { "libtklo.a", tk_component_getFactory }, \
     { "libucb1.a", ucb_component_getFactory }, \
     { "libucpexpand1lo.a", ucpexpand1_component_getFactory }, \
     { "libucpfile1.a", ucpfile_component_getFactory }, \
+    { "libunordflo.a", unordf_component_getFactory }, \
+    { "libunoxmllo.a", unoxml_component_getFactory }, \
     { "libutllo.a", utl_component_getFactory }, \
     { "libvcllo.a", vcl_component_getFactory }, \
+    { "libxmlsecurity.a", xmlsecurity_component_getFactory }, \
+    { "libxolo.a", xo_component_getFactory }, \
+    { "libxoflo.a", xof_component_getFactory }, \
     { "libxstor.a", xstor_component_getFactory }, \
 
 #define NON_APP_SPECIFIC_CONSTRUCTOR_MAP \

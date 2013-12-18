@@ -36,20 +36,13 @@ lo_get_factory_map(void)
         //MAP_LIB_LO(fwk),      //MAP_LIB_LO(fwm),      //MAP_LIB_LO(frm),
         //MAP_LIB_LO(pricing),  //MAP_LIB_LO(scd),      //MAP_LIB_LO(scfilt),
         //MAP_LIB_LO(hwp),
-        MAP_LIB_LO(hyphen),
         //MAP_LIB_LO(dbaxml), //MAP_LIB_LO(sdd),      //MAP_LIB_LO(smd),
-        MAP_LIB_LO(spell),
         //MAP_LIB_LO(svgfilter),//MAP_LIB_LO(t602filter),//MAP_LIB_LO(textfd),
         MAP_LIB_LO(uui),
         //MAP_LIB_LO(xmlfd),
-        MAP_LIB(xmlsecurity), //MAP_LIB_LO(sc),       //MAP_LIB_LO(sd),
-        MAP_LIB_LO(svx),        MAP_LIB_LO(fwl),        MAP_LIB_LO(oox),
+        //MAP_LIB_LO(sc),       //MAP_LIB_LO(sd),
         //MAP_LIB(fileacc),
-        MAP_LIB_LO(svt),        MAP_LIB_LO(xof),
-        MAP_LIB_LO(evtatt),     MAP_LIB_LO(fsstorage),  MAP_LIB_LO(lng),
-        MAP_LIB_LO(swd),        MAP_LIB_LO(sw),         MAP_LIB_LO(lnth),
-        MAP_LIB_LO(unordf),     MAP_LIB_LO(unoxml),     MAP_LIB_LO(xo),
-        MAP_LIB_LO(stocservices), MAP_LIB_LO(reflection),
+        MAP_LIB_LO(swd),        MAP_LIB_LO(sw),
 
         // from ANDROID
         
@@ -61,7 +54,6 @@ lo_get_factory_map(void)
         //MAP_LIB_LO(wpftdraw), //MAP_LIB_LO(svxcore),  //MAP_LIB_LO(protocolhandler),
         //MAP_LIB_LO_1(filterconfig), //MAP_LIB_LO(canvasfactory),    //MAP_LIB_LO(mtfrenderer),
         MAP_LIB_LO(writerfilter),
-        MAP_LIB(embobj),        MAP_LIB(emboleobj),     MAP_LIB_LO(sot),
         
         // ADDED for search
         
