@@ -39,7 +39,7 @@ struct ScSubTotalParam;
 class ScTpSubTotalGroup : public SfxTabPage
 {
 protected:
-            ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
+            ScTpSubTotalGroup( Window* pParent,
                                const SfxItemSet& rArgSet );
 
 public:
@@ -50,12 +50,9 @@ public:
     bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
                                       SfxItemSet&   rArgSet  );
 protected:
-    FixedText       aFtGroup;
-    ListBox         aLbGroup;
-    FixedText       aFtColumns;
-    SvxCheckListBox aLbColumns;
-    FixedText       aFtFunctions;
-    ListBox         aLbFunctions;
+    ListBox*        mpLbGroup;
+    SvxCheckListBox* mpLbColumns;
+    ListBox*         mpLbFunctions;
     const OUString    aStrNone;
     const OUString    aStrColumn;
 

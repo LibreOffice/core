@@ -33,19 +33,13 @@
 #include "tpsubt.hxx"
 
 //========================================================================
-// Zwischenergebnisgruppen-Tabpage:
+// Subtotals group tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
+ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
                                       const SfxItemSet& rArgSet )
         :   SfxTabPage      ( pParent,
-                              ScResId( nResId ),
+                              "SubTotalGrpPage", "modules/scalc/ui/subtotalgrppage.ui",
                               rArgSet ),
-            aFtGroup        ( this, ScResId( FT_GROUP ) ),
-            aLbGroup        ( this, ScResId( LB_GROUP ) ),
-            aFtColumns      ( this, ScResId( FT_COLUMNS ) ),
-            aLbColumns      ( this, ScResId( WND_COLUMNS ) ),
-            aFtFunctions    ( this, ScResId( FT_FUNCTIONS ) ),
-            aLbFunctions    ( this, ScResId( LB_FUNCTIONS ) ),
             aStrNone        ( SC_RESSTR( SCSTR_NONE ) ),
             aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
             pViewData       ( NULL ),
@@ -56,21 +50,22 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
                                 GetSubTotalData() ),
             nFieldCount     ( 0 )
 {
+    get( mpLbGroup, "group_by");
+    get( mpLbColumns, "columns");
+    get( mpLbFunctions, "functions");
     // Font is correctly initialized by SvTreeListBox ctor
-    aLbColumns.SetSelectionMode( SINGLE_SELECTION );
-    aLbColumns.SetDragDropMode( SV_DRAGDROP_NONE );
-    aLbColumns.SetSpaceBetweenEntries( 0 );
-    aLbColumns.Show();
+    mpLbColumns->SetSelectionMode( SINGLE_SELECTION );
+    mpLbColumns->SetDragDropMode( SV_DRAGDROP_NONE );
+    mpLbColumns->SetSpaceBetweenEntries( 0 );
 
     Init ();
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
-    sal_uInt16  nCount = (sal_uInt16)aLbColumns.GetEntryCount();
+    sal_uInt16  nCount = (sal_uInt16)mpLbColumns->GetEntryCount();
 
     if ( nCount > 0 )
     {
@@ -78,7 +73,7 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
 
         for ( sal_uInt16 i=0; i<nCount; i++ )
         {
-            pData = (sal_uInt16*)(aLbColumns.GetEntryData( i ));
+            pData = (sal_uInt16*)(mpLbColumns->GetEntryData( i ));
             OSL_ENSURE( pData, "EntryData not found" );
 
             delete pData;
@@ -98,10 +93,10 @@ void ScTpSubTotalGroup::Init()
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
-    aLbGroup.SetSelectHdl       ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
-    aLbColumns.SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
-    aLbColumns.SetCheckButtonHdl    ( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
-    aLbFunctions.SetSelectHdl   ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
+    mpLbGroup->SetSelectHdl       ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
+    mpLbColumns->SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
+    mpLbColumns->SetCheckButtonHdl    ( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
+    mpLbFunctions->SetSelectHdl   ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
 
     nFieldArr[0] = 0;
     FillListBoxes();
@@ -124,12 +119,12 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     //----------------------------------------------------------
 
     // first we have to clear the listboxes...
-    for ( sal_uInt16 nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
+    for ( sal_uInt16 nLbEntry = 0; nLbEntry < mpLbColumns->GetEntryCount(); ++nLbEntry )
     {
-        aLbColumns.CheckEntryPos( nLbEntry, false );
-        *((sal_uInt16*)aLbColumns.GetEntryData( nLbEntry )) = 0;
+        mpLbColumns->CheckEntryPos( nLbEntry, false );
+        *((sal_uInt16*)mpLbColumns->GetEntryData( nLbEntry )) = 0;
     }
-    aLbFunctions.SelectEntryPos( 0 );
+    mpLbFunctions->SelectEntryPos( 0 );
 
     ScSubTotalParam theSubTotalData( ((const ScSubTotalItem&)
                                       rArgSet.Get( nWhichSubTotals )).
@@ -142,28 +137,28 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         SCCOL*          pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx];
         ScSubTotalFunc* pFunctions  = theSubTotalData.pFunctions[nGroupIdx];
 
-        aLbGroup.SelectEntryPos( GetFieldSelPos( nField )+1 );
+        mpLbGroup->SelectEntryPos( GetFieldSelPos( nField )+1 );
 
         sal_uInt16 nFirstChecked = 0;
         for ( sal_uInt16 i=0; i<nSubTotals; i++ )
         {
             sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
-            sal_uInt16* pFunction = (sal_uInt16*)aLbColumns.GetEntryData( nCheckPos );
+            sal_uInt16* pFunction = (sal_uInt16*)mpLbColumns->GetEntryData( nCheckPos );
 
-            aLbColumns.CheckEntryPos( nCheckPos );
+            mpLbColumns->CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
 
             if (i == 0 || (i > 0 && nCheckPos < nFirstChecked))
                 nFirstChecked = nCheckPos;
         }
         // Select the first checked field from the top.
-        aLbColumns.SelectEntryPos(nFirstChecked);
+        mpLbColumns->SelectEntryPos(nFirstChecked);
     }
     else
     {
-        aLbGroup.SelectEntryPos( (nGroupNo == 1) ? 1 : 0 );
-        aLbColumns.SelectEntryPos( 0 );
-        aLbFunctions.SelectEntryPos( 0 );
+        mpLbGroup->SelectEntryPos( (nGroupNo == 1) ? 1 : 0 );
+        mpLbColumns->SelectEntryPos( 0 );
+        mpLbFunctions->SelectEntryPos( 0 );
     }
 
     return true;
@@ -177,16 +172,16 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     sal_uInt16 nGroupIdx = 0;
 
     OSL_ENSURE( (nGroupNo<=3) && (nGroupNo>0), "Invalid group" );
-    OSL_ENSURE(    (aLbGroup.GetEntryCount() > 0)
-                && (aLbColumns.GetEntryCount() > 0)
-                && (aLbFunctions.GetEntryCount() > 0),
+    OSL_ENSURE(    (mpLbGroup->GetEntryCount() > 0)
+                && (mpLbColumns->GetEntryCount() > 0)
+                && (mpLbFunctions->GetEntryCount() > 0),
                 "Non-initialized Lists" );
 
 
     if (  (nGroupNo > 3) || (nGroupNo == 0)
-        || (aLbGroup.GetEntryCount() == 0)
-        || (aLbColumns.GetEntryCount() == 0)
-        || (aLbFunctions.GetEntryCount() == 0)
+        || (mpLbGroup->GetEntryCount() == 0)
+        || (mpLbColumns->GetEntryCount() == 0)
+        || (mpLbFunctions->GetEntryCount() == 0)
        )
         return false;
     else
@@ -206,9 +201,9 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
     ScSubTotalFunc* pFunctions  = NULL;
     SCCOL*          pSubTotals  = NULL;
-    sal_uInt16          nGroup      = aLbGroup.GetSelectEntryPos();
-    sal_uInt16          nEntryCount = (sal_uInt16)aLbColumns.GetEntryCount();
-    sal_uInt16          nCheckCount = aLbColumns.GetCheckedEntryCount();
+    sal_uInt16          nGroup      = mpLbGroup->GetSelectEntryPos();
+    sal_uInt16          nEntryCount = (sal_uInt16)mpLbColumns->GetEntryCount();
+    sal_uInt16          nCheckCount = mpLbColumns->GetCheckedEntryCount();
 
     theSubTotalData.nCol1                   = rSubTotalData.nCol1;
     theSubTotalData.nRow1                   = rSubTotalData.nRow1;
@@ -228,11 +223,11 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
         for ( sal_uInt16 i=0, nCheck=0; i<nEntryCount; i++ )
         {
-            if ( aLbColumns.IsChecked( i ) )
+            if ( mpLbColumns->IsChecked( i ) )
             {
                 OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
-                nFunction = *((sal_uInt16*)aLbColumns.GetEntryData( i ));
+                nFunction = *((sal_uInt16*)mpLbColumns->GetEntryData( i ));
                 pSubTotals[nCheck] = nFieldArr[i];
                 pFunctions[nCheck] = LbPosToFunc( nFunction );
                 nCheck++;
@@ -268,9 +263,9 @@ void ScTpSubTotalGroup::FillListBoxes()
         SCCOL   col;
         OUString  aFieldName;
 
-        aLbGroup.Clear();
-        aLbColumns.Clear();
-        aLbGroup.InsertEntry( aStrNone, 0 );
+        mpLbGroup->Clear();
+        mpLbColumns->Clear();
+        mpLbGroup->InsertEntry( aStrNone, 0 );
 
         sal_uInt16 i=0;
         for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
@@ -281,12 +276,12 @@ void ScTpSubTotalGroup::FillListBoxes()
                 aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
             }
             nFieldArr[i] = col;
-            aLbGroup.InsertEntry( aFieldName, i+1 );
-            aLbColumns.InsertEntry( aFieldName, i );
-            aLbColumns.SetEntryData( i, new sal_uInt16(0) );
+            mpLbGroup->InsertEntry( aFieldName, i+1 );
+            mpLbColumns->InsertEntry( aFieldName, i );
+            mpLbColumns->SetEntryData( i, new sal_uInt16(0) );
             i++;
         }
-        // Nachtraegliche "Konstanteninitialisierung":
+        // subsequent initialization of the constant:
         (sal_uInt16&)nFieldCount = i;
     }
 }
@@ -364,25 +359,25 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 
 IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
 {
-    if (   (aLbColumns.GetEntryCount() > 0)
-        && (aLbColumns.GetSelectionCount() > 0) )
+    if (   (mpLbColumns->GetEntryCount() > 0)
+        && (mpLbColumns->GetSelectionCount() > 0) )
     {
-        sal_uInt16      nFunction   = aLbFunctions.GetSelectEntryPos();
-        sal_uInt16      nColumn     = aLbColumns.GetSelectEntryPos();
-        sal_uInt16*     pFunction   = (sal_uInt16*)aLbColumns.GetEntryData( nColumn );
+        sal_uInt16      nFunction   = mpLbFunctions->GetSelectEntryPos();
+        sal_uInt16      nColumn     = mpLbColumns->GetSelectEntryPos();
+        sal_uInt16*     pFunction   = (sal_uInt16*)mpLbColumns->GetEntryData( nColumn );
 
-        OSL_ENSURE( pFunction, "EntryData nicht gefunden!" );
+        OSL_ENSURE( pFunction, "EntryData not found!" );
         if ( !pFunction )
             return 0;
 
-        if ( ((SvxCheckListBox*)pLb) == &aLbColumns )
+        if ( ((SvxCheckListBox*)pLb) == mpLbColumns )
         {
-            aLbFunctions.SelectEntryPos( *pFunction );
+            mpLbFunctions->SelectEntryPos( *pFunction );
         }
-        else if ( pLb == &aLbFunctions )
+        else if ( pLb == mpLbFunctions )
         {
             *pFunction = nFunction;
-            aLbColumns.CheckEntryPos( nColumn, true );
+            mpLbColumns->CheckEntryPos( nColumn, true );
         }
     }
     return 0;
@@ -392,13 +387,13 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
 
 IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 {
-    if ( ((SvxCheckListBox*)pLb) == &aLbColumns )
+    if ( ((SvxCheckListBox*)pLb) == mpLbColumns )
     {
-        SvTreeListEntry* pEntry = aLbColumns.GetHdlEntry();
+        SvTreeListEntry* pEntry = mpLbColumns->GetHdlEntry();
 
         if ( pEntry )
         {
-            aLbColumns.SelectEntryPos( (sal_uInt16)aLbColumns.GetModel()->GetAbsPos( pEntry ) );
+            mpLbColumns->SelectEntryPos( (sal_uInt16)mpLbColumns->GetModel()->GetAbsPos( pEntry ) );
             SelectHdl( pLb );
         }
     }
@@ -406,7 +401,7 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 }
 
 //========================================================================
-// Abgeleitete Gruppen-TabPages:
+// Derived Group TabPages:
 
 SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
                                                  const SfxItemSet&  rArgSet )
@@ -427,15 +422,15 @@ SfxTabPage* ScTpSubTotalGroup3::Create( Window*          pParent,
 // -----------------------------------------------------------------------
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( Window* pParent, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pParent, RID_SCPAGE_SUBT_GROUP1, rArgSet )
+    ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
 ScTpSubTotalGroup2::ScTpSubTotalGroup2( Window* pParent, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pParent, RID_SCPAGE_SUBT_GROUP2, rArgSet )
+    ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
 ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pParent, RID_SCPAGE_SUBT_GROUP3, rArgSet )
+    ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
 // -----------------------------------------------------------------------
@@ -500,7 +495,7 @@ void ScTpSubTotalOptions::Init()
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
 
-    OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
+    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
 
     pBtnSort->SetClickHdl    ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
     pBtnUserDef->SetClickHdl ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
