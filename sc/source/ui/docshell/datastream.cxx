@@ -392,6 +392,7 @@ void DataStream::Refresh()
 {
     // Hard recalc will repaint the grid area.
     mpDocShell->DoHardRecalc(true);
+    mpDocShell->SetDocumentModified(true);
 
     mfLastRefreshTime = getNow();
     mnLinesSinceRefresh = 0;
