@@ -254,7 +254,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mnBitmapDepth( 0 )
     , mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
-    , mfFakeDPIScale( 1.0 )
     , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
@@ -274,7 +273,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mnWidth( 0 )
     , mnHeight( 0 )
     , mnBitmapDepth( 0 )
-    , mfFakeDPIScale( 1.0 )
     , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
@@ -325,7 +323,7 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 
 void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int /*nFallbackLevel*/ )
 {
-    mpTextStyle->GetFontMetric( mfFakeDPIScale, *pMetric );
+    mpTextStyle->GetFontMetric( *pMetric );
 }
 
 // -----------------------------------------------------------------------

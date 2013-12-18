@@ -519,7 +519,6 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
     }
     mnRealDPIX = rGraphics.mnRealDPIX;
     mnRealDPIY = rGraphics.mnRealDPIY;
-    mfFakeDPIScale = rGraphics.mfFakeDPIScale;
 }
 
 #endif
@@ -1241,8 +1240,8 @@ void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
         initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
     }
 
-    rDPIX = lrint( mfFakeDPIScale * mnRealDPIX);
-    rDPIY = lrint( mfFakeDPIScale * mnRealDPIY);
+    rDPIX = mnRealDPIX;
+    rDPIY = mnRealDPIY;
 }
 
 #endif
@@ -1353,8 +1352,6 @@ void AquaSalGraphics::initResolution( NSWindow* )
         mnRealDPIX = pSalData->mnDPIX;
         mnRealDPIY = pSalData->mnDPIY;
     }
-
-    mfFakeDPIScale = 1.0;
 }
 
 #endif

@@ -44,14 +44,13 @@ void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
     mbVirDev    = false;
 }
 
-void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY, double fScale )
+void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY )
 {
     mbWindow    = false;
     mbPrinter   = true;
     mbVirDev    = false;
 
     mrContext   = xContext;
-    mfFakeDPIScale = fScale;
     mnRealDPIX  = nDPIX;
     mnRealDPIY  = nDPIY;
 

@@ -139,7 +139,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
                 // scale to be top/down and reflect our "virtual" DPI
                 CGContextScaleCTM( i_rContext, -(72.0/double(nDPIY)), (72.0/double(nDPIX)) );
             }
-            mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
+            mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY );
         }
         else
             OSL_FAIL( "no print info in SetupPrinterGraphics" );

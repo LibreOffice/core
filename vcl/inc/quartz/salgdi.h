@@ -92,7 +92,7 @@ public:
 
     SalLayout* GetTextLayout( void ) const;
 
-    void       GetFontMetric( float fPDIY, ImplFontMetricData& ) const;
+    void       GetFontMetric( ImplFontMetricData& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
 
@@ -156,10 +156,6 @@ protected:
     /// device resolution of this graphics
     long                                    mnRealDPIX;
     long                                    mnRealDPIY;
-    /// some graphics implementations (e.g. AquaSalInfoPrinter) scale
-    /// everything down by a factor (see SetupPrinterGraphics for details)
-    /// so we have to compensate for it with the inverse factor
-    double                                  mfFakeDPIScale;
 
     /// path representing current clip region
     CGMutablePathRef                        mxClipPath;
@@ -194,7 +190,7 @@ public:
     bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
 
     void                SetWindowGraphics( AquaSalFrame* pFrame );
-    void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
+    void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
     void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
     void                initResolution( NSWindow* );

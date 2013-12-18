@@ -112,20 +112,20 @@ CoreTextStyle::~CoreTextStyle( void )
 
 // -----------------------------------------------------------------------
 
-void CoreTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric ) const
+void CoreTextStyle::GetFontMetric( ImplFontMetricData& rMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
-    rMetric.mnAscent       = lrint( CTFontGetAscent( aCTFontRef ) * fPixelSize);
-    rMetric.mnDescent      = lrint( CTFontGetDescent( aCTFontRef ) * fPixelSize);
-    rMetric.mnExtLeading   = lrint( CTFontGetLeading( aCTFontRef ) * fPixelSize);
+    rMetric.mnAscent       = CTFontGetAscent( aCTFontRef );
+    rMetric.mnDescent      = CTFontGetDescent( aCTFontRef );
+    rMetric.mnExtLeading   = CTFontGetLeading( aCTFontRef );
     rMetric.mnIntLeading   = 0;
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
-    rMetric.mnWidth        = lrint( CTFontGetSize( aCTFontRef ) * fPixelSize * mfFontStretch);
+    rMetric.mnWidth        = lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch);
 
     // all CoreText fonts are scalable
     rMetric.mbScalableFont = true;

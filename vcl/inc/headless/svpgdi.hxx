@@ -74,10 +74,6 @@ class SvpSalGraphics : public SalGraphics
     int                                     mnWidth;
     int                                     mnHeight;
     int                                  mnBitmapDepth;  // zero unless bitmap
-    /// some graphics implementations (e.g. AquaSalInfoPrinter) scale
-    /// everything down by a factor (see SetupPrinterGraphics for details)
-    /// so we have to compensate for it with the inverse factor
-    double                               mfFakeDPIScale;
 
     /// path representing current clip region
     CGMutablePathRef                        mxClipPath;
