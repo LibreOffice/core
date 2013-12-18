@@ -1905,6 +1905,157 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return varc;\n";
     ss << "}";
 }
+void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    int flag = 0;
+    (3 == vSubArguments.size()) && (flag = 2);
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss << "{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double vara, varb, varc, sum = 0.0f;\n";
+    FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
+    assert(tmpCur);
+    if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
+    {
+        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken* tmpCurDVR=
+                dynamic_cast<
+                const formula::SingleVectorRefToken *>(tmpCur);
+            ss << "    varb = ";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(isNan(varb)||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        varb = 0;\n";
+#endif
+        }
+        else if(tmpCur->GetType() == formula::svDouble)
+        {
+            ss << "    varb = ";
+            ss << tmpCur->GetDouble() << ";\n";
+        }
+    }
+    else
+    {
+        ss << "    varb = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+    tmpCur = vSubArguments[0]->GetFormulaToken();
+    assert(tmpCur);
+    if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
+    {
+        //TODO       DoubleVector
+        if (tmpCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(tmpCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+            {
+#ifdef  ISNAN
+                ss << "gid0; i < " << pDVR->GetArrayLength();
+                ss << " && i < " << nCurWindowSize  << "; ++i)\n";
+                ss << "    {\n";
+#else
+                ss << "gid0; i < "<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#endif
+            }
+            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
+#ifdef  ISNAN
+                ss << "0; i < " << pDVR->GetArrayLength();
+                ss << " && i < gid0+"<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#else
+                ss << "0; i < gid0+"<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#endif
+            }
+            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
+#ifdef  ISNAN
+                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                ss << " &&  i < "<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#endif
+            }
+            else
+            {
+#ifdef  ISNAN
+                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#else
+                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
+                ss << "    {\n";
+#endif
+            }
+            ss << "        vara = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef  ISNAN
+            ss << "        if (isNan(vara))\n";
+            ss << "            continue;\n";
+#endif
+            ss << "        varc = ";
+            ss << vSubArguments[flag]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef  ISNAN
+            ss << "        if (isNan(varc))\n";
+            ss << "            varc = 0.0f;\n";
+#endif
+            ss << "        (vara == varb)&&(sum = sum + varc);\n";
+            ss << "    }\n";
+        }
+        else if(tmpCur->GetType() == formula::svSingleVectorRef)
+        {
+            const formula::SingleVectorRefToken* tmpCurDVR=
+                dynamic_cast<
+                const formula::SingleVectorRefToken *>(tmpCur);
+            ss << "    vara = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(isNan(vara)||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        return 0;\n";
+#endif
+            ss << "    int i = 0;\n";
+            ss << "    varc = ";
+            ss << vSubArguments[flag]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(isNan(varc)||(gid0>=";
+            ss << tmpCurDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        varc = 0.0f;\n";
+#endif
+
+            ss << "        (vara == varb)&&(sum = sum + varc);\n";
+
+        }
+    }
+    ss << "    return sum;\n";
+    ss << "}";
+}
 void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {

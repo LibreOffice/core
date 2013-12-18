@@ -468,6 +468,13 @@ public:
             const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "SeriesSum"; }
 };
+class OpSumIf: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments);
+    virtual std::string BinFuncName(void) const { return "SumIf"; }
+};
 class OpQuotient: public Normal
 {
 public:
