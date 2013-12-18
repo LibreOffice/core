@@ -27,6 +27,7 @@
 #include "op_statistical.hxx"
 #include "op_array.hxx"
 #include "op_spreadsheet.hxx"
+#include "op_addin.hxx"
 /// CONFIGURATIONS
 // Comment out this to turn off FMIN and FMAX intrinsics
 #define USE_FMIN_FMAX 1
@@ -2818,6 +2819,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
                         new OpSeriesSum));
+                }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getBesselj"))))
+                {
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                        new OpBesselj));
                 }
                 break;
 
