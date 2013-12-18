@@ -1296,14 +1296,7 @@ diff -uprN misc/vigra1.6.0/include/vigra/separableconvolution.hxx misc/build/vig
 diff -uprN misc/vigra1.6.0/include/vigra/sized_int.hxx misc/build/vigra1.6.0/include/vigra/sized_int.hxx
 --- misc/vigra1.6.0/include/vigra/sized_int.hxx	2008-08-13 08:15:41.000000000 -0500
 +++ misc/build/vigra1.6.0/include/vigra/sized_int.hxx	2012-09-19 17:30:24.000000000 -0500
-@@ -73,11 +73,15 @@ struct SelectIntegerType<SIZE, Int_type_
-     typedef Int_type_not_supported_on_this_platform type;
- };
- 
-+#if defined __SUNPRO_CC
-+#pragma disable_warn
-+#endif
-+
+@@ -73,8 +73,8 @@ struct SelectIntegerType<SIZE, Int_type_
  template<class LIST>
  struct SelectBiggestIntegerType
  {
@@ -1314,17 +1307,6 @@ diff -uprN misc/vigra1.6.0/include/vigra/sized_int.hxx misc/build/vigra1.6.0/inc
             size = (cursize < nextsize) ? nextsize : cursize };
      typedef typename 
         IfBool<(cursize < nextsize), 
-@@ -86,6 +90,10 @@ struct SelectBiggestIntegerType
-        type;
- };
- 
-+#if defined __SUNPRO_CC
-+#pragma enable_warn
-+#endif
-+
- template<>
- struct SelectBiggestIntegerType<Int_type_not_supported_on_this_platform>
- {
 diff -uprN misc/vigra1.6.0/include/vigra/splines.hxx misc/build/vigra1.6.0/include/vigra/splines.hxx
 --- misc/vigra1.6.0/include/vigra/splines.hxx	2008-08-13 08:15:41.000000000 -0500
 +++ misc/build/vigra1.6.0/include/vigra/splines.hxx	2012-09-19 17:30:24.000000000 -0500
@@ -1394,18 +1376,6 @@ diff -uprN misc/vigra1.6.0/include/vigra/splines.hxx misc/build/vigra1.6.0/inclu
      {}
  
      result_type operator()(argument_type x) const
-diff -uprN misc/vigra1.6.0/include/vigra/static_assert.hxx misc/build/vigra1.6.0/include/vigra/static_assert.hxx
---- misc/vigra1.6.0/include/vigra/static_assert.hxx	2008-08-13 08:15:41.000000000 -0500
-+++ misc/build/vigra1.6.0/include/vigra/static_assert.hxx	2012-09-19 17:30:24.000000000 -0500
-@@ -115,7 +115,7 @@ assertImpl( void (*)(Predicate), typenam
-     
- TODO: provide more assertion base classes for other (non boolean) types of tests
- */
--#if !defined(__GNUC__) || __GNUC__ > 2
-+#if (!defined(__GNUC__) || __GNUC__ > 2) && (!defined(__SUNPRO_CC) || __SUNPRO_CC > 0x550)
- #define VIGRA_STATIC_ASSERT(Predicate) \
- enum { \
-     VIGRA_PREPROCESSOR_CONCATENATE(vigra_assertion_in_line_, __LINE__) = sizeof( \
 diff -uprN misc/vigra1.6.0/include/vigra/tinyvector.hxx misc/build/vigra1.6.0/include/vigra/tinyvector.hxx
 --- misc/vigra1.6.0/include/vigra/tinyvector.hxx	2008-08-13 08:15:42.000000000 -0500
 +++ misc/build/vigra1.6.0/include/vigra/tinyvector.hxx	2012-09-19 17:30:24.000000000 -0500
