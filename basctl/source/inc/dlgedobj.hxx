@@ -103,7 +103,7 @@ public:
     // FullDrag support
     virtual SdrObject* getFullDragClone() const;
 
-    virtual sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
+    bool supportsService( OUString const & serviceName ) const;
     virtual OUString GetDefaultName() const;
     virtual OUString GetUniqueName() const;
 

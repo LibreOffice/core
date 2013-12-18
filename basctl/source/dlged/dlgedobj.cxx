@@ -671,14 +671,14 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
+bool DlgEdObj::supportsService( OUString const & serviceName ) const
 {
     bool bSupports = false;
 
     Reference< lang::XServiceInfo > xServiceInfo( GetUnoControlModel() , UNO_QUERY );
         // TODO: cache xServiceInfo as member?
     if ( xServiceInfo.is() )
-        bSupports = xServiceInfo->supportsService( OUString::createFromAscii( _pServiceName ) );
+        bSupports = xServiceInfo->supportsService( serviceName );
 
     return bSupports;
 }
