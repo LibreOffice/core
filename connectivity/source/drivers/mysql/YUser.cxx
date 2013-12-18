@@ -139,7 +139,8 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
             OUString sPrivilege  = xCurrentRow->getString(6);
             OUString sGrantable  = xCurrentRow->getString(7);
 
-            if (!m_Name.equalsIgnoreAsciiCase(sGrantee))
+            // sGrantee = root@localhost whereas m_Name = 'root'@'localhost'
+            if (!m_Name.replaceAll("'", "").equalsIgnoreAsciiCase(sGrantee))
                 continue;
 
             if (sPrivilege.equalsIgnoreAsciiCase(sSELECT))
