@@ -45,6 +45,12 @@ $(eval $(call gb_Library_use_externals,sc,\
     mdds_headers \
 ))
 
+ifeq ($(SYSTEM_LIBORCUS),YES)
+$(eval $(call gb_Library_use_externals,sc,orcus))
+else
+$(eval $(call gb_Library_use_externals,sc,orcus-parser))
+endif
+
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sc,tubes))
 

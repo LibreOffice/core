@@ -28,6 +28,15 @@
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 
+#include <config_orcus.h>
+
+#if ENABLE_ORCUS
+#if defined WNT
+#define __ORCUS_STATIC_LIB
+#endif
+#include <orcus/csv_parser.hpp>
+#endif
+
 #include <queue>
 
 namespace sc {
@@ -316,6 +325,7 @@ void DataStream::StartImport()
 {
     if (mbRunning)
         return;
+
     if (!mxReaderThread.is())
     {
         SvStream *pStream = 0;
@@ -327,6 +337,7 @@ void DataStream::StartImport()
         mxReaderThread->launch();
     }
     mbRunning = true;
+    maDocAccess.reset();
     mxThread->maStart.set();
 }
 
@@ -334,6 +345,7 @@ void DataStream::StopImport()
 {
     if (!mbRunning)
         return;
+
     mbRunning = false;
     Repaint();
 }
@@ -362,23 +374,32 @@ void DataStream::MoveData()
     switch (meMove)
     {
         case RANGE_DOWN:
+        {
             if (mnCurRow == mpEndRange->aStart.Row())
                 meMove = MOVE_UP;
-            break;
+        }
+        break;
         case MOVE_UP:
+        {
             // Remove the top row and shift the remaining rows upward. Then
             // insert a new row at the end row position.
-            mpDoc->DeleteRow(maStartRange);
-            mpDoc->InsertRow(*mpEndRange);
-            break;
+            ScRange aRange = maStartRange;
+            aRange.aEnd = mpEndRange->aEnd;
+            maDocAccess.shiftRangeUp(aRange);
+        }
+        break;
         case MOVE_DOWN:
+        {
             // Remove the end row and shift the remaining rows downward by
             // inserting a new row at the top row.
-            mpDoc->DeleteRow(*mpEndRange);
-            mpDoc->InsertRow(maStartRange);
-            break;
+            ScRange aRange = maStartRange;
+            aRange.aEnd = mpEndRange->aEnd;
+            maDocAccess.shiftRangeDown(aRange);
+        }
+        break;
         case NO_MOVE:
-            break;
+        default:
+            ;
     }
 }
 
@@ -388,77 +409,61 @@ IMPL_LINK_NOARG(DataStream, RefreshHdl)
     return 0;
 }
 
-//  lcl_ScanString and Text2Doc is simplified version
-//  of code from sc/source/ui/docshell/impex.cxx
-const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString, sal_Unicode cStr)
+#if ENABLE_ORCUS
+
+namespace {
+
+/**
+ * This handler handles a single line CSV input.
+ */
+class CSVHandler
 {
-    const sal_Unicode* p0 = p;
-    for( ;; )
+    DocumentStreamAccess& mrDoc;
+    ScAddress maPos;
+    SCROW mnRow;
+    SCCOL mnCol;
+    SCCOL mnEndCol;
+    SCTAB mnTab;
+
+public:
+    CSVHandler( DocumentStreamAccess& rDoc, const ScAddress& rPos, SCCOL nEndCol ) :
+        mrDoc(rDoc), maPos(rPos), mnEndCol(nEndCol) {}
+
+    void begin_parse() {}
+    void end_parse() {}
+    void begin_row() {}
+    void end_row() {}
+
+    void cell(const char* p, size_t n)
     {
-        if (!*p)
-            break;
-        if (*p == cStr)
+        if (maPos.Col() <= mnEndCol)
         {
-            if (*++p != cStr)
-                break;
-            p++;
+            mrDoc.setStringCell(maPos, OUString(p, n, RTL_TEXTENCODING_UTF8));
         }
-        else
-            p++;
+        maPos.IncCol();
     }
-    if (p0 < p)
-        if (rString.getLength() + (p - p0) <= STRING_MAXLEN)
-            rString += OUString( p0, sal::static_int_cast<sal_Int32>( p - p0 ) );
-    return p;
+};
+
 }
 
 void DataStream::Text2Doc()
 {
-    sal_Unicode cSep(',');
-    sal_Unicode cStr('"');
-    SCCOL nStartCol = maStartRange.aStart.Col();
-    SCCOL nEndCol = maStartRange.aEnd.Col();
-    OUString aCell;
-    ScDocumentImport aDocImport(*mpDoc);
+    OString aLine = ConsumeLine();
+    orcus::csv_parser_config aConfig;
+    aConfig.delimiters.push_back(',');
+    aConfig.text_qualifier = '"';
+    CSVHandler aHdl(maDocAccess, ScAddress(maStartRange.aStart.Col(), mnCurRow, maStartRange.aStart.Tab()), maStartRange.aEnd.Col());
+    orcus::csv_parser<CSVHandler> parser(aLine.getStr(), aLine.getLength(), aHdl, aConfig);
+    parser.parse();
 
-    SCCOL nCol = nStartCol;
-    OUString sLine( OStringToOUString(ConsumeLine(), RTL_TEXTENCODING_UTF8) );
-    const sal_Unicode* p = sLine.getStr();
-    while (*p)
-    {
-        aCell = "";
-        const sal_Unicode* q = p;
-        while (*p && *p != cSep)
-        {
-            // Always look for a pairing quote and ignore separator in between.
-            while (*p && *p == cStr)
-                q = p = lcl_ScanString(p, aCell, cStr);
-            // All until next separator or quote.
-            while (*p && *p != cSep && *p != cStr)
-                ++p;
-            if (aCell.getLength() + (p - q) <= STRING_MAXLEN)
-                aCell += OUString( q, sal::static_int_cast<sal_Int32>( p - q ) );
-            q = p;
-        }
-        if (*p)
-            ++p;
-        if (nCol <= nEndCol)
-        {
-            ScAddress aAddress(nCol, mnCurRow, maStartRange.aStart.Tab());
-            if (aCell == "0" || ( aCell.indexOf(':') == -1 && aCell.toDouble() ))
-                aDocImport.setNumericCell(aAddress, aCell.toDouble());
-            else
-                aDocImport.setStringCell(aAddress, aCell);
-        }
-        ++nCol;
-    }
     ++mnRepaintCounter;
-
-    aDocImport.finalize();
-
-    ScRange aBCRange(nStartCol, mnCurRow, maStartRange.aStart.Tab(), nEndCol, mnCurRow, maStartRange.aStart.Tab());
-    maBroadcastRanges.Join(aBCRange);
 }
+
+#else
+
+void DataStream::Text2Doc() {}
+
+#endif
 
 bool DataStream::ImportData()
 {
@@ -474,6 +479,7 @@ bool DataStream::ImportData()
     }
     else
     {
+#if 0 // TODO : temporarily disable this code.
         ScDocumentImport aDocImport(*mpDoc);
         // read more lines at once but not too much
         for (int i = 0; i < 10; ++i)
@@ -496,8 +502,9 @@ bool DataStream::ImportData()
             maBroadcastRanges.Join(aAddress);
         }
         aDocImport.finalize();
+#endif
     }
-    mpDocShell->SetDocumentModified();
+
     if (meMove == NO_MOVE)
         return mbRunning;
 

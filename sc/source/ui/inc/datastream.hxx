@@ -78,8 +78,8 @@ private:
     void Broadcast();
 
 private:
-    ScDocShell *mpDocShell;
-    ScDocument *mpDoc;
+    ScDocShell* mpDocShell;
+    ScDocument* mpDoc;
     DocumentStreamAccess maDocAccess;
     OUString msURL;
     OUString msMove;
@@ -88,7 +88,7 @@ private:
     MoveEnum meMove;
     bool mbRunning;
     bool mbValuesInLine;
-    LinesList *mpLines;
+    LinesList* mpLines;
     size_t mnLinesCount;
     size_t mnRepaintCounter;
     SCROW mnCurRow;

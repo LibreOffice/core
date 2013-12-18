@@ -10,7 +10,11 @@
 #ifndef SC_DOCUMENTSTREAMACCESS_HXX
 #define SC_DOCUMENTSTREAMACCESS_HXX
 
+#include <rtl/ustring.hxx>
+
 class ScDocument;
+class ScAddress;
+class ScRange;
 
 namespace sc {
 
@@ -28,6 +32,26 @@ class DocumentStreamAccess
 
 public:
     DocumentStreamAccess( ScDocument& rDoc );
+
+    void setStringCell( const ScAddress& rPos, const OUString& rStr );
+
+    /**
+     * Clear its internal state, and more importantly all the block position
+     * hints currently held.
+     */
+    void reset();
+
+    /**
+     * Pop the top row inside specified range, shift all the other rows up by
+     * one, then set the bottom row empty.
+     */
+    void shiftRangeUp( const ScRange& rRange );
+
+    /**
+     * Top the bottom row inside specified range, shift all the other rows
+     * above downward by one by inserting an empty row at the top.
+     */
+    void shiftRangeDown( const ScRange& rRange );
 };
 
 }
