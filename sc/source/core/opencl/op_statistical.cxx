@@ -3798,7 +3798,7 @@ void OpPearson::GenSlidingWindowFunction(
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
         if (pCur->GetType() == formula::svDoubleVectorRef)
         {
@@ -4066,7 +4066,7 @@ vSubArguments)
     ss << "    double tmp = 0;\n";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
         if (pCur->GetType() == formula::svDoubleVectorRef)
         {
@@ -4334,13 +4334,13 @@ void OpRsq::GenSlidingWindowFunction(
     ss <<"\n";
     for (i = 0; i < vSubArguments.size(); i++)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
         if (pCur->GetType() == formula::svDoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            nCurWindowSize = pDVR->GetRefRowSize();
             ss << "for (int i = ";
             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
 #ifdef  ISNAN
@@ -5354,13 +5354,13 @@ void OpKurt:: GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    double tmp = 0;\n";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
-            FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+            pCur = vSubArguments[i]->GetFormulaToken();
             assert(pCur);
             if (pCur->GetType() == formula::svDoubleVectorRef)
             {
                 const formula::DoubleVectorRefToken* pDVR =
                 dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-                size_t nCurWindowSize = pDVR->GetRefRowSize();
+                nCurWindowSize = pDVR->GetRefRowSize();
                 ss << "    for (int i = 0; i <" << nCurWindowSize;
                 ss << "; i++)\n";
                 ss << "    {\n";
