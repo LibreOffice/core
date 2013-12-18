@@ -153,7 +153,6 @@ case ${sdk_platform} in
 	platform='Solaris x86'
     fi
     comid=gcc3
-    pltfrm=gcc
     soext=so
     exampleout=SOLARISexample.out
     LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
@@ -163,7 +162,6 @@ case ${sdk_platform} in
   darwin*)
     directoryname=macosx
     comid=gcc3
-    pltfrm=gcc
     soext=dylib
     exampleout=MACOSXexample.out
     platform=MacOSX
@@ -174,7 +172,6 @@ case ${sdk_platform} in
   linux-gnu)
     directoryname=linux
     comid=gcc3
-    pltfrm=gcc
     soext=so
     exampleout=LINUXexample.out
     platform=Linux
@@ -185,7 +182,6 @@ case ${sdk_platform} in
   freebsd*)
     directoryname=freebsd
     comid=gcc3
-    pltfrm=gcc
     soext=so
     exampleout=FREEBSDexample.out
     platform=FreeBSD
