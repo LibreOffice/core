@@ -40,7 +40,7 @@ const sal_Unicode Locale::SEPERATOR_CV       = (sal_Unicode)'_';
 const sal_Unicode Locale::SEPERATOR_CV_LINUX = (sal_Unicode)'.';
 
 //-----------------------------------------------
-const Locale Locale::X_DEFAULT()
+const Locale& Locale::X_DEFAULT()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("x"),
@@ -49,7 +49,7 @@ const Locale Locale::X_DEFAULT()
 }
 
 //-----------------------------------------------
-const Locale Locale::EN()
+const Locale& Locale::EN()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("en"),
@@ -58,7 +58,7 @@ const Locale Locale::EN()
 }
 
 //-----------------------------------------------
-const Locale Locale::EN_US()
+const Locale& Locale::EN_US()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("en"),
@@ -67,7 +67,7 @@ const Locale Locale::EN_US()
 }
 
 //-----------------------------------------------
-const Locale Locale::DE_DE()
+const Locale& Locale::DE_DE()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("de"),
@@ -76,7 +76,7 @@ const Locale Locale::DE_DE()
 }
 
 //-----------------------------------------------
-const Locale Locale::DE_CH()
+const Locale& Locale::DE_CH()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("de"),
@@ -85,7 +85,7 @@ const Locale Locale::DE_CH()
 }
 
 //-----------------------------------------------
-const Locale Locale::DE_AT()
+const Locale& Locale::DE_AT()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("de"),
@@ -94,7 +94,7 @@ const Locale Locale::DE_AT()
 }
 
 //-----------------------------------------------
-const Locale Locale::AR()
+const Locale& Locale::AR()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("ar"),
@@ -103,7 +103,7 @@ const Locale Locale::AR()
 }
 
 //-----------------------------------------------
-const Locale Locale::CA()
+const Locale& Locale::CA()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("ca"),
@@ -112,7 +112,7 @@ const Locale Locale::CA()
 }
 
 //-----------------------------------------------
-const Locale Locale::CS()
+const Locale& Locale::CS()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("cs"),
@@ -121,7 +121,7 @@ const Locale Locale::CS()
 }
 
 //-----------------------------------------------
-const Locale Locale::DA()
+const Locale& Locale::DA()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("da"),
@@ -130,7 +130,7 @@ const Locale Locale::DA()
 }
 
 //-----------------------------------------------
-const Locale Locale::EL()
+const Locale& Locale::EL()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("el"),
@@ -139,7 +139,7 @@ const Locale Locale::EL()
 }
 
 //-----------------------------------------------
-const Locale Locale::ES()
+const Locale& Locale::ES()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("es"),
@@ -148,7 +148,7 @@ const Locale Locale::ES()
 }
 
 //-----------------------------------------------
-const Locale Locale::FI()
+const Locale& Locale::FI()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("fi"),
@@ -157,7 +157,7 @@ const Locale Locale::FI()
 }
 
 //-----------------------------------------------
-const Locale Locale::FR()
+const Locale& Locale::FR()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("fr"),
@@ -166,7 +166,7 @@ const Locale Locale::FR()
 }
 
 //-----------------------------------------------
-const Locale Locale::HE()
+const Locale& Locale::HE()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("he"),
@@ -175,7 +175,7 @@ const Locale Locale::HE()
 }
 
 //-----------------------------------------------
-const Locale Locale::HI_IN()
+const Locale& Locale::HI_IN()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("hi"),
@@ -184,7 +184,7 @@ const Locale Locale::HI_IN()
 }
 
 //-----------------------------------------------
-const Locale Locale::HU()
+const Locale& Locale::HU()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("hu"),
@@ -193,7 +193,7 @@ const Locale Locale::HU()
 }
 
 //-----------------------------------------------
-const Locale Locale::IT()
+const Locale& Locale::IT()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("it"),
@@ -202,7 +202,7 @@ const Locale Locale::IT()
 }
 
 //-----------------------------------------------
-const Locale Locale::JA()
+const Locale& Locale::JA()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("ja"),
@@ -211,7 +211,7 @@ const Locale Locale::JA()
 }
 
 //-----------------------------------------------
-const Locale Locale::KO()
+const Locale& Locale::KO()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("ko"),
@@ -220,7 +220,7 @@ const Locale Locale::KO()
 }
 
 //-----------------------------------------------
-const Locale Locale::NL()
+const Locale& Locale::NL()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("nl"),
@@ -229,7 +229,7 @@ const Locale Locale::NL()
 }
 
 //-----------------------------------------------
-const Locale Locale::PL()
+const Locale& Locale::PL()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("pl"),
@@ -238,7 +238,7 @@ const Locale Locale::PL()
 }
 
 //-----------------------------------------------
-const Locale Locale::PT()
+const Locale& Locale::PT()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("pt"),
@@ -247,7 +247,7 @@ const Locale Locale::PT()
 }
 
 //-----------------------------------------------
-const Locale Locale::PT_BR()
+const Locale& Locale::PT_BR()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("pt"),
@@ -256,7 +256,7 @@ const Locale Locale::PT_BR()
 }
 
 //-----------------------------------------------
-const Locale Locale::RU()
+const Locale& Locale::RU()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("ru"),
@@ -265,7 +265,7 @@ const Locale Locale::RU()
 }
 
 //-----------------------------------------------
-const Locale Locale::SK()
+const Locale& Locale::SK()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("sk"),
@@ -274,7 +274,7 @@ const Locale Locale::SK()
 }
 
 //-----------------------------------------------
-const Locale Locale::SL()
+const Locale& Locale::SL()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("sl"),
@@ -283,7 +283,7 @@ const Locale Locale::SL()
 }
 
 //-----------------------------------------------
-const Locale Locale::SV()
+const Locale& Locale::SV()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("sv"),
@@ -292,7 +292,7 @@ const Locale Locale::SV()
 }
 
 //-----------------------------------------------
-const Locale Locale::TH()
+const Locale& Locale::TH()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("th"),
@@ -301,7 +301,7 @@ const Locale Locale::TH()
 }
 
 //-----------------------------------------------
-const Locale Locale::TR()
+const Locale& Locale::TR()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("tr"),
@@ -310,7 +310,7 @@ const Locale Locale::TR()
 }
 
 //-----------------------------------------------
-const Locale Locale::X_COMMENT()
+const Locale& Locale::X_COMMENT()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("x"),
@@ -319,7 +319,7 @@ const Locale Locale::X_COMMENT()
 }
 
 //-----------------------------------------------
-const Locale Locale::X_TRANSLATE()
+const Locale& Locale::X_TRANSLATE()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("x"),
@@ -328,7 +328,7 @@ const Locale Locale::X_TRANSLATE()
 }
 
 //-----------------------------------------------
-const Locale Locale::X_NOTRANSLATE()
+const Locale& Locale::X_NOTRANSLATE()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("x"),
@@ -337,7 +337,7 @@ const Locale Locale::X_NOTRANSLATE()
 }
 
 //-----------------------------------------------
-const Locale Locale::ZH_CN()
+const Locale& Locale::ZH_CN()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("zh"),
@@ -346,7 +346,7 @@ const Locale Locale::ZH_CN()
 }
 
 //-----------------------------------------------
-const Locale Locale::ZH_TW()
+const Locale& Locale::ZH_TW()
 {
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("zh"),
