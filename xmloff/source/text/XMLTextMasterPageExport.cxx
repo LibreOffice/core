@@ -128,18 +128,18 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         sal_Bool bHeader = sal_False;
         aAny >>= bHeader;
 
-        sal_Bool bHeaderFirst = sal_False;
+        sal_Bool bHeaderFirstShared = sal_False;
         if( bHeader )
         {
             aAny = rPropSet->getPropertyValue( sFirstShareContent );
-            aAny >>= bHeaderFirst;
+            aAny >>= bHeaderFirstShared;
         }
 
-        sal_Bool bHeaderLeft = sal_False;
+        sal_Bool bHeaderLeftShared = sal_False;
         if( bHeader )
         {
             aAny = rPropSet->getPropertyValue( sHeaderShareContent );
-            aAny >>= bHeaderLeft;
+            aAny >>= bHeaderLeftShared;
         }
 
         if( xHeaderText.is() )
@@ -154,7 +154,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
 
         if( xHeaderTextFirst.is() && xHeaderTextFirst != xHeaderText )
         {
-            if( !bHeaderFirst )
+            if (bHeaderFirstShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
@@ -164,7 +164,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
 
         if( xHeaderTextLeft.is() && xHeaderTextLeft != xHeaderText )
         {
-            if( !bHeaderLeft )
+            if (bHeaderLeftShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
@@ -176,18 +176,18 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         sal_Bool bFooter = sal_False;
         aAny >>= bFooter;
 
-        sal_Bool bFooterFirst = sal_False;
+        sal_Bool bFooterFirstShared = sal_False;
         if( bFooter )
         {
             aAny = rPropSet->getPropertyValue( sFirstShareContent );
-            aAny >>= bFooterFirst;
+            aAny >>= bFooterFirstShared;
         }
 
-        sal_Bool bFooterLeft = sal_False;
+        sal_Bool bFooterLeftShared = sal_False;
         if( bFooter )
         {
             aAny = rPropSet->getPropertyValue( sFooterShareContent );
-            aAny >>= bFooterLeft;
+            aAny >>= bFooterLeftShared;
         }
 
         if( xFooterText.is() )
@@ -202,7 +202,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
 
         if( xFooterTextFirst.is() && xFooterTextFirst != xFooterText )
         {
-            if( !bFooterFirst )
+            if (bFooterFirstShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
@@ -212,7 +212,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
 
         if( xFooterTextLeft.is() && xFooterTextLeft != xFooterText )
         {
-            if( !bFooterLeft )
+            if (bFooterLeftShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
