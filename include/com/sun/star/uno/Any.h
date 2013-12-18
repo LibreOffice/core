@@ -232,18 +232,17 @@ public:
     inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW(());
 
 private:
-    // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
-    explicit Any( sal_uInt16 );
-#if defined(_MSC_VER)
-    // Omitting the following private declarations leads to an internal compiler
-    // error on MSVC (version 1310).
-    // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
-    template <>
-    sal_uInt16 get<sal_uInt16>() const;
-    template <>
-    bool has<sal_uInt16>() const;
-#endif // defined(_MSC_VER)
+    /// @cond INTERNAL
+    // Forbid use with ambiguous type (sal_Unicode, sal_uInt16):
+    explicit Any(sal_uInt16) SAL_DELETED_FUNCTION;
+    /// @endcond
 };
+
+/// @cond INTERNAL
+// Forbid use with ambiguous type (sal_Unicode, sal_uInt16):
+template<> sal_uInt16 Any::get<sal_uInt16>() const SAL_DELETED_FUNCTION;
+template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
+/// @endcond
 
 /** Template function to generically construct an any from a C++ value.
 
