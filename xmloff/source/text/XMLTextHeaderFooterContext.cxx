@@ -54,6 +54,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     bLeft( bLft ),
     bFirst( bFrst )
 {
+    // NOTE: if this ever handles XML_DISPLAY attr then beware of fdo#72850 !
     if( bLeft || bFirst )
     {
         Any aAny;
