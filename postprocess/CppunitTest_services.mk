@@ -13,6 +13,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,services, \
     postprocess/qa/services \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,services, \
+	boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,services, \
 	cppu \
 	sal \
