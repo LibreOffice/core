@@ -2427,7 +2427,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
-    const SwRedlineData* pRedlineParagraphMarkerDeleted = AttrOutput().IsParagraphMarkerDeleted( rNode );
+    const SwRedlineData* pRedlineParagraphMarkerDeleted = AttrOutput().GetDeletedParagraphMarker( rNode );
     const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
     AttrOutput().EndParagraphProperties( pParagraphRedlineData, pRedlineParagraphMarkerDeleted );
 

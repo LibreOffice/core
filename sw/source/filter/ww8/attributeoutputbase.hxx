@@ -636,7 +636,7 @@ public:
     virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}
 
     // Returns whether or not the 'SwTxtNode' has a paragraph marker deleted (using 'track changes')
-    virtual const SwRedlineData* IsParagraphMarkerDeleted( const SwTxtNode& rNode );
+    virtual const SwRedlineData* GetDeletedParagraphMarker( const SwTxtNode& rNode );
 
 };
 

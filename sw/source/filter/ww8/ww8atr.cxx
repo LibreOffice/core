@@ -5389,7 +5389,7 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
  * - Start = the last character of the current paragraph
  * - End = the first character of the next paragraph
  */
-const SwRedlineData* AttributeOutputBase::IsParagraphMarkerDeleted( const SwTxtNode& rNode )
+const SwRedlineData* AttributeOutputBase::GetDeletedParagraphMarker( const SwTxtNode& rNode )
 {
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
     for( sal_uInt16 nRedlinePos = 0; nRedlinePos < GetExport().pDoc->GetRedlineTbl().size(); ++nRedlinePos )
