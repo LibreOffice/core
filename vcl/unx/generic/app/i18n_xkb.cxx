@@ -32,7 +32,7 @@
 #include "unx/i18n_xkb.hxx"
 
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay)
-:   mbUseExtension( true ),
+:   mbUseExtension( true )
 ,   mnDefaultGroup( 0 )
 {
     mpDisplay = pDisplay;
