@@ -19,7 +19,6 @@ $(call gb_ExternalProject_get_state_target,mythes,build):
 	$(call gb_ExternalProject_run,build,\
 		LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --with-pic \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
-		$(if $(filter C52-SPARC64,$(COM)-$(CPUNAME)),CFLAGS="-m64") \
 		&& $(MAKE) \
 	)
 
