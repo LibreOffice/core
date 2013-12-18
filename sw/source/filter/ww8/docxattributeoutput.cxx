@@ -503,6 +503,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                     FSEND);
             WriteDMLTextFrame(pParentFrame);
             m_pSerializer->endElementNS(XML_mc, XML_Choice);
+
+            // Reset table infos, otherwise the depth of the cells will be incorrect,
+            // in case the text frame had table(s) and we try to export the
+            // same table second time.
+            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+
             m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
             WriteVMLTextFrame(pParentFrame);
             m_pSerializer->endElementNS(XML_mc, XML_Fallback);
