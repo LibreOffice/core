@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -42,21 +43,22 @@
   <object class="GtkBox" id="SubTotalGrpPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="orientation">vertical</property>
     <property name="border_width">6</property>
+    <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Group by:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">group_by</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -89,13 +91,15 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Calculate subtotals for:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">columns:border</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -110,6 +114,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">Use function:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">functions:border</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -119,11 +125,14 @@
           </packing>
         </child>
         <child>
-          <object class="svxcorelo-SvxCheckListBox" id="columns">
+          <object class="svxcorelo-SvxCheckListBox" id="columns:border">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Check List Box-selection1"/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -133,26 +142,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTreeView" id="functions">
+          <object class="GtkTreeView" id="functions:border">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="model">liststore1</property>
             <property name="search_column">0</property>
-            <items>
-              <item translatable="yes">Sum</item>
-              <item translatable="yes">Count</item>
-              <item translatable="yes">Average</item>
-              <item translatable="yes">Max</item>
-              <item translatable="yes">Min</item>
-              <item translatable="yes">Product</item>
-              <item translatable="yes">Count (numbers only)</item>
-              <item translatable="yes">StDev (Sample)</item>
-              <item translatable="yes">StDevP (Population)</item>
-              <item translatable="yes">Var (Sample)</item>
-              <item translatable="yes">VarP (Population)</item>
-            </items>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection2"/>
             </child>

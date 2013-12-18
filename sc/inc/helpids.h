@@ -46,11 +46,7 @@
 #define HID_SC_NAVIPI_ROOT                                      "SC_HID_SC_NAVIPI_ROOT"
 #define HID_SC_NAVIPI_SCEN                                      "SC_HID_SC_NAVIPI_SCEN"
 #define HID_SC_NAVIPI_DROP                                      "SC_HID_SC_NAVIPI_DROP"
-//  Teilergebnisse
-#define HID_SC_SUBT_GROUP                                       "SC_HID_SC_SUBT_GROUP"
-#define HID_SC_SUBT_COLS                                        "SC_HID_SC_SUBT_COLS"
-#define HID_SC_SUBT_FUNC                                        "SC_HID_SC_SUBT_FUNC"
-//
+
 #define HID_SC_NAVIPI_TOOLBOX                                   "SC_HID_SC_NAVIPI_TOOLBOX"
 //  Bereich ist voll!
 
@@ -58,10 +54,6 @@
 #define HID_SC_PIVOTFILTER                                      "SC_HID_SC_PIVOTFILTER"
 #define HID_SC_INPORTOPT                                        "SC_HID_SC_INPORTOPT"
 #define HID_SC_PIVOTSUBT                                        "SC_HID_SC_PIVOTSUBT"
-#define HID_SCPAGE_SUBT_GROUP                                   "SC_HID_SCPAGE_SUBT_GROUP"
-#define HID_SCPAGE_SUBT_GROUP1                                  "SC_HID_SCPAGE_SUBT_GROUP1"
-#define HID_SCPAGE_SUBT_GROUP2                                  "SC_HID_SCPAGE_SUBT_GROUP2"
-#define HID_SCPAGE_SUBT_GROUP3                                  "SC_HID_SCPAGE_SUBT_GROUP3"
 
 #define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
 

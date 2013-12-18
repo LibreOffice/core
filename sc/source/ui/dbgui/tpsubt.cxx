@@ -50,9 +50,14 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
                                 GetSubTotalData() ),
             nFieldCount     ( 0 )
 {
-    get( mpLbGroup, "group_by");
-    get( mpLbColumns, "columns");
-    get( mpLbFunctions, "functions");
+    get(mpLbGroup, "group_by");
+    get(mpLbColumns, "columns");
+    get(mpLbFunctions, "functions");
+
+    long nHeight = mpLbColumns->GetTextHeight() * 14;
+    mpLbColumns->set_height_request(nHeight);
+    mpLbFunctions->set_height_request(nHeight);
+
     // Font is correctly initialized by SvTreeListBox ctor
     mpLbColumns->SetSelectionMode( SINGLE_SELECTION );
     mpLbColumns->SetDragDropMode( SV_DRAGDROP_NONE );
