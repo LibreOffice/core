@@ -462,6 +462,7 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
             XML_prst, "rect",
             FSEND);
     m_bDMLTextFrameSyntax = true;
+    m_pBodyPrAttrList = m_pSerializer->createAttrList();
     m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
     m_bDMLTextFrameSyntax = false;
     m_pSerializer->endElementNS(XML_wps, XML_spPr);
@@ -472,7 +473,9 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
     m_rExport.WriteText( );
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
     m_pSerializer->endElementNS( XML_wps, XML_txbx );
-    m_pSerializer->singleElementNS( XML_wps, XML_bodyPr, FSEND );
+    XFastAttributeListRef xBodyPrAttrList(m_pBodyPrAttrList);
+    m_pBodyPrAttrList = NULL;
+    m_pSerializer->singleElementNS( XML_wps, XML_bodyPr, xBodyPrAttrList );
 
     m_pSerializer->endElementNS(XML_wps, XML_wsp);
     m_pSerializer->endElementNS(XML_a, XML_graphicData);
@@ -5891,7 +5894,13 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         }
 
         if (m_bDMLTextFrameSyntax)
+        {
+            m_pBodyPrAttrList->add(XML_lIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_LEFT))));
+            m_pBodyPrAttrList->add(XML_tIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_TOP))));
+            m_pBodyPrAttrList->add(XML_rIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_RIGHT))));
+            m_pBodyPrAttrList->add(XML_bIns, OString::number(TwipsToEMU(rBox.GetDistance(BOX_LINE_BOTTOM))));
             return;
+        }
 
         // v:textbox's inset attribute: inner margin values for textbox text - write only non-default values
         double fDistanceLeftTwips = double(rBox.GetDistance(BOX_LINE_LEFT));
@@ -6235,6 +6244,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
       m_pFlyAttrList( NULL ),
+      m_pBodyPrAttrList( NULL ),
       m_pFlyFillAttrList( NULL ),
       m_pFlyWrapAttrList( NULL ),
       m_pTextboxAttrList( NULL ),
@@ -6293,6 +6303,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pFlyAttrList, m_pFlyAttrList = NULL;
+    delete m_pBodyPrAttrList, m_pBodyPrAttrList = NULL;
     delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
 

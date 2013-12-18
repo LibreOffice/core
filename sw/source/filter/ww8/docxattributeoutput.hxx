@@ -678,6 +678,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
+    /// Attributes of <wps:bodyPr>, used during DML export of text frames.
+    ::sax_fastparser::FastAttributeList *m_pBodyPrAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyFillAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyWrapAttrList;
     /// Attributes of the next v:textbox element.
