@@ -13,12 +13,12 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <osl/conditn.hxx>
+#include <osl/time.h>
 #include <rtl/strbuf.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <arealink.hxx>
-#include <asciiopt.hxx>
 #include <datastreamdlg.hxx>
 #include <dbfunc.hxx>
 #include <docsh.hxx>
@@ -41,6 +41,13 @@
 #include <queue>
 
 namespace sc {
+
+inline double getNow()
+{
+    TimeValue now;
+    osl_getSystemTime(&now);
+    return static_cast<double>(now.Seconds) + static_cast<double>(now.Nanosec) / 1000000000.0;
+}
 
 namespace datastreams {
 
@@ -246,7 +253,8 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mbRunning(false),
     mpLines(0),
     mnLinesCount(0),
-    mnRepaintCounter(0),
+    mnLinesSinceRefresh(0),
+    mfLastRefreshTime(0.0),
     mnCurRow(0)
 {
     mxThread = new datastreams::CallerThread( this );
@@ -375,14 +383,11 @@ void DataStream::StopImport()
 
 void DataStream::Refresh()
 {
-    SCROW nEndRow = mpEndRange ? mpEndRange->aEnd.Row() : MAXROW;
-    ScRange aRange(maStartRange.aStart);
-    aRange.aEnd = ScAddress(maStartRange.aEnd.Col(), nEndRow, maStartRange.aStart.Tab());
-
-    mnRepaintCounter = 0;
-
     // Hard recalc will repaint the grid area.
     mpDocShell->DoHardRecalc(true);
+
+    mfLastRefreshTime = getNow();
+    mnLinesSinceRefresh = 0;
 }
 
 void DataStream::MoveData()
@@ -477,7 +482,7 @@ void DataStream::Text2Doc()
     orcus::csv_parser<CSVHandler> parser(aLine.getStr(), aLine.getLength(), aHdl, aConfig);
     parser.parse();
 
-    ++mnRepaintCounter;
+    ++mnLinesSinceRefresh;
 }
 
 #else
@@ -536,7 +541,9 @@ bool DataStream::ImportData()
 //              maStartRange.aStart.Col(), mnCurRow, SC_FOLLOW_JUMP);
     }
 
-    if (mnRepaintCounter > 200)
+    if (getNow() - mfLastRefreshTime > 0.1 && mnLinesSinceRefresh > 200)
+        // Refresh no more frequently than every 0.1 second, and wait until at
+        // least we have processed 200 lines.
         Refresh();
 
     return mbRunning;

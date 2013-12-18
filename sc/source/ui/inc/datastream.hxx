@@ -93,7 +93,8 @@ private:
     bool mbValuesInLine;
     LinesList* mpLines;
     size_t mnLinesCount;
-    size_t mnRepaintCounter;
+    size_t mnLinesSinceRefresh;
+    double mfLastRefreshTime;
     SCROW mnCurRow;
     ScRange maStartRange;
     boost::scoped_ptr<ScRange> mpEndRange;
