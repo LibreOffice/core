@@ -27,6 +27,7 @@ import re
 import os, os.path
 import stat
 import sys
+import threading
 try:
     from urllib.request import urlopen
 except:
@@ -451,13 +452,25 @@ common_noncore_mimetypes = {
 }
 
 for (prefix, uri) in rss_bugzillas.items():
+    thread_list = []
     for (mimetype,extension) in mimetypes.items():
         # It seems that bugzilla has problems returing that many results
         # (10000 results is probably a limit set somewhere) so we always
         # end processing the complete list.
         if mimetype == 'text/html' and prefix == 'moz':
                 continue
-        get_through_rss_query(uri, mimetype, prefix, extension)
+
+        #create threads for every mimetype (as far tested, servers can handle requests)
+        t = threading.Thread(target=get_through_rss_query, args = (uri, mimetype, prefix, extension))
+        thread_list.append(t)
+
+    #start thread
+    for thread in thread_list:
+        thread.start()
+
+    #only go to another bugzilla if all threads are done
+    for thread in thread_list:
+        thread.join()
 
 for (mimetype,extension) in mimetypes.items():
     get_through_rpc_query(redhatrpc, redhatbug, mimetype, "rhbz", extension)
