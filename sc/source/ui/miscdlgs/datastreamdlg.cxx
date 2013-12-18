@@ -38,6 +38,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
 
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
+    m_pRBAddressValue->Enable(false);
     m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamDlg, BrowseHdl ) );
