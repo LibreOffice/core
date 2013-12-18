@@ -27,8 +27,6 @@
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
-#elif defined __SUNPRO_CC
-#pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -46,8 +44,6 @@
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 # pragma GCC diagnostic pop
 #endif
-#elif defined __SUNPRO_CC
-#pragma enable_warn
 #elif defined _MSC_VER
 #pragma warning(pop)
 #endif
