@@ -46,6 +46,7 @@ struct TextCharacterProperties
     OptValue< sal_Int32 > moHeight;
     OptValue< sal_Int32 > moSpacing;
     OptValue< sal_Int32 > moUnderline;
+    OptValue< sal_Int32 > moBaseline;
     OptValue< sal_Int32 > moStrikeout;
     OptValue< sal_Int32 > moCaseMap;
     OptValue< bool >    moBold;
