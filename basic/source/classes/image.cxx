@@ -84,7 +84,7 @@ bool SbiGood( SvStream& r )
 sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
 {
     sal_uIntPtr nPos = r.Tell();
-    r << nSignature << (sal_Int32) 0 << nElem;
+    r.WriteuInt16( nSignature ).WriteInt32( 0 ).WriteuInt16( nElem );
     return nPos;
 }
 
@@ -93,7 +93,7 @@ void SbiCloseRecord( SvStream& r, sal_uIntPtr nOff )
 {
     sal_uIntPtr nPos = r.Tell();
     r.Seek( nOff + 2 );
-    r << (sal_Int32) ( nPos - nOff - 8 );
+    r.WriteInt32( nPos - nOff - 8 );
     r.Seek( nPos );
 }
 
@@ -258,18 +258,18 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     eCharSet = GetSOStoreTextEncoding( eCharSet );
     if ( bLegacy )
     {
-        r << (sal_Int32) B_LEGACYVERSION;
+        r.WriteInt32( B_LEGACYVERSION );
     }
     else
     {
-        r << (sal_Int32) B_CURVERSION;
+        r.WriteInt32( B_CURVERSION );
     }
-    r  << (sal_Int32) eCharSet
-       << (sal_Int32) nDimBase
-       << (sal_Int16) nFlags
-       << (sal_Int16) 0
-       << (sal_Int32) 0
-       << (sal_Int32) 0;
+    r.WriteInt32( eCharSet )
+     .WriteInt32( nDimBase )
+     .WriteInt16( nFlags )
+     .WriteInt16( 0 )
+     .WriteInt32( 0 )
+     .WriteInt32( 0 );
 
     // Name?
     if( !aName.isEmpty() && SbiGood( r ) )
@@ -321,7 +321,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
         for( i = 0; i < nStrings && SbiGood( r ); i++ )
         {
-            r << (sal_uInt32) pStringOff[ i ];
+            r.WriteuInt32( pStringOff[ i ] );
         }
         // Then the String-Block
         char* pByteStrings = new char[ nStringSize ];
@@ -331,7 +331,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             OString aStr(OUStringToOString(OUString(pStrings + nOff), eCharSet));
             memcpy( pByteStrings + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
-        r << (sal_uInt32) nStringSize;
+        r.WriteuInt32( nStringSize );
         r.Write( pByteStrings, nStringSize );
 
         delete[] pByteStrings;

@@ -618,7 +618,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
-    rStrm << (sal_uInt8) 0xFF;      // Marker
+    rStrm.WriteuInt8( 0xFF );      // Marker
     sal_Bool bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
@@ -644,17 +644,17 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
     {
         return sal_False;
     }
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, maName,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
-    rStrm << (sal_uInt32)nUserData;
+    rStrm.WriteuInt32( nUserData );
     if( pInfo.Is() )
     {
-        rStrm << (sal_uInt8) 2;     // Version 2: with UserData!
+        rStrm.WriteuInt8( 2 );     // Version 2: with UserData!
         pInfo->StoreData( rStrm );
     }
     else
     {
-        rStrm << (sal_uInt8) 0;
+        rStrm.WriteuInt8( 0 );
     }
     // Save private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE )

@@ -234,10 +234,10 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                 if (aHeader.GetValue().getLength())
                 {
                     // NYI: Folding long lines.
-                    *pMsgBuffer << aHeader.GetName().getStr();
-                    *pMsgBuffer << ": ";
-                    *pMsgBuffer << aHeader.GetValue().getStr();
-                    *pMsgBuffer << "\r\n";
+                    pMsgBuffer->WriteOString(aHeader.GetName());
+                    pMsgBuffer->WriteCharPtr(": ");
+                    pMsgBuffer->WriteOString(aHeader.GetValue());
+                    pMsgBuffer->WriteCharPtr("\r\n");
                 }
             }
 
@@ -323,7 +323,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
                 // Emit any buffered last header field.
                 if (pMsgBuffer->Tell() > 0)
                 {
-                    *pMsgBuffer << '\0';
+                    pMsgBuffer->WriteChar(0);
                     int status = PutMsgLine( (const sal_Char*) pMsgBuffer->GetData(),
                                              pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
@@ -339,7 +339,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
             else if ((*pData == ' ') || (*pData == '\t'))
             {
                 // Continuation line. Unfold multi-line field-body.
-                *pMsgBuffer << ' ';
+                pMsgBuffer->WriteChar(' ');
                 pData++;
             }
             else
@@ -348,7 +348,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
                 if (pMsgBuffer->Tell() > 0)
                 {
                     // Emit buffered header field now.
-                    *pMsgBuffer << '\0';
+                    pMsgBuffer->WriteChar(0);
                     int status = PutMsgLine((const sal_Char*) pMsgBuffer->GetData(),
                                              pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
@@ -358,7 +358,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
                 pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
 
                 // Insert current character into buffer.
-                *pMsgBuffer << *pData++;
+                pMsgBuffer->WriteChar(*pData++);
             }
 
             // Search for next line break character.
@@ -381,7 +381,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
         {
             // Any <LWS> is folded into a single <SP> character.
             sal_Char c = *((const sal_Char*) pMsgBuffer->GetData() + pMsgBuffer->Tell() - 1);
-            if (!ascii_isWhitespace(c & 0x7f)) *pMsgBuffer << ' ';
+            if (!ascii_isWhitespace(c & 0x7f)) pMsgBuffer->WriteChar(' ');
 
             // Skip over this <LWS> character.
             pData++;
@@ -389,7 +389,7 @@ int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
         else
         {
             // Any other character is inserted into line buffer.
-            *pMsgBuffer << *pData++;
+            pMsgBuffer->WriteChar(*pData++);
         }
     }
 
@@ -714,7 +714,7 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
                 else
                 {
                     // Decode token.
-                    *pMsgBuffer << sal_uInt8 (
+                    pMsgBuffer->WriteuInt8(
                         (pr2hex[(int)(pTokBuffer[0] & 0x7f)] << 4) |
                         (pr2hex[(int)(pTokBuffer[1] & 0x7f)] & 15)   );
 
@@ -734,17 +734,17 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
         }
         else if (eState == INETMSG_EOL_FCR)
         {
-            *pMsgBuffer << *pData++;
+            pMsgBuffer->WriteChar(*pData++);
             eState = INETMSG_EOL_BEGIN;
         }
         else if (*pData == '\r')
         {
-            *pMsgBuffer << *pData++;
+            pMsgBuffer->WriteChar(*pData++);
             eState = INETMSG_EOL_FCR;
         }
         else
         {
-            *pMsgBuffer << *pData++;
+            pMsgBuffer->WriteChar(*pData++);
         }
 
         if (eState == INETMSG_EOL_BEGIN)

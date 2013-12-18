@@ -1722,7 +1722,7 @@ sal_Bool SbModule::StoreData( SvStream& rStrm ) const
         pImage->aOUSource = aOUSource;
         pImage->aComment = aComment;
         pImage->aName = GetName();
-        rStrm << (sal_uInt8) 1;
+        rStrm.WriteuInt8( 1 );
         // # PCode is saved only for legacy formats only
         // It should be noted that it probably isn't necessary
         // It would be better not to store the image ( more flexible with
@@ -1739,7 +1739,7 @@ sal_Bool SbModule::StoreData( SvStream& rStrm ) const
         aImg.aOUSource = aOUSource;
         aImg.aComment = aComment;
         aImg.aName = GetName();
-        rStrm << (sal_uInt8) 1;
+        rStrm.WriteuInt8( 1 );
         return aImg.Save( rStrm );
     }
 }
@@ -1862,13 +1862,13 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
             pImage->aComment = aComment;
             pImage->aName = GetName();
 
-            rStrm << (sal_uInt8) 1;
-                    if ( nVer )
-                        bRet = pImage->Save( rStrm, B_EXT_IMG_VERSION );
-                    else
-                        bRet = pImage->Save( rStrm, B_LEGACYVERSION );
-                    if ( bFixup )
-                        fixUpMethodStart( false ); // restore method starts
+            rStrm.WriteuInt8( 1 );
+            if ( nVer )
+                bRet = pImage->Save( rStrm, B_EXT_IMG_VERSION );
+            else
+                bRet = pImage->Save( rStrm, B_LEGACYVERSION );
+            if ( bFixup )
+                fixUpMethodStart( false ); // restore method starts
 
             pImage->aOUSource = aOUSource;
         }
@@ -2090,11 +2090,11 @@ sal_Bool SbMethod::StoreData( SvStream& rStrm ) const
 {
     if( !SbxMethod::StoreData( rStrm ) )
         return sal_False;
-    rStrm << (sal_Int16) nDebugFlags
-          << (sal_Int16) nLine1
-          << (sal_Int16) nLine2
-          << (sal_Int16) nStart
-          << (sal_uInt8)  bInvalid;
+    rStrm.WriteInt16( nDebugFlags )
+         .WriteInt16( nLine1 )
+         .WriteInt16( nLine2 )
+         .WriteInt16( nStart )
+         .WriteuInt8( bInvalid );
     return sal_True;
 }
 

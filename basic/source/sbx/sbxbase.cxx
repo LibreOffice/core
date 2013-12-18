@@ -273,16 +273,16 @@ sal_Bool SbxBase::Store( SvStream& rStrm )
     DBG_CHKTHIS( SbxBase, 0 );
     if( !( nFlags & SBX_DONTSTORE ) )
     {
-        rStrm << (sal_uInt32) GetCreator()
-              << (sal_uInt16) GetSbxId()
-              << (sal_uInt16) GetFlags()
-              << (sal_uInt16) GetVersion();
+        rStrm.WriteuInt32( GetCreator() )
+             .WriteuInt16( GetSbxId() )
+             .WriteuInt16( GetFlags() )
+             .WriteuInt16( GetVersion() );
         sal_uIntPtr nOldPos = rStrm.Tell();
-        rStrm << (sal_uInt32) 0L;
+        rStrm.WriteuInt32( 0L );
         sal_Bool bRes = StoreData( rStrm );
         sal_uIntPtr nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
-        rStrm << (sal_uInt32) ( nNewPos - nOldPos );
+        rStrm.WriteuInt32( nNewPos - nOldPos );
         rStrm.Seek( nNewPos );
         if( rStrm.GetError() != SVSTREAM_OK )
             bRes = sal_False;
@@ -391,18 +391,18 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
 {
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aComment,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aComment,
         RTL_TEXTENCODING_ASCII_US );
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aHelpFile,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aHelpFile,
         RTL_TEXTENCODING_ASCII_US);
-    rStrm << nHelpId << static_cast<sal_uInt16>(aParams.size());
+    rStrm.WriteuInt32( nHelpId ).WriteuInt16( aParams.size() );
     for(SbxParams::const_iterator i = aParams.begin(); i != aParams.end(); ++i)
     {
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, i->aName,
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, i->aName,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm << (sal_uInt16) i->eType
-              << (sal_uInt16) i->nFlags
-              << (sal_uInt32) i->nUserData;
+        rStrm.WriteuInt16( i->eType )
+             .WriteuInt16( i->nFlags )
+             .WriteuInt32( i->nUserData );
     }
     return sal_True;
 }

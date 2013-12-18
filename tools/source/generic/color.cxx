@@ -225,7 +225,7 @@ SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
 SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
 {
     if ( bNewFormat )
-        rOStm << mnColor;
+        rOStm.WriteuInt32(mnColor);
     else
         rOStm << *this;
 

@@ -496,8 +496,8 @@ SvStream& operator >> ( SvStream& rIStream, Fraction& rFract )
 SvStream& operator << ( SvStream& rOStream, const Fraction& rFract )
 {
     //fdo#39428 SvStream no longer supports operator<<(long)
-    rOStream << sal::static_int_cast<sal_Int32>(rFract.nNumerator);
-    rOStream << sal::static_int_cast<sal_Int32>(rFract.nDenominator);
+    rOStream.WriteInt32(rFract.nNumerator);
+    rOStream.WriteInt32(rFract.nDenominator);
     return rOStream;
 }
 

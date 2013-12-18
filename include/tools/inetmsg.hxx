@@ -65,8 +65,8 @@ public:
     friend SvStream& operator<< (
         SvStream& rStrm, const INetMessageHeader& rHdr)
     {
-        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aName);
-        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aValue);
+        write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, rHdr.m_aName);
+        write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, rHdr.m_aValue);
         return rStrm;
     }
 
