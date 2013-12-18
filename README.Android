@@ -44,12 +44,7 @@ know. But don't seem to be necessary on a real device anyway?
 
 * Debugging
 
-	Debugging is fun, the default NDK gdb (in v7) is busted, you
-need to download a new one from:
-
-	http://code.google.com/p/mingw-and-ndk/
-
-	Even this 'fixed' gdb is broken in the way that it can see
+	Some versions of the NDK had a broken gdb in the way that it can see
 symbols only for shlibs that were already loaded when the debuggee was
 attached, so you need to carefully guess where to put:
 
@@ -75,6 +70,9 @@ the file is truncated; check it out with adb shell ls -l /data/data/....
 
 
 * Detailed explanation
+
+Note: the below talk about unit tests is obsolete; we no longer have
+any makefilery etc to build unit tests for Android.
 
 Unit tests are the first thing we want to run on Android, to get some
 idea how well, if at all, the basic LO libraries work. We want to
