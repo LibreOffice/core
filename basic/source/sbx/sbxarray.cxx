@@ -565,14 +565,14 @@ sal_Bool SbxArray::StoreData( SvStream& rStrm ) const
         if( p && !( p->GetFlags() & SBX_DONTSTORE ) )
             nElem++;
     }
-    rStrm << (sal_uInt16) nElem;
+    rStrm.WriteUInt16( nElem );
     for( n = 0; n < pData->size(); n++ )
     {
         SbxVariableRef* pRef = (*pData)[n];
         SbxVariable* p = *pRef;
         if( p && !( p->GetFlags() & SBX_DONTSTORE ) )
         {
-            rStrm << (sal_uInt16) n;
+            rStrm.WriteUInt16( n );
             if( !p->Store( rStrm ) )
                 return sal_False;
         }
@@ -830,12 +830,12 @@ sal_Bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbxDimArray::StoreData( SvStream& rStrm ) const
 {
-    rStrm << (sal_Int16) nDim;
+    rStrm.WriteInt16( nDim );
     for( short i = 0; i < nDim; i++ )
     {
         short lb, ub;
         GetDim( i, lb, ub );
-        rStrm << (sal_Int16) lb << (sal_Int16) ub;
+        rStrm.WriteInt16( lb ).WriteInt16( ub );
     }
     return SbxArray::StoreData( rStrm );
 }

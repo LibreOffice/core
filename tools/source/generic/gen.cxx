@@ -39,7 +39,7 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Pair::<< - Solar-Version not set on rOStream" );
 
     //39428 SvStream no longer supports operator<<(long)
-    rOStream << sal::static_int_cast<sal_Int32>(rPair.nA) << sal::static_int_cast<sal_Int32>(rPair.nB);
+    rOStream.WriteInt32(rPair.nA).WriteInt32(rPair.nB);
 
     return rOStream;
 }
@@ -191,10 +191,10 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Rectangle::<< - Solar-Version not set on rOStream" );
 
     //fdo#39428 SvStream no longer supports operator<<(long)
-    rOStream << sal::static_int_cast<sal_Int32>(rRect.nLeft)
-             << sal::static_int_cast<sal_Int32>(rRect.nTop)
-             << sal::static_int_cast<sal_Int32>(rRect.nRight)
-             << sal::static_int_cast<sal_Int32>(rRect.nBottom);
+    rOStream.WriteInt32(rRect.nLeft)
+            .WriteInt32(rRect.nTop)
+            .WriteInt32(rRect.nRight)
+            .WriteInt32(rRect.nBottom);
 
     return rOStream;
 }

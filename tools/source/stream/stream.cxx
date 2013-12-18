@@ -790,7 +790,7 @@ bool SvStream::WriteLine(const OString& rStr)
 bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
-        *this << ch;
+        WriteChar(ch);
     else
     {
         OString aStr(&ch, 1, eDestCharSet);
@@ -805,7 +805,7 @@ bool SvStream::StartWritingUnicodeText()
     // BOM, Byte Order Mark, U+FEFF, see
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
-    *this << sal_uInt16( 0xfeff );
+    WriteUInt16( 0xfeff );
     return nError == SVSTREAM_OK;
 }
 
@@ -1055,7 +1055,7 @@ SvStream& SvStream::operator>> ( SvStream& rStream )
     return *this;
 }
 
-SvStream& SvStream::operator<< ( sal_uInt16 v )
+SvStream& SvStream::WriteUInt16( sal_uInt16 v )
 {
     if( bSwap )
         SwapUShort(v);
@@ -1063,7 +1063,7 @@ SvStream& SvStream::operator<< ( sal_uInt16 v )
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( sal_uInt32 v )
+SvStream& SvStream::WriteUInt32( sal_uInt32 v )
 {
     if( bSwap )
         SwapULong(v);
@@ -1071,7 +1071,7 @@ SvStream& SvStream::operator<<  ( sal_uInt32 v )
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( sal_uInt64 v )
+SvStream& SvStream::WriteUInt64( sal_uInt64 v )
 {
     if( bSwap )
         SwapUInt64(v);
@@ -1079,7 +1079,7 @@ SvStream& SvStream::operator<<  ( sal_uInt64 v )
     return *this;
 }
 
-SvStream& SvStream::operator<< ( sal_Int16 v )
+SvStream& SvStream::WriteInt16( sal_Int16 v )
 {
     if( bSwap )
         SwapShort(v);
@@ -1087,7 +1087,7 @@ SvStream& SvStream::operator<< ( sal_Int16 v )
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( sal_Int32 v )
+SvStream& SvStream::WriteInt32( sal_Int32 v )
 {
     if( bSwap )
         SwapLongInt(v);
@@ -1103,7 +1103,7 @@ SvStream& SvStream::WriteInt64  (sal_Int64 v)
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( signed char v )
+SvStream& SvStream::WriteSChar( signed char v )
 {
     //SDO
     if(bIoWrite && sizeof(signed char) <= nBufFree )
@@ -1123,7 +1123,7 @@ SvStream& SvStream::operator<<  ( signed char v )
 
 // Special treatment for Chars due to PutBack
 
-SvStream& SvStream::operator<<  ( char v )
+SvStream& SvStream::WriteChar( char v )
 {
     //SDO
     if(bIoWrite && sizeof(char) <= nBufFree )
@@ -1141,7 +1141,7 @@ SvStream& SvStream::operator<<  ( char v )
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( unsigned char v )
+SvStream& SvStream::WriteUChar( unsigned char v )
 {
 //SDO
     if(bIoWrite && sizeof(char) <= nBufFree )
@@ -1159,7 +1159,17 @@ SvStream& SvStream::operator<<  ( unsigned char v )
     return *this;
 }
 
-SvStream& SvStream::operator<< ( float v )
+SvStream& SvStream::WriteUInt8( sal_uInt8 v )
+{
+    return WriteUChar(v);
+}
+
+SvStream& SvStream::WriteUnicode( sal_Unicode v )
+{
+    return WriteUInt16(v);
+}
+
+SvStream& SvStream::WriteFloat( float v )
 {
 #ifdef UNX
     if( bSwap )
@@ -1169,7 +1179,7 @@ SvStream& SvStream::operator<< ( float v )
     return *this;
 }
 
-SvStream& SvStream::operator<< ( const double& r )
+SvStream& SvStream::WriteDouble ( const double& r )
 {
 #if defined UNX
     if( bSwap )
@@ -1187,13 +1197,13 @@ SvStream& SvStream::operator<< ( const double& r )
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( const char* pBuf )
+SvStream& SvStream::WriteCharPtr( const char* pBuf )
 {
     Write( pBuf, strlen( pBuf ) );
     return *this;
 }
 
-SvStream& SvStream::operator<<  ( const unsigned char* pBuf )
+SvStream& SvStream::WriteUCharPtr( const unsigned char* pBuf )
 {
     Write( (char*)pBuf, strlen( (char*)pBuf ) );
     return *this;
@@ -1225,9 +1235,9 @@ SvStream& SvStream::WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding
 {
     // write UTF-16 string directly into stream ?
     if (eDestCharSet == RTL_TEXTENCODING_UNICODE)
-        write_lenPrefixed_uInt16s_FromOUString<sal_uInt32>(*this, rStr);
+        write_uInt32_lenPrefixed_uInt16s_FromOUString(*this, rStr);
     else
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*this, rStr, eDestCharSet);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(*this, rStr, eDestCharSet);
     return *this;
 }
 
@@ -1627,11 +1637,11 @@ SvStream& endl( SvStream& rStr )
 {
     LineEnd eDelim = rStr.GetLineDelimiter();
     if ( eDelim == LINEEND_CR )
-        rStr << '\r';
+        rStr.WriteChar('\r');
     else if( eDelim == LINEEND_LF )
-        rStr << '\n';
+        rStr.WriteChar('\n');
     else
-        rStr << '\r' << '\n';
+        rStr.WriteChar('\r').WriteChar('\n');
     return rStr;
 }
 
@@ -1640,13 +1650,13 @@ SvStream& endlu( SvStream& rStrm )
     switch ( rStrm.GetLineDelimiter() )
     {
         case LINEEND_CR :
-            rStrm << sal_Unicode('\r');
+            rStrm.WriteUnicode('\r');
         break;
         case LINEEND_LF :
-            rStrm << sal_Unicode('\n');
+            rStrm.WriteUnicode('\n');
         break;
         default:
-            rStrm << sal_Unicode('\r') << sal_Unicode('\n');
+            rStrm.WriteUnicode('\r').WriteUnicode('\n');
     }
     return rStrm;
 }
@@ -2168,6 +2178,57 @@ OString convertLineEnd(const OString &rIn, LineEnd eLineEnd)
 OUString convertLineEnd(const OUString &rIn, LineEnd eLineEnd)
 {
     return tmpl_convertLineEnd<OUString, OUStringBuffer>(rIn, eLineEnd);
+}
+
+sal_Size write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+                                                const OUString &rStr)
+{
+    sal_Size nWritten = 0;
+    sal_uInt32 nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<sal_uInt32>::max());
+    SAL_WARN_IF(static_cast<sal_Size>(nUnits) != static_cast<sal_Size>(rStr.getLength()),
+        "tools.stream",
+        "string too long for prefix count to fit in output type");
+    rStrm.WriteUInt32(nUnits);
+    if (rStrm.good())
+    {
+        nWritten += sizeof(sal_uInt32);
+        nWritten += write_uInt16s_FromOUString(rStrm, rStr, nUnits);
+    }
+    return nWritten;
+}
+
+sal_Size write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+                                                const OUString &rStr)
+{
+    sal_Size nWritten = 0;
+    sal_uInt16 nUnits = std::min<sal_uInt16>(rStr.getLength(), std::numeric_limits<sal_uInt16>::max());
+    SAL_WARN_IF(static_cast<sal_uInt16>(nUnits) != static_cast<sal_uInt16>(rStr.getLength()),
+        "tools.stream",
+        "string too long for prefix count to fit in output type");
+    rStrm.WriteUInt16(nUnits);
+    if (rStrm.good())
+    {
+        nWritten += sizeof(sal_uInt32);
+        nWritten += write_uInt16s_FromOUString(rStrm, rStr, nUnits);
+    }
+    return nWritten;
+}
+
+sal_Size write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
+                                              const OString &rStr)
+{
+    sal_Size nWritten = 0;
+    sal_uInt16 nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<sal_uInt16>::max());
+    SAL_WARN_IF(static_cast<sal_Size>(nUnits) != static_cast<sal_Size>(rStr.getLength()),
+        "tools.stream",
+        "string too long for sal_uInt16 count to fit in output type");
+    rStrm.WriteUInt16( nUnits );
+    if (rStrm.good())
+    {
+        nWritten += sizeof(sal_uInt16);
+        nWritten += write_uInt8s_FromOString(rStrm, rStr, nUnits);
+    }
+    return nWritten;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

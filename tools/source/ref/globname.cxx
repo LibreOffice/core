@@ -124,14 +124,14 @@ SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
 {
     sal_uInt32 a;
     memcpy(&a, rObj.pImp->szData, sizeof(sal_uInt32));
-    rOStr << a;
+    rOStr.WriteUInt32(a);
 
     sal_uInt16 b;
     memcpy(&b, rObj.pImp->szData+4, sizeof(sal_uInt16));
-    rOStr << b;
+    rOStr.WriteUInt16(b);
 
     memcpy(&b, rObj.pImp->szData+6, sizeof(sal_uInt16));
-    rOStr << b;
+    rOStr.WriteUInt16(b);
 
     rOStr.Write( (sal_Char *)&rObj.pImp->szData[ 8 ], 8 );
     return rOStr;

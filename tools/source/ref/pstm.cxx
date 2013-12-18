@@ -50,16 +50,16 @@ TYPEINIT0( SvRttiBase );
 void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList, SvPersistStream & rStm, bool bOnlyStreamed )
 {
 #ifdef STOR_NO_OPTIMIZE
-    rStm << (sal_uInt8)(PERSIST_LIST_VER | PERSIST_LIST_DBGUTIL);
+    rStm.WriteUInt8(PERSIST_LIST_VER | PERSIST_LIST_DBGUTIL);
     sal_uInt32 nObjPos = rStm.WriteDummyLen();
 #else
     sal_uInt8 bTmp = PERSIST_LIST_VER;
-    rStm << bTmp;
+    rStm.WriteUInt8(bTmp);
 #endif
     sal_uInt32 nCountMember = rList.size();
     sal_uIntPtr  nCountPos = rStm.Tell();
     sal_uInt32 nWriteCount = 0;
-    rStm << nCountMember;
+    rStm.WriteUInt32(nCountMember);
     // Don't change the list, as it causes side-effects while saving
     for( sal_uIntPtr n = 0; n < nCountMember; n++ )
     {
@@ -75,7 +75,7 @@ void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList
         // Didn't write all members, adjust count
         sal_uIntPtr nPos = rStm.Tell();
         rStm.Seek( nCountPos );
-        rStm << nWriteCount;
+        rStm.WriteUInt32(nWriteCount);
         rStm.Seek( nPos );
     }
 #ifdef STOR_NO_OPTIMIZE
@@ -324,25 +324,25 @@ void SvPersistStream::WriteCompressed( SvStream & rStm, sal_uInt32 nVal )
 {
 #ifdef STOR_NO_OPTIMIZE
     if( nVal < 0x80 )
-        rStm << (sal_uInt8)(LEN_1 | nVal);
+        rStm.WriteUInt8(LEN_1 | nVal);
     else if( nVal < 0x4000 )
     {
-        rStm << (sal_uInt8)(LEN_2 | (nVal >> 8));
-        rStm << (sal_uInt8)nVal;
+        rStm.WriteUInt8(LEN_2 | (nVal >> 8));
+        rStm.WriteUInt8(nVal);
     }
     else if( nVal < 0x20000000 )
     {
         // highest sal_uInt8
-        rStm << (sal_uInt8)(LEN_4 | (nVal >> 24));
+        rStm.WriteUInt8(LEN_4 | (nVal >> 24));
         // 2nd highest sal_uInt8
-        rStm << (sal_uInt8)(nVal >> 16);
-        rStm << (sal_uInt16)(nVal);
+        rStm.WriteUInt8(nVal >> 16);
+        rStm.WriteUInt16(nVal);
     }
     else
 #endif
     {
-        rStm << (sal_uInt8)LEN_5;
-        rStm << nVal;
+        rStm.WriteUInt8(LEN_5);
+        rStm.WriteUInt32(nVal);
     }
 }
 
@@ -369,7 +369,7 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     sal_uInt32 nPos = Tell();
 #endif
     sal_uInt32 n0 = 0;
-    *this << n0; // Because of Sun sp
+    WriteUInt32(n0); // Because of Sun sp
     // Don't assert on stream error
     DBG_ASSERT( GetError() != SVSTREAM_OK
                   || (sizeof( sal_uInt32 ) == Tell() -nPos),
@@ -404,7 +404,7 @@ void SvPersistStream::WriteLen( sal_uInt32 nObjPos )
     // Length in stream must be 4 Bytes
     Seek( nObjPos - sizeof( sal_uInt32 ) );
     // write length
-    *this << nLen;
+    WriteUInt32(nLen);
     Seek( nPos );
 }
 
@@ -457,17 +457,17 @@ static void WriteId
     {
         if( (nHdr & P_OBJ) || nId != 0 )
         { // Id set only for pointers or DBGUTIL
-            rStm << (sal_uInt8)(nHdr);
+            rStm.WriteUInt8(nHdr);
             SvPersistStream::WriteCompressed( rStm, nId );
         }
         else
         { // NULL Pointer
-            rStm << (sal_uInt8)(nHdr | P_ID_0);
+            rStm.WriteUInt8(nHdr | P_ID_0);
             return;
         }
     }
     else
-        rStm << nHdr;
+        rStm.WriteUInt8(nHdr);
 
     if( (nHdr & P_DBGUTIL) || (nHdr & P_OBJ) )
         // Objects always have a class id
@@ -670,9 +670,9 @@ SvStream& operator <<
     rThis.SetStream( &rStm );
 
     sal_uInt8 bTmp = 0;
-    rThis << bTmp;    // Version
+    rThis.WriteUInt8(bTmp);    // Version
     sal_uInt32 nCount = (sal_uInt32)rThis.aPUIdx.Count();
-    rThis << nCount;
+    rThis.WriteUInt32(nCount);
     sal_uIntPtr aIndex = rThis.aPUIdx.FirstIndex();
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {

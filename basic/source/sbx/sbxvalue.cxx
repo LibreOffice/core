@@ -1557,84 +1557,83 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
     sal_Bool SbxValue::StoreData( SvStream& r ) const
     {
         sal_uInt16 nType = sal::static_int_cast< sal_uInt16 >(aData.eType);
-        r << nType;
+        r.WriteUInt16( nType );
         switch( nType & 0x0FFF )
         {
             case SbxBOOL:
             case SbxINTEGER:
-                r << aData.nInteger; break;
+                r.WriteInt16( aData.nInteger ); break;
             case SbxLONG:
-                r << aData.nLong; break;
+                r.WriteInt32( aData.nLong ); break;
             case SbxDATE:
                 // #49935: Save as double, otherwise an error during the read in
                 ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
                 ((SbxValue*)this)->aData.eType = (SbxDataType)nType;
                 break;
             case SbxSINGLE:
             case SbxDOUBLE:
-                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+                write_uInt16_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
                 break;
             case SbxSALUINT64:
             case SbxSALINT64:
                 // see comment in SbxValue::StoreData
-                r << aData.uInt64;
+                r.WriteUInt64( aData.uInt64 );
                 break;
             case SbxCURRENCY:
             {
                 sal_Int32 tmpHi = ( (aData.nInt64 >> 32) &  0xFFFFFFFF );
                 sal_Int32 tmpLo = ( sal_Int32 )aData.nInt64;
-                r << tmpHi << tmpLo;
+                r.WriteInt32( tmpHi ).WriteInt32( tmpLo );
                 break;
             }
             case SbxSTRING:
                 if( aData.pOUString )
                 {
-                    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
+                    write_uInt16_lenPrefixed_uInt8s_FromOUString(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
                 }
                 else
                 {
-                    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, OUString(), RTL_TEXTENCODING_ASCII_US);
+                    write_uInt16_lenPrefixed_uInt8s_FromOUString(r, OUString(), RTL_TEXTENCODING_ASCII_US);
             }
             break;
         case SbxERROR:
         case SbxUSHORT:
-            r << aData.nUShort; break;
+            r.WriteUInt16( aData.nUShort ); break;
         case SbxOBJECT:
             // to save itself as Objectptr does not work!
             if( aData.pObj )
             {
                 if( PTR_CAST(SbxValue,aData.pObj) != this )
                 {
-                    r << (sal_uInt8) 1;
+                    r.WriteUInt8( 1 );
                     return aData.pObj->Store( r );
                 }
                 else
-                    r << (sal_uInt8) 2;
+                    r.WriteUInt8( 2 );
             }
             else
-                r << (sal_uInt8) 0;
+                r.WriteUInt8( 0 );
             break;
         case SbxCHAR:
         {
-            char c = sal::static_int_cast< char >(aData.nChar);
-            r << c;
+            r.WriteChar( aData.nChar );
             break;
         }
         case SbxBYTE:
-            r << aData.nByte; break;
+            r.WriteUInt8( aData.nByte ); break;
         case SbxULONG:
-            r << aData.nULong; break;
+            r.WriteUInt32( aData.nULong ); break;
         case SbxINT:
         {
             sal_uInt8 n = SAL_TYPES_SIZEOFINT;
-            r << n << (sal_Int32)aData.nInt;
+            r.WriteUInt8( n ).WriteInt32( aData.nInt );
             break;
         }
         case SbxUINT:
         {
             sal_uInt8 n = SAL_TYPES_SIZEOFINT;
-            r << n << (sal_uInt32)aData.nUInt;
+            r.WriteUInt8( n ).WriteUInt32( aData.nUInt );
             break;
         }
         case SbxEMPTY:
@@ -1642,7 +1641,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxVOID:
             break;
         case SbxDATAOBJECT:
-            r << aData.nLong;
+            r.WriteInt32( aData.nLong );
             break;
         // #78919 For backwards compatibility
         case SbxWSTRING:
