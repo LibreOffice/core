@@ -651,10 +651,10 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf.get());
     BitmapEx aBmp;
-    aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
+    aBmp.Expand(m_iWidth, m_iHeight);
 
-    Bitmap aBitmap( aBmp.GetBitmap() );
-    Bitmap aAlpha( aBmp.GetAlpha().GetBitmap() );
+    Bitmap aBitmap( Size( m_iWidth, m_iHeight ), 24 );
+    Bitmap aAlpha( Size( m_iWidth, m_iHeight ), 24 );
 
     Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
     Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
