@@ -30,6 +30,7 @@ class DataStreamDlg : public ModalDialog
     RadioButton*    m_pRBScriptData;
     RadioButton*    m_pRBValuesInLine;
     RadioButton*    m_pRBAddressValue;
+    CheckBox*       m_pCBRefreshOnEmpty;
     RadioButton*    m_pRBDataDown;
     RadioButton*    m_pRBRangeDown;
     RadioButton*    m_pRBNoMove;

@@ -251,6 +251,8 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     maDocAccess(*mpDoc),
     meMove(NO_MOVE),
     mbRunning(false),
+    mbValuesInLine(false),
+    mbRefreshOnEmptyLine(false),
     mpLines(0),
     mnLinesCount(0),
     mnLinesSinceRefresh(0),
@@ -381,6 +383,11 @@ void DataStream::StopImport()
     Refresh();
 }
 
+void DataStream::SetRefreshOnEmptyLine( bool bVal )
+{
+    mbRefreshOnEmptyLine = bVal;
+}
+
 void DataStream::Refresh()
 {
     // Hard recalc will repaint the grid area.
@@ -437,18 +444,38 @@ IMPL_LINK_NOARG(DataStream, RefreshHdl)
 
 namespace {
 
+struct StrVal
+{
+    ScAddress maPos;
+    OUString maStr;
+
+    StrVal( const ScAddress& rPos, const OUString& rStr ) : maPos(rPos), maStr(rStr) {}
+};
+
+struct NumVal
+{
+    ScAddress maPos;
+    double mfVal;
+
+    NumVal( const ScAddress& rPos, double fVal ) : maPos(rPos), mfVal(fVal) {}
+};
+
+typedef std::vector<StrVal> StrValArray;
+typedef std::vector<NumVal> NumValArray;
+
 /**
  * This handler handles a single line CSV input.
  */
 class CSVHandler
 {
-    DocumentStreamAccess& mrDoc;
     ScAddress maPos;
     SCCOL mnEndCol;
 
+    StrValArray maStrs;
+    NumValArray maNums;
+
 public:
-    CSVHandler( DocumentStreamAccess& rDoc, const ScAddress& rPos, SCCOL nEndCol ) :
-        mrDoc(rDoc), maPos(rPos), mnEndCol(nEndCol) {}
+    CSVHandler( const ScAddress& rPos, SCCOL nEndCol ) : maPos(rPos), mnEndCol(nEndCol) {}
 
     void begin_parse() {}
     void end_parse() {}
@@ -462,12 +489,15 @@ public:
             OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
             double fVal;
             if (ScStringUtil::parseSimpleNumber(aStr, '.', ',', fVal))
-                mrDoc.setNumericCell(maPos, fVal);
+                maNums.push_back(NumVal(maPos, fVal));
             else
-                mrDoc.setStringCell(maPos, aStr);
+                maStrs.push_back(StrVal(maPos, aStr));
         }
         maPos.IncCol();
     }
+
+    const StrValArray& getStrs() const { return maStrs; }
+    const NumValArray& getNums() const { return maNums; }
 };
 
 }
@@ -478,61 +508,34 @@ void DataStream::Text2Doc()
     orcus::csv_parser_config aConfig;
     aConfig.delimiters.push_back(',');
     aConfig.text_qualifier = '"';
-    CSVHandler aHdl(maDocAccess, ScAddress(maStartRange.aStart.Col(), mnCurRow, maStartRange.aStart.Tab()), maStartRange.aEnd.Col());
+    CSVHandler aHdl(ScAddress(maStartRange.aStart.Col(), mnCurRow, maStartRange.aStart.Tab()), maStartRange.aEnd.Col());
     orcus::csv_parser<CSVHandler> parser(aLine.getStr(), aLine.getLength(), aHdl, aConfig);
     parser.parse();
 
-    ++mnLinesSinceRefresh;
-}
-
-#else
-
-void DataStream::Text2Doc() {}
-
-#endif
-
-bool DataStream::ImportData()
-{
-    SolarMutexGuard aGuard;
-    if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
-        return mbRunning;
+    const StrValArray& rStrs = aHdl.getStrs();
+    const NumValArray& rNums = aHdl.getNums();
+    if (rStrs.empty() && rNums.empty() && mbRefreshOnEmptyLine)
+    {
+        // Empty line detected.  Trigger refresh and discard it.
+        Refresh();
+        return;
+    }
 
     MoveData();
-    if (mbValuesInLine)
     {
-        // do CSV import
-        Text2Doc();
+        StrValArray::const_iterator it = rStrs.begin(), itEnd = rStrs.end();
+        for (; it != itEnd; ++it)
+            maDocAccess.setStringCell(it->maPos, it->maStr);
     }
-    else
+
     {
-#if 0 // TODO : temporarily disable this code.
-        ScDocumentImport aDocImport(*mpDoc);
-        // read more lines at once but not too much
-        for (int i = 0; i < 10; ++i)
-        {
-            OUString sLine( OStringToOUString(ConsumeLine(), RTL_TEXTENCODING_UTF8) );
-            if (sLine.indexOf(',') <= 0)
-                continue;
-
-            OUString sAddress( sLine.copy(0, sLine.indexOf(',')) );
-            OUString sValue( sLine.copy(sLine.indexOf(',') + 1) );
-            ScAddress aAddress;
-            aAddress.Parse(sAddress, mpDoc);
-            if (!aAddress.IsValid())
-                continue;
-
-            if (sValue == "0" || ( sValue.indexOf(':') == -1 && sValue.toDouble() ))
-                aDocImport.setNumericCell(aAddress, sValue.toDouble());
-            else
-                aDocImport.setStringCell(aAddress, sValue);
-            maBroadcastRanges.Join(aAddress);
-        }
-        aDocImport.finalize();
-#endif
+        NumValArray::const_iterator it = rNums.begin(), itEnd = rNums.end();
+        for (; it != itEnd; ++it)
+            maDocAccess.setNumericCell(it->maPos, it->mfVal);
     }
 
     if (meMove == NO_MOVE)
-        return mbRunning;
+        return;
 
     if (meMove == RANGE_DOWN)
     {
@@ -546,6 +549,26 @@ bool DataStream::ImportData()
         // least we have processed 200 lines.
         Refresh();
 
+    ++mnLinesSinceRefresh;
+}
+
+#else
+
+void DataStream::Text2Doc() {}
+
+#endif
+
+bool DataStream::ImportData()
+{
+    SolarMutexGuard aGuard;
+    if (!mbValuesInLine)
+        // We no longer support this mode. To be deleted later.
+        return false;
+
+    if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
+        return mbRunning;
+
+    Text2Doc();
     return mbRunning;
 }
 

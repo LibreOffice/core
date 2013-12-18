@@ -26,6 +26,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     get(m_pRBScriptData, "scriptdata");
     get(m_pRBValuesInLine, "valuesinline");
     get(m_pRBAddressValue, "addressvalue");
+    get(m_pCBRefreshOnEmpty, "refresh_ui");
     get(m_pRBDataDown, "datadown");
     get(m_pRBRangeDown, "rangedown");
     get(m_pRBNoMove, "nomove");
@@ -166,10 +167,12 @@ void DataStreamDlg::StartStream(DataStream *pStream)
     if (pStream)
     {
         pStream->Decode(rURL, aStartRange, nLimit, eMove, nSettings);
+        pStream->SetRefreshOnEmptyLine(m_pCBRefreshOnEmpty->IsChecked());
         return;
     }
 
     pStream = DataStream::Set(mpDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
+    pStream->SetRefreshOnEmptyLine(m_pCBRefreshOnEmpty->IsChecked());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
 }

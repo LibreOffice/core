@@ -78,6 +78,8 @@ public:
     void StartImport();
     void StopImport();
 
+    void SetRefreshOnEmptyLine( bool bVal );
+
 private:
     void Refresh();
 
@@ -91,6 +93,7 @@ private:
     MoveType meMove;
     bool mbRunning;
     bool mbValuesInLine;
+    bool mbRefreshOnEmptyLine;
     LinesList* mpLines;
     size_t mnLinesCount;
     size_t mnLinesSinceRefresh;
