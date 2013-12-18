@@ -4942,7 +4942,7 @@ void ScOpenclTest:: testLogicalFormulaNot()
     ScDocShellRef xDocShRes = loadDoc("opencl/logical/not.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
-    for (SCROW i = 0; i < 30000; ++i)
+    for (SCROW i = 0; i < 3000; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(1, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(1, i, 0));
@@ -4964,7 +4964,7 @@ void ScOpenclTest:: testLogicalFormulaXor()
     ScDocShellRef xDocShRes = loadDoc("opencl/logical/xor.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
-    for (SCROW i = 0; i < 30000; ++i)
+    for (SCROW i = 0; i < 3000; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(1, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(1, i, 0));
