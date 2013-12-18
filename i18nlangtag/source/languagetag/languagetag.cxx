@@ -364,7 +364,6 @@ private:
     /** Convert Locale to BCP 47 string without resolving system and creating
         temporary LanguageTag instances. */
     static OUString     convertToBcp47( const com::sun::star::lang::Locale& rLocale );
-
 };
 
 
@@ -713,6 +712,24 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
     return pImpl;
 }
 
+// static
+void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
+{
+    if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_SYSTEM)
+    {
+        SAL_WARN( "i18nlangtag",
+                "LanguageTag::setConfiguredSystemLanguage: refusing to set unresolved system locale 0x" <<
+                ::std::hex << nLang);
+        return;
+    }
+    SAL_INFO( "i18nlangtag", "LanguageTag::setConfiguredSystemLanguage: setting to 0x" << ::std::hex << nLang);
+    MsLangId::LanguageTagAccess::setConfiguredSystemLanguage( nLang);
+    // Resest system locale to none and let registerImpl() do the rest to
+    // initialize a new one.
+    theSystemLocale::get().reset();
+    LanguageTag aLanguageTag( LANGUAGE_SYSTEM);
+    aLanguageTag.registerImpl();
+}
 
 static bool lcl_isKnownOnTheFlyID( LanguageType nLang )
 {

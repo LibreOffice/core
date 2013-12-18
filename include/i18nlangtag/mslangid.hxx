@@ -172,11 +172,27 @@ public:
 
     /** @ATTENTION: these are _ONLY_ to be called by the application's
         configuration! */
-    static void setConfiguredSystemLanguage( LanguageType nLang );
     static void setConfiguredSystemUILanguage( LanguageType nLang );
     static void setConfiguredWesternFallback( LanguageType nLang );
     static void setConfiguredComplexFallback( LanguageType nLang );
     static void setConfiguredAsianFallback( LanguageType nLang );
+
+// ---------------------------------------------------------------------------
+
+    /** Encapsulated methods that shall only be accessed through
+        class LanguageTag.
+     */
+    class LanguageTagAccess
+    {
+    private:
+
+        friend class LanguageTag;
+
+        /** Configured system locale needs always be synchronized with
+            LanguageTag's system locale.
+         */
+        I18NLANGTAG_DLLPRIVATE static void setConfiguredSystemLanguage( LanguageType nLang );
+    };
 
 // ---------------------------------------------------------------------------
 

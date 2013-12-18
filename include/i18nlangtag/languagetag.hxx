@@ -498,6 +498,9 @@ public:
     /** If nLang is a generated on-the-fly LangID */
     static bool         isOnTheFlyID( LanguageType nLang );
 
+    /** @ATTENTION: _ONLY_ to be called by the application's configuration! */
+    static void setConfiguredSystemLanguage( LanguageType nLang );
+
     typedef ::boost::shared_ptr< LanguageTagImpl > ImplPtr;
 
 private:

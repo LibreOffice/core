@@ -37,7 +37,7 @@ LanguageType MsLangId::nConfiguredAsianFallback    = LANGUAGE_SYSTEM;
 LanguageType MsLangId::nConfiguredComplexFallback  = LANGUAGE_SYSTEM;
 
 // static
-void MsLangId::setConfiguredSystemLanguage( LanguageType nLang )
+void MsLangId::LanguageTagAccess::setConfiguredSystemLanguage( LanguageType nLang )
 {
     nConfiguredSystemLanguage = nLang;
 }
