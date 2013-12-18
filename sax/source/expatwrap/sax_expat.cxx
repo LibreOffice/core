@@ -129,7 +129,11 @@ OUString XmlChar2OUString( const XML_Char *p )
 
 class SaxExpatParser_Impl;
 
-static Sequence< OUString > SaxExpatParser_getSupportedServiceNames(void)
+OUString SaxExpatParser_getImplementationName() {
+    return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
+}
+
+Sequence< OUString > SaxExpatParser_getSupportedServiceNames(void)
 {
     Sequence<OUString> seq(1);
     seq[0] = OUString("com.sun.star.xml.sax.Parser");
@@ -594,7 +598,7 @@ void SaxExpatParser::setLocale( const Locale & locale ) throw (RuntimeException)
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName() throw ()
 {
-    return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
+    return SaxExpatParser_getImplementationName();
 }
 
 // XServiceInfo
@@ -1019,27 +1023,25 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(pImpl,rExtendedDocumentHandler->endCDATA() );
 }
 
-} // namespace
-
-static Reference< XInterface > SaxExpatParser_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
-    throw(Exception)
+Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference<css::uno::XComponentContext> & )
+    SAL_THROW((css::uno::Exception))
 {
     SaxExpatParser *p = new SaxExpatParser;
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
+} // namespace
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
 com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory(
-    const char * , void *pServiceManager, void * )
+    const char *, void *, void * )
 {
-    Reference< XSingleServiceFactory > xFactory;
-    Reference< XMultiServiceFactory > xSMgr =
-        reinterpret_cast< XMultiServiceFactory * >( pServiceManager );
-    xFactory = createSingleFactory( xSMgr,
-            "com.sun.star.comp.extensions.xml.sax.ParserExpat",
-            SaxExpatParser_CreateInstance,
-            SaxExpatParser_getSupportedServiceNames() );
+    Reference<css::lang::XSingleComponentFactory> xFactory(
+        cppu::createSingleComponentFactory(
+            &SaxExpatParser_CreateInstance,
+            SaxExpatParser_getImplementationName(),
+            SaxExpatParser_getSupportedServiceNames()));
     xFactory->acquire();
     return xFactory.get();
 }

@@ -867,7 +867,11 @@ static inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
     return -1;
 }
 
-static Sequence< OUString > SAXWriter_getSupportedServiceNames(void) throw ()
+OUString SAXWriter_getImplementationName() {
+    return OUString("com.sun.star.extensions.xml.sax.Writer");
+}
+
+Sequence< OUString > SAXWriter_getSupportedServiceNames(void) throw ()
 {
     Sequence<OUString> seq(1);
     seq.getArray()[0] = OUString("com.sun.star.xml.sax.Writer");
@@ -994,7 +998,7 @@ static inline sal_Bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
 // XServiceInfo
 OUString SAXWriter::getImplementationName() throw()
 {
-    return OUString("com.sun.star.extensions.xml.sax.Writer");
+    return SAXWriter_getImplementationName();
 }
 
 // XServiceInfo
@@ -1372,27 +1376,24 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
     }
 }
 
-} // namespace
-
-static Reference < XInterface > SAXWriter_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference < XMultiServiceFactory > & )
-    throw (Exception)
+Reference < XInterface > SAL_CALL SAXWriter_CreateInstance(
+    SAL_UNUSED_PARAMETER const Reference<css::uno::XComponentContext> & )
+    SAL_THROW((css::uno::Exception))
 {
     SAXWriter *p = new SAXWriter;
     return Reference< XInterface > ( (static_cast< OWeakObject * >(p)) );
 }
 
+} // namespace
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
 com_sun_star_extensions_xml_sax_Writer_component_getFactory(
-    const char * , void *pServiceManager, void * )
+    const char *, void *, void * )
 {
-    Reference< XSingleServiceFactory > xFactory;
-    Reference< XMultiServiceFactory > xSMgr =
-        reinterpret_cast< XMultiServiceFactory * >( pServiceManager );
-    xFactory = createSingleFactory( xSMgr,
-            "com.sun.star.extensions.xml.sax.Writer",
-            SAXWriter_CreateInstance,
-            SAXWriter_getSupportedServiceNames() );
+    Reference<css::lang::XSingleComponentFactory > xFactory(
+        cppu::createSingleComponentFactory(
+            &SAXWriter_CreateInstance, SAXWriter_getImplementationName(),
+            SAXWriter_getSupportedServiceNames()));
     xFactory->acquire();
     return xFactory.get();
 }
