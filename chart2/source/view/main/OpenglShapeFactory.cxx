@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/unoshape.hxx>
 #include "OpenglShapeFactory.hxx"
 #include "DummyXShape.hxx"
 #include "ViewDefines.hxx"
@@ -46,7 +47,6 @@
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/unoshape.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
