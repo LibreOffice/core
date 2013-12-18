@@ -202,7 +202,7 @@ namespace connectivity
                 if ( !xStorage.is() || sURL.isEmpty() )
                 {
                     ::connectivity::SharedResources aResources;
-                    const OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
+                    const OUString sMessage = aResources.getResourceString(STR_NO_STORAGE);
                     ::dbtools::throwGenericSQLException(sMessage ,*this);
                 }
 

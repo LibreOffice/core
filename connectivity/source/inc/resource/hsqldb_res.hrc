@@ -27,7 +27,7 @@
 // = the hsqldb driver's resource strings
 // ============================================================================
 
-#define STR_NO_STROAGE              ( STR_HSQLDB_BASE +    0 )
+#define STR_NO_STORAGE              ( STR_HSQLDB_BASE +    0 )
 #define STR_INVALID_FILE_URL        ( STR_HSQLDB_BASE +    1 )
 #define STR_NO_TABLE_CONTAINER      ( STR_HSQLDB_BASE +    2 )
 #define STR_NO_TABLE_EDITOR_DIALOG  ( STR_HSQLDB_BASE +    3 )

@@ -147,7 +147,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
         if ( !m_xEmbeddedStorage.is() )
         {
             ::connectivity::SharedResources aResources;
-            const OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
+            const OUString sMessage = aResources.getResourceString(STR_NO_STORAGE);
             ::dbtools::throwGenericSQLException(sMessage ,*this);
         }
 

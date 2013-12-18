@@ -591,7 +591,7 @@ String STR_NO_MAC_OS_FOUND
 };
 
 // hsqldb
-String STR_NO_STROAGE
+String STR_NO_STORAGE
 {
     Text [ en-US ] = "The connection can not be established. No storage or URL was given.";
 };
