@@ -3318,8 +3318,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                         // if the cursor position was corrected or if a Fly
                         // was selected in ReadOnlyMode, no word selection.
-                        if ( !bValidCrsrPos ||
-                            (rSh.IsFrmSelected() && rSh.IsFrmSelected() ))
+                        if ( !bValidCrsrPos || rSh.IsFrmSelected() )
                             return;
 
                         SwField *pFld;
