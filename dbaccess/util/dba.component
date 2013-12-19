@@ -23,7 +23,6 @@
     <service name="com.sun.star.chart2.data.DatabaseDataProvider"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.DataAccessDescriptorFactory">
-    <service name="com.sun.star.sdb.DataAccessDescriptorFactory"/>
     <singleton name="com.sun.star.sdb.DataAccessDescriptorFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.OCommandDefinition">

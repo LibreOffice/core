@@ -23,6 +23,7 @@ const sdecl::ServiceDecl ResourceIndexAccessDecl(
     "org.libreoffice.extensions.resource.ResourceIndexAccess",
     "org.libreoffice.resource.ResourceIndexAccess");
 
+//TOOD: this is a singleton, not a service:
 const sdecl::ServiceDecl OpenOfficeResourceLoaderDecl(
     OpenOfficeResourceLoaderServiceImpl,
     "com.sun.star.comp.resource.OpenOfficeResourceLoader",

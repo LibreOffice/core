@@ -20,7 +20,6 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="res" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.resource.OpenOfficeResourceLoader">
-    <service name="com.sun.star.resource.OfficeResourceLoader"/>
     <singleton name="com.sun.star.resource.OfficeResourceLoader"/>
   </implementation>
   <implementation name="org.libreoffice.extensions.resource.ResourceIndexAccess">

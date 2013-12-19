@@ -27,9 +27,6 @@ using namespace cssu;
 namespace framework {
 
 #define IMPLEMENTATION_NAME "org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer"
-#define SERVICE_NAME "com.sun.star.ui.ContextChangeEventMultiplexer"
-#define SINGLETON_NAME "org.apache.openoffice.comp.framework.ContextChangeEventMultiplexerSigleton"
-
 
 ContextChangeEventMultiplexer::ContextChangeEventMultiplexer (
     const cssu::Reference<cssu::XComponentContext>& rxContext)
@@ -347,14 +344,8 @@ OUString SAL_CALL ContextChangeEventMultiplexer::impl_getStaticImplementationNam
 
 cssu::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::static_GetSupportedServiceNames (void)
 {
-    cssu::Sequence<OUString> aServiceNames (2);
-    aServiceNames[0] = SERVICE_NAME;
-    aServiceNames[1] = SINGLETON_NAME;
-    return aServiceNames;
+    return css::uno::Sequence<OUString>();
 }
-
-
-
 
 cssu::Reference<cssu::XInterface> ContextChangeEventMultiplexer::impl_createFactory (
     const cssu::Reference<cssl::XMultiServiceFactory>& rxServiceManager)

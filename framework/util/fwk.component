@@ -38,7 +38,6 @@
     <service name="com.sun.star.ui.DocumentAcceleratorConfiguration"/>
   </implementation>
   <implementation name="org.apache.openoffice.comp.framework.ContextChangeEventMultiplexer">
-    <service name="com.sun.star.ui.ContextChangeEventMultiplexer"/>
     <singleton name="com.sun.star.ui.ContextChangeEventMultiplexer"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.Frame">

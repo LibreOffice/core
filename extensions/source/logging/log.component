@@ -29,7 +29,6 @@
     <service name="com.sun.star.logging.FileHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.extensions.LoggerPool">
-    <service name="com.sun.star.logging.LoggerPool"/>
     <singleton name="com.sun.star.logging.LoggerPool"/>
   </implementation>
   <implementation name="com.sun.star.comp.extensions.PlainTextFormatter">
