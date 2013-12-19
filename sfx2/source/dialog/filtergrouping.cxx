@@ -661,7 +661,7 @@ namespace sfx2
 
             assert(aCurrentGroup != _rAllFilters.end()); //invalid current group!
             if (aCurrentGroup == _rAllFilters.end())
-                aCurrentGroup == _rAllFilters.begin();
+                aCurrentGroup = _rAllFilters.begin();
 
             // ===========================================================
             // check if the filter is part of a global group
