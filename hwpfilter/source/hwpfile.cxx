@@ -517,7 +517,7 @@ ShowPageNum *HWPFile::getPageNumber(int index)
 	  break;
     }
 
-    return *it;
+    return it != pagenumbers.end() ? *it : NULL;
 
 }
 
