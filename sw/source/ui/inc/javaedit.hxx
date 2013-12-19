@@ -70,22 +70,18 @@ private:
     void            CheckTravel();
     void            SetFld();
 
-    using Dialog::GetText;
-    using Window::GetType;
-
 public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
     ~SwJavaEditDialog();
 
-    OUString       GetText() { return aText; }
+    OUString GetScriptText() const { return aText; }
 
-    OUString       GetType() { return aType; }
+    OUString GetScriptType() const { return aType; }
 
-    sal_Bool                IsUrl() { return bIsUrl; }
-    sal_Bool                IsNew() { return bNew; }
-    bool                IsUpdate();
+    sal_Bool IsUrl() const { return bIsUrl; }
+    sal_Bool IsNew() const { return bNew; }
+    bool IsUpdate() const;
 };
-
 
 #endif
 

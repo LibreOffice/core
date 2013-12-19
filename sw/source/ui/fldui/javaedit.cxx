@@ -220,7 +220,7 @@ void SwJavaEditDialog::SetFld()
         aType = "JavaScript";
 }
 
-bool SwJavaEditDialog::IsUpdate()
+bool SwJavaEditDialog::IsUpdate() const
 {
     return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }

@@ -535,8 +535,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {
-                        aType = pDlg->GetType();
-                        aText = pDlg->GetText();
+                        aType = pDlg->GetScriptType();
+                        aText = pDlg->GetScriptText();
                         bIsUrl = pDlg->IsUrl();
                         bNew = pDlg->IsNew();
                         bUpdate = pDlg->IsUpdate();

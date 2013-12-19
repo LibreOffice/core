@@ -451,27 +451,27 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
     pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rTableAutoFmtName, prTAFmt);
 }
 
-OUString AbstractJavaEditDialog_Impl::GetText()
+OUString AbstractJavaEditDialog_Impl::GetScriptText() const
 {
-    return pDlg->GetText();
+    return pDlg->GetScriptText();
 }
 
-OUString AbstractJavaEditDialog_Impl::GetType()
+OUString AbstractJavaEditDialog_Impl::GetScriptType() const
 {
-    return pDlg->GetType();
+    return pDlg->GetScriptType();
 }
 
-sal_Bool AbstractJavaEditDialog_Impl::IsUrl()
+sal_Bool AbstractJavaEditDialog_Impl::IsUrl() const
 {
     return pDlg->IsUrl();
 }
 
-sal_Bool AbstractJavaEditDialog_Impl::IsNew()
+sal_Bool AbstractJavaEditDialog_Impl::IsNew() const
 {
     return pDlg->IsNew();
 }
 
-bool AbstractJavaEditDialog_Impl::IsUpdate()
+bool AbstractJavaEditDialog_Impl::IsUpdate() const
 {
     return pDlg->IsUpdate();
 }

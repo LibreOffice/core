@@ -130,11 +130,11 @@ public:
 class AbstractJavaEditDialog : public VclAbstractDialog
 {
 public:
-    virtual OUString            GetText() = 0;
-    virtual OUString            GetType() = 0;
-    virtual sal_Bool            IsUrl() = 0;
-    virtual sal_Bool            IsNew() = 0;
-    virtual bool                IsUpdate() = 0;
+    virtual OUString            GetScriptText() const = 0;
+    virtual OUString            GetScriptType() const = 0;
+    virtual sal_Bool            IsUrl() const = 0;
+    virtual sal_Bool            IsNew() const = 0;
+    virtual bool                IsUpdate() const = 0;
 };
 
 class AbstractMailMergeDlg : public VclAbstractDialog

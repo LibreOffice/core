@@ -273,11 +273,11 @@ class SwJavaEditDialog;
 class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 {
     DECL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl,SwJavaEditDialog)
-    virtual OUString            GetText();
-    virtual OUString            GetType();
-    virtual sal_Bool            IsUrl();
-    virtual sal_Bool            IsNew();
-    virtual bool                IsUpdate();
+    virtual OUString            GetScriptText() const;
+    virtual OUString            GetScriptType() const;
+    virtual sal_Bool            IsUrl() const;
+    virtual sal_Bool            IsNew() const;
+    virtual bool                IsUpdate() const;
 };
 
 class SwMailMergeDlg;
