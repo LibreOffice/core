@@ -47,6 +47,8 @@ public:
     void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId);
     /// Writes a diagram (smartart).
     void writeDiagram(const SdrObject* sdrObject, const Size& size);
+    /// Write <a:effectLst>, the effect list.
+    void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX

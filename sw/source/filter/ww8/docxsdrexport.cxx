@@ -21,6 +21,7 @@
 #include <svx/svdogrp.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 
@@ -381,6 +382,70 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
     }
     else
         writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
+}
+
+// Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
+OString lcl_ConvertTransparency(const Color& rColor)
+{
+    if (rColor.GetTransparency() > 0)
+    {
+        sal_Int32 nTransparencyPercent = 100 - float(rColor.GetTransparency()) / 2.55;
+        return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);
+    }
+    else
+        return OString("");
+}
+
+void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
+{
+    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
+
+    // Output effects
+    if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
+    {
+        // Distance is measured diagonally from corner
+        double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2.0);
+        OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
+        OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
+        OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());
+        sal_uInt32 nShadowDir = 0;
+        switch (aShadowItem.GetLocation())
+        {
+        case SVX_SHADOW_TOPLEFT:
+            nShadowDir = 13500000;
+            break;
+        case SVX_SHADOW_TOPRIGHT:
+            nShadowDir = 18900000;
+            break;
+        case SVX_SHADOW_BOTTOMLEFT:
+            nShadowDir = 8100000;
+            break;
+        case SVX_SHADOW_BOTTOMRIGHT:
+            nShadowDir = 2700000;
+            break;
+        case SVX_SHADOW_NONE:
+        case SVX_SHADOW_END:
+            break;
+        }
+        OString aShadowDir(OString::number(nShadowDir));
+
+        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_effectLst, FSEND);
+        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_outerShdw,
+                                               XML_dist, aShadowDist.getStr(),
+                                               XML_dir, aShadowDir.getStr(), FSEND);
+        if (aShadowAlpha.isEmpty())
+            m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
+                                                    XML_val, aShadowColor.getStr(), FSEND);
+        else
+        {
+            m_pImpl->m_pSerializer->startElementNS(XML_a, XML_srgbClr, XML_val, aShadowColor.getStr(), FSEND);
+            m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_alpha, XML_val, aShadowAlpha.getStr(), FSEND);
+            m_pImpl->m_pSerializer->endElementNS(XML_a, XML_srgbClr);
+        }
+        m_pImpl->m_pSerializer->endElementNS(XML_a, XML_outerShdw);
+        m_pImpl->m_pSerializer->endElementNS(XML_a, XML_effectLst);
+    }
+
 }
 
 void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
