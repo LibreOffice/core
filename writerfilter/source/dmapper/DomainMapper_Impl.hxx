@@ -173,8 +173,10 @@ struct TextAppendContext
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >       xTextAppend;
     ParagraphPropertiesPtr                                                        pLastParagraphProperties;
 
-    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend ) :
-        xTextAppend( xAppend ){}
+    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend )
+        : xTextAppend( xAppend )
+    {
+    }
 };
 
 typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
@@ -211,11 +213,16 @@ class FIB
 struct DeletableTabStop : public ::com::sun::star::style::TabStop
 {
     bool bDeleted;
-    DeletableTabStop() :
-        bDeleted( false ){}
-    DeletableTabStop( const ::com::sun::star::style::TabStop& rTabStop ) :
-        TabStop( rTabStop ),
-            bDeleted( false ){}
+
+    DeletableTabStop()
+        : TabStop()
+        , bDeleted( false )
+    {}
+
+    DeletableTabStop( const ::com::sun::star::style::TabStop& rTabStop )
+        : TabStop( rTabStop )
+        , bDeleted( false )
+    {}
 };
 /*-- 12.06.2007 07:15:31---------------------------------------------------
     /// helper to remember bookmark start position
@@ -225,10 +232,14 @@ struct BookmarkInsertPosition
     bool                                                                    m_bIsStartOfText;
     ::rtl::OUString                                                         m_sBookmarkName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, const ::rtl::OUString& rName, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
-        m_bIsStartOfText( bIsStartOfText ),
-        m_sBookmarkName( rName ),
-        m_xTextRange( xTextRange )
+
+    BookmarkInsertPosition(
+        bool bIsStartOfText,
+        const ::rtl::OUString& rName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange )
+        : m_bIsStartOfText( bIsStartOfText )
+        , m_sBookmarkName( rName )
+        , m_xTextRange( xTextRange )
      {}
 };
 
@@ -352,8 +363,8 @@ private:
     bool                            m_bIsInComments;
 
     //annotation import
-    uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
-    AnnotationPosition                                                         m_aAnnotationPosition;
+    uno::Reference< beans::XPropertySet >   m_xAnnotationField;
+    AnnotationPosition                      m_aAnnotationPosition;
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,

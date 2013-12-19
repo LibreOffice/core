@@ -3769,9 +3769,18 @@ sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
 
 void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_sAuthor = sAuthor;
+    if (m_xAnnotationField.is())
+    {
+        m_xAnnotationField->setPropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Author")),
+            uno::makeAny(sAuthor) );
+    }
+    else
+    {
+        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+        if ( pCurrent.get(  ) )
+            pCurrent->m_sAuthor = sAuthor;
+    }
 }
 
 void DomainMapper_Impl::SetCurrentRedlineInitials( rtl::OUString sInitials )
@@ -3786,9 +3795,18 @@ void DomainMapper_Impl::SetCurrentRedlineInitials( rtl::OUString sInitials )
 
 void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_sDate = sDate;
+    if (m_xAnnotationField.is())
+    {
+        m_xAnnotationField->setPropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
+            uno::makeAny( ConversionHelper::convertDateTime( sDate ) ) );
+    }
+    else
+    {
+        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+        if ( pCurrent.get(  ) )
+            pCurrent->m_sDate = sDate;
+    }
 }
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
