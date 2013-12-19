@@ -40,6 +40,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pRBAddressValue->Enable(false);
+    m_pRBNoMove->Hide();
     m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pBtnBrowse->SetClickHdl( LINK( this, DataStreamDlg, BrowseHdl ) );
@@ -68,7 +69,6 @@ void DataStreamDlg::UpdateEnable()
     bool bOk = !m_pCbUrl->GetURL().isEmpty();
     if (m_pRBAddressValue->IsChecked())
     {
-        m_pRBNoMove->Check();
         m_pVclFrameLimit->Disable();
         m_pVclFrameMove->Disable();
         m_pEdRange->Disable();
@@ -129,13 +129,12 @@ void DataStreamDlg::Init(
         case DataStream::MOVE_DOWN:
             m_pRBDataDown->Check();
         break;
-        case DataStream::NO_MOVE:
-            m_pRBNoMove->Check();
         break;
         case DataStream::RANGE_DOWN:
             m_pRBRangeDown->Check();
         break;
         case DataStream::MOVE_UP:
+        case DataStream::NO_MOVE:
         default:
             ;
     }
@@ -161,8 +160,7 @@ void DataStreamDlg::StartStream(DataStream *pStream)
        nSettings |= DataStream::VALUES_IN_LINE;
 
     DataStream::MoveType eMove =
-        m_pRBNoMove->IsChecked() ? DataStream::NO_MOVE : m_pRBRangeDown->IsChecked()
-            ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
+        m_pRBRangeDown->IsChecked() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
 
     if (pStream)
     {
