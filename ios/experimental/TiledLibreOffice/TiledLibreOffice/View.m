@@ -37,6 +37,14 @@
 
         self.subView = [[TiledView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width*docAspectRatio) scale:widthScale maxZoom:MAXZOOM];
         [self addSubview:self.subView];
+
+        UILabel *tpsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 300, 40)];
+        [tpsLabel setFont:[UIFont systemFontOfSize:38]];
+        [tpsLabel setBackgroundColor: [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3]];
+        [tpsLabel setTextColor: [UIColor colorWithRed:1 green:1 blue:0 alpha:1]];
+        [tpsLabel setTextAlignment: NSTextAlignmentRight];
+        [self addSubview:tpsLabel];
+        self.tpsLabel = tpsLabel;
     }
     return self;
 }
@@ -44,6 +52,15 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.subView;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGRect frame = ((View*) scrollView).tpsLabel.frame;
+
+    frame.origin.x = 20 + scrollView.contentOffset.x;
+    frame.origin.y = 20 + scrollView.contentOffset.y;
+    ((View *) scrollView).tpsLabel.frame = frame;
 }
 
 @end

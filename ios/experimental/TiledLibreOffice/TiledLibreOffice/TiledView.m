@@ -19,6 +19,60 @@
 
 @implementation TiledView
 
+static const int NTIMESTAMPS = 100;
+static const CFTimeInterval AVERAGINGTIME = 5;
+
+static CFTimeInterval tileTimestamps[NTIMESTAMPS];
+static int curFirstTimestamp = 0;
+static int curNextTimestamp = 0;
+
+static void dropOldTimestamps(CFTimeInterval now)
+{
+    // Drop too old timestamps
+    while (curFirstTimestamp != curNextTimestamp && now - tileTimestamps[curFirstTimestamp] >= AVERAGINGTIME)
+        curFirstTimestamp = (curFirstTimestamp + 1) % NTIMESTAMPS;
+}
+
+static void updateTilesPerSecond(UILabel *label)
+{
+    int n = (curNextTimestamp < curFirstTimestamp) ?
+        (NTIMESTAMPS - (curFirstTimestamp - curNextTimestamp))
+        : ((curNextTimestamp - curFirstTimestamp));
+
+    // NSLog(@"first:%d next:%d n:%d", curFirstTimestamp, curNextTimestamp, n);
+
+    double tps = n/AVERAGINGTIME;
+
+    [label setText:[NSString stringWithFormat:@"%.0f tiles/second", tps]];
+}
+
+- (void)didRenderTile
+{
+    CFTimeInterval now = CACurrentMediaTime();
+
+    @synchronized(self) {
+        dropOldTimestamps(now);
+
+        // Add new timestamp
+        tileTimestamps[curNextTimestamp] = now;
+        // Let next added replace newest if array full
+        if (curFirstTimestamp != (curNextTimestamp + 1) % NTIMESTAMPS)
+            curNextTimestamp = (curNextTimestamp + 1) % NTIMESTAMPS;
+
+        updateTilesPerSecond(((View *) [self superview]).tpsLabel);
+    }
+}
+
+- (void)updateTilesPerSecond
+{
+    CFTimeInterval now = CACurrentMediaTime();
+
+    @synchronized(self) {
+        dropOldTimestamps(now);
+        updateTilesPerSecond(((View *) [self superview]).tpsLabel);
+    }
+}
+
 - (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom
 {
     self = [super initWithFrame:frame];
@@ -28,6 +82,8 @@
         catl.tileSize = CGSizeMake(512, 512);
         catl.levelsOfDetail = log2(maxZoom) + 1;
         catl.levelsOfDetailBias = catl.levelsOfDetail - 1;
+
+        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateTilesPerSecond) userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -44,8 +100,9 @@
     // expected it to be called with a bbox of 256x256.
 
     CGRect bb = CGContextGetClipBoundingBox(ctx);
-    double zoomScale = [(View *) [self superview] zoomScale];
-    CATiledLayer *catl = (CATiledLayer*) [self layer];
+
+    // double zoomScale = [(View *) [self superview] zoomScale];
+    // CATiledLayer *catl = (CATiledLayer*) [self layer];
 
     CGContextSaveGState(ctx);
 
@@ -69,6 +126,8 @@
                        tileSize.width, tileSize.height,
                        CGPointMake(bb.origin.x/self.scale, bb.origin.y/self.scale),
                        CGSizeMake(bb.size.width/self.scale, bb.size.height/self.scale));
+
+    [self didRenderTile];
 
     CGContextRestoreGState(ctx);
 

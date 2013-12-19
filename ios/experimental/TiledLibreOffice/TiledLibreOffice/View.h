@@ -10,6 +10,8 @@
 
 @interface View : UIScrollView <UIScrollViewDelegate>
 
+@property UILabel *tpsLabel;
+
 @end
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
