@@ -1713,7 +1713,7 @@ void Window::ImplInitResolutionSettings()
         mnDPIY = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
 
         // setup the scale factor for Hi-DPI displays
-        mnDPIScaleFactor = std::max(1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
+        mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
 
         SetPointFont( rStyleSettings.GetAppFont() );
     }
