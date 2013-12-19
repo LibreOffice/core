@@ -62,6 +62,7 @@ public:
     const sal_Int32& GetLimit() const { return mnLimit; }
     MoveType GetMove() const;
     const sal_uInt32& GetSettings() const { return mnSettings; }
+    bool IsRefreshOnEmptyLine() const;
 
     void Decode(
         const OUString& rURL, const ScRange& rRange, sal_Int32 nLimit,
@@ -83,7 +84,8 @@ private:
     OUString msURL;
     sal_Int32 mnLimit;
     sal_uInt32 mnSettings;
-    MoveType meMove;
+    MoveType meOrigMove; // Initial move setting. This one gets saved to file.
+    MoveType meMove; // move setting during streaming, which may change in the middle.
     bool mbRunning;
     bool mbValuesInLine;
     bool mbRefreshOnEmptyLine;

@@ -208,6 +208,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mpDocShell(pShell),
     mpDoc(mpDocShell->GetDocument()),
     maDocAccess(*mpDoc),
+    meOrigMove(NO_MOVE),
     meMove(NO_MOVE),
     mbRunning(false),
     mbValuesInLine(false),
@@ -268,9 +269,14 @@ ScRange DataStream::GetRange() const
     return aRange;
 }
 
+bool DataStream::IsRefreshOnEmptyLine() const
+{
+    return mbRefreshOnEmptyLine;
+}
+
 DataStream::MoveType DataStream::GetMove() const
 {
-    return meMove;
+    return meOrigMove;
 }
 
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
@@ -279,6 +285,7 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
     msURL = rURL;
     mnLimit = nLimit;
     meMove = eMove;
+    meOrigMove = eMove;
     mnSettings = nSettings;
 
     mbValuesInLine = mnSettings & VALUES_IN_LINE;

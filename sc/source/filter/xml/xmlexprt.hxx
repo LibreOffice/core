@@ -198,6 +198,7 @@ class ScXMLExport : public SvXMLExport
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, bool bColumn );
     void WriteNamedExpressions();
+    void WriteDataStream();
     void WriteNamedRange(ScRangeName* pRangeName);
     void ExportConditionalFormat(SCTAB nTab);
     void WriteExternalRefCaches();
