@@ -3682,7 +3682,8 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
                 new XMLStringBufferImportContext( GetImport(), nPrefix, rLocalName, aDateBuffer);
         }
     }
-    else if ( XML_NAMESPACE_TEXT == nPrefix )
+    else if ( XML_NAMESPACE_TEXT == nPrefix
+              || XML_NAMESPACE_TEXT_EXT == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_SENDER_INITIALS ) )
         {

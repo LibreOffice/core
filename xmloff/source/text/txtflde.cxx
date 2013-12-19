@@ -1764,13 +1764,14 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
 
         // initials
+        if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         {
             OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
             if ( aInitials.getLength() > 0 )
             {
                 SvXMLElementExport aCreatorElem(
                     GetExport(),
-                    XML_NAMESPACE_TEXT,
+                    XML_NAMESPACE_TEXT_EXT,
                     XML_SENDER_INITIALS,
                     sal_True,
                     sal_False );

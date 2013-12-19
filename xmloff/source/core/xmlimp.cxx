@@ -92,6 +92,7 @@ sal_Char __READONLY_DATA sXML_np__oooc[] = "_oooc";
 sal_Char __READONLY_DATA sXML_np__of[] = "_of";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
 sal_Char __READONLY_DATA sXML_np__text[] = "_text";
+sal_Char __READONLY_DATA sXML_np__text_ext[] = "_text_ooo";
 sal_Char __READONLY_DATA sXML_np__table[] = "_table";
 sal_Char __READONLY_DATA sXML_np__table_ext[] = "_table_ooo";
 sal_Char __READONLY_DATA sXML_np__draw[] = "_draw";
@@ -308,8 +309,7 @@ void SvXMLImport::_InitCtor()
     if( mnImportFlags != 0 )
     {
         // implicit "xml" namespace prefix
-        mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML),
-                            XML_NAMESPACE_XML );
+        mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
                             GetXMLToken(XML_N_OFFICE),
                             XML_NAMESPACE_OFFICE );
@@ -323,6 +323,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text) ),
                             GetXMLToken(XML_N_TEXT),
                             XML_NAMESPACE_TEXT );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text_ext ) ),
+            GetXMLToken(XML_N_TEXT_EXT),
+            XML_NAMESPACE_TEXT_EXT );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table ) ),
                             GetXMLToken(XML_N_TABLE),
                             XML_NAMESPACE_TABLE );
