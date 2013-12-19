@@ -659,7 +659,9 @@ namespace sfx2
                 aCurrentServiceName = aServiceName;
             }
 
-            DBG_ASSERT( aCurrentGroup != _rAllFilters.end(), "sfx2::lcl_GroupAndClassify: invalid current group!" );
+            assert(aCurrentGroup != _rAllFilters.end()); //invalid current group!
+            if (aCurrentGroup == _rAllFilters.end())
+                aCurrentGroup == _rAllFilters.begin();
 
             // ===========================================================
             // check if the filter is part of a global group
