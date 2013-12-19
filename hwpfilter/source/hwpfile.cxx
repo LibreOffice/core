@@ -530,7 +530,7 @@ Table *HWPFile::getTable(int index)
 	  break;
     }
 
-    return *it;
+    return it != tables.end() ? *it : NULL;
 }
 
 void HWPFile::AddParaShape(ParaShape * pshape)
