@@ -251,11 +251,11 @@ const SwFldTypes* SwDoc::GetFldTypes() const
 }
 
 /// Find first type with ResId and name
-SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const OUString& rName,
-         bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
-                                   // to use different string matching code
-                                   // #i51815#
-         ) const
+SwFieldType* SwDoc::GetFldType(
+    sal_uInt16 nResId,
+    const OUString& rName,
+    bool bDbFieldMatching // used in some UNO calls for RES_DBFLD to use different string matching code #i51815#
+    ) const
 {
     sal_uInt16 nSize = mpFldTypes->size(), i = 0;
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
@@ -2116,7 +2116,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
                             n < nEnd; ++n )
                     {
                         const SwTxtAttr* pAttr = pTNd->GetSwpHints()[ n ];
-                        if( RES_TXTATR_FIELD == pAttr->Which() )
+                        if ( pAttr->Which() == RES_TXTATR_FIELD )
                         {
                             b = true;
                             break;

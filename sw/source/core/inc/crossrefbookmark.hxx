@@ -67,7 +67,6 @@ namespace sw {
                 const KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
-            static OUString GenerateNewName();
             static bool IsLegalName(const OUString& rName);
         };
 
@@ -79,7 +78,6 @@ namespace sw {
                 const KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
-            static OUString GenerateNewName();
             static bool IsLegalName(const OUString& rName);
         };
     }

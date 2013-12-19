@@ -665,7 +665,7 @@ static bool lcl_InsAttr(
                                 : pNode->Len();
                 SwRegHistory history( pNode, *pNode, pHistory );
                 bRet = history.InsertItems( aTxtSet, nInsCnt, nEnd, nFlags )
-                    || bRet;
+                       || bRet;
 
                 if (bRet && (pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline()
                                 && !pDoc->GetRedlineTbl().empty())))
@@ -679,8 +679,10 @@ static bool lcl_InsAttr(
                         pUndo->SaveRedlineData( aPam, bTxtIns );
 
                     if( pDoc->IsRedlineOn() )
-                        pDoc->AppendRedline( new SwRedline( bTxtIns
-                                ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
+                        pDoc->AppendRedline(
+                            new SwRedline(
+                                bTxtIns ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_FORMAT, aPam ),
+                                true);
                     else if( bTxtIns )
                         pDoc->SplitRedline( aPam );
                 }

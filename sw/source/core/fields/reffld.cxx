@@ -333,9 +333,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         const sal_Int32 nFrom = bHasCat
                             ? std::max(nNumStart + 1, nCatEnd)
                             : nNumStart + 1;
-                        nStart = SwGetExpField::GetReferenceTextPos(
-                            pTxtAttr->GetFmtFld(), *pDoc, nFrom
-                        );
+                        nStart = SwGetExpField::GetReferenceTextPos( pTxtAttr->GetFmtFld(), *pDoc, nFrom );
                     } else {
                         nStart = bHasCat ? std::max(nNumEnd, nCatEnd) : nNumEnd;
                     }
@@ -863,7 +861,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
     case REF_BOOKMARK:
         {
             IDocumentMarkAccess::const_iterator_t ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
-            if(ppMark != pDoc->getIDocumentMarkAccess()->getMarksEnd())
+            if(ppMark != pDoc->getIDocumentMarkAccess()->getAllMarksEnd())
             {
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 const SwPosition* pPos = &pBkmk->GetMarkStart();

@@ -123,7 +123,9 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
         SwNodeIndex(rMkPos.m_nNode, +1).GetNode().GetCntntNode());
     if (rMkPos == rPtPos &&
         ((0 != rPtPos.m_nCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
-        && (RES_TXTATR_FIELD != nWhich && RES_TXTATR_INPUTFIELD != nWhich)
+        && ( RES_TXTATR_FIELD != nWhich
+             && RES_TXTATR_ANNOTATION != nWhich
+             && RES_TXTATR_INPUTFIELD != nWhich )
         && !(bIsParaEnd && pCntntNode && pCntntNode->IsTxtNode() && 0 != pCntntNode->Len() ))
     {
         return false;
@@ -516,9 +518,12 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_STYLESHEET:
         break;
+
     case RES_TXTATR_FIELD:
+    case RES_TXTATR_ANNOTATION:
     case RES_TXTATR_INPUTFIELD:
         break;
+
     case RES_TXTATR_TOXMARK:
         break;
 

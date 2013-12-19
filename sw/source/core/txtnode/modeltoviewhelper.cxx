@@ -140,6 +140,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
                 switch (pAttr->Which())
                 {
                     case RES_TXTATR_FIELD:
+                    case RES_TXTATR_ANNOTATION:
                         aExpand =
                             static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
                                 ->ExpandField(true);

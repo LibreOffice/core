@@ -75,62 +75,66 @@ struct LayoutInfoOrder
 
 } // eof anonymous namespace
 
-SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLayoutInfo >& rInfo, SwPosition& rPos )
+SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
+    SwLayoutInfo& o_rInfo,
+    const SwPosition& rAnchorPos,
+    const SwPosition* pAnnotationStartPos )
 {
     SwLayoutStatus aRet = INVISIBLE;
-    const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();   // getfirstcontentnode // getnext...
-    if( !pNode )
+    SwTxtNode* pTxtNode = rAnchorPos.nNode.GetNode().GetTxtNode();
+    if ( pTxtNode == NULL )
         return aRet;
-    SwIterator<SwTxtFrm,SwCntntNode> aIter( *pNode );
-    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm; pTxtFrm = aIter.Next() )
+
+    SwIterator<SwTxtFrm,SwCntntNode> aIter( *pTxtNode );
+    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm != NULL; pTxtFrm = aIter.Next() )
     {
         if( !pTxtFrm->IsFollow() )
         {
-            pTxtFrm = ((SwTxtFrm*)pTxtFrm)->GetFrmAtPos( rPos );
-        SwPageFrm *pPage = pTxtFrm ? pTxtFrm->FindPageFrm() : 0;
-        // #i103490#
-            if ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
+            pTxtFrm = pTxtFrm->GetFrmAtPos( rAnchorPos );
+            SwPageFrm *pPage = pTxtFrm ? pTxtFrm->FindPageFrm() : 0;
+            if ( pPage != NULL && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
             {
-                SwLayoutInfo aInfo;
-                pTxtFrm->GetCharRect( aInfo.mPosition, rPos, 0 );
-                aInfo.mpAnchorFrm = pTxtFrm;
-                aInfo.mPageFrame = pPage->Frm();
-                aInfo.mPagePrtArea = pPage->Prt();
-                aInfo.mPagePrtArea.Pos() += aInfo.mPageFrame.Pos();
-                aInfo.mnPageNumber = pPage->GetPhyPageNum();
-                aInfo.meSidebarPosition = pPage->SidebarPosition();
-                aInfo.mRedlineAuthor = 0;
+                aRet = VISIBLE;
 
-                if( aRet == INVISIBLE )
+                o_rInfo.mpAnchorFrm = pTxtFrm;
+                pTxtFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos, 0 );
+                if ( pAnnotationStartPos != NULL )
                 {
-                    aRet = VISIBLE;
-                    const IDocumentRedlineAccess* pIDRA = pNode->getIDocumentRedlineAccess();
-                    if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
-                    {
-                        const SwRedline* pRedline = pIDRA->GetRedline( rPos, 0 );
-                        if( pRedline )
-                        {
-                            if( nsRedlineType_t::REDLINE_INSERT == pRedline->GetType() )
-                                aRet = INSERTED;
-                            else if( nsRedlineType_t::REDLINE_DELETE == pRedline->GetType() )
-                                aRet = DELETED;
-                            aInfo.mRedlineAuthor = pRedline->GetAuthor();
-                        }
-                    }
+                    o_rInfo.mnStartNodeIdx = pAnnotationStartPos->nNode.GetIndex();
+                    o_rInfo.mnStartContent = pAnnotationStartPos->nContent.GetIndex();
                 }
-
+                else
                 {
-                    std::vector< SwLayoutInfo >::iterator aInsPosIter =
-                                std::lower_bound( rInfo.begin(), rInfo.end(),
-                                                  aInfo, LayoutInfoOrder() );
+                    o_rInfo.mnStartNodeIdx = 0;
+                    o_rInfo.mnStartContent = -1;
+                }
+                o_rInfo.mPageFrame = pPage->Frm();
+                o_rInfo.mPagePrtArea = pPage->Prt();
+                o_rInfo.mPagePrtArea.Pos() += o_rInfo.mPageFrame.Pos();
+                o_rInfo.mnPageNumber = pPage->GetPhyPageNum();
+                o_rInfo.meSidebarPosition = pPage->SidebarPosition();
+                o_rInfo.mRedlineAuthor = 0;
 
-                    rInfo.insert( aInsPosIter, aInfo );
+                const IDocumentRedlineAccess* pIDRA = pTxtNode->getIDocumentRedlineAccess();
+                if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
+                {
+                    const SwRedline* pRedline = pIDRA->GetRedline( rAnchorPos, 0 );
+                    if( pRedline )
+                    {
+                        if( nsRedlineType_t::REDLINE_INSERT == pRedline->GetType() )
+                            aRet = INSERTED;
+                        else if( nsRedlineType_t::REDLINE_DELETE == pRedline->GetType() )
+                            aRet = DELETED;
+                        o_rInfo.mRedlineAuthor = pRedline->GetAuthor();
+                    }
                 }
             }
         }
     }
-    return ((aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTxtNode , rPos.nContent.GetIndex()) ) ? HIDDEN : aRet;
+
+    return ( (aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTxtNode , rAnchorPos.nContent.GetIndex()) )
+             ? HIDDEN
+             : aRet;
 }
 
 long SwPostItHelper::getLayoutHeight( const SwRootFrm* pRoot )
@@ -163,17 +167,17 @@ unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrm, const SwRootFrm* pR
 
 SwPosition SwAnnotationItem::GetAnchorPosition() const
 {
-    SwTxtFld* pFld = pFmtFld->GetTxtFld();
-    SwTxtNode* pTNd = pFld->GetpTxtNode();
+    SwTxtFld* pTxtFld = mrFmtFld.GetTxtFld();
+    SwTxtNode* pTxtNode = pTxtFld->GetpTxtNode();
 
-    SwPosition aPos( *pTNd );
-    aPos.nContent.Assign( pTNd, *pFld->GetStart() );
+    SwPosition aPos( *pTxtNode );
+    aPos.nContent.Assign( pTxtNode, *(pTxtFld->GetStart()) );
     return aPos;
 }
 
 bool SwAnnotationItem::UseElement()
 {
-    return pFmtFld->IsFldInDoc();
+    return mrFmtFld.IsFldInDoc();
 }
 
 sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
@@ -185,7 +189,7 @@ sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
     return new sw::annotation::SwAnnotationWin( rEditWin, nBits,
                                                 aMgr, aBits,
                                                 *this,
-                                                pFmtFld );
+                                                &mrFmtFld );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

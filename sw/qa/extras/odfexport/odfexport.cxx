@@ -42,10 +42,10 @@ DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
     // Test properties
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -109,7 +109,7 @@ DECLARE_ODFEXPORT_TEST(testFdo60769, "fdo60769.odt")
         uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
         OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
         // First paragraph: no field end, no anchor
-        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldStart");
+        CPPUNIT_ASSERT(aType == "Text" || aType == "Annotation");
     }
 
     xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
@@ -118,7 +118,7 @@ DECLARE_ODFEXPORT_TEST(testFdo60769, "fdo60769.odt")
         uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
         OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
         // Second paragraph: no field start
-        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldEnd");
+        CPPUNIT_ASSERT(aType == "Text" || aType == "AnnotationEnd");
     }
 }
 

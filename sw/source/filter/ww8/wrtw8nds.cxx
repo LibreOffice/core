@@ -1687,10 +1687,10 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt,
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uLong nNd = rNd.GetIndex( );
 
-    const sal_Int32 nMarks = pMarkAccess->getMarksCount();
+    const sal_Int32 nMarks = pMarkAccess->getCommonMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
     {
-        IMark* pMark = ( pMarkAccess->getMarksBegin() + i )->get();
+        IMark* pMark = ( pMarkAccess->getCommonMarksBegin() + i )->get();
 
         // Only keep the bookmarks starting or ending in this node
         if ( pMark->GetMarkStart().nNode == nNd ||
@@ -1708,7 +1708,9 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt,
                 continue;
 
             if ( bIsStartOk || bIsEndOk )
+            {
                 rArr.push_back( pMark );
+            }
         }
     }
     return ( rArr.size() > 0 );

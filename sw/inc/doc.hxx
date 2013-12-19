@@ -1095,6 +1095,7 @@ public:
     void CopyWithFlyInFly( const SwNodeRange& rRg,
                             const sal_Int32 nEndContentIndex,
                             const SwNodeIndex& rInsPos,
+                            const SwPaM* pCopiedPaM = NULL,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;

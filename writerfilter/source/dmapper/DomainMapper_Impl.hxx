@@ -252,6 +252,7 @@ struct AnnotationPosition
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xStart;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xEnd;
 };
+typedef boost::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
 
 struct RedlineParams
 {
@@ -397,8 +398,9 @@ private:
     uno::Reference< text::XTextCursor > xTOCMarkerCursor;
 
     //annotation import
-    uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
-    AnnotationPosition                                                         m_aAnnotationPosition;
+    uno::Reference< beans::XPropertySet > m_xAnnotationField;
+    sal_Int32 m_nAnnotationId;
+    AnnotationPositions_t m_aAnnotationPositions;
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const OUString& rCommand,
@@ -613,7 +615,9 @@ public:
 
     void AddBookmark( const OUString& rBookmarkName, const OUString& rId );
 
-    void AddAnnotationPosition(const bool bStart);
+    void AddAnnotationPosition(
+        const bool bStart,
+        const sal_Int32 nAnnotationId );
 
     DomainMapperTableManager& getTableManager()
     {

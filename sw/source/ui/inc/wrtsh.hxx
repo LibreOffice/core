@@ -287,7 +287,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     int     IntelligentCut(int nSelectionType, sal_Bool bCut = sal_True);
 
     // edit
-    void    Insert(SwField &, SwPaM *pCommentRange = NULL);
+    void    Insert(SwField &);
     void    Insert(const OUString &);
     // graphic
     void    Insert( const OUString &rPath, const OUString &rFilter,

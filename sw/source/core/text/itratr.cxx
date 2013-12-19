@@ -768,17 +768,19 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                             nAdd = 20;
                         break;
                     }
+
                     case RES_TXTATR_FIELD :
-                    {
-                        SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
-                        const OUString aTxt = pFld->ExpandField(true);
-                        if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
-                            aTxt.getLength() ) )
-                            nAdd = 20;
-                        break;
-                    }
+                    case RES_TXTATR_ANNOTATION :
+                        {
+                            SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
+                            const OUString aTxt = pFld->ExpandField(true);
+                            if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
+                                aTxt.getLength() ) )
+                                nAdd = 20;
+                            break;
+                        }
                     default: aArg.nWordWidth = nOldWidth;
-                             aArg.nWordAdd = nOldAdd;
+                        aArg.nWordAdd = nOldAdd;
 
                 }
                 aIter.SeekAndChgAttrIter( ++nIdx, pOut );
@@ -960,7 +962,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
         {
             switch( pHint->Which() )
             {
-                case RES_TXTATR_FTN :
+            case RES_TXTATR_FTN :
                 {
                     const OUString aTxt = pHint->GetFtn().GetNumStr();
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.getLength() );
@@ -968,7 +970,9 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
                 }
-                case RES_TXTATR_FIELD :
+
+            case RES_TXTATR_FIELD :
+            case RES_TXTATR_ANNOTATION :
                 {
                     SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
                     OUString const aTxt = pFld->ExpandField(true);
@@ -977,9 +981,10 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
                 }
-                default:
+
+            default:
                 {
-                // any suggestions for a default action?
+                    // any suggestions for a default action?
                 }
             } // end of switch
             nIdx++;

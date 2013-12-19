@@ -172,8 +172,10 @@ bool SwAnnotationWin::CalcFollow()
     SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
     SwPosition aPosition( pTxtFld->GetTxtNode() );
     aPosition.nContent = *pTxtFld->GetStart();
-    SwTxtAttr * const pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
-                    aPosition.nContent.GetIndex() - 1, RES_TXTATR_FIELD );
+    SwTxtAttr * const pTxtAttr =
+        pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+            aPosition.nContent.GetIndex() - 1,
+            RES_TXTATR_ANNOTATION );
     const SwField* pFld = pTxtAttr ? pTxtAttr->GetFmtFld().GetField() : 0;
     return pFld && (pFld->Which()== RES_POSTITFLD);
 }
@@ -188,7 +190,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 
     SwTxtAttr * pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
                                         aPosition.nContent.GetIndex() + 1,
-                                        RES_TXTATR_FIELD );
+                                        RES_TXTATR_ANNOTATION );
     SwField* pFld = pTxtAttr
                     ? const_cast<SwField*>(pTxtAttr->GetFmtFld().GetField())
                     : 0;
@@ -197,7 +199,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
         aCount++;
         pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
                                         aPosition.nContent.GetIndex() + aCount,
-                                        RES_TXTATR_FIELD );
+                                        RES_TXTATR_ANNOTATION );
         pFld = pTxtAttr
                ? const_cast<SwField*>(pTxtAttr->GetFmtFld().GetField())
                : 0;

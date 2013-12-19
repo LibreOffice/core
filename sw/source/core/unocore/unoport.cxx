@@ -76,7 +76,8 @@ void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
     pUnoCursor->Add(this);
 }
 
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+SwXTextPortion::SwXTextPortion(
+    const SwUnoCrsr* pPortionCrsr,
         uno::Reference< text::XText > const& rParent,
         SwTextPortionType eType)
     : m_pImpl(new Impl)
@@ -98,9 +99,10 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     init( pPortionCrsr);
 }
 
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        uno::Reference< text::XText > const& rParent,
-        SwFrmFmt& rFmt )
+SwXTextPortion::SwXTextPortion(
+    const SwUnoCrsr* pPortionCrsr,
+    uno::Reference< text::XText > const& rParent,
+    SwFrmFmt& rFmt )
     : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -117,10 +119,11 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     init( pPortionCrsr);
 }
 
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-                    SwTxtRuby const& rAttr,
-                    uno::Reference< text::XText > const& xParent,
-                    sal_Bool bIsEnd )
+SwXTextPortion::SwXTextPortion(
+    const SwUnoCrsr* pPortionCrsr,
+    SwTxtRuby const& rAttr,
+    uno::Reference< text::XText > const& xParent,
+    sal_Bool bIsEnd )
     : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -287,6 +290,12 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_FIELD_START:pRet = "TextFieldStart";break;
                 case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
                 case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
+                case PORTION_ANNOTATION:
+                    pRet = "Annotation";
+                    break;
+                case PORTION_ANNOTATION_END:
+                    pRet = "AnnotationEnd";
+                    break;
                 default:
                     pRet = 0;
                 }

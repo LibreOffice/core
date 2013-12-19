@@ -130,8 +130,8 @@ public:
     void                SetWrtShell( SwWrtShell* pShell )
                         {   pWrtShell = pShell;     }
 
-    // insert field using TypeID (TYP_ ...)
-    sal_Bool            InsertFld(  const SwInsertFld_Data& rData, SwPaM* pPam = 0 );
+     // insert field using TypeID (TYP_ ...)
+    sal_Bool InsertFld( const SwInsertFld_Data& rData );
 
     // change the current field directly
     void            UpdateCurFld(sal_uLong nFormat,
