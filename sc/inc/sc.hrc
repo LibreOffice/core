@@ -1063,8 +1063,6 @@
 
 // derivations from RID_SCDLG_SELENTRY
 
-#define RID_SCDLG_SHOW_TAB              (SC_DIALOGS_START + 109)
-
 #define RID_SCPAGE_CONTENT              (SC_DIALOGS_START + 113)
 #define RID_SCPAGE_LAYOUT               (SC_DIALOGS_START + 114)
 

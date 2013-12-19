@@ -1004,21 +1004,10 @@ AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg 
     return 0;
 }
 
-AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window* pParent, int nId )
+AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg(Window* pParent)
 {
-    ScShowTabDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_SHOW_TAB :
-            pDlg = new ScShowTabDlg( pParent);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScShowTabDlg_Impl( pDlg );
-    return 0;
+    ScShowTabDlg * pDlg = new ScShowTabDlg( pParent);
+    return new AbstractScShowTabDlg_Impl( pDlg );
 }
 
 AbstractScStringInputDlg * ScAbstractDialogFactory_Impl::CreateScStringInputDlg (  Window* pParent,

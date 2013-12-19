@@ -521,7 +521,7 @@ public:
     virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const OUString& rName,
                                                                 int nId,
                                                                 sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
-    virtual AbstractScShowTabDlg * CreateScShowTabDlg ( Window* pParent, int nId );
+    virtual AbstractScShowTabDlg * CreateScShowTabDlg(Window* pParent);
 
     virtual AbstractScStringInputDlg * CreateScStringInputDlg (  Window* pParent,
                                                                 const OUString& rTitle,

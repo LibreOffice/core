@@ -795,7 +795,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
+                AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg(GetDialogParent());
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
                     OUString( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),

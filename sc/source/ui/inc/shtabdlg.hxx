@@ -20,9 +20,9 @@
 #ifndef SC_SHTABDLG_HXX
 #define SC_SHTABDLG_HXX
 
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 
 //------------------------------------------------------------------------
@@ -30,17 +30,13 @@
 class ScShowTabDlg : public ModalDialog
 {
 private:
-    FixedText                       aFtLbTitle;
-    MultiListBox                    aLb;
-    OKButton                        aBtnOk;
-    CancelButton                    aBtnCancel;
-    HelpButton                      aBtnHelp;
+    VclFrame* m_pFrame;
+    ListBox* m_pLb;
 
     DECL_LINK( DblClkHdl, void * );
 
 public:
-            ScShowTabDlg( Window* pParent );
-            ~ScShowTabDlg();
+    ScShowTabDlg( Window* pParent );
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(

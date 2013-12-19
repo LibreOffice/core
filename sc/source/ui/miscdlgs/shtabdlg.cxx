@@ -33,19 +33,16 @@
 
 //==================================================================
 
-ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_SHOW_TAB ) ),
-    aFtLbTitle      ( this, ScResId( FT_LABEL ) ),
-    aLb             ( this, ScResId( LB_ENTRYLIST ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+ScShowTabDlg::ScShowTabDlg(Window* pParent)
+    : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")
 {
-    aLb.Clear();
-    aLb.SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
+    get(m_pFrame, "frame");
+    get(m_pLb, "treeview");
 
-    //-------------
-    FreeResource();
+    m_pLb->Clear();
+    m_pLb->EnableMultiSelection(true);
+    m_pLb->set_height_request(m_pLb->GetTextHeight() * 10);
+    m_pLb->SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
 }
 
 //------------------------------------------------------------------------
@@ -54,34 +51,34 @@ void ScShowTabDlg::SetDescription(
         const OUString& rTitle, const OUString& rFixedText,
         const OString& rDlgHelpId, const OString& sLbHelpId )
 {
-    SetText( rTitle );
-    aFtLbTitle.SetText( rFixedText );
+    SetText(rTitle);
+    m_pFrame->set_label(rFixedText);
     SetHelpId( rDlgHelpId );
-    aLb.SetHelpId( sLbHelpId );
+    m_pLb->SetHelpId( sLbHelpId );
 }
 
 void ScShowTabDlg::Insert( const OUString& rString, sal_Bool bSelected )
 {
-    aLb.InsertEntry( rString );
+    m_pLb->InsertEntry( rString );
     if( bSelected )
-        aLb.SelectEntryPos( aLb.GetEntryCount() - 1 );
+        m_pLb->SelectEntryPos( m_pLb->GetEntryCount() - 1 );
 }
 
 //------------------------------------------------------------------------
 
 sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
 {
-    return aLb.GetSelectEntryCount();
+    return m_pLb->GetSelectEntryCount();
 }
 
 OUString ScShowTabDlg::GetSelectEntry(sal_uInt16 nPos) const
 {
-    return aLb.GetSelectEntry(nPos);
+    return m_pLb->GetSelectEntry(nPos);
 }
 
 sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
 {
-    return aLb.GetSelectEntryPos(nPos);
+    return m_pLb->GetSelectEntryPos(nPos);
 }
 
 //------------------------------------------------------------------------
@@ -92,11 +89,5 @@ IMPL_LINK_NOARG_INLINE_START(ScShowTabDlg, DblClkHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScShowTabDlg, DblClkHdl)
-
-ScShowTabDlg::~ScShowTabDlg()
-{
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
