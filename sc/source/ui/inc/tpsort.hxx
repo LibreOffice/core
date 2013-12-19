@@ -90,7 +90,6 @@ private:
     ScSortKeyItems      maSortKeyItems;
     ScSortKeyCtrl       maSortKeyCtrl;
 
-#ifdef _TPSORT_CXX
 private:
     void    Init            ();
     void    FillFieldLists  ( sal_uInt16 nStartField );
@@ -99,7 +98,6 @@ private:
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
-#endif
 };
 
 //========================================================================
@@ -165,7 +163,6 @@ private:
     CollatorResource*  pColRes;
     CollatorWrapper*    pColWrap;
 
-#ifdef _TPSORT_CXX
 private:
     void Init                   ();
     void FillUserSortListBox    ();
@@ -177,7 +174,6 @@ private:
     void EdOutPosModHdl ( Edit* pEd );
     DECL_LINK( SortDirHdl, RadioButton * );
     DECL_LINK( FillAlgorHdl, void * );
-#endif
 };
 
 #endif // SC_TPSORT_HXX

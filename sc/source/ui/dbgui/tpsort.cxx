@@ -44,9 +44,7 @@
 
 #include "sortdlg.hxx"
 
-#define _TPSORT_CXX
 #include "tpsort.hxx"
-#undef _TPSORT_CXX
 
 using namespace com::sun::star;
 
