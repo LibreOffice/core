@@ -481,7 +481,7 @@ FBoxStyle *HWPFile::getFBoxStyle(int index)
 	  break;
     }
 
-    return *it;
+    return it != fbslist.end() ? *it : 0;
 }
 
 DateCode *HWPFile::getDateCode(int index)
