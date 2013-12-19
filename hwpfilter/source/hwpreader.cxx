@@ -1901,16 +1901,8 @@ void HwpReader::makeTableStyle(Table *tbl)
     }
 
 // --------------- cell --------------------- //
-    for (int i = 0 ; i < static_cast<int>(tbl->cells.size()); i++)
+    for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
-        std::list<TCell*>::iterator it = tbl->cells.begin();
-
-        for( int ii = 0; it != tbl->cells.end(); ++it, ii++ )
-        {
-            if( ii == i )
-                break;
-        }
-
         TCell *tcell = *it;
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
         padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
