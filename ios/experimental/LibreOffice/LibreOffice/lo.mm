@@ -22,23 +22,18 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         LO_CORE_FACTORY_MAP
+        LO_CALC_FACTORY_MAP
         LO_WRITER_FACTORY_MAP
-        { "libanalysislo.a", analysis_component_getFactory },
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libchartcorelo.a", chartcore_component_getFactory },
         { "libcuilo.a", cui_component_getFactory },
-        { "libdatelo.a", date_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
         { "libfwmlo.a", fwm_component_getFactory },
         { "libhwplo.a", hwp_component_getFactory },
-        { "libpricinglo.a", pricing_component_getFactory },
-        { "libscdlo.a", scd_component_getFactory },
-        { "libscfiltlo.a", scfilt_component_getFactory },
-        { "libsclo.a", sc_component_getFactory },
         { "libsddlo.a", sdd_component_getFactory },
         { "libsdlo.a", sd_component_getFactory },
         { "libsmdlo.a", smd_component_getFactory },

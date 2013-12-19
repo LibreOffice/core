@@ -83,6 +83,17 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libxoflo.a", xof_component_getFactory }, \
     { "libxstor.a", xstor_component_getFactory }, \
 
+#define LO_CALC_CORE_FACTORY_MAP \
+    { "libscdlo.a", scd_component_getFactory }, \
+    { "libscfiltlo.a", scfilt_component_getFactory }, \
+    { "libsclo.a", sc_component_getFactory }, \
+
+#define LO_CALC_FACTORY_MAP \
+    LO_CALC_CORE_FACTORY_MAP \
+    { "libanalysislo.a", analysis_component_getFactory }, \
+    { "libdatelo.a", date_component_getFactory }, \
+    { "libpricinglo.a", pricing_component_getFactory }, \
+
 #define LO_WRITER_FACTORY_MAP \
     { "libswdlo.a", swd_component_getFactory }, \
     { "libswlo.a", sw_component_getFactory }, \

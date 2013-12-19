@@ -16,6 +16,7 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         LO_CORE_FACTORY_MAP
+        LO_CALC_CORE_FACTORY_MAP
         LO_WRITER_FACTORY_MAP
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
@@ -26,10 +27,7 @@ lo_get_factory_map(void)
         { "libfwmlo.a", fwm_component_getFactory },
         { "libhwplo.a", hwp_component_getFactory },
         { "libprotocolhandlerlo.a", protocolhandler_component_getFactory },
-        { "libscdlo.a", scd_component_getFactory },
-        { "libscfiltlo.a", scfilt_component_getFactory },
         { "libsblo.a", sb_component_getFactory },
-        { "libsclo.a", sc_component_getFactory },
         { "libsddlo.a", sdd_component_getFactory },
         { "libsdlo.a", sd_component_getFactory },
         { "libsmdlo.a", smd_component_getFactory },
