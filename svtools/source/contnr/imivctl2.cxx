@@ -129,7 +129,11 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     if( bSimple )
     {
         SvxIconChoiceCtrlEntryPtrVec::const_iterator it = std::find( rList.begin(), rList.end(), pCurEntry );
-        DBG_ASSERT( it != rList.end(), "Entry not in Col-List" );
+
+        assert(it != rList.end()); //Entry not in Col-List
+        if (it == rList.end())
+            return 0;
+
         if( bDown )
         {
             while( ++it != rList.end() )
