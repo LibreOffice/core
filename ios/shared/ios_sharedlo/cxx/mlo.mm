@@ -29,35 +29,8 @@ lo_get_factory_map(void)
     static lib_to_factory_mapping map[] = {
         LO_CORE_FACTORY_MAP
         LO_WRITER_FACTORY_MAP
-
-        //from IOS
-        
-        //MAP_LIB_LO(analysis), //MAP_LIB_LO(animcore), //MAP_LIB_LO(sm),
-        //MAP_LIB_LO(avmedia),  //MAP_LIB_LO(dba),      //MAP_LIB_LO(date),
-        //MAP_LIB_LO(fwk),      //MAP_LIB_LO(fwm),      //MAP_LIB_LO(frm),
-        //MAP_LIB_LO(pricing),  //MAP_LIB_LO(scd),      //MAP_LIB_LO(scfilt),
-        //MAP_LIB_LO(hwp),
-        //MAP_LIB_LO(dbaxml), //MAP_LIB_LO(sdd),      //MAP_LIB_LO(smd),
-        //MAP_LIB_LO(svgfilter),//MAP_LIB_LO(t602filter),//MAP_LIB_LO(textfd),
         MAP_LIB_LO(uui),
-        //MAP_LIB_LO(xmlfd),
-        //MAP_LIB_LO(sc),       //MAP_LIB_LO(sd),
-        //MAP_LIB(fileacc),
-
-        // from ANDROID
-        
-        //MAP_LIB_LO(cui),      //MAP_LIB_LO(basprov),  //MAP_LIB_LO(chartcore),
-        //MAP_LIB_LO(dlgprov),  //MAP_LIB_LO(vclcanvas),//MAP_LIB_LO(sb),
-        //MAP_LIB(scriptframe), //MAP_LIB_LO(vbaevents),
-        //MAP_LIB_LO(spl),      //MAP_LIB_LO(tk),       //MAP_LIB_LO(stringresource),
-        //MAP_LIB(ucppkg1),     //MAP_LIB_LO(vbaswobj), //MAP_LIB_LO(wpftwriter),
-        //MAP_LIB_LO(wpftdraw), //MAP_LIB_LO(svxcore),  //MAP_LIB_LO(protocolhandler),
-        //MAP_LIB_LO_1(filterconfig), //MAP_LIB_LO(canvasfactory),    //MAP_LIB_LO(mtfrenderer),
-        
-        // ADDED for search
-        
         MAP_LIB_LO(i18nsearch),
-        
         { NULL, NULL }
     };
 
