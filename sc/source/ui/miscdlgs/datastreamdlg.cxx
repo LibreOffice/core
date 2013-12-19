@@ -150,6 +150,8 @@ void DataStreamDlg::Init( const DataStream& rStrm )
             ;
     }
 
+    m_pCBRefreshOnEmpty->Check(rStrm.IsRefreshOnEmptyLine());
+
     UpdateEnable();
 }
 

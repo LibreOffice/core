@@ -55,6 +55,12 @@ class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;
 class ScDocumentImport;
 
+namespace sc {
+
+struct ImportPostProcessData;
+
+}
+
 enum ScXMLDocTokens
 {
     XML_TOK_DOC_FONTDECLS,
@@ -97,7 +103,8 @@ enum ScXMLBodyTokens
     XML_TOK_BODY_DATABASE_RANGE,
     XML_TOK_BODY_DATA_PILOT_TABLES,
     XML_TOK_BODY_CONSOLIDATION,
-    XML_TOK_BODY_DDE_LINKS
+    XML_TOK_BODY_DDE_LINKS,
+    XML_TOK_BODY_DATA_STREAM_SOURCE
 };
 
 enum ScXMLContentValidationsElemTokens
@@ -733,6 +740,17 @@ enum ScXMLCellTextSAttrTokens
     XML_TOK_CELL_TEXT_S_ATTR_C
 };
 
+/**
+ * Attribute tokens for <calcext:data-stream-source>.
+ */
+enum ScXMLDataStreamAttrTokens
+{
+    XML_TOK_DATA_STREAM_ATTR_URL,
+    XML_TOK_DATA_STREAM_ATTR_RANGE,
+    XML_TOK_DATA_STREAM_ATTR_EMPTY_LINE_REFRESH,
+    XML_TOK_DATA_STREAM_ATTR_INSERTION_POSITION
+};
+
 class SvXMLTokenMap;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
@@ -907,6 +925,9 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     SvXMLTokenMap           *pCellTextSpanAttrTokenMap;
     SvXMLTokenMap           *pCellTextURLAttrTokenMap;
     SvXMLTokenMap           *pCellTextSAttrTokenMap;
+    SvXMLTokenMap           *pDataStreamAttrTokenMap;
+
+    sc::ImportPostProcessData* mpPostProcessData; /// Lift cycle managed elsewhere, no need to delete.
 
     ScMyTables              aTables;
 
@@ -1076,6 +1097,10 @@ public:
     const SvXMLTokenMap& GetCellTextSpanAttrTokenMap();
     const SvXMLTokenMap& GetCellTextURLAttrTokenMap();
     const SvXMLTokenMap& GetCellTextSAttrTokenMap();
+    const SvXMLTokenMap& GetDataStreamAttrTokenMap();
+
+    void SetPostProcessData( sc::ImportPostProcessData* p );
+    sc::ImportPostProcessData* GetPostProcessData();
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {

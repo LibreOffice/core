@@ -288,7 +288,7 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
     meOrigMove = eMove;
     mnSettings = nSettings;
 
-    mbValuesInLine = mnSettings & VALUES_IN_LINE;
+    mbValuesInLine = true; // always true.
 
     mnCurRow = rRange.aStart.Row();
 

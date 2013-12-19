@@ -39,6 +39,7 @@
 #include "XMLEmptyContext.hxx"
 #include "scerrors.hxx"
 #include "tabprotection.hxx"
+#include "datastreamimport.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -191,6 +192,9 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_BODY_DDE_LINKS:
         pContext = new ScXMLDDELinksContext ( GetScImport(), nPrefix, rLocalName,
                                                         xAttrList );
+        break;
+    case XML_TOK_BODY_DATA_STREAM_SOURCE:
+        pContext = new ScXMLDataStreamContext(GetScImport(), nPrefix, rLocalName, xAttrList);
         break;
     }
 

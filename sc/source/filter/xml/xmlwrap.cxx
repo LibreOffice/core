@@ -174,6 +174,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     if (xImporter.is())
         xImporter->setTargetDocument( xComponent );
 
+    ScXMLImport* pImporterImpl = dynamic_cast<ScXMLImport*>(xImporter.get());
+    if (pImporterImpl)
+        pImporterImpl->SetPostProcessData(&maPostProcessData);
+
     // connect parser and filter
     xParser->setDocumentHandler( xDocHandler );
 
@@ -990,6 +994,11 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     // later: give string descriptor as parameter for doc type
 
     return false;
+}
+
+const sc::ImportPostProcessData& ScXMLImportWrapper::GetImportPostProcessData() const
+{
+    return maPostProcessData;
 }
 
 

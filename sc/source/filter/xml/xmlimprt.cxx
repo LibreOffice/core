@@ -457,6 +457,7 @@ const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLES,       XML_TOK_BODY_DATA_PILOT_TABLES      },
             { XML_NAMESPACE_TABLE, XML_CONSOLIDATION,           XML_TOK_BODY_CONSOLIDATION          },
             { XML_NAMESPACE_TABLE, XML_DDE_LINKS,               XML_TOK_BODY_DDE_LINKS              },
+            { XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE,   XML_TOK_BODY_DATA_STREAM_SOURCE     },
             XML_TOKEN_MAP_END
         };
 
@@ -1930,6 +1931,33 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSAttrTokenMap()
     return *pCellTextSAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetDataStreamAttrTokenMap()
+{
+    if (!pDataStreamAttrTokenMap)
+    {
+        static const SvXMLTokenMapEntry aMap[] =
+        {
+            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_DATA_STREAM_ATTR_URL },
+            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, XML_TOK_DATA_STREAM_ATTR_RANGE },
+            { XML_NAMESPACE_CALC_EXT, XML_EMPTY_LINE_REFRESH, XML_TOK_DATA_STREAM_ATTR_EMPTY_LINE_REFRESH },
+            { XML_NAMESPACE_CALC_EXT, XML_INSERTION_POSITION, XML_TOK_DATA_STREAM_ATTR_INSERTION_POSITION },
+            XML_TOKEN_MAP_END
+        };
+        pDataStreamAttrTokenMap = new SvXMLTokenMap(aMap);
+    }
+    return *pDataStreamAttrTokenMap;
+}
+
+void ScXMLImport::SetPostProcessData( sc::ImportPostProcessData* p )
+{
+    mpPostProcessData = p;
+}
+
+sc::ImportPostProcessData* ScXMLImport::GetPostProcessData()
+{
+    return mpPostProcessData;
+}
+
 SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -2056,6 +2084,8 @@ ScXMLImport::ScXMLImport(
     pCellTextSpanAttrTokenMap(NULL),
     pCellTextURLAttrTokenMap(NULL),
     pCellTextSAttrTokenMap(NULL),
+    pDataStreamAttrTokenMap(NULL),
+    mpPostProcessData(NULL),
     aTables(*this),
     pMyNamedExpressions(NULL),
     pMyLabelRanges(NULL),
@@ -2197,6 +2227,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pCellTextSpanAttrTokenMap;
     delete pCellTextURLAttrTokenMap;
     delete pCellTextSAttrTokenMap;
+    delete pDataStreamAttrTokenMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;

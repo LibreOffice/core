@@ -25,6 +25,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <importfilterdata.hxx>
+
 class ScDocument;
 class SfxMedium;
 class ScMySharedData;
@@ -44,6 +46,8 @@ namespace com { namespace sun { namespace star {
 
 class ScXMLImportWrapper
 {
+    sc::ImportPostProcessData maPostProcessData;
+
     ScDocument&     rDoc;
     SfxMedium*      pMedium;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xStorage;
@@ -70,6 +74,8 @@ public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
     sal_Bool Import(sal_Bool bStylesOnly, ErrCode& );
     sal_Bool Export(sal_Bool bStylesOnly);
+
+    const sc::ImportPostProcessData& GetImportPostProcessData() const;
 };
 
 class ScXMLChartExportWrapper

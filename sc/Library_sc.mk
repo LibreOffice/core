@@ -269,6 +269,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/userlist \
     sc/source/core/tool/viewopti \
     sc/source/core/tool/zforauto \
+    sc/source/filter/xml/datastreamimport \
     sc/source/filter/xml/XMLCalculationSettingsContext \
     sc/source/filter/xml/XMLCellRangeSourceContext \
     sc/source/filter/xml/XMLChangeTrackingExportHelper \
@@ -324,6 +325,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/filter/xml/xmltabi \
     sc/source/filter/xml/xmlwrap \
     sc/source/filter/chart/chart_imp \
+    sc/source/filter/importfilterdata \
     sc/source/ui/Accessibility/AccessibilityHints \
     sc/source/ui/Accessibility/AccessibleCell \
     sc/source/ui/Accessibility/AccessibleCellBase \
