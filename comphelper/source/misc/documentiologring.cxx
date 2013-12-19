@@ -123,14 +123,17 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
     if ( !m_refCount )
         throw uno::RuntimeException(); // the object must be refcounted already!
 
-    sal_Int32 nLen = 0;
-    if ( aArguments.getLength() == 1 && ( aArguments[0] >>= nLen ) && nLen )
-        m_aMessages.realloc( nLen );
-    else
-        throw lang::IllegalArgumentException(
-                OUString( "Nonnull size is expected as the first argument!" ),
+    if (aArguments.hasElements())
+    {
+        sal_Int32 nLen = 0;
+        if ( aArguments.getLength() == 1 && ( aArguments[0] >>= nLen ) && nLen )
+            m_aMessages.realloc( nLen );
+        else
+            throw lang::IllegalArgumentException(
+                "Nonnull size is expected as the first argument!",
                 uno::Reference< uno::XInterface >(),
                 0 );
+    }
 
     m_bInitialized = sal_True;
 }
