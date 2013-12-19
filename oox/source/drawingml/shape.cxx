@@ -51,6 +51,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -624,6 +625,22 @@ Reference< XShape > Shape::createAndInsert(
                 {
                     aShapeProps.setProperty(PROP_BackColorTransparency, aShapeProps[PROP_FillTransparence]);
                     aShapeProps.erase(PROP_FillTransparence);
+                }
+                // And no LineColor property; individual borders can have colors
+                if (aShapeProps.hasProperty(PROP_LineColor))
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+                    static const sal_Int32 aBorders[] =
+                    {
+                        PROP_TopBorder, PROP_LeftBorder, PROP_BottomBorder, PROP_RightBorder
+                    };
+                    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+                    {
+                        css::table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<css::table::BorderLine2>();
+                        aBorderLine.Color = aShapeProps[PROP_LineColor].get<sal_Int32>();
+                        aShapeProps.setProperty(aBorders[i], uno::makeAny(aBorderLine));
+                    }
+                    aShapeProps.erase(PROP_LineColor);
                 }
             }
 
