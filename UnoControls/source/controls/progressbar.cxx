@@ -339,9 +339,8 @@ Reference< XControlModel > SAL_CALL ProgressBar::getModel() throw( RuntimeExcept
 
 const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 {
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = SERVICENAME_PROGRESSBAR;
+    seqServiceNames[0] = "com.sun.star.awt.XProgressBar";
     return seqServiceNames ;
 }
 
@@ -351,7 +350,7 @@ const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 
 const OUString ProgressBar::impl_getStaticImplementationName()
 {
-    return OUString(IMPLEMENTATIONNAME_PROGRESSBAR );
+    return OUString("stardiv.UnoControls.ProgressBar");
 }
 
 //____________________________________________________________________________________________________________

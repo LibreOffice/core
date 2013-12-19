@@ -48,7 +48,7 @@ namespace unocontrols{
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-ProgressMonitor::ProgressMonitor( const Reference< XComponentContext >& rxContext )
+ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )
     : BaseContainerControl  ( rxContext  )
 {
     // Its not allowed to work with member in this method (refcounter !!!)
@@ -57,28 +57,26 @@ ProgressMonitor::ProgressMonitor( const Reference< XComponentContext >& rxContex
 
     // Create instances for fixedtext, button and progress ...
 
-    m_xTopic_Top    = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
-    m_xText_Top     = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
-    m_xTopic_Bottom = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
-    m_xText_Bottom  = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
-    m_xButton       = Reference< XButton >      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY ) ;
-    m_xProgressBar  = Reference< XProgressBar > ( rxContext->getServiceManager()->createInstanceWithContext( SERVICENAME_PROGRESSBAR, rxContext ), UNO_QUERY ) ;
+    m_xTopic_Top    = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xText_Top     = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xTopic_Bottom = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xText_Bottom  = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xButton       = css::uno::Reference< XButton >      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xProgressBar = new ProgressBar(rxContext);
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
-    Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY ) ;
-    Reference< XControl >   xRef_Text_Top       ( m_xText_Top     , UNO_QUERY ) ;
-    Reference< XControl >   xRef_Topic_Bottom   ( m_xTopic_Bottom , UNO_QUERY ) ;
-    Reference< XControl >   xRef_Text_Bottom    ( m_xText_Bottom  , UNO_QUERY ) ;
-    Reference< XControl >   xRef_Button         ( m_xButton       , UNO_QUERY ) ;
-    Reference< XControl >   xRef_ProgressBar    ( m_xProgressBar  , UNO_QUERY ) ;
-
+    css::uno::Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY ) ;
+    css::uno::Reference< XControl >   xRef_Text_Top       ( m_xText_Top     , UNO_QUERY ) ;
+    css::uno::Reference< XControl >   xRef_Topic_Bottom   ( m_xTopic_Bottom , UNO_QUERY ) ;
+    css::uno::Reference< XControl >   xRef_Text_Bottom    ( m_xText_Bottom  , UNO_QUERY ) ;
+    css::uno::Reference< XControl >   xRef_Button         ( m_xButton       , UNO_QUERY ) ;
 
     // ... set models ...
-    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
-    xRef_Text_Top->setModel     ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
-    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
-    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
-    xRef_Button->setModel       ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Topic_Top->setModel    ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Text_Top->setModel     ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Topic_Bottom->setModel ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Text_Bottom->setModel  ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Button->setModel       ( css::uno::Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_MODELNAME, rxContext ), UNO_QUERY ) ) ;
     // ProgressBar has no model !!!
 
     // ... and add controls to basecontainercontrol!
@@ -87,12 +85,11 @@ ProgressMonitor::ProgressMonitor( const Reference< XComponentContext >& rxContex
     addControl ( CONTROLNAME_TEXT, xRef_Topic_Bottom        ) ;
     addControl ( CONTROLNAME_TEXT, xRef_Text_Bottom         ) ;
     addControl ( CONTROLNAME_BUTTON, xRef_Button            ) ;
-    addControl ( CONTROLNAME_PROGRESSBAR, xRef_ProgressBar  ) ;
+    addControl ( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
 
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
-    Reference< XWindow > xWindowRef_ProgressBar( m_xProgressBar, UNO_QUERY );
-    xWindowRef_ProgressBar->setVisible( sal_True );
+    m_xProgressBar->setVisible( sal_True );
 
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
@@ -119,7 +116,7 @@ Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType ) throw( Runtime
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
-    Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
+    css::uno::Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
     if ( xDel.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
@@ -181,9 +178,9 @@ Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection ( ::getCppuType(( const Reference< XLayoutConstrains >*)NULL )   ,
-                                                     ::getCppuType(( const Reference< XButton           >*)NULL )   ,
-                                                     ::getCppuType(( const Reference< XProgressMonitor  >*)NULL )   ,
+            static OTypeCollection aTypeCollection ( ::getCppuType(( const css::uno::Reference< XLayoutConstrains >*)NULL )   ,
+                                                     ::getCppuType(( const css::uno::Reference< XButton           >*)NULL )   ,
+                                                     ::getCppuType(( const css::uno::Reference< XProgressMonitor  >*)NULL )   ,
                                                      BaseContainerControl::getTypes()
                                                    );
             // ... and set his address to static pointer!
@@ -350,10 +347,7 @@ void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor ) throw( Ru
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
 
-    if ( m_xProgressBar.is () )
-    {
-        m_xProgressBar->setForegroundColor ( nColor ) ;
-    }
+    m_xProgressBar->setForegroundColor ( nColor ) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -365,10 +359,7 @@ void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor ) throw( Ru
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
 
-    if ( m_xProgressBar.is () )
-    {
-        m_xProgressBar->setBackgroundColor ( nColor ) ;
-    }
+    m_xProgressBar->setBackgroundColor ( nColor ) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -380,10 +371,7 @@ void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue ) throw( RuntimeExcep
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
 
-    if ( m_xProgressBar.is () )
-    {
-        m_xProgressBar->setValue ( nValue ) ;
-    }
+    m_xProgressBar->setValue ( nValue ) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -395,10 +383,7 @@ void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
 
-    if ( m_xProgressBar.is () )
-    {
-        m_xProgressBar->setRange ( nMin, nMax ) ;
-    }
+    m_xProgressBar->setRange ( nMin, nMax ) ;
 }
 
 //____________________________________________________________________________________________________________
@@ -410,19 +395,14 @@ sal_Int32 SAL_CALL ProgressMonitor::getValue () throw( RuntimeException )
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
 
-    if (m_xProgressBar.is())
-    {
-        return m_xProgressBar->getValue () ;
-    }
-
-    return 0 ;
+    return m_xProgressBar->getValue () ;
 }
 
 //____________________________________________________________________________________________________________
 //  XButton
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressMonitor::addActionListener ( const Reference< XActionListener > & rListener ) throw( RuntimeException )
+void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener ) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
@@ -437,7 +417,7 @@ void SAL_CALL ProgressMonitor::addActionListener ( const Reference< XActionListe
 //  XButton
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressMonitor::removeActionListener ( const Reference< XActionListener > & rListener ) throw( RuntimeException )
+void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener ) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex ) ;
@@ -497,15 +477,14 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException )
     ClearableMutexGuard aGuard ( m_aMutex ) ;
 
     // get information about required place of child controls
-    Reference< XLayoutConstrains >  xTopicLayout_Top        ( m_xTopic_Top      , UNO_QUERY ) ;
-    Reference< XLayoutConstrains >  xTopicLayout_Bottom     ( m_xTopic_Bottom   , UNO_QUERY ) ;
-    Reference< XLayoutConstrains >  xButtonLayout           ( m_xButton         , UNO_QUERY ) ;
-    Reference< XWindow >            xProgressBarWindow      ( m_xProgressBar    , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Top        ( m_xTopic_Top      , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Bottom     ( m_xTopic_Bottom   , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xButtonLayout           ( m_xButton         , UNO_QUERY ) ;
 
     Size        aTopicSize_Top      =   xTopicLayout_Top->getPreferredSize          ();
     Size        aTopicSize_Bottom   =   xTopicLayout_Bottom->getPreferredSize       ();
     Size        aButtonSize         =   xButtonLayout->getPreferredSize             ();
-    Rectangle   aTempRectangle      =   xProgressBarWindow->getPosSize              ();
+    Rectangle aTempRectangle = m_xProgressBar->getPosSize();
     Size        aProgressBarSize    =   Size( aTempRectangle.Width, aTempRectangle.Height );
 
     aGuard.clear () ;
@@ -548,7 +527,7 @@ Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& /*rNewSize*/ ) thr
 //  XControl
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressMonitor::createPeer ( const Reference< XToolkit > & rToolkit, const Reference< XWindowPeer > & rParent    ) throw( RuntimeException )
+void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    ) throw( RuntimeException )
 {
     if (!getPeer().is())
     {
@@ -566,7 +545,7 @@ void SAL_CALL ProgressMonitor::createPeer ( const Reference< XToolkit > & rToolk
 //  XControl
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL ProgressMonitor::setModel ( const Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
+sal_Bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
 {
     // We have no model.
     return sal_False ;
@@ -576,11 +555,11 @@ sal_Bool SAL_CALL ProgressMonitor::setModel ( const Reference< XControlModel > &
 //  XControl
 //____________________________________________________________________________________________________________
 
-Reference< XControlModel > SAL_CALL ProgressMonitor::getModel () throw( RuntimeException )
+css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel () throw( RuntimeException )
 {
     // We have no model.
     // return (XControlModel*)this ;
-    return Reference< XControlModel >  () ;
+    return css::uno::Reference< XControlModel >  () ;
 }
 
 //____________________________________________________________________________________________________________
@@ -593,19 +572,18 @@ void SAL_CALL ProgressMonitor::dispose () throw( RuntimeException )
     MutexGuard aGuard ( m_aMutex ) ;
 
     // "removeControl()" control the state of a reference
-    Reference< XControl >  xRef_Topic_Top       ( m_xTopic_Top      , UNO_QUERY ) ;
-    Reference< XControl >  xRef_Text_Top        ( m_xText_Top       , UNO_QUERY ) ;
-    Reference< XControl >  xRef_Topic_Bottom    ( m_xTopic_Bottom   , UNO_QUERY ) ;
-    Reference< XControl >  xRef_Text_Bottom     ( m_xText_Bottom    , UNO_QUERY ) ;
-    Reference< XControl >  xRef_Button          ( m_xButton         , UNO_QUERY ) ;
-    Reference< XControl >  xRef_ProgressBar     ( m_xProgressBar    , UNO_QUERY ) ;
+    css::uno::Reference< XControl >  xRef_Topic_Top       ( m_xTopic_Top      , UNO_QUERY ) ;
+    css::uno::Reference< XControl >  xRef_Text_Top        ( m_xText_Top       , UNO_QUERY ) ;
+    css::uno::Reference< XControl >  xRef_Topic_Bottom    ( m_xTopic_Bottom   , UNO_QUERY ) ;
+    css::uno::Reference< XControl >  xRef_Text_Bottom     ( m_xText_Bottom    , UNO_QUERY ) ;
+    css::uno::Reference< XControl >  xRef_Button          ( m_xButton         , UNO_QUERY ) ;
 
     removeControl ( xRef_Topic_Top      ) ;
     removeControl ( xRef_Text_Top       ) ;
     removeControl ( xRef_Topic_Bottom   ) ;
     removeControl ( xRef_Text_Bottom    ) ;
     removeControl ( xRef_Button         ) ;
-    removeControl ( xRef_ProgressBar    ) ;
+    removeControl ( m_xProgressBar.get() );
 
     // do'nt use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
@@ -614,7 +592,7 @@ void SAL_CALL ProgressMonitor::dispose () throw( RuntimeException )
     xRef_Topic_Bottom->dispose  () ;
     xRef_Text_Bottom->dispose   () ;
     xRef_Button->dispose        () ;
-    xRef_ProgressBar->dispose   () ;
+    m_xProgressBar->dispose();
 
     BaseContainerControl::dispose () ;
 }
@@ -650,9 +628,8 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
 
 const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames()
 {
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = SERVICENAME_PROGRESSMONITOR;
+    seqServiceNames[0] = "com.sun.star.awt.XProgressMonitor";
     return seqServiceNames ;
 }
 
@@ -662,14 +639,14 @@ const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames(
 
 const OUString ProgressMonitor::impl_getStaticImplementationName()
 {
-    return OUString(IMPLEMENTATIONNAME_PROGRESSMONITOR);
+    return OUString("stardiv.UnoControls.ProgressMonitor");
 }
 
 //____________________________________________________________________________________________________________
 //  protected method
 //____________________________________________________________________________________________________________
 
-void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
+void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
     if (rGraphics.is())
     {
@@ -734,11 +711,11 @@ void ProgressMonitor::impl_recalcLayout ()
     MutexGuard aGuard ( m_aMutex ) ;
 
     // get information about required place of child controls
-    Reference< XLayoutConstrains >  xTopicLayout_Top    ( m_xTopic_Top      , UNO_QUERY ) ;
-    Reference< XLayoutConstrains >  xTextLayout_Top     ( m_xText_Top       , UNO_QUERY ) ;
-    Reference< XLayoutConstrains >  xTopicLayout_Bottom ( m_xTopic_Bottom   , UNO_QUERY ) ;
-    Reference< XLayoutConstrains >  xTextLayout_Bottom  ( m_xText_Bottom    , UNO_QUERY ) ;
-    Reference< XLayoutConstrains >  xButtonLayout       ( m_xButton         , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Top    ( m_xTopic_Top      , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xTextLayout_Top     ( m_xText_Top       , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xTopicLayout_Bottom ( m_xTopic_Bottom   , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xTextLayout_Bottom  ( m_xText_Bottom    , UNO_QUERY ) ;
+    css::uno::Reference< XLayoutConstrains >  xButtonLayout       ( m_xButton         , UNO_QUERY ) ;
 
     Size    aTopicSize_Top      =   xTopicLayout_Top->getPreferredSize      () ;
     Size    aTextSize_Top       =   xTextLayout_Top->getPreferredSize       () ;
@@ -817,19 +794,18 @@ void ProgressMonitor::impl_recalcLayout ()
     }
 
     // Set new position and size on all controls
-    Reference< XWindow >  xRef_Topic_Top        ( m_xTopic_Top      , UNO_QUERY ) ;
-    Reference< XWindow >  xRef_Text_Top         ( m_xText_Top       , UNO_QUERY ) ;
-    Reference< XWindow >  xRef_Topic_Bottom     ( m_xTopic_Bottom   , UNO_QUERY ) ;
-    Reference< XWindow >  xRef_Text_Bottom      ( m_xText_Bottom    , UNO_QUERY ) ;
-    Reference< XWindow >  xRef_Button           ( m_xButton         , UNO_QUERY ) ;
-    Reference< XWindow >  xRef_ProgressBar      ( m_xProgressBar    , UNO_QUERY ) ;
+    css::uno::Reference< XWindow >  xRef_Topic_Top        ( m_xTopic_Top      , UNO_QUERY ) ;
+    css::uno::Reference< XWindow >  xRef_Text_Top         ( m_xText_Top       , UNO_QUERY ) ;
+    css::uno::Reference< XWindow >  xRef_Topic_Bottom     ( m_xTopic_Bottom   , UNO_QUERY ) ;
+    css::uno::Reference< XWindow >  xRef_Text_Bottom      ( m_xText_Bottom    , UNO_QUERY ) ;
+    css::uno::Reference< XWindow >  xRef_Button           ( m_xButton         , UNO_QUERY ) ;
 
     xRef_Topic_Top->setPosSize    ( nDx+nX_Topic_Top    , nDy+nY_Topic_Top    , nWidth_Topic_Top    , nHeight_Topic_Top    , 15 ) ;
     xRef_Text_Top->setPosSize     ( nDx+nX_Text_Top     , nDy+nY_Text_Top     , nWidth_Text_Top     , nHeight_Text_Top     , 15 ) ;
     xRef_Topic_Bottom->setPosSize ( nDx+nX_Topic_Bottom , nDy+nY_Topic_Bottom , nWidth_Topic_Bottom , nHeight_Topic_Bottom , 15 ) ;
     xRef_Text_Bottom->setPosSize  ( nDx+nX_Text_Bottom  , nDy+nY_Text_Bottom  , nWidth_Text_Bottom  , nHeight_Text_Bottom  , 15 ) ;
     xRef_Button->setPosSize       ( nDx+nX_Button       , nDy+nY_Button       , nWidth_Button       , nHeight_Button       , 15 ) ;
-    xRef_ProgressBar->setPosSize  ( nDx+nX_ProgressBar  , nDy+nY_ProgressBar  , nWidth_ProgressBar  , nHeight_ProgressBar  , 15 ) ;
+    m_xProgressBar->setPosSize( nDx+nX_ProgressBar, nDy+nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar, 15 );
 
     m_a3DLine.X      = nDx+nX_Topic_Top                                         ;
     m_a3DLine.Y      = nDy+nY_Topic_Bottom+nHeight_Topic_Bottom+(PROGRESSMONITOR_FREEBORDER/2)  ;
@@ -838,7 +814,7 @@ void ProgressMonitor::impl_recalcLayout ()
 
     // All childcontrols make an implicit repaint in setPosSize()!
     // Make it also for this 3D-line ...
-    Reference< XGraphics >  xGraphics = impl_getGraphicsPeer () ;
+    css::uno::Reference< XGraphics >  xGraphics = impl_getGraphicsPeer () ;
 
     xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  ) ;
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y ) ;

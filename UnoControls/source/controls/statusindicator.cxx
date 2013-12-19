@@ -40,7 +40,7 @@ namespace unocontrols{
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-StatusIndicator::StatusIndicator( const Reference< XComponentContext >& rxContext )
+StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >& rxContext )
     : BaseContainerControl  ( rxContext  )
 {
     // Its not allowed to work with member in this method (refcounter !!!)
@@ -48,20 +48,18 @@ StatusIndicator::StatusIndicator( const Reference< XComponentContext >& rxContex
     ++m_refCount ;
 
     // Create instances for fixedtext and progress ...
-    m_xText         = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
-    m_xProgressBar  = Reference< XProgressBar > ( rxContext->getServiceManager()->createInstanceWithContext( SERVICENAME_PROGRESSBAR, rxContext ), UNO_QUERY );
-    // ... cast controls to Reference< XControl > and set model ...
+    m_xText         = css::uno::Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xProgressBar = new ProgressBar(rxContext);
+    // ... cast controls to css::uno::Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
-    Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
-    Reference< XControl > xProgressControl  ( m_xProgressBar, UNO_QUERY );
-    xTextControl->setModel( Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
+    css::uno::Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
+    xTextControl->setModel( css::uno::Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
     addControl( CONTROLNAME_TEXT, xTextControl    );
-    addControl( CONTROLNAME_PROGRESSBAR, xProgressControl    );
+    addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
-    Reference< XWindow > xProgressWindow( m_xProgressBar, UNO_QUERY );
-    xProgressWindow->setVisible( sal_True );
+    m_xProgressBar->setVisible( sal_True );
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
     m_xText->setText( STATUSINDICATOR_DEFAULT_TEXT );
@@ -69,12 +67,7 @@ StatusIndicator::StatusIndicator( const Reference< XComponentContext >& rxContex
     --m_refCount ;
 }
 
-StatusIndicator::~StatusIndicator()
-{
-    // Release all references
-    m_xText.clear();
-    m_xProgressBar.clear();
-}
+StatusIndicator::~StatusIndicator() {}
 
 //____________________________________________________________________________________________________________
 //  XInterface
@@ -85,7 +78,7 @@ Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( Runtime
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
-    Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
+    css::uno::Reference< XInterface > xDel = BaseContainerControl::impl_getDelegator();
     if ( xDel.is() )
     {
         // If an delegator exist, forward question to his queryInterface.
@@ -147,8 +140,8 @@ Sequence< Type > SAL_CALL StatusIndicator::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  ( ::getCppuType(( const Reference< XLayoutConstrains    >*)NULL )   ,
-                                                      ::getCppuType(( const Reference< XStatusIndicator >*)NULL )   ,
+            static OTypeCollection aTypeCollection  ( ::getCppuType(( const css::uno::Reference< XLayoutConstrains    >*)NULL )   ,
+                                                      ::getCppuType(( const css::uno::Reference< XStatusIndicator >*)NULL )   ,
                                                       BaseContainerControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
@@ -274,7 +267,7 @@ Size SAL_CALL StatusIndicator::getPreferredSize () throw( RuntimeException )
     ClearableMutexGuard aGuard ( m_aMutex ) ;
 
     // get information about required place of child controls
-    Reference< XLayoutConstrains >  xTextLayout ( m_xText, UNO_QUERY );
+    css::uno::Reference< XLayoutConstrains >  xTextLayout ( m_xText, UNO_QUERY );
     Size                            aTextSize   = xTextLayout->getPreferredSize();
 
     aGuard.clear () ;
@@ -311,8 +304,8 @@ Size SAL_CALL StatusIndicator::calcAdjustedSize ( const Size& /*rNewSize*/ ) thr
 //____________________________________________________________________________________________________________
 
 void SAL_CALL StatusIndicator::createPeer (
-    const Reference< XToolkit > & rToolkit,
-    const Reference< XWindowPeer > & rParent
+    const css::uno::Reference< XToolkit > & rToolkit,
+    const css::uno::Reference< XWindowPeer > & rParent
 ) throw( RuntimeException )
 {
     if( getPeer().is() == sal_False )
@@ -331,7 +324,7 @@ void SAL_CALL StatusIndicator::createPeer (
 //  XControl
 //____________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL StatusIndicator::setModel ( const Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
+sal_Bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException )
 {
     // We have no model.
     return sal_False ;
@@ -341,11 +334,11 @@ sal_Bool SAL_CALL StatusIndicator::setModel ( const Reference< XControlModel > &
 //  XControl
 //____________________________________________________________________________________________________________
 
-Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw( RuntimeException )
+css::uno::Reference< XControlModel > SAL_CALL StatusIndicator::getModel () throw( RuntimeException )
 {
     // We have no model.
     // return (XControlModel*)this ;
-    return Reference< XControlModel >  () ;
+    return css::uno::Reference< XControlModel >  () ;
 }
 
 //____________________________________________________________________________________________________________
@@ -358,16 +351,15 @@ void SAL_CALL StatusIndicator::dispose () throw( RuntimeException )
     MutexGuard aGuard ( m_aMutex ) ;
 
     // "removeControl()" control the state of a reference
-    Reference< XControl >  xTextControl     ( m_xText       , UNO_QUERY );
-    Reference< XControl >  xProgressControl ( m_xProgressBar, UNO_QUERY );
+    css::uno::Reference< XControl >  xTextControl     ( m_xText       , UNO_QUERY );
 
     removeControl( xTextControl     );
-    removeControl( xProgressControl );
+    removeControl( m_xProgressBar.get() );
 
     // do'nt use "...->clear ()" or "... = XFixedText ()"
     // when other hold a reference at this object !!!
     xTextControl->dispose();
-    xProgressControl->dispose();
+    m_xProgressBar->dispose();
     BaseContainerControl::dispose();
 }
 
@@ -408,9 +400,8 @@ void SAL_CALL StatusIndicator::setPosSize (
 
 const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
 {
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = SERVICENAME_STATUSINDICATOR;
+    seqServiceNames[0] = "com.sun.star.task.XStatusIndicator";
     return seqServiceNames ;
 }
 
@@ -420,14 +411,14 @@ const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames(
 
 const OUString StatusIndicator::impl_getStaticImplementationName()
 {
-    return OUString(IMPLEMENTATIONNAME_STATUSINDICATOR);
+    return OUString("stardiv.UnoControls.StatusIndicator");
 }
 
 //____________________________________________________________________________________________________________
 //  protected method
 //____________________________________________________________________________________________________________
 
-WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
+WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
 {
     // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!
     // - if you will change the descriptor-values, you must override this virtuell function
@@ -448,7 +439,7 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XW
 //  protected method
 //____________________________________________________________________________________________________________
 
-void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
+void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
 {
     // This paint method ist not buffered !!
     // Every request paint the completely control. ( but only, if peer exist )
@@ -457,18 +448,18 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< 
         MutexGuard  aGuard (m_aMutex) ;
 
         // background = gray
-        Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
+        css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
         if( xPeer.is() == sal_True )
             xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // FixedText background = gray
-        Reference< XControl > xTextControl( m_xText, UNO_QUERY );
+        css::uno::Reference< XControl > xTextControl( m_xText, UNO_QUERY );
         xPeer = xTextControl->getPeer();
         if( xPeer.is() == sal_True )
             xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
         // Progress background = gray
-        xPeer = Reference< XWindowPeer >( m_xProgressBar, UNO_QUERY );
+        xPeer = m_xProgressBar->getPeer();
         if( xPeer.is() == sal_True )
             xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 
@@ -503,7 +494,7 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 
     // get information about required place of child controls
     Size                            aWindowSize     ( aEvent.Width, aEvent.Height );
-    Reference< XLayoutConstrains >  xTextLayout     ( m_xText, UNO_QUERY );
+    css::uno::Reference< XLayoutConstrains >  xTextLayout     ( m_xText, UNO_QUERY );
     Size                            aTextSize       = xTextLayout->getPreferredSize();
 
     if( aWindowSize.Width < STATUSINDICATOR_DEFAULT_WIDTH )
@@ -527,11 +518,10 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     nHeight_ProgressBar = nHeight_Text                                  ;
 
     // Set new position and size on all controls
-    Reference< XWindow >  xTextWindow       ( m_xText       , UNO_QUERY );
-    Reference< XWindow >  xProgressWindow   ( m_xProgressBar, UNO_QUERY );
+    css::uno::Reference< XWindow >  xTextWindow       ( m_xText       , UNO_QUERY );
 
     xTextWindow->setPosSize     ( nX_Text       , nY_Text       , nWidth_Text       , nHeight_Text          , 15 ) ;
-    xProgressWindow->setPosSize ( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar   , 15 ) ;
+    m_xProgressBar->setPosSize( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar, 15 );
 }
 
 }   // namespace unocontrols

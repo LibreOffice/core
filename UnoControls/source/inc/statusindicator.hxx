@@ -29,13 +29,14 @@
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ref.hxx>
 
 #include "basecontainercontrol.hxx"
 
 namespace unocontrols{
 
-#define SERVICENAME_STATUSINDICATOR             "com.sun.star.task.XStatusIndicator"
-#define IMPLEMENTATIONNAME_STATUSINDICATOR      "stardiv.UnoControls.StatusIndicator"
+class ProgressBar;
+
 #define STATUSINDICATOR_FREEBORDER              5                                                       // border around and between the controls
 #define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
 #define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
@@ -538,7 +539,7 @@ private:
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >       m_xText         ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar >     m_xProgressBar  ;
+    rtl::Reference<ProgressBar> m_xProgressBar;
 
 };  // class StatusIndicator
 

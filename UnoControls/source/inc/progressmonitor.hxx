@@ -57,6 +57,7 @@
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -64,8 +65,8 @@
 
 namespace unocontrols{
 
-#define SERVICENAME_PROGRESSMONITOR                     "com.sun.star.awt.XProgressMonitor"
-#define IMPLEMENTATIONNAME_PROGRESSMONITOR              "stardiv.UnoControls.ProgressMonitor"
+class ProgressBar;
+
 #define PROGRESSMONITOR_FREEBORDER                      10                                                      // border around and between the controls
 #define FIXEDTEXT_SERVICENAME                           "com.sun.star.awt.UnoControlFixedText"
 #define BUTTON_SERVICENAME                              "com.sun.star.awt.UnoControlButton"
@@ -758,7 +759,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Bottom     ;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Bottom      ;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar > m_xProgressBar      ;
+    rtl::Reference<ProgressBar> m_xProgressBar;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton >      m_xButton           ;
     ::com::sun::star::awt::Rectangle                          m_a3DLine           ;
 

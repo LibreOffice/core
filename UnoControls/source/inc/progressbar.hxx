@@ -31,8 +31,6 @@
 
 namespace unocontrols{
 
-#define SERVICENAME_PROGRESSBAR             "com.sun.star.awt.XProgressBar"
-#define IMPLEMENTATIONNAME_PROGRESSBAR      "stardiv.UnoControls.ProgressBar"
 #define PROGRESSBAR_FREESPACE               4
 #define PROGRESSBAR_DEFAULT_HORIZONTAL      sal_True
 #define PROGRESSBAR_DEFAULT_BLOCKDIMENSION  Size(1,1)
