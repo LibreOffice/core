@@ -204,7 +204,11 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     if( bSimple )
     {
         SvxIconChoiceCtrlEntryPtrVec::const_iterator it = std::find( rList.begin(), rList.end(), pCurEntry );
-        DBG_ASSERT( it != rList.end(), "Entry not in Row-List" );
+
+        assert(it != rList.end()); //Entry not in Row-List
+        if (it == rList.end())
+            return 0;
+
         if( bRight )
         {
             while( ++it != rList.end() )
