@@ -329,9 +329,11 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     If the source format is located in another document, also copy correctly
     in this case.
     The Anchor attribute's position is always set to 0! */
-SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
-                                const SwFmtAnchor& rNewAnchor,
-                                bool bSetTxtFlyAtt, bool bMakeFrms )
+SwFrmFmt *SwDoc::CopyLayoutFmt(
+    const SwFrmFmt& rSource,
+    const SwFmtAnchor& rNewAnchor,
+    bool bSetTxtFlyAtt,
+    bool bMakeFrms )
 {
     const bool bFly = RES_FLYFRMFMT == rSource.Which();
     const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
@@ -441,7 +443,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         //contact object itself. They should be managed by SwUndoInsLayFmt.
         const ::sw::DrawUndoGuard drawUndoGuard(GetIDocumentUndoRedo());
 
-        pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, sal_False, sal_True, sal_True );
+        pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, NULL, sal_False, sal_True, sal_True );
     }
     else
     {

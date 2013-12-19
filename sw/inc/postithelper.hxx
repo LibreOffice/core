@@ -43,15 +43,24 @@ struct SwLayoutInfo
 {
     const SwFrm* mpAnchorFrm;
     SwRect mPosition;
+
+    // optional start of the annotation
+    sal_uLong mnStartNodeIdx;
+    sal_Int32 mnStartContent;
+
     SwRect mPageFrame;
     SwRect mPagePrtArea;
     unsigned long mnPageNumber;
+
     sw::sidebarwindows::SidebarPosition meSidebarPosition;
+
     sal_uInt16 mRedlineAuthor;
 
     SwLayoutInfo()
         : mpAnchorFrm(0)
         , mPosition()
+        , mnStartNodeIdx( 0 )
+        , mnStartContent( -1 )
         , mPageFrame()
         , mPagePrtArea()
         , mnPageNumber(1)
@@ -67,7 +76,11 @@ namespace SwPostItHelper
         INVISIBLE, VISIBLE, INSERTED, DELETED, NONE, HIDDEN
     };
 
-    SwLayoutStatus getLayoutInfos( std::vector< SwLayoutInfo >&, SwPosition& );
+    SwLayoutStatus getLayoutInfos(
+        SwLayoutInfo& o_rInfo,
+        const SwPosition& rAnchorPos,
+        const SwPosition* pAnnotationStartPos = NULL );
+
     long getLayoutHeight( const SwRootFrm* pRoot );
     void setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode );
     unsigned long getPageInfo( SwRect& rPageFrm, const SwRootFrm* , const Point& );
@@ -90,12 +103,17 @@ public:
         , bFocus(aFocus)
         , mLayoutStatus( SwPostItHelper::INVISIBLE )
         , maLayoutInfo()
-    {}
-    virtual ~SwSidebarItem(){}
+    {
+    }
+
+    virtual ~SwSidebarItem()
+    {
+    }
+
     virtual SwPosition GetAnchorPosition() const = 0;
     virtual bool UseElement() = 0;
-    virtual SwFmtFld* GetFmtFld() const = 0;
-    virtual SfxBroadcaster* GetBroadCaster() const = 0;
+    virtual const SwFmtFld& GetFmtFld() const = 0;
+    virtual const SfxBroadcaster* GetBroadCaster() const = 0;
     virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,
                                                                 SwPostItMgr& aMgr,
@@ -104,25 +122,38 @@ public:
 
 class SwAnnotationItem: public SwSidebarItem
 {
-    private:
-    SwFmtFld* pFmtFld;
-
-    public:
-    SwAnnotationItem( SwFmtFld* p,
-                      const bool aShow,
-                      const bool aFocus)
+public:
+    SwAnnotationItem(
+        SwFmtFld& rFmtFld,
+        const bool aShow,
+        const bool aFocus)
         : SwSidebarItem( aShow, aFocus )
-        , pFmtFld(p)
-    {}
-    virtual ~SwAnnotationItem() {}
+        , mrFmtFld( rFmtFld )
+    {
+    }
+
+    virtual ~SwAnnotationItem()
+    {
+    }
+
     virtual SwPosition GetAnchorPosition() const;
     virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() const {return pFmtFld;}
-    virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pFmtFld); }
-    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
-                                                                WinBits nBits,
-                                                                SwPostItMgr& aMgr,
-                                                                SwPostItBits aBits);
+    virtual const SwFmtFld& GetFmtFld() const
+    {
+        return mrFmtFld;
+    }
+    virtual const SfxBroadcaster* GetBroadCaster() const
+    {
+        return dynamic_cast<const SfxBroadcaster *> (&mrFmtFld);
+    }
+    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow(
+        SwEditWin& rEditWin,
+        WinBits nBits,
+        SwPostItMgr& aMgr,
+        SwPostItBits aBits );
+
+private:
+    SwFmtFld& mrFmtFld;
 };
 
 #endif // INCLUDED_SW_INC_POSTITHELPER_HXX

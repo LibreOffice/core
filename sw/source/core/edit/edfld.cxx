@@ -277,6 +277,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         sal_Bool bTblSelBreak = sal_False;
 
         SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  // Search-Hint
+        SwMsgPoolItem aAnnotationFldHint( RES_TXTATR_ANNOTATION );
         SwMsgPoolItem aInputFldHint( RES_TXTATR_INPUTFIELD );
         FOREACHPAM_START(GetCrsr())               // for each PaM
             if( PCURCRSR->HasMark() && bOkay )    // ... with selection
@@ -297,6 +298,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
                      && ( aPam.Find( aFldHint, sal_False, fnMoveForward, &aCurPam )
+                          || aPam.Find( aAnnotationFldHint, sal_False, fnMoveForward, &aCurPam )
                           || aPam.Find( aInputFldHint, sal_False, fnMoveForward, &aCurPam ) ) )
                 {
                     // if only one PaM has more than one field  ...

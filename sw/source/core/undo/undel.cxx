@@ -93,12 +93,29 @@ static void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
 // 4. We have to anticipate the joining of the two paragraphs if the start
 //    paragraph is inside a section and the end paragraph not. Then we have to
 //    move the paragraph into this section and to record this in nSectDiff.
-SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByTblCpy )
-    : SwUndo(UNDO_DELETE), SwUndRng( rPam ),
-    pMvStt( 0 ), pSttStr(0), pEndStr(0), pRedlData(0), pRedlSaveData(0),
-    nNode(0), nNdDiff(0), nSectDiff(0), nReplaceDummy(0), nSetPos(0),
-    bGroup( sal_False ), bBackSp( sal_False ), bJoinNext( sal_False ), bTblDelLastNd( sal_False ),
-    bDelFullPara( bFullPara ), bResetPgDesc( sal_False ), bResetPgBrk( sal_False ),
+SwUndoDelete::SwUndoDelete(
+    SwPaM& rPam,
+    sal_Bool bFullPara,
+    sal_Bool bCalledByTblCpy )
+    : SwUndo(UNDO_DELETE),
+    SwUndRng( rPam ),
+    pMvStt( 0 ),
+    pSttStr(0),
+    pEndStr(0),
+    pRedlData(0),
+    pRedlSaveData(0),
+    nNode(0),
+    nNdDiff(0),
+    nSectDiff(0),
+    nReplaceDummy(0),
+    nSetPos(0),
+    bGroup( sal_False ),
+    bBackSp( sal_False ),
+    bJoinNext( sal_False ),
+    bTblDelLastNd( sal_False ),
+    bDelFullPara( bFullPara ),
+    bResetPgDesc( sal_False ),
+    bResetPgBrk( sal_False ),
     bFromTableCopy( bCalledByTblCpy )
 {
     // bFullPara is set e.g. if an empty paragraph before a table is deleted

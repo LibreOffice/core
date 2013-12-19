@@ -857,8 +857,8 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
             ::std::vector< ::sw::mark::IMark* > vDdeMarks;
             // find all DDE-Bookmarks
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
-                ppMark != pMarkAccess->getMarksEnd();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+                ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
             {
                 if(IDocumentMarkAccess::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
@@ -3637,7 +3637,7 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
-    if(ppMark != pMarkAccess->getMarksEnd()
+    if(ppMark != pMarkAccess->getAllMarksEnd()
         && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::BOOKMARK)
     {
         // the mark is still a DdeBookmark

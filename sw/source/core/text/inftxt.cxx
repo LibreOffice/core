@@ -31,7 +31,6 @@
 #include <editeng/pgrditem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <xmloff/odffields.hxx>
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
@@ -40,9 +39,6 @@
 #include <editeng/forbiddenruleitem.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
-#include <fmtfld.hxx>
-#include <fldbas.hxx>
-#include <PostItMgr.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -1123,7 +1119,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         if(aIntersect.HasArea())
         {
             SwTxtNode *pNd = m_pFrm->GetTxtNode();
-            const ::sw::mark::IFieldmark* pFieldmark = NULL;
+            const ::sw::mark::IMark* pFieldmark = NULL;
             if(pNd)
             {
                 const SwDoc *doc=pNd->GetDoc();
@@ -1149,23 +1145,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
                 pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-                bool bFilled = false;
-                // If this is a comment range, need to look up the color of the comment author.
-                if (pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
-                {
-                    // Search for the postit field
-                    const SwFmtFld* pField = SwPostItField::GetByName(pNd->GetDoc(), pFieldmark->GetName());
-                    if (pField)
-                    {
-                        // Look up the author name
-                        const OUString& rAuthor = pField->GetField()->GetPar1();
-                        sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
-                        pOutDev->SetFillColor(SwPostItMgr::GetColorLight(nIndex));
-                        bFilled = true;
-                    }
-                }
-                if (!bFilled)
-                    pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+                pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();

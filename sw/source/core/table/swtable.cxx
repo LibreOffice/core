@@ -2542,8 +2542,8 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
                         const SwTxtAttr* pAttr = (*pHts)[ n ];
                         if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() )
                         {
-                            if ((*pAttr->GetStart() == nNextSetField) &&
-                                (pAttr->Which() == RES_TXTATR_FIELD))
+                            if ( (*pAttr->GetStart() == nNextSetField)
+                                 && (pAttr->Which() == RES_TXTATR_FIELD))
                             {
                                 // #i104949# hideous hack for report builder:
                                 // it inserts hidden variable-set fields at

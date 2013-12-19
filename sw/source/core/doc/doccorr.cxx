@@ -186,7 +186,8 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     aNewPos.nContent += nOffset;
 
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
-    {   // fix redlines
+    // fix redlines
+    {
         SwRedlineTbl& rTbl = *mpRedlineTbl;
         for (sal_uInt16 n = 0; n < rTbl.size(); )
         {

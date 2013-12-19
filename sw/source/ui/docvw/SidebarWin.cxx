@@ -25,6 +25,7 @@
 #include <SidebarTxtControl.hxx>
 #include <AnchorOverlayObject.hxx>
 #include <ShadowOverlayObject.hxx>
+#include <OverlayRanges.hxx>
 
 #include <annotation.hrc>
 #include <popup.hrc>
@@ -63,6 +64,9 @@
 #include <swmodule.hxx>
 #include <langhelper.hxx>
 
+#include <txtannotationfld.hxx>
+#include <ndtxt.hxx>
+
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
@@ -97,8 +101,9 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
     , mpMetadataAuthor(0)
     , mpMetadataDate(0)
     , mpMenuButton(0)
-    , mpAnchor(0)
-    , mpShadow(0)
+    , mpAnchor( NULL )
+    , mpShadow( NULL )
+    , mpTextRangeOverlay( NULL )
     , mColorAnchor()
     , mColorDark()
     , mColorLight()
@@ -121,7 +126,7 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
     }
 
     mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
-                                  *(mrSidebarItem.GetFmtFld()),
+                                  mrSidebarItem.GetFmtFld(),
                                   *this );
 }
 
@@ -176,10 +181,13 @@ SwSidebarWin::~SwSidebarWin()
     }
 
     AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
-    mpAnchor = 0;
+    mpAnchor = NULL;
 
     ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
-    mpShadow = 0;
+    mpShadow = NULL;
+
+    delete mpTextRangeOverlay;
+    mpTextRangeOverlay = NULL;
 
     delete mpMenuButton;
     mpMenuButton = 0;
@@ -273,11 +281,11 @@ void SwSidebarWin::SetPosSizePixelRect( long nX,
                                         long nY,
                                         long nWidth,
                                         long nHeight,
-                                        const SwRect &aRect,
+                                        const SwRect& aAnchorRect,
                                         const long aPageBorder)
 {
     mPosSize = Rectangle(Point(nX,nY),Size(nWidth,nHeight));
-    mAnchorRect = aRect;
+    mAnchorRect = aAnchorRect;
     mPageBorder = aPageBorder;
 }
 
@@ -616,6 +624,69 @@ void SwSidebarWin::SetPosAndSize()
                 pWin->Anchor()->SetAnchorState(AS_END);
             }
         }
+    }
+
+    // text range overlay
+    if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
+         && mrSidebarItem.maLayoutInfo.mnStartContent != -1 )
+    {
+        std::vector< basegfx::B2DRange > aAnnotationTextRanges;
+        {
+            const SwTxtAnnotationFld* pTxtAnnotationFld =
+                dynamic_cast< const SwTxtAnnotationFld* >( mrSidebarItem.GetFmtFld().GetTxtFld() );
+            if ( pTxtAnnotationFld != NULL
+                 && pTxtAnnotationFld->GetpTxtNode() != NULL )
+            {
+                SwTxtNode* pTxtNode = pTxtAnnotationFld->GetpTxtNode();
+                SwNodes& rNds = pTxtNode->GetDoc()->GetNodes();
+                SwCntntNode* const pCntntNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetCntntNode();
+                SwPosition aStartPos( *pCntntNd, mrSidebarItem.maLayoutInfo.mnStartContent );
+                ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange(
+                    new SwShellCrsr( DocView().GetWrtShell(), aStartPos ) );
+                pTmpCrsrForAnnotationTextRange->SetMark();
+                pTmpCrsrForAnnotationTextRange->GetMark()->nNode = *pTxtNode;
+                pTmpCrsrForAnnotationTextRange->GetMark()->nContent.Assign( pTxtNode, *(pTxtAnnotationFld->GetStart())+1 );
+
+                pTmpCrsrForAnnotationTextRange->FillRects();
+
+                for( sal_uInt16 a(0); a < pTmpCrsrForAnnotationTextRange->size(); ++a )
+                {
+                    const SwRect aNextRect((*pTmpCrsrForAnnotationTextRange)[a]);
+                    const Rectangle aPntRect(aNextRect.SVRect());
+
+                    aAnnotationTextRanges.push_back(basegfx::B2DRange(
+                        aPntRect.Left(), aPntRect.Top(),
+                        aPntRect.Right() + 1, aPntRect.Bottom() + 1));
+                }
+            }
+        }
+
+        if ( mpTextRangeOverlay != NULL )
+        {
+            mpTextRangeOverlay->setRanges( aAnnotationTextRanges );
+            if ( mpAnchor != NULL && mpAnchor->getLineSolid() )
+            {
+                mpTextRangeOverlay->ShowSolidBorder();
+            }
+            else
+            {
+                mpTextRangeOverlay->HideSolidBorder();
+            }
+        }
+        else
+        {
+            mpTextRangeOverlay =
+                sw::overlay::OverlayRanges::CreateOverlayRange(
+                    DocView(),
+                    mColorAnchor,
+                    aAnnotationTextRanges,
+                    mpAnchor != NULL ? mpAnchor->getLineSolid() : false );
+        }
+    }
+    else
+    {
+        delete mpTextRangeOverlay;
+        mpTextRangeOverlay = NULL;
     }
 }
 
@@ -1163,6 +1234,10 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     pWin->Anchor()->SetAnchorState(AS_END);
                 }
                 mpAnchor->setLineSolid(true);
+                if ( mpTextRangeOverlay != NULL )
+                {
+                    mpTextRangeOverlay->ShowSolidBorder();
+                }
             }
             if (mpShadow)
                 mpShadow->SetShadowState(SS_EDIT);
@@ -1171,7 +1246,13 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
         case VS_VIEW:
         {
             if (mpAnchor)
+            {
                 mpAnchor->setLineSolid(true);
+                if ( mpTextRangeOverlay != NULL )
+                {
+                    mpTextRangeOverlay->ShowSolidBorder();
+                }
+            }
             if (mpShadow)
                 mpShadow->SetShadowState(SS_VIEW);
             break;
@@ -1196,11 +1277,19 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                         if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
                         {
                             pTopWinSelf->Anchor()->setLineSolid(false);
+                            if ( pTopWinSelf->TextRange() != NULL )
+                            {
+                                pTopWinSelf->TextRange()->HideSolidBorder();
+                            }
                         }
                         pTopWinSelf->Anchor()->SetAnchorState(AS_ALL);
                     }
                 }
                 mpAnchor->setLineSolid(false);
+                if ( mpTextRangeOverlay != NULL )
+                {
+                    mpTextRangeOverlay->HideSolidBorder();
+                }
             }
             if ( mpShadow )
             {
@@ -1284,7 +1373,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
     if ( bAnchorChanged )
     {
         mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
-                                      *(mrSidebarItem.GetFmtFld()),
+                                      mrSidebarItem.GetFmtFld(),
                                       *this );
     }
 }

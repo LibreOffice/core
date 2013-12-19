@@ -169,7 +169,7 @@ map<sal_uInt16,OUString,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_TXTATR_FIELD] = "TXTATR_FIELD";
         aItemWhichMap[RES_TXTATR_FLYCNT] = "TXTATR_FLYCNT";
         aItemWhichMap[RES_TXTATR_FTN] = "TXTATR_FTN";
-        aItemWhichMap[RES_TXTATR_DUMMY4] = "TXTATR_DUMMY4";
+        aItemWhichMap[RES_TXTATR_ANNOTATION] = "TXTATR_ANNOTATION";
         aItemWhichMap[RES_TXTATR_DUMMY3] = "TXTATR_DUMMY3";
         aItemWhichMap[RES_TXTATR_DUMMY1] = "TXTATR_DUMMY1";
         aItemWhichMap[RES_TXTATR_DUMMY2] = "TXTATR_DUMMY2";

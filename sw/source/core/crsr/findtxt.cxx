@@ -118,6 +118,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                 case RES_TXTATR_FLYCNT:
                 case RES_TXTATR_FTN:
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_REFMARK:
                 case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_META:
@@ -130,9 +131,10 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         // simply removed if first. If at the end, we keep the
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
-                        bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                            (static_cast<SwTxtFld const*>(pHt)
-                                ->GetFmtFld().GetField()->ExpandField(true).isEmpty());
+                        const bool bEmpty =
+                            ( pHt->Which() != RES_TXTATR_FIELD
+                              && pHt->Which() != RES_TXTATR_ANNOTATION )
+                            || (static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true).isEmpty());;
                         if ( bEmpty && nStart == nAkt )
                         {
                             rArr.push_back( nAkt );
@@ -189,8 +191,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
         {
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
-            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
-                 && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+            if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION )
             {
                 aCount--;
                 if (!aCount)
@@ -202,8 +203,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     for( sal_Int32 i = aIndex; i < pHts->Count(); i++ )
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
-        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
-             && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+        if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION )
             break;
         else
             aIndex++;
@@ -267,8 +267,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 for( sal_Int32 i = 0; i < pHts->Count(); i++ )
                 {
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
-                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
-                         && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+                    if ( pTxtAttr->Which()==RES_TXTATR_ANNOTATION )
                     {
                         const sal_Int32 aPos = *pTxtAttr->GetStart();
                         if ( (aPos >= nStart) && (aPos <= nEnd) )

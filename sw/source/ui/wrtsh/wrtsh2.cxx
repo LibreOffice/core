@@ -65,7 +65,7 @@
 
 #include <xmloff/odffields.hxx>
 
-void SwWrtShell::Insert(SwField &rFld, SwPaM *pCommentRange)
+void SwWrtShell::Insert(SwField &rFld)
 {
     ResetCursorStack();
     if(!CanInsert())
@@ -77,21 +77,37 @@ void SwWrtShell::Insert(SwField &rFld, SwPaM *pCommentRange)
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
-    if (pCommentRange && GetDoc())
-    {
-        // If an annotation field is inserted, take care of the relevant fieldmark.
-        IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
-        sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(*pCommentRange, OUString(), ODF_COMMENTRANGE);
-        ((SwPostItField&)rFld).SetName(pFieldmark->GetName());
-    }
-
     bool bDeleted = false;
-    if( HasSelection() )
+    const SwPaM* pAnnotationTextRange = NULL;
+    if ( HasSelection() )
     {
-        bDeleted = DelRight() != 0;
+        if ( rFld.GetTyp()->Which() == RES_POSTITFLD )
+        {
+            // for annotation fields:
+            // - keep the current selection in order to create a corresponding annotation mark
+            // - collapse cursur to its point
+            const SwPaM& rCurrPaM = GetCurrentShellCursor();
+            pAnnotationTextRange = new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
+            ClearMark();
+        }
+        else
+        {
+            bDeleted = DelRight() != 0;
+        }
     }
 
     SwEditShell::Insert2(rFld, bDeleted);
+
+    if ( pAnnotationTextRange != NULL )
+    {
+        if ( GetDoc() != NULL )
+        {
+            IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
+            pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, ::rtl::OUString() );
+        }
+        delete pAnnotationTextRange;
+    }
+
     EndUndo();
     EndAllAction();
 }

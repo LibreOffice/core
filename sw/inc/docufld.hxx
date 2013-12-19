@@ -504,12 +504,16 @@ public:
 class SwPostItFieldType : public SwFieldType
 {
 private:
-    SwDoc*  mpDoc;
+    SwDoc* mpDoc;
 public:
     SwPostItFieldType(SwDoc* pDoc);
 
-    virtual SwFieldType*    Copy() const;
-    SwDoc* GetDoc()         {return mpDoc;};
+    virtual SwFieldType* Copy() const;
+
+    SwDoc* GetDoc() const
+    {
+        return mpDoc;
+    };
 };
 
 /*--------------------------------------------------------------------
@@ -557,7 +561,7 @@ public:
     void                    SetName(const OUString& rStr);
     OUString                GetName() const;
 
-    const OutlinerParaObject*   GetTextObject() const;
+    const OutlinerParaObject* GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
 
     sal_Int32 GetNumberOfParagraphs() const;

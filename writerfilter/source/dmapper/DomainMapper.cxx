@@ -1415,10 +1415,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->SetCurrentRedlineId( nIntValue );
         break;
         case NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart:
-            m_pImpl->AddAnnotationPosition(true);
+            m_pImpl->AddAnnotationPosition( true, nIntValue );
         break;
         case NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd:
-            m_pImpl->AddAnnotationPosition(false);
+            m_pImpl->AddAnnotationPosition( false, nIntValue );
         break;
         case NS_ooxml::LN_CT_Comment_initials:
             m_pImpl->SetCurrentRedlineInitials(sStringValue);

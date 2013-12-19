@@ -2180,6 +2180,9 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 {
     static const OUString sMeta("InContentMetadata");
     static const OUString sFieldMarkName("__FieldMark_");
+    static OUString sAnnotation("Annotation");
+    static OUString sAnnotationEnd("AnnotationEnd");
+
     bool bPrevCharIsSpace = bPrvChrIsSpc;
 
     /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
@@ -2204,21 +2207,23 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if( sType.equals(sTextField))
             {
-                Reference< ::com::sun::star::text::XFormField > xFormField;
-                try
+                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
+                bPrevCharIsSpace = false;
+            }
+            else if ( sType.equals( sAnnotation ) )
+            {
+                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
+                bPrevCharIsSpace = false;
+            }
+            else if ( sType.equals( sAnnotationEnd ) )
+            {
+                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                const OUString& rName = xBookmark->getName();
+                if ( rName.getLength() > 0 )
                 {
-                    xFormField.set(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
                 }
-                catch( const uno::Exception& )
-                {
-                    SAL_WARN("xmloff", "unexpected bookmark exception");
-                }
-
-                if (!xFormField.is() || xFormField->getFieldType() != ODF_COMMENTRANGE)
-                {
-                    exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                    bPrevCharIsSpace = false;
-                }
+                SvXMLElementExport aElem( GetExport(), !bAutoStyles, XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, sal_False, sal_False );
             }
             else if( sType.equals( sFrame ) )
             {
@@ -2279,11 +2284,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sTextFieldStart))
             {
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField.is() && xFormField->getFieldType() == ODF_COMMENTRANGE)
-                {
-                    exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                    continue;
-                }
 
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
                 if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
@@ -2293,10 +2293,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                     }
+
                     if (xFormField.is())
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                     }
+
                     GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
                     if (xFormField.is())
                     {
@@ -2346,17 +2348,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sTextFieldEnd))
             {
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField.is() && xFormField->getFieldType() == ODF_COMMENTRANGE)
-                {
-                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    const OUString& rName = xBookmark->getName();
-                    if (!rName.isEmpty())
-                        GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
-                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                        XML_NAMESPACE_OFFICE, XML_ANNOTATION_END,
-                        sal_False, sal_False );
-                    continue;
-                }
 
                 if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {

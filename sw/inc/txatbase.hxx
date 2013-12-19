@@ -186,6 +186,7 @@ inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
 {
     assert( m_pAttr
             && ( m_pAttr->Which() == RES_TXTATR_FIELD
+                 || m_pAttr->Which() == RES_TXTATR_ANNOTATION
                  || m_pAttr->Which() == RES_TXTATR_INPUTFIELD ));
     return (const SwFmtFld&)(*m_pAttr);
 }

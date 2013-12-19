@@ -347,6 +347,7 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
             break;
         }
     case RES_TXTATR_FIELD :
+    case RES_TXTATR_ANNOTATION :
         {
             pRet = NewFldPortion( rInf, pHint );
             break;

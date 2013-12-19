@@ -139,7 +139,7 @@ RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
     RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 55
     RES_TXTATR_FLYCNT,                              // 56
     RES_TXTATR_FTN,                                 // 57
-    RES_TXTATR_DUMMY4,                              // 58
+    RES_TXTATR_ANNOTATION,                          // 58
     RES_TXTATR_DUMMY3,                              // 59
     RES_TXTATR_DUMMY1,                              // 60
     RES_TXTATR_DUMMY2,                              // 61

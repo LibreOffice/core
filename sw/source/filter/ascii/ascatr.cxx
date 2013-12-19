@@ -137,6 +137,7 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_INPUTFIELD:
                     sOut = static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true);
                     break;

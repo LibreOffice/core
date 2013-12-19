@@ -862,7 +862,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
     case REF_BOOKMARK:
         {
             IDocumentMarkAccess::const_iterator_t ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
-            if(ppMark != pDoc->getIDocumentMarkAccess()->getMarksEnd())
+            if(ppMark != pDoc->getIDocumentMarkAccess()->getAllMarksEnd())
             {
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 const SwPosition* pPos = &pBkmk->GetMarkStart();

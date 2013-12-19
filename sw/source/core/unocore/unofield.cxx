@@ -86,10 +86,8 @@
 #include <docsh.hxx>
 #include <fmtmeta.hxx>
 #include <switerator.hxx>
-#include <bookmrk.hxx>
 #include <rtl/strbuf.hxx>
 #include <vector>
-#include <xmloff/odffields.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
@@ -1207,22 +1205,32 @@ throw (uno::RuntimeException)
     return ::sw::UnoTunnelImpl<SwXTextField>(rId, this);
 }
 
-SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc)
+SwXTextField::SwXTextField(
+    sal_uInt16 nServiceId,
+    SwDoc* pDoc)
     : m_pImpl(new Impl(*this, pDoc, 0, nServiceId))
 {
     //Set visible as default!
-    if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId ||
-            SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM == nServiceId ||
-            SW_SERVICE_FIELDTYPE_DATABASE == nServiceId ||
-            SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId  )
+    if ( SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId
+         || SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM == nServiceId
+         || SW_SERVICE_FIELDTYPE_DATABASE == nServiceId
+         || SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId )
+    {
         m_pImpl->m_pProps->bBool2 = sal_True;
+    }
     else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
+    {
         m_pImpl->m_pProps->bBool1 = sal_True;
+    }
     if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
+    {
         m_pImpl->m_pProps->nUSHORT2 = USHRT_MAX;
+    }
 }
 
-SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc & rDoc)
+SwXTextField::SwXTextField(
+    const SwFmtFld& rFmt,
+    SwDoc & rDoc)
     : m_pImpl(new Impl(*this, &rDoc, &rFmt, USHRT_MAX))
 {
 }
@@ -1303,8 +1311,8 @@ void SAL_CALL SwXTextField::attach(
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if (!m_pImpl->m_bIsDescriptor)
-        throw uno::RuntimeException();
+    if (m_pImpl->m_bIsDescriptor)
+    {
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
     OTextCursorHelper* pCursor = 0;
@@ -1328,31 +1336,34 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     switch (m_pImpl->m_nServiceId)
     {
         case SW_SERVICE_FIELDTYPE_ANNOTATION:
-        {
-            SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
+            {
+                SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
 
-            DateTime aDateTime( DateTime::EMPTY );
-            if (m_pImpl->m_pProps->pDateTime)
-            {
-                aDateTime.SetYear(m_pImpl->m_pProps->pDateTime->Year);
-                aDateTime.SetMonth(m_pImpl->m_pProps->pDateTime->Month);
-                aDateTime.SetDay(m_pImpl->m_pProps->pDateTime->Day);
-                aDateTime.SetHour(m_pImpl->m_pProps->pDateTime->Hours);
-                aDateTime.SetMin(m_pImpl->m_pProps->pDateTime->Minutes);
-                aDateTime.SetSec(m_pImpl->m_pProps->pDateTime->Seconds);
+                DateTime aDateTime( DateTime::EMPTY );
+                if (m_pImpl->m_pProps->pDateTime)
+                {
+                    aDateTime.SetYear(m_pImpl->m_pProps->pDateTime->Year);
+                    aDateTime.SetMonth(m_pImpl->m_pProps->pDateTime->Month);
+                    aDateTime.SetDay(m_pImpl->m_pProps->pDateTime->Day);
+                    aDateTime.SetHour(m_pImpl->m_pProps->pDateTime->Hours);
+                    aDateTime.SetMin(m_pImpl->m_pProps->pDateTime->Minutes);
+                    aDateTime.SetSec(m_pImpl->m_pProps->pDateTime->Seconds);
+                }
+                SwPostItField* pPostItField = new SwPostItField(
+                    (SwPostItFieldType*)pFldType,
+                    m_pImpl->m_pProps->sPar1, // author
+                    m_pImpl->m_pProps->sPar2, // content
+                    m_pImpl->m_pProps->sPar3, // author's initials
+                    m_pImpl->m_pProps->sPar4, // name
+                    aDateTime );
+                if ( m_pImpl->m_pTextObject )
+                {
+                    pPostItField->SetTextObject( m_pImpl->m_pTextObject->CreateText() );
+                    pPostItField->SetPar2(m_pImpl->m_pTextObject->GetText());
+                }
+                pFld = pPostItField;
             }
-            pFld = new SwPostItField((SwPostItFieldType*)pFldType,
-                    m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
-                    m_pImpl->m_pProps->sPar3, m_pImpl->m_pProps->sPar4,
-                    aDateTime);
-            if (m_pImpl->m_pTextObject)
-            {
-                SwPostItField *const pP(static_cast<SwPostItField *>(pFld));
-                pP->SetTextObject(m_pImpl->m_pTextObject->CreateText());
-                pP->SetPar2(m_pImpl->m_pTextObject->GetText());
-            }
-        }
-        break;
+            break;
         case SW_SERVICE_FIELDTYPE_SCRIPT:
         {
             SwFieldType* pFldType = pDoc->GetSysFldType(RES_SCRIPTFLD);
@@ -1896,7 +1907,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         SwFmtFld aFmt( *pFld );
 
         UnoActionContext aCont(pDoc);
-        SwTxtAttr* pTxtAttr = 0;
         if (aPam.HasMark() &&
             m_pImpl->m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION)
         {
@@ -1916,19 +1926,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         if (*aPam.GetPoint() != *aPam.GetMark() &&
             m_pImpl->m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION)
         {
-            IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-            sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
-                    aPam,
-                    OUString(),
-                    ODF_COMMENTRANGE);
-            SwPostItField* pPostItField = (SwPostItField*)aFmt.GetField();
-            if (pPostItField->GetName().isEmpty())
-                // The fieldmark always has a (generated) name.
-                pPostItField->SetName(pFieldmark->GetName());
-            else
-                // The field has a name already, use it.
-                pMarksAccess->renameMark(pFieldmark, pPostItField->GetName());
-
             // Make sure we always insert the field at the end
             SwPaM aEnd(*aPam.End(), *aPam.End());
             pDoc->InsertPoolItem(aEnd, aFmt, nInsertFlags);
@@ -1936,13 +1933,26 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         else
             pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
-        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+        SwTxtAttr* pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
         // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
         if (pTxtAttr)
         {
             const SwFmtFld& rFld = pTxtAttr->GetFmtFld();
             m_pImpl->m_pFmtFld = &rFld;
+
+            if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION
+                 && *aPam.GetPoint() != *aPam.GetMark() )
+            {
+                // create annotation mark
+                const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTxtAttr->GetFmtFld().GetField());
+                OSL_ENSURE( pPostItField != NULL, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
+                if ( pPostItField != NULL )
+                {
+                    IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+                    pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
+                }
+            }
         }
     }
     delete pFld;
@@ -1958,6 +1968,61 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pProps.reset();
     if (m_pImpl->m_bCallUpdate)
         update();
+    }
+    else if ( m_pImpl->m_pFmtFld != NULL
+              && m_pImpl->m_pDoc != NULL
+              && m_pImpl->m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION )
+    {
+        SwUnoInternalPaM aIntPam( *m_pImpl->m_pDoc );
+        if ( ::sw::XTextRangeToSwPaM( aIntPam, xTextRange ) )
+        {
+            // nothing to do, if the text range only covers the former annotation field
+            if ( aIntPam.Start()->nNode != aIntPam.End()->nNode
+                 || aIntPam.Start()->nContent.GetIndex() != aIntPam.End()->nContent.GetIndex()-1 )
+            {
+                UnoActionContext aCont( m_pImpl->m_pDoc );
+                // insert copy of annotation at new text range
+                SwPostItField* pPostItField = dynamic_cast< SwPostItField* >(m_pImpl->m_pFmtFld->GetField()->CopyField());
+                SwFmtFld aFmtFld( *pPostItField );
+                delete pPostItField;
+                SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
+                m_pImpl->m_pDoc->InsertPoolItem( aEnd, aFmtFld, nsSetAttrMode::SETATTR_DEFAULT );
+                // delete former annotation
+                {
+                    const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
+                    SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
+                    SwPaM aPam( rTxtNode, *pTxtFld->GetStart() );
+                    aPam.SetMark();
+                    aPam.Move();
+                    m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+                }
+                // keep inserted annotation
+                {
+                    SwTxtFld* pTxtAttr = aEnd.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
+                    if ( pTxtAttr != NULL )
+                    {
+                        m_pImpl->m_pFmtFld = &pTxtAttr->GetFmtFld();
+
+                        if ( *aIntPam.GetPoint() != *aIntPam.GetMark() )
+                        {
+                            // create annotation mark
+                            const SwPostItField* pField = dynamic_cast< const SwPostItField* >(pTxtAttr->GetFmtFld().GetField());
+                            OSL_ENSURE( pField != NULL, "<SwXTextField::attach(..)> - annotation field missing!" );
+                            if ( pField != NULL )
+                            {
+                                IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc()->getIDocumentMarkAccess();
+                                pMarksAccess->makeAnnotationMark( aIntPam, pField->GetName() );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+            throw lang::IllegalArgumentException();
+    }
+    else
+        throw lang::IllegalArgumentException();
 }
 
 uno::Reference< text::XTextRange > SAL_CALL

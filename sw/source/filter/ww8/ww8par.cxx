@@ -1196,6 +1196,8 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
         "fields into the control stack");
     OSL_ENSURE(RES_TXTATR_INPUTFIELD != rAttr.Which(), "probably don't want to put"
         "input fields into the control stack");
+    OSL_ENSURE(RES_TXTATR_ANNOTATION != rAttr.Which(), "probably don't want to put"
+        "annotations into the control stack");
     OSL_ENSURE(RES_FLTR_REDLINE != rAttr.Which(), "probably don't want to put"
         "redlines into the control stack");
     SwFltControlStack::NewAttr(rPos, rAttr);
@@ -1441,8 +1443,14 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
             break;
+
         case RES_TXTATR_FIELD:
             OSL_ENSURE(!this, "What is a field doing in the control stack,"
+                "probably should have been in the endstack");
+            break;
+
+        case RES_TXTATR_ANNOTATION:
+            OSL_ENSURE(!this, "What is a annotation doing in the control stack,"
                 "probably should have been in the endstack");
             break;
 
@@ -1558,7 +1566,9 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
     return 0;
 }
 
-bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo)
+bool SwWW8FltRefStack::IsFtnEdnBkmField(
+    const SwFmtFld& rFmtFld,
+    sal_uInt16& rBkmNo)
 {
     const SwField* pFld = rFmtFld.GetField();
     sal_uInt16 nSubType;
@@ -1567,12 +1577,12 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBk
         && !((SwGetRefField*)pFld)->GetSetRefName().isEmpty())
     {
         const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(
-            ((SwGetRefField*)pFld)->GetSetRefName());
-        if(ppBkmk != pMarkAccess->getMarksEnd())
+        IDocumentMarkAccess::const_iterator_t ppBkmk =
+            pMarkAccess->findMark( ((SwGetRefField*)pFld)->GetSetRefName() );
+        if(ppBkmk != pMarkAccess->getAllMarksEnd())
         {
             // find Sequence No of corresponding Foot-/Endnote
-            rBkmNo = ppBkmk - pMarkAccess->getMarksBegin();
+            rBkmNo = ppBkmk - pMarkAccess->getAllMarksBegin();
             return true;
         }
     }
@@ -1590,6 +1600,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         do normal (?) strange stuff
         */
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
         {
             SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
@@ -1603,7 +1614,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 sal_uInt16 nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
                 {
-                    ::sw::mark::IMark const * const pMark = (pDoc->getIDocumentMarkAccess()->getMarksBegin() + nBkmNo)->get();
+                    ::sw::mark::IMark const * const pMark = (pDoc->getIDocumentMarkAccess()->getAllMarksBegin() + nBkmNo)->get();
 
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 

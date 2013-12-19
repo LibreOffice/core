@@ -1609,25 +1609,6 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         }
     }
 
-    // Delete fieldmarks before postits, but let's leave them alone during import.
-    if (GetIDocumentUndoRedo().DoesUndo() && pStt->nNode == pEnd->nNode && (pEnd->nContent.GetIndex() - pStt->nContent.GetIndex()) == 1)
-    {
-        SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
-        const sal_Int32 nIndex = rPam.Start()->nContent.GetIndex();
-        // We may have a postit here.
-        if (pTxtNd->GetTxt()[nIndex] == CH_TXTATR_INWORD)
-        {
-            SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(nIndex, RES_TXTATR_FIELD);
-            if (pTxtAttr && pTxtAttr->GetFmtFld().GetField()->Which() == RES_POSTITFLD)
-            {
-                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pTxtAttr->GetFmtFld().GetField());
-                IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark(pField->GetName());
-                if (ppMark != getIDocumentMarkAccess()->getMarksEnd())
-                    getIDocumentMarkAccess()->deleteMark(ppMark);
-            }
-        }
-    }
-
     {
         // Send DataChanged before deletion, so that we still know
         // which objects are in the range.

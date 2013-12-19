@@ -1991,7 +1991,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                         *rFndBox.GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
-                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, sal_False );
+                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, NULL, sal_False );
                 // Delete the initial TextNode
                 pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
             }

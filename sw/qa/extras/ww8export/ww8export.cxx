@@ -152,6 +152,7 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 {
+    // FIXME port to AnnotationMarks
     // See ooxmlexport's testFdo38244().
     // Test comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

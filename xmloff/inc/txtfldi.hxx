@@ -1220,8 +1220,7 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
     com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > mxField;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxCursor;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxOldCursor;
-    /// If this is an annotation end, then position of the start.
-    com::sun::star::uno::Reference < com::sun::star::text::XTextContent >  m_xStart;
+
     sal_uInt16 m_nToken;
 
 public:
@@ -1240,8 +1239,7 @@ protected:
 
     /// set properties
     virtual void PrepareField(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xPropertySet);
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,

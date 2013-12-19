@@ -1931,7 +1931,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                     bRet = true;
                 }
             }
-            else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
+            else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
                 m_pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = true;
             else if( 0 != ( pINet = m_pWrtShell->FindINetAttr( sMark ) )) {
                 m_pWrtShell->addCurrentPosition();
@@ -1955,7 +1955,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                 }
             }
         }
-        else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
+        else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
             m_pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = true;
         else if( 0 != ( pINet = m_pWrtShell->FindINetAttr( sMark ) ))
             bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );

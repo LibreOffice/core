@@ -185,12 +185,12 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
     const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     const IDocumentMarkAccess::const_iterator_t ppBkmk = ::std::lower_bound(
-        pMarkAccess->getMarksBegin(),
-        pMarkAccess->getMarksEnd(),
+        pMarkAccess->getAllMarksBegin(),
+        pMarkAccess->getAllMarksEnd(),
         rPos,
         sw::mark::CompareIMarkStartsBefore()); // find the first Mark that does not start before
-    if(ppBkmk != pMarkAccess->getMarksEnd())
-        return ppBkmk - pMarkAccess->getMarksBegin();
+    if(ppBkmk != pMarkAccess->getAllMarksEnd())
+        return ppBkmk - pMarkAccess->getAllMarksBegin();
     return -1;
 }
 

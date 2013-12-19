@@ -40,17 +40,24 @@ typedef enum {
 } CopyOrNew_t;
 
 /// if COPY then pTxtNode must be given!
-SW_DLLPRIVATE SwTxtAttr *
-MakeTxtAttr( SwDoc & rDoc, SfxPoolItem & rNew,
-        sal_Int32 const nStt, sal_Int32 const nEnd,
-        CopyOrNew_t const bIsCopy = NEW, SwTxtNode *const pTxtNode = 0);
-SW_DLLPRIVATE SwTxtAttr *
-MakeTxtAttr( SwDoc & rDoc, const SfxItemSet & rSet,
-        sal_Int32 nStt, sal_Int32 nEnd );
+SW_DLLPRIVATE SwTxtAttr * MakeTxtAttr(
+    SwDoc & rDoc,
+    SfxPoolItem & rNew,
+    sal_Int32 const nStt,
+    sal_Int32 const nEnd,
+    CopyOrNew_t const bIsCopy = NEW,
+    SwTxtNode *const pTxtNode = 0 );
+
+SW_DLLPRIVATE SwTxtAttr * MakeTxtAttr(
+    SwDoc & rDoc,
+    const SfxItemSet & rSet,
+    sal_Int32 nStt,
+    sal_Int32 nEnd );
 
 /// create redline dummy text hint that must not be inserted into hints array
-SW_DLLPRIVATE SwTxtAttr*
-MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
+SW_DLLPRIVATE SwTxtAttr* MakeRedlineTxtAttr(
+    SwDoc & rDoc,
+    SfxPoolItem& rAttr );
 
 
 /** Class SwpHints is derived indirectly via SwpHts, because only the

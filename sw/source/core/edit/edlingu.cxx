@@ -1655,6 +1655,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                     switch (nWhich)
                     {
                         case RES_TXTATR_FIELD:
+                        case RES_TXTATR_ANNOTATION:
                         case RES_TXTATR_FTN:
                         case RES_TXTATR_FLYCNT:
                             bField = true;

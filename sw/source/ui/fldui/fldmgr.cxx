@@ -826,7 +826,8 @@ sal_uInt16 SwFldMgr::GetCurTypeId() const
  --------------------------------------------------------------------*/
 
 
-sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
+sal_Bool SwFldMgr::InsertFld(
+    const SwInsertFld_Data& rData)
 {
     SwField* pFld   = 0;
     bool bExp = false;
@@ -847,9 +848,17 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_POSTITFLD:
         {
             SwPostItFieldType* pType = (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
-            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ));
-            break;
+            SwPostItField* pPostItField =
+                new SwPostItField(
+                    pType,
+                    rData.sPar1, // author
+                    rData.sPar2, // content
+                    aEmptyOUStr, // author's initials
+                    aEmptyOUStr, // name
+                    DateTime(DateTime::SYSTEM) );
+            pFld = pPostItField;
         }
+        break;
         case TYP_SCRIPTFLD:
         {
             SwScriptFieldType* pType =
@@ -857,14 +866,16 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = new SwScriptField(pType, rData.sPar1, rData.sPar2, (sal_Bool)nFormatId);
             break;
         }
-        case TYP_COMBINED_CHARS:
+
+    case TYP_COMBINED_CHARS:
         {
             SwCombinedCharFieldType* pType = (SwCombinedCharFieldType*)
-                                pCurShell->GetFldType( 0, RES_COMBINED_CHARS );
+                pCurShell->GetFldType( 0, RES_COMBINED_CHARS );
             pFld = new SwCombinedCharField( pType, rData.sPar1 );
         }
         break;
-        case TYP_AUTHORITY:
+
+    case TYP_AUTHORITY:
         {
             SwAuthorityFieldType* pType =
                 (SwAuthorityFieldType*)pCurShell->GetFldType(0, RES_AUTHORITY);
@@ -877,8 +888,9 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = new SwAuthorityField(pType, rData.sPar1);
         }
         break;
-        case TYP_DATEFLD:
-        case TYP_TIMEFLD:
+
+    case TYP_DATEFLD:
+    case TYP_TIMEFLD:
         {
             sal_uInt16 nSub = static_cast< sal_uInt16 >(rData.nTypeId == TYP_DATEFLD ? DATEFLD : TIMEFLD);
             nSub |= nSubType == DATE_VAR ? 0 : FIXEDFLD;
@@ -889,21 +901,24 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld->SetPar2(rData.sPar2);
             break;
         }
-        case TYP_FILENAMEFLD:
+
+    case TYP_FILENAMEFLD:
         {
             SwFileNameFieldType* pTyp =
                 (SwFileNameFieldType*)pCurShell->GetFldType(0, RES_FILENAMEFLD);
             pFld = new SwFileNameField(pTyp, nFormatId);
             break;
         }
-        case TYP_TEMPLNAMEFLD:
+
+    case TYP_TEMPLNAMEFLD:
         {
             SwTemplNameFieldType* pTyp =
                 (SwTemplNameFieldType*)pCurShell->GetFldType(0, RES_TEMPLNAMEFLD);
             pFld = new SwTemplNameField(pTyp, nFormatId);
             break;
         }
-        case TYP_CHAPTERFLD:
+
+    case TYP_CHAPTERFLD:
         {
             sal_uInt16 nByte = (sal_uInt16)rData.sPar2.toInt32();
             SwChapterFieldType* pTyp =
@@ -915,9 +930,10 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             ((SwChapterField*)pFld)->SetLevel((sal_uInt8)nByte);
             break;
         }
-        case TYP_NEXTPAGEFLD:
-        case TYP_PREVPAGEFLD:
-        case TYP_PAGENUMBERFLD:
+
+    case TYP_NEXTPAGEFLD:
+    case TYP_PREVPAGEFLD:
+    case TYP_PAGENUMBERFLD:
         {
             short nOff = (short)rData.sPar2.toInt32();
 
@@ -949,20 +965,25 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 ((SwPageNumberField*)pFld)->SetUserString( rData.sPar2 );
             break;
         }
-        case TYP_DOCSTATFLD:
-        {   SwDocStatFieldType* pTyp =
+
+    case TYP_DOCSTATFLD:
+        {
+            SwDocStatFieldType* pTyp =
                 (SwDocStatFieldType*)pCurShell->GetFldType(0, RES_DOCSTATFLD);
             pFld = new SwDocStatField(pTyp, nSubType, nFormatId);
             break;
         }
-        case TYP_AUTHORFLD:
-        {   SwAuthorFieldType* pTyp =
+
+    case TYP_AUTHORFLD:
+        {
+            SwAuthorFieldType* pTyp =
                 (SwAuthorFieldType*)pCurShell->GetFldType(0, RES_AUTHORFLD);
             pFld = new SwAuthorField(pTyp, nFormatId);
             break;
         }
-        case TYP_CONDTXTFLD:
-        case TYP_HIDDENTXTFLD:
+
+    case TYP_CONDTXTFLD:
+    case TYP_HIDDENTXTFLD:
         {
             SwHiddenTxtFieldType* pTyp =
                 (SwHiddenTxtFieldType*)pCurShell->GetFldType(0, RES_HIDDENTXTFLD);
@@ -970,7 +991,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             bExp = true;
             break;
         }
-        case TYP_HIDDENPARAFLD:
+
+    case TYP_HIDDENPARAFLD:
         {
             SwHiddenParaFieldType* pTyp =
                 (SwHiddenParaFieldType*)pCurShell->GetFldType(0, RES_HIDDENPARAFLD);
@@ -978,7 +1000,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             bExp = true;
             break;
         }
-        case TYP_SETREFFLD:
+
+    case TYP_SETREFFLD:
         {
             if( !rData.sPar1.isEmpty() && CanInsertRefMark( rData.sPar1 ) )
             {
@@ -987,7 +1010,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             }
             return sal_False;
         }
-        case TYP_GETREFFLD:
+
+    case TYP_GETREFFLD:
         {
             SwGetRefFieldType* pTyp =
                 (SwGetRefFieldType*)pCurShell->GetFldType(0, RES_GETREFFLD);
@@ -996,7 +1020,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             bExp = true;
             break;
         }
-        case TYP_DDEFLD:
+
+    case TYP_DDEFLD:
         {
             //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
             //              That's not yet considered here.
@@ -1012,7 +1037,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = new SwDDEField( pTyp );
             break;
         }
-        case TYP_MACROFLD:
+
+    case TYP_MACROFLD:
         {
             SwMacroFieldType* pTyp =
                 (SwMacroFieldType*)pCurShell->GetFldType(0, RES_MACROFLD);
@@ -1021,14 +1047,16 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 
             break;
         }
-        case TYP_INTERNETFLD:
+
+    case TYP_INTERNETFLD:
         {
             SwFmtINetFmt aFmt( rData.sPar1, sCurFrame );
             if( pMacroItem )
                 aFmt.SetMacroTbl( &pMacroItem->GetMacroTable() );
             return pCurShell->InsertURL( aFmt, rData.sPar2 );
         }
-        case TYP_JUMPEDITFLD:
+
+    case TYP_JUMPEDITFLD:
         {
             SwJumpEditFieldType* pTyp =
                 (SwJumpEditFieldType*)pCurShell->GetFldType(0, RES_JUMPEDITFLD);
@@ -1036,21 +1064,24 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = new SwJumpEditField(pTyp, nFormatId, rData.sPar1, rData.sPar2 );
             break;
         }
-        case TYP_DOCINFOFLD:
+
+    case TYP_DOCINFOFLD:
         {
             SwDocInfoFieldType* pTyp = (SwDocInfoFieldType*)pCurShell->GetFldType(
-                                            0, RES_DOCINFOFLD );
+                0, RES_DOCINFOFLD );
             pFld = new SwDocInfoField(pTyp, nSubType, rData.sPar1, nFormatId);
             break;
         }
-        case TYP_EXTUSERFLD:
+
+    case TYP_EXTUSERFLD:
         {
             SwExtUserFieldType* pTyp = (SwExtUserFieldType*)pCurShell->GetFldType(
-                                            0, RES_EXTUSERFLD);
+                0, RES_EXTUSERFLD);
             pFld = new SwExtUserField(pTyp, nSubType, nFormatId);
             break;
         }
-        case TYP_DBFLD:
+
+    case TYP_DBFLD:
         {
             SwDBData aDBData;
             OUString sPar1;
@@ -1072,7 +1103,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 pCurShell->ChgDBData(aDBData);
 
             SwDBFieldType* pTyp = (SwDBFieldType*)pCurShell->InsertFldType(
-                    SwDBFieldType(pCurShell->GetDoc(), sPar1, aDBData) );
+                SwDBFieldType(pCurShell->GetDoc(), sPar1, aDBData) );
             pFld = new SwDBField(pTyp);
             pFld->SetSubType(nSubType);
 
@@ -1087,22 +1118,23 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 if(xColumn.is())
                 {
                     nFormatId = pCurShell->GetNewDBMgr()->GetColumnFmt(xSource, xConnection, xColumn,
-                                        pCurShell->GetNumberFormatter(), GetCurrLanguage() );
+                        pCurShell->GetNumberFormatter(), GetCurrLanguage() );
                 }
                 else
                     nFormatId = pCurShell->GetNewDBMgr()->GetColumnFmt(
-                                        aDBData.sDataSource, aDBData.sCommand, sPar1,
-                                        pCurShell->GetNumberFormatter(), GetCurrLanguage() );
+                    aDBData.sDataSource, aDBData.sCommand, sPar1,
+                    pCurShell->GetNumberFormatter(), GetCurrLanguage() );
             }
             pFld->ChangeFormat( nFormatId );
 
             bExp = true;
             break;
         }
-        case TYP_DBSETNUMBERFLD:
-        case TYP_DBNUMSETFLD:
-        case TYP_DBNEXTSETFLD:
-        case TYP_DBNAMEFLD:
+
+    case TYP_DBSETNUMBERFLD:
+    case TYP_DBNUMSETFLD:
+    case TYP_DBNEXTSETFLD:
+    case TYP_DBNAMEFLD:
         {
             SwDBData aDBData;
 
@@ -1139,7 +1171,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 
             switch(rData.nTypeId)
             {
-                case TYP_DBNAMEFLD:
+            case TYP_DBNAMEFLD:
                 {
                     SwDBNameFieldType* pTyp =
                         (SwDBNameFieldType*)pCurShell->GetFldType(0, RES_DBNAMEFLD);
@@ -1147,26 +1179,26 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 
                     break;
                 }
-                case TYP_DBNEXTSETFLD:
+            case TYP_DBNEXTSETFLD:
                 {
                     SwDBNextSetFieldType* pTyp = (SwDBNextSetFieldType*)pCurShell->GetFldType(
-                                                    0, RES_DBNEXTSETFLD);
+                        0, RES_DBNEXTSETFLD);
                     pFld = new SwDBNextSetField(pTyp, sPar1, rData.sPar2, aDBData);
                     bExp = true;
                     break;
                 }
-                case TYP_DBNUMSETFLD:
+            case TYP_DBNUMSETFLD:
                 {
                     SwDBNumSetFieldType* pTyp = (SwDBNumSetFieldType*)pCurShell->GetFldType(
-                                                    0, RES_DBNUMSETFLD);
+                        0, RES_DBNUMSETFLD);
                     pFld = new SwDBNumSetField( pTyp, sPar1, rData.sPar2, aDBData);
                     bExp = true;
                     break;
                 }
-                case TYP_DBSETNUMBERFLD:
+            case TYP_DBSETNUMBERFLD:
                 {
                     SwDBSetNumberFieldType* pTyp = (SwDBSetNumberFieldType*)
-                                                pCurShell->GetFldType(0, RES_DBSETNUMBERFLD);
+                        pCurShell->GetFldType(0, RES_DBSETNUMBERFLD);
                     pFld = new SwDBSetNumberField( pTyp, aDBData, nFormatId);
                     bExp = true;
                     break;
@@ -1174,7 +1206,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             }
             break;
         }
-        case TYP_USERFLD:
+
+    case TYP_USERFLD:
         {
             SwUserFieldType* pTyp =
                 (SwUserFieldType*)pCurShell->GetFldType(RES_USERFLD, rData.sPar1);
@@ -1183,7 +1216,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             if(!pTyp)
             {
                 pTyp = (SwUserFieldType*)pCurShell->InsertFldType(
-                        SwUserFieldType(pCurShell->GetDoc(), rData.sPar1));
+                    SwUserFieldType(pCurShell->GetDoc(), rData.sPar1));
             }
             if (pTyp->GetContent(nFormatId) != rData.sPar2)
                 pTyp->SetContent(rData.sPar2, nFormatId);
@@ -1193,12 +1226,13 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             bTbl = true;
             break;
         }
-        case TYP_INPUTFLD:
+
+    case TYP_INPUTFLD:
         {
             if ((nSubType & 0x00ff) == INP_VAR)
             {
                 SwSetExpFieldType* pTyp = (SwSetExpFieldType*)
-                                    pCurShell->GetFldType(RES_SETEXPFLD, rData.sPar1);
+                    pCurShell->GetFldType(RES_SETEXPFLD, rData.sPar1);
 
                 // no Experssion Type with this name existing -> create
                 if(pTyp)
@@ -1232,13 +1266,14 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pCurShell->StartInputFldDlg(pFld, sal_False, rData.pParent);
             break;
         }
-        case TYP_SETFLD:
+
+    case TYP_SETFLD:
         {
             if (rData.sPar2.isEmpty())   // empty variables are not allowed
                 return sal_False;
 
             SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurShell->InsertFldType(
-                    SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1) );
+                SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1) );
 
             SwSetExpField* pExpFld = new SwSetExpField( pTyp, rData.sPar2, nFormatId);
             pExpFld->SetSubType(nSubType);
@@ -1247,10 +1282,11 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             pFld = pExpFld;
             break;
         }
-        case TYP_SEQFLD:
+
+    case TYP_SEQFLD:
         {
             SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurShell->InsertFldType(
-                    SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1, nsSwGetSetExpType::GSE_SEQ));
+                SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1, nsSwGetSetExpType::GSE_SEQ));
 
             sal_uInt8 nLevel = static_cast< sal_uInt8 >(nSubType & 0xff);
 
@@ -1265,16 +1301,17 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             nSubType = nsSwGetSetExpType::GSE_SEQ;
             break;
         }
-        case TYP_GETFLD:
+
+    case TYP_GETFLD:
         {
             // is there a corresponding SetField
             SwSetExpFieldType* pSetTyp = (SwSetExpFieldType*)
-                                    pCurShell->GetFldType(RES_SETEXPFLD, rData.sPar1);
+                pCurShell->GetFldType(RES_SETEXPFLD, rData.sPar1);
 
             if(pSetTyp)
             {
                 SwGetExpFieldType* pTyp = (SwGetExpFieldType*)pCurShell->GetFldType(
-                                                0, RES_GETEXPFLD);
+                    0, RES_GETEXPFLD);
                 pFld = new SwGetExpField(pTyp, rData.sPar1, pSetTyp->GetType(), nFormatId);
                 pFld->SetSubType(nSubType | pSetTyp->GetType());
                 bExp = true;
@@ -1283,7 +1320,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 return sal_False;
             break;
         }
-        case TYP_FORMELFLD:
+
+    case TYP_FORMELFLD:
         {
             if(pCurShell->GetFrmType(0,sal_False) & FRMTYPE_TABLE)
             {
@@ -1300,7 +1338,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 }
 
                 SfxItemSet aBoxSet( pCurShell->GetAttrPool(),
-                                RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
+                    RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
 
                 OUString sFml(comphelper::string::stripStart(rData.sPar2, ' '));
                 if ( sFml.startsWith("=") )
@@ -1319,7 +1357,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             else
             {
                 SwGetExpFieldType* pTyp = (SwGetExpFieldType*)
-                                            pCurShell->GetFldType(0, RES_GETEXPFLD);
+                    pCurShell->GetFldType(0, RES_GETEXPFLD);
                 pFld = new SwGetExpField(pTyp, rData.sPar2, nsSwGetSetExpType::GSE_FORMULA, nFormatId);
                 pFld->SetSubType(nSubType);
                 bExp = true;
@@ -1358,22 +1396,15 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
     OSL_ENSURE(pFld, "field not available");
 
 
-     //the auto language flag has to be set prior to the language!
-     pFld->SetAutomaticLanguage(rData.bIsAutomaticLanguage);
-     sal_uInt16 nLang = GetCurrLanguage();
-     pFld->SetLanguage(nLang);
+    //the auto language flag has to be set prior to the language!
+    pFld->SetAutomaticLanguage(rData.bIsAutomaticLanguage);
+    sal_uInt16 nLang = GetCurrLanguage();
+    pFld->SetLanguage(nLang);
 
     // insert
     pCurShell->StartAllAction();
 
-    SwPaM *pCommentRange = NULL;
-    if (pPam && *pPam->GetPoint() != *pPam->GetMark() && rData.nTypeId == TYP_POSTITFLD)
-    {
-        // If an annotation field will be inserted, pass through the affected range
-        pCommentRange = pPam;
-    }
-
-    pCurShell->Insert(*pFld, pCommentRange);
+    pCurShell->Insert( *pFld );
 
     if(bExp && bEvalExp)
         pCurShell->UpdateExpFlds(sal_True);

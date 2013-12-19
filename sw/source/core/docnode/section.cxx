@@ -1357,7 +1357,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
                     SwTblNumFmtMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, bCreateFrm );
+                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, NULL, bCreateFrm );
                     ++aSave;
 
                     if( !bCreateFrm )

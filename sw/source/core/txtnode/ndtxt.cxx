@@ -1060,22 +1060,22 @@ void SwTxtNode::Update(
             }
         }
 
-        const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
-        for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
-              ppMark != pMarkAccess->getMarksEnd();
-              ++ppMark)
+        // Bookmarks must never grow to either side, when editing (directly) to the left or right (#i29942#)!
+        // And a bookmark with same start and end must remain to the left of the inserted text (used in XML import).
         {
-            // Bookmarks must never grow to either side, when
-            // editing (directly) to the left or right (#i29942#)!
-            // And a bookmark with same start and end must remain
-            // to the left of the inserted text (used in XML import).
-            const ::sw::mark::IMark* const pMark = ppMark->get();
-            const SwPosition* pEnd = &pMark->GetMarkEnd();
-            SwIndex & rIdx = const_cast<SwIndex&>(pEnd->nContent);
-            if( this == &pEnd->nNode.GetNode() &&
-                rPos.GetIndex() == rIdx.GetIndex() )
+            const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
+            for ( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+                ppMark != pMarkAccess->getAllMarksEnd();
+                ++ppMark )
             {
-                rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
+                const ::sw::mark::IMark* const pMark = ppMark->get();
+                const SwPosition* pEnd = &pMark->GetMarkEnd();
+                SwIndex & rIdx = const_cast<SwIndex&>(pEnd->nContent);
+                if( this == &pEnd->nNode.GetNode() &&
+                    rPos.GetIndex() == rIdx.GetIndex() )
+                {
+                    rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
+                }
             }
         }
     }
@@ -1299,6 +1299,10 @@ SwTxtFld* SwTxtNode::GetFldTxtAttrAt(
     pTxtFld = dynamic_cast<SwTxtFld*>(GetTxtAttrForCharAt( nIndex, RES_TXTATR_FIELD ));
     if ( pTxtFld == NULL )
     {
+        pTxtFld = dynamic_cast<SwTxtFld*>(GetTxtAttrForCharAt( nIndex, RES_TXTATR_ANNOTATION ));
+    }
+    if ( pTxtFld == NULL )
+    {
         pTxtFld =
             dynamic_cast<SwTxtFld*>( GetTxtAttrAt(
                 nIndex,
@@ -1351,9 +1355,8 @@ void lcl_CopyHint(
 
     // TabellenFormel muessen relativ kopiert werden.
     case RES_TXTATR_FIELD :
-    case RES_TXTATR_INPUTFIELD :
         {
-            if( pOtherDoc )
+            if( pOtherDoc != NULL )
             {
                 static_cast<const SwTxtFld*>(pHt)->CopyTxtFld( static_cast<SwTxtFld*>(pNewHt) );
             }
@@ -1368,11 +1371,20 @@ void lcl_CopyHint(
                     static_cast<const SwTxtFld*>(pHt)->GetTxtNode().FindTableNode();
                 if( pDstTblNd )
                 {
-                    SwTblField* const pTblFld = const_cast<SwTblField*>(
-                        static_cast<const SwTblField*>(pNewHt->GetFmtFld().GetField()));
+                    SwTblField* const pTblFld =
+                        const_cast<SwTblField*>(static_cast<const SwTblField*>(
+                            pNewHt->GetFmtFld().GetField()));
                     pTblFld->PtrToBoxNm( &pDstTblNd->GetTable() );
                 }
             }
+        }
+        break;
+
+    case RES_TXTATR_INPUTFIELD :
+    case RES_TXTATR_ANNOTATION :
+        if( pOtherDoc != NULL )
+        {
+            static_cast<const SwTxtFld*>(pHt)->CopyTxtFld( static_cast<SwTxtFld*>(pNewHt) );
         }
         break;
 
@@ -1738,10 +1750,11 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         }
         else
         {
-            pNewHt = pDest->InsertItem( pHt->GetAttr(), nAttrStt - nDeletedDummyChars,
+            pNewHt = pDest->InsertItem(
+                pHt->GetAttr(),
+                nAttrStt - nDeletedDummyChars,
                 nAttrEnd - nDeletedDummyChars,
-                      nsSetAttrMode::SETATTR_NOTXTATRCHR
-                    | nsSetAttrMode::SETATTR_IS_COPY);
+                nsSetAttrMode::SETATTR_NOTXTATRCHR | nsSetAttrMode::SETATTR_IS_COPY);
             if (pNewHt)
             {
                 lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
@@ -3022,15 +3035,18 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
     return nLeftMarginForTabCalc;
 }
 
-static void
-Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
-            sal_Int32 nEndPos, sal_Bool const bExpandFlds, sal_Bool const bExpandFtn = sal_True )
+static void Replace0xFF(
+    SwTxtNode const& rNode,
+    OUStringBuffer & rTxt,
+    sal_Int32 & rTxtStt,
+    sal_Int32 nEndPos,
+    sal_Bool const bExpandFlds,
+    sal_Bool const bExpandFtn = sal_True )
 {
     if (rNode.GetpSwpHints())
     {
         sal_Unicode cSrchChr = CH_TXTATR_BREAKWORD;
-        for( int nSrchIter = 0; 2 > nSrchIter; ++nSrchIter,
-                                cSrchChr = CH_TXTATR_INWORD )
+        for( int nSrchIter = 0; 2 > nSrchIter; ++nSrchIter, cSrchChr = CH_TXTATR_INWORD )
         {
             sal_Int32 nPos = rTxt.indexOf(cSrchChr);
             while (-1 != nPos && nPos < nEndPos)
@@ -3042,6 +3058,7 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
                     switch( pAttr->Which() )
                     {
                     case RES_TXTATR_FIELD:
+                    case RES_TXTATR_ANNOTATION:
                         rTxt.remove(nPos, 1);
                         if( bExpandFlds )
                         {
@@ -3054,6 +3071,7 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
                         }
                         ++rTxtStt;
                         break;
+
                     case RES_TXTATR_FTN:
                         rTxt.remove(nPos, 1);
                         if( bExpandFlds && bExpandFtn )
@@ -3075,6 +3093,7 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
                         }
                         ++rTxtStt;
                         break;
+
                     default:
                         rTxt.remove(nPos, 1);
                         ++rTxtStt;
@@ -3204,6 +3223,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 switch( nWhich )
                 {
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
                     {
                         OUString const aExpand(
                             static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true) );
@@ -3232,7 +3252,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 sExpand = rFtn.GetNumStr();
                             else if( rFtn.IsEndNote() )
                                 sExpand = GetDoc()->GetEndNoteInfo().aFmt.
-                                                GetNumStr( rFtn.GetNumber() );
+                                GetNumStr( rFtn.GetNumber() );
                             else
                                 sExpand = GetDoc()->GetFtnInfo().aFmt.
                                                 GetNumStr( rFtn.GetNumber() );
@@ -3241,12 +3261,11 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 ++aDestIdx;     // insert behind
                                 SvxEscapementItem aItem(
                                         SVX_ESCAPEMENT_SUPERSCRIPT );
-                                rDestNd.InsertItem(aItem,
+                                rDestNd.InsertItem(
+                                        aItem,
                                         aDestIdx.GetIndex(),
                                         aDestIdx.GetIndex() );
-                                OUString const ins( rDestNd.InsertText(sExpand,
-                                  aDestIdx,
-                                  IDocumentContentOperations::INS_EMPTYEXPAND));
+                                OUString const ins( rDestNd.InsertText(sExpand, aDestIdx, IDocumentContentOperations::INS_EMPTYEXPAND));
                                 SAL_INFO_IF(ins.getLength() != sExpand.getLength(),
                                         "sw.core", "GetExpandTxt lossage");
                                 aDestIdx = nInsPos + nAttrStartIdx;
@@ -3421,6 +3440,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
                 switch (pAttr->Which())
                 {
                     case RES_TXTATR_FIELD:
+                    case RES_TXTATR_ANNOTATION:
                         aExpand =
                             static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
                                 ->ExpandField(true);
