@@ -163,6 +163,15 @@ public:
         return m_Module;
     }
 
+    /** Release the module so that it will not be unloaded from the destructor.
+
+        This instance returns to the state of a default-constructed instance
+        again.
+
+        @since LibreOffice 4.3
+    */
+    void release() { m_Module = 0; }
+
 private:
     oslModule m_Module;
 
