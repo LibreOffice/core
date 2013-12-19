@@ -14,18 +14,29 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <servicemanager.hxx>
+
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
-    namespace uno { class XInterface; }
+    namespace uno {
+        class Environment;
+        class XInterface;
+    }
 } } }
 namespace rtl { class OUString; }
 
 namespace cppuhelper { namespace detail {
 
-css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
+css::uno::Environment getEnvironment(
+    rtl::OUString const & name, rtl::OUString const & implementation);
+
+void loadSharedLibComponentFactory(
     rtl::OUString const & uri, rtl::OUString const & environment,
-    rtl::OUString const & prefix, rtl::OUString const & rImplName,
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr);
+    rtl::OUString const & prefix, rtl::OUString const & implementation,
+    rtl::OUString const & constructor,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
+    ImplementationConstructorFn ** constructorFunction,
+    css::uno::Reference<css::uno::XInterface> * factory);
 
 } }
 

@@ -23,11 +23,11 @@
 #define MAP_LIB_LO_1(LIB) { "lib" #LIB "lo.a", LIB##1_component_getFactory }
 
 extern "C"
-const lib_to_component_mapping *
-lo_get_library_map(void)
+const lib_to_factory_mapping *
+lo_get_factory_map(void)
 {
-    static lib_to_component_mapping map[] = {
-        NON_APP_SPECIFIC_COMPONENT_MAP
+    static lib_to_factory_mapping map[] = {
+        NON_APP_SPECIFIC_FACTORY_MAP
 
         //from IOS
         
@@ -74,11 +74,11 @@ lo_get_library_map(void)
 }
 
 extern "C"
-const lib_to_component_mapping *
-lo_get_implementation_map(void)
+const lib_to_constructor_mapping *
+lo_get_constructor_map(void)
 {
-    static lib_to_component_mapping map[] = {
-        NON_APP_SPECIFIC_DIRECT_COMPONENT_MAP
+    static lib_to_constructor_mapping map[] = {
+        NON_APP_SPECIFIC_CONSTRUCTOR_MAP
         { NULL, NULL }
     };
 

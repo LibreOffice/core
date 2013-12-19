@@ -34,9 +34,19 @@
 #include "registry/registry.hxx"
 #include "rtl/ustring.hxx"
 
+namespace com { namespace sun { namespace star { namespace lang {
+    class XSingleComponentFactory;
+} } } }
 namespace cppu { struct ContextEntry_Init; }
 
 namespace cppuhelper {
+
+extern "C" {
+
+typedef css::uno::XInterface * SAL_CALL ImplementationConstructorFn(
+    css::uno::XComponentContext *, uno_Sequence *);
+
+}
 
 typedef cppu::WeakComponentImplHelper8<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
@@ -55,13 +65,15 @@ public:
                 rtl::OUString const & theName, rtl::OUString const & theLoader,
                 rtl::OUString const & theUri,
                 rtl::OUString const & theEnvironment,
+                rtl::OUString const & theConstructor,
                 rtl::OUString const & thePrefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     theAlienContext,
                 rtl::OUString const & theRdbFile):
                 name(theName), loader(theLoader), uri(theUri),
-                environment(theEnvironment), prefix(thePrefix),
-                alienContext(theAlienContext), rdbFile(theRdbFile)
+                environment(theEnvironment), constructor(theConstructor),
+                prefix(thePrefix), alienContext(theAlienContext),
+                rdbFile(theRdbFile)
             {}
 
             explicit ImplementationInfo(rtl::OUString const & theName):
@@ -71,6 +83,7 @@ public:
             rtl::OUString const loader;
             rtl::OUString const uri;
             rtl::OUString const environment;
+            rtl::OUString const constructor;
             rtl::OUString const prefix;
             css::uno::Reference< css::uno::XComponentContext > const
                 alienContext;
@@ -83,15 +96,16 @@ public:
             Implementation(
                 rtl::OUString const & name, rtl::OUString const & loader,
                 rtl::OUString const & uri, rtl::OUString const & environment,
+                rtl::OUString const & constructorName,
                 rtl::OUString const & prefix,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     alienContext,
                 rtl::OUString const & rdbFile):
                 info(
                     new ImplementationInfo(
-                        name, loader, uri, environment, prefix, alienContext,
-                        rdbFile)),
-                loaded(false)
+                        name, loader, uri, environment, constructorName, prefix,
+                        alienContext, rdbFile)),
+                constructor(0), loaded(false)
             {}
 
             Implementation(
@@ -102,11 +116,13 @@ public:
                     theFactory2,
                 css::uno::Reference< css::lang::XComponent > const &
                     theComponent):
-                info(new ImplementationInfo(name)), factory1(theFactory1),
-                factory2(theFactory2), component(theComponent), loaded(true)
+                info(new ImplementationInfo(name)), constructor(0),
+                factory1(theFactory1), factory2(theFactory2),
+                component(theComponent), loaded(true)
             {}
 
             boost::shared_ptr< ImplementationInfo > info;
+            ImplementationConstructorFn * constructor;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
             css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
             css::uno::Reference< css::lang::XComponent > component;
@@ -160,6 +176,7 @@ public:
     void loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         boost::shared_ptr< Data::ImplementationInfo > const & info,
+        ImplementationConstructorFn ** constructor,
         css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
         css::uno::Reference< css::lang::XSingleServiceFactory > * factory2);
 

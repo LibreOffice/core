@@ -29,16 +29,21 @@ extern "C" {
 typedef struct {
     const char *name;
     void * (*component_getFactory_function)(const char *, void *, void *);
-} lib_to_component_mapping;
+} lib_to_factory_mapping;
 
-const lib_to_component_mapping *lo_get_library_map(void);
-const lib_to_component_mapping *lo_get_implementation_map(void);
+typedef struct {
+    const char *name;
+    void * (*constructor_function)(void *, void *);
+} lib_to_constructor_mapping;
+
+const lib_to_factory_mapping *lo_get_factory_map(void);
+const lib_to_constructor_mapping *lo_get_constructor_map(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#define NON_APP_SPECIFIC_COMPONENT_MAP \
+#define NON_APP_SPECIFIC_FACTORY_MAP \
     { "libintrospectionlo.a", introspection_component_getFactory }, \
     { "libreflectionlo.a", reflection_component_getFactory }, \
     { "libstocserviceslo.a", stocservices_component_getFactory }, \
@@ -60,19 +65,19 @@ const lib_to_component_mapping *lo_get_implementation_map(void);
     { "libvcllo.a", vcl_component_getFactory }, \
     { "libxstor.a", xstor_component_getFactory }, \
 
-#define NON_APP_SPECIFIC_DIRECT_COMPONENT_MAP \
-    { "com.sun.star.comp.extensions.xml.sax.ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory }, \
-    { "com.sun.star.comp.extensions.xml.sax.FastParser", com_sun_star_comp_extensions_xml_sax_FastParser_component_getFactory }, \
-    { "com.sun.star.comp.stoc.DLLComponentLoader.component.getFactory", com_sun_star_comp_stoc_DLLComponentLoader_component_getFactory }, \
-    { "com.sun.star.comp.stoc.ImplementationRegistration.component.getFactory", com_sun_star_comp_stoc_ImplementationRegistration_component_getFactory }, \
-    { "com.sun.star.comp.stoc.NestedRegistry.component.getFactory", com_sun_star_comp_stoc_NestedRegistry_component_getFactory }, \
-    { "com.sun.star.comp.stoc.ORegistryServiceManager.component.getFactory", com_sun_star_comp_stoc_ORegistryServiceManager_component_getFactory }, \
-    { "com.sun.star.comp.stoc.OServiceManager.component.getFactory", com_sun_star_comp_stoc_OServiceManager_component_getFactory }, \
-    { "com.sun.star.comp.stoc.OServiceManagerWrapper.component.getFactory", com_sun_star_comp_stoc_OServiceManagerWrapper_component_getFactory }, \
-    { "com.sun.star.comp.stoc.SimpleRegistry.component.getFactory", com_sun_star_comp_stoc_SimpleRegistry_component_getFactory }, \
-    { "com.sun.star.extensions.xml.sax.Writer", com_sun_star_extensions_xml_sax_Writer_component_getFactory }, \
-    { "com.sun.star.security.comp.stoc.AccessController.component.getFactory", com_sun_star_security_comp_stoc_AccessController_component_getFactory }, \
-    { "com.sun.star.security.comp.stoc.FilePolicy.component.getFactory", com_sun_star_security_comp_stoc_FilePolicy_component_getFactory }, \
+#define NON_APP_SPECIFIC_CONSTRUCTOR_MAP \
+    { "com_sun_star_comp_extensions_xml_sax_ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat }, \
+    { "com_sun_star_comp_extensions_xml_sax_FastParser", com_sun_star_comp_extensions_xml_sax_FastParser }, \
+    { "com_sun_star_comp_stoc_DLLComponentLoader", com_sun_star_comp_stoc_DLLComponentLoader }, \
+    { "com_sun_star_comp_stoc_ImplementationRegistration", com_sun_star_comp_stoc_ImplementationRegistration }, \
+    { "com_sun_star_comp_stoc_NestedRegistry", com_sun_star_comp_stoc_NestedRegistry }, \
+    { "com_sun_star_comp_stoc_ORegistryServiceManager", com_sun_star_comp_stoc_ORegistryServiceManager }, \
+    { "com_sun_star_comp_stoc_OServiceManager", com_sun_star_comp_stoc_OServiceManager }, \
+    { "com_sun_star_comp_stoc_OServiceManagerWrapper", com_sun_star_comp_stoc_OServiceManagerWrapper }, \
+    { "com_sun_star_comp_stoc_SimpleRegistry", com_sun_star_comp_stoc_SimpleRegistry }, \
+    { "com_sun_star_extensions_xml_sax_Writer", com_sun_star_extensions_xml_sax_Writer }, \
+    { "com_sun_star_security_comp_stoc_AccessController", com_sun_star_security_comp_stoc_AccessController }, \
+    { "com_sun_star_security_comp_stoc_FilePolicy", com_sun_star_security_comp_stoc_FilePolicy }, \
 
 #endif /* DISABLE_DYNLOADING */
 

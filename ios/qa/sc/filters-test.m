@@ -29,10 +29,10 @@ extern void * sc_component_getFactory( const char * pImplName, void * pServiceMa
 extern void * scfilt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
 extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
 
-const lib_to_component_mapping *
+const lib_to_factory_mapping *
 lo_get_libmap(void)
 {
-    static lib_to_component_mapping map[] = {
+    static lib_to_factory_mapping map[] = {
         { "libanalysislo.a", analysis_component_getFactory },
         { "libdatelo.a", date_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },

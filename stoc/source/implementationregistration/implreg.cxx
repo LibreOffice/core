@@ -22,7 +22,6 @@
 #include <list>
 
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -62,9 +61,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-
-#define IMPLNAME "com.sun.star.comp.stoc.ImplementationRegistration"
-#define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
 
 namespace {
 
@@ -111,13 +107,6 @@ const StringPool &spool()
         }
     }
     return *pPool;
-}
-
-static Sequence< OUString > ImplementationRegistration_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = SERVICENAME;
-    return seqNames;
 }
 
 //*************************************************************************
@@ -1309,7 +1298,7 @@ ImplementationRegistration::~ImplementationRegistration() {}
 // XServiceInfo
 OUString ImplementationRegistration::getImplementationName() throw(RuntimeException)
 {
-    return OUString(IMPLNAME);
+    return OUString("com.sun.star.comp.stoc.ImplementationRegistration");
 }
 
 // XServiceInfo
@@ -1321,7 +1310,9 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames(void) throw(RuntimeException)
 {
-    return ImplementationRegistration_getSupportedServiceNames();
+    Sequence< OUString > seqNames(1);
+    seqNames[0] = "com.sun.star.registry.ImplementationRegistration";
+    return seqNames;
 }
 
 Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager()
@@ -1825,23 +1816,16 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 
 }
 
-static Reference<XInterface> ImplementationRegistration_CreateInstance(
-    const Reference<XComponentContext> & xCtx ) // throw(Exception)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_ImplementationRegistration(
+    css::uno::XComponentContext * context, uno_Sequence * arguments)
 {
-    return (XImplementationRegistration *)new ImplementationRegistration(xCtx);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_stoc_ImplementationRegistration_component_getFactory(
-    const char * , void * , void * )
-{
-    Reference< css::lang::XSingleComponentFactory > xFactory;
-    xFactory = createSingleComponentFactory(
-            ImplementationRegistration_CreateInstance,
-            IMPLNAME,
-            ImplementationRegistration_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(
+            new ImplementationRegistration(context)));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

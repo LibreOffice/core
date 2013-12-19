@@ -17,456 +17,333 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
+#include <cstdlib>
 
-#include "osl/module.hxx"
-#include "uno/environment.h"
-#include <uno/lbnames.h>
-#include "uno/mapping.hxx"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/shlib.hxx"
-
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/shlib.hxx>
+#include <osl/module.hxx>
+#include <uno/environment.hxx>
+#include <uno/mapping.hxx>
 
 #include <loadsharedlibcomponentfactory.hxx>
 
-#include <stdio.h>
-
-#ifdef ANDROID
+#if defined ANDROID
 #include <osl/detail/android-bootstrap.h>
-#endif
-
-#ifdef IOS
+#elif defined IOS
 #include <osl/detail/component-mapping.h>
 #endif
 
-using namespace ::osl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-
-using rtl::OString;
-using rtl::OUString;
+css::uno::Environment cppuhelper::detail::getEnvironment(
+    rtl::OUString const & name, rtl::OUString const & implementation)
+{
+    assert(!implementation.isEmpty());
+    rtl::OUString n(name);
+    static char const * log = std::getenv("UNO_ENV_LOG");
+    if (log != 0 && *log != 0) {
+        rtl::OString imps(log);
+        for (sal_Int32 i = 0; i != -1;) {
+            rtl::OString imp(imps.getToken(0, ';', i));
+            //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
+            if (implementation.equalsAsciiL(imp.getStr(), imp.getLength())) {
+                n += ":log";
+                break;
+            }
+        }
+    }
+    return css::uno::Environment(n);
+}
 
 namespace {
 
-uno::Environment getEnvironment(
-    OUString const & name, OUString const & cImplName)
+#if !defined DISABLE_DYNLOADING
+
+css::uno::Environment getEnvironmentFromModule(
+    osl::Module const & module, css::uno::Environment const & target,
+    rtl::OUString const & implementation, rtl::OUString const & prefix)
 {
-    OUString n(name);
-    static const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
-    if (pUNO_ENV_LOG && rtl_str_getLength(pUNO_ENV_LOG) )
-    {
-        OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
-        OString aEnv( pUNO_ENV_LOG );
-        sal_Int32 nIndex = 0;
-        do
-        {
-            const OString aStr( aEnv.getToken( 0, ';', nIndex ) );
-            if ( aStr.equals(implName) )
-            {
-                n += ::rtl::OUString(":log");
+    char const * name = 0;
+    css::uno::Environment env;
+    rtl::OUString fullPrefix(prefix);
+    if (!fullPrefix.isEmpty()) {
+        fullPrefix += "_";
+    }
+    component_getImplementationEnvironmentExtFunc fp1
+        = reinterpret_cast<component_getImplementationEnvironmentExtFunc>(
+            module.getFunctionSymbol(fullPrefix + COMPONENT_GETENVEXT));
+    if (fp1 != 0) {
+        (*fp1)(
+            &name, reinterpret_cast<uno_Environment **>(&env),
+            (rtl::OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US)
+             .getStr()),
+            target.get());
+    } else {
+        component_getImplementationEnvironmentFunc fp2
+            = reinterpret_cast<component_getImplementationEnvironmentFunc>(
+                module.getFunctionSymbol(fullPrefix + COMPONENT_GETENV));
+        if (fp2 != 0) {
+            (*fp2)(&name, reinterpret_cast<uno_Environment **>(&env));
+        } else {
+            name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; //TODO: fail
+        }
+    }
+    if (!env.is() && name != 0) {
+        env = cppuhelper::detail::getEnvironment(
+            rtl::OUString::createFromAscii(name), implementation);
+    }
+    return env;
+}
+
+#endif
+
+extern "C" void getFactory(va_list * args) {
+    component_getFactoryFunc fn = va_arg(*args, component_getFactoryFunc);
+    rtl::OString const * implementation = va_arg(*args, rtl::OString const *);
+    void * smgr = va_arg(*args, void *);
+    void * key = va_arg(*args, void *);
+    void ** factory = va_arg(*args, void **);
+    *factory = (*fn)(implementation->getStr(), smgr, key);
+}
+
+css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
+    css::uno::Environment const & source, css::uno::Environment const & target,
+    component_getFactoryFunc function, rtl::OUString const & uri,
+    rtl::OUString const & implementation,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager)
+{
+    if (!(source.is() && target.is())) {
+        throw css::loader::CannotActivateFactoryException(
+            "cannot get environments",
+            css::uno::Reference<css::uno::XInterface>());
+    }
+    rtl::OString impl(
+        rtl::OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US));
+    if (source.get() == target.get()) {
+        return css::uno::Reference<css::uno::XInterface>(
+            static_cast<css::uno::XInterface *>(
+                (*function)(impl.getStr(), serviceManager.get(), 0)),
+            SAL_NO_ACQUIRE);
+    } else {
+        css::uno::Mapping mapTo(source, target);
+        css::uno::Mapping mapFrom(target, source);
+        if (!(mapTo.is() && mapFrom.is())) {
+            throw css::loader::CannotActivateFactoryException(
+                "cannot get mappings",
+                css::uno::Reference<css::uno::XInterface>());
+        }
+        void * smgr = mapTo.mapInterface(
+            serviceManager.get(),
+            cppu::UnoType<css::lang::XMultiServiceFactory>::get());
+        void * factory = 0;
+        target.invoke(getFactory, function, &impl, smgr, 0, &factory);
+        if (smgr != 0) {
+            (*target.get()->pExtEnv->releaseInterface)(
+                target.get()->pExtEnv, smgr);
+        }
+        if (factory == 0) {
+            throw css::loader::CannotActivateFactoryException(
+                ("calling factory function for \"" + implementation + "\" in <"
+                 + uri + "> returned null"),
+                css::uno::Reference<css::uno::XInterface>());
+        }
+        css::uno::Reference<css::uno::XInterface> res;
+        mapFrom.mapInterface(
+            reinterpret_cast<void **>(&res), factory,
+            cppu::UnoType<css::uno::XInterface>::get());
+        (*target.get()->pExtEnv->releaseInterface)(
+            target.get()->pExtEnv, factory);
+        return res;
+    }
+}
+
+}
+
+void cppuhelper::detail::loadSharedLibComponentFactory(
+    rtl::OUString const & uri, rtl::OUString const & environment,
+    rtl::OUString const & prefix, rtl::OUString const & implementation,
+    rtl::OUString const & constructor,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
+    ImplementationConstructorFn ** constructorFunction,
+    css::uno::Reference<css::uno::XInterface> * factory)
+{
+    assert(constructor.isEmpty() || !environment.isEmpty());
+    assert(
+        (constructorFunction == 0 && constructor.isEmpty())
+        || *constructorFunction == 0);
+    assert(factory != 0 && !factory->is());
+#if defined DISABLE_DYNLOADING
+    assert(!environment.isEmpty());
+    if (constructor.isEmpty()) {
+        css::uno::Environment curEnv(css::uno::Environment::getCurrent());
+        css::uno::Environment env(getEnvironment(environment, implementation));
+        if (!(curEnv.is() && env.is())) {
+            throw css::loader::CannotActivateFactoryException(
+                "cannot get environments",
+                css::uno::Reference<css::uno::XInterface>());
+        }
+        if (curEnv.get() != env.get()) {
+            std::abort();//TODO
+        }
+        rtl::OUString name(prefix == "direct" ? implementation : uri);
+        lib_to_factory_mapping const * map = lo_get_factory_map();
+        component_getFactoryFunc fp;
+        for (int i = 0; map[i].name != 0; ++i) {
+            if (name.equalsAscii(map[i].name)) {
+                fp = map[i].component_getFactory_function;
                 break;
             }
-        } while( nIndex != -1 );
-    }
-    return uno::Environment(n);
-}
-
-#ifndef DISABLE_DYNLOADING
-
-void getLibEnv(oslModule                lib,
-                      uno::Environment       * pEnv,
-                      uno::Environment const & cTargetEnv,
-                      OUString         const & cImplName = OUString(),
-                      OUString         const & rPrefix = OUString())
-{
-    sal_Char const * pEnvTypeName = NULL;
-
-    OUString aGetEnvNameExt = rPrefix + COMPONENT_GETENVEXT;
-    component_getImplementationEnvironmentExtFunc pGetImplEnvExt =
-        (component_getImplementationEnvironmentExtFunc)osl_getFunctionSymbol(lib, aGetEnvNameExt.pData);
-
-    if (pGetImplEnvExt)
-    {
-        OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
-        pGetImplEnvExt(&pEnvTypeName, (uno_Environment **)pEnv, implName.getStr(), cTargetEnv.get());
-    }
-    else
-    {
-        OUString aGetEnvName = rPrefix + COMPONENT_GETENV;
-        component_getImplementationEnvironmentFunc pGetImplEnv =
-            (component_getImplementationEnvironmentFunc)osl_getFunctionSymbol(
-                lib, aGetEnvName.pData );
-        if (pGetImplEnv)
-            pGetImplEnv(&pEnvTypeName, (uno_Environment **)pEnv);
-
-        else // this symbol used to be mandatory, but is no longer
-            pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    if (!pEnv->is() && pEnvTypeName)
-    {
-        *pEnv = getEnvironment(
-            OUString::createFromAscii(pEnvTypeName), cImplName);
-    }
-}
-
-#endif
-
-extern "C" void s_getFactory(va_list * pParam)
-{
-    component_getFactoryFunc         pSym      = va_arg(*pParam, component_getFactoryFunc);
-    OString                  const * pImplName = va_arg(*pParam, OString const *);
-    void                           * pSMgr     = va_arg(*pParam, void *);
-    void                           * pKey      = va_arg(*pParam, void *);
-    void                          ** ppSSF     = va_arg(*pParam, void **);
-
-    *ppSSF = pSym(pImplName->getStr(), pSMgr, pKey);
-}
-
-}
-
-namespace cppu
-{
-
-/* For backwards compatibility */
-Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
-    OUString const & uri, OUString const & rPath, OUString const & rImplName,
-    Reference< lang::XMultiServiceFactory > const & xMgr,
-    Reference< registry::XRegistryKey > const & xKey )
-    SAL_THROW( (loader::CannotActivateFactoryException) )
-{
-    assert(rPath.isEmpty());
-    assert(!xKey.is());
-    (void) rPath;
-    (void) xKey;
-    return cppuhelper::detail::loadSharedLibComponentFactory(
-        uri, "", "", rImplName, xMgr);
-}
-
-}
-
-namespace
-{
-
-Reference< XInterface > invokeComponentFactory(
-    uno::Environment const & env,
-    oslGenericFunction pGetter,
-    OUString const & rModulePath,
-    OUString const & rImplName,
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    OUString &rExcMsg )
-{
-    Reference< XInterface > xRet;
-    uno::Environment currentEnv(Environment::getCurrent());
-
-    OString aImplName(
-        OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
-    if (env.is() && currentEnv.is())
-    {
-#if OSL_DEBUG_LEVEL > 1
-        {
-            rtl::OString modPath(rtl::OUStringToOString(rModulePath, RTL_TEXTENCODING_ASCII_US));
-            rtl::OString implName(rtl::OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US));
-            rtl::OString envDcp(rtl::OUStringToOString(env.getTypeName(), RTL_TEXTENCODING_ASCII_US));
-
-            fprintf(stderr, "invokeComponentFactory envDcp:%s implName:%s modPath:%s\n", envDcp.getStr(), implName.getStr(), modPath.getStr());
         }
-#endif
-        if (env.get() == currentEnv.get())
-        {
-            xRet.set(
-                static_cast<css::uno::XInterface *>(
-                    (*reinterpret_cast<component_getFactoryFunc>(pGetter))(
-                        aImplName.getStr(), xMgr.get(), 0)),
-                SAL_NO_ACQUIRE);
+        if (fp == 0) {
+            throw css::loader::CannotActivateFactoryException(
+                "unknown factory name \"" + name + "\"",
+                css::uno::Reference<css::uno::XInterface>());
         }
-        else
-        {
-            Mapping aCurrent2Env( currentEnv, env );
-            Mapping aEnv2Current( env, currentEnv );
-
-            if (aCurrent2Env.is() && aEnv2Current.is())
-            {
-                void * pSMgr = aCurrent2Env.mapInterface(
-                    xMgr.get(), ::getCppuType( &xMgr ) );
-
-                void * pSSF = NULL;
-
-                env.invoke(s_getFactory, pGetter, &aImplName, pSMgr, 0, &pSSF);
-
-                if (pSMgr)
-                {
-                    (*env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pSMgr );
-                }
-
-                if (pSSF)
-                {
-                    aEnv2Current.mapInterface(
-                        reinterpret_cast< void ** >( &xRet ),
-                        pSSF, ::getCppuType( &xRet ) );
-                    (env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pSSF );
-                }
-                else
-                {
-                    rExcMsg = rModulePath +
-                        ": cannot get factory of " +
-                        "demanded implementation: " +
-                        OStringToOUString(
-                            aImplName, RTL_TEXTENCODING_ASCII_US );
-                }
-            }
-            else
-            {
-                rExcMsg =
-                    "cannot get uno mappings: C++ <=> UNO!";
+        *factory = invokeComponentFactory(
+            css::uno::Environment::getCurrent(),
+            getEnvironment(environment, implementation), fp, uri,
+            implementation, serviceManager);
+    } else {
+        lib_to_constructor_mapping const * map = lo_get_constructor_map();
+        for (int i = 0; map[i].name != 0; ++i) {
+            if (constructor.equalsAscii(map[i].name)) {
+                *constructorFunction
+                    = reinterpret_cast<ImplementationConstructorFn *>(
+                        map[i].constructor_function);
+                return;
             }
         }
-    }
-    else
-    {
-        rExcMsg = "cannot get uno environments!";
-    }
-
-    return xRet;
-}
-
-} // namespace
-
-namespace cppuhelper { namespace detail {
-
-css::uno::Reference<css::uno::XInterface> loadSharedLibComponentFactory(
-    OUString const & uri, OUString const & rEnvironment,
-    OUString const & rPrefix, OUString const & rImplName,
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr)
-{
-#ifndef DISABLE_DYNLOADING
-    OUString moduleUri(uri);
-    oslModule lib = osl_loadModule(
-        moduleUri.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-    if (! lib)
-    {
-        OUString const msg("loading component library failed: " + moduleUri);
-        SAL_WARN("cppuhelper", msg);
-        throw loader::CannotActivateFactoryException(msg,
-            Reference< XInterface >() );
+        throw css::loader::CannotActivateFactoryException(
+            "unknown constructor name \"" + constructor + "\"",
+            css::uno::Reference<css::uno::XInterface>());
     }
 #else
-    oslModule lib;
-    OUString moduleUri("MAIN");
-    if (! osl_getModuleHandle( NULL, &lib))
-    {
-        throw loader::CannotActivateFactoryException(
-            "osl_getModuleHandle of the executable: ",
-            Reference< XInterface >() );
+    osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+    if (!mod.is()) {
+        throw css::loader::CannotActivateFactoryException(
+            "loading component library <" + uri + "> failed",
+            css::uno::Reference<css::uno::XInterface>());
     }
-#endif
-
-    Reference< XInterface > xRet;
-
-    OUString aExcMsg;
-
-    OUString aFullPrefix(rPrefix);
-    if (!aFullPrefix.isEmpty()) {
-        aFullPrefix += "_";
-    }
-    OUString aGetFactoryName = aFullPrefix + COMPONENT_GETFACTORY;
-    if (rPrefix == "direct")
-        aGetFactoryName = rImplName.replace('.', '_') + "_" + COMPONENT_GETFACTORY;
-
-    oslGenericFunction pSym = NULL;
-
-#ifdef DISABLE_DYNLOADING
-
-    OString sName;
-    const lib_to_component_mapping *map = NULL;
-    if (rPrefix == "direct")
-    {
-        sName = OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US);
-        map = lo_get_implementation_map();
-    }
-    else
-    {
-        sName = OUStringToOString(uri, RTL_TEXTENCODING_ASCII_US);
-        map = lo_get_library_map();
-    }
-    for (int i = 0; pSym == NULL && map[i].name != NULL; ++i)
-    {
-        if ( sName == map[i].name )
-            pSym = (oslGenericFunction) map[i].component_getFactory_function;
-    }
-    if ( pSym == NULL )
-    {
-        fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( uri, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        assert( !"Attempt to load unknown library" );
-    }
-#else
-
-    if ( pSym == NULL )
-        pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
-#endif
-
-    if (pSym != 0)
-    {
-        uno::Environment env;
-        if (rEnvironment.isEmpty()) {
-#if defined DISABLE_DYNLOADING
-            //TODO: assert(false); // this cannot happen
-            env = getEnvironment(CPPU_CURRENT_LANGUAGE_BINDING_NAME, rImplName);
-
-#else
-            getLibEnv(
-                lib, &env, Environment::getCurrent(), rImplName, aFullPrefix);
-#endif
+    if (constructor.isEmpty()) {
+        rtl::OUString sym;
+        if (prefix == "direct") {
+            sym = implementation.replace('.', '_') + "_" + COMPONENT_GETFACTORY;
+        } else if (!prefix.isEmpty()) {
+            sym = prefix + "_" + COMPONENT_GETFACTORY;
         } else {
-            env = getEnvironment(rEnvironment, rImplName);
+            sym = COMPONENT_GETFACTORY;
         }
-
-        xRet = invokeComponentFactory(
-            env, pSym, moduleUri, rImplName, xMgr, aExcMsg );
+        oslGenericFunction fp = mod.getFunctionSymbol(sym);
+        if (fp == 0) {
+            throw css::loader::CannotActivateFactoryException(
+                ("no factory symbol \"" + sym + "\" in component library <"
+                 + uri + ">"),
+                css::uno::Reference<css::uno::XInterface>());
+        }
+        css::uno::Environment curEnv(css::uno::Environment::getCurrent());
+        *factory = invokeComponentFactory(
+            curEnv,
+            (environment.isEmpty()
+             ? getEnvironmentFromModule(mod, curEnv, implementation, prefix)
+             : getEnvironment(environment, implementation)),
+            reinterpret_cast<component_getFactoryFunc>(fp), uri, implementation,
+            serviceManager);
+    } else {
+        oslGenericFunction fp = mod.getFunctionSymbol(constructor);
+        if (fp == 0) {
+            throw css::loader::CannotActivateFactoryException(
+                ("no constructor symbol \"" + constructor
+                 + "\" in component library <" + uri + ">"),
+                css::uno::Reference<css::uno::XInterface>());
+        }
+        *constructorFunction = reinterpret_cast<ImplementationConstructorFn *>(
+            fp);
     }
-    else
-    {
-        aExcMsg = moduleUri;
-        aExcMsg += ": cannot get symbol: ";
-        aExcMsg += aGetFactoryName;
-    }
-
-    if (! xRet.is())
-    {
-#ifndef DISABLE_DYNLOADING
-        osl_unloadModule( lib );
+    mod.release();
 #endif
-        SAL_WARN("cppuhelper", "### cannot activate factory: " << aExcMsg);
-        throw loader::CannotActivateFactoryException(
-            aExcMsg,
-            Reference< XInterface >() );
-    }
-    return xRet;
 }
 
-} }
+#if !defined DISABLE_DYNLOADING
 
-#ifndef DISABLE_DYNLOADING
-
-//==============================================================================
-extern "C" { static void s_writeInfo(va_list * pParam)
+css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
+    rtl::OUString const & uri, rtl::OUString const & rPath,
+    rtl::OUString const & rImplName,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
+    css::uno::Reference<css::registry::XRegistryKey> const & xKey)
+    SAL_THROW((css::loader::CannotActivateFactoryException))
 {
-    component_writeInfoFunc         pSym      = va_arg(*pParam, component_writeInfoFunc);
-    void                          * pSMgr     = va_arg(*pParam, void *);
-    void                          * pKey      = va_arg(*pParam, void *);
-    sal_Bool                      * pbRet     = va_arg(*pParam, sal_Bool *);
+    assert(rPath.isEmpty()); (void) rPath;
+    assert(!xKey.is()); (void) xKey;
+    css::uno::Reference<css::uno::XInterface> fac;
+    cppuhelper::detail::loadSharedLibComponentFactory(
+        uri, "", "", rImplName, "", xMgr, 0, &fac);
+    return fac;
+}
 
-    *pbRet = pSym(pSMgr, pKey);
+namespace {
 
-}}
+extern "C" void writeInfo(va_list * args) {
+    component_writeInfoFunc fn = va_arg(*args, component_writeInfoFunc);
+    void * smgr = va_arg(*args, void *);
+    void * key = va_arg(*args, void *);
+    sal_Bool * ok = va_arg(*args, sal_Bool *);
+    *ok = (*fn)(smgr, key);
+}
 
-namespace cppu {
+}
 
-void SAL_CALL writeSharedLibComponentInfo(
-    OUString const & uri, OUString const & rPath,
-    Reference< lang::XMultiServiceFactory > const & xMgr,
-    Reference< registry::XRegistryKey > const & xKey )
-    SAL_THROW( (registry::CannotRegisterImplementationException) )
+void cppu::writeSharedLibComponentInfo(
+    rtl::OUString const & uri, rtl::OUString const & rPath,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
+    css::uno::Reference<css::registry::XRegistryKey> const & xKey)
+    SAL_THROW((css::registry::CannotRegisterImplementationException))
 {
-    (void) rPath;
-    assert(rPath.isEmpty());
-    oslModule lib = osl_loadModule(
-        uri.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-    if (! lib)
-    {
-        OUString const msg("loading component library failed: " + uri);
-        SAL_WARN("cppuhelper", msg);
-        throw registry::CannotRegisterImplementationException(msg,
-            Reference< XInterface >() );
+    assert(rPath.isEmpty()); (void) rPath;
+    osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+    if (!mod.is()) {
+        throw css::registry::CannotRegisterImplementationException(
+            "loading component library <" + uri + "> failed",
+            css::uno::Reference<css::uno::XInterface>());
     }
-
-    sal_Bool bRet = sal_False;
-
-    uno::Environment currentEnv(Environment::getCurrent());
-    uno::Environment env;
-
-    OUString aExcMsg;
-
-    getLibEnv(lib, &env, currentEnv);
-
-    OUString aWriteInfoName = COMPONENT_WRITEINFO;
-    oslGenericFunction pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
-    if (pSym != 0)
-    {
-        if (env.is() && currentEnv.is())
-        {
-            Mapping aCurrent2Env( currentEnv, env );
-            if (aCurrent2Env.is())
-            {
-                void * pSMgr = aCurrent2Env.mapInterface(
-                    xMgr.get(), ::getCppuType( &xMgr ) );
-                void * pKey = aCurrent2Env.mapInterface(
-                    xKey.get(), ::getCppuType( &xKey ) );
-                if (pKey)
-                {
-                    env.invoke(s_writeInfo, pSym, pSMgr, pKey, &bRet);
-
-
-                    (*env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pKey );
-                    if (! bRet)
-                    {
-                        aExcMsg = uri;
-                        aExcMsg += ": component_writeInfo() "
-                                   "returned false!";
-                    }
-                }
-                else
-                {
-                    // key is mandatory
-                    aExcMsg = uri;
-                    aExcMsg += ": registry is mandatory to invoke"
-                               " component_writeInfo()!";
-                }
-
-                if (pSMgr)
-                {
-                    (*env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pSMgr );
-                }
-            }
-            else
-            {
-                aExcMsg = "cannot get uno mapping: C++ <=> UNO!";
-            }
-        }
-        else
-        {
-            aExcMsg = "cannot get uno environments!";
-        }
+    oslGenericFunction fp = mod.getFunctionSymbol(COMPONENT_WRITEINFO);
+    if (fp == 0) {
+        throw css::registry::CannotRegisterImplementationException(
+            ("no symbol \"" COMPONENT_WRITEINFO "\" in component library <"
+             + uri + ">"),
+            css::uno::Reference<css::uno::XInterface>());
     }
-    else
-    {
-        aExcMsg = uri;
-        aExcMsg += ": cannot get symbol: ";
-        aExcMsg += aWriteInfoName;
+    css::uno::Environment curEnv(css::uno::Environment::getCurrent());
+    css::uno::Environment env(getEnvironmentFromModule(mod, curEnv, "", ""));
+    if (!(curEnv.is() && env.is())) {
+        throw css::registry::CannotRegisterImplementationException(
+            "cannot get environments",
+            css::uno::Reference<css::uno::XInterface>());
     }
-
-//!
-//! OK: please look at #88219#
-//!
-//! ::osl_unloadModule( lib);
-    if (! bRet)
-    {
-        SAL_WARN("cppuhelper", "### cannot write component info: " << aExcMsg);
-        throw registry::CannotRegisterImplementationException(
-            aExcMsg, Reference< XInterface >() );
+    css::uno::Mapping map(curEnv, env);
+    if (!map.is()) {
+        throw css::registry::CannotRegisterImplementationException(
+            "cannot get mapping", css::uno::Reference<css::uno::XInterface>());
+    }
+    void * smgr = map.mapInterface(
+        xMgr.get(), cppu::UnoType<css::lang::XMultiServiceFactory>::get());
+    void * key = map.mapInterface(
+        xKey.get(), cppu::UnoType<css::registry::XRegistryKey>::get());
+    sal_Bool ok;
+    env.invoke(writeInfo, fp, smgr, key, &ok);
+    (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, key);
+    if (smgr != 0) {
+        (*env.get()->pExtEnv->releaseInterface)(env.get()->pExtEnv, smgr);
+    }
+    if (!ok) {
+        throw css::registry::CannotRegisterImplementationException(
+            ("calling \"" COMPONENT_WRITEINFO "\" in component library <" + uri
+             + "> returned false"),
+            css::uno::Reference<css::uno::XInterface>());
     }
 }
 
-}
-
-#endif // DISABLE_DYNLOADING
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

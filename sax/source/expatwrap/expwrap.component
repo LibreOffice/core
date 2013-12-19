@@ -18,14 +18,17 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="direct" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.extensions.xml.sax.ParserExpat">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.extensions.xml.sax.ParserExpat"
+      constructor="com_sun_star_comp_extensions_xml_sax_ParserExpat">
     <service name="com.sun.star.xml.sax.Parser"/>
   </implementation>
-  <implementation name="com.sun.star.extensions.xml.sax.Writer">
+  <implementation name="com.sun.star.extensions.xml.sax.Writer"
+      constructor="com_sun_star_extensions_xml_sax_Writer">
     <service name="com.sun.star.xml.sax.Writer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.extensions.xml.sax.FastParser">
+  <implementation name="com.sun.star.comp.extensions.xml.sax.FastParser"
+      constructor="com_sun_star_comp_extensions_xml_sax_FastParser">
      <service name="com.sun.star.xml.sax.FastParser"/>
   </implementation>
 </component>

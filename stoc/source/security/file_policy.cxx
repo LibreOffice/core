@@ -39,7 +39,6 @@
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
 
-#define SERVICE_NAME "com.sun.star.security.Policy"
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
 
 using namespace ::osl;
@@ -532,39 +531,25 @@ sal_Bool FilePolicy::supportsService( OUString const & serviceName )
     return cppu::supportsService(this, serviceName);
 }
 //__________________________________________________________________________________________________
-static Sequence< OUString > FilePolicy_getSupportedServiceNames() SAL_THROW(())
-{
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString(SERVICE_NAME);
-    return aSNS;
-}
-
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return FilePolicy_getSupportedServiceNames();
+    Sequence< OUString > aSNS( 1 );
+    aSNS[0] = OUString("com.sun.star.security.Policy");
+    return aSNS;
 }
 
 } // namespace
 
-static Reference< XInterface > FilePolicy_CreateInstance(
-    Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW( (Exception) )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_security_comp_stoc_FilePolicy(
+    css::uno::XComponentContext * context, uno_Sequence * arguments)
 {
-    return (OWeakObject *)new FilePolicy( xComponentContext );
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_security_comp_stoc_FilePolicy_component_getFactory(
-    const char * , void * , void * )
-{
-    Reference< css::lang::XSingleComponentFactory > xFactory;
-    xFactory = createSingleComponentFactory(
-            FilePolicy_CreateInstance,
-            IMPL_NAME,
-            FilePolicy_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new FilePolicy(context)));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

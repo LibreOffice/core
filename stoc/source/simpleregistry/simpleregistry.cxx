@@ -34,9 +34,9 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include <cppuhelper/factory.hxx>
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "registry/registry.hxx"
@@ -51,12 +51,6 @@
 #include "sal/types.h"
 
 namespace {
-
-static css::uno::Sequence< OUString > SimpleRegistry_getSupportedServiceNames() {
-    css::uno::Sequence< OUString > names(1);
-    names[0] = "com.sun.star.registry.SimpleRegistry";
-    return names;
-}
 
 class SimpleRegistry:
     public cppu::WeakImplHelper2<
@@ -105,11 +99,15 @@ private:
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
-    { return ServiceName == getSupportedServiceNames()[0]; }
+    { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return SimpleRegistry_getSupportedServiceNames(); }
+    {
+        css::uno::Sequence< OUString > names(1);
+        names[0] = "com.sun.star.registry.SimpleRegistry";
+        return names;
+    }
 
     Registry registry_;
 };
@@ -1125,24 +1123,16 @@ void SimpleRegistry::mergeKey(
 
 }
 
-static css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
-    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
-        const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_SimpleRegistry(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
 {
-    return static_cast< cppu::OWeakObject * >(new SimpleRegistry);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_stoc_SimpleRegistry_component_getFactory(
-    const char * , void * , void * )
-{
-    css::uno::Reference< css::lang::XSingleComponentFactory > xFactory;
-    xFactory = cppu::createSingleComponentFactory(
-            SimpleRegistry_CreateInstance,
-            "com.sun.star.comp.stoc.SimpleRegistry",
-            SimpleRegistry_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new SimpleRegistry));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

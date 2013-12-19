@@ -28,7 +28,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -66,29 +65,6 @@ using namespace osl;
 using namespace std;
 
 namespace {
-
-Sequence< OUString > OServiceManager_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = "com.sun.star.lang.MultiServiceFactory";
-    seqNames.getArray()[1] = "com.sun.star.lang.ServiceManager";
-    return seqNames;
-}
-
-Sequence< OUString > ORegistryServiceManager_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = "com.sun.star.lang.MultiServiceFactory";
-    seqNames.getArray()[1] = "com.sun.star.lang.RegistryServiceManager";
-    return seqNames;
-}
-
-Sequence< OUString > OServiceManagerWrapper_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.lang.MultiServiceFactory";
-    return seqNames;
-}
 
 static Sequence< OUString > retrieveAsciiValueList(
     const Reference< XSimpleRegistry > &xReg, const OUString &keyName )
@@ -1083,7 +1059,6 @@ void OServiceManager::initialize( Sequence< Any > const & )
 OUString OServiceManager::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    check_undisposed();
     return OUString("com.sun.star.comp.stoc.OServiceManager");
 }
 
@@ -1098,8 +1073,10 @@ sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
 Sequence< OUString > OServiceManager::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    check_undisposed();
-    return  OServiceManager_getSupportedServiceNames();
+    Sequence< OUString > seqNames(2);
+    seqNames[0] = "com.sun.star.lang.MultiServiceFactory";
+    seqNames[1] = "com.sun.star.lang.ServiceManager";
+    return seqNames;
 }
 
 
@@ -1601,8 +1578,10 @@ Sequence< OUString > ORegistryServiceManager::getAvailableServiceNames()
 Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    check_undisposed();
-    return ORegistryServiceManager_getSupportedServiceNames();
+    Sequence< OUString > seqNames(2);
+    seqNames[0] = "com.sun.star.lang.MultiServiceFactory";
+    seqNames[1] = "com.sun.star.lang.RegistryServiceManager";
+    return seqNames;
 }
 
 
@@ -1691,67 +1670,37 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
 
 } // namespace
 
-static Reference<XInterface > OServiceManager_CreateInstance(
-    const Reference< XComponentContext > & xContext )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_OServiceManager(
+    css::uno::XComponentContext * context, uno_Sequence * arguments)
 {
-    return Reference<XInterface >(
-        static_cast< XInterface * >(
-            static_cast< OWeakObject * >( new OServiceManager( xContext ) ) ) );
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new OServiceManager(context)));
+    x->acquire();
+    return x.get();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_stoc_OServiceManager_component_getFactory(
-    const char * , void * , void * )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_ORegistryServiceManager(
+    css::uno::XComponentContext * context, uno_Sequence * arguments)
 {
-    Reference< css::lang::XSingleComponentFactory > xFactory;
-    xFactory = createSingleComponentFactory(
-            OServiceManager_CreateInstance,
-            "com.sun.star.comp.stoc.OServiceManager",
-            OServiceManager_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new ORegistryServiceManager(context)));
+    x->acquire();
+    return x.get();
 }
 
-static Reference<XInterface > ORegistryServiceManager_CreateInstance(
-    const Reference< XComponentContext > & xContext )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_OServiceManagerWrapper(
+    css::uno::XComponentContext * context, uno_Sequence * arguments)
 {
-    return Reference<XInterface >(
-        static_cast< XInterface * >(
-            static_cast< OWeakObject * >( new ORegistryServiceManager( xContext ) ) ) );
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_stoc_ORegistryServiceManager_component_getFactory(
-    const char * , void * , void * )
-{
-    Reference< css::lang::XSingleComponentFactory > xFactory;
-    xFactory = createSingleComponentFactory(
-            ORegistryServiceManager_CreateInstance,
-            "com.sun.star.comp.stoc.ORegistryServiceManager",
-            ORegistryServiceManager_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
-}
-
-static Reference<XInterface > OServiceManagerWrapper_CreateInstance(
-    const Reference< XComponentContext > & xContext )
-    throw (Exception)
-{
-    return (OWeakObject *)new OServiceManagerWrapper( xContext );
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_stoc_OServiceManagerWrapper_component_getFactory(
-    const char * , void * , void * )
-{
-    Reference< css::lang::XSingleComponentFactory > xFactory;
-    xFactory = createSingleComponentFactory(
-            OServiceManagerWrapper_CreateInstance,
-            "com.sun.star.comp.stoc.OServiceManagerWrapper",
-            OServiceManagerWrapper_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new OServiceManagerWrapper(context)));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

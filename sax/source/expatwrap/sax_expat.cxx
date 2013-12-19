@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sal/alloca.h>
+#include <cassert>
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -30,7 +31,6 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -42,12 +42,15 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
 #include "attrlistimpl.hxx"
 #include "xml2utf.hxx"
+
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 namespace {
 
@@ -128,17 +131,6 @@ OUString XmlChar2OUString( const XML_Char *p )
 
 
 class SaxExpatParser_Impl;
-
-OUString SaxExpatParser_getImplementationName() {
-    return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
-}
-
-Sequence< OUString > SaxExpatParser_getSupportedServiceNames(void)
-{
-    Sequence<OUString> seq(1);
-    seq[0] = OUString("com.sun.star.xml.sax.Parser");
-    return seq;
-}
 
 // This class implements the external Parser interface
 class SaxExpatParser
@@ -598,7 +590,7 @@ void SaxExpatParser::setLocale( const Locale & locale ) throw (RuntimeException)
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName() throw ()
 {
-    return SaxExpatParser_getImplementationName();
+    return OUString("com.sun.star.comp.extensions.xml.sax.ParserExpat");
 }
 
 // XServiceInfo
@@ -610,7 +602,9 @@ sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw ()
 // XServiceInfo
 Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw ()
 {
-    return SaxExpatParser_getSupportedServiceNames();
+    Sequence<OUString> seq(1);
+    seq[0] = "com.sun.star.xml.sax.Parser";
+    return seq;
 }
 
 
@@ -1023,27 +1017,18 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(pImpl,rExtendedDocumentHandler->endCDATA() );
 }
 
-Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference<css::uno::XComponentContext> & )
-    SAL_THROW((css::uno::Exception))
-{
-    SaxExpatParser *p = new SaxExpatParser;
-    return Reference< XInterface > ( (OWeakObject * ) p );
-}
-
 } // namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_extensions_xml_sax_ParserExpat_component_getFactory(
-    const char *, void *, void * )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_extensions_xml_sax_ParserExpat(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
 {
-    Reference<css::lang::XSingleComponentFactory> xFactory(
-        cppu::createSingleComponentFactory(
-            &SaxExpatParser_CreateInstance,
-            SaxExpatParser_getImplementationName(),
-            SaxExpatParser_getSupportedServiceNames()));
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new SaxExpatParser));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

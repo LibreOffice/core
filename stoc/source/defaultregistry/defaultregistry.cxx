@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -43,13 +42,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-
-static Sequence< OUString > NestedRegistryImpl_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString("com.sun.star.registry.NestedRegistry");
-    return seqNames;
-}
 
 namespace {
 
@@ -1207,7 +1199,9 @@ sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    return NestedRegistryImpl_getSupportedServiceNames();
+    Sequence< OUString > seqNames(1);
+    seqNames[0] = "com.sun.star.registry.NestedRegistry";
+    return seqNames;
 }
 
 //*************************************************************************
@@ -1355,32 +1349,16 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
 
 } // namespace
 
-static Reference<XInterface> NestedRegistry_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference<XComponentContext>& )
-    throw(Exception)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_NestedRegistry(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
 {
-    Reference<XInterface>   xRet;
-    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new NestedRegistryImpl;
-
-    if (pRegistry)
-    {
-        xRet = Reference<XInterface>::query(pRegistry);
-    }
-
-    return xRet;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL
-com_sun_star_comp_stoc_NestedRegistry_component_getFactory(
-    const char * , void * , void * )
-{
-    Reference< XSingleComponentFactory > xFactory;
-    xFactory = createSingleComponentFactory(
-            NestedRegistry_CreateInstance,
-            "com.sun.star.comp.stoc.NestedRegistry",
-            NestedRegistryImpl_getSupportedServiceNames() );
-    xFactory->acquire();
-    return xFactory.get();
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new NestedRegistryImpl));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
