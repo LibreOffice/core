@@ -14,14 +14,12 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <sfx2/lnkbase.hxx>
 #include <address.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
-#include <rangelst.hxx>
 #include <documentstreamaccess.hxx>
 
 class ScDocShell;
@@ -37,12 +35,11 @@ namespace datastreams {
 
 typedef std::vector<OString> LinesList;
 
-class DataStream : boost::noncopyable, public sfx2::SvBaseLink
+class DataStream : boost::noncopyable
 {
     OString ConsumeLine();
     void MoveData();
     void Text2Doc();
-    DECL_LINK( RefreshHdl, void* );
 
 public:
     enum MoveType { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
@@ -58,11 +55,7 @@ public:
         ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings);
 
-    virtual ~DataStream();
-    // sfx2::SvBaseLink
-    virtual sfx2::SvBaseLink::UpdateResult DataChanged(
-            const OUString& , const css::uno::Any& ) SAL_OVERRIDE;
-    virtual void Edit(Window* , const Link& ) SAL_OVERRIDE;
+    ~DataStream();
 
     ScRange GetRange() const;
     const OUString& GetURL() const { return msURL; }

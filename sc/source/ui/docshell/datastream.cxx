@@ -16,18 +16,14 @@
 #include <osl/time.h>
 #include <rtl/strbuf.hxx>
 #include <salhelper/thread.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <arealink.hxx>
 #include <datastreamdlg.hxx>
-#include <dbfunc.hxx>
 #include <docsh.hxx>
-#include <documentimport.hxx>
-#include <impex.hxx>
 #include <rangelst.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <stringutil.hxx>
+#include <documentlinkmgr.hxx>
 
 #include <config_orcus.h>
 
@@ -189,46 +185,9 @@ DataStream* DataStream::Set(
     ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
     sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings)
 {
-    // Each DataStream needs a destination area in order to be exported.
-    // There can be only one ScAreaLink / DataStream per cell.
-    // So - if we don't need range (DataStream with mbValuesInLine == false),
-    // just find a free cell for now.
-    ScRange aDestArea;
-    if (rRange.IsValid())
-        aDestArea = rRange;
-
-    sfx2::LinkManager* pLinkManager = pShell->GetDocument()->GetLinkManager();
-    sal_uInt16 nLinkPos = 0;
-    while (nLinkPos < pLinkManager->GetLinks().size())
-    {
-        sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[nLinkPos];
-        if (!rRange.IsValid())
-        {
-            if ( (pBase->ISA(ScAreaLink) && static_cast<ScAreaLink*>
-                        (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
-                || (pBase->ISA(DataStream) && static_cast<DataStream*>
-                        (&(*pBase))->GetRange().aStart == aDestArea.aStart) )
-            {
-                aDestArea.Move(0, 1, 0);
-                nLinkPos = 0;
-                continue;
-            }
-            else
-                ++nLinkPos;
-        }
-        else if ( (pBase->ISA(ScAreaLink) && static_cast<ScAreaLink*>
-                    (&(*pBase))->GetDestArea().aStart == aDestArea.aStart)
-                || (pBase->ISA(DataStream) && static_cast<DataStream*>
-                    (&(*pBase))->GetRange().aStart == aDestArea.aStart) )
-        {
-            pLinkManager->Remove( pBase );
-        }
-        else
-            ++nLinkPos;
-    }
-
-    DataStream* pLink = new DataStream(pShell, rURL, aDestArea, nLimit, eMove, nSettings);
-    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rURL, NULL, NULL );
+    DataStream* pLink = new DataStream(pShell, rURL, rRange, nLimit, eMove, nSettings);
+    sc::DocumentLinkManager& rMgr = pShell->GetDocument()->GetDocLinkManager();
+    rMgr.setDataStream(pLink);
     return pLink;
 }
 
@@ -435,12 +394,6 @@ void DataStream::MoveData()
     }
 }
 
-IMPL_LINK_NOARG(DataStream, RefreshHdl)
-{
-    ImportData();
-    return 0;
-}
-
 #if ENABLE_ORCUS
 
 namespace {
@@ -571,39 +524,6 @@ bool DataStream::ImportData()
 
     Text2Doc();
     return mbRunning;
-}
-
-sfx2::SvBaseLink::UpdateResult DataStream::DataChanged(
-        const OUString& , const css::uno::Any& )
-{
-    MakeToolbarVisible();
-    StopImport();
-    bool bStart = true;
-    if (mnSettings & SCRIPT_STREAM && !mxReaderThread.is() &&
-        officecfg::Office::Common::Security::Scripting::MacroSecurityLevel::get() >= 1)
-    {
-        MessageDialog aQBox( NULL, "QueryRunStreamScriptDialog", "modules/scalc/ui/queryrunstreamscriptdialog.ui");
-        aQBox.set_primary_text( aQBox.get_primary_text().replaceFirst("%URL", msURL) );
-        if (RET_YES != aQBox.Execute())
-            bStart = false;
-    }
-    if (bStart)
-        StartImport();
-    return SUCCESS;
-}
-
-void DataStream::Edit( Window* pWindow, const Link& )
-{
-    DataStreamDlg aDialog(mpDocShell, pWindow);
-    aDialog.Init(msURL, maStartRange, mnLimit, meMove, mnSettings);
-    if (aDialog.Execute() == RET_OK)
-    {
-        bool bWasRunning = mbRunning;
-        StopImport();
-        aDialog.StartStream(this);
-        if (bWasRunning)
-            StartImport();
-    }
 }
 
 } // namespace sc

@@ -70,6 +70,7 @@ class EditTextIterator;
 struct NoteEntry;
 struct FormulaGroupContext;
 class DocumentStreamAccess;
+class DocumentLinkManager;
 
 }
 
@@ -259,6 +260,7 @@ private:
 
     boost::scoped_ptr<svl::SharedStringPool> mpCellStringPool;
     boost::scoped_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
+    mutable boost::scoped_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
@@ -479,6 +481,9 @@ public:
     rtl::Reference<XColorList>          GetColorList();
 
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
+
+    sc::DocumentLinkManager& GetDocLinkManager();
+    const sc::DocumentLinkManager& GetDocLinkManager() const;
 
     SC_DLLPUBLIC const ScDocOptions&        GetDocOptions() const;
     SC_DLLPUBLIC void                   SetDocOptions( const ScDocOptions& rOpt );
