@@ -3865,6 +3865,13 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS)
 
+# Running dsymutil takes too long
+XCODE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
+if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \); then
+    XCODE_DEBUG_INFORMATION_FORMAT=dwarf
+fi
+AC_SUBST(XCODE_DEBUG_INFORMATION_FORMAT)
+
 # Check for explicit A/C/CXX/OBJC/OBJCXX/LDFLAGS.
 # By default use the ones specified by our build system,
 # but explicit override is possible.

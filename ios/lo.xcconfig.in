@@ -22,6 +22,7 @@ LO_WORKDIR = @WORKDIR@
 // what they will be used for.
 ARCHS = @XCODE_ARCHS@
 CLANG_CXX_LIBRARY = @XCODE_CLANG_CXX_LIBRARY@
+DEBUG_INFORMATION_FORMAT=@XCODE_DEBUG_INFORMATION_FORMAT@
 
 // These settings are edited in CustomTarget_Lo_Xcconfig.mk.
 LINK_LDFLAGS =
