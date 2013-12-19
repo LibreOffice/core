@@ -2992,6 +2992,10 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     ctrl_iterator iterActive = std::find(aControlList.begin(),
                                          aControlList.end(), pActiveCtrl);
 
+    assert(iterActive != aControlList.end());
+    if (iterActive == aControlList.end())
+        return;
+
     Size aControlSize(GetOutputSizePixel());
 
     if( WINDOW_EDIT == pActiveCtrl->GetType())
