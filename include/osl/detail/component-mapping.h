@@ -83,6 +83,25 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libxoflo.a", xof_component_getFactory }, \
     { "libxstor.a", xstor_component_getFactory }, \
 
+#define LO_EXTENDED_CORE_FACTORY_MAP \
+    LO_CORE_FACTORY_MAP \
+    { "libanimcorelo.a", animcore_component_getFactory }, \
+    { "libavmedialo.a", avmedia_component_getFactory }, \
+    { "libchartcorelo.a", chartcore_component_getFactory }, \
+    { "libfilterconfiglo.a", filterconfig1_component_getFactory }, \
+    { "libfrmlo.a", frm_component_getFactory }, \
+    { "libfwklo.a", fwk_component_getFactory }, \
+    { "libfwmlo.a", fwm_component_getFactory }, \
+    { "libsvxcorelo.a", svxcore_component_getFactory }, \
+    { "libtextfdlo.a", textfd_component_getFactory },
+    { "libtklo.a", tk_component_getFactory }, \
+    { "libucppkg1.a", ucppkg1_component_getFactory }, \
+    { "libxmlfdlo.a", xmlfd_component_getFactory }, \
+
+#define LO_BASE_CORE_FACTORY_MAP \
+    { "libdbalo.a", dba_component_getFactory }, \
+    { "libdbaxmllo.a", dbaxml_component_getFactory }, \
+
 #define LO_CALC_CORE_FACTORY_MAP \
     { "libscdlo.a", scd_component_getFactory }, \
     { "libscfiltlo.a", scfilt_component_getFactory }, \
@@ -94,10 +113,26 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libdatelo.a", date_component_getFactory }, \
     { "libpricinglo.a", pricing_component_getFactory }, \
 
-#define LO_WRITER_FACTORY_MAP \
+#define LO_DRAW_CORE_FACTORY_MAP \
+    { "libsddlo.a", sdd_component_getFactory }, \
+    { "libsdlo.a", sd_component_getFactory }, \
+    { "libsvgfilterlo.a", svgfilter_component_getFactory }, \
+    { "libwpftdrawlo.a", wpftdraw_component_getFactory }, \
+
+#define LO_MATH_FACTORY_MAP \
+    { "libsmdlo.a", smd_component_getFactory }, \
+    { "libsmlo.a", sm_component_getFactory }, \
+
+#define LO_WRITER_CORE_FACTORY_MAP \
     { "libswdlo.a", swd_component_getFactory }, \
     { "libswlo.a", sw_component_getFactory }, \
     { "libwriterfilterlo.a", writerfilter_component_getFactory }, \
+
+#define LO_WRITER_FACTORY_MAP \
+    LO_WRITER_CORE_FACTORY_MAP \
+    { "libhwplo.a", hwp_component_getFactory }, \
+    { "libt602filterlo.a", t602filter_component_getFactory }, \
+    { "libwpftwriterlo.a", wpftwriter_component_getFactory }, \
 
 #define NON_APP_SPECIFIC_CONSTRUCTOR_MAP \
     { "com_sun_star_comp_extensions_xml_sax_ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat }, \

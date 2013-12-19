@@ -15,29 +15,14 @@ const lib_to_factory_mapping *
 lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
-        LO_CORE_FACTORY_MAP
+        LO_EXTENDED_CORE_FACTORY_MAP
+        LO_BASE_CORE_FACTORY_MAP
         LO_CALC_CORE_FACTORY_MAP
+        LO_DRAW_CORE_FACTORY_MAP
+        LO_MATH_FACTORY_MAP
         LO_WRITER_FACTORY_MAP
-        { "libanimcorelo.a", animcore_component_getFactory },
-        { "libavmedialo.a", avmedia_component_getFactory },
-        { "libdbalo.a", dba_component_getFactory },
-        { "libdbaxmllo.a", dbaxml_component_getFactory },
-        { "libfrmlo.a", frm_component_getFactory },
-        { "libfwklo.a", fwk_component_getFactory },
-        { "libfwmlo.a", fwm_component_getFactory },
-        { "libhwplo.a", hwp_component_getFactory },
         { "libprotocolhandlerlo.a", protocolhandler_component_getFactory },
         { "libsblo.a", sb_component_getFactory },
-        { "libsddlo.a", sdd_component_getFactory },
-        { "libsdlo.a", sd_component_getFactory },
-        { "libsmdlo.a", smd_component_getFactory },
-        { "libsmlo.a", sm_component_getFactory },
-        { "libsvgfilterlo.a", svgfilter_component_getFactory },
-        { "libt602filterlo.a", t602filter_component_getFactory },
-        { "libtextfdlo.a", textfd_component_getFactory },
-        { "libwpftdrawlo.a", wpftdraw_component_getFactory },
-        { "libwpftwriterlo.a", wpftwriter_component_getFactory },
-        { "libxmlfdlo.a", xmlfd_component_getFactory },
         { NULL, NULL }
     };
 

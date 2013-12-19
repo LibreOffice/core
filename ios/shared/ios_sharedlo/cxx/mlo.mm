@@ -28,7 +28,7 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         LO_CORE_FACTORY_MAP
-        LO_WRITER_FACTORY_MAP
+        LO_WRITER_CORE_FACTORY_MAP
         MAP_LIB_LO(uui),
         MAP_LIB_LO(i18nsearch),
         { NULL, NULL }
