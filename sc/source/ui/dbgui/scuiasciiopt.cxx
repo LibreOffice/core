@@ -314,7 +314,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
         pCkbDetectNumber->Check();
     if( bFixedWidth && !bIsTSV )
         pRbFixed->Check();
-    if( nFromRow != 1 && !bIsTSV )
+    if( nFromRow != 1 )
         pNfRow->SetValue( nFromRow );
 
     if ( bIsTSV )
