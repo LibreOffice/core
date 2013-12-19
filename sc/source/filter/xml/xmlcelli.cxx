@@ -1000,26 +1000,6 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
                 rPosition.Row() + static_cast<SCROW>(pCellRangeSource->nRows - 1), rPosition.Tab() );
             OUString sFilterName( pCellRangeSource->sFilterName );
             OUString sSourceStr( pCellRangeSource->sSourceStr );
-            OUString sRangeStr;
-            ScRangeStringConverter::GetStringFromRange( sRangeStr, aDestRange, pDoc, formula::FormulaGrammar::CONV_OOO );
-            SvtMiscOptions aMiscOptions;
-            if (aMiscOptions.IsExperimentalMode() && pCellRangeSource->sFilterOptions == "DataStream")
-            {
-                ScRange aRange;
-                sal_uInt16 nRes = aRange.Parse(sRangeStr, pDoc);
-                if ((nRes & SCA_VALID) == SCA_VALID)
-                {
-                    sc::DataStream::MoveType eMove = sc::DataStream::ToMoveType(sSourceStr);
-                    sc::DataStream::Set( dynamic_cast<ScDocShell*>(pDoc->GetDocumentShell())
-                            , pCellRangeSource->sURL // rURL
-                            , aRange
-                            , sFilterName.toInt32() // nLimit
-                            , eMove
-                            , pCellRangeSource->nRefresh // nSettings
-                            );
-                }
-                return;
-            }
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
                 sFilterName, pCellRangeSource->sFilterOptions, sSourceStr, aDestRange, pCellRangeSource->nRefresh );
             sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
