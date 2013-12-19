@@ -5779,6 +5779,11 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
     else if (m_bDMLTextFrameSyntax)
     {
+        m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
+        m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
+                                       XML_val, sColor,
+                                       FSEND);
+        m_pSerializer->endElementNS(XML_a, XML_solidFill);
     }
     else if ( !m_rExport.bOutPageDescs )
     {
