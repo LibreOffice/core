@@ -1621,8 +1621,10 @@ void OOXMLFastContextHandlerTable::newPropertySet
  */
 
 OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
-(OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandler(pContext)
+    ( OOXMLFastContextHandler * pContext )
+    : OOXMLFastContextHandlerProperties( pContext )
+    , mbForwardEventsSaved( false )
+    , msMyXNoteId()
 {
 }
 
@@ -1649,7 +1651,8 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
 (Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    endAction(Element);
+    // handle properties by calling parent class' method
+    OOXMLFastContextHandlerProperties::lcl_endFastElement( Element );
 
     setForwardEvents(mbForwardEventsSaved);
 }
