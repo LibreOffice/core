@@ -310,6 +310,7 @@ private:
     long                mnOutHeight;
     sal_Int32           mnDPIX;
     sal_Int32           mnDPIY;
+    sal_Int32           mnDPIScaleFactor; ///< For Hi-DPI displays, we want to draw everything mnDPIScaleFactor-times larger
     /// font specific text alignment offsets in pixel units
     mutable long        mnTextOffX;
     mutable long        mnTextOffY;

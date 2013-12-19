@@ -5319,9 +5319,10 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
      if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
          nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
 
-     ImplDrawWaveLine( nStartX, nStartY, 0, 0,
-                      nEndX-nStartX, nWaveHeight, 1,
-                      nOrientation, GetLineColor() );
+    ImplDrawWaveLine(nStartX, nStartY, 0, 0,
+            nEndX-nStartX, nWaveHeight * mnDPIScaleFactor,
+            mnDPIScaleFactor, nOrientation, GetLineColor());
+
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nStyle );
 }

@@ -1711,12 +1711,17 @@ void Window::ImplInitResolutionSettings()
         sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
         mnDPIX = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
         mnDPIY = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
+
+        // setup the scale factor for Hi-DPI displays
+        mnDPIScaleFactor = std::max(1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
+
         SetPointFont( rStyleSettings.GetAppFont() );
     }
     else if ( mpWindowImpl->mpParent )
     {
         mnDPIX  = mpWindowImpl->mpParent->mnDPIX;
         mnDPIY  = mpWindowImpl->mpParent->mnDPIY;
+        mnDPIScaleFactor = mpWindowImpl->mpParent->mnDPIScaleFactor;
     }
 
     // update the recalculated values for logical units
