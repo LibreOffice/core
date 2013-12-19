@@ -23,9 +23,6 @@ namespace {
 class ServicesTest: public test::BootstrapFixture
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
-
     void test();
 
     CPPUNIT_TEST_SUITE(ServicesTest);
@@ -33,58 +30,46 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void ServicesTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-}
-
-void ServicesTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
-}
-
 void ServicesTest::test()
 {
     Reference< XHierarchicalNameAccess > xTypeManager(
             m_xContext->getValueByName(
                 "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
             UNO_QUERY_THROW );
-    Sequence<OUString> seq = m_xContext->getServiceManager()->getAvailableServiceNames();
-    OUString *s = seq.getArray();
-    for (sal_Int32 i = 0; i < seq.getLength(); i++)
+    Sequence<OUString> s = m_xContext->getServiceManager()->getAvailableServiceNames();
+    for (sal_Int32 i = 0; i < s.getLength(); i++)
     {
         if (!xTypeManager->hasByHierarchicalName(s[i]))
         {
+            SAL_WARN(
+                "postprocess.cppunit",
+                "fantasy service name \"" << s[i] << "\"");
             continue;
         }
         Reference< XServiceTypeDescription2 > xDesc(
-                xTypeManager->getByHierarchicalName(s[i]), UNO_QUERY);
-        if (!xDesc.is())
-        {
-            // Does happen for singletons?
-            continue;
-        }
+            xTypeManager->getByHierarchicalName(s[i]), UNO_QUERY_THROW);
         Sequence< Reference< XServiceConstructorDescription > > xseq = xDesc->getConstructors();
-        bool bHasDefault = false;
         for (sal_Int32 c = 0; c < xseq.getLength(); c++)
-            if (xseq[c]->isDefaultConstructor())
-                bHasDefault = true;
-
-        try
-        {
-            if (bHasDefault
-                    && s[i] != "com.sun.star.deployment.test.SmoketestCommandEnvironment")
-                // TODO: com.sun.star.deployment.test.SmoketestCommandEnvironment throws
-                // "Can not activate the factory for org.libreoffice.smoketest.SmoketestCommandEnvironment
-                // because java.lang.NoClassDefFoundError: com/sun/star/ucb/XCommandEnvironment"
-                m_xContext->getServiceManager()->createInstanceWithContext(s[i], m_xContext);
-        }
-        catch(const Exception & e)
-        {
-            OString exc = "Exception thrown while creating " +
-                OUStringToOString(s[i] + ": " + e.Message, RTL_TEXTENCODING_UTF8);
-            CPPUNIT_FAIL(exc.getStr());
-        }
+            if (!xseq[c]->getParameters().hasElements())
+                try
+                {
+                    CPPUNIT_ASSERT_MESSAGE(
+                        OUStringToOString(s[i], RTL_TEXTENCODING_UTF8).getStr(),
+                        ((xseq[c]->isDefaultConstructor()
+                          ? (m_xContext->getServiceManager()
+                             ->createInstanceWithContext(s[i], m_xContext))
+                          : (m_xContext->getServiceManager()
+                             ->createInstanceWithArgumentsAndContext(
+                                 s[i], css::uno::Sequence<css::uno::Any>(),
+                                 m_xContext)))
+                         .is()));
+                }
+                catch(const Exception & e)
+                {
+                    OString exc = "Exception thrown while creating " +
+                        OUStringToOString(s[i] + ": " + e.Message, RTL_TEXTENCODING_UTF8);
+                    CPPUNIT_FAIL(exc.getStr());
+                }
     }
 }
 

@@ -29,7 +29,17 @@ $(eval $(call gb_CppunitTest_use_sdk_api,services))
 $(eval $(call gb_CppunitTest_use_ure,services))
 
 $(eval $(call gb_CppunitTest_use_rdb,services,services))
+ifneq ($(DISABLE_PYTHON),TRUE)
+$(eval $(call gb_CppunitTest_use_rdb,services,pyuno))
+endif
 
 $(eval $(call gb_CppunitTest_use_configuration,services))
+
+ifeq ($(ENABLE_JAVA),TRUE)
+$(call gb_CppunitTest_get_target,services): $(call gb_Jar_get_target,unoil)
+$(eval $(call gb_CppunitTest_add_arguments,services, \
+    -env:URE_MORE_JAVA_TYPES=$(call gb_Helper_make_url,$(call gb_Jar_get_target,unoil)) \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
