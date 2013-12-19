@@ -32,6 +32,7 @@
  */
 
 #include "MorkParser.hxx"
+#include <boost/io/ios_state.hpp>
 #include <stdlib.h>
 #include <sstream>
 #include <string>
@@ -601,6 +602,11 @@ std::string &MorkParser::getColumn( int oid )
 
 void MorkParser::retrieveLists(std::set<std::string>& lists)
 {
+#ifdef VERBOSE
+    boost::io::ios_all_saver ias(std::cout);
+    std::cout << std::hex << std::uppercase;
+#endif
+
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
     for (MorkTableMap::iterator TableIter = tables->begin();
@@ -609,7 +615,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 #ifdef VERBOSE
         std::cout    << "\t Table:"
         << ( ( int ) TableIter->first < 0 ? "-" : " " )
-        << std::hex << std::uppercase << TableIter->first << std::endl;
+        << TableIter->first << std::endl;
 #endif
         MorkRowMap* rows = getRows( defaultListScope_, &TableIter->second );
         if (!rows) return;
@@ -619,7 +625,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 #ifdef VERBOSE
             std::cout    << "\t\t\t Row Id:"
                 << ( ( int ) RowIter->first < 0 ? "-" : " ")
-                << std::hex << std::uppercase << RowIter->first << std::endl;
+                << RowIter->first << std::endl;
                 std::cout << "\t\t\t\t Cells:\r\n";
 #endif
             // Get cells
@@ -638,6 +644,11 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 
 void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>& records)
 {
+#ifdef VERBOSE
+    boost::io::ios_all_saver ias(std::cout);
+    std::cout << std::hex << std::uppercase;
+#endif
+
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
     for (MorkTableMap::iterator TableIter = tables->begin();
@@ -646,7 +657,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
 #ifdef VERBOSE
         std::cout    << "\t Table:"
         << ( ( int ) TableIter->first < 0 ? "-" : " " )
-        << std::hex << std::uppercase << TableIter->first << std::endl;
+        << TableIter->first << std::endl;
 #endif
         MorkRowMap* rows = getRows( 0x81, &TableIter->second );
         if (!rows) return;
@@ -656,7 +667,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
 #ifdef VERBOSE
             std::cout    << "\t\t\t Row Id:"
             << ( ( int ) RowIter->first < 0 ? "-" : " ")
-            << std::hex << std::uppercase << RowIter->first << std::endl;
+            << RowIter->first << std::endl;
             std::cout << "\t\t\t\t Cells:\r\n";
 #endif
             // Get cells
@@ -686,6 +697,9 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
 
 void MorkParser::dump()
 {
+    boost::io::ios_all_saver ias(std::cout);
+    std::cout << std::hex << std::uppercase;
+
     std::cout << "Column Dict:\r\n";
     std::cout << "=============================================\r\n\r\n";
 
@@ -693,7 +707,7 @@ void MorkParser::dump()
     for ( MorkDict::iterator iter = columns_.begin();
           iter != columns_.end(); ++iter )
     {
-        std::cout  << std::hex << std::uppercase << iter->first
+        std::cout  << iter->first
                    << " : "
                    << iter->second
                    << std::endl;
@@ -710,7 +724,7 @@ void MorkParser::dump()
             continue;
         }
 
-        std::cout << std::hex << std::uppercase << iter->first
+        std::cout << iter->first
                   << " : "
                   << iter->second
                   << "\r\n";
@@ -724,21 +738,19 @@ void MorkParser::dump()
     for ( TableScopeMap::iterator iter = mork_.begin();
           iter != mork_.end(); ++iter )
     {
-        std::cout << "\r\n Scope:" << std::hex << std::uppercase
-                  << iter->first << std::endl;
+        std::cout << "\r\n Scope:" << iter->first << std::endl;
 
         for ( MorkTableMap::iterator TableIter = iter->second.begin();
               TableIter != iter->second.end(); ++TableIter )
         {
             std::cout << "\t Table:"
                       << ( ( int ) TableIter->first < 0 ? "-" : " " )
-                      << std::hex << std::uppercase << TableIter->first << std::endl;
+                      << TableIter->first << std::endl;
 
             for (RowScopeMap::iterator RowScopeIter = TableIter->second.begin();
                  RowScopeIter != TableIter->second.end(); ++RowScopeIter )
             {
                 std::cout << "\t\t RowScope:"
-                          << std::hex << std::uppercase
                           << RowScopeIter->first << std::endl;
 
                 for (MorkRowMap::iterator RowIter = RowScopeIter->second.begin();
@@ -746,7 +758,6 @@ void MorkParser::dump()
                 {
                     std::cout << "\t\t\t Row Id:"
                               << ((int) RowIter->first < 0 ? "-" : " ")
-                              << std::hex << std::uppercase
                               << RowIter->first << std::endl;
                     std::cout << "\t\t\t\t Cells:" << std::endl;
 
@@ -755,10 +766,8 @@ void MorkParser::dump()
                     {
                         // Write ids
                         std::cout << "\t\t\t\t\t"
-                                  << std::hex << std::uppercase
                                   << CellsIter->first
                                   << " : "
-                                  << std::hex << std::uppercase
                                   << CellsIter->second
                                   << "  =>  ";
 
