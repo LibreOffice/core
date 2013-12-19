@@ -18,7 +18,7 @@
 
 extern "C"
 const lib_to_factory_mapping *
-lo_get_libmap(void)
+lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         LO_CORE_FACTORY_MAP
