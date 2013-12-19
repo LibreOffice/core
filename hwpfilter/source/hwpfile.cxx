@@ -468,7 +468,7 @@ CharShape *HWPFile::getCharShape(int index)
 	  break;
     }
 
-    return *it;
+    return it != cslist.end() ? *it : 0;
 }
 
 
