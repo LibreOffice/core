@@ -23,6 +23,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
 {
     get(m_pCbUrl, "url");
     get(m_pBtnBrowse, "browse");
+    get(m_pRBDirectData, "directdata");
     get(m_pRBScriptData, "scriptdata");
     get(m_pRBValuesInLine, "valuesinline");
     get(m_pRBAddressValue, "addressvalue");
@@ -41,6 +42,8 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pRBAddressValue->Enable(false);
     m_pRBScriptData->Enable(false);
+    m_pRBDirectData->Hide();
+    m_pRBScriptData->Hide();
     m_pRBNoMove->Hide();
     m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );

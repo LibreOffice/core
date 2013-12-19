@@ -27,6 +27,7 @@ class DataStreamDlg : public ModalDialog
 
     SvtURLBox*      m_pCbUrl;
     PushButton*     m_pBtnBrowse;
+    RadioButton*    m_pRBDirectData;
     RadioButton*    m_pRBScriptData;
     RadioButton*    m_pRBValuesInLine;
     RadioButton*    m_pRBAddressValue;
