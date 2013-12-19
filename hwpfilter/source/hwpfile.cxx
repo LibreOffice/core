@@ -399,7 +399,7 @@ HyperText *HWPFile::GetHyperText()
     }
 
     currenthyper++;
-    return *it;
+    return it != hyperlist.end() ? *it : NULL;
 }
 
 EmPicture *HWPFile::GetEmPicture(Picture * pic)
