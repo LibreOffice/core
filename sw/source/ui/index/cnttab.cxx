@@ -3090,12 +3090,15 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
 
     ctrl_iterator it = std::find(aControlList.begin(), aControlList.end(), pDel);
 
-    OSL_ENSURE(it != aControlList.end(), "Control does not exist!");
+    assert(it != aControlList.end()); //Control does not exist!
+    if (it == aControlList.end())
+        return;
 
     // the two neighbours of the box must be merged
     // the properties of the right one will be lost
-    OSL_ENSURE(it != aControlList.begin() && it != aControlList.end() - 1,
-        "Button at first or last position?");
+    assert(it != aControlList.begin() && it != aControlList.end() - 1); //Button at first or last position?
+    if (it == aControlList.begin() || it == aControlList.end() - 1)
+        return;
 
     ctrl_iterator itLeft = it, itRight = it;
     --itLeft;
