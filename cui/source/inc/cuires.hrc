@@ -41,7 +41,6 @@
 
 // used in "tabpages"
 #define RID_SVXDLG_LINE                     (RID_SVX_START +  50)
-#define RID_SVXDLG_BBDLG                    (RID_SVX_START +  40)
 #define RID_SVXDLG_CAPTION                  (RID_SVX_START + 151)
 #define RID_SVXSTRARY_PAPERSIZE_STD         (RID_SVX_START + 142)
 #define RID_SVXSTRARY_PAPERSIZE_DRAW        (RID_SVX_START + 143)

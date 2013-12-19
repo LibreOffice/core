@@ -59,7 +59,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/treeopt.src \
     cui/source/tabpages/align.src \
     cui/source/tabpages/autocdlg.src \
-    cui/source/tabpages/bbdlg.src \
     cui/source/tabpages/border.src \
     cui/source/tabpages/dstribut.src \
     cui/source/tabpages/frmdirlbox.src \

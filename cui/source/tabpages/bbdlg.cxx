@@ -17,43 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
-#include <svx/dialogs.hrc>
-#include <cuires.hrc>
-
 #include "bbdlg.hxx"
 #include "border.hxx"
 #include "backgrnd.hxx"
-#include <dialmgr.hxx>
 
-// class SvxBorderBackgroundDlg ------------------------------------------
+SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(Window *pParent,
+    const SfxItemSet& rCoreSet, bool bEnableSelector)
 
-SvxBorderBackgroundDlg::SvxBorderBackgroundDlg( Window *pParent,
-                                                const SfxItemSet& rCoreSet,
-                                                sal_Bool bEnableSelector ) :
-
-    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_BBDLG ), &rCoreSet ),
-    bEnableBackgroundSelector( bEnableSelector )
+    : SfxTabDialog(pParent, "BorderBackgroundDialog",
+        "cui/ui/borderbackgrounddialog.ui", &rCoreSet)
+    , m_bEnableBackgroundSelector(bEnableSelector)
+    , m_nBackgroundPageId(0)
 {
-    FreeResource();
-    AddTabPage( RID_SVXPAGE_BORDER, SvxBorderTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_BACKGROUND, SvxBackgroundTabPage::Create, 0 );
+    AddTabPage("borders", SvxBorderTabPage::Create, 0 );
+    m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0 );
 }
-
-// -----------------------------------------------------------------------
-
-SvxBorderBackgroundDlg::~SvxBorderBackgroundDlg()
-{
-}
-
-// -----------------------------------------------------------------------
 
 void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     // Make it possible to switch between color/graphic:
-    if ( bEnableBackgroundSelector && (RID_SVXPAGE_BACKGROUND == nPageId) )
+    if ( m_bEnableBackgroundSelector && (nPageId == m_nBackgroundPageId) )
         ((SvxBackgroundTabPage&)rTabPage).ShowSelector( );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
