@@ -3581,8 +3581,31 @@ void ServiceType::dumpHxxFile(
                     o << indent() << "try {\n";
                     inc();
                 }
-                o << indent()
-                  << "the_instance = ::css::uno::Reference< "
+                o << ("#if defined LO_URE_CURRENT_ENV && defined "
+                      "LO_URE_CTOR_ENV_")
+                  << name_.replaceAll(".", "_dot_")
+                  << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
+                  << name_.replaceAll(".", "_dot_")
+                  << ") && defined LO_URE_CTOR_FUN_"
+                  << name_.replaceAll(".", "_dot_") << "\n" << indent()
+                  << "the_instance = ::css::uno::Reference< " << scopedBaseName
+                  << (" >(::css::uno::Reference< ::css::uno::XInterface >("
+                      "static_cast< ::css::uno::XInterface * >((*"
+                      "LO_URE_CTOR_FUN_")
+                  << name_.replaceAll(".", "_dot_")
+                  << ")(the_context.get(), ";
+                if (rest) {
+                    o << codemaker::cpp::translateUnoToCppIdentifier(
+                        u2b(i->parameters.back().name), "param",
+                        codemaker::cpp::ITM_NONGLOBAL);
+                } else if (i->parameters.empty()) {
+                    o << ("::css::uno::Sequence< ::css::uno::Any >()");
+                } else {
+                    o << "the_arguments";
+                }
+                o << (".get())), ::SAL_NO_ACQUIRE), ::css::uno::UNO_QUERY);\n"
+                      "#else\n")
+                  << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithArgumentsAndContext(::rtl::OUString("
@@ -3597,7 +3620,7 @@ void ServiceType::dumpHxxFile(
                 } else {
                     o << "the_arguments";
                 }
-                o << ", the_context), ::css::uno::UNO_QUERY);\n";
+                o << ", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
                 if (!tree.getRoot()->present) {
                     dec();
                     o << indent()
