@@ -13,7 +13,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "anyrefdg.hxx"
-#include "sortdlg.hrc"
 
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>

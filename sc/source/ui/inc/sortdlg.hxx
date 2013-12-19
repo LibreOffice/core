@@ -29,31 +29,22 @@
 class ScSortDlg : public SfxTabDialog
 {
 public:
-    ScSortDlg( Window*           pParent,
-            const SfxItemSet* pArgSet );
-    virtual ~ScSortDlg();
+    ScSortDlg(Window* pParent, const SfxItemSet* pArgSet);
 
-    void    SetHeaders( sal_Bool bHeaders );
-    void    SetByRows ( sal_Bool bByRows );
-    sal_Bool    GetHeaders() const;
-    sal_Bool    GetByRows () const;
-
+    void SetHeaders( sal_Bool bHeaders )  { bIsHeaders = bHeaders; }
+    void SetByRows ( sal_Bool bByRows  )  { bIsByRows = bByRows; }
+    sal_Bool GetHeaders() const           { return bIsHeaders; }
+    sal_Bool GetByRows () const           { return bIsByRows; }
 
 private:
     sal_Bool    bIsHeaders;
     sal_Bool    bIsByRows;
 };
 
-inline void ScSortDlg::SetHeaders( sal_Bool bHeaders )  { bIsHeaders = bHeaders; }
-inline void ScSortDlg::SetByRows ( sal_Bool bByRows  )  { bIsByRows = bByRows; }
-inline sal_Bool ScSortDlg::GetHeaders() const           { return bIsHeaders; }
-inline sal_Bool ScSortDlg::GetByRows () const           { return bIsByRows; }
-
 class ScSortWarningDlg : public ModalDialog
 {
 public:
     ScSortWarningDlg( Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
-            ~ScSortWarningDlg();
     DECL_LINK( BtnHdl, PushButton* );
 private:
     FixedText*       aFtText;

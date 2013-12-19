@@ -9,7 +9,6 @@
 
 #include "sortkeydlg.hxx"
 #include "sortdlg.hxx"
-#include "sortdlg.hrc"
 #include <vcl/layout.hxx>
 
 // =======================================================================

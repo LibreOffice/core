@@ -502,8 +502,7 @@ public:
 
     virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent,
                                                         const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  ) = 0;
-    virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent,
-                                                    const SfxItemSet* pArgSet,int nId ) = 0;
+    virtual SfxAbstractTabDialog * CreateScSortDlg(Window* pParent, const SfxItemSet* pArgSet) = 0;
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;

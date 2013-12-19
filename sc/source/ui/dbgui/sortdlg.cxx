@@ -25,30 +25,20 @@
 #include "tpsort.hxx"
 #include "sortdlg.hxx"
 #include "scresid.hxx"
-#include "sortdlg.hrc"
 
-ScSortDlg::ScSortDlg( Window*           pParent,
-                      const SfxItemSet* pArgSet ) :
-        SfxTabDialog( pParent,
-                      ScResId( RID_SCDLG_SORT ),
-                      pArgSet ),
-        bIsHeaders  ( false ),
-        bIsByRows   ( false )
+ScSortDlg::ScSortDlg(Window* pParent, const SfxItemSet* pArgSet)
+    : SfxTabDialog(pParent, "SortDialog", "modules/scalc/ui/sortdialog.ui", pArgSet)
+    , bIsHeaders(false)
+    , bIsByRows(false)
 {
-    AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
-    AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
-    FreeResource();
-}
-
-ScSortDlg::~ScSortDlg()
-{
+    AddTabPage("criteria",  ScTabPageSortFields::Create,  0);
+    AddTabPage("options", ScTabPageSortOptions::Create, 0);
 }
 
 //==================================================================
-ScSortWarningDlg::ScSortWarningDlg( Window* pParent,
-                                   const OUString& rExtendText,
-                                   const OUString& rCurrentText ):
-    ModalDialog     ( pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui" )
+ScSortWarningDlg::ScSortWarningDlg(Window* pParent,
+    const OUString& rExtendText, const OUString& rCurrentText)
+    : ModalDialog(pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui")
 {
     get(aFtText, "sorttext" );
     get( aBtnExtSort, "extend" );
@@ -61,10 +51,6 @@ ScSortWarningDlg::ScSortWarningDlg( Window* pParent,
 
     aBtnExtSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
     aBtnCurSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );
-}
-
-ScSortWarningDlg::~ScSortWarningDlg()
-{
 }
 
 IMPL_LINK( ScSortWarningDlg, BtnHdl, PushButton*, pBtn )

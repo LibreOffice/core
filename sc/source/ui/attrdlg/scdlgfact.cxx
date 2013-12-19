@@ -1217,22 +1217,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Wind
     return 0;
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*            pParent,
-                                                    const SfxItemSet* pArgSet,int nId )
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg(Window* pParent, const SfxItemSet* pArgSet)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_SORT :
-            pDlg = new ScSortDlg( pParent, pArgSet );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new ScSortDlg( pParent, pArgSet );
+    return new ScAbstractTabDialog_Impl( pDlg );
 }
 
 #undef SfxTabDialog

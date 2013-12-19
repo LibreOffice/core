@@ -475,11 +475,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+                        assert(pFact); //ScAbstractFactory create fail!
 
-                        pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, RID_SCDLG_SORT );
-                        OSL_ENSURE(pDlg, "Dialog create fail!");
-                    pDlg->SetCurPageId(1);  // 1=sort field tab  2=sort options tab
+                        pDlg = pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet);
+                        assert(pDlg); //Dialog create fail!
+                        pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
 
                         if ( pDlg->Execute() == RET_OK )
                         {

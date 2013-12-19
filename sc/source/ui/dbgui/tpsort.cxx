@@ -43,7 +43,6 @@
 #include "sortkeydlg.hxx"
 
 #include "sortdlg.hxx"
-#include "sortdlg.hrc"
 
 #define _TPSORT_CXX
 #include "tpsort.hxx"
