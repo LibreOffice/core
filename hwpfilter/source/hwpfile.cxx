@@ -493,7 +493,7 @@ DateCode *HWPFile::getDateCode(int index)
 	  break;
     }
 
-    return *it;
+    return it != datecodes.end() ? *it : NULL;
 }
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
