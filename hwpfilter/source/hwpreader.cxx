@@ -3448,10 +3448,11 @@ void HwpReader::makeTable(TxtBox * hbox)
     {
         std::list<TCell*>::iterator it = tbl->cells.begin();
 
-        for( int ii = 0; it != tbl->cells.end(); ++it, ii++ ){
-        if( ii == i )
-          break;
-    }
+        for( int ii = 0; it != tbl->cells.end(); ++it, ii++ )
+        {
+            if( ii == i )
+                break;
+        }
 
         TCell *tcell = *it;
         if( tcell->nRowIndex > j )
