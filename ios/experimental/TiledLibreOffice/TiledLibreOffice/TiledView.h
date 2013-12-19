@@ -10,7 +10,7 @@
 
 @interface TiledView : UIView
 
-- (id)initWithFrame:(CGRect)frame andScale:(CGFloat)scale;
+- (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom;
 
 @end
 

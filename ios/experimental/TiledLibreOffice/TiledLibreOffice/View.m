@@ -23,7 +23,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setMaximumZoomScale:4];
+        const int MAXZOOM = 4;
+
+        [self setMaximumZoomScale:MAXZOOM];
         [self setDelegate:self];
 
         MLODpxSize docSize = touch_lo_get_content_size();
@@ -31,9 +33,9 @@
         double widthScale = frame.size.width / docSize.width;
         double docAspectRatio = docSize.height / docSize.width;
 
-        NSLog(@"View frame=%.0fx%.0f docSize=%.0fx%.0f scale=%.3f aspectRatio=%.3f", frame.size.width, frame.size.height, docSize.width, docSize.height, widthScale, docAspectRatio);
+        // NSLog(@"View frame=%.0fx%.0f docSize=%.0fx%.0f scale=%.3f aspectRatio=%.3f", frame.size.width, frame.size.height, docSize.width, docSize.height, widthScale, docAspectRatio);
 
-        self.subView = [[TiledView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width*docAspectRatio) andScale:widthScale];
+        self.subView = [[TiledView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width*docAspectRatio) scale:widthScale maxZoom:MAXZOOM];
         [self addSubview:self.subView];
     }
     return self;
@@ -42,14 +44,6 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.subView;
-}
-
-- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view
-{
-}
-
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
-{
 }
 
 @end
