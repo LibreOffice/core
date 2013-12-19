@@ -288,6 +288,16 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
             SetText( aName );
     }
 
+    // To be able to prefill the correct values based on the file extension
+    bool bIsCSV = false;
+    bool bIsTSV = false;
+
+    OUString aExtWithDot = aDatName.copy(aDatName.getLength() - 4); // All handled extensions (csv, tsv, tab) have length of 3
+    if ( aExtWithDot.equalsIgnoreAsciiCase(".tsv") || aExtWithDot.equalsIgnoreAsciiCase(".tab") )
+        bIsTSV = true;
+    else if ( aExtWithDot.equalsIgnoreAsciiCase(".csv") )
+        bIsCSV = true;
+
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
     OUString sFieldSeparators(",;\t");
     OUString sTextSeparators(mcTextSep);
@@ -303,19 +313,24 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     // load from saved settings
     maFieldSeparators = OUString(sFieldSeparators);
 
-    if( bMergeDelimiters )
+    if( bMergeDelimiters && !bIsTSV )
         pCkbAsOnce->Check();
     if (bQuotedFieldAsText)
         pCkbQuotedAsText->Check();
     if (bDetectSpecialNum)
         pCkbDetectNumber->Check();
-    if( bFixedWidth )
+    if( bFixedWidth && !bIsTSV )
         pRbFixed->Check();
-    if( nFromRow != 1 )
+    if( nFromRow != 1 && !bIsTSV )
         pNfRow->SetValue( nFromRow );
 
-    // Set Separators in the dialog from maFieldSeparators (empty are not set)
-    SetSeparators();
+    if ( bIsTSV )
+        pCkbTab->Check();
+    else
+        SetSeparators(); // Set Separators in the dialog from maFieldSeparators (empty are not set)
+
+    if ( bIsCSV )
+        pCkbComma->Check();
 
     // Get Separators from the dialog (empty are set from default)
     maFieldSeparators = GetSeparators();
@@ -574,7 +589,7 @@ void ScImportAsciiDlg::SetSeparators()
             case ' ':   pCkbSpace->Check();      break;
             default:
                 pCkbOther->Check();
-               pEdOther->SetText( pEdOther->GetText() + OUString( aSep[i] ) );
+                pEdOther->SetText( pEdOther->GetText() + OUString( aSep[i] ) );
         }
     }
 }
