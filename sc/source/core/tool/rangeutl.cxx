@@ -396,7 +396,7 @@ void ScRangeStringConverter::GetTokenByOffset(
         sal_Unicode cQuote)
 {
     sal_Int32 nLength = rString.getLength();
-    if( nOffset >= nLength )
+    if( nOffset == -1 || nOffset >= nLength )
     {
         rToken = OUString();
         nOffset = -1;
