@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///Nk\u003d",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-19T16:44:06Z",
+      "side": 1,
+      "message": "Nevertheless it should be checked if the string length is \u003e\u003d4, file names can be shorter if the filter was explicitly selected.\n\nI just did that with d340d3bbcf12729adb2cd3a847bc474e3d58b286",
+      "revId": "a4b5fdc2942d45c5c8aad5d77ca3346bd0862ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///Ng\u003d",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-19T16:44:06Z",
+      "side": 1,
+      "message": "Why this? If the settings indicated that import last was done from row Y, why override just because the extension is .tsv|.tab?",
+      "revId": "a4b5fdc2942d45c5c8aad5d77ca3346bd0862ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
