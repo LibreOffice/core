@@ -122,10 +122,15 @@ static sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortPar
     if( rSortParam.nRow1 != rSortParam.nRow2 )
         eFillDir = DIR_TOP;
 
-    SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
-
     if( rSortParam.nRow2 == MAXROW )
-        aExternalRange = ScRange( rSortParam.nCol1,sal::static_int_cast<SCROW>( nCount ), nTab );
+    {
+        // Assume that user selected entire column(s), but cater for the
+        // possibility that the start row is not the first row.
+        SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab,
+                                                    rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
+        aExternalRange = ScRange( rSortParam.nCol1,
+                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), MAXROW), nTab );
+    }
     else
         aExternalRange = ScRange( pData->GetCurX(), pData->GetCurY(), nTab );
 
