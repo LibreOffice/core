@@ -11,6 +11,12 @@ APP_PACKAGE=org.libreoffice.android.examples
 BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
+native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
+	$< \
+		-f EXTENDED_CORE -f BASE_CORE -f CALC_CORE -f DRAW_CORE -f MATH -f WRITER \
+		-s protocolhandler -s sb \
+		> $@
+
 copy-stuff:
 # Then "assets". Let the directory structure under assets mimic
 # that under solver for now.

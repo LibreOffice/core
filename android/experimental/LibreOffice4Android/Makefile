@@ -12,6 +12,11 @@ APP_PACKAGE=org.libreoffice
 BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
+native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
+	$< -f EXTENDED_CORE -f BASE_CORE -f CALC_CORE -f DRAW_CORE -f MATH -f WRITER \
+		-s dlgprov -s protocolhandler -s scriptframe -s sb -s stringresource -s vbaswobj -s vbaevents \
+		> $@
+
 copy-stuff:
 # Then "assets". Let the directory structure under assets mimic
 # that under solver for now.

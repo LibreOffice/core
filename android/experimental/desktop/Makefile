@@ -11,6 +11,12 @@ APP_PACKAGE=org.libreoffice.experimental.desktop
 BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
+native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
+	$< -j \
+		-f EXTENDED_CORE -f BASE_CORE -f CALC_CORE -f DRAW_CORE -f MATH -f WRITER \
+		-s basprov -s dlgprov -s cui -s protocolhandler -s scriptframe -s sb -s spl -s stringresource -s uui -s vbaswobj -s vbaevents \
+		> $@
+
 # The name of the Bootstrap activity class
 BOOTSTRAP=org.libreoffice.android.Bootstrap
 
