@@ -1069,6 +1069,8 @@ void ChartExport::exportPlotArea( )
     }
     //Axis Data
     exportAxes( );
+    // Data Table
+    exportDataTable();
 
     // shape properties
     Reference< ::com::sun::star::chart::X3DDisplay > xWallFloorSupplier( mxDiagram, uno::UNO_QUERY );
@@ -1080,7 +1082,6 @@ void ChartExport::exportPlotArea( )
             exportShapeProps( xWallPropSet );
         }
     }
-    exportDataTable();
     pFS->endElement( FSNS( XML_c, XML_plotArea ) );
 
 }
