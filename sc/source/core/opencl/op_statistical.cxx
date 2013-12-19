@@ -4072,7 +4072,7 @@ vSubArguments)
         {
             const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            nCurWindowSize = pDVR->GetRefRowSize();
             ss << "    for (int i = ";
 #ifdef  ISNAN
             ss << "0; i < "<< nCurWindowSize << "; i++){\n";
@@ -5472,7 +5472,7 @@ void OpIntercept::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp = 0;\n";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
         if (pCur->GetType() == formula::svDoubleVectorRef)
         {
