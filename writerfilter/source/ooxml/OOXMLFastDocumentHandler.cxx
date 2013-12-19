@@ -42,15 +42,13 @@ using namespace ::std;
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
     uno::Reference< uno::XComponentContext > const & context,
     Stream* pStream,
-    OOXMLDocument* pDocument,
-    const ::rtl::OUString& rXNoteId )
+    OOXMLDocument* pDocument )
     : m_xContext(context)
     , mpStream( pStream )
 #ifdef DEBUG_ELEMENT
     , mpTmpStream()
 #endif
     , mpDocument( pDocument )
-    , msXNoteId( rXNoteId )
     , mpContextHandler()
 {
 #ifdef DEBUG_PROTOCOL
@@ -140,11 +138,10 @@ OOXMLFastDocumentHandler::getContextHandler() const
 {
     if (mpContextHandler == OOXMLFastContextHandler::Pointer_t())
     {
-        mpContextHandler.reset
-        (new OOXMLFastContextHandler(m_xContext));
+        mpContextHandler.reset(
+            new OOXMLFastContextHandler(m_xContext) );
         mpContextHandler->setStream(mpStream);
         mpContextHandler->setDocument(mpDocument);
-        mpContextHandler->setXNoteId(msXNoteId);
         mpContextHandler->setForwardEvents(true);
     }
 
@@ -196,7 +193,7 @@ Name
 #endif
 
     return uno::Reference< xml::sax::XFastContextHandler >
-        ( new OOXMLFastDocumentHandler( m_xContext, 0, 0, ::rtl::OUString() ) );
+        ( new OOXMLFastDocumentHandler( m_xContext, 0, 0 ) );
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::characters(const ::rtl::OUString & /*aChars*/)

@@ -201,7 +201,7 @@ bool OOXMLValue::getBool() const
     return false;
 }
 
-int OOXMLValue::getInt() const
+sal_Int32 OOXMLValue::getInt() const
 {
     return 0;
 }
@@ -301,7 +301,7 @@ bool OOXMLBooleanValue::getBool() const
     return mbValue;
 }
 
-int OOXMLBooleanValue::getInt() const
+sal_Int32 OOXMLBooleanValue::getInt() const
 {
     return mbValue ? 1 : 0;
 }
@@ -594,7 +594,7 @@ OOXMLIntegerValue::~OOXMLIntegerValue()
 {
 }
 
-int OOXMLIntegerValue::getInt() const
+sal_Int32 OOXMLIntegerValue::getInt() const
 {
     return mnValue;
 }
@@ -637,7 +637,7 @@ OOXMLHexValue::~OOXMLHexValue()
 {
 }
 
-int OOXMLHexValue::getInt() const
+sal_Int32 OOXMLHexValue::getInt() const
 {
     return mnValue;
 }

@@ -40,54 +40,70 @@ using namespace ::com::sun::star;
 class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
-    rtl::OUString msXNoteId;
-    Id mXNoteType;
+    // ID for parsing certain item in a XNote stream
+    // used for footnotes, endnotes and comments streams
+    sal_Int32 mnIDForXNoteStream;
 
     uno::Reference<frame::XModel> mxModel;
     uno::Reference<drawing::XDrawPage> mxDrawPage;
 
-    bool mbIsSubstream;
+    const bool mbIsSubstream;
 
 protected:
-    virtual void resolveFastSubStream(Stream & rStream,
-                                      OOXMLStream::StreamType_t nType);
+    virtual void resolveFastSubStream(
+        Stream & rStream,
+        OOXMLStream::StreamType_t nType);
 
-    virtual void resolveFastSubStreamWithId(Stream & rStream,
-                                      writerfilter::Reference<Stream>::Pointer_t pStream,
-                      sal_uInt32 nId);
+    virtual void resolveFastSubStreamWithId(
+        Stream & rStream,
+        writerfilter::Reference<Stream>::Pointer_t pStream,
+        sal_uInt32 nId);
 
-    writerfilter::Reference<Stream>::Pointer_t
-    getSubStream(const rtl::OUString & rId);
+    writerfilter::Reference<Stream>::Pointer_t getSubStream(
+        const rtl::OUString & rId );
 
-    writerfilter::Reference<Stream>::Pointer_t
-    getXNoteStream(OOXMLStream::StreamType_t nType,
-                   const Id & rType,
-                   const rtl::OUString & rNoteId);
-
-    void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
+    writerfilter::Reference<Stream>::Pointer_t getXNoteStream(
+        OOXMLStream::StreamType_t nType,
+        const sal_Int32 nIDForXNoteStream );
 
 public:
-    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
+    explicit OOXMLDocumentImpl(
+        OOXMLStream::Pointer_t pStream );
+
+    OOXMLDocumentImpl(
+        OOXMLStream::Pointer_t pStream,
+        uno::Reference<frame::XModel> xModel,
+        uno::Reference<drawing::XDrawPage> xDrawPage,
+        const bool bIsSubstream );
+
+    OOXMLDocumentImpl(
+        OOXMLStream::Pointer_t pStream,
+        const sal_Int32 nIDForXNoteStream );
+
     virtual ~OOXMLDocumentImpl();
 
     virtual void resolve(Stream & rStream);
 
     virtual string getType() const;
 
-    virtual void resolveFootnote(Stream & rStream,
-                                 const Id & rType,
-                                 const rtl::OUString & rNoteId);
-    virtual void resolveEndnote(Stream & rStream,
-                                const Id & rType,
-                                const rtl::OUString & rNoteId);
+    virtual void resolveFootnote(
+        Stream & rStream,
+        const Id & rType,
+        const sal_Int32 nIDForXNoteStream );
+    virtual void resolveEndnote(
+        Stream & rStream,
+        const Id & rType,
+        const sal_Int32 nIDForXNoteStream );
+    virtual void resolveComment(
+        Stream & rStream,
+        const sal_Int32 nIDForXNoteStream );
+
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
                                const rtl::OUString & rId);
     virtual void resolveFooter(Stream & rStream,
                                const sal_Int32 type,
                                const rtl::OUString & rId);
-
-    virtual void resolveComment(Stream & rStream, const rtl::OUString & rId);
 
     virtual OOXMLPropertySet * getPicturePropSet
     (const ::rtl::OUString & rId);
@@ -102,10 +118,10 @@ public:
     virtual uno::Reference<io::XInputStream> getInputStream();
     virtual uno::Reference<io::XInputStream> getStorageStream();
     virtual uno::Reference<io::XInputStream> getInputStreamForId(const rtl::OUString & rId);
-    virtual void setXNoteId(const rtl::OUString & rId);
-    virtual const ::rtl::OUString & getXNoteId() const;
-    virtual void setXNoteType(const Id & rId);
-    virtual const Id & getXNoteType() const;
+
+    virtual void setIDForXNoteStream( const sal_Int32 nID );
+    virtual const sal_Int32 getIDForXNoteStream() const;
+
     virtual const ::rtl::OUString & getTarget() const;
 };
 }}

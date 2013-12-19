@@ -316,7 +316,7 @@ string WW8Sprm::getName() const
     return (*SprmIdToString::Instance())(getId());
 }
 
-int WW8Value::getInt() const
+sal_Int32 WW8Value::getInt() const
 {
     return 0;
 }
@@ -351,7 +351,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t WW8Value::getBinary()
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
-int WW8IntValue::getInt() const
+sal_Int32 WW8IntValue::getInt() const
 {
     return mValue;
 }
@@ -389,7 +389,7 @@ WW8Value::Pointer_t createValue(WW8Value::Pointer_t value)
     return value;
 }
 
-int WW8StringValue::getInt() const
+sal_Int32 WW8StringValue::getInt() const
 {
     return 0;
 }

@@ -158,7 +158,7 @@ public:
     virtual ~WW8Value() {}
 
     virtual string toString() const;
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
@@ -174,7 +174,7 @@ public:
     WW8IntValue(int value) : mValue(value) {}
     virtual ~WW8IntValue() {}
 
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
 
@@ -200,7 +200,7 @@ public:
     WW8StringValue(::rtl::OUString string_) : mString(string_) {}
     virtual ~WW8StringValue() {}
 
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
 

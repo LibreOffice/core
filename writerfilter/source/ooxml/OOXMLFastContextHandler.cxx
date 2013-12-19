@@ -1032,37 +1032,31 @@ bool OOXMLFastContextHandler::isForwardEvents() const
     return mpParserState->isForwardEvents();
 }
 
-void OOXMLFastContextHandler::setXNoteId(const ::rtl::OUString & rId)
+
+void OOXMLFastContextHandler::setIDForXNoteStream(OOXMLValue::Pointer_t pValue)
 {
-    mpParserState->setXNoteId(rId);
+    mpParserState->getDocument()->setIDForXNoteStream(pValue->getInt());
 }
 
-void OOXMLFastContextHandler::setXNoteId(OOXMLValue::Pointer_t pValue)
-{
-    mpParserState->setXNoteId(pValue->getString());
-}
 
-const rtl::OUString & OOXMLFastContextHandler::getXNoteId() const
-{
-    return mpParserState->getXNoteId();
-}
-
-void OOXMLFastContextHandler::resolveFootnote
-(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolveFootnote(
+    const sal_Int32 nIDForXNoteStream )
 {
     mpParserState->getDocument()->resolveFootnote
-        (*mpStream, 0, rId);
+        (*mpStream, 0, nIDForXNoteStream);
 }
 
-void OOXMLFastContextHandler::resolveEndnote(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolveEndnote(
+    const sal_Int32 nIDForXNoteStream )
 {
     mpParserState->getDocument()->resolveEndnote
-        (*mpStream, 0, rId);
+        (*mpStream, 0, nIDForXNoteStream);
 }
 
-void OOXMLFastContextHandler::resolveComment(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolveComment(
+    const sal_Int32 nIDForXNoteStream )
 {
-    mpParserState->getDocument()->resolveComment(*mpStream, rId);
+    mpParserState->getDocument()->resolveComment(*mpStream, nIDForXNoteStream);
 }
 
 void OOXMLFastContextHandler::resolvePicture(const rtl::OUString & rId)
@@ -1624,7 +1618,7 @@ OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
     ( OOXMLFastContextHandler * pContext )
     : OOXMLFastContextHandlerProperties( pContext )
     , mbForwardEventsSaved( false )
-    , msMyXNoteId()
+    , mnMyXNoteId( -1 )
 {
 }
 
@@ -1639,7 +1633,7 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
 {
     mbForwardEventsSaved = isForwardEvents();
 
-    if (msMyXNoteId.compareTo(getXNoteId()) == 0)
+    if ( mnMyXNoteId == mpParserState->getDocument()->getIDForXNoteStream() )
         setForwardEvents(true);
     else
         setForwardEvents(false);
@@ -1661,12 +1655,12 @@ void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("checkId");
-    debug_logger->attribute("myId", pValue->getString());
-    debug_logger->attribute("id", getXNoteId());
+    debug_logger->attribute("myId", pValue->getInt());
+    debug_logger->attribute("id", mpParserState->getDocument()->getXNoteId());
     debug_logger->endElement("checkId");
 #endif
 
-    msMyXNoteId = pValue->getString();
+    mnMyXNoteId = pValue->getInt();
 }
 
 /*

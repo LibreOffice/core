@@ -45,9 +45,37 @@ TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 
 using namespace ::std;
 
-OOXMLDocumentImpl::OOXMLDocumentImpl
-(OOXMLStream::Pointer_t pStream)
-: mpStream(pStream), mXNoteType(0), mbIsSubstream( false )
+OOXMLDocumentImpl::OOXMLDocumentImpl(
+    OOXMLStream::Pointer_t pStream )
+    : mpStream(pStream)
+    , mnIDForXNoteStream( -1 )
+    , mxModel()
+    , mxDrawPage()
+    , mbIsSubstream( false )
+{
+}
+
+OOXMLDocumentImpl::OOXMLDocumentImpl(
+    OOXMLStream::Pointer_t pStream,
+    uno::Reference<frame::XModel> xModel,
+    uno::Reference<drawing::XDrawPage> xDrawPage,
+    const bool bIsSubstream )
+    : mpStream(pStream)
+    , mnIDForXNoteStream( -1 )
+    , mxModel( xModel )
+    , mxDrawPage( xDrawPage )
+    , mbIsSubstream( bIsSubstream )
+{
+}
+
+OOXMLDocumentImpl::OOXMLDocumentImpl(
+    OOXMLStream::Pointer_t pStream,
+    const sal_Int32 nIDForXNoteStream )
+    : mpStream(pStream)
+    , mnIDForXNoteStream( nIDForXNoteStream )
+    , mxModel()
+    , mxDrawPage()
+    , mbIsSubstream( false )
 {
 }
 
@@ -68,8 +96,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     {
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
         OOXMLFastDocumentHandler * pDocHandler =
-            new OOXMLFastDocumentHandler(
-                xContext, &rStreamHandler, this, msXNoteId );
+            new OOXMLFastDocumentHandler( xContext, &rStreamHandler, this );
 
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
@@ -100,25 +127,16 @@ void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
     rStream.substream(nId, pStream);
 }
 
-void OOXMLDocumentImpl::setXNoteId(const rtl::OUString & rId)
+void OOXMLDocumentImpl::setIDForXNoteStream( const sal_Int32 nID )
 {
-    msXNoteId = rId;
+    mnIDForXNoteStream = nID;
 }
 
-const rtl::OUString & OOXMLDocumentImpl::getXNoteId() const
+const sal_Int32 OOXMLDocumentImpl::getIDForXNoteStream() const
 {
-    return msXNoteId;
+    return mnIDForXNoteStream;
 }
 
-void OOXMLDocumentImpl::setXNoteType(const Id & nId)
-{
-    mXNoteType = nId;
-}
-
-const Id & OOXMLDocumentImpl::getXNoteType() const
-{
-    return mXNoteType;
-}
 
 const ::rtl::OUString & OOXMLDocumentImpl::getTarget() const
 {
@@ -131,17 +149,19 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
     OOXMLStream::Pointer_t pStream
         (OOXMLDocumentFactory::createStream(mpStream, rId));
 
-    OOXMLDocumentImpl * pTemp;
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
-    pTemp->setModel(mxModel);
-    pTemp->setDrawPage(mxDrawPage);
-    pTemp->setIsSubstream( true );
+    writerfilter::Reference<Stream>::Pointer_t pRet(
+        new OOXMLDocumentImpl(
+            pStream,
+            mxModel,
+            mxDrawPage,
+            true ) );
+
     return pRet;
 }
 
-writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rType,
-                                  const rtl::OUString & rId)
+writerfilter::Reference<Stream>::Pointer_t OOXMLDocumentImpl::getXNoteStream(
+    OOXMLStream::StreamType_t nType,
+    const sal_Int32 nIDForXNoteStream )
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("getXNoteStream");
@@ -151,19 +171,21 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
 
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream);
-    pDocument->setXNoteId(rId);
-    pDocument->setXNoteType(rType);
+    OOXMLDocumentImpl * pDocument =
+        new OOXMLDocumentImpl(
+            pStream,
+            nIDForXNoteStream );
 
     return writerfilter::Reference<Stream>::Pointer_t(pDocument);
 }
 
-void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
-                                        const Id & rType,
-                                        const rtl::OUString & rNoteId)
+void OOXMLDocumentImpl::resolveFootnote(
+    Stream & rStream,
+    const Id & rType,
+    const sal_Int32 nIDForXNoteStream )
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::FOOTNOTES, rType, rNoteId);
+        getXNoteStream( OOXMLStream::FOOTNOTES, nIDForXNoteStream );
 
     Id nId;
     switch (rType)
@@ -177,15 +199,16 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
         break;
     }
 
-    resolveFastSubStreamWithId(rStream, pStream, nId);
+    resolveFastSubStreamWithId( rStream, pStream, nId );
 }
 
-void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
-                                       const Id & rType,
-                                       const rtl::OUString & rNoteId)
+void OOXMLDocumentImpl::resolveEndnote(
+    Stream & rStream,
+    const Id & rType,
+    const sal_Int32 nIDForXNoteStream )
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::ENDNOTES, rType, rNoteId);
+        getXNoteStream( OOXMLStream::ENDNOTES, nIDForXNoteStream );
 
     Id nId;
     switch (rType)
@@ -199,16 +222,17 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
         break;
     }
 
-    resolveFastSubStreamWithId(rStream, pStream, nId);
+    resolveFastSubStreamWithId( rStream, pStream, nId );
 }
 
-void OOXMLDocumentImpl::resolveComment(Stream & rStream,
-                                       const rtl::OUString & rId)
+void OOXMLDocumentImpl::resolveComment(
+    Stream & rStream,
+    const sal_Int32 nIDForXNoteStream )
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::COMMENTS, 0, rId);
+        getXNoteStream(OOXMLStream::COMMENTS, nIDForXNoteStream );
 
-    resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_annotation);
+    resolveFastSubStreamWithId( rStream, pStream, NS_rtf::LN_annotation );
 }
 
 OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
@@ -315,8 +339,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
 
         OOXMLFastDocumentHandler * pDocHandler =
-            new OOXMLFastDocumentHandler(
-                xContext, &rStream, this, msXNoteId );
+            new OOXMLFastDocumentHandler( xContext, &rStream, this );
         pDocHandler->setIsSubstream( mbIsSubstream );
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
@@ -392,9 +415,8 @@ uno::Reference<io::XInputStream> OOXMLDocumentImpl::getStorageStream()
     return mpStream->getStorageStream();
 }
 
-OOXMLDocument *
-OOXMLDocumentFactory::createDocument
-(OOXMLStream::Pointer_t pStream)
+OOXMLDocument * OOXMLDocumentFactory::createDocument(
+    OOXMLStream::Pointer_t pStream )
 {
     return new OOXMLDocumentImpl(pStream);
 }

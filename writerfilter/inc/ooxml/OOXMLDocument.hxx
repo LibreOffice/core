@@ -156,11 +156,11 @@ public:
 
        @param rStream       stream handler to resolve to
        @param rNoteType     type of footnote to resolve
-       @param rNoteId       id of the footnote to resolve
+       @param nIDForXNoteStream  id of the footnote to resolve
      */
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rNoteType,
-                                 const rtl::OUString & rNoteId) = 0;
+                                 const sal_Int32 nIDForXNoteStream ) = 0;
     /**
        Resolves an endnote to a stream handler.
 
@@ -168,21 +168,21 @@ public:
        note id matches.
 
        @param rStream       stream handler to resolve to
-       @param rNoteType     type of footnote to resolve
-       @param rNoteId       id of the endnote to resolve
+       @param rNoteType     type of endnote to resolve
+       @param nIDForXNoteStream  id of the endnote to resolve
      */
     virtual void resolveEndnote(Stream & rStream,
                                 const Id & rNoteType,
-                                const rtl::OUString & rNoteId) = 0;
+                                const sal_Int32 nIDForXNoteStream ) = 0;
 
     /**
        Resolves a comment to a stream handler.
 
        @param rStream       stream handler to resolve to
-       @param rComment      id of the comment to resolve
+       @param nIDForXNoteStream  id of the comment to resolve
      */
     virtual void resolveComment(Stream & rStream,
-                                const rtl::OUString & rCommentId) = 0;
+                                const sal_Int32 nIDForXNoteStream ) = 0;
 
     /**
        Resolves a picture to a stream handler.
@@ -239,12 +239,11 @@ public:
     virtual uno::Reference<drawing::XDrawPage> getDrawPage() = 0;
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
     virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
-    virtual uno::Reference<io::XInputStream> getInputStreamForId
-    (const ::rtl::OUString & rId) = 0;
-    virtual void setXNoteId(const rtl::OUString & rId) = 0;
-    virtual const ::rtl::OUString & getXNoteId() const = 0;
-    virtual void setXNoteType(const Id & nId) = 0;
-    virtual const Id & getXNoteType() const = 0;
+    virtual uno::Reference<io::XInputStream> getInputStreamForId( const ::rtl::OUString & rId ) = 0;
+
+    virtual void setIDForXNoteStream( const sal_Int32 nID ) = 0;
+    virtual const sal_Int32 getIDForXNoteStream() const = 0;
+
     virtual const ::rtl::OUString & getTarget() const = 0;
 };
 

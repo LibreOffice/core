@@ -47,7 +47,7 @@ public:
     OOXMLValue();
     virtual ~OOXMLValue();
 
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual bool getBool() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
@@ -108,7 +108,7 @@ public:
     explicit OOXMLBooleanValue(const rtl::OUString & rValue);
     virtual ~OOXMLBooleanValue();
 
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual bool getBool() const;
     virtual uno::Any getAny() const;
     virtual string toString() const;
@@ -197,7 +197,7 @@ public:
     explicit OOXMLIntegerValue(const rtl::OUString & rValue);
     virtual ~OOXMLIntegerValue();
 
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual uno::Any getAny() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
@@ -212,7 +212,7 @@ public:
     explicit OOXMLHexValue(const rtl::OUString & rValue);
     virtual ~OOXMLHexValue();
 
-    virtual int getInt() const;
+    virtual sal_Int32 getInt() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };

@@ -47,8 +47,8 @@ public:
     OOXMLFastDocumentHandler(
         uno::Reference< uno::XComponentContext > const & context,
         Stream* pStream,
-        OOXMLDocument* pDocument,
-        const ::rtl::OUString& rXNoteId );
+        OOXMLDocument* pDocument );
+
     virtual ~OOXMLFastDocumentHandler() {}
 
     // ::com::sun::star::xml::sax::XFastDocumentHandler:
@@ -103,7 +103,6 @@ private:
     Stream::Pointer_t mpTmpStream;
 #endif
     OOXMLDocument * mpDocument;
-    ::rtl::OUString msXNoteId;
     mutable boost::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
     boost::shared_ptr<OOXMLFastContextHandler> getContextHandler() const;
 };

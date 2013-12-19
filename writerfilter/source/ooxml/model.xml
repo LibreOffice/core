@@ -14439,10 +14439,6 @@
         </optional>
       </define>
       <define name="CT_MarkupRangeBookmark">
-        <attribute name="id">
-          <text/>
-          <xs:documentation>Annotation Identifier</xs:documentation>
-        </attribute>
         <ref name="CT_MarkupRange"/>
       </define>
       <define name="CT_MarkupRangeCommentStart">
@@ -14485,10 +14481,6 @@
         </attribute>
       </define>
       <define name="CT_Comment">
-        <attribute name="id">
-          <ref name="ST_DecimalNumber"/>
-          <xs:documentation>Annotation Identifier</xs:documentation>
-        </attribute>
         <ref name="CT_TrackChange"/>
         <zeroOrMore>
           <ref name="EG_BlockLevelElts"/>
@@ -18159,13 +18151,13 @@
           </attribute>
         </optional>
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID Reference</xs:documentation>
         </attribute>
       </define>
       <define name="CT_FtnEdnSepRef">
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
       </define>
@@ -18180,7 +18172,7 @@
           </attribute>
         </optional>
         <attribute name="id">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Footnote/Endnote ID</xs:documentation>
         </attribute>
       </define>
@@ -22859,7 +22851,7 @@
     </resource>
     <resource name="CT_FtnEdnRef" resource="Properties" tag="reference">
       <attribute name="customMarkFollows" tokenid="ooxml:CT_FtnEdnRef_customMarkFollows"/>
-      <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id" action="setXNoteId"/>
+      <attribute name="id" tokenid="ooxml:CT_FtnEdnRef_id" action="setIDForXNoteStream"/>
       <action name="end" action="handleXNotes"/>
     </resource>
     <resource name="CT_FtnEdnSepRef" resource="Properties" tag="reference">
