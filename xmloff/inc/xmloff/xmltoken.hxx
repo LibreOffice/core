@@ -227,6 +227,7 @@ namespace xmloff { namespace token {
         XML_ANIMATION_STOP_INSIDE,
         XML_ANIMATIONS,
         XML_ANNOTATION,
+        XML_ANNOTATION_END,
         XML_ANNOTATIONS,
         XML_ANNOTE,
         XML_APPEAR,

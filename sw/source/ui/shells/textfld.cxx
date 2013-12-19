@@ -354,53 +354,61 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     GetView().GetPostItMgr()->Hide( pNoteItem->GetValue() );
             }
             break;
+
             case FN_POSTIT:
-            {
-                SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(aFldMgr.GetCurFld());
-                  sal_Bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
-                if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
-                    SvtUserOptions aUserOpt;
-                    String sAuthor;
-                    if( !(sAuthor = aUserOpt.GetFullName()).Len())
-                        if( !(sAuthor = aUserOpt.GetID()).Len() )
-                            sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
-                    if( rSh.HasSelection() )
+                    SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(aFldMgr.GetCurFld());
+                    sal_Bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
+                    if (bNew || GetView().GetPostItMgr()->IsAnswer())
                     {
-                        rSh.NormalizePam(true);
-                        rSh.KillPams();
-                        rSh.ClearMark();
+                        SvtUserOptions aUserOpt;
+                        String sAuthor;
+                        if( !(sAuthor = aUserOpt.GetFullName()).Len())
+                            if( !(sAuthor = aUserOpt.GetID()).Len() )
+                                sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+
+                        // Save the current selection, it will be required later for fieldmark insertion.
+                        const SwPaM& rCurrPaM = rSh.GetCurrentShellCursor();
+                        const SwPaM aSavedPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
+
+                        if( rSh.HasSelection() )
+                        {
+                            rSh.NormalizePam( sal_False );
+                            rSh.KillPams();
+                            rSh.ClearMark();
+                        }
+
+                        // #120513# Inserting a comment into an autocompletion crashes
+                        // --> suggestion has to be removed before
+                        GetView().GetEditWin().StopQuickHelp();
+
+                        SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
+                        aFldMgr.InsertFld( aData, &aSavedPaM );
+
+                        rSh.Push();
+                        rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);
+                        pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
+                        rSh.Pop(sal_False); // Cursorpos restaurieren
                     }
 
-                    // #120513# Inserting a comment into an autocompletion crashes
-                    // --> suggestion has to be removed before
-                    GetView().GetEditWin().StopQuickHelp();
-
-                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
-                    aFldMgr.InsertFld(aData);
-                    rSh.Push();
-                    rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);
-                    pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
-                    rSh.Pop(sal_False); // Cursorpos restaurieren
-                 }
-
-                if (pPostIt)
-                {
-                    SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
-                    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                    SwFmtFld* pSwFmtFld = aIter.First();
-                    while( pSwFmtFld )
+                    if (pPostIt)
                     {
-                        if ( pSwFmtFld->GetField() == pPostIt )
+                        SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
+                        SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+                        SwFmtFld* pSwFmtFld = aIter.First();
+                        while( pSwFmtFld )
                         {
-                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
-                            break;
+                            if ( pSwFmtFld->GetField() == pPostIt )
+                            {
+                                pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
+                                break;
+                            }
+                            pSwFmtFld = aIter.Next();
                         }
-                        pSwFmtFld = aIter.Next();
                     }
                 }
-            }
-            break;
+                break;
+
             case FN_REDLINE_COMMENT:
             {
                 /*  this code can be used once we want redline comments in the margin, all other stuff can

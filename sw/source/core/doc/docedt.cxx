@@ -72,6 +72,9 @@
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
+#include <docufld.hxx>
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
 
@@ -1683,6 +1686,30 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
                     0 != (pEndIdx = pAttr->End()) &&
                     *pEndIdx == *pAttr->GetStart() )
                     pTxtNd->DestroyAttr( pHts->Cut( n ) );
+            }
+        }
+    }
+
+    // Delete fieldmarks before postits, but let's leave them alone during import.
+    if ( GetIDocumentUndoRedo().DoesUndo()
+         && pStt->nNode == pEnd->nNode
+         && (pEnd->nContent.GetIndex() - pStt->nContent.GetIndex()) == 1 )
+    {
+        SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
+        xub_StrLen nIndex = rPam.Start()->nContent.GetIndex();
+        // We may have a postit here.
+        if (pTxtNd->GetTxt().GetChar(nIndex) == CH_TXTATR_INWORD)
+        {
+            SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(nIndex, RES_TXTATR_FIELD);
+            if ( pTxtAttr != NULL
+                 && pTxtAttr->GetFmtFld().GetField()->Which() == RES_POSTITFLD )
+            {
+                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pTxtAttr->GetFmtFld().GetField());
+                IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark(pField->GetName());
+                if (ppMark != getIDocumentMarkAccess()->getMarksEnd())
+                {
+                    getIDocumentMarkAccess()->deleteMark(ppMark);
+                }
             }
         }
     }

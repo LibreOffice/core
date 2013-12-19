@@ -27,9 +27,7 @@
 
 #include <unoport.hxx>
 #include <IMark.hxx>
-// --> OD 2007-10-23 #i81002#
 #include <crossrefbookmark.hxx>
-// <--
 #include <doc.hxx>
 #include <txatbase.hxx>
 #include <txtatr.hxx>
@@ -55,6 +53,9 @@
 #include <unoidx.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>
+#include <switerator.hxx>
+#include <docufld.hxx>
+#include <fmtfld.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <set>
@@ -329,9 +330,10 @@ throw( container::NoSuchElementException, lang::WrappedTargetException,
 
 typedef ::std::deque< xub_StrLen > FieldMarks_t;
 
-static void
-lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
-        const sal_Int32 i_nStartPos)
+static void lcl_FillFieldMarkArray(
+    FieldMarks_t & rFieldMarks,
+    SwUnoCrsr const & rUnoCrsr,
+    const sal_Int32 i_nStartPos)
 {
     const SwTxtNode * const pTxtNode =
         rUnoCrsr.GetPoint()->nNode.GetNode().GetTxtNode();
@@ -345,6 +347,32 @@ lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
         rFieldMarks.push_back(pos);
         ++pos;
     }
+}
+
+static const SwFmtFld* lcl_getFieldByName(
+    SwDoc* pDoc,
+    const OUString& rName)
+{
+    const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
+    const sal_uInt16 nCount = pFldTypes->Count();
+    for ( sal_uInt16 nType = 0; nType < nCount; ++nType)
+    {
+        const SwFieldType *pCurType = (*pFldTypes)[nType];
+        SwIterator<SwFmtFld, SwFieldType> aIter(*pCurType);
+        for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
+        {
+            if (pCurFldFmt->GetField()->GetTyp()->Which() != RES_POSTITFLD)
+                continue;
+
+            const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetField());
+            if ( pField != NULL && pField->GetName() == String( rName ) )
+            {
+                return pCurFldFmt;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 static uno::Reference<text::XTextRange>
@@ -373,14 +401,21 @@ lcl_ExportFieldMark(
         ::sw::mark::IFieldmark* pFieldmark = NULL;
         if (pDoc)
         {
-            pFieldmark = pDoc->getIDocumentMarkAccess()->
-                getFieldmarkFor(*pUnoCrsr->GetMark());
+            pFieldmark =
+                pDoc->getIDocumentMarkAccess()->getFieldmarkFor(*pUnoCrsr->GetMark());
         }
-        SwXTextPortion* pPortion = new SwXTextPortion(
-            pUnoCrsr, i_xParentText, PORTION_FIELD_START);
+        SwXTextPortion* pPortion =
+            new SwXTextPortion( pUnoCrsr, i_xParentText, PORTION_FIELD_START);
         xRef = pPortion;
-        if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+        if ( pPortion && pFieldmark && pDoc )
+        {
+            pPortion->SetBookmark( new SwXFieldmark( false, pFieldmark, pDoc ) );
+            Reference<XTextField> xField;
+            const SwFmtFld* pField = lcl_getFieldByName( pDoc, pFieldmark->GetName() );
+            if (pField)
+                xField = SwXTextField::CreateSwXTextField(*pDoc, *pField);
+            pPortion->SetTextField(xField);
+        }
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
     {

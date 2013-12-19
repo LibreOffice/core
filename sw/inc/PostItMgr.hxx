@@ -268,9 +268,9 @@ class SwPostItMgr: public SfxListener
 
             void SetSpellChecking();
 
-            Color           GetColorDark(sal_uInt16 aAuthorIndex);
-            Color           GetColorLight(sal_uInt16 aAuthorIndex);
-            Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
+            static Color GetColorDark(sal_uInt16 aAuthorIndex);
+            static Color GetColorLight(sal_uInt16 aAuthorIndex);
+            static Color GetColorAnchor(sal_uInt16 aAuthorIndex);
 
 
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}

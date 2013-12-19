@@ -91,6 +91,10 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
+    virtual void WritePostitFieldStart();
+
+    virtual void WritePostitFieldEnd();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -525,6 +529,7 @@ protected:
 private:
 
     void DoWriteBookmarks( );
+    void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun = sal_False );
     void DoWriteCmd( String& rCmd );
@@ -558,6 +563,11 @@ private:
     /// Bookmarks to output
     std::vector<rtl::OString> m_rMarksStart;
     std::vector<rtl::OString> m_rMarksEnd;
+
+    /// Is there a postit start to output?
+    bool m_bPostitStart;
+    /// Is there a postit end to output?
+    bool m_bPostitEnd;
 
     /// Maps of the bookmarks ids
     std::map<rtl::OString, sal_uInt16> m_rOpenedMarksIds;

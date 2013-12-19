@@ -1628,7 +1628,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             sTitle += sDate;
                             aNote.Title = sTitle;
                             // Guess what the contents contains...
-                            aNote.Contents = pField->GetTxt();
+                            aNote.Contents = pField->GetContent();
 
                             // Link Export
                             pPDFExtOutDevData->CreateNote( rNoteRect.SVRect(), aNote, nNotePageNum );

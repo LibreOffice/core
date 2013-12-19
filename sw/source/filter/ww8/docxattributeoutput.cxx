@@ -381,6 +381,7 @@ void DocxAttributeOutput::EndRun()
     }
 
     DoWriteBookmarks( );
+    WriteCommentRanges();
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND ); // merges with "postponed run start", see above
@@ -406,6 +407,33 @@ void DocxAttributeOutput::EndRun()
     // if there is some redlining in the document, output it
     EndRedline();
 }
+
+void DocxAttributeOutput::WriteCommentRanges()
+{
+    if (m_bPostitStart)
+    {
+        m_bPostitStart = false;
+        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
+    }
+    if (m_bPostitEnd)
+    {
+        m_bPostitEnd = false;
+        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        m_pSerializer->singleElementNS( XML_w, XML_commentRangeEnd, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
+    }
+}
+
+void DocxAttributeOutput::WritePostitFieldStart()
+{
+    m_bPostitStart = true;
+}
+
+void DocxAttributeOutput::WritePostitFieldEnd()
+{
+    m_bPostitEnd = true;
+}
+
 
 void DocxAttributeOutput::DoWriteBookmarks()
 {
@@ -3263,6 +3291,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bOpenedSectPr( false ),
       m_sFieldBkm( ),
       m_nNextMarkId( 0 ),
+      m_bPostitStart(false),
+      m_bPostitEnd(false),
       m_pTableWrt( NULL ),
       m_bTableCellOpen( false ),
       m_nTableDepth( 0 ),

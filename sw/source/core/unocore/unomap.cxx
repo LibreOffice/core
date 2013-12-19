@@ -1934,21 +1934,25 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aHiddenTxtFieldPropMap;
             }
             break;
+
             case PROPERTY_MAP_FLDTYP_ANNOTATION            :
-            {
-                static SfxItemPropertyMapEntry aAnnotationFieldPropMap [] =
                 {
-                    {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),    FIELD_PROP_DATE_TIME,   CPPU_E2T(CPPUTYPE_DATETIME),    PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATE),    FIELD_PROP_DATE,   CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
-                    COMMON_FLDTYP_PROPERTIES
-                    {0,0,0,0,0,0}
-                };
-                aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
-            }
-            break;
+                    static SfxItemPropertyMapEntry aAnnotationFieldPropMap [] =
+                    {
+                        {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_INITIALS),   FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_NAME),       FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),    FIELD_PROP_DATE_TIME,   CPPU_E2T(CPPUTYPE_DATETIME),    PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_DATE),    FIELD_PROP_DATE,   CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
+                        COMMON_FLDTYP_PROPERTIES
+                        {0,0,0,0,0,0}
+                    };
+                    aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
+                }
+                break;
+
             case PROPERTY_MAP_FLDTYP_INPUT:
             {
                 static SfxItemPropertyMapEntry aInputFieldPropMap      [] =

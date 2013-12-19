@@ -1775,13 +1775,23 @@ SwFieldType* SwPostItFieldType::Copy() const
 }
 
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwPostItFieldType
- --------------------------------------------------------------------*/
 
-SwPostItField::SwPostItField( SwPostItFieldType* pT,
-        const String& rAuthor, const String& rTxt, const DateTime& rDateTime )
-    : SwField( pT ), sTxt( rTxt ), sAuthor( rAuthor ), aDateTime( rDateTime ), mpText(0), m_pTextObject(0)
+
+SwPostItField::SwPostItField(
+    SwPostItFieldType* pT,
+    const String& rCommentContent,
+    const String& rAuthor,
+    const String& rAuthorInitials,
+    const String& rName,
+    const DateTime& rDateTime )
+    : SwField( pT )
+    , msCommentContent( rCommentContent )
+    , msAuthor( rAuthor )
+    , msAuthorInitials( rAuthorInitials )
+    , msName( rName )
+    , maDateTime( rDateTime )
+    , mpText(0)
+    , m_pTextObject(0)
 {
 }
 
@@ -1797,9 +1807,7 @@ SwPostItField::~SwPostItField()
     delete mpText;
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwPostItField::Expand() const
 {
     return aEmptyStr;
@@ -1811,46 +1819,58 @@ String SwPostItField::GetDescription() const
     return SW_RES(STR_NOTE);
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwPostItField::Copy() const
 {
-    SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
-                                sTxt, aDateTime);
-    if (mpText)
+    SwPostItField* pRet =
+        new SwPostItField(
+            (SwPostItFieldType*)GetTyp(),
+            msCommentContent,
+            msAuthor,
+            msAuthorInitials,
+            msName,
+            maDateTime);
+    if ( mpText != NULL )
+    {
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
+    }
+
     return pRet;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: Author setzen
- --------------------------------------------------------------------*/
+
 
 void SwPostItField::SetPar1(const String& rStr)
 {
-    sAuthor = rStr;
+    msAuthor = rStr;
 }
 
 const String& SwPostItField::GetPar1() const
 {
-    return sAuthor;
+    return msAuthor;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Text fuers PostIt setzen
- --------------------------------------------------------------------*/
 
 void SwPostItField::SetPar2(const String& rStr)
 {
-    sTxt = rStr;
+    msCommentContent = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwPostItField::GetPar2() const
 {
-        return sTxt;
+    return msCommentContent;
 }
+
+
+void SwPostItField::SetName(const String& rName)
+{
+    msName = rName;
+}
+
+const String& SwPostItField::GetName() const
+{
+    return msName;
+}
+
 
 const OutlinerParaObject* SwPostItField::GetTextObject() const
 {
@@ -1863,23 +1883,31 @@ void SwPostItField::SetTextObject( OutlinerParaObject* pText )
     mpText = pText;
 }
 
+
 sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
 {
     return (mpText) ? mpText->Count() : 1;
 }
+
 
 sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= OUString(sAuthor);
+        rAny <<= OUString(msAuthor);
         break;
     case FIELD_PROP_PAR2:
         {
-        rAny <<= OUString(sTxt);
-        break;
+            rAny <<= OUString(msCommentContent);
+            break;
         }
+    case FIELD_PROP_PAR3:
+        rAny <<= OUString(msAuthorInitials);
+        break;
+    case FIELD_PROP_PAR4:
+        rAny <<= OUString(msName);
+        break;
     case FIELD_PROP_TEXT:
         {
             if ( !m_pTextObject )
@@ -1894,7 +1922,7 @@ sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             if ( mpText )
                 m_pTextObject->SetText( *mpText );
             else
-                m_pTextObject->SetString( sTxt );
+                m_pTextObject->SetString( msCommentContent );
 
             uno::Reference < text::XText > xText( m_pTextObject );
             rAny <<= xText;
@@ -1903,23 +1931,23 @@ sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_DATE:
         {
             util::Date aSetDate;
-            aSetDate.Day = aDateTime.GetDay();
-            aSetDate.Month = aDateTime.GetMonth();
-            aSetDate.Year = aDateTime.GetYear();
+            aSetDate.Day = maDateTime.GetDay();
+            aSetDate.Month = maDateTime.GetMonth();
+            aSetDate.Year = maDateTime.GetYear();
             rAny.setValue(&aSetDate, ::getCppuType((util::Date*)0));
         }
         break;
     case FIELD_PROP_DATE_TIME:
         {
-                util::DateTime DateTimeValue;
-                DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
-                DateTimeValue.Seconds = aDateTime.GetSec();
-                DateTimeValue.Minutes = aDateTime.GetMin();
-                DateTimeValue.Hours = aDateTime.GetHour();
-                DateTimeValue.Day = aDateTime.GetDay();
-                DateTimeValue.Month = aDateTime.GetMonth();
-                DateTimeValue.Year = aDateTime.GetYear();
-                rAny <<= DateTimeValue;
+            util::DateTime DateTimeValue;
+            DateTimeValue.HundredthSeconds = maDateTime.Get100Sec();
+            DateTimeValue.Seconds = maDateTime.GetSec();
+            DateTimeValue.Minutes = maDateTime.GetMin();
+            DateTimeValue.Hours = maDateTime.GetHour();
+            DateTimeValue.Day = maDateTime.GetDay();
+            DateTimeValue.Month = maDateTime.GetMonth();
+            DateTimeValue.Year = maDateTime.GetYear();
+            rAny <<= DateTimeValue;
         }
         break;
     default:
@@ -1928,15 +1956,16 @@ sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
+
 sal_Bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        ::GetString( rAny, sAuthor );
+        ::GetString( rAny, msAuthor );
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, sTxt );
+        ::GetString( rAny, msCommentContent );
         //#i100374# new string via api, delete complex text object so SwPostItNote picks up the new string
         if (mpText)
         {
@@ -1944,36 +1973,44 @@ sal_Bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             mpText = 0;
         }
         break;
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, msAuthorInitials );
+        break;
+    case FIELD_PROP_PAR4:
+        ::GetString( rAny, msName );
+        break;
     case FIELD_PROP_TEXT:
         DBG_ERROR("Not implemented!");
-        // ::GetString( rAny, sTxt );
+        // ::GetString( rAny, msCommentContent );
         break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
         {
             util::Date aSetDate = *(util::Date*)rAny.getValue();
-            aDateTime = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
+            maDateTime = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
         }
         break;
     case FIELD_PROP_DATE_TIME:
-    {
-        util::DateTime aDateTimeValue;
-        if(!(rAny >>= aDateTimeValue))
-            return sal_False;
-        aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
-        aDateTime.SetSec(aDateTimeValue.Seconds);
-        aDateTime.SetMin(aDateTimeValue.Minutes);
-        aDateTime.SetHour(aDateTimeValue.Hours);
-        aDateTime.SetDay(aDateTimeValue.Day);
-        aDateTime.SetMonth(aDateTimeValue.Month);
-        aDateTime.SetYear(aDateTimeValue.Year);
-    }
-    break;
+        {
+            util::DateTime aDateTimeValue;
+            if(!(rAny >>= aDateTimeValue))
+                return sal_False;
+            maDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
+            maDateTime.SetSec(aDateTimeValue.Seconds);
+            maDateTime.SetMin(aDateTimeValue.Minutes);
+            maDateTime.SetHour(aDateTimeValue.Hours);
+            maDateTime.SetDay(aDateTimeValue.Day);
+            maDateTime.SetMonth(aDateTimeValue.Month);
+            maDateTime.SetYear(aDateTimeValue.Year);
+        }
+        break;
     default:
         DBG_ERROR("illegal property");
     }
     return sal_True;
 }
+
+
 /*--------------------------------------------------------------------
     Beschreibung: DokumentinfoFields
  --------------------------------------------------------------------*/

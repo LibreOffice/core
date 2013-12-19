@@ -622,9 +622,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         ::sw::UnoTunnelGetImplementation<SwXReferenceMark>(xContentTunnel);
     SwXMeta *const pMeta =
         ::sw::UnoTunnelGetImplementation<SwXMeta>(xContentTunnel);
+    SwXTextField* pTextField =
+        ::sw::UnoTunnelGetImplementation<SwXTextField>(xContentTunnel);
+    if ( pTextField
+         && pTextField->GetServiceId() != SW_SERVICE_FIELDTYPE_ANNOTATION )
+    {
+        pTextField = 0;
+    }
 
-    const bool bAttribute = pBookmark || pDocumentIndexMark
-        || pSection || pReferenceMark || pMeta;
+    const bool bAttribute =
+        pBookmark || pDocumentIndexMark || pSection || pReferenceMark || pMeta || pTextField;
 
     if (bAbsorb && !bAttribute)
     {

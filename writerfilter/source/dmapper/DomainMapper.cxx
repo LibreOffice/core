@@ -2074,6 +2074,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->SetCurrentRedlineId( nIntValue );
         break;
+        case NS_ooxml::LN_CT_Comment_initials:
+            m_pImpl->SetCurrentRedlineInitials(sStringValue);
+        break;
+        case NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart:
+            m_pImpl->AddAnnotationPosition(true);
+        break;
+        case NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd:
+            m_pImpl->AddAnnotationPosition(false);
+        break;
         case NS_ooxml::LN_token:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->SetCurrentRedlineToken( nIntValue );

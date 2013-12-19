@@ -14445,6 +14445,12 @@
         </attribute>
         <ref name="CT_MarkupRange"/>
       </define>
+      <define name="CT_MarkupRangeCommentStart">
+        <ref name="CT_Markup"/>
+      </define>
+      <define name="CT_MarkupRangeCommentEnd">
+        <ref name="CT_Markup"/>
+      </define>
       <define name="CT_BookmarkRange">
         <ref name="CT_MarkupRangeBookmark"/>
         <optional>
@@ -14608,10 +14614,10 @@
             <ref name="CT_MarkupRange"/>
           </element>
           <element name="commentRangeStart">
-            <ref name="CT_MarkupRange"/>
+            <ref name="CT_MarkupRangeCommentStart"/>
           </element>
           <element name="commentRangeEnd">
-            <ref name="CT_MarkupRange"/>
+            <ref name="CT_MarkupRangeCommentEnd"/>
           </element>
           <element name="customXmlInsRangeStart">
             <ref name="CT_TrackChange"/>
@@ -21828,6 +21834,12 @@
     </resource>
     <resource name="CT_MarkupRangeBookmark" resource="Properties" tag="redline">
       <attribute name="id" tokenid="rtf:IBKL"/>
+    </resource>
+    <resource name="CT_MarkupRangeCommentStart" resource="Properties" tag="content">
+      <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeStart"/>
+    </resource>
+    <resource name="CT_MarkupRangeCommentEnd" resource="Properties" tag="content">
+      <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeEnd"/>
     </resource>
     <resource name="CT_BookmarkRange" resource="Properties" tag="reference">
       <type name="Bookmark"/>

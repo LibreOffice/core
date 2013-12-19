@@ -44,6 +44,7 @@ namespace com{namespace sun{namespace star{
 class SwWrtShell;
 class SwField;
 class SwFieldType;
+class SwPaM;
 class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
@@ -136,8 +137,10 @@ public:
     void                SetWrtShell( SwWrtShell* pShell )
                         {   pWrtShell = pShell;     }
 
-    // Feld einfuegen ueber TypeId (TYP_ ...)
-    sal_Bool            InsertFld(  const SwInsertFld_Data& rData );
+     // insert field using TypeID (TYP_ ...)
+    sal_Bool InsertFld(
+        const SwInsertFld_Data& rData,
+        const SwPaM* pPam = 0 );
 
     // Direkt das aktuelle Feld aendern
     void            UpdateCurFld(sal_uLong nFormat,

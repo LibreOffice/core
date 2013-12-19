@@ -5380,8 +5380,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
         return;
     }
 
-    String sText(
-            String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
+    String sText( String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
     sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_meta) );
     sText.Append( ' ' );
     if( bHTTPEquiv  )
@@ -5398,7 +5397,11 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItFld(
         (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-        aEmptyStr, sText, DateTime() );
+        sText,
+        aEmptyStr,
+        aEmptyStr,
+        aEmptyStr,
+        DateTime() );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }

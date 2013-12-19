@@ -203,6 +203,7 @@ public:
 
     /// @return an SwXTextField, either an already existing one or a new one
     static SwXTextField* CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
+    sal_uInt16 GetServiceId();
 };
 
 

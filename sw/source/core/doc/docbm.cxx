@@ -440,8 +440,8 @@ namespace sw { namespace mark
         const rtl::OUString& rName,
         const rtl::OUString& rType )
     {
-        sw::mark::IMark* pMark = makeMark( rPaM, rName,
-                IDocumentMarkAccess::TEXT_FIELDMARK );
+        sw::mark::IMark* pMark =
+            makeMark( rPaM, rName, IDocumentMarkAccess::TEXT_FIELDMARK );
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         pFieldMark->SetFieldname( rType );
 
@@ -620,18 +620,17 @@ namespace sw { namespace mark
                 isPosInRange = true, isOtherPosInRange = true;
             }
 
-            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded()))
+            if ( isPosInRange
+                 && ( isOtherPosInRange
+                      || !pMark->IsExpanded() ) )
             {
                 // completely in range
 
-                // --> OD 2009-08-07 #i92125#
                 bool bKeepCrossRefBkmk( false );
                 {
-                    if ( rStt == rEnd &&
-                         ( IDocumentMarkAccess::GetType(*pMark) ==
-                            IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK ||
-                           IDocumentMarkAccess::GetType(*pMark) ==
-                            IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
+                    if ( rStt == rEnd
+                         && ( IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK
+                              || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
                     {
                         bKeepCrossRefBkmk = true;
                     }
@@ -642,7 +641,6 @@ namespace sw { namespace mark
                         pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
                     vMarksToDelete.push_back(ppMark);
                 }
-                // <--
             }
             else if(isPosInRange ^ isOtherPosInRange)
             {
@@ -725,6 +723,12 @@ namespace sw { namespace mark
                     "<MarkManager::deleteMark(..)>"
                     " - Bookmark not found.");
                 m_vFieldmarks.erase(ppFieldmark);
+
+                sw::mark::TextFieldmark* pTextFieldmark = dynamic_cast<sw::mark::TextFieldmark*>(ppMark->get());
+                if ( pTextFieldmark )
+                {
+                    pTextFieldmark->ReleaseDoc(m_pDoc);
+                }
                 break;
             }
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:

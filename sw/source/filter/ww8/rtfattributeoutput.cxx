@@ -3225,7 +3225,7 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
     m_aRunText.getOStringBuffer().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNDATE " ");
     m_aRunText.getOStringBuffer().append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDate()));
     m_aRunText.getOStringBuffer().append('}');
-    m_aRunText.getOStringBuffer().append(OUStringToOString(OUString(rPFld.GetTxt()), m_rExport.eCurrentEncoding));
+    m_aRunText.getOStringBuffer().append(OUStringToOString(OUString(rPFld.GetContent()), m_rExport.eCurrentEncoding));
     m_aRunText.getOStringBuffer().append('}');
 }
 

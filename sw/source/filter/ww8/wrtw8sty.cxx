@@ -1926,7 +1926,7 @@ WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
 {
     mpRichText = pPostIt->GetTextObject();
     if (!mpRichText)
-        msSimpleText = pPostIt->GetTxt();
+        msSimpleText = pPostIt->GetContent();
     msOwner = pPostIt->GetPar1();
     maDateTime = DateTime(pPostIt->GetDate(), pPostIt->GetTime());
 }

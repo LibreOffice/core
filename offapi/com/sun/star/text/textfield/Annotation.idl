@@ -42,12 +42,27 @@ published service Annotation
     /** contains the name of the author of the annotation.
      */
     [property]string Author;
+
+    /** contains the initials of the author of the annotation.
+
+        @since Apache OpenOffice 4.1
+     */
+    [optional, property]string Initials;
+
+    /** contains the name of the annotation.
+
+        @since Apache OpenOffice 4.1
+     */
+    [optional, property]string Name;
+
     /** contains the annotation's content
      */
     [property]string Content;
+
     /** contains the creation date.
      */
     [property]com::sun::star::util::Date Date;
+
     /** contains the creation date.
      */
     [optional, property]com::sun::star::util::DateTime DateTimeValue;

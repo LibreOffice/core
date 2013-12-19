@@ -1669,8 +1669,11 @@ void MSWordExportBase::UpdatePosition( WW8SwAttrIter* aAttrIter, xub_StrLen nAkt
         aAttrIter->NextPos();
 }
 
-bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
-                    xub_StrLen nEnd, IMarkVector& rArr )
+bool MSWordExportBase::GetBookmarks(
+    const SwTxtNode& rNd,
+    const xub_StrLen nStt,
+    const xub_StrLen nEnd,
+    IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uLong nNd = rNd.GetIndex( );
@@ -1684,15 +1687,20 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
         if ( pMark->GetMarkStart().nNode == nNd ||
              pMark->GetMarkEnd().nNode == nNd )
         {
-            xub_StrLen nBStart = pMark->GetMarkStart().nContent.GetIndex();
-            xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
-
-            // Keep only the bookmars starting or ending in the snippet
-            bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
-            bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
-
+            // Keep only the bookmarks starting or ending in the snippet
+            const xub_StrLen nBStart = pMark->GetMarkStart().nContent.GetIndex();
+            const bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            const xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
             if ( bIsStartOk || bIsEndOk )
-                rArr.push_back( pMark );
+            {
+                IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>(pMark);
+                // COMMENTRANGE fieldmarks are no bookmarks
+                if ( !( pFieldmark != NULL && pFieldmark->GetFieldname().equalsAscii( ODF_COMMENTRANGE ) ) )
+                {
+                    rArr.push_back( pMark );
+                }
+            }
         }
     }
     return ( rArr.size() > 0 );
@@ -1890,12 +1898,26 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), lcl_getFieldCode( pFieldmark ), WRITEFIELD_START | WRITEFIELD_CMD_START );
+
+                const bool bCommentRange = pFieldmark != NULL && pFieldmark->GetFieldname().equalsAscii( ODF_COMMENTRANGE );
+                if ( bCommentRange )
+                {
+                    AttrOutput().WritePostitFieldStart(); // Note: empty for WW8 export
+                }
+                else
+                {
+                    OutputField( NULL, lcl_getFieldId( pFieldmark ), lcl_getFieldCode( pFieldmark ), WRITEFIELD_START | WRITEFIELD_CMD_START );
+                }
+
                 if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) )
                     WriteFormData( *pFieldmark );
                 else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_HYPERLINK ) )
                     WriteHyperlinkData( *pFieldmark );
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
+
+                if ( !bCommentRange )
+                {
+                    OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
+                }
             }
             else if ( ch == CH_TXT_ATR_FIELDEND )
             {
@@ -1903,7 +1925,15 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                if ( pFieldmark && pFieldmark->GetFieldname().equalsAscii( ODF_COMMENTRANGE ) )
+                {
+                    AttrOutput().WritePostitFieldEnd(); // Note: empty for WW8 export
+                }
+                else
+                {
+                    OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                }
+
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_FORMTEXT ) )
                     AppendBookmark( pFieldmark->GetName(), false );
             }

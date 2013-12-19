@@ -90,6 +90,9 @@
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 #include <switerator.hxx>
+#include <bookmrk.hxx>
+#include <xmloff/odffields.hxx>
+
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1221,7 +1224,7 @@ void SwXTextField::attachToRange(
         SwField* pFld = 0;
         switch(m_nServiceId)
         {
-            case SW_SERVICE_FIELDTYPE_ANNOTATION:
+        case SW_SERVICE_FIELDTYPE_ANNOTATION:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
 
@@ -1235,24 +1238,31 @@ void SwXTextField::attachToRange(
                     aDateTime.SetMin(m_pProps->pDateTime->Minutes);
                     aDateTime.SetSec(m_pProps->pDateTime->Seconds);
                 }
-                pFld = new SwPostItField((SwPostItFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2,aDateTime);
+                pFld = new SwPostItField(
+                    (SwPostItFieldType*)pFldType,
+                    m_pProps->sPar2, // content
+                    m_pProps->sPar1, // author
+                    m_pProps->sPar3, // author's initials
+                    m_pProps->sPar4, // name
+                    aDateTime );
                 if ( m_pTextObject )
                 {
                     ((SwPostItField*)pFld)->SetTextObject( m_pTextObject->CreateText() );
-                      ((SwPostItField*)pFld)->SetPar2(m_pTextObject->GetText());
+                    ((SwPostItField*)pFld)->SetPar2(m_pTextObject->GetText());
                 }
             }
             break;
-            case SW_SERVICE_FIELDTYPE_SCRIPT:
+
+        case SW_SERVICE_FIELDTYPE_SCRIPT:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_SCRIPTFLD);
                 pFld = new SwScriptField((SwScriptFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2,
-                        m_pProps->bBool1);
+                    m_pProps->sPar1, m_pProps->sPar2,
+                    m_pProps->bBool1);
             }
             break;
-            case SW_SERVICE_FIELDTYPE_DATETIME:
+
+        case SW_SERVICE_FIELDTYPE_DATETIME:
             {
                 sal_uInt16 nSub = 0;
                 if(m_pProps->bBool1)
@@ -1263,7 +1273,7 @@ void SwXTextField::attachToRange(
                     nSub |= TIMEFLD;
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DATETIMEFLD);
                 pFld = new SwDateTimeField((SwDateTimeFieldType*)pFldType,
-                nSub, m_pProps->nFormat);
+                    nSub, m_pProps->nFormat);
                 if(m_pProps->fDouble > 0.)
                     ((SwDateTimeField*)pFld)->SetValue( m_pProps->fDouble );
                 if(m_pProps->pDateTime)
@@ -1274,7 +1284,8 @@ void SwXTextField::attachToRange(
                 ((SwDateTimeField*)pFld)->SetOffset(m_pProps->nSubType);
             }
             break;
-            case SW_SERVICE_FIELDTYPE_FILE_NAME:
+
+        case SW_SERVICE_FIELDTYPE_FILE_NAME:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_FILENAMEFLD);
                 sal_Int32 nFormat = m_pProps->nFormat;
@@ -1287,16 +1298,18 @@ void SwXTextField::attachToRange(
                 pFld->PutValue( aFormat, FIELD_PROP_FORMAT );
             }
             break;
-            case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME:
+
+        case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_TEMPLNAMEFLD);
                 pFld = new SwTemplNameField((SwTemplNameFieldType*)pFldType,
-                                                    m_pProps->nFormat);
+                    m_pProps->nFormat);
                 uno::Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
                 pFld->PutValue(aFormat, FIELD_PROP_FORMAT);
             }
             break;
-            case SW_SERVICE_FIELDTYPE_CHAPTER:
+
+        case SW_SERVICE_FIELDTYPE_CHAPTER:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_CHAPTERFLD);
                 pFld = new SwChapterField((SwChapterFieldType*)pFldType, m_pProps->nUSHORT1);
@@ -1305,7 +1318,7 @@ void SwXTextField::attachToRange(
                 pFld->PutValue(aVal, FIELD_PROP_USHORT1 );
             }
             break;
-            case SW_SERVICE_FIELDTYPE_AUTHOR:
+        case SW_SERVICE_FIELDTYPE_AUTHOR:
             {
                 long nFormat = m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
                 if(m_pProps->bBool2)
@@ -1316,20 +1329,21 @@ void SwXTextField::attachToRange(
                 ((SwAuthorField*)pFld)->SetExpansion(m_pProps->sPar1);
             }
             break;
-            case SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT:
-            case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT:
+
+        case SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT:
+        case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_HIDDENTXTFLD);
                 pFld = new SwHiddenTxtField(((SwHiddenTxtFieldType*)pFldType),
-                        m_pProps->sPar1,
-                        m_pProps->sPar2, m_pProps->sPar3,
-                        static_cast< sal_uInt16 >(SW_SERVICE_FIELDTYPE_HIDDEN_TEXT == m_nServiceId ?
-                             TYP_HIDDENTXTFLD : TYP_CONDTXTFLD));
+                    m_pProps->sPar1,
+                    m_pProps->sPar2, m_pProps->sPar3,
+                    static_cast< sal_uInt16 >(SW_SERVICE_FIELDTYPE_HIDDEN_TEXT == m_nServiceId ? TYP_HIDDENTXTFLD : TYP_CONDTXTFLD));
                 ((SwHiddenTxtField*)pFld)->SetValue(m_pProps->bBool1);
                 uno::Any aVal; aVal <<= (OUString)m_pProps->sPar4;
                 pFld->PutValue(aVal, FIELD_PROP_PAR4 );
             }
             break;
+
             case SW_SERVICE_FIELDTYPE_HIDDEN_PARA:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_HIDDENPARAFLD);
@@ -1723,15 +1737,18 @@ void SwXTextField::attachToRange(
             break;
             default: DBG_ERROR("was ist das fuer ein Typ?");
         }
-        if(pFld)
+        if ( pFld )
         {
             pFld->SetAutomaticLanguage(!m_pProps->bBool4);
             SwFmtFld aFmt( *pFld );
 
             UnoActionContext aCont(pDoc);
             SwTxtAttr* pTxtAttr = 0;
-            if(aPam.HasMark())
+            if ( aPam.HasMark()
+                 && m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION )
+            {
                 pDoc->DeleteAndJoin(aPam);
+            }
 
             SwXTextCursor const*const pTextCursor( dynamic_cast<SwXTextCursor*>(pCursor) );
             const bool bForceExpandHints(
@@ -1743,7 +1760,41 @@ void SwXTextField::attachToRange(
                 ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
                 : nsSetAttrMode::SETATTR_DEFAULT;
 
-            pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
+            if ( *aPam.GetPoint() != *aPam.GetMark()
+                 && m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION )
+            {
+                IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+                sw::mark::IFieldmark* pFieldmark =
+                    pMarksAccess->makeFieldBookmark(
+                        aPam,
+                        OUString(),
+                        ::rtl::OUString::createFromAscii( ODF_COMMENTRANGE ) );
+                ASSERT( pFieldmark != NULL, "<SwXTextField::attachToRange(..)> - <IFieldmark> instance for SW_SERVICE_FIELDTYPE_ANNOTATION not created!" );
+                if ( pFieldmark != NULL )
+                {
+                    SwPostItField* pPostItField = dynamic_cast<SwPostItField*>(aFmt.GetField());
+                    ASSERT( pPostItField != NULL, "<SwXTextField::attachToRange(..)> - missing <SwPostItField> instance for SW_SERVICE_FIELDTYPE_ANNOTATION!" );
+                    if ( pPostItField != NULL )
+                    {
+                        if ( pPostItField->GetName().Len() > 0 )
+                        {
+                            // The field has a name already, use it.
+                            pMarksAccess->renameMark(pFieldmark, pPostItField->GetName());
+                        }
+                        else
+                        {
+                            // The fieldmark always has a (generated) name.
+                            pPostItField->SetName( pFieldmark->GetName() );
+                        }
+                    }
+                }
+
+                // Make sure we always insert the field at the end
+                SwPaM aEnd(*aPam.End(), *aPam.End());
+                pDoc->InsertPoolItem(aEnd, aFmt, nInsertFlags);
+            }
+            else
+                pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
             pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
             // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
@@ -2330,7 +2381,14 @@ uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( un
     return aRet;
 }
 
-void SwXTextField::Invalidate()
+
+sal_uInt16 SwXTextField::GetServiceId()
+{
+    return m_nServiceId;
+}
+
+
+    void SwXTextField::Invalidate()
 {
     if (GetRegisteredIn())
     {

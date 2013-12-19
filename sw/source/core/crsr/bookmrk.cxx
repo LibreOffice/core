@@ -94,6 +94,37 @@ namespace
         }
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
     };
+
+    static void lcl_RemoveFieldMarks(Fieldmark* const pField,
+        SwDoc* const io_pDoc,
+        const sal_Unicode aStartMark,
+        const sal_Unicode aEndMark)
+    {
+        SwPosition& rStart = pField->GetMarkStart();
+        SwPosition& rEnd = pField->GetMarkEnd();
+        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
+        xub_StrLen nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
+            rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
+        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
+        SwPaM aStartPaM(rStart);
+        SwPaM aEndPaM(rEnd);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+        if( ch_start == aStartMark )
+        {
+            SwPaM aStart(rStart, rStart);
+            aStart.End()->nContent++;
+            io_pDoc->DeleteRange(aStart);
+        }
+        if ( ch_end == aEndMark )
+        {
+            SwPaM aEnd(rEnd, rEnd);
+            aEnd.Start()->nContent--;
+            io_pDoc->DeleteRange(aEnd);
+        }
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
+    };
 }
 
 namespace sw { namespace mark
@@ -315,6 +346,11 @@ namespace sw { namespace mark
     void TextFieldmark::InitDoc(SwDoc* const io_pDoc)
     {
         lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+    }
+
+    void TextFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    {
+        lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
     CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)

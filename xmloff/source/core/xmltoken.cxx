@@ -235,6 +235,7 @@ namespace xmloff { namespace token {
         TOKEN( "animation-stop-inside",           XML_ANIMATION_STOP_INSIDE ),
         TOKEN( "animations",                      XML_ANIMATIONS ),
         TOKEN( "annotation",                      XML_ANNOTATION ),
+        TOKEN( "annotation-end",                  XML_ANNOTATION_END ),
         TOKEN( "annotations",                     XML_ANNOTATIONS ),
         TOKEN( "annote",                          XML_ANNOTE ),
         TOKEN( "appear",                          XML_APPEAR ),

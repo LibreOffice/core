@@ -311,6 +311,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
     sPropertyFileFormat(RTL_CONSTASCII_USTRINGPARAM("FileFormat")),
     sPropertyFullName(RTL_CONSTASCII_USTRINGPARAM("FullName")),
     sPropertyHint(RTL_CONSTASCII_USTRINGPARAM("Hint")),
+    sPropertyInitials(RTL_CONSTASCII_USTRINGPARAM("Initials")),
     sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
     sPropertyIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
     sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
@@ -1731,12 +1732,17 @@ void XMLTextFieldExport::ExportFieldHelper(
                    "Unexpected presentation for annotation field");
 
         // annotation element + content
-        SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
-                                 XML_ANNOTATION, sal_False, sal_True);
+        OUString aAnnotationName;
+        rPropSet->getPropertyValue(sPropertyName) >>= aAnnotationName;
+        if ( aAnnotationName.getLength() > 0 )
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME, aAnnotationName );
+        }
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE, XML_ANNOTATION, sal_False, sal_True );
 
         // author
         OUString aAuthor( GetStringProperty(sPropertyAuthor, rPropSet) );
-        if( aAuthor.getLength() )
+        if ( aAuthor.getLength() > 0 )
         {
             SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_CREATOR, sal_True,
@@ -1755,6 +1761,21 @@ void XMLTextFieldExport::ExportFieldHelper(
                                               XML_DATE, sal_True,
                                               sal_False );
             GetExport().Characters(aBuffer.makeStringAndClear());
+        }
+
+        // initials
+        {
+            OUString aInitials( GetStringProperty(sPropertyInitials, rPropSet) );
+            if ( aInitials.getLength() > 0 )
+            {
+                SvXMLElementExport aCreatorElem(
+                    GetExport(),
+                    XML_NAMESPACE_TEXT,
+                    XML_SENDER_INITIALS,
+                    sal_True,
+                    sal_False );
+                GetExport().Characters(aInitials);
+            }
         }
 
         com::sun::star::uno::Reference < com::sun::star::text::XText > xText;

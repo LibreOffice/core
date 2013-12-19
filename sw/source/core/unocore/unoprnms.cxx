@@ -777,7 +777,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0739 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
 /* 0740 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
 /* 0741 UNO_NAME_REPLACEMENT_GRAPHIC_URL */ {MAP_CHAR_LEN("ReplacementGraphicURL")},
-/* 0742 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")}
+/* 0742 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")},
+/* 0743 UNO_NAME_INITIALS */            {MAP_CHAR_LEN("Initials")}
 };
 
 const SwPropNameLen& SwGetPropName( sal_uInt16 nId )

@@ -1342,30 +1342,40 @@ protected:
 };
 
 
-/** Import an annotation field (<text:annotation>) */
+/** Import an annotation field (<office:annotation>) */
 class XMLAnnotationImportContext : public XMLTextFieldImportContext
 {
+    const ::rtl::OUString sPropertyName;
     const ::rtl::OUString sPropertyAuthor;
+    const ::rtl::OUString sPropertyInitials;
     const ::rtl::OUString sPropertyContent;
     const ::rtl::OUString sPropertyDate;
     const ::rtl::OUString sPropertyTextRange;
 
+    ::rtl::OUString aName;
+
     ::rtl::OUStringBuffer aAuthorBuffer;
+    ::rtl::OUStringBuffer aInitialsBuffer;
     ::rtl::OUStringBuffer aTextBuffer;
     ::rtl::OUStringBuffer aDateBuffer;
 
     com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > mxField;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxCursor;
     com::sun::star::uno::Reference < com::sun::star::text::XTextCursor >  mxOldCursor;
+    /// If this is an annotation end, then position of the start.
+    com::sun::star::uno::Reference < com::sun::star::text::XTextContent >  m_xStart;
+    const sal_uInt16 m_nToken;
 
 public:
 
     TYPEINFO();
 
-    XMLAnnotationImportContext(SvXMLImport& rImport,
-                               XMLTextImportHelper& rHlp,
-                               sal_uInt16 nPrfx,
-                               const ::rtl::OUString& sLocalName);
+    XMLAnnotationImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_uInt16 nToken,
+        sal_uInt16 nPrfx,
+        const ::rtl::OUString& sLocalName);
 
 protected:
 

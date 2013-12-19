@@ -165,6 +165,12 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
+    /// for docx w:commentRangeStart
+    virtual void WritePostitFieldStart() {};
+
+    /// for docx w:commentRangeEnd
+    virtual void WritePostitFieldEnd() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 

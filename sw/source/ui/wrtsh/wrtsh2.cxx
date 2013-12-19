@@ -65,6 +65,7 @@
 #include "swabstdlg.hxx"
 #include "fldui.hrc"
 #include <SwRewriter.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -74,7 +75,9 @@
         Beschreibung:
 ------------------------------------------------------------------------*/
 
-void SwWrtShell::Insert(SwField &rFld)
+void SwWrtShell::Insert(
+    SwField& rFld,
+    const SwPaM* pCommentRange )
 {
     ResetCursorStack();
     if(!_CanInsert())
@@ -85,6 +88,18 @@ void SwWrtShell::Insert(SwField &rFld)
     aRewriter.AddRule(UNDO_ARG1, rFld.GetDescription());
 
     StartUndo(UNDO_INSERT, &aRewriter);
+
+    if ( pCommentRange && GetDoc() )
+    {
+        // If an annotation field is inserted, take care of the relevant fieldmark.
+        IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
+        sw::mark::IFieldmark* pFieldmark =
+            pMarksAccess->makeFieldBookmark(
+                *pCommentRange,
+                ::rtl::OUString(),
+                ::rtl::OUString::createFromAscii( ODF_COMMENTRANGE ) );
+        ((SwPostItField&)rFld).SetName(pFieldmark->GetName());
+    }
 
     bool bDeleted = false;
     if( HasSelection() )

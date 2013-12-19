@@ -1276,9 +1276,32 @@ void DomainMapper_Impl::PopFootOrEndnote()
 void DomainMapper_Impl::PopAnnotation()
 {
     m_bIsInComments = false;
+
+    RemoveLastParagraph();
     m_aTextAppendStack.pop();
-    uno::Sequence< beans::PropertyValue > aEmptyProperties;
-    appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
+
+    // See if the annotation will be a single position or a range.
+    if ( !m_aAnnotationPosition.m_xStart.is()
+         || !m_aAnnotationPosition.m_xEnd.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aEmptyProperties;
+        appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
+    }
+    else
+    {
+        // Create a range that points to the annotation start/end.
+        uno::Reference<text::XText> xText = m_aAnnotationPosition.m_xStart->getText();
+        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(m_aAnnotationPosition.m_xStart);
+        xCursor->gotoRange(m_aAnnotationPosition.m_xEnd, true);
+        uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY_THROW);
+
+        // Attach the annotation to the range.
+        uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+        xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
+    }
+
+    m_aAnnotationPosition.m_xStart.clear();
+    m_aAnnotationPosition.m_xEnd.clear();
     m_xAnnotationField.clear();
 
 }
@@ -2890,6 +2913,30 @@ void DomainMapper_Impl::handleToc
     pContext->SetTOC( xTOC );
 }
 
+void DomainMapper_Impl::AddAnnotationPosition(const bool bStart)
+{
+    if (m_aTextAppendStack.empty())
+        return;
+
+    // Create a cursor, pointing to the current position.
+    uno::Reference<text::XTextAppend>  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    uno::Reference<text::XTextRange> xCurrent;
+    if (xTextAppend.is())
+    {
+        uno::Reference<text::XTextCursor> xCursor = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
+        xCurrent = xCursor->getStart();
+    }
+
+    // And save it, to be used by PopAnnotation() later.
+    if (bStart)
+    {
+        m_aAnnotationPosition.m_xStart = xCurrent;
+    }
+    else
+    {
+        m_aAnnotationPosition.m_xEnd = xCurrent;
+    }
+}
 
 /*-- 29.01.2007 11:33:16---------------------------------------------------
 //the field command has to be closed (0x14 appeared)
@@ -3725,6 +3772,16 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
     RedlineParamsPtr pCurrent( GetTopRedline(  ) );
     if ( pCurrent.get(  ) )
         pCurrent->m_sAuthor = sAuthor;
+}
+
+void DomainMapper_Impl::SetCurrentRedlineInitials( rtl::OUString sInitials )
+{
+    if (m_xAnnotationField.is())
+    {
+        m_xAnnotationField->setPropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Initials")),
+            uno::makeAny(sInitials) );
+    }
 }
 
 void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
