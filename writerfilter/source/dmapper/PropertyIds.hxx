@@ -337,7 +337,7 @@ class PropertyNameSupplier
 public:
     PropertyNameSupplier();
     ~PropertyNameSupplier();
-    const OUString& GetName( PropertyIds eId ) const;
+    OUString GetName( PropertyIds eId ) const;
 
     static PropertyNameSupplier& GetPropertyNameSupplier();
 };

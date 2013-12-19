@@ -45,7 +45,7 @@ PropertyNameSupplier::~PropertyNameSupplier()
 }
 
 
-const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
+OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
 {
     PropertyNameMap_t::iterator aIt = m_pImpl->aNameMap.find(eId);
     if(aIt == m_pImpl->aNameMap.end())
@@ -364,6 +364,11 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
         if(aInsertIt.second)
             aIt = aInsertIt.first;
     }
+
+    assert(aIt != m_pImpl->aNameMap.end());
+    if (aIt == m_pImpl->aNameMap.end())
+        return OUString();
+
     return aIt->second;
 }
 
