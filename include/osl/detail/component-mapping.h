@@ -93,7 +93,7 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libfwklo.a", fwk_component_getFactory }, \
     { "libfwmlo.a", fwm_component_getFactory }, \
     { "libsvxcorelo.a", svxcore_component_getFactory }, \
-    { "libtextfdlo.a", textfd_component_getFactory },
+    { "libtextfdlo.a", textfd_component_getFactory }, \
     { "libtklo.a", tk_component_getFactory }, \
     { "libucppkg1.a", ucppkg1_component_getFactory }, \
     { "libxmlfdlo.a", xmlfd_component_getFactory }, \
