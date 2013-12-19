@@ -18,6 +18,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/numitem.hxx>
 #include <rsc/rscsfx.hxx>
 
 #include <svx/svdotext.hxx>
@@ -54,6 +55,7 @@ public:
     void testN828390_2();
     void testN828390_3();
     void testN828390_4();
+    void testN828390_5();
     void testFdo68594();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
@@ -67,6 +69,7 @@ public:
     CPPUNIT_TEST(testN828390_2);
     CPPUNIT_TEST(testN828390_3);
     CPPUNIT_TEST(testN828390_4);
+    CPPUNIT_TEST(testN828390_5);
     CPPUNIT_TEST(testFdo68594);
 
     CPPUNIT_TEST_SUITE_END();
@@ -324,6 +327,29 @@ void SdFiltersTest::testN828390_4()
         }
     }
     CPPUNIT_ASSERT(bPassed);
+}
+
+void SdFiltersTest::testN828390_5()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/n828390_5.odp") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        SdrObject *pObj = pPage->GetObj(0);
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetPool()->GetItem2(EE_PARA_NUMBULLET, 5));
+        CPPUNIT_ASSERT( pNumFmt );
+        CPPUNIT_ASSERT_MESSAGE( "Bullet's relative size is wrong!", pNumFmt->GetNumRule()->GetLevel(1).GetBulletRelSize() == 75 ); // != 25
+    }
 }
 
 void SdFiltersTest::testN778859()
