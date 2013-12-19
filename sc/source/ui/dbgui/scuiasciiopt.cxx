@@ -292,15 +292,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     bool bIsCSV = false;
     bool bIsTSV = false;
 
-    if (aDatName.getLength() >= 4)
-    {
-        // All handled extensions (csv, tsv, tab) have length of 3
-        OUString aExtWithDot = aDatName.copy(aDatName.getLength() - 4);
-        if ( aExtWithDot.equalsIgnoreAsciiCase(".tsv") || aExtWithDot.equalsIgnoreAsciiCase(".tab") )
-            bIsTSV = true;
-        else if ( aExtWithDot.equalsIgnoreAsciiCase(".csv") )
-            bIsCSV = true;
-    }
+    if ( aDatName.endsWithIgnoreAsciiCase(".csv") )
+        bIsCSV = true;
+    else if ( aDatName.endsWithIgnoreAsciiCase(".tsv") || aDatName.endsWithIgnoreAsciiCase(".tab") )
+        bIsTSV = true;
 
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
     OUString sFieldSeparators(",;\t");
