@@ -43,7 +43,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/textdlgs.src \
     sc/source/ui/src/sc.src \
     sc/source/ui/src/pseudo.src \
-    sc/source/ui/src/subtdlg.src \
     sc/source/ui/src/hdrcont.src \
     sc/source/ui/src/scerrors.src \
     sc/source/ui/src/simpref.src \

@@ -492,8 +492,7 @@ public:
                                                     int nId) = 0;
 
     virtual SfxAbstractTabDialog * CreateScSubTotalDlg( Window*             pParent,
-                                                        const SfxItemSet*   pArgSet,
-                                                        int nId) = 0;
+                                                        const SfxItemSet*   pArgSet ) = 0;
 
     virtual SfxAbstractTabDialog * CreateScCharDlg( Window* pParent, const SfxItemSet* pAttr,
                                                     const SfxObjectShell* pDocShell, int nId ) = 0;

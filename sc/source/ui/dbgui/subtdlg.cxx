@@ -25,31 +25,28 @@
 #include "tpsubt.hxx"
 #include "scresid.hxx"
 #include "subtdlg.hxx"
-#include "subtdlg.hrc"
 
 
 //==================================================================
 
-ScSubTotalDlg::ScSubTotalDlg( Window*           pParent,
-                              const SfxItemSet* pArgSet ) :
-        SfxTabDialog( pParent,
-                      ScResId( RID_SCDLG_SUBTOTALS ),
-                      pArgSet ),
-        aBtnRemove  ( m_pActionArea, ScResId( BTN_REMOVE ) )
+ScSubTotalDlg::ScSubTotalDlg(Window* pParent, const SfxItemSet* pArgSet)
+    : SfxTabDialog(pParent, "SubTotalDialog",
+        "modules/scalc/ui/subtotaldialog.ui", pArgSet)
 {
-    AddTabPage( PAGE_GROUP1,  ScTpSubTotalGroup1::Create,  0 );
-    AddTabPage( PAGE_GROUP2,  ScTpSubTotalGroup2::Create,  0 );
-    AddTabPage( PAGE_GROUP3,  ScTpSubTotalGroup3::Create,  0 );
-    AddTabPage( PAGE_OPTIONS, ScTpSubTotalOptions::Create, 0 );
-    aBtnRemove.SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
-    FreeResource();
+    get(m_pBtnRemove, "remove");
+
+    AddTabPage("1stgroup",  ScTpSubTotalGroup1::Create, 0);
+    AddTabPage("2ndgroup",  ScTpSubTotalGroup2::Create, 0);
+    AddTabPage("3rdgroup",  ScTpSubTotalGroup3::Create, 0);
+    AddTabPage("options", ScTpSubTotalOptions::Create, 0);
+    m_pBtnRemove->SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
 }
 
 //------------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( ScSubTotalDlg, RemoveHdl, PushButton *, pBtn )
 {
-    if ( pBtn == &aBtnRemove )
+    if (pBtn == m_pBtnRemove)
     {
         EndDialog( SCRET_REMOVE );
     }

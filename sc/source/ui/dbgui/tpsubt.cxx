@@ -29,7 +29,6 @@
 #include "sc.hrc"
 
 #include "subtdlg.hxx"
-#include "subtdlg.hrc"
 #include "tpsubt.hxx"
 
 //========================================================================

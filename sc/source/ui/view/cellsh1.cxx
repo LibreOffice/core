@@ -2729,10 +2729,10 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+    assert(pFact); //"ScAbstractFactory create fail
 
-    pDlg = pFact->CreateScSubTotalDlg( pTabViewShell->GetDialogParent(), &aArgSet, RID_SCDLG_SUBTOTALS );
-    OSL_ENSURE(pDlg, "Dialog create fail!");
+    pDlg = pFact->CreateScSubTotalDlg(pTabViewShell->GetDialogParent(), &aArgSet);
+    assert(pDlg); // "Dialog create fail
     pDlg->SetCurPageId(1);
 
     short bResult = pDlg->Execute();
