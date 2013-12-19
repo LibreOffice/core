@@ -43,7 +43,7 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
 }
 #endif
 
-#define NON_APP_SPECIFIC_FACTORY_MAP \
+#define LO_CORE_FACTORY_MAP \
     { "libembobj.a", embobj_component_getFactory }, \
     { "libemboleobj.a", emboleobj_component_getFactory }, \
     { "libintrospectionlo.a", introspection_component_getFactory }, \
@@ -82,6 +82,11 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libxolo.a", xo_component_getFactory }, \
     { "libxoflo.a", xof_component_getFactory }, \
     { "libxstor.a", xstor_component_getFactory }, \
+
+#define LO_WRITER_FACTORY_MAP \
+    { "libswdlo.a", swd_component_getFactory }, \
+    { "libswlo.a", sw_component_getFactory }, \
+    { "libwriterfilterlo.a", writerfilter_component_getFactory }, \
 
 #define NON_APP_SPECIFIC_CONSTRUCTOR_MAP \
     { "com_sun_star_comp_extensions_xml_sax_ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat }, \

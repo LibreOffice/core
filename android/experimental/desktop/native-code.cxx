@@ -15,7 +15,8 @@ const lib_to_factory_mapping *
 lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
-        NON_APP_SPECIFIC_FACTORY_MAP
+        LO_CORE_FACTORY_MAP
+        LO_WRITER_FACTORY_MAP
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libbasprovlo.a", basprov_component_getFactory },
@@ -44,8 +45,6 @@ lo_get_factory_map(void)
         { "libstringresourcelo.a", stringresource_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
         { "libsvxcorelo.a", svxcore_component_getFactory },
-        { "libswdlo.a", swd_component_getFactory },
-        { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
         { "libtextfdlo.a", textfd_component_getFactory },
         { "libtklo.a", tk_component_getFactory },
@@ -55,7 +54,6 @@ lo_get_factory_map(void)
         { "libvbaeventslo.a", vbaevents_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },
         { "libwpftwriterlo.a", wpftwriter_component_getFactory },
-        { "libwriterfilterlo.a", writerfilter_component_getFactory },
         { "libxmlfdlo.a", xmlfd_component_getFactory },
         { NULL, NULL }
     };

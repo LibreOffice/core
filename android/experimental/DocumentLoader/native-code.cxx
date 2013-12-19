@@ -15,7 +15,8 @@ const lib_to_factory_mapping *
 lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
-        NON_APP_SPECIFIC_FACTORY_MAP
+        LO_CORE_FACTORY_MAP
+        LO_WRITER_FACTORY_MAP
         { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libdbalo.a", dba_component_getFactory },
@@ -34,8 +35,6 @@ lo_get_factory_map(void)
         { "libsmdlo.a", smd_component_getFactory },
         { "libsmlo.a", sm_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
-        { "libswdlo.a", swd_component_getFactory },
-        { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
         { "libtextfdlo.a", textfd_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },

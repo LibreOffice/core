@@ -27,7 +27,8 @@ const lib_to_factory_mapping *
 lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
-        NON_APP_SPECIFIC_FACTORY_MAP
+        LO_CORE_FACTORY_MAP
+        LO_WRITER_FACTORY_MAP
 
         //from IOS
         
@@ -42,7 +43,6 @@ lo_get_factory_map(void)
         //MAP_LIB_LO(xmlfd),
         //MAP_LIB_LO(sc),       //MAP_LIB_LO(sd),
         //MAP_LIB(fileacc),
-        MAP_LIB_LO(swd),        MAP_LIB_LO(sw),
 
         // from ANDROID
         
@@ -53,7 +53,6 @@ lo_get_factory_map(void)
         //MAP_LIB(ucppkg1),     //MAP_LIB_LO(vbaswobj), //MAP_LIB_LO(wpftwriter),
         //MAP_LIB_LO(wpftdraw), //MAP_LIB_LO(svxcore),  //MAP_LIB_LO(protocolhandler),
         //MAP_LIB_LO_1(filterconfig), //MAP_LIB_LO(canvasfactory),    //MAP_LIB_LO(mtfrenderer),
-        MAP_LIB_LO(writerfilter),
         
         // ADDED for search
         
