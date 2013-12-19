@@ -1392,6 +1392,9 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
     if( nStart >= (int)m_GlyphItems.size() )
         return 0;
 
+    if( pG == pGEnd )
+        return 0;
+
     // calculate absolute position in pixel units
     Point aRelativePos = pG->maLinearPos - maBasePoint;
 
