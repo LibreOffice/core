@@ -103,8 +103,9 @@ void SwXBookmark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
     }
 }
 
-void SwXBookmark::Impl::registerInMark(SwXBookmark & rThis,
-        ::sw::mark::IMark *const pBkmk)
+void SwXBookmark::Impl::registerInMark(
+    SwXBookmark & rThis,
+    ::sw::mark::IMark *const pBkmk)
 {
     if (pBkmk)
     {
@@ -157,21 +158,21 @@ SwXBookmark::CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark)
     uno::Reference<text::XTextContent> xBookmark(pMarkBase->GetXBookmark());
     if (!xBookmark.is())
     {
-        // FIXME: These belong in XTextFieldsSupplier
-        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
-        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
-        //else
         OSL_ENSURE(
             dynamic_cast< ::sw::mark::IBookmark* >(&rBookmark),
             "<SwXBookmark::GetObject(..)>"
             "SwXBookmark requested for non-bookmark mark.");
         SwXBookmark *const pXBookmark = new SwXBookmark(&rBookmark, &rDoc);
         xBookmark.set(pXBookmark);
-        pXBookmark->m_pImpl->registerInMark(*pXBookmark, pMarkBase);
+        pXBookmark->registerInMark( pMarkBase);
     }
     return xBookmark;
+}
+
+
+void SwXBookmark::registerInMark( ::sw::mark::IMark *const pBkmk )
+{
+    m_pImpl->registerInMark( *this, pBkmk );
 }
 
 ::sw::mark::IMark const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
@@ -246,10 +247,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         eType = IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK;
     }
-    m_pImpl->registerInMark(*this,
-        m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
-            aPam, m_pImpl->m_sMarkName, eType));
-    // --> OD 2007-10-23 #i81002#
+    registerInMark( m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark( aPam, m_pImpl->m_sMarkName, eType ) );
     // Check, if bookmark has been created.
     // E.g., the creation of a cross-reference bookmark is suppress,
     // if the PaM isn't a valid one for cross-reference bookmarks.
@@ -260,7 +258,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             " - could not create Mark.");
         throw lang::IllegalArgumentException();
     }
-    // <--
 }
 
 void SwXBookmark::attachToRange(
@@ -514,10 +511,53 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
  * SwXFieldmark
  ******************************************************************/
 
-SwXFieldmark::SwXFieldmark(bool _isReplacementObject, ::sw::mark::IMark* pBkm, SwDoc* pDc)
-    : SwXFieldmark_Base(pBkm, pDc)
+SwXFieldmark::SwXFieldmark( bool _isReplacementObject )
+    : SwXFieldmark_Base()
     , isReplacementObject(_isReplacementObject)
-{ }
+{
+}
+
+
+SwXFieldmark::SwXFieldmark(
+    bool _isReplacementObject,
+    ::sw::mark::IMark *const pMark,
+    SwDoc *const pDoc )
+    : SwXFieldmark_Base( pMark, pDoc )
+    , isReplacementObject( _isReplacementObject )
+{
+}
+
+
+uno::Reference<text::XTextContent> SwXFieldmark::CreateXFieldmark(
+    SwDoc & rDoc,
+    ::sw::mark::IMark & rBookmark )
+{
+    // do not iterate over the registered clients: race condition
+    ::sw::mark::MarkBase *const pMarkBase( dynamic_cast< ::sw::mark::MarkBase * >(&rBookmark));
+    OSL_ENSURE(pMarkBase, "CreateXFieldmark: no MarkBase?");
+    if (!pMarkBase) { return 0; }
+
+    uno::Reference<text::XTextContent> xBookmark(pMarkBase->GetXBookmark());
+    if (!xBookmark.is())
+    {
+        SwXFieldmark* pXFieldmark = NULL;
+        if ( dynamic_cast< ::sw::mark::TextFieldmark* >(&rBookmark) )
+        {
+            pXFieldmark = new SwXFieldmark( false, &rBookmark, &rDoc );
+        }
+        else if ( dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBookmark) )
+        {
+            pXFieldmark = new SwXFieldmark( true, &rBookmark, &rDoc );
+        }
+        if ( pXFieldmark != NULL )
+        {
+            xBookmark.set( pXFieldmark );
+            pXFieldmark->registerInMark( pMarkBase );
+        }
+    }
+    return xBookmark;
+}
+
 
 void SwXFieldmarkParameters::insertByName(const OUString& aName, const uno::Any& aElement)
     throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)

@@ -87,6 +87,7 @@ namespace
         if(ch_start != aStartMark)
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
+            rStart.nContent--;
         }
         if ( aEndMark && ( ch_end != aEndMark ) && ( rStart != rEnd ) )
         {

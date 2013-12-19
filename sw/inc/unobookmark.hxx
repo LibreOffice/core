@@ -81,13 +81,14 @@ protected:
     /// @param pDoc and pMark != 0, but not & because of ImplInheritanceHelper
     SwXBookmark(::sw::mark::IMark *const pMark, SwDoc *const pDoc);
 
+    void registerInMark( ::sw::mark::IMark *const pBkmk );
+
 public:
 
     /// descriptor
     SwXBookmark();
 
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextContent>
+    static ::com::sun::star::uno::Reference<::com::sun::star::text::XTextContent>
         CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark);
 
     /// @return IMark for this, but only if it lives in pDoc
@@ -234,10 +235,21 @@ private:
 
     bool isReplacementObject;
 
+    SwXFieldmark(
+        bool _isReplacementObject,
+        ::sw::mark::IMark *const pMark,
+        SwDoc *const pDoc );
+
 public:
 
-    SwXFieldmark(bool isReplacementObject,
-            ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0);
+    // <SwXFieldmark> instance not attached to the document - property descriptor available
+    SwXFieldmark( bool isReplacementObject );
+
+    // (as the parent class) newly created <SwXFieldmark> instances for an existing <IMark> instance needs to be registered in the Mark
+    static ::com::sun::star::uno::Reference<::com::sun::star::text::XTextContent>
+        CreateXFieldmark(
+            SwDoc & rDoc,
+            ::sw::mark::IMark & rBookmark );
 
     virtual void attachToRange(
             const ::com::sun::star::uno::Reference<

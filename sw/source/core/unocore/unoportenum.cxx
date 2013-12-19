@@ -399,17 +399,19 @@ lcl_ExportFieldMark(
     if (CH_TXT_ATR_FIELDSTART == Char)
     {
         ::sw::mark::IFieldmark* pFieldmark = NULL;
-        if (pDoc)
+        if ( pDoc != NULL )
         {
             pFieldmark =
                 pDoc->getIDocumentMarkAccess()->getFieldmarkFor(*pUnoCrsr->GetMark());
         }
         SwXTextPortion* pPortion =
-            new SwXTextPortion( pUnoCrsr, i_xParentText, PORTION_FIELD_START);
+            new SwXTextPortion( pUnoCrsr, i_xParentText, PORTION_FIELD_START );
         xRef = pPortion;
-        if ( pPortion && pFieldmark && pDoc )
+        if ( pPortion != NULL
+             && pFieldmark != NULL
+             && pDoc != NULL )
         {
-            pPortion->SetBookmark( new SwXFieldmark( false, pFieldmark, pDoc ) );
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
             Reference<XTextField> xField;
             const SwFmtFld* pField = lcl_getFieldByName( pDoc, pFieldmark->GetName() );
             if (pField)
@@ -420,30 +422,38 @@ lcl_ExportFieldMark(
     else if (CH_TXT_ATR_FIELDEND == Char)
     {
         ::sw::mark::IFieldmark* pFieldmark = NULL;
-        if (pDoc)
+        if ( pDoc != NULL )
         {
-            pFieldmark = pDoc->getIDocumentMarkAccess()->
-                getFieldmarkFor(*pUnoCrsr->GetMark());
+            pFieldmark =
+                pDoc->getIDocumentMarkAccess()->getFieldmarkFor(*pUnoCrsr->GetMark());
         }
-        SwXTextPortion* pPortion = new SwXTextPortion(
-            pUnoCrsr, i_xParentText, PORTION_FIELD_END);
+        SwXTextPortion* pPortion =
+            new SwXTextPortion( pUnoCrsr, i_xParentText, PORTION_FIELD_END );
         xRef = pPortion;
-        if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(false, pFieldmark, pDoc));
+        if ( pPortion != NULL
+             && pFieldmark != NULL
+             && pDoc != NULL )
+        {
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
+        }
     }
     else if (CH_TXT_ATR_FORMELEMENT == Char)
     {
         ::sw::mark::IFieldmark* pFieldmark = NULL;
-        if (pDoc)
+        if ( pDoc != NULL )
         {
             pFieldmark = pDoc->getIDocumentMarkAccess()->
                 getFieldmarkFor(*pUnoCrsr->GetMark());
         }
-        SwXTextPortion* pPortion = new SwXTextPortion(
-            pUnoCrsr, i_xParentText, PORTION_FIELD_START_END);
+        SwXTextPortion* pPortion =
+            new SwXTextPortion( pUnoCrsr, i_xParentText, PORTION_FIELD_START_END );
         xRef = pPortion;
-        if (pPortion && pFieldmark && pDoc)
-            pPortion->SetBookmark(new SwXFieldmark(true, pFieldmark, pDoc));
+        if ( pPortion != NULL
+             && pFieldmark != NULL
+             && pDoc != NULL )
+        {
+            pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
+        }
     }
     else
     {
