@@ -321,13 +321,7 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
 {
     if (! mxFastParser.is())
     {
-        uno::Reference &lt; lang::XMultiComponentFactory &gt; xFactory = 
-            uno::Reference &lt; lang::XMultiComponentFactory &gt;
-            (mxContext->getServiceManager());
-
-        mxFastParser.set(xFactory->createInstanceWithContext
-            ( "com.sun.star.xml.sax.FastParser", 
-                    mxContext ), uno::UNO_QUERY_THROW);
+        mxFastParser = css::xml::sax::FastParser::create(mxContext);
 </xsl:text>
 <xsl:for-each select="//namespace-alias">
   <xsl:text>
@@ -346,7 +340,8 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
 </xsl:template>
 
   <xsl:template match="/">
-    <xsl:text>    
+    <xsl:text>
+#include &lt;com/sun/star/xml/sax/FastParser.hpp&gt;
 #include "ooxml/OOXMLFactory.hxx"
 #include "ooxml/OOXMLFastHelper.hxx"
 #include "ooxml/OOXMLStreamImpl.hxx"

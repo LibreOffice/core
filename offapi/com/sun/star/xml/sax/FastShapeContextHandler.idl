@@ -24,9 +24,7 @@
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-service FastShapeContextHandler : XFastShapeContextHandler
-{
-};
+service FastShapeContextHandler : XFastShapeContextHandler;
 
 }; }; }; }; };
 

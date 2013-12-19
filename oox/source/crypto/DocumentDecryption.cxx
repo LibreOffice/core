@@ -18,6 +18,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 
 namespace oox {
@@ -221,15 +222,11 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
     mEngine.reset(engine);
     AgileEncryptionInfo& info = engine->getInfo();
 
-    Reference<XMultiComponentFactory> xFactory( mxContext->getServiceManager(), UNO_SET_THROW );
     Reference<XFastDocumentHandler> xFastDocumentHandler( new AgileDocumentHandler(info) );
     Reference<XFastTokenHandler>    xFastTokenHandler   ( new AgileTokenHandler );
 
-    Reference<XFastParser> xParser;
-    xParser.set( xFactory->createInstanceWithContext( "com.sun.star.xml.sax.FastParser", mxContext ), UNO_QUERY_THROW );
-
-    if (!xParser.is())
-        return false;
+    Reference<XFastParser> xParser(
+        css::xml::sax::FastParser::create(mxContext));
 
     xParser->setFastDocumentHandler( xFastDocumentHandler );
     xParser->setTokenHandler( xFastTokenHandler );

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include "oox/core/fastparser.hxx"
 
 #include "oox/core/fasttokenhandler.hxx"
@@ -72,8 +75,7 @@ FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw(
     mpParser(NULL)
 {
     // create a fast parser instance
-    Reference< XMultiComponentFactory > xFactory( rxContext->getServiceManager(), UNO_SET_THROW );
-    mxParser.set( xFactory->createInstanceWithContext( "com.sun.star.xml.sax.FastParser", rxContext ), UNO_QUERY_THROW );
+    mxParser = css::xml::sax::FastParser::create(rxContext);
     mpParser = dynamic_cast<sax_fastparser::FastSaxParser*>(mxParser.get());
 
     // create the fast tokenhandler

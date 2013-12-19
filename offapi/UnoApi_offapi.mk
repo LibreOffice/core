@@ -457,6 +457,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/dom,\
 	SAXDocumentBuilder \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/sax,\
+	FastParser \
 	FastShapeContextHandler \
 	FastTokenHandler \
 	Parser \

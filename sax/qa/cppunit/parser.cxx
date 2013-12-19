@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/io/Pipe.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
@@ -44,11 +45,7 @@ private:
 void ParserTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    mxParser.set(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.xml.sax.FastParser", m_xContext),
-        uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("No FastParser!", mxParser.is());
+    mxParser = css::xml::sax::FastParser::create(m_xContext);
     mxParser->setTokenHandler(
         css::xml::sax::FastTokenHandler::create(m_xContext));
 }
