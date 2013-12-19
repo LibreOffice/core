@@ -770,7 +770,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const Size& size)
     }
 }
 
-void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
+void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool& rTableStarted, bool& rOpenedVMLTxtBox)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
@@ -813,7 +813,10 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     }
     pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+    if(rTableStarted)
+        rOpenedVMLTxtBox = true;
     m_pImpl->m_rExport.WriteText();
+    rOpenedVMLTxtBox = false;
     pFS->endElementNS(XML_w, XML_txbxContent);
     pFS->endElementNS(XML_v, XML_textbox);
 

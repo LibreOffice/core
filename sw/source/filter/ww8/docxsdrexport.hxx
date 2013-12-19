@@ -79,7 +79,7 @@ public:
     /// Write <a:effectLst>, the effect list.
     void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
     /// Writes text frame in VML format.
-    void writeVMLTextFrame(sw::Frame* pParentFrame);
+    void writeVMLTextFrame(sw::Frame* pParentFrame, bool& rTableStarted, bool& rOpenedVMLTxtBox);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0, sax_fastparser::FastAttributeList* pBodyPrAttrList = 0);
 };
