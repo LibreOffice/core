@@ -87,9 +87,6 @@ public:
 
 class SvxRubyDialog : public SfxModelessDialog
 {
-    using Dialog::SetText;
-    using Dialog::GetText;
-
     friend class RubyPreview;
 
     FixedText*          m_pLeftFT;
@@ -123,7 +120,7 @@ class SvxRubyDialog : public SfxModelessDialog
     long                nLastPos;
     long                nCurrentEdit;
 
-    sal_Bool                bModified;
+    sal_Bool            bModified;
 
     com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
@@ -140,18 +137,18 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK(EditScrollHdl_Impl, sal_Int32*);
     DECL_LINK(EditJumpHdl_Impl, sal_Int32*);
 
-    void                SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
-    void                GetText();
+    void                SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
+    void                GetRubyText();
     void                ClearCharStyleList();
     void                AssertOneEntry();
 
     void                Update();
-    virtual sal_Bool        Close();
+    virtual sal_Bool    Close();
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
 
-    sal_Bool                IsModified() const {return bModified;}
+    sal_Bool            IsModified() const {return bModified;}
     void                SetModified(sal_Bool bSet) {bModified = bSet;}
 
     void EnableControls(bool bEnable);

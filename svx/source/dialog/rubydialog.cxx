@@ -373,7 +373,7 @@ void    SvxRubyDialog::Deactivate()
     SfxModelessDialog::Deactivate();
 }
 
-void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
+void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 {
     OUString sLeft, sRight;
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
@@ -400,7 +400,7 @@ void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
     rRight.SaveValue();
 }
 //-----------------------------------------------------------------------------
-void SvxRubyDialog::GetText()
+void SvxRubyDialog::GetRubyText()
 {
     long nTempLastPos = GetLastPos();
     for(int i = 0; i < 8; i+=2)
@@ -515,12 +515,12 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     long nPos = pScroll->GetThumbPos();
     if(GetLastPos() != nPos)
     {
-        GetText();
+        GetRubyText();
     }
-    SetText(nPos++, *m_pLeft1ED, *m_pRight1ED);
-    SetText(nPos++, *m_pLeft2ED, *m_pRight2ED);
-    SetText(nPos++, *m_pLeft3ED, *m_pRight3ED);
-    SetText(nPos, *m_pLeft4ED, *m_pRight4ED);
+    SetRubyText(nPos++, *m_pLeft1ED, *m_pRight1ED);
+    SetRubyText(nPos++, *m_pLeft2ED, *m_pRight2ED);
+    SetRubyText(nPos++, *m_pLeft3ED, *m_pRight3ED);
+    SetRubyText(nPos, *m_pLeft4ED, *m_pRight4ED);
     SetLastPos(nPos - 3);
     m_pPreviewWin->Invalidate();
     return 0;
@@ -536,7 +536,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
         AdjustHdl_Impl(m_pAdjustLB);
         CharStyleHdl_Impl(m_pCharStyleLB);
     }
-    GetText();
+    GetRubyText();
     //reset all edit fields - SaveValue is called
     ScrollHdl_Impl(m_pScrollSB);
 
