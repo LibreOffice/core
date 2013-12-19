@@ -20,7 +20,6 @@ class ScXMLDataStreamContext : public ScXMLImportContext
     OUString maURL;
     ScRange maRange;
     bool mbRefreshOnEmpty;
-    bool mbInsertBottom;
     sc::ImportPostProcessData::DataStream::InsertPos meInsertPos;
 
 public:
