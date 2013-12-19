@@ -400,9 +400,7 @@ void SAL_CALL StatusIndicator::setPosSize (
 
 const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = "com.sun.star.task.XStatusIndicator";
-    return seqServiceNames ;
+    return css::uno::Sequence<OUString>();
 }
 
 //____________________________________________________________________________________________________________

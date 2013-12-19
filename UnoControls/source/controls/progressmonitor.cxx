@@ -628,9 +628,7 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
 
 const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = "com.sun.star.awt.XProgressMonitor";
-    return seqServiceNames ;
+    return css::uno::Sequence<OUString>();
 }
 
 //____________________________________________________________________________________________________________

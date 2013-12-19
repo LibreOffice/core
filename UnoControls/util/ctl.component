@@ -22,13 +22,7 @@
   <implementation name="stardiv.UnoControls.FrameControl">
     <service name="com.sun.star.frame.FrameControl"/>
   </implementation>
-  <implementation name="stardiv.UnoControls.ProgressBar">
-    <service name="com.sun.star.awt.XProgressBar"/>
-  </implementation>
-  <implementation name="stardiv.UnoControls.ProgressMonitor">
-    <service name="com.sun.star.awt.XProgressMonitor"/>
-  </implementation>
-  <implementation name="stardiv.UnoControls.StatusIndicator">
-    <service name="com.sun.star.task.XStatusIndicator"/>
-  </implementation>
+  <implementation name="stardiv.UnoControls.ProgressBar"/>
+  <implementation name="stardiv.UnoControls.ProgressMonitor"/>
+  <implementation name="stardiv.UnoControls.StatusIndicator"/>
 </component>

@@ -339,9 +339,7 @@ Reference< XControlModel > SAL_CALL ProgressBar::getModel() throw( RuntimeExcept
 
 const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = "com.sun.star.awt.XProgressBar";
-    return seqServiceNames ;
+    return css::uno::Sequence<OUString>();
 }
 
 //____________________________________________________________________________________________________________
