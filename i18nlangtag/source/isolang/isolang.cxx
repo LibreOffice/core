@@ -1359,6 +1359,7 @@ static IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
     { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr", "",   "latin" },
     { LANGUAGE_AZERI_CYRILLIC,                      "az", "AZ", "cyrillic" },
     { LANGUAGE_UZBEK_CYRILLIC,                      "uz", "UZ", "cyrillic" },
+    { LANGUAGE_CATALAN_VALENCIAN,                   "ca", "ES", "valencia" },
     { LANGUAGE_DONTKNOW,                            "",   "",   ""   }       // marks end of table
 };
 
