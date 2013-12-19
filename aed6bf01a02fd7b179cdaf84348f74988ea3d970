@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAbH///NQ\u003d",
+        "filename": "i18npool/qa/cppunit/test_breakiterator.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-19T18:23:33Z",
+      "side": 1,
+      "message": "Chinese locale ...",
+      "revId": "aed6bf01a02fd7b179cdaf84348f74988ea3d970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///NM\u003d",
+        "filename": "i18npool/qa/cppunit/test_breakiterator.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-19T18:23:33Z",
+      "side": 1,
+      "message": "... but a variable named JAPANESE? Looks like copypasta forgot to adapt ;-)\n\nThere are no surrogate pairs in the data, only some high surrogate but not followed by a low surrogate, which in itself is invalid utf-16 and iterateCodePoints() correctly does not increment by 2 positions in these cases.",
+      "revId": "aed6bf01a02fd7b179cdaf84348f74988ea3d970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAbH///NA\u003d",
+        "filename": "i18npool/qa/cppunit/test_breakiterator.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-12-19T18:23:33Z",
+      "side": 1,
+      "message": "In this constellation the changed code is not executed because xdictionary::seekSegment() returns false and the else path is taken in xdictionary::getWordBoundary()",
+      "revId": "aed6bf01a02fd7b179cdaf84348f74988ea3d970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
