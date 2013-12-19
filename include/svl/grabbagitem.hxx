@@ -26,7 +26,7 @@ public:
     TYPEINFO();
 
     SfxGrabBagItem();
-    SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, com::sun::star::uno::Any> *pMap = 0);
+    SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, com::sun::star::uno::Any>* pMap = 0);
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
     ~SfxGrabBagItem();
 
@@ -34,7 +34,7 @@ public:
     const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const;
 
     virtual int operator==(const SfxPoolItem&) const;
-    virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const;
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0);
     virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0) const;

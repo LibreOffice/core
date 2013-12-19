@@ -25,8 +25,8 @@ SfxGrabBagItem::SfxGrabBagItem()
 {
 }
 
-SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, uno::Any> *pMap) :
-    SfxPoolItem( nWhich )
+SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, uno::Any>* pMap) :
+    SfxPoolItem(nWhich)
 {
     if (pMap)
         m_aMap = *pMap;
@@ -59,7 +59,7 @@ int SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
     return m_aMap == pItem->m_aMap;
 }
 
-SfxPoolItem* SfxGrabBagItem::Clone(SfxItemPool * /*pPool*/) const
+SfxPoolItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SfxGrabBagItem(*this);
 }
@@ -67,7 +67,7 @@ SfxPoolItem* SfxGrabBagItem::Clone(SfxItemPool * /*pPool*/) const
 bool SfxGrabBagItem::PutValue(const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     uno::Sequence<beans::PropertyValue> aValue;
-    if ( rVal >>= aValue )
+    if (rVal >>= aValue)
     {
         m_aMap.clear();
         comphelper::OSequenceIterator<beans::PropertyValue> i(aValue);
