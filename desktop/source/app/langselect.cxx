@@ -58,18 +58,13 @@ OUString getInstalledLocale(
             return installed[i];
         }
     }
-    // FIXME: It is not very clever to handle the zh-HK -> zh-TW fallback here,
-    // but right now, there is no place that handles those fallbacks globally:
-    if (locale == "zh-HK") {
+    ::std::vector<OUString> fallbacks( LanguageTag( locale).getFallbackStrings( false));
+    for (size_t f=0; f < fallbacks.size(); ++f) {
+        const OUString& rf = fallbacks[f];
         for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
-            if (installed[i] == "zh-TW") {
+            if (installed[i] == rf) {
                 return installed[i];
             }
-        }
-    }
-    for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
-        if (locale.startsWith(installed[i])) {
-            return installed[i];
         }
     }
     return OUString();
