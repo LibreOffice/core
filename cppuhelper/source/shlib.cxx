@@ -189,7 +189,7 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         }
         rtl::OUString name(prefix == "direct" ? implementation : uri);
         lib_to_factory_mapping const * map = lo_get_factory_map();
-        component_getFactoryFunc fp;
+        component_getFactoryFunc fp = 0;
         for (int i = 0; map[i].name != 0; ++i) {
             if (name.equalsAscii(map[i].name)) {
                 fp = map[i].component_getFactory_function;
