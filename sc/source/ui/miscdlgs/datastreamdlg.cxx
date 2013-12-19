@@ -126,7 +126,7 @@ void DataStreamDlg::Init( const DataStream& rStrm )
     m_pEdRange->SetText(aStr);
     SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
 
-    if (nRows == MAXROWCOUNT)
+    if (aRange.aEnd.Row() == MAXROW)
         m_pRBUnlimited->Check();
     else
     {
