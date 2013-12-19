@@ -518,14 +518,14 @@ css::beans::Property getDefaultContextProperty() {
         css::beans::PropertyAttribute::READONLY);
 }
 
-class FactoryWrapper:
+class ImplementationWrapper:
     public cppu::WeakImplHelper3<
         css::lang::XSingleComponentFactory, css::lang::XSingleServiceFactory,
         css::lang::XServiceInfo >,
     private boost::noncopyable
 {
 public:
-    FactoryWrapper(
+    ImplementationWrapper(
         rtl::Reference< cppuhelper::ServiceManager > const & manager,
         boost::shared_ptr<
             cppuhelper::ServiceManager::Data::ImplementationInfo > const &
@@ -534,7 +534,7 @@ public:
     { assert(manager.is() && info.get() != 0); }
 
 private:
-    virtual ~FactoryWrapper() {}
+    virtual ~ImplementationWrapper() {}
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
@@ -579,7 +579,7 @@ private:
 };
 
 css::uno::Reference< css::uno::XInterface >
-FactoryWrapper::createInstanceWithContext(
+ImplementationWrapper::createInstanceWithContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
@@ -595,7 +595,7 @@ FactoryWrapper::createInstanceWithContext(
 }
 
 css::uno::Reference< css::uno::XInterface >
-FactoryWrapper::createInstanceWithArgumentsAndContext(
+ImplementationWrapper::createInstanceWithArgumentsAndContext(
     css::uno::Sequence< css::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException)
@@ -609,14 +609,15 @@ FactoryWrapper::createInstanceWithArgumentsAndContext(
         : factory2_->createInstanceWithArguments(Arguments);
 }
 
-css::uno::Reference< css::uno::XInterface > FactoryWrapper::createInstance()
+css::uno::Reference< css::uno::XInterface >
+ImplementationWrapper::createInstance()
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     return createInstanceWithContext(manager_->getContext());
 }
 
 css::uno::Reference< css::uno::XInterface >
-FactoryWrapper::createInstanceWithArguments(
+ImplementationWrapper::createInstanceWithArguments(
     css::uno::Sequence< css::uno::Any > const & Arguments)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
@@ -624,19 +625,20 @@ FactoryWrapper::createInstanceWithArguments(
         Arguments, manager_->getContext());
 }
 
-rtl::OUString FactoryWrapper::getImplementationName()
+rtl::OUString ImplementationWrapper::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return info_->name;
 }
 
-sal_Bool FactoryWrapper::supportsService(rtl::OUString const & ServiceName)
+sal_Bool ImplementationWrapper::supportsService(rtl::OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< rtl::OUString > FactoryWrapper::getSupportedServiceNames()
+css::uno::Sequence< rtl::OUString >
+ImplementationWrapper::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     if (info_->services.size() > static_cast< sal_uInt32 >(SAL_MAX_INT32)) {
@@ -656,7 +658,7 @@ css::uno::Sequence< rtl::OUString > FactoryWrapper::getSupportedServiceNames()
     return names;
 }
 
-void FactoryWrapper::loadImplementation(
+void ImplementationWrapper::loadImplementation(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     {
@@ -1113,12 +1115,13 @@ cppuhelper::ServiceManager::createContentEnumeration(
                 break;
             }
             if (!impl->loaded) {
-                // Postpone actual factory instantiation as long as possible (so
-                // that e.g. opening LO's "Tools - Macros" menu does not try to
-                // instantiate a JVM, which can lead to a synchronous error
-                // dialog when no JVM is specified, and showing the dialog while
-                // hovering over a menu can cause trouble):
-                impl->factory1 = new FactoryWrapper(this, impl->info);
+                // Postpone actual implementation instantiation as long as
+                // possible (so that e.g. opening LO's "Tools - Macros" menu
+                // does not try to instantiate a JVM, which can lead to a
+                // synchronous error dialog when no JVM is specified, and
+                // showing the dialog while hovering over a menu can cause
+                // trouble):
+                impl->factory1 = new ImplementationWrapper(this, impl->info);
                 impl->loaded = true;
             }
         }
