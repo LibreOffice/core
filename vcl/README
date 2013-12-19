@@ -7,8 +7,6 @@ source/
 
 inc/
 	+ cross-platform abstraction headers
-	vcl/
-		+ public headers ("public" to the rest of LibreOffice, that is)
 
 generic/
 	+ shared helper code for *some* of the backends, actually built into vcl.
