@@ -1142,17 +1142,15 @@ sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
     }
 }
 
-sal_uLong CalcDiff( const Point &rPt1, const Point &rPt2 )
+static sal_uInt64 CalcDiff(const Point &rPt1, const Point &rPt2)
 {
     //Calculate the distance between the two points.
     //'delta' X^2 + 'delta'Y^2 = 'distance'^2
-    sal_uInt32 dX = std::max( rPt1.X(), rPt2.X() ) -
+    sal_uInt64 dX = std::max( rPt1.X(), rPt2.X() ) -
                std::min( rPt1.X(), rPt2.X() ),
           dY = std::max( rPt1.Y(), rPt2.Y() ) -
                std::min( rPt1.Y(), rPt2.Y() );
-    BigInt dX1( dX ), dY1( dY );
-    dX1 *= dX1; dY1 *= dY1;
-    return ::SqRt( dX1 + dY1 );
+    return (dX * dX) + (dY * dY);
 }
 
 /** Check if the point lies inside the page part in wich also the CntntFrame lies.
@@ -1209,7 +1207,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     const SwLayoutFrm *pInside = NULL;
     sal_uInt16 nMaxPage = GetPhyPageNum() + (bDefaultExpand ? 1 : 0);
     Point aPoint = rPoint;
-    sal_uLong nDistance = ULONG_MAX;
+    sal_uInt64 nDistance = SAL_MAX_UINT64;
 
     while ( true )  //A loop to be sure we always find one.
     {
@@ -1262,7 +1260,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                     if( !pInside || ( pInside->IsAnLower( pCntnt ) &&
                         ( !pCntnt->IsInFtn() || pInside->IsFtnContFrm() ) ) )
                     {
-                        const sal_uLong nDiff = ::CalcDiff( aCntntPoint, rPoint );
+                        const sal_uInt64 nDiff = ::CalcDiff(aCntntPoint, rPoint);
                         sal_Bool bBetter = nDiff < nDistance;  // This one is nearer
                         if( !pInside )
                         {
@@ -1406,7 +1404,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 
     const SwCntntFrm *pAct = pCntnt;
     Point aAct       = rPt;
-    sal_uLong nDist      = ULONG_MAX;
+    sal_uLong nDist  = SAL_MAX_UINT64;
 
     while ( pCntnt )
     {
@@ -1433,7 +1431,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
         else if ( aCntFrm.Right() < rPt.X() )
             aPoint.X() = aCntFrm.Right();
 
-        const sal_uLong nDiff = ::CalcDiff( aPoint, rPt );
+        const sal_uInt64 nDiff = ::CalcDiff( aPoint, rPt );
         if ( nDiff < nDist )
         {
             aAct    = aPoint;

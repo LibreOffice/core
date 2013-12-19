@@ -877,7 +877,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
     return 0;
 }
 
-static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
+static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
                           const bool bBody, const sal_Bool bFtn )
 {
@@ -890,8 +890,8 @@ static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 #endif
 
     rpCnt = 0;
-    sal_uLong nDistance = ULONG_MAX;
-    sal_uLong nNearest  = ULONG_MAX;
+    sal_uInt64 nDistance = SAL_MAX_UINT64;
+    sal_uInt64 nNearest  = SAL_MAX_UINT64;
     const SwCntntFrm *pCnt = pLay->ContainsCntnt();
 
     while ( pCnt && (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
@@ -907,13 +907,12 @@ static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
         {
             //Calculate the distance between those two points.
             //'delta' X^2 + 'delta' Y^2 = 'distance'^2
-            sal_uInt32 dX = std::max( pCnt->Frm().Left(), rPt.X() ) -
+            sal_uInt64 dX = std::max( pCnt->Frm().Left(), rPt.X() ) -
                        std::min( pCnt->Frm().Left(), rPt.X() ),
                   dY = std::max( pCnt->Frm().Top(), rPt.Y() ) -
                        std::min( pCnt->Frm().Top(), rPt.Y() );
-            BigInt dX1( dX ), dY1( dY );
-            dX1 *= dX1; dY1 *= dY1;
-            const sal_uLong nDiff = ::SqRt( dX1 + dY1 );
+            // square of the difference will do fine here
+            const sal_uInt64 nDiff = (dX * dX) + (dY * dY);
             if ( pCnt->Frm().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
@@ -935,7 +934,7 @@ static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 
         }  while ( pCnt && pLay->IsAnLower( pCnt ) );
     }
-    if ( nDistance == ULONG_MAX )
+    if (nDistance == SAL_MAX_UINT64)
     {   rpCnt = pNearest;
         return nNearest;
     }
@@ -955,26 +954,26 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
     //above the point.
     const SwCntntFrm  *pRet, *pNew;
     const SwLayoutFrm *pLay = pCnt->FindPageFrm();
-    sal_uLong nDist;
+    sal_uInt64 nDist; // not sure if a sal_Int32 would be enough?
 
     nDist = ::lcl_FindCntDiff( rPt, pLay, pNew, bBody, bFtn );
     if ( pNew )
         pRet = pNew;
     else
     {   pRet  = pCnt;
-        nDist = ULONG_MAX;
+        nDist = SAL_MAX_UINT64;
     }
     const SwCntntFrm *pNearest = pRet;
-    sal_uLong nNearest = nDist;
+    sal_uInt64 nNearest = nDist;
 
     if ( pLay )
     {
         const SwLayoutFrm *pPge = pLay;
-        sal_uLong nOldNew = ULONG_MAX;
+        sal_uInt64 nOldNew = SAL_MAX_UINT64;
         for ( sal_uInt16 i = 0; pPge->GetPrev() && (i < 3); ++i )
         {
             pPge = (SwLayoutFrm*)pPge->GetPrev();
-            const sal_uLong nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -988,18 +987,18 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                     nNearest = nNew;
                 }
             }
-            else if ( nOldNew != ULONG_MAX && nNew > nOldNew )
+            else if (nOldNew != SAL_MAX_UINT64 && nNew > nOldNew)
                 break;
             else
                 nOldNew = nNew;
 
         }
         pPge = pLay;
-        nOldNew = ULONG_MAX;
+        nOldNew = SAL_MAX_UINT64;
         for ( sal_uInt16 j = 0; pPge->GetNext() && (j < 3); ++j )
         {
             pPge = (SwLayoutFrm*)pPge->GetNext();
-            const sal_uLong nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -1013,7 +1012,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                     nNearest = nNew;
                 }
             }
-            else if ( nOldNew != ULONG_MAX && nNew > nOldNew )
+            else if (nOldNew != SAL_MAX_UINT64 && nNew > nOldNew)
                 break;
             else
                 nOldNew = nNew;

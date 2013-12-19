@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/bigint.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/brushitem.hxx>
@@ -2681,29 +2680,6 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
 
     if ( bGrow )
         pParent->Grow( nGrowVal );
-}
-
-/*************************************************************************
-|*
-|*  SqRt()              Berechnung der Quadratwurzel, damit die math.lib
-|*      nicht auch noch dazugelinkt werden muss.
-|*
-|*************************************************************************/
-
-sal_uLong SqRt( BigInt nX )
-{
-    BigInt nErg = 1;
-
-    if ( !nX.IsNeg() )
-    {
-        BigInt nOldErg = 1;
-        for ( int i = 0; i <= 5; i++ )
-        {
-            nErg = (nOldErg + (nX / nOldErg)) / BigInt(2);
-            nOldErg = nErg;
-        }
-    }
-    return nErg >= BigInt(SAL_MAX_UINT32) ? ULONG_MAX : (sal_uLong)nErg;
 }
 
 /*************************************************************************/

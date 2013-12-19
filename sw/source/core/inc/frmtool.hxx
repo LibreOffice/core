@@ -35,7 +35,6 @@ class SwRootFrm;
 class SwDoc;
 class SwAttrSet;
 class SdrObject;
-class BigInt;
 class SvxBrushItem;
 class XFillStyleItem;
 class XFillGradientItem;
@@ -81,8 +80,6 @@ void PaintCharacterBorder(
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
-
-sal_uLong SqRt( BigInt nX );
 
 SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart = NULL );
 void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
