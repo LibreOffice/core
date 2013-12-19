@@ -128,9 +128,7 @@ int access_u(const rtl_uString* pustrPath, int mode)
 {
     rtl::OString fn = OUStringToOString(pustrPath);
 #ifdef ANDROID
-    if (fn.startsWith("/assets") &&
-        (fn[sizeof("/assets")-1] == '\0' ||
-         fn[sizeof("/assets")-1] == '/'))
+    if (fn == "/assets" || fn.startsWith("/assets/"))
     {
         struct stat stat;
         if (lo_apk_lstat(fn.getStr(), &stat) == -1)
@@ -161,9 +159,7 @@ sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolv
 {
     rtl::OString fn = OUStringToOString(pustrFileName);
 #ifdef ANDROID
-    if (fn.startsWith("/assets") &&
-        (fn[sizeof("/assets")-1] == '\0' ||
-         fn[sizeof("/assets")-1] == '/'))
+    if (fn == "/assets" || fn.startsWith("/assets/"))
     {
         if (access_u(pustrFileName, F_OK) == -1)
             return sal_False;
