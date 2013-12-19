@@ -265,8 +265,6 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
 #endif
 }
 
-#if !defined DISABLE_DYNLOADING
-
 css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
     rtl::OUString const & uri, rtl::OUString const & rPath,
     rtl::OUString const & rImplName,
@@ -281,6 +279,8 @@ css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
         uri, "", "", rImplName, "", xMgr, 0, &fac);
     return fac;
 }
+
+#if !defined DISABLE_DYNLOADING
 
 namespace {
 
