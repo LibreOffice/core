@@ -3444,16 +3444,8 @@ void HwpReader::makeTable(TxtBox * hbox)
 
 // ----------- cell ---------------- //
     int j = -1, k = -1;
-    for (int i = 0 ; i < static_cast<int>(tbl->cells.size()); i++)
+    for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
-        std::list<TCell*>::iterator it = tbl->cells.begin();
-
-        for( int ii = 0; it != tbl->cells.end(); ++it, ii++ )
-        {
-            if( ii == i )
-                break;
-        }
-
         TCell *tcell = *it;
         if( tcell->nRowIndex > j )
         {
