@@ -289,13 +289,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     }
 
     // To be able to prefill the correct values based on the file extension
-    bool bIsCSV = false;
-    bool bIsTSV = false;
-
-    if ( aDatName.endsWithIgnoreAsciiCase(".csv") )
-        bIsCSV = true;
-    else if ( aDatName.endsWithIgnoreAsciiCase(".tsv") || aDatName.endsWithIgnoreAsciiCase(".tab") )
-        bIsTSV = true;
+    bool bIsTSV = (aDatName.endsWithIgnoreAsciiCase(".tsv") || aDatName.endsWithIgnoreAsciiCase(".tab"));
 
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
     OUString sFieldSeparators(",;\t");
@@ -327,9 +321,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
         pCkbTab->Check();
     else
         SetSeparators(); // Set Separators in the dialog from maFieldSeparators (empty are not set)
-
-    if ( bIsCSV )
-        pCkbComma->Check();
 
     // Get Separators from the dialog (empty are set from default)
     maFieldSeparators = GetSeparators();
