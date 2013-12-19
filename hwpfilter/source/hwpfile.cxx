@@ -455,7 +455,7 @@ ParaShape *HWPFile::getParaShape(int index)
 	  break;
     }
 
-    return *it;
+    return it != pslist.end() ? *it : NULL;
 }
 
 
