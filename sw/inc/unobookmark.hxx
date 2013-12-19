@@ -88,7 +88,7 @@ public:
     /// descriptor
     SwXBookmark();
 
-    static ::com::sun::star::uno::Reference<::com::sun::star::text::XTextContent>
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
         CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark);
 
     /// @return IMark for this, but only if it lives in pDoc
@@ -246,7 +246,7 @@ public:
     SwXFieldmark( bool isReplacementObject );
 
     // (as the parent class) newly created <SwXFieldmark> instances for an existing <IMark> instance needs to be registered in the Mark
-    static ::com::sun::star::uno::Reference<::com::sun::star::text::XTextContent>
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
         CreateXFieldmark(
             SwDoc & rDoc,
             ::sw::mark::IMark & rBookmark );

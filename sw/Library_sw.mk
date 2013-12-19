@@ -130,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/bastyp/swregion \
     sw/source/core/bastyp/swtypes \
     sw/source/core/bastyp/tabcol \
+    sw/source/core/crsr/annotationmark \
     sw/source/core/crsr/BlockCursor \
     sw/source/core/crsr/bookmrk \
     sw/source/core/crsr/callnk \
@@ -576,6 +577,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/docvw/AnchorOverlayObject \
     sw/source/ui/docvw/AnnotationMenuButton \
     sw/source/ui/docvw/AnnotationWin \
+    sw/source/ui/docvw/OverlayRanges \
     sw/source/ui/docvw/PostItMgr \
     sw/source/ui/docvw/ShadowOverlayObject \
     sw/source/ui/docvw/SidebarTxtControl \

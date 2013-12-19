@@ -3750,39 +3750,58 @@ void XMLAnnotationImportContext::EndElement()
 
     if ( bValid )
     {
-        if ( mxField.is() || CreateField( mxField, sServicePrefix + GetServiceName() ) )
+        if ( m_nToken == XML_TOK_TEXT_ANNOTATION_END )
         {
-            // set field properties
-            PrepareField( mxField );
-
-            // attach field to document
-            Reference < XTextContent > xTextContent( mxField, UNO_QUERY );
-
-            // workaround for #80606#
-            try
+            // Search for a previous annotation with the same name.
+            uno::Reference< text::XTextContent > xPrevField;
             {
-                if ( m_nToken == XML_TOK_TEXT_ANNOTATION_END
-                     && m_xStart.is() )
+                Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
+                uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+                uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+                while (xFields->hasMoreElements())
                 {
-                    // So we are ending a previous annotation,
-                    // let's create a text range covering the start and the current position.
-                    uno::Reference<text::XText> xText = GetImportHelper().GetText();
-                    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(m_xStart->getAnchor());
-                    xCursor->gotoRange(GetImportHelper().GetCursorAsRange(), true);
-                    uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY);
-                    xText->insertTextContent( xTextRange, xTextContent, !xCursor->isCollapsed() );
-
-                    // Now we can delete the annotation at the start position.
-                    uno::Reference<lang::XComponent>(m_xStart, uno::UNO_QUERY)->dispose();
+                    uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+                    OUString aFieldName;
+                    xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
+                    if ( aFieldName == aName )
+                    {
+                        xPrevField.set( xCurrField, uno::UNO_QUERY );
+                        break;
+                    }
                 }
-                else
+            }
+            if ( xPrevField.is() )
+            {
+                // So we are ending a previous annotation,
+                // let's create a text range covering the start and the current position.
+                uno::Reference< text::XText > xText = GetImportHelper().GetText();
+                uno::Reference< text::XTextCursor > xCursor =
+                    xText->createTextCursorByRange( xPrevField->getAnchor() );
+                xCursor->gotoRange( GetImportHelper().GetCursorAsRange(), true );
+                uno::Reference< text::XTextRange > xTextRange( xCursor, uno::UNO_QUERY );
+
+                xText->insertTextContent( xTextRange, xPrevField, !xCursor->isCollapsed() );
+            }
+        }
+        else
+        {
+            if ( mxField.is() || CreateField( mxField, sServicePrefix + GetServiceName() ) )
+            {
+                // set field properties
+                PrepareField( mxField );
+
+                // attach field to document
+                Reference < XTextContent > xTextContent( mxField, UNO_QUERY );
+
+                // workaround for #80606#
+                try
                 {
                     GetImportHelper().InsertTextContent( xTextContent );
                 }
-            }
-            catch (lang::IllegalArgumentException)
-            {
-                // ignore
+                catch (lang::IllegalArgumentException)
+                {
+                    // ignore
+                }
             }
         }
     }
@@ -3791,42 +3810,8 @@ void XMLAnnotationImportContext::EndElement()
 }
 
 void XMLAnnotationImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropertySet)
+    const Reference<XPropertySet> & xPropertySet )
 {
-    if ( m_nToken == XML_TOK_TEXT_ANNOTATION_END
-         && aName.getLength() > 0 )
-    {
-        // Search for a previous annotation with the same name.
-        Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-        uno::Reference<beans::XPropertySet> xPrevField;
-        while (xFields->hasMoreElements())
-        {
-            uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
-            OUString aFieldName;
-            xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
-            if ( aFieldName == aName )
-            {
-                xPrevField = xCurrField;
-                break;
-            }
-        }
-        if (xPrevField.is())
-        {
-            // copy over the properties.
-            xPropertySet->setPropertyValue(sPropertyAuthor, xPrevField->getPropertyValue(sPropertyAuthor));
-            xPropertySet->setPropertyValue(sPropertyInitials, xPrevField->getPropertyValue(sPropertyInitials));
-            xPropertySet->setPropertyValue(sPropertyDate, xPrevField->getPropertyValue(sPropertyDate));
-            xPropertySet->setPropertyValue(sPropertyName, xPrevField->getPropertyValue(sPropertyName));
-            xPropertySet->setPropertyValue(sPropertyContent, xPrevField->getPropertyValue(sPropertyContent));
-
-            // And save a reference to it, so we can delete it later.
-            m_xStart.set(xPrevField, uno::UNO_QUERY);
-            return;
-        }
-    }
-
     // import (possibly empty) author
     OUString sAuthor( aAuthorBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue(sPropertyAuthor, makeAny(sAuthor));

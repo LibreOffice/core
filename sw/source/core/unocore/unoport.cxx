@@ -74,9 +74,10 @@ void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 /*-- 11.12.98 09:56:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        uno::Reference< text::XText > const& rParent,
-        SwTextPortionType eType)
+SwXTextPortion::SwXTextPortion(
+    const SwUnoCrsr* pPortionCrsr,
+    uno::Reference< text::XText > const& rParent,
+    SwTextPortionType eType )
     : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
     , m_pPropSet(aSwMapProvider.GetPropertySet(
         (PORTION_REDLINE_START == eType ||
@@ -99,9 +100,10 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 /* -----------------24.03.99 16:30-------------------
  *
  * --------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        uno::Reference< text::XText > const& rParent,
-        SwFrmFmt& rFmt )
+SwXTextPortion::SwXTextPortion(
+    const SwUnoCrsr* pPortionCrsr,
+    uno::Reference< text::XText > const& rParent,
+    SwFrmFmt& rFmt )
     : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -121,10 +123,11 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 /* -----------------------------19.02.01 10:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-                    SwTxtRuby const& rAttr,
-                    uno::Reference< text::XText > const& xParent,
-                    sal_Bool bIsEnd )
+SwXTextPortion::SwXTextPortion(
+    const SwUnoCrsr* pPortionCrsr,
+    SwTxtRuby const& rAttr,
+    uno::Reference< text::XText > const& xParent,
+    sal_Bool bIsEnd )
     : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
@@ -310,6 +313,12 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_FIELD_START:pRet = "TextFieldStart";break;
                 case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
                 case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
+                case PORTION_ANNOTATION:
+                    pRet = "Annotation";
+                    break;
+                case PORTION_ANNOTATION_END:
+                    pRet = "AnnotationEnd";
+                    break;
                 default:
                     pRet = 0;
                 }

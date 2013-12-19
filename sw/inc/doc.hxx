@@ -1108,12 +1108,14 @@ public:
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
 
-    void CopyWithFlyInFly( const SwNodeRange& rRg,
-                            const xub_StrLen nEndContentIndex,
-                            const SwNodeIndex& rInsPos,
-                            sal_Bool bMakeNewFrms = sal_True,
-                            sal_Bool bDelRedlines = sal_True,
-                            sal_Bool bCopyFlyAtFly = sal_False ) const;
+    void CopyWithFlyInFly(
+        const SwNodeRange& rRg,
+        const xub_StrLen nEndContentIndex,
+        const SwNodeIndex& rInsPos,
+        const SwPaM* pCopiedPaM = NULL,
+        const sal_Bool bMakeNewFrms = sal_True,
+        const sal_Bool bDelRedlines = sal_True,
+        const sal_Bool bCopyFlyAtFly = sal_False ) const;
 
     sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 

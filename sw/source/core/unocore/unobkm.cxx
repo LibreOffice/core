@@ -110,8 +110,7 @@ void SwXBookmark::Impl::registerInMark(
     if (pBkmk)
     {
         pBkmk->Add(this);
-        ::sw::mark::MarkBase *const pMarkBase(
-            dynamic_cast< ::sw::mark::MarkBase * >(pBkmk));
+        ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(pBkmk));
         OSL_ENSURE(pMarkBase, "registerInMark: no MarkBase?");
         if (pMarkBase)
         {
@@ -133,7 +132,9 @@ const ::sw::mark::IMark* SwXBookmark::GetBookmark() const
     return m_pImpl->m_pRegisteredBookmark;
 }
 
-SwXBookmark::SwXBookmark(::sw::mark::IMark *const pBkmk, SwDoc *const pDoc)
+SwXBookmark::SwXBookmark(
+    ::sw::mark::IMark *const pBkmk,
+    SwDoc *const pDoc)
     : m_pImpl( new SwXBookmark::Impl(*this, pDoc, pBkmk) )
 {
 }
@@ -147,21 +148,21 @@ SwXBookmark::~SwXBookmark()
 {
 }
 
-uno::Reference<text::XTextContent>
-SwXBookmark::CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark)
+uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
+    SwDoc & rDoc,
+    ::sw::mark::IMark & rBookmark)
 {
     // #i105557#: do not iterate over the registered clients: race condition
-    ::sw::mark::MarkBase *const pMarkBase(
-        dynamic_cast< ::sw::mark::MarkBase * >(&rBookmark));
+    ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(&rBookmark));
     OSL_ENSURE(pMarkBase, "CreateXBookmark: no MarkBase?");
     if (!pMarkBase) { return 0; }
     uno::Reference<text::XTextContent> xBookmark(pMarkBase->GetXBookmark());
     if (!xBookmark.is())
     {
         OSL_ENSURE(
-            dynamic_cast< ::sw::mark::IBookmark* >(&rBookmark),
+            dynamic_cast< ::sw::mark::IBookmark* >(&rBookmark) || IDocumentMarkAccess::GetType(rBookmark) == IDocumentMarkAccess::ANNOTATIONMARK,
             "<SwXBookmark::GetObject(..)>"
-            "SwXBookmark requested for non-bookmark mark.");
+            "SwXBookmark requested for non-bookmark mark and non-annotation mark.");
         SwXBookmark *const pXBookmark = new SwXBookmark(&rBookmark, &rDoc);
         xBookmark.set(pXBookmark);
         pXBookmark->registerInMark( pMarkBase);
@@ -193,8 +194,7 @@ const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
     return aSeq;
 }
 
-sal_Int64 SAL_CALL
-SwXBookmark::getSomething(const uno::Sequence< sal_Int8 >& rId)
+sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& rId )
 throw (uno::RuntimeException)
 {
     return ::sw::UnoTunnelImpl<SwXBookmark>(rId, this);
@@ -260,23 +260,21 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 }
 
-void SwXBookmark::attachToRange(
-        const uno::Reference< text::XTextRange > & xTextRange)
+void SwXBookmark::attachToRange( const uno::Reference< text::XTextRange > & xTextRange )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     attachToRangeEx(xTextRange, IDocumentMarkAccess::BOOKMARK);
 }
 
-void SAL_CALL
-SwXBookmark::attach(const uno::Reference< text::XTextRange > & xTextRange)
+void SAL_CALL SwXBookmark::attach( const uno::Reference< text::XTextRange > & xTextRange )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     attachToRange( xTextRange );
 }
 
-uno::Reference< text::XTextRange > SAL_CALL
-SwXBookmark::getAnchor() throw (uno::RuntimeException)
+uno::Reference< text::XTextRange > SAL_CALL SwXBookmark::getAnchor()
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -291,13 +289,13 @@ SwXBookmark::getAnchor() throw (uno::RuntimeException)
                 ? &m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos() : NULL);
 }
 
-void SAL_CALL SwXBookmark::dispose() throw (uno::RuntimeException)
+void SAL_CALL SwXBookmark::dispose()
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if (m_pImpl->m_pRegisteredBookmark)
     {
-        m_pImpl->m_pDoc->getIDocumentMarkAccess()->deleteMark(
-                m_pImpl->m_pRegisteredBookmark);
+        m_pImpl->m_pDoc->getIDocumentMarkAccess()->deleteMark( m_pImpl->m_pRegisteredBookmark );
     }
 }
 
@@ -352,7 +350,7 @@ throw (uno::RuntimeException)
     }
     IDocumentMarkAccess *const pMarkAccess =
         m_pImpl->m_pDoc->getIDocumentMarkAccess();
-    if(pMarkAccess->findMark(rName) != pMarkAccess->getMarksEnd())
+    if(pMarkAccess->findMark(rName) != pMarkAccess->getAllMarksEnd())
     {
         throw uno::RuntimeException();
     }

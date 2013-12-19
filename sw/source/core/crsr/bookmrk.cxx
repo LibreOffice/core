@@ -184,7 +184,6 @@ namespace sw { namespace mark
         if(nCount == SAL_MAX_INT32)
         {
             sal_Int32 nRandom;
-            ::rtl::OUStringBuffer sUniquePostfixBuffer;
             rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
             sUniquePostfix = ::rtl::OUStringBuffer(13).appendAscii("_").append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
             nCount = 0;

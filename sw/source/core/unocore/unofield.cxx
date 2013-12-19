@@ -90,8 +90,6 @@
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 #include <switerator.hxx>
-#include <bookmrk.hxx>
-#include <xmloff/odffields.hxx>
 
 
 using ::rtl::OUString;
@@ -1089,38 +1087,48 @@ sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& 
     return 0;
 }
 
-SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc) :
-    aLstnrCntnr( (XTextContent*)this),
-    pFmtFld(0),
-    m_pDoc(pDoc),
-    m_pTextObject(0),
-    m_bIsDescriptor(nServiceId != USHRT_MAX),
-    m_bCallUpdate(sal_False),
-    m_nServiceId(nServiceId),
-    m_pProps(new SwFieldProperties_Impl)
+SwXTextField::SwXTextField(
+    sal_uInt16 nServiceId,
+    SwDoc* pDoc )
+    : m_aLstnrCntnr( (XTextContent*)this)
+    , m_pFmtFld(0)
+    , m_pDoc(pDoc)
+    , m_pTextObject(0)
+    , m_bIsDescriptor(nServiceId != USHRT_MAX)
+    , m_bCallUpdate(sal_False)
+    , m_nServiceId(nServiceId)
+    , m_pProps( new SwFieldProperties_Impl() )
 {
     //Set visible as default!
-    if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId ||
-            SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM == nServiceId ||
-            SW_SERVICE_FIELDTYPE_DATABASE == nServiceId ||
-            SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId  )
+    if ( SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId
+         || SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM == nServiceId
+         || SW_SERVICE_FIELDTYPE_DATABASE == nServiceId
+         || SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId )
+    {
         m_pProps->bBool2 = sal_True;
-    else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
+    }
+    else if( SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId )
+    {
         m_pProps->bBool1 = sal_True;
-    if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
+    }
+    if ( SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId )
+    {
         m_pProps->nUSHORT2 = USHRT_MAX;
+    }
 
 }
 
-SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
-    aLstnrCntnr( (XTextContent*)this),
-    pFmtFld(&rFmt),
-    m_pDoc(pDc),
-    m_pTextObject(0),
-    m_bIsDescriptor(sal_False),
-    m_bCallUpdate(sal_False),
-    m_nServiceId( lcl_GetServiceForField( *pFmtFld->GetField() ) ),
-    m_pProps(0)
+SwXTextField::SwXTextField(
+    const SwFmtFld& rFmt,
+    SwDoc* pDc )
+    : m_aLstnrCntnr( (XTextContent*)this)
+    , m_pFmtFld(&rFmt)
+    , m_pDoc(pDc)
+    , m_pTextObject(0)
+    , m_bIsDescriptor(sal_False)
+    , m_bCallUpdate(sal_False)
+    , m_nServiceId( lcl_GetServiceForField( *m_pFmtFld->GetField() ) )
+    , m_pProps(0)
 {
     pDc->GetUnoCallBack()->Add(this);
 }
@@ -1171,7 +1179,7 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
     {
         if(!GetRegisteredIn())
             throw uno::RuntimeException();
-        pType = pFmtFld->GetField()->GetTyp();
+        pType = m_pFmtFld->GetField()->GetTyp();
     }
 
     SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
@@ -1219,7 +1227,6 @@ void SwXTextField::attachToRange(
     if(pDoc && (!m_pDoc || m_pDoc == pDoc))
     {
         SwUnoInternalPaM aPam(*pDoc);
-        //das muss jetzt sal_True liefern
         ::sw::XTextRangeToSwPaM(aPam, xTextRange);
         SwField* pFld = 0;
         switch(m_nServiceId)
@@ -1238,7 +1245,7 @@ void SwXTextField::attachToRange(
                     aDateTime.SetMin(m_pProps->pDateTime->Minutes);
                     aDateTime.SetSec(m_pProps->pDateTime->Seconds);
                 }
-                pFld = new SwPostItField(
+                SwPostItField* pPostItField = new SwPostItField(
                     (SwPostItFieldType*)pFldType,
                     m_pProps->sPar2, // content
                     m_pProps->sPar1, // author
@@ -1247,9 +1254,10 @@ void SwXTextField::attachToRange(
                     aDateTime );
                 if ( m_pTextObject )
                 {
-                    ((SwPostItField*)pFld)->SetTextObject( m_pTextObject->CreateText() );
-                    ((SwPostItField*)pFld)->SetPar2(m_pTextObject->GetText());
+                    pPostItField->SetTextObject( m_pTextObject->CreateText() );
+                    pPostItField->SetPar2(m_pTextObject->GetText());
                 }
+                pFld = pPostItField;
             }
             break;
 
@@ -1743,7 +1751,6 @@ void SwXTextField::attachToRange(
             SwFmtFld aFmt( *pFld );
 
             UnoActionContext aCont(pDoc);
-            SwTxtAttr* pTxtAttr = 0;
             if ( aPam.HasMark()
                  && m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION )
             {
@@ -1763,45 +1770,32 @@ void SwXTextField::attachToRange(
             if ( *aPam.GetPoint() != *aPam.GetMark()
                  && m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION )
             {
-                IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-                sw::mark::IFieldmark* pFieldmark =
-                    pMarksAccess->makeFieldBookmark(
-                        aPam,
-                        OUString(),
-                        ::rtl::OUString::createFromAscii( ODF_COMMENTRANGE ) );
-                ASSERT( pFieldmark != NULL, "<SwXTextField::attachToRange(..)> - <IFieldmark> instance for SW_SERVICE_FIELDTYPE_ANNOTATION not created!" );
-                if ( pFieldmark != NULL )
-                {
-                    SwPostItField* pPostItField = dynamic_cast<SwPostItField*>(aFmt.GetField());
-                    ASSERT( pPostItField != NULL, "<SwXTextField::attachToRange(..)> - missing <SwPostItField> instance for SW_SERVICE_FIELDTYPE_ANNOTATION!" );
-                    if ( pPostItField != NULL )
-                    {
-                        if ( pPostItField->GetName().Len() > 0 )
-                        {
-                            // The field has a name already, use it.
-                            pMarksAccess->renameMark(pFieldmark, pPostItField->GetName());
-                        }
-                        else
-                        {
-                            // The fieldmark always has a (generated) name.
-                            pPostItField->SetName( pFieldmark->GetName() );
-                        }
-                    }
-                }
-
-                // Make sure we always insert the field at the end
+                // Make sure we always insert the annotation at the end of the provided text range
                 SwPaM aEnd(*aPam.End(), *aPam.End());
                 pDoc->InsertPoolItem(aEnd, aFmt, nInsertFlags);
             }
             else
                 pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
-            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+            SwTxtAttr* pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
             // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
-            if(pTxtAttr)
+            if ( pTxtAttr != NULL )
             {
                 const SwFmtFld& rFld = pTxtAttr->GetFmtFld();
-                pFmtFld = &rFld;
+                m_pFmtFld = &rFld;
+
+                if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION
+                     && *aPam.GetPoint() != *aPam.GetMark() )
+                {
+                    // create annotation mark
+                    const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTxtAttr->GetFmtFld().GetField());
+                    ASSERT( pPostItField != NULL, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
+                    if ( pPostItField != NULL )
+                    {
+                        IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+                        pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
+                    }
+                }
             }
         }
         delete pFld;
@@ -1819,11 +1813,69 @@ void SwXTextField::attachToRange(
         throw lang::IllegalArgumentException();
 }
 
-void SwXTextField::attach(const uno::Reference< text::XTextRange > & xTextRange)
+void SwXTextField::attach( const uno::Reference< text::XTextRange > & xTextRange )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    attachToRange( xTextRange );
+
+    if ( m_bIsDescriptor )
+    {
+        attachToRange( xTextRange );
+    }
+    else if ( m_pFmtFld != NULL
+              && m_pDoc != NULL
+              && m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION )
+    {
+        SwUnoInternalPaM aIntPam( *m_pDoc );
+        if ( ::sw::XTextRangeToSwPaM( aIntPam, xTextRange ) )
+        {
+            // nothing to do, if the text range only covers the former annotation field
+            if ( aIntPam.Start()->nNode != aIntPam.End()->nNode
+                 || aIntPam.Start()->nContent.GetIndex() != aIntPam.End()->nContent.GetIndex()-1 )
+            {
+                UnoActionContext aCont( m_pDoc );
+                // insert copy of annotation at new text range
+                SwPostItField* pPostItField = dynamic_cast< SwPostItField* >(m_pFmtFld->GetField()->CopyField());
+                SwFmtFld aFmtFld( *pPostItField );
+                delete pPostItField;
+                SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
+                m_pDoc->InsertPoolItem( aEnd, aFmtFld, nsSetAttrMode::SETATTR_DEFAULT );
+                // delete former annotation
+                {
+                    const SwTxtFld* pTxtFld = m_pFmtFld->GetTxtFld();
+                    SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
+                    SwPaM aPam( rTxtNode, *pTxtFld->GetStart() );
+                    aPam.SetMark();
+                    aPam.Move();
+                    GetDoc()->DeleteAndJoin(aPam);
+                }
+                // keep inserted annotation
+                {
+                    SwTxtFld* pTxtAttr = aEnd.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
+                    if ( pTxtAttr != NULL )
+                    {
+                        m_pFmtFld = &pTxtAttr->GetFmtFld();
+
+                        if ( *aIntPam.GetPoint() != *aIntPam.GetMark() )
+                        {
+                            // create annotation mark
+                            const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTxtAttr->GetFmtFld().GetField());
+                            ASSERT( pPostItField != NULL, "<SwXTextField::attach(..)> - annotation field missing!" );
+                            if ( pPostItField != NULL )
+                            {
+                                IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc()->getIDocumentMarkAccess();
+                                pMarksAccess->makeAnnotationMark( aIntPam, pPostItField->GetName() );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+            throw lang::IllegalArgumentException();
+    }
+    else
+        throw lang::IllegalArgumentException();
 }
 
 uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::RuntimeException )
@@ -1833,7 +1885,7 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
     SwField* pField = (SwField*)GetField();
     if(pField)
     {
-        const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+        const SwTxtFld* pTxtFld = m_pFmtFld->GetTxtFld();
         if(!pTxtFld)
             throw uno::RuntimeException();
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
@@ -1854,7 +1906,7 @@ void SwXTextField::dispose(void) throw( uno::RuntimeException )
     if(pField)
     {
         UnoActionContext aContext(GetDoc());
-        const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+        const SwTxtFld* pTxtFld = m_pFmtFld->GetTxtFld();
         SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
         aPam.SetMark();
@@ -1874,12 +1926,12 @@ void SwXTextField::addEventListener(const uno::Reference< lang::XEventListener >
 {
     if(!GetRegisteredIn())
         throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    m_aLstnrCntnr.AddListener(aListener);
 }
 
 void SwXTextField::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
+    if(!GetRegisteredIn() || !m_aLstnrCntnr.RemoveListener(aListener))
         throw uno::RuntimeException();
 }
 
@@ -1941,7 +1993,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 
             if (NULL != pDoc)
             {
-                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+                const SwTxtFld* pTxtFld = m_pFmtFld->GetTxtFld();
                 if(!pTxtFld)
                     throw uno::RuntimeException();
                 SwPosition aPosition( pTxtFld->GetTxtNode() );
@@ -1953,16 +2005,16 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         pField->PutValue( rValue, pEntry->nWID );
 
     //#i100374# notify SwPostIt about new field content
-    if (RES_POSTITFLD== nWhich && pFmtFld)
+    if (RES_POSTITFLD== nWhich && m_pFmtFld)
     {
-        const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
+        const_cast<SwFmtFld*>(m_pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
     }
 
         //#114571# changes of the expanded string have to be notified
         //#to the SwTxtFld
-        if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
+        if(RES_DBFLD == nWhich && m_pFmtFld->GetTxtFld())
         {
-            pFmtFld->GetTxtFld()->ExpandTxtFld();
+            m_pFmtFld->GetTxtFld()->ExpandTxtFld();
         }
 
     //#i100374# changing a document field should set the modify flag
@@ -2124,7 +2176,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
 
                 // get text node for the text field
                 const SwFmtFld *pFldFmt = GetFldFmt();
-                const SwTxtFld* pTxtFld = pFldFmt ? pFmtFld->GetTxtFld() : 0;
+                const SwTxtFld* pTxtFld = pFldFmt ? pFldFmt->GetTxtFld() : 0;
                 if(!pTxtFld)
                     throw uno::RuntimeException();
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
@@ -2178,7 +2230,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                         m_pTextObject->acquire();
                     }
 
-                    uno::Reference < text::XText > xText( m_pTextObject  );
+                    uno::Reference < text::XText > xText( m_pTextObject );
                     aRet <<= xText;
                     break;
                 }
@@ -2322,7 +2374,7 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
         }
         // --> FME 2004-10-06 #116480#
         // Text formatting has to be triggered.
-        const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
+        const_cast<SwFmtFld*>(m_pFmtFld)->ModifyNotification( 0, 0 );
         // <--
     }
     else
@@ -2393,8 +2445,8 @@ sal_uInt16 SwXTextField::GetServiceId()
     if (GetRegisteredIn())
     {
         ((SwModify*)GetRegisteredIn())->Remove(this);
-        aLstnrCntnr.Disposing();
-        pFmtFld = 0;
+        m_aLstnrCntnr.Disposing();
+        m_pFmtFld = 0;
         m_pDoc = 0;
     }
 }
@@ -2417,7 +2469,7 @@ void SwXTextField::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
             Invalidate();
         break;
     case RES_FIELD_DELETED:
-        if( (void*)pFmtFld == ((SwPtrMsgPoolItem *)pOld)->pObject )
+        if( (void*)m_pFmtFld == ((SwPtrMsgPoolItem *)pOld)->pObject )
             Invalidate();
         break;
     }
@@ -2425,9 +2477,9 @@ void SwXTextField::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 const SwField*  SwXTextField::GetField() const
 {
-    if ( GetRegisteredIn() && pFmtFld )
+    if ( GetRegisteredIn() && m_pFmtFld )
     {
-        return  pFmtFld->GetField();
+        return m_pFmtFld->GetField();
     }
     return 0;
 }

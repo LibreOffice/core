@@ -1354,8 +1354,11 @@ void SwCompareData::ShowInsert( sal_uLong nStt, sal_uLong nEnd )
 
 }
 
-void SwCompareData::ShowDelete( const CompareData& rData, sal_uLong nStt,
-                                sal_uLong nEnd, sal_uLong nInsPos )
+void SwCompareData::ShowDelete(
+    const CompareData& rData,
+    sal_uLong nStt,
+    sal_uLong nEnd,
+    sal_uLong nInsPos )
 {
     SwNodeRange aRg(
         ((SwCompareLine*)rData.GetLine( nStt ))->GetNode(), 0,

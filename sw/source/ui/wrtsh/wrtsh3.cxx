@@ -147,7 +147,7 @@ void SwWrtShell::DrawSelChanged( )
 sal_Bool SwWrtShell::GotoMark( const ::rtl::OUString& rName )
 {
     IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
-    if(ppMark == getIDocumentMarkAccess()->getMarksEnd()) return false;
+    if(ppMark == getIDocumentMarkAccess()->getAllMarksEnd()) return false;
     return MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
 }
 

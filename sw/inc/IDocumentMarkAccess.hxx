@@ -50,6 +50,7 @@ class IDocumentMarkAccess
             BOOKMARK,
             CROSSREF_HEADING_BOOKMARK,
             CROSSREF_NUMITEM_BOOKMARK,
+            ANNOTATIONMARK,
             TEXT_FIELDMARK,
             CHECKBOX_FIELDMARK,
             NAVIGATOR_REMINDER
@@ -85,6 +86,10 @@ class IDocumentMarkAccess
         virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
             const rtl::OUString& rName,
             const rtl::OUString& rType) = 0;
+
+        virtual sw::mark::IMark* makeAnnotationMark(
+            const SwPaM& rPaM,
+            const ::rtl::OUString& rName ) = 0;
 
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
@@ -159,6 +164,9 @@ class IDocumentMarkAccess
             const xub_StrLen nOffset) =0;
 
         /** Deletes marks in a range
+
+            Note: navigator reminders are excluded
+
         */
         virtual void deleteMarks(
             const SwNodeIndex& rStt,
@@ -187,15 +195,17 @@ class IDocumentMarkAccess
 
         /** returns a STL-like random access iterator to the begin of the sequence of marks.
         */
-        virtual const_iterator_t getMarksBegin() const =0;
+        virtual const_iterator_t getAllMarksBegin() const =0;
 
         /** returns a STL-like random access iterator to the end of the sequence of marks.
         */
-        virtual const_iterator_t getMarksEnd() const =0;
+        virtual const_iterator_t getAllMarksEnd() const =0;
 
         /** returns the number of marks.
+
+            Note: annotation marks are excluded
         */
-        virtual sal_Int32 getMarksCount() const =0;
+        virtual sal_Int32 getAllMarksCount() const =0;
 
         /** Finds a mark by name.
 
@@ -203,12 +213,12 @@ class IDocumentMarkAccess
             [in] the name of the mark to find.
 
             @returns
-            an iterator pointing to the mark, or pointing to getMarksEnd() if nothing was found.
+            an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
         */
         virtual const_iterator_t findMark(const ::rtl::OUString& rMark) const =0;
 
 
-        // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK)
+        // interface IBookmarks (BOOKMARK, CROSSREF_NUMITEM_BOOKMARK, CROSSREF_HEADING_BOOKMARK )
 
         /** returns a STL-like random access iterator to the begin of the sequence the IBookmarks.
         */
@@ -237,6 +247,17 @@ class IDocumentMarkAccess
         virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& pos) const =0;
+
+        // Marks exclusive annotation marks
+        virtual const_iterator_t getCommonMarksBegin() const = 0;
+        virtual const_iterator_t getCommonMarksEnd() const = 0;
+        virtual sal_Int32 getCommonMarksCount() const = 0;
+
+        // Annotation Marks
+        virtual const_iterator_t getAnnotationMarksBegin() const = 0;
+        virtual const_iterator_t getAnnotationMarksEnd() const = 0;
+        virtual sal_Int32 getAnnotationMarksCount() const = 0;
+        virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const = 0;
 
         // Returns the MarkType used to create the mark
         static MarkType SAL_DLLPUBLIC_EXPORT GetType(const ::sw::mark::IMark& rMark);

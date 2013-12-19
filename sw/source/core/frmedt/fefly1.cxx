@@ -1483,9 +1483,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             // search for a sequence field:
             const SfxPoolItem* pItem;
             for( sal_uInt16 n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
-                if( RES_TXTATR_FIELD == ( pItem =
-                            &(*pHts)[ n ]->GetAttr())->Which() &&
-                    TYP_SEQFLD == ((SwFmtFld*)pItem)->GetField()->GetTypeId() )
+                if( RES_TXTATR_FIELD == ( pItem = &(*pHts)[ n ]->GetAttr())->Which()
+                    && TYP_SEQFLD == ((SwFmtFld*)pItem)->GetField()->GetTypeId() )
                 {
                     // sequence field found
                     SwFlyFrm* pChgFly = (SwFlyFrm*)pAnchor->GetUpper();

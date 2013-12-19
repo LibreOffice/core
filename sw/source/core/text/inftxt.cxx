@@ -38,7 +38,6 @@
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <xmloff/odffields.hxx>
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
@@ -47,9 +46,6 @@
 #include <editeng/forbiddenruleitem.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
-#include <fmtfld.hxx>
-#include <fldbas.hxx>
-#include <PostItMgr.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -1203,7 +1199,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
         if(aIntersect.HasArea())
         {
             SwTxtNode *pNd = pFrm->GetTxtNode();
-            const ::sw::mark::IFieldmark* pFieldmark = NULL;
+            const ::sw::mark::IMark* pFieldmark = NULL;
             if(pNd)
             {
                 const SwDoc *doc=pNd->GetDoc();
@@ -1229,26 +1225,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
                 pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-                bool bFilled = false;
-                // If this is a comment range, need to look up the color of the comment author.
-                if ( pFieldmark->GetFieldname().equalsAscii( ODF_COMMENTRANGE ) )
-                {
-                    // Search for the position of the postit field
-                    const sal_Unicode fld[] = { CH_TXTATR_INWORD, 0 };
-                    xub_StrLen nEndIdx = GetTxt().SearchChar(fld, GetIdx());
-                    if (nEndIdx != STRING_NOTFOUND)
-                    {
-                        SwTxtAttr* pTxtAttr = pNd->GetTxtAttrForCharAt(nEndIdx, RES_TXTATR_FIELD);
-                        const SwFmtFld& rPostItField = pTxtAttr->GetFmtFld();
-                        // Look up the author name
-                        const rtl::OUString& rAuthor = rPostItField.GetField()->GetPar1();
-                        sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
-                        pOutDev->SetFillColor( SwPostItMgr::GetColorLight(nIndex) );
-                        bFilled = true;
-                    }
-                }
-                if (!bFilled)
-                    pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+                pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();

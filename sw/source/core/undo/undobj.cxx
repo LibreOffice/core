@@ -766,102 +766,111 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     if( nsDelCntntType::DELCNT_BKM & nDelCntntType )
     {
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        if( pMarkAccess->getMarksCount() )
+        if( pMarkAccess->getAllMarksCount() )
         {
 
-            for( sal_uInt16 n = 0; n < pMarkAccess->getMarksCount(); ++n )
+            for( sal_uInt16 n = 0; n < pMarkAccess->getAllMarksCount(); ++n )
             {
-                // --> OD 2007-10-17 #i81002#
                 bool bSavePos = false;
                 bool bSaveOtherPos = false;
-                const ::sw::mark::IMark* pBkmk = (pMarkAccess->getMarksBegin() + n)->get();
+                const ::sw::mark::IMark* pBkmk = (pMarkAccess->getAllMarksBegin() + n)->get();
+
                 if( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                 {
-                    if( pStt->nNode <= pBkmk->GetMarkPos().nNode &&
-                        pBkmk->GetMarkPos().nNode < pEnd->nNode )
+                    if ( pStt->nNode <= pBkmk->GetMarkPos().nNode
+                         && pBkmk->GetMarkPos().nNode < pEnd->nNode )
+                    {
                         bSavePos = true;
-                    if( pBkmk->IsExpanded() &&
-                        pStt->nNode <= pBkmk->GetOtherMarkPos().nNode &&
-                        pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                    }
+                    if ( pBkmk->IsExpanded()
+                         && pStt->nNode <= pBkmk->GetOtherMarkPos().nNode
+                         && pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                    {
                         bSaveOtherPos = true;
+                    }
                 }
                 else
                 {
-                    // --> OD 2009-08-06 #i92125#
-                    bool bKeepCrossRefBkmk( false );
+                    // keep cross-reference bookmarks, if content inside one paragraph is deleted.
+                    if ( rMark.nNode == rPoint.nNode
+                         && ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK
+                              || IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
                     {
-                        if ( rMark.nNode == rPoint.nNode &&
-                             ( IDocumentMarkAccess::GetType(*pBkmk) ==
-                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK ||
-                               IDocumentMarkAccess::GetType(*pBkmk) ==
-                                IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
+                        continue;
+                    }
+
+                    bool bMaybe = false;
+                    if ( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
+                    {
+                        if ( pBkmk->GetMarkPos() == *pEnd
+                             || ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
+                            bMaybe = true;
+                        else
+                            bSavePos = true;
+                    }
+                    if( pBkmk->IsExpanded() &&
+                        *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
+                    {
+                        if ( bSavePos || bSaveOtherPos
+                             || ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
                         {
-                            bKeepCrossRefBkmk = true;
+                            if( bMaybe )
+                                bSavePos = true;
+                            bSaveOtherPos = true;
                         }
                     }
-                    if ( !bKeepCrossRefBkmk )
+
+                    if ( !bSavePos && !bSaveOtherPos
+                         && dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk) )
                     {
-                        bool bMaybe = false;
-                        if ( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
+                        // certain special handling for cross-reference bookmarks
+                        const bool bDifferentTxtNodesAtMarkAndPoint =
+                            rMark.nNode != rPoint.nNode
+                            && rMark.nNode.GetNode().GetTxtNode()
+                            && rPoint.nNode.GetNode().GetTxtNode();
+                        if ( bDifferentTxtNodesAtMarkAndPoint )
                         {
-                            if( pBkmk->GetMarkPos() == *pEnd ||
-                                ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
-                                bMaybe = true;
-                            else
-                                bSavePos = true;
-                        }
-                        if( pBkmk->IsExpanded() &&
-                            *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
-                        {
-                            if( bSavePos || bSaveOtherPos ||
-                                ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
+                            // delete cross-reference bookmark at <pStt>, if only part of
+                            // <pEnd> text node content is deleted.
+                            if( pStt->nNode == pBkmk->GetMarkPos().nNode
+                                && pEnd->nContent.GetIndex() != pEnd->nNode.GetNode().GetTxtNode()->Len() )
                             {
-                                if( bMaybe )
-                                    bSavePos = true;
-                                bSaveOtherPos = true;
+                                bSavePos = true;
+                                bSaveOtherPos = false; // cross-reference bookmarks are not expanded
+                            }
+                            // delete cross-reference bookmark at <pEnd>, if only part of
+                            // <pStt> text node content is deleted.
+                            else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
+                                pStt->nContent.GetIndex() != 0 )
+                            {
+                                bSavePos = true;
+                                bSaveOtherPos = false; // cross-reference bookmarks are not expanded
                             }
                         }
                     }
-                    // <--
-
-                    // --> OD 2007-10-17 #i81002#
-                    const bool bDifferentTxtNodesAtMarkAndPoint(
-                                        rMark.nNode != rPoint.nNode &&
-                                        rMark.nNode.GetNode().GetTxtNode() &&
-                                        rPoint.nNode.GetNode().GetTxtNode() );
-                    // <--
-                    if( !bSavePos && !bSaveOtherPos && bDifferentTxtNodesAtMarkAndPoint &&
-                        dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk))
+                    else if ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::ANNOTATIONMARK )
                     {
-                        // delete cross-reference bookmark at <pStt>, if only part of
-                        // <pEnd> text node content is deleted.
-                        if( pStt->nNode == pBkmk->GetMarkPos().nNode &&
-                            pEnd->nContent.GetIndex() !=
-                                pEnd->nNode.GetNode().GetTxtNode()->Len() )
+                        // delete annotation marks, if its end position is covered by the deletion
+                        const SwPosition& rAnnotationEndPos = pBkmk->GetMarkEnd();
+                        if ( *pStt < rAnnotationEndPos && rAnnotationEndPos <= *pEnd )
                         {
                             bSavePos = true;
-                            bSaveOtherPos = false;
-                        }
-                        // delete cross-reference bookmark at <pEnd>, if only part of
-                        // <pStt> text node content is deleted.
-                        else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
-                            pStt->nContent.GetIndex() != 0 )
-                        {
-                            bSavePos = true;
-                            bSaveOtherPos = false;
+                            bSaveOtherPos = true;
                         }
                     }
                 }
-                if( bSavePos || bSaveOtherPos )
+
+                if ( bSavePos || bSaveOtherPos )
                 {
                     if( !pHistory )
                         pHistory = new SwHistory;
 
                     pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
-                    if(bSavePos &&
-                        (bSaveOtherPos || !pBkmk->IsExpanded()))
+                    if ( bSavePos
+                         && ( bSaveOtherPos
+                              || !pBkmk->IsExpanded() ) )
                     {
-                        pMarkAccess->deleteMark(pMarkAccess->getMarksBegin()+n);
+                        pMarkAccess->deleteMark(pMarkAccess->getAllMarksBegin()+n);
                         n--;
                     }
                 }

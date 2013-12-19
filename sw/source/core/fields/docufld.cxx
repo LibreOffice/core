@@ -1764,7 +1764,8 @@ const String& SwHiddenParaField::GetPar1() const
  --------------------------------------------------------------------*/
 
 SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
-    : SwFieldType( RES_POSTITFLD ),mpDoc(pDoc)
+    : SwFieldType( RES_POSTITFLD )
+    , mpDoc(pDoc)
 {}
 /* ---------------------------------------------------------------------------
 
@@ -1790,15 +1791,15 @@ SwPostItField::SwPostItField(
     , msAuthorInitials( rAuthorInitials )
     , msName( rName )
     , maDateTime( rDateTime )
-    , mpText(0)
-    , m_pTextObject(0)
+    , mpText( NULL )
+    , m_pTextObject( NULL )
 {
 }
 
 
 SwPostItField::~SwPostItField()
 {
-    if ( m_pTextObject )
+    if ( m_pTextObject != NULL )
     {
         m_pTextObject->DisposeEditSource();
         m_pTextObject->release();
@@ -1834,6 +1835,8 @@ SwField* SwPostItField::Copy() const
     {
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
     }
+
+    // Note: member <m_pTextObject> not copied.
 
     return pRet;
 }

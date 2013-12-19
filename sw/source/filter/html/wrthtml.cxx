@@ -878,7 +878,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 
     SwTxtNode *pTxtNd = 0;
     while( nIdx<=nEndIdx &&
-            0==(pTxtNd=pDoc->GetNodes()[nIdx]->GetTxtNode()) )
+        0==(pTxtNd=pDoc->GetNodes()[nIdx]->GetTxtNode()) )
         nIdx++;
 
     ASSERT( pTxtNd, "Kein Text-Node gefunden" );
@@ -894,7 +894,9 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
         if( !pHt->End() )
         {
             xub_StrLen nPos = *pHt->GetStart();
-            if( nPos-nOldPos > 1 || RES_TXTATR_FIELD != pHt->Which() )
+            if( nPos-nOldPos > 1
+                || ( pHt->Which() != RES_TXTATR_FIELD
+                     && pHt->Which() != RES_TXTATR_ANNOTATION ) )
                 break;
 
             const sal_uInt16 nFldWhich =
@@ -1061,24 +1063,27 @@ void SwHTMLWriter::OutBookmarks()
     const ::sw::mark::IMark* pBookmark = NULL;
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     if(nBkmkTabPos != -1)
-        pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
+        pBookmark = (pMarkAccess->getAllMarksBegin() + nBkmkTabPos)->get();
     // Ausgabe aller Bookmarks in diesem Absatz. Die Content-Position
     // wird vorerst nicht beruecksichtigt!
     sal_uInt32 nNode = pCurPam->GetPoint()->nNode.GetIndex();
-    while( nBkmkTabPos != -1 &&
-        pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
+    while( nBkmkTabPos != -1
+           && pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
     {
         // Der Bereich derBookmark wird erstam ignoriert, da er von uns
         // auch nicht eingelesen wird.
 
         // erst die SWG spezifischen Daten:
-        if(dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && pBookmark->GetName().getLength() )
+        if ( dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) != NULL
+             && pBookmark->GetName().getLength() )
+        {
             OutAnchor( pBookmark->GetName() );
+        }
 
-        if( ++nBkmkTabPos >= pMarkAccess->getMarksCount() )
+        if( ++nBkmkTabPos >= pMarkAccess->getAllMarksCount() )
             nBkmkTabPos = -1;
         else
-            pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
+            pBookmark = (pMarkAccess->getAllMarksBegin() + nBkmkTabPos)->get();
     }
 
     sal_uInt16 nPos;

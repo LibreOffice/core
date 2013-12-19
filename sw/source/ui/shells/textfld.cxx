@@ -367,15 +367,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             if( !(sAuthor = aUserOpt.GetID()).Len() )
                                 sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
 
-                        // Save the current selection, it will be required later for fieldmark insertion.
-                        const SwPaM& rCurrPaM = rSh.GetCurrentShellCursor();
-                        const SwPaM aSavedPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
-
                         if( rSh.HasSelection() )
                         {
                             rSh.NormalizePam( sal_False );
                             rSh.KillPams();
-                            rSh.ClearMark();
                         }
 
                         // #120513# Inserting a comment into an autocompletion crashes
@@ -383,7 +378,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         GetView().GetEditWin().StopQuickHelp();
 
                         SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
-                        aFldMgr.InsertFld( aData, &aSavedPaM );
+                        aFldMgr.InsertFld( aData );
 
                         rSh.Push();
                         rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);

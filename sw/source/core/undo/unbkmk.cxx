@@ -57,10 +57,9 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    for (IDocumentMarkAccess::const_iterator_t ppBkmk =
-                pMarkAccess->getMarksBegin();
-            ppBkmk != pMarkAccess->getMarksEnd();
-            ++ppBkmk)
+    for ( IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
+          ppBkmk != pMarkAccess->getAllMarksEnd();
+          ++ppBkmk )
     {
         if ( m_pHistoryBookmark->IsEqualBookmark( **ppBkmk ) )
         {

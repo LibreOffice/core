@@ -500,12 +500,16 @@ public:
 class SwPostItFieldType : public SwFieldType
 {
 private:
-    SwDoc*  mpDoc;
+    SwDoc* mpDoc;
 public:
     SwPostItFieldType(SwDoc* pDoc);
 
-    virtual SwFieldType*    Copy() const;
-    SwDoc* GetDoc()         {return mpDoc;};
+    virtual SwFieldType* Copy() const;
+
+    SwDoc* GetDoc() const
+    {
+        return mpDoc;
+    };
 };
 
 
@@ -544,13 +548,13 @@ public:
     }
 
     // Author
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const String& GetPar1() const;
+    virtual void SetPar1(const String& rStr);
 
     // Text
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
-    inline const String&    GetContent() const
+    virtual String GetPar2() const;
+    virtual void SetPar2(const String& rStr);
+    inline const String& GetContent() const
     {
         return msCommentContent;
     }
@@ -559,7 +563,7 @@ public:
     void SetName(const String& rStr);
     const String& GetName() const;
 
-    const OutlinerParaObject*   GetTextObject() const;
+    const OutlinerParaObject* GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
 
     sal_uInt32 GetNumberOfParagraphs() const;

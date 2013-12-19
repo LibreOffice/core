@@ -1650,12 +1650,16 @@ String SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             for( sal_uInt16 i = 0; i < nSize; ++i )
             {
                 const SwTxtAttr* pHt = (*pSwpHints)[i];
-                if (pHt->Which() == RES_TXTATR_FIELD && (nFldIndex-- == 0))
+                if ( ( pHt->Which() == RES_TXTATR_FIELD
+                       || pHt->Which() == RES_TXTATR_ANNOTATION
+                       || pHt->Which() == RES_TXTATR_INPUTFIELD )
+                     && (nFldIndex-- == 0))
                 {
                     pTxtFld = (SwTxtFld *)pHt;
                     break;
                 }
-                else if (pHt->Which() == RES_TXTATR_REFMARK && (nFldIndex-- == 0))
+                else if ( pHt->Which() == RES_TXTATR_REFMARK
+                          && (nFldIndex-- == 0) )
                     strTypeName = String(OUString(RTL_CONSTASCII_USTRINGPARAM("set reference")));
             }
         }

@@ -148,11 +148,13 @@ bool SwFltStackEntry::IsAbleMakeRegion()
          && ( (0 != nPtCntnt)
               || ( pCntntNode
                    && ( 0 != pCntntNode->Len() ) ) )
-        && ( RES_TXTATR_FIELD != pAttr->Which() && RES_TXTATR_INPUTFIELD != pAttr->Which() )
-        && !( bIsParaEnd
-              && pCntntNode
-              && pCntntNode->IsTxtNode()
-              && 0 != pCntntNode->Len() ) )
+         && ( RES_TXTATR_FIELD != pAttr->Which()
+              && RES_TXTATR_ANNOTATION != pAttr->Which()
+              && RES_TXTATR_INPUTFIELD != pAttr->Which() )
+         && !( bIsParaEnd
+               && pCntntNode
+               && pCntntNode->IsTxtNode()
+               && 0 != pCntntNode->Len() ) )
     {
         return false;
     }
@@ -509,9 +511,12 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_FLTR_STYLESHEET:
         break;
+
     case RES_TXTATR_FIELD:
+    case RES_TXTATR_ANNOTATION:
     case RES_TXTATR_INPUTFIELD:
         break;
+
     case RES_TXTATR_TOXMARK:
         break;
 

@@ -1097,27 +1097,30 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 SetCompletePaint();
             }
             break;
+
         case RES_TXTATR_FIELD:
-        {
-            nPos = *((SwFmtFld*)pNew)->GetTxtFld()->GetStart();
-            if( IsIdxInside( nPos, 1 ) )
+        case RES_TXTATR_ANNOTATION:
             {
-                if( pNew == pOld )
+                nPos = *((SwFmtFld*)pNew)->GetTxtFld()->GetStart();
+                if( IsIdxInside( nPos, 1 ) )
                 {
-                    // Nur repainten
-                    // opt: invalidate aufs Window ?
-                    InvalidatePage();
-                    SetCompletePaint();
+                    if( pNew == pOld )
+                    {
+                        // Nur repainten
+                        // opt: invalidate aufs Window ?
+                        InvalidatePage();
+                        SetCompletePaint();
+                    }
+                    else
+                        _InvalidateRange( SwCharRange( nPos, 1 ) );
                 }
-                else
-                    _InvalidateRange( SwCharRange( nPos, 1 ) );
+                bSetFldsDirty = sal_True;
+                // ST2
+                if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
+                    SET_WRONG( nPos, nPos + 1, false )
             }
-            bSetFldsDirty = sal_True;
-            // ST2
-            if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
-                SET_WRONG( nPos, nPos + 1, false )
-        }
-        break;
+            break;
+
         case RES_TXTATR_FTN :
         {
             nPos = *((SwFmtFtn*)pNew)->GetTxtFtn()->GetStart();
@@ -1131,12 +1134,11 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             InvalidateLineNum();
 
             SwAttrSet& rNewSet = *((SwAttrSetChg*)pNew)->GetChgSet();
-            const SfxPoolItem* pItem;
+            const SfxPoolItem* pItem = 0;
             int nClear = 0;
             MSHORT nCount = rNewSet.Count();
 
-            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FTN,
-                sal_False, &pItem ))
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FTN, sal_False, &pItem ))
             {
                 nPos = *((SwFmtFtn*)pItem)->GetTxtFtn()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
@@ -1145,18 +1147,15 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 --nCount;
             }
 
-            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FIELD,
-                sal_False, &pItem ))
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FIELD, sal_False, &pItem ))
             {
                 nPos = *((SwFmtFld*)pItem)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                 {
-                    const SfxPoolItem& rOldItem = ((SwAttrSetChg*)pOld)->
-                                        GetChgSet()->Get( RES_TXTATR_FIELD );
+                    const SfxPoolItem& rOldItem =
+                        ((SwAttrSetChg*)pOld)->GetChgSet()->Get( RES_TXTATR_FIELD );
                     if( pItem == &rOldItem )
                     {
-                        // Nur repainten
-                        // opt: invalidate aufs Window ?
                         InvalidatePage();
                         SetCompletePaint();
                     }

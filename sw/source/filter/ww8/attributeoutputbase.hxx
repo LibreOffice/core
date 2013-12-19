@@ -443,7 +443,7 @@ protected:
     /// Sfx item RES_TXTATR_CHARFMT
     virtual void TextCharFormat( const SwFmtCharFmt& ) = 0;
 
-    /// Sfx item RES_TXTATR_FIELD and RES_TXTATR_INPUTFIELD
+    /// Sfx item RES_TXTATR_FIELD, RES_TXTATR_ANNOTATION and RES_TXTATR_INPUTFIELD
     void TextField( const SwFmtFld& );
 
     /// Sfx item RES_TXTATR_FLYCNT

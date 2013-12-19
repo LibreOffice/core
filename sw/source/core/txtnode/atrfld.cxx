@@ -27,6 +27,7 @@
 #include "fldbas.hxx"          // fuer FieldType
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
+#include <txtannotationfld.hxx>
 #include <docufld.hxx>
 #include <doc.hxx>
 
@@ -68,11 +69,16 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
     , mpField( rFld.CopyField() )
     , mpTxtFld( NULL )
 {
-    // input field in-place editing
     if ( GetField()->GetTyp()->Which() == RES_INPUTFLD )
     {
+        // input field in-place editing
         SetWhich( RES_TXTATR_INPUTFIELD );
         dynamic_cast<SwInputField*>(GetField())->SetFmtFld( *this );
+    }
+    else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
+    {
+        // text annotation field
+        SetWhich( RES_TXTATR_ANNOTATION );
     }
 }
 
@@ -91,11 +97,16 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     {
         rAttr.GetField()->GetTyp()->Add(this);
         mpField = rAttr.GetField()->CopyField();
-        // input field in-place editing
         if ( GetField()->GetTyp()->Which() == RES_INPUTFLD )
         {
+            // input field in-place editing
             SetWhich( RES_TXTATR_INPUTFIELD );
             dynamic_cast<SwInputField*>(GetField())->SetFmtFld( *this );
+        }
+        else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
+        {
+            // text annotation field
+            SetWhich( RES_TXTATR_ANNOTATION );
         }
     }
 }
@@ -518,3 +529,47 @@ void SwTxtInputFld::UpdateTextNodeContent( const String& rNewContent )
     SwIndex aIdx( &GetTxtNode(), nIdx );
     GetTxtNode().ReplaceText( aIdx, nDelLen, rNewContent );
 }
+
+
+
+
+// text annotation field
+SwTxtAnnotationFld::SwTxtAnnotationFld(
+    SwFmtFld & rAttr,
+    xub_StrLen const nStart )
+    : SwTxtFld( rAttr, nStart )
+{
+}
+
+SwTxtAnnotationFld::~SwTxtAnnotationFld()
+{
+}
+
+
+::sw::mark::IMark* SwTxtAnnotationFld::GetAnnotationMark(
+    SwDoc* pDoc ) const
+{
+    const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(GetFmtFld().GetField());
+    ASSERT( pPostItField != NULL, "<SwTxtAnnotationFld::GetAnnotationMark()> - field missing" );
+    if ( pPostItField == NULL )
+    {
+        return NULL;
+    }
+
+    if ( pDoc == NULL )
+    {
+        pDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
+    }
+    ASSERT( pDoc != NULL, "<SwTxtAnnotationFld::GetAnnotationMark()> - missing document" );
+    if ( pDoc == NULL )
+    {
+        return NULL;
+    }
+
+    IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess::const_iterator_t pMark = pMarksAccess->findAnnotationMark( pPostItField->GetName() );
+    return pMark != pMarksAccess->getAnnotationMarksEnd()
+           ? pMark->get()
+           : NULL;
+}
+

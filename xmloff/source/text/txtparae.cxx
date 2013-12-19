@@ -110,7 +110,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <xmloff/odffields.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -2222,8 +2221,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
     sal_Bool bPrvChrIsSpc )
 {
     static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
+    static OUString sAnnotation(RTL_CONSTASCII_USTRINGPARAM("Annotation"));
+    static OUString sAnnotationEnd(RTL_CONSTASCII_USTRINGPARAM("AnnotationEnd"));
+
     sal_Bool bPrevCharIsSpace = bPrvChrIsSpc;
-    bool bAnnotationStarted = false;
 
     while( rTextEnum->hasMoreElements() )
     {
@@ -2242,15 +2243,23 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if( sType.equals(sTextField))
             {
-                if ( bAnnotationStarted )
+                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
+                bPrevCharIsSpace = false;
+            }
+            else if ( sType.equals( sAnnotation ) )
+            {
+                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
+                bPrevCharIsSpace = false;
+            }
+            else if ( sType.equals( sAnnotationEnd ) )
+            {
+                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                const OUString& rName = xBookmark->getName();
+                if ( rName.getLength() > 0 )
                 {
-                    bAnnotationStarted = false;
+                    GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
                 }
-                else
-                {
-                    exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                    bPrevCharIsSpace = false;
-                }
+                SvXMLElementExport aElem( GetExport(), !bAutoStyles, XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, sal_False, sal_False );
             }
             else if( sType.equals( sFrame ) )
             {
@@ -2303,52 +2312,29 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldStart))
             {
+                Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xBookmark.is())
+                {
+                    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                }
+
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if ( xFormField.is()
-                     && xFormField->getFieldType().equalsAscii( ODF_COMMENTRANGE ) )
+                if (xFormField.is())
                 {
-                    exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                    bPrevCharIsSpace = false;
-                    bAnnotationStarted = true;
+                    GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                 }
-                else
+
+                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+                if (xFormField.is())
                 {
-                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    if (xBookmark.is())
-                    {
-                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
-                    }
-
-                    if (xFormField.is())
-                    {
-                        GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
-                    }
-
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
-                    if (xFormField.is())
-                    {
-                        FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
-                    }
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
+                    FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
                 }
+                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, sal_False);
             }
             else if (sType.equals(sTextFieldEnd))
             {
-                if (bAnnotationStarted)
-                {
-                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    const OUString& rName = xBookmark->getName();
-                    if ( rName.getLength() > 0 )
-                    {
-                        GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
-                    }
-                    SvXMLElementExport aElem( GetExport(), !bAutoStyles, XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, sal_False, sal_False );
-                }
-                else
-                {
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
-                }
+                GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
+                GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
             }
             else if (sType.equals(sTextFieldStartEnd))
             {

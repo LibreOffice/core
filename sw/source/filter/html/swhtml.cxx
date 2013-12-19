@@ -2754,7 +2754,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         const String sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
-                        if( ppBkmk != pMarkAccess->getMarksEnd() &&
+                        if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
                             ppBkmk->get()->GetMarkStart() == *pAttrPam->GetPoint() )
                             break; // do not generate duplicates on this position
                         pAttrPam->DeleteMark();
@@ -2772,6 +2772,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     }
                     break;
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_INPUTFIELD:
                     {
                         sal_uInt16 nFldWhich =

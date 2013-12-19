@@ -148,6 +148,9 @@ DomainMapper_Impl::DomainMapper_Impl(
     m_bParaChanged( false ),
     m_bIsLastParaInSection( false ),
     m_bIsInComments( false )
+    , m_xAnnotationField()
+    , m_nAnnotationId( -1 )
+    , m_aAnnotationPositions()
 {
     appendTableManager( );
     GetBodyText();
@@ -1280,30 +1283,33 @@ void DomainMapper_Impl::PopAnnotation()
     RemoveLastParagraph();
     m_aTextAppendStack.pop();
 
-    // See if the annotation will be a single position or a range.
-    if ( !m_aAnnotationPosition.m_xStart.is()
-         || !m_aAnnotationPosition.m_xEnd.is() )
+    if ( m_nAnnotationId != -1 )
     {
-        uno::Sequence< beans::PropertyValue > aEmptyProperties;
-        appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
-    }
-    else
-    {
-        // Create a range that points to the annotation start/end.
-        uno::Reference<text::XText> xText = m_aAnnotationPosition.m_xStart->getText();
-        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(m_aAnnotationPosition.m_xStart);
-        xCursor->gotoRange(m_aAnnotationPosition.m_xEnd, true);
-        uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY_THROW);
+        // See if the annotation will be a single position or a range.
+        AnnotationPosition& aAnnotationPosition = m_aAnnotationPositions[ m_nAnnotationId ];
+        if ( !aAnnotationPosition.m_xStart.is()
+             || !aAnnotationPosition.m_xEnd.is() )
+        {
+            uno::Sequence< beans::PropertyValue > aEmptyProperties;
+            appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
+        }
+        else
+        {
+            // Create a range that points to the annotation start/end.
+            uno::Reference<text::XText> xText = aAnnotationPosition.m_xStart->getText();
+            uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange( aAnnotationPosition.m_xStart );
+            xCursor->gotoRange( aAnnotationPosition.m_xEnd, true );
+            uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY_THROW);
 
-        // Attach the annotation to the range.
-        uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
-        xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
+            // Attach the annotation to the range.
+            uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+            xTextAppend->insertTextContent(xTextRange, uno::Reference<text::XTextContent>(m_xAnnotationField, uno::UNO_QUERY_THROW), !xCursor->isCollapsed());
+        }
+        m_aAnnotationPositions.erase( m_nAnnotationId );
     }
 
-    m_aAnnotationPosition.m_xStart.clear();
-    m_aAnnotationPosition.m_xEnd.clear();
     m_xAnnotationField.clear();
-
+    m_nAnnotationId = -1;
 }
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
@@ -2913,7 +2919,9 @@ void DomainMapper_Impl::handleToc
     pContext->SetTOC( xTOC );
 }
 
-void DomainMapper_Impl::AddAnnotationPosition(const bool bStart)
+void DomainMapper_Impl::AddAnnotationPosition(
+    const bool bStart,
+    const sal_Int32 nAnnotationId )
 {
     if (m_aTextAppendStack.empty())
         return;
@@ -2928,14 +2936,16 @@ void DomainMapper_Impl::AddAnnotationPosition(const bool bStart)
     }
 
     // And save it, to be used by PopAnnotation() later.
-    if (bStart)
+    AnnotationPosition& aAnnotationPosition = m_aAnnotationPositions[ nAnnotationId ];
+    if ( bStart )
     {
-        m_aAnnotationPosition.m_xStart = xCurrent;
+        aAnnotationPosition.m_xStart = xCurrent;
     }
     else
     {
-        m_aAnnotationPosition.m_xEnd = xCurrent;
+        aAnnotationPosition.m_xEnd = xCurrent;
     }
+    m_aAnnotationPositions[ nAnnotationId ] = aAnnotationPosition;
 }
 
 /*-- 29.01.2007 11:33:16---------------------------------------------------
@@ -3811,9 +3821,16 @@ void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_nId = sId;
+    if (m_xAnnotationField.is())
+    {
+        m_nAnnotationId = sId;
+    }
+    else
+    {
+        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+        if ( pCurrent.get(  ) )
+            pCurrent->m_nId = sId;
+    }
 }
 
 void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )

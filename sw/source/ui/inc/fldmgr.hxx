@@ -138,9 +138,7 @@ public:
                         {   pWrtShell = pShell;     }
 
      // insert field using TypeID (TYP_ ...)
-    sal_Bool InsertFld(
-        const SwInsertFld_Data& rData,
-        const SwPaM* pPam = 0 );
+    sal_Bool InsertFld( const SwInsertFld_Data& rData );
 
     // Direkt das aktuelle Feld aendern
     void            UpdateCurFld(sal_uLong nFormat,

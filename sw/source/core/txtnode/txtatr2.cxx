@@ -308,7 +308,9 @@ SwTxtMeta::CreateTxtMeta(
     ::sw::MetaFieldManager & i_rTargetDocManager,
     SwTxtNode *const i_pTargetTxtNode,
     SwFmtMeta & i_rAttr,
-    xub_StrLen const i_nStart, xub_StrLen const i_nEnd, bool const i_bIsCopy)
+    xub_StrLen const i_nStart,
+    xub_StrLen const i_nEnd,
+    bool const i_bIsCopy)
 {
     if (COPY == i_bIsCopy)
     {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta

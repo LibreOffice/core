@@ -50,6 +50,11 @@ namespace sw { namespace mark
 
             virtual ::sw::mark::IMark* getMarkForTxtNode(const SwTxtNode& rTxtNode, IDocumentMarkAccess::MarkType eMark);
 
+            virtual sw::mark::IMark* makeAnnotationMark(
+                const SwPaM& rPaM,
+                const ::rtl::OUString& rName );
+
+
             virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM);
             virtual bool renameMark(::sw::mark::IMark* io_pMark, const ::rtl::OUString& rNewName);
             virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const xub_StrLen nOffset);
@@ -63,9 +68,9 @@ namespace sw { namespace mark
             virtual void clearAllMarks();
 
             // marks
-            virtual const_iterator_t getMarksBegin() const;
-            virtual const_iterator_t getMarksEnd() const;
-            virtual sal_Int32 getMarksCount() const;
+            virtual const_iterator_t getAllMarksBegin() const;
+            virtual const_iterator_t getAllMarksEnd() const;
+            virtual sal_Int32 getAllMarksCount() const;
             virtual const_iterator_t findMark(const ::rtl::OUString& rName) const;
 
             // bookmarks
@@ -79,14 +84,36 @@ namespace sw { namespace mark
             virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& rPos) const;
             virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& rPos) const;
 
+            // Marks exclusive annotation marks
+            virtual const_iterator_t getCommonMarksBegin() const;
+            virtual const_iterator_t getCommonMarksEnd() const;
+            virtual sal_Int32 getCommonMarksCount() const;
+
+            // Annotation Marks
+            virtual const_iterator_t getAnnotationMarksBegin() const;
+            virtual const_iterator_t getAnnotationMarksEnd() const;
+            virtual sal_Int32 getAnnotationMarksCount() const;
+            virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const;
+
         private:
             // make names
             ::rtl::OUString getUniqueMarkName(const ::rtl::OUString& rName) const;
             void sortMarks();
 
-            container_t m_vMarks;
+            // container for all marks
+            container_t m_vAllMarks;
+
+            // additional container for bookmarks
             container_t m_vBookmarks;
+            // additional container for fieldmarks
             container_t m_vFieldmarks;
+
+            // container for annotation marks
+            container_t m_vAnnotationMarks;
+
+            // container for all marks except annotation marks
+            container_t m_vCommonMarks;
+
             SwDoc * const m_pDoc;
     };
 }}

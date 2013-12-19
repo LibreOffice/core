@@ -1934,7 +1934,7 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
                     bRet = sal_True;
                 }
             }
-            else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
+            else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
                 pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = sal_True;
             else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
                 bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
@@ -1956,7 +1956,7 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
                 }
             }
         }
-        else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
+        else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
             pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = sal_True;
         else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
             bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );

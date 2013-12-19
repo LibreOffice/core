@@ -73,7 +73,6 @@ namespace sw { namespace mark
                 const KeyCode& rCode,
                 const ::rtl::OUString& rName,
                 const ::rtl::OUString& rShortName);
-            static ::rtl::OUString GenerateNewName();
             static bool IsLegalName(const ::rtl::OUString& rName);
     };
 
@@ -85,7 +84,6 @@ namespace sw { namespace mark
                 const KeyCode& rCode,
                 const ::rtl::OUString& rName,
                 const ::rtl::OUString& rShortName);
-            static ::rtl::OUString GenerateNewName();
             static bool IsLegalName(const ::rtl::OUString& rName);
             static const ::rtl::OUString our_sNamePrefix;
     };

@@ -3761,7 +3761,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_TXTATR_FIELD */              0,
 /* RES_TXTATR_FLYCNT */             0,
 /* RES_TXTATR_FTN */                0,
-/* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_ANNOTATION */         0,
 /* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:

@@ -5165,10 +5165,13 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_TXTATR_CHARFMT:
             TextCharFormat( static_cast< const SwFmtCharFmt& >( rHt ) );
             break;
+
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
             TextField( static_cast< const SwFmtFld& >( rHt ) );
             break;
+
         case RES_TXTATR_FLYCNT:
             TextFlyContent( static_cast< const SwFmtFlyCnt& >( rHt ) );
             break;

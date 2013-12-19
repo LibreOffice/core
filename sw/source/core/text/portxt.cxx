@@ -911,7 +911,7 @@ void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
 void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & /*rInf*/) const
 {
     // These shouldn't be painted!
-    // SwTxtPortion::Paint(rInf);
+    //SwTxtPortion::Paint(rInf);
 }
 
 sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )

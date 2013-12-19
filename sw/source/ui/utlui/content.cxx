@@ -418,7 +418,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 {
                     if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
                     {
-                        SwFmtFld* aFmtFld = static_cast<SwFmtFld*>((*i)->GetBroadCaster());
+                        const SwFmtFld* aFmtFld = static_cast<const SwFmtFld*>((*i)->GetBroadCaster());
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
@@ -427,7 +427,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
-                                                (const SwFmtFld*)aFmtFld,
+                                                aFmtFld,
                                                 nMemberCount);
                             pMember->Insert(pCnt);
                             nMemberCount++;
@@ -766,7 +766,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 {
                     if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
                     {
-                        SwFmtFld* aFmtFld = static_cast<SwFmtFld*>((*i)->GetBroadCaster());
+                        const SwFmtFld* aFmtFld = static_cast<const SwFmtFld*>((*i)->GetBroadCaster());
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
@@ -775,7 +775,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
-                                                (const SwFmtFld*)aFmtFld,
+                                                aFmtFld,
                                                 nMemberCount);
                             pMember->Insert(pCnt);
                             nMemberCount++;

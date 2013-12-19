@@ -132,7 +132,9 @@ namespace
     }
 
     // TODO: use SaveBookmark (from _DelBookmarks)
-    static void lcl_CopyBookmarks(const SwPaM& rPam, SwPaM& rCpyPam)
+    static void lcl_CopyBookmarks(
+        const SwPaM& rPam,
+        SwPaM& rCpyPam )
     {
         const SwDoc* pSrcDoc = rPam.GetDoc();
         SwDoc* pDestDoc =  rCpyPam.GetDoc();
@@ -144,19 +146,23 @@ namespace
 
         typedef ::std::vector< const ::sw::mark::IMark* > mark_vector_t;
         mark_vector_t vMarksToCopy;
-        for(IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getMarksBegin();
-            ppMark != pSrcMarkAccess->getMarksEnd();
-            ppMark++)
+        for ( IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getAllMarksBegin();
+              ppMark != pSrcMarkAccess->getAllMarksEnd();
+              ppMark++ )
         {
             const ::sw::mark::IMark* const pMark = ppMark->get();
+
             const SwPosition& rMarkStart = pMark->GetMarkStart();
             const SwPosition& rMarkEnd = pMark->GetMarkEnd();
-            // only include marks that are in the range and not touching
-            // both start and end
-            bool bIsNotOnBoundary = pMark->IsExpanded()
+            // only include marks that are in the range and not touching both start and end
+            // - not for annotation marks.
+            const bool bIsNotOnBoundary =
+                pMark->IsExpanded()
                 ? (rMarkStart != rStt || rMarkEnd != rEnd)  // rMarkStart != rMarkEnd
                 : (rMarkStart != rStt && rMarkEnd != rEnd); // rMarkStart == rMarkEnd
-            if(rMarkStart >= rStt && rMarkEnd <= rEnd && bIsNotOnBoundary)
+            if ( rMarkStart >= rStt && rMarkEnd <= rEnd
+                 && ( bIsNotOnBoundary
+                      || IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::ANNOTATIONMARK ) )
             {
                 vMarksToCopy.push_back(pMark);
             }
@@ -1245,13 +1251,13 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, 0,aInsPos, bMakeNewFrms, sal_False );
+                CopyWithFlyInFly( aRg, 0, aInsPos, &rPam, bMakeNewFrms, sal_False );
                 aSaveIdx++;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTxtNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, bMakeNewFrms, sal_False );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &rPam, bMakeNewFrms, sal_False );
 
             bCopyBookmarks = false;
 
@@ -1281,7 +1287,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     aCpyPam.Exchange();
 
     // dann kopiere noch alle Bookmarks
-    if( bCopyBookmarks && getIDocumentMarkAccess()->getMarksCount() )
+    if( bCopyBookmarks && getIDocumentMarkAccess()->getAllMarksCount() )
         lcl_CopyBookmarks( rPam, aCpyPam );
 
     if( nsRedlineMode_t::REDLINE_DELETE_REDLINES & eOld )
@@ -1318,9 +1324,14 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
 //  ----- Copy-Methode vom SwDoc - "kopiere Fly's in Fly's" ------
 
-void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
-                            const SwNodeIndex& rInsPos, sal_Bool bMakeNewFrms,
-                            sal_Bool bDelRedlines, sal_Bool bCopyFlyAtFly ) const
+void SwDoc::CopyWithFlyInFly(
+    const SwNodeRange& rRg,
+    const xub_StrLen nEndContentIndex,
+    const SwNodeIndex& rInsPos,
+    const SwPaM* pCopiedPaM,
+    const sal_Bool bMakeNewFrms,
+    const sal_Bool bDelRedlines,
+    const sal_Bool bCopyFlyAtFly ) const
 {
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
 
@@ -1362,12 +1373,14 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
     // dann kopiere noch alle Bookmarks
-    if( getIDocumentMarkAccess()->getMarksCount() )
+    if( getIDocumentMarkAccess()->getAllMarksCount() )
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPaM aCpyTmp( aCpyRange.aStart, aCpyRange.aEnd );
 
-        lcl_CopyBookmarks( aRgTmp, aCpyTmp );
+        lcl_CopyBookmarks(
+            pCopiedPaM != NULL ? *pCopiedPaM : aRgTmp,
+            aCpyTmp );
     }
 
     if( bDelRedlines && ( nsRedlineMode_t::REDLINE_DELETE_REDLINES & pDest->GetRedlineMode() ))
@@ -1392,9 +1405,11 @@ void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
     }
 }
 
-void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
-        const xub_StrLen nEndContentIndex, const SwNodeIndex& rStartIdx,
-        const bool bCopyFlyAtFly ) const
+void SwDoc::CopyFlyInFlyImpl(
+    const SwNodeRange& rRg,
+    const xub_StrLen nEndContentIndex,
+    const SwNodeIndex& rStartIdx,
+    const bool bCopyFlyAtFly ) const
 {
     // Bug 22727: suche erst mal alle Flys zusammen, sortiere sie entsprechend
     //            ihrer Ordnungsnummer und kopiere sie erst dann. Damit wird

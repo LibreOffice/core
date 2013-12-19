@@ -320,7 +320,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
     { 0, 0 },                                           // RES_TXTATR_FTN
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
+    { 0, 0 },                                           // RES_TXTATR_ANNOTATION
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY2
@@ -533,9 +533,9 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] = new SwFmtFld( RES_TXTATR_FIELD );
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] = new SwFmtFlyCnt( 0 );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] = new SwFmtFtn;
+    aAttrTab[ RES_TXTATR_ANNOTATION - POOLATTR_BEGIN ] = new SwFmtFld( RES_TXTATR_ANNOTATION );
 
 // TextAttr - Dummies
-    aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY4 );
     aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY3 );
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY1 );
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );

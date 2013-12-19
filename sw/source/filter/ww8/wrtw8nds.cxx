@@ -1678,10 +1678,10 @@ bool MSWordExportBase::GetBookmarks(
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uLong nNd = rNd.GetIndex( );
 
-    const sal_Int32 nMarks = pMarkAccess->getMarksCount();
+    const sal_Int32 nMarks = pMarkAccess->getCommonMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
     {
-        IMark* pMark = ( pMarkAccess->getMarksBegin() + i )->get();
+        IMark* pMark = ( pMarkAccess->getCommonMarksBegin() + i )->get();
 
         // Only keep the bookmarks starting or ending in this node
         if ( pMark->GetMarkStart().nNode == nNd ||
@@ -1694,12 +1694,7 @@ bool MSWordExportBase::GetBookmarks(
             const bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
             if ( bIsStartOk || bIsEndOk )
             {
-                IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>(pMark);
-                // COMMENTRANGE fieldmarks are no bookmarks
-                if ( !( pFieldmark != NULL && pFieldmark->GetFieldname().equalsAscii( ODF_COMMENTRANGE ) ) )
-                {
-                    rArr.push_back( pMark );
-                }
+                rArr.push_back( pMark );
             }
         }
     }

@@ -46,9 +46,11 @@ class SwEditWin;
 class SwView;
 class Edit;
 class MenuButton;
-//class SwRedline;
 class SwFrm;
 
+namespace sw { namespace overlay {
+    class OverlayRanges;
+}}
 
 namespace sw { namespace sidebarwindows {
 
@@ -76,7 +78,7 @@ class SwSidebarWin : public Window
                                   long nY,
                                   long nWidth,
                                   long nHeight,
-                                  const SwRect &aRect,
+                                  const SwRect& aAnchorRect,
                                   const long PageBorder);
         void SetPosAndSize();
         void TranslateTopPosition(const long aAmount);
@@ -91,6 +93,7 @@ class SwSidebarWin : public Window
         inline ScrollBar* Scrollbar() { return mpVScrollbar; }
         inline ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor;}
         inline ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow;}
+        inline ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay;}
 
         long            GetPostItTextHeight();
 
@@ -127,14 +130,20 @@ class SwSidebarWin : public Window
 
         void            SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition);
         void            SetReadonly(sal_Bool bSet);
-        sal_Bool            IsReadOnly()        { return mbReadonly;}
-        bool            IsPreview()         { return nFlags & PB_Preview;}
+        sal_Bool        IsReadOnly()
+        {
+            return mbReadonly;
+        }
+        bool            IsPreview()
+        {
+            return nFlags & PB_Preview;
+        }
 
-        void            SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
+        void         SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
         const Color& ColorAnchor() { return mColorAnchor; }
         const Color& ColorDark() { return mColorDark; }
         const Color& ColorLight() { return mColorLight; }
-        void            Rescale();
+        void         Rescale();
 
         void            SetViewState(::sw::sidebarwindows::ViewState bViewState);
 
@@ -142,18 +151,15 @@ class SwSidebarWin : public Window
         void            SetFollow( bool bIsFollow) { mbIsFollow = bIsFollow; };
         virtual bool    CalcFollow() = 0;
 
-#if 0
-#endif
+        sal_Int32   GetMetaHeight();
+        sal_Int32   GetMinimumSizeWithMeta();
+        sal_Int32   GetMinimumSizeWithoutMeta();
+        sal_Int32   GetMetaButtonAreaWidth();
+        sal_Int32   GetScrollbarWidth();
 
-        sal_Int32       GetMetaHeight();
-        sal_Int32       GetMinimumSizeWithMeta();
-        sal_Int32       GetMinimumSizeWithoutMeta();
-        sal_Int32       GetMetaButtonAreaWidth();
-        sal_Int32       GetScrollbarWidth();
+        void    SetSpellChecking();
 
-        void            SetSpellChecking();
-
-        void            ToggleInsMode();
+        void    ToggleInsMode();
 
         virtual void    ActivatePostIt();
         virtual void    DeactivatePostIt();
@@ -163,7 +169,10 @@ class SwSidebarWin : public Window
         SwPostItHelper::SwLayoutStatus GetLayoutStatus() { return mLayoutStatus; }
         Color GetChangeColor() { return mChangeColor; }
 
-        virtual bool    IsProtected() {return mbReadonly;};
+        virtual bool IsProtected()
+        {
+            return mbReadonly;
+        }
 
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
         inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
@@ -213,6 +222,7 @@ class SwSidebarWin : public Window
 
         sw::sidebarwindows::AnchorOverlayObject* mpAnchor;
         sw::sidebarwindows::ShadowOverlayObject* mpShadow;
+        sw::overlay::OverlayRanges* mpTextRangeOverlay;
 
         Color           mColorAnchor;
         Color           mColorDark;

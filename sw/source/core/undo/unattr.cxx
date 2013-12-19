@@ -881,7 +881,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 
     const bool bToLast =  (1 == m_AttrSet.Count())
                        && (RES_TXTATR_FIELD <= *m_AttrSet.GetRanges())
-                       && (*m_AttrSet.GetRanges() <= RES_TXTATR_FTN);
+                       && (*m_AttrSet.GetRanges() <= RES_TXTATR_ANNOTATION);
 
     // restore old values
     m_pHistory->TmpRollback( pDoc, 0, !bToLast );

@@ -55,16 +55,20 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(
+        const IDocumentMarkAccess& rMarkAccess,
+        const String& rName,
+        const bool bCaseSensitive )
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
-        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getMarksBegin();
-            ppMark != rMarkAccess.getMarksEnd();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getCommonMarksBegin();
+            ppMark != rMarkAccess.getCommonMarksEnd();
             ppMark++)
         {
-            if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get()))
+            if ( IDocumentMarkAccess::GetType( *(ppMark->get()) ) == IDocumentMarkAccess::DDE_BOOKMARK)
             {
+                ::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get());
                 if (
                     (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
                     (!bCaseSensitive && GetAppCharClass().lower(pBkmk->GetName()) == String(sNameLc))
