@@ -60,7 +60,7 @@ public:
     ScRange GetRange() const;
     const OUString& GetURL() const { return msURL; }
     const sal_Int32& GetLimit() const { return mnLimit; }
-    OUString GetMove() const;
+    MoveType GetMove() const;
     const sal_uInt32& GetSettings() const { return mnSettings; }
 
     void Decode(
@@ -93,7 +93,7 @@ private:
     double mfLastRefreshTime;
     SCROW mnCurRow;
     ScRange maStartRange;
-    boost::scoped_ptr<ScRange> mpEndRange;
+    ScRange maEndRange;
     rtl::Reference<datastreams::CallerThread> mxThread;
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
 };

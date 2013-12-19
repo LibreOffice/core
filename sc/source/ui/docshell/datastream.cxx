@@ -264,27 +264,13 @@ OString DataStream::ConsumeLine()
 ScRange DataStream::GetRange() const
 {
     ScRange aRange = maStartRange;
-    if (mpEndRange)
-        aRange.aEnd = mpEndRange->aEnd;
+    aRange.aEnd = maEndRange.aEnd;
     return aRange;
 }
 
-OUString DataStream::GetMove() const
+DataStream::MoveType DataStream::GetMove() const
 {
-    switch (meMove)
-    {
-        case MOVE_DOWN:
-            return OUString("MOVE_DOWN");
-        case MOVE_UP:
-            return OUString("MOVE_UP");
-        case NO_MOVE:
-            return OUString("NO_MOVE");
-        case RANGE_DOWN:
-            return OUString("RANGE_DOWN");
-        default:
-            ;
-    }
-    return OUString();
+    return meMove;
 }
 
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
@@ -294,7 +280,6 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
     mnLimit = nLimit;
     meMove = eMove;
     mnSettings = nSettings;
-    mpEndRange.reset( NULL );
 
     mbValuesInLine = mnSettings & VALUES_IN_LINE;
 
@@ -306,11 +291,21 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
         aRange.aEnd.SetRow(aRange.aStart.Row());
 
     maStartRange = aRange;
-    if (nLimit && aRange.aStart.Row() + nLimit - 1 < MAXROW)
+    maEndRange = aRange;
+    if (nLimit == 0)
     {
-        mpEndRange.reset(new ScRange(aRange));
-        mpEndRange->Move(0, nLimit-1, 0);
+        // Unlimited
+        maEndRange.aStart.SetRow(MAXROW);
     }
+    else if (nLimit > 0)
+    {
+        // Limited.
+        maEndRange.aStart.IncRow(nLimit-1);
+        if (maEndRange.aStart.Row() > MAXROW)
+            maEndRange.aStart.SetRow(MAXROW);
+    }
+
+    maEndRange.aEnd.SetRow(maEndRange.aStart.Row());
 }
 
 void DataStream::StartImport()
@@ -359,14 +354,11 @@ void DataStream::Refresh()
 
 void DataStream::MoveData()
 {
-    if (!mpEndRange)
-        return;
-
     switch (meMove)
     {
         case RANGE_DOWN:
         {
-            if (mnCurRow == mpEndRange->aStart.Row())
+            if (mnCurRow == maEndRange.aStart.Row())
                 meMove = MOVE_UP;
         }
         break;
@@ -375,7 +367,7 @@ void DataStream::MoveData()
             // Remove the top row and shift the remaining rows upward. Then
             // insert a new row at the end row position.
             ScRange aRange = maStartRange;
-            aRange.aEnd = mpEndRange->aEnd;
+            aRange.aEnd = maEndRange.aEnd;
             maDocAccess.shiftRangeUp(aRange);
         }
         break;
@@ -384,7 +376,7 @@ void DataStream::MoveData()
             // Remove the end row and shift the remaining rows downward by
             // inserting a new row at the top row.
             ScRange aRange = maStartRange;
-            aRange.aEnd = mpEndRange->aEnd;
+            aRange.aEnd = maEndRange.aEnd;
             maDocAccess.shiftRangeDown(aRange);
         }
         break;

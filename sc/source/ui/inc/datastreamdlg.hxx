@@ -36,6 +36,7 @@ class DataStreamDlg : public ModalDialog
     RadioButton*    m_pRBRangeDown;
     RadioButton*    m_pRBNoMove;
     RadioButton*    m_pRBMaxLimit;
+    RadioButton*    m_pRBUnlimited;
     Edit*           m_pEdRange;
     Edit*           m_pEdLimit;
     OKButton*       m_pBtnOk;
@@ -51,11 +52,9 @@ class DataStreamDlg : public ModalDialog
 public:
     DataStreamDlg(ScDocShell *pDocShell, Window* pParent);
 
-    void Init(
-        const OUString& rURL, const ScRange& rRange, const sal_Int32 nLimit,
-        DataStream::MoveType eMove, const sal_uInt32 nSettings);
+    void Init( const DataStream& rStrm );
 
-    void StartStream(DataStream *pStream = 0);
+    void StartStream();
 };
 
 }

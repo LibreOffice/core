@@ -836,18 +836,6 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
                 aAreaLink.nRefresh = pLink->GetTimeout();
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
-            sc::DataStream *pStream = dynamic_cast<sc::DataStream*>(&(*(*rLinks[i])));
-            if (pStream)
-            {
-                ScMyAreaLink aAreaLink;
-                ScUnoConversion::FillApiRange( aAreaLink.aDestRange, pStream->GetRange() );
-                aAreaLink.sSourceStr = pStream->GetMove();
-                aAreaLink.sFilter = OUString::number(pStream->GetLimit());
-                aAreaLink.sFilterOptions = "DataStream";
-                aAreaLink.sURL = pStream->GetURL();
-                aAreaLink.nRefresh = pStream->GetSettings();
-                rAreaLinks.AddNewAreaLink( aAreaLink );
-            }
         }
     }
     rAreaLinks.Sort();

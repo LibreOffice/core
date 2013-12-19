@@ -744,6 +744,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_STREAMS:
         {
             sc::DataStreamDlg aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            ScDocument *pDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            sc::DataStream* pStrm = rMgr.getDataStream();
+            if (pStrm)
+                aDialog.Init(*pStrm);
+
             if (aDialog.Execute() == RET_OK)
                 aDialog.StartStream();
         }

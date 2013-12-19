@@ -32,6 +32,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, Window* pParent)
     get(m_pRBRangeDown, "rangedown");
     get(m_pRBNoMove, "nomove");
     get(m_pRBMaxLimit, "maxlimit");
+    get(m_pRBUnlimited, "unlimited");
     get(m_pEdRange, "range");
     get(m_pEdLimit, "limit");
     get(m_pBtnOk, "ok");
@@ -114,20 +115,26 @@ ScRange DataStreamDlg::GetStartRange()
     return aRange;
 }
 
-void DataStreamDlg::Init(
-    const OUString& rURL, const ScRange& rRange, const sal_Int32 nLimit,
-    DataStream::MoveType eMove, const sal_uInt32 nSettings)
+void DataStreamDlg::Init( const DataStream& rStrm )
 {
-    m_pEdLimit->SetText(OUString::number(nLimit));
-    m_pCbUrl->SetText(rURL);
-    if (nSettings & DataStream::SCRIPT_STREAM)
-        m_pRBScriptData->Check();
-    if (!(nSettings & DataStream::VALUES_IN_LINE))
-        m_pRBAddressValue->Check();
+    m_pCbUrl->SetText(rStrm.GetURL());
 
-    OUString aStr = rRange.Format(SCA_VALID);
+    ScRange aRange = rStrm.GetRange();
+    ScRange aTopRange = aRange;
+    aTopRange.aEnd.SetRow(aTopRange.aStart.Row());
+    OUString aStr = aTopRange.Format(SCA_VALID);
     m_pEdRange->SetText(aStr);
+    SCROW nRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
 
+    if (nRows == MAXROWCOUNT)
+        m_pRBUnlimited->Check();
+    else
+    {
+        m_pRBMaxLimit->Check();
+        m_pEdLimit->SetText(OUString::number(nRows));
+    }
+
+    DataStream::MoveType eMove = rStrm.GetMove();
     switch (eMove)
     {
         case DataStream::MOVE_DOWN:
@@ -146,7 +153,7 @@ void DataStreamDlg::Init(
     UpdateEnable();
 }
 
-void DataStreamDlg::StartStream(DataStream *pStream)
+void DataStreamDlg::StartStream()
 {
     ScRange aStartRange = GetStartRange();
     if (!aStartRange.IsValid())
@@ -166,14 +173,7 @@ void DataStreamDlg::StartStream(DataStream *pStream)
     DataStream::MoveType eMove =
         m_pRBRangeDown->IsChecked() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
 
-    if (pStream)
-    {
-        pStream->Decode(rURL, aStartRange, nLimit, eMove, nSettings);
-        pStream->SetRefreshOnEmptyLine(m_pCBRefreshOnEmpty->IsChecked());
-        return;
-    }
-
-    pStream = DataStream::Set(mpDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
+    DataStream* pStream = DataStream::Set(mpDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
     pStream->SetRefreshOnEmptyLine(m_pCBRefreshOnEmpty->IsChecked());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
