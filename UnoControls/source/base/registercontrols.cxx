@@ -17,126 +17,105 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
+#include <sal/config.h>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/container/XSet.hpp>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/factory.hxx>
 
-#include <stdio.h>
+#include <framecontrol.hxx>
+#include <progressbar.hxx>
+#include <progressmonitor.hxx>
+#include <statusindicator.hxx>
 
-//=============================================================================
-//  Add new include line to use new services.
-//=============================================================================
-#include "framecontrol.hxx"
-#include "progressbar.hxx"
-#include "progressmonitor.hxx"
-#include "statusindicator.hxx"
-//=============================================================================
+namespace {
 
-//______________________________________________________________________________________________________________
-//  namespaces
-//______________________________________________________________________________________________________________
-
-using namespace ::rtl                                           ;
-using namespace ::cppu                                          ;
-using namespace ::unocontrols                                   ;
-using namespace ::com::sun::star::uno                           ;
-using namespace ::com::sun::star::container                     ;
-using namespace ::com::sun::star::lang                          ;
-using namespace ::com::sun::star::registry                      ;
-
-//______________________________________________________________________________________________________________
-//  macros
-//______________________________________________________________________________________________________________
-
-//******************************************************************************************************************************
-#define CREATEINSTANCE(CLASS)                                                                                                               \
-                                                                                                                                            \
-    static Reference< XInterface > SAL_CALL CLASS##_createInstance ( const Reference< XMultiServiceFactory >& rServiceManager ) throw ( Exception ) \
-    {                                                                                                                                       \
-        return Reference< XInterface >( *(OWeakObject*)(new CLASS( comphelper::getComponentContext(rServiceManager) )) );                                                    \
-    }
-
-//******************************************************************************************************************************
-#define CREATEFACTORY_SINGLE(CLASS)                                                                                     \
-                                                                                                                        \
-    /* Create right factory ... */                                                                                      \
-    xFactory = Reference< XSingleServiceFactory >                                                                       \
-                    (                                                                                                   \
-                        cppu::createSingleFactory   (   xServiceManager                                     ,           \
-                                                        CLASS::impl_getStaticImplementationName     ()  ,           \
-                                                        CLASS##_createInstance                              ,           \
-                                                        CLASS::impl_getStaticSupportedServiceNames  ()  )           \
-                    ) ;                                                                                                 \
-
-//******************************************************************************************************************************
-#define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \
-                                                                                                                        \
-    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
-    {                                                                                                                   \
-        CREATEFACTORY_SINGLE ( CLASS )                                                                              \
-    }
-
-//______________________________________________________________________________________________________________
-//  declare functions to create a new instance of service
-//______________________________________________________________________________________________________________
-
-//=============================================================================
-//  Add new macro line to use new services.
-//
-//  !!! ATTENTION !!!
-//      Write no ";" at end of line! (see macro)
-//=============================================================================
-CREATEINSTANCE  ( FrameControl      )
-CREATEINSTANCE  ( ProgressBar       )
-CREATEINSTANCE  ( ProgressMonitor   )
-CREATEINSTANCE  ( StatusIndicator   )
-//=============================================================================
-
-//______________________________________________________________________________________________________________
-//  create right component factory
-//______________________________________________________________________________________________________________
-
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL ctl_component_getFactory( const sal_Char* pImplementationName,
-                                                        void*       pServiceManager     ,
-                                                        void*       /*pRegistryKey*/        )
+css::uno::Reference<css::uno::XInterface> SAL_CALL FrameControl_createInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &
+        rServiceManager)
+    throw (css::uno::Exception)
 {
-    // Set default return value for this operation - if it failed.
-    void* pReturn = NULL ;
+    return static_cast<cppu::OWeakObject *>(
+        new unocontrols::FrameControl(
+            comphelper::getComponentContext(rServiceManager)));
+}
 
-    if  (
-            ( pImplementationName   !=  NULL ) &&
-            ( pServiceManager       !=  NULL )
-        )
+css::uno::Reference<css::uno::XInterface> SAL_CALL ProgressBar_createInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &
+        rServiceManager)
+    throw (css::uno::Exception)
+{
+    return static_cast<cppu::OWeakObject *>(
+        new unocontrols::ProgressBar(
+            comphelper::getComponentContext(rServiceManager)));
+}
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+ProgressMonitor_createInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &
+        rServiceManager)
+    throw (css::uno::Exception)
+{
+    return static_cast<cppu::OWeakObject *>(
+        new unocontrols::ProgressMonitor(
+            comphelper::getComponentContext(rServiceManager)));
+}
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL
+StatusIndicator_createInstance(
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &
+        rServiceManager)
+    throw (css::uno::Exception)
+{
+    return static_cast<cppu::OWeakObject *>(
+        new unocontrols::StatusIndicator(
+            comphelper::getComponentContext(rServiceManager)));
+}
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ctl_component_getFactory(
+    char const * pImplName, void * pServiceManager, SAL_UNUSED_PARAMETER void *)
+{
+    css::uno::Reference<css::lang::XMultiServiceFactory > smgr(
+        static_cast<css::lang::XMultiServiceFactory *>(pServiceManager));
+    css::uno::Reference<css::lang::XSingleServiceFactory> fac;
+    if (unocontrols::FrameControl::impl_getStaticImplementationName()
+        .equalsAscii(pImplName))
     {
-        // Define variables which are used in following macros.
-        Reference< XSingleServiceFactory >  xFactory                                                                        ;
-        Reference< XMultiServiceFactory >   xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-
-        //=============================================================================
-        //  Add new macro line to handle new service.
-        //
-        //  !!! ATTENTION !!!
-        //      Write no ";" at end of line and dont forget "else" ! (see macro)
-        //=============================================================================
-        IF_NAME_CREATECOMPONENTFACTORY_SINGLE( FrameControl     )
-        else IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressBar      )
-        else IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressMonitor  )
-        else IF_NAME_CREATECOMPONENTFACTORY_SINGLE( StatusIndicator  )
-        //=============================================================================
-
-        // Factory is valid - service was found.
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
+        fac = cppu::createSingleFactory(
+            smgr, unocontrols::FrameControl::impl_getStaticImplementationName(),
+            &FrameControl_createInstance,
+            unocontrols::FrameControl::impl_getStaticSupportedServiceNames());
+    } else if (unocontrols::ProgressBar::impl_getStaticImplementationName()
+               .equalsAscii(pImplName))
+    {
+        fac = cppu::createSingleFactory(
+            smgr, unocontrols::ProgressBar::impl_getStaticImplementationName(),
+            &ProgressBar_createInstance,
+            unocontrols::ProgressBar::impl_getStaticSupportedServiceNames());
+    } else if (unocontrols::ProgressMonitor::impl_getStaticImplementationName()
+               .equalsAscii(pImplName))
+    {
+        fac = cppu::createSingleFactory(
+            smgr,
+            unocontrols::ProgressMonitor::impl_getStaticImplementationName(),
+            &ProgressMonitor_createInstance,
+            unocontrols::ProgressMonitor::impl_getStaticSupportedServiceNames());
+    } else if (unocontrols::StatusIndicator::impl_getStaticImplementationName()
+               .equalsAscii(pImplName))
+    {
+        fac = cppu::createSingleFactory(
+            smgr,
+            unocontrols::StatusIndicator::impl_getStaticImplementationName(),
+            &StatusIndicator_createInstance,
+            unocontrols::StatusIndicator::impl_getStaticSupportedServiceNames());
     }
-
-    // Return with result of this operation.
-    return pReturn ;
+    if (fac.is()) {
+        fac->acquire();
+    }
+    return fac.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
