@@ -394,7 +394,10 @@ void DocxAttributeOutput::WriteVMLTextFrame(sw::Frame* pParentFrame)
     }
     m_pSerializer->startElementNS( XML_v, XML_textbox, xTextboxAttrList );
     m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
+    if(m_bTableStarted)
+       m_bOpenedVMLTxtBox = true;
     m_rExport.WriteText( );
+    m_bOpenedVMLTxtBox = false;
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
     m_pSerializer->endElementNS( XML_v, XML_textbox );
 
@@ -525,7 +528,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->endElementNS( XML_w, XML_p );
 
     // Check for end of cell, rows, tables here
-    FinishTableRowCell( pTextNodeInfoInner );
+    if(!m_bOpenedVMLTxtBox)
+       FinishTableRowCell( pTextNodeInfoInner );
 
     m_bParagraphOpened = false;
 
@@ -2222,7 +2226,7 @@ void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     m_pSerializer->startElementNS( XML_w, XML_tbl, FSEND );
 
     tableFirstCells.push_back(pTableTextNodeInfoInner);
-
+    m_bTableStarted = true;
     InitTableHelper( pTableTextNodeInfoInner );
     TableDefinition( pTableTextNodeInfoInner );
 }
@@ -2233,7 +2237,7 @@ void DocxAttributeOutput::EndTable()
 
     if ( m_tableReference->m_nTableDepth > 0 )
         --m_tableReference->m_nTableDepth;
-
+    m_bTableStarted = false;
     tableFirstCells.pop_back();
 
     // We closed the table; if it is a nested table, the cell that contains it
@@ -6258,6 +6262,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
+      m_bOpenedVMLTxtBox( false ),
+      m_bTableStarted(false),
       m_bWritingHeaderFooter( false ),
       m_sFieldBkm( ),
       m_nNextMarkId( 0 ),

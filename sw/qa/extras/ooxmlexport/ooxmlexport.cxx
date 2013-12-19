@@ -2154,8 +2154,13 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
       assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO72865, "FDO72865.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (pXmlDoc)
+      CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p[1]/w:r[2]/w:pict/v:rect/v:textbox/w:txbxContent/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
+}
 #endif
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 
