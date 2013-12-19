@@ -505,7 +505,7 @@ HeaderFooter *HWPFile::getHeaderFooter(int index)
 	  break;
     }
 
-    return *it;
+    return it != headerfooters.end() ? *it : NULL;
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
