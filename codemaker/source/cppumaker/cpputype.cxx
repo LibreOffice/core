@@ -3408,6 +3408,17 @@ void ServiceType::dumpHxxFile(
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
     includes.dump(o, 0);
+    if (!entity_->getConstructors().empty()) {
+        o << ("\n#if defined ANDROID || defined IOS //TODO\n"
+              "#include <osl/detail/component-defines.h>\n#endif\n\n"
+              "#if defined LO_URE_CURRENT_ENV && defined LO_URE_CTOR_ENV_")
+          << name_.replaceAll(".", "_dot_")
+          << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
+          << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
+          << name_.replaceAll(".", "_dot_")
+          << "\nextern \"C\" void * SAL_CALL LO_URE_CTOR_FUN_"
+          << name_.replaceAll(".", "_dot_") << "(void *, void *);\n#endif\n";
+    }
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
         o << "\n";
@@ -3436,14 +3447,28 @@ void ServiceType::dumpHxxFile(
                   << "::css::uno::Reference< " << scopedBaseName
                   << " > the_instance;\n" << indent() << "try {\n";
                 inc();
-                o << indent()
-                  << "the_instance = ::css::uno::Reference< "
+                o << ("#if defined LO_URE_CURRENT_ENV && defined "
+                      "LO_URE_CTOR_ENV_")
+                  << name_.replaceAll(".", "_dot_")
+                  << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
+                  << name_.replaceAll(".", "_dot_")
+                  << ") && defined LO_URE_CTOR_FUN_"
+                  << name_.replaceAll(".", "_dot_") << "\n" << indent()
+                  << "the_instance = ::css::uno::Reference< " << scopedBaseName
+                  << (" >(::css::uno::Reference< ::css::uno::XInterface >("
+                      "static_cast< ::css::uno::XInterface * >((*"
+                      "LO_URE_CTOR_FUN_")
+                  << name_.replaceAll(".", "_dot_")
+                  << (")(the_context.get(), ::css::uno::Sequence<"
+                      " ::css::uno::Any >().get())), ::SAL_NO_ACQUIRE),"
+                      " ::css::uno::UNO_QUERY);\n#else\n")
+                  << indent() << "the_instance = ::css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithContext(::rtl::OUString("
                       " \"")
                   << name_
-                  << "\" ), the_context), ::css::uno::UNO_QUERY);\n";
+                  << "\" ), the_context), ::css::uno::UNO_QUERY);\n#endif\n";
                 dec();
                 o << indent()
                   << "} catch (const ::css::uno::RuntimeException &) {\n";
