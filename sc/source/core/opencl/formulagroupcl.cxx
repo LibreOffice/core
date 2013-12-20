@@ -3232,7 +3232,7 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
 
     DynamicKernel *result = DynamicKernel::create(rDoc, rTopPos, *pCode);
     if ( result )
-    result->SetPCode(pCode);
+        result->SetPCode(pCode);
     return result;
 }
 
