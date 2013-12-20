@@ -1359,7 +1359,7 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rInputImage )
             //Some code calls this twice, so add a sanity check
             if (aBitmap.GetSizePixel().Width() < 32)
             {
-                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
                 aImage = Image(aBitmap);
                 pImage = &aImage;
             }

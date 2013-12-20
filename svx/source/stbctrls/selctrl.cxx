@@ -83,7 +83,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
     if ( GetStatusBar().GetDPIScaleFactor() > 1 )
     {
         BitmapEx b = maImage.GetBitmapEx();
-        b.Scale(GetStatusBar().GetDPIScaleFactor(), GetStatusBar().GetDPIScaleFactor(), BMP_SCALE_FAST);
+        b.Scale(GetStatusBar().GetDPIScaleFactor(), GetStatusBar().GetDPIScaleFactor());
         maImage = Image(b);
     }
 

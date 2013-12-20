@@ -68,7 +68,7 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
         for (int i = 0; i < 3; i++)
         {
             BitmapEx b = arr[i].GetBitmapEx();
-            b.Scale(_rStb.GetDPIScaleFactor(), _rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+            b.Scale(_rStb.GetDPIScaleFactor(), _rStb.GetDPIScaleFactor());
             arr[i] = Image(b);
         }
 

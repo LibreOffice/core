@@ -62,7 +62,7 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
         {
             BitmapEx b = arr[i].GetBitmapEx();
             //Don't scale width, no space.
-            b.Scale(1.0, rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+            b.Scale(1.0, rStb.GetDPIScaleFactor());
             arr[i] = Image(b);
         }
 

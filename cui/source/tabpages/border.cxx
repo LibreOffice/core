@@ -134,7 +134,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
         {
             OUString rImageName = aBorderImgLst.GetImageName(i);
             BitmapEx b = aBorderImgLst.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
             aBorderImgLst.ReplaceImage(rImageName, Image(b));
         }
 
@@ -142,7 +142,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
         {
             OUString rImageName = aShadowImgLst.GetImageName(i);
             BitmapEx b = aShadowImgLst.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
             aShadowImgLst.ReplaceImage(rImageName, Image(b));
         }
     }

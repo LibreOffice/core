@@ -78,7 +78,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
         for (int i = 0; i < mpImpl->MODIFICATION_STATE_SIZE; i++)
         {
             BitmapEx b = mpImpl->maImages[i].GetBitmapEx();
-            b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+            b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor());
             mpImpl->maImages[i] = Image(b);
         }
     }
