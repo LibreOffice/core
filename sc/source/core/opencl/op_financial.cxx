@@ -1685,11 +1685,11 @@ void OpEffective::GenSlidingWindowFunction(std::stringstream& ss,
     std::set<std::string>& funs)
 {
     decls.insert(GetDiffDate360_Decl);decls.insert(GetDiffDate360Decl);
-    decls.insert(DateToDaysDecl);decls.insert(DaysToDateDecl);
+    decls.insert(DateToDaysDecl);decls.insert(DaysToDate_LocalBarrierDecl);
     decls.insert(DaysInMonthDecl);decls.insert(GetNullDateDecl);
     decls.insert(IsLeapYearDecl);
     funs.insert(GetDiffDate360_);funs.insert(GetDiffDate360);
-    funs.insert(DateToDays);funs.insert(DaysToDate);
+    funs.insert(DateToDays);funs.insert(DaysToDate_LocalBarrier);
     funs.insert(DaysInMonth);funs.insert(GetNullDate);
     funs.insert(IsLeapYear);
 }
@@ -4845,11 +4845,11 @@ void RATE::GenSlidingWindowFunction(
     std::set<std::string>& funs)
 {
     decls.insert(GetDiffDate360Decl);decls.insert(IsLeapYearDecl);
-    decls.insert(DateToDaysDecl);decls.insert(DaysToDateDecl);
+    decls.insert(DateToDaysDecl);decls.insert(DaysToDate_LocalBarrierDecl);
     decls.insert(DaysInMonthDecl);decls.insert(GetNullDateDecl);
     decls.insert(GetDiffDate360_Decl);
     funs.insert(GetDiffDate360);funs.insert(DateToDays);
-    funs.insert(DaysToDate);funs.insert(IsLeapYear);
+    funs.insert(DaysToDate_LocalBarrier);funs.insert(IsLeapYear);
     funs.insert(DaysInMonth);funs.insert(GetNullDate);
     funs.insert(GetDiffDate360_);
 
@@ -4930,14 +4930,14 @@ void OpTbillyield::GenSlidingWindowFunction(
     ss<<"tmp002 = ";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
     ss<<";\n\t";
-    ss <<"int nDiff=GetDiffDate360(GetNullDate(),tmp000,tmp001,true);\n";
-    ss <<"nDiff++;\n";
-    ss <<"tmp=100.0;\n";
-    ss <<"tmp /= tmp002;\n";
-    ss <<"tmp-=1.0;\n";
-    ss <<"tmp= tmp/( nDiff );\n";
-    ss <<"tmp *= 360.0;\n";
-    ss <<"return tmp;\n";
+    ss <<"    int nDiff=GetDiffDate360(GetNullDate(),tmp000,tmp001,true);\n";
+    ss <<"    nDiff++;\n";
+    ss <<"    tmp=100.0;\n";
+    ss <<"    tmp = tmp *pow( tmp002,-1);\n";
+    ss <<"    tmp = tmp - 1.0;\n";
+    ss <<"    tmp = tmp * pow( nDiff,-1.0 );\n";
+    ss <<"    tmp = tmp * 360.0;\n";
+    ss <<"    return tmp;\n";
     ss << "}\n";
 }
 void OpDDB::GenSlidingWindowFunction(std::stringstream& ss,
