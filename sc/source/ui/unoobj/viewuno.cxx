@@ -1285,6 +1285,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         aMouseEvent.ClickCount = e.ClickCount;
         aMouseEvent.PopupTrigger = e.PopupTrigger;
         aMouseEvent.Target = xTarget;
+        aMouseEvent.Modifiers = e.Modifiers;
 
         for ( sal_uInt16 n=0; n<aMouseClickHandlers.Count(); n++ )
         {
@@ -1379,6 +1380,7 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             aMouseEvent.ClickCount = e.ClickCount;
             aMouseEvent.PopupTrigger = e.PopupTrigger;
             aMouseEvent.Target = xTarget;
+            aMouseEvent.Modifiers = e.Modifiers;
 
             for ( sal_uInt16 n=0; n<aMouseClickHandlers.Count(); n++ )
             {
