@@ -1632,9 +1632,12 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     if( aSet.Count() )
     {
         if( bSetLeft )
+        {
             pNewPgDsc->GetLeft().SetFmtAttr( aSet );
+            pNewPgDsc->GetFirstLeft().SetFmtAttr( aSet );
+        }
         pNewPgDsc->GetMaster().SetFmtAttr( aSet );
-        pNewPgDsc->GetFirst().SetFmtAttr( aSet );
+        pNewPgDsc->GetFirstMaster().SetFmtAttr( aSet );
     }
     return pNewPgDsc;
 }
