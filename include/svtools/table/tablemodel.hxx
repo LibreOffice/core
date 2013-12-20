@@ -525,6 +525,10 @@ namespace svt { namespace table
         */
         virtual ITableDataSort* getSortAdapter() = 0;
 
+        /** returns enabled state.
+        */
+        virtual bool isEnabled() const = 0;
+
         /// destroys the table model instance
         virtual ~ITableModel() { }
     };

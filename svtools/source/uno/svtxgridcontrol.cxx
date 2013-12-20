@@ -853,6 +853,21 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    m_pTableModel->setEnabled( bEnable );
+    Window * pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->Enable( bEnable, sal_True );
+        pWindow->EnableInput( bEnable );
+        pWindow->Invalidate();
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::ImplCallItemListeners()
 {
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );

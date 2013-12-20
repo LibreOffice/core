@@ -90,6 +90,7 @@ namespace svt { namespace table
         virtual ::com::sun::star::style::VerticalAlignment
                                                 getVerticalAlign() const;
         virtual ITableDataSort*                 getSortAdapter();
+        virtual bool                            isEnabled() const;
 
         // ITableDataSort overridables
         virtual void        sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection );
@@ -133,6 +134,7 @@ namespace svt { namespace table
         void    setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue );
 
         void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
+        void    setEnabled( bool _bEnabled );
 
         // multiplexing of XGridDataListener events
         void    notifyRowsInserted( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const;
