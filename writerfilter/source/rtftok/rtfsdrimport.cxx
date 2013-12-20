@@ -704,7 +704,9 @@ void RTFSdrImport::append(OUString aKey, OUString aValue)
 
 void RTFSdrImport::appendGroupProperty(OUString aKey, OUString aValue)
 {
-    applyProperty(uno::Reference<drawing::XShape>(m_aParents.top(), uno::UNO_QUERY), aKey, aValue);
+    uno::Reference<drawing::XShape> xShape(m_aParents.top(), uno::UNO_QUERY);
+    if (xShape.is())
+        applyProperty(xShape, aKey, aValue);
 }
 
 } // namespace rtftok
