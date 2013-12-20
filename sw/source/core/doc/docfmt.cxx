@@ -2157,18 +2157,30 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
     if( !rDstDesc.IsFirstShared() )
-        CopyHeader( rSrcDesc.GetFirst(), rDstDesc.GetFirst() );
+    {
+        CopyHeader( rSrcDesc.GetFirstMaster(), rDstDesc.GetFirstMaster() );
+        rDstDesc.GetFirstLeft().SetFmtAttr(rDstDesc.GetFirstMaster().GetHeader());
+    }
     else
-        rDstDesc.GetFirst().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
+    {
+        rDstDesc.GetFirstMaster().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
+        rDstDesc.GetFirstLeft().SetFmtAttr(rDstDesc.GetLeft().GetHeader());
+    }
 
     if( !rDstDesc.IsFooterShared() )
         CopyFooter( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
     if( !rDstDesc.IsFirstShared() )
-        CopyFooter( rSrcDesc.GetFirst(), rDstDesc.GetFirst() );
+    {
+        CopyFooter( rSrcDesc.GetFirstMaster(), rDstDesc.GetFirstMaster() );
+        rDstDesc.GetFirstLeft().SetFmtAttr(rDstDesc.GetFirstMaster().GetFooter());
+    }
     else
-        rDstDesc.GetFirst().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
+    {
+        rDstDesc.GetFirstMaster().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
+        rDstDesc.GetFirstLeft().SetFmtAttr(rDstDesc.GetLeft().GetFooter());
+    }
 
     if( bNotifyLayout && pTmpRoot )
     {
