@@ -337,7 +337,7 @@ public:
 
             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getOrCreateRootStorage();
     inline  ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getRootStorage() const { return m_xDocumentStorage.getTyped(); }
-    inline  void resetRootStroage() { impl_switchToStorage_throw( NULL ); }
+    inline  void resetRootStorage() { impl_switchToStorage_throw( NULL ); }
 
     /** returns the data source. If it doesn't exist it will be created
     */

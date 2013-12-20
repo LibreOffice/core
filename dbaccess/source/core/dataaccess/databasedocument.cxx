@@ -466,7 +466,7 @@ void ODatabaseDocument::impl_reset_nothrow()
     {
         m_pImpl->clearConnections();
         m_pImpl->disposeStorages();
-        m_pImpl->resetRootStroage();
+        m_pImpl->resetRootStorage();
 
         clearObjectContainer( m_xForms );
         clearObjectContainer( m_xReports );

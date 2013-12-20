@@ -61,7 +61,7 @@ interface XStorageBasedLibraryContainer
     /** stores the libraries to a storage other than the current container storage
 
         <p>Note that the library container is not automatically associated with the
-        new root storage. Instead, you need to manually set the RootStroage
+        new root storage. Instead, you need to manually set the RootStorage
         attribute afterwards. This separation allows for Save-To as well Save-As
         operations.</p>
 
