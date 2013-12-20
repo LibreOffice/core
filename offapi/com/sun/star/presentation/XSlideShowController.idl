@@ -238,6 +238,12 @@ interface XSlideShowController
     /** This attribute changes the color of the pen. */
     [attribute] long PenColor;
 
+    /** This attribute changes the width of the pen.
+
+        @since LibreOffice 4.2
+    */
+    [attribute] double PenWidth;
+
 
     /** returns the actual XSlideShow instance that runs the
         slide show.
