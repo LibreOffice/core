@@ -52,6 +52,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -641,6 +642,56 @@ Reference< XShape > Shape::createAndInsert(
                         aShapeProps.setProperty(aBorders[i], uno::makeAny(aBorderLine));
                     }
                     aShapeProps.erase(PROP_LineColor);
+                }
+
+                // TextFrames have ShadowFormat, not individual shadow properties.
+                boost::optional<sal_Int32> oShadowDistance;
+                if (aShapeProps.hasProperty(PROP_ShadowXDistance))
+                {
+                    oShadowDistance = aShapeProps[PROP_ShadowXDistance].get<sal_Int32>();
+                    aShapeProps.erase(PROP_ShadowXDistance);
+                }
+                if (aShapeProps.hasProperty(PROP_ShadowYDistance))
+                {
+                    // There is a single 'dist' attribute, so no need to count the avg of x and y.
+                    aShapeProps.erase(PROP_ShadowYDistance);
+                }
+                boost::optional<sal_Int32> oShadowColor;
+                if (aShapeProps.hasProperty(PROP_ShadowColor))
+                {
+                    oShadowColor = aShapeProps[PROP_ShadowColor].get<sal_Int32>();
+                    aShapeProps.erase(PROP_ShadowColor);
+                }
+                if (aShapeProps.hasProperty(PROP_Shadow))
+                    aShapeProps.erase(PROP_Shadow);
+
+                if (oShadowDistance || oShadowColor || aEffectProperties.maShadow.moShadowDir.has())
+                {
+                    css::table::ShadowFormat aFormat;
+                    if (oShadowColor)
+                        aFormat.Color = *oShadowColor;
+                    if (aEffectProperties.maShadow.moShadowDir.has())
+                    {
+                        css::table::ShadowLocation nLocation = css::table::ShadowLocation_NONE;
+                        switch (aEffectProperties.maShadow.moShadowDir.get())
+                        {
+                        case 13500000:
+                            nLocation = css::table::ShadowLocation_TOP_LEFT;
+                            break;
+                        case 18900000:
+                            nLocation = css::table::ShadowLocation_TOP_RIGHT;
+                            break;
+                        case 8100000:
+                            nLocation = css::table::ShadowLocation_BOTTOM_LEFT;
+                            break;
+                        case 2700000:
+                            nLocation = css::table::ShadowLocation_BOTTOM_RIGHT;
+                            break;
+                        }
+                        aFormat.Location = nLocation;
+                    }
+                    aFormat.ShadowWidth = *oShadowDistance;
+                    aShapeProps.setProperty(PROP_ShadowFormat, uno::makeAny(aFormat));
                 }
             }
 
