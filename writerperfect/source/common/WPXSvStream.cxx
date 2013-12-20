@@ -37,7 +37,7 @@ typedef struct
     SotStorageStreamRef ref;
 } SotStorageStreamRefWrapper;
 
-class WPXSvInputStreamImpl : public WPXInputStream
+class WPXSvInputStreamImpl
 {
 public :
     WPXSvInputStreamImpl( ::com::sun::star::uno::Reference<
@@ -48,27 +48,35 @@ public :
     WPXInputStream * getDocumentOLEStream(const char *name);
 
     const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
-    int seek(long offset, WPX_SEEK_TYPE seekType);
+    int seek(long offset);
     long tell();
     bool atEOS();
+    sal_Int64 getLength() const { return mnLength; }
 private:
     ::std::vector< SotStorageRefWrapper > mxChildrenStorages;
     ::std::vector< SotStorageStreamRefWrapper > mxChildrenStreams;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XInputStream > mxStream;
+    ::com::sun::star::io::XInputStream > mxStream;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XSeekable > mxSeekable;
+    ::com::sun::star::io::XSeekable > mxSeekable;
     ::com::sun::star::uno::Sequence< sal_Int8 > maData;
+public:
     sal_Int64 mnLength;
+    unsigned char *mpReadBuffer;
+    unsigned long mnReadBufferLength;
+    unsigned long mnReadBufferPos;
 };
 
 WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) :
-    WPXInputStream(),
     mxChildrenStorages(),
     mxChildrenStreams(),
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
-    maData(0)
+    maData(0),
+    mnLength(0),
+    mpReadBuffer(0),
+    mnReadBufferLength(0),
+    mnReadBufferPos(0)
 {
     if (!xStream.is() || !mxStream.is())
         mnLength = 0;
@@ -93,6 +101,8 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
 
 WPXSvInputStreamImpl::~WPXSvInputStreamImpl()
 {
+    if (mpReadBuffer)
+        delete [] mpReadBuffer;
 }
 
 const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned long &numBytesRead)
@@ -122,7 +132,7 @@ long WPXSvInputStreamImpl::tell()
     }
 }
 
-int WPXSvInputStreamImpl::seek(long offset, WPX_SEEK_TYPE seekType)
+int WPXSvInputStreamImpl::seek(long offset)
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1;
@@ -131,28 +141,10 @@ int WPXSvInputStreamImpl::seek(long offset, WPX_SEEK_TYPE seekType)
     if ((tmpPosition < 0) || (tmpPosition > (std::numeric_limits<long>::max)()))
         return -1;
 
-    sal_Int64 tmpOffset = offset;
-    if (seekType == WPX_SEEK_CUR)
-        tmpOffset += tmpPosition;
-    if (seekType == WPX_SEEK_END)
-        tmpOffset += mnLength;
-
-    int retVal = 0;
-    if (tmpOffset < 0)
-    {
-        tmpOffset = 0;
-        retVal = -1;
-    }
-    if (tmpOffset > mnLength)
-    {
-        tmpOffset = mnLength;
-        retVal = -1;
-    }
-
     try
     {
-        mxSeekable->seek(tmpOffset);
-        return retVal;
+        mxSeekable->seek(offset);
+        return 0;
     }
     catch (...)
     {
@@ -262,36 +254,151 @@ WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
 
 WPXSvInputStream::~WPXSvInputStream()
 {
-   delete mpImpl;
+   if (mpImpl)
+       delete mpImpl;
 }
+
+#define BUFFER_MAX 65536
 
 const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
-    return mpImpl->read(numBytes, numBytesRead);
+    numBytesRead = 0;
+
+    if (numBytes == 0 || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
+        return 0;
+
+    if (mpImpl->mpReadBuffer)
+    {
+        if ((mpImpl->mnReadBufferPos + numBytes > mpImpl->mnReadBufferPos) && (mpImpl->mnReadBufferPos + numBytes <= mpImpl->mnReadBufferLength))
+        {
+            const unsigned char *pTmp = mpImpl->mpReadBuffer + mpImpl->mnReadBufferPos;
+            mpImpl->mnReadBufferPos += numBytes;
+            numBytesRead = numBytes;
+            return pTmp;
+        }
+
+        // we cannot read from the buffer go back by the bytes we read ahead && invalidate the buffer
+        mpImpl->seek((long) mpImpl->tell() + (long)mpImpl->mnReadBufferPos - (long)mpImpl->mnReadBufferLength);
+        delete [] mpImpl->mpReadBuffer;
+        mpImpl->mpReadBuffer = 0;
+        mpImpl->mnReadBufferPos = 0;
+        mpImpl->mnReadBufferLength = 0;
+    }
+
+    unsigned long curpos = (unsigned long) mpImpl->tell();
+    if (curpos == (unsigned long)-1)  // returned ERROR
+        return 0;
+
+    if ((curpos + numBytes < curpos) /*overflow*/ ||
+            (curpos + numBytes >= (sal_uInt64)mpImpl->mnLength))  /*reading more than available*/
+    {
+        numBytes = mpImpl->mnLength - curpos;
+    }
+
+    if (numBytes < BUFFER_MAX)
+    {
+        if (BUFFER_MAX < mpImpl->mnLength - curpos)
+            mpImpl->mnReadBufferLength = BUFFER_MAX;
+        else /* BUFFER_MAX >= mpImpl->mnLength - curpos */
+            mpImpl->mnReadBufferLength = mpImpl->mnLength - curpos;
+    }
+    else
+        mpImpl->mnReadBufferLength = numBytes;
+
+    mpImpl->seek((long) curpos);
+
+    mpImpl->mpReadBuffer = new unsigned char[mpImpl->mnReadBufferLength];
+    unsigned long tmpNumBytes(0);
+    const unsigned char *pTmp = mpImpl->read(mpImpl->mnReadBufferLength, tmpNumBytes);
+    if (tmpNumBytes != mpImpl->mnReadBufferLength)
+        mpImpl->mnReadBufferLength = tmpNumBytes;
+
+    mpImpl->mnReadBufferPos = 0;
+    if (!mpImpl->mnReadBufferLength)
+        return 0;
+
+    numBytesRead = numBytes;
+
+    mpImpl->mnReadBufferPos += numBytesRead;
+    memcpy(mpImpl->mpReadBuffer, pTmp, mpImpl->mnReadBufferLength);
+    return const_cast<const unsigned char *>(mpImpl->mpReadBuffer);
 }
 
 long WPXSvInputStream::tell()
 {
-    return mpImpl->tell();
+    long retVal = mpImpl->tell();
+    return retVal - (long)mpImpl->mnReadBufferLength + (long)mpImpl->mnReadBufferPos;
 }
 
 int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 {
-    return mpImpl->seek(offset, seekType);
+    sal_Int64 tmpOffset = offset;
+    if (seekType == WPX_SEEK_CUR)
+        tmpOffset += tell();
+    if (seekType == WPX_SEEK_END)
+        tmpOffset += mpImpl->mnLength;
+
+    int retVal = 0;
+    if (tmpOffset < 0)
+    {
+        tmpOffset = 0;
+        retVal = -1;
+    }
+    if (tmpOffset > mpImpl->mnLength)
+    {
+        tmpOffset = mpImpl->mnLength;
+        retVal = -1;
+    }
+
+    if (tmpOffset < mpImpl->tell() && (unsigned long)tmpOffset >= (unsigned long)mpImpl->tell() - mpImpl->mnReadBufferLength)
+    {
+        mpImpl->mnReadBufferPos = (unsigned long)(tmpOffset + (long) mpImpl->mnReadBufferLength - (long) mpImpl->tell());
+        return 0;
+    }
+
+    if (mpImpl->mpReadBuffer) // seeking outside of the buffer, so invalidate the buffer
+    {
+        mpImpl->seek((long) mpImpl->tell() + (long)mpImpl->mnReadBufferPos - (long)mpImpl->mnReadBufferLength);
+        delete [] mpImpl->mpReadBuffer;
+        mpImpl->mpReadBuffer = 0;
+        mpImpl->mnReadBufferPos = 0;
+        mpImpl->mnReadBufferLength = 0;
+    }
+
+    int retVal2 = mpImpl->seek(tmpOffset);
+    if (retVal)
+        return retVal;
+    return retVal2;
 }
 
 bool WPXSvInputStream::atEOS()
 {
-    return mpImpl->atEOS();
+    return mpImpl->atEOS() && mpImpl->mnReadBufferPos == mpImpl->mnReadBufferLength;
 }
 
 bool WPXSvInputStream::isOLEStream()
 {
+    if (mpImpl->mpReadBuffer) // invalidate the buffer
+    {
+        mpImpl->seek((long) mpImpl->tell() + (long)mpImpl->mnReadBufferPos - (long)mpImpl->mnReadBufferLength);
+        delete [] mpImpl->mpReadBuffer;
+        mpImpl->mpReadBuffer = 0;
+        mpImpl->mnReadBufferPos = 0;
+        mpImpl->mnReadBufferLength = 0;
+    }
     return mpImpl->isOLEStream();
 }
 
 WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
 {
+    if (mpImpl->mpReadBuffer) // invalidate the buffer
+    {
+        mpImpl->seek((long) mpImpl->tell() + (long)mpImpl->mnReadBufferPos - (long)mpImpl->mnReadBufferLength);
+        delete [] mpImpl->mpReadBuffer;
+        mpImpl->mpReadBuffer = 0;
+        mpImpl->mnReadBufferPos = 0;
+        mpImpl->mnReadBufferLength = 0;
+    }
     return mpImpl->getDocumentOLEStream(name);
 }
 
