@@ -248,6 +248,27 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }
+        if (!rDest.IsFirstShared())
+        {
+            // Same procedure for unshared header..
+            const SwFmtHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
+            rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+            pNewItem = pItem->Clone();
+            pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+#if OSL_DEBUG_LEVEL > 1
+            const SwFmtCntnt& rSourceCntnt1 = rSourceFirstMasterHead.GetHeaderFmt()->GetCntnt();
+            (void)rSourceCntnt1;
+            const SwFmtCntnt& rDestCntnt1 = rDest.GetFirstMaster().GetHeader().GetHeaderFmt()->GetCntnt();
+            (void)rDestCntnt1;
+#endif
+            pNewFmt->SetFmtAttr( rSourceFirstMasterHead.GetHeaderFmt()->GetCntnt() );
+            delete pNewItem;
+            rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+            pNewItem = pItem->Clone();
+            pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+            pNewFmt->SetFmtAttr( SwFmtCntnt() );
+            delete pNewItem;
+        }
     }
     // Same procedure for footers...
     const SwFmtFooter& rDestFoot = rDest.GetMaster().GetFooter();
@@ -289,6 +310,27 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             pNewFmt->SetFmtAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+            pNewItem = pItem->Clone();
+            pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+            pNewFmt->SetFmtAttr( SwFmtCntnt() );
+            delete pNewItem;
+        }
+        if (!rDest.IsFirstShared())
+        {
+            const SwFmtFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
+#if OSL_DEBUG_LEVEL > 1
+            const SwFmtCntnt& rFooterSourceCntnt2 = rSourceFirstMasterFoot.GetFooterFmt()->GetCntnt();
+            const SwFmtCntnt& rFooterDestCntnt2 =
+                rDest.GetFirstMaster().GetFooter().GetFooterFmt()->GetCntnt();
+            (void)rFooterSourceCntnt2;
+            (void)rFooterDestCntnt2;
+#endif
+            rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+            pNewItem = pItem->Clone();
+            pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+            pNewFmt->SetFmtAttr( rSourceFirstMasterFoot.GetFooterFmt()->GetCntnt() );
+            delete pNewItem;
+            rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
