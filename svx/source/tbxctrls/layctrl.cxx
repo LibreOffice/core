@@ -62,11 +62,11 @@ private:
     long TABLE_CELL_WIDTH;
     long TABLE_CELL_HEIGHT;
 
-    const long TABLE_CELLS_HORIZ = 10;
-    const long TABLE_CELLS_VERT  = 15;
+    const long TABLE_CELLS_HORIZ;
+    const long TABLE_CELLS_VERT;
 
-    long TABLE_POS_X = 2;
-    long TABLE_POS_Y = 2;
+    long TABLE_POS_X;
+    long TABLE_POS_Y;
 
     long TABLE_WIDTH;
     long TABLE_HEIGHT;
@@ -111,10 +111,15 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     nLine( 0 ),
     rTbx(rParentTbx),
     mxFrame( rFrame ),
-    maCommand( rCmd )
+    maCommand( rCmd ),
+    TABLE_CELLS_HORIZ(10),
+    TABLE_CELLS_VERT(15),
+    TABLE_POS_X(2),
+    TABLE_POS_Y(2)
 {
     TABLE_CELL_WIDTH  = 15 * GetDPIScaleFactor();
     TABLE_CELL_HEIGHT = 15 * GetDPIScaleFactor();
+
 
     TABLE_WIDTH  = TABLE_POS_X + TABLE_CELLS_HORIZ*TABLE_CELL_WIDTH;
     TABLE_HEIGHT = TABLE_POS_Y + TABLE_CELLS_VERT*TABLE_CELL_HEIGHT;
