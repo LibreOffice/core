@@ -59,8 +59,8 @@ private:
     Reference< XFrame > mxFrame;
     OUString       maCommand;
 
-    static const long TABLE_CELLS_HORIZ = 10;
-    static const long TABLE_CELLS_VERT = 15;
+    static const long TABLE_CELLS_HORIZ;
+    static const long TABLE_CELLS_VERT;
 
     long mnTableCellWidth;
     long mnTableCellHeight;
@@ -93,6 +93,9 @@ private:
     void                    TableDialog( const Sequence< PropertyValue >& rArgs );
     void                    CloseAndShowTableDialog();
 };
+
+const long TableWindow::TABLE_CELLS_HORIZ = 10;
+const long TableWindow::TABLE_CELLS_VERT = 15;
 
 // -----------------------------------------------------------------------
 
