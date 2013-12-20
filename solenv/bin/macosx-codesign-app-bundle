@@ -19,6 +19,8 @@ for V in \
     fi
 done
 
+echo "codesigning using MACSOX_CODESIGNING_IDENTITY=[${MACOSX_CODESIGNING_IDENTITY?}]"
+
 APP_BUNDLE=$1
 
 # Sign dylibs
@@ -55,8 +57,10 @@ done
 # completeness.
 
 for framework in `find $APP_BUNDLE -name '*.framework' -type d`; do \
+    fn="$(basename $framework)"
+    fn=${fn%.*}
     for version in $framework/Versions/*; do \
-        if test ! -L $version -a -d $version; then codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version; fi; \
+        if test ! -L $version -a -d $version; then codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version/$fn; fi; \
     done; \
 done
 
