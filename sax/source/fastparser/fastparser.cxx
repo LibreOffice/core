@@ -528,6 +528,52 @@ Event& Entity::getEvent( CallbackType aType )
     return rEvent;
 }
 
+// throw an exception, but avoid callback if
+// during a threaded produce
+void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
+                             bool mbDuringParse )
+{
+    // Error during parsing !
+    SAXParseException aExcept(
+        lclGetErrorMessage( XML_GetErrorCode( mpParser ),
+                            xDocumentLocator->getSystemId(),
+                            xDocumentLocator->getLineNumber() ),
+        Reference< XInterface >(),
+        Any( &maSavedException, getCppuType( &maSavedException ) ),
+        xDocumentLocator->getPublicId(),
+        xDocumentLocator->getSystemId(),
+        xDocumentLocator->getLineNumber(),
+        xDocumentLocator->getColumnNumber()
+    );
+
+    // error handler is set, it may throw the exception
+    if( !mbDuringParse || !mbEnableThreads )
+    {
+        if (mxErrorHandler.is() )
+            mxErrorHandler->fatalError( Any( aExcept ) );
+    }
+
+    // error handler has not thrown, but parsing must stop => throw ourselves
+    throw aExcept;
+}
+
+// In the single threaded case we emit events via our C
+// callbacks, so any exception caught must be queued up until
+// we can safely re-throw it from our C++ parent of parse()
+//
+// If multi-threaded, we need to push an EXCEPTION event, at
+// which point we transfer ownership of maSavedException to
+// the consuming thread.
+void Entity::saveException( const Exception &e )
+{
+    // only store the first exception
+    if( !maSavedException.hasValue() )
+    {
+        maSavedException <<= e;
+        XML_StopParser( mpParser, /* resumable? */ XML_FALSE );
+    }
+}
+
 } // namespace
 
 namespace sax_fastparser {
@@ -1009,35 +1055,6 @@ const Entity& FastSaxParserImpl::getEntity() const
     return maEntities.top();
 }
 
-// throw an exception, but avoid callback if
-// during a threaded produce
-void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
-                             bool mbDuringParse )
-{
-    // Error during parsing !
-    SAXParseException aExcept(
-        lclGetErrorMessage( XML_GetErrorCode( mpParser ),
-                            xDocumentLocator->getSystemId(),
-                            xDocumentLocator->getLineNumber() ),
-        Reference< XInterface >(),
-        Any( &maSavedException, getCppuType( &maSavedException ) ),
-        xDocumentLocator->getPublicId(),
-        xDocumentLocator->getSystemId(),
-        xDocumentLocator->getLineNumber(),
-        xDocumentLocator->getColumnNumber()
-    );
-
-    // error handler is set, it may throw the exception
-    if( !mbDuringParse || !mbEnableThreads )
-    {
-        if (mxErrorHandler.is() )
-            mxErrorHandler->fatalError( Any( aExcept ) );
-    }
-
-    // error handler has not thrown, but parsing must stop => throw ourselves
-    throw aExcept;
-}
-
 // starts parsing with actual parser !
 void FastSaxParserImpl::parse()
 {
@@ -1066,23 +1083,6 @@ void FastSaxParserImpl::parse()
     rEntity.getEvent( DONE );
     if( rEntity.mbEnableThreads )
         produce( DONE );
-}
-
-// In the single threaded case we emit events via our C
-// callbacks, so any exception caught must be queued up until
-// we can safely re-throw it from our C++ parent of parse()
-//
-// If multi-threaded, we need to push an EXCEPTION event, at
-// which point we transfer ownership of maSavedException to
-// the consuming thread.
-void Entity::saveException( const Exception &e )
-{
-    // only store the first exception
-    if( !maSavedException.hasValue() )
-    {
-        maSavedException <<= e;
-        XML_StopParser( mpParser, /* resumable? */ XML_FALSE );
-    }
 }
 
 //------------------------------------------
