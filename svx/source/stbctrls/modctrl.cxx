@@ -69,16 +69,10 @@ struct SvxModifyControl::ImplData
     }
 };
 
-SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
-                                    sal_uInt16 _nId,
-                                    StatusBar& rStb ) :
-
+SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mpImpl(new ImplData)
 {
-    printf ("SvxModifyControl SF %d\n", rStb.GetDPIScaleFactor());
-    printf ("SvxModifyControl DPIY %d\n", rStb.ImplGetDPIY());
-
     if ( rStb.GetDPIScaleFactor() > 1 )
     {
         for (int i = 0; i < mpImpl->MODIFICATION_STATE_SIZE; i++)
