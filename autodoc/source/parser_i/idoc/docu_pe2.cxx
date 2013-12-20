@@ -491,7 +491,7 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::inf::DocuToken & let_drNewTo
 }
 
 const String
-    C_sSinceFormat("Correct version format: \"AOO <major>.<minor>[.<micro> if micro is not 0]\".");
+    C_sSinceFormat("Correct version format: \"OpenOffice <major>.<minor>[.<micro> if micro is not 0]\".");
 
 void
 SapiDocu_PE::SetCurSinceAtTagVersion_OOo( DYN ary::inf::DocuToken & let_drNewToken )
@@ -507,7 +507,8 @@ SapiDocu_PE::SetCurSinceAtTagVersion_OOo( DYN ary::inf::DocuToken & let_drNewTok
 
     const String
         sVersion(pToken->GetText());
-    if (NOT CheckVersionSyntax_OOo(sVersion))
+//    if (NOT CheckVersionSyntax_OOo(sVersion))
+    if (sVersion != "OpenOffice")
     {
         Cerr() << "Version information in @since tag has incorrect format.\n"
                << "Found: \"" << sVersion << "\"\n"
@@ -520,48 +521,6 @@ SapiDocu_PE::SetCurSinceAtTagVersion_OOo( DYN ary::inf::DocuToken & let_drNewTok
         rCommandLine = autodoc::CommandLine::Get_();
     if (NOT rCommandLine.DoesTransform_SinceTag())
         pCurAtTag->AddToken(let_drNewToken);
-
-    if (sVersion=="Apache")
-    {
-        fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion_AOO;
-    }
-    else
-        fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion_Number;
-}
-
-void
-SapiDocu_PE::SetCurSinceAtTagVersion_AOO( DYN ary::inf::DocuToken & let_drNewToken )
-{
-    csv_assert(pCurAtTag);
-
-    DT_TextToken * pToken = dynamic_cast< DT_TextToken* >(&let_drNewToken);
-    if (pToken == 0)
-    {
-        delete &let_drNewToken;
-        return;
-    }
-
-    const String
-        sVersion(pToken->GetText());
-    if (sVersion != "OpenOffice")
-    {
-        Cerr() << "Version information in @since tag has incorrect format.\n"
-               << "Found: Apache \"" << sVersion << "\"\n"
-               << "Correct version format: \"Apache OpenOffice <major>.<minor>[.<micro> if micro is not 0]\"."
-               << Endl();
-        exit(1);
-    }
-
-    const autodoc::CommandLine &
-        rCommandLine = autodoc::CommandLine::Get_();
-    if (NOT rCommandLine.DoesTransform_SinceTag())
-    {
-        String &
-            sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
-        StreamLock
-            sHelp(1000);
-        sValue = sHelp() << sValue << " " << sVersion << " " << c_str;
-    }
 
     fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion_Number;
 }
@@ -645,15 +604,6 @@ SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::inf::DocuToken & let_drNewToken )
         sValue = sHelp() << sValue << " " << c_str;
     }
       delete &let_drNewToken;
-}
-
-bool
-SapiDocu_PE::CheckVersionSyntax_OOo(const String & i_versionPart1)
-{
-    return      i_versionPart1 == "OOo"
-            OR  i_versionPart1 == "Apache"
-            OR  i_versionPart1 == "AOO"
-            OR  i_versionPart1 == "OpenOffice.org";
 }
 
 bool
