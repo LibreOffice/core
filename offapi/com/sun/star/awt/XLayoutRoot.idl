@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module awt {
 
 /** specifies an interface for a top-level layoutable widget
 
-   @since OOo 3.0
+   @since OpenOffice 3.0
 */
 interface XLayoutRoot: com::sun::star::container::XNameAccess
 {

@@ -76,7 +76,7 @@ published service UnoControlPatternFieldModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] long BorderColor;
 
@@ -129,7 +129,7 @@ published service UnoControlPatternFieldModel
     /** specifies whether the selection in the control should be hidden when
         the control is not active (focused).
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean HideInactiveSelection;
 
@@ -194,7 +194,7 @@ published service UnoControlPatternFieldModel
         <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
         <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
     */
     [optional, property] short WritingMode;
 
@@ -210,7 +210,7 @@ published service UnoControlPatternFieldModel
 
     /** specifies the vertical alignment of the text in the control.
 
-        @since OOo 3.3
+        @since OpenOffice 3.3
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };

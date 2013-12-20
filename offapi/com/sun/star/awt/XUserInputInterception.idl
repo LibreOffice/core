@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module awt {
 /** Interface to add handlers for key and mouse events. A handler is not a passive
    listener, it can even consume the event.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XUserInputInterception : ::com::sun::star::uno::XInterface
 {

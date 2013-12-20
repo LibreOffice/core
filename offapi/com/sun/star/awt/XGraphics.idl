@@ -100,7 +100,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** clears the given rectangle on the device
 
-        @since Apache OpenOffice 4.0
+        @since OpenOffice 4.0
      */
     [oneway] void clear( [in] Rectangle aRect );
 
@@ -241,7 +241,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
         <p>Note that some devices may not support this operation.</p>
 
-        @since Apache OpenOffice 4.0
+        @since OpenOffice 4.0
 
         @param  nX
             the X coordinate on the device where the graphic will be drawn

@@ -91,7 +91,7 @@ published service UnoControlButtonModel
         If set to <FALSE/>, the focus is preserved when the user operates the button control with
         the mouse.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean FocusOnClick;
 
@@ -165,7 +165,7 @@ published service UnoControlButtonModel
             to an empty string.</li>
         </ul></p>
 
-        @since OOo 2.1
+        @since OpenOffice 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
@@ -179,7 +179,7 @@ published service UnoControlButtonModel
 
     /** specifies that the text may be displayed on more than one line.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean MultiLine;
 
@@ -204,7 +204,7 @@ published service UnoControlButtonModel
         set to <TRUE/>, the button is repeatedly pressed while you hold
         down the mouse button.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean Repeat;
 
@@ -218,7 +218,7 @@ published service UnoControlButtonModel
         mouse button and to press it again. The delay between two such triggers
         is specified with this property.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] long RepeatDelay;
 
@@ -257,7 +257,7 @@ published service UnoControlButtonModel
         <p>The default for this property is <FALSE/>, which means the button behaves like a usual
         push button.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean Toggle;
 
@@ -265,7 +265,7 @@ published service UnoControlButtonModel
 
     /** specifies the vertical alignment of the text in the control.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 

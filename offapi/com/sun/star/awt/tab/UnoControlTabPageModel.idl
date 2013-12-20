@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module awt { module tab {
 //=============================================================================
 
 /** specifies the standard model of a XTabPageModel.
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 published service UnoControlTabPageModel
 {

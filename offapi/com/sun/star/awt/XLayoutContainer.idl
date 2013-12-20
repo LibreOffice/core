@@ -51,7 +51,7 @@ interface XLayoutUnit;
 
 /** specifies the layout constraints for a surrounding container.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XLayoutContainer: com::sun::star::container::XChild
 {

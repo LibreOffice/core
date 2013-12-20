@@ -65,7 +65,7 @@
     You than will be notified for any selection change.</p>
 
     <p>The <type>XGridSelection</type> interface provides a bunch of methods to set and get selection for the grid control.</p>
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 service UnoControlGrid
 {

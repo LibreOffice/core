@@ -71,7 +71,7 @@ published service UnoControlImageControlModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] long BorderColor;
 
@@ -113,7 +113,7 @@ published service UnoControlImageControlModel
             to an empty string.</li>
         </ul></p>
 
-        @since OOo 2.1
+        @since OpenOffice 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
@@ -136,7 +136,7 @@ published service UnoControlImageControlModel
 
         <p>The value of this property is one of the <type>ImageScaleMode</type> constants.</p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
     */
     [property, optional] short ScaleMode;
 
@@ -144,7 +144,7 @@ published service UnoControlImageControlModel
 
     /** specifies that the control can be reached with the TAB key.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional, property] boolean Tabstop;
 

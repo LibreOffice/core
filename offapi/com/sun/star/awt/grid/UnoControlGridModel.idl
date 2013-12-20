@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 /** specifies the standard model of a <type>UnoControlGrid</type> control.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 published service UnoControlGridModel
 {

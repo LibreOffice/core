@@ -29,7 +29,7 @@ interface XPrinterServer;
 
 /** manages several printers on one machine.
 
-    @since Apache OpenOffice 4.0
+    @since OpenOffice 4.0
  */
 service PrinterServer : XPrinterServer
 {

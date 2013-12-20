@@ -87,7 +87,7 @@ published service UnoControlListBoxModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] long BorderColor;
 
@@ -195,7 +195,7 @@ published service UnoControlListBoxModel
         <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
         <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
     */
     [optional, property] short WritingMode;
 
@@ -210,7 +210,7 @@ published service UnoControlListBoxModel
     /** allows mmanipulating the list of items in the list box more fine-grained than the
         <member>StringItemList</member> property.
 
-        @since OOo 3.3
+        @since OpenOffice 3.3
     */
     [optional] interface XItemList;
 
@@ -219,7 +219,7 @@ published service UnoControlListBoxModel
         <p>If this is not <NULL/>, then a horizontal line will be drawn between the item at the given position,
         and the following item.</p>
 
-        @since OOo 3.3
+        @since OpenOffice 3.3
     */
     [optional, property, maybevoid] short ItemSeparatorPos;
 };

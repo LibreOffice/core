@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module awt {
     whether its parent will honor it is another story, so keep implementing
     getMinimumSize().
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XLayoutFlow
 {

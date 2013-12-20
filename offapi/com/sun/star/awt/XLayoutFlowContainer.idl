@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module awt {
     should let it know of state changes that may affects their size.
     All children of a top-level window should share the same object.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XLayoutContainer
 {

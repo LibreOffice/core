@@ -31,7 +31,7 @@ module com { module sun { module star { module awt {
 //=============================================================================
 
 /** describes the scroll behavior of the mouse wheel for a control
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 constants MouseWheelBehavior
 {

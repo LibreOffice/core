@@ -62,7 +62,7 @@ published service UnoControlRadioButtonModel
         2: right
         </pre>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] short Align;
 
@@ -138,7 +138,7 @@ published service UnoControlRadioButtonModel
             to an empty string.</li>
         </ul></p>
 
-        @since OOo 2.1
+        @since OpenOffice 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
@@ -152,7 +152,7 @@ published service UnoControlRadioButtonModel
 
     /** specifies that the text may be displayed on more than one line.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean MultiLine;
 
@@ -195,7 +195,7 @@ published service UnoControlRadioButtonModel
 
     /** specifies the vertical alignment of the text in the control.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
@@ -208,7 +208,7 @@ published service UnoControlRadioButtonModel
 
         @see com::sun::star::awt::VisualEffect
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] short VisualEffect;
 
@@ -218,7 +218,7 @@ published service UnoControlRadioButtonModel
         <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
         <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
     */
     [optional, property] short WritingMode;
 };

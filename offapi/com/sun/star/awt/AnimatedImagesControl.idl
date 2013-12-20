@@ -37,7 +37,7 @@ interface XAnimation;
 /** is the default control used for an <type>AnimatedImagesControlModel</type>, displayed a series of
     images.
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 service AnimatedImagesControl
 {

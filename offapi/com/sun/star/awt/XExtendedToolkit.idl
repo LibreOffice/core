@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module awt {
         This interface was only implemented in an intermediate developer
         release anyway.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
 {

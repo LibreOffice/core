@@ -157,7 +157,7 @@ published service UnoControlDialogModel
 
     /** If set to true the dialog will have the desktop as parent.
 
-        @since OOo 2.3
+        @since OpenOffice 2.3
      */
     [optional, property] boolean DesktopAsParent;
 
@@ -165,7 +165,7 @@ published service UnoControlDialogModel
         background image.
             @see Graphic
 
-        @since OOo 2.4
+        @since OpenOffice 2.4
     */
     [optional, property] string ImageURL;
 
@@ -180,7 +180,7 @@ published service UnoControlDialogModel
             to an empty string.</li>
         </ul></p>
 
-        @since OOo 2.4
+        @since OpenOffice 2.4
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 

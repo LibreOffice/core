@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module awt { module tab {
 
     @see UnoControlTabPage
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 published interface XTabPage
 {

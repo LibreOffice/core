@@ -36,7 +36,7 @@ published interface XAnimatedImages;
 
 /** describes the model for a control displaying a series of images
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 published service AnimatedImagesControlModel
 {
