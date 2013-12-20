@@ -22,10 +22,6 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {
         LO_EXTENDED_CORE_FACTORY_MAP
-        LO_BASE_CORE_FACTORY_MAP
-        LO_CALC_FACTORY_MAP
-        LO_DRAW_CORE_FACTORY_MAP
-        LO_MATH_FACTORY_MAP
         LO_WRITER_FACTORY_MAP
         { "libcuilo.a", cui_component_getFactory },
         { "libspllo.a", spl_component_getFactory },
