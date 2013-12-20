@@ -146,7 +146,7 @@ namespace dbaui
 
         /** return the element type for given container
             @param  _xContainer The container where the element type has to be found
-            @return the element type coressponding to the given container
+            @return the element type corresponding to the given container
         */
         ElementType getElementType(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) const;
 

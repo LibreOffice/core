@@ -86,7 +86,7 @@ DispatchProvider::~DispatchProvider()
     @short      search a dispatcher for given URL
     @descr      If no interceptor is set on owner, we search for right frame and dispatch URL to it.
                 If no frame was found, we do nothing.
-                But we doesn't do it directly here. We detect the type of our owner frame and calls
+                But we don't do it directly here. We detect the type of our owner frame and calls
                 specialized queryDispatch() helper dependen from that. Because a Desktop handle some
                 requests in another way then a normal frame.
 
@@ -488,7 +488,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
     ProtocolHandler                              aHandler   ;
 
-    // This member is threadsafe by himself and lives if we live - we doesn't need any mutex here.
+    // This member is threadsafe by himself and lives if we live - we don't need any mutex here.
     if (m_aProtocolHandlerCache.search(aURL,&aHandler))
     {
         /* SAFE { */
@@ -545,7 +545,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 Thats why we implement this method. It return an already existing helper or create a new one otherwise.
 
     @attention  The parameter sTarget and nSearchFlags are defaulted to "" and 0!
-                Please use it only, if you can be shure, that the realy given by the outside calli!
+                Please use it only, if you can be shure, that the really given by the outside calli!
                 Mostly it depends from the parameter eHelper is they are required or not.
 
     @param      eHelper

@@ -750,7 +750,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         else if ( pHdl )
         {
             pViewShell->SetActivePointer(
-                pView->GetPreferedPointer( aPnt, pWindow ) );
+                pView->GetPreferredPointer( aPnt, pWindow ) );
         }
         else if ( pView->IsMarkedHit(aPnt) )
         {

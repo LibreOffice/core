@@ -927,7 +927,7 @@ public:
 
     /** Inserts information about a new SdrObject. */
     void                InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, sal_uInt32 nDffFlags );
-    /** Removes inforamtion of an SdrObject (and all child objects if it is a group). */
+    /** Removes information of an SdrObject (and all child objects if it is a group). */
     void                RemoveSdrObjectInfo( SdrObject& rSdrObj );
 
     /** Inserts the SdrObject pointers into all connector rules. */

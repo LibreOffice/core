@@ -67,7 +67,7 @@ SwDDETable::~SwDDETable()
         GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         pFldTyp->DecRefCnt();
 
-    // If it is the last dependant of the "deleted field" than delete it finally
+    // If it is the last dependent of the "deleted field" than delete it finally
     if( pFldTyp->IsDeleted() && pFldTyp->IsLastDepend() )
     {
         pFldTyp->Remove( &aDepend );

@@ -74,7 +74,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @member m_sTrueText          this text will be shown at the used UI control as description for an enabled status
      * @member m_sFalseText         this text will be shown at the used UI control as description for an disabled status
      * @member m_xDispatch          if we listen for status events, we must hold the dispatch object alive!
-     * @member m_xFrame             reference to the frame, which can provide new dispatch objects if it's neccessary to update it
+     * @member m_xFrame             reference to the frame, which can provide new dispatch objects if it's necessary to update it
      * @member m_aURL               and of course we must be registered for a special URL
      * @member m_bIsActionListener  indicates if we are currently registered as a listener for frame action events or not
      * @member m_bIsStatusListener  indicates if we are currently registered as a listener for status events or not
@@ -95,7 +95,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
     /**
      * ctor
      * It initialize an instance of this class only.
-     * We set all neccessary information on our internal member - that's it
+     * We set all necessary information on our internal member - that's it
      */
     StatusListener( /*IN*/ Component                   rControl   ,
                     /*IN*/ String                      sTrueText  ,
@@ -118,7 +118,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
     //_____________________
 
     /**
-     * start working as frame action listener realy.
+     * start working as frame action listener really.
      * In case we get such frame action, it indicates that we should
      * update our internal saved dispatch object on which we listen
      * for status events. So we can do it automaticly. The outside code
@@ -185,9 +185,9 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
     /**
      * This is the callback method for such frame action events, we listen for.
      * Because it's a oneway method we start a thread as reaction. This thread call
-     * us back and we can do neccessary things there.
-     * But we shouldn't start such action - if it's not realy neccessary.
-     * So we check before, if we are intereested on this event realy.
+     * us back and we can do necessary things there.
+     * But we shouldn't start such action - if it's not really necessary.
+     * So we check before, if we are intereested on this event really.
      *
      * @see impl_frameAction()
      *
@@ -226,9 +226,9 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
 
     /**
      * This is the callback method for the status we listen for an wish to show it
-     * on our UI control. Of yourse it's a oneway method ... but we doesn't call back
+     * on our UI control. Of course it's a oneway method ... but we don't call back
      * to the office synchronously here. We update our UI only. So we don't leave this
-     * java process. In such case it's not neccessary to use threads to decouple it.
+     * java process. In such case it's not necessary to use threads to decouple it.
      * Do it here and now ...
      *
      * @param aEvent
@@ -242,7 +242,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                 return;
 
             // enable/dsiable th control.
-            // Means: If the feature isn't available currently - we can't show an status realy here.
+            // Means: If the feature isn't available currently - we can't show an status really here.
             // Then we should colorize it gray ...
             m_rControl.setEnabled(aEvent.IsEnabled);
 
@@ -279,7 +279,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
 
                     // Detect type of state value
                     // and set it on internal well known UI control
-                    // But do it only, if value realy change.
+                    // But do it only, if value really change.
                     if(aEvent.State instanceof String)
                     {
                         String sState = (String)aEvent.State;
@@ -382,7 +382,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
     /**
      * callback for disposing events
      * Our dispatch or frame object inform us about his following dead ...
-     * So we must forget his reference. But it's not neccessary to
+     * So we must forget his reference. But it's not necessary to
      * remove listener connections here. Because the broadcaster
      * forget us automaticly. The only thing we have to do: release
      * his reference and let him die!

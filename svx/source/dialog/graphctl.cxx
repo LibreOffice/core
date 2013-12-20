@@ -650,7 +650,7 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
         if ( pCreateObj && !pCreateObj->GetUserCall() )
             pCreateObj->SetUserCall( pUserCall );
 
-        SetPointer( pView->GetPreferedPointer( aLogPt, this ) );
+        SetPointer( pView->GetPreferredPointer( aLogPt, this ) );
     }
     else
         Control::MouseButtonDown( rMEvt );
@@ -671,7 +671,7 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
             SetPointer( POINTER_CROSS );
         }
         else
-            SetPointer( pView->GetPreferedPointer( aLogPos, this ) );
+            SetPointer( pView->GetPreferredPointer( aLogPos, this ) );
     }
     else
         Control::MouseButtonUp( rMEvt );
@@ -697,7 +697,7 @@ void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
             pView->MouseButtonUp( rMEvt, this );
 
         ReleaseMouse();
-        SetPointer( pView->GetPreferedPointer( PixelToLogic( rMEvt.GetPosPixel() ), this ) );
+        SetPointer( pView->GetPreferredPointer( PixelToLogic( rMEvt.GetPosPixel() ), this ) );
     }
     else
         Control::MouseButtonUp( rMEvt );

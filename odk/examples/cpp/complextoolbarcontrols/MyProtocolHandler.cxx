@@ -211,7 +211,7 @@ Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler::getSupportedServiceNames
 
 void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < PropertyValue >& lArgs ) throw (RuntimeException)
 {
-    /* Its neccessary to hold this object alive, till this method finish.
+    /* Its necessary to hold this object alive, till this method finish.
        May the outside dispatch cache (implemented by the menu/toolbar!)
        forget this instance during de-/activation of frames (focus!).
 

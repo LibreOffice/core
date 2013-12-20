@@ -107,7 +107,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< OUString >
             return ::std::find(begin(), end(), sElement);
         }
 
-        // the only way to free used memory realy!
+        // the only way to free used memory really!
         void free()
         {
             OUStringList().swap( *this );
@@ -138,7 +138,7 @@ class BaseHash : public ::boost::unordered_map< OUString                    ,
 {
     public:
 
-        // the only way to free used memory realy!
+        // the only way to free used memory really!
         void free()
         {
             BaseHash().swap( *this );

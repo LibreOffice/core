@@ -382,7 +382,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     }
 
     // get the configuration data from the job data container ... if possible
-    // Means: if this job has any configuration data. Note: only realy
+    // Means: if this job has any configuration data. Note: only really
     // filled lists will be set to the return structure at the end of this method.
     css::uno::Sequence< css::beans::NamedValue > lConfigArgs   ;
     css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
@@ -737,7 +737,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
             Then we had not throwed a veto exception. But now we must agree with this situation and break
             all our internal processes. Its not a good idea to mark this instance as non startable any longer
             inside queryTermination() if no job was unning too. Because that would disable this job and may
-            the office does not realy shutdownm, because another listener has thrown the suitable exception.
+            the office does not really shutdownm, because another listener has thrown the suitable exception.
 
     @param  aEvent
                 describes the broadcaster and must be the desktop instance

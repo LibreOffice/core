@@ -125,7 +125,7 @@ class AnnotationWindow : public FloatingWindow
         void            InitControls();
         void            HidePostIt();
         void            DoResize();
-        void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
+        void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
         void            SetScrollbar();
 
         void            Rescale();

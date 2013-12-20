@@ -362,7 +362,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
     }
 
-    pViewShell->SetActivePointer(pView->GetPreferedPointer(
+    pViewShell->SetActivePointer(pView->GetPreferredPointer(
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
     if (!bStraightEnter)
     {
@@ -387,7 +387,7 @@ sal_Bool FuText::MouseMove(const MouseEvent& rMEvt)
 
 //  pViewShell->SetActivePointer(aNewPointer);
 
-    pViewShell->SetActivePointer(pView->GetPreferedPointer(
+    pViewShell->SetActivePointer(pView->GetPreferredPointer(
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
 
     if (aDragTimer.IsActive() )

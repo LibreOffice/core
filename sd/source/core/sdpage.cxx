@@ -2727,7 +2727,7 @@ void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettin
         // #i119056# For HeaderFooterSettings SdrObjects are used, but the properties
         // used are not part of their model data, but kept in SD. This data is applied
         // using a 'backdoor' on primitive creation. Thus, the normal mechanism to detect
-        // object changes does not work here. It is neccessary to trigger updates here
+        // object changes does not work here. It is necessary to trigger updates here
         // directly. BroadcastObjectChange used for PagePreview invalidations,
         // flushViewObjectContacts used to invalidate and flush all visualizations in
         // edit views.

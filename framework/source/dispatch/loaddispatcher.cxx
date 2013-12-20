@@ -98,7 +98,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     {
         if (xListener.is())
             xListener->dispatchFinished(
-                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); // DONTKNOW? ... not realy started ... not realy failed :-)
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, css::uno::Any())); // DONTKNOW? ... not really started ... not really failed :-)
     }
 
     css::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), css::uno::UNO_QUERY);

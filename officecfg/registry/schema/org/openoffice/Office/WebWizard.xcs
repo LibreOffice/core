@@ -58,7 +58,7 @@
       </prop>
       <prop oor:name="ExporterClass" oor:type="xs:string">
         <info>
-          <desc>A full quilified class name of the exporter class</desc>
+          <desc>A full qualified class name of the exporter class</desc>
         </info>
       </prop>
       <prop oor:name="OwnDirectory" oor:type="xs:boolean">
@@ -78,7 +78,7 @@
       </prop>
       <prop oor:name="Extension" oor:type="xs:string">
         <info>
-          <desc>the extension that should be used, if the expoter supports filename</desc>
+          <desc>the extension that should be used, if the exporter supports filename</desc>
         </info>
       </prop>
       <prop oor:name="SupportedMimeTypes" oor:type="xs:string">
@@ -230,7 +230,7 @@
     <group oor:name="WWizContent">
       <info>
         <desc>describes a web-wizard content, which contains
-	  recursivley documents and other contents.
+	  recursively documents and other contents.
 	  At the moment, contents contain only documents. Implementation of
 	  sub-contents is a future issue
 	</desc>
@@ -328,7 +328,7 @@
         </prop>
         <prop oor:name="DisplayDescription" oor:type="xs:boolean">
           <info>
-            <desc>should the desctiprion of each document be listed in the TOC</desc>
+            <desc>should the description of each document be listed in the TOC</desc>
           </info>
         </prop>
         <prop oor:name="DisplayAuthor" oor:type="xs:boolean">
@@ -483,7 +483,7 @@
       </info>
       <prop oor:name="WorkDir" oor:type="xs:string">
         <info>
-          <desc>the sub dir under temnplate/(langauge)/ of the web wizard files</desc>
+          <desc>the sub dir under template/(language)/ of the web wizard files</desc>
         </info>
       </prop>
       <prop oor:name="LastSavedSession" oor:type="xs:string">

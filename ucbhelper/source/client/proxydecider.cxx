@@ -723,9 +723,9 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 else
                 {
                     // Port given, extract server pattern
-                    sal_Int32 nAsterixPos = aToken.indexOf( '*' );
+                    sal_Int32 nAsteriskPos = aToken.indexOf( '*' );
                     aPort = aToken.copy( nColonPos + 1 );
-                    if ( nAsterixPos < nColonPos )
+                    if ( nAsteriskPos < nColonPos )
                     {
                         // pattern describes exactly one server
                         aServer = aToken.copy( 0, nColonPos );

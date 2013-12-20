@@ -125,7 +125,7 @@ public:
     }
 
 
-    // the following method may be overriden by sub-classes for
+    // the following method may be overridden by sub-classes for
     // customized behaviour
 
     /// called before insertion to determine whether item is valid
@@ -134,7 +134,7 @@ public:
 
 protected:
 
-    // the following methods may be overriden by sub-classes for
+    // the following methods may be overridden by sub-classes for
     // customized behaviour
 
     /// called after item has been inserted into the collection

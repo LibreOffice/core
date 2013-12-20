@@ -12,11 +12,11 @@ source/service/
 	+ the UNO service providing the accessibility bridge.
 	  It essentially listens to events from the LibreOffice
 	  core and creates and synchronises COM peers for our
-	  internal accessibilty objects when events arrive.
+	  internal accessibility objects when events arrive.
 
 source/UAccCom/
 	+ COM implementations of the MSAA / IAccessible2 interfaces
-	  to provide native peers for the accessbility code.
+	  to provide native peers for the accessibility code.
 
 source/UAccCOMIDL/
 	+ COM Interface Definition Language (IDL) for UAccCom.

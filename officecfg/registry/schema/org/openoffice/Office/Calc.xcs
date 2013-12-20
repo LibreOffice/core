@@ -1445,7 +1445,7 @@
       </group>
       <group oor:name="Load">
         <info>
-          <desc>Contains settings that affect formula handling while laoding.</desc>
+          <desc>Contains settings that affect formula handling while loading.</desc>
         </info>
         <prop oor:name="OOXMLRecalcMode" oor:type="xs:int" oor:nillable="false">
           <!-- UIHint: Tools - Options - Spreadsheet - Formula -->

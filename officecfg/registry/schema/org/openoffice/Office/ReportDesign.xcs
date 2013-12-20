@@ -18,7 +18,7 @@
  -->
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ReportDesign" oor:package="org.openoffice.Office" xml:lang="en-US">
   <info>
-    <desc>Contains informatation of report design.</desc>
+    <desc>Contains information of report design.</desc>
   </info>
   <component>
     <group oor:name="PropertyBrowser">

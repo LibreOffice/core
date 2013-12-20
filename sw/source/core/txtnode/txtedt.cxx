@@ -1465,7 +1465,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         sal_Int32 nLangBegin = nBegin;
         sal_Int32 nLangEnd = nEnd;
 
-        // smart tag recognization has to be done for each language portion:
+        // smart tag recognition has to be done for each language portion:
         SwLanguageIterator aIter( *pNode, nLangBegin );
 
         do

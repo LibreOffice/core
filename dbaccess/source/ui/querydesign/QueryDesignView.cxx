@@ -613,7 +613,7 @@ namespace
 
         OUStringBuffer aTmpStr,aFieldListStr;
 
-        sal_Bool bAsterix = sal_False;
+        sal_Bool bAsterisk = sal_False;
         int nVis = 0;
         OTableFields::iterator aIter = _rFieldList.begin();
         OTableFields::iterator aEnd = _rFieldList.end();
@@ -623,12 +623,12 @@ namespace
             if ( pEntryField->IsVisible() )
             {
                 if ( pEntryField->GetField().toChar() == '*' )
-                    bAsterix = sal_True;
+                    bAsterisk = sal_True;
                 ++nVis;
             }
         }
         if(nVis == 1)
-            bAsterix = sal_False;
+            bAsterisk = sal_False;
 
         try
         {
@@ -651,7 +651,7 @@ namespace
                     const OUString rAlias = pEntryField->GetAlias();
                     const OUString rFieldAlias = pEntryField->GetFieldAlias();
 
-                    aTmpStr.append(quoteTableAlias((bAlias || bAsterix),rAlias,aQuote));
+                    aTmpStr.append(quoteTableAlias((bAlias || bAsterisk),rAlias,aQuote));
 
                     // if we have a none numeric field, the table alias could be in the name
                     // otherwise we are not allowed to do this (e.g. 0.1 * PRICE )
@@ -2101,14 +2101,14 @@ namespace
     {
         SqlParseError eErrorCode = eOk;
         sal_Bool bFirstField = sal_True;
-        OUString sAsterix("*");
+        OUString sAsterisk("*");
         OJoinTableView::OTableWindowMap::iterator aIter = _pTabList->begin();
         OJoinTableView::OTableWindowMap::iterator aEnd = _pTabList->end();
         for(;aIter != aEnd && eOk == eErrorCode ;++aIter)
         {
             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
             OTableFieldDescRef  aInfo = new OTableFieldDesc();
-            if (pTabWin->ExistsField( sAsterix, aInfo ))
+            if (pTabWin->ExistsField( sAsterisk, aInfo ))
             {
                 eErrorCode = _pView->InsertField(aInfo, sal_True, bFirstField);
                 bFirstField = sal_False;

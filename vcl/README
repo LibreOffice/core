@@ -92,7 +92,7 @@ documentation
 
 parsing:
 
- wmf/emf filter --> GDI metafile with emf+ in commments --> cppcanvas metafile renderer
+ wmf/emf filter --> GDI metafile with emf+ in comments --> cppcanvas metafile renderer
 
 lately the GDIMetafile rendering path changed which also influenced
 emf+ rendering. now many things happen in drawing layer, where
@@ -101,7 +101,7 @@ metafiles with emf+ we let the mtfrenderer render them into bitmap
 (with transparency) and use this bitmap in drawinlayer. cleaner
 solution for current state would be to extend the drawing layer for
 missing features and move parsing into drawing layer (might be quite
-a lot of work). intemediary enhancement would be to know better the
+a lot of work). intermediary enhancement would be to know better the
 needed size/resolution of the bitmap, before we render emf+ into
 bitmap in drawing layer. Thorsten is working on the same problem with
 svg rendering, so hopefully his approach could be extended for emf+ as
@@ -111,7 +111,7 @@ look at vcl/source/gdi/gdimetafile.cxx where you can look for
 UseCanvas again. moving the parsing into drawinglayer might also have
 nice side effect for emf+-dual metafiles. in case the emf+ records
 are broken, it would be easier to use the duplicit emf
-rendering. fortunatelly we didn't run into such a broken emf+ file
+rendering. fortunately we didn't run into such a broken emf+ file
 yet. but there were already few cases where we first though that the
 problem might be because of broken emf+ part. so far it always turned
 out to be another problem.

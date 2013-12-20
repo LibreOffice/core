@@ -158,7 +158,7 @@ protected:
       * "getPropertySetInfo" simply return the return value of this method.
       *
       * @param xEnv is an environment to use for example, for interactions.
-      * @param bCache indicates, whether the implemetation should use
+      * @param bCache indicates, whether the implementation should use
       *        cached data, if exist.
       * @return an XPropertySetInfo implementation object containing meta data
       *         for the properties supported by this content.
@@ -174,7 +174,7 @@ protected:
       * return the return value of this method.
       *
       * @param xEnv is an environment to use for example, for interactions.
-      * @param bCache indicates, whether the implemetation should use
+      * @param bCache indicates, whether the implementation should use
       *        cached data, if exist.
       * @return an XCommandInfo implementation object containing meta data
       *         for the commands supported by this content.

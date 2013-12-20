@@ -587,7 +587,7 @@ public:
     /// @endcond
 
     // This overload is needed because OUString has a ctor from rtl_uString*, but
-    // the bool overload above would be prefered to the conversion.
+    // the bool overload above would be preferred to the conversion.
     /**
      @internal
     */

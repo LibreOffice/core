@@ -27,7 +27,7 @@
 		<group oor:name="RuntimeNode">
 			<info>
 	        <desc xml:lang="x-no-translate"></desc>
-			<desc xml:lang="en-US">Specifies the runtimes available to the Scriptying Framework.</desc>
+			<desc xml:lang="en-US">Specifies the runtimes available to the Scripting Framework.</desc>
 			</info>
 			<prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
 				<info>

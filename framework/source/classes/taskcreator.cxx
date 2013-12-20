@@ -35,7 +35,7 @@
 namespace framework{
 
 /*-****************************************************************************************************//**
-    @short      initialize instance with neccessary information
+    @short      initialize instance with necessary information
     @descr      We need a valid uno service manager to create or instanciate new services.
                 All other information to create frames or tasks come in on right interface methods.
 

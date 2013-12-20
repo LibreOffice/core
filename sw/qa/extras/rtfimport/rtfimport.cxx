@@ -176,7 +176,7 @@ DECLARE_RTFIMPORT_TEST(testN695479, "n695479.rtf")
             CPPUNIT_ASSERT_EQUAL(OUString("plain"), xText->getString());
 
             if (i == 0)
-                // Additonally, the frist frame should have double border at the bottom.
+                // Additionally, the frist frame should have double border at the bottom.
                 CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::DOUBLE, getProperty<table::BorderLine2>(xPropertySet, "BottomBorder").LineStyle);
         }
         else if (xServiceInfo->supportsService("com.sun.star.drawing.LineShape"))

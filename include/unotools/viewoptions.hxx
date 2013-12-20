@@ -186,7 +186,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         /*-****************************************************************************************************//**
             @short      use it to set/get the window state of your view
             @descr      These value describe position/size and some other states of a window.
-                        Use it with right vcl methods directly. Normaly it's not neccessary to
+                        Use it with right vcl methods directly. Normaly it's not necessary to
                         parse given string!
 
             @seealso    vcl methods

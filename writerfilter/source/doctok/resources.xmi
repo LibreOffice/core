@@ -2497,7 +2497,7 @@
             <UML:Attribute name="fFormatting">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>true if the formatting is overriden (in which case the LFOLVL
+                  <UML:TaggedValue.dataValue>true if the formatting is overridden (in which case the LFOLVL
                   should contain a pointer to a LVL)</UML:TaggedValue.dataValue>
                   <UML:TaggedValue.type>
                     <UML:TagDefinition xmi.idref="comment"/>

@@ -195,7 +195,7 @@ Sequence<OUString> SwLabCfgItem::GetPropertyNames()
 {
     static const char* aLabelPropNames[] =
     {
-        "Medium/Continous",         // 0
+        "Medium/Continuous",         // 0
         "Medium/Brand",             // 1
         "Medium/Type",              // 2
         "Format/Column",            // 3
@@ -289,7 +289,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
                     bNoConfigValues = false;
                 switch(nProperty)
                 {
-                    case  0: aItem.bCont = *(sal_Bool*)pValues[nProp].getValue(); break;// "Medium/Continous",
+                    case  0: aItem.bCont = *(sal_Bool*)pValues[nProp].getValue(); break;// "Medium/Continuous",
                     case  1: pValues[nProp] >>= aItem.aMake;            break;// "Medium/Brand",
                     case  2: pValues[nProp] >>= aItem.aType;            break;// "Medium/Type",
                     case  3: pValues[nProp] >>= aItem.nCols;            break;// "Format/Column",
@@ -412,7 +412,7 @@ void    SwLabCfgItem::Commit()
             nProperty += 3;
         switch(nProperty)
         {
-            case  0: pValues[nProp].setValue(&aItem.bCont, rType); break;// "Medium/Continous",
+            case  0: pValues[nProp].setValue(&aItem.bCont, rType); break;// "Medium/Continuous",
             case  1: pValues[nProp] <<= aItem.aMake;            break;// "Medium/Brand",
             case  2: pValues[nProp] <<= aItem.aType;            break;// "Medium/Type",
             case  3: pValues[nProp] <<= aItem.nCols;            break;// "Format/Column",

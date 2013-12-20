@@ -29,7 +29,7 @@ namespace framework{
 //_______________________________________________________________________
 /**
     some protocols must be checked during loading or dispatching URLs manually
-    It can be neccessary to decide, if a URL represent a non visible content or
+    It can be necessary to decide, if a URL represent a non visible content or
     a real visible component.
  */
 

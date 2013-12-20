@@ -2873,7 +2873,7 @@ static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
 {
     bool bRes = false;
 
-    // valid symbol name needs to have a '%' at pos 0 and at least an additonal char
+    // valid symbol name needs to have a '%' at pos 0 and at least an additional char
     if (rTokenText.getLength() > 2 && rTokenText[0] == (sal_Unicode)'%')
     {
         OUString aName( rTokenText.copy(1) );

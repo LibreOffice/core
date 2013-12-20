@@ -16,7 +16,7 @@ Drawing Layer Object diagram:
 |              getChild()  |-----|    getPrimitiveList()  -----> Object(s) ---> SdrView |
 |              getVOC()    |     |    getRecPrimitiveList()      Contact                |
 |              getViewIn...|     |___________|__________________________________________|
-| dependantPrimitiveList() |                 |
+| dependentPrimitiveList() |                 |
 |_________________________ |              generates      ______
                                              |          /      |
                                    .----------------------.    |

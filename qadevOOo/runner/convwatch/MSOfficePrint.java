@@ -265,7 +265,7 @@ public class MSOfficePrint
                 if (! OSHelper.isWindows())
                 {
                     // TODO: use a better Exception!!!
-                    throw new ConvWatchCancelException/*WrongEnvironmentException*/("We doesn't work within windows environment.");
+                    throw new ConvWatchCancelException/*WrongEnvironmentException*/("We don't work within windows environment.");
                 }
 
 

@@ -57,7 +57,7 @@ import com.sun.star.document.XFilter;
                 During import/export special functionality can be used to
                 e.g. to change some characters inside the file content
                 or replace some strings (no using of regular expressions!).
-                User can decide at runtime which functionality realy should
+                User can decide at runtime which functionality really should
                 be used by selecting it in an extra filter property dialog.
 
                 So we show how a filter works fro iport/export, use or create
@@ -106,7 +106,7 @@ public class AsciiReplaceFilter
         // native interface
        /**
         * special debug helper to get an idea how expensive
-        * the implemented filter operations are realy.
+        * the implemented filter operations are really.
         * May be useful for own purposes.
         *
         * To see the output inside an office environment
@@ -232,7 +232,7 @@ public class AsciiReplaceFilter
         * It's not allowed for us - neither very easy to change our internal
         * name during runtime of an office. Because every filter name must
         * be unambigous ...
-        * So we doesn't implement this method here.
+        * So we don't implement this method here.
         */
         public void setName( String sName )
         {
@@ -395,7 +395,7 @@ public class AsciiReplaceFilter
          * But if some optional filter options are given
          * we make some changes: replace chars or complete strings.
          *
-         * Note: It's not alloed for a filter to seek inside the stream.
+         * Note: It's not allowed for a filter to seek inside the stream.
          * Because the outside frameloader has to set the stream position
          * right and a filter must read till EOF occurs only.
          *
@@ -403,7 +403,7 @@ public class AsciiReplaceFilter
          *          the target text model to put the data in
          *
          * @param aOptions
-         *          capsulate all other neccessary information for this filter request
+         *          capsulate all other necessary information for this filter request
          *          (streams, replace values ...)
          *
          * @return a bool value which describes if method was successfully or not.
@@ -527,7 +527,7 @@ public class AsciiReplaceFilter
          * a text model. We copy every letter from the document.
          * There are no checks.
          *
-         * Note: It's not alloed for a filter to seek inside the stream.
+         * Note: It's not allowed for a filter to seek inside the stream.
          * Because the outside frameloader has to set the stream position
          * right and a filter must read till EOF occurs only.
          *
@@ -535,7 +535,7 @@ public class AsciiReplaceFilter
          *          the source text model to get the data from
          *
          * @param aOptions
-         *          capsulate all other neccessary information for this filter request
+         *          capsulate all other necessary information for this filter request
          *          (streams, replace values ...)
          *
          * @return a bool value which describes if method was successfully or not.
@@ -560,7 +560,7 @@ public class AsciiReplaceFilter
 
                 measure("get text from model");
 
-                // Normaly this function isn't realy cancelable
+                // Normaly this function isn't really cancelable
                 // But we following operation can be very expensive. So
                 // this place is the last one to stop it.
                 synchronized(this)

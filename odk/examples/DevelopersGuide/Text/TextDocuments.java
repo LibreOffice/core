@@ -314,7 +314,7 @@ public class TextDocuments {
         mxDocFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class, mxDoc );
 
-        // Examples of text fields, dependant text fields and field masters
+        // Examples of text fields, dependent text fields and field masters
         TextFieldExample ();
 
         // Example of using an XEnumerationAccess to iterate over paragraphs and

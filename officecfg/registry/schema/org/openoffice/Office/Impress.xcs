@@ -70,7 +70,7 @@
     <group oor:name="StartupService">
       <info>
         <desc>
-          A service that is instantiated when a framework is initializd for a
+          A service that is instantiated when a framework is initialized for a
           Draw or Impress document.
         </desc>
       </info>
@@ -422,7 +422,7 @@
       <prop oor:name="ShowUndoDeleteWarning" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: UNDO stack delete warnng dialog -->
+        <!-- UIHints: UNDO stack delete warning dialog -->
         <info>
           <desc>Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
           <label>Show Undo-Stack Delete Warning</label>
@@ -519,7 +519,7 @@
       <prop oor:name="PreviewTransitions" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: automatic preview in slide transtion panel -->
+        <!-- UIHints: automatic preview in slide transition panel -->
         <info>
           <desc>Indicates whether changes in the slide transition panel should be previewed.</desc>
           <label>Automatic preview for slide transition panel</label>
@@ -923,7 +923,7 @@
           <!-- OldPath: Impress/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
-          <!-- Notice: Default- nonmerical value: 1270 1/100 mm. -->
+          <!-- Notice: Default- nonmetrical value: 1270 1/100 mm. -->
           <info>
             <desc>Defines the vertical distance between adjacent grid points.</desc>
             <label>Y Axis Resolution</label>

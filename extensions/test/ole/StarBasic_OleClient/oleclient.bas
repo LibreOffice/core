@@ -493,7 +493,7 @@ If outSCode.Value <> scode_paramNotFound.Value Or inLong2 <> outLong2 _
 	Exit Function
 End If
 
-'mixed positional and named args with ommitted args as out -args
+'mixed positional and named args with omitted args as out -args
 inLong = 1
 inLong2 = 2
 inLong3 = 3

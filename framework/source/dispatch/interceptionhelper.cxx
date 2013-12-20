@@ -64,7 +64,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     //    Use first interceptor everytimes.
     //    Note: it doesn't matter, which direction this helper implementation use to ask interceptor objects.
     //    Using of member m_aInterceptorList will starts at the beginning everytimes.
-    //    It depends from the filling operation, in which direction it works realy!
+    //    It depends from the filling operation, in which direction it works really!
     if (!xInterceptor.is() && m_lInterceptionRegs.size()>0)
     {
         pIt          = m_lInterceptionRegs.begin();

@@ -900,7 +900,7 @@ void SfxTabDialog::PageCreated
 
 /*  [Description]
 
-    Default implemetation of the virtual method. This is called immediately
+    Default implementation of the virtual method. This is called immediately
     after creating a page. Here the dialogue can call the TabPage Method
     directly.
 */
@@ -1049,7 +1049,7 @@ const SfxItemSet* SfxTabDialog::GetRefreshedSet()
 
 /*  [Description]
 
-    Default implemetation of the virtual Method.
+    Default implementation of the virtual Method.
     This is called, when <SfxTabPage::DeactivatePage(SfxItemSet *)>
     returns <SfxTabPage::REFRESH_SET>.
 */

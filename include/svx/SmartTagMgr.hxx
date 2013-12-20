@@ -203,7 +203,7 @@ public:
     com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagRecognizer >
         GetRecognizer( sal_uInt32 i ) const  { return maRecognizerList[i]; }
 
-    /** Is smart tag recognization active?
+    /** Is smart tag recognition active?
     */
     bool IsSmartTagsEnabled() const { return 0 != NumberOfRecognizers() &&
                                       IsLabelTextWithSmartTags(); }

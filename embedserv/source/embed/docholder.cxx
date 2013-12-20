@@ -1106,7 +1106,7 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
                 // TODO/LATER: in future UNO API should be used for the conversion, currently there is no
                 if ( aMapMode == embed::EmbedMapUnits::TWIP )
                 {
-                    // convertion from ONE_100TH_MM
+                    // conversion from ONE_100TH_MM
                     aNewSize.Width = aNewSize.Width * 144 / 254;
                     aNewSize.Height = aNewSize.Height * 144 / 254;
                 }
@@ -1140,7 +1140,7 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
                 // TODO/LATER: in future UNO API should be used for the conversion, currently there is no
                 if ( aMapMode == embed::EmbedMapUnits::TWIP )
                 {
-                    // convertion to ONE_100TH_MM
+                    // conversion to ONE_100TH_MM
                     aDocSize.Width = aDocSize.Width * 254 / 144;
                     aDocSize.Height = aDocSize.Height * 254 / 144;
                 }

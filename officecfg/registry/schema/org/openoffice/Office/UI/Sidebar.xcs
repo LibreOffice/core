@@ -87,7 +87,7 @@
                  com.sun.star.sheet.SpreadsheetDocument
                  com.sun.star.presentation.PresentationDocument
                  com.sun.star.drawing.DrawingDocument
-             
+
              Recognized shortcuts:
                  Writer
                  Calc
@@ -98,9 +98,9 @@
                  DrawImpress
                  WriterVariants
              These shortcuts exist for even more convenience and handle the frequent case of Draw
-	     and Impress as well as different variants of the Writer where they have otherwise 
+	     and Impress as well as different variants of the Writer where they have otherwise
 	     identical context descriptions.
-             
+
              Special values:
                  any
                  none
@@ -114,11 +114,11 @@
              Special values:
                  any
 
-          3  Panel state.  One of 
+          3  Panel state.  One of
              visible  Panel is initially visible and expanded
              hidden   Panel is initially collapsed, ie only its title bar is visible
 
-          4  (Optional, only used for panels) UNO command that overrides the DefaultMenuCommand.  Use 
+          4  (Optional, only used for panels) UNO command that overrides the DefaultMenuCommand.  Use
              the special value none to override the DefaultMenuCommand to the empty string and thereby
              disable the showing of a) the menu button in the panel titlebar and b) the showing of a dialog.
         </desc></info>
@@ -142,7 +142,7 @@
       </prop>
       <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
         <info>
-          <desc>When true then the title bar can be ommitted when the panel is the only panel in a deck.</desc>
+          <desc>When true then the title bar can be omitted when the panel is the only panel in a deck.</desc>
         </info>
         <value>false</value>
       </prop>
@@ -181,7 +181,7 @@
       <prop oor:name="DefaultMenuCommand" oor:type="xs:string">
         <info><desc>
           The default UNO command to execute when the user clicks on the menu button in the panel title bar.
-          Can be overriden in the ContextList to provide context dependent menu dialogs.
+          Can be overridden in the ContextList to provide context dependent menu dialogs.
           When empty then the menu icon is not shown in the panel title bar.
         </desc></info>
         <value></value>

@@ -2123,7 +2123,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
-    // Cell prefered width
+    // Cell preferred width
     SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
     if ( pTableTextNodeInfoInner->getCell() )
         nWidth = nWidth - GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() - 1 );
@@ -2351,7 +2351,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
     GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
-    // Output the table prefered width
+    // Output the table preferred width
     if ( nPageSize != 0 )
         m_pSerializer->singleElementNS( XML_w, XML_tblW,
                 FSNS( XML_w, XML_w ), OString::number( nPageSize ).getStr( ),

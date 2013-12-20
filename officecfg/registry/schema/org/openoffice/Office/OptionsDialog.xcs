@@ -74,7 +74,7 @@
       </info>
       <set oor:name="Nodes" oor:node-type="OrderedNode">
         <info>
-          <desc>A set member countains a Node (see type Node) which has been 
+          <desc>A set member contains a Node (see type Node) which has been 
 	    assigned to this Module. Also entities which do not own the Module 
 	    may add members to the set. Please look at the specification for 
 	    applying restrictions
@@ -261,7 +261,7 @@
     </set>
     <set oor:name="Modules" oor:node-type="Module">
       <info>
-        <desc>List of availabe application contexts</desc>
+        <desc>List of available application contexts</desc>
       </info>
     </set>
     <set oor:name="Nodes" oor:node-type="Node">

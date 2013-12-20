@@ -928,7 +928,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
     if ( nCount )
     {
         uno::Reference< beans::XPropertySet > xAdditionalPropSet;
-        sal_Bool bTriedToGetAdditonalPropSet = sal_False;
+        sal_Bool bTriedToGetAdditionalPropSet = sal_False;
 
         const beans::Property* pProps = rProperties.getConstArray();
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -971,14 +971,14 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
             {
                 // Not a Core Property! Maybe it's an Additional Core Property?!
 
-                if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
+                if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
                 {
                     xAdditionalPropSet
                         = uno::Reference< beans::XPropertySet >(
                             pProvider->getAdditionalPropertySet( rContentId,
                                                                  sal_False ),
                             uno::UNO_QUERY );
-                    bTriedToGetAdditonalPropSet = sal_True;
+                    bTriedToGetAdditionalPropSet = sal_True;
                 }
 
                 if ( xAdditionalPropSet.is() )
@@ -1097,7 +1097,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     sal_Int32 nCount = rValues.getLength();
 
     uno::Reference< ucb::XPersistentPropertySet > xAdditionalPropSet;
-    sal_Bool bTriedToGetAdditonalPropSet = sal_False;
+    sal_Bool bTriedToGetAdditionalPropSet = sal_False;
 
     sal_Bool bExchange = sal_False;
     OUString aOldTitle;
@@ -1250,10 +1250,10 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         {
             // Not a Core Property! Maybe it's an Additional Core Property?!
 
-            if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
+            if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
                 xAdditionalPropSet = getAdditionalPropertySet( sal_False );
-                bTriedToGetAdditonalPropSet = sal_True;
+                bTriedToGetAdditionalPropSet = sal_True;
             }
 
             if ( xAdditionalPropSet.is() )

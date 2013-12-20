@@ -65,7 +65,7 @@ namespace comphelper
         }
 
         /** call this in the getInfoHelper method of your derived class. The method returns the array helper of the
-            class, which is created if neccessary.
+            class, which is created if necessary.
         */
         ::cppu::IPropertyArrayHelper* getArrayHelper(sal_Int32 nId);
 

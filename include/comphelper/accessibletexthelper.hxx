@@ -160,7 +160,7 @@ namespace comphelper
 //      getTextBeforeIndex
 //      getTextBehindIndex
 //
-//  The following methods must be overriden by derived classes:
+//  The following methods must be overridden by derived classes:
 //
 //      implGetText
 //      implGetLocale

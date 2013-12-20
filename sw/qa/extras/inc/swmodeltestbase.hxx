@@ -156,7 +156,7 @@ protected:
      */
     virtual void verify()
     {
-        CPPUNIT_FAIL( "verify method must be overriden" );
+        CPPUNIT_FAIL( "verify method must be overridden" );
     }
 
     /**

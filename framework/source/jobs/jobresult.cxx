@@ -60,7 +60,7 @@ JobResult::JobResult()
                         <br>
                         The returned list of (for this generic implementation unknown!)
                         properties, will be written directly to the configuration and replace
-                        any old values there. There will no check for changes and we doesn't
+                        any old values there. There will no check for changes and we don't
                         support any mege feature here. They are written only. The job has
                         to modify this list.
                     </li>
@@ -151,7 +151,7 @@ JobResult::JobResult( const JobResult& rCopy )
 */
 JobResult::~JobResult()
 {
-    // Nothing realy to do here.
+    // Nothing really to do here.
 }
 
 //________________________________
@@ -179,7 +179,7 @@ void JobResult::operator=( const JobResult& rCopy )
 /**
     @short      checks for existing parts of the analyzed result
     @descr      The internal flag mask was set after analyzing of the pure result.
-                An user of us can check here, if the required part was realy part
+                An user of us can check here, if the required part was really part
                 of this result. Otherwhise it would use invalid information ...
                 by using our other members!
 

@@ -90,7 +90,7 @@ void BaseContainer::impl_loadOnDemand()
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // A generic container needs all items of a set of our cache!
-    // Of course it can block for a while, till the cache is realy filled.
+    // Of course it can block for a while, till the cache is really filled.
     // Note: dont load all sets supported by the cache here!
 
     FilterCache::EFillState eRequiredState = FilterCache::E_CONTAINS_NOTHING;
@@ -423,7 +423,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
     throw (css::uno::RuntimeException)
 {
-    OSL_FAIL("not pure virtual ... but not realy implemented .-)");
+    OSL_FAIL("not pure virtual ... but not really implemented .-)");
 
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< OUString >());
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);

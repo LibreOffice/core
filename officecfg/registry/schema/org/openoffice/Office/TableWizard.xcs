@@ -89,7 +89,7 @@
     </group>
     <group oor:name="TWizCategory">
       <info>
-        <desc>Information on the categries of the  table wizard</desc>
+        <desc>Information on the categories of the  table wizard</desc>
       </info>
       <prop oor:name="Index" oor:type="xs:int">
         <info>

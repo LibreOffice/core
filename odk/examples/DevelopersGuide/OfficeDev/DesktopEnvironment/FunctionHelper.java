@@ -117,7 +117,7 @@ public class FunctionHelper
         {
             // "createInstance()" method of used service manager can throw it.
             // Then it wasn't possible to get the URL transformer.
-            // Return default instead of realy parsed URL.
+            // Return default instead of really parsed URL.
             aURL = null;
         }
 
@@ -253,7 +253,7 @@ public class FunctionHelper
             // is returned. But normaly nobody outside the office knows this id.
             // New version of this method ignore the id parameter and creation will
             // work.
-            // Note: You must be shure if your window handle can be realy used by
+            // Note: You must be shure if your window handle can be really used by
             // the remote office. Means if this java client and the remote office
             // use the same display!
             com.sun.star.awt.XSystemChildFactory xChildFactory =
@@ -272,7 +272,7 @@ public class FunctionHelper
                 if (xPeer==null)
                 {
                     // mode 3) OK - new version doesn't work. It requires the
-                    // process id which we doesn't have.
+                    // process id which we don't have.
                     // So we must use the old way to get the right window peer.
                     // Pack the handle inside a wrapper object.
                     JavaWindowPeerFake aWrapper = new
@@ -308,7 +308,7 @@ public class FunctionHelper
                 // java window. In this case it should be enough to set return
                 // values to null. All other resources (which was created before)
                 // will be freed automaticly if scope wil be leaved.
-                System.out.println("May be the NativeView object wasn't realy visible at calling time of getNativeWindow()?");
+                System.out.println("May be the NativeView object wasn't really visible at calling time of getNativeWindow()?");
                 xPeer   = null;
                 xWindow = null;
             }
@@ -494,7 +494,7 @@ public class FunctionHelper
      * Dispatch an URL to given frame.
      * Caller can register himself for following result events for dispatched
      * URL too. Notifications are guaranteed (instead of dispatch())
-     * Returning of the dispatch object isn't neccessary.
+     * Returning of the dispatch object isn't necessary.
      * Nobody must hold it alive longer the dispatch needs.
      *
      * @param   xFrame      frame which should be the target of this dispatch
@@ -984,7 +984,7 @@ public class FunctionHelper
     /**
      * helper to get a file URL selected by user
      * This method doesn't show any API concepts ...
-     * but is neccessary rof this demo application.
+     * but is necessary rof this demo application.
      *
      * @param   aParent parent window of this dialog
      * @param   bOpen   If it is set to true =>

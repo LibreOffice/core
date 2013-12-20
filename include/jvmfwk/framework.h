@@ -388,7 +388,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
  */
 JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
 
-/** provides information about all availabe JRE installations.
+/** provides information about all available JRE installations.
 
     <p>The function determines dynamically what JREs are available. It uses
     the plug-in libraries to provide lists of available <code>JavaInfo</code>

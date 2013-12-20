@@ -156,7 +156,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
         aSel = ImpDeleteSelection( aSel );
 
     // The SvRTF parser expects the Which-mapping passed on in the pool, not
-    // dependant on a secondary.
+    // dependent on a secondary.
     SfxItemPool* pPool = &aEditDoc.GetItemPool();
     while (pPool->GetSecondaryPool() && !pPool->GetName().startsWith("EditEngineItemPool"))
     {

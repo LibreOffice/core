@@ -206,7 +206,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
             }
         }
         if (bDone)
-            mrSidebarWin.ResizeIfNeccessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );
+            mrSidebarWin.ResizeIfNecessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );
         else
         {
             // write back data first when showing navigator

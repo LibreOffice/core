@@ -98,7 +98,7 @@ public class _XAutoFormattable extends MultiMethodTest {
             // applying style
             oObj.autoFormat(name);
 
-            // getting new cell's backround.
+            // getting new cell's background.
             Integer bkgrnd2;
             try {
                 bkgrnd2 = (Integer) PS.getPropertyValue("CellBackColor");

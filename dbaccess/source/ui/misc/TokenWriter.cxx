@@ -203,7 +203,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         m_sDataSourceName = _aDataDescriptor.getDataSource();
         _aDataDescriptor[daCommandType] >>= m_nCommandType;
         _aDataDescriptor[daCommand]     >>= m_sName;
-        // some additonal information
+        // some additional information
         if(_aDataDescriptor.has(daConnection))
         {
             Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );

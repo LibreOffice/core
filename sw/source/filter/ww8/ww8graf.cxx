@@ -1984,7 +1984,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
             aPoly.Scale(aMapPolyX, aMapPolyY);
 
             // #i47277# - contour is already in unit of the
-            // graphic prefered unit. Thus, call method <SetContour(..)>
+            // graphic preferred unit. Thus, call method <SetContour(..)>
             pNd->SetContour(&aPoly);
         }
     }

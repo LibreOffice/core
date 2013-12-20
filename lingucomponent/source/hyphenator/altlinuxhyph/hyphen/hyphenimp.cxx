@@ -298,7 +298,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specifc problem that the
+            // workaround for Windows specific problem that the
             // path length in calls to 'fopen' is limted to somewhat
             // about 120+ characters which will usually be exceed when
             // using dictionaries as extensions.
@@ -559,7 +559,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specifc problem that the
+            // workaround for Windows specific problem that the
             // path length in calls to 'fopen' is limted to somewhat
             // about 120+ characters which will usually be exceed when
             // using dictionaries as extensions.

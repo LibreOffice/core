@@ -25,7 +25,7 @@ namespace framework{
 /*-************************************************************************************************************//**
     @descr          Use this as one of your base classes to disable
                     all possiblities to copy or assign one object to another one!
-                    We declare neccessary functions private to do so.
+                    We declare necessary functions private to do so.
 *//*-*************************************************************************************************************/
 class INonCopyable
 {

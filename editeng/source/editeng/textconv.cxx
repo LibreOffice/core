@@ -440,7 +440,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         ESelection *pESelection )
 {
-    //!! code is a modifed copy of SwHHCWrapper::ChangeText from sw !!
+    //!! code is a modified copy of SwHHCWrapper::ChangeText from sw !!
 
     DBG_ASSERT( !rNewText.isEmpty(), "unexpected empty string" );
     if (rNewText.isEmpty())

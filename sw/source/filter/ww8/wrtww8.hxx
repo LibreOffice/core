@@ -752,7 +752,7 @@ public:
     int GetGrfIndex(const SvxBrushItem& rBrush);
 
 protected:
-    /// Format-dependant part of the actual export.
+    /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
@@ -940,7 +940,7 @@ public:
     virtual bool SupportsUnicode() const { return bWrtWW8; }
 
 private:
-    /// Format-dependant part of the actual export.
+    /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl();
 
     void PrepareStorage();

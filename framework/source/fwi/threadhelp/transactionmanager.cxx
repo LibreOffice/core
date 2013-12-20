@@ -65,7 +65,7 @@ TransactionManager::~TransactionManager()
     @short      set new working mode
     @descr      These implementation knows for states of working: E_INIT, E_WORK, E_CLOSING, E_CLOSE
                 You can step during this ones only from the left to the right side and start at left side again!
-                (This is neccessary e.g. for refcounted objects!)
+                (This is necessary e.g. for refcounted objects!)
                 This call will block till all current existing transactions was finished.
                 Following results can occur:
                     E_INIT        :  All requests on this implementation are refused.

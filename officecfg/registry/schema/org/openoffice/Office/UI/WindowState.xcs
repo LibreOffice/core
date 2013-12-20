@@ -77,7 +77,7 @@
       </prop>
       <prop oor:name="Size" oor:type="xs:string">
         <info>
-          <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumenstances. Width and height must be splitted by an comma.</desc>
+          <desc>Specifies the size of a floating user interface element in pixel. The real size can differ if the layout manager decides to resize it due to current circumstances. Width and height must be splitted by an comma.</desc>
         </info>
       </prop>
       <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">

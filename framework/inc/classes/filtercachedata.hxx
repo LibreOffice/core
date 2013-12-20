@@ -355,7 +355,7 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
     //-------------------------------------------------------------------------------------------------------------
     public:
         //---------------------------------------------------------------------------------------------------------
-        // The only way to free ALL memory realy!
+        // The only way to free ALL memory really!
         //---------------------------------------------------------------------------------------------------------
         inline void free()
         {
@@ -664,7 +664,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //  member
     //-------------------------------------------------------------------------------------------------------------
     private:
-        EFilterPackage  m_ePackage                     ;   // ... not realy used yet! should split configuration in STANDARD and ADDITIONAL filter
+        EFilterPackage  m_ePackage                     ;   // ... not really used yet! should split configuration in STANDARD and ADDITIONAL filter
         sal_Int32       m_nVersion                     ;   // file format version of configuration! (necessary for "xml2xcd" transformation!)
         sal_Int32       m_nKeyCountTypes               ;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
         sal_Int32       m_nKeyCountFilters             ;

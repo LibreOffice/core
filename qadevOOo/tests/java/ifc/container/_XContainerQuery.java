@@ -43,7 +43,7 @@ import com.sun.star.container.XEnumeration;
 *     Normaly <code>createSubSetEnumerationByProperties()</code> covers all
 *    possible queries. But for special cases, i.e. sorted output, the function
 *    <code>createSubSetEnumerationByQuery()</code> was made. The special cases was not
-*    implemented by default in the implemetation object. So this function could be
+*    implemented by default in the implementation object. So this function could be
 *    marked as <code>optional</code></li>
 * <ul> <p>
 * <p>
@@ -90,7 +90,7 @@ public class _XContainerQuery extends MultiMethodTest {
 
         boolean bResult = true;
         if ( m_queryStrings == null ) {
-            log.println("This object does not have an implemetation for this function");
+            log.println("This object does not have an implementation for this function");
             // This is not a bug, because it's a feature for future purposes
         } else {
             for (int i = 0; i < m_queryStrings.length; i++){

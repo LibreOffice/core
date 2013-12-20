@@ -181,7 +181,7 @@ public:
     //      SdrHitKind eHit=pSdrView->PickAnything(rMEvt,SDRMOUSEBUTTONDOWN,aVEvt);
     //      ... hier Applikationsspezifischer Eingriff ...
     //      pSdrView->DoMouseEvent(aVEvt);
-    //      SetPointer(GetPreferedPointer(...))
+    //      SetPointer(GetPreferredPointer(...))
     //      CaptureMouse(...)
     void EnableExtendedMouseEventDispatcher(sal_Bool bOn) { bNoExtendedMouseDispatcher = !bOn; }
     sal_Bool IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
@@ -217,7 +217,7 @@ public:
     // unvollstaendige Implementation:
     // Das OutputDevice ist notwendig, damit ich die HandleSize ermitteln kann.
     // Bei NULL wird das 1. angemeldete Win verwendet.
-    Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, sal_Bool bLeftDown=sal_False) const;
+    Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, sal_Bool bLeftDown=sal_False) const;
     SdrHitKind PickAnything(const MouseEvent& rMEvt, sal_uInt16 nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
     sal_Bool DoMouseEvent(const SdrViewEvent& rVEvt);
@@ -297,7 +297,7 @@ public:
 //
 //   Sonstiges:
 //   ~~~~~~~~~~
-//     Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
+//     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
 //     OUString GetStatusText();
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////// */

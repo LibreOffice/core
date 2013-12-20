@@ -71,7 +71,7 @@ int SAL_DLLPUBLIC_EXPORT SAL_CALL main(int argc, char ** argv) \
 
 #include <stdlib.h>
 
-/* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
+/* Sorry but this is necessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
 
 #ifndef WINAPI
 #   define WINAPI   __stdcall

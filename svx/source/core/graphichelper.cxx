@@ -58,7 +58,7 @@ using namespace sfx2;
 
 namespace drawing = com::sun::star::drawing;
 
-void GraphicHelper::GetPreferedExtension( OUString& rExtension, const Graphic& rGraphic )
+void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic )
 {
     OUString aExtension = "png";
     switch( const_cast<Graphic&>( rGraphic ).GetLink().GetType() )
@@ -113,7 +113,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     OUString aExtension( aURL.GetExtension() );
     if( aExtension.isEmpty() )
     {
-        GetPreferedExtension( aExtension, rGraphic );
+        GetPreferredExtension( aExtension, rGraphic );
     }
 
     aExtension = aExtension.toAsciiLowerCase();
@@ -133,7 +133,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     if ( USHRT_MAX == nDefaultFilter )
     {
         // "wrong" extension?
-        GetPreferedExtension( aExtension, rGraphic );
+        GetPreferredExtension( aExtension, rGraphic );
         for ( sal_uInt16 i = 0; i < nCount; ++i )
             if ( aExtension == rGraphicFilter.GetExportFormatShortName( i ).toAsciiLowerCase() )
             {

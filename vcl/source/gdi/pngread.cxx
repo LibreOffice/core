@@ -90,7 +90,7 @@ private:
     sal_Int32           mnChunkLen;     // Length of current PNG chunk
     Size                maOrigSize;     // pixel size of the full image
     Size                maTargetSize;   // pixel size of the result image
-    Size                maPhysSize;     // prefered size in MAP_100TH_MM units
+    Size                maPhysSize;     // preferred size in MAP_100TH_MM units
     sal_uInt32          mnBPP;          // number of bytes per pixel
     sal_uInt32          mnScansize;     // max size of scanline
     sal_uInt32          mnYpos;         // latest y position in full image

@@ -2683,7 +2683,7 @@
         </info>
         <prop oor:name="CaptionOrderNumberingFirst" oor:type="xs:boolean">
           <info>
-            <desc>Specifies the order of the captions. If true the Numeber appears in front of the category.</desc>
+            <desc>Specifies the order of the captions. If true, the number appears in front of the category.</desc>
             <label>Caption order: Numbering first</label>
           </info>
         </prop>
@@ -3620,7 +3620,7 @@
               </prop>
               <prop oor:name="Level" oor:type="xs:int" oor:nillable="false">
                 <info>
-                  <desc>Specifies the feadings or chapter levels where the numbering starts in the document.</desc>
+                  <desc>Specifies the headings or chapter levels where the numbering starts in the document.</desc>
                   <label>Level</label>
                 </info>
                 <constraints>
@@ -4249,7 +4249,7 @@
           <prop oor:name="SetInetAttribute" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->
-            <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL regocnition -->
+            <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL recognition -->
             <info>
               <desc>Specifies whether character strings which could represent a URL are converted to a hyperlink.</desc>
               <label>Detect URL</label>
@@ -4353,7 +4353,7 @@
               <!-- OldLocation: Soffice.cfg -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
               <info>
-                <desc>Specifies whether paragraphs starting with a dash, a plus sign or an asterix followed by space or tab are replaced by a bullet character.</desc>
+                <desc>Specifies whether paragraphs starting with a dash, a plus sign or an asterisk followed by space or tab are replaced by a bullet character.</desc>
                 <label>Replace bullets with</label>
               </info>
               <value>true</value>
@@ -4384,7 +4384,7 @@
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
-                <!--Defautl value 0 = Symbol-->
+                <!--Default value 0 = Symbol-->
                 <info>
                   <desc>Specifies the font family if ChangeToBullets=true.</desc>
                 </info>
@@ -4394,7 +4394,7 @@
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
-                <!--Defautl value 10 = Symbol-->
+                <!--Default value 10 = Symbol-->
                 <info>
                   <desc>Specifies the font character set if ChangeToBullets=true.</desc>
                 </info>
@@ -4404,7 +4404,7 @@
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
-                <!--Defautl value 2 = Variable-->
+                <!--Default value 2 = Variable-->
                 <info>
                   <desc>Specifies the font pitch if ChangeToBullets=true.</desc>
                 </info>
@@ -4525,7 +4525,7 @@
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
-                <!--Defautl value 0 = Symbol-->
+                <!--Default value 0 = Symbol-->
                 <info>
                   <desc>Specifies the font family if ApplyNumbering=true.</desc>
                 </info>
@@ -4535,7 +4535,7 @@
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
-                <!--Defautl value 10 = Symbol-->
+                <!--Default value 10 = Symbol-->
                 <info>
                   <desc>Specifies the font character set if ApplyNumbering=true.</desc>
                 </info>
@@ -4545,7 +4545,7 @@
                 <!-- OldPath: Writer/AutoFormat/Options -->
                 <!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
-                <!--Defautl value 2 = Variable-->
+                <!--Default value 2 = Variable-->
                 <info>
                   <desc>Specifies the font pitch if ApplyNumbering=true.</desc>
                 </info>
@@ -4725,13 +4725,13 @@
         <info>
           <desc>Contains settings for the media type used for the label.</desc>
         </info>
-        <prop oor:name="Continous" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="Continuous" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Labels/Labels -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
             <desc>Specifies whether continuous paper or individual sheets are used.</desc>
-            <label>Continous / Sheet</label>
+            <label>Continuous / Sheet</label>
           </info>
           <value>false</value>
         </prop>
@@ -4913,13 +4913,13 @@
         <info>
           <desc>Contains settings for the media type used.</desc>
         </info>
-        <prop oor:name="Continous" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="Continuous" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
             <desc>Specifies whether continuous paper or individual sheets are used.</desc>
-            <label>Continous / Sheet</label>
+            <label>Continuous / Sheet</label>
           </info>
           <value>false</value>
         </prop>
@@ -5577,7 +5577,7 @@
         <prop oor:name="Addressee" oor:type="xs:string" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Envelope -->
+          <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies the recipient's address.</desc>
             <label>Addressee</label>
@@ -5588,7 +5588,7 @@
         <prop oor:name="Sender" oor:type="xs:string">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Envelope -->
+          <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies the sender's address.</desc>
             <label>Sender</label>
@@ -5597,7 +5597,7 @@
         <prop oor:name="UseSender" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Envelope -->
+          <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies whether the sender's address is used.</desc>
             <label>Use Sender</label>
@@ -5607,7 +5607,7 @@
         <prop oor:name="Database" oor:type="xs:string" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Envelope -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Envelope -->
+          <!-- UIHints: Insert  Envelope  Envelope -->
           <info>
             <desc>Specifies the database to be used for the addressee.</desc>
             <label>Database</label>
@@ -5623,7 +5623,7 @@
         <prop oor:name="AddresseeFromLeft" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Format //  old twips: 6463 / 2-->
+          <!-- UIHints: Insert  Envelope  Format //  old twips: 6463 / 2-->
           <info>
             <desc>Specifies the position of the addressee field measured from the left margin [UNIT=1/100 mm].</desc>
             <label>Addressee from left</label>
@@ -5633,7 +5633,7 @@
         <prop oor:name="AddresseeFromTop" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Format  // old twips: 6463 / 2-->
+          <!-- UIHints: Insert  Envelope  Format  // old twips: 6463 / 2-->
           <info>
             <desc>Specifies the position of the addressee field measured from the upper margin [UNIT=1/100 mm].</desc>
             <label>Addressee from top</label>
@@ -5643,7 +5643,7 @@
         <prop oor:name="SenderFromLeft" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Format -->
+          <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the position of the sender field measured from the left margin [UNIT=1/100 mm].</desc>
             <label>Sender from left</label>
@@ -5653,7 +5653,7 @@
         <prop oor:name="SenderFromTop" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Format -->
+          <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the position of the sender field measured from the upper margin [UNIT=1/100 mm].</desc>
             <label>Sender from top</label>
@@ -5663,7 +5663,7 @@
         <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Format -->
+          <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the width of the envelope [UNIT=1/100 mm].</desc>
             <label>Width</label>
@@ -5673,7 +5673,7 @@
         <prop oor:name="Height" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Format -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Format -->
+          <!-- UIHints: Insert  Envelope  Format -->
           <info>
             <desc>Specifies the height of the envelope [UNIT=1/100 mm].</desc>
             <label>Height</label>
@@ -5688,7 +5688,7 @@
         <prop oor:name="Alignment" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Printer -->
+          <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies the alignment when printing.</desc>
             <label>Alignment</label>
@@ -5730,7 +5730,7 @@
         <prop oor:name="FromAbove" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Printer -->
+          <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies whether the envelope is printed with the side facing up or down in the printer tray.</desc>
             <label>Print from top / Print from bottom</label>
@@ -5740,7 +5740,7 @@
         <prop oor:name="Right" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Printer -->
+          <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies the right distance of the printed area (horizontal position).</desc>
             <label>Shift right</label>
@@ -5750,7 +5750,7 @@
         <prop oor:name="Down" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Writer/Dialog/Envelope/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Insert  Envolpe  Printer -->
+          <!-- UIHints: Insert  Envelope  Printer -->
           <info>
             <desc>Specifies the bottom distance of the printed area (vertical position).</desc>
             <label>Shift down</label>

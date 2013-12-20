@@ -49,7 +49,7 @@ public class Desk
     /**
      * main
      * Establish connection to a remote office and starts the demo application.
-     * User can overwrite some of neccessary start options by using command line parameters.
+     * User can overwrite some of necessary start options by using command line parameters.
      *
      * syntax: Desk [mode={inplace|outplace}] [file=<filename>]
      *

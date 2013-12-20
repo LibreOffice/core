@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module lang {
 
 /** Provides a collection of implementations of services.
 
-    <p>The factories for instantiating objects of implemetations
+    <p>The factories for instantiating objects of implementations
     are accessed via a service name.</p>
 
     <p>The com::sun::star::container::XContentEnumerationAccess

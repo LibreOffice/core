@@ -292,7 +292,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
-        // all states simple as READONLY ! But because all realy needed paths are "mandatory" by default
+        // all states simple as READONLY ! But because all really needed paths are "mandatory" by default
         // we have to handle "finalized" as the real "readonly" indicator .
         aPathVal.bIsReadonly = bFinalized;
     }
@@ -332,7 +332,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 
     // remove the whole path from the old configuration !
     // Otherwise we cant make sure that the diff between new and old configuration
-    // on loading time realy represent an user setting !!!
+    // on loading time really represent an user setting !!!
 
     // Check if the given path exists inside the old configuration.
     // Because our new configuration knows more then the list of old paths ... !

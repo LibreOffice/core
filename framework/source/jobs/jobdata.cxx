@@ -67,7 +67,7 @@ const sal_Char* JobData::PROP_CONTEXT             = "Context"                   
 /**
     @short      standard ctor
     @descr      It initialize this new instance.
-                But for real working it's neccessary to call setAlias() or setService() later.
+                But for real working it's necessary to call setAlias() or setService() later.
                 Because we need the job data ...
 
     @param      rxContext
@@ -138,7 +138,7 @@ JobData::~JobData()
 //________________________________
 /**
     @short      initalize this instance as a job with configuration
-    @descr      They given alias can be used to address some configuraton data.
+    @descr      They given alias can be used to address some configuration data.
                 We read it and fill our internal structures. Of course old information
                 will be lost doing so.
 
@@ -482,7 +482,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     @short  return information, if this job is part of the global configuration package
             org.openoffice.Office.Jobs
     @descr  Because jobs can be executed by the dispatch framework using an uno service name
-            directly - an executed job must not have any configuration realy. Such jobs
+            directly - an executed job must not have any configuration really. Such jobs
             must provide the right interfaces only! But after finishing jobs can return
             some information (e.g. for updating her configuration ...). We must know
             if such request is valid or not then.
@@ -704,7 +704,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
                 But note: that does not set defaults for internal used members, which
                 does not relate to any job property! e.g. the reference to the global
                 uno service manager. Such information is used for internal processes only
-                and are neccessary for our work.
+                and are necessary for our work.
  */
 void JobData::impl_reset()
 {

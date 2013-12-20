@@ -176,7 +176,7 @@ public:
                com::sun::star::uno::RuntimeException );
 
     /**
-      * The implemetation of this method always returns 0. Override this
+      * The implementation of this method always returns 0. Override this
       * method, if necessary.
       */
     virtual sal_Int16 SAL_CALL

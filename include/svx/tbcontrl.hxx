@@ -102,7 +102,7 @@
                         -> SvxBoxItem & SvxBoxInfoItem
         Additional information
         from DocShell:  none
-        Bemerkung:      provides dependant of chosen ValueSet-Item
+        Bemerkung:      provides dependent of chosen ValueSet-Item
                         only SvxBoxItem or additionally SvxBoxInfoItem
                         If the Controller ein SfxUInt16Item receives a
                         value != 0, paragraph mode will be switched on,

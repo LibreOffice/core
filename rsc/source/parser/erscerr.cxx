@@ -148,7 +148,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-presponse     Use response file for Preprocessor.\n" );
             StdLstOut( "-lg<language>  Use a different language.\n" );
             StdLstOut( "-fs=<filename> Name of the .res file.\n" );
-            StdLstOut( "-lip=<path>    additional search path for system dependant files\n" );
+            StdLstOut( "-lip=<path>    additional search path for system dependent files\n" );
             StdLstOut( "-fp=<filename> Renaming of the .srs file.\n" );
             StdLstOut( "-oil=<dir>     Output directory for image list files\n" );
             StdLstOut( "-sub<ENV>=<path> replace <path> by <ENV> in image list files\n" );

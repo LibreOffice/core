@@ -65,7 +65,7 @@ PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
 /**
     @short      initialize static member of class HandlerCache
     @descr      We use a singleton pattern to implement this handler cache.
-                That means it use two static member list to hold all neccessary information
+                That means it use two static member list to hold all necessary information
                 and a ref count mechanism to create/destroy it on demand.
  */
 HandlerHash* HandlerCache::m_pHandler  = NULL;
@@ -148,7 +148,7 @@ sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) 
 
 /**
     @short      search for a registered handler by using an URL struct
-    @descr      We combine neccessary parts of this struct to a valid URL string
+    @descr      We combine necessary parts of this struct to a valid URL string
                 and call our other search method ...
                 It's a helper for outside code.
  */

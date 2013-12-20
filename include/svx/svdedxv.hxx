@@ -241,7 +241,7 @@ public:
     // Object-MacroModus (z.B. Rect als Button oder sowas):
     //************************************************************************
     // Persistent. Default TRUE. SvDraw wertet das Flag u.a. bei
-    // SdrView::GetPreferedPointer() aus. Hat nur Wirkung, wenn das Dokument
+    // SdrView::GetPreferredPointer() aus. Hat nur Wirkung, wenn das Dokument
     // Draw-Objekte mit Macrofunktionalitaet hat (SdrObject::HasMacro()==sal_True).
     void SetMacroMode(sal_Bool bOn) { bMacroMode=bOn; }
     sal_Bool IsMacroMode() const { return bMacroMode; }

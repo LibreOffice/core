@@ -38,7 +38,7 @@ namespace ww
     /*
      needed_cast is the same as static_cast except that there will be a compile
      time assert when NDEBUG is not defined and the in and out types are the
-     same.  i.e. needed_cast catches unneccessary casts
+     same.  i.e. needed_cast catches unnecessary casts
     */
     template<typename Ret, typename Param> Ret needed_cast(Param in)
     {

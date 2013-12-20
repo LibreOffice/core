@@ -63,20 +63,20 @@ using namespace ::com::sun::star::accessibility;
 
 namespace
 {
-    sal_Bool isFieldNameAsterix(const OUString& _sFieldName )
+    sal_Bool isFieldNameAsterisk(const OUString& _sFieldName )
     {
-        sal_Bool bAsterix = !(!_sFieldName.isEmpty() && _sFieldName.toChar() != '*');
-        if ( !bAsterix )
+        sal_Bool bAsterisk = !(!_sFieldName.isEmpty() && _sFieldName.toChar() != '*');
+        if ( !bAsterisk )
         {
             OUString sName = _sFieldName;
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sName, '.');
             if (    (nTokenCount == 2 && sName.getToken(1,'.')[0] == '*' )
                 ||  (nTokenCount == 3 && sName.getToken(2,'.')[0] == '*' ) )
             {
-                bAsterix = sal_True;
+                bAsterisk = sal_True;
             }
         }
-        return bAsterix;
+        return bAsterisk;
     }
     sal_Bool lcl_SupportsCoreSQLGrammar(const Reference< XConnection>& _xConnection)
     {
@@ -569,7 +569,7 @@ void OSelectionBrowseBox::notifyFunctionFieldChanged(const OUString& _sOldFuncti
 
 void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,sal_uInt16 _nColumnId)
 {
-    if ( isFieldNameAsterix( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy()) )
+    if ( isFieldNameAsterisk( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy()) )
     {
         OUString sFunctionName;
         GetFunctionName(SQL_TOKEN_COUNT,sFunctionName);
@@ -736,7 +736,7 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
     // we got a valid select column
     // find what type of column has be inserted
     ::connectivity::OSQLParseNode* pSelection = pParseNode->getChild(2);
-    if ( SQL_ISRULE(pSelection,selection) ) // we found the asterix
+    if ( SQL_ISRULE(pSelection,selection) ) // we found the asterisk
     {
         _pEntry->SetField(_sFieldName);
         clearEntryFunctionField(_sFieldName,_pEntry,_bListAction,_pEntry->GetColumnId());
@@ -1395,7 +1395,7 @@ sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     {
         if ( IsEditing() )
         {
-            // allow the asterix again
+            // allow the asterisk again
             m_bDisableErrorBox = sal_True;
             SaveModified();
             m_bDisableErrorBox = sal_False;
@@ -2697,10 +2697,10 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
         // Aggregate functions in general only available with Core SQL
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
-            // if we have an asterix, no other function than count is allowed
+            // if we have an asterisk, no other function than count is allowed
             m_pFunctionCell->Clear();
             m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';'));
-            if ( isFieldNameAsterix(_pEntry->GetField()) )
+            if ( isFieldNameAsterisk(_pEntry->GetField()) )
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
             else
             {
@@ -2726,7 +2726,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
         else
         {
             // only COUNT(*) and COUNT("table".*) allowed
-            sal_Bool bCountRemoved = !isFieldNameAsterix(_pEntry->GetField());
+            sal_Bool bCountRemoved = !isFieldNameAsterisk(_pEntry->GetField());
             if ( bCountRemoved )
                 m_pFunctionCell->RemoveEntry(1);
 

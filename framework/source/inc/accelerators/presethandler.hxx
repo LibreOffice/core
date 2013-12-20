@@ -392,12 +392,12 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                  sal_Bool         bCreateIfMissing);
 
         //---------------------------------------
-        /** @short  do anything which is neccessary to flush all changes
+        /** @short  do anything which is necessary to flush all changes
                     back to disk.
 
             @descr  We have to call commit on all cached sub storages on the
                     path from the root storage upside down to the working storage
-                    (which are not realy used, but required to be holded alive!).
+                    (which are not really used, but required to be holded alive!).
          */
         void commitUserChanges();
 

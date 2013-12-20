@@ -53,7 +53,7 @@ DEFINE_INIT_SERVICE(
 /**
     @short  standard constructor to create instance
     @descr  Because an instance will be initialized by her interface methods
-            it's not neccessary to do anything here.
+            it's not necessary to do anything here.
  */
 DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& )
         //  init baseclasses first!
@@ -67,7 +67,7 @@ DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< c
 //_____________________________________________________________________________
 /**
     @short  standard destructor
-    @descr  We are a helper and not a real service. So we doesn't provide
+    @descr  We are a helper and not a real service. So we don't provide
             dispose() functionality. This supplier dies by ref count mechanism
             and should release all internal used ones too.
  */

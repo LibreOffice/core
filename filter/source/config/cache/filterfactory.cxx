@@ -89,7 +89,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
-            check if the given filter name realy exist ...
+            check if the given filter name really exist ...
             Because our old implementation worked with an internal
             type name instead of a filter name. For a small migration time
             we must simulate this old feature :-( */
@@ -161,7 +161,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     throw(css::uno::RuntimeException)
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
-                  which can be created as UNO Services realy. Thats why we search for filters,
+                  which can be created as UNO Services really. Thats why we search for filters,
                   which dont have a valid value for the property "FilterService".
                   Of course we cant check for corrupted service names here. We can check
                   for empty strings only ...
@@ -555,7 +555,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& 
         xUISortConfig->getByName(sModule) >>= xModule;
         if (xModule.is()) // only to be on the safe side of life if the exception was not thrown .-)
         {
-            // Note: convertion of the returned Any to OUStringList throws
+            // Note: conversion of the returned Any to OUStringList throws
             // an IllegalArgumentException if the type does not match ...
             // but it resets the OUStringList to a length of 0 if the Any is empty!
             OUStringList lSortedFilters(xModule->getByName(PROPNAME_SORTEDFILTERLIST));

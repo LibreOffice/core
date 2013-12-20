@@ -573,7 +573,7 @@ void ImpEditView::SetAnchorMode( EVAnchorMode eMode )
 
 void ImpEditView::CalcAnchorPoint()
 {
-    // GetHeight() and GetWidth() -1, because rectangle calculation not prefered.
+    // GetHeight() and GetWidth() -1, because rectangle calculation not preferred.
 
     // X:
     switch ( eAnchorMode )

@@ -971,7 +971,7 @@
           <desc>Specifies if the Application Repaint shall use a buffer for
           Pre-Rendering. If on, screen flicker is greatly reduced and remote
           display is fast, but a buffer (graphics memory) is needed. If off,
-          screen flicker will occurr and remote display is slow, but no buffer
+          screen flicker will occur and remote display is slow, but no buffer
           is needed. This is the global switch for the whole office.</desc>
           <label>Application Repaint is allowed to use Pre-Rendering
           Buffer.</label>
@@ -1098,7 +1098,7 @@
           activated and thus avoids AntiAliasing of pure Horizontal or Vertical
           Hairlines.</desc>
           <label>Determines if Horizontal and Vertical HairLines in AntiAliased
-          mode are snapped to discrete pixles to enhance visualisation</label>
+          mode are snapped to discrete pixels to enhance visualisation</label>
         </info>
         <value>true</value>
       </prop>
@@ -1195,7 +1195,7 @@
         <info>
           <desc>Specifies the maximum allowed luminance the system's selection
           color may have. When the colorfetched from the system is brighter
-          (luminacne is bigger), it will be scaled to a luminance of exactly
+          (luminance is bigger), it will be scaled to a luminance of exactly
           this given value.</desc>
           <label>Specifies the maximum allowed luminance for the system's
           selection color.</label>
@@ -1259,7 +1259,7 @@
         <!-- OldPath: AutoCorrect/Options/All -->
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL
-             regocnition -->
+             recognition -->
         <info>
           <desc>Specifies if character strings which could represent an URL
           should be converted to a hyperlink.</desc>
@@ -1408,7 +1408,7 @@
           <!-- OldPath: AutoCorrect/Options/All -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions -
-               Abbrevation -->
+               Abbreviation -->
           <info>
             <desc>Specifies if defined abbreviations should be taken into
             account to exclude a preceding capital letter.</desc>
@@ -4728,7 +4728,7 @@
             <desc>Contains settings for HTML import.</desc>
           </info>
           <prop oor:name="NumbersEnglishUS" oor:type="xs:boolean" oor:nillable="false">
-            <!-- UIHints: Tools  Options  Load/Save - HTML Compability [Section]
+            <!-- UIHints: Tools  Options  Load/Save - HTML Compatibility [Section]
                  Import -->
             <info>
               <desc>Specifies if numbers should be parsed according to the en-US
@@ -5231,7 +5231,7 @@
               </enumeration>
               <enumeration oor:value="3">
                 <info>
-                  <desc>Opens magnified to fit the entire width of its boundig
+                  <desc>Opens magnified to fit the entire width of its bounding
                   box within the window (cuts out margins).</desc>
                 </info>
               </enumeration>
@@ -5540,14 +5540,14 @@
       </prop>
       <prop oor:name="ExperimentalMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Determins if various experimental, and potentially unstable
+          <desc>Determines if various experimental, and potentially unstable
           features should be enabled in the user interface.</desc>
         </info>
         <value>false</value>
       </prop>
       <prop oor:name="MacroRecorderMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Determins if the limited, and awkward code producing
+          <desc>Determines if the limited, and awkward code producing
           macro recorder should be enabled in the user interface.</desc>
         </info>
         <value>false</value>
@@ -6282,7 +6282,7 @@
         <info>
           <author>ALG</author>
           <desc>
-            This option allows to make previews (e.g. UI previews for object attirbutes) show the content with a checkeded 
+            This option allows to make previews (e.g. UI previews for object attributes) show the content with a checkered
             background to allow simple identification and better preview of transparent content, e.g. when a draw object
             is filled with a transparent graphic (SVG or bitmap) the preview will show the checkered background shine
             through, so the user can identify that the fill has transparency with a single look.
@@ -6499,7 +6499,7 @@
         </info>
         <prop oor:name="RecognizeSmartTags" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies whether smart tag recognization is enabled.</desc>
+            <desc>Specifies whether smart tag recognition is enabled.</desc>
           </info>
           <value>true</value>
         </prop>

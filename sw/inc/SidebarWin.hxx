@@ -106,7 +106,7 @@ class SwSidebarWin : public Window
         void            InitControls();
         void            HidePostIt();
         void            DoResize();
-        void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
+        void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
         void            SetScrollbar();
 
         void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);

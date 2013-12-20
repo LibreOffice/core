@@ -53,7 +53,7 @@ public class ViewContainer extends Thread
 
     /**
      * provides a singleton view container
-     * Neccessary for terminate(9 functionality to be able
+     * Necessary for terminate(9 functionality to be able
      * to call Runtime.runFinilization().
      *
      * @return a reference to the singleton ViewContainer instance
@@ -145,12 +145,12 @@ public class ViewContainer extends Thread
         // remote references.
         if (nViewCount<1)
         {
-            boolean bNeccessary = false;
+            boolean bNecessary = false;
             synchronized(this)
             {
-                bNeccessary = ! mbShutdownActive;
+                bNecessary = ! mbShutdownActive;
             }
-            if (bNeccessary==true)
+            if (bNecessary==true)
             {
                 System.out.println("call exit(0)!");
                 System.exit(0);

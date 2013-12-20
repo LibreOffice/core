@@ -92,7 +92,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             //-----------------------------------
             /** @short  default ctor.
 
-                @descr  Such constructed object cant be used realy.
+                @descr  Such constructed object cant be used really.
                         Might it will crash if its used!
                         Dont forget to initialize all(!) members ...
              */

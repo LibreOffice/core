@@ -159,7 +159,7 @@ public:
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
 
 protected:
-    /// Format-dependant part of the actual export.
+    /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl();
 
     /// Output page/section breaks

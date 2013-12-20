@@ -134,8 +134,8 @@ OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (Runt
 
 Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)
 {
-    // Note: That service  does not realy exists .-)
-    // But this implementation is not thought to be registered realy within our service.rdb.
+    // Note: That service  does not really exists .-)
+    // But this implementation is not thought to be registered really within our service.rdb.
     // At least we need the implementation name only to identify these service at the global desktop instance.
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener

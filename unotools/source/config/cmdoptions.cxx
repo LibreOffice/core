@@ -77,7 +77,7 @@ class SvtCmdOptions
 
         //---------------------------------------------------------------------------------------------------------
         // convert internal list to external format
-        // for using it on right menus realy
+        // for using it on right menus really
         // Notice:   We build a property list with 4 entries and set it on result list then.
         //           The while-loop starts with pointer on internal member list lSetupEntries, change to
         //           lUserEntries then and stop after that with NULL!

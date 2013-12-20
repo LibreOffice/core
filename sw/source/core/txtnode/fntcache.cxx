@@ -2613,7 +2613,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
 
             if( GetShell() && GetShell()->GetWin() )
             {
-                // here we determine the prefered window text color for painting
+                // here we determine the preferred window text color for painting
                 const SwViewOption* pViewOption = GetShell()->GetViewOptions();
                 if(pViewOption->IsPagePreview() &&
                         !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())

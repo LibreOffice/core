@@ -125,7 +125,7 @@ bool StgCompObjStream::Load()
                 //the actual codepage used doesn't seem to be specified/stored
                 //anywhere :-(. Might as well pick 1252 and be consistent on
                 //all platforms and envs
-                //http://www.openoffice.org/nonav/issues/showattachment.cgi/68668/Orginal%20Document.doc
+                //https://issues.apache.org/ooo/attachment.cgi?id=68668
                 //for a good edge-case example
                 aUserName = nStrLen ? OUString( p, nStrLen, RTL_TEXTENCODING_MS_1252 ) : OUString();
                 nCbFormat = ReadClipboardFormat( *this );

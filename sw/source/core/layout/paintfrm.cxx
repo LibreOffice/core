@@ -3832,7 +3832,7 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     if ( 0 == ( pUserCall = GetUserCall(pObj) ) )
         return sal_True;
 
-    //Attribute dependant, don't paint for printer or Preview
+    //Attribute dependent, don't paint for printer or Preview
     sal_Bool bPaint =  pFlyOnlyDraw ||
                        ((SwContact*)pUserCall)->GetFmt()->GetPrint().GetValue();
     if ( !bPaint )

@@ -154,7 +154,7 @@ public: // XNameAccess
 
 
 public: // XAppend
-    // Must be overriden in Non-Descriptors. May be overriden in descriptors, when
+    // Must be overridden in Non-Descriptors. May be overridden in descriptors, when
     // PropertySet.NAME != container name
     virtual void SAL_CALL appendByDescriptor(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )

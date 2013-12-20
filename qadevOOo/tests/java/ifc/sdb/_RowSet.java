@@ -97,7 +97,7 @@ public class _RowSet extends MultiPropertyTest {
     }
 
     /**
-     * Overriden method which tests all the properties
+     * Overridden method which tests all the properties
      * with <code>SafeTester</code>.
      *
      * @see SafeTester

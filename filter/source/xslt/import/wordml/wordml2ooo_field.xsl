@@ -1318,7 +1318,7 @@
         </xsl:choose>
     </xsl:template -->
     <!-- ========= the following code is to generate the date styles for date/time fields ============ -->
-    <!--the default date styel content -->
+    <!--the default date style content -->
     <xsl:template name="default_date_style_content">
         <number:year number:style="long">
         </number:year>
@@ -1340,7 +1340,7 @@
         <number:am-pm>
 			</number:am-pm>
     </xsl:template>
-    <!--the default date styel -->
+    <!--the default date style -->
     <xsl:template name="default_date_style">
         <number:date-style style:name="NDF1">
             <xsl:call-template name="default_date_style_content"/>

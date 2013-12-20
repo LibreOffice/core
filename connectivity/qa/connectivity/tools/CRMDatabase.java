@@ -172,7 +172,7 @@ public class CRMDatabase
                 new HsqlColumnDescriptor( "Comment","LONGVARCHAR")} );
         m_database.createTable( table, true );
 
-        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(1,'Food, Inc.','Down Under','Melbourne','509','Prefered') " );
+        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(1,'Food, Inc.','Down Under','Melbourne','509','Preferred') " );
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(2,'Simply Delicious','Down Under','Melbourne','518',null) " );
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(3,'Pure Health','10 Fish St.','San Francisco','94107',null) " );
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(4,'Milk And More','Arlington Road 21','Dublin','31021','Good one.') " );

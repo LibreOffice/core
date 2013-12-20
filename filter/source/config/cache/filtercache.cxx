@@ -183,7 +183,7 @@ void FilterCache::load(EFillState eRequired,
 #if OSL_DEBUG_LEVEL > 1
     if (!bByThread && ((eRequired & E_CONTAINS_ALL) == E_CONTAINS_ALL))
     {
-        SAL_WARN( "filter.config", "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
+        SAL_WARN( "filter.config", "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not really needed here!");
     }
 #endif
 
@@ -1741,7 +1741,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                 aItem[PROPNAME_USERDATA    ] = xItem->getByName(PROPNAME_USERDATA    );
                 aItem[PROPNAME_TEMPLATENAME] = xItem->getByName(PROPNAME_TEMPLATENAME);
 //TODO remove it if moving of filter uinames to type uinames
-//       will be finished realy
+//       will be finished really
 #ifdef AS_ENABLE_FILTER_UINAMES
                 impl_readPatchUINames(xItem, aItem);
 #endif // AS_ENABLE_FILTER_UINAMES
@@ -1921,7 +1921,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
             }
 
 //TODO remove it if moving of filter uinames to type uinames
-//       will be finished realy
+//       will be finished really
 #ifdef AS_ENABLE_FILTER_UINAMES
             css::uno::Reference< css::container::XNameReplace > xUIName;
             xItem->getByName(PROPNAME_UINAME) >>= xUIName;
@@ -1944,7 +1944,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
 }
 
 /*-----------------------------------------------
-    static! => no locks neccessary
+    static! => no locks necessary
 -----------------------------------------------*/
 css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(sal_Int32 nFlags)
 {
@@ -1979,7 +1979,7 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(sal_
 }
 
 /*-----------------------------------------------
-    static! => no locks neccessary
+    static! => no locks necessary
 -----------------------------------------------*/
 sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames)
 {

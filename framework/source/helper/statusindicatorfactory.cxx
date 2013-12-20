@@ -251,7 +251,7 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     else
     {
         // Our stack is empty. No further child exists.
-        // Se we must "end" our progress realy
+        // Se we must "end" our progress really
         if (xProgress.is())
             xProgress->end();
         // Now hide the progress bar again.

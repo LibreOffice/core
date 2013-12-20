@@ -703,7 +703,7 @@ void PrintFontManager::deinitFontconfig()
 bool PrintFontManager::addFontconfigDir( const OString& rDirName )
 {
     // workaround for a stability problems in older FC versions
-    // when handling application specifc fonts
+    // when handling application specific fonts
     const int nVersion = FcGetVersion();
     if( nVersion <= 20400 )
         return false;

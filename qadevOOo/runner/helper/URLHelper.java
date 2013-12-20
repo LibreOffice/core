@@ -31,7 +31,7 @@ import com.sun.star.util.XURLTransformer;
 
 /**
  * It collects some static helper functons to handle URLs.
- * Sometimes it's neccessary to convert URL from/to system paths.
+ * Sometimes it's necessary to convert URL from/to system paths.
  * Or from string to strutural notations (e.g. com.sun.star.util.URL).
  * And sometimes java had another notation then the office it has.
  *
@@ -83,7 +83,7 @@ public class URLHelper
 
     /**
      * The same as getFileURLFromSystemPath() before but uses string parameter instead
-     * of a File type. It exist to supress converting of neccessary parameters in the
+     * of a File type. It exist to supress converting of necessary parameters in the
      * outside code. But of course getFileURLFromSystemPath(File) will be a little bit faster
      * then this method ...
      *
@@ -148,7 +148,7 @@ public class URLHelper
 
     /**
      * The same as getURLWithProtocolFromSystemPath() before but uses string parameter instead
-     * of a File types. It exist to supress converting of neccessary parameters in the
+     * of a File types. It exist to supress converting of necessary parameters in the
      * outside code. But of course getURLWithProtocolFromSystemPath(File,File,String) will be
      * a little bit faster then this method ...
      *

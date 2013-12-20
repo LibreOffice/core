@@ -39,7 +39,7 @@ namespace framework{
 
 
 /**
-    @short  holds all neccessary information about a job and
+    @short  holds all necessary information about a job and
             handle it's configuration (if any exist!)
     @descr  It can be used rom different use cases as a container
             (or proxy) for all config data of a registered job.
@@ -125,7 +125,7 @@ class JobData : private ThreadHelpBase
             occurs. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
             And normaly the original event is transported as parameter set to the executed job. But then such job
             cant differ between e.g. "OnNew" and "onDocumentOpened".
-            That's why we must know, for which type of event the job was realy triggered .-)
+            That's why we must know, for which type of event the job was really triggered .-)
 
             The information "sDocEvent" from this struct must be set on the member JobData::m_sEvent from outside
             user of such Jobdata structure.
@@ -160,7 +160,7 @@ class JobData : private ThreadHelpBase
                 - as a job without any configuration
             First mode is triggered by an alias, which points to the
             configuration entries. Second mode is specified by an uno service
-            or implementation name. Then we does the same things (use the same interfaces)
+            or implementation name. Then we do the same things (use the same interfaces)
             but don't handle any configuration data.
             The effect: This mode can be detected by this member.
          */
@@ -177,7 +177,7 @@ class JobData : private ThreadHelpBase
         /**
             the alias name of this job.
             Is used as entry of configuration set for job registration, to find all
-            neccessary properties of it..
+            necessary properties of it..
          */
         OUString m_sAlias;
 

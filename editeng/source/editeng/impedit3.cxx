@@ -4327,7 +4327,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
     }
     else
     {
-        // CTL/Bidi checking neccessary
+        // CTL/Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
         nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
 

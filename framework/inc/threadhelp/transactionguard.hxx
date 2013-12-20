@@ -54,7 +54,7 @@ class TransactionGuard : private INonCopyable
             @descr      Use these ctor methods to initialize the guard right.
                         Given reference must be valid - otherwise crashes could occur!
 
-            @attention  It's not neccessary to lock any mutex here! Because a ctor should not be called
+            @attention  It's not necessary to lock any mutex here! Because a ctor should not be called
                         from different threads at the same time ... this class use no refcount mechanism!
 
             @seealso    -

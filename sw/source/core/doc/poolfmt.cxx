@@ -1422,7 +1422,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
                     bFnd = true;
     }
 
-    // Not found or no dependecies?
+    // Not found or no dependencies?
     if( bFnd && pNewFmt->GetDepends() )
     {
         // Check if we have dependent ContentNodes in the Nodes array

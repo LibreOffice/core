@@ -264,15 +264,15 @@ public:
     void Read();
     OUString GetRubyText(){return m_strRubyText;}
     void SetRubyText(OUString sText){m_strRubyText = sText;}
-    OUString GetTextStyleName(){return m_TextStye;}
-    void SetTextStyleName(OUString sName){m_TextStye = sName;}
+    OUString GetTextStyleName(){return m_TextStyle;}
+    void SetTextStyleName(OUString sName){m_TextStyle = sName;}
     OUString GetRubyStyleName(){return m_RubyStyle;}
     void SetRubyStyleName(OUString sName){m_RubyStyle = sName;}
 private:
     LwpObjectID m_objLayout;
     OUString m_strRubyText;
     OUString m_RubyStyle;
-    OUString m_TextStye;
+    OUString m_TextStyle;
 };
 #endif
 

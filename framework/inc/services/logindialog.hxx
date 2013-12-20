@@ -487,7 +487,7 @@ class LoginDialog   :   public css::lang::XTypeProvider     ,
                         Don't use this directly!
                         You must try to convert the value of given propertyhandle and
                         return results of this operation. This will be use to ask vetoable
-                        listener. If no listener have a veto, we will change value realy!
+                        listener. If no listener have a veto, we will change value really!
                         ( in method setFastPropertyValue_NoBroadcast(...) )
 
             @seealso    class OPropertySetHelper
@@ -598,7 +598,7 @@ class LoginDialog   :   public css::lang::XTypeProvider     ,
 
         /*-****************************************************************************************************//**
             @short      helper method to check if a property will change his value
-            @descr      Is neccessary for vetoable listener mechanism of OPropertySethelper.
+            @descr      Is necessary for vetoable listener mechanism of OPropertySethelper.
 
             @seealso    -
 
@@ -694,7 +694,7 @@ class LoginDialog   :   public css::lang::XTypeProvider     ,
         /*-****************************************************************************************************//**
             @short      helper methods to read/write  properties from/to ini file
             @descr      Using of Config-Class isn't easy everytime :-(
-                        Thats the reason for these helper. State of operation isn't realy important ..
+                        Thats the reason for these helper. State of operation isn't really important ..
                         but we assert impossible cases or occurred errors!
 
             @seealso    -

@@ -54,7 +54,7 @@ contain only ASCII characters<p>
 case preserving or not. The operating system implementation itself should
 determine if it can map case-insensitive paths. The case correct notation of
 a filename or file path is part of the "File Info". This case correct name
-can be used as a unique key if neccessary.<p>
+can be used as a unique key if necessary.<p>
 
 4. Obtaining information about files or volumes is controlled by a
 bitmask which specifies which fields are of interest. Due to performance

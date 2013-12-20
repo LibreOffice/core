@@ -1855,7 +1855,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         {
             if( m_pDrawViewWrapper->IsTextEditHit( aMousePos, HITPIX) )
             {
-                m_pChartWindow->SetPointer( m_pDrawViewWrapper->GetPreferedPointer(
+                m_pChartWindow->SetPointer( m_pDrawViewWrapper->GetPreferredPointer(
                     aMousePos, m_pChartWindow, nModifier, bLeftDown ) );
                 return;
             }
@@ -1872,7 +1872,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         if( pHitSelectionHdl )
         {
 
-            Pointer aPointer = m_pDrawViewWrapper->GetPreferedPointer(
+            Pointer aPointer = m_pDrawViewWrapper->GetPreferredPointer(
                 aMousePos, m_pChartWindow, nModifier, bLeftDown );
             bool bForceArrowPointer = false;
 

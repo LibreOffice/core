@@ -276,7 +276,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_PARATR_WIDOWS
     MP_E( "ParaWidows",         FO,     WIDOWS,             XML_TYPE_NUMBER8, 0 ),
     // RES_PARATR_TABSTOP
-    MP_ED( "ParaTabStops",      STYLE,  TAB_STOPS,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
+    MP_ED( "ParaTabStops",      STYLE,  TAB_STOPS,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not really a string!
     // RES_PARATR_HYPHENZONE
     MT_E( "ParaIsHyphenation",  FO,     HYPHENATE,          XML_TYPE_BOOL, 0 ),
     MT_E( "ParaHyphenationMaxLeadingChars", FO, HYPHENATION_REMAIN_CHAR_COUNT, XML_TYPE_NUMBER16_NO_ZERO, 0 ),

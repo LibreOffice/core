@@ -89,7 +89,7 @@ private:
                     The specified MediaDescriptor will be patched, so it contain
                     the right values everytime. Using of any deep detection service
                     can be enabled/disabled. And last but not least: If the results
-                    wont be realy clear (because a flat detected type has no deep
+                    wont be really clear (because a flat detected type has no deep
                     detection service), a "sugested" type name will be returned as "rLastChance".
                     It can be used after e.g. all well known deep detection services
                     was used without getting any result. Then this "last-chance-type"
@@ -188,7 +188,7 @@ private:
     //---------------------------------------
 
     /** @short      check if an input stream is already part of the
-                    given MediaDesciptor and creates a new one if neccessary.
+                    given MediaDesciptor and creates a new one if necessary.
 
         @attention  This method does further something special!
                     <ul>

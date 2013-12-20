@@ -345,7 +345,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
         }
 
         mpPlaybin = gst_element_factory_make( "playbin", NULL );
-        if( pSink != NULL ) // used for getting prefered size etc.
+        if( pSink != NULL ) // used for getting preferred size etc.
         {
             g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, NULL );
             mbFakeVideo = true;

@@ -84,7 +84,7 @@ public:
 
     RESOURCE_TYPE   GetRT() const { return( m_nRT ); }
 
-    /** Set the type if not already set. Ask for tye with GetRT()
+    /** Set the type if not already set. Ask for type with GetRT()
 
     [Example]
     ResId aId( 1000 );

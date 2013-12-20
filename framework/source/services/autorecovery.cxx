@@ -774,7 +774,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     /* document saved as copy => mark it as "non used by concurrent save operation".
        so we can try to create a backup copy if next time AutoSave is started too.
        Dont remove temp. files or change the modified state of the document!
-       It was not realy saved to the original file ...
+       It was not really saved to the original file ...
     */
     else if ( aEvent.EventName == EVENT_ON_SAVETODONE )
     {
@@ -937,7 +937,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     catch(const css::uno::Exception&)
     {
         // These config keys are not sooooo important, that
-        // we are interested on errors here realy .-)
+        // we are interested on errors here really .-)
         nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
         nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
     }
@@ -1697,7 +1697,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     implts_specifyAppModuleAndFactory(aNew);
 
     // Hack! Check for "illegal office documents" ... as e.g. the Basic IDE
-    // Its not realy a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
+    // Its not really a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
     // TODO file bug to Basci IDE developers. They must remove the office document API from its service.
     if (
         (aNew.OrgURL.isEmpty()) &&
@@ -2754,7 +2754,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     // This unique name must solve an optimization problem too!
     // In case we are asked to save unmodified documents too - and one of them
     // is an empty one (because it was new created using e.g. an URL private:factory/...)
-    // we should not save it realy. Then we put the information about such "empty document"
+    // we should not save it really. Then we put the information about such "empty document"
     // into the configuration and dont create any recovery file on disk.
     // We use the title of the document to make it unique.
     OUStringBuffer sUniqueName;
@@ -2936,7 +2936,7 @@ void AutoRecovery::implts_resetHandleStates(sal_Bool /*bLoadCache*/)
 //-----------------------------------------------
 void AutoRecovery::implts_prepareEmergencySave()
 {
-    // Be sure to know all open documents realy .-)
+    // Be sure to know all open documents really .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
     // hide all docs, so the user cant disturb our emergency save .-)
@@ -3024,7 +3024,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionSave()");
 
-    // Be sure to know all open documents realy .-)
+    // Be sure to know all open documents really .-)
     implts_verifyCacheAgainstDesktopDocumentList();
 
     // for all docs, store their current view/names in the configurtion

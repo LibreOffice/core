@@ -484,7 +484,7 @@ protected :
                 const Graphic& rGrf,
                 const Rectangle& rVisArea );
 
-// the following methods need to be overriden for Excel imports
+// the following methods need to be overridden for Excel imports
     virtual sal_Bool ProcessClientAnchor( SvStream& rStData,
                                           sal_uInt32 nDatLen,
                                           char*& rpBuff,

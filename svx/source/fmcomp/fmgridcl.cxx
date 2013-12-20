@@ -482,7 +482,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         sal_Bool bDateNTimeCol = sal_False;
         if (!aPossibleTypes.empty())
         {
-            sal_Int32 nPreferedType = aPossibleTypes[0];
+            sal_Int32 nPreferredType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.size() > 1))
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
@@ -492,18 +492,18 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
                 PopupMenu* pMenu = aInsertMenu.GetPopupMenu(SID_FM_INSERTCOL);
                 for (std::vector<sal_uInt16>::const_iterator iter = aPossibleTypes.begin(); iter != aPossibleTypes.end(); ++iter)
                     SetMenuItem(aImageList, *iter, pMenu, aTypeMenu, sal_True, 0);
-                nPreferedType = aTypeMenu.Execute(this, m_pImpl->aDropPosPixel);
+                nPreferredType = aTypeMenu.Execute(this, m_pImpl->aDropPosPixel);
             }
 
-            bDateNTimeCol = nPreferedType == SID_FM_TWOFIELDS_DATE_N_TIME;
+            bDateNTimeCol = nPreferredType == SID_FM_TWOFIELDS_DATE_N_TIME;
             sal_uInt16 nColCount = bDateNTimeCol ? 2 : 1;
             OUString sFieldService;
             while (nColCount--)
             {
                 if (bDateNTimeCol)
-                    nPreferedType = nColCount ? SID_FM_DATEFIELD : SID_FM_TIMEFIELD;
+                    nPreferredType = nColCount ? SID_FM_DATEFIELD : SID_FM_TIMEFIELD;
 
-                sFieldService = FieldServiceFromId(nPreferedType);
+                sFieldService = FieldServiceFromId(nPreferredType);
                 Reference< XPropertySet >  xThisRoundCol;
                 if ( !sFieldService.isEmpty() )
                     xThisRoundCol = xFactory->createColumn(sFieldService);

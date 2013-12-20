@@ -463,15 +463,15 @@ class Desktop   :   // base classes
         //---------------------------------------------------------------------
         /** special terminate listener shuting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener
-          * only ... it does not realy shutdown the whole application.
+          * only ... it does not really shutdown the whole application.
           *
           * Btw: That wouldnt be possible by design ... because Desktop.terminate()
-          * has to return a boolean value about success ... it cant realy shutdown the
+          * has to return a boolean value about success ... it cant really shutdown the
           * process .-)
           *
           * So we uses a trick: A special listener (exactly these one here) listen for notifyTermination()
           * and shutdown the process asynchronous. But desktop has to make this special
-          * notification as realy last one ... Otherwise it can happen that asynchronous
+          * notification as really last one ... Otherwise it can happen that asynchronous
           * shutdown will be faster then all other code around Desktop.terminate() .-))
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;

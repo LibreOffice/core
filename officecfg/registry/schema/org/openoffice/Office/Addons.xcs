@@ -278,7 +278,7 @@
       </prop>
       <prop oor:name="OwnerDraw" oor:type="xs:boolean">
         <info>
-          <desc>Specifies whether the contents of the status bar item are drawn by the client (true) or by the internal implemenetation (false).</desc>
+          <desc>Specifies whether the contents of the status bar item are drawn by the client (true) or by the internal implementation (false).</desc>
         </info>
         <value>false</value>
       </prop>
@@ -412,7 +412,7 @@
       </set>
       <set oor:name="OfficeHelp" oor:node-type="MenuItem">
         <info>
-          <desc>Contains a list of functions inserted into the Office help menu. The optional property 'Submeno' will be ignored for this set.</desc>
+          <desc>Contains a list of functions inserted into the Office help menu. The optional property 'Submenu' will be ignored for this set.</desc>
         </info>
       </set>
     </group>

@@ -153,7 +153,7 @@ public:
     sal_Bool                bInUpdate;      // for Assertions
     sal_Bool                bInNextJob;     // for Assertions
     sal_Bool                bFirstRound;    // First round in Update
-    sal_uInt16              nFirstShell;    // Shell, the first round is prefered
+    sal_uInt16              nFirstShell;    // Shell, the first round is preferred
     sal_uInt16              nOwnRegLevel;   // Counts the real Locks, exept those of the Super Bindings
     InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
 };

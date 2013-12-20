@@ -209,7 +209,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
             break;
         case ND_STARTNODE:
         case ND_TEXTNODE:
-            abort(); // overriden
+            abort(); // overridden
         case ND_TABLENODE:
             name = "table";
             break;

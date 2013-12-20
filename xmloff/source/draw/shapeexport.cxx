@@ -1390,9 +1390,9 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
     // decide if transformation is necessary
-    sal_Bool bTransformationIsNeccessary(fTRShear != 0.0 || fTRRotate != 0.0);
+    sal_Bool bTransformationIsNecessary(fTRShear != 0.0 || fTRRotate != 0.0);
 
-    if(bTransformationIsNeccessary)
+    if(bTransformationIsNecessary)
     {
         // write transformation, but WITHOUT scale which is exported as size above
         SdXMLImExTransform2D aTransform;

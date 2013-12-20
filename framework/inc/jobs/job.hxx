@@ -49,7 +49,7 @@ namespace framework{
 /**
     @short  it represent a job; execute it and control it's lifetime
 
-    @descr  This implemetation can be used to wrapp jobs, execute it
+    @descr  This implementation can be used to wrapp jobs, execute it
             synchronously or asynchronous, control it's lifetime
             and differe between jobs with and without configuration.
  */
@@ -82,7 +82,7 @@ class Job : private ThreadHelpBase
     private:
 
         /**
-            hold all neccessary information about this job.
+            hold all necessary information about this job.
             It can be used for both modes: with and without configuration.
          */
         JobData m_aJobCfg;
@@ -108,7 +108,7 @@ class Job : private ThreadHelpBase
             We use it too, to listen for closing events of this resource.
 
             Please note: If m_xFrame is set - m_xModel should be NULL.
-            Only one environment can be supported realy.
+            Only one environment can be supported really.
          */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
 
@@ -118,13 +118,13 @@ class Job : private ThreadHelpBase
             We use it too, to listen for closing events of this resource.
 
             Please note: If m_xModel is set - m_xFrame should be NULL.
-            Only one environment can be supported realy.
+            Only one environment can be supported really.
          */
         css::uno::Reference< css::frame::XModel > m_xModel;
 
         /**
             We are registered at this instance to listen for office shutdown events.
-            It's neccessary supress it (if possible) or to react in the right way.
+            It's necessary supress it (if possible) or to react in the right way.
          */
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
@@ -145,7 +145,7 @@ class Job : private ThreadHelpBase
 
         /**
             Holds the state, if we are listen for desktop/frame or model closing events or not.
-            The used references are not realy enough to detect a valid listener connection.
+            The used references are not really enough to detect a valid listener connection.
             Thats why we use this additional information here too.
          */
         sal_Bool m_bListenOnDesktop;

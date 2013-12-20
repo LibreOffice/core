@@ -137,7 +137,7 @@ class TitleBarUpdate : // baseclasses (order necessary for right initialization!
         //____________________________
         /** @short  set a new icon and title on the title bar of our connected frame window.
 
-            @descr  It does not check if an update is realy needed. That has to be done outside.
+            @descr  It does not check if an update is really needed. That has to be done outside.
                     It retrieves all needed information and update the title bar - nothing less -
                     nothing more.
          */

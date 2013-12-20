@@ -1003,7 +1003,7 @@ void SvxRuler::SetDefTabDist(long inDefTabDist)  // New distance for DefaultTabs
 
 sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
 {
-    /* Internal convertion routine between SV-Tab.-Enum and Svx */
+    /* Internal conversion routine between SV-Tab.-Enum and Svx */
     switch(eAdj) {
         case SVX_TAB_ADJUST_LEFT:    return RULER_TAB_LEFT;
         case SVX_TAB_ADJUST_RIGHT:   return RULER_TAB_RIGHT;

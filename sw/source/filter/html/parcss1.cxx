@@ -127,10 +127,10 @@ CSS1Token CSS1Parser::GetNextToken()
                     // COMMENT
                     cNextCh = GetNextChar();
 
-                    sal_Bool bAsterix = sal_False;
-                    while( !(bAsterix && '/'==cNextCh) && !IsEOF() )
+                    sal_Bool bAsterisk = sal_False;
+                    while( !(bAsterisk && '/'==cNextCh) && !IsEOF() )
                     {
-                        bAsterix = ('*'==cNextCh);
+                        bAsterisk = ('*'==cNextCh);
                         cNextCh = GetNextChar();
                     }
                 }

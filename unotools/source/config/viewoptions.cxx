@@ -91,8 +91,8 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
             User must decide which information are useful and which not. We are a container iztem only and doesn't
             know anything about the context.
             But; we support a feature:
-                decision between items with default values (should not realy exist in configuration!)
-                and items with real values - changed by user. So user can suppress saving of realy unused items
+                decision between items with default values (should not really exist in configuration!)
+                and items with real values - changed by user. So user can suppress saving of really unused items
                 to disk - because; defaulted items could be restored on runtime without reading from disk!!!
                 And if only items with valid information was written to cfg - we mustn't read so much and save time.
             So we start with an member m_bDefault=True and reset it to False after first set-call.
@@ -243,7 +243,7 @@ typedef ::boost::unordered_map< OUString                    ,
     @descr          Implement base data container for view options elements.
                     Every item support ALL possible configuration information.
                     But not every superclass should use them! Because some view types don't
-                    have it realy.
+                    have it really.
 
     @attention      We implement a write-througt-cache! We use it for reading - but write all changes directly to
                     configuration. (changes are made on internal cache too!). So it's easier to distinguish
@@ -343,8 +343,8 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
     @short          dtor
     @descr          clean up something
 
-    @attention      We implement a write through cache! So we mustn't do it realy. All changes was written to cfg directly.
-                    Commit isn't neccessary then.
+    @attention      We implement a write through cache! So we mustn't do it really. All changes was written to cfg directly.
+                    Commit isn't necessary then.
 
     @seealso        baseclass ::utl::ConfigItem
     @seealso        method IsModified()

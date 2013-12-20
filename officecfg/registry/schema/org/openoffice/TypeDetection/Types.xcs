@@ -52,7 +52,7 @@
       </prop>
       <prop oor:name="DocumentIconID" oor:type="xs:int" oor:nillable="false">
         <info>
-          <desc>Global ID of an icon, which represent this tye at the UI.</desc>
+          <desc>Global ID of an icon, which represent this type at the UI.</desc>
         </info>
         <value>0</value>
       </prop>
@@ -64,15 +64,15 @@
       </prop>
       <prop oor:name="Preferred" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>In case of ambigoues registrations (e.g. for extensions doc/txt)
-          it specify the prefererred type.</desc>
+          <desc>In case of ambigous registrations (e.g. for extensions doc/txt)
+          it specify the preferred type.</desc>
         </info>
         <value>false</value>
       </prop>
       <prop oor:name="PreferredFilter" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>An optimization; points directly at the preferred filter for
-          this type. No search across all filters is neccessary.</desc>
+          this type. No search across all filters is necessary.</desc>
         </info>
         <value/>
       </prop>

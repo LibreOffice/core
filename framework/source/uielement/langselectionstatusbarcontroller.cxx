@@ -122,7 +122,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
     // add first few entries to main menu
     sal_Int16 nItemId = static_cast< sal_Int16 >(MID_LANG_SEL_1);
-    const OUString sAsterix("*");  // multiple languages in current selection
+    const OUString sAsterisk("*");  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
     std::map< sal_Int16, OUString > aLangMap;
     std::set< OUString >::const_iterator it;
@@ -130,7 +130,7 @@ throw (::com::sun::star::uno::RuntimeException)
     {
         const OUString & rStr( *it );
         if ( rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) ) &&
-             rStr != sAsterix &&
+             rStr != sAsterisk &&
              rStr != sEmpty)
         {
             DBG_ASSERT( MID_LANG_SEL_1 <= nItemId && nItemId <= MID_LANG_SEL_9,
@@ -158,7 +158,7 @@ throw (::com::sun::star::uno::RuntimeException)
     {
         const OUString & rStr( *it );
         if( rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
-            rStr != sAsterix &&
+            rStr != sAsterisk &&
             rStr != sEmpty)
         {
             DBG_ASSERT( MID_LANG_PARA_1 <= nItemId && nItemId <= MID_LANG_PARA_9,

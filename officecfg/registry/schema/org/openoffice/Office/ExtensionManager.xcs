@@ -49,7 +49,7 @@
     </group>
     <group oor:name="ExtensionUpdateData">
       <info>
-        <desc>Contains inforamtion about availabe or ignored updates for extensions."</desc>
+        <desc>Contains information about available or ignored updates for extensions."</desc>
       </info>
       <set oor:name="AvailableUpdates" oor:node-type="UpdateInfo">
         <info>

@@ -359,7 +359,7 @@ public class DocumentView extends    JFrame
 
     /**
      * callback from our internal saved frame
-     * which wish to die. Its not neccessary to remove listener connections
+     * which wish to die. Its not necessary to remove listener connections
      * here. Because the broadcaster do it automaticly.
      * We have to release all references to him only.
      *

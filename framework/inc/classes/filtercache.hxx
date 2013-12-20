@@ -53,7 +53,7 @@ namespace framework{
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
     @descr          Frameloader - and filterfactory need some information about our current registered filters and types.
-                    For better performance its neccessary to cache all needed values.
+                    For better performance its necessary to cache all needed values.
 
     @implements     -
     @base           ThreadHelpBase

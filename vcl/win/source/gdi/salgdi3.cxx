@@ -380,7 +380,7 @@ static Unicode2LangType aLangFromCodeChart[]= {
 // get language matching to the missing char
 LanguageType MapCharToLanguage( sal_UCS4 uChar )
 {
-    // entries marked with default-CJK get replaced with the prefered CJK language
+    // entries marked with default-CJK get replaced with the preferred CJK language
     static bool bFirst = true;
     if( bFirst )
     {
@@ -408,7 +408,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
 
         LanguageType nDefaultCJK = MsLangId::isCJK(nDefaultLang) ? nDefaultLang : LANGUAGE_CHINESE;
 
-        // change the marked entries to prefered language
+        // change the marked entries to preferred language
         static const int nCount = SAL_N_ELEMENTS(aLangFromCodeChart);
         for( int i = 0; i < nCount; ++i )
         {
@@ -519,7 +519,7 @@ namespace
 }
 
 // find a fallback font for missing characters
-// TODO: should stylistic matches be searched and prefered?
+// TODO: should stylistic matches be searched and preferred?
 bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, OUString& rMissingChars ) const
 {
     // guess a locale matching to the missing chars
@@ -603,7 +603,7 @@ struct ImplEnumInfo
     OUString*           mpName;
     LOGFONTA*           mpLogFontA;
     LOGFONTW*           mpLogFontW;
-    UINT                mnPreferedCharSet;
+    UINT                mnPreferredCharSet;
     bool                mbCourier;
     bool                mbImplSalCourierScalable;
     bool                mbImplSalCourierNew;
@@ -1826,7 +1826,7 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
         // prefer the system character set, so that we get as much as
         // possible important characters. In the other case we could only
         // display a limited set of characters (#87309#)
-        if ( pInfo->mnPreferedCharSet == pLogFont->elfLogFont.lfCharSet )
+        if ( pInfo->mnPreferredCharSet == pLogFont->elfLogFont.lfCharSet )
             pData->mnQuality += 100;
 
         // knowing Courier to be scalable is nice
@@ -2127,7 +2127,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     if( !ImplAddTempFont( *GetSalData(), rFontFileURL ) )
         return false;
 
-    UINT nPreferedCharSet = DEFAULT_CHARSET;
+    UINT nPreferredCharSet = DEFAULT_CHARSET;
 
     // create matching FontData struct
     aDFA.SetSymbolFlag(false); // TODO: how to know it without accessing the font?
@@ -2147,7 +2147,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     */
 
     ImplWinFontData* pFontData = new ImplWinFontData( aDFA, 0,
-        sal::static_int_cast<BYTE>(nPreferedCharSet),
+        sal::static_int_cast<BYTE>(nPreferredCharSet),
         sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
     pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData) );
     pFontList->Add( pFontData );
@@ -2225,11 +2225,11 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         aInfo.mbImplSalCourierNew       = true;
     }
 
-    aInfo.mnPreferedCharSet = DEFAULT_CHARSET;
+    aInfo.mnPreferredCharSet = DEFAULT_CHARSET;
     DWORD nCP = GetACP();
     CHARSETINFO aCharSetInfo;
     if ( TranslateCharsetInfo( (DWORD*)(sal_IntPtr)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
-        aInfo.mnPreferedCharSet = aCharSetInfo.ciCharset;
+        aInfo.mnPreferredCharSet = aCharSetInfo.ciCharset;
 
     LOGFONTW aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );

@@ -2925,7 +2925,7 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
     ScChangeActionType eActType = pAct->GetType();
     if ( eActType == SC_CAT_REJECT ||
             (eActType == SC_CAT_MOVE && pAct->IsRejecting()) )
-        return ; // These Rejects are not dependant
+        return ; // These Rejects are not dependent
 
     if ( eActType == SC_CAT_CONTENT )
     {
@@ -2964,8 +2964,8 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
 
     // Insert in a corresponding Insert depends on it or else we would need
     // to split the preceding one.
-    // Intersecting Inserts and Deletes are not dependant, everything else
-    // is dependant.
+    // Intersecting Inserts and Deletes are not dependent, everything else
+    // is dependent.
     // The Insert last linked in is at the beginning of a chain, just the way we need it
 
     const ScBigRange& rRange = pAct->GetBigRange();

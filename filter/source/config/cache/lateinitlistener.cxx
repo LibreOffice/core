@@ -107,7 +107,7 @@ void SAL_CALL LateInitListener::disposing(const css::lang::EventObject& /* aEven
     // Normaly it should never be called. Because we cancel our listener connection
     // if we got the event about finished open of the first office document.
     // But if this method was reached, it indicates an office, which was started
-    // (might as remote script container for an external API client) but not realy used.
+    // (might as remote script container for an external API client) but not really used.
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);

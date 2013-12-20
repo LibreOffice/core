@@ -932,7 +932,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             break;
         }
     }
-    pPostItMgr->GetActiveSidebarWin()->ResizeIfNeccessary(aOldHeight,pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight());
+    pPostItMgr->GetActiveSidebarWin()->ResizeIfNecessary(aOldHeight,pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight());
 }
 
 void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
@@ -1506,7 +1506,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 
     if (rView.GetPostItMgr()->HasActiveSidebarWin())
-        rView.GetPostItMgr()->GetActiveSidebarWin()->ResizeIfNeccessary(aOldHeight,rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight());
+        rView.GetPostItMgr()->GetActiveSidebarWin()->ResizeIfNecessary(aOldHeight,rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight());
 }
 
 void SwAnnotationShell::StateUndo(SfxItemSet &rSet)

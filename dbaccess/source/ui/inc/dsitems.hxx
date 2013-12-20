@@ -25,7 +25,7 @@ typedef sal_Int32   ItemID;
 // item ids for the data source administration dialog
 
 #define DSID_NAME                   1           // name of a data source, SfxStringItem
-#define DSID_ORIGINALNAME           2           // orginal name, internal, SfxStringItem
+#define DSID_ORIGINALNAME           2           // original name, internal, SfxStringItem
 #define DSID_CONNECTURL             3           // connection URL, SfxStringItem
 #define DSID_TABLEFILTER            4           // table filter, OStringListItem
 #define DSID_TYPECOLLECTION         5           // collection of data source types, ODsnTypeCollection

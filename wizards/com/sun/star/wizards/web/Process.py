@@ -205,7 +205,7 @@ class Process(ProcessErrors):
         task.advance(True)
 
     # Copy "static" files (which are always the same,
-    # thus not user-input-dependant) to a target directory.
+    # thus not user-input-dependent) to a target directory.
     # Note that this method is static since it is
     # also used when displaying a "preview"
     # @param copy

@@ -78,9 +78,9 @@ public:
 
     /*
         Shows the window with the text that was last set.
-        The posistion is the prefered position. The window
+        The posistion is the preferred position. The window
         may itself show at a slightly different position
-        if it fits not at the prefered position.
+        if it fits not at the preferred position.
     */
     void SAL_CALL show( sal_Int32 x, sal_Int32 y );
 

@@ -740,7 +740,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
     //-----------------------------------------------------------------------------------------------------
     // 0) Ignore wrong parameter!
-    //    We doesn't support search for following special targets.
+    //    We don't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
     //    search results can occur!
@@ -758,7 +758,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     //    force using of "if() else if() ..."
     //-----------------------------------------------------------------------------------------------------
 
-    // get threadsafe some necessary member which are neccessary for following functionality
+    // get threadsafe some necessary member which are necessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
@@ -850,7 +850,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
         //  TASK and CREATE are handled special.
         //-------------------------------------------------------------------------------------------------
 
-        // get threadsafe some necessary member which are neccessary for following functionality
+        // get threadsafe some necessary member which are necessary for following functionality
         /* SAFE { */
         aReadLock.lock();
         OUString sOwnName = m_sName;
@@ -906,7 +906,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
             //  In such case we must protect us against recursive calls.
             //  Use snapshot of our parent. But don't use queryFrames() of XFrames interface.
             //  Because it's return all siblings and all her children including our children too
-            //  if we call it with the CHILDREN flag. We doesn't need that - we need the direct container
+            //  if we call it with the CHILDREN flag. We don't need that - we need the direct container
             //  items of our parent only to start searches there. So we must use the container interface
             //  XIndexAccess instead of XFrames.
             //-------------------------------------------------------------------------------------------------
@@ -1655,7 +1655,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
 void SAL_CALL Frame::addCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-    // We doesn't need any lock here ...
+    // We don't need any lock here ...
     // Container lives if we live and is threadsafe by himself.
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
 }
@@ -1665,7 +1665,7 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
 {
     // Use soft exception mode - moslty this method is called during disposing of this frame ...
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-    // We doesn't need any lock here ...
+    // We don't need any lock here ...
     // Container lives if we live and is threadsafe by himself.
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
 }
@@ -1868,7 +1868,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // should exist. Otherwhise it's the problem of the outside caller.
     // Note:
     //      (a) Do it after stopWindowListening(). May that force some active/deactive
-    //          notifications which we doesn't need here realy.
+    //          notifications which we don't need here really.
     //      (b) Don't forget to save the old value of IsDialogCancelEnabled() to
     //          restore it afterwards (to not kill headless mode).
     Application::DialogCancelMode old = Application::GetDialogCancelMode();
@@ -1946,7 +1946,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_bSelfClose         = sal_False;
     m_bIsHidden          = sal_True;
 
-    // Disable this instance for further working realy!
+    // Disable this instance for further working really!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
 
     // Don't forget it restore old value -
@@ -2348,7 +2348,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
 /*-****************************************************************************************************//**
     @short      react for a show event for the internal container window
-    @descr      Normaly we doesn't need this information realy. But we can use it to
+    @descr      Normaly we don't need this information really. But we can use it to
                 implement the special feature "trigger first visible task".
 
                 Algorithm: - first we have to check if we are a top (task) frame
@@ -2902,7 +2902,7 @@ void Frame::implts_setIconOnWindow()
     @short      helper to start/stop listeneing for window events on container window
     @descr      If we get a new container window, we must set it on internal member ...
                 and stop listening at old one ... and start listening on new one!
-                But sometimes (in dispose() call!) it's neccessary to stop listeneing without starting
+                But sometimes (in dispose() call!) it's necessary to stop listeneing without starting
                 on new connections. So we split this functionality to make it easier at use.
 
     @seealso    method initialize()

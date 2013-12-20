@@ -39,7 +39,7 @@ published interface XTextOutputStream: com::sun::star::io::XOutputStream
     /** writes a string to the stream using the encoding
         defined by setEncoding().
 
-        <p>Line breaks or delimiters that may be neccessary
+        <p>Line breaks or delimiters that may be necessary
         to support XTextInputStream::readLine()
         and XTextInputStream::readString()
         have to be added manually to the parameter string.</p>

@@ -293,7 +293,7 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException)
 {
 // #FIXME I *hate* having these upstream differences
 // but this is necessary until I manage to upstream other
-// dependant parts
+// dependent parts
     OUString sControlSource;
     uno::Reference< form::binding::XBindableValue > xBindable( m_xProps, uno::UNO_QUERY );
     if ( xBindable.is() )

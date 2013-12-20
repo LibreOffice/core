@@ -163,7 +163,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
 
             /// the Auto/Emergency saved document isnt useable any longer
             E_DAMAGED = 64,
-            /// the Auto/Emergency saved document isnt realy up-to-date (some changes can be missing)
+            /// the Auto/Emergency saved document isnt really up-to-date (some changes can be missing)
             E_INCOMPLETE = 128,
             /// the Auto/Emergency saved document was processed successfully
             E_SUCCEDED = 512
@@ -238,7 +238,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
                 css::uno::Reference< css::frame::XModel > Document;
 
                 //-------------------------------
-                /** @short  knows, if the document is realy modified since the last autosave,
+                /** @short  knows, if the document is really modified since the last autosave,
                             or  was postponed, because it was an active one etcpp...
 
                     @descr  Because we have no CHANGE TRACKING mechanism, based on office document,
@@ -713,7 +713,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         /** @short  save all current opened documents to a specific
                     backup directory.
 
-            @descr  Only realy changed documents will be saved here.
+            @descr  Only really changed documents will be saved here.
 
                     Further this method returns a suggestion, if and how it should
                     be called again. May be some documents was not saved yet
@@ -1017,7 +1017,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         /** try to remove the specified file from disc.
 
             Every URL supported by our UCB component can be used here.
-            Further it doesn't matter if the file realy exists or not.
+            Further it doesn't matter if the file really exists or not.
             Because removing a non exsistent file will have the same
             result at the end ... a non existing file .-)
 

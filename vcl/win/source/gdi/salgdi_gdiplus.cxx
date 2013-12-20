@@ -193,7 +193,7 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             // Normally GdiPlus should not be used for printing at all since printers cannot
             // print transparent filled polygon geometry and normally this does not happen
             // since OutputDevice::RemoveTransparenciesFromMetaFile is used as preparation
-            // and no transparent parts should remain for printing. But this can be overriden
+            // and no transparent parts should remain for printing. But this can be overridden
             // by the user and thus happens. This call can only come (currently) from
             // OutputDevice::DrawTransparent, see comments there with the same TaskID.
             // If it is used, the mapping for the printer is wrong and needs to be corrected. I

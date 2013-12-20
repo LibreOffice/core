@@ -128,7 +128,7 @@ public:
     void BrkInsObjPoint() { BrkDragObj(); }
     sal_Bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
 
-    // Fuer die App zum Verwalten des Status. GetPreferedPointer() wird
+    // Fuer die App zum Verwalten des Status. GetPreferredPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
     void SetInsObjPointMode(sal_Bool bOn) { bInsObjPointMode = bOn; }
     sal_Bool IsInsObjPointMode() const { return bInsObjPointMode; }
@@ -140,7 +140,7 @@ public:
     void BrkInsGluePoint() { BrkDragObj(); }
     sal_Bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
 
-    // Fuer die App zum Verwalten des Status. GetPreferedPointer() wird
+    // Fuer die App zum Verwalten des Status. GetPreferredPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
     void SetInsGluePointMode(sal_Bool bOn) { bInsGluePointMode = bOn; }
     sal_Bool IsInsGluePointMode() const { return bInsGluePointMode; }

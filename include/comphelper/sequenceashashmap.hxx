@@ -81,7 +81,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
 
         //---------------------------------------
-        /** @short  not realy used but maybe useful :-)
+        /** @short  not really used but maybe useful :-)
          */
         ~SequenceAsHashMap();
 
@@ -208,7 +208,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     specified default value otherwise.
 
             @descr  If a value should be extracted only in case
-                    the requsted property exists realy (without creating
+                    the requsted property exists really (without creating
                     of new items as it the index operator of a
                     has_map does!) this method can be used.
 

@@ -532,7 +532,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             if (m_rView.GetDrawFuncPtr() && m_rView.GetDrawFuncPtr()->IsInsertForm() && !bHitHandle)
                 SetPointer( POINTER_DRAW_RECT );
             else
-                SetPointer( pSdrView->GetPreferedPointer( rLPt, rSh.GetOut() ) );
+                SetPointer( pSdrView->GetPreferredPointer( rLPt, rSh.GetOut() ) );
         }
     }
     else

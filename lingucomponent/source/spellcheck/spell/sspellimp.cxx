@@ -313,7 +313,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 
 #if defined(WNT)
-                    // workaround for Windows specifc problem that the
+                    // workaround for Windows specific problem that the
                     // path length in calls to 'fopen' is limted to somewhat
                     // about 120+ characters which will usually be exceed when
                     // using dictionaries as extensions.

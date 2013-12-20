@@ -2192,7 +2192,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
     // Sometimes we might get a float or a double or whatever
     // set in the Any, we should convert as appropriate
     // #FIXME - perhaps worth turning this into some sort of
-    // convertion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, getCppuType((sal_Int32*)0) )
+    // conversion routine e.g. bSuccess = getValueFromAny( nRow, nRowIndex, getCppuType((sal_Int32*)0) )
     uno::Any aRowIndexAny = nRowIndex;
     if ( aRowIndexAny.hasValue() && !( aRowIndexAny >>= nRow ) )
     {

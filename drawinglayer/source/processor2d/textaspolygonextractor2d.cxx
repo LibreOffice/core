@@ -82,7 +82,7 @@ namespace drawinglayer
 
                 // as can be seen from the TextSimplePortionPrimitive2D and the
                 // TextDecoratedPortionPrimitive2D, inside of the mnInText marks
-                // the following primitives can occurr containing geometry data
+                // the following primitives can occur containing geometry data
                 // from text decomposition:
                 //
                 // - PolyPolygonColorPrimitive2D

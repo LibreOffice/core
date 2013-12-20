@@ -285,7 +285,7 @@ sal_Bool SwCrsrShell::SelTblBox()
     // if we're in a table, create a table cursor, and select the cell
     // that the current cursor's point resides in
 
-    // search for start node of our table box. If not found, exit realy
+    // search for start node of our table box. If not found, exit really
     const SwStartNode* pStartNode =
         m_pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 

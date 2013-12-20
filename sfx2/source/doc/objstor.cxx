@@ -280,7 +280,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
             uno::Reference< embed::XStorage > xTempStorage =
                 ::comphelper::OStorageHelper::GetStorageFromURL( aTempURL, embed::ElementModes::READWRITE );
 
-            // the password will be transferred from the xStorage to xTempStorage by storage implemetation
+            // the password will be transferred from the xStorage to xTempStorage by storage implementation
             xStorage->copyToStorage( xTempStorage );
 
             // the temporary storage was commited by the previous method and it will die by refcount
@@ -2788,7 +2788,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         SAL_WARN( "sfx.doc","Salvage item present in Itemset, check the parameters!");
 #endif
 
-    // should be unneccessary - too hot to handle!
+    // should be unnecessary - too hot to handle!
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
     // take over the new merged itemset

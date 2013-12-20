@@ -35,7 +35,7 @@ import com.sun.star.system.XSimpleMailClientSupplier;
 * <ul>
 *  <li> <code>'SystemMailExist'</code> (of type <code>Boolean</code>):
 *   if <code>true</code> then <code>SimpleSystemMail</code> service
-*   is available, if NOT then the service is not availabel or
+*   is available, if NOT then the service is not availablel or
 *   OS doesn't has system mail.</li>
 * <ul> <p>
 * @see com.sun.star.system.XSimpleMailClientSupplier

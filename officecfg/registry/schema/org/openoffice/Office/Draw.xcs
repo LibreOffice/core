@@ -713,7 +713,7 @@
           <!-- OldPath: Draw/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
-          <!-- Notice: Default- nonmerical value: 1270 1/100 mm. -->
+          <!-- Notice: Default- nonmetrical value: 1270 1/100 mm. -->
           <info>
             <desc>Defines the vertical distance between adjacent grid points.</desc>
             <label>Y Axis Resolution</label>

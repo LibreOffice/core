@@ -459,7 +459,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 #endif
 }
 
-// Treat the args as possible inouts ( convertion at bottom of method )
+// Treat the args as possible inouts ( conversion at bottom of method )
 sal_Bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
 #ifdef DISABLE_SCRIPTING

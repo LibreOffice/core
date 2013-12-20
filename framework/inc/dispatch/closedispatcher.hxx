@@ -267,7 +267,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                     directly used as css::frame::DispatchResultState value.
 
             @param  aResult
-                    not used yet realy ...
+                    not used yet really ...
          */
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
@@ -275,7 +275,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
 
         //---------------------------------------
         /** @short  try to find the right target frame where this close request
-                    must be realy done.
+                    must be really done.
 
             @descr  The problem behind: closing some resources depends sometimes from the
                     context where its dispatched. Sometimes the start frame of the dispatch

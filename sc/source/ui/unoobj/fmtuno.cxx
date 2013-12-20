@@ -715,7 +715,7 @@ void ScTableValidationObj::ClearData_Impl()
     aExpr2 = "";
     maExprNmsp1 = "";
     maExprNmsp2 = "";
-    meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
+    meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overridden when needed
     aInputTitle = OUString();
     aInputMessage = OUString();
     aErrorTitle = OUString();

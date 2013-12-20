@@ -264,7 +264,7 @@ public:
                 passing this information to this LoadEnv instance can supress this
                 might expensive check.
                 That can be useful in case this information is needed outside too,
-                to decide if its neccessary to create some resources for this load
+                to decide if its necessary to create some resources for this load
                 request ... or to reject the request imidiatly if it seems to be not
                 loadable in general.
 
@@ -536,7 +536,7 @@ private:
 
         @descr  Note: Showing of a frame is bound to a special feature ...
                 a) If we recycle any existing frame, we must bring it to front.
-                   Showing of such frame isnt needed realy .. because we recycle
+                   Showing of such frame isnt needed really .. because we recycle
                    visible frames only!
                 b) If the document was already shown (e.g. by our progress implementation)
                    we do nothing here. The reason  behind: The document was already shown ..

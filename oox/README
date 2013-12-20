@@ -129,14 +129,14 @@ needed. Radek backported code for the new commands to 3-6
 and 4-0 branches.
 
 the drawingml also contains new presets (compared to binary/VML) and
-so we now have code with these presets - they are basicallly
+so we now have code with these presets - they are basically
 predefined custom shapes. we generate them using scripts in
 oox/source/drawingml/customshapes/ and the output are
 oox/source/drawingml/customshapepresets[123456].cxx source files
 containing the definition for the preset shapes. this mean that we
 import presets from OOXML files perfectly. one area to look at might
 be check how handles on the imported custom shapes (and presets)
-wotk.
+work.
 
 the source code generation happens in these steps:
 

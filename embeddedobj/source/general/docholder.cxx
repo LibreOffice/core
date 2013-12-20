@@ -730,7 +730,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                        bResult = sal_True;
 
                     // TODO/LATER: The following action should be done only if the window is not hidden
-                    // otherwise the activation must fail, unfortunatelly currently it is not possible
+                    // otherwise the activation must fail, unfortunately currently it is not possible
                     // to detect whether the window is hidden using UNO API
                     m_xOwnWindow->setFocus();
                 }

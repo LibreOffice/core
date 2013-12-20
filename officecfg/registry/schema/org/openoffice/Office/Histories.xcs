@@ -48,7 +48,7 @@
       </info>
       <prop oor:name="HistoryItemRef" oor:type="xs:string">
         <info>
-          <desc>Reference to an item of the orginal history list.</desc>
+          <desc>Reference to an item of the original history list.</desc>
         </info>
       </prop>
     </group>

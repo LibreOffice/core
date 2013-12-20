@@ -65,7 +65,7 @@
       </info>
       <set oor:name="JobList" oor:node-type="TimeStamp">
         <info>
-          <desc>This list contains all registered jobs, which wish to be executed, if the coressponding event was triggered.</desc>
+          <desc>This list contains all registered jobs, which wish to be executed, if the corresponding event was triggered.</desc>
         </info>
       </set>
     </group>

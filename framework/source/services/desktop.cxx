@@ -347,7 +347,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
-        // Must be realy the last listener to be called.
+        // Must be really the last listener to be called.
         // Because it shutdown the whole process asynchronous !
         if ( xSfxTerminator.is() )
             xSfxTerminator->notifyTermination( aEvent );
@@ -728,7 +728,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
     @short      supports registration/deregistration of interception objects, which
                 are interested on special dispatches.
 
-    @descr      Its realy provided by an internal helper, which is used inside the dispatch api too.
+    @descr      Its really provided by an internal helper, which is used inside the dispatch api too.
     @param      xInterceptor
                 the interceptor object, which wish to be (de)registered.
 
@@ -980,7 +980,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     //-----------------------------------------------------------------------------------------------------
     // 0) Ignore wrong parameter!
-    //    We doesn't support search for following special targets.
+    //    We don't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
     //    search results can occur!
@@ -1001,7 +1001,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     //    force using of "if() else if() ..."
     //-----------------------------------------------------------------------------------------------------
 
-    // get threadsafe some necessary member which are neccessary for following functionality
+    // get threadsafe some necessary member which are necessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::uno::XComponentContext> xContext = m_xContext;
@@ -1051,7 +1051,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
         //-------------------------------------------------------------------------------------------------
 
-        // get threadsafe some necessary member which are neccessary for following functionality
+        // get threadsafe some necessary member which are necessary for following functionality
         /* SAFE { */
         aReadLock.lock();
         OUString sOwnName = m_sName;
@@ -1077,7 +1077,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
         //  a special feature: We use it to start search on our direct children only. That means we supress
         //  search on ALL child frames. May that can be useful to get access on opened document tasks
-        //  only without filter out all non realy required sub frames ...
+        //  only without filter out all non really required sub frames ...
         //  Used helper method on our container doesn't create any frame - it's a search only.
         //-------------------------------------------------------------------------------------------------
         if (
@@ -1135,7 +1135,7 @@ void SAL_CALL Desktop::dispose()
     WriteGuard aWriteLock( m_aLock ); // start synchronize
 
     // Look for multiple calls of this method!
-    // If somewhere call dispose() twice - he will be stopped here realy!!!
+    // If somewhere call dispose() twice - he will be stopped here really!!!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // Now - we are alone and its the first call of this method ...
@@ -1199,7 +1199,7 @@ void SAL_CALL Desktop::dispose()
                 about our dieing!
                 You must releas ethis listener reference during your own disposing() method.
 
-    @attention  Our container is threadsafe himeslf. So we doesn't need any lock here.
+    @attention  Our container is threadsafe himeslf. So we don't need any lock here.
 
     @seealso    -
 
@@ -1275,7 +1275,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
 /*-************************************************************************************************************//**
     @interface  XEventListener
     @short      not implemented!
-    @descr      We are a status listener ... and so we must be an event listener too ... But we doesn't need it realy!
+    @descr      We are a status listener ... and so we must be an event listener too ... But we don't need it really!
                 We are a temp. listener only and our lifetime isn't smaller then of our temp. used dispatcher.
 
     @seealso    method loadComponentFromURL()
@@ -1382,7 +1382,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
 
     /* SAFE AREA ------------------------------------------------------------------------------------------- */
     // Ok now it's time to break yield loop of loadComponentFromURL().
-    // But only for realy aborted requests!
+    // But only for really aborted requests!
     // For example warnings will be approved and we wait for any success story ...
     if (bAbort)
     {
@@ -1435,7 +1435,7 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
                 Don't use this directly!
                 You must try to convert the value of given DESKTOP_PROPHANDLE and
                 return results of this operation. This will be used to ask vetoable
-                listener. If no listener has a veto, we will change value realy!
+                listener. If no listener has a veto, we will change value really!
                 ( in method setFastPropertyValue_NoBroadcast(...) )
 
     @attention  Methods of OPropertySethelper are safed by using our shared osl mutex! (see ctor!)
@@ -1667,7 +1667,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
                 then we try to become his component. It can be a VCL-component, the model or the controller
                 of founded frame.
 
-    @attention  We don't work on internal member ... so we doesn't need any lock here.
+    @attention  We don't work on internal member ... so we don't need any lock here.
 
     @seealso    method getCurrentComponent();
 

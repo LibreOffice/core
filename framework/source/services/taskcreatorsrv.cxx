@@ -194,7 +194,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     // get toolkit to create task container window
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
 
-    // Check if child frames can be created realy. We need at least a valid window at the parent frame ...
+    // Check if child frames can be created really. We need at least a valid window at the parent frame ...
     css::uno::Reference< css::awt::XWindowPeer > xParentWindowPeer;
     if ( ! bTopWindow)
     {

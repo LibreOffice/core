@@ -70,7 +70,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
      * @throw   com.sun.star.io.NotConnectedException
      *              in case the internal streams to the file on disk couldn't
      *              be established.
-     *              They are neccessary. Otherwhise this simulator can't
+     *              They are necessary. Otherwhise this simulator can't
      *              really work.
      */
     public StreamSimulator(XMultiServiceFactory xMSF,
@@ -115,7 +115,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     /**
      * following methods simulates the XInputStream.
      * The notice all actions inside the internal protocol
-     * and try to map all neccessary functions to the internal
+     * and try to map all necessary functions to the internal
      * open in-stream.
      */
     public int readBytes(byte[][] lData, int nBytesToRead )
@@ -257,7 +257,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     /**
      * following methods simulates the XOutputStream.
      * The notice all actions inside the internal protocol
-     * and try to map all neccessary functions to the internal
+     * and try to map all necessary functions to the internal
      * open out-stream.
      */
     public void writeBytes(byte[] lData)
@@ -344,7 +344,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
     /**
      * following methods simulates the XSeekable.
      * The notice all actions inside the internal protocol
-     * and try to map all neccessary functions to the internal
+     * and try to map all necessary functions to the internal
      * open stream.
      */
     public void seek(long nLocation )

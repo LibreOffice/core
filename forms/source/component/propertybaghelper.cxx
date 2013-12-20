@@ -112,7 +112,7 @@ namespace frm
         ::comphelper::OPropertyArrayAggregationHelper& rPropInfo( impl_ts_getArrayHelper() );
 
         // check the preferred handle
-        sal_Int32 nHandle = lcl_getPropertyInfos().getPreferedPropertyId( _rPropertyName );
+        sal_Int32 nHandle = lcl_getPropertyInfos().getPreferredPropertyId( _rPropertyName );
         if ( ( nHandle != -1 ) && rPropInfo.fillPropertyMembersByHandle( NULL, NULL, nHandle ) )
             nHandle = -1;
 

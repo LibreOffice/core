@@ -30,7 +30,7 @@
 /** forward declaration to our private date container implementation
 
     We use these class as internal member to support small memory requirements.
-    You can create the container if it is neccessary. The class which use these mechanism
+    You can create the container if it is necessary. The class which use these mechanism
     is faster and smaller then a complete implementation!
 */
 class SvtSlideSorterBarOptions_Impl;

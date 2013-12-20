@@ -111,7 +111,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         sal_Int32 nHandle = -1;
         // ask the infor service first
         if ( _pInfoService )
-            nHandle = _pInfoService->getPreferedPropertyId( pMergedProps->Name );
+            nHandle = _pInfoService->getPreferredPropertyId( pMergedProps->Name );
 
         if ( -1 == nHandle )
             // no handle from the info service -> default

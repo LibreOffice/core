@@ -126,7 +126,7 @@ bool recursivelyFindType(
     // This code assumes that the vtables of a multiple-inheritance class (the
     // offset amount by which to adjust the this pointer) follow one another in
     // the object layout, and that they contain slots for the inherited classes
-    // in a specifc order.  In theory, that need not hold for any given
+    // in a specific order.  In theory, that need not hold for any given
     // platform; in practice, it seems to work well on all supported platforms:
  next:
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {

@@ -387,7 +387,7 @@ struct WW8LFOLVL
     // (siehe Kommentar unten bei struct WW8LFOInfo)
 
     sal_uInt8 bStartAt :1;       // true if the start-at value is overridden
-    sal_uInt8 bFormat :1;        // true if the formatting is overriden
+    sal_uInt8 bFormat :1;        // true if the formatting is overridden
 
     WW8LFOLVL() :
         nStartAt(1), nLevel(0), bStartAt(1), bFormat(0) {}

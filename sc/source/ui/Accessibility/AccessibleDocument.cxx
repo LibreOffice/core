@@ -975,7 +975,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
     SortedShapes::const_iterator aFocusedItr = aDataEndItr;
     while((aDataItr != aDataEndItr))
     {
-        if (*aDataItr) // is it realy a shape or only the sheet
+        if (*aDataItr) // is it really a shape or only the sheet
         {
             sal_Int8 nComp(0);
             if (aXShapesItr == aXShapesEndItr)

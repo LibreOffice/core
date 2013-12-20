@@ -87,7 +87,7 @@ public:
     */
     ::boost::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
-    /** The requested configuration which is modifed (asynchronously) by
+    /** The requested configuration which is modified (asynchronously) by
         calls to requestResourceActivation() and
         requestResourceDeactivation().  The mpConfigurationUpdater makes the
         current configuration reflect the content of this one.

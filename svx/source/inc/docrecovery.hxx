@@ -101,7 +101,7 @@ enum EDocStates
 
     /// the Auto/Emergency saved document isnt useable any longer
     E_DAMAGED = 64,
-    /// the Auto/Emergency saved document isnt realy up-to-date (some changes can be missing)
+    /// the Auto/Emergency saved document isnt really up-to-date (some changes can be missing)
     E_INCOMPLETE = 128,
     /// the Auto/Emergency saved document was processed successfully
     E_SUCCEDED = 512

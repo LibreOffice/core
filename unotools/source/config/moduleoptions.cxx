@@ -40,11 +40,11 @@
 #include "itemholder1.hxx"
 
 /*-************************************************************************************************************//**
-    @descr          These values are used to define neccessary keys from our configuration management to support
+    @descr          These values are used to define necessary keys from our configuration management to support
                     all functionality of these implementation.
                     It's a fast way to make changes if some keys change his name or location!
 
-                    Property handle are neccessary to specify right position in return list of configuration
+                    Property handle are necessary to specify right position in return list of configuration
                     for asked values. We ask it with a list of properties to get his values. The returned list
                     has the same order like our given name list!
                     e.g.:
@@ -356,7 +356,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
 /*-************************************************************************************************************//**
     @short      default ctor
-    @descr      We open our configuration here and read all neccessary values from it.
+    @descr      We open our configuration here and read all necessary values from it.
                 These values are cached till everyone call Commit(). Then we write changed ones back to cfg.
 
     @seealso    baseclass ConfigItem
@@ -453,7 +453,7 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
 void SvtModuleOptions_Impl::Commit()
 {
     // Reserve memory for ALL possible factory properties!
-    // Step over all factories and get her realy changed values only.
+    // Step over all factories and get her really changed values only.
     // Build list of these ones and use it for commit.
     css::uno::Sequence< css::beans::PropertyValue > lCommitProperties( FACTORYCOUNT*PROPERTYCOUNT );
     FactoryInfo*                                    pInfo            = NULL                        ;
@@ -750,7 +750,7 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
 /*-************************************************************************************************************//**
     @short      return list of key names of ouer configuration management which represent our module tree
     @descr      You give use a list of current existing set node names .. and we expand it for all
-                well known properties which are neccessary for this implementation.
+                well known properties which are necessary for this implementation.
                 These full expanded list should be used to get values of this properties.
 
     @seealso    ctor

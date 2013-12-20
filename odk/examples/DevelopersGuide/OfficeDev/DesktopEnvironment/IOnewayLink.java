@@ -54,7 +54,7 @@ public interface IOnewayLink
      * @param nRequest
      *          The two user of this callback can define an unique number,
      *          which identify the type of original interface method. So the called
-     *          interface object can decide, which action will be neccessary.
+     *          interface object can decide, which action will be necessary.
      *
      * @param lParams
      *          If the original method used parameters, they will be coded here in

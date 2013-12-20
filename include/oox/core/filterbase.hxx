@@ -222,7 +222,7 @@ public:
             com.sun.star.lang.XMultiServiceFactory interface of the global
             service factory. The optional second argument may contain a
             sequence of com.sun.star.beans.NamedValue objects. The different
-            filter implemetations may support different arguments.
+            filter implementations may support different arguments.
      */
     virtual void SAL_CALL initialize(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )

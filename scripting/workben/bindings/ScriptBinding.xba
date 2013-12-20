@@ -1673,7 +1673,7 @@ sub LangLocComboListener()
     	end if
     endif
     
-    &apos; extra dialog dependant processing
+    &apos; extra dialog dependent processing
     if dialogName = &quot;Menu&quot; then
     	&apos; will set New button to false if no text in LableBox
     	MenuLabelBoxListener()

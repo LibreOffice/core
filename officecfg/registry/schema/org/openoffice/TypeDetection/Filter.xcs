@@ -70,7 +70,7 @@
       <prop oor:name="TemplateName" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Name of a corresponding template, which is merged together with
-          the style seets of the loaded document.</desc>
+          the style sheets of the loaded document.</desc>
         </info>
         <value/>
       </prop>
@@ -83,7 +83,7 @@
       </prop>
       <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
         <info>
-          <desc>Localized name of the filter, whch can be shown at the
+          <desc>Localized name of the filter, which can be shown at the
           UI.</desc>
         </info>
       </prop>

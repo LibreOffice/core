@@ -73,7 +73,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
         /* -> TODO - HACK
-            check if the given handler name realy exist ...
+            check if the given handler name really exist ...
             Because our old implementation worked with an internal
             type name instead of a handler name. For a small migration time
             we must simulate this old feature :-( */

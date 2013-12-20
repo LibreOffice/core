@@ -93,7 +93,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
                     create new objects without opening configuration twice and free memory automaticly
                     if last object will gone.
 
-    @attention      We implement a singleton concept - so we doesn't need any mutex member here.
+    @attention      We implement a singleton concept - so we don't need any mutex member here.
                     Because to safe access on static member we must use a static global lock
                     here too.
 
@@ -136,7 +136,7 @@ class FWI_DLLPUBLIC HandlerCache
                     We set a data container pointer for filling or reading ... this class use it temp.
                     After successfully calling of read(), we can use filled container directly or merge it with an existing one.
                     After successfully calling of write() all values of given data container are flushed to our configuration -
-                    but current implementation doesn't support writeing realy.
+                    but current implementation doesn't support writing really.
 
     @base           ::utl::ConfigItem
                     base mechanism for configuration access

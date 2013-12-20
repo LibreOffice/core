@@ -76,7 +76,7 @@ class JobResult : private ThreadHelpBase
 
         /**
             an user of us must know, which (possible) parts of
-            a "pure result" was realy set by an executed job.
+            a "pure result" was really set by an executed job.
             Means which other members of this class are valid.
             This mask can be used to find it out.
          */

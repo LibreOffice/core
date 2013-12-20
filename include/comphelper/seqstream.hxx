@@ -97,12 +97,12 @@ protected:
 
 public:
     /** constructs the object. Everything written into the stream through the XOutputStream methods will be forwarded
-        to the sequence, reallocating it if neccessary. Writing will start at offset 0 within the sequence.
+        to the sequence, reallocating it if necessary. Writing will start at offset 0 within the sequence.
         @param      _rSeq               a reference to the sequence which will be used for output.
                                         The caller is responsible for taking care of the lifetime of the stream
                                         object and the sequence. If you're in doubt about this, use <code>closeOutput</code>
                                         before destroying the sequence
-        @param      _nResizeFactor      the factor which is used for resizing the sequence when neccessary. In every
+        @param      _nResizeFactor      the factor which is used for resizing the sequence when necessary. In every
                                         resize step, the new sequence size will be calculated by multiplying the current
                                         size with this factor, rounded off to the next multiple of 4.
         @param      _nMinimumResize     the minmal number of bytes which is additionally allocated on resizing

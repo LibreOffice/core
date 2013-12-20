@@ -46,7 +46,7 @@ import java.lang.String;
  * It uses separate listener threads to get this information
  * and actualize it automatically, if frame broadcast changes of
  * his contained document.
- * Threads are neccessary to prevent this view against deadlocks.
+ * Threads are necessary to prevent this view against deadlocks.
  * These deadlocks can occur if a listener will be notified
  * by the office in an "oneway" method and try to call back
  * to the office by using a synchronous method.

@@ -50,7 +50,7 @@ private:
     virtual void deactivate_st( NodeState eDestState );
     virtual bool hasPendingAnimation() const;
 
-    /// overriden, because we need to deal with STOPAUDIO commands
+    /// overridden, because we need to deal with STOPAUDIO commands
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
 
 private:

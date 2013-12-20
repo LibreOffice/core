@@ -42,7 +42,7 @@ E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, c
     // Set Defaults
     SetDefaultAttributes(rDefault);
 
-    aCubePos = aPos; // position centre or left, bottom, back (dependant on bPosIsCenter)
+    aCubePos = aPos; // position centre or left, bottom, back (dependent on bPosIsCenter)
     aCubeSize = r3DSize;
 }
 

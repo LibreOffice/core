@@ -37,7 +37,7 @@
         </info>
         <prop oor:name="OS" oor:type="xs:string">
           <info>
-            <desc>Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
+            <desc>Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
           </info>
         </prop>
         <prop oor:name="Host" oor:type="xs:string">

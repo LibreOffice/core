@@ -549,7 +549,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
     // the rear controller view -or the front controller view- if it is never displayed.
     //
     // If you need to manipulate views of any of your child controllers in an override
-    // of this method, you can load yourself the views explicitly on your overriden method.
+    // of this method, you can load yourself the views explicitly on your overridden method.
     // However we discourage it as an app following the MVC principles should never need to do so
         
 //  [_frontViewController view];

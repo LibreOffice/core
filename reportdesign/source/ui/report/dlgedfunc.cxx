@@ -803,7 +803,7 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     }
 
     if ( !bIsSetPoint )
-        m_pParent->SetPointer( m_rView.GetPreferedPointer( aPos, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferredPointer( aPos, m_pParent) );
 
     return sal_True;
 }
@@ -883,7 +883,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
     checkTwoCklicks(rMEvt);
 
-    m_pParent->SetPointer( m_rView.GetPreferedPointer( aPnt, m_pParent) );
+    m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent) );
 
     if ( !m_bUiActive )
         m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
@@ -928,7 +928,7 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     if ( !bIsSetPoint )
     {
-        m_pParent->SetPointer( m_rView.GetPreferedPointer( aPnt, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent) );
 
         // restore color
         unColorizeOverlappedObj();

@@ -164,7 +164,7 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
                     directly used as css::frame::DispatchResultState value.
 
             @param  aResult
-                    not used yet realy ...
+                    not used yet really ...
          */
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,

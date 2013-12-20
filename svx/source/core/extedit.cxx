@@ -85,7 +85,7 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 
     //get the Preferred File Extension for this graphic
     OUString fExtension;
-    GraphicHelper::GetPreferedExtension(fExtension, aGraphic);
+    GraphicHelper::GetPreferredExtension(fExtension, aGraphic);
 
     //Create the temp File
     OUString aTempFileBase;

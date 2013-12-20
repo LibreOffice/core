@@ -58,7 +58,7 @@ sal_Int32 PropertyInfoService::getPropertyId(const OUString& _rName)
 }
 
 //------------------------------------------------------------------
-sal_Int32 ConcreteInfoService::getPreferedPropertyId(const OUString& _rName)
+sal_Int32 ConcreteInfoService::getPreferredPropertyId(const OUString& _rName)
 {
     return PropertyInfoService::getPropertyId(_rName);
 }

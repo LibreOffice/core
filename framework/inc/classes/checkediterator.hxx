@@ -30,7 +30,7 @@ namespace framework{
     @short          implement a iterator which support 2 end states!
     @descr          For our search methods we need a "walking" iterator object with special functionality!
                     We must check for 3 different states of an iterator - normal position, exact end, after end.
-                    It's neccessary to detect if we have not found a entry and must return our default or
+                    It's necessary to detect if we have not found a entry and must return our default or
                     default already returned and we must break loop!
                     see using in class FilterCache too for further information!
 

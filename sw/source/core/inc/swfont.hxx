@@ -424,7 +424,7 @@ public:
     SvxShadowLocation   GetShadowLocation() const { return m_aShadowLocation; }
 
     /**
-     * Get the absolute shadow location dependant from orientation.
+     * Get the absolute shadow location dependent from orientation.
      *
      * @param[in]   bVertLayout true, if the container layout is vertical
      *                          false, otherwise
@@ -433,7 +433,7 @@ public:
     SvxShadowLocation GetAbsShadowLocation( const bool bVertLayout ) const;
 
     /**
-     * Calculate the shadow space on the specified side dependant from
+     * Calculate the shadow space on the specified side dependent from
      * the orientation and connection with neightbours.
      * @see shaditem.hxx for integer constants of sides
      *

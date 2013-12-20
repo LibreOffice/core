@@ -493,7 +493,7 @@ public:
 
     /**
      * This method returns the count of objects obtained so far. There is no
-     * for the implemetation to obtain all objects at once. It can obtain
+     * for the implementation to obtain all objects at once. It can obtain
      * all data on demand.
      *
      * The implementation should call m_pResultSet->rowCountChanged(...)

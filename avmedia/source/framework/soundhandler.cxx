@@ -245,7 +245,7 @@ SoundHandler::~SoundHandler()
     @attention  We must hold us alive by ourself ... because we use async. vcl sound player ... but playing is started
                 in async interface call "dispatch()" too. And caller forget us immediately. But then our uno ref count
                 will decreased to 0 and will die. The only solution is to use own reference to our implementation.
-                But we do it for realy started jobs only and release it during call back of vcl.
+                But we do it for really started jobs only and release it during call back of vcl.
 
     @seealso    class vcl/Sound
     @seealso    method implts_PlayerNotify()
@@ -324,7 +324,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
 
     @attention  a) We don't need any mutex here ... because we don't use any member!
                 b) Don't use internal player instance "m_pPlayer" to detect given sound file!
-                   It's not neccessary to do that ... and we can use temp. variable to do the same.
+                   It's not necessary to do that ... and we can use temp. variable to do the same.
                    This way is easy - we don't must synchronize it with currently played sounds!
                    Another reason to do so ... We are a listener on our internal ma_Player object.
                    If you would call "IsSoundFile()" on this instance, he would call us back and
@@ -340,7 +340,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
 *//*-*************************************************************************************************************/
 OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException )
 {
-    // Our default is "nothing". So we can return it, if detection failed or fily type is realy unknown.
+    // Our default is "nothing". So we can return it, if detection failed or file type is really unknown.
     OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...

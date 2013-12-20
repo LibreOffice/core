@@ -309,7 +309,7 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
     // Set camera position to a default position (that should be set hard, so
     // that it will be exported.  The property default is a camera looking
     // straight ono the scene).  These defaults have been acquired from the old
-    // chart implemetation.
+    // chart implementation.
     setFastPropertyValue_NoBroadcast(
         SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::makeAny(
             ThreeDHelper::getDefaultCameraGeometry()));

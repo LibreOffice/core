@@ -31,7 +31,7 @@ namespace framework{
     @short      initialize an empty container
     @descr      The container will be empty then - special features (e.g. the async quit mechanism) are disabled.
 
-    @threadsafe not neccessary - its not a singleton
+    @threadsafe not necessary - its not a singleton
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
         // initialize base classes first.
@@ -48,7 +48,7 @@ FrameContainer::FrameContainer()
     @short      deinitialize may a filled container
     @descr      Special features (if the currently are running) will be dsiabled and we free all used other resources.
 
-    @threadsafe not neccessary - its not a singleton
+    @threadsafe not necessary - its not a singleton
  *****************************************************************************************************************/
 FrameContainer::~FrameContainer()
 {

@@ -555,7 +555,7 @@ namespace svgio
                             {
                                 // Clip is necessary. This will make Svg images evtl. smaller
                                 // than wanted from Svg (the free space which may be around it is
-                                // conform to the Svg spec), but avoids an expensive and unneccessary
+                                // conform to the Svg spec), but avoids an expensive and unnecessary
                                 // clip. Keep the full Svg range here to get the correct mappings
                                 // to objects using this. Optimizations can be done in the processors
                                 const drawinglayer::primitive2d::Primitive2DReference xMask(

@@ -677,7 +677,7 @@ bool TypeDetection::impl_getPreselectionForType(
                                                           INetURLObject::DECODE_WITH_CHARSET);
         sExtension = sExtension.toAsciiLowerCase();
 
-        // otherwise we must know, if it matches to the given URL realy.
+        // otherwise we must know, if it matches to the given URL really.
         // especialy if it matches by its extension or pattern registration.
         OUStringList lExtensions(aType[PROPNAME_EXTENSIONS]);
         OUStringList lURLPattern(aType[PROPNAME_URLPATTERN]);
@@ -1009,7 +1009,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     {
         // Attention! If e.g. an office module was not installed sometimes we
         // find a registered detect service, which is referred inside the
-        // configuration ... but not realy installed. On the other side we use
+        // configuration ... but not really installed. On the other side we use
         // third party components here, which can make trouble anyway.  So we
         // should handle errors during creation of such services more
         // gracefully .-)
@@ -1108,7 +1108,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
         if (aRequest.isAbort())
             return OUString();
 
-        // "OK" pressed => verify the selected filter, get it's coressponding
+        // "OK" pressed => verify the selected filter, get it's corresponding
         // type and return it. (BTW: We must update the media descriptor here ...)
         // The user selected explicitly a filter ... but normaly we are interested on
         // a type here only. But we must be shure, that the selected filter is used

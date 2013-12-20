@@ -72,13 +72,13 @@ public class _XDocumentInsertable extends MultiMethodTest {
      */
     public static abstract class InsertChecker {
         /**
-         * Must be overriden to check if document was
+         * Must be overridden to check if document was
          * successfully inserted.
          * @return <code>true</code> if document was inserted.
          */
         public abstract boolean isInserted() ;
         /**
-         * Can be overriden to specify different than default
+         * Can be overridden to specify different than default
          * document name. This document must be situated in
          * the test document disrectory, and its name must
          * be specified relational to this directory. By

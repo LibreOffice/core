@@ -33,7 +33,7 @@ class ImpressHTMLExporter(ConfiguredExporter):
     def export(source, targetDirectory, xmsf, task):
 
         # here set some filter specific properties.
-        # other properties, which are not dependant on
+        # other properties, which are not dependent on
         # user input are set through the exporter
         # configuration.
 

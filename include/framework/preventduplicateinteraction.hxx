@@ -161,7 +161,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
             @param      xSMGR
                             uno service manager for creating services internaly
 
-            @threadsafe not neccessary
+            @threadsafe not necessary
         */
         PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 

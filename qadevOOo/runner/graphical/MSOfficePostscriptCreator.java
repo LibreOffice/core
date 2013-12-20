@@ -348,7 +348,7 @@ public class MSOfficePostscriptCreator implements IOffice
                 if (! OSHelper.isWindows())
                 {
                     // TODO: use a better Exception!!!
-                    throw new WrongEnvironmentException("We doesn't work within windows environment.");
+                    throw new WrongEnvironmentException("We don't work within windows environment.");
                 }
 
 

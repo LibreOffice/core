@@ -68,12 +68,12 @@ namespace internal
 class IPropertyInfoService
 {
 public:
-    /** get the prefered handle for the given property
+    /** get the preferred handle for the given property
         @param      _rName      the property name
         @return                 the handle the property should be refered by, or -1 if there are no
                                 preferences for the given property
     */
-    virtual sal_Int32           getPreferedPropertyId(const OUString& _rName) = 0;
+    virtual sal_Int32           getPreferredPropertyId(const OUString& _rName) = 0;
 
 protected:
     ~IPropertyInfoService() {}
@@ -110,7 +110,7 @@ public:
                                 for refering the aggregate's properties from outside.
                                 If one of the properties returned from the info service conflict with other handles
                                 alread present (e.g. through _rProperties), the property is handled as if -1 was returned.
-                                If NULL (or, for a special property, a call to getPreferedPropertyId returns -1),
+                                If NULL (or, for a special property, a call to getPreferredPropertyId returns -1),
                                 the aggregate property(ies) get a new handle which they can be refered by from outside.
         @param  _nFirstAggregateId
                                 if the object is about to create new handles for the aggregate properties, it uses

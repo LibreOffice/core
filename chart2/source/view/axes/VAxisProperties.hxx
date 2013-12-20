@@ -126,7 +126,7 @@ struct AxisProperties
     ExplicitCategoriesProvider* m_pExplicitCategoriesProvider;/*no ownership here*/
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XTextualDataSequence >
-                                                    m_xAxisTextProvider; //for categries or series names
+                                                    m_xAxisTextProvider; //for categories or series names
     //<- category axes
 
     //methods:

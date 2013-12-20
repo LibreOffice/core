@@ -349,7 +349,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL BackingComp::impl_createIns
 /** returns a new factory instance for instances of this class.
 
     It uses a helper class of the cppuhelper project as factory.
-    It will be initialized with all neccessary information and
+    It will be initialized with all necessary information and
     will be able afterwards to create instance of this class.
     This factory call us back inside our method impl_createInstance().
     So we can create and initialize ourself. Only filtering of creation
@@ -378,7 +378,7 @@ css::uno::Reference< css::lang::XSingleServiceFactory > BackingComp::impl_create
     attach this component to a target frame.
 
     We has to use the container window of this frame as parent window of our own component window.
-    But it's not allowed to work with it realy. May another component used it too.
+    But it's not allowed to work with it really. May another component used it too.
     Currently we need it only to create our child component window and support it's
     interfaces inside our queryInterface() method. The user of us must have e.g. the
     XWindow interface of it to be able to call setComponent(xWindow,xController) at the
@@ -594,7 +594,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     and inform us. We must release its reference only here. Of course we check the given reference
     here and reject callback from unknown sources.
 
-    Note: deregistration as listener isnt neccessary here. The broadcaster do it automaticly.
+    Note: deregistration as listener isnt necessary here. The broadcaster do it automaticly.
 
     @param  aEvent
                 describe the broadcaster of this callback
@@ -698,7 +698,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
 
 /** not supported.
 
-    Because registration is not supported too, we must do nothing here. Nobody can call this method realy.
+    Because registration is not supported too, we must do nothing here. Nobody can call this method really.
 
     @param  xListener
                 not used.
@@ -717,7 +717,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
     Inside attachFrame() we created our component window. But it was not allowed there, to
     initialitze it. E.g. the menu must be set at the container window of the frame, which
     is our parent window. But may at that time another component used it.
-    That's why our creator has to inform us, when it's time to initialize us realy.
+    That's why our creator has to inform us, when it's time to initialize us really.
     Currently only calling of this method must be done. But further implementatoins
     can use special in parameter to configure this initialization ...
 

@@ -297,7 +297,7 @@ public class JavaLoader implements XImplementationLoader,
         Class<?>[] paramTypes = {String.class, XMultiServiceFactory.class, XRegistryKey.class};
         Object[] params = { implementationName, multiServiceFactory, xKey };
 
-        // try to get factory from implemetation class
+        // try to get factory from implementation class
         // latest style: use the public static method __getComponentFactory
         // - new style: use the public static method __getServiceFactory
         // - old style: use the public static method getServiceFactory ( DEPRECATED )

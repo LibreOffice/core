@@ -35,7 +35,7 @@ namespace gb
             SrsPartTarget(String name);
             friend class SrsTarget;
 
-            /// Platformdependant command to generate the dependencies for the srs target.
+            /// Platformdependent command to generate the dependencies for the srs target.
             static const Command command_dep(
                 String srsname,
                 Path sourcefile,

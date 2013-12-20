@@ -194,7 +194,7 @@ private:
     bool          readAvailableMigrations(migrations_available&);
     bool          alreadyMigrated();
     migrations_vr readMigrationSteps(const OUString& rMigrationName);
-    sal_Int32     findPreferedMigrationProcess(const migrations_available&);
+    sal_Int32     findPreferredMigrationProcess(const migrations_available&);
 #if defined UNX && ! defined MACOSX
     OUString preXDGConfigDir(const OUString& rConfigDir);
 #endif

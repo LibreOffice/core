@@ -139,7 +139,7 @@ sub controlparameter
 
 #############################################################################
 # The program msidb.exe can be located next to the Perl program. Then it is
-# not neccessary to find it in the PATH variable.
+# not necessary to find it in the PATH variable.
 #############################################################################
 
 sub check_local_msidb

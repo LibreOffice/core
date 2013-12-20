@@ -49,7 +49,7 @@ module org {
               any number of arguments after xOptions.
               Furthermore, you could replace the name of the service and
               the interface, but only if you want to replace this name in all
-              your project files. This example will work with tNeccessaryhe default
+              your project files. This example will work with tNecessaryhe default
               names.
               Interface names should start with an X prefix.
            */

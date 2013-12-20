@@ -175,7 +175,7 @@ void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
         }
         if (bDone)
         {
-            mpAnnotationWindow->ResizeIfNeccessary(aOldHeight,mpAnnotationWindow->GetPostItTextHeight());
+            mpAnnotationWindow->ResizeIfNecessary(aOldHeight,mpAnnotationWindow->GetPostItTextHeight());
         }
         else
         {
@@ -449,7 +449,7 @@ void AnnotationWindow::SetScrollbar()
     mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
 }
 
-void AnnotationWindow::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
+void AnnotationWindow::ResizeIfNecessary(long aOldHeight, long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {

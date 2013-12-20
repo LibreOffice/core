@@ -525,7 +525,7 @@ DECLARE_OOXMLIMPORT_TEST(testN693238, "n693238.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testNumbering1, "numbering1.docx")
 {
-/* <w:numPr> in the paragraph itself was overriden by <w:numpr> introduced by the paragraph's <w:pStyle>
+/* <w:numPr> in the paragraph itself was overridden by <w:numpr> introduced by the paragraph's <w:pStyle>
 enum = ThisComponent.Text.createEnumeration
 para = enum.NextElement
 xray para.NumberingStyleName

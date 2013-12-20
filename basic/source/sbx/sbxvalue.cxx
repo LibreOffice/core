@@ -710,7 +710,7 @@ sal_Bool SbxValue::IsFixed() const
     return ( (GetFlags() & SBX_FIXED) | (aData.eType & SbxBYREF) ) != 0;
 }
 
-// A variable is numeric, if it is EMPTY or realy numeric
+// A variable is numeric, if it is EMPTY or really numeric
 // or if it contains a complete convertible String
 
 // #41692, implement it for RTL and Basic-Core separately

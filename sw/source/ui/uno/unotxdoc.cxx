@@ -1154,7 +1154,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                 OUString sFileURL;
                 if ( (rProp.Value >>= sFileURL ) )
                 {
-                    // Convert the File URL into a system dependant path, as the SalPrinter expects
+                    // Convert the File URL into a system dependent path, as the SalPrinter expects
                     OUString sSystemPath;
                     FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
                     aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );
@@ -2764,7 +2764,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 {
                     // we just state what output size we would need
                     // which may cause vcl to set that page size on the printer
-                    // (if available and not overriden by the user)
+                    // (if available and not overridden by the user)
                     aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
                     aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
                                                      TWIP_TO_MM100( aTmpSize.Height() ));

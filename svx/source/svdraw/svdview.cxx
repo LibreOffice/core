@@ -209,7 +209,7 @@ sal_Bool SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
             }
         } // switch
         if (bRet && pWin!=NULL) {
-            pWin->SetPointer(GetPreferedPointer(
+            pWin->SetPointer(GetPreferredPointer(
                 pWin->PixelToLogic(pWin->ScreenToOutputPixel( pWin->GetPointerPosPixel() ) ),
                 pWin,
                 rKEvt.GetKeyCode().GetModifier()));
@@ -933,7 +933,7 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         bool bLeftUp=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseUp;
         // left mouse button pressed or held?
         sal_Bool bLeftDown1=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && !rVEvt.bMouseUp;
-        pWin->SetPointer(GetPreferedPointer(rVEvt.aLogicPos,pWin,
+        pWin->SetPointer(GetPreferredPointer(rVEvt.aLogicPos,pWin,
                 rVEvt.nMouseCode & (KEY_SHIFT|KEY_MOD1|KEY_MOD2),bLeftDown1));
         sal_Bool bAction=IsAction();
         if (bLeftDown && bAction) pWin->CaptureMouse();
@@ -943,7 +943,7 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
 }
 #include <editeng/outlobj.hxx>
 
-Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier, sal_Bool bLeftDown) const
+Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier, sal_Bool bLeftDown) const
 {
     // Actions
     if (IsCreateObj())

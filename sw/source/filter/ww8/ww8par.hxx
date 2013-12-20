@@ -255,7 +255,7 @@ public:
                                  //been explicitly set, it's set to the value
                                  //of pFmt->GetItemState(RES_LR_SPACE, false)
                                  //if it was possible to get the ItemState
-                                 //for L of the LR space independantly
+                                 //for L of the LR space independently
     bool bParaAutoBefore;   // For Auto spacing before a paragraph
     bool bParaAutoAfter;    // For Auto Spacing after a paragraph
 

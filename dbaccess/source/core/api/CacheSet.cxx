@@ -241,7 +241,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     OUString aQuote  = getIdentifierQuoteString();
 
-    sal_Int32 nCheckCount = 1; // index for the orginal values
+    sal_Int32 nCheckCount = 1; // index for the original values
     sal_Int32 i = 1;
 
     OUString sIsNull(" IS NULL");
@@ -285,7 +285,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     }
 }
 
-void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OCacheSet::updateRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
@@ -324,7 +324,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
     for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
     {
-        setParameter(i,xParameter,(_rOrginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(_rOriginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;

@@ -867,7 +867,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
                 // another possibility is to adapt the values created so far with a factor; this
                 // will keep the original Bitmap untouched and thus quality will not change
-                // caution: convert to double first, else pretty big errors may occurr
+                // caution: convert to double first, else pretty big errors may occur
                 const double fFactorX((double)aBitmapEx.GetSizePixel().Width() / aSrcSizePixel.Width());
                 const double fFactorY((double)aBitmapEx.GetSizePixel().Height() / aSrcSizePixel.Height());
 

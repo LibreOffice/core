@@ -109,7 +109,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {
-        /* Attention: Dont add .uno:CloseFrame here. Because its not realy
+        /* Attention: Dont add .uno:CloseFrame here. Because its not really
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
         css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
@@ -238,7 +238,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                 Now we do the following:
                 - close all views to the same document, if needed and possible
                 - make the current frame empty
-                  ! This step is neccessary to handle errors during closing the
+                  ! This step is necessary to handle errors during closing the
                     document inside the frame. May the document shows a dialog and
                     the user ignore it. Then the state of the office can be changed
                     during we try to close frame and document.
@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // We reached this method only, by using a reference to ourself :-)
     // Further this member is used to detect still running and not yet finished
     // ansynchronous operations. So its time now to release this reference.
-    // But hold it temp alive. Otherwhise we die before we can finish this method realy :-))
+    // But hold it temp alive. Otherwhise we die before we can finish this method really :-))
     css::uno::Reference< css::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();
     m_xResultListener.clear();
@@ -479,7 +479,7 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
         }
     }
 
-    // dont remove the component realy by e.g. calling setComponent(null, null).
+    // dont remove the component really by e.g. calling setComponent(null, null).
     // It's enough to suspend the controller.
     // If we close the frame later this controller doesn't show the same dialog again.
     return sal_True;
@@ -596,7 +596,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         if (xTopWindowCheck.is())
         {
             // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
-            //     Be sure that these window is realy a "top system window".
+            //     Be sure that these window is really a "top system window".
             //     Attention ! Checking Window->GetParent() isnt the right approach here.
             //     Because sometimes VCL create "implicit border windows" as parents even we created
             //     a simple XWindow using the toolkit only .-(

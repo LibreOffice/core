@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module bridge {
 
-/** These constants are used to specify model-dependant representations.
+/** These constants are used to specify model-dependent representations.
 
     <p>They are only used for creating bridges to other component models.
 

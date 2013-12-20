@@ -105,7 +105,7 @@
         <info>
           <desc>The Emailaddress to fill out in the reportmail.xml file.
                 DO NOT SET THIS VALUE UNLESS YOU KNOW WHAT YOU ARE DOING!
-                Its only purpose is testing and quality assureance.
+                Its only purpose is testing and quality assurance.
           </desc>
         </info>
         <value/>

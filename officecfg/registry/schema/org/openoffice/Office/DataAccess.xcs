@@ -662,7 +662,7 @@
           </prop>
           <prop oor:name="PreferMailFormat" oor:type="xs:string">
             <info>
-              <desc>Specifies the perfered mail format.</desc>
+              <desc>Specifies the preferred mail format.</desc>
             </info>
           </prop>
           <prop oor:name="WorkPhone" oor:type="xs:string">
@@ -819,9 +819,9 @@
           <info>
             <desc>HSQLDB features calling Java code directly from SQL statements. For security
               reasons, this is restricted to classes from the org.hsqldb.Library package,
-              the java.lang.math package, plus any methods specified in this configuraton
+              the java.lang.math package, plus any methods specified in this configuration
               setting. If a method specification ends with .*, then all methods
-              from the respectiv package are permitted.</desc>
+              from the respective package are permitted.</desc>
           </info>
         </group>
       </group>

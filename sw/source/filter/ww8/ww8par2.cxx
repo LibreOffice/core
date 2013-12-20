@@ -1101,7 +1101,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
         delete[] pNewSHDs, pNewSHDs = 0;
     }
 
-    short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // realy saved
+    short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // really saved
 
     if (!pTCs && nCols)
     {

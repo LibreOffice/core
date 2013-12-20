@@ -756,7 +756,7 @@ void RegionBand::InsertBands(long nTop, long nBottom)
             break;
         }
 
-        // insert bands between two bands if neccessary
+        // insert bands between two bands if necessary
         if ( pBand->mpNextBand )
         {
             if ( (pBand->mnYBottom + 1) < pBand->mpNextBand->mnYTop )

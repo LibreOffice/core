@@ -686,7 +686,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     case 0x0394:
                     // And this is really just a guess, but a mere presence of this
                     // flag makes a horizontal rule be as wide as the page (unless
-                    // overriden by something), so it probably matches o:hr from .docx.
+                    // overridden by something), so it probably matches o:hr from .docx.
                         pImpRec->isHorizontalRule = true;
                         break;
                 }

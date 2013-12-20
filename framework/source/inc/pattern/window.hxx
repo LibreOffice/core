@@ -107,7 +107,7 @@ static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xW
     if (xTopWindowCheck.is())
     {
         // Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
-        // Be sure that these window is realy a "top system window".
+        // Be sure that these window is really a "top system window".
         // Attention ! Checking Window->GetParent() isnt the right approach here.
         // Because sometimes VCL create "implicit border windows" as parents even we created
         // a simple XWindow using the toolkit only .-(

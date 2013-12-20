@@ -53,7 +53,7 @@ import com.sun.star.uno.UnoRuntime;
  *   MultiMethodTest subclass). See also TestResult and MultiMethodTest.tRes
  *   documentation.
  *
- *   4. the before() and after() methods can be overriden to perform some
+ *   4. the before() and after() methods can be overridden to perform some
  *   actions, accordingly, before and after calling the test methods.
  *
  *   5. besides tRes, there are some fields initialized in the MultiMethodTest,

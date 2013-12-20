@@ -674,7 +674,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             OUString aTmp( m_aSuggestions[ nAltIdx ] );
             OUString aOrig( m_bGrammarResults ? OUString() : m_xSpellAlt->getWord() );
 
-            // if orginal word has a trailing . (likely the end of a sentence)
+            // if original word has a trailing . (likely the end of a sentence)
             // and the replacement text hasn't, then add it to the replacement
             if (!aTmp.isEmpty() && !aOrig.isEmpty() &&
                 aOrig.endsWith(".") && /* !IsAlphaNumeric ??*/

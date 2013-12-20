@@ -467,7 +467,7 @@ void XMLStyleExport::exportStyleFamily(
                 Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
                 Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-                // styles that aren't existing realy are ignored.
+                // styles that aren't existing really are ignored.
                 if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
                 {
                     Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );

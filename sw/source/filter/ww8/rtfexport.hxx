@@ -104,7 +104,7 @@ public:
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
 
 protected:
-    /// Format-dependant part of the actual export.
+    /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl();
 
     virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}

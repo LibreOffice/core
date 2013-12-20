@@ -301,7 +301,7 @@ namespace dbaui
         void            notifyFunctionFieldChanged(const OUString& _sOldFunctionName,const OUString& _sFunctionName,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** clears the function fields of the submitted entry if it doesn't match the SQL standard and append an undo action.
-            E.q. AGGREGATE functions are only valid when the field name isn't an asterix
+            E.q. AGGREGATE functions are only valid when the field name isn't an asterisk
             @param  _sFieldName
                 The field name.
             @param  _pEntry

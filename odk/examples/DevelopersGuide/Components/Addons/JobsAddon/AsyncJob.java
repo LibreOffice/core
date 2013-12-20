@@ -287,7 +287,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         catch(java.lang.Throwable exIgnore)
         {
             // ignore any problem, which can occur here.
-            // It's not realy a bug for this example job, if
+            // It's not really a bug for this example job, if
             // it's message could not be printed out!
         }
     }
@@ -297,7 +297,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     private void showInfoNonModal( java.lang.String sTitle   ,
                                    java.lang.String sMessage )
     {
-        // Couldnt be implemented realy using the toolkit ...
+        // Couldnt be implemented really using the toolkit ...
         // Because we need a parent anytime.
         // And showing e.g. a java dialog can make some trouble
         // inside office ... but we have no chance here.

@@ -194,7 +194,7 @@ class FairRWLock : public  IRWLock
 
             @attention  Don't call this method if you are not a writer!
                         Results are not defined then ...
-                        An upgrade can't be implemented realy ... because acquiring new access
+                        An upgrade can't be implemented really ... because acquiring new access
                         will be the same - there no differences!
 
             @seealso    -

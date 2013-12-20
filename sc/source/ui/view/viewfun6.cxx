@@ -229,7 +229,7 @@ void ScViewFunc::DetectiveMarkSucc()
     pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
-        // No dependants found.  Nothing to do.
+        // No dependents found.  Nothing to do.
         return;
 
     ScRangeList aDestRanges;

@@ -978,7 +978,7 @@ void ScDPSource::CreateRes_Impl()
         pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
     }
 
-    //  SortMembers does the sorting by a result dimension, using the orginal results,
+    //  SortMembers does the sorting by a result dimension, using the original results,
     //  but not running totals etc.
     pRowResRoot->SortMembers( pColResRoot );
 

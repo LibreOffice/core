@@ -78,7 +78,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
             It's holded weak only so we do not need any complex dispose sessions.
 
-            Note: Passing NULL as parameter will be alloed. It will reset the internal
+            Note: Passing NULL as parameter will be allowed. It will reset the internal
             member reference only.
 
             @param  xOwner
@@ -92,7 +92,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
             It's holded weak only so we do not need any complex dispose sessions.
 
-            Note: Passing NULL as parameter will be alloed. It will reset the internal
+            Note: Passing NULL as parameter will be allowed. It will reset the internal
             member reference only.
 
             @param  xNumbers

@@ -168,7 +168,7 @@ class BaseContainer : public BaseLock
         //---------------------------------------
 
         /** @short  check if the underlying configuration data was already loaded
-                    and do it if neccessary automaticly.
+                    and do it if necessary automaticly.
          */
         void impl_loadOnDemand();
 
@@ -271,7 +271,7 @@ class BaseContainer : public BaseLock
         //---------------------------------------
         // XContainerQuery
 
-        // must be implemented realy by derived class ...
+        // must be implemented really by derived class ...
         // We implement return of an empty result here only!
         // But we show an assertion :-)
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)

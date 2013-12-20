@@ -328,7 +328,7 @@ class QueryAnalyzer
 
         //---------------------------------------------------------------------------------------------------------
         // access to additional parameter values
-        // Methods return default of realy set values!
+        // Methods return default of really set values!
         //---------------------------------------------------------------------------------------------------------
         sal_uInt32 getIFlags       () const { return m_nIFlags       ; }
         sal_uInt32 getEFlags       () const { return m_nEFlags       ; }

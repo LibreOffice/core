@@ -84,7 +84,7 @@ MailToDispatcher::~MailToDispatcher()
                 be asked by the generic dispatch mechanism inside framework, if he can handle this
                 special URL which match his registration. He can agree by returning of a valid dispatch
                 instance or disagree by returning <NULL/>.
-                We don't create new dispatch instances here realy - we return THIS as result to handle it
+                We don't create new dispatch instances here really - we return THIS as result to handle it
                 at the same implementation.
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
@@ -122,7 +122,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
 /**
     @short      dispatch URL with arguments
     @descr      We use threadsafe internal method to do so. It returns a state value - but we ignore it.
-                Because we doesn't support status listener notifications here. Status events are not guaranteed -
+                Because we don't support status listener notifications here. Status events are not guaranteed -
                 and we call another service internaly which doesn't return any notifications too.
 
     @param      aURL
@@ -193,7 +193,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     @return     <TRUE/> if dispatch could be started successfully
                 Note: Our internal used shell executor doesn't return any state value - so we must
                 belive that call was successfully.
-                <FALSE/> if neccessary resource couldn't be created or an exception was thrown.
+                <FALSE/> if necessary resource couldn't be created or an exception was thrown.
 */
 sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
                                             const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
@@ -231,7 +231,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 /**
     @short      add/remove listener for state events
     @descr      Because we use an external process to forward such mail URLs, and this process doesn't
-                return any notifications about success or failed state - we doesn't support such status
+                return any notifications about success or failed state - we don't support such status
                 listener. We have no status to send.
 
     @param      xListener

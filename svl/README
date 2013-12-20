@@ -39,7 +39,7 @@ The item set can be created with a user-supplied range of WhichIds; it
 will accept SfxPoolItems with matching WhichIds and ignore attempts to
 insert items with non-matching WhichIds.
 
-Items that are succesfully inserted into the set will be stored in the
+Items that are successfully inserted into the set will be stored in the
 set's SfxItemPool, and for poolable items only a single instance that
 compares equal under the predicate operator== will be stored in the pool,
 regardless of how many sets contain it, thus conserving memory.

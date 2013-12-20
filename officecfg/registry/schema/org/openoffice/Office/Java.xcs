@@ -87,7 +87,7 @@
           </enumeration>
           <enumeration oor:value="3">
             <info>
-              <desc>None - no connection alloed</desc>
+              <desc>None - no connection allowed</desc>
             </info>
           </enumeration>
         </constraints>

@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC GraphicHelper
 {
 
 public:
-    static void GetPreferedExtension( OUString& rExtension, const Graphic& rGraphic );
+    static void GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic );
     static OUString ExportGraphic( const Graphic& rGraphic, const OUString& rGraphicName );
     static void SaveShapeAsGraphic( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 };

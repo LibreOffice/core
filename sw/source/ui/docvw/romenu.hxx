@@ -57,7 +57,7 @@ public:
     void Execute( Window* pWin, sal_uInt16 nId );
 };
 
-void GetPreferedExtension( OUString &rExt, const Graphic &rGrf );
+void GetPreferredExtension( OUString &rExt, const Graphic &rGrf );
 
 #endif
 

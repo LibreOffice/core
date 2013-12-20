@@ -284,7 +284,7 @@ public:
 
     /**___________________________________________________________________________________________________
         @short      get implementation id
-        @descr      This ID is neccessary for UNO-caching. If there no ID, cache is disabled.
+        @descr      This ID is necessary for UNO-caching. If there no ID, cache is disabled.
                     Another way, cache is enabled.
 
         @seealso    XTypeProvider

@@ -518,7 +518,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         }
 
         /* static helper to move the temp. file to the target location by using the ucb
-           It's static to be useable from outside too. So it's not realy neccessary to start
+           It's static to be useable from outside too. So it's not really necessary to start
            the thread, if finishing of the job was detected outside this thread.
            But it must be called without using a corresponding thread for the given parameter!
          */

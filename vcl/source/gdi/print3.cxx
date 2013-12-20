@@ -173,7 +173,7 @@ public:
     // 1. default tray
     // 2. tray set for a concrete page by an application, e.g., writer
     //    allows setting a printer tray (for the default printer) for a
-    //    page style. This setting can be overriden by user by selecting
+    //    page style. This setting can be overridden by user by selecting
     //    "Use only paper tray from printer preferences" on the Options
     //    page in the print dialog, in which case the default tray is
     //    used for all pages.

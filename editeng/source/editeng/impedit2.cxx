@@ -3101,7 +3101,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( sal_Bool bIgnoreExtraSpace )
                 OSL_ENSURE( pLine, "NULL-Pointer in the line iterator in CalcWidth" );
                 // nCurWidth = pLine->GetStartPosX();
                 // For Center- or Right- alignment it depends on the paper
-                // width, here not prefered. I general, it is best not leave it
+                // width, here not preferred. I general, it is best not leave it
                 // to StartPosX, also the right indents have to be taken into
                 // account!
                 nCurWidth = GetXValue( rLRItem.GetTxtLeft() + nSpaceBeforeAndMinLabelWidth );

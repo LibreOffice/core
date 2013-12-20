@@ -259,7 +259,7 @@
       </info>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
-          <desc>Name of the entry. May be used to have mode dependant entries.</desc>
+          <desc>Name of the entry. May be used to have mode dependent entries.</desc>
         </info>
       </prop>
       <prop oor:name="Type" oor:type="xs:string">
@@ -388,7 +388,7 @@
     <group oor:name="ViewStyle">
       <info>
         <desc>Visual properties of a view style:
-          font and backround color.</desc>
+          font and background color.</desc>
       </info>
       <prop oor:name="StyleName" oor:type="xs:string">
         <info>

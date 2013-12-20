@@ -570,7 +570,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     return aRet;
 }
 
-void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::updateRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
@@ -610,7 +610,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             sKeyCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
-            if((_rOrginalRow->get())[aIter->second.nPosition].isNull())
+            if((_rOriginalRow->get())[aIter->second.nPosition].isNull())
                 sKeyCondition.append(sIsNull);
             else
                 sKeyCondition.append(sParam);
@@ -625,7 +625,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
                 if((*aIndexIter)->hasByName(aIter->first))
                 {
                     sIndexCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
-                    if((_rOrginalRow->get())[aIter->second.nPosition].isNull())
+                    if((_rOriginalRow->get())[aIter->second.nPosition].isNull())
                         sIndexCondition.append(sIsNull);
                     else
                     {
@@ -672,10 +672,10 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 
     // now create end execute the prepared statement
     OUString sEmpty;
-    executeUpdate(_rInsertRow ,_rOrginalRow,aSql.makeStringAndClear(),sEmpty,aIndexColumnPositions);
+    executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),sEmpty,aIndexColumnPositions);
 }
 
-void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions)
+void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions)
 {
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
@@ -700,7 +700,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
                     bRefetch = ::std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),aIter->second.sRealName) == m_aFilterColumns.end();
                 }
                 impl_convertValue_throw(_rInsertRow,aIter->second);
-                (_rInsertRow->get())[nPos].setSigned((_rOrginalRow->get())[nPos].isSigned());
+                (_rInsertRow->get())[nPos].setSigned((_rOriginalRow->get())[nPos].isSigned());
                 setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
             }
         }
@@ -713,7 +713,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     {
         if ( i_sTableName.isEmpty() || aIter->second.sTableName == i_sTableName )
         {
-            setParameter(i++,xParameter,(_rOrginalRow->get())[aIter->second.nPosition],aIter->second.nType,aIter->second.nScale);
+            setParameter(i++,xParameter,(_rOriginalRow->get())[aIter->second.nPosition],aIter->second.nType,aIter->second.nScale);
         }
     }
     if ( !_aIndexColumnPositions.empty() )
@@ -725,7 +725,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
         aIter = m_pColumnNames->begin();
         for(;aIdxColIter != aIdxColEnd;++aIdxColIter,++i,++j,++aIter)
         {
-            setParameter(i,xParameter,(_rOrginalRow->get())[*aIdxColIter],(_rOrginalRow->get())[*aIdxColIter].getTypeKind(),aIter->second.nScale);
+            setParameter(i,xParameter,(_rOriginalRow->get())[*aIdxColIter],(_rOriginalRow->get())[*aIdxColIter].getTypeKind(),aIter->second.nScale);
         }
     }
     const sal_Int32 nRowsUpdated = xPrep->executeUpdate();

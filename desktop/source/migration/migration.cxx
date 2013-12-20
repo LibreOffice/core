@@ -188,7 +188,7 @@ bool MigrationImpl::initializeMigration()
 
     if (!checkMigrationCompleted()) {
         readAvailableMigrations(m_vMigrationsAvailable);
-        sal_Int32 nIndex = findPreferedMigrationProcess(m_vMigrationsAvailable);
+        sal_Int32 nIndex = findPreferredMigrationProcess(m_vMigrationsAvailable);
         // m_aInfo is now set to the preferred migration source
         if ( nIndex >= 0 ) {
             if (alreadyMigrated())
@@ -607,7 +607,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
     return aInfo;
 }
 
-sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available& rAvailableMigrations)
+sal_Int32 MigrationImpl::findPreferredMigrationProcess(const migrations_available& rAvailableMigrations)
 {
     sal_Int32    nIndex( -1 );
     sal_Int32    i( 0 );

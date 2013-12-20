@@ -32,7 +32,7 @@ UNO dialogs from various languages
 - java/com/sun/star/script/framework/provider
 
 Implementation of an abstract base class ScriptProvider which provides
-core methods for implementing Java based LanguageScriptProvider implemetations
+core methods for implementing Java based LanguageScriptProvider implementations
 
 - java/com/sun/star/script/framework/provider/*
 

@@ -312,7 +312,7 @@ def printHelp():
     printOut("parameters:"                                                 )
     printOut("\tcfg=<file name>"                                           )
     printOut("\t\tmust point to a system file, which contains"             )
-    printOut("\t\tall neccessary configuration data for the merge process.")
+    printOut("\t\tall necessary configuration data for the merge process.")
     printOut("\tFurther cou can specify every parameter allowed in the"    )
     printOut("\tconfig file as command line parameter too, to overwrite"   )
     printOut("\tthe value from the file."                                  )

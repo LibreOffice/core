@@ -1418,7 +1418,7 @@ static const XclBuiltInFormat spBuiltInFormats_THAI[] =
 
 // ----------------------------------------------------------------------------
 
-/** Specifies a number format table for a specific langauge. */
+/** Specifies a number format table for a specific language. */
 struct XclBuiltInFormatTable
 {
     LanguageType        meLanguage;         /// The language of this table.

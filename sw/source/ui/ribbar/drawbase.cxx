@@ -555,7 +555,7 @@ void SwDrawBase::SetDrawPointer()
     SdrView *pSdrView = m_pSh->GetDrawView();
         Point aPnt(m_pWin->OutputToScreenPixel(m_pWin->GetPointerPosPixel()));
     aPnt = m_pWin->PixelToLogic(m_pWin->ScreenToOutputPixel(aPnt));
-    const Pointer aPointTyp = pSdrView->GetPreferedPointer(aPnt, m_pSh->GetOut());
+    const Pointer aPointTyp = pSdrView->GetPreferredPointer(aPnt, m_pSh->GetOut());
     const Pointer aDrawPt(aPointTyp);
     m_pWin->SetPointer(aDrawPt);
 }

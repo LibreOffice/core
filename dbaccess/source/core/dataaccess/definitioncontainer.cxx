@@ -380,7 +380,7 @@ Any SAL_CALL ODefinitionContainer::getByName( const OUString& _rName ) throw(NoS
     return makeAny( implGetByName( _rName, sal_True ) );
 }
 
-Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName, sal_Bool _bReadIfNeccessary) throw (NoSuchElementException)
+Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName, sal_Bool _bReadIfNecessary) throw (NoSuchElementException)
 {
     Documents::iterator aMapPos = m_aDocumentMap.find(_rName);
     if (aMapPos == m_aDocumentMap.end())
@@ -388,7 +388,7 @@ Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName
 
     Reference< XContent > xProp = aMapPos->second;
 
-    if (_bReadIfNeccessary && !xProp.is())
+    if (_bReadIfNecessary && !xProp.is())
     {   // the object has never been accessed before, so we have to read it now
         // (that's the expensive part)
 

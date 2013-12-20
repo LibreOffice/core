@@ -98,7 +98,7 @@
       <prop oor:name="Priority" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Contains the priority value to specify which migration should be
-          prefered. Higher values are prefered.</desc>
+          preferred. Higher values are preferred.</desc>
         </info>
         <value/>
       </prop>
@@ -348,7 +348,7 @@
       </prop>
       <prop oor:name="MigrationCompleted" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>This should be set to true, as soon as settings from nother
+          <desc>This should be set to true, as soon as settings from another
           version have been imported into this installation in order to prevent
           multiple migrations</desc>
         </info>
@@ -416,7 +416,7 @@
       </prop>
       <prop oor:name="DecimalSeparatorAsLocale" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Indicates that the decimal separator (dot or commma) is used as
+          <desc>Indicates that the decimal separator (dot or comma) is used as
           appropriate for the selected locale instead of the one related to the
           default keyboard layout.</desc>
           <label>Decimal separator key same as locale setting.</label>

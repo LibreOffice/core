@@ -37,7 +37,7 @@ namespace uui
 
 /*-************************************************************************************************************//**
     @short      initialize filter dialog with start values
-    @descr      We set some neccessary information on these instance for later working and create internal structures.
+    @descr      We set some necessary information on these instance for later working and create internal structures.
                 After construction user should call "SetFilters()" and "SetURL()" to fill listbox with selectable filter
                 names and set file name of file, which should be used for selected filter.
 
@@ -120,7 +120,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     @short      ask user for his decision
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
                 name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
-                parameter "pSelectedItem" as pointer into your FilterNameList to get selected item realy ...
+                parameter "pSelectedItem" as pointer into your FilterNameList to get selected item really ...
                 but if we return sal_False ... user has cancel the dialog ... you should not do that. pSelectedItem isnt
                 set to any valid value then. We don't change them ...
 

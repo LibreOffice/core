@@ -154,7 +154,7 @@ class PathSettings : // base classes
     public:
 
         /** initialize a new instance of this class.
-            Attention: It's neccessary for right function of this class, that the order of base
+            Attention: It's necessary for right function of this class, that the order of base
             classes is the right one. Because we transfer information from one base to another
             during this ctor runs! */
         PathSettings(const css::uno::Reference< css::uno::XComponentContext >& xContext);

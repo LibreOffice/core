@@ -631,7 +631,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
     if (bDefPointer)
     {
-        mpWindow->SetPointer(mpView->GetPreferedPointer(
+        mpWindow->SetPointer(mpView->GetPreferredPointer(
                             aPnt, mpWindow, nModifier, bLeftDown));
     }
 }

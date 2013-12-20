@@ -456,7 +456,7 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
         rView.MovAction(aPos);
     }
 
-    rWindow.SetPointer( rView.GetPreferedPointer( aPos, &rWindow, nHitLog ) );
+    rWindow.SetPointer( rView.GetPreferredPointer( aPos, &rWindow, nHitLog ) );
 
     return true;
 }
@@ -569,7 +569,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 
     bMarkAction = false;
 
-    rWindow.SetPointer( rView.GetPreferedPointer( aPnt, &rWindow, nHitLog ) );
+    rWindow.SetPointer( rView.GetPreferredPointer( aPnt, &rWindow, nHitLog ) );
     rWindow.ReleaseMouse();
 
     return true;
@@ -595,7 +595,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
         rView.MovAction(aPnt_);
     }
 
-    rWindow.SetPointer( rView.GetPreferedPointer( aPnt, &rWindow, nHitLog ) );
+    rWindow.SetPointer( rView.GetPreferredPointer( aPnt, &rWindow, nHitLog ) );
 
     return true;
 }

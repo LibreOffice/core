@@ -184,7 +184,7 @@ Sequence< sal_Int32 > SAL_CALL OptimisticSet::deleteRows( const Sequence< Any >&
     return aRet;
 }
 
-void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
+void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OptimisticSet::updateRow" );
     if ( m_aJoinedKeyColumns.empty() )
@@ -209,7 +209,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             aResultSetChanged[aIter->second.sTableName] = m_aJoinedKeyColumns.find(aIter->second.nPosition) != m_aJoinedKeyColumns.end();
-            lcl_fillKeyCondition(aIter->second.sTableName,sQuotedColumnName,(_rOrginalRow->get())[aIter->second.nPosition],aKeyConditions);
+            lcl_fillKeyCondition(aIter->second.sTableName,sQuotedColumnName,(_rOriginalRow->get())[aIter->second.nPosition],aKeyConditions);
         }
         if((_rInsertRow->get())[aIter->second.nPosition].isModified())
         {
@@ -254,7 +254,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             if ( !rCondition.isEmpty() )
                 sSql.append(" WHERE " + rCondition.toString() );
 
-            executeUpdate(_rInsertRow ,_rOrginalRow,sSql.makeStringAndClear(),aSqlIter->first);
+            executeUpdate(_rInsertRow ,_rOriginalRow,sSql.makeStringAndClear(),aSqlIter->first);
         }
     }
 }

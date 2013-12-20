@@ -46,7 +46,7 @@ import com.sun.star.uno.UnoRuntime;
  * on any frame used in this demo application.
  * It intercept all URL's which try to create a new empty frame.
  * (e.g. "private:factory/swriter")
- * Nobody can guarantee that this interception will be realy used -
+ * Nobody can guarantee that this interception will be really used -
  * because another interceptor (registered at a later time then this one!)
  * will be called before this one.
  * Implementation is executed inside a new thread to prevent application
@@ -114,7 +114,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     //_____________________
 
     /**
-     * start working as frame action listener realy.
+     * start working as frame action listener really.
      * We will be frame action listener here. In case
      * we get a frame action which indicates, that we should
      * update our interception. Because such using of an interecptor
@@ -524,7 +524,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
 
     /**
      * Notification of status listener isn't guaranteed (instead of listener on XNotifyingDispatch interface).
-     * So this interceptor doesn't support that realy ...
+     * So this interceptor doesn't support that really ...
      */
     public /*ONEWAY*/ void addStatusListener(/*IN*/ com.sun.star.frame.XStatusListener xListener,/*IN*/ com.sun.star.util.URL aURL)
     {
@@ -573,7 +573,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     /**
      * This class listen on the intercepted frame to free all used resources on closing.
      * We forget the reference to the frame only here. Deregistration
-     * isn't neccessary here - because this frame dies and wish to forgoten.
+     * isn't necessary here - because this frame dies and wish to forgoten.
      *
      * @param aSource
      *          must be our internal saved frame, on which we listen for frame action events

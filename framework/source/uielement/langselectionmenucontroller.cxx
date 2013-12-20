@@ -236,14 +236,14 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     // for aCmd_Dialog and aCmd_Language
 
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
-    const OUString sAsterix("*");  // multiple languages in current selection
+    const OUString sAsterisk("*");  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         const OUString & rStr( *it );
         if (rStr != aLanguageTable.GetString( LANGUAGE_NONE ) &&
-            rStr != sAsterix &&
+            rStr != sAsterisk &&
             rStr != sEmpty)
         {
             pPopupMenu->InsertItem( nItemId, rStr );

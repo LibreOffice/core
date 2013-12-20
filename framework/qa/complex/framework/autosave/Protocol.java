@@ -30,7 +30,7 @@ import java.sql.*;
 /**
  * Implements a log mechanism to create a protocol of all steps of e.g. an api test
  * It provides the possibility to write the logged meesages to a file and/or
- * to stdout/stderr (if neccessary at the same time!).
+ * to stdout/stderr (if necessary at the same time!).
  *
  *  TODO
  *      - implement filter, which e.g. supress showing of INFO data
@@ -473,7 +473,7 @@ public class Protocol extends JComponent
 
     // ____________________
     /**
-     * For some modes it's neccessary, that we write some additional
+     * For some modes it's necessary, that we write some additional
      * information to the log. E.g. for html we must generate close targets.
      */
     public synchronized void finish()
@@ -495,7 +495,7 @@ public class Protocol extends JComponent
     /**
      * log an unspecified message.
      *
-     * Sometimes it's not neccessary to set a special type for an message.
+     * Sometimes it's not necessary to set a special type for an message.
      * The pure message seams to be enough. The type of such "pure messages"
      * will be set to INFO.
      *
@@ -728,7 +728,7 @@ public class Protocol extends JComponent
      * returns a generic html header for generating html log files
      *
      * It's used from the method finish() to generate a valid html formated file.
-     * For that its neccessary to open some special html targets like e.g. <html>.
+     * For that its necessary to open some special html targets like e.g. <html>.
      *
      * @return  A string, which includes the whole header.
      *

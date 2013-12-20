@@ -1806,7 +1806,7 @@ empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler)
  * empathy_ft_handler_is_completed:
  * @handler: an #EmpathyFTHandler
  *
- * Returns whether the transfer for @handler has been completed succesfully.
+ * Returns whether the transfer for @handler has been completed successfully.
  *
  * Return value: %TRUE if the handler has been transferred correctly, %FALSE
  * otherwise

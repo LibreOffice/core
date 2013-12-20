@@ -202,7 +202,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         //---------------------------------------
         /** @short  return the current office locale.
 
-        @descr  We does not cache this value, because we are not listen
+        @descr  We do not cache this value, because we are not listen
         for changes on the configuration layer ...
 
         @return OUString
@@ -421,7 +421,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         //---------------------------------------
         /** @short  return the current office locale.
 
-        @descr  We does not cache this value, because we are not listen
+        @descr  We do not cache this value, because we are not listen
         for changes on the configuration layer ...
 
         @return OUString

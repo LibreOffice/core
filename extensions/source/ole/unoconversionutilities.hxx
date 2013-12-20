@@ -1244,7 +1244,7 @@ size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
 // param rSeq - an Any that has to contain a Sequence
 // param dim - the dimension for which the number of elements is being determined,
 //              must be one.
-// param seqElementCounts - countains the maximum number of elements for each
+// param seqElementCounts - contains the maximum number of elements for each
 //                          dimension. Index 0 contains the number of dimension one.
 //                          After return the Sequence contains the maximum number of
 //                          elements for each dimension.

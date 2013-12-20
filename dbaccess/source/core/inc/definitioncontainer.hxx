@@ -222,7 +222,7 @@ protected:
 
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
         @param      _rName              the object name
-        @param      _bReadIfNeccessary  if sal_True, the object will be created if necessary
+        @param      _bReadIfNecessary  if sal_True, the object will be created if necessary
         @return                         the property set interface of the object. Usually the return value is not NULL, but
                                         if so, then the object could not be read from the configuration
         @throws                         NoSuchElementException if there is no object with the given name.

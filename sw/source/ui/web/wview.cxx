@@ -124,7 +124,7 @@ void SwWebView::SelectShell()
         {
             rDispatcher.Flush();        // really delete all cached shells
 
-            //Additonal to the old selection remember which toolbar was visible.
+            //Additional to the old selection remember which toolbar was visible.
             sal_Int32 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
             if ( nId )
                 pBarCfg->SetTopToolbar( _nSelectionType, nId );

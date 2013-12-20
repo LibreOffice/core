@@ -24,7 +24,7 @@
   <templates>
     <group oor:name="RuntimeNode">
       <info>
-        <desc>Specifies the runtimes available to the Scriptying Framework.</desc>
+        <desc>Specifies the runtimes available to the Scripting Framework.</desc>
       </info>
       <prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
         <info>

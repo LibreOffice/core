@@ -671,7 +671,7 @@ void SwSidebarWin::SetScrollbar()
     mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
 }
 
-void SwSidebarWin::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
+void SwSidebarWin::ResizeIfNecessary(long aOldHeight, long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {

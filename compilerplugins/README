@@ -39,7 +39,7 @@ Additional optional make arguments:
 - it is possible to also pass FORCE_COMPILE_ALL=1 to make to trigger rebuild of all source files,
     even those that are up to date.
 - UPDATE_FILES=<scope> - limits which modified files will be actually written back with the changes
-    - mainfile - only the main .cxx file will be modifed (default)
+    - mainfile - only the main .cxx file will be modified (default)
     - all - all source files involved will be modified (possibly even header files from other LO modules),
         3rd party header files are however never modified
     - <module> - only files in the given LO module (toplevel directory) will be modified (including headers)

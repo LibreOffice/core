@@ -471,7 +471,7 @@ callback(struct dl_phdr_info *info, size_t size, void *data)
 /* Get the location of the .dynamic section offset for the given elf file.
  * i.e. same as the "Offset" value shown for DYNAMIC from readelf -l foo
  *
- * We want to know this value so that if the binaries have been modifed
+ * We want to know this value so that if the binaries have been modified
  * by prelink then we can still process the call stack on server side
  * by comparing this value to that of an "un-prelinked but known to be
  * otherwise equivalent" version of those binaries and adjust the call

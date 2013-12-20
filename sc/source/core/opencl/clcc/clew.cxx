@@ -136,7 +136,7 @@ static void clewExit(void)
 //! \param path path to dynamic library to load
 //! \return CLEW_ERROR_OPEN_FAILED if the library could not be opened
 //! CLEW_ERROR_ATEXIT_FAILED if atexit(clewExit) failed
-//! CLEW_SUCCESS when the library was succesfully loaded
+//! CLEW_SUCCESS when the library was successfully loaded
 int clewInit(const char* path)
 {
     int error = 0;

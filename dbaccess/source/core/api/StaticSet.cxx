@@ -324,10 +324,10 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     }
 }
 
-void SAL_CALL OStaticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStaticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "OStaticSet::updateRow" );
-    OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
+    OCacheSet::updateRow( _rInsertRow,_rOriginalRow,_xTable);
 }
 
 void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)

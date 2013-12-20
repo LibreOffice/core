@@ -55,7 +55,7 @@
       </info>
       <prop oor:name="SupportedDictionaryFormats" oor:type="oor:string-list">
         <info>
-          <desc>The list of all dictionry formats the service can handle.</desc>
+          <desc>The list of all dictionary formats the service can handle.</desc>
           <label>Supported dictionary formats</label>
         </info>
       </prop>
@@ -74,7 +74,7 @@
     </group>
     <group oor:name="VendorImagesEntry">
       <info>
-        <desc>The images for vendor specifc branding in the UI. The node name is
+        <desc>The images for vendor specific branding in the UI. The node name is
         the service implementation name.</desc>
       </info>
       <prop oor:name="SpellAndGrammarDialogImage" oor:type="xs:string">
@@ -114,7 +114,7 @@
     <group oor:name="GrammarCheckerEntry">
       <info>
         <desc>Specifies the settings for a grammar checker. The node name is the
-        grammar checkers implemetation name.</desc>
+        grammar checkers implementation name.</desc>
       </info>
       <prop oor:name="Locales" oor:type="oor:string-list">
         <info>
@@ -371,7 +371,7 @@
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
           <desc>Allows spellchecking in headers, footers, and frames.</desc>
-          <label>Check spelljng in special regions</label>
+          <label>Check spelling in special regions</label>
         </info>
         <value>true</value>
       </prop>

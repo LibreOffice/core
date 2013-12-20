@@ -86,7 +86,7 @@ ServiceHandler::~ServiceHandler()
                 be asked by the generic dispatch mechanism inside framework, if he can handle this
                 special URL which match his registration. He can agree by returning of a valid dispatch
                 instance or disagree by returning <NULL/>.
-                We don't create new dispatch instances here realy - we return THIS as result to handle it
+                We don't create new dispatch instances here really - we return THIS as result to handle it
                 at the same implementation.
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
@@ -124,7 +124,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
 /**
     @short      dispatch URL with arguments
     @descr      We use threadsafe internal method to do so. It returns a state value - but we ignore it.
-                Because we doesn't support status listener notifications here.
+                Because we don't support status listener notifications here.
 
     @param      aURL
                     uno URL which should be executed

@@ -172,7 +172,7 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
 
         /*-****************************************************************************************************//**
             @short      recursive method (!) to collect all components of all frames from the subtree of given node
-            @descr      This is neccessary to create the enumeration.
+            @descr      This is necessary to create the enumeration.
 
             @seealso    method createEnumeration
 

@@ -40,8 +40,8 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 
 /*-************************************************************************
-  @title        helper to analyze neccessary option properties of our filter
-  @description  Our filter needs some neccessary properties for working:
+  @title        helper to analyze necessary option properties of our filter
+  @description  Our filter needs some necessary properties for working:
                     - a stream for input or output
                     - or an URL for creating such streams
                     - information about required action on filtering
@@ -179,8 +179,8 @@ public class FilterOptions
 
     /**
      * with this method it's possible for the outside filter to decide
-     * if he can use this FilterOptions realy or not.
-     * That means especialy if neccessary streams are available or not.
+     * if he can use this FilterOptions really or not.
+     * That means especialy if necessary streams are available or not.
      */
     public boolean isValid()
     {

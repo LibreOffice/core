@@ -32,7 +32,7 @@
         <info>
           <desc>Because there can exists more then one implementations of such TaskCreatorService,
             the actual one must be specified with it's UNO implementation name.
-            Otherwise it's not guaranteed, which implementation is realy used at runtime.</desc>
+            Otherwise it's not guaranteed, which implementation is really used at runtime.</desc>
         </info>
       </prop>
     </group>

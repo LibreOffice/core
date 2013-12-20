@@ -340,7 +340,7 @@ class FilterCache : public BaseLock
                         "load-on-demand-thread", which tries to optimize our startup performance
                         and start this load() only in case the office startup was already finished!
 
-            @throw      An exception if the cache could not be filled realy
+            @throw      An exception if the cache could not be filled really
                         or seems to be invalid afterwards. But there is no reaction
                         at all if this method does nothing inside, because the cache
                         is already full filled!
@@ -461,7 +461,7 @@ class FilterCache : public BaseLock
             @attention  This method exists to supports some UNO container interfaces
                         only. (e.g. XNameAccess.hasByName()). But inside multithreaded
                         environments there is no guarantee, that this item still exists, if
-                        its realy requested e.g. by calling getItem()!
+                        its really requested e.g. by calling getItem()!
                         Be aware of some NoSuchElementExistExceptions ...
 
             @param      eType
@@ -540,7 +540,7 @@ class FilterCache : public BaseLock
                         cache item reference.
 
             @descr      Such properties can e.g. finalized or mandatory.
-                        They are not persistent  and not realy part of e.g. a
+                        They are not persistent  and not really part of e.g. a
                         filter not. But they are attributes of a configuration
                         entry and can influence our container interface.
 
@@ -669,7 +669,7 @@ class FilterCache : public BaseLock
                         see EConfigProvider for further information ...
 
             @attention  If a configuration access was opened successfully
-                        all neccessary listener connections will be established
+                        all necessary listener connections will be established
                         too. So this cache will be informed about outside updates.
          */
         css::uno::Reference< css::uno::XInterface > impl_openConfig(EConfigProvider eProvide)
@@ -765,7 +765,7 @@ class FilterCache : public BaseLock
             @descr      Because detect services, frame loader or content handler
                         are not listed inside the xml configuration as separated
                         items (they are properties of any type entry!), this method update
-                        the internal lists of such items. Thats neccessary to have
+                        the internal lists of such items. Thats necessary to have
                         it accessible for our container interfaces of detect, frame loader
                         and content handler services.
 
@@ -915,7 +915,7 @@ class FilterCache : public BaseLock
 
         //---------------------------------------
 
-        /** @short  specify, which save operation is neccessary for the specified item.
+        /** @short  specify, which save operation is necessary for the specified item.
 
             @desrc  If an item of this cache will be added/removed or modified it will
                     be changed inside memory only first. But we save its name inside a special

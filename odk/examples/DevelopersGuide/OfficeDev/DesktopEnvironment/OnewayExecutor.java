@@ -39,7 +39,7 @@ import java.util.ArrayList;
 /**
  * It's not allowed to call synchronoues back inside an oneway interface call.
  * (see IOnewayLink too). So we start a thread (implemented by this class), which
- * gets all neccessary parameters from the original called object and
+ * gets all necessary parameters from the original called object and
  * call it back later inside his run() method. So the execution of such oneway call
  * will be asynchronous. It works in a generic way and can be used or any type
  * of oneway request. Because the source and the target of this call-link knows,
@@ -82,7 +82,7 @@ class OnewayExecutor extends Thread
 
     /**
      * ctor
-     * It's initialize this thread with all neccessary parameters.
+     * It's initialize this thread with all necessary parameters.
      * It gets the object, which wish to be called back and the type
      * and parameters of the original request.
      *
@@ -90,7 +90,7 @@ class OnewayExecutor extends Thread
      *          The two user of this callback can define an unique number,
      *          which identify the type of original interface method.
      *          So the called interface object can decide, which action will be
-     *          neccessary.
+     *          necessary.
      *
      * @param lParams
      *          If the original method used parameters, they will be coded here in
@@ -119,7 +119,7 @@ class OnewayExecutor extends Thread
     /**
      * implements the thread function
      * Here we call the internal set link object back and
-     * give him all neccessary parameters.
+     * give him all necessary parameters.
      * After that we die by ouerself ...
      */
     public void run()

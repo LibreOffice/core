@@ -62,7 +62,7 @@ public:
     svt::EmbeddedObjectRef& GetObject();
     OUString GetCurrentPersistName() const { return aName; }
     OUString GetStyleString();
-    sal_Bool IsOleRef() const;  ///< To avoid unneccessary loading of object.
+    sal_Bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
 };
 
 

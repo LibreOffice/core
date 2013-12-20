@@ -85,7 +85,7 @@ public:
     virtual void            SetStyleName(const OUString& styleName);
 
     /**
-     * @descr   Set parent style name.
+     * @descr   set parent style name.
      */
     virtual OUString   GetParentStyleName();
 
@@ -95,7 +95,7 @@ public:
     virtual void            SetParentStyleName(const OUString& styleName);
 
     /**
-     * @descr   get styel family.
+     * @descr   get style family.
      */
     virtual enumXFStyle     GetStyleFamily();
 

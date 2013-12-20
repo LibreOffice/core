@@ -358,7 +358,7 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (voi
 
     if (mxViewWindow.is())
     {
-        // When the mbIsInModifyNotification is set then a slightly modifed
+        // When the mbIsInModifyNotification is set then a slightly modified
         // version of the transformation is returned in order to get past
         // optimizations the avoid updates when the transformation is
         // unchanged (when the window size changes then due to the constant
