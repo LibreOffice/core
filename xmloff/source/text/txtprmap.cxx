@@ -67,6 +67,11 @@ using namespace ::xmloff::token;
 #define MR_E( a, p, l, t, c ) \
     _M_E( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
+// extensions import/export
+#define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
+// extensions import only
+#define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
+
 #define M_END() \
     { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
@@ -88,7 +93,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaTopMarginRelative",  FO, MARGIN_TOP,         XML_TYPE_PERCENT16, CTF_PARATOPMARGIN_REL ),
     MP_E( "ParaBottomMargin",       FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
     MP_E( "ParaBottomMarginRelative",FO,    MARGIN_BOTTOM,      XML_TYPE_PERCENT16, CTF_PARABOTTOMMARGIN_REL ),
-    { "ParaContextMargin", sizeof("ParaContextMargin")-1, XML_NAMESPACE_STYLE, XML_CONTEXTUAL_SPACING, XML_TYPE_BOOL|XML_TYPE_PROP_PARAGRAPH, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false },
+    MAP_EXT( "ParaContextMargin", XML_NAMESPACE_STYLE, XML_CONTEXTUAL_SPACING, XML_TYPE_BOOL|XML_TYPE_PROP_PARAGRAPH, 0 ),      // proposed ODF 1.2+
+    MAP_EXT_I( "ParaContextMargin", XML_NAMESPACE_LO_EXT, XML_CONTEXTUAL_SPACING, XML_TYPE_BOOL|XML_TYPE_PROP_PARAGRAPH, 0 ),   // extension namespace
     // RES_CHRATR_CASEMAP
     MT_E( "CharCaseMap",        FO,     FONT_VARIANT,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     MT_E( "CharCaseMap",        FO,     TEXT_TRANSFORM,     XML_TYPE_TEXT_CASEMAP,  0 ),
