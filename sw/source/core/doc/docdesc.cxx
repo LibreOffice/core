@@ -258,7 +258,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                 // The CntntIdx is _always_ different when called from
                 // SwDocStyleSheet::SetItemSet, because it deep-copies the
                 // PageDesc.  So check if it was previously shared.
-                 ((bLeft) ? pDesc->IsHeaderShared() : pDesc->IsFirstShared()))
+                 ((bLeft) ? pDesc->IsFooterShared() : pDesc->IsFirstShared()))
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left footer" : "First footer"),
                                                 GetDfltFrmFmt() );
