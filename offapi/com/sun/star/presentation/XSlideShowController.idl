@@ -48,7 +48,7 @@
 /** interface to control a running slideshow.
 
     @see XPresentation2
-    @since OOo 3.0
+    @since OpenOffice 3.0
 */
 interface XSlideShowController
 {
@@ -285,6 +285,14 @@ interface XSlideShowController
 
     /** This attribute changes the color of the pen. */
     [attribute] long PenColor;
+
+    //-------------------------------------------------------------------------
+
+    /** This attribute changes the width of the pen.
+
+        @since OpenOffice 4.1
+    */
+    [attribute] double PenWidth;
 
     //-------------------------------------------------------------------------
 
