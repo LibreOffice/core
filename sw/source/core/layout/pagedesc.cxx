@@ -49,7 +49,8 @@ SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     aDescName( rName ),
     aMaster( pDc->GetAttrPool(), rName, pFmt ),
     aLeft( pDc->GetAttrPool(), rName, pFmt ),
-    aFirst( pDc->GetAttrPool(), rName, pFmt ),
+    m_FirstMaster( pDc->GetAttrPool(), rName, pFmt ),
+    m_FirstLeft( pDc->GetAttrPool(), rName, pFmt ),
     aDepend( this, 0 ),
     pFollow( this ),
     nRegHeight( 0 ),
@@ -67,7 +68,8 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
     aNumType( rCpy.GetNumType() ),
     aMaster( rCpy.GetMaster() ),
     aLeft( rCpy.GetLeft() ),
-    aFirst( rCpy.GetFirst() ),
+    m_FirstMaster( rCpy.GetFirstMaster() ),
+    m_FirstLeft( rCpy.GetFirstLeft() ),
     aDepend( this, (SwModify*)rCpy.aDepend.GetRegisteredIn() ),
     pFollow( rCpy.pFollow ),
     nRegHeight( rCpy.GetRegHeight() ),
@@ -85,7 +87,8 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     aNumType = rSrc.aNumType;
     aMaster = rSrc.aMaster;
     aLeft = rSrc.aLeft;
-    aFirst = rSrc.aFirst;
+    m_FirstMaster = rSrc.m_FirstMaster;
+    m_FirstLeft = rSrc.m_FirstLeft;
 
     if (rSrc.pFollow == &rSrc)
         pFollow = this;
@@ -243,7 +246,15 @@ void SwPageDesc::RegisterChange()
         }
     }
     {
-        SwIterator<SwFrm,SwFmt> aIter( GetFirst() );
+        SwIterator<SwFrm,SwFmt> aIter( GetFirstMaster() );
+        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        {
+            if( pLast->IsPageFrm() )
+                ((SwPageFrm*)pLast)->PrepareRegisterChg();
+        }
+    }
+    {
+        SwIterator<SwFrm,SwFmt> aIter( GetFirstLeft() );
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
@@ -348,14 +359,14 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst)
 {
     return (nsUseOnPage::PD_LEFT & eUse)
-            ? ((bFirst) ? &aFirst : &aLeft)
+            ? ((bFirst) ? &m_FirstLeft : &aLeft)
             : 0;
 }
 
 SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
 {
     return (nsUseOnPage::PD_RIGHT & eUse)
-            ? ((bFirst) ? &aFirst : &aMaster)
+            ? ((bFirst) ? &m_FirstMaster : &aMaster)
             : 0;
 }
 
