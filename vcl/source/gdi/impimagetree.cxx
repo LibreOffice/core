@@ -197,7 +197,7 @@ bool ImplImageTree::doLoadImage(
         if (pos != -1) {
             // find() uses a reverse iterator, so push in reverse order.
             std::vector< OUString > aFallbacks( Application::GetSettings().GetUILanguageTag().getFallbackStrings( true));
-            for (std::vector< OUString >::const_reverse_iterator it( aFallbacks.rbegin());
+            for (std::vector< OUString >::reverse_iterator it( aFallbacks.rbegin());
                     it != aFallbacks.rend(); ++it)
             {
                 paths.push_back( getRealImageName( createPath(name, pos, *it) ) );
