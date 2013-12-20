@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     named arguments, otherwise the call fails.
     </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 struct NamedArgument
 {

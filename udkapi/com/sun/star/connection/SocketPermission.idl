@@ -81,7 +81,7 @@ SocketPermission("localhost:1024-", "accept,connect,listen");
     confidential data among parties who may not otherwise have access to the data.
     </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct SocketPermission
 {

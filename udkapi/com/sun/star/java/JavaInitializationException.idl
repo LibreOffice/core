@@ -44,7 +44,7 @@ module com { module sun { module star { module java {
     <type scope:"com::sun::star::java">MissingJavaRuntimeException</type> <br>
     <type scope:"com::sun::star::java">JavaVMCreationFailureException</type> <br>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception JavaInitializationException: com::sun::star::uno::DeploymentException
 {

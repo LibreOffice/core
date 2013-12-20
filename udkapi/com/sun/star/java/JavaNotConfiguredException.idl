@@ -35,7 +35,7 @@ module com { module sun { module star { module java {
     This exception occurs if there is no java.ini or javarc available. This usually
     happens if a user cancels the Java configuration which of the office.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception JavaNotConfiguredException: JavaInitializationException
 {

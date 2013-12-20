@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
     By providing <type>XAutomationObject</type> an object declares
     to be representing an Automation object.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 interface XAutomationObject: com::sun::star::uno::XInterface
 {

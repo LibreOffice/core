@@ -62,7 +62,7 @@ interface XTypeDescription;
        sequence.</li>
    </ul>
 
-   @since OOo 2.0
+   @since OpenOffice 2.0
  */
 interface XStructTypeDescription: XCompoundTypeDescription {
     /**

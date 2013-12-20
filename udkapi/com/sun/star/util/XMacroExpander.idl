@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module util {
 
 /** Expands macro in expressions, i.e. substitudes macro names.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XMacroExpander : com::sun::star::uno::XInterface
 {

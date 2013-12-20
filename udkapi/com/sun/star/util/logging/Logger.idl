@@ -45,7 +45,7 @@ module com { module sun { module star { module util { module logging {
 /** deprecated API - use <type scope="com::sun::star::logging">LoggerPool</type> instead
 
     @deprecated
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service Logger
 {

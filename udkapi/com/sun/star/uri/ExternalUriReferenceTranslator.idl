@@ -31,7 +31,7 @@ published interface XExternalUriReferenceTranslator;
 /**
    translates between external and internal URI references.
 
-   @since OOo 2.0
+   @since OpenOffice 2.0
  */
 published service ExternalUriReferenceTranslator:
     XExternalUriReferenceTranslator;

@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module security {
     A RuntimePermission contains a name (also referred to as a "target name")
     but no actions list;  you either have the named permission or you don't.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct RuntimePermission
 {

@@ -40,7 +40,7 @@ module com { module sun { module star { module java {
     library is corrupted, so that the symbols for JNI_GetDefaultVMInitArgs
     or JNI_CreateJavaVM cannot be found, etc.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception JavaVMCreationFailureException: JavaInitializationException
 {

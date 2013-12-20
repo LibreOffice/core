@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module security {
     or in extremely rare cases where an application is completely trusted and
     adding the necessary permissions to the policy is prohibitively cumbersome.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct AllPermission
 {
