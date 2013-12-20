@@ -2539,8 +2539,6 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double significance = " << GetBottom() << ";\n";
     ss << "    double bAbs = 0;\n";
 #ifdef ISNAN
-    FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
-    FormulaToken *iSignificance = vSubArguments[1]->GetFormulaToken();
     ss << "    if(isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num = " << GetBottom() << ";\n";
@@ -2615,10 +2613,6 @@ void OpKombin::GenSlidingWindowFunction(std::stringstream &ss,
             iNumChosen->GetType() == formula::svSingleVectorRef)
         {
 #ifdef ISNAN
-            const formula::SingleVectorRefToken* tmpCurDVRNum=
-                dynamic_cast<const formula::SingleVectorRefToken *>(iNum);
-            const formula::SingleVectorRefToken* tmpCurDVRNumChosen=
-                dynamic_cast<const formula::SingleVectorRefToken *>(iNumChosen);
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
             ss << "        num = " << GetBottom() << ";\n";
@@ -2862,7 +2856,6 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "        int doubleIndex =i;\n";
     }
     ss << "        int singleIndex =gid0;\n";
-    int m = 0;
     CheckSubArgumentIsNan(ss,vSubArguments,0);
     CheckSubArgumentIsNan(ss,vSubArguments,1);
     ss << "        if ( isequal( tmp0 , tmp1 ) ) \n";
@@ -3022,8 +3015,6 @@ void OpQuotient::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double num1 = 1.0;\n";
     ss << "    double num2 = 1.0;\n";
 #ifdef ISNAN
-    FormulaToken *iNum1 = vSubArguments[0]->GetFormulaToken();
-    FormulaToken *iNum2 = vSubArguments[1]->GetFormulaToken();
     ss << "    if(isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num1 = 1.0;\n";

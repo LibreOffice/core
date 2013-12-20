@@ -4273,7 +4273,6 @@ void OpGeoMean::GenSlidingWindowFunction(
             ss << "        int p1 = loopOffset + lidx + offset, p2 = p1 + 256;\n";
             ss << "        if (p2 < min(offset + windowSize, arrayLength)) {\n";
             ss << "            tmp0 = 0.0;\n";
-            int mm=0;
             std::string p1 = "p1";
             std::string p2 = "p2";
 
