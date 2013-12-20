@@ -1001,23 +1001,23 @@ XMLTextImportHelper::XMLTextImportHelper(
     }
 
     XMLPropertySetMapper *pPropMapper =
-            new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
+            new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, false );
     m_pImpl->m_xParaImpPrMap =
         new XMLTextImportPropertyMapper( pPropMapper, rImport );
 
-    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT, false );
     m_pImpl->m_xTextImpPrMap =
         new XMLTextImportPropertyMapper( pPropMapper, rImport );
 
-    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME, false );
     m_pImpl->m_xFrameImpPrMap =
         new XMLTextImportPropertyMapper( pPropMapper, rImport );
 
-    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION, false );
     m_pImpl->m_xSectionImpPrMap =
         new XMLTextImportPropertyMapper( pPropMapper, rImport );
 
-    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
+    pPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY, false );
     m_pImpl->m_xRubyImpPrMap =
         new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
@@ -1029,25 +1029,25 @@ XMLTextImportHelper::~XMLTextImportHelper()
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME, false );
     return new XMLTextImportPropertyMapper( pPropMapper, rImport );
 }
 
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA, false );
     return new XMLTextImportPropertyMapper( pPropMapper, rImport );
 }
 
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaDefaultExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper* pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA, false );
     SvXMLImportPropertyMapper* pImportMapper = new XMLTextImportPropertyMapper( pPropMapper, rImport );
 
     pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS, false );
     pImportMapper->ChainImportMapper( new XMLTextImportPropertyMapper( pPropMapper, rImport ) );
 
     return pImportMapper;
@@ -1058,7 +1058,7 @@ SvXMLImportPropertyMapper*
         SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS, false );
     return new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 
@@ -1067,7 +1067,7 @@ SvXMLImportPropertyMapper*
         SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_ROW_DEFAULTS );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_ROW_DEFAULTS, false );
     return new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 

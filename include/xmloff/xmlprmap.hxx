@@ -53,13 +53,14 @@ class XMLPropertyHandler;
 */
 struct XMLPropertySetMapperEntry_Impl
 {
-    OUString sXMLAttributeName;
-    OUString sAPIPropertyName;
-    sal_uInt16 nXMLNameSpace;
-    sal_Int32  nType;
-    sal_Int16  nContextId;
-    SvtSaveOptions::ODFDefaultVersion   nEarliestODFVersionForExport;
-    const XMLPropertyHandler *pHdl;
+    OUString                           sXMLAttributeName;
+    OUString                           sAPIPropertyName;
+    sal_Int32                          nType;
+    sal_uInt16                         nXMLNameSpace;
+    sal_Int16                          nContextId;
+    SvtSaveOptions::ODFDefaultVersion  nEarliestODFVersionForExport;
+    bool                               bImportOnly;
+    const XMLPropertyHandler          *pHdl;
 
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertyMapEntry& rMapEntry,
@@ -75,12 +76,19 @@ class XMLOFF_DLLPUBLIC XMLPropertySetMapper : public UniRefBase
 {
     ::std::vector< XMLPropertySetMapperEntry_Impl > aMapEntries;
     ::std::vector< UniReference < XMLPropertyHandlerFactory > > aHdlFactories;
+    bool mbOnlyExportMappings;
 
 public:
-    /** The last element of the XMLPropertyMapEntry-array must contain NULL-values */
+    /** The last element of the XMLPropertyMapEntry-array must contain NULL-values.
+
+        @param  bForExport
+                If TRUE, only entries that have the mbImportOnly flag not set
+                will be in the mappings.
+      */
     XMLPropertySetMapper(
             const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory );
+            const UniReference< XMLPropertyHandlerFactory >& rFactory,
+            bool bForExport );
     virtual ~XMLPropertySetMapper();
 
     void AddMapperEntry( const UniReference < XMLPropertySetMapper >& rMapper );
