@@ -35,6 +35,4 @@
 
 #define NF_VALUE                1
 
-#define ED_VALUE                1
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

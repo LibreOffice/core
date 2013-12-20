@@ -32,52 +32,38 @@
 //==================================================================
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
-                                    sal_uInt16          nResId,
+                                    OString         sDialogName,
                                     long            nCurrent,
                                     long            nDefault,
                                     FieldUnit       eFUnit,
-                                    sal_uInt16          nDecimals,
+                                    sal_uInt16      nDecimals,
                                     long            nMaximum,
                                     long            nMinimum,
                                     long            nFirst,
                                     long            nLast )
 
-    :   ModalDialog     ( pParent, ScResId( nResId ) ),
-        //
-        aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
-        aEdValue        ( this, ScResId( ED_VALUE ) ),
-        aBtnDefVal      ( this, ScResId( BTN_DEFVAL ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) )
+    :   ModalDialog(pParent, sDialogName,
+            OStringToOUString("modules/scalc/ui/" +
+                sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8))
 {
-    //SetText( rTitle );
-    //
-    //aFtEditTitle.SetText( rEditTitle );
-    CalcPositions();
-    aBtnDefVal.SetClickHdl ( LINK( this, ScMetricInputDlg, SetDefValHdl ) );
-    aEdValue.  SetModifyHdl( LINK( this, ScMetricInputDlg, ModifyHdl    ) );
+    get(m_pEdValue, "value");
+    get(m_pBtnDefVal, "default");
 
-    aEdValue.SetUnit            ( eFUnit );
-    aEdValue.SetDecimalDigits   ( nDecimals );
-    aEdValue.SetMax             ( aEdValue.Normalize( nMaximum ), FUNIT_TWIP );
-    aEdValue.SetMin             ( aEdValue.Normalize( nMinimum ), FUNIT_TWIP );
-    aEdValue.SetLast            ( aEdValue.Normalize( nLast ),    FUNIT_TWIP );
-    aEdValue.SetFirst           ( aEdValue.Normalize( nFirst ),   FUNIT_TWIP );
-    aEdValue.SetSpinSize        ( aEdValue.Normalize( 1 ) / 10 );
-    aEdValue.SetValue           ( aEdValue.Normalize( nDefault ), FUNIT_TWIP );
-    nDefaultValue = sal::static_int_cast<long>( aEdValue.GetValue() );
-    aEdValue.SetValue           ( aEdValue.Normalize( nCurrent ), FUNIT_TWIP );
-    nCurrentValue = sal::static_int_cast<long>( aEdValue.GetValue() );
-    aBtnDefVal.Check( nCurrentValue == nDefaultValue );
+    m_pBtnDefVal->SetClickHdl ( LINK( this, ScMetricInputDlg, SetDefValHdl ) );
+    m_pEdValue->SetModifyHdl( LINK( this, ScMetricInputDlg, ModifyHdl    ) );
 
-    FreeResource();
-}
-
-//------------------------------------------------------------------------
-
-ScMetricInputDlg::~ScMetricInputDlg()
-{
+    m_pEdValue->SetUnit            ( eFUnit );
+    m_pEdValue->SetDecimalDigits   ( nDecimals );
+    m_pEdValue->SetMax             ( m_pEdValue->Normalize( nMaximum ), FUNIT_TWIP );
+    m_pEdValue->SetMin             ( m_pEdValue->Normalize( nMinimum ), FUNIT_TWIP );
+    m_pEdValue->SetLast            ( m_pEdValue->Normalize( nLast ),    FUNIT_TWIP );
+    m_pEdValue->SetFirst           ( m_pEdValue->Normalize( nFirst ),   FUNIT_TWIP );
+    m_pEdValue->SetSpinSize        ( m_pEdValue->Normalize( 1 ) / 10 );
+    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nDefault ), FUNIT_TWIP );
+    nDefaultValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
+    m_pEdValue->SetValue           ( m_pEdValue->Normalize( nCurrent ), FUNIT_TWIP );
+    nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
+    m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
 
 //------------------------------------------------------------------------
@@ -87,8 +73,8 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 /*
     mit Nachkommastellen:
 
-    double  nVal    = aEdValue.GetValue( eUnit );
-    sal_uInt16  nDecs   = aEdValue.GetDecimalDigits();
+    double  nVal    = m_pEdValue->GetValue( eUnit );
+    sal_uInt16  nDecs   = m_pEdValue->GetDecimalDigits();
     double  nFactor = 0.0;
 
     // static long ImpPower10( sal_uInt16 nDecs )
@@ -103,49 +89,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 */
     // erstmal Nachkommastellen abschneiden - nich so doll...
 
-    return sal::static_int_cast<long>( aEdValue.Denormalize( aEdValue.GetValue( eUnit ) ) );
-}
-
-//------------------------------------------------------------------------
-
-void ScMetricInputDlg::CalcPositions()
-{
-    MapMode oldMode     = GetMapMode();
-    SetMapMode( MAP_APPFONT );
-
-    Size    aDlgSize    = GetOutputSizePixel();
-    Size    aFtSize     = aFtEditTitle.GetSizePixel();
-    Point   aNewPos;
-
-    aFtSize.Width() = aFtEditTitle.GetTextWidth(aFtEditTitle.GetText());
-    // add mnemonic char width to fixed text width
-    aFtSize.Width() += aFtEditTitle.GetTextWidth(OUString("(W)"));
-    aFtEditTitle.SetSizePixel( aFtSize );
-
-    aNewPos.Y()  = aEdValue.GetPosPixel().Y();
-    aNewPos.X()  = aFtEditTitle.GetPosPixel().X();
-    aNewPos.X() += aFtEditTitle.GetSizePixel().Width();
-    aNewPos.X() += LogicToPixel( Point(3,0) ).X();
-    aEdValue.SetPosPixel( aNewPos );
-
-    aNewPos.Y()  = aBtnDefVal.GetPosPixel().Y();
-    aBtnDefVal.SetPosPixel( aNewPos );
-
-    aNewPos.Y()  = aBtnOk.GetPosPixel().Y();
-    aNewPos.X() += aEdValue.GetSizePixel().Width();
-    aNewPos.X() += LogicToPixel( Point(6,0) ).X();
-    aBtnOk.SetPosPixel( aNewPos );
-    aNewPos.Y()  = aBtnCancel.GetPosPixel().Y();
-    aBtnCancel.SetPosPixel( aNewPos );
-    aNewPos.Y()  = aBtnHelp.GetPosPixel().Y();
-    aBtnHelp.SetPosPixel( aNewPos );
-
-    aNewPos.X() += aBtnOk.GetSizePixel().Width();
-    aNewPos.X() += LogicToPixel( Point(6,0) ).X();
-    aDlgSize.Width() = aNewPos.X();
-    SetOutputSizePixel( aDlgSize );
-
-    SetMapMode( oldMode );
+    return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( eUnit ) ) );
 }
 
 //------------------------------------------------------------------------
@@ -153,13 +97,13 @@ void ScMetricInputDlg::CalcPositions()
 
 IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
 {
-    if ( aBtnDefVal.IsChecked() )
+    if ( m_pBtnDefVal->IsChecked() )
     {
-        nCurrentValue = sal::static_int_cast<long>( aEdValue.GetValue() );
-        aEdValue.SetValue( nDefaultValue );
+        nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
+        m_pEdValue->SetValue( nDefaultValue );
     }
     else
-        aEdValue.SetValue( nCurrentValue );
+        m_pEdValue->SetValue( nCurrentValue );
     return 0;
 }
 
@@ -167,7 +111,7 @@ IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
 
 IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
 {
-    aBtnDefVal.Check( nDefaultValue == aEdValue.GetValue() );
+    m_pBtnDefVal->Check( nDefaultValue == m_pEdValue->GetValue() );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(ScMetricInputDlg, ModifyHdl)

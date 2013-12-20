@@ -470,16 +470,15 @@ public:
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg(Window* pParent);
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent,
-                                                                sal_uInt16      nResId,     // Ableitung fuer jeden Dialog!
+                                                                OString sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
-                                                                int nId ,
                                                                 FieldUnit       eFUnit    = FUNIT_MM,
                                                                 sal_uInt16      nDecimals = 2,
                                                                 long            nMaximum  = 1000,
                                                                 long            nMinimum  = 0,
                                                                 long            nFirst    = 1,
-                                                                long          nLast     = 100 );
+                                                                long            nLast     = 100 );
 
     virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(Window * pParent,
         const OUString& rDefault);

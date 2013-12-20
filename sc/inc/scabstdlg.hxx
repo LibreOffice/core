@@ -400,17 +400,16 @@ public:
                                                           const std::vector<OUString> &rEntryList ) = 0;
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg(Window* pParent) = 0;
 
-    virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent,
-                                                                sal_uInt16      nResId,     // derivative for every dialog!
+    virtual AbstractScMetricInputDlg * CreateScMetricInputDlg ( Window*        pParent,
+                                                                OString sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
-                                                                int nId ,
                                                                 FieldUnit       eFUnit    = FUNIT_MM,
                                                                 sal_uInt16      nDecimals = 2,
                                                                 long            nMaximum  = 1000,
                                                                 long            nMinimum  = 0,
                                                                 long            nFirst    = 1,
-                                                                long          nLast     = 100 ) = 0;
+                                                                long            nLast     = 100 ) = 0;
 
     virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(Window * pParent,
         const OUString& rDefault) = 0;

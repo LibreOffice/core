@@ -31,31 +31,25 @@
 class ScMetricInputDlg : public ModalDialog
 {
 public:
-            ScMetricInputDlg( Window*       pParent,
-                              sal_uInt16        nResId,     // Ableitung fuer jeden Dialog!
-                              long          nCurrent,
-                              long          nDefault,
-                              FieldUnit     eFUnit    = FUNIT_MM,
-                              sal_uInt16        nDecimals = 2,
-                              long          nMaximum  = 1000,
-                              long          nMinimum  = 0,
-                              long          nFirst    = 1,
-                              long          nLast     = 100 );
-            ~ScMetricInputDlg();
+    ScMetricInputDlg( Window*       pParent,
+                      OString       sDialogName,
+                      long          nCurrent,
+                      long          nDefault,
+                      FieldUnit     eFUnit    = FUNIT_MM,
+                      sal_uInt16    nDecimals = 2,
+                      long          nMaximum  = 1000,
+                      long          nMinimum  = 0,
+                      long          nFirst    = 1,
+                      long          nLast     = 100 );
 
     long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
 
 private:
-    FixedText       aFtEditTitle;
-    MetricField     aEdValue;
-    CheckBox        aBtnDefVal;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    MetricField*    m_pEdValue;
+    CheckBox*       m_pBtnDefVal;
     long            nDefaultValue;
     long            nCurrentValue;
 
-    void CalcPositions();
     DECL_LINK(SetDefValHdl, void *);
     DECL_LINK(ModifyHdl, void *);
 };

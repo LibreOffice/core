@@ -64,6 +64,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/allheaderfooterdialog \
 	sc/uiconfig/scalc/ui/analysisofvariancedialog \
 	sc/uiconfig/scalc/ui/cellprotectionpage \
+	sc/uiconfig/scalc/ui/colwidthdialog \
 	sc/uiconfig/scalc/ui/consolidatedialog \
 	sc/uiconfig/scalc/ui/correlationdialog \
 	sc/uiconfig/scalc/ui/covariancedialog \
@@ -104,6 +105,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/optdefaultpage \
 	sc/uiconfig/scalc/ui/optdlg \
 	sc/uiconfig/scalc/ui/optformula \
+	sc/uiconfig/scalc/ui/optimalcolwidthdialog \
+	sc/uiconfig/scalc/ui/optimalrowheightdialog \
 	sc/uiconfig/scalc/ui/optsortlists \
 	sc/uiconfig/scalc/ui/pagetemplatedialog \
 	sc/uiconfig/scalc/ui/paratemplatedialog \
@@ -114,6 +117,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/randomnumbergenerator \
 	sc/uiconfig/scalc/ui/rightfooterdialog \
 	sc/uiconfig/scalc/ui/rightheaderdialog \
+	sc/uiconfig/scalc/ui/rowheightdialog \
 	sc/uiconfig/scalc/ui/samplingdialog \
 	sc/uiconfig/scalc/ui/standardfilterdialog \
 	sc/uiconfig/scalc/ui/scgeneralpage \

@@ -849,10 +849,9 @@ AbstractScLinkedAreaDlg * ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(Wi
 }
 
 AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg (  Window*      pParent,
-                                                                sal_uInt16      nResId,     // Ableitung fuer jeden Dialog!
+                                                                OString sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
-                                                                int nId ,
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals,
                                                                 long            nMaximum ,
@@ -860,23 +859,9 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
                                                                 long            nFirst,
                                                                 long          nLast )
 {
-    ScMetricInputDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_ROW_MAN :
-        case RID_SCDLG_ROW_OPT :
-        case RID_SCDLG_COL_MAN :
-        case RID_SCDLG_COL_OPT :
-            pDlg = new ScMetricInputDlg( pParent , nResId,nCurrent ,nDefault, eFUnit,
-                                        nDecimals, nMaximum , nMinimum , nFirst, nLast);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScMetricInputDlg_Impl( pDlg );
-    return 0;
+    ScMetricInputDlg * pDlg = new ScMetricInputDlg(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
+        nDecimals, nMaximum , nMinimum , nFirst, nLast);
+    return new AbstractScMetricInputDlg_Impl( pDlg );
 }
 
 AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(Window* pParent,

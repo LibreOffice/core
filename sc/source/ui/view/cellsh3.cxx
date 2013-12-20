@@ -545,16 +545,13 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+                    assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
-                                                                                    nCurHeight,
-                                                                                    ScGlobal::nStdRowHeight,
-                                                                                    RID_SCDLG_ROW_MAN,
-                                                                                    eMetric,
-                                                                                    2,
-                                                                                    MAX_ROW_HEIGHT);
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                        pTabViewShell->GetDialogParent(), "RowHeightDialog",
+                        nCurHeight, ScGlobal::nStdRowHeight,
+                        eMetric, 2, MAX_ROW_HEIGHT);
+                    assert(pDlg); //Dialog create fail
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -590,16 +587,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+                    assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_OPT,
-                                                                                    ScGlobal::nLastRowHeightExtra,
-                                                                                    0,
-                                                                                    RID_SCDLG_ROW_OPT,
-                                                                                    eMetric,
-                                                                                    1,
-                                                                                    MAX_EXTRA_HEIGHT);
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                        pTabViewShell->GetDialogParent(), "OptimalRowHeightDialog",
+                        ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT);
+                    assert(pDlg); //Dialog create fail!
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -637,16 +630,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+                    assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
-                                                                                    nCurHeight,
-                                                                                    STD_COL_WIDTH,
-                                                                                    RID_SCDLG_COL_MAN,
-                                                                                    eMetric,
-                                                                                    2,
-                                                                                    MAX_COL_WIDTH);
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                        pTabViewShell->GetDialogParent(), "ColWidthDialog", nCurHeight,
+                        STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH);
+                    assert(pDlg); //Dialog create fail!
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -682,16 +671,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+                    assert(pFact); //ScAbstractFactory create fail!
 
-                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_OPT,
-                                                                                    ScGlobal::nLastColWidthExtra,
-                                                                                    STD_EXTRA_WIDTH,
-                                                                                    RID_SCDLG_COL_OPT,
-                                                                                    eMetric,
-                                                                                    1,
-                                                                                    MAX_EXTRA_WIDTH);
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
+                    AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
+                        pTabViewShell->GetDialogParent(), "OptimalColWidthDialog",
+                        ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH);
+                    assert(pDlg); //Dialog create fail!
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();

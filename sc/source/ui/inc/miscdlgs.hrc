@@ -20,7 +20,6 @@
 #include "sc.hrc"
                     // -> RID_SCDLG_INSCONT
                     // -> RID_SCDLG_MOVETAB
-                    // -> RID_SCDLG_MTRINPUT
                     // -> RID_SCDLG_SELENTRY
                     // -> RID_SCDLG_FILLSERIES
                     // -> RID_SCDLG_AUTOFORMAT
@@ -65,10 +64,6 @@
 
 // String input
 #define ED_INPUT        10
-
-// Metrics input
-#define ED_VALUE        1
-#define BTN_DEFVAL      1
 
 // Selection from a (String-)ListBox
 #define FL_ENTRYLIST    10

@@ -996,7 +996,6 @@
 #define RID_SCDLG_INSCONT       (SC_DIALOGS_START + 14)
 
 
-#define RID_SCDLG_MTRINPUT      (SC_DIALOGS_START + 17)
 #define RID_SCDLG_SELENTRY      (SC_DIALOGS_START + 18)
 #define RID_SCDLG_AUTOFORMAT    (SC_DIALOGS_START + 20)
 #define RID_SCDLG_NAMES         (SC_DIALOGS_START + 22)
@@ -1054,12 +1053,6 @@
 #define RID_DROPMODE_LINK               (SC_DIALOGS_START + 94)
 #define RID_DROPMODE_COPY               (SC_DIALOGS_START + 95)
 #define RID_SCDLG_CONDFORMAT            (SC_DIALOGS_START + 96)
-
-// derivations from RID_SCDLG_MTRINPUT
-#define RID_SCDLG_COL_MAN               (SC_DIALOGS_START + 104)
-#define RID_SCDLG_COL_OPT               (SC_DIALOGS_START + 105)
-#define RID_SCDLG_ROW_MAN               (SC_DIALOGS_START + 106)
-#define RID_SCDLG_ROW_OPT               (SC_DIALOGS_START + 107)
 
 // derivations from RID_SCDLG_SELENTRY
 
