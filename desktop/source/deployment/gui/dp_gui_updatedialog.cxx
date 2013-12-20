@@ -411,13 +411,13 @@ OUString UpdateDialog::Thread::getUpdateDisplayString(
 {
     OSL_ASSERT(data.aInstalledPackage.is());
     OUStringBuffer b(data.aInstalledPackage->getDisplayName());
-    b.append(static_cast< sal_Unicode >(' '));
+    b.append(' ');
     {
         SolarMutexGuard g;
         if(!m_stop)
             b.append(m_dialog.m_version);
     }
-    b.append(static_cast< sal_Unicode >(' '));
+    b.append(' ');
     if (!version.isEmpty())
         b.append(version);
     else
@@ -425,7 +425,7 @@ OUString UpdateDialog::Thread::getUpdateDisplayString(
 
     if (!data.sWebsiteURL.isEmpty())
     {
-        b.append(static_cast< sal_Unicode >(' '));
+        b.append(' ');
         {
             SolarMutexGuard g;
             if(!m_stop)

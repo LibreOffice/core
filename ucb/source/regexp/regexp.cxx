@@ -202,7 +202,7 @@ void appendStringLiteral(OUStringBuffer * pBuffer,
 {
     OSL_ASSERT(pBuffer);
 
-    pBuffer->append(sal_Unicode('"'));
+    pBuffer->append('"');
     sal_Unicode const * p = rString.getStr();
     sal_Unicode const * pEnd = p + rString.getLength();
     while (p != pEnd)

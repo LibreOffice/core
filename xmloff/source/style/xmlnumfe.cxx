@@ -289,7 +289,7 @@ static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool b
     aFmtName.append( nKey );
     if (!bDefPart)
     {
-        aFmtName.append( (sal_Unicode)'P' );
+        aFmtName.append( 'P' );
         aFmtName.append( nPart );
     }
     return aFmtName.makeStringAndClear();
@@ -706,11 +706,11 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
         aCondStr.appendAscii( "value()" );          //! define constant
         switch ( nOp )
         {
-            case NUMBERFORMAT_OP_EQ: aCondStr.append( (sal_Unicode) '=' );  break;
+            case NUMBERFORMAT_OP_EQ: aCondStr.append( '=' );  break;
             case NUMBERFORMAT_OP_NE: aCondStr.appendAscii( "<>" );          break;
-            case NUMBERFORMAT_OP_LT: aCondStr.append( (sal_Unicode) '<' );  break;
+            case NUMBERFORMAT_OP_LT: aCondStr.append( '<' );  break;
             case NUMBERFORMAT_OP_LE: aCondStr.appendAscii( "<=" );          break;
-            case NUMBERFORMAT_OP_GT: aCondStr.append( (sal_Unicode) '>' );  break;
+            case NUMBERFORMAT_OP_GT: aCondStr.append( '>' );  break;
             case NUMBERFORMAT_OP_GE: aCondStr.appendAscii( ">=" );          break;
             default:
                 OSL_FAIL("unknown operator");

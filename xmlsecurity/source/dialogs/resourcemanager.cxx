@@ -89,8 +89,8 @@ namespace XmlSec
         {
             if (i != vecAttrValueOfDN.begin())
             {
-                s1.append(static_cast<sal_Unicode>(','));
-                s2.append(static_cast<sal_Unicode>('\n'));
+                s1.append(',');
+                s2.append('\n');
             }
             s1.append(i->second);
             s2.append(i->first + sEqual + i->second);

@@ -176,7 +176,7 @@ OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
     for ( sal_Int32 nInd = 0; nInd < aSource.getLength() && pStr[nInd] != 0; nInd++ )
     {
         if ( pStr[nInd] == '\\' || pStr[nInd] == ';' || pStr[nInd] == ',' )
-            aBuffer.append( (sal_Unicode)'\\' );
+            aBuffer.append( '\\' );
         aBuffer.append( pStr[nInd] );
     }
 

@@ -172,9 +172,9 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         buf.append( (*(typelib_TypeDescriptionReference **)pVal)->pTypeName );
         break;
     case typelib_TypeClass_STRING:
-        buf.append( (sal_Unicode)'\"' );
+        buf.append( '\"' );
         buf.append( *(rtl_uString **)pVal );
-        buf.append( (sal_Unicode)'\"' );
+        buf.append( '\"' );
         break;
     case typelib_TypeClass_ENUM:
     {
@@ -194,7 +194,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         if (nPos >= 0)
             buf.append( ((typelib_EnumTypeDescription *)pTypeDescr)->ppEnumNames[ nPos ] );
         else
-            buf.append( (sal_Unicode)'?' );
+            buf.append( '?' );
 
         ::typelib_typedescription_release( pTypeDescr );
         break;
@@ -206,9 +206,9 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
             buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR:
-        buf.append( (sal_Unicode)'\'' );
+        buf.append( '\'' );
         buf.append( *(sal_Unicode *)pVal );
-        buf.append( (sal_Unicode)'\'' );
+        buf.append( '\'' );
         break;
     case typelib_TypeClass_FLOAT:
         buf.append( *(float *)pVal );
@@ -253,7 +253,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 #endif
         break;
     default:
-        buf.append( (sal_Unicode)'?' );
+        buf.append( '?' );
     }
 
     return buf.makeStringAndClear();

@@ -921,7 +921,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             { // already existing, append extensions:
                 OUStringBuffer buf;
                 buf.append( insertion.first->second );
-                buf.append( static_cast<sal_Unicode>(';') );
+                buf.append( ';' );
                 buf.append( filter );
                 insertion.first->second = buf.makeStringAndClear();
             }

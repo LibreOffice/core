@@ -167,7 +167,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     {
         // style:rel-width
         ::sax::Converter::convertNumber( sValue, pColumns->Width );
-        sValue.append( (sal_Unicode)'*' );
+        sValue.append( '*' );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                   sValue.makeStringAndClear() );
 

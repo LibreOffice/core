@@ -1597,7 +1597,7 @@ OUString SAL_CALL MetadatableMixin::getLocalName()
     }
     OUStringBuffer buf;
     buf.append(mdref.First);
-    buf.append(static_cast<sal_Unicode>('#'));
+    buf.append('#');
     buf.append(mdref.Second);
     return buf.makeStringAndClear();
 }

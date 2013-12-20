@@ -437,7 +437,7 @@ void SpaPrinterController::printPage( int ) const
             aToken = PaResId( aResIds[i].nResId );
         nMaxWidth = ( nWidth = pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
         aPrintText.append( aToken );
-        aPrintText.append( (sal_Unicode)'\n' );
+        aPrintText.append( '\n' );
     };
 
     pPrinter->DrawText( Rectangle( Point( 1000, 1000 ),

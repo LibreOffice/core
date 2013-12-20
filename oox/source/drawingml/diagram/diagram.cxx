@@ -102,7 +102,7 @@ void Diagram::setLayout( const DiagramLayoutPtr & pLayout)
 OString normalizeDotName( const OUString& rStr )
 {
     OUStringBuffer aBuf;
-    aBuf.append((sal_Unicode)'N');
+    aBuf.append('N');
 
     const sal_Int32 nLen(rStr.getLength());
     sal_Int32 nCurrIndex(0);

@@ -532,7 +532,7 @@ SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nPre
         case XML_TOK_P:
         {
             if(nParagraphCount)
-                sMessage.append(static_cast<sal_Unicode>('\n'));
+                sMessage.append('\n');
             ++nParagraphCount;
             pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
         }
@@ -606,7 +606,7 @@ SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 nPr
         case XML_TOK_P:
         {
             if(nParagraphCount)
-                sMessage.append(static_cast<sal_Unicode>('\n'));
+                sMessage.append('\n');
             ++nParagraphCount;
             pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
         }

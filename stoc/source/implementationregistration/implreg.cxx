@@ -972,7 +972,7 @@ static void insert_singletons(
                                 OUStringBuffer buf( 64 );
                                 buf.append( "existing singleton service (" );
                                 buf.append( singleton_name );
-                                buf.append( (sal_Unicode)'=' );
+                                buf.append( '=' );
                                 buf.append( existing_name );
                                 buf.append( ") does not support given one: " );
                                 buf.append( service_name );

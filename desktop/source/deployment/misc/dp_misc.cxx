@@ -248,7 +248,7 @@ inline OUString encodeForRcFile( OUString const & str )
         case '\\':
         case '{':
         case '}':
-            buf.append( static_cast<sal_Unicode>('\\') );
+            buf.append( '\\' );
             break;
         }
         buf.append( c );
@@ -270,7 +270,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
         relPath = relPath.copy( 1 );
     if (!relPath.isEmpty())
     {
-        buf.append( static_cast<sal_Unicode>('/') );
+        buf.append( '/' );
         if (baseURL.match( "vnd.sun.star.expand:" )) {
             // encode for macro expansion: relPath is supposed to have no
             // macros, so encode $, {} \ (bootstrap mimic)

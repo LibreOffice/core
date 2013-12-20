@@ -74,9 +74,9 @@ void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno
     {
         aBuffer.append( EscapeCharacters( aEntry[nEntryInd] ) );
         if ( nEntryInd < aEntry.getLength() - 1 )
-            aBuffer.append( (sal_Unicode)',' );
+            aBuffer.append( ',' );
         else
-            aBuffer.append( (sal_Unicode)';' );
+            aBuffer.append( ';' );
     }
 
     OString aStringData( OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );

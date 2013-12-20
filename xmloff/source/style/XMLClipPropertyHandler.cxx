@@ -108,21 +108,21 @@ bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& 
     if( rValue >>= aCrop )
     {
         aOut.append( GetXMLToken(XML_RECT) );
-        aOut.append( (sal_Unicode)'(' );
+        aOut.append( '(' );
         rUnitConverter.convertMeasureToXML( aOut, aCrop.Top );
         if( !m_bODF11 )
-            aOut.append( (sal_Unicode)',' );
-        aOut.append( (sal_Unicode)' ' );
+            aOut.append( ',' );
+        aOut.append( ' ' );
         rUnitConverter.convertMeasureToXML( aOut, aCrop.Right );
         if( !m_bODF11 )
-            aOut.append( (sal_Unicode)',' );
-        aOut.append( (sal_Unicode)' ' );
+            aOut.append( ',' );
+        aOut.append( ' ' );
         rUnitConverter.convertMeasureToXML( aOut, aCrop.Bottom );
         if( !m_bODF11 )
-            aOut.append( (sal_Unicode)',' );
-        aOut.append( (sal_Unicode)' ' );
+            aOut.append( ',' );
+        aOut.append( ' ' );
         rUnitConverter.convertMeasureToXML( aOut, aCrop.Left );
-        aOut.append( (sal_Unicode)')' );
+        aOut.append( ')' );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = true;

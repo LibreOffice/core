@@ -579,9 +579,9 @@ void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
 OUString LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
     OUStringBuffer aFormula;
-    aFormula.append(static_cast<sal_Unicode>('('));
+    aFormula.append('(');
     aFormula.append(ToString(pCellsMap));
-    aFormula.append(static_cast<sal_Unicode>(')'));
+    aFormula.append(')');
     return aFormula.makeStringAndClear();
 }
 /**

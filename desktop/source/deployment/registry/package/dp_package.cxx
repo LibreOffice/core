@@ -1071,7 +1071,7 @@ void BackendImpl::PackageImpl::exportTo(
                                     rtl_UriCharClassRegName,
                                     rtl_UriEncodeIgnoreEscapes,
                                     RTL_TEXTENCODING_UTF8 ) );
-    buf.append( static_cast<sal_Unicode>('/') );
+    buf.append( '/' );
     OUString destFolder( buf.makeStringAndClear() );
 
     ::ucbhelper::Content destFolderContent(

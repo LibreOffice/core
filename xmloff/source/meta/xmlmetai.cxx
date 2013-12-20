@@ -243,7 +243,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
                 nBegin = i_rBuildId.indexOf( sBuildCompare, nEnd );
                 if ( nBegin != -1 )
                 {
-                    sBuffer.append( (sal_Unicode)'$' );
+                    sBuffer.append( '$' );
                     sBuffer.append( i_rBuildId.copy(
                         nBegin + sBuildCompare.getLength() ) );
                     sBuildId = sBuffer.makeStringAndClear();

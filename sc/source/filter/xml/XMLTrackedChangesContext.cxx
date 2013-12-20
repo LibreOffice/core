@@ -668,7 +668,7 @@ SvXMLImportContext *ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPref
     else if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLocalName, XML_P)) )
     {
         if(nParagraphCount)
-            sCommentBuffer.append(static_cast<sal_Unicode>('\n'));
+            sCommentBuffer.append('\n');
         ++nParagraphCount;
         pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLocalName, xAttrList, sCommentBuffer);
     }
@@ -1060,9 +1060,9 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
         }
         if (nRepeat)
             for (sal_Int32 j = 0; j < nRepeat; ++j)
-                sText.append(static_cast<sal_Unicode>(' '));
+                sText.append(' ');
         else
-            sText.append(static_cast<sal_Unicode>(' '));
+            sText.append(' ');
     }
     else
     {

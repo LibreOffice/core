@@ -3482,7 +3482,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             }
             if ( nDecPos == 2 && k < nAnzNums )     // . somewhere
             {
-                sResString.append((sal_Unicode)'.');
+                sResString.append('.');
                 sal_uInt16 nStop = (eScannedType == NUMBERFORMAT_SCIENTIFIC ?
                                     nAnzNums-1 : nAnzNums);
                 for ( ; k < nStop; k++)
@@ -3497,10 +3497,10 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             }
             else
             {                                           // append exponent
-                sResString.append((sal_Unicode)'E');
+                sResString.append('E');
                 if ( nESign == -1 )
                 {
-                    sResString.append((sal_Unicode)'-');
+                    sResString.append('-');
                 }
                 sResString.append(sStrArray[nNums[nAnzNums-1]]);
                 rtl_math_ConversionStatus eStatus;

@@ -307,7 +307,7 @@ static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
                                   sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
 {
     rBuffer.append( rNamePrefix );
-    rBuffer.append( (sal_Unicode)'.' );
+    rBuffer.append( '.' );
     if( bTop )
     {
         OUString sTmp;
@@ -317,7 +317,7 @@ static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
     else
     {
         rBuffer.append( (sal_Int32)(nCol + 1));
-        rBuffer.append( (sal_Unicode)'.' );
+        rBuffer.append( '.' );
     }
     rBuffer.append( (sal_Int32)(nRow + 1));
 }
@@ -541,7 +541,7 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
         if( rCol.GetRelWidth() )
         {
             sValue.append( (sal_Int32)rCol.GetRelWidth() );
-            sValue.append( (sal_Unicode)'*' );
+            sValue.append( '*' );
             AddAttribute( XML_NAMESPACE_STYLE, XML_REL_COLUMN_WIDTH,
                           sValue.makeStringAndClear() );
         }
@@ -618,7 +618,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             else
             {
                 sBuffer.append( rNamePrefix );
-                sBuffer.append( (sal_Unicode)'.' );
+                sBuffer.append( '.' );
                 if( bTop )
                 {
                     OUString sTmp;

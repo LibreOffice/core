@@ -286,15 +286,15 @@ static inline OUString getMappingName(
 {
     OUStringBuffer aKey( 64 );
     aKey.append( rAddPurpose );
-    aKey.append( (sal_Unicode)';' );
+    aKey.append( ';' );
     aKey.append( rFrom.getTypeName() );
-    aKey.append( (sal_Unicode)'[' );
+    aKey.append( '[' );
     aKey.append( reinterpret_cast< sal_IntPtr >(rFrom.get()), 16 );
     aKey.append( "];" );
     aKey.append( rTo.getTypeName() );
-    aKey.append( (sal_Unicode)'[' );
+    aKey.append( '[' );
     aKey.append( reinterpret_cast< sal_IntPtr >(rTo.get()), 16 );
-    aKey.append( (sal_Unicode)']' );
+    aKey.append( ']' );
     return aKey.makeStringAndClear();
 }
 //==================================================================================================
@@ -306,10 +306,10 @@ static inline OUString getBridgeName(
     if (!rAddPurpose.isEmpty())
     {
         aBridgeName.append( rAddPurpose );
-        aBridgeName.append( (sal_Unicode)'_' );
+        aBridgeName.append( '_' );
     }
     aBridgeName.append( EnvDcp::getTypeName(rFrom.getTypeName()) );
-    aBridgeName.append( (sal_Unicode)'_' );
+    aBridgeName.append( '_' );
     aBridgeName.append( EnvDcp::getTypeName(rTo.getTypeName()) );
     return aBridgeName.makeStringAndClear();
 }

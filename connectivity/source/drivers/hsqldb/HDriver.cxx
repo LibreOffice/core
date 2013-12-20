@@ -165,7 +165,7 @@ namespace connectivity
                 OSL_VERIFY( aConfig.getNodeValue( *pNodeNames ) >>= sPermittedMethod );
 
                 if ( !aPermittedMethods.isEmpty() )
-                    aPermittedMethods.append( (sal_Unicode)';' );
+                    aPermittedMethods.append( ';' );
                 aPermittedMethods.append( sPermittedMethod );
             }
 

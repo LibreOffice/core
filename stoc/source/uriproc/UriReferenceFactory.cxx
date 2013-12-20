@@ -421,7 +421,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
         return abs;
     } else {
         OUStringBuffer abs(baseUriReference->getScheme());
-        abs.append(static_cast< sal_Unicode >(':'));
+        abs.append(':');
         if (uriReference->hasAuthority()) {
             abs.append("//");
             abs.append(uriReference->getAuthority());
@@ -442,7 +442,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             // these rules for consistent results.
             bool slash = !baseUriReference->getPath().isEmpty();
             if (slash) {
-                abs.append(static_cast< sal_Unicode >('/'));
+                abs.append('/');
             }
             for (Segments::iterator i(segments.begin()); i != segments.end();
                  ++i)
@@ -452,24 +452,24 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                         baseUriReference->getPathSegment(-(*i + 2)));
                     if (!segment.isEmpty() || segments.size() > 1) {
                         if (!slash) {
-                            abs.append(static_cast< sal_Unicode >('/'));
+                            abs.append('/');
                         }
                         abs.append(segment);
                         slash = true;
-                        abs.append(static_cast< sal_Unicode >('/'));
+                        abs.append('/');
                     }
                 } else if (*i > 1) {
                     OUString segment(uriReference->getPathSegment(*i - 2));
                     if (!segment.isEmpty() || segments.size() > 1) {
                         if (!slash) {
-                            abs.append(static_cast< sal_Unicode >('/'));
+                            abs.append('/');
                         }
                         abs.append(segment);
                         slash = false;
                     }
                 } else if (*i == 0) {
                     if (segments.size() > 1 && !slash) {
-                        abs.append(static_cast< sal_Unicode >('/'));
+                        abs.append('/');
                     }
                 } else {
                     switch (excessParentSegments) {
@@ -478,12 +478,12 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
 
                     case css::uri::RelativeUriExcessParentSegments_RETAIN:
                         if (!slash) {
-                            abs.append(static_cast< sal_Unicode >('/'));
+                            abs.append('/');
                         }
                         abs.append("..");
                         slash = *i < 0;
                         if (slash) {
-                            abs.append(static_cast< sal_Unicode >('/'));
+                            abs.append('/');
                         }
                         break;
 
@@ -500,11 +500,11 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             abs.append(uriReference->getPath());
         }
         if (uriReference->hasQuery()) {
-            abs.append(static_cast< sal_Unicode >('?'));
+            abs.append('?');
             abs.append(uriReference->getQuery());
         }
         if (uriReference->hasFragment()) {
-            abs.append(static_cast< sal_Unicode >('#'));
+            abs.append('#');
             abs.append(uriReference->getFragment());
         }
         return parse(abs.makeStringAndClear());
@@ -570,7 +570,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                     || uriReference->getPath().getLength() > 1)
                 {
                     if (uriReference->getPath().isEmpty()) {
-                        rel.append(static_cast< sal_Unicode >('/'));
+                        rel.append('/');
                     } else {
                         assert(uriReference->getPath()[0] == '/');
                         if (uriReference->getPath().startsWith("//")) {
@@ -585,7 +585,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                 bool segments = false;
                 for (sal_Int32 j = i; j < count1 - 1; ++j) {
                     if (segments) {
-                        rel.append(static_cast< sal_Unicode >('/'));
+                        rel.append('/');
                     }
                     rel.append("..");
                     segments = true;
@@ -598,12 +598,12 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                             || (parseScheme(uriReference->getPathSegment(i))
                                 >= 0)))
                     {
-                        rel.append(static_cast< sal_Unicode >('.'));
+                        rel.append('.');
                         segments = true;
                     }
                     for (; i < count2; ++i) {
                         if (segments) {
-                            rel.append(static_cast< sal_Unicode >('/'));
+                            rel.append('/');
                         }
                         OUString s(uriReference->getPathSegment(i));
                         if (encodeRetainedSpecialSegments && s == ".") {
@@ -619,11 +619,11 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
             }
         }
         if (!omitQuery && uriReference->hasQuery()) {
-            rel.append(static_cast< sal_Unicode >('?'));
+            rel.append('?');
             rel.append(uriReference->getQuery());
         }
         if (uriReference->hasFragment()) {
-            rel.append(static_cast< sal_Unicode >('#'));
+            rel.append('#');
             rel.append(uriReference->getFragment());
         }
         return parse(rel.makeStringAndClear());

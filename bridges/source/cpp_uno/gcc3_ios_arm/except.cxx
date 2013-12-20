@@ -144,7 +144,7 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
         buf.appendAscii( p, n );
         p += n;
         if ('E' != *p)
-            buf.append( (sal_Unicode)'.' );
+            buf.append( '.' );
     }
 
     OUString result( buf.makeStringAndClear() );

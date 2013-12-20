@@ -94,7 +94,7 @@ namespace
             const OUString operator () () {
                 OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
-                buf.append( static_cast<sal_Unicode>('_') );
+                buf.append( '_' );
                 buf.append( StrCPU::get() );
                 return buf.makeStringAndClear();
             }

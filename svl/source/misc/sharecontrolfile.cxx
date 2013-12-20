@@ -215,9 +215,9 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
         {
             aBuffer.append( EscapeCharacters( aUsersData[nInd][nEntryInd] ) );
             if ( nEntryInd < SHARED_ENTRYSIZE - 1 )
-                aBuffer.append( (sal_Unicode)',' );
+                aBuffer.append( ',' );
             else
-                aBuffer.append( (sal_Unicode)';' );
+                aBuffer.append( ';' );
         }
     }
 

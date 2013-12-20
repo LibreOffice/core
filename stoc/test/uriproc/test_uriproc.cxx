@@ -85,9 +85,9 @@ OString createTestAssertEqualMessage(
 {
     OUStringBuffer buf;
     buf.appendAscii(token1);
-    buf.append(static_cast< sal_Unicode >('|'));
+    buf.append('|');
     append(buf, token2);
-    buf.append(static_cast< sal_Unicode >('|'));
+    buf.append('|');
     append(buf, token3);
     buf.append(": TEST_ASSERT_EQUAL(");
     buf.appendAscii(expectedExpr);
@@ -97,7 +97,7 @@ OString createTestAssertEqualMessage(
     append(buf, expected);
     buf.append("> != <");
     append(buf, actual);
-    buf.append(static_cast< sal_Unicode >('>'));
+    buf.append('>');
     return OUStringToOString(
         buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }

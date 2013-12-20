@@ -569,14 +569,14 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
 
     int seenright = 0;
     if ( bForLike )
-        sResult.append(static_cast<sal_Unicode>('^'));
+        sResult.append('^');
 
     while (start < end)
     {
         switch (*start)
         {
             case '?':
-                sResult.append(static_cast<sal_Unicode>('.'));
+                sResult.append('.');
                 start++;
                 break;
             case '*':
@@ -588,13 +588,13 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                 start++;
                 break;
             case '~':
-                sResult.append(static_cast<sal_Unicode>('\\'));
+                sResult.append('\\');
                 sResult.append(*(++start));
                 start++;
                 break;
                 // dump the ~ and escape the next characture
             case ']':
-                sResult.append(static_cast<sal_Unicode>('\\'));
+                sResult.append('\\');
                 sResult.append(*start++);
                 break;
             case '[':
@@ -607,7 +607,7 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                         case '[':
                         case '?':
                         case '*':
-                        sResult.append(static_cast<sal_Unicode>('\\'));
+                        sResult.append(('\\');
                         sResult.append(*start);
                             break;
                         case ']':
@@ -615,11 +615,11 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                             seenright = 1;
                             break;
                         case '!':
-                            sResult.append(static_cast<sal_Unicode>('^'));
+                            sResult.append('^');
                             break;
                         default:
                         if (NeedEsc(*start))
-                            sResult.append(static_cast<sal_Unicode>('\\'));
+                            sResult.append('\\');
                         sResult.append(*start);
                             break;
                     }
@@ -628,13 +628,13 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                 break;
             default:
                 if (NeedEsc(*start))
-                    sResult.append(static_cast<sal_Unicode>('\\'));
+                    sResult.append('\\');
                 sResult.append(*start++);
         }
     }
 
     if ( bForLike )
-        sResult.append(static_cast<sal_Unicode>('$'));
+        sResult.append('$');
 
     return sResult.makeStringAndClear( );
 }

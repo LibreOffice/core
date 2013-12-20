@@ -697,11 +697,11 @@ namespace pcr
             if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_LABEL ) )
             {
                 OUStringBuffer aValue;
-                aValue.append( (sal_Unicode)'<' );
+                aValue.append( '<' );
                 OUString sLabel;
                 OSL_VERIFY( xSet->getPropertyValue( PROPERTY_LABEL ) >>= sLabel );
                 aValue.append( sLabel );
-                aValue.append( (sal_Unicode)'>' );
+                aValue.append( '>' );
                 sControlValue = aValue.makeStringAndClear();
             }
 

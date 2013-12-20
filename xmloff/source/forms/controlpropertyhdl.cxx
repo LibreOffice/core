@@ -148,7 +148,7 @@ namespace xmloff
             bSuccess = SvXMLUnitConverter::convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE);
             if (bSuccess)
             {
-                aReturn.append( (sal_Unicode)' ' );
+                aReturn.append( ' ' );
                 aReturn.append( GetXMLToken(bBelow ? XML_BELOW : XML_ABOVE) );
 
                 _rStrExpValue = aReturn.makeStringAndClear();

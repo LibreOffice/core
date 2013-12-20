@@ -219,7 +219,7 @@ OUString AbstractShapeFactory::getStackedString( const OUString& rString, bool b
     for( sal_Int32 nPosSrc=0; nPosSrc < nLen; nPosSrc++ )
     {
         if( nPosSrc )
-            aStackStr.append( sal_Unicode('\r') );
+            aStackStr.append( '\r' );
         aStackStr.append(rString[nPosSrc]);
     }
     return aStackStr.makeStringAndClear();

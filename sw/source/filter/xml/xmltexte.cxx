@@ -149,11 +149,11 @@ void SwXMLTextParagraphExport::exportStyleContent(
                 if( eFunc != XML_TOKEN_INVALID )
                 {
                     sBuffer.append( GetXMLToken(eFunc) );
-                    sBuffer.append( (sal_Unicode)'(' );
-                    sBuffer.append( (sal_Unicode)')' );
+                    sBuffer.append( '(' );
+                    sBuffer.append( ')' );
                     if( !sVal.isEmpty() )
                     {
-                        sBuffer.append( (sal_Unicode)'=' );
+                        sBuffer.append( '=' );
                         sBuffer.append( sVal );
                     }
 
@@ -511,11 +511,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     case '\\':
                         if( aBuffer.isEmpty() )
                         {
-                            aBuffer.append( (sal_Unicode)'\'' );
+                            aBuffer.append( '\'' );
                             aBuffer.append( sRange.copy( 0, i ) );
                         }
                         if( '\'' == c || '\\' == c )
-                            aBuffer.append( (sal_Unicode)'\\' );
+                            aBuffer.append( '\\' );
                         // no break!
                     default:
                         if( !aBuffer.isEmpty() )
@@ -524,7 +524,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             }
             if( !aBuffer.isEmpty() )
             {
-                aBuffer.append( (sal_Unicode)'\'' );
+                aBuffer.append( '\'' );
                 sRange = aBuffer.makeStringAndClear();
             }
 

@@ -1122,7 +1122,7 @@ SfxItemPresentation SwGammaGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
             aText.append(SW_RESSTR(STR_GAMMA));
-        aText.append(GetValue()).append(static_cast<sal_Unicode>('%'));
+        aText.append(GetValue()).append('%');
         break;
 
     default:

@@ -34,7 +34,7 @@ void appendTypeError(
 {
     buf.append( "<cannot get type description of type " );
     buf.append( OUString::unacquired( &typeRef->pTypeName ) );
-    buf.append( static_cast< sal_Unicode >('>') );
+    buf.append( '>' );
 }
 
 inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
@@ -44,7 +44,7 @@ inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
         OUString const s(
             OUString::number( static_cast< sal_Int32 >(c), 16 ) );
         for ( sal_Int32 f = 4 - s.getLength(); f > 0; --f )
-            buf.append( static_cast< sal_Unicode >('0') );
+            buf.append( '0' );
         buf.append( s );
     }
     else {
@@ -68,14 +68,14 @@ void appendValue( OUStringBuffer & buf,
         typeRef->eTypeClass != typelib_TypeClass_CHAR &&
         typeRef->eTypeClass != typelib_TypeClass_BOOLEAN)
     {
-        buf.append( static_cast< sal_Unicode >('(') );
+        buf.append( '(' );
         buf.append( OUString::unacquired( &typeRef->pTypeName ) );
         buf.append( ") " );
     }
 
     switch (typeRef->eTypeClass) {
     case typelib_TypeClass_INTERFACE: {
-        buf.append( static_cast<sal_Unicode>('@') );
+        buf.append( '@' );
         buf.append( reinterpret_cast< sal_Int64 >(
                         *static_cast< void * const * >(val) ), 16 );
         uno::Reference< lang::XServiceInfo > xServiceInfo(
@@ -201,7 +201,7 @@ void appendValue( OUStringBuffer & buf,
                         )->pTypeName );
         break;
     case typelib_TypeClass_STRING: {
-        buf.append( static_cast< sal_Unicode >('\"') );
+        buf.append( '\"' );
         OUString const & str = OUString::unacquired(
             static_cast< rtl_uString * const * >(val) );
         sal_Int32 len = str.getLength();
@@ -215,7 +215,7 @@ void appendValue( OUStringBuffer & buf,
             else
                 appendChar( buf, c );
         }
-        buf.append( static_cast< sal_Unicode >('\"') );
+        buf.append( '\"' );
         break;
     }
     case typelib_TypeClass_ENUM: {
@@ -257,7 +257,7 @@ void appendValue( OUStringBuffer & buf,
             buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR: {
-        buf.append( static_cast< sal_Unicode >('\'') );
+        buf.append( '\'' );
         sal_Unicode c = *static_cast< sal_Unicode const * >(val);
         if (c == '\'')
             buf.append( "\\\'" );
@@ -265,7 +265,7 @@ void appendValue( OUStringBuffer & buf,
             buf.append( "\\\\" );
         else
             appendChar( buf, c );
-        buf.append( static_cast< sal_Unicode >('\'') );
+        buf.append( '\'' );
         break;
     }
     case typelib_TypeClass_FLOAT:
@@ -303,7 +303,7 @@ void appendValue( OUStringBuffer & buf,
 //     case typelib_TypeClass_SERVICE:
 //     case typelib_TypeClass_MODULE:
     default:
-        buf.append( static_cast< sal_Unicode >('?') );
+        buf.append( '?' );
         break;
     }
 }

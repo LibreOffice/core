@@ -201,7 +201,7 @@ void Test::test_Uri() {
     aBuffer.append(static_cast< sal_Unicode >(0xD800)); // %F0%90%8F%BF
     aBuffer.append(static_cast< sal_Unicode >(0xDFFF));
     aBuffer.append(static_cast< sal_Unicode >(0xDFFF)); // %ED%BF%BF
-    aBuffer.append(static_cast< sal_Unicode >('A')); // A
+    aBuffer.append('A'); // A
     aText1 = aBuffer.makeStringAndClear();
     aText2 = rtl::OUString(
             "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A");
@@ -230,7 +230,7 @@ void Test::test_Uri() {
     aBuffer.append(static_cast< sal_Unicode >(0xD800));
     aBuffer.append(static_cast< sal_Unicode >(0xDFFF));
     aBuffer.append("%ED%BF%BF");
-    aBuffer.append(static_cast< sal_Unicode >('A'));
+    aBuffer.append('A');
     aText2 = aBuffer.makeStringAndClear();
     CPPUNIT_ASSERT_MESSAGE(
         "failure 14",

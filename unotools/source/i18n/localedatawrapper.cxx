@@ -1745,7 +1745,7 @@ OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     OUStringBuffer aDebugMsg(rDebugMsg);
-    aDebugMsg.append(static_cast<sal_Unicode>('\n'));
+    aDebugMsg.append('\n');
     aDebugMsg.append(maLanguageTag.getBcp47());
     aDebugMsg.appendAscii(" requested\n");
     LanguageTag aLoaded = getLoadedLanguageTag();

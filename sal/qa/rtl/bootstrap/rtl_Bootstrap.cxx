@@ -698,7 +698,7 @@ namespace rtl_Bootstrap
             rtl::OUString p(t_getSourcePath(TESTSHL2_INI));
             for (sal_Int32 i = 0; i < p.getLength(); ++i) {
                 if (p[i] != 'u') {
-                    b.append(static_cast< sal_Unicode >('\\'));
+                    b.append('\\');
                 }
                 b.append(p[i]);
             }

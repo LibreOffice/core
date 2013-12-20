@@ -70,9 +70,9 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
         }
         if (nRepeat)
             for (sal_Int32 j = 0; j < nRepeat; ++j)
-                sOUText.append(static_cast<sal_Unicode>(' '));
+                sOUText.append(' ');
         else
-            sOUText.append(static_cast<sal_Unicode>(' '));
+            sOUText.append(' ');
     }
 
     if( !pContext )

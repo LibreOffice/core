@@ -1375,12 +1375,12 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                     case FNTSIZ_MULTIPLY:
                         ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(aFrac*Fraction(100.00)));
-                        sStrBuf.append(static_cast<sal_Unicode>('%'));
+                        sStrBuf.append('%');
                         break;
                     case FNTSIZ_DIVIDE:
                         ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(Fraction(100.00)/aFrac));
-                        sStrBuf.append(static_cast<sal_Unicode>('%'));
+                        sStrBuf.append('%');
                         break;
                     case FNTSIZ_ABSOLUT:
                         ::sax::Converter::convertDouble(sStrBuf,

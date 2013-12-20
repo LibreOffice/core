@@ -624,7 +624,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
             //Folder. No need to unzip, just copy
             buf.append(sourceContent.getURL());
         }
-        buf.append( static_cast<sal_Unicode>('/') );
+        buf.append( '/' );
         sourceContent = ::ucbhelper::Content(
             buf.makeStringAndClear(), xCmdEnv, m_xComponentContext );
     }

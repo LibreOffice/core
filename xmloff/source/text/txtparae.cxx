@@ -3082,9 +3082,9 @@ void XMLTextParagraphExport::_exportTextGraphic(
     {
         OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
         sRet.append( GetXMLToken(XML_ROTATE));
-        sRet.append( (sal_Unicode)'(' );
+        sRet.append( '(' );
         ::sax::Converter::convertNumber( sRet, (sal_Int32)nVal );
-        sRet.append( (sal_Unicode)')' );
+        sRet.append( ')' );
         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
                                   sRet.makeStringAndClear() );
     }

@@ -2111,28 +2111,28 @@ void implWriteCharToBuffer( OUStringBuffer& aBuf, sal_Unicode cu, bool bKey )
 {
     if( cu == '\\' )
     {
-        aBuf.append( (sal_Unicode)'\\' );
-        aBuf.append( (sal_Unicode)'\\' );
+        aBuf.append( '\\' );
+        aBuf.append( '\\' );
     }
     else if( cu == 0x000a )
     {
-        aBuf.append( (sal_Unicode)'\\' );
-        aBuf.append( (sal_Unicode)'n' );
+        aBuf.append( '\\' );
+        aBuf.append( 'n' );
     }
     else if( cu == 0x000d )
     {
-        aBuf.append( (sal_Unicode)'\\' );
-        aBuf.append( (sal_Unicode)'r' );
+        aBuf.append( '\\' );
+        aBuf.append( 'r' );
     }
     else if( bKey && cu == '=' )
     {
-        aBuf.append( (sal_Unicode)'\\' );
-        aBuf.append( (sal_Unicode)'=' );
+        aBuf.append( '\\' );
+        aBuf.append( '=' );
     }
     else if( bKey && cu == ':' )
     {
-        aBuf.append( (sal_Unicode)'\\' );
-        aBuf.append( (sal_Unicode)':' );
+        aBuf.append( '\\' );
+        aBuf.append( ':' );
     }
     // ISO/IEC 8859-1 range according to:
     // http://en.wikipedia.org/wiki/ISO/IEC_8859-1
@@ -2147,8 +2147,8 @@ void implWriteCharToBuffer( OUStringBuffer& aBuf, sal_Unicode cu, bool bKey )
     else
     {
         // Unicode encoding
-        aBuf.append( (sal_Unicode)'\\' );
-        aBuf.append( (sal_Unicode)'u' );
+        aBuf.append( '\\' );
+        aBuf.append( 'u' );
 
         sal_uInt16 nVal = cu;
         for( sal_uInt16 i = 0 ; i < 4 ; i++ )

@@ -426,17 +426,17 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     OUStringBuffer buf;
     sal_Int32 n = (nTimeSecs / 3600);
     if (n < 10)
-        buf.append( static_cast<sal_Unicode>('0') );
+        buf.append( '0' );
     buf.append( n );
-    buf.append( static_cast<sal_Unicode>(':') );
+    buf.append( ':' );
     n = ((nTimeSecs % 3600) / 60);
     if (n < 10)
-        buf.append( static_cast<sal_Unicode>('0') );
+        buf.append( '0' );
     buf.append( n );
-    buf.append( static_cast<sal_Unicode>(':') );
+    buf.append( ':' );
     n = (nTimeSecs % 60);
     if (n < 10)
-        buf.append( static_cast<sal_Unicode>('0') );
+        buf.append( '0' );
     buf.append( n );
     const OUString time = buf.makeStringAndClear();
 

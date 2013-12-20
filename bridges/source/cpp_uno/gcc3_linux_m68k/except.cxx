@@ -76,7 +76,7 @@ namespace CPPU_CURRENT_NAMESPACE
             buf.appendAscii( p, n );
             p += n;
             if ('E' != *p)
-                buf.append( (sal_Unicode)'.' );
+                buf.append( '.' );
         }
 
 #if OSL_DEBUG_LEVEL > 1

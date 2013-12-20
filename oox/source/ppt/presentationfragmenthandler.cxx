@@ -383,7 +383,7 @@ void PresentationFragmentHandler::finalizeImport()
     {
         aPageRange = OUStringBuffer()
             .append( static_cast< sal_Int32 >( 1 ) )
-            .append( static_cast< sal_Unicode >( '-' ) )
+            .append( '-' )
             .append( nPageCount ).makeStringAndClear();
     }
 

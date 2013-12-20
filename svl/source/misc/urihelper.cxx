@@ -203,7 +203,7 @@ OUString normalize(
         return uriReference;
     }
     OUStringBuffer head(ref->getScheme());
-    head.append(static_cast< sal_Unicode >(':'));
+    head.append(':');
     if (ref->hasAuthority()) {
         head.append("//");
         head.append(ref->getAuthority());
@@ -211,7 +211,7 @@ OUString normalize(
     for (sal_Int32 i = count - 1; i > 0; --i) {
         OUStringBuffer buf(head);
         for (sal_Int32 j = 0; j < i; ++j) {
-            buf.append(static_cast< sal_Unicode >('/'));
+            buf.append('/');
             buf.append(ref->getPathSegment(j));
         }
         normalized = buf.makeStringAndClear();
@@ -228,7 +228,7 @@ OUString normalize(
             // normalizePrefix may have added or removed a final slash:
             if (preCount != i) {
                 if (preCount == i - 1) {
-                    buf.append(static_cast< sal_Unicode >('/'));
+                    buf.append('/');
                 } else if (preCount - 1 == i && !buf.isEmpty()
                            && buf[buf.getLength() - 1] == '/')
                 {
@@ -239,15 +239,15 @@ OUString normalize(
                 }
             }
             for (sal_Int32 j = i; j < count; ++j) {
-                buf.append(static_cast< sal_Unicode >('/'));
+                buf.append('/');
                 buf.append(ref->getPathSegment(j));
             }
             if (ref->hasQuery()) {
-                buf.append(static_cast< sal_Unicode >('?'));
+                buf.append'?');
                 buf.append(ref->getQuery());
             }
             if (ref->hasFragment()) {
-                buf.append(static_cast< sal_Unicode >('#'));
+                buf.append('#');
                 buf.append(ref->getFragment());
             }
             return buf.makeStringAndClear();

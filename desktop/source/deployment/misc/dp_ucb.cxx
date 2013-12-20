@@ -233,7 +233,7 @@ bool readLine( OUString * res, OUString const & startingWith,
                     if (pos < file.getLength() &&
                         (file[ pos ] == ' ' || file[ pos ] == '\t'))
                     {
-                        buf.append( static_cast<sal_Unicode>(' ') );
+                        buf.append( ' ' );
                         ++pos;
                         start = pos;
                         continue;

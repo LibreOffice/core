@@ -169,12 +169,12 @@ uno::Reference<rdf::XURI> createBaseURI(
             const OUString last( xBaseURI->getPathSegment(count - 1) );
             buf.append(last);
         }
-        buf.append(static_cast<sal_Unicode>('/'));
+        buf.append('/');
     }
     if (!i_rSubDocument.isEmpty())
     {
         buf.append(i_rSubDocument);
-        buf.append(static_cast<sal_Unicode>('/'));
+        buf.append('/');
     }
     const OUString Path(buf.makeStringAndClear());
     if (!Path.isEmpty())
@@ -561,7 +561,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                     }
                 } catch (const uno::Exception &) { }
                 OUStringBuffer buf(i_rBaseURI);
-                buf.append(dir).append(static_cast<sal_Unicode>('/'));
+                buf.append(dir).append('/');
                 readStream(i_rImpl, xDir, rest, buf.makeStringAndClear() );
             } else {
                 throw mkException(OUString(
@@ -663,7 +663,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                 }
             } catch (const uno::Exception &) { }
             OUStringBuffer buf(i_rBaseURI);
-            buf.append(dir).append(static_cast<sal_Unicode>('/'));
+            buf.append(dir).append('/');
             writeStream(i_rImpl, xDir, i_xGraphName, rest,
                 buf.makeStringAndClear());
             uno::Reference<embed::XTransactedObject> const xTransaction(

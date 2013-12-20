@@ -1243,22 +1243,22 @@ static void convertTime(
         const com::sun::star::util::DateTime& i_rDateTime)
 {
     if (i_rDateTime.Hours   < 10) {
-        i_rBuffer.append(sal_Unicode('0'));
+        i_rBuffer.append('0');
     }
     i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Hours)   )
-             .append(sal_Unicode(':'));
+             .append(':');
     if (i_rDateTime.Minutes < 10) {
-        i_rBuffer.append(sal_Unicode('0'));
+        i_rBuffer.append('0');
     }
     i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Minutes) )
-             .append(sal_Unicode(':'));
+             .append(':');
     if (i_rDateTime.Seconds < 10) {
-        i_rBuffer.append(sal_Unicode('0'));
+        i_rBuffer.append('0');
     }
     i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Seconds) );
     if (i_rDateTime.NanoSeconds > 0) {
         OSL_ENSURE(i_rDateTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
-        i_rBuffer.append(sal_Unicode('.'));
+        i_rBuffer.append('.');
         std::ostringstream ostr;
         ostr.fill('0');
         ostr.width(9);
@@ -1339,7 +1339,7 @@ void Converter::convertDateTime(
         i_rDateTime.Hours   != 0 ||
         i_bAddTimeIf0AM )
     {
-        i_rBuffer.append(sal_Unicode('T'));
+        i_rBuffer.append('T');
         convertTime(i_rBuffer, i_rDateTime);
     }
 

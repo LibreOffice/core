@@ -433,7 +433,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case '&':
             bEqSignFound = false;
             if( bReadXMP )
-                sTmpBuffer.append( (sal_Unicode)'&' );
+                sTmpBuffer.append( '&' );
             else
             {
                 sal_uLong nStreamPos = rInput.Tell();
@@ -542,7 +542,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         {
                             // back in stream, insert '&'
                             // and restart with next character
-                            sTmpBuffer.append( (sal_Unicode)'&' );
+                            sTmpBuffer.append( '&' );
 
                             DBG_ASSERT( rInput.Tell()-nStreamPos ==
                                         (sal_uLong)(nPos+1)*GetCharSize(),
@@ -618,7 +618,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 // &{...};-JavaScript-Macros are not supported any longer.
                 else if( IsParserWorking() )
                 {
-                    sTmpBuffer.append( (sal_Unicode)'&' );
+                    sTmpBuffer.append( '&' );
                     bNextCh = false;
                     break;
                 }
@@ -632,7 +632,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     // \ has to be escaped as well.
                     // Space is protected because it's not a delimiter between
                     // options.
-                    sTmpBuffer.append( (sal_Unicode)'\\' );
+                    sTmpBuffer.append( '\\' );
                     if( MAX_LEN == sTmpBuffer.getLength() )
                         aToken += sTmpBuffer.makeStringAndClear();
                 }
@@ -670,11 +670,11 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>'==cBreak )
             {
                 // Innerhalb von Tags kennzeichnen
-                sTmpBuffer.append( (sal_Unicode)'\\' );
+                sTmpBuffer.append( '\\' );
                 if( MAX_LEN == sTmpBuffer.getLength() )
                     aToken += sTmpBuffer.makeStringAndClear();
             }
-            sTmpBuffer.append( (sal_Unicode)'\\' );
+            sTmpBuffer.append( '\\' );
             break;
 
         case '\"':
@@ -713,7 +713,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>' == cBreak )
             {
                 // If scanning options treat it like a space, ...
-                sTmpBuffer.append( (sal_Unicode)' ' );
+                sTmpBuffer.append( ' ' );
             }
             else
             {

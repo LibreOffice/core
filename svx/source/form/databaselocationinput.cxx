@@ -104,7 +104,7 @@ namespace svx
             )
         {
             aExtensionList.append( *pExtension );
-            aExtensionList.append( (sal_Unicode)';' );
+            aExtensionList.append( ';' );
         }
         m_rLocationInput.SetFilter( aExtensionList.makeStringAndClear() );
 

@@ -65,13 +65,8 @@ makeCURIE(SvXMLExport * i_pExport,
     OSL_ENSURE(!Namespace.isEmpty(), "makeCURIE: no namespace");
     if (Namespace.isEmpty()) throw uno::RuntimeException();
 
-    OUStringBuffer buf;
-    buf.append( i_pExport->EnsureNamespace(Namespace) );
-    buf.append( static_cast<sal_Unicode>(':') );
     // N.B.: empty LocalName is valid!
-    buf.append( i_xURI->getLocalName() );
-
-    return buf.makeStringAndClear();
+    return i_pExport->EnsureNamespace(Namespace) + ":" + i_xURI->getLocalName();
 }
 
 // #i112473# SvXMLExport::GetRelativeReference() not right for RDF on SaveAs

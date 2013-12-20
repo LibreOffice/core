@@ -92,7 +92,7 @@ static inline OUString makeStrings(
         {
             buf.appendAscii( *strings );
             if (mask << 1) // more items following
-                buf.append( (sal_Unicode)',' );
+                buf.append( ',' );
         }
         mask = (mask << 1);
         ++strings;
@@ -247,19 +247,19 @@ OUString SocketPermission::toString() const SAL_THROW(())
     buf.append( m_host );
     if (m_resolvedHost)
     {
-        buf.append( (sal_Unicode)'[' );
+        buf.append( '[' );
         buf.append( m_ip );
-        buf.append( (sal_Unicode)']' );
+        buf.append( ']' );
     }
     // port
     if (0 != m_lowerPort || 65535 != m_upperPort)
     {
-        buf.append( (sal_Unicode)':' );
+        buf.append( ':' );
         if (m_lowerPort > 0)
             buf.append( m_lowerPort );
         if (m_upperPort > m_lowerPort)
         {
-            buf.append( (sal_Unicode)'-' );
+            buf.append( '-' );
             if (m_upperPort < 65535)
                 buf.append( m_upperPort );
         }

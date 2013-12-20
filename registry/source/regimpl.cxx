@@ -661,7 +661,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     OUStringBuffer  sFullPath(sFullKeyName.getLength());
     OUString        token;
 
-    sFullPath.append((sal_Unicode)'/');
+    sFullPath.append('/');
 
     sal_Int32 nIndex = 0;
     do
@@ -675,7 +675,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
             }
 
             sFullPath.append(token);
-            sFullPath.append((sal_Unicode)'/');
+            sFullPath.append('/');
         }
     } while( nIndex != -1 );
 

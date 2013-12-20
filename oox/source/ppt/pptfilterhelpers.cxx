@@ -141,7 +141,7 @@ namespace oox { namespace ppt {
                         }
                         else
                         {
-                            sRes.append((sal_Unicode)'x');
+                            sRes.append('x');
                         }
                         bRet = true;
                         break;
@@ -152,7 +152,7 @@ namespace oox { namespace ppt {
                         }
                         else
                         {
-                            sRes.append((sal_Unicode)'y');
+                            sRes.append('y');
                         }
                         bRet = true;
                         break;

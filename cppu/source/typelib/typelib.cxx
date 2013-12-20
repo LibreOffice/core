@@ -1201,9 +1201,9 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
                 rtl::OUStringBuffer aBuf(pDirectBaseMember->pTypeName);
                 aBuf.append(":@");
                 aBuf.append(i->directBaseIndex);
-                aBuf.append(static_cast< sal_Unicode >(','));
+                aBuf.append(',');
                 aBuf.append(i->memberOffset + j);
-                aBuf.append(static_cast< sal_Unicode >(':'));
+                aBuf.append(':');
                 aBuf.append(pITD->aBase.pTypeName);
                 rtl::OUString aName(aBuf.makeStringAndClear());
                 typelib_TypeDescriptionReference * pDerivedMember = 0;

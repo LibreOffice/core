@@ -316,7 +316,7 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
         if( !rSequence[nIndex].isEmpty())
         {
             if( bPrecedeWithSpace )
-                aResult.append( static_cast< sal_Unicode >( ' ' ));
+                aResult.append( ' ' );
             aResult.append( rSequence[nIndex] );
             bPrecedeWithSpace = true;
         }

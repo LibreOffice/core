@@ -57,11 +57,11 @@ OUString UriReference::getUriReference() throw (css::uno::RuntimeException)
     OUStringBuffer buf;
     if (!m_scheme.isEmpty()) {
         buf.append(m_scheme);
-        buf.append(static_cast< sal_Unicode >(':'));
+        buf.append(':');
     }
     appendSchemeSpecificPart(buf);
     if (m_hasFragment) {
-        buf.append(static_cast< sal_Unicode >('#'));
+        buf.append('#');
         buf.append(m_fragment);
     }
     return buf.makeStringAndClear();
@@ -189,7 +189,7 @@ void UriReference::appendSchemeSpecificPart(OUStringBuffer & buffer) const
     }
     buffer.append(m_path);
     if (m_hasQuery) {
-        buffer.append(static_cast< sal_Unicode >('?'));
+        buffer.append('?');
         buffer.append(m_query);
     }
 }

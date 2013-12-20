@@ -40,7 +40,7 @@ OUString DocInfoHelper::GetGeneratorString()
     if ( !aValue.isEmpty() )
     {
         aResult.append( aValue.replace( ' ', '_' ) );
-        aResult.append( (sal_Unicode)'/' );
+        aResult.append( '/' );
 
         aValue = utl::ConfigManager::getProductVersion();
         if ( !aValue.isEmpty() )
@@ -58,11 +58,11 @@ OUString DocInfoHelper::GetGeneratorString()
         OUString arch( "$_ARCH" );
         ::rtl::Bootstrap::expandMacros(os);
         ::rtl::Bootstrap::expandMacros(arch);
-        aResult.append( (sal_Unicode)'$' );
+        aResult.append( '$' );
         aResult.append( os );
-        aResult.append( (sal_Unicode)'_' );
+        aResult.append( '_' );
         aResult.append( arch );
-        aResult.append( (sal_Unicode)' ' );
+        aResult.append( ' ' );
     }
 
     // second product: LibreOffice_project/<build_information>
@@ -79,13 +79,13 @@ OUString DocInfoHelper::GetGeneratorString()
             {
             case '(':
             case '[':
-                aResult.append( (sal_Unicode)'$' );
+                aResult.append( '$' );
                 break;
             case ')':
             case ']':
                 break;
             case ':':
-                aResult.append( (sal_Unicode)'-' );
+                aResult.append( '-' );
                 break;
             default:
                 aResult.append( c );

@@ -1563,7 +1563,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                 if( XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
                 {
                     OUStringBuffer sFormulaBuf;
-                    sFormulaBuf.append( (sal_Unicode) '"' );
+                    sFormulaBuf.append( '"' );
                     /*  Formula is a list of string tokens -> build the Excel string.
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
@@ -1576,14 +1576,14 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         if( nToken > 0 )
                         {
                             mxString1->Append(OUString(static_cast<sal_Unicode>('\0')));
-                            sFormulaBuf.append( (sal_Unicode) ',' );
+                            sFormulaBuf.append( ',' );
                         }
                         mxString1->Append( aToken );
                         sFormulaBuf.append( aToken );
                     }
                     ::set_flag( mnFlags, EXC_DV_STRINGLIST );
 
-                    sFormulaBuf.append( (sal_Unicode) '"' );
+                    sFormulaBuf.append( '"' );
                     msFormula1 = sFormulaBuf.makeStringAndClear();
                 }
                 else

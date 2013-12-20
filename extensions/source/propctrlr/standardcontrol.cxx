@@ -1190,10 +1190,10 @@ namespace pcr
                 )
             {
                 if ( strings != _rStrings.begin() )
-                    aComposed.append( (sal_Unicode)';' );
-                aComposed.append( (sal_Unicode)'\"' );
+                    aComposed.append( ';' );
+                aComposed.append( '\"' );
                 aComposed.append( *strings );
-                aComposed.append( (sal_Unicode)'\"' );
+                aComposed.append( '\"' );
             }
             return aComposed.makeStringAndClear();
         }

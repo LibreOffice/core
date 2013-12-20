@@ -110,12 +110,12 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                 // interface
                 OUStringBuffer oid( 64 );
                 oid.append( reinterpret_cast< sal_Int64 >(xHome.get()), 16 );
-                oid.append( (sal_Unicode)';' );
+                oid.append( ';' );
                 // ;environment[context]
                 oid.append(
                     *reinterpret_cast< OUString const * >(
                         &((uno_Environment *) pEnv)->pTypeName ) );
-                oid.append( (sal_Unicode)'[' );
+                oid.append( '[' );
                 oid.append(
                     reinterpret_cast< sal_Int64 >(
                         ((uno_Environment *)pEnv)->pContext),

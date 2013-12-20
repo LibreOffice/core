@@ -748,7 +748,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
         buf.append( pOEntry->nRef, 10 );
         buf.append( "; oid=\"" );
         buf.append( pOEntry->oid );
-        buf.append( (sal_Unicode) '\"' );
+        buf.append( '\"' );
         writeLine( stream, buf.makeStringAndClear(), pFilter );
 
         for ( ::std::size_t nPos = 0;
@@ -839,7 +839,7 @@ namespace
             // good guid
             sal_uInt8 ar[16];
             ::rtl_getGlobalProcessId( ar );
-            aRet.append( (sal_Unicode)';' );
+            aRet.append( ';' );
             for ( sal_Int32 i = 0; i < 16; ++i )
                 aRet.append( (sal_Int32)ar[i], 16 );
 
@@ -881,10 +881,10 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
         // interface
         ::rtl::OUStringBuffer oid( 64 );
         oid.append( reinterpret_cast< sal_Int64 >(pUnoI), 16 );
-        oid.append( static_cast< sal_Unicode >(';') );
+        oid.append( ';' );
         // environment[context]
         oid.append( ((uno_Environment *) pEnv)->pTypeName );
-        oid.append( static_cast< sal_Unicode >('[') );
+        oid.append( '[' );
         oid.append( reinterpret_cast< sal_Int64 >(
                         reinterpret_cast<
                         uno_Environment * >(pEnv)->pContext ), 16 );

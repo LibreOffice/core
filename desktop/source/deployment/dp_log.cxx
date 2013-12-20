@@ -163,7 +163,7 @@ void ProgressLogImpl::update( Any const & Status )
     OUStringBuffer buf;
     OSL_ASSERT( m_log_level >= 0 );
     for ( sal_Int32 n = 0; n < m_log_level; ++n )
-        buf.append( static_cast<sal_Unicode>(' ') );
+        buf.append( ' ' );
 
     OUString msg;
     if (Status >>= msg) {

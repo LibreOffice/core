@@ -171,7 +171,7 @@ OUString normalizeMediaType( OUString const & mediaType )
         buf.append( mediaType.getToken( 0, '/', index ).trim() );
         if (index < 0)
             break;
-        buf.append( static_cast< sal_Unicode >('/') );
+        buf.append( '/' );
     }
     return buf.makeStringAndClear();
 }

@@ -532,7 +532,7 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
         if( !rSequence[nIndex].isEmpty())
         {
             if( bPrecedeWithSpace )
-                aResult.append( static_cast< sal_Unicode >( ' ' ));
+                aResult.append( ' ' );
             aResult.append( rSequence[nIndex] );
             bPrecedeWithSpace = true;
         }
@@ -1113,7 +1113,7 @@ static OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Se
         if(nIndex>=0)
         {
             if(bHasPredecessor)
-                aBuf.append( static_cast< sal_Unicode >( ' ' ));
+                aBuf.append( ' ' );
             aBuf.append( nIndex, 10 );
             bHasPredecessor = true;
         }

@@ -2967,7 +2967,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
             // the prefix for the next level
             aNextLevelPrefix = _rCurrentLevelPrefix;
             if ( !_rCurrentLevelPrefix.isEmpty() )
-                aNextLevelPrefix.append( (sal_Unicode)'/' );
+                aNextLevelPrefix.append( '/' );
             aNextLevelPrefix.append( sCurrentFormName );
 
             // remember both the form and it's "display name"
