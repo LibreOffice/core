@@ -37,7 +37,7 @@
 
 <p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
 
-@since OOo 3.3
+@since OpenOffice 3.3
 */
 
 published interface XComplexDescriptionAccess : XChartDataArray

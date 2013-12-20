@@ -59,7 +59,7 @@ module com { module sun { module star { module accessibility {
     <const>AccessibleRole::BUTTON</const>, its name is 'OK', and its description
     is something like 'Accepts all changes made in the dialog'.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleContext : ::com::sun::star::uno::XInterface
 {

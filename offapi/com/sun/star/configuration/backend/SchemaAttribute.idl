@@ -35,7 +35,7 @@ module com { module sun { module star { module configuration { module backend {
     @see com::sun::star::configuration::backend::NodeAttribute
         During merging the values may be combined with node attributes.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published constants SchemaAttribute
 {

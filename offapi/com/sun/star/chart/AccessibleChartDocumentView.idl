@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module chart {
     accessibility representation tree as simple as possible and
     provide as much relevant information as possible.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service AccessibleChartDocumentView
 {

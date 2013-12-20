@@ -32,7 +32,7 @@ module com { module sun { module star { module configuration { module backend {
 
 /** holds the data needed to identify a template.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 
  */
 published struct TemplateIdentifier

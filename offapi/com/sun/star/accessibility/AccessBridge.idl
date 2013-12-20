@@ -36,7 +36,7 @@ module com { module sun { module star { module accessibility {
     and Java <-> GNOME access bridge by registering the native frames as
     Java windows.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 
 published service AccessBridge

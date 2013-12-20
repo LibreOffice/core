@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
     include future extensions to the set of roles we have to use constants
     here.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published constants AccessibleRelationType
 {
@@ -107,7 +107,7 @@ published constants AccessibleRelationType
         displayed because a cell in the same column is expanded and
         identifies that cell.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short NODE_CHILD_OF = 9;
 
@@ -115,7 +115,7 @@ published constants AccessibleRelationType
 
         <p>Indicates an object is described by the target object.</p>
 
-        @since OOo 3.5
+        @since OpenOffice 3.5
     */
     const short DESCRIBED_BY = 10;
 };

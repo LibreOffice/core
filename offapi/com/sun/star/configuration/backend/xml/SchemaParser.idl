@@ -52,7 +52,7 @@ module xml {
     @see com::sun::star::configuration::backend::xml::LayerParser
         Service that parses configuration layer xml.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service SchemaParser
 {

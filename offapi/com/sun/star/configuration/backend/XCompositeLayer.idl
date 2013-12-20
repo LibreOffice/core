@@ -54,7 +54,7 @@ module com { module sun { module star { module configuration { module backend {
   provides read access to layers that contain sublayers accessible through an
   additional criterion (for instance the locale they contain data for).
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published interface XCompositeLayer : XLayer
 {

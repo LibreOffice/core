@@ -50,7 +50,7 @@ module com { module sun { module star { module configuration { module backend {
   Provides access to a read-write layer of configuration data for
   a given component and entity.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published interface XUpdatableLayer : XLayer
 {

@@ -72,12 +72,12 @@ interface XInternalDataProvider  : com::sun::star::chart2::data::XDataProvider
 
     /** insert an additional sequence for categories nLevel>=1;
     categories at level 0 are always present and cannot be inserted or deleted
-    @since OOo 3.3
+    @since OpenOffice 3.3
     */
     void insertComplexCategoryLevel( [in] long nLevel );
     /** deletes an additional sequence for categories at nLevel>=1;
     categories at level 0 are always present and cannot be deleted
-    @since OOo 3.3
+    @since OpenOffice 3.3
     */
     void deleteComplexCategoryLevel( [in] long nLevel );
 };

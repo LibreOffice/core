@@ -43,7 +43,7 @@ module com { module sun { module star { module accessibility {
     expose all actions that it can perform.  Each action can be performed or
     be queried for a description or associated key bindings.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleAction : ::com::sun::star::uno::XInterface
 {

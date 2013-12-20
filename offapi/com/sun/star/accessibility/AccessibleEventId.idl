@@ -36,7 +36,7 @@ module com { module sun { module star { module accessibility {
     @see AccessibleEventObject
     @see XAccessibleEventListener
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published constants AccessibleEventId
 {
@@ -365,7 +365,7 @@ published constants AccessibleEventId
         <member>AccessibleEventObject::OldValue</member> is empty.
         <member>AccessibleEventObject::NewValue</member> contains the expanded list box entry.
 
-        @since OOo 3.2
+        @since OpenOffice 3.2
     */
     const short LISTBOX_ENTRY_EXPANDED = 32;
 
@@ -373,7 +373,7 @@ published constants AccessibleEventId
         <member>AccessibleEventObject::OldValue</member> is empty.
         <member>AccessibleEventObject::NewValue</member> contains the collapsed list box entry.
 
-        @since OOo 3.2
+        @since OpenOffice 3.2
     */
     const short LISTBOX_ENTRY_COLLAPSED = 33;
 

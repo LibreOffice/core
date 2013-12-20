@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
     numerical value like scroll bars and spin boxes.  This interface lets
     you access the value and its upper and lower bounds.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleValue : ::com::sun::star::uno::XInterface
 {

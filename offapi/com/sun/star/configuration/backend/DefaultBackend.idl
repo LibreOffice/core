@@ -40,7 +40,7 @@ module com { module sun { module star { module configuration { module backend {
 
     <p>This object is accessible as singleton within the context</p>.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 service DefaultBackend
 {

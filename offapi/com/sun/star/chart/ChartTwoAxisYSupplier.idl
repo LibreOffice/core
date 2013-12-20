@@ -71,7 +71,7 @@ published service ChartTwoAxisYSupplier
 
         @see ChartTitle
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     [optional, property] boolean HasSecondaryYAxisTitle;
 

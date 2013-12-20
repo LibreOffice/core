@@ -75,7 +75,7 @@ module com { module sun { module star { module accessibility {
     selection.  An empty selection is used for example to express the
     current cursor position.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleText : ::com::sun::star::uno::XInterface
 {

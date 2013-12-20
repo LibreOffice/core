@@ -39,7 +39,7 @@ module backend {
         will also fail.
     </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published exception ConnectionLostException : BackendAccessException {
 } ;

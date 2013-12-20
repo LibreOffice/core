@@ -35,7 +35,7 @@
 
 <p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
 
-@since OOo 3.4
+@since OpenOffice 3.4
 */
 
 published interface XDateCategories

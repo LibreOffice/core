@@ -48,7 +48,7 @@ module com { module sun { module star { module configuration { module backend {
   <p>An updatable layer can be read or replaced with another layer.
   </p>
 
-  @since OOo 1.1.2
+  @since OpenOffice 1.1.2
   */
 published service UpdatableLayer
 {

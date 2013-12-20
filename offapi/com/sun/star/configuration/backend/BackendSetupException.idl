@@ -36,7 +36,7 @@ module backend {
   backend fails.
   <p>Indicates an error that originates in the underlying access layer.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published exception BackendSetupException : ::com::sun::star::configuration::CannotLoadConfigurationException {
 
