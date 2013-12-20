@@ -215,6 +215,7 @@ ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponen
     ,maContainerListeners( *this )
     ,maChangeListeners ( GetMutex() )
     ,mbGroupsUpToDate( sal_False )
+    ,m_bEnabled( sal_True )
 {
 }
 
@@ -801,7 +802,6 @@ OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star:
     OUString sTitle;
     xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
     return sTitle;
-    //return m_sTitle;
 }
 void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {

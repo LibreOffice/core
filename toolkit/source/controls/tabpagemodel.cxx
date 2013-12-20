@@ -70,8 +70,6 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_TITLE );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
-    ImplRegisterProperty( BASEPROPERTY_ENABLED );
 }
 
 OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException)
@@ -156,9 +154,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
                 Reference<XPropertySet> xThis(*this,UNO_QUERY);
                 xThis->setPropertyValue(s_sResourceResolver,xDialogProp->getPropertyValue(s_sResourceResolver));
                 xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)));
-                xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL)));
                 xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_HELPTEXT),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_HELPTEXT)));
-                xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)));
                 xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_HELPURL),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_HELPURL)));
             }
         }

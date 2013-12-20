@@ -84,11 +84,10 @@ protected:
     AllGroups                           maGroups;
     sal_Bool                            mbGroupsUpToDate;
 
-    bool                                    m_bEnabled;
-    OUString                         m_sTitle;
+    sal_Bool                         m_bEnabled;
     OUString                         m_sImageURL;
     OUString                         m_sTooltip;
-    sal_Int16                               m_nTabPageId;
+    sal_Int16                        m_nTabPageId;
 
     void    Clone_Impl(ControlModelContainerBase& _rClone) const;
 protected:
