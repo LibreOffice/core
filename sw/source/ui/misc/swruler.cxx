@@ -56,7 +56,8 @@ void SwCommentRuler::Paint( const Rectangle& rRect )
 {
     SvxRuler::Paint( rRect );
     // Don't draw if there is not any note
-    if ( mpViewShell->GetPostItMgr()->HasNotes() )
+    if ( mpViewShell->GetPostItMgr()
+         && mpViewShell->GetPostItMgr()->HasNotes() )
         DrawCommentControl();
 }
 
