@@ -1534,7 +1534,7 @@ public:
             DynamicKernelSlidingArgument<VectorRef> *slidingArgPtr =
                 dynamic_cast< DynamicKernelSlidingArgument<VectorRef> *>
                 (mvSubArguments[0].get());
-            cl_mem mpClmem2;
+            cl_mem pClmem2;
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
@@ -1548,7 +1548,7 @@ public:
                     else
                         vclmem.push_back(NULL);
                 }
-                mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
+                pClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                         sizeof(double)*nVectorWidth, NULL, &err);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err);
@@ -1565,7 +1565,7 @@ public:
                     if (CL_SUCCESS != err)
                         throw OpenCLError(err);
                 }
-                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void *)&mpClmem2);
+                err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void *)&pClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err);
 
@@ -1580,8 +1580,8 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err);
 
-                 // Pass mpClmem2 to the "real" kernel
-                err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&mpClmem2);
+                 // Pass pClmem2 to the "real" kernel
+                err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&pClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err);
             }
