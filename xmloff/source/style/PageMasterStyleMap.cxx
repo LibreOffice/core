@@ -24,7 +24,7 @@
 
 using namespace ::xmloff::token;
 
-#define MAP(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version }
+#define MAP(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
 #define PLMAP(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_010)
 #define PLMAP_12(name,prefix,token,type,context) \
@@ -186,7 +186,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterBackGraphicURL",      XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,           XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_FOOTERGRAPHICURL ),
     HFMAP( "FooterDynamicSpacing",        XML_NAMESPACE_STYLE,    XML_DYNAMIC_SPACING,           XML_TYPE_BOOL,          CTF_PM_FOOTERFLAG ),
 
-    { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010 }
+    { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

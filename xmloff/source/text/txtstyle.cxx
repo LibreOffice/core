@@ -128,7 +128,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
                 GetXMLToken(XML_TABLE),
                 new XMLTextExportPropertySetMapper(
                     new XMLTextPropertySetMapper(
-                        TEXT_PROP_MAP_TABLE_DEFAULTS ),
+                        TEXT_PROP_MAP_TABLE_DEFAULTS, true ),
                     GetExport() ) );
 
             exportDefaultStyle(
@@ -136,7 +136,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
                 GetXMLToken(XML_TABLE_ROW),
                 new XMLTextExportPropertySetMapper(
                     new XMLTextPropertySetMapper(
-                        TEXT_PROP_MAP_TABLE_ROW_DEFAULTS ),
+                        TEXT_PROP_MAP_TABLE_ROW_DEFAULTS, true ),
                     GetExport() ) );
         }
     }

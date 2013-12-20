@@ -677,7 +677,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
     case XML_STYLE_FAMILY_SCH_CHART_ID:
         if( ! mxChartImpPropMapper.is() )
         {
-            XMLPropertySetMapper *pPropMapper = new XMLChartPropertySetMapper();
+            XMLPropertySetMapper *pPropMapper = new XMLChartPropertySetMapper( false );
             mxChartImpPropMapper = new XMLChartImportPropertyMapper( pPropMapper, GetImport() );
         }
         xMapper = mxChartImpPropMapper;
@@ -686,7 +686,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         if( ! mxPageImpPropMapper.is() )
         {
             XMLPropertySetMapper *pPropMapper =
-                new XMLPageMasterPropSetMapper();
+                new XMLPageMasterPropSetMapper( false );
             mxPageImpPropMapper =
                 new PageMasterImportPropertyMapper( pPropMapper,
                                     ((SvXMLStylesContext*)this)->GetImport() );

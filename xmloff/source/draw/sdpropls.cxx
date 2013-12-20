@@ -72,14 +72,14 @@ using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
-#define _MAPV(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version }
+#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define _MAPV(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
 #define GMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
 #define GMAPV(name,prefix,token,type,context,version) _MAPV(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context,version)
 #define DPMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
-#define MAP_END() { 0L, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010}
+#define MAP_END() { 0L, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
 
 //////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
@@ -1180,8 +1180,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
-: XMLPropertySetMapper( aXMLSDProperties, rFactoryRef )
+XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef,
+        bool bForExport)
+: XMLPropertySetMapper( aXMLSDProperties, rFactoryRef, bForExport )
 {
 }
 
