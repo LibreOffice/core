@@ -5309,13 +5309,13 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
 
         if (mnDPIScaleFactor > 1)
         {
-            nStartY++; //Shift down an additional pixel to create more visual separation.
             nWaveHeight *= mnDPIScaleFactor;
 
-            //5 pixels looks better than 6.
-            if (mnDPIScaleFactor == 2 && nWaveHeight == 6)
+            // odd heights look better than even
+            if (mnDPIScaleFactor % 2 == 0)
             {
-                nWaveHeight = 5;
+                nStartY++; // Shift down an additional pixel to create more visual separation.
+                nWaveHeight--;
             }
         }
     }
