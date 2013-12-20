@@ -1614,7 +1614,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     // The latter method was previously used by the doc/docx import filter.
     // In both of these cases, we emit a single Word section with different
     // first page header/footer.
-    const SwFrmFmt* pPdFirstPgFmt = &pPd->GetFirst();
+    const SwFrmFmt* pPdFirstPgFmt = &pPd->GetFirstMaster();
     bool titlePage = !pPd->IsFirstShared();
     if ( bOutPgDscSet )
     {

@@ -157,7 +157,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             }
             if( !rNewDesc.IsFirstShared() )
             {
-                pFormat = new SwFrmFmt( *rNewDesc.GetFirst().GetHeader().GetHeaderFmt() );
+                pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFmt() );
                 // The Ctor of this object will remove the duplicate!
                 SwFmtHeader aFormatHeader( pFormat );
             }
@@ -176,7 +176,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             }
             if( !rNewDesc.IsFirstShared() )
             {
-                pFormat = new SwFrmFmt( *rNewDesc.GetFirst().GetFooter().GetFooterFmt() );
+                pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFmt() );
                 // The Ctor of this object will remove the duplicate!
                 SwFmtFooter aFormatFooter( pFormat );
             }
