@@ -197,7 +197,7 @@ static const GLfloat g_color_buffer_data[] = {
     0.982f,  0.099f,  0.879f
 };
 #endif
-int static checkGLError(char *file, int line)
+int static checkGLError(const char *file, int line)
 {
     GLenum glErr;
     int    retCode = 0;
@@ -219,6 +219,13 @@ int static checkGLError(char *file, int line)
 
 
 #define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
+
+#define CHECK_GL_FRAME_BUFFER_STATUS() \
+    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);\
+    if( status != GL_FRAMEBUFFER_COMPLETE ) {\
+    printf(" error at line(%d) '%d'\n", __LINE__, status );\
+    return -1;\
+    }
 
 GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentShader)
 {
@@ -439,7 +446,8 @@ int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArrayS
     //create render buffer object
     CreateRenderObj(m_iWidth, m_iHeight);
     //create fbo
-    CreateFrameBufferObj();
+    if ( CreateFrameBufferObj() !=0 )
+        return -1;
     //fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertexArraySize, vertexArray, GL_STATIC_DRAW);
@@ -487,12 +495,8 @@ int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArrayS
     glDisableVertexAttribArray(m_VertexID);
     glDisableVertexAttribArray(m_ColorID);
     glUseProgram(0);
-    int result = 0;
-    GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if( fbResult != GL_FRAMEBUFFER_COMPLETE )
-    {
-        result = -1;
-    }
+    GLenum status;
+    CHECK_GL_FRAME_BUFFER_STATUS();
 #if 0
     sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
     CreateBMPHeader(buf, m_iWidth, -m_iHeight);
@@ -515,12 +519,12 @@ int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArrayS
     Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
     size_t nCurPos = 0;
-    for( size_t y = 0; y < m_iHeight; ++y)
+    for( int y = 0; y < m_iHeight; ++y)
     {
         Scanline pScan = pWriteAccess->GetScanline(y);
         Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
 
-        for( size_t x = 0; x < m_iWidth; ++x )
+        for( int x = 0; x < m_iWidth; ++x )
         {
             *pScan++ = buf[nCurPos];
             *pScan++ = buf[nCurPos+1];
@@ -588,7 +592,8 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
         //create render buffer object
         CreateRenderObj(m_iWidth, m_iHeight);
         //create fbo
-        CreateFrameBufferObj();
+        if ( CreateFrameBufferObj() !=0 )
+            return -1;
     }
     //bind fbo
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
@@ -633,12 +638,8 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
         free(pointList.pointBuf);
     }
     m_iPointNum = 0;
-    int result = 0;
-    GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if( fbResult != GL_FRAMEBUFFER_COMPLETE )
-    {
-        result = -1;
-    }
+    GLenum status;
+    CHECK_GL_FRAME_BUFFER_STATUS();
 #if 0
     sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
     CreateBMPHeader(buf, m_iWidth, m_iHeight);
@@ -651,21 +652,21 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf.get());
     BitmapEx aBmp;
-    aBmp.Expand(m_iWidth, m_iHeight);
+    aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
 
-    Bitmap aBitmap( Size( m_iWidth, m_iHeight ), 24 );
-    Bitmap aAlpha( Size( m_iWidth, m_iHeight ), 24 );
+    Bitmap aBitmap( aBmp.GetBitmap() );
+    Bitmap aAlpha( aBmp.GetAlpha().GetBitmap() );
 
     Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
     Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
     size_t nCurPos = 0;
-    for( size_t y = 0; y < m_iHeight; ++y)
+    for( int y = 0; y < m_iHeight; ++y)
     {
         Scanline pScan = pWriteAccess->GetScanline(y);
         Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
 
-        for( size_t x = 0; x < m_iWidth; ++x )
+        for( int x = 0; x < m_iWidth; ++x )
         {
             *pScan++ = buf[nCurPos];
             *pScan++ = buf[nCurPos+1];
@@ -847,32 +848,32 @@ int OpenGLRender::CreateFrameBufferObj()
     GLenum status;
     // create a framebuffer object, you need to delete them when program exits.
     glGenFramebuffers(1, &m_FboID[0]);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_FRAME_BUFFER_STATUS();
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
     glBindTexture(GL_TEXTURE_2D, m_TextureObj[0]);
     // attach a texture to FBO color attachement point
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[0], 0);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_FRAME_BUFFER_STATUS();
     glBindTexture(GL_TEXTURE_2D, 0);
     // attach a renderbuffer to depth attachment point
     glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[0]);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[0]);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_FRAME_BUFFER_STATUS();
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glGenFramebuffers(1, &m_FboID[1]);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_FRAME_BUFFER_STATUS();
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[1]);
     glBindTexture(GL_TEXTURE_2D, m_TextureObj[1]);
     // attach a texture to FBO color attachement point
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[1], 0);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_FRAME_BUFFER_STATUS();
     glBindTexture(GL_TEXTURE_2D, 0);
     // attach a renderbuffer to depth attachment point
     glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[1]);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[1]);
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    CHECK_GL_FRAME_BUFFER_STATUS();
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
