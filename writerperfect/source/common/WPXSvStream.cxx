@@ -365,10 +365,9 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 
     mpImpl->invalidateReadBuffer();
 
-    int retVal2 = mpImpl->seek(tmpOffset);
-    if (retVal)
-        return retVal;
-    return retVal2;
+    if (mpImpl->seek(tmpOffset))
+        return -1;
+    return retVal;
 }
 
 bool WPXSvInputStream::atEOS()
