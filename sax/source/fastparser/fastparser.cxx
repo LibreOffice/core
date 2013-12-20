@@ -528,6 +528,47 @@ Event& Entity::getEvent( CallbackType aType )
     return rEvent;
 }
 
+OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
+{
+    const sal_Char* pMessage = "";
+    switch( xmlE )
+    {
+        case XML_ERROR_NONE:                            pMessage = "No";                                    break;
+        case XML_ERROR_NO_MEMORY:                       pMessage = "no memory";                             break;
+        case XML_ERROR_SYNTAX:                          pMessage = "syntax";                                break;
+        case XML_ERROR_NO_ELEMENTS:                     pMessage = "no elements";                           break;
+        case XML_ERROR_INVALID_TOKEN:                   pMessage = "invalid token";                         break;
+        case XML_ERROR_UNCLOSED_TOKEN:                  pMessage = "unclosed token";                        break;
+        case XML_ERROR_PARTIAL_CHAR:                    pMessage = "partial char";                          break;
+        case XML_ERROR_TAG_MISMATCH:                    pMessage = "tag mismatch";                          break;
+        case XML_ERROR_DUPLICATE_ATTRIBUTE:             pMessage = "duplicate attribute";                   break;
+        case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:          pMessage = "junk after doc element";                break;
+        case XML_ERROR_PARAM_ENTITY_REF:                pMessage = "parameter entity reference";            break;
+        case XML_ERROR_UNDEFINED_ENTITY:                pMessage = "undefined entity";                      break;
+        case XML_ERROR_RECURSIVE_ENTITY_REF:            pMessage = "recursive entity reference";            break;
+        case XML_ERROR_ASYNC_ENTITY:                    pMessage = "async entity";                          break;
+        case XML_ERROR_BAD_CHAR_REF:                    pMessage = "bad char reference";                    break;
+        case XML_ERROR_BINARY_ENTITY_REF:               pMessage = "binary entity reference";               break;
+        case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:   pMessage = "attribute external entity reference";   break;
+        case XML_ERROR_MISPLACED_XML_PI:                pMessage = "misplaced xml processing instruction";  break;
+        case XML_ERROR_UNKNOWN_ENCODING:                pMessage = "unknown encoding";                      break;
+        case XML_ERROR_INCORRECT_ENCODING:              pMessage = "incorrect encoding";                    break;
+        case XML_ERROR_UNCLOSED_CDATA_SECTION:          pMessage = "unclosed cdata section";                break;
+        case XML_ERROR_EXTERNAL_ENTITY_HANDLING:        pMessage = "external entity reference";             break;
+        case XML_ERROR_NOT_STANDALONE:                  pMessage = "not standalone";                        break;
+        default:;
+    }
+
+    OUStringBuffer aBuffer( '[' );
+    aBuffer.append( sSystemId );
+    aBuffer.append( " line " );
+    aBuffer.append( nLine );
+    aBuffer.append( "]: " );
+    aBuffer.appendAscii( pMessage );
+    aBuffer.append( " error" );
+    return aBuffer.makeStringAndClear();
+}
+
 // throw an exception, but avoid callback if
 // during a threaded produce
 void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
@@ -900,47 +941,6 @@ void FastSaxParserImpl::setEntityResolver(const Reference < XEntityResolver > & 
 void FastSaxParserImpl::setLocale( const Locale & Locale ) throw (RuntimeException)
 {
     maData.maLocale = Locale;
-}
-
-static OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
-{
-    const sal_Char* pMessage = "";
-    switch( xmlE )
-    {
-        case XML_ERROR_NONE:                            pMessage = "No";                                    break;
-        case XML_ERROR_NO_MEMORY:                       pMessage = "no memory";                             break;
-        case XML_ERROR_SYNTAX:                          pMessage = "syntax";                                break;
-        case XML_ERROR_NO_ELEMENTS:                     pMessage = "no elements";                           break;
-        case XML_ERROR_INVALID_TOKEN:                   pMessage = "invalid token";                         break;
-        case XML_ERROR_UNCLOSED_TOKEN:                  pMessage = "unclosed token";                        break;
-        case XML_ERROR_PARTIAL_CHAR:                    pMessage = "partial char";                          break;
-        case XML_ERROR_TAG_MISMATCH:                    pMessage = "tag mismatch";                          break;
-        case XML_ERROR_DUPLICATE_ATTRIBUTE:             pMessage = "duplicate attribute";                   break;
-        case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:          pMessage = "junk after doc element";                break;
-        case XML_ERROR_PARAM_ENTITY_REF:                pMessage = "parameter entity reference";            break;
-        case XML_ERROR_UNDEFINED_ENTITY:                pMessage = "undefined entity";                      break;
-        case XML_ERROR_RECURSIVE_ENTITY_REF:            pMessage = "recursive entity reference";            break;
-        case XML_ERROR_ASYNC_ENTITY:                    pMessage = "async entity";                          break;
-        case XML_ERROR_BAD_CHAR_REF:                    pMessage = "bad char reference";                    break;
-        case XML_ERROR_BINARY_ENTITY_REF:               pMessage = "binary entity reference";               break;
-        case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:   pMessage = "attribute external entity reference";   break;
-        case XML_ERROR_MISPLACED_XML_PI:                pMessage = "misplaced xml processing instruction";  break;
-        case XML_ERROR_UNKNOWN_ENCODING:                pMessage = "unknown encoding";                      break;
-        case XML_ERROR_INCORRECT_ENCODING:              pMessage = "incorrect encoding";                    break;
-        case XML_ERROR_UNCLOSED_CDATA_SECTION:          pMessage = "unclosed cdata section";                break;
-        case XML_ERROR_EXTERNAL_ENTITY_HANDLING:        pMessage = "external entity reference";             break;
-        case XML_ERROR_NOT_STANDALONE:                  pMessage = "not standalone";                        break;
-        default:;
-    }
-
-    OUStringBuffer aBuffer( '[' );
-    aBuffer.append( sSystemId );
-    aBuffer.append( " line " );
-    aBuffer.append( nLine );
-    aBuffer.append( "]: " );
-    aBuffer.appendAscii( pMessage );
-    aBuffer.append( " error" );
-    return aBuffer.makeStringAndClear();
 }
 
 void FastSaxParserImpl::deleteUsedEvents()
