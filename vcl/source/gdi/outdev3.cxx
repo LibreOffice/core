@@ -5306,6 +5306,18 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
         nWaveHeight = 3;
         nStartY++;
         nEndY++;
+
+        if (mnDPIScaleFactor > 1)
+        {
+            nStartY++; //Shift down an additional pixel to create more visual separation.
+            nWaveHeight *= mnDPIScaleFactor;
+
+            //5 pixels looks better than 6.
+            if (mnDPIScaleFactor == 2 && nWaveHeight == 6)
+            {
+                nWaveHeight = 5;
+            }
+        }
     }
     else if( nStyle == WAVE_SMALL )
     {
@@ -5316,13 +5328,13 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
     else // WAVE_FLAT
         nWaveHeight = 1;
 
-     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
-     ImplFontEntry* pFontEntry = mpFontEntry;
-     if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
-         nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
+    // #109280# make sure the waveline does not exceed the descent to avoid paint problems
+    ImplFontEntry* pFontEntry = mpFontEntry;
+    if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
+        nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
 
     ImplDrawWaveLine(nStartX, nStartY, 0, 0,
-            nEndX-nStartX, nWaveHeight * mnDPIScaleFactor,
+            nEndX-nStartX, nWaveHeight,
             mnDPIScaleFactor, nOrientation, GetLineColor());
 
     if( mpAlphaVDev )
