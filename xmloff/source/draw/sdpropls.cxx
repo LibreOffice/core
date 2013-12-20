@@ -1162,8 +1162,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     return pHdl;
 }
 
-XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
-: XMLPropertySetMapper( aXMLSDProperties, rFactoryRef )
+XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef,
+        bool bForExport)
+: XMLPropertySetMapper( aXMLSDProperties, rFactoryRef, bForExport )
 {
 }
 

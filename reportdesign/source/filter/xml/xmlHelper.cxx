@@ -109,7 +109,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 #define MAP_CONST_C_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 ,0, SvtSaveOptions::ODFVER_010, false}
 // -----------------------------------------------------------------------------
-UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat)
+UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat, bool bForExport)
 {
     if ( _bOldFormat )
     {
@@ -132,7 +132,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
             MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
             MAP_END()
         };
-        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory());
+        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
     }
     else
     {
@@ -152,7 +152,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
             MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
             MAP_END()
         };
-        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory());
+        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
     }
 }
 // -----------------------------------------------------------------------------

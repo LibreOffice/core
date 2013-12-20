@@ -376,10 +376,10 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
                         XML_NAMESPACE_REPORT );
 
     m_xPropHdlFactory = new OXMLRptPropHdlFactory;
-    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap(true);
-    m_xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory);
-    m_xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory);
-    m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS );
+    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap(true, false);
+    m_xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory, false);
+    m_xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory, false);
+    m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS, false );
 }
 
 // -----------------------------------------------------------------------------

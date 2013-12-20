@@ -1052,7 +1052,7 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
     msTableName = "local-table";
 
     // create property set mapper
-    mxPropertySetMapper = new XMLChartPropertySetMapper;
+    mxPropertySetMapper = new XMLChartPropertySetMapper( true);
     mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport );
 
     // register chart auto-style family

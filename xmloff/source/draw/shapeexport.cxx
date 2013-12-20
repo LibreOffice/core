@@ -1024,7 +1024,7 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     SvXMLExport& rExport )
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExport );
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, true );
     rExport.GetTextParagraphExport(); // get or create text paragraph export
     SvXMLExportPropertyMapper* pResult =
         new XMLShapeExportPropertyMapper( xMapper, rExport );
@@ -1265,7 +1265,7 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
     if( !mxShapeTableExport.is() )
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
-        UniReference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        UniReference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get(), true ) );
         mrExport.GetTextParagraphExport(); // get or create text paragraph export
         rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, mrExport ) );
         mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );

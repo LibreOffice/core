@@ -836,7 +836,7 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetTableStylesPropertySetMapper
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
     {
-        m_xTableStylesPropertySetMapper = OXMLHelper::GetTableStylesPropertySetMapper();
+        m_xTableStylesPropertySetMapper = OXMLHelper::GetTableStylesPropertySetMapper( false);
     }
     return m_xTableStylesPropertySetMapper;
 }
@@ -845,7 +845,7 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetColumnStylesPropertySetMappe
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
     {
-        m_xColumnStylesPropertySetMapper = OXMLHelper::GetColumnStylesPropertySetMapper();
+        m_xColumnStylesPropertySetMapper = OXMLHelper::GetColumnStylesPropertySetMapper( false);
     }
     return m_xColumnStylesPropertySetMapper;
 }
@@ -854,7 +854,7 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper(
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
     {
-        m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylesPropertySetMapper();
+        m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylesPropertySetMapper( false);
     }
     return m_xCellStylesPropertySetMapper;
 }

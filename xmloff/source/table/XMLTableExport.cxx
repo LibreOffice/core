@@ -149,8 +149,8 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     mxCellExportPropertySetMapper = xExportPropertyMapper;
     mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 
-    mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get() ) );
-    mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get() ) );
+    mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), true ) );
+    mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), true ) );
 
     mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN,
         OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME),

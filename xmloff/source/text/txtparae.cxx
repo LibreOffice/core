@@ -1267,7 +1267,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextFieldStartEnd( "TextFieldStartEnd"  ),
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
-    UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
+    UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, true ));
     xParaPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
 
@@ -1276,7 +1276,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               xParaPropMapper, aPrefix );
 
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT, true );
     xTextPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = GetXMLToken(XML_TEXT);
@@ -1284,7 +1284,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_TEXT, sFamily,
                               xTextPropMapper, aPrefix );
 
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_AUTO_FRAME );
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_AUTO_FRAME, true );
     xAutoFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                                   GetExport() );
     sFamily = XML_STYLE_FAMILY_SD_GRAPHICS_NAME;
@@ -1292,7 +1292,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_FRAME, sFamily,
                               xAutoFramePropMapper, aPrefix );
 
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION, true );
     xSectionPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                              GetExport() );
     sFamily = GetXMLToken( XML_SECTION );
@@ -1300,14 +1300,14 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
                               xSectionPropMapper, aPrefix );
 
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY );
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_RUBY, true );
     xRubyPropMapper = new SvXMLExportPropertyMapper( xPropMapper );
     sFamily = GetXMLToken( XML_RUBY );
     aPrefix = "Ru";
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_RUBY, sFamily,
                               xRubyPropMapper, aPrefix );
 
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
+    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME, true );
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                               GetExport() );
 
@@ -1351,7 +1351,7 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(
         SvXMLExport& rExport )
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE, true );
     return new XMLTextExportPropertySetMapper( xPropMapper, rExport );
 }
 
@@ -1359,7 +1359,7 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateCharExtPropMapper(
         SvXMLExport& rExport)
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT, true );
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
@@ -1367,7 +1367,7 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaExtPropMapper(
         SvXMLExport& rExport)
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA, true );
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
@@ -1375,7 +1375,7 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaDefaultExtPropMappe
         SvXMLExport& rExport)
 {
     XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS, true );
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 

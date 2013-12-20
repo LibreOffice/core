@@ -25,10 +25,11 @@
 class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
 public:
-                        XMLPageMasterPropSetMapper();
+                        XMLPageMasterPropSetMapper( bool bForExport );
                         XMLPageMasterPropSetMapper(
                             const XMLPropertyMapEntry* pEntries,
-                            const UniReference< XMLPropertyHandlerFactory >& rFactory );
+                            const UniReference< XMLPropertyHandlerFactory >& rFactory,
+                            bool bForExport );
     virtual             ~XMLPageMasterPropSetMapper();
 };
 

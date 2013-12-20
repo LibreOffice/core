@@ -157,7 +157,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     xPageMasterPropHdlFactory = new XMLPageMasterPropHdlFactory;
     xPageMasterPropSetMapper = new XMLPageMasterPropSetMapper(
                                 (XMLPropertyMapEntry*) aXMLPageMasterStyleMap,
-                                xPageMasterPropHdlFactory  );
+                                xPageMasterPropHdlFactory, true );
     xPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(
                                     xPageMasterPropSetMapper, rExp);
 

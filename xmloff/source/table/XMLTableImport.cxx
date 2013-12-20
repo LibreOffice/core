@@ -184,10 +184,10 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     mxCellImportPropertySetMapper = new SvXMLImportPropertyMapper( xCellPropertySetMapper.get(), rImport );
     mxCellImportPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImport));
 
-    UniReference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get() ) );
+    UniReference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), false ) );
     mxRowImportPropertySetMapper = new SvXMLImportPropertyMapper( xRowMapper, rImport );
 
-    UniReference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get() ) );
+    UniReference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), false ) );
     mxColumnImportPropertySetMapper = new SvXMLImportPropertyMapper( xColMapper, rImport );
 }
 

@@ -270,23 +270,23 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext,sal_uInt
 
     m_xPropHdlFactory = new OXMLRptPropHdlFactory();
     UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
-    UniReference < XMLPropertySetMapper > xTableStylesPropertySetMapper1 = new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(),xFac);
-    UniReference < XMLPropertySetMapper > xTableStylesPropertySetMapper2 = new XMLTextPropertySetMapper(TEXT_PROP_MAP_TABLE_DEFAULTS );
+    UniReference < XMLPropertySetMapper > xTableStylesPropertySetMapper1 = new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(),xFac, true);
+    UniReference < XMLPropertySetMapper > xTableStylesPropertySetMapper2 = new XMLTextPropertySetMapper(TEXT_PROP_MAP_TABLE_DEFAULTS, true );
     xTableStylesPropertySetMapper1->AddMapperEntry(xTableStylesPropertySetMapper2);
 
     m_xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper1);
 
-    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap();
+    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap( false, true);
     m_xCellStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(m_xCellStylesPropertySetMapper);
     m_xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
-    UniReference < XMLPropertySetMapper > xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory);
+    UniReference < XMLPropertySetMapper > xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory, true);
     m_xColumnStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
 
-    UniReference < XMLPropertySetMapper > xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory);
+    UniReference < XMLPropertySetMapper > xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory, true);
     m_xRowStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(xRowStylesPropertySetMapper);
 
-    UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
+    UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, true ));
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
