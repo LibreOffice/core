@@ -1325,6 +1325,12 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
      ss << "    return 0.5 * log(1 + 2 * pown(arg0 - 1.0, -1));\n";
      ss << "}";
 }
+void OpArcSin::BinInlineFun(std::set<std::string>& decls,
+    std::set<std::string>& funs)
+{
+    decls.insert(atan2Decl);
+    funs.insert(atan2Content);
+}
 void OpArcSin::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string sSymName, SubArguments &vSubArguments)
 {
@@ -1349,7 +1355,7 @@ void OpArcSin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    else \n    ";
 #endif
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-    ss << "    return asin(tmp);\n";
+    ss << "    return arctan2(tmp, sqrt(1.0 - pow(tmp, 2)));\n";
     ss << "}";
 }
 void OpArcSinHyp::GenSlidingWindowFunction(std::stringstream &ss,
