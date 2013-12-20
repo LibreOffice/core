@@ -101,7 +101,7 @@ public class SdLayerManager extends TestCase {
     *      {@link ifc.drawing._XLayerManager}(the created shape)</li>
     *  <li> <code>'Shapes'</code> for
     *      {@link ifc.drawing._XLayerManager}(the shape collection of
-    *      the retrived draw page)</li>
+    *      the retrieved draw page)</li>
     * </ul>
     * @see com.sun.star.drawing.XLayerSupplier
     * @see com.sun.star.drawing.LayerManager

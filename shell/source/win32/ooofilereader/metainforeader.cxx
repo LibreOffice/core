@@ -130,7 +130,7 @@ CMetaInfoReader::~CMetaInfoReader( void )
 /** check if the Tag is in the target meta.xml file.
 
     @param TagName
-    the name of the tag that will be retrive.
+    the name of the tag that will be retrieve.
 */
 bool CMetaInfoReader::hasTag( std::wstring TagName ) const
 {
@@ -140,7 +140,7 @@ bool CMetaInfoReader::hasTag( std::wstring TagName ) const
 /** Get a specific tag content, compound tags will be returned as comma separated list.
 
     @param TagName
-    the name of the tag that will be retrive.
+    the name of the tag that will be retrieve.
 */
 std::wstring CMetaInfoReader::getTagData( const std::wstring& TagName)
 {

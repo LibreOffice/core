@@ -97,7 +97,7 @@ public class ScDDELinksObj extends TestCase {
     * spreadsheets from a document and takes one of them. Sets specific formula
     * to some cells in the spreadsheet(the formula specify DDE links to the
     * testdocument). Retrieves the collection of DDE links in the document.
-    * The retrived collection of DDE link is the instance of the service
+    * The retrieved collection of DDE link is the instance of the service
     * <code>com.sun.star.sheet.DDELinks</code>.
     * @see com.sun.star.frame.Desktop
     * @see com.sun.star.sheet.DDELinks

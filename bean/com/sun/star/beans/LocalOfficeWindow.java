@@ -62,7 +62,7 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives an AWT component object associated with the OfficeWindow.
+     * Retrieves an AWT component object associated with the OfficeWindow.
      *
      * @return The AWT component object associated with the OfficeWindow.
      */
@@ -72,7 +72,7 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives an UNO XWindowPeer object associated with the OfficeWindow.
+     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
      *
      * @return The UNO XWindowPeer object associated with the OfficeWindow.
      */
@@ -238,14 +238,14 @@ public class LocalOfficeWindow
     }
 
     /**
-     * Retrives a platform dependent system window identifier.
+     * Retrieves a platform dependent system window identifier.
      *
      * @return The system window identifier.
      */
     private native long getNativeWindow();
 
     /**
-     * Retrives a platform dependent system window type.
+     * Retrieves a platform dependent system window type.
      *
      * @return The system window type.
      */

@@ -85,7 +85,7 @@ public class ScCellsEnumeration extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document
     * and takes one of them. Replaces text of some cells.
-    * Retrives a cell range of the visible cells using the interface
+    * Retrieves a cell range of the visible cells using the interface
     * <code>XCellRangesQuery</code>. Retrieves a collection of cells from
     * this cell range and creates it's enumeration using the interface
     * <code>XEnumerationAccess</code>.The created enumeration is the instance

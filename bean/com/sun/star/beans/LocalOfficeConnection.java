@@ -136,7 +136,7 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Retrives the UNO component context.
+     * Retrieves the UNO component context.
      * Establishes a connection if necessary and initialises the
      * UNO service manager if it has not already been initialised.
      * This method can return <code>null</code> if it fails to connect
@@ -304,7 +304,7 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Retrives a path to the office program folder.
+     * Retrieves a path to the office program folder.
      *
      * @return The path to the office program folder.
      */
@@ -557,7 +557,7 @@ public class LocalOfficeConnection
         implements NativeService
     {
         /**
-         * Retrive the office service identifier.
+         * Retrieve the office service identifier.
          *
          * @return The identifier of the office service.
          */
@@ -595,7 +595,7 @@ public class LocalOfficeConnection
         }
 
         /**
-         * Retrives the ammount of time to wait for the startup.
+         * Retrieves the ammount of time to wait for the startup.
          *
          * @return The ammount of time to wait in seconds(?).
          */

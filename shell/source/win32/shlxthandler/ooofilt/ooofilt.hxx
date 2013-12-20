@@ -141,8 +141,8 @@ private:
     virtual ~COooFilter();
 
     long                      m_lRefs;                  // Reference count
-    CContentReader *          m_pContentReader;         // A content reader that retrive document content.
-    CMetaInfoReader *         m_pMetaInfoReader;        // A metainfo reader that retrive document metainfo.
+    CContentReader *          m_pContentReader;         // A content reader that retrieves document content.
+    CMetaInfoReader *         m_pMetaInfoReader;        // A metainfo reader that retrieves document metainfo.
     FilterState               m_eState;                 // State of filtering
     ::std::wstring            m_pwszFileName;           // Name of input file to filter
     ULONG                     m_ulUnicodeBufferLen;     // UNICODE Characters read from file to chunk buffer

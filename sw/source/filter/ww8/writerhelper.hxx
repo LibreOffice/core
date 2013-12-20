@@ -274,8 +274,8 @@ namespace sw
             and receiving a SfxPoolItem reference which must then typically be
             cast back to its original type which is both tedious and verbose.
 
-            ItemGet uses item_cast () on the retrived reference to test that the
-            retrived property is of the type that the developer thinks it is.
+            ItemGet uses item_cast () on the retrieved reference to test that the
+            retrieved property is of the type that the developer thinks it is.
 
             @param rNode
             The SwCntntNode to retrieve the property from
@@ -305,8 +305,8 @@ namespace sw
             and receiving a SfxPoolItem reference which must then typically be
             cast back to its original type which is both tedious and verbose.
 
-            ItemGet uses item_cast () on the retrived reference to test that the
-            retrived property is of the type that the developer thinks it is.
+            ItemGet uses item_cast () on the retrieved reference to test that the
+            retrieved property is of the type that the developer thinks it is.
 
             @param rFmt
             The SwFmt to retrieve the property from
@@ -334,8 +334,8 @@ namespace sw
             and receiving a SfxPoolItem reference which must then typically be
             cast back to its original type which is both tedious and verbose.
 
-            ItemGet uses item_cast () on the retrived reference to test that the
-            retrived property is of the type that the developer thinks it is.
+            ItemGet uses item_cast () on the retrieved reference to test that the
+            retrieved property is of the type that the developer thinks it is.
 
             @param rSet
             The SfxItemSet to retrieve the property from
@@ -368,8 +368,8 @@ namespace sw
             DefaultItemGet returns a reference to the default property of a
             given SfxItemPool for a given property id, e.g. default fontsize
 
-            DefaultItemGet uses item_cast () on the retrived reference to test
-            that the retrived property is of the type that the developer thinks
+            DefaultItemGet uses item_cast () on the retrieved reference to test
+            that the retrieved property is of the type that the developer thinks
             it is.
 
             @param rPool
@@ -404,8 +404,8 @@ namespace sw
             given SwDoc (Writer Document) for a given property id, e.g default
             fontsize
 
-            DefaultItemGet uses item_cast () on the retrived reference to test
-            that the retrived property is of the type that the developer thinks
+            DefaultItemGet uses item_cast () on the retrieved reference to test
+            that the retrieved property is of the type that the developer thinks
             it is.
 
             @param rPool
@@ -441,8 +441,8 @@ namespace sw
             property id if it exists in the SfxItemSet or its chain of parents,
             e.g. fontsize
 
-            HasItem uses item_cast () on the retrived pointer to test that the
-            retrived property is of the type that the developer thinks it is.
+            HasItem uses item_cast () on the retrieved pointer to test that the
+            retrieved property is of the type that the developer thinks it is.
 
             @param rSet
             The SfxItemSet whose property we want
@@ -474,8 +474,8 @@ namespace sw
             HasItem returns a pointer to the requested SfxPoolItem for a given
             property id if it exists in the SwFmt e.g. fontsize
 
-            HasItem uses item_cast () on the retrived pointer to test that the
-            retrived property is of the type that the developer thinks it is.
+            HasItem uses item_cast () on the retrieved pointer to test that the
+            retrieved property is of the type that the developer thinks it is.
 
             @param rSet
             The SwFmt whose property we want

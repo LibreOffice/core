@@ -240,11 +240,11 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
 
 /** This function gets the string list value of a key.
 
-    @param[in]  hKey identifies a currently open key. The key whose value will be retrived by this
+    @param[in]  hKey identifies a currently open key. The key whose value will be retrieved by this
                  function is a subkey of the key identified by hKey.
     @param[in]  keyName points to a null terminated string specifying the name of a key whose value
-                    will be retrived. If keyName is NULL, then the value of the key specified by
-                    hKey will be retrived.
+                    will be retrieved. If keyName is NULL, then the value of the key specified by
+                    hKey will be retrieved.
     @param[out]  pValueList a Pointer to an ascii value list which returns the data of the value.
     @param[out]  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
@@ -257,11 +257,11 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKe
 
 /** This function gets the unicode list value of a key.
 
-    @param[in]  hKey identifies a currently open key. The key whose value will be retrived by this
+    @param[in]  hKey identifies a currently open key. The key whose value will be retrieved by this
                  function is a subkey of the key identified by hKey.
     @param[in]  keyName points to a null terminated string specifying the name of a key whose value
-                    will be retrived. If keyName is NULL, then the value of the key specified by
-                    hKey will be retrived.
+                    will be retrieved. If keyName is NULL, then the value of the key specified by
+                    hKey will be retrieved.
     @param[out]  pValueList a Pointer to an unicode value list which returns the data of the value.
     @param[out]  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.

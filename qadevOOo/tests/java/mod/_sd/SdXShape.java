@@ -103,11 +103,11 @@ public class SdXShape extends TestCase {
     * <ul>
     *  <li> <code>'Style1'</code> for
     *      {@link ifc.drawing._XShapeDescriptor}, {@link ifc.drawing._XShape}
-    *      (the value of the property 'Style' that was retrived from the created
+    *      (the value of the property 'Style' that was retrieved from the created
     *      rectangle shape) </li>
     *  <li> <code>'Style2'</code> for
     *      {@link ifc.drawing._XShapeDescriptor}, {@link ifc.drawing._XShape}
-    *      (the value of the property 'Style' that was retrived from the created
+    *      (the value of the property 'Style' that was retrieved from the created
     *      ellipse shape) </li>
     * </ul>
     * @see com.sun.star.drawing.XDrawPagesSupplier

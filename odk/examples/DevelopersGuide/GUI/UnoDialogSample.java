@@ -217,7 +217,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     public String getImageUrl(String _sRegistryPath, String _sImageName) {
         String sImageUrl = "";
         try {
-            // retrive the configuration node of the extension
+            // retrieve the configuration node of the extension
             XNameAccess xNameAccess = getRegistryKeyContent(_sRegistryPath);
             if (xNameAccess != null){
                 if (xNameAccess.hasByName(_sImageName)){

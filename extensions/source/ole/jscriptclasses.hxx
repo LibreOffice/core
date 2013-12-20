@@ -36,7 +36,7 @@
 // "InitInOutParam"
 
 // If the object represents an out parameter then the value can after the call
-// be retrived by "Get".
+// be retrieved by "Get".
 
 // From JavaScript the functions Get, Set, InitOutParam and InitInOutParam are
 // used, that is they are accessible through IDispatch. The functions are used

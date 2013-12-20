@@ -5579,7 +5579,7 @@ namespace osl_Directory
             nError1 = testDirectory.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrive three items and check their names.",
+            CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrieve three items and check their names.",
                                     ( sal_True == bOk1 ) && ( sal_True == bOk2 ) && ( sal_True == bOk3 ) );
         }
 
@@ -5588,7 +5588,7 @@ namespace osl_Directory
              ::osl::Directory testDirectory( aTmpName3 ); //constructor
             nError1 = testDirectory.getNextItem( rItem );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrive an item in a directory which is not opened, also test for nHint's default value.",
+            CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrieve an item in a directory which is not opened, also test for nHint's default value.",
                                     ( ::osl::FileBase::E_INVAL == nError1 ) );
         }
 
@@ -5609,7 +5609,7 @@ namespace osl_Directory
             nError1 = testDirectory.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrive 4 times in a directory which contain only 3 files.",
+            CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrieve 4 times in a directory which contain only 3 files.",
                                     ( ::osl::FileBase::E_NOENT == nError2 ) );
         }
 

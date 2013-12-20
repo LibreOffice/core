@@ -41,7 +41,7 @@ public class OpenOfficeDocFileSystemBeanInfo
         ICONLOCATION + File.separator + "OpenOfficeDocFileSystemIcon32.png";
 
     /**
-     * Retrives an additional bean information.
+     * Retrieves an additional bean information.
      */
     public BeanInfo[] getAdditionalBeanInfo()
     {
@@ -64,7 +64,7 @@ public class OpenOfficeDocFileSystemBeanInfo
     }
 */
     /**
-     * Retrives bean property descriptors.
+     * Retrieves bean property descriptors.
      */
     public PropertyDescriptor[] getPropertyDescriptors()
     {
@@ -99,7 +99,7 @@ public class OpenOfficeDocFileSystemBeanInfo
     }
 
     /**
-     * Retrives an icon by the icon type.
+     * Retrieves an icon by the icon type.
      */
     public Image getIcon(int type)
     {

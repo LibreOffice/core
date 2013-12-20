@@ -583,35 +583,35 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 #endif
 
     /// print the information.
-    t_print("#\n#Retrived system information is below:\n");
+    t_print("#\n#Retrieved system information is below:\n");
 
     t_print("Computer Name:              ");
     if ( strComputerName.isEmpty())
-        t_print("Not retrived\n" );
+        t_print("Not retrieved\n" );
     else
         printUString( strComputerName );
 
     t_print("Current User Name:          ");
     if ( strUserName.isEmpty())
-        t_print("Not retrived\n" );
+        t_print("Not retrieved\n" );
     else
         printUString( strUserName );
 
     t_print("Current User Home Directory:");
     if ( strHomeDirectory.isEmpty())
-        t_print("Not retrived\n" );
+        t_print("Not retrieved\n" );
     else
         printUString( strHomeDirectory );
 
     t_print("Current Config Directory:   ");
     if ( strConfigDirectory.isEmpty())
-        t_print("Not retrived\n" );
+        t_print("Not retrieved\n" );
     else
         printUString( strConfigDirectory );
 
     t_print("Current UserID:             ");
     if ( strUserID.isEmpty())
-        t_print("Not retrived\n" );
+        t_print("Not retrieved\n" );
     else
         printUString( strUserID );
 

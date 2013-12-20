@@ -49,7 +49,7 @@ public interface OfficeConnection
     void setContainerFactory(ContainerFactory containerFactory);
 
     /**
-     * Retrives the UNO component context.
+     * Retrieves the UNO component context.
      * Establishes a connection if necessary and initialises the
      * UNO service manager if it has not already been initialised.
      *

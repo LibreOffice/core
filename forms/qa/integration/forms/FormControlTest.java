@@ -491,7 +491,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     }
 
     /* ------------------------------------------------------------------ */
-    /** retrives the control model with the given name
+    /** retrieves the control model with the given name
     */
     private XPropertySet getControlModel( String name ) throws com.sun.star.uno.Exception, java.lang.Exception
     {

@@ -89,7 +89,7 @@ public class ScCellsObj extends TestCase {
     * Creating a Testenvironment for the interfaces to be tested.
     * Retrieves a collection of spreadsheets from a document,
     * and takes one of them. Replaces text of some cells.
-    * Retrives a cell range of the visible cells using the interface
+    * Retrieves a cell range of the visible cells using the interface
     * <code>XCellRangesQuery</code>. Retrieves a collection of cells from
     * this cell range, this collection is instance of the service
     * <code>com.sun.star.sheet.Cells</code>.

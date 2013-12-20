@@ -1499,7 +1499,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ILLEGAL_MOVEMENT, *this );
 
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
-    sal_Int32  nRetrivedRows = currentRowCount();
+    sal_Int32  nRetrievedRows = currentRowCount();
     sal_Int32  nCurPos = m_nRowPos;
 
     OSL_TRACE("seekRow: nCurPos = %d", nCurPos );
@@ -1521,7 +1521,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 
         case LAST_POS:
             OSL_TRACE("seekRow: LAST");
-            nCurPos = nRetrivedRows;
+            nCurPos = nRetrievedRows;
             break;
         case ABSOLUTE_POS:
             OSL_TRACE("seekRow: ABSOLUTE : %d", nOffset);
@@ -1543,7 +1543,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     {
         nCurCard = (m_pKeySet->get())[nCurPos-1];
     }
-    else    //The requested row has not been retrived until now. We should get the right card for it.
+    else    //The requested row has not been retrieved until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
 
     if ( nCurCard > nNumberOfRecords) {
@@ -1552,7 +1552,7 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
         OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
         return sal_False;
     }
-    //Insert new retrived items for later use
+    //Insert new retrieved items for later use
     fillKeySet(nNumberOfRecords);
     m_nRowPos = (sal_uInt32)nCurPos;
     OSL_TRACE("seekRow: return True, m_nRowPos = %u", m_nRowPos );

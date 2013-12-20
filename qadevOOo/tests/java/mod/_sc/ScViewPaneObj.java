@@ -97,7 +97,7 @@ public class ScViewPaneObj extends TestCase {
      * Retieves the current controller of the spreadsheet document using the
      * interface <code>XModel</code>. The controller contains the collection
      * of the view panes so retrieves the view pane with index 0 from
-     * the collection. The retrived view pane is the instance of the service
+     * the collection. The retrieved view pane is the instance of the service
      * <code>com.sun.star.sheet.SpreadsheetViewPane</code>. Retrieves the address
      * of the cell range that consists of the cells which are visible in the pane.
      * Object relations created :
