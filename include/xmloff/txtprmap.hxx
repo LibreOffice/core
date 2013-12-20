@@ -193,7 +193,7 @@
 class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper : public XMLPropertySetMapper
 {
 public:
-    XMLTextPropertySetMapper( sal_uInt16 nType );
+    XMLTextPropertySetMapper( sal_uInt16 nType, bool bForExport );
     virtual ~XMLTextPropertySetMapper();
 
     static const XMLPropertyMapEntry* getPropertyMapForType( sal_uInt16 _nType );

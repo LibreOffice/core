@@ -43,6 +43,14 @@ struct XMLPropertyMapEntry
                                                     to im/export the porperty */
     sal_Int16       mnContextId;    /// User defined id for context filtering
     SvtSaveOptions::ODFDefaultVersion   mnEarliestODFVersionForExport;// no export when the used ODF version is lower than this
+
+    /** Flag to specify whether entry is only used during import.
+
+        Allows to handle more than one Namespace/XML-Name to Property-Name
+        mapping, i.e. for extensions. If several entries for the same
+        Property-Name exist, all except one must have this flag set.
+     */
+    bool            mbImportOnly;
 };
 
 ///////////////////////////////////////////////////////////////////////////

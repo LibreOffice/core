@@ -62,7 +62,7 @@ void Test::testAutoStylePool()
     UniReference< SvXMLAutoStylePoolP > xPool(
         new SvXMLAutoStylePoolP( *pExport ) );
     UniReference< XMLPropertySetMapper > xSetMapper(
-        new XMLChartPropertySetMapper );
+        new XMLChartPropertySetMapper( true) );
     UniReference< XMLChartExportPropertyMapper > xExportPropMapper(
         new XMLChartExportPropertyMapper( xSetMapper, *pExport ) );
 

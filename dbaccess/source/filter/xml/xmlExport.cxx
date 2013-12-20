@@ -232,7 +232,7 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
     m_xColumnExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
 
     m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
-    m_xRowExportHelper = new OSpecialHanldeXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper());
+    m_xRowExportHelper = new OSpecialHanldeXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper( true));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
@@ -1401,7 +1401,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
     {
-        m_xTableStylesPropertySetMapper = OXMLHelper::GetTableStylesPropertySetMapper();
+        m_xTableStylesPropertySetMapper = OXMLHelper::GetTableStylesPropertySetMapper( true);
     }
     return m_xTableStylesPropertySetMapper;
 }
@@ -1410,7 +1410,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper(
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
     {
-        m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylesPropertySetMapper();
+        m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylesPropertySetMapper( true);
     }
     return m_xCellStylesPropertySetMapper;
 }
@@ -1419,7 +1419,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetColumnStylesPropertySetMappe
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
     {
-        m_xColumnStylesPropertySetMapper = OXMLHelper::GetColumnStylesPropertySetMapper();
+        m_xColumnStylesPropertySetMapper = OXMLHelper::GetColumnStylesPropertySetMapper( true);
     }
     return m_xColumnStylesPropertySetMapper;
 }

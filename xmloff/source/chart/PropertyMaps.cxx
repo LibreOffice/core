@@ -171,8 +171,8 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
 // ----------------------------------------
 
-XMLChartPropertySetMapper::XMLChartPropertySetMapper() :
-        XMLPropertySetMapper( aXMLChartPropMap, new XMLChartPropHdlFactory )
+XMLChartPropertySetMapper::XMLChartPropertySetMapper( bool bForExport ) :
+        XMLPropertySetMapper( aXMLChartPropMap, new XMLChartPropHdlFactory, bForExport )
 {
 }
 

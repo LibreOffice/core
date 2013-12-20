@@ -40,10 +40,11 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     sXMLAttributeName( GetXMLToken(rMapEntry.meXMLName) ),
     sAPIPropertyName( OUString(rMapEntry.msApiName, rMapEntry.nApiNameLength,
                                RTL_TEXTENCODING_ASCII_US ) ),
-    nXMLNameSpace( rMapEntry.mnNameSpace ),
     nType( rMapEntry.mnType ),
+    nXMLNameSpace( rMapEntry.mnNameSpace ),
     nContextId( rMapEntry.mnContextId ),
     nEarliestODFVersionForExport( rMapEntry.mnEarliestODFVersionForExport ),
+    bImportOnly( rMapEntry.mbImportOnly),
     pHdl( rFactory->GetPropertyHandler( rMapEntry.mnType & MID_FLAG_MASK ) )
 {
 }
@@ -52,10 +53,11 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
         const XMLPropertySetMapperEntry_Impl& rEntry ) :
     sXMLAttributeName( rEntry.sXMLAttributeName),
     sAPIPropertyName( rEntry.sAPIPropertyName),
-    nXMLNameSpace( rEntry.nXMLNameSpace),
     nType( rEntry.nType),
+    nXMLNameSpace( rEntry.nXMLNameSpace),
     nContextId( rEntry.nContextId),
     nEarliestODFVersionForExport( rEntry.nEarliestODFVersionForExport ),
+    bImportOnly( rEntry.bImportOnly),
     pHdl( rEntry.pHdl)
 {
     DBG_ASSERT( pHdl, "Unknown XML property type handler!" );
@@ -67,19 +69,36 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
 //
 XMLPropertySetMapper::XMLPropertySetMapper(
         const XMLPropertyMapEntry* pEntries,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory )
+        const UniReference< XMLPropertyHandlerFactory >& rFactory,
+        bool bForExport )
+    :
+        mbOnlyExportMappings( bForExport)
 {
     aHdlFactories.push_back( rFactory );
     if( pEntries )
     {
         const XMLPropertyMapEntry* pIter = pEntries;
 
-        // count entries
-        while( pIter->msApiName )
+        if (mbOnlyExportMappings)
         {
-            XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
-            aMapEntries.push_back( aEntry );
-            pIter++;
+            while( pIter->msApiName )
+            {
+                if (!pIter->mbImportOnly)
+                {
+                    XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
+                    aMapEntries.push_back( aEntry );
+                }
+                pIter++;
+            }
+        }
+        else
+        {
+            while( pIter->msApiName )
+            {
+                XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
+                aMapEntries.push_back( aEntry );
+                pIter++;
+            }
         }
     }
 }
@@ -104,7 +123,8 @@ void XMLPropertySetMapper::AddMapperEntry(
          aEIter != rMapper->aMapEntries.end();
          ++aEIter )
     {
-        aMapEntries.push_back( *aEIter );
+        if (!mbOnlyExportMappings || !(*aEIter).bImportOnly)
+            aMapEntries.push_back( *aEIter );
     }
 }
 

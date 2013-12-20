@@ -71,21 +71,20 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
     return pHandler;
 }
 // -----------------------------------------------------------------------------
-#define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFVER_010}
-// -----------------------------------------------------------------------------
-UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMapper()
+#define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFVER_010, false}
+UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMapper( bool bForExport )
 {
     static const XMLPropertyMapEntry s_aTableStylesProperties[] =
     {
         MAP_END()
     };
     UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aTableStylesProperties, xFac);
+    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aTableStylesProperties, xFac, bForExport);
 }
 // -----------------------------------------------------------------------------
-UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper()
+UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper( bool bForExport )
 {
-#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFVER_010, false }
     static const XMLPropertyMapEntry s_aColumnStylesProperties[] =
     {
         MAP_CONST_COLUMN( PROPERTY_WIDTH,           XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_MEASURE, 0),
@@ -94,13 +93,13 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapp
         MAP_END()
     };
     UniReference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aColumnStylesProperties, xFac);
+    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aColumnStylesProperties, xFac, bForExport);
 }
 // -----------------------------------------------------------------------------
-UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper()
+UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper( bool bForExport )
 {
-#define MAP_CONST_CELL( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST_TEXT( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_CELL( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010, false }
+#define MAP_CONST_TEXT( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010, false }
     static const XMLPropertyMapEntry s_aCellStylesProperties[] =
     {
         MAP_CONST_CELL( PROPERTY_ALIGN,             XML_NAMESPACE_FO,       XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, CTF_DB_COLUMN_TEXT_ALIGN),
@@ -135,19 +134,19 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper
         MAP_END()
     };
     UniReference < XMLPropertyHandlerFactory> xFac = new /*OPropertyHandlerFactory*/::xmloff::OControlPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aCellStylesProperties, xFac);
+    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aCellStylesProperties, xFac, bForExport);
 }
 // -----------------------------------------------------------------------------
-UniReference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper()
+UniReference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper( bool bForExport )
 {
-#define MAP_CONST_ROW( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_ROW( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFVER_010, false }
     static const XMLPropertyMapEntry s_aStylesProperties[] =
     {
         MAP_CONST_ROW( PROPERTY_ROW_HEIGHT,         XML_NAMESPACE_STYLE,    XML_ROW_HEIGHT,             XML_TYPE_MEASURE, 0),
         MAP_END()
     };
     UniReference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aStylesProperties, xFac);
+    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aStylesProperties, xFac, bForExport);
 }
 // -----------------------------------------------------------------------------
 }
