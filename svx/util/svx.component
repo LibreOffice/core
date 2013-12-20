@@ -19,27 +19,9 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.GraphicExporter"
-      constructor="com_sun_star_comp_Draw_GraphicExporter_implementation_getFactory">
-    <service name="com.sun.star.drawing.GraphicExportFilter"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper"
-      constructor="com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory">
-    <service name="com.sun.star.document.BinaryStreamResolver"/>
-    <service name="com.sun.star.document.GraphicObjectResolver"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper"
-      constructor="com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory">
-    <service name="com.sun.star.document.BinaryStreamResolver"/>
-    <service name="com.sun.star.document.GraphicObjectResolver"/>
-  </implementation>
   <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider"
       constructor="com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory">
     <service name="com.sun.star.gallery.GalleryThemeProvider"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D"
-      constructor="com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory">
-    <service name="com.sun.star.graphic.PrimitiveFactory2D"/>
   </implementation>
   <implementation name="com.sun.star.comp.svx.Impl.FindbarDispatcher"
       constructor="com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory">
