@@ -55,7 +55,10 @@ using namespace ::xmloff::token;
 using namespace ::formula;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+// extensions import/export
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
+// extensions import only
+#define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
@@ -106,7 +109,8 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "UserDefinedAttributes", XML_NAMESPACE_TEXT, XML_XMLNS, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
-    MAP_EXT( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),
+    MAP_EXT( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),       // proposed ODF 1.2+
+    MAP_EXT_I( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_LO_EXT, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),    // extension namespace
     MAP_END()
 };
 
