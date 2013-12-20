@@ -3411,7 +3411,9 @@ MakeObject:
                     }
                     else if (bFirst && !bShareFirst)
                     {
-                        pFrmFmt = &rDesc.GetFirst();
+                        pFrmFmt = &rDesc.GetFirstMaster();
+                        // no need to make GetFirstLeft() accessible
+                        // since it is always shared
                     }
                     else
                     {

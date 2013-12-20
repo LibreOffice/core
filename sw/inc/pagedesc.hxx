@@ -136,7 +136,9 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     SvxNumberType   aNumType;
     SwFrmFmt    aMaster;
     SwFrmFmt    aLeft;
-    SwFrmFmt    aFirst;
+    // FIXME epicycles growing here - page margins need to be stored differently
+    SwFrmFmt    m_FirstMaster;
+    SwFrmFmt    m_FirstLeft;
     SwDepend    aDepend;    ///< Because of grid alignment (Registerhaltigkeit).
     SwPageDesc *pFollow;
     sal_uInt16  nRegHeight; ///< Sentence spacing and fontascent of style.
@@ -191,10 +193,12 @@ public:
 
           SwFrmFmt &GetMaster() { return aMaster; }
           SwFrmFmt &GetLeft()   { return aLeft; }
-          SwFrmFmt &GetFirst()   { return aFirst; }
+          SwFrmFmt &GetFirstMaster()   { return m_FirstMaster; }
+          SwFrmFmt &GetFirstLeft()   { return m_FirstLeft; }
     const SwFrmFmt &GetMaster() const { return aMaster; }
     const SwFrmFmt &GetLeft()   const { return aLeft; }
-    const SwFrmFmt &GetFirst()   const { return aFirst; }
+    const SwFrmFmt &GetFirstMaster()   const { return m_FirstMaster; }
+    const SwFrmFmt &GetFirstLeft()   const { return m_FirstLeft; }
 
     /** Reset all attrs of the format but keep the ones a pagedesc
        cannot live without. */

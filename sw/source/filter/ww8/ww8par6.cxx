@@ -1183,14 +1183,14 @@ void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
     // copy first page header content section
     if( nCode & WW8_HEADER_FIRST )
     {
-        rDoc.CopyHeader(pOrgPageDesc->GetFirst(),
-                        pNewPageDesc->GetFirst());
+        rDoc.CopyHeader(pOrgPageDesc->GetFirstMaster(),
+                        pNewPageDesc->GetFirstMaster());
     }
     // copy first page footer content section
     if( nCode & WW8_FOOTER_FIRST )
     {
-        rDoc.CopyFooter(pOrgPageDesc->GetFirst(),
-                        pNewPageDesc->GetFirst());
+        rDoc.CopyFooter(pOrgPageDesc->GetFirstMaster(),
+                        pNewPageDesc->GetFirstMaster());
     }
 }
 
