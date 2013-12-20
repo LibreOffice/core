@@ -56,8 +56,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace com::sun::star;
+using namespace sax_fastparser;
 
-namespace sax_fastparser {
+namespace {
 
 struct Event;
 class FastLocatorImpl;
@@ -75,12 +76,12 @@ enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEP
 
 struct Event
 {
-    OUString msChars;
+    CallbackType maType;
     sal_Int32 mnElementToken;
     OUString msNamespace;
     OUString msElementName;
     rtl::Reference< FastAttributeList > mxAttributes;
-    CallbackType maType;
+    OUString msChars;
 };
 
 struct NameWithToken
@@ -163,9 +164,13 @@ struct Entity : public ParserData
     XML_Parser                              mpParser;
     ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
 
-    // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
-    // therefore the exception must be saved somewhere.
-    ::com::sun::star::uno::Any              maSavedException;
+    // Exceptions cannot be thrown through the C-XmlParser (possible
+    // resource leaks), therefore any exception thrown by a UNO callback
+    // must be saved somewhere until the C-XmlParser is stopped.
+    ::com::sun::star::uno::Any maSavedException;
+    void saveException( const Exception &e );
+    void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
+                         bool mbDuringParse );
 
     ::std::stack< NameWithToken >           maNamespaceStack;
     /* Context for main thread consuming events.
@@ -186,9 +191,9 @@ struct Entity : public ParserData
     Event& getEvent( CallbackType aType );
 };
 
-// --------------------------------------------------------------------
-// FastSaxParser implementation
-// --------------------------------------------------------------------
+} // namespace
+
+namespace sax_fastparser {
 
 class FastSaxParserImpl
 {
@@ -262,6 +267,10 @@ private:
     FastTokenLookup maTokenLookup;
 };
 
+} // namespace sax_fastparser
+
+namespace {
+
 class ParserThread: public salhelper::Thread
 {
     FastSaxParserImpl *mpParser;
@@ -274,15 +283,14 @@ private:
         {
             mpParser->parse();
         }
-        catch (const SAXParseException&)
+        catch (const Exception &e)
         {
-            mpParser->getEntity().getEvent( EXCEPTION );
+            Entity &rEntity = mpParser->getEntity();
+            rEntity.getEvent( EXCEPTION );
             mpParser->produce( EXCEPTION );
         }
     }
 };
-
-}
 
 extern "C" {
 
@@ -323,8 +331,6 @@ static int call_callbackExternalEntityRef( XML_Parser parser,
 
 }
 
-namespace sax_fastparser {
-
 // --------------------------------------------------------------------
 // FastLocatorImpl
 // --------------------------------------------------------------------
@@ -347,18 +353,6 @@ private:
     FastSaxParserImpl *mpParser;
 };
 
-// --------------------------------------------------------------------
-// FastSaxParser
-// --------------------------------------------------------------------
-
-//---------------------------------------------
-// the implementation part
-//---------------------------------------------
-
-
-// --------------------------------------------------------------------
-// FastLocatorImpl implementation
-// --------------------------------------------------------------------
 
 sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber(void) throw (RuntimeException)
 {
@@ -477,7 +471,7 @@ void Entity::startElement( Event *pEvent )
     }
     catch (const Exception& e)
     {
-        maSavedException <<= e;
+        saveException( e );
     }
 }
 
@@ -490,7 +484,7 @@ void Entity::characters( const OUString& sChars )
     }
     catch (const Exception& e)
     {
-        maSavedException <<= e;
+        saveException( e );
     }
 }
 
@@ -508,7 +502,7 @@ void Entity::endElement()
     }
     catch (const Exception& e)
     {
-        maSavedException <<= e;
+        saveException( e );
     }
     maContextStack.pop();
 }
@@ -545,6 +539,97 @@ Event& Entity::getEvent( CallbackType aType )
     rEvent.maType = aType;
     return rEvent;
 }
+
+OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
+{
+    const sal_Char* pMessage = "";
+    switch( xmlE )
+    {
+        case XML_ERROR_NONE:                            pMessage = "No";                                    break;
+        case XML_ERROR_NO_MEMORY:                       pMessage = "no memory";                             break;
+        case XML_ERROR_SYNTAX:                          pMessage = "syntax";                                break;
+        case XML_ERROR_NO_ELEMENTS:                     pMessage = "no elements";                           break;
+        case XML_ERROR_INVALID_TOKEN:                   pMessage = "invalid token";                         break;
+        case XML_ERROR_UNCLOSED_TOKEN:                  pMessage = "unclosed token";                        break;
+        case XML_ERROR_PARTIAL_CHAR:                    pMessage = "partial char";                          break;
+        case XML_ERROR_TAG_MISMATCH:                    pMessage = "tag mismatch";                          break;
+        case XML_ERROR_DUPLICATE_ATTRIBUTE:             pMessage = "duplicate attribute";                   break;
+        case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:          pMessage = "junk after doc element";                break;
+        case XML_ERROR_PARAM_ENTITY_REF:                pMessage = "parameter entity reference";            break;
+        case XML_ERROR_UNDEFINED_ENTITY:                pMessage = "undefined entity";                      break;
+        case XML_ERROR_RECURSIVE_ENTITY_REF:            pMessage = "recursive entity reference";            break;
+        case XML_ERROR_ASYNC_ENTITY:                    pMessage = "async entity";                          break;
+        case XML_ERROR_BAD_CHAR_REF:                    pMessage = "bad char reference";                    break;
+        case XML_ERROR_BINARY_ENTITY_REF:               pMessage = "binary entity reference";               break;
+        case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:   pMessage = "attribute external entity reference";   break;
+        case XML_ERROR_MISPLACED_XML_PI:                pMessage = "misplaced xml processing instruction";  break;
+        case XML_ERROR_UNKNOWN_ENCODING:                pMessage = "unknown encoding";                      break;
+        case XML_ERROR_INCORRECT_ENCODING:              pMessage = "incorrect encoding";                    break;
+        case XML_ERROR_UNCLOSED_CDATA_SECTION:          pMessage = "unclosed cdata section";                break;
+        case XML_ERROR_EXTERNAL_ENTITY_HANDLING:        pMessage = "external entity reference";             break;
+        case XML_ERROR_NOT_STANDALONE:                  pMessage = "not standalone";                        break;
+        default:;
+    }
+
+    OUStringBuffer aBuffer( '[' );
+    aBuffer.append( sSystemId );
+    aBuffer.append( " line " );
+    aBuffer.append( nLine );
+    aBuffer.append( "]: " );
+    aBuffer.appendAscii( pMessage );
+    aBuffer.append( " error" );
+    return aBuffer.makeStringAndClear();
+}
+
+// throw an exception, but avoid callback if
+// during a threaded produce
+void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
+                             bool mbDuringParse )
+{
+    // Error during parsing !
+    SAXParseException aExcept(
+        lclGetErrorMessage( XML_GetErrorCode( mpParser ),
+                            xDocumentLocator->getSystemId(),
+                            xDocumentLocator->getLineNumber() ),
+        Reference< XInterface >(),
+        Any( &maSavedException, getCppuType( &maSavedException ) ),
+        xDocumentLocator->getPublicId(),
+        xDocumentLocator->getSystemId(),
+        xDocumentLocator->getLineNumber(),
+        xDocumentLocator->getColumnNumber()
+    );
+
+    // error handler is set, it may throw the exception
+    if( !mbDuringParse || !mbEnableThreads )
+    {
+        if (mxErrorHandler.is() )
+            mxErrorHandler->fatalError( Any( aExcept ) );
+    }
+
+    // error handler has not thrown, but parsing must stop => throw ourselves
+    throw aExcept;
+}
+
+// In the single threaded case we emit events via our C
+// callbacks, so any exception caught must be queued up until
+// we can safely re-throw it from our C++ parent of parse()
+//
+// If multi-threaded, we need to push an EXCEPTION event, at
+// which point we transfer ownership of maSavedException to
+// the consuming thread.
+void Entity::saveException( const Exception &e )
+{
+    // only store the first exception
+    if( !maSavedException.hasValue() )
+    {
+        maSavedException <<= e;
+        XML_StopParser( mpParser, /* resumable? */ XML_FALSE );
+    }
+}
+
+} // namespace
+
+namespace sax_fastparser {
 
 FastSaxParserImpl::FastSaxParserImpl( FastSaxParser* pFront ) : mpFront(pFront)
 {
@@ -800,7 +885,7 @@ void FastSaxParserImpl::parseStream( const InputSource& maStructSource) throw (S
     {
         popEntity();
         XML_ParserFree( entity.mpParser );
-          throw;
+        throw;
     }
     catch (const IOException&)
     {
@@ -898,58 +983,6 @@ Sequence< OUString > FastSaxParserImpl::getSupportedServiceNames(void) throw (Ru
     return seq;
 }
 
-
-/*---------------------------------------
-*
-* Helper functions and classes
-*
-*-------------------------------------------*/
-
-namespace {
-
-OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int32 nLine )
-{
-    const sal_Char* pMessage = "";
-    switch( xmlE )
-    {
-        case XML_ERROR_NONE:                            pMessage = "No";                                    break;
-        case XML_ERROR_NO_MEMORY:                       pMessage = "no memory";                             break;
-        case XML_ERROR_SYNTAX:                          pMessage = "syntax";                                break;
-        case XML_ERROR_NO_ELEMENTS:                     pMessage = "no elements";                           break;
-        case XML_ERROR_INVALID_TOKEN:                   pMessage = "invalid token";                         break;
-        case XML_ERROR_UNCLOSED_TOKEN:                  pMessage = "unclosed token";                        break;
-        case XML_ERROR_PARTIAL_CHAR:                    pMessage = "partial char";                          break;
-        case XML_ERROR_TAG_MISMATCH:                    pMessage = "tag mismatch";                          break;
-        case XML_ERROR_DUPLICATE_ATTRIBUTE:             pMessage = "duplicate attribute";                   break;
-        case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:          pMessage = "junk after doc element";                break;
-        case XML_ERROR_PARAM_ENTITY_REF:                pMessage = "parameter entity reference";            break;
-        case XML_ERROR_UNDEFINED_ENTITY:                pMessage = "undefined entity";                      break;
-        case XML_ERROR_RECURSIVE_ENTITY_REF:            pMessage = "recursive entity reference";            break;
-        case XML_ERROR_ASYNC_ENTITY:                    pMessage = "async entity";                          break;
-        case XML_ERROR_BAD_CHAR_REF:                    pMessage = "bad char reference";                    break;
-        case XML_ERROR_BINARY_ENTITY_REF:               pMessage = "binary entity reference";               break;
-        case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:   pMessage = "attribute external entity reference";   break;
-        case XML_ERROR_MISPLACED_XML_PI:                pMessage = "misplaced xml processing instruction";  break;
-        case XML_ERROR_UNKNOWN_ENCODING:                pMessage = "unknown encoding";                      break;
-        case XML_ERROR_INCORRECT_ENCODING:              pMessage = "incorrect encoding";                    break;
-        case XML_ERROR_UNCLOSED_CDATA_SECTION:          pMessage = "unclosed cdata section";                break;
-        case XML_ERROR_EXTERNAL_ENTITY_HANDLING:        pMessage = "external entity reference";             break;
-        case XML_ERROR_NOT_STANDALONE:                  pMessage = "not standalone";                        break;
-        default:;
-    }
-
-    OUStringBuffer aBuffer( '[' );
-    aBuffer.append( sSystemId );
-    aBuffer.append( " line " );
-    aBuffer.append( nLine );
-    aBuffer.append( "]: " );
-    aBuffer.appendAscii( pMessage );
-    aBuffer.append( " error" );
-    return aBuffer.makeStringAndClear();
-}
-
-} // namespace
-
 void FastSaxParserImpl::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
@@ -1016,7 +1049,7 @@ bool FastSaxParserImpl::consume(EventList *pEventList)
 {
     Entity& rEntity = getEntity();
     for (EventList::iterator aEventIt = pEventList->begin();
-            aEventIt != pEventList->end(); ++aEventIt)
+         aEventIt != pEventList->end(); ++aEventIt)
     {
         switch ((*aEventIt).maType)
         {
@@ -1032,28 +1065,8 @@ bool FastSaxParserImpl::consume(EventList *pEventList)
             case DONE:
                 return false;
             case EXCEPTION:
-            {
-                assert( rEntity.maSavedException.hasValue() );
-                // Error during parsing !
-                XML_Error xmlE = XML_GetErrorCode( rEntity.mpParser );
-                OUString sSystemId = mxDocumentLocator->getSystemId();
-                sal_Int32 nLine = mxDocumentLocator->getLineNumber();
-
-                SAXParseException aExcept(
-                    lclGetErrorMessage( xmlE, sSystemId, nLine ),
-                    Reference< XInterface >(),
-                    Any( &rEntity.maSavedException, getCppuType( &rEntity.maSavedException ) ),
-                    mxDocumentLocator->getPublicId(),
-                    mxDocumentLocator->getSystemId(),
-                    mxDocumentLocator->getLineNumber(),
-                    mxDocumentLocator->getColumnNumber()
-                );
-                // error handler is set, it may throw the exception
-                if( rEntity.mxErrorHandler.is() )
-                    rEntity.mxErrorHandler->fatalError( Any( aExcept ) );
-
-                throw aExcept;
-            }
+                rEntity.throwException( mxDocumentLocator, false );
+                return false;
             default:
                 assert(false);
                 return false;
@@ -1101,36 +1114,14 @@ void FastSaxParserImpl::parse()
 
         bool const bContinue = XML_STATUS_ERROR != XML_Parse(rEntity.mpParser,
             reinterpret_cast<const char*>(seqOut.getConstArray()), nRead, 0);
+
         // callbacks used inside XML_Parse may have caught an exception
         if( !bContinue || rEntity.maSavedException.hasValue() )
-        {
-            // Error during parsing !
-            XML_Error xmlE = XML_GetErrorCode( rEntity.mpParser );
-            OUString sSystemId = mxDocumentLocator->getSystemId();
-            sal_Int32 nLine = mxDocumentLocator->getLineNumber();
-
-            SAXParseException aExcept(
-                lclGetErrorMessage( xmlE, sSystemId, nLine ),
-                Reference< XInterface >(),
-                Any( &rEntity.maSavedException, getCppuType( &rEntity.maSavedException ) ),
-                mxDocumentLocator->getPublicId(),
-                mxDocumentLocator->getSystemId(),
-                mxDocumentLocator->getLineNumber(),
-                mxDocumentLocator->getColumnNumber()
-            );
-
-            // error handler is set, it may throw the exception
-            if( rEntity.mxErrorHandler.is() )
-                rEntity.mxErrorHandler->fatalError( Any( aExcept ) );
-
-            // error handler has not thrown, but parsing cannot go on, the
-            // exception MUST be thrown
-            throw aExcept;
-        }
+            rEntity.throwException( mxDocumentLocator, true );
     }
     while( nRead > 0 );
     rEntity.getEvent( DONE );
-    if (rEntity.mbEnableThreads)
+    if( rEntity.mbEnableThreads )
         produce( DONE );
 }
 
@@ -1265,7 +1256,7 @@ void FastSaxParserImpl::callbackStartElement( const XML_Char* pwName, const XML_
     }
     catch (const Exception& e)
     {
-        rEntity.maSavedException <<= e;
+        rEntity.saveException( e );
     }
 }
 
@@ -1311,13 +1302,13 @@ void FastSaxParserImpl::callbackEntityDecl(
     if (value) { // value != 0 means internal entity
         SAL_INFO("sax", "FastSaxParser: internal entity declaration, stopping");
         XML_StopParser(getEntity().mpParser, XML_FALSE);
-        getEntity().maSavedException <<= SAXParseException(
+        getEntity().saveException( SAXParseException(
             "FastSaxParser: internal entity declaration, stopping",
             static_cast<OWeakObject*>(mpFront), Any(),
             mxDocumentLocator->getPublicId(),
             mxDocumentLocator->getSystemId(),
             mxDocumentLocator->getLineNumber(),
-            mxDocumentLocator->getColumnNumber() );
+            mxDocumentLocator->getColumnNumber() ) );
     } else {
         SAL_INFO("sax", "FastSaxParser: ignoring external entity declaration");
     }
@@ -1342,17 +1333,17 @@ int FastSaxParserImpl::callbackExternalEntityRef(
     }
     catch (const SAXParseException & e)
     {
-        rCurrEntity.maSavedException <<= e;
+        rCurrEntity.saveException( e );
         bOK = false;
     }
     catch (const SAXException& e)
     {
-        rCurrEntity.maSavedException <<= SAXParseException(
+        rCurrEntity.saveException( SAXParseException(
             e.Message, e.Context, e.WrappedException,
             mxDocumentLocator->getPublicId(),
             mxDocumentLocator->getSystemId(),
             mxDocumentLocator->getLineNumber(),
-            mxDocumentLocator->getColumnNumber() );
+            mxDocumentLocator->getColumnNumber() ) );
         bOK = false;
     }
 
@@ -1372,21 +1363,21 @@ int FastSaxParserImpl::callbackExternalEntityRef(
         }
         catch (const SAXParseException& e)
         {
-            rCurrEntity.maSavedException <<= e;
+            rCurrEntity.saveException( e );
             bOK = false;
         }
         catch (const IOException& e)
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
-            rCurrEntity.maSavedException <<= aEx;
+            rCurrEntity.saveException( aEx );
             bOK = false;
         }
         catch (const RuntimeException& e)
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
-            rCurrEntity.maSavedException <<= aEx;
+            rCurrEntity.saveException( aEx );
             bOK = false;
         }
 
