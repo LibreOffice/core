@@ -219,6 +219,10 @@ namespace svt { namespace table
         {
             return NULL;
         }
+        virtual bool isEnabled() const
+        {
+            return true;
+        }
         virtual void getCellContent( ColPos const i_col, RowPos const i_row, ::com::sun::star::uno::Any& o_cellContent )
         {
             (void)i_row;

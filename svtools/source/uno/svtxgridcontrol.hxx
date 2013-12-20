@@ -106,6 +106,9 @@ public:
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // XWindow
+    void SAL_CALL setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException);
+
 protected:
     // VCLXWindow
     virtual void    SetWindow( Window* pWindow );
