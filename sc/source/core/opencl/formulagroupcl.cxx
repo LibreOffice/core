@@ -1538,7 +1538,7 @@ public:
 
             if (OpSumCodeGen->NeedReductionKernel())
             {
-                assert(slidingArgPtr);
+                assert(slidingArgPtr); (void) slidingArgPtr;
                 std::vector<cl_mem> vclmem;
                 for (SubArgumentsType::iterator it = mvSubArguments.begin(),
                         e= mvSubArguments.end(); it!=e; ++it)
