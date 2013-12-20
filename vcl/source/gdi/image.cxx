@@ -513,11 +513,10 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 
     if( nId )
     {
-        RemoveImage( nId );
-
-        if( !mpImplData )
-            ImplInit( 0, rImage.GetSizePixel() );
-        mpImplData->AddImage( rImageName, nId, rImage.GetBitmapEx());
+        //Just replace the bitmap rather than doing RemoveImage / AddImage
+        //which breaks index-based iteration.
+        ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
+        pImg->maBitmapEx = rImage.GetBitmapEx();
     }
 }
 

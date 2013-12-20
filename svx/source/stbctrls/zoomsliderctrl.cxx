@@ -66,12 +66,6 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
 
 // -----------------------------------------------------------------------
 
-const long nButtonWidth   = 10;
-const long nButtonHeight  = 10;
-const long nIncDecWidth   = 10;
-const long nIncDecHeight  = 10;
-const long nSliderHeight  = 2;
-const long nSnappingHeight = 4;
 const long nSliderXOffset = 20;
 const long nSnappingEpsilon = 5; // snapping epsilon in pixels
 const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
@@ -175,6 +169,23 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     mpImpl->maSliderButton   = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
     mpImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
     mpImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
+
+    if ( _rStb.GetDPIScaleFactor() > 1)
+    {
+        Image arr[3] = {mpImpl->maSliderButton, mpImpl->maIncreaseButton, mpImpl->maDecreaseButton};
+
+        for (int i = 0; i < 3; i++)
+        {
+            BitmapEx b = arr[i].GetBitmapEx();
+            //Use Lanczos scaling for the slider button because it does a better job with circles
+            b.Scale(_rStb.GetDPIScaleFactor(), _rStb.GetDPIScaleFactor(), i == 0 ? BMP_SCALE_LANCZOS : BMP_SCALE_FAST);
+            arr[i] = Image(b);
+        }
+
+        mpImpl->maSliderButton = arr[0];
+        mpImpl->maIncreaseButton = arr[1];
+        mpImpl->maDecreaseButton = arr[2];
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -258,6 +269,9 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     Rectangle           aRect = rUsrEvt.GetRect();
     Rectangle           aSlider = aRect;
 
+    long nSliderHeight  = 2 * pDev->GetDPIScaleFactor();
+    long nSnappingHeight = 4 * pDev->GetDPIScaleFactor();
+
     aSlider.Top()   += (aControlRect.GetHeight() - nSliderHeight)/2;
     aSlider.Bottom() = aSlider.Top() + nSliderHeight - 1;
     aSlider.Left()  += nSliderXOffset;
@@ -269,6 +283,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     pDev->SetLineColor( rStyleSettings.GetShadowColor() );
     pDev->SetFillColor( rStyleSettings.GetShadowColor() );
+
 
     // draw snapping points:
     std::vector< long >::iterator aSnappingPointIter;
@@ -288,18 +303,18 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
     aImagePoint.X() += Zoom2Offset( mpImpl->mnCurrentZoom );
-    aImagePoint.X() -= nButtonWidth/2;
-    aImagePoint.Y() += (aControlRect.GetHeight() - nButtonHeight)/2;
+    aImagePoint.X() -= mpImpl->maSliderButton.GetSizePixel().Width()/2;
+    aImagePoint.Y() += (aControlRect.GetHeight() - mpImpl->maSliderButton.GetSizePixel().Height())/2;
     pDev->DrawImage( aImagePoint, mpImpl->maSliderButton );
 
     // draw decrease button
     aImagePoint = aRect.TopLeft();
-    aImagePoint.X() += (nSliderXOffset - nIncDecWidth)/2;
-    aImagePoint.Y() += (aControlRect.GetHeight() - nIncDecHeight)/2;
+    aImagePoint.X() += (nSliderXOffset - mpImpl->maDecreaseButton.GetSizePixel().Width())/2;
+    aImagePoint.Y() += (aControlRect.GetHeight() - mpImpl->maDecreaseButton.GetSizePixel().Height())/2;
     pDev->DrawImage( aImagePoint, mpImpl->maDecreaseButton );
 
     // draw increase button
-    aImagePoint.X() = aRect.TopLeft().X() + aControlRect.GetWidth() - nIncDecWidth - (nSliderXOffset - nIncDecWidth)/2;
+    aImagePoint.X() = aRect.TopLeft().X() + aControlRect.GetWidth() - mpImpl->maIncreaseButton.GetSizePixel().Width() - (nSliderXOffset - mpImpl->maIncreaseButton.GetSizePixel().Height())/2;
     pDev->DrawImage( aImagePoint, mpImpl->maIncreaseButton );
 
     pDev->SetLineColor( aOldLineColor );
@@ -316,6 +331,8 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     const Rectangle aControlRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
     const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
+
+    long nIncDecWidth   = mpImpl->maIncreaseButton.GetSizePixel().Width();
 
     const long nButtonLeftOffset = (nSliderXOffset - nIncDecWidth)/2;
     const long nButtonRightOffset = (nSliderXOffset + nIncDecWidth)/2;

@@ -85,7 +85,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     FontSizeBox( _pParent, WinBits( WB_DROPDOWN ) ),
 
     m_pCtrl             ( &_rCtrl ),
-    m_aLogicalSize      ( 30,100 ),
+    m_aLogicalSize      ( 20,100 ),
     m_bRelease          ( true ),
     m_xDispatchProvider ( _rDispatchProvider ),
     m_xFrame            ( _xFrame )

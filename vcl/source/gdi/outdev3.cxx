@@ -395,6 +395,7 @@ static void ImplFontSubstitute( OUString& rFontName )
     }
 }
 
+//hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl
 Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                                    sal_uLong nFlags, const OutputDevice* pOutDev )
 {
@@ -5299,6 +5300,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
     }
 
     long nWaveHeight;
+
     if ( nStyle == WAVE_NORMAL )
     {
         nWaveHeight = 3;

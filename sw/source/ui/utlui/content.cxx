@@ -1561,6 +1561,19 @@ void SwContentTree::Display( bool bActive )
     if(!bIsImageListInitialized)
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
+
+        if ( GetDPIScaleFactor() > 1 )
+        {
+            for (short i = 0; i < aEntryImages.GetImageCount(); i++)
+            {
+                OUString rImageName = aEntryImages.GetImageName(i);
+                BitmapEx b = aEntryImages.GetImage(rImageName).GetBitmapEx();
+                //Use Lanczos because it looks better with circles / diagonals
+                b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_LANCZOS);
+                aEntryImages.ReplaceImage(rImageName, Image(b));
+            }
+        }
+
         bIsImageListInitialized = true;
     }
     // First read the selected entry to select it later again if necessary
@@ -3478,8 +3491,9 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
   if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
         FindActiveTypeAndRemoveUserData();
+
+        bIsImageListInitialized = false;
         Display(true);
     }
     SvTreeListBox::DataChanged( rDCEvt );

@@ -559,6 +559,8 @@ public:
     */
     bool                supportsOperation( OutDevSupportType ) const;
 
+    sal_Int32           GetDPIScaleFactor() const { return mnDPIScaleFactor; }
+
     vcl::PDFWriterImpl* GetPDFWriter() const { return mpPDFWriter; }
 
     void                SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }

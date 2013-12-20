@@ -2760,7 +2760,6 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 }
 
 // -----------------------------------------------------------------------
-
 static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, sal_Bool bSetColor, sal_Bool bRotate )
 {
     Color aOldFillColor = pBox->GetFillColor();
@@ -2775,38 +2774,55 @@ static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, sal_Bo
             pBox->SetFillColor( Color( COL_BLACK ) );
     }
 
+    int linewidth = 1 * pBox->GetDPIScaleFactor();
+    int space = 4 * pBox->GetDPIScaleFactor();
+
     if( !bRotate )
     {
-        long width = 8;
-        long height = 5;
+        long width = 8 * pBox->GetDPIScaleFactor();
+        long height = 5 * pBox->GetDPIScaleFactor();
+
+        //Keep odd b/c drawing code works better
+        if ( height % 2 == 0 )
+            height--;
+
+        long heightOrig = height;
+
         long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
         long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
         while( height >= 1)
         {
-            pBox->DrawRect( Rectangle( x, y, x+1, y ) );
-            x+=4;
-            pBox->DrawRect( Rectangle( x, y, x+1, y ) );
-            x-=4;
+            pBox->DrawRect( Rectangle( x, y, x + linewidth, y ) );
+            x += space;
+            pBox->DrawRect( Rectangle( x, y, x + linewidth, y ) );
+            x -= space;
             y++;
-            if( height <= 3) x--;
+            if( height <= heightOrig / 2 + 1) x--;
             else            x++;
             height--;
         }
     }
     else
     {
-        long width = 5;
-        long height = 8;
+        long width = 5 * pBox->GetDPIScaleFactor();
+        long height = 8 * pBox->GetDPIScaleFactor();
+
+        //Keep odd b/c drawing code works better
+        if (width % 2 == 0)
+            width--;
+
+        long widthOrig = width;
+
         long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
         long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
         while( width >= 1)
         {
-            pBox->DrawRect( Rectangle( x, y, x, y+1 ) );
-            y+=4;
-            pBox->DrawRect( Rectangle( x, y, x, y+1 ) );
-            y-=4;
+            pBox->DrawRect( Rectangle( x, y, x, y + linewidth ) );
+            y += space;
+            pBox->DrawRect( Rectangle( x, y, x, y + linewidth ) );
+            y -= space;
             x++;
-            if( width <= 3) y--;
+            if( width <= widthOrig / 2 + 1) y--;
             else           y++;
             width--;
         }
@@ -2834,8 +2850,9 @@ static void ImplDrawDropdownArrow( ToolBox *pBox, const Rectangle& rDropDownRect
 
     if( !bRotate )
     {
-        long width = 5;
-        long height = 3;
+        long width = 5 * pBox->GetDPIScaleFactor();
+        long height = 3 * pBox->GetDPIScaleFactor();
+
         long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
         long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
         while( width >= 1)
@@ -2847,8 +2864,9 @@ static void ImplDrawDropdownArrow( ToolBox *pBox, const Rectangle& rDropDownRect
     }
     else
     {
-        long width = 3;
-        long height = 5;
+        long width = 3 * pBox->GetDPIScaleFactor();
+        long height = 5 * pBox->GetDPIScaleFactor();
+
         long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
         long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
         while( height >= 1)

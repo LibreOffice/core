@@ -43,18 +43,6 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 
 // class TableWindow -----------------------------------------------------
 
-const long TABLE_CELL_WIDTH  = 15;
-const long TABLE_CELL_HEIGHT = 15;
-
-const long TABLE_CELLS_HORIZ = 10;
-const long TABLE_CELLS_VERT  = 15;
-
-const long TABLE_POS_X = 2;
-const long TABLE_POS_Y = 2;
-
-const long TABLE_WIDTH  = TABLE_POS_X + TABLE_CELLS_HORIZ*TABLE_CELL_WIDTH;
-const long TABLE_HEIGHT = TABLE_POS_Y + TABLE_CELLS_VERT*TABLE_CELL_HEIGHT;
-
 class TableWindow : public SfxPopupWindow
 {
 private:
@@ -70,6 +58,18 @@ private:
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     OUString       maCommand;
+
+    long TABLE_CELL_WIDTH;
+    long TABLE_CELL_HEIGHT;
+
+    const long TABLE_CELLS_HORIZ = 10;
+    const long TABLE_CELLS_VERT  = 15;
+
+    long TABLE_POS_X = 2;
+    long TABLE_POS_Y = 2;
+
+    long TABLE_WIDTH;
+    long TABLE_HEIGHT;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -113,6 +113,12 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     mxFrame( rFrame ),
     maCommand( rCmd )
 {
+    TABLE_CELL_WIDTH  = 15 * GetDPIScaleFactor();
+    TABLE_CELL_HEIGHT = 15 * GetDPIScaleFactor();
+
+    TABLE_WIDTH  = TABLE_POS_X + TABLE_CELLS_HORIZ*TABLE_CELL_WIDTH;
+    TABLE_HEIGHT = TABLE_POS_Y + TABLE_CELLS_VERT*TABLE_CELL_HEIGHT;
+
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 

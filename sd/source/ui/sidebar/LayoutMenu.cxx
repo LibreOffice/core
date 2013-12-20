@@ -650,6 +650,9 @@ void LayoutMenu::Fill (void)
         {
             BitmapEx aBmp(SdResId(pInfo->mnBmpResId));
 
+            if (GetDPIScaleFactor() > 1)
+                aBmp.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BMP_MIRROR_HORZ);
 
