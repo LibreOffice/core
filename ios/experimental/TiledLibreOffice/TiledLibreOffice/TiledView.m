@@ -22,24 +22,28 @@
 static const int NTIMESTAMPS = 100;
 static const CFTimeInterval AVERAGINGTIME = 5;
 
-static CFTimeInterval tileTimestamps[NTIMESTAMPS];
-static int curFirstTimestamp = 0;
-static int curNextTimestamp = 0;
+static struct {
+    CFTimeInterval timestamp;
+    int count;
+} tileTimestamps[NTIMESTAMPS];
+static int oldestTimestampIndex = 0;
+static int nextTimestampIndex = 0;
 
 static void dropOldTimestamps(CFTimeInterval now)
 {
     // Drop too old timestamps
-    while (curFirstTimestamp != curNextTimestamp && now - tileTimestamps[curFirstTimestamp] >= AVERAGINGTIME)
-        curFirstTimestamp = (curFirstTimestamp + 1) % NTIMESTAMPS;
+    while (oldestTimestampIndex != nextTimestampIndex && now - tileTimestamps[oldestTimestampIndex].timestamp >= AVERAGINGTIME)
+        oldestTimestampIndex = (oldestTimestampIndex + 1) % NTIMESTAMPS;
 }
 
 static void updateTilesPerSecond(UILabel *label)
 {
-    int n = (curNextTimestamp < curFirstTimestamp) ?
-        (NTIMESTAMPS - (curFirstTimestamp - curNextTimestamp))
-        : ((curNextTimestamp - curFirstTimestamp));
+    int n = 0;
 
-    // NSLog(@"first:%d next:%d n:%d", curFirstTimestamp, curNextTimestamp, n);
+    for (int k = oldestTimestampIndex; k != nextTimestampIndex; k = (k + 1) % NTIMESTAMPS)
+        n += tileTimestamps[k].count;
+
+    // NSLog(@"oldest:%d next:%d n:%d", oldestTimestampIndex, nextTimestampIndex, n);
 
     double tps = n/AVERAGINGTIME;
 
@@ -54,10 +58,13 @@ static void updateTilesPerSecond(UILabel *label)
         dropOldTimestamps(now);
 
         // Add new timestamp
-        tileTimestamps[curNextTimestamp] = now;
+        tileTimestamps[nextTimestampIndex].timestamp = now;
+        tileTimestamps[nextTimestampIndex].count++;
         // Let next added replace newest if array full
-        if (curFirstTimestamp != (curNextTimestamp + 1) % NTIMESTAMPS)
-            curNextTimestamp = (curNextTimestamp + 1) % NTIMESTAMPS;
+        if (oldestTimestampIndex != (nextTimestampIndex + 1) % NTIMESTAMPS) {
+            nextTimestampIndex = (nextTimestampIndex + 1) % NTIMESTAMPS;
+            tileTimestamps[nextTimestampIndex].count = 0;
+        }
 
         updateTilesPerSecond(((View *) [self superview]).tpsLabel);
     }
@@ -114,13 +121,15 @@ static void updateTilesPerSecond(UILabel *label)
 
     // NSLog(@"bb:%.0fx%.0f@(%.0f,%.0f) zoomScale:%.0f tile:%.0fx%.0f at:(%.0f,%.0f) size:%.0fx%.0f", bb.size.width, bb.size.height, bb.origin.x, bb.origin.y, zoomScale, tileSize.width, tileSize.height, bb.origin.x/self.scale, bb.origin.y/self.scale, bb.size.width/self.scale, bb.size.height/self.scale);
 
-    // I don't really claim to fully understand all this. It does seem
-    // a bit weird to be passing in a "context width x height" (in the
-    // terminology of touch_lo_draw_tile) of 64x64, for instance, even
-    // if that tile is actually going to be rendered to 128x128 actual
-    // pixels. But this seems to work. Other combinations, applying
-    // scaling to the CTM, etc, don't. But maybe I haven't tried hard
-    // enough.
+    // I don't really claim to fully understand all this. It did at
+    // first seem a bit weird to be passing in a "context width x
+    // height" (in the terminology of touch_lo_draw_tile) of 64x64,
+    // for instance, even if that tile is actually going to be
+    // rendered to 128x128 on-screen pixels. But what I tend to forget
+    // is that this 64x64 is in the coordinate space of the initial
+    // view of the document; the CGContext keeps track of scaling it
+    // as needed at the current zoom levels. I keep thinking about
+    // "pixels" incorrectly.
 
     touch_lo_draw_tile(ctx,
                        tileSize.width, tileSize.height,
