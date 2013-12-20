@@ -40,7 +40,7 @@
 /** describes a change of the active sheet. The new active sheet is given
     with this event.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 
  */
 published struct ActivationEvent: com::sun::star::lang::EventObject

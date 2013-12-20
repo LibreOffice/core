@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module sheet {
     <p>This constants group extends the <type>FilterOperator</type> enum by
     additional filter operators.</p>
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 published constants FilterOperator2
 {

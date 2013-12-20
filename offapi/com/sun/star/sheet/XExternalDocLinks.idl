@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::ExternalDocLinks
 
-    @since OOo 3.1
+    @since OpenOffice 3.1
  */
 interface XExternalDocLinks
 {

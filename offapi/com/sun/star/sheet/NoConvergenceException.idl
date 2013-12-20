@@ -37,7 +37,7 @@ module com { module sun { module star { module sheet {
 /** Thrown by a Calc Add-In function this exception indicates the
     function's algorithm did not converge to a meaningful result.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 exception NoConvergenceException : ::com::sun::star::uno::Exception{};
 

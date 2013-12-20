@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module sheet {
     The name of the hidden sheet is composed of the URL of the external
     document and the external sheet name.</p>
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XExternalSheetName: com::sun::star::uno::XInterface
 {

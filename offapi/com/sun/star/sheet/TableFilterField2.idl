@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module sheet {
     <type>FilterOperator</type> enum.</p>
 
     @see SheetFilterDescriptor
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 published struct TableFilterField2
 {

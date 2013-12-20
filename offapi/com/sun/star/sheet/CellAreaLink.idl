@@ -102,7 +102,7 @@ published service CellAreaLink
 
     /** specifies the time between two refresh actions in seconds.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] long RefreshPeriod;
 

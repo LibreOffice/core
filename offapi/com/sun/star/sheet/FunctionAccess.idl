@@ -77,7 +77,7 @@ published service FunctionAccess
         <p>For compatibility with older versions, the default value of this
         property is <TRUE/>.</p>
 
-        @since OOo 3.3
+        @since OpenOffice 3.3
      */
     [optional, property] boolean IsArrayFunction;
 

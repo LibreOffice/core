@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module sheet {
     <type>TableFilterField</type> struct.</p>
 
     @see SheetFilterDescriptor
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 published interface XSheetFilterDescriptor2: com::sun::star::uno::XInterface
 {

@@ -76,7 +76,7 @@ published service DDELink
 
     /** provides access to the DDE link results.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional] interface com::sun::star::sheet::XDDELinkResults;
 

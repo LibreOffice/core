@@ -80,7 +80,7 @@ published service DDELinks
 
     /** provides a method to add a DDE link to a spreadsheet.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional] interface com::sun::star::sheet::XDDELinks;
 
