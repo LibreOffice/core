@@ -4308,10 +4308,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
 
     aColorString = msfilter::util::ConvertColor( aColor );
 
-    if( !m_pColorAttrList )
-        m_pColorAttrList = m_pSerializer->createAttrList();
-
-    m_pColorAttrList->add( FSNS( XML_w, XML_val ), aColorString.getStr() );
+    pushToAttrList( &m_pColorAttrList, FSNS( XML_w, XML_val ), aColorString.getStr() );
 }
 
 void DocxAttributeOutput::CharContour( const SvxContourItem& rContour )
@@ -4380,13 +4377,12 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 
 void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 {
-    if (!m_pFontsAttrList)
-        m_pFontsAttrList = m_pSerializer->createAttrList();
     GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
-    m_pFontsAttrList->add(FSNS(XML_w, XML_ascii), sFontNameUtf8);
-    m_pFontsAttrList->add(FSNS(XML_w, XML_hAnsi), sFontNameUtf8);
+    pushToAttrList(&m_pFontsAttrList, 2,
+            FSNS(XML_w, XML_ascii), sFontNameUtf8.getStr(),
+            FSNS(XML_w, XML_hAnsi), sFontNameUtf8.getStr() );
 }
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
@@ -4413,9 +4409,6 @@ void DocxAttributeOutput::CharKerning( const SvxKerningItem& rKerning )
 
 void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 {
-    if (!m_pCharLangAttrList)
-        m_pCharLangAttrList = m_pSerializer->createAttrList();
-
     OString aLanguageCode( OUStringToOString(
                 LanguageTag( rLanguage.GetLanguage()).getBcp47(),
                 RTL_TEXTENCODING_UTF8));
@@ -4423,13 +4416,13 @@ void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
     switch ( rLanguage.Which() )
     {
         case RES_CHRATR_LANGUAGE:
-            m_pCharLangAttrList->add(FSNS(XML_w, XML_val), aLanguageCode);
+            pushToAttrList(&m_pCharLangAttrList, FSNS(XML_w, XML_val), aLanguageCode.getStr());
             break;
         case RES_CHRATR_CJK_LANGUAGE:
-            m_pCharLangAttrList->add(FSNS(XML_w, XML_eastAsia), aLanguageCode);
+            pushToAttrList(&m_pCharLangAttrList, FSNS(XML_w, XML_eastAsia), aLanguageCode.getStr());
             break;
         case RES_CHRATR_CTL_LANGUAGE:
-            m_pCharLangAttrList->add(FSNS(XML_w, XML_bidi), aLanguageCode);
+            pushToAttrList(&m_pCharLangAttrList, FSNS(XML_w, XML_bidi), aLanguageCode.getStr());
             break;
     }
 }
@@ -4540,11 +4533,9 @@ void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
-    if (!m_pFontsAttrList)
-        m_pFontsAttrList = m_pSerializer->createAttrList();
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
-    m_pFontsAttrList->add(FSNS(XML_w, XML_eastAsia), sFontNameUtf8);
+    pushToAttrList(&m_pFontsAttrList, FSNS(XML_w, XML_eastAsia), sFontNameUtf8.getStr());
 }
 
 void DocxAttributeOutput::CharPostureCJK( const SvxPostureItem& rPosture )
@@ -4565,11 +4556,9 @@ void DocxAttributeOutput::CharWeightCJK( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 {
-    if (!m_pFontsAttrList)
-        m_pFontsAttrList = m_pSerializer->createAttrList();
     OUString sFontName(rFont.GetFamilyName());
     OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
-    m_pFontsAttrList->add(FSNS(XML_w, XML_cs), sFontNameUtf8);
+    pushToAttrList(&m_pFontsAttrList, FSNS(XML_w, XML_cs), sFontNameUtf8.getStr());
 
 }
 
@@ -4595,13 +4584,10 @@ void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
     if ( !rRotate.GetValue() || m_bBtLr || m_bFrameBtLr)
         return;
 
-    if (!m_pEastAsianLayoutAttrList)
-        m_pEastAsianLayoutAttrList = m_pSerializer->createAttrList();
-    OString sTrue((sal_Char *)"true");
-    m_pEastAsianLayoutAttrList->add(FSNS(XML_w, XML_vert), sTrue);
+    pushToAttrList(&m_pEastAsianLayoutAttrList, FSNS(XML_w, XML_vert), "true");
 
     if (rRotate.IsFitToLine())
-        m_pEastAsianLayoutAttrList->add(FSNS(XML_w, XML_vertCompress), sTrue);
+        pushToAttrList(&m_pEastAsianLayoutAttrList, FSNS(XML_w, XML_vertCompress), "true");
 }
 
 void DocxAttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisMark )
@@ -4625,10 +4611,7 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
     if ( !rTwoLines.GetValue() )
         return;
 
-    if (!m_pEastAsianLayoutAttrList)
-        m_pEastAsianLayoutAttrList = m_pSerializer->createAttrList();
-    OString sTrue((sal_Char *)"true");
-    m_pEastAsianLayoutAttrList->add(FSNS(XML_w, XML_combine), sTrue);
+    pushToAttrList(&m_pEastAsianLayoutAttrList, FSNS(XML_w, XML_combine), "true");
 
     sal_Unicode cStart = rTwoLines.GetStartBracket();
     sal_Unicode cEnd = rTwoLines.GetEndBracket();
@@ -4645,7 +4628,7 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         sBracket = (sal_Char *)"square";
     else
         sBracket = (sal_Char *)"round";
-    m_pEastAsianLayoutAttrList->add(FSNS(XML_w, XML_combineBrackets), sBracket);
+    pushToAttrList(&m_pEastAsianLayoutAttrList, FSNS(XML_w, XML_combineBrackets), sBracket.getStr());
 }
 
 void DocxAttributeOutput::CharScaleWidth( const SvxCharScaleWidthItem& rScaleWidth )
@@ -5072,26 +5055,26 @@ void DocxAttributeOutput::SectFootnoteEndnotePr()
 
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
 {
-    if ( !m_pParagraphSpacingAttrList )
-        m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
-
     if ( nSpace < 0 )
     {
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "exact" );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::number( -nSpace ) );
+        pushToAttrList( &m_pParagraphSpacingAttrList, 2,
+                FSNS( XML_w, XML_lineRule ), "exact",
+                FSNS( XML_w, XML_line ), OString::number( -nSpace ).getStr() );
     }
     else if( nMulti )
     {
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::number( nSpace ) );
+        pushToAttrList( &m_pParagraphSpacingAttrList, 2,
+                FSNS( XML_w, XML_lineRule ), "auto",
+                FSNS( XML_w, XML_line ), OString::number( nSpace ).getStr() );
     }
     else if ( nSpace > 0 )
     {
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "atLeast" );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::number( nSpace ) );
+        pushToAttrList( &m_pParagraphSpacingAttrList, 2,
+                FSNS( XML_w, XML_lineRule ), "atLeast",
+                FSNS( XML_w, XML_line ), OString::number( nSpace ).getStr() );
     }
     else
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
+        pushToAttrList( &m_pParagraphSpacingAttrList, FSNS( XML_w, XML_lineRule ), "auto" );
 }
 
 void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
@@ -5325,21 +5308,18 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        if ( !m_pFlyAttrList )
-            m_pFlyAttrList = m_pSerializer->createAttrList( );
-
         if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE )
-        {
-            m_pFlyAttrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );
-        }
+            pushToAttrList( &m_pFlyAttrList,
+                    FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ).getStr() );
 
         if ( rSize.GetHeight() )
         {
             OString sRule( "exact" );
             if ( rSize.GetHeightSizeType() == ATT_MIN_SIZE )
                 sRule = OString( "atLeast" );
-            m_pFlyAttrList->add( FSNS( XML_w, XML_hRule ), sRule );
-            m_pFlyAttrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
+            pushToAttrList( &m_pFlyAttrList, 2,
+                    FSNS( XML_w, XML_hRule ), sRule.getStr(),
+                    FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ).getStr() );
         }
     }
     else if ( m_rExport.bOutPageDescs )
@@ -5377,18 +5357,12 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        if ( !m_pFlyAttrList )
-            m_pFlyAttrList = m_pSerializer->createAttrList();
-
-        m_pFlyAttrList->add( FSNS( XML_w, XML_hSpace ),
+        pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_hSpace ),
                 OString::number(
-                    ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ) );
+                    ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ).getStr() );
     }
     else if ( m_rExport.bOutPageDescs )
     {
-        if ( !m_pSectionSpacingAttrList )
-            m_pSectionSpacingAttrList = m_pSerializer->createAttrList();
-
         m_pageMargins.nPageMarginLeft = 0;
         m_pageMargins.nPageMarginRight = 0;
 
@@ -5404,8 +5378,9 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginLeft + (sal_uInt16)rLRSpace.GetLeft();
         m_pageMargins.nPageMarginRight = m_pageMargins.nPageMarginRight + (sal_uInt16)rLRSpace.GetRight();
 
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nPageMarginLeft ) );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nPageMarginRight ) );
+        pushToAttrList( &m_pSectionSpacingAttrList, 2,
+                FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nPageMarginLeft ).getStr(),
+                FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nPageMarginRight ).getStr() );
     }
     else
     {
@@ -5436,12 +5411,9 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        if ( !m_pFlyAttrList )
-            m_pFlyAttrList = m_pSerializer->createAttrList();
-
-        m_pFlyAttrList->add( FSNS( XML_w, XML_vSpace ),
+        pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_vSpace ),
                 OString::number(
-                    ( rULSpace.GetLower() + rULSpace.GetUpper() ) / 2 ) );
+                    ( rULSpace.GetLower() + rULSpace.GetUpper() ) / 2 ).getStr() );
     }
     else if (m_rExport.bOutPageDescs )
     {
@@ -5449,64 +5421,57 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         if ( !m_rExport.GetCurItemSet() )
             return;
 
-        if ( !m_pSectionSpacingAttrList )
-            m_pSectionSpacingAttrList = m_pSerializer->createAttrList();
-
         HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
 
         sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::number( nHeader ) );
 
         // Page top
         m_pageMargins.nPageMarginTop = aDistances.dyaTop;
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_top ),
-                OString::number( m_pageMargins.nPageMarginTop ) );
 
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::number( nFooter ) );
 
         // Page Bottom
         m_pageMargins.nPageMarginBottom = aDistances.dyaBottom;
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
-                OString::number( m_pageMargins.nPageMarginBottom ) );
 
-        // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_gutter ),
-                OString::number( 0 ) );
+        pushToAttrList( &m_pSectionSpacingAttrList, 5,
+                FSNS( XML_w, XML_header ), OString::number( nHeader ).getStr(),
+                FSNS( XML_w, XML_top ), OString::number( m_pageMargins.nPageMarginTop ).getStr(),
+                FSNS( XML_w, XML_footer ), OString::number( nFooter ).getStr(),
+                FSNS( XML_w, XML_bottom ), OString::number( m_pageMargins.nPageMarginBottom ).getStr(),
+                // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
+                FSNS( XML_w, XML_gutter ), "0" );
     }
     else
     {
-        if ( !m_pParagraphSpacingAttrList )
-            m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
         SAL_INFO("sw.ww8", "DocxAttributeOutput::FormatULSpace: setting spacing" << rULSpace.GetUpper() );
         // check if before auto spacing was set during import and spacing we get from actual object is same
         // that we set in import. If yes just write beforeAutoSpacing tag.
         if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == rULSpace.GetUpper())
         {
-            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_beforeAutospacing ),
-                    "1" );
+            pushToAttrList( &m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_beforeAutospacing ), "1" );
         }
         else
         {
-            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
-                    OString::number( rULSpace.GetUpper() ) );
+            pushToAttrList( &m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_before ), OString::number( rULSpace.GetUpper() ).getStr() );
         }
         m_bParaBeforeAutoSpacing = false;
         // check if after auto spacing was set during import and spacing we get from actual object is same
         // that we set in import. If yes just write afterAutoSpacing tag.
         if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == rULSpace.GetLower())
         {
-            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_afterAutospacing ),
-                    "1" );
+            pushToAttrList( &m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_afterAutospacing ), "1" );
         }
         else
         {
-            m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
-                    OString::number( rULSpace.GetLower()) );
+            pushToAttrList( &m_pParagraphSpacingAttrList,
+                    FSNS( XML_w, XML_after ), OString::number( rULSpace.GetLower()).getStr() );
         }
         m_bParaAfterAutoSpacing = false;
 
@@ -5559,9 +5524,6 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        if ( !m_pFlyAttrList )
-            m_pFlyAttrList = m_pSerializer->createAttrList();
-
         OString sWrap( "auto" );
         switch ( rSurround.GetSurround( ) )
         {
@@ -5579,7 +5541,7 @@ void DocxAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
                 sWrap = OString( "around" );
         }
 
-        m_pFlyAttrList->add( FSNS( XML_w, XML_wrap ), sWrap );
+        pushToAttrList(&m_pFlyAttrList, FSNS( XML_w, XML_wrap ), sWrap.getStr() );
     }
 }
 
@@ -5594,9 +5556,6 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        if ( !m_pFlyAttrList )
-            m_pFlyAttrList = m_pSerializer->createAttrList();
-
         OString sAlign;
         switch( rFlyVert.GetVertOrient() )
         {
@@ -5618,10 +5577,10 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
         }
 
         if ( !sAlign.isEmpty() )
-            m_pFlyAttrList->add( FSNS( XML_w, XML_yAlign ), sAlign );
+            pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_yAlign ), sAlign.getStr() );
         else
-            m_pFlyAttrList->add( FSNS( XML_w, XML_y ),
-                OString::number( rFlyVert.GetPos() ) );
+            pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_y ),
+                OString::number( rFlyVert.GetPos() ).getStr() );
 
         OString sVAnchor( "page" );
         switch ( rFlyVert.GetRelationOrient( ) )
@@ -5644,7 +5603,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
                 break;
         }
 
-        m_pFlyAttrList->add( FSNS( XML_w, XML_vAnchor ), sVAnchor );
+        pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_vAnchor ), sVAnchor.getStr() );
     }
 }
 
@@ -5659,9 +5618,6 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
-        if ( !m_pFlyAttrList )
-            m_pFlyAttrList = m_pSerializer->createAttrList();
-
         OString sAlign;
         switch( rFlyHori.GetHoriOrient() )
         {
@@ -5681,10 +5637,10 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
         }
 
         if ( !sAlign.isEmpty() )
-            m_pFlyAttrList->add( FSNS( XML_w, XML_xAlign ), sAlign );
+            pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_xAlign ), sAlign.getStr() );
         else
-            m_pFlyAttrList->add( FSNS( XML_w, XML_x ),
-                OString::number( rFlyHori.GetPos() ) );
+            pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_x ),
+                OString::number( rFlyHori.GetPos() ).getStr() );
 
         OString sHAnchor( "page" );
         switch ( rFlyHori.GetRelationOrient( ) )
@@ -5706,7 +5662,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
                 break;
         }
 
-        m_pFlyAttrList->add( FSNS( XML_w, XML_hAnchor ), sHAnchor );
+        pushToAttrList( &m_pFlyAttrList, FSNS( XML_w, XML_hAnchor ), sHAnchor.getStr() );
     }
 }
 
@@ -5744,15 +5700,13 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             // Calculate opacity value
             // Consider oox/source/vml/vmlformatting.cxx : decodeColor() function.
             double fOpacity = (double)(*oAlpha) * 65535 / ::oox::drawingml::MAX_PERCENT;
-            OUString sOpacity = OUString::number(fOpacity);
+            OUString sOpacity = OUString::number(fOpacity) + "f";
 
-            if ( !m_pFlyFillAttrList )
-                m_pFlyFillAttrList = m_pSerializer->createAttrList();
-
-            m_pFlyFillAttrList->add(XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8) + "f");
+            pushToAttrList( &m_pFlyFillAttrList, XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8).getStr() );
         }
 
-        m_pFlyAttrList->add(XML_fillcolor, "#" + sColor);
+        sColor = "#" + sColor;
+        pushToAttrList( &m_pFlyAttrList, XML_fillcolor, sColor.getStr() );
     }
     else if (m_bDMLTextFrameSyntax)
     {
@@ -5785,10 +5739,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 {
     if (*m_oFillStyle == XFILL_GRADIENT)
     {
-        if ( !m_pFlyFillAttrList )
-            m_pFlyFillAttrList = m_pSerializer->createAttrList();
-
-        m_pFlyFillAttrList->add(XML_type, "gradient");
+        pushToAttrList(&m_pFlyFillAttrList, XML_type, "gradient");
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
         OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
@@ -5803,7 +5754,8 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         nReverseAngle = nReverseAngle / 10;
         nReverseAngle = (270 - nReverseAngle) % 360;
         if (nReverseAngle != 0)
-            m_pFlyFillAttrList->add(XML_angle, OString::number(nReverseAngle));
+            pushToAttrList(&m_pFlyFillAttrList,
+                    XML_angle, OString::number(nReverseAngle).getStr());
 
         OString sColor1 = sStartColor;
         OString sColor2 = sEndColor;
@@ -5811,7 +5763,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         switch (rGradient.GetGradientStyle())
         {
             case XGRAD_AXIAL:
-                m_pFlyFillAttrList->add(XML_focus, "50%");
+                pushToAttrList(&m_pFlyFillAttrList, XML_focus, "50%");
                 // If it is an 'axial' gradient - swap the colors
                 // (because in the import process they were imported swapped)
                 sColor1 = sEndColor;
@@ -5824,8 +5776,10 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
             case XGRAD_RECT: break;
         }
 
-        m_pFlyAttrList->add(XML_fillcolor , "#" + sColor1);
-        m_pFlyFillAttrList->add(XML_color2, "#" + sColor2);
+        sColor1 = "#" + sColor1;
+        sColor2 = "#" + sColor2;
+        pushToAttrList(&m_pFlyAttrList, XML_fillcolor , sColor1.getStr());
+        pushToAttrList(&m_pFlyFillAttrList, XML_color2, sColor2.getStr());
     }
     m_oFillStyle.reset();
 }
@@ -5848,8 +5802,8 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             {
                 if (m_bTextFrameSyntax)
                 {
-                    m_pFlyAttrList->add(XML_stroked, "f");
-                    m_pFlyAttrList->add(XML_strokeweight, "0pt");
+                    pushToAttrList(&m_pFlyAttrList, 2,
+                            XML_stroked, "f", XML_strokeweight, "0pt");
                 }
             }
             else
@@ -5860,15 +5814,17 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 if (m_bTextFrameSyntax)
                 {
                     sColor = "#" + sColor;
-                    m_pFlyAttrList->add(XML_strokecolor, sColor);
                     sal_Int32 nWidth = sal_Int32(fConverted / 20);
-                    m_pFlyAttrList->add(XML_strokeweight, OString::number(nWidth) + "pt");
+                    OString sWidth = OString::number(nWidth) + "pt";
+                    pushToAttrList(&m_pFlyAttrList, 2,
+                            XML_strokecolor, sColor.getStr(),
+                            XML_strokeweight, sWidth.getStr());
                 }
                 else
                 {
-                    OString aWidth(OString::number(TwipsToEMU(fConverted)));
+                    OString sWidth(OString::number(TwipsToEMU(fConverted)));
                     m_pSerializer->startElementNS(XML_a, XML_ln,
-                            XML_w, aWidth.getStr(),
+                            XML_w, sWidth.getStr(),
                             FSEND);
                     m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
                     m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
@@ -6159,54 +6115,40 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         if ( i->first == "CharThemeNameAscii" && bWriteAsciiTheme )
         {
             i->second >>= str;
-            if (!m_pFontsAttrList)
-                m_pFontsAttrList = m_pSerializer->createAttrList();
-            m_pFontsAttrList->add( FSNS( XML_w, XML_asciiTheme ),
-                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+            pushToAttrList( &m_pFontsAttrList, FSNS( XML_w, XML_asciiTheme ),
+                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if ( i->first == "CharThemeNameCs" && bWriteCSTheme )
         {
             i->second >>= str;
-            if (!m_pFontsAttrList)
-                m_pFontsAttrList = m_pSerializer->createAttrList();
-            m_pFontsAttrList->add( FSNS( XML_w, XML_cstheme ),
-                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+            pushToAttrList( &m_pFontsAttrList, FSNS( XML_w, XML_cstheme ),
+                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if ( i->first == "CharThemeNameEastAsia" && bWriteEastAsiaTheme )
         {
             i->second >>= str;
-            if (!m_pFontsAttrList)
-                m_pFontsAttrList = m_pSerializer->createAttrList();
-            m_pFontsAttrList->add( FSNS( XML_w, XML_eastAsiaTheme ),
-                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+            pushToAttrList( &m_pFontsAttrList, FSNS( XML_w, XML_eastAsiaTheme ),
+                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if ( i->first == "CharThemeNameHAnsi" && bWriteAsciiTheme )
         // this is not a mistake: in LibO we don't directly support the hAnsi family
         // of attributes so we save the same value from ascii attributes instead
         {
             i->second >>= str;
-            if (!m_pFontsAttrList)
-                m_pFontsAttrList = m_pSerializer->createAttrList();
-            m_pFontsAttrList->add( FSNS( XML_w, XML_hAnsiTheme ),
-                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+            pushToAttrList( &m_pFontsAttrList, FSNS( XML_w, XML_hAnsiTheme ),
+                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if ( i->first == "CharThemeColor" && bWriteThemeFontColor )
         {
             i->second >>= str;
-            if( !m_pColorAttrList )
-                m_pColorAttrList = m_pSerializer->createAttrList();
-
-            m_pColorAttrList->add( FSNS( XML_w, XML_themeColor ),
-                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+            pushToAttrList( &m_pColorAttrList, FSNS( XML_w, XML_themeColor ),
+                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if ( i->first == "CharThemeColorShade" )
         {
             i->second >>= str;
-            if( !m_pColorAttrList )
-                m_pColorAttrList = m_pSerializer->createAttrList();
-
-            m_pColorAttrList->add( FSNS( XML_w, XML_themeShade ),
-                                   OUStringToOString( str, RTL_TEXTENCODING_UTF8 ) );
+            pushToAttrList( &m_pColorAttrList, FSNS( XML_w, XML_themeShade ),
+                    OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else if( i->first == "CharThemeFontNameCs"   ||
                 i->first == "CharThemeFontNameAscii" ||
@@ -6353,6 +6295,28 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
     m_pSerializer->endElementNS(XML_w, XML_pict);
 
     m_pSerializer->endElementNS(XML_w, XML_numPicBullet);
+}
+
+void DocxAttributeOutput::pushToAttrList( ::sax_fastparser::FastAttributeList **pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
+{
+    pushToAttrList( pAttrList, 1, nAttrName, sAttrValue );
+}
+
+void DocxAttributeOutput::pushToAttrList( ::sax_fastparser::FastAttributeList **pAttrList, sal_Int32 nAttrs, ... )
+{
+    if( !*pAttrList )
+        *pAttrList = m_pSerializer->createAttrList();
+
+    va_list args;
+    va_start( args, nAttrs );
+    for( sal_Int32 i = 0; i<nAttrs; i++)
+    {
+        sal_Int32 nName = va_arg( args, sal_Int32 );
+        const char* pValue = va_arg( args, const char* );
+        if( pValue )
+            (*pAttrList)->add( nName, pValue );
+    }
+    va_end( args );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
