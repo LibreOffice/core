@@ -762,7 +762,7 @@ void DrawController::FillPropertyTable (
     rProperties.push_back(
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),
             PROPERTY_ACTIVE_LAYER,
-            ::getCppuBooleanType(),
+            ::getCppuType((const Reference< drawing::XLayer > *)0),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomValue") ),
