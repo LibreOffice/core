@@ -5700,25 +5700,35 @@ void DocxAttributeOutput::FormatAnchor( const SwFmtAnchor& )
     // Fly frames: anchors here aren't matching the anchors in docx
 }
 
+boost::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
+{
+    boost::optional<sal_Int32> oRet;
+    sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();
+    if (nTransparency)
+    {
+        // Convert transparency to percent
+        sal_Int8 nTransparencyPercent = SvxBrushItem::TransparencyToPercent(nTransparency);
+
+        // Calculate alpha value
+        // Consider oox/source/drawingml/color.cxx : getTransparency() function.
+        sal_Int32 nAlpha = (::oox::drawingml::MAX_PERCENT - ( ::oox::drawingml::PER_PERCENT * nTransparencyPercent ) );
+        oRet = nAlpha;
+    }
+    return oRet;
+}
+
 void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 {
     OString sColor = msfilter::util::ConvertColor( rBrush.GetColor( ) );
+    boost::optional<sal_Int32> oAlpha = lcl_getDmlAlpha(rBrush);
     if (m_bTextFrameSyntax)
     {
         // Handle 'Opacity'
-        sal_Int32 nTransparency = rBrush.GetColor().GetTransparency();
-        if (nTransparency)
+        if (oAlpha)
         {
-            // Convert transparency to percent
-            sal_Int8 nTransparencyPercent = SvxBrushItem::TransparencyToPercent(nTransparency);
-
-            // Calculate alpha value
-            // Consider oox/source/drawingml/color.cxx : getTransparency() function.
-            sal_Int32 nAlpha = (::oox::drawingml::MAX_PERCENT - ( ::oox::drawingml::PER_PERCENT * nTransparencyPercent ) );
-
             // Calculate opacity value
             // Consider oox/source/vml/vmlformatting.cxx : decodeColor() function.
-            double fOpacity = (double)nAlpha * 65535 / ::oox::drawingml::MAX_PERCENT;
+            double fOpacity = (double)(*oAlpha) * 65535 / ::oox::drawingml::MAX_PERCENT;
             OUString sOpacity = OUString::number(fOpacity);
 
             if ( !m_pFlyFillAttrList )
@@ -5732,9 +5742,14 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     else if (m_bDMLTextFrameSyntax)
     {
         m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
-        m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
-                                       XML_val, sColor,
-                                       FSEND);
+        m_pSerializer->startElementNS(XML_a, XML_srgbClr,
+                                      XML_val, sColor,
+                                      FSEND);
+        if (oAlpha)
+            m_pSerializer->singleElementNS(XML_a, XML_alpha,
+                                           XML_val, OString::number(*oAlpha),
+                                           FSEND);
+        m_pSerializer->endElementNS(XML_a, XML_srgbClr);
         m_pSerializer->endElementNS(XML_a, XML_solidFill);
     }
     else if ( !m_rExport.bOutPageDescs )
