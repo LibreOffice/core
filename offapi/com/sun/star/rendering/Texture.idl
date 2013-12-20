@@ -47,7 +47,7 @@ published interface XParametricPolyPolygon2D;
     as the hatch and the gradient. The transformation member can then
     be used to scale the complete texture as it fits suit.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published struct Texture
 {

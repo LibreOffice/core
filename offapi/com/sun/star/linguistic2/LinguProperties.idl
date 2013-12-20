@@ -59,7 +59,7 @@ published service LinguProperties
          text or not when doing spellchecking or hyphenation, or using the
          thesaurus.
 
-        @deprecated since OOo 3.0.1
+        @deprecated since OpenOffice 3.0.1
       */
     [property, maybevoid] boolean IsGermanPreReform;
 
@@ -136,7 +136,7 @@ published service LinguProperties
     /** indicates whether the markings for incorrectly spelled text should be
          hidden or not.
 
-        @deprecated since OOo 3.0.1
+        @deprecated since OpenOffice 3.0.1
     */
     [property, maybevoid] boolean IsSpellHide;
 
@@ -144,7 +144,7 @@ published service LinguProperties
     /** indicates if spellchecking should be performed in all available
          languages.
 
-        @deprecated since OOo 3.0.1
+        @deprecated since OpenOffice 3.0.1
     */
     [property, maybevoid] boolean IsSpellInAllLanguages;
 

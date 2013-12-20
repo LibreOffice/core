@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module inspection {
 /** defines the interface for an <type>XPropertyControl</type> which supports
     displaying and entering numerical values.
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XNumericControl : XPropertyControl
 {

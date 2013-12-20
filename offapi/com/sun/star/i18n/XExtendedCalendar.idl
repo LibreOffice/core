@@ -42,7 +42,7 @@ module com { module sun { module star { module i18n {
     additional functionality to display parts of the date currently
     set at the calendar. </p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 published interface XExtendedCalendar : ::com::sun::star::i18n::XCalendar
 {

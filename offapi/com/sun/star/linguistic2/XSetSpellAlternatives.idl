@@ -48,7 +48,7 @@ interface XSetSpellAlternatives : com::sun::star::uno::XInterface
     /**
         set the list of suggestions to be returned.
 
-        @since  OOo 3.0.1
+        @since OpenOffice 3.0.1
     */
     void setAlternatives( [in] sequence< string > aAlternatives );
 
@@ -57,7 +57,7 @@ interface XSetSpellAlternatives : com::sun::star::uno::XInterface
         set the type of error found.
 
         @see    <tyoe scope="com::sun::star::linguistic2">SpellFailure</type>
-        @since  OOo 3.0.1
+        @since OpenOffice 3.0.1
     */
     void setFailureType( [in] short nFailureType );
 

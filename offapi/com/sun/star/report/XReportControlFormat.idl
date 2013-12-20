@@ -139,7 +139,7 @@ published interface XReportControlFormat
 
     /** If this optional property is <TRUE/>, then the characters are invisible.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [attribute,bound] boolean CharHidden
     {

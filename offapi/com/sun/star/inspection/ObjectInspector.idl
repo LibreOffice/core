@@ -76,13 +76,13 @@ module com {  module sun {  module star {  module inspection {
     @see com::sun::star::uno::XComponentContext
     @see com::sun::star::lang::XMultiComponentFactory
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published service ObjectInspector : XObjectInspector
 {
     /** creates a default instance of the ObjectInspector
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     createDefault();
 
@@ -91,7 +91,7 @@ published service ObjectInspector : XObjectInspector
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <arg>Model</arg> is <NULL/>.
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     createWithModel( [in] XObjectInspectorModel Model )
         raises ( ::com::sun::star::lang::IllegalArgumentException );

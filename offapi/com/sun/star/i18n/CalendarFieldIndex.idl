@@ -88,7 +88,7 @@ published constants CalendarFieldIndex
     /// Get/Set time zone offset in minutes, e.g. [-14*60..14*60]
     const short ZONE_OFFSET     = 14;
 
-    /// Total number of fields for &lt; OOo 3.1
+    /// Total number of fields for &lt; OpenOffice 3.1
     const short FIELD_COUNT     = 15;
 
     /** Get/Set additional offset in milliseconds that <b>adds</b> to
@@ -101,7 +101,7 @@ published constants CalendarFieldIndex
         60000 and expresses an absolute value that inherits its sign
         from the parent ZONE_OFFSET field.
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
     const short ZONE_OFFSET_SECOND_MILLIS = 15;
 
@@ -115,13 +115,13 @@ published constants CalendarFieldIndex
         60000 and expresses an absolute value that inherits its sign
         from the parent DST_OFFSET field.
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
     const short DST_OFFSET_SECOND_MILLIS  = 16;
 
-    /** Total number of fields as of OOo 3.1
+    /** Total number of fields as of OpenOffice 3.1
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
     const short FIELD_COUNT2              = 17;
 

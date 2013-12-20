@@ -32,7 +32,7 @@ module com { module sun { module star { module rendering {
     different shapes (which are, of course, only visible for strokes
     wider than one device pixel).<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 constants PathCapType
 {

@@ -54,7 +54,7 @@ module com {  module sun {  module star {  module linguistic2 {
 //=============================================================================
 /** API for the proofreading iterator that mediates between the document and the proofreader.
 
-    @since  OOo 3.0.1
+    @since OpenOffice 3.0.1
 */
 interface XProofreadingIterator: com::sun::star::uno::XInterface
 {

@@ -49,7 +49,7 @@ published interface XPropertyControl;
     @see XPropertyHandler::describePropertyLine
     @see PropertyLineElement
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published struct LineDescriptor
 {

@@ -35,12 +35,12 @@ module com {  module sun {  module star {  module i18n {
 /** CTL tcript type constants for layout engine, returned by
     <member>XScriptTypeDetector::getCTLScriptType()</member>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 
 published constants CTLScriptType
 {
-    /// For CTL scripts OOo currently does not support or could not handle
+    /// For CTL scripts OpenOffice currently does not support or could not handle
     const short CTL_UNKNOWN = 0;
 
     /// For Hebrew script

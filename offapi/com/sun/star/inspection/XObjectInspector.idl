@@ -45,7 +45,7 @@ published interface XObjectInspectorUI;
 
     @see ObjectInspector
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XObjectInspector
 {
@@ -93,7 +93,7 @@ published interface XObjectInspector
         property controls (or parts thereof), or register observers for all property
         controls.</p>
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     [attribute, readonly] XObjectInspectorUI InspectorUI;
 

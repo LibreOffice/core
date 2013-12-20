@@ -47,7 +47,7 @@ module com { module sun { module star { module i18n {
     marked with CAL: for the specific language and the corresponding
     DBNum modifier and the NatNum values used for Y/M/D are listed </p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 
 published constants NativeNumberMode

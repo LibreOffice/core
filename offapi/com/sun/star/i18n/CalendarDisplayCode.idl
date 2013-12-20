@@ -39,7 +39,7 @@ module com { module sun { module star { module i18n {
     strings, for example not a four digit year but a CJK name instead.
     <p/>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 published constants CalendarDisplayCode
 {

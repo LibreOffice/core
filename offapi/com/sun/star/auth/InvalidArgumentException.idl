@@ -32,7 +32,7 @@ module com { module sun { module star { module auth {
 
 /** indicates an invalid argument was passed to SSO API.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception InvalidArgumentException : ::com::sun::star::uno::Exception
 {

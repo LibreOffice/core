@@ -48,7 +48,7 @@ module com { module sun { module star { module rendering {
 /** This is a specialized interface for bitmaps having integer color
     channels.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 interface XIntegerBitmap : XIntegerReadOnlyBitmap
 {

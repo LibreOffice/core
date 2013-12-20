@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module i18n {
 
 /** Method to convert text from one type to another
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published interface XTextConversion : ::com::sun::star::uno::XInterface
 {

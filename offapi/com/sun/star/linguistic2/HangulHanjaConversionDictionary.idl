@@ -42,7 +42,7 @@ module com { module sun { module star { module linguistic2 {
     and the number of characters for the left part has to be the
     same as for the right part.</p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published service HangulHanjaConversionDictionary
 {

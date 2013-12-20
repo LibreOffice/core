@@ -30,7 +30,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** specifies the conversion dictionary type to be used with <type>XConversionDictionary</type>.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 constants ConversionDictionaryType
 {
@@ -40,7 +40,7 @@ constants ConversionDictionaryType
 
     /** Dictionary type for the conversion between Simplified and Traditionary Chinese
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     const short SCHINESE_TCHINESE   = 2;
 };

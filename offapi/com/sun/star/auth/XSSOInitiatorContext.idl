@@ -38,7 +38,7 @@ module com { module sun { module star { module auth {
     <P>This context may be used to initialise authetication tokens to send to
     an acceptor and to authenticate any token sent back in response.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XSSOInitiatorContext : ::com::sun::star::auth::XSSOContext
 {

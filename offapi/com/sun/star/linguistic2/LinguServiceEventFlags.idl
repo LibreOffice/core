@@ -55,7 +55,7 @@ published constants LinguServiceEventFlags
     //-------------------------------------------------------------------------
     /** Request new proofreading of the document
 
-        @since OOo 3.0.1
+        @since OpenOffice 3.0.1
     */
     const short PROOFREAD_AGAIN = 8;
 

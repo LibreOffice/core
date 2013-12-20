@@ -39,7 +39,7 @@ published interface XPropertyControl;
 /** specifies an interface for components to observer certain aspects
     of an <type>XPropertyControl</type>.
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
 */
 published interface XPropertyControlObserver
 {
