@@ -41,7 +41,7 @@ module com { module sun { module star { module ui {
 /** supplies information about changes of a user interface
     configuration manager.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published interface XUIConfigurationListener : com::sun::star::lang::XEventListener

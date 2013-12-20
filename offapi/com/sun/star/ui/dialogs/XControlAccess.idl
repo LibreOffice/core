@@ -47,7 +47,7 @@ module com { module sun { module star { module ui { module dialogs {
     @see com::sun::star::ui::dialogs::FilePicker
     @see com::sun::star::ui::dialogs::FilePicker
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XControlAccess: com::sun::star::uno::XInterface
 {

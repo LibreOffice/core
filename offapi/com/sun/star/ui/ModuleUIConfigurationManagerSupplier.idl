@@ -36,7 +36,7 @@ module com { module sun { module star { module ui {
 /** specifies a central user interface configuration provider which gives
     access to module based user interface configuration managers.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published service ModuleUIConfigurationManagerSupplier

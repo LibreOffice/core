@@ -40,7 +40,7 @@ module com { module sun { module star { module ui { module dialogs {
 /** Interface to query for controls and control properties supported by the
     implementing instance.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XControlInformation: com::sun::star::uno::XInterface
 {

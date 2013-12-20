@@ -45,7 +45,7 @@ module com { module sun { module star { module ui {
     service to provide access to itself.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published service UIElementFactory

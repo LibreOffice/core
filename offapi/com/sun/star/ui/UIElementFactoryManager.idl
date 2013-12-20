@@ -45,7 +45,7 @@ module com { module sun { module star { module ui {
     <type scope="com::sun::star::lang">ServiceManager</type>.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 service UIElementFactoryManager

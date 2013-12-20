@@ -40,7 +40,7 @@ module com { module sun { module star { module ui {
     @see com::sun::star::frame::XLayoutManager
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published enum DockingArea

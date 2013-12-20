@@ -73,7 +73,7 @@ module com {  module sun {  module star {  module ui {
     @see    AcceleratorConfiguration
     @see    <type scope="dom::sun::star::util">XFlushable</type>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 interface XAcceleratorConfiguration
 {

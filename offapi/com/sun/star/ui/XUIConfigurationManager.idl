@@ -66,7 +66,7 @@ module com { module sun { module star { module ui {
     controls the structure of all customizable user interface
     elements.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
