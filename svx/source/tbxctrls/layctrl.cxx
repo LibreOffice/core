@@ -59,17 +59,17 @@ private:
     Reference< XFrame > mxFrame;
     OUString       maCommand;
 
-    long TABLE_CELL_WIDTH;
-    long TABLE_CELL_HEIGHT;
+    static const long TABLE_CELLS_HORIZ = 10;
+    static const long TABLE_CELLS_VERT = 15;
 
-    const long TABLE_CELLS_HORIZ;
-    const long TABLE_CELLS_VERT;
+    long mnTableCellWidth;
+    long mnTableCellHeight;
 
-    long TABLE_POS_X;
-    long TABLE_POS_Y;
+    long mnTablePosX;
+    long mnTablePosY;
 
-    long TABLE_WIDTH;
-    long TABLE_HEIGHT;
+    long mnTableWidth;
+    long mnTableHeight;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -112,17 +112,14 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     rTbx(rParentTbx),
     mxFrame( rFrame ),
     maCommand( rCmd ),
-    TABLE_CELLS_HORIZ(10),
-    TABLE_CELLS_VERT(15),
-    TABLE_POS_X(2),
-    TABLE_POS_Y(2)
+    mnTablePosX(2),
+    mnTablePosY(2)
 {
-    TABLE_CELL_WIDTH  = 15 * GetDPIScaleFactor();
-    TABLE_CELL_HEIGHT = 15 * GetDPIScaleFactor();
+    mnTableCellWidth  = 15 * GetDPIScaleFactor();
+    mnTableCellHeight = 15 * GetDPIScaleFactor();
 
-
-    TABLE_WIDTH  = TABLE_POS_X + TABLE_CELLS_HORIZ*TABLE_CELL_WIDTH;
-    TABLE_HEIGHT = TABLE_POS_Y + TABLE_CELLS_VERT*TABLE_CELL_HEIGHT;
+    mnTableWidth  = mnTablePosX + TABLE_CELLS_HORIZ*mnTableCellWidth;
+    mnTableHeight = mnTablePosY + TABLE_CELLS_VERT*mnTableCellHeight;
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
@@ -141,13 +138,13 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 
     SetText( rText );
 
-    aTableButton.SetPosSizePixel( Point( TABLE_POS_X + TABLE_CELL_WIDTH, TABLE_HEIGHT + 5 ),
-            Size( TABLE_WIDTH - TABLE_POS_X - 2*TABLE_CELL_WIDTH, 24 ) );
+    aTableButton.SetPosSizePixel( Point( mnTablePosX + mnTableCellWidth, mnTableHeight + 5 ),
+            Size( mnTableWidth - mnTablePosX - 2*mnTableCellWidth, 24 ) );
     aTableButton.SetText( SVX_RESSTR( RID_SVXSTR_MORE ) );
     aTableButton.SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
     aTableButton.Show();
 
-    SetOutputSizePixel( Size( TABLE_WIDTH + 3, TABLE_HEIGHT + 33 ) );
+    SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 33 ) );
 }
 
 // -----------------------------------------------------------------------
@@ -171,8 +168,8 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos( aPos );
 
-    long nNewCol = ( aMousePos.X() - TABLE_POS_X + TABLE_CELL_WIDTH ) / TABLE_CELL_WIDTH;
-    long nNewLine = ( aMousePos.Y() - TABLE_POS_Y + TABLE_CELL_HEIGHT ) / TABLE_CELL_HEIGHT;
+    long nNewCol = ( aMousePos.X() - mnTablePosX + mnTableCellWidth ) / mnTableCellWidth;
+    long nNewLine = ( aMousePos.Y() - mnTablePosY + mnTableCellHeight ) / mnTableCellHeight;
 
     Update( nNewCol, nNewLine );
 }
@@ -263,33 +260,33 @@ void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void TableWindow::Paint( const Rectangle& )
 {
-    const long nSelectionWidth = TABLE_POS_X + nCol*TABLE_CELL_WIDTH;
-    const long nSelectionHeight = TABLE_POS_Y + nLine*TABLE_CELL_HEIGHT;
+    const long nSelectionWidth = mnTablePosX + nCol*mnTableCellWidth;
+    const long nSelectionHeight = mnTablePosY + nLine*mnTableCellHeight;
 
     // the non-selected parts of the table
     SetLineColor( aLineColor );
     SetFillColor( aFillColor );
-    DrawRect( Rectangle( nSelectionWidth, TABLE_POS_Y, TABLE_WIDTH, nSelectionHeight ) );
-    DrawRect( Rectangle( TABLE_POS_X, nSelectionHeight, nSelectionWidth, TABLE_HEIGHT ) );
-    DrawRect( Rectangle( nSelectionWidth, nSelectionHeight, TABLE_WIDTH, TABLE_HEIGHT ) );
+    DrawRect( Rectangle( nSelectionWidth, mnTablePosY, mnTableWidth, nSelectionHeight ) );
+    DrawRect( Rectangle( mnTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight ) );
+    DrawRect( Rectangle( nSelectionWidth, nSelectionHeight, mnTableWidth, mnTableHeight ) );
 
     // the selection
     if ( nCol > 0 && nLine > 0 )
     {
         SetFillColor( aHighlightFillColor );
-        DrawRect( Rectangle( TABLE_POS_X, TABLE_POS_Y,
+        DrawRect( Rectangle( mnTablePosX, mnTablePosY,
                     nSelectionWidth, nSelectionHeight ) );
     }
 
     // lines inside of the table
     SetLineColor( aLineColor );
     for ( long i = 1; i < TABLE_CELLS_VERT; ++i )
-        DrawLine( Point( TABLE_POS_X, TABLE_POS_Y + i*TABLE_CELL_HEIGHT ),
-                  Point( TABLE_WIDTH, TABLE_POS_Y + i*TABLE_CELL_HEIGHT ) );
+        DrawLine( Point( mnTablePosX, mnTablePosY + i*mnTableCellHeight ),
+                  Point( mnTableWidth, mnTablePosY + i*mnTableCellHeight ) );
 
     for ( long i = 1; i < TABLE_CELLS_HORIZ; ++i )
-        DrawLine( Point( TABLE_POS_X + i*TABLE_CELL_WIDTH, TABLE_POS_Y ),
-                  Point( TABLE_POS_X + i*TABLE_CELL_WIDTH, TABLE_HEIGHT ) );
+        DrawLine( Point( mnTablePosX + i*mnTableCellWidth, mnTablePosY ),
+                  Point( mnTablePosX + i*mnTableCellWidth, mnTableHeight ) );
 
     // the text near the mouse cursor telling the table dimensions
     if ( nCol && nLine )
@@ -306,15 +303,15 @@ void TableWindow::Paint( const Rectangle& )
 
         Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
 
-        long nTextX = nSelectionWidth + TABLE_CELL_WIDTH;
-        long nTextY = nSelectionHeight + TABLE_CELL_HEIGHT;
+        long nTextX = nSelectionWidth + mnTableCellWidth;
+        long nTextY = nSelectionHeight + mnTableCellHeight;
         const long nTipBorder = 2;
 
-        if ( aTextSize.Width() + TABLE_POS_X + TABLE_CELL_WIDTH + 2*nTipBorder < nSelectionWidth )
-            nTextX = nSelectionWidth - TABLE_CELL_WIDTH - aTextSize.Width();
+        if ( aTextSize.Width() + mnTablePosX + mnTableCellWidth + 2*nTipBorder < nSelectionWidth )
+            nTextX = nSelectionWidth - mnTableCellWidth - aTextSize.Width();
 
-        if ( aTextSize.Height() + TABLE_POS_Y + TABLE_CELL_HEIGHT + 2*nTipBorder < nSelectionHeight )
-            nTextY = nSelectionHeight - TABLE_CELL_HEIGHT - aTextSize.Height();
+        if ( aTextSize.Height() + mnTablePosY + mnTableCellHeight + 2*nTipBorder < nSelectionHeight )
+            nTextY = nSelectionHeight - mnTableCellHeight - aTextSize.Height();
 
         SetLineColor( aLineColor );
         SetFillColor( aBackgroundColor );
@@ -361,7 +358,7 @@ void TableWindow::Update( long nNewCol, long nNewLine )
     {
         nCol = nNewCol;
         nLine = nNewLine;
-        Invalidate( Rectangle( TABLE_POS_X, TABLE_POS_Y, TABLE_WIDTH, TABLE_HEIGHT ) );
+        Invalidate( Rectangle( mnTablePosX, mnTablePosY, mnTableWidth, mnTableHeight ) );
     }
 }
 
