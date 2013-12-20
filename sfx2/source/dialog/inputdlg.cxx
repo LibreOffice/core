@@ -9,73 +9,31 @@
 
 #include "inputdlg.hxx"
 
-#include "inputdlg.hrc"
-
 #include <sfx2/sfxresid.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 
-#define LABEL_TEXT_SPACE 5
-
-InputDialog::InputDialog (const OUString &rLabelText, Window *pParent)
-    : ModalDialog(pParent,SfxResId(DLG_INPUT_BOX)),
-      mpEntry(new Edit(this,SfxResId(EDT_INPUT_FIELD))),
-      mpLabel(new FixedText(this,SfxResId(LABEL_INPUT_TEXT))),
-      mpOK(new PushButton(this,SfxResId(BTN_INPUT_OK))),
-      mpCancel(new PushButton(this,SfxResId(BTN_INPUT_CANCEL)))
+InputDialog::InputDialog(const OUString &rLabelText, Window *pParent)
+    : ModalDialog(pParent, "InputDialog", "sfx/ui/inputdialog.ui")
 {
-    SetStyle(GetStyle() | WB_CENTER | WB_VCENTER);
-
-    mpLabel->SetText(rLabelText);
-
-    // Fit label size to text and reposition edit box
-    Size aLabelSize = mpLabel->CalcMinimumSize();
-    Size aEditSize = mpEntry->GetSizePixel();
-    Size aBtnSize = mpOK->GetSizePixel();
-
-    Point aLabelPos = mpLabel->GetPosPixel();
-    Point aEditPos = mpEntry->GetPosPixel();
-
-    aEditPos.setX(aLabelPos.getX() + aLabelSize.getWidth() + LABEL_TEXT_SPACE);
-
-    mpLabel->SetPosSizePixel(aLabelPos,aLabelSize);
-    mpEntry->SetPosSizePixel(aEditPos,aEditSize);
-
-    // Resize window if needed
-    Size aWinSize = GetOutputSize();
-    aWinSize.setWidth(aEditPos.getX() + aEditSize.getWidth() + LABEL_TEXT_SPACE);
-    SetSizePixel(aWinSize);
-
-    // Align buttons
-    Point aBtnPos = mpCancel->GetPosPixel();
-
-    aBtnPos.setX(aWinSize.getWidth() - aBtnSize.getWidth() - LABEL_TEXT_SPACE);
-    mpCancel->SetPosPixel(aBtnPos);
-
-    aBtnPos.setX(aBtnPos.getX() - aBtnSize.getWidth() - LABEL_TEXT_SPACE);
-    mpOK->SetPosPixel(aBtnPos);
-
-    mpOK->SetClickHdl(LINK(this,InputDialog,ClickHdl));
-    mpCancel->SetClickHdl(LINK(this,InputDialog,ClickHdl));
+    get(m_pEntry, "entry");
+    get(m_pLabel, "label");
+    get(m_pOK, "ok");
+    get(m_pCancel, "cancel");
+    m_pLabel->SetText(rLabelText);
+    m_pOK->SetClickHdl(LINK(this,InputDialog,ClickHdl));
+    m_pCancel->SetClickHdl(LINK(this,InputDialog,ClickHdl));
 }
 
-InputDialog::~InputDialog()
+OUString InputDialog::getEntryText() const
 {
-    delete mpEntry;
-    delete mpLabel;
-    delete mpOK;
-    delete mpCancel;
-}
-
-OUString InputDialog::getEntryText () const
-{
-    return mpEntry->GetText();
+    return m_pEntry->GetText();
 }
 
 IMPL_LINK(InputDialog,ClickHdl,PushButton*, pButton)
 {
-    EndDialog(pButton == mpOK ? true : false);
+    EndDialog(pButton == m_pOK ? true : false);
     return 0;
 }
 

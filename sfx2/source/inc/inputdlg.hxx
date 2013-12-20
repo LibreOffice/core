@@ -19,11 +19,7 @@ class PushButton;
 class InputDialog : public ModalDialog
 {
 public:
-
     InputDialog (const OUString &labelText, Window *pParent = NULL);
-
-    virtual ~InputDialog();
-
     OUString getEntryText () const;
 
 private:
@@ -32,10 +28,10 @@ private:
 
 private:
 
-    Edit *mpEntry;
-    FixedText *mpLabel;
-    PushButton *mpOK;
-    PushButton *mpCancel;
+    Edit *m_pEntry;
+    FixedText *m_pLabel;
+    PushButton *m_pOK;
+    PushButton *m_pCancel;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
