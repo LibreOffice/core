@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
 /** The argument for the "addProperty" command.
 
     @see XCommandProcessor
-    @since Apache OpenOffice 4.0
+    @since OpenOffice 4.0
 */
 struct PropertyCommandArgument
 {

@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module util {
 
 /** allows to control notification behaviour of a broadcaster.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XBroadcaster: com::sun::star::uno::XInterface
 {

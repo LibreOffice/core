@@ -41,7 +41,7 @@ module com { module sun { module star { module deployment {
     in the user, shared and bundled repository.
 
     @see ExtensionManager
-    @since OOo 3.3
+    @since OpenOffice 3.3
 */
 interface XExtensionManager
 {
@@ -302,7 +302,7 @@ interface XExtensionManager
        with bundled extensions.
 
        This function is intended to be called during the installation of OOo.
-       OOo will copy parts of the registration data folder to the user installation at the
+       OpenOffice will copy parts of the registration data folder to the user installation at the
        first startup.
     */
 

@@ -78,7 +78,7 @@ module com {   module sun {   module star {   module document {
     <member>storeToStorage</member> and <member>storeToMedium</member>.
     </p>
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 
     @see XDocumentPropertiesSupplier
             for getting access to an instance from a loaded document
@@ -392,7 +392,7 @@ published interface XDocumentProperties
         This method is used for accessing an ODF package that is owned by
         someone else, e.g., a document.
         Note that the implementation may choose to store the meta-data
-        in either OOo or ODF format, depending on the MediaType property
+        in either OpenOffice or ODF format, depending on the MediaType property
         of the given <type>Storage</type> argument.
         </p>
 

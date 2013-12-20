@@ -39,7 +39,7 @@ module com { module sun { module star { module deployment {
    <p>This exception is intended to be used with an
    <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
 
-   @since OOo 2.0.4
+   @since OpenOffice 2.0.4
 */
 exception DependencyException: com::sun::star::uno::Exception {
     /**
@@ -52,7 +52,7 @@ exception DependencyException: com::sun::star::uno::Exception {
        namespace name
        <code>http://openoffice.org/extensions/description/2006</code> and the
        local part <code>name</code> and whose value is a human-readable
-       (english) description of the dependency.  If an instance of OOo does not
+       (english) description of the dependency.  If an instance of OpenOffice does not
        know more about a specific kind of dependency, it should display the
        value of that attribute to the user.</p>
 

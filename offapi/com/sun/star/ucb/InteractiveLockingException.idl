@@ -37,7 +37,7 @@ module com { module sun { module star { module ucb {
 
     <p> Various meaningful errors are derived from this exception. </p>
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
 */
 /*published*/ exception InteractiveLockingException : com::sun::star::task::ClassifiedInteractionRequest
 {

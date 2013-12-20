@@ -42,7 +42,7 @@ module com { module sun { module star { module xml {
 
 /** interface to implement for an XML-based import filter. i
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XExportFilter: com::sun::star::uno::XInterface
 {

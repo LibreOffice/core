@@ -41,7 +41,7 @@ module com { module sun { module star { module util {
     later. In many cases, storing the reference directly would destroy the
     relocatability of an office installation.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
 {

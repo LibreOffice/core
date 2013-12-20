@@ -33,7 +33,7 @@ module com { module sun { module star { module xml { module crypto {
     algorithms.
 
     @see <type>XCipherContextSupplier</type>
-    @since OOo 3.4
+    @since OpenOffice 3.4
 */
 constants CipherID
 {

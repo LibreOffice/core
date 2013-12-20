@@ -47,7 +47,7 @@
 /** This interface allows to get an object that allows to encrypt/decrypt data
     using the specified algorithm.
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 interface XCipherContextSupplier : com::sun::star::uno::XInterface
 {

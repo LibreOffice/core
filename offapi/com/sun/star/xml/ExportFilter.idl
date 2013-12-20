@@ -42,7 +42,7 @@ module com { module sun { module star { module xml {
    a <type scope="com::sun::star::xml::sax">SAXException</type> in the
    <type scope="com::sun::star::xml::sax">XDocumentHandler</type> calls.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service ExportFilter
 {

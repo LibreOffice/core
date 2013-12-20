@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module view {
     <p><member scope="com::sun::star::lang">EventObject::Source</member>
     contains the <type>XPrintJob</type> having changed its state</p>.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 
  */
 published struct PrintJobEvent : com::sun::star::lang::EventObject

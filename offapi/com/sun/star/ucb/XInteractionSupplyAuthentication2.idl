@@ -39,7 +39,7 @@ module com { module sun { module star { module ucb {
     <p> This continuation is typically used in conjunction with
     <type>AuthenticationRequest</type>. </p>
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
 */
 published interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
 {

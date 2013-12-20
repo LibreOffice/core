@@ -43,7 +43,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** This is an extension to the interface <type>XSimpleFileAccess2</type>.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XSimpleFileAccess3 : com::sun::star::ucb::XSimpleFileAccess2
 {

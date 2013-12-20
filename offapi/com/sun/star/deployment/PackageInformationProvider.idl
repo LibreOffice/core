@@ -28,7 +28,7 @@ module com { module sun { module star { module deployment {
 /** Implementations of this service provide the root location
     of a package for a given Package ID.
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
 */
 published singleton PackageInformationProvider : XPackageInformationProvider;
 

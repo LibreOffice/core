@@ -43,7 +43,7 @@ module com { module sun { module star { module document {
 /** Is used for interaction handle to query user decision in case the document
     being saved was already stored by another user during the editing.
 
-    @since OOo 3.1
+    @since OpenOffice 3.1
 */
 published exception ChangedByOthersRequest : ::com::sun::star::uno::Exception
 {

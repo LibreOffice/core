@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module util {
     for example, a Duration of 400 Days is valid.
     </p>
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 struct Duration
 {

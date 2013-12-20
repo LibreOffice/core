@@ -40,7 +40,7 @@ module com {   module sun {   module star {   module document {
     <type>StandaloneDocumentInfo</type> services.
     </p>
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 
     @see XDocumentProperties
     @see XDocumentPropertiesSupplier

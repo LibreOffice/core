@@ -33,7 +33,7 @@ module com { module sun { module star { module xml {
     unknown by its parser, that belong to the XML element representing
     it (the component).
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 
     @deprecated     because of typo in service name.
             Please use the service UserDefinedAttributesSupplier instead.

@@ -36,7 +36,7 @@ interface XPackage;
    <p>This exception is intended to be used with an
    <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
 
-   @since OOo 2.1
+   @since OpenOffice 2.1
 */
 exception VersionException: com::sun::star::uno::Exception {
     /**

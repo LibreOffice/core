@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module util {
     @see XModeChangeBroadcaster
     @see XModeChangeListener
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct ModeChangeEvent : com::sun::star::lang::EventObject
 {
