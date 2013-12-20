@@ -4240,8 +4240,7 @@ void OpGeoMean::GenSlidingWindowFunction(
 
     for(unsigned i=0;i<vSubArguments.size();i++)
     {
-        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-        assert(pCur);
+        assert(vSubArguments[i]->GetFormulaToken());
 
         if(vSubArguments[i]->GetFormulaToken()->GetType() ==
         formula::svDoubleVectorRef)
