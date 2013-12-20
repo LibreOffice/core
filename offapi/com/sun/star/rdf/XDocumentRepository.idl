@@ -51,7 +51,7 @@ module com {   module sun {   module star {   module rdf {
     which is stored as RDFa.
     </p>
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
 
     @see XRepositorySupplier
     @see XDocumentMetadataAccess

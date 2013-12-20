@@ -47,7 +47,7 @@ published interface XLogHandler;
         <li>Logger instances do not form a hierarchy.</li>
     </ul></p>
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 published interface XLogger
 {

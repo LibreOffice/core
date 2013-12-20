@@ -130,7 +130,7 @@ published service DataAwareControlModel
         update is prevented, showing an error message to the user. To disable this behavior on a per-control
         basis, use the <code>InputRequired</code> property.</p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
     */
     [optional, property] boolean InputRequired;
 

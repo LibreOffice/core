@@ -80,7 +80,7 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
         <p>If the returned context is not <NULL/>, its <code>ScriptContainer</code> attribute
         equals the document as returned by <code>XScriptContext::getDocument</code>.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     ::com::sun::star::document::XScriptInvocationContext getInvocationContext();
 

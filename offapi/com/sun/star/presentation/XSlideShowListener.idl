@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module presentation {
 
     @see XShapeEventListener
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 published interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
 {

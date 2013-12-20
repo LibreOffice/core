@@ -37,7 +37,7 @@
     It can be used to transport the error code information.
     E.g. that can be usefull for interactions.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception ErrorCodeRequest : com::sun::star::uno::Exception
 {

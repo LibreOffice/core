@@ -119,7 +119,7 @@ module com {   module sun {   module star {   module rdf {
     </p>
 
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
 
     @see XRepositorySupplier
     @see XDocumentRepository

@@ -43,7 +43,7 @@ interface XCsvLogFormatter;
     (userdefined) column the data to log has to be preformatted with the
     formatMultiColumn method.</p>
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 service CsvLogFormatter : XCsvLogFormatter
 {

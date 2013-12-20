@@ -36,7 +36,7 @@ module com { module sun { module star { module sdbcx {
 
 /** implements the possibility to alter aspects of a view's definition
 
-    @since OOo 2.4
+    @since OpenOffice 2.4
  */
 interface XAlterView
 {

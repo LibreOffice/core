@@ -44,7 +44,7 @@ module com { module sun { module star { module script {
 /** defines a container of dialog libraries, which is to be made
     persistent in a sub storage of a document storage.
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 service DocumentDialogLibraryContainer : XStorageBasedLibraryContainer
 {

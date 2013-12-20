@@ -137,7 +137,7 @@ published service MeasureProperties
     /** This value is the number of decimal places that is used to format the
         measure value.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional, property] short MeasureDecimalPlaces;
  };

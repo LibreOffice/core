@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module task {
 //=============================================================================
 /** allows to try to restart the office.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
 */
 published interface XRestartManager : com::sun::star::uno::XInterface
 {

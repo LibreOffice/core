@@ -36,7 +36,7 @@ module com {   module sun {   module star {   module rdf {
 //=============================================================================
 /** provides access to a set of named RDF graphs.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 
     @see XRepository
     @see XRepositorySupplier

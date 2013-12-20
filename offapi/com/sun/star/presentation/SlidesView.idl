@@ -60,7 +60,7 @@
     to the user as thumbnails and can be arranged and cut/copied to/from
     the clipboard.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service SlidesView
 {

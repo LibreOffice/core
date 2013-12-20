@@ -46,7 +46,7 @@ interface XSimpleLogRing;
     Please do not use the singleton without communication with source owner!
     </p>
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 singleton DocumentIOLogRing : XSimpleLogRing;
 

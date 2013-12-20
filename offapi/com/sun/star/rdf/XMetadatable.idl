@@ -58,7 +58,7 @@ module com {   module sun {   module star {   module rdf {
     reference for the instance.
     </p>
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
 
     @see XRepository
     @see XDocumentMetadataAccess

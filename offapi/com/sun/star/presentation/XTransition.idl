@@ -37,7 +37,7 @@ interface XSlideShowView;
 
 /** Transition interface to render custom transitions over time.<p>
 
-    @since OOo 2.4
+    @since OpenOffice 2.4
  */
 interface XTransition : ::com::sun::star::uno::XInterface
 {

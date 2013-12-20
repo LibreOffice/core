@@ -43,7 +43,7 @@ module com { module sun { module star { module logging {
     simple, the strings should be produced by the preprocessor mainly.
     </p>
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 interface XSimpleLogRing
 {

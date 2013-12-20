@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module drawing {
     <p>An accessible slide view gives access to all visible slides of a
     slide view.</p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published service AccessibleSlideView
 {

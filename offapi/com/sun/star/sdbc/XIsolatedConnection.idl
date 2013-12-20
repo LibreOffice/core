@@ -40,7 +40,7 @@
     as it is the case when creating connections in normal way.
     </p>
     @see com::sun::star::sdb::DataSource
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XIsolatedConnection: com::sun::star::uno::XInterface
 {

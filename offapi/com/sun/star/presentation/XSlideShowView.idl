@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module presentation {
     XSlideShow interface to display a presentation. The slideshow can
     be displayed simultaneously on multiple views<p>
 
-    @since OOo 2.4
+    @since OpenOffice 2.4
  */
 published interface XSlideShowView : ::com::sun::star::uno::XInterface
 {

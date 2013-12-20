@@ -208,48 +208,48 @@ published constants NumberingType
     /** Numbering in Arabic alphabet letters
         as "&#1571;,&#1576;,&#1578;..."
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     const short CHARS_ARABIC = 31;
 
     //-------------------------------------------------------------------------
     /** Numbering in Thai alphabet letters
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     const short CHARS_THAI = 32;
 
     //-------------------------------------------------------------------------
     /** Numbering in Hebrew alphabet letters
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     const short CHARS_HEBREW = 33;
 
     //-------------------------------------------------------------------------
     /** Numbering in Nepali alphabet letters
 
-        @since OOo 2.0.1
+        @since OpenOffice 2.0.1
      */
     const short CHARS_NEPALI = 34;
 
     //-------------------------------------------------------------------------
     /** Numbering in Khmer alphabet letters
 
-        @since OOo 2.0.1
+        @since OpenOffice 2.0.1
      */
     const short CHARS_KHMER = 35;
 
     //-------------------------------------------------------------------------
     /** Numbering in Lao alphabet letters
 
-        @since OOo 2.0.1
+        @since OpenOffice 2.0.1
       */
     const short CHARS_LAO = 36;
     //-------------------------------------------------------------------------
     /** Numbering in Tibetan/Dzongkha alphabet letters
 
-        @since OOo 2.0.3
+        @since OpenOffice 2.0.3
       */
     const short CHARS_TIBETAN = 37;
 
@@ -257,7 +257,7 @@ published constants NumberingType
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;,  &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1074;, &#1040;&#1072;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         Since IDL comments allow only 7-bit characters, hence the XHTML
@@ -279,7 +279,7 @@ published constants NumberingType
     /** Numbering in Cyrillic alphabet lower case letters as
         "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072; &#1072;,  &#1072;&#1073;, &#1072;&#1074;, ...  &#1072; &#1072; &#1072;,  &#1072; &#1072;&#1073;".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
@@ -297,7 +297,7 @@ published constants NumberingType
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
@@ -313,7 +313,7 @@ published constants NumberingType
     /** Numbering in Cyrillic alphabet upper case letters as
         "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
@@ -329,7 +329,7 @@ published constants NumberingType
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, &#1042;, &#1043;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1040;&#1073;, &#1040;&#1074;, ... &#1040;&#1072;&#1072;, &#1040;&#1072;&#1073;".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
@@ -347,7 +347,7 @@ published constants NumberingType
     /** Numbering in Russian Cyrillic alphabet lower case letters as
         "&#1072;, &#1073;, &#1074;, &#1075;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1072;&#1073;, &#1072;&#1074;, ... &#1072;&#1072;&#1072;, &#1072;&#1072;&#1073;".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
@@ -365,7 +365,7 @@ published constants NumberingType
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1040;, &#1041;, ..., &#1070;, &#1071;, &#1040;&#1072;, &#1041;&#1073;, &#1042;&#1074;, ... &#1040;&#1072;&#1072;, ...".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
@@ -381,7 +381,7 @@ published constants NumberingType
     /** Numbering in Russian Cyrillic alphabet upper case letters as
         "&#1072;, &#1073;, ..., &#1102;, &#1103;, &#1072;&#1072;, &#1073;&#1073;, &#1074;&#1074;, ... &#1072;&#1072;&#1072;, ...".
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
@@ -396,21 +396,21 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Persian alphabet letters (aa, be, pe, te, ...)
 
-        @since OOo 2.4
+        @since OpenOffice 2.4
      */
     const short CHARS_PERSIAN = 46;
 
     //-------------------------------------------------------------------------
     /** Numbering in Myanmar alphabet letters
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
     const short CHARS_MYANMAR = 47;
 
     //-------------------------------------------------------------------------
     /** Numbering in Serbian Cyrillic alphabet upper case letters
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
@@ -426,7 +426,7 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Russian Serbian alphabet lower case letters
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
@@ -442,7 +442,7 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Serbian Cyrillic alphabet upper case letters
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
      /*
         CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
@@ -456,7 +456,7 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Serbian Cyrillic alphabet upper case letters
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
      /*
         CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,

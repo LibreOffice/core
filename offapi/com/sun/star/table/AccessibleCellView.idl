@@ -58,7 +58,7 @@ module com {  module sun {  module star {  module table {
       of a spreadsheet document. See
     <type scope="::com::sun::star::sheet">AccessibleCell</type> for cells in
     the edit view of a spreadsheet.
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service AccessibleCellView
 {

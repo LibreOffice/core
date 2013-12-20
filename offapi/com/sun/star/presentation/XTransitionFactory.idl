@@ -44,7 +44,7 @@ interface XSlideShowView;
 
     This interface provides the necessary methods to query and create optional transition effects for a SlideShow<p>
 
-    @since OOo 2.4
+    @since OpenOffice 2.4
  */
 interface XTransitionFactory : ::com::sun::star::uno::XInterface
 {

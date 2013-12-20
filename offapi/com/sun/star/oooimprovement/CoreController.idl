@@ -33,10 +33,10 @@ interface XCoreController;
 //=============================================================================
 
 /** specifies a service controlling the core components of the Openoffice.org
-    improvement program. The OOo improvement program extension has to implement
+    improvement program. The OpenOffice improvement program extension has to implement
     this service.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 service CoreController : XCoreController
 {

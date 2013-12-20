@@ -38,9 +38,9 @@ module com { module sun { module star { module task {
 
 //=============================================================================
 /** Allows to store and retrieve URLs. URLs can be stored persistently or
-    until end of OOo session.
+    until end of OpenOffice session.
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
 */
 published interface XUrlContainer : com::sun::star::uno::XInterface
 {
@@ -50,7 +50,7 @@ published interface XUrlContainer : com::sun::star::uno::XInterface
         @param Url        URL to add to the container
         @param MakePersistent indicates whether the URL shall be stored
                           persistently or just in memory (until end of
-                          OOo session)
+                          OpenOffice session)
     */
     void addUrl( [in] string Url, [in] boolean MakePersistent );
 

@@ -69,7 +69,7 @@ service JDBCConnectionProperties
         <type scope="com::sun::star::util">theMacroExpander</type>
         singleton.</p>
 
-        @since OOo 2.3
+        @since OpenOffice 2.3
     */
     [optional, property] string JavaDriverClassPath;
 

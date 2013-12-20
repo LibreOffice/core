@@ -37,7 +37,7 @@
     It can be used to transport the error code information.
     E.g. that can be usefull for interactions.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 exception GraphicFilterRequest : com::sun::star::uno::Exception
 {

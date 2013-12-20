@@ -82,7 +82,7 @@ published service DrawingDocumentDrawView
 
     /** lets you access the window for this view
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
     */
     [optional] interface com::sun::star::awt::XWindow;
 
@@ -158,7 +158,7 @@ published service DrawingDocumentDrawView
         to <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>
         afterwards.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
     */
        [optional, property] short ZoomType;
 
@@ -168,7 +168,7 @@ published service DrawingDocumentDrawView
         Valid only if the ZoomType is set to
         <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
     */
        [optional, property] short ZoomValue;
 
@@ -177,7 +177,7 @@ published service DrawingDocumentDrawView
     /** defines the offset from the top left position of the displayed page
         to the top left position of the view area in 100th/mm.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
     */
     [optional, property] com::sun::star::awt::Point ViewOffset;
 

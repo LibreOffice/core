@@ -34,7 +34,7 @@ module com { module sun { module star { module ldap {
   Indicates failure to connect to an LDAP server, usually because
   of wrong parameters (host/port) or down server.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
   */
 published exception LdapConnectionException : ::com::sun::star::uno::Exception
 {

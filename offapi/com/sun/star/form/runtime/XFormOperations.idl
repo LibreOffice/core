@@ -89,7 +89,7 @@ interface XFeatureInvalidation;
 
     @see FormFeature
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
  */
 interface XFormOperations : ::com::sun::star::lang::XComponent
 {

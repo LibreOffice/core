@@ -35,7 +35,7 @@ interface XCore;
 /** specifies a service which allows interfacing the core components of the
     Core
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 service Core : XCore
 {
