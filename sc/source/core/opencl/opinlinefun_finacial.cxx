@@ -1654,6 +1654,52 @@ std::string DaysToDate_new =
 "    }\n"
 "}\n";
 
+std::string DaysToDate_LocalBarrierDecl =
+"void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear );\n";
+
+std::string DaysToDate_LocalBarrier =
+"void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear )\n"
+"{\n"
+"    int   nTempDays;\n"
+"    int   i = 0;\n"
+"    bool    bCalc;\n"
+"    do\n"
+"    {\n"
+"        nTempDays = nDays;\n"
+"        *rYear = (int)((nTempDays / 365) - i);\n"
+"        nTempDays -= ((int) *rYear -1) * 365;\n"
+"        nTempDays -= ((*rYear -1) / 4) - ((*rYear -1) / 100) + ((*rYear -1)"
+" / 400);\n"
+"        bCalc = false;\n"
+"        if ( nTempDays < 1 )\n"
+"        {\n"
+"            i++;\n"
+"            bCalc = true;\n"
+"        }\n"
+"        else\n"
+"        {\n"
+"            if ( nTempDays > 365 )\n"
+"            {\n"
+"                if ( (nTempDays != 366) || !IsLeapYear( *rYear ) )\n"
+"                {\n"
+"                    i--;\n"
+"                    bCalc = true;\n"
+"                }\n"
+"            }\n"
+"        }\n"
+"    }\n"
+"    while ( bCalc );\n"
+"    barrier(CLK_LOCAL_MEM_FENCE);\n"
+"    if(nTempDays != 0){\n"
+"        for (*rMonth = 1; (int)nTempDays > DaysInMonth( *rMonth, *rYear );"
+" *rMonth += 1)\n"
+"        {\n"
+"            nTempDays -= DaysInMonth( *rMonth, *rYear ); \n"
+"        }\n"
+"        *rDay = (int)nTempDays;\n"
+"    }\n"
+"}\n";
+
 std::string GetYearDiff_newDecl=
 "double GetYearDiff_new( int nNullDate, int nStartDate, int nEndDate,"
 "int nMode);\n";
