@@ -50,7 +50,7 @@ module com {  module sun {  module star {  module text {
 /** is a <type>TextContent</type> that can be used to attach RDF metadata
     to a range of text.
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 service InContentMetadata
 {
@@ -70,7 +70,7 @@ service InContentMetadata
 
     //-------------------------------------------------------------------------
     /** The <type>TextContent</type> that is the parent of this text range.
-        @since OOo 3.3
+        @since OpenOffice 3.3
      */
     interface com::sun::star::container::XChild;
 

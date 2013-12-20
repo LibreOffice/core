@@ -65,7 +65,7 @@ published service TextDocumentView
 
     /** Gives access to the objects properties.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional] interface com::sun::star::beans::XPropertySet;
 
@@ -76,7 +76,7 @@ published service TextDocumentView
         <p>Since the document needs to be formatted to get the result
         obtaining this value may take some time.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property, readonly] long PageCount;
 
@@ -88,21 +88,21 @@ published service TextDocumentView
 
         <p>Empty paragraphs are not counted.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property, readonly] long LineCount;
 
     //-------------------------------------------------------------------------
     /** specifies if spellchecking should be done while typing.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean IsConstantSpellcheck;
 
     //-------------------------------------------------------------------------
     /** specifies if the marks for misspelled text should be displayed.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean IsHideSpellMarks;
 

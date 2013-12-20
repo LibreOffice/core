@@ -104,7 +104,7 @@ published constants RelOrientation
 
         /** at the top of the text line, only sensible for vertical orientation.
 
-            @since OOo 2.0
+            @since OpenOffice 2.0
          */
         const short TEXT_LINE = 9;
 

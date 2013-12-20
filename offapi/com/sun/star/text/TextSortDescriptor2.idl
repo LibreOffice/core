@@ -43,7 +43,7 @@
 /** describes sort criterias for sorting paragraphs or table contents in
     a text document.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service TextSortDescriptor2
 {

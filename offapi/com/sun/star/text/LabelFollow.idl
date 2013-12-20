@@ -32,7 +32,7 @@
 
 /** These enumeration values specify character following the list label
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
  */
 published constants LabelFollow
 {

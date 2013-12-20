@@ -66,7 +66,7 @@ published service TextField
         <p>Not all available text fields are used, for example fields
         that are part of unused styles.</p>
 
-        @since  OOo 2.0.1
+        @since OpenOffice 2.0.1
      */
     [optional, property, readonly] boolean IsFieldUsed;
 
@@ -78,7 +78,7 @@ published service TextField
         even when they are used. For example hidden fields or fields
         in hidden text are used in the document but get not displayed.</p>
 
-        @since  OOo 2.0.1
+        @since OpenOffice 2.0.1
      */
     [optional, property, readonly] boolean IsFieldDisplayed;
 

@@ -180,7 +180,7 @@ published service Shape
             of the shape, if the text document setting ConsiderTextWrapOnObjPos
             is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-            @since OOo 2.0
+            @since OpenOffice 2.0
          */
         [optional, property] short WrapInfluenceOnPosition;
 
@@ -193,7 +193,7 @@ published service Shape
         transformation property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [optional, readonly, property] com::sun::star::drawing::HomogenMatrix3 TransformationInHoriL2R;
     //-------------------------------------------------------------------------
@@ -202,7 +202,7 @@ published service Shape
 
         <p>Valid values are given by <member>PositionLayoutDir</member></p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] short PositionLayoutDir;
     //-------------------------------------------------------------------------
@@ -214,7 +214,7 @@ published service Shape
         start position property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [optional, readonly, property] com::sun::star::awt::Point StartPositionInHoriL2R;
     //-------------------------------------------------------------------------
@@ -226,7 +226,7 @@ published service Shape
         end position property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [optional, readonly, property] com::sun::star::awt::Point EndPositionInHoriL2R;
 };

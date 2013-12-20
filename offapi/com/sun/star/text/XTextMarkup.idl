@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module text {
 
 /** provides functionality to markup text.
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 
 interface XTextMarkup

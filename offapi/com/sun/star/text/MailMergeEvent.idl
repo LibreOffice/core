@@ -46,7 +46,7 @@ module com { module sun { module star { module text {
 
     @see    com::sun::star::text::MailMerge
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct MailMergeEvent : com::sun::star::lang::EventObject
 {

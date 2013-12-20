@@ -45,13 +45,13 @@ published service Annotation
 
     /** contains the initials of the author of the annotation.
 
-        @since Apache OpenOffice 4.1
+        @since OpenOffice 4.1
      */
     [optional, property]string Initials;
 
     /** contains the name of the annotation.
 
-        @since Apache OpenOffice 4.1
+        @since OpenOffice 4.1
      */
     [optional, property]string Name;
 

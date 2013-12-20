@@ -53,7 +53,7 @@
 
 /** Gives access to mail merge functionality.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service MailMerge
 {
@@ -263,7 +263,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string OutServerPassword;
     //=============================================================================
@@ -274,7 +274,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string InServerPassword;
     //=============================================================================
@@ -282,7 +282,7 @@ published service MailMerge
     /** contains the subject of the e-Mail message.
 
         <p>This property is only evaluated for e-Mail output.</p>
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string Subject;
 
@@ -293,7 +293,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string AddressFromColumn;
 
@@ -304,7 +304,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] boolean SendAsHTML;
 
@@ -315,7 +315,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] boolean SendAsAttachment;
 
@@ -325,7 +325,7 @@ published service MailMerge
         This property is only valid if the property "SendAsAttachment" is set to <true/>
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string MailBody;
 
@@ -336,7 +336,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string AttachmentName;
 
@@ -347,7 +347,7 @@ published service MailMerge
 
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string AttachmentFilter;
 
@@ -356,7 +356,7 @@ published service MailMerge
     /** contains a list of e-Mail addresses to
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] sequence< string > CopiesTo;
 
@@ -365,7 +365,7 @@ published service MailMerge
     /**
         <p>This property is only evaluated for e-Mail output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] sequence< string > BlindCopiesTo;
 
@@ -375,7 +375,7 @@ published service MailMerge
     /** determines that the output of the mail merge is save in one single file.
         <p>This property is only evaluated for file output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] boolean SaveAsSingleFile;
 
@@ -384,7 +384,7 @@ published service MailMerge
     /** contains the name of the document filter to save the output file(s).
         <p>This property is only evaluated for file output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] string SaveFilter;
 
@@ -394,7 +394,7 @@ published service MailMerge
 
         <p>This property is only evaluated for printer output.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [property, optional] sequence< com::sun::star::beans::PropertyValue > PrintOptions;
 

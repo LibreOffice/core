@@ -169,14 +169,14 @@ published service ViewSettings
 
     /** Specifies whether to display the grid or not
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean IsRasterVisible;
 
     /** Specifies whether to move frames, drawing elements, and form
         functions only between grid points.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean IsSnapToRaster;
 
@@ -185,7 +185,7 @@ published service ViewSettings
         <p>The value must be greater or equal to 0, and the application
         may enforce an upper bound for the value.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -196,7 +196,7 @@ published service ViewSettings
         <p>The value must be greater or equal to 0, and the application
         may enforce an upper bound for the value.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -208,7 +208,7 @@ published service ViewSettings
         <p>The value must be greater than 0. The application
         may enforce more restricting bounds for the value.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -220,7 +220,7 @@ published service ViewSettings
         <p>The value must be greater than 0. The application
         may enforce more restricting bounds for the value.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
         @throws com::sun::star::lang::IllegalArgumentException
             if the value is out of bounds.
      */
@@ -228,7 +228,7 @@ published service ViewSettings
 
     /** If this property is <TRUE/>, hidden characters are displayed
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean ShowHiddenCharacters;
 
@@ -237,7 +237,7 @@ published service ViewSettings
         <p>This option controls the use of the settings ShowHiddenCharacters,
         ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean ShowNonprintingCharacters;
 
@@ -245,7 +245,7 @@ published service ViewSettings
 
         <p>Uses values <type scope="com::sun::star::awt">FieldUnit</type></p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
     [optional, property] long HorizontalRulerMetric;
 
@@ -253,21 +253,21 @@ published service ViewSettings
 
         <p>Uses values from <type scope="com::sun::star::awt">FieldUnit</type></p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
      */
     [optional, property] long VerticalRulerMetric;
 
     /** If this property is <TRUE/>, tips for document content are shown,
         typically in a help balloon when the mouse is over the content.
 
-        @since Apache OpenOffice 4.0
+        @since OpenOffice 4.0
      */
     [optional, property] boolean ShowContentTips;
 
     /** If this property is <TRUE/>, and the scroll bar is shown, a tool tip
         is displayed while scrolling.
 
-        @since Apache OpenOffice 4.0
+        @since OpenOffice 4.0
      */
     [optional, property] boolean ShowScrollBarTips;
 };

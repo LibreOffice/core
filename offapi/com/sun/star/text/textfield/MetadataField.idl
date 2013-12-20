@@ -53,7 +53,7 @@ module com { module sun { module star { module text { module textfield {
 /** is a <type scope="com::sun::star::text">TextField</type> whose content
     is specified by RDF metadata.
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
 
     @see com::sun::star::rdf
 */
@@ -81,7 +81,7 @@ published service MetadataField
     //-------------------------------------------------------------------------
     /** The <type scope="com::sun::star::text">TextContent</type>
         that is the parent of this <type>MetadataField</type>.
-        @since OOo 3.3
+        @since OpenOffice 3.3
      */
     interface com::sun::star::container::XChild;
 

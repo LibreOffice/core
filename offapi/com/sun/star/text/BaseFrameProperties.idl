@@ -60,7 +60,7 @@
 published service BaseFrameProperties
 {
     /** gives access to the UserDefinedAttributes property.
-        @since  OOo 2.1
+        @since OpenOffice 2.1
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
@@ -331,7 +331,7 @@ published service BaseFrameProperties
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
         is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] short WrapInfluenceOnPosition;
 
@@ -343,7 +343,7 @@ published service BaseFrameProperties
         document needs to be formatted as well. Thus if that was not done
         previously it may take some while to retrieve this value.</p>
 
-        @since OOo 2.0.4
+        @since OpenOffice 2.0.4
      */
     [optional, property, maybevoid] com::sun::star::awt::Size LayoutSize;
 
@@ -353,7 +353,7 @@ published service BaseFrameProperties
             <p>This short title is visible as an alternative tag in HTML format.
             Accessibility tools can read this text.</p>
 
-            @since OOo 3.2
+            @since OpenOffice 3.2
         */
         [optional, property] string Title;
 
@@ -364,7 +364,7 @@ published service BaseFrameProperties
             more detail to users with screen reader software. The description is
             visible as an alternative tag for accessibility tools.</p>
 
-            @since OOo 3.2
+            @since OpenOffice 3.2
         */
         [optional, property] string Description;
 };

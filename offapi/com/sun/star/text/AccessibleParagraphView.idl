@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module text {
 /** The accessible view of a paragraph fragment.
 
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 published service AccessibleParagraphView
 {
@@ -195,7 +195,7 @@ published service AccessibleParagraphView
         /** This interface gives access to the default attributes of a paragraph
             and to the run attributes of a certain character in a paragraph
 
-            @since OOo 2.0.4
+            @since OpenOffice 2.0.4
         */
         [optional] interface ::com::sun::star::accessibility::XAccessibleTextAttributes;
 

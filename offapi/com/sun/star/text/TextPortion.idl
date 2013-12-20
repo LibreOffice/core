@@ -81,7 +81,7 @@ published service TextPortion
 
     //-------------------------------------------------------------------------
     /** gives access to a sequence of properties.
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional]
     interface ::com::sun::star::beans::XTolerantMultiPropertySet;
@@ -149,7 +149,7 @@ published service TextPortion
 
     //-------------------------------------------------------------------------
     /** contains the text range of a text portion of type InContentMetadata.
-        @since OOo 3.2
+        @since OpenOffice 3.2
      */
     [optional, readonly, property]
     ::com::sun::star::text::XTextContent InContentMetadata;
