@@ -4955,81 +4955,83 @@ void OpDDB::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tmp = 0;\n";
     ss << "    double fWert,fRest,fDauer,fPeriode,fFaktor;\n";
-    ss << "    double fGda, fZins, fAlterWert, fNeuerWert;\n";
+    ss << "    double fZins, fAlterWert, fNeuerWert;\n";
+
 #ifdef ISNAN
     FormulaToken* tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
     FormulaToken* tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
     FormulaToken* tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur2);
     FormulaToken* tmpCur3 = vSubArguments[3]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur3);
     FormulaToken* tmpCur4 = vSubArguments[4]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur4);
-    ss<< "    int buffer_wert_len = ";
-    ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_rest_len = ";
-    ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_dauer_len = ";
-    ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_periode_len = ";
-    ss<< tmpCurDVR3->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_factor_len = ";
-    ss<< tmpCurDVR4->GetArrayLength();
-    ss << ";\n";
 #endif
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_wert_len || isNan(";
-    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fWert = 0;\n    else\n";
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur0);
+        ss <<"    if(gid0 >= "<<tmpCurDVR0->GetArrayLength()<<" || isNan(";
+        ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        fWert = 0;\n    else\n";
+    }
 #endif
     ss <<"        fWert = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_rest_len || isNan(";
-    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fRest = 0;\n    else\n";
+    if(tmpCur1->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur1);
+        ss <<"    if(gid0 >= "<<tmpCurDVR1->GetArrayLength()<<" || isNan(";
+        ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        fRest = 0;\n    else\n";
+    }
 #endif
     ss <<"        fRest = ";
     ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_dauer_len || isNan(";
-    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fDauer = 0;\n    else\n";
+    if(tmpCur2->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur2);
+        ss <<"    if(gid0 >= "<<tmpCurDVR2->GetArrayLength()<<" || isNan(";
+        ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        fDauer = 0;\n    else\n";
+    }
 #endif
-    ss <<"        fDauer = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<"        fDauer = ";
+    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_periode_len || isNan(";
-    ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fPeriode = 0;\n    else\n";
+    if(tmpCur3->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur3);
+        ss <<"    if(gid0 >= "<<tmpCurDVR3->GetArrayLength()<<" || isNan(";
+        ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        fPeriode = 0;\n    else\n";
+    }
 #endif
     ss <<"        fPeriode = "<<vSubArguments[3]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_factor_len || isNan(";
-    ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
-    ss <<"        fFaktor = 0;\n    else\n";
+    if(tmpCur4->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur4);
+        ss <<"    if(gid0 >= "<<tmpCurDVR4->GetArrayLength()<<" || isNan(";
+        ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss <<"))\n";
+        ss <<"        fFaktor = 0;\n    else\n";
+    }
 #endif
     ss <<"        fFaktor = "<<vSubArguments[4]->GenSlidingWindowDeclRef();
     ss <<";\n";
-    ss <<"    fZins = fFaktor / fDauer;\n";
+    ss <<"    fZins = fFaktor * pow(fDauer,-1);\n";
     ss <<"    if (fZins >= 1.0)\n";
     ss <<"    {\n";
     ss <<"        fZins = 1.0;\n";
@@ -5039,15 +5041,14 @@ void OpDDB::GenSlidingWindowFunction(std::stringstream& ss,
     ss <<"            fAlterWert = 0.0;\n";
     ss <<"    }\n";
     ss <<"    else\n";
-    ss <<"        fAlterWert = fWert * pow(1.0 - fZins, fPeriode - 1.0);\n";
+    ss <<"        fAlterWert = fWert * pow(1.0 - fZins, fPeriode - 1);\n";
     ss <<"    fNeuerWert = fWert * pow(1.0 - fZins, fPeriode);\n";
     ss <<"    if (fNeuerWert < fRest)\n";
-    ss <<"        fGda = fAlterWert - fRest;\n";
+    ss <<"        tmp = fAlterWert - fRest;\n";
     ss <<"    else\n";
-    ss <<"        fGda = fAlterWert - fNeuerWert;\n";
-    ss <<"    if (fGda < 0.0)\n";
-    ss <<"        fGda = 0.0;\n";
-    ss <<"    tmp = fGda;\n";
+    ss <<"        tmp = fAlterWert - fNeuerWert;\n";
+    ss <<"    if (tmp < 0.0)\n";
+    ss <<"        tmp = 0.0;\n";
     ss <<"    return tmp;\n";
     ss <<"}";
 }
