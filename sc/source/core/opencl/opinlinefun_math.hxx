@@ -56,6 +56,35 @@ std::string local_cosh =
 "    double nVal = (exp(n) + exp(-n)) / 2;\n"
 "    return nVal;\n"
 "}\n";
+std::string atan2Decl = "double arctan2(double y, double x);\n";
+std::string atan2Content =
+"double arctan2(double y, double x)\n"
+"{\n"
+"    if(y==0.0)\n"
+"        return 0.0;\n"
+"    double a,num,den,tmpPi;\n"
+"    int flag;\n"
+"    tmpPi = 0;\n"
+"    if (fabs(x) >= fabs(y))\n"
+"    {\n"
+"        num = y;\n"
+"        den = x;\n"
+"        flag = 1;\n"
+"        if (x < 0.0)\n"
+"            tmpPi = M_PI;\n"
+"    }\n"
+"    if(fabs(x) < fabs(y))\n"
+"    {\n"
+"        num = x;\n"
+"        den = y;\n"
+"        flag = -1;\n"
+"        tmpPi = M_PI_2;\n"
+"    }\n"
+"    a = atan(num/den);\n"
+"    a = flag==1?a:-a;\n"
+"    a = a + (y >= 0.0 ? tmpPi : -tmpPi);\n"
+"    return a;\n"
+"}\n";
 
 
 #endif //SC_OPENCL_OPINLINFUN_MATH

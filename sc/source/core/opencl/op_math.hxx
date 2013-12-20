@@ -175,6 +175,7 @@ public:
         const std::string sSymName, SubArguments &vSubArguments);
     virtual std::string GetBottom(void) { return "0.0"; }
     virtual std::string BinFuncName(void) const { return "ScATan2"; }
+    virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>&);
 };
 class OpArcTan:public Normal{
 public:
