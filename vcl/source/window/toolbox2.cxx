@@ -1343,18 +1343,17 @@ void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rInputImage )
+void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
     {
-        const Image* pImage = &rInputImage; // Use the pointer to avoid unnecessary copying
-        Image aImage; // But we still need to keep the modified image alive if created.
+        Image aImage(rImage);
 
         if ( GetDPIScaleFactor() > 1)
         {
-            BitmapEx aBitmap = rInputImage.GetBitmapEx();
+            BitmapEx aBitmap(aImage.GetBitmapEx());
 
             // Some code calls this twice, so add a sanity check
             // FIXME find out what that code is & fix accordingly
@@ -1362,7 +1361,6 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rInputImage )
             {
                 aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
                 aImage = Image(aBitmap);
-                pImage = &aImage;
             }
         }
 
@@ -1371,14 +1369,14 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rInputImage )
         if ( !mbCalc )
         {
             Size aOldSize = pItem->maImage.GetSizePixel();
-            pItem->maImage = *pImage;
+            pItem->maImage = aImage;
             if ( aOldSize != pItem->maImage.GetSizePixel() )
                 ImplInvalidate( sal_True );
             else
                 ImplUpdateItem( nPos );
         }
         else
-            pItem->maImage = *pImage;
+            pItem->maImage = aImage;
     }
 }
 
