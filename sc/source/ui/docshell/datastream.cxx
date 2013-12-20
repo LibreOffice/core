@@ -65,11 +65,15 @@ private:
     {
         while (!mbTerminate)
         {
+            // wait for a small amount of time, so that
+            // painting methods have a chance to be called.
+            // And also to make UI more responsive.
+            TimeValue const aTime = {0, 1000};
             maStart.wait();
             maStart.reset();
             if (!mbTerminate)
                 while (mpDataStream->ImportData())
-                    ;
+                    wait(aTime);
         };
     }
 };
@@ -347,8 +351,9 @@ void DataStream::SetRefreshOnEmptyLine( bool bVal )
 
 void DataStream::Refresh()
 {
-    // Hard recalc will repaint the grid area.
     Application::Yield();
+
+    // Hard recalc will repaint the grid area.
     mpDocShell->DoHardRecalc(true);
     mpDocShell->SetDocumentModified(true);
 
@@ -509,9 +514,13 @@ void DataStream::Text2Doc() {}
 
 bool DataStream::ImportData()
 {
+    SolarMutexGuard aGuard;
     if (!mbValuesInLine)
         // We no longer support this mode. To be deleted later.
         return false;
+
+    if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
+        return mbRunning;
 
     Text2Doc();
     return mbRunning;
