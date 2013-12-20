@@ -1214,8 +1214,7 @@ std::string GetYearDiff=
 "    int   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate,"
 "nMode, &"
 "nDays1stYear );\n"
-"    double result=(double)(nTotalDays)/(nDays1stYear);\n"
-"    return result;\n"
+"     return (double)(nTotalDays)*pow((double)nDays1stYear,-1);\n"
 "}\n";
 
 std::string GetDiffDate360_Decl=
