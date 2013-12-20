@@ -944,9 +944,9 @@ const XMLPropertyMapEntry* XMLTextPropertySetMapper::getPropertyMapForType( sal_
     return lcl_txtprmap_getMap( _nType );
 }
 
-XMLTextPropertySetMapper::XMLTextPropertySetMapper( sal_uInt16 nType ) :
+XMLTextPropertySetMapper::XMLTextPropertySetMapper( sal_uInt16 nType, bool bForExport ) :
     XMLPropertySetMapper( lcl_txtprmap_getMap( nType ),
-                          new XMLTextPropertyHandlerFactory )
+                          new XMLTextPropertyHandlerFactory, bForExport )
 {
 }
 

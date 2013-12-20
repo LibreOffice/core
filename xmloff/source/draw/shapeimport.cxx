@@ -148,7 +148,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpSdPropHdlFactory->acquire();
 
     // construct PropertySetMapper
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory);
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
     mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     // set lock to avoid deletion
     mpPropertySetMapper->acquire();
@@ -164,7 +164,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
 
     // construct PresPagePropsMapper
-    xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory);
+    xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory, false);
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     if(mpPresPagePropsMapper)
     {
@@ -1014,7 +1014,7 @@ void XMLShapeImportHelper::restoreConnections()
 SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, rImport );
-    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, false );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
     // chain text attributes
@@ -1119,7 +1119,7 @@ const rtl::Reference< XMLTableImport >& XMLShapeImportHelper::GetShapeTableImpor
     if( !mxShapeTableImport.is() )
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrImporter.GetModel(), mrImporter ) );
-        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory.get(), false ) );
         mxShapeTableImport = new XMLTableImport( mrImporter, xPropertySetMapper, xFactory );
     }
 

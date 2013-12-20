@@ -65,19 +65,36 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
 // Ctor
 XMLPropertySetMapper::XMLPropertySetMapper(
         const XMLPropertyMapEntry* pEntries,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory )
+        const UniReference< XMLPropertyHandlerFactory >& rFactory,
+        bool bForExport )
+    :
+        mbOnlyExportMappings( bForExport)
 {
     aHdlFactories.push_back( rFactory );
     if( pEntries )
     {
         const XMLPropertyMapEntry* pIter = pEntries;
 
-        // count entries
-        while( pIter->msApiName )
+        if (mbOnlyExportMappings)
         {
-            XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
-            aMapEntries.push_back( aEntry );
-            pIter++;
+            while( pIter->msApiName )
+            {
+                if (!pIter->mbImportOnly)
+                {
+                    XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
+                    aMapEntries.push_back( aEntry );
+                }
+                pIter++;
+            }
+        }
+        else
+        {
+            while( pIter->msApiName )
+            {
+                XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
+                aMapEntries.push_back( aEntry );
+                pIter++;
+            }
         }
     }
 }
@@ -102,7 +119,8 @@ void XMLPropertySetMapper::AddMapperEntry(
          aEIter != rMapper->aMapEntries.end();
          ++aEIter )
     {
-        aMapEntries.push_back( *aEIter );
+        if (!mbOnlyExportMappings || !(*aEIter).bImportOnly)
+            aMapEntries.push_back( *aEIter );
     }
 }
 

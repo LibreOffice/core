@@ -50,10 +50,10 @@ namespace dbaxml
     class OXMLHelper
     {
     public:
-        static UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper();
-        static UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper();
-        static UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper();
-        static UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper();
+        static UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper( bool bForExport );
+        static UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper( bool bForExport );
+        static UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper( bool bForExport );
+        static UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper( bool bForExport );
     };
 } // dbaxml
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLHELPER_HXX

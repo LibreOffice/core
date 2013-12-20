@@ -435,7 +435,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         const UniReference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
 
         // construct PropertySetMapper
-        UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef);
+        UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef, true);
 
         // get or create text paragraph export
         GetTextParagraphExport();
@@ -447,7 +447,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         mpPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
         // construct PresPagePropsMapper
-        xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
+        xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef, true);
 
         mpPresPagePropsMapper = new XMLPageExportPropertyMapper( xMapper, *this  );
         // set lock to avoid deletion

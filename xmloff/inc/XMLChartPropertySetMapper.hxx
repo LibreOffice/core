@@ -42,8 +42,8 @@ public:
 class XMLChartPropertySetMapper : public XMLPropertySetMapper
 {
 public:
-    XMLChartPropertySetMapper();
-    ~XMLChartPropertySetMapper();
+    explicit XMLChartPropertySetMapper( bool bForExport );
+            ~XMLChartPropertySetMapper();
 };
 
 class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
