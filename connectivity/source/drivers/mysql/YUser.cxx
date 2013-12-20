@@ -126,7 +126,7 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
         static const OUString sREAD(  "READ" );
         static const OUString sCREATE(  "CREATE" );
         static const OUString sALTER(  "ALTER" );
-        static const OUString sREFERENCE(  "REFERENCE" );
+        static const OUString sREFERENCE(  "REFERENCES" );
         static const OUString sDROP(  "DROP" );
         static const OUString sYes(  "YES" );
 
