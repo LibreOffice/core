@@ -3205,57 +3205,18 @@ void OpPriceDisc::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"    double tmp2=0;\n";
     ss<<"    double tmp3=0;\n";
     ss<<"    double tmp4=0;\n";
-    size_t nItems = 0;
     ss <<"    \n";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "    for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n";
-#else
-                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n";
-#endif
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-#else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n";
-#endif
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-#ifdef  ISNAN
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-#endif
-            }
-            else {
-#ifdef  ISNAN
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n";
-#endif
-            }
-            nItems += nCurWindowSize;
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
+        if (pCur->GetType() == formula::svSingleVectorRef)
         {
 #ifdef  ISNAN
             const formula::SingleVectorRefToken* pSVR =
             dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
@@ -3263,13 +3224,11 @@ void OpPriceDisc::GenSlidingWindowFunction(std::stringstream &ss,
 #ifdef  ISNAN
             ss << "{\n";
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 #ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
