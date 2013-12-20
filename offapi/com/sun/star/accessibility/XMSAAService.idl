@@ -23,7 +23,6 @@
 #define __com_sun_star_accessibility_XMSAASERVICE_idl__
 
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
