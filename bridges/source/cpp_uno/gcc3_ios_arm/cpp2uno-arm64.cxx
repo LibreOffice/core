@@ -20,9 +20,7 @@
 #ifdef __arm64
 
 // For iOS devices (64-bit ARM). Originally a copy of
-// ../gcc3_linux_arm/cpp2uno.cxx with some cleanups and necessary
-// changes: No dynamic code generation as that is prohibited for apps
-// in the App Store. Instead we use a set of pre-generated snippets.
+// ../gcc3_linux_arm/cpp2uno.cxx.
 
 // No attempts at factoring out the large amounts of more or less
 // common code in this, cpp2uno-arm.cxx and cpp2uno-i386.cxx have been
@@ -49,23 +47,19 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-
     static typelib_TypeClass cpp2uno_call(
         bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         const typelib_TypeDescription * pMemberTypeDescr,
         typelib_TypeDescriptionReference * pReturnTypeRef,
-        sal_Int32 nParams, typelib_MethodParameter * pParams,
+        sal_Int32 nParams,
+        typelib_MethodParameter * pParams,
         void ** pCallStack,
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
-        // pCallStack: ret, [return ptr], this, params
+        // pCallStack: x8, ret, [return ptr], this, params
         char * pTopStack = (char *)(pCallStack + 0);
         char * pCppStack = pTopStack;
 
-#ifdef __ARM_PCS_VFP
-        int dc = 0;
-        char * pFloatArgs = (char *)(pCppStack - 64);
-#endif
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
         if (pReturnTypeRef)
@@ -77,7 +71,7 @@ namespace
 
         if (pReturnTypeDescr)
         {
-            if (!arm::return_in_hidden_param(pReturnTypeRef))
+            if (!arm::return_in_x8(pReturnTypeRef))
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             else // complex return via ptr (pCppReturn)
             {
@@ -99,14 +93,14 @@ namespace
 
         // Indices of values this have to be converted (interface conversion
         // cpp<=>uno)
-        sal_Int32 * pTempIndices = (sal_Int32 *)alloca( sizeof(sal_Int32) * nParams);
+        int * pTempIndices = (sal_Int32 *)alloca( sizeof(int) * nParams);
 
         // Type descriptions for reconversions
         typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)alloca( sizeof(typelib_TypeDescription *) * nParams);
 
-        sal_Int32 nTempIndices   = 0;
+        int nTempIndices = 0;
 
-        for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+        for ( int nPos = 0; nPos < nParams; ++nPos )
         {
             const typelib_MethodParameter & rParam = pParams[nPos];
             typelib_TypeDescription * pParamTypeDescr = 0;
@@ -221,7 +215,7 @@ namespace
             // destruct temporary in/inout params
             for ( ; nTempIndices--; )
             {
-                sal_Int32 nIndex = pTempIndices[nTempIndices];
+                int nIndex = pTempIndices[nTempIndices];
 
                 if (pParams[nIndex].bIn) // is in/inout => was constructed
                     uno_destructData( pUnoArgs[nIndex],
@@ -241,7 +235,7 @@ namespace
             // temporary params
             for ( ; nTempIndices--; )
             {
-                sal_Int32 nIndex = pTempIndices[nTempIndices];
+                int nIndex = pTempIndices[nTempIndices];
                 typelib_TypeDescription * pParamTypeDescr =
                     ppTempParamTypeDescr[nTempIndices];
 
@@ -285,25 +279,15 @@ namespace
 
 
     //=====================================================================
-    static typelib_TypeClass cpp_mediate(
-        sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
-        void ** pCallStack,
-        sal_Int64 * pRegisterReturn /* space for register return */ )
+    static typelib_TypeClass cpp_mediate( sal_Int32 nFunctionIndex,
+                                          sal_Int32 nVtableOffset,
+                                          void ** pCallStack,
+                                          sal_Int64 * pRegisterReturn )
     {
-        OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
-
-        // pCallStack: [ret *], this, params
+        // pCallStack: x8, ret *, this, params
         // _this_ ptr is patched cppu_XInterfaceProxy object
-        void *pThis;
-        if( nFunctionIndex & 0x80000000 )
-        {
-            nFunctionIndex &= 0x7fffffff;
-            pThis = pCallStack[1];
-        }
-        else
-        {
-            pThis = pCallStack[0];
-        }
+        nFunctionIndex &= 0x7fffffff;
+        void *pThis = pCallStack[2];
 
         pThis = static_cast< char * >(pThis) - nVtableOffset;
         bridges::cpp_uno::shared::CppInterfaceProxy * pCppI =
@@ -427,12 +411,11 @@ namespace
  * (called by asm snippets)
  */
 
-extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
-    void **pCallStack )
+extern "C" sal_Int64 cpp_vtable_call( sal_Int32 *pFunctionAndOffset,
+                                      void **pCallStack )
 {
     sal_Int64 nRegReturn;
-    typelib_TypeClass aType = cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack,
-        &nRegReturn );
+    typelib_TypeClass aType = cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack, &nRegReturn );
 
     switch( aType )
     {
@@ -461,7 +444,7 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
 namespace
 {
     unsigned char *codeSnippet(sal_Int32 functionIndex,
-        sal_Int32 vtableOffset, bool bHasHiddenParam)
+        sal_Int32 vtableOffset, bool bReturnThroughX8)
     {
         assert(functionIndex < nFunIndexes);
         if (!(functionIndex < nFunIndexes))
@@ -472,14 +455,14 @@ namespace
             return NULL;
 
         // The codeSnippets table is indexed by functionIndex,
-        // vtableOffset, and the has-hidden-param flag
+        // vtableOffset, and the return-through-x8 flag
 
-        int index = functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam;
+        int index = functionIndex*nVtableOffsets*2 + vtableOffset*2 + bReturnThroughX8;
         unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
 
         SAL_INFO( "bridges.ios",
                   "codeSnippet: [" <<
-                  functionIndex << "," << vtableOffset << "," << bHasHiddenParam << "]=" <<
+                  functionIndex << "," << vtableOffset << "," << bReturnThroughX8 << "]=" <<
                   (void *) result);
 
         return result;
@@ -532,7 +515,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 // Getter:
                 (s++)->fn = codeSnippet(
                     functionOffset++, vtableOffset,
-                    arm::return_in_hidden_param( pAttrTD->pAttributeTypeRef ));
+                    arm::return_in_x8( pAttrTD->pAttributeTypeRef ));
 
                 // Setter:
                 if (!pAttrTD->bReadOnly)
@@ -549,7 +532,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                         typelib_InterfaceMethodTypeDescription * >(member);
 
                 (s++)->fn = codeSnippet(functionOffset++, vtableOffset,
-                    arm::return_in_hidden_param(pMethodTD->pReturnTypeRef));
+                    arm::return_in_x8(pMethodTD->pReturnTypeRef));
                 break;
             }
         default:

@@ -35,7 +35,7 @@ _privateSnippetExecutor:
     mov     r0, ip          // r0 points to functionoffset/vtable
     mov     r1, sp          // r1 points to this and params
                             // (see cpp2uno.cxx:codeSnippet())
-    stmfd   sp!, {r4,lr}    // save return address 
+    stmfd   sp!, {r4, lr}   // save return address
                             // (r4 pushed to preserve stack alignment)
     bl      _cpp_vtable_call
 
@@ -49,9 +49,20 @@ _privateSnippetExecutor:
 
 _privateSnippetExecutor:
 
-	// Not done yet, intentionally crash for now...
-    mov     x15, #0
-    ldr     x15, [x15]
+    stp     x6, x7, [sp, #-16]!
+    stp     x4, x5, [sp, #-16]!
+    stp     x2, x3, [sp, #-16]!
+    stp     x0, x1, [sp, #-16]!
+
+    mov     x0, x15
+    stp     x8, lr, [sp, #-16]!
+    mov     x1, sp
+
+    bl      _cpp_vtable_call
+
+    ldp     x8, lr, [sp, #0]
+    add     sp, sp, #80
+    ret     lr
 
 #else
     .text

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <boost/unordered_map.hpp>

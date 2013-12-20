@@ -32,46 +32,23 @@ using namespace ::com::sun::star::uno;
 
 namespace arm
 {
-    bool is_complex_struct(const typelib_TypeDescription * type)
+    bool is_hfa_struct(const typelib_TypeDescription * type)
     {
         const typelib_CompoundTypeDescription * p
             = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        if (p->nMembers >= 4)
+            return false;
         for (sal_Int32 i = 0; i < p->nMembers; ++i)
         {
-            if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
-                p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
-            {
-                typelib_TypeDescription * t = 0;
-                TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
-                bool b = is_complex_struct(t);
-                TYPELIB_DANGER_RELEASE(t);
-                if (b) {
-                    return true;
-                }
-            }
-            else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
-                return true;
-        }
-        if (p->pBaseTypeDescription != 0)
-            return is_complex_struct(&p->pBaseTypeDescription->aBase);
-        return false;
-    }
-
-#ifdef __ARM_PCS_VFP
-    bool is_float_only_struct(const typelib_TypeDescription * type)
-    {
-        const typelib_CompoundTypeDescription * p
-            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
-        for (sal_Int32 i = 0; i < p->nMembers; ++i)
-        {
-            if (p->ppTypeRefs[i]->eTypeClass != typelib_TypeClass_FLOAT &&
-                p->ppTypeRefs[i]->eTypeClass != typelib_TypeClass_DOUBLE)
+            if ((p->ppTypeRefs[i]->eTypeClass != typelib_TypeClass_FLOAT &&
+                 p->ppTypeRefs[i]->eTypeClass != typelib_TypeClass_DOUBLE) ||
+                p->ppTypeRefs[i]->eTypeClass != p->ppTypeRefs[0]->eTypeClass)
                 return false;
         }
         return true;
     }
-#endif
-    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef )
+
+    bool return_in_x8( typelib_TypeDescriptionReference *pTypeRef )
     {
         if (bridges::cpp_uno::shared::isSimpleType(pTypeRef))
             return false;
@@ -81,15 +58,10 @@ namespace arm
             TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
             // A Composite Type not larger than 16 bytes is returned in x0, x1
-            // FIXME: what about the "complex struct" thing, is that relevant at all?
-            bool bRet = pTypeDescr->nSize > 16 || is_complex_struct(pTypeDescr);
+            bool bRet = pTypeDescr->nSize > 16;
 
-#ifdef __ARM_PCS_VFP
-            // In the VFP ABI, structs with only float/double values that fit in
-            // 16 bytes are returned in registers
-            if( pTypeDescr->nSize <= 16 && is_float_only_struct(pTypeDescr))
+            if (is_hfa_struct(pTypeDescr))
                 bRet = false;
-#endif
 
             TYPELIB_DANGER_RELEASE( pTypeDescr );
             return bRet;
@@ -98,174 +70,131 @@ namespace arm
     }
 }
 
-void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
+void MapReturn(sal_uInt64 x0, sal_uInt64 x1, typelib_TypeDescriptionReference *pReturnType, sal_uInt64 *pRegisterReturn)
 {
     switch( pReturnType->eTypeClass )
     {
-        case typelib_TypeClass_HYPER:
-        case typelib_TypeClass_UNSIGNED_HYPER:
-            pRegisterReturn[1] = r1;
-        case typelib_TypeClass_LONG:
-        case typelib_TypeClass_UNSIGNED_LONG:
-        case typelib_TypeClass_ENUM:
-        case typelib_TypeClass_CHAR:
-        case typelib_TypeClass_SHORT:
-        case typelib_TypeClass_UNSIGNED_SHORT:
-        case typelib_TypeClass_BOOLEAN:
-        case typelib_TypeClass_BYTE:
-            pRegisterReturn[0] = r0;
-            break;
-        case typelib_TypeClass_FLOAT:
-#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__) || defined(IOS))
-            pRegisterReturn[0] = r0;
-#else
-            register float fret asm("s0");
+    case typelib_TypeClass_HYPER:
+    case typelib_TypeClass_UNSIGNED_HYPER:
+        pRegisterReturn[1] = x1;
+        // fallthrough
+    case typelib_TypeClass_LONG:
+    case typelib_TypeClass_UNSIGNED_LONG:
+    case typelib_TypeClass_ENUM:
+    case typelib_TypeClass_CHAR:
+    case typelib_TypeClass_SHORT:
+    case typelib_TypeClass_UNSIGNED_SHORT:
+    case typelib_TypeClass_BOOLEAN:
+    case typelib_TypeClass_BYTE:
+        pRegisterReturn[0] = x0;
+        break;
+    case typelib_TypeClass_FLOAT:
+        register float fret asm("s0");
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wuninitialized"
-            *(float*)pRegisterReturn = fret;
+        *(float*)pRegisterReturn = fret;
 #pragma GCC diagnostic pop
-#endif
-            break;
-        case typelib_TypeClass_DOUBLE:
-#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__) || defined(IOS))
-            pRegisterReturn[1] = r1;
-            pRegisterReturn[0] = r0;
-#else
-            register double dret asm("d0");
+        break;
+    case typelib_TypeClass_DOUBLE:
+        register double dret asm("d0");
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wuninitialized"
-            *(double*)pRegisterReturn = dret;
+        *(double*)pRegisterReturn = dret;
 #pragma GCC diagnostic pop
-#endif
-            break;
-        case typelib_TypeClass_STRUCT:
-        case typelib_TypeClass_EXCEPTION:
+        break;
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+        if (!arm::return_in_x8(pReturnType))
         {
-            if (!arm::return_in_hidden_param(pReturnType))
-                pRegisterReturn[0] = r0;
-            break;
+            pRegisterReturn[0] = x0;
+            pRegisterReturn[1] = x1;
         }
-        default:
-            break;
+        break;
+    default:
+        break;
     }
 }
 
 namespace
 {
-//================================================================
-
 void callVirtualMethod(
-    void * pThis,
+    void *pThis,
     sal_Int32 nVtableIndex,
-    void * pRegisterReturn,
-    typelib_TypeDescriptionReference * pReturnType,
-    sal_uInt32 *pStack,
-    sal_uInt32 nStack,
-    sal_uInt32 *pGPR,
-    sal_uInt32 nGPR,
-    double *pFPR) __attribute__((noinline));
-
-void callVirtualMethod(
-    void * pThis,
-    sal_Int32 nVtableIndex,
-    void * pRegisterReturn,
-    typelib_TypeDescriptionReference * pReturnType,
-    sal_uInt32 *pStack,
-    sal_uInt32 nStack,
-    sal_uInt32 *pGPR,
-    sal_uInt32 nGPR,
-    double *pFPR)
+    void *pRegisterReturn,
+    typelib_TypeDescriptionReference *pReturnType,
+    sal_uInt64 *pStack,
+    int nStack,
+    sal_uInt64 *pGPR,
+    int nGPR,
+    double *pFPR,
+    int nFPR)
 {
-    abort(); // arm64 code not yet implemented
+    // never called
+    if (! pThis)
+        CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
-    (void) pThis;
-    (void) nVtableIndex;
-    (void) pRegisterReturn;
-    (void) pReturnType;
-    (void) pStack;
-    (void) nStack;
-    (void) pGPR;
-    (void) nGPR;
-    (void) pFPR;
+    if ( nStack )
+    {
+        // 16-bytes aligned
+        sal_uInt32 nStackBytes = ( ( nStack + 3 ) >> 2 ) * 16;
+        sal_uInt32 *stack = (sal_uInt32 *) alloca( nStackBytes );
+        memcpy( stack, pStack, nStackBytes );
+    }
+
+    assert( nGPR <= arm::MAX_GPR_REGS );
+    assert( nFPR <= arm::MAX_FPR_REGS );
+
+    sal_uInt64 pMethod = *((sal_uInt64*)pThis);
+    pMethod += 8 * nVtableIndex;
+    pMethod = *((sal_uInt64 *)pMethod);
+
+    // For value returned in registers
+    sal_uInt64 x0;
+    sal_uInt64 x1;
+
+  __asm__ __volatile__
+    (
+     "  ldp x0, x1, %[pgpr_0]\n"
+     "  ldp x2, x3, %[pgpr_2]\n"
+     "  ldp x4, x5, %[pgpr_4]\n"
+     "  ldp x6, x7, %[pgpr_6]\n"
+     "  ldr x8, %[pregisterreturn]\n"
+     "  ldp d0, d1, %[pfpr_0]\n"
+     "  ldp d2, d3, %[pfpr_2]\n"
+     "  ldp d4, d5, %[pfpr_4]\n"
+     "  ldp d6, d7, %[pfpr_6]\n"
+     "  blr %[pmethod]\n"
+     "  str x0, %[x0]\n"
+     "  str x1, %[x1]\n"
+     : [x0]"=m" (x0), [x1]"=m" (x1)
+     : [pgpr_0]"m" (pGPR[0]),
+       [pgpr_2]"m" (pGPR[2]),
+       [pgpr_4]"m" (pGPR[4]),
+       [pgpr_6]"m" (pGPR[6]),
+       [pregisterreturn]"m" (pRegisterReturn),
+       [pfpr_0]"m" (pFPR[0]),
+       [pfpr_2]"m" (pFPR[2]),
+       [pfpr_4]"m" (pFPR[4]),
+       [pfpr_6]"m" (pFPR[6]),
+       [pmethod]"r" (pMethod)
+     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7"
+     );
+
+  MapReturn(x0, x1, pReturnType, (sal_uInt64 *) pRegisterReturn);
 }
 }
+
+#define INSERT_INT64( pSV, nr, pGPR, pDS ) \
+        if ( nr < arm::MAX_GPR_REGS ) \
+                pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
+        else \
+                *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
 
 #define INSERT_INT32( pSV, nr, pGPR, pDS ) \
         if ( nr < arm::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
         else \
                 *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
-
-#ifdef __ARM_EABI__
-#define INSERT_INT64( pSV, nr, pGPR, pDS, pStart ) \
-        if ( (nr < arm::MAX_GPR_REGS) && (nr % 2) ) \
-        { \
-                ++nr; \
-        } \
-        if ( nr < arm::MAX_GPR_REGS ) \
-        { \
-                pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
-                pGPR[nr++] = *(reinterpret_cast<sal_uInt32 *>( pSV ) + 1); \
-        } \
-        else \
-    { \
-        if ( (pDS - pStart) % 2) \
-                { \
-                    ++pDS; \
-                } \
-                *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[0]; \
-                *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[1]; \
-    }
-#else
-#define INSERT_INT64( pSV, nr, pGPR, pDS, pStart ) \
-        INSERT_INT32( pSV, nr, pGPR, pDS ) \
-        INSERT_INT32( ((sal_uInt32*)pSV)+1, nr, pGPR, pDS )
-#endif
-
-#ifdef __ARM_PCS_VFP
-// Since single and double arguments share the same register bank the filling of the
-// registers is not always linear. Single values go to the first available single register,
-// while doubles need to have an 8 byte alignment, so only go into double registers starting
-// at every other single register. For ex a float, double, float sequence will fill registers
-// s0, d1, and s1, actually corresponding to the linear order s0,s1, d1.
-//
-// These use the single/double register array and counters and ignore the pGPR argument
-// nSR and nDR are the number of single and double precision registers that are no longer
-// available
-#define INSERT_FLOAT( pSV, nr, pGPR, pDS ) \
-        if (nSR % 2 == 0) {\
-            nSR = 2*nDR; \
-        }\
-        if ( nSR < arm::MAX_FPR_REGS*2 ) {\
-                pSPR[nSR++] = *reinterpret_cast<float *>( pSV ); \
-                if ((nSR % 2 == 1) && (nSR > 2*nDR)) {\
-                    nDR++; \
-                }\
-        }\
-        else \
-        {\
-                *pDS++ = *reinterpret_cast<float *>( pSV );\
-        }
-#define INSERT_DOUBLE( pSV, nr, pGPR, pDS, pStart ) \
-        if ( nDR < arm::MAX_FPR_REGS ) { \
-                pFPR[nDR++] = *reinterpret_cast<double *>( pSV ); \
-        }\
-        else\
-        {\
-            if ( (pDS - pStart) % 2) \
-                { \
-                    ++pDS; \
-                } \
-            *(double *)pDS = *reinterpret_cast<double *>( pSV );\
-            pDS += 2;\
-        }
-#else
-#define INSERT_FLOAT( pSV, nr, pFPR, pDS ) \
-        INSERT_INT32( pSV, nr, pGPR, pDS )
-
-#define INSERT_DOUBLE( pSV, nr, pFPR, pDS, pStart ) \
-        INSERT_INT64( pSV, nr, pGPR, pDS, pStart )
-#endif
 
 #define INSERT_INT16( pSV, nr, pGPR, pDS ) \
         if ( nr < arm::MAX_GPR_REGS ) \
@@ -279,8 +208,16 @@ void callVirtualMethod(
         else \
                 *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
+#define INSERT_DOUBLE( pSV, nr, pFPR, pDS ) \
+        if ( nr < arm::MAX_FPR_REGS ) \
+                pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
+        else \
+                *pDS++ = *reinterpret_cast<double *>( pSV );
+
+#define INSERT_FLOAT( pSV, nr, pFPR, pDS ) \
+        INSERT_DOUBLE( pSV, nr, pGPR, pDS )
+
 namespace {
-//=======================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
@@ -288,21 +225,16 @@ static void cpp_call(
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
-    // max space for: [complex ret ptr], values|ptr ...
-    sal_uInt32 * pStack = (sal_uInt32 *)__builtin_alloca(
-        sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) );
-    sal_uInt32 * pStackStart = pStack;
+    // max space for: values|ptr ...
+    sal_uInt64 * pStack = (sal_uInt64 *)alloca( (nParams+2) * sizeof(sal_Int64) );
+    sal_uInt64 * pStackStart = pStack;
 
-    sal_uInt32 pGPR[arm::MAX_GPR_REGS];
-    sal_uInt32 nGPR = 0;
+    sal_uInt64 pGPR[arm::MAX_GPR_REGS];
+    int nGPR = 0;
 
-    // storage and counters for single and double precision VFP registers
+    // storage and counter for SIMD/FP registers
     double pFPR[arm::MAX_FPR_REGS];
-#ifdef __ARM_PCS_VFP
-    sal_uInt32 nDR = 0;
-    float *pSPR = reinterpret_cast< float *>(&pFPR);
-    sal_uInt32 nSR = 0;
-#endif
+    int nFPR = 0;
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -311,22 +243,16 @@ static void cpp_call(
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
-    bool bSimpleReturn = true;
     if (pReturnTypeDescr)
     {
-        if (arm::return_in_hidden_param( pReturnTypeRef ) )
-            bSimpleReturn = false;
-
-        if (bSimpleReturn)
+        if (!arm::return_in_x8( pReturnTypeRef ) )
             pCppReturn = pUnoReturn; // direct way for simple types
         else
         {
-            // complex return via ptr
+            // complex return via x8
             pCppReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
-                    ? __builtin_alloca( pReturnTypeDescr->nSize )
+                    ? alloca( pReturnTypeDescr->nSize )
                     : pUnoReturn); // direct way
-
-            INSERT_INT32( &pCppReturn, nGPR, pGPR, pStack );
         }
     }
     // push this
@@ -335,15 +261,16 @@ static void cpp_call(
     INSERT_INT32( &pAdjustedThisPtr, nGPR, pGPR, pStack );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
     // args
-    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
-    // indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
-    // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    void ** pCppArgs  = (void **)alloca( sizeof(void *) * nParams );
 
-    sal_Int32 nTempIndices   = 0;
+    // indices of values this have to be converted (interface conversion cpp<=>uno)
+    int * pTempIndices = (int *)alloca( sizeof(int) * nParams );
+
+    // type descriptions for reconversions
+    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)alloca( sizeof(void *) * nParams );
+
+    sal_Int32 nTempIndices = 0;
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -353,7 +280,6 @@ static void cpp_call(
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-//            uno_copyAndConvertData( pCppArgs[nPos] = pStack, pUnoArgs[nPos],
             uno_copyAndConvertData( pCppArgs[nPos] = alloca(8), pUnoArgs[nPos],
                 pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
 
@@ -361,17 +287,11 @@ static void cpp_call(
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-
-                SAL_INFO( "bridges.ios", "hyper is " << pCppArgs[nPos] );
-
-                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, pStackStart );
+                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-
-                SAL_INFO( "bridges.ios", "long is " << pCppArgs[nPos] );
-
                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_SHORT:
@@ -384,10 +304,10 @@ static void cpp_call(
                 INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_FLOAT:
-                INSERT_FLOAT( pCppArgs[nPos], nGPR, pGPR, pStack );
+                INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, pStack );
                 break;
             case typelib_TypeClass_DOUBLE:
-                INSERT_DOUBLE( pCppArgs[nPos], nGPR, pGPR, pStack, pStackStart );
+                INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack );
                 break;
             default:
                 break;
@@ -436,7 +356,7 @@ static void cpp_call(
             pStackStart,
             (pStack - pStackStart),
             pGPR, nGPR,
-            pFPR);
+            pFPR, nFPR);
 
         // NO exception occurred...
         *ppUnoExc = 0;
@@ -476,8 +396,6 @@ static void cpp_call(
     }
     catch (...)
     {
-//        __asm__ __volatile__ ("sub sp, sp, #2048\n");
-
         // fill uno exception
         CPPU_CURRENT_NAMESPACE::fillUnoException( abi::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 

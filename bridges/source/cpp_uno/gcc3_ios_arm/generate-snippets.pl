@@ -39,10 +39,10 @@ printf (".text\n");
 printf ("#if defined(__arm) || defined(__arm64)\n");
 
 printf ("\n");
-printf ("// Each codeSnippetX function stores into ip/x15 an address and branches to _privateSnippetExecutor\n");
-printf ("// The branch instruction is followed by two longs that ip/x15 points to:\n");
-printf ("// - the function index, as such and with the 0x80000000 bit set\n");
-printf ("//   (to indicate a hidden parameter for returning large values)\n");
+printf ("// Each codeSnippetX function stores into ip (arm64: x15) an address and branches to _privateSnippetExecutor\n");
+printf ("// The address is that following the branch instruction, containing two 32-bit ints:\n");
+printf ("// - the function index, as such or with the 0x80000000 bit set\n");
+printf ("//   (to indicate that a hidden parameter (arm64: x8) is used for returning large values)\n");
 printf ("// - the vtable offset\n");
 printf ("\n");
 
