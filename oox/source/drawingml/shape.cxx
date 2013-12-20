@@ -639,6 +639,8 @@ Reference< XShape > Shape::createAndInsert(
                     {
                         css::table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<css::table::BorderLine2>();
                         aBorderLine.Color = aShapeProps[PROP_LineColor].get<sal_Int32>();
+                        if (aLineProperties.moLineWidth.has())
+                            aBorderLine.LineWidth = convertEmuToHmm(aLineProperties.moLineWidth.get());
                         aShapeProps.setProperty(aBorders[i], uno::makeAny(aBorderLine));
                     }
                     aShapeProps.erase(PROP_LineColor);
