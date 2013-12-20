@@ -57,42 +57,6 @@ ModelessDialog RID_SCDLG_SOLVER_PROGRESS
 };
 
 
-ModalDialog RID_SCDLG_SOLVER_NOSOLUTION
-{
-    OutputSize = TRUE ;
-    HelpId = HID_SC_SOLVER_NOSOLUTION ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 118 , 72 ) ;
-    Moveable = TRUE ;
-    FixedText FT_NOSOLUTION
-    {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 106 , 8 ) ;
-        Text [ en-US ] = "No solution was found." ;
-    };
-    FixedText FT_ERRORTEXT
-    {
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 106 , 16 ) ;
-        WordBreak = TRUE ;
-        // text is dynamic
-    };
-    FixedLine FL_BUTTONS
-    {
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 34 , 52 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    Text [ en-US ] = "No Solution" ;
-};
-
-
 ModalDialog RID_SCDLG_SOLVER_SUCCESS
 {
     OutputSize = TRUE ;

@@ -79,18 +79,10 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
 //----------------------------------------------------------------------------
 
 ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const OUString& rErrorText )
-    : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_NOSOLUTION ) ),
-    maFtNoSolution  ( this, ScResId( FT_NOSOLUTION ) ),
-    maFtErrorText   ( this, ScResId( FT_ERRORTEXT ) ),
-    maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) )
+    : ModalDialog(pParent, "NoSolutionDialog", "modules/scalc/ui/nosolutiondialog.ui")
 {
-    maFtErrorText.SetText( rErrorText );
-    FreeResource();
-}
-
-ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
-{
+    get(m_pFtErrorText, "error");
+    m_pFtErrorText->SetText(rErrorText);
 }
 
 //----------------------------------------------------------------------------

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="OptimalRowHeightDialog">
+  <object class="GtkDialog" id="NoSolutionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Optimal Row Height</property>
+    <property name="title" translatable="yes">No Solution</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -64,7 +64,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">56</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

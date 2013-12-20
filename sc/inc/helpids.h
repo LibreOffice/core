@@ -163,7 +163,6 @@
 #define HID_SC_SOLVEROPTIONS                                    "SC_HID_SC_SOLVEROPTIONS"
 #define HID_SC_SOLVEROPTIONS_LB                                 "SC_HID_SC_SOLVEROPTIONS_LB"
 #define HID_SC_SOLVER_PROGRESS                                  "SC_HID_SC_SOLVER_PROGRESS"
-#define HID_SC_SOLVER_NOSOLUTION                                "SC_HID_SC_SOLVER_NOSOLUTION"
 #define HID_SC_SOLVER_SUCCESS                                   "SC_HID_SC_SOLVER_SUCCESS"
 
 #define HID_SCDLG_CONFLICTS                                     "SC_HID_SCDLG_CONFLICTS"

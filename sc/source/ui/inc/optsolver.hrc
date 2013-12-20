@@ -21,8 +21,6 @@
 
 #define FT_PROGRESS             7
 #define FT_TIMELIMIT            8
-#define FT_NOSOLUTION           9
-#define FT_ERRORTEXT            10
 #define FT_SUCCESS              11
 #define FT_RESULT               12
 #define FT_QUESTION             13

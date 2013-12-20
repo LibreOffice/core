@@ -221,14 +221,10 @@ public:
 
 class ScSolverNoSolutionDialog : public ModalDialog
 {
-    FixedText       maFtNoSolution;
-    FixedText       maFtErrorText;
-    FixedLine       maFlButtons;
-    OKButton        maBtnOk;
+    FixedText* m_pFtErrorText;
 
 public:
-    ScSolverNoSolutionDialog( Window* pParent, const OUString& rErrorText );
-    ~ScSolverNoSolutionDialog();
+    ScSolverNoSolutionDialog(Window* pParent, const OUString& rErrorText);
 };
 
 class ScSolverSuccessDialog : public ModalDialog
