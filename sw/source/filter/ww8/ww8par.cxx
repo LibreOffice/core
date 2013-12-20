@@ -2337,7 +2337,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                     = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
 
                 SwFrmFmt& rFmt = bUseLeft ? pPD->GetLeft()
-                    : bUseFirst ? pPD->GetFirst()
+                    : bUseFirst ? pPD->GetFirstMaster()
                     : pPD->GetMaster();
 
                 SwFrmFmt* pHdFtFmt;
@@ -2352,7 +2352,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtFooter(true));
                     if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
-                        pPD->GetFirst().SetFmtAttr(SwFmtFooter(true));
+                        pPD->GetFirstMaster().SetFmtAttr(SwFmtFooter(true));
                     pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetFooter().GetFooterFmt());
                 }
                 else
@@ -2364,7 +2364,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtHeader(true));
                     if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
-                        pPD->GetFirst().SetFmtAttr(SwFmtHeader(true));
+                        pPD->GetFirstMaster().SetFmtAttr(SwFmtHeader(true));
                     pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetHeader().GetHeaderFmt());
                 }
 
@@ -4198,7 +4198,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     if (!(rSection.maSep.pgbApplyTo & 1))
         mrReader.SetPageBorder(rFmt, rSection);
     if (!(rSection.maSep.pgbApplyTo & 2))
-        mrReader.SetPageBorder(rPage.GetFirst(), rSection);
+        mrReader.SetPageBorder(rPage.GetFirstMaster(), rSection);
 
     mrReader.SetDocumentGrid(rFmt, rSection);
 }

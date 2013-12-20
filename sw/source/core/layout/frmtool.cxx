@@ -2695,18 +2695,19 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
         if (rDesc.IsFirstShared())
         {
             // We need to fallback to left or right page format, decide it now.
+            // FIXME: is this still needed?
             if (bOdd)
             {
-                rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetHeader() );
-                rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetFooter() );
+                rDesc.GetFirstMaster().SetFmtAttr( rDesc.GetMaster().GetHeader() );
+                rDesc.GetFirstMaster().SetFmtAttr( rDesc.GetMaster().GetFooter() );
                 // fdo#60250 copy margins for mirrored pages
-                rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetLRSpace() );
+                rDesc.GetFirstMaster().SetFmtAttr( rDesc.GetMaster().GetLRSpace() );
             }
             else
             {
-                rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetHeader() );
-                rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetFooter() );
-                rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetLRSpace() );
+                rDesc.GetFirstLeft().SetFmtAttr( rDesc.GetLeft().GetHeader() );
+                rDesc.GetFirstLeft().SetFmtAttr( rDesc.GetLeft().GetFooter() );
+                rDesc.GetFirstLeft().SetFmtAttr( rDesc.GetLeft().GetLRSpace() );
             }
         }
     }

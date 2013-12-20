@@ -2093,9 +2093,9 @@ public:
 
 private:
     /// Copies master header to left / first one, if necessary - used by ChgPageDesc().
-    void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft);
+    void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft, bool bFirst);
     /// Copies master footer to left / first one, if necessary - used by ChgPageDesc().
-    void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft);
+    void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft, bool bFirst);
 
     /** continue computing a chunk of document statistics
       * \param nChars  number of characters to count before exiting
