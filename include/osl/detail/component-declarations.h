@@ -109,24 +109,6 @@ void * com_sun_star_comp_stoc_SimpleRegistry( void * , void * );
 void * com_sun_star_extensions_xml_sax_Writer( void * , void * );
 void * com_sun_star_security_comp_stoc_AccessController( void * , void * );
 void * com_sun_star_security_comp_stoc_FilePolicy( void * , void * );
-void * com_sun_star_comp_Draw_GraphicExporter_implementation_getFactory( void * , void * );
-void * com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory( void * , void * );
-void * com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory( void * , void * );
-void * com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory( void * , void * );
-void * com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory( void * , void * );
-void * com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory( void * , void * );
-void * com_sun_star_comp_svx_RecoveryUI_implementation_getFactory( void * , void * );
-void * com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory( void * , void * );
-void * com_sun_star_drawing_SvxShapeCollection_implementation_getFactory( void * , void * );
-void * com_sun_star_drawing_SvxUnoColorTable_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_DownSearchToolboxController_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_FindTextToolboxController_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_FindAllToolboxController_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_UpSearchToolboxController_implementation_getFactory( void * , void * );
-void * com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory( void * , void * );
-void * org_apache_openoffice_comp_svx_sidebar_PanelFactory_implementation_getFactory( void * , void * );
 
 #ifdef __cplusplus
 }

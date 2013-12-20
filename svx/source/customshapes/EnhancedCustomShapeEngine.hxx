@@ -40,8 +40,6 @@
 
 class SdrObject;
 class SdrObjCustomShape;
-namespace {
-
 class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
 <
     css::lang::XInitialization,
@@ -49,13 +47,14 @@ class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
     css::drawing::XCustomShapeEngine
 >
 {
+    css::uno::Reference< css::lang::XMultiServiceFactory >      mxFact;
     css::uno::Reference< css::drawing::XShape >      mxShape;
     sal_Bool                                    mbForceGroupWithText;
 
     SdrObject* ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape );
 
 public:
-                            EnhancedCustomShapeEngine();
+                            EnhancedCustomShapeEngine( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
     virtual                 ~EnhancedCustomShapeEngine();
 
     // XInterface
@@ -85,7 +84,12 @@ public:
         throw ( css::uno::RuntimeException );
 };
 
-}
+OUString EnhancedCustomShapeEngine_getImplementationName()
+    throw ( css::uno::RuntimeException );
+sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
+    throw( css::uno::RuntimeException );
 
 #endif
 

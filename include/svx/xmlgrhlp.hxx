@@ -119,6 +119,42 @@ public:
     virtual OUString SAL_CALL resolveOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxBinaryStream ) throw (::com::sun::star::uno::RuntimeException);
 };
 
+
+// for instantiation via service manager
+namespace svx
+{
+/** Create this with createInstanceWithArguments. service name
+    "com.sun.star.comp.Svx.GraphicImportHelper", one argument which is the
+    XStorage.  Without arguments no helper class is created.  With an empty
+    argument the helper class is created and initialized like in the CTOR to
+    SvXMLGraphicHelper that only gets the create mode.
+
+    You should call dispose after you no longer need this component.
+
+    uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == sal_True in
+    SvXMLGraphicHelper
+ */
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+SVX_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames() throw();
+SVX_DLLPUBLIC OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName() throw();
+
+/** Create this with createInstanceWithArguments. service name
+    "com.sun.star.comp.Svx.GraphicExportHelper", one argument which is the
+    XStorage.  Without arguments no helper class is created.  With an empty
+    argument the helper class is created and initialized like in the CTOR to
+    SvXMLGraphicHelper that only gets the create mode
+
+    To write the Pictures stream, you have to call dispose at this component.
+    Make sure you call dipose before you commit the parent storage.
+
+    uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == sal_True in
+    SvXMLGraphicHelper
+ */
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+SVX_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames() throw();
+SVX_DLLPUBLIC OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName() throw();
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

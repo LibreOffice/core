@@ -30,7 +30,38 @@
 
 using namespace ::com::sun::star;
 
-namespace {
+namespace unogallery {
+
+// --------------------
+// - Helper functions -
+// --------------------
+
+uno::Reference< uno::XInterface > SAL_CALL GalleryThemeProvider_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & )
+    throw( uno::Exception )
+{
+    return *( new GalleryThemeProvider() );
+}
+
+// -----------------------------------------------------------------------------
+
+uno::Sequence< OUString > SAL_CALL GalleryThemeProvider_getSupportedServiceNames()
+    throw()
+{
+    return GalleryThemeProvider::getSupportedServiceNames_Static();
+}
+
+// -----------------------------------------------------------------------------
+
+OUString SAL_CALL GalleryThemeProvider_getImplementationName()
+    throw()
+{
+    return GalleryThemeProvider::getImplementationName_Static();
+}
+
+// -----------------
+// - GalleryThemeProvider -
+// -----------------
 
 GalleryThemeProvider::GalleryThemeProvider() :
     mbHiddenThemes( sal_False )
@@ -46,10 +77,30 @@ GalleryThemeProvider::~GalleryThemeProvider()
 
 // ------------------------------------------------------------------------------
 
+SVX_DLLPUBLIC OUString GalleryThemeProvider::getImplementationName_Static()
+    throw()
+{
+    return OUString( "com.sun.star.comp.gallery.GalleryThemeProvider" );
+}
+
+// ------------------------------------------------------------------------------
+
+SVX_DLLPUBLIC uno::Sequence< OUString > GalleryThemeProvider::getSupportedServiceNames_Static()
+    throw()
+{
+    uno::Sequence< OUString > aSeq( 1 );
+
+    aSeq.getArray()[ 0 ] = "com.sun.star.gallery.GalleryThemeProvider";
+
+    return aSeq;
+}
+
+// ------------------------------------------------------------------------------
+
 OUString SAL_CALL GalleryThemeProvider::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString( "com.sun.star.comp.gallery.GalleryThemeProvider" );
+    return getImplementationName_Static();
 }
 
 // ------------------------------------------------------------------------------
@@ -72,9 +123,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& Service
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq.getArray()[ 0 ] = "com.sun.star.gallery.GalleryThemeProvider";
-    return aSeq;
+    return getSupportedServiceNames_Static();
 }
 
 // ------------------------------------------------------------------------------
@@ -246,18 +295,6 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
     }
 }
 
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    uno_Sequence * arguments)
-{
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new GalleryThemeProvider));
-    x->acquire();
-    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

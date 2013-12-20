@@ -69,6 +69,7 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libspelllo.a", spell_component_getFactory }, \
     { "libsvllo.a", svl_component_getFactory }, \
     { "libsvtlo.a", svt_component_getFactory }, \
+    { "libsvxlo.a", svx_component_getFactory }, \
     { "libtklo.a", tk_component_getFactory }, \
     { "libucb1.a", ucb_component_getFactory }, \
     { "libucpexpand1lo.a", ucpexpand1_component_getFactory }, \
@@ -134,11 +135,8 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "libwpftwriterlo.a", wpftwriter_component_getFactory }, \
 
 #define NON_APP_SPECIFIC_CONSTRUCTOR_MAP \
-    /* expwrap.component */ \
     { "com_sun_star_comp_extensions_xml_sax_ParserExpat", com_sun_star_comp_extensions_xml_sax_ParserExpat }, \
     { "com_sun_star_comp_extensions_xml_sax_FastParser", com_sun_star_comp_extensions_xml_sax_FastParser }, \
-    { "com_sun_star_extensions_xml_sax_Writer", com_sun_star_extensions_xml_sax_Writer }, \
-    /* bootstrap.component */ \
     { "com_sun_star_comp_stoc_DLLComponentLoader", com_sun_star_comp_stoc_DLLComponentLoader }, \
     { "com_sun_star_comp_stoc_ImplementationRegistration", com_sun_star_comp_stoc_ImplementationRegistration }, \
     { "com_sun_star_comp_stoc_NestedRegistry", com_sun_star_comp_stoc_NestedRegistry }, \
@@ -146,27 +144,9 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
     { "com_sun_star_comp_stoc_OServiceManager", com_sun_star_comp_stoc_OServiceManager }, \
     { "com_sun_star_comp_stoc_OServiceManagerWrapper", com_sun_star_comp_stoc_OServiceManagerWrapper }, \
     { "com_sun_star_comp_stoc_SimpleRegistry", com_sun_star_comp_stoc_SimpleRegistry }, \
+    { "com_sun_star_extensions_xml_sax_Writer", com_sun_star_extensions_xml_sax_Writer }, \
     { "com_sun_star_security_comp_stoc_AccessController", com_sun_star_security_comp_stoc_AccessController }, \
     { "com_sun_star_security_comp_stoc_FilePolicy", com_sun_star_security_comp_stoc_FilePolicy }, \
-    /* svx.component */ \
-    { "com_sun_star_comp_Draw_GraphicExporter_implementation_getFactory", com_sun_star_comp_Draw_GraphicExporter_implementation_getFactory }, \
-    { "com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory", com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory }, \
-    { "com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory", com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory }, \
-    { "com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory", com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory }, \
-    { "com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory", com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory }, \
-    { "com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory", com_sun_star_comp_svx_Impl_FindbarDispatcher_implementation_getFactory }, \
-    { "com_sun_star_comp_svx_RecoveryUI_implementation_getFactory", com_sun_star_comp_svx_RecoveryUI_implementation_getFactory }, \
-    { "com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory", com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory }, \
-    { "com_sun_star_drawing_SvxShapeCollection_implementation_getFactory", com_sun_star_drawing_SvxShapeCollection_implementation_getFactory }, \
-    { "com_sun_star_drawing_SvxUnoColorTable_implementation_getFactory", com_sun_star_drawing_SvxUnoColorTable_implementation_getFactory }, \
-    { "com_sun_star_svx_DownSearchToolboxController_implementation_getFactory", com_sun_star_svx_DownSearchToolboxController_implementation_getFactory }, \
-    { "com_sun_star_svx_FindTextToolboxController_implementation_getFactory", com_sun_star_svx_FindTextToolboxController_implementation_getFactory }, \
-    { "com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory", com_sun_star_svx_MatchCaseToolboxController_implementation_getFactory }, \
-    { "com_sun_star_svx_FindAllToolboxController_implementation_getFactory", com_sun_star_svx_FindAllToolboxController_implementation_getFactory }, \
-    { "com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory", com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory }, \
-    { "com_sun_star_svx_UpSearchToolboxController_implementation_getFactory", com_sun_star_svx_UpSearchToolboxController_implementation_getFactory }, \
-    { "com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory", com_sun_star_svx_ExitFindbarToolboxController_implementation_getFactory }, \
-    { "org_apache_openoffice_comp_svx_sidebar_PanelFactory_implementation_getFactory", org_apache_openoffice_comp_svx_sidebar_PanelFactory_implementation_getFactory }, \
 
 #endif /* DISABLE_DYNLOADING */
 

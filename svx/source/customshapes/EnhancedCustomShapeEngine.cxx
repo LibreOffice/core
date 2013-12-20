@@ -47,10 +47,24 @@
 using namespace css;
 using namespace css::uno;
 
-namespace {
-
 // - EnhancedCustomShapeEngine -
-EnhancedCustomShapeEngine::EnhancedCustomShapeEngine() :
+OUString EnhancedCustomShapeEngine_getImplementationName()
+    throw( RuntimeException )
+{
+    return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
+}
+
+Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
+    throw( RuntimeException )
+{
+    Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = "com.sun.star.drawing.CustomShapeEngine";
+    return aRet;
+}
+
+EnhancedCustomShapeEngine::EnhancedCustomShapeEngine( const Reference< lang::XMultiServiceFactory >& rxMgr ) :
+    mxFact                  ( rxMgr ),
     mbForceGroupWithText    ( sal_False )
 {
 }
@@ -95,7 +109,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
     throw( RuntimeException )
 {
-    return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
+    return EnhancedCustomShapeEngine_getImplementationName();
 }
 sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
     throw( RuntimeException )
@@ -105,10 +119,7 @@ sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rS
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
     throw ( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.drawing.CustomShapeEngine";
-    return aRet;
+    return EnhancedCustomShapeEngine_getSupportedServiceNames();
 }
 
 // XCustomShapeEngine -----------------------------------------------------------
@@ -431,20 +442,6 @@ Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShap
     for ( i = 0; i < nHdlCount; i++ )
         aSeq[ i ] = new EnhancedCustomShapeHandle( mxShape, i );
     return aSeq;
-}
-
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    uno_Sequence * arguments)
-{
-    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
-    css::uno::Reference<css::uno::XInterface> x(
-        static_cast<cppu::OWeakObject *>(new EnhancedCustomShapeEngine));
-    x->acquire();
-    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

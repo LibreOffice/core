@@ -25,9 +25,19 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/gallery/XGalleryThemeProvider.hpp>
 
+#include <svx/svxdllapi.h>
+
 class Gallery;
 
-namespace {
+namespace unogallery {
+
+// -------------------------
+// - some helper functions -
+// -------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GalleryThemeProvider_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider_getSupportedServiceNames() throw();
+OUString SAL_CALL GalleryThemeProvider_getImplementationName() throw();
 
 // -----------------
 // - GalleryThemes -
@@ -40,6 +50,9 @@ public:
 
     GalleryThemeProvider();
     ~GalleryThemeProvider();
+
+    SVX_DLLPUBLIC static OUString getImplementationName_Static() throw();
+    SVX_DLLPUBLIC static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
 protected:
 
