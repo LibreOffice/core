@@ -32,7 +32,7 @@ module com { module sun { module star { module frame {
     A toolbar controller can be registered for a command URL and a model service name.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 service ToolbarControllerFactory : XUIControllerFactory

@@ -51,7 +51,7 @@
        is already initialized the mentioned methods should throw DoubleInitializationException.
     </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XLoadable: com::sun::star::uno::XInterface
 {

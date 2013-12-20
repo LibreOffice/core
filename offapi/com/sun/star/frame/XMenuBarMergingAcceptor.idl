@@ -41,7 +41,7 @@ module com { module sun { module star { module frame {
 /** provides functions to set and remove a merged menu bar for inplace
     editing.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 interface XMenuBarMergingAcceptor : com::sun::star::uno::XInterface

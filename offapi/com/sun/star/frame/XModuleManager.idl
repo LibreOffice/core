@@ -43,7 +43,7 @@ module com { module sun { module star { module frame {
 //===============================================
 /** can be used to identify office modules.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published interface XModuleManager : com::sun::star::uno::XInterface
 {
@@ -58,7 +58,7 @@ published interface XModuleManager : com::sun::star::uno::XInterface
                is requested on the given module. Because all module service registrations must be unique
                this value can be queried and checked against the configuration.
 
-               Since OOo 2.3.0 also the optional interface <type>XModule</type> will be used.
+               Since OpenOffice 2.3.0 also the optional interface <type>XModule</type> will be used.
                If its exists it will be preferred.
 
        @param  Module

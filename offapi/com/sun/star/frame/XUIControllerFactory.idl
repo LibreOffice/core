@@ -39,7 +39,7 @@ module com { module sun { module star { module frame {
     @see ToolbarControllerFactory
     </p>
 
-    @since Apache OpenOffice 4.0
+    @since OpenOffice 4.0
  */
 interface XUIControllerFactory
 {

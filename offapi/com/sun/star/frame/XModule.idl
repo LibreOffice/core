@@ -54,7 +54,7 @@ module com { module sun { module star { module frame {
 
     @see XModuleManager
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 interface XModule : com::sun::star::uno::XInterface
 {

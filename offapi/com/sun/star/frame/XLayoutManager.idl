@@ -91,7 +91,7 @@ module com { module sun { module star { module frame {
     @see com::sun::star::frame::XFrame
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published interface XLayoutManager : com::sun::star::uno::XInterface

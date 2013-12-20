@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module frame {
 /** Must be implemented by dispatch objects which want to get
     notifications about control events.
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
  */
 interface XControlNotificationListener : com::sun::star::uno::XInterface
 {

@@ -51,7 +51,7 @@
     @see DispatchRecorderSupplier
     @see Frame::RecorderSupplier
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service DispatchRecorder
 {

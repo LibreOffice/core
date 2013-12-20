@@ -51,7 +51,7 @@
     </p>
 
     @see XDispatchRecorder
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
 {

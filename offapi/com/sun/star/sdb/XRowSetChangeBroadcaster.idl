@@ -38,7 +38,7 @@ interface XRowSetChangeListener;
 
     @see XRowSetSupplier
     @see XRowSetChangeListener
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 interface XRowSetChangeBroadcaster
 {

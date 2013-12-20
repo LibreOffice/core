@@ -186,7 +186,7 @@ published service QueryDesign
     /** specifies whether the user enabled escape processing for the statement being designed.
 
         @see DataAccessDescriptor::EscapeProcessing
-        @since OOo 2.4
+        @since OpenOffice 2.4
     */
     [readonly, property, optional] boolean EscapeProcessing;
 };

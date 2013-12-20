@@ -61,7 +61,7 @@ module com { module sun { module star { module frame {
     worked on. This list gets changes consistently during a work session.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 service PopupMenuController
@@ -124,7 +124,7 @@ service PopupMenuController
         the dispatch URL scheme: "vnd.sun.star.popup:" opaque_part [ "?" query ].
         </p>
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     [optional] interface com::sun::star::frame::XDispatchProvider;
 
@@ -137,7 +137,7 @@ service PopupMenuController
         controller should support this interface.
         </p>
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     [optional] interface com::sun::star::lang::XComponent;
 };

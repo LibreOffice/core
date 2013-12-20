@@ -36,7 +36,7 @@ module com { module sun { module star { module sdb { module application {
 
 /** denotes different objects within a database document
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
 
     @see DatabaseObjectContainer
  */

@@ -75,7 +75,7 @@ published service DataSource
         as it is the case when using <type>XCompletedConnection</type> or <type scope="com::sun::star::sdbc">XDataSource</type>.
         @see XCompletedConnection
         @see com::sun::star::sdbc::XDataSource
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     interface com::sun::star::sdbc::XIsolatedConnection;
 

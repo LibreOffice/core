@@ -48,7 +48,7 @@ module com { module sun { module star { module sdb { module application {
     @see com::sun::star::frame::Controller
     @see com::sun::star::sdb::DatabaseDocument
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
  */
 published interface XDatabaseDocumentUI
 {
@@ -109,7 +109,7 @@ published interface XDatabaseDocumentUI
         controllers (<type scope="com::sun::star::frame">XController</type>), or frames
         (<type scope="com::sun::star::frame">XFrame</type>).
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     [attribute, readonly] sequence< ::com::sun::star::lang::XComponent >
             SubComponents;
@@ -157,7 +157,7 @@ published interface XDatabaseDocumentUI
         @return
             <TRUE/> if and only if both suspending and closing all sub components succeeds.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     boolean closeSubComponents();
 

@@ -63,7 +63,7 @@
 
     @see com::sun::star::frame::XDispatchProvider
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 
 service ToolbarController

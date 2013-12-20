@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module frame { module status {
 /** contains a list of format ID's and names which are part of the
     system clipboard.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 struct ClipboardFormats
 {
