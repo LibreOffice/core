@@ -210,8 +210,6 @@ $(eval $(foreach method,\
 	use_internal_api \
 	use_internal_bootstrap_api \
 	use_internal_comprehensive_api \
-	use_libraries \
-	use_static_libraries \
 	use_external \
 	use_externals \
 	use_custom_headers \
@@ -230,5 +228,24 @@ $(eval $(foreach method,\
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+
+define gb_Library_use_libraries
+endef
+
+define gb_Library_use_static_libraries
+endef
+
+else
+
+$(eval $(foreach method,\
+	use_libraries \
+	use_static_libraries \
+,\
+	$(call gb_Library__forward_to_Linktarget,$(method))\
+))
+
+endif
 
 # vim: set noet sw=4:
