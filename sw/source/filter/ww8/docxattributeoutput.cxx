@@ -311,8 +311,11 @@ public:
 };
 
 // Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
-bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList)
+bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0, sax_fastparser::FastAttributeList* pBodyPrAttrList = 0)
 {
+    // The intended usage is to pass either a valid VML or DML attribute list.
+    assert(pTextboxAttrList || pBodyPrAttrList);
+
     if (!pStartNode->IsTxtNode())
         return false;
 
@@ -345,7 +348,10 @@ bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* p
         const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
         if (rCharRotate.GetValue() == 900)
         {
-            pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+            if (pTextboxAttrList)
+                pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+            else
+                pBodyPrAttrList->add(XML_vert, "vert270");
             return true;
         }
     }
@@ -471,7 +477,11 @@ void DocxAttributeOutput::WriteDMLTextFrame(sw::Frame* pParentFrame)
     m_rExport.mpParentFrame = NULL;
     m_pSerializer->startElementNS( XML_wps, XML_txbx, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
+
+    m_bFrameBtLr = lcl_checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], 0, m_pBodyPrAttrList);
     m_rExport.WriteText( );
+    m_bFrameBtLr = false;
+
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
     m_pSerializer->endElementNS( XML_wps, XML_txbx );
     XFastAttributeListRef xBodyPrAttrList(m_pBodyPrAttrList);
