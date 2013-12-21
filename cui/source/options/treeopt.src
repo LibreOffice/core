@@ -118,7 +118,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_INET_DLG
     {
-        //modified by jmeng begin
         ItemList [ en-US ] =
         {
             < "Internet" ; 0; > ;
@@ -126,7 +125,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "E-mail" ;  RID_SVXPAGE_INET_MAIL; > ;
             < "Browser Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
         };
-        //modified by jmeng end
     };
     StringArray SID_SW_EDITOPTIONS
     {
