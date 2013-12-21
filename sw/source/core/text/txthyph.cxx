@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>
 #include <viewsh.hxx>
 #include <SwPortionHandler.hxx>
@@ -370,16 +369,9 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
  *              virtual SwHyphPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &/*rInf*/, OUString &rTxt ) const
 {
-    // #i16816# tagged pdf support
-    const sal_Unicode cChar = rInf.GetVsh() &&
-                              rInf.GetVsh()->GetViewOptions()->IsPDFExport() &&
-                              SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut() ) ?
-                              0xad :
-                              '-';
-
-    rTxt = OUString(cChar);
+    rTxt = "-";
     return sal_True;
 }
 
