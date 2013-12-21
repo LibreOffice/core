@@ -89,7 +89,7 @@ enum ScanState
     ssStop
 };
 
-static const sal_Char* pInternal[ 1 ] = { "TTT" };
+static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 using namespace ::com::sun::star::i18n;
 
@@ -3440,7 +3440,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     bool bAsciiNonAlnum;    // operators, separators, ...
     if ( cSymbol[0] < 128 )
     {
-        bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
+        bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] ) || cSymbol[0] == '_';
         bAsciiNonAlnum = !bMayBeFuncName && !rtl::isAsciiDigit( cSymbol[0] );
     }
     else

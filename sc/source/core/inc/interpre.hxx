@@ -561,6 +561,7 @@ void ScBitXor();
 void ScBitRshift();
 void ScBitLshift();
 void ScTTT();
+void ScDebugVar();
 
 /** Obtain the date serial number for a given date.
     @param bStrict

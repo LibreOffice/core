@@ -39,7 +39,7 @@ namespace formula
 {
     using namespace ::com::sun::star;
 
-    static const sal_Char* pInternal[ 1 ] = { "TTT" };
+    static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 namespace {
 
@@ -794,6 +794,8 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
         case ocIndirectXL:
             // ocOffset results in indirect references.
         case ocOffset:
+            // ocDebugVar shows internal value that may change as the internal state changes.
+        case ocDebugVar:
             bRet = true;
             break;
         default:

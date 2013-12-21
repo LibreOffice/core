@@ -440,6 +440,7 @@ enum OpCodeEnum
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
+        ocDebugVar          = SC_OPCODE_DEBUG_VAR,
         ocInternalEnd       = SC_OPCODE_INTERNAL_END,
     // from here on ExtraData
         ocDataToken1        = SC_OPCODE_DATA_TOKEN_1,

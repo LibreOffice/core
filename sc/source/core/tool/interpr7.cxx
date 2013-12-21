@@ -15,6 +15,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include "libxml/xpath.h"
+#include <dpobject.hxx>
+#include <document.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <cstring>
@@ -203,6 +205,44 @@ void ScInterpreter::ScWebservice()
         OUString aContent = OStringToOUString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
         PushString( aContent );
     }
+}
+
+void ScInterpreter::ScDebugVar()
+{
+    // This is to be used by developers only!  Never document this for end
+    // users.  This is a convenient way to extract arbitrary internal state to
+    // a cell for easier debugging.
+
+    if (!MustHaveParamCount(GetByte(), 1))
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    rtl_uString* p = GetString().getDataIgnoreCase();
+    if (!p)
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    OUString aStrUpper(p);
+
+    if (aStrUpper == "PIVOTCOUNT")
+    {
+        // Set the number of pivot tables in the document.
+
+        double fVal = 0.0;
+        if (pDok->HasPivotTable())
+        {
+            const ScDPCollection* pDPs = pDok->GetDPCollection();
+            fVal = pDPs->GetCount();
+        }
+        PushDouble(fVal);
+        return;
+    }
+
+    PushIllegalParameter();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -450,10 +450,11 @@
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999
 #define SC_OPCODE_TTT              9999
-#define SC_OPCODE_INTERNAL_END     9999
+#define SC_OPCODE_DEBUG_VAR       10000
+#define SC_OPCODE_INTERNAL_END    10000
 
 /*** from here on ExtraData contained ***/
-#define SC_OPCODE_DATA_TOKEN_1    10000
+#define SC_OPCODE_DATA_TOKEN_1    10001
 
 #define SC_OPCODE_NONE           0xFFFF
 
