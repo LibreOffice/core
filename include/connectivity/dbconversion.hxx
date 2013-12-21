@@ -105,7 +105,7 @@ namespace dbtools
 
         static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
         static ::com::sun::star::util::Date     toDate(const OUString& _sSQLDate);
-        static ::com::sun::star::util::Time     toTime(double dVal);
+        static ::com::sun::star::util::Time     toTime(double dVal, short nDigits = 9);
         static ::com::sun::star::util::Time     toTime(const OUString& _sSQLDate);
         static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
         static ::com::sun::star::util::DateTime toDateTime(const OUString& _sSQLDate);
