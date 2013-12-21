@@ -19,9 +19,9 @@
 #ifndef UUI_SSLWARN_HXX
 #define UUI_SSLWARN_HXX
 
-#include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -29,35 +29,27 @@
 //=====================================================================
 //= Https_WarnDialog
 //=====================================================================
-class SSLWarnDialog : public ModalDialog
+class SSLWarnDialog : public MessageDialog
 {
 private:
-    FixedText       m_aLabel1;
-    PushButton      m_aOkButton;
-    CancelButton    m_aCancelButton;
-    PushButton      m_aCommandButtonViewCert;
-    FixedLine       m_aLine;
-    FixedImage      m_aWarnImage;
-
-
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
     Window* m_pParent;
 
-    DECL_LINK(OKHdl_Impl, void *);
-    DECL_LINK(ViewCertHdl_Impl, void *);
+    void ViewCert();
 
-    public:
+public:
     SSLWarnDialog( Window* pParent,
-                       const css::uno::Reference< css::security::XCertificate >& rXCert,
-                       const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                       ResMgr * pResMgr );
+        const css::uno::Reference< css::security::XCertificate >& rXCert,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; };
+    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; }
 
-    Window* getParent() { return m_pParent; };
+    Window* getParent() { return m_pParent; }
 
-    void setDescription1Text( const OUString &aText ) { m_aLabel1.SetText( aText ); };
+    virtual void response(short nResponseId);
+
+    void setDescription1Text(const OUString &aText) { set_primary_text(aText); }
 };
 
 #endif // UUI_SSLWARN_HXX

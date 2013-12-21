@@ -20,7 +20,6 @@
 #include <vcl/msgbox.hxx>
 
 #include <ids.hrc>
-#include <sslwarndlg.hrc>
 #include <sslwarndlg.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -28,54 +27,38 @@
 
 using namespace css;
 
-// -----------------------------------------------------------------------
-
-IMPL_LINK_NOARG(SSLWarnDialog, OKHdl_Impl)
+void SSLWarnDialog::ViewCert()
 {
-    EndDialog( RET_OK );
-    return 1;
-}
+    uno::Reference< ::css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
-// -----------------------------------------------------------------------
-
-IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl_Impl)
-{
-    uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
-
-    xDocumentDigitalSignatures = ::com::sun::star::security::DocumentDigitalSignatures::createDefault( m_xContext );
+    xDocumentDigitalSignatures = ::css::security::DocumentDigitalSignatures::createDefault( m_xContext );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
-
-    return 0;
 }
 
 // -----------------------------------------------------------------------
 
-SSLWarnDialog::SSLWarnDialog
-(
-    Window*                                     pParent,
+SSLWarnDialog::SSLWarnDialog(Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
-    ResMgr*                                     pResMgr
-) :
-
-    ModalDialog( pParent, ResId( DLG_UUI_SSLWARN, *pResMgr ) ),
-    m_aLabel1 ( this, ResId( FT_LABEL_1, *pResMgr ) ),
-    m_aOkButton ( this, ResId( PB_OK, *pResMgr ) ),
-    m_aCancelButton ( this, ResId( PB_CANCEL, *pResMgr ) ),
-    m_aCommandButtonViewCert ( this, ResId( PB_VIEW__CERTIFICATE, *pResMgr ) ),
-    m_aLine ( this, ResId( FL_LINE, *pResMgr ) ),
-    m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
-    m_xContext ( xContext ),
-    m_rXCert ( rXCert )
+    const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : MessageDialog(pParent, "SSLWarnDialog", "uui/ui/sslwarndialog.ui")
+    , m_xContext(xContext)
+    , m_rXCert(rXCert)
 {
-    FreeResource();
-    m_aWarnImage.SetImage( WarningBox::GetStandardImage() );
     m_pParent = pParent;
-    m_aCommandButtonViewCert.SetClickHdl( LINK( this, SSLWarnDialog, ViewCertHdl_Impl ) );
-    m_aOkButton.SetClickHdl( LINK( this, SSLWarnDialog, OKHdl_Impl ) );
 };
 
-
+void SSLWarnDialog::response(short nResponseId)
+{
+    switch (nResponseId)
+    {
+        case -1:
+            ViewCert();
+            break;
+        default:
+            MessageDialog::response(nResponseId);
+            break;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

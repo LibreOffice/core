@@ -193,12 +193,8 @@ executeSSLWarnDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         boost::scoped_ptr< SSLWarnDialog > xDialog(
-           new SSLWarnDialog( pParent,
-                              rXCert,
-                              xContext,
-                              xManager.get()));
+           new SSLWarnDialog(pParent, rXCert, xContext));
 
         // Get correct resource string
         OUString aMessage_1;
@@ -225,6 +221,8 @@ executeSSLWarnDialog(
             case SSLWARN_TYPE_INVALID:
                 break;
         }
+
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
 
         if (xManager.get())
         {
