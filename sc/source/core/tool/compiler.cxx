@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <svtools/miscopt.hxx>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,7 +90,7 @@ enum ScanState
     ssStop
 };
 
-static const sal_Char* pInternal[ 1 ] = { "TTT" };
+static const sal_Char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
 
 using namespace ::com::sun::star::i18n;
 
@@ -3441,6 +3442,13 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( cSymbol[0] < 128 )
     {
         bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
+        if (!bMayBeFuncName)
+        {
+            SvtMiscOptions aOpt;
+            if (aOpt.IsExperimentalMode())
+                bMayBeFuncName = (cSymbol[0] == '_' && cSymbol[1] == '_');
+        }
+
         bAsciiNonAlnum = !bMayBeFuncName && !rtl::isAsciiDigit( cSymbol[0] );
     }
     else
