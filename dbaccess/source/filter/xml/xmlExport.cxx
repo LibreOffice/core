@@ -651,7 +651,6 @@ void ODBExport::exportConnectionData()
             else
             {
                 AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
-                AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                 SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_CONNECTION_RESOURCE, sal_True, sal_True);
             }
         }
@@ -862,7 +861,6 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
         sValue = "reports/" + sValue;
 
     AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,sValue);
-    AddAttribute(XML_NAMESPACE_DB,XML_TYPE, TODO: always XML_SIMPLE?);
     sal_Bool bAsTemplate = sal_False;
     _xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
     AddAttribute(XML_NAMESPACE_DB, XML_AS_TEMPLATE,bAsTemplate ? XML_TRUE : XML_FALSE);
