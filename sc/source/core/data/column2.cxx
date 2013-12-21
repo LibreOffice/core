@@ -1962,6 +1962,21 @@ void ScColumn::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRo
         maBroadcasters.set_empty(rBlockPos.miBroadcasterPos, nRow1, nRow2);
 }
 
+void ScColumn::PrepareBroadcastersForDestruction()
+{
+    sc::BroadcasterStoreType::iterator itPos = maBroadcasters.begin(), itPosEnd = maBroadcasters.end();
+    for (; itPos != itPosEnd; ++itPos)
+    {
+        if (itPos->type == sc::element_type_broadcaster)
+        {
+            sc::broadcaster_block::iterator it = sc::broadcaster_block::begin(*itPos->data);
+            sc::broadcaster_block::iterator itEnd = sc::broadcaster_block::end(*itPos->data);
+            for (; it != itEnd; ++it)
+                (*it)->PrepareForDestruction();
+        }
+    }
+}
+
 bool ScColumn::HasBroadcaster() const
 {
     sc::BroadcasterStoreType::const_iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
