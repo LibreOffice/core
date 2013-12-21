@@ -9191,7 +9191,7 @@ AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
 # Obviously no such thing on iOS or Android. Also not possible when building
 # 64-bit OS X code as the plugin code uses QuickTime and Carbon.
 if test "$_os" != Android -a "$_os" != iOS -a \( $_os != Darwin -o "$BITNESS_OVERRIDE" = "" \) -a \
-        "$enable_headless" != yes
+        "$enable_headless" != yes -a "$enable_mpl_subset" != yes
 then
     AC_MSG_RESULT([yes])
     ENABLE_NPAPI_FROM_BROWSER=TRUE
@@ -9205,8 +9205,8 @@ dnl ===================================================================
 dnl Check for NPAPI interface to plug LibreOffice into browser windows
 dnl ===================================================================
 AC_MSG_CHECKING([whether to plug LibreOffice into browser windows])
-if test "$_os" = WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
-        "$enable_headless" != yes -a "$enable_gtk" != no
+if test "$enable_mpl_subset" != yes -a \( "$_os" = WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
+        "$enable_headless" != yes -a "$enable_gtk" != no \)
 then
     AC_MSG_RESULT([yes])
     ENABLE_NPAPI_INTO_BROWSER=TRUE

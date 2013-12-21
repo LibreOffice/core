@@ -331,7 +331,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/Accessibility/AccessibleCellBase \
     sc/source/ui/Accessibility/AccessibleContextBase \
     sc/source/ui/Accessibility/AccessibleCsvControl \
-    sc/source/ui/Accessibility/AccessibleDataPilotControl \
+    $(if $(filter TRUE,$(MPL_SUBSET)),, \
+    sc/source/ui/Accessibility/AccessibleDataPilotControl) \
     sc/source/ui/Accessibility/AccessibleDocument \
     sc/source/ui/Accessibility/AccessibleDocumentBase \
     sc/source/ui/Accessibility/AccessibleDocumentPagePreview \
