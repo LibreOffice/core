@@ -13,16 +13,19 @@
 #include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
 
-namespace oox { namespace shape {
+namespace oox
+{
+namespace shape
+{
 
 /// Locked canvas is kind of a container for drawingml shapes: it can even contain group shapes.
 class LockedCanvasContext : public oox::core::ContextHandler2
 {
 public:
-    LockedCanvasContext( oox::core::ContextHandler2Helper& rParent );
+    LockedCanvasContext(oox::core::ContextHandler2Helper& rParent);
     virtual ~LockedCanvasContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const ::oox::AttributeList& rAttribs) SAL_OVERRIDE;
 
     oox::drawingml::ShapePtr getShape();
 
@@ -32,7 +35,8 @@ protected:
 };
 
 
-} }
+}
+}
 
 #endif
 

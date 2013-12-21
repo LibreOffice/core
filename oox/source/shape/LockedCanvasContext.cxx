@@ -12,10 +12,13 @@
 
 using namespace com::sun::star;
 
-namespace oox { namespace shape {
+namespace oox
+{
+namespace shape
+{
 
-LockedCanvasContext::LockedCanvasContext( ContextHandler2Helper& rParent )
-: ContextHandler2( rParent )
+LockedCanvasContext::LockedCanvasContext(ContextHandler2Helper& rParent)
+    : ContextHandler2(rParent)
 {
 }
 
@@ -28,9 +31,9 @@ oox::drawingml::ShapePtr LockedCanvasContext::getShape()
     return mpShape;
 }
 
-::oox::core::ContextHandlerRef LockedCanvasContext::onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& /*rAttribs*/ )
+::oox::core::ContextHandlerRef LockedCanvasContext::onCreateContext(sal_Int32 aElementToken, const ::oox::AttributeList& /*rAttribs*/)
 {
-    switch( getBaseToken( aElementToken ) )
+    switch (getBaseToken(aElementToken))
     {
     case XML_lockedCanvas:
         break;
@@ -39,19 +42,19 @@ oox::drawingml::ShapePtr LockedCanvasContext::getShape()
     case XML_grpSpPr:
         break;
     case XML_sp:
-        {
-            oox::drawingml::ShapePtr pMasterShape;
-            mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
-            mpShape->setLockedCanvas(true);
-            return new oox::drawingml::ShapeContext( *this, pMasterShape, mpShape );
-        }
+    {
+        oox::drawingml::ShapePtr pMasterShape;
+        mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
+        mpShape->setLockedCanvas(true);
+        return new oox::drawingml::ShapeContext(*this, pMasterShape, mpShape);
+    }
     case XML_grpSp:
-        {
-            oox::drawingml::ShapePtr pMasterShape;
-            mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
-            mpShape->setLockedCanvas(true);
-            return new oox::drawingml::ShapeGroupContext( *this, pMasterShape, mpShape );
-        }
+    {
+        oox::drawingml::ShapePtr pMasterShape;
+        mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+        mpShape->setLockedCanvas(true);
+        return new oox::drawingml::ShapeGroupContext(*this, pMasterShape, mpShape);
+    }
     default:
         SAL_WARN("oox", "LockedCanvasContext::createFastChildContext: unhandled element:" << getBaseToken(aElementToken));
         break;
@@ -59,6 +62,7 @@ oox::drawingml::ShapePtr LockedCanvasContext::getShape()
     return 0;
 }
 
-} }
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
