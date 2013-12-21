@@ -21,44 +21,23 @@
 #include <svl/listener.hxx>
 #include <svl/smplhint.hxx>
 
-namespace {
-
-class StartListeningHandler : std::unary_function<SvtListener*, void>
-{
-    SvtBroadcaster& mrBC;
-public:
-    StartListeningHandler( SvtBroadcaster& rBC ) : mrBC(rBC) {}
-
-    void operator() ( SvtListener* p )
-    {
-        p->StartListening(mrBC);
-    }
-};
-
-class NotifyHandler : std::unary_function<SvtListener*, void>
-{
-    SvtBroadcaster& mrBC;
-    const SfxHint& mrHint;
-public:
-    NotifyHandler( SvtBroadcaster& rBC, const SfxHint& rHint ) : mrBC(rBC), mrHint(rHint) {}
-
-    void operator() ( SvtListener* p )
-    {
-        p->Notify(mrBC, mrHint);
-    }
-};
-
-}
-
 void SvtBroadcaster::Normalize()
 {
-    if (mbNormalized)
-        return;
+    if (!mbNormalized)
+    {
+        std::sort(maListeners.begin(), maListeners.end());
+        ListenersType::iterator itUniqueEnd = std::unique(maListeners.begin(), maListeners.end());
+        maListeners.erase(itUniqueEnd, maListeners.end());
+        mbNormalized = true;
+    }
 
-    std::sort(maListeners.begin(), maListeners.end());
-    ListenersType::iterator itUniqueEnd = std::unique(maListeners.begin(), maListeners.end());
-    maListeners.erase(itUniqueEnd, maListeners.end());
-    mbNormalized = true;
+    if (!mbDestNormalized)
+    {
+        std::sort(maDestructedListeners.begin(), maDestructedListeners.end());
+        ListenersType::iterator itUniqueEnd = std::unique(maDestructedListeners.begin(), maDestructedListeners.end());
+        maDestructedListeners.erase(itUniqueEnd, maDestructedListeners.end());
+        mbDestNormalized = true;
+    }
 }
 
 void SvtBroadcaster::Add( SvtListener* p )
@@ -75,6 +54,7 @@ void SvtBroadcaster::Remove( SvtListener* p )
     if (mbAboutToDie)
     {
         maDestructedListeners.push_back(p);
+        mbDestNormalized = false;
         return;
     }
 
@@ -88,12 +68,33 @@ void SvtBroadcaster::Remove( SvtListener* p )
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(false) {}
+SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(false), mbDestNormalized(false) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    maListeners(rBC.maListeners), mbAboutToDie(false), mbDisposing(false), mbNormalized(rBC.mbNormalized)
+    maListeners(rBC.maListeners), maDestructedListeners(rBC.maDestructedListeners),
+    mbAboutToDie(rBC.mbAboutToDie), mbDisposing(false),
+    mbNormalized(rBC.mbNormalized), mbDestNormalized(rBC.mbDestNormalized)
 {
-    std::for_each(maListeners.begin(), maListeners.end(), StartListeningHandler(*this));
+    if (mbAboutToDie)
+        Normalize();
+
+    ListenersType::iterator dest(maDestructedListeners.begin());
+    for (ListenersType::iterator it(maListeners.begin()); it < maListeners.end(); ++it)
+    {
+        bool bStart = true;
+
+        if (mbAboutToDie)
+        {
+            // skip the destructed ones
+            while (dest != maDestructedListeners.end() && (*dest < *it))
+                ++dest;
+
+            bStart = (dest == maDestructedListeners.end() || *dest != *it);
+        }
+
+        if (bStart)
+            (*it)->StartListening(*this);
+    }
 }
 
 SvtBroadcaster::~SvtBroadcaster()
@@ -101,12 +102,6 @@ SvtBroadcaster::~SvtBroadcaster()
     mbDisposing = true;
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
-    // normalize the list of listeners than already asked for destruction
-    std::sort(maDestructedListeners.begin(), maDestructedListeners.end());
-    ListenersType::iterator itUniqueEnd = std::unique(maDestructedListeners.begin(), maDestructedListeners.end());
-    maDestructedListeners.erase(itUniqueEnd, maDestructedListeners.end());
-
-    // and the list of registered listeners too
     Normalize();
 
     // now when both lists are sorted, we can linearly unregister all
@@ -126,12 +121,18 @@ SvtBroadcaster::~SvtBroadcaster()
 
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
-    if (mbAboutToDie)
-        return;
-
     Normalize();
-    ListenersType listeners(maListeners);
-    std::for_each(listeners.begin(), listeners.end(), NotifyHandler(*this, rHint));
+
+    ListenersType::iterator dest(maDestructedListeners.begin());
+    for (ListenersType::iterator it(maListeners.begin()); it < maListeners.end(); ++it)
+    {
+        // skip the destructed ones
+        while (dest != maDestructedListeners.end() && (*dest < *it))
+            ++dest;
+
+        if (dest == maDestructedListeners.end() || *dest != *it)
+            (*it)->Notify(*this, rHint);
+    }
 }
 
 void SvtBroadcaster::ListenersGone() {}

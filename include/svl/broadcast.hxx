@@ -82,6 +82,7 @@ private:
     bool mbAboutToDie:1;
     bool mbDisposing:1;
     bool mbNormalized:1;
+    bool mbDestNormalized:1;
 };
 
 
