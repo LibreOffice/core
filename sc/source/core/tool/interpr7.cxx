@@ -9,6 +9,8 @@
 
 #include "interpre.hxx"
 #include <rtl/strbuf.hxx>
+#include <formula/errorcodes.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -212,6 +214,13 @@ void ScInterpreter::ScDebugVar()
     // This is to be used by developers only!  Never document this for end
     // users.  This is a convenient way to extract arbitrary internal state to
     // a cell for easier debugging.
+
+    SvtMiscOptions aMiscOptions;
+    if (!aMiscOptions.IsExperimentalMode())
+    {
+        PushError(ScErrorCodes::errNoName);
+        return;
+    }
 
     if (!MustHaveParamCount(GetByte(), 1))
     {
