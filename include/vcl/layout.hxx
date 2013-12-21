@@ -715,6 +715,8 @@ public:
     MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue);
     virtual short Execute();
+    ///Emitted when an action widget is clicked
+    virtual void response(short nResponseId);
     OUString get_primary_text() const;
     OUString get_secondary_text() const;
     void set_primary_text(const OUString &rPrimaryString);

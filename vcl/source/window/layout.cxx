@@ -1947,9 +1947,14 @@ MessageDialog::~MessageDialog()
     delete m_pGrid;
 }
 
+void MessageDialog::response(short nResponseId)
+{
+    EndDialog(nResponseId);
+}
+
 IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
 {
-    EndDialog(get_response(pButton));
+    response(get_response(pButton));
     return 0;
 }
 
