@@ -766,7 +766,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             case vcl::PDFWriter::Span :
             case vcl::PDFWriter::Quote :
             case vcl::PDFWriter::Code :
-                if( POR_HYPHSTR == pPor->GetWhichPor() || POR_SOFTHYPHSTR == pPor->GetWhichPor() )
+                if( POR_HYPHSTR == pPor->GetWhichPor() || POR_SOFTHYPHSTR == pPor->GetWhichPor() ||
+                    POR_HYPH == pPor->GetWhichPor() || POR_SOFTHYPH == pPor->GetWhichPor() )
                     bActualText = true;
                 else
                 {
@@ -789,7 +790,11 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bActualText )
         {
-            const String aActualTxt( rInf.GetTxt(), rInf.GetIdx(), pPor->GetLen() );
+            String aActualTxt;
+            if (pPor->GetWhichPor() == POR_SOFTHYPH || pPor->GetWhichPor() == POR_HYPH)
+                aActualTxt = (sal_Unicode)0xad; // soft hyphen
+            else
+                aActualTxt = String(rInf.GetTxt(), rInf.GetIdx(), pPor->GetLen());
             mpPDFExtOutDevData->SetActualText( aActualTxt );
         }
 
@@ -1373,6 +1378,8 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
     switch ( pPor->GetWhichPor() )
     {
+        case POR_HYPH :
+        case POR_SOFTHYPH :
         // Check for alternative spelling:
         case POR_HYPHSTR :
         case POR_SOFTHYPHSTR :
