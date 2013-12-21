@@ -60,8 +60,21 @@ public:
 
     bool HasListeners() const;
 
+    /**
+     * Listeners and broadcasters are M:N relationship.  If you want to
+     * destruct them, you easily end up in O(M*N) situation; where for every
+     * listener, you iterate all broadcasters, to remove that one listener.
+     *
+     * To avoid that, use this call to announce to the broadcaster it is going
+     * to die, and the listeners do not have to bother with removing
+     * themselves from the broadcaster - the broadcaster will not broadcast
+     * anything after the PrepareForDesctruction() call anyway.
+     */
+    void PrepareForDestruction() { mbAboutToDie = true; }
+
 private:
     ListenersType maListeners;
+    bool mbAboutToDie:1;
     bool mbDisposing:1;
     bool mbNormalized:1;
 };

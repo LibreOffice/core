@@ -341,6 +341,9 @@ ScTable::~ScTable()
     delete mpRangeName;
     delete pDBDataNoName;
     DestroySortCollator();
+
+    for (SCCOL k=0; k<=MAXCOL; k++)
+        aCol[k].PrepareBroadcastersForDestruction();
 }
 
 void ScTable::GetName( OUString& rName ) const

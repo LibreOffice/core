@@ -81,7 +81,7 @@ void SvtBroadcaster::Add( SvtListener* p )
 
 void SvtBroadcaster::Remove( SvtListener* p )
 {
-    if (mbDisposing)
+    if (mbAboutToDie || mbDisposing)
         return;
 
     Normalize();
@@ -94,10 +94,10 @@ void SvtBroadcaster::Remove( SvtListener* p )
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() : mbDisposing(false), mbNormalized(false) {}
+SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(false) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    maListeners(rBC.maListeners), mbDisposing(false), mbNormalized(rBC.mbNormalized)
+    maListeners(rBC.maListeners), mbAboutToDie(false), mbDisposing(false), mbNormalized(rBC.mbNormalized)
 {
     std::for_each(maListeners.begin(), maListeners.end(), StartListeningHandler(*this));
 }
@@ -113,6 +113,9 @@ SvtBroadcaster::~SvtBroadcaster()
 
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
+    if (mbAboutToDie)
+        return;
+
     Normalize();
     ListenersType listeners(maListeners);
     std::for_each(listeners.begin(), listeners.end(), NotifyHandler(*this, rHint));
