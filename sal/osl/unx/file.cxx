@@ -25,6 +25,8 @@
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 
+#include <rtl/string.hxx>
+
 #include <sal/log.hxx>
 
 #include "system.h"
@@ -992,7 +994,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
 
-    SAL_INFO("sal.file", "osl_openFile(" << pImpl->m_strFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") => " << pImpl->m_fd);
+    SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") => " << pImpl->m_fd);
 
     *pHandle = (oslFileHandle)(pImpl);
     return osl_File_E_None;
@@ -1028,7 +1030,7 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
     if (pImpl == 0)
         return osl_File_E_INVAL;
 
-    SAL_INFO("sal.file", "osl_closeFile(" << pImpl->m_strFilePath << ":" << pImpl->m_fd << ")");
+    SAL_INFO("sal.file", "osl_closeFile(" << rtl::OString(pImpl->m_strFilePath) << ":" << pImpl->m_fd << ")");
 
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
