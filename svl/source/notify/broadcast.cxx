@@ -35,18 +35,6 @@ public:
     }
 };
 
-class EndListeningHandler : std::unary_function<SvtListener*, void>
-{
-    SvtBroadcaster& mrBC;
-public:
-    EndListeningHandler( SvtBroadcaster& rBC ) : mrBC(rBC) {}
-
-    void operator() ( SvtListener* p )
-    {
-        p->EndListening(mrBC);
-    }
-};
-
 class NotifyHandler : std::unary_function<SvtListener*, void>
 {
     SvtBroadcaster& mrBC;
@@ -81,8 +69,14 @@ void SvtBroadcaster::Add( SvtListener* p )
 
 void SvtBroadcaster::Remove( SvtListener* p )
 {
-    if (mbAboutToDie || mbDisposing)
+    if (mbDisposing)
         return;
+
+    if (mbAboutToDie)
+    {
+        maDestructedListeners.push_back(p);
+        return;
+    }
 
     Normalize();
     std::pair<ListenersType::iterator,ListenersType::iterator> r =
@@ -107,8 +101,27 @@ SvtBroadcaster::~SvtBroadcaster()
     mbDisposing = true;
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
-    // unregister all listeners.
-    std::for_each(maListeners.begin(), maListeners.end(), EndListeningHandler(*this));
+    // normalize the list of listeners than already asked for destruction
+    std::sort(maDestructedListeners.begin(), maDestructedListeners.end());
+    ListenersType::iterator itUniqueEnd = std::unique(maDestructedListeners.begin(), maDestructedListeners.end());
+    maDestructedListeners.erase(itUniqueEnd, maDestructedListeners.end());
+
+    // and the list of registered listeners too
+    Normalize();
+
+    // now when both lists are sorted, we can linearly unregister all
+    // listeners, with the exception of those that already asked to be removed
+    // during their own destruction
+    ListenersType::iterator dest(maDestructedListeners.begin());
+    for (ListenersType::iterator it(maListeners.begin()); it < maListeners.end(); ++it)
+    {
+        // skip the destructed ones
+        while (dest != maDestructedListeners.end() && (*dest < *it))
+            ++dest;
+
+        if (dest == maDestructedListeners.end() || *dest != *it)
+            (*it)->EndListening(*this);
+    }
 }
 
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
@@ -131,6 +144,12 @@ SvtBroadcaster::ListenersType& SvtBroadcaster::GetAllListeners()
 bool SvtBroadcaster::HasListeners() const
 {
     return !maListeners.empty();
+}
+
+void SvtBroadcaster::PrepareForDestruction()
+{
+    mbAboutToDie = true;
+    maDestructedListeners.reserve(maListeners.size());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

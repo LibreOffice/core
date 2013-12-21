@@ -70,10 +70,15 @@ public:
      * themselves from the broadcaster - the broadcaster will not broadcast
      * anything after the PrepareForDesctruction() call anyway.
      */
-    void PrepareForDestruction() { mbAboutToDie = true; }
+    void PrepareForDestruction();
 
 private:
     ListenersType maListeners;
+
+    /// When the broadcaster is about to die, collect listeners that asked for removal.
+    ListenersType maDestructedListeners;
+
+    /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
     bool mbAboutToDie:1;
     bool mbDisposing:1;
     bool mbNormalized:1;
