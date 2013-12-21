@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <svtools/miscopt.hxx>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -3440,7 +3441,14 @@ bool ScCompiler::NextNewToken( bool bInArray )
     bool bAsciiNonAlnum;    // operators, separators, ...
     if ( cSymbol[0] < 128 )
     {
-        bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] ) || cSymbol[0] == '_';
+        bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
+        if (!bMayBeFuncName)
+        {
+            SvtMiscOptions aOpt;
+            if (aOpt.IsExperimentalMode())
+                bMayBeFuncName = (cSymbol[0] == '_' && cSymbol[1] == '_');
+        }
+
         bAsciiNonAlnum = !bMayBeFuncName && !rtl::isAsciiDigit( cSymbol[0] );
     }
     else
