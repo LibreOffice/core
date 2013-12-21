@@ -44,7 +44,7 @@ VectorRef::~VectorRef()
     if (mpClmem) {
         cl_int ret = clReleaseMemObject(mpClmem);
         if (ret != CL_SUCCESS)
-            throw OpenCLError(ret);
+            throw OpenCLError(ret, __FILE__, __LINE__);
     }
 }
 

@@ -100,7 +100,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
                 szHostBuffer,
                 pHostBuffer, &err);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
     }
     else
     {
@@ -111,12 +111,12 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
                 (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
                 szHostBuffer, NULL, &err);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         double *pNanBuffer = (double*)clEnqueueMapBuffer(
                 kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
                 szHostBuffer, 0, NULL, NULL, &err);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         for (size_t i = 0; i < szHostBuffer/sizeof(double); i++)
             pNanBuffer[i] = NAN;
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
@@ -125,7 +125,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     if (CL_SUCCESS != err)
-        throw OpenCLError(err);
+        throw OpenCLError(err, __FILE__, __LINE__);
     return 1;
 }
 
@@ -184,7 +184,7 @@ public:
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
     }
 };
@@ -233,7 +233,7 @@ public:
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
     }
     virtual cl_mem GetCLBuffer(void) const { return NULL; }
@@ -273,7 +273,7 @@ public:
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
     }
 };
@@ -315,7 +315,7 @@ public:
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
     }
 };
@@ -370,12 +370,12 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
             (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, NULL, &err);
     if (CL_SUCCESS != err)
-        throw OpenCLError(err);
+        throw OpenCLError(err, __FILE__, __LINE__);
     cl_uint *pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
             szHostBuffer, 0, NULL, NULL, &err);
     if (CL_SUCCESS != err)
-        throw OpenCLError(err);
+        throw OpenCLError(err, __FILE__, __LINE__);
     for (size_t i = 0; i < nStrings; i++)
     {
         if (vRef.mpStringArray[i])
@@ -391,11 +391,11 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
             pHashBuffer, 0, NULL, NULL);
     if (CL_SUCCESS != err)
-        throw OpenCLError(err);
+        throw OpenCLError(err, __FILE__, __LINE__);
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     if (CL_SUCCESS != err)
-        throw OpenCLError(err);
+        throw OpenCLError(err, __FILE__, __LINE__);
     return 1;
 }
 
@@ -879,32 +879,32 @@ public:
         mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_WRITE_ONLY,
                 sizeof(double)*w, NULL, NULL);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         // reproduce the reduction function name
         std::string kernelName = Base::GetName() + "_reduction";
 
         cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
         if (err != CL_SUCCESS)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         // set kernel arg of reduction kernel
         // TODO(Wei Wei): use unique name for kernel
         cl_mem buf = Base::GetCLBuffer();
         err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
                 (void *)&buf);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
 
         err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void *)&mpClmem2);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
 
         err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
 
         err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
 
         // set work group size and execute
         size_t global_work_size[] = {256, (size_t)w };
@@ -912,15 +912,15 @@ public:
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
                 global_work_size, local_work_size, 0, NULL, NULL);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         err = clFinish(kEnv.mpkCmdQueue);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
 
         // set kernel arg
         err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
     }
     ~ParallelReductionVectorRef()
@@ -1551,23 +1551,23 @@ public:
                 pClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                         sizeof(double)*nVectorWidth, NULL, &err);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                 std::string kernelName = "GeoMean_reduction";
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
                 if (err != CL_SUCCESS)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
                     // set kernel arg of reduction kernel
                 for (size_t j=0; j< vclmem.size(); j++){
                     err = clSetKernelArg(redKernel, j,
                             vclmem[j]?sizeof(cl_mem):sizeof(double),
                             (void *)&vclmem[j]);
                     if (CL_SUCCESS != err)
-                        throw OpenCLError(err);
+                        throw OpenCLError(err, __FILE__, __LINE__);
                 }
                 err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void *)&pClmem2);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                 // set work group size and execute
                 size_t global_work_size[] = {256, (size_t)nVectorWidth };
@@ -1575,15 +1575,15 @@ public:
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
                         global_work_size, local_work_size, 0, NULL, NULL);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
                 err = clFinish(kEnv.mpkCmdQueue);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                  // Pass pClmem2 to the "real" kernel
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&pClmem2);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
             }
          }
         if (OpSumIfs *OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
@@ -1619,12 +1619,12 @@ public:
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                         sizeof(double)*nVectorWidth, NULL, &err);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                 std::string kernelName = mvSubArguments[0]->GetName() + "_SumIfs_reduction";
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
                 if (err != CL_SUCCESS)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                     // set kernel arg of reduction kernel
                 for (size_t j=0; j< vclmem.size(); j++){
@@ -1633,34 +1633,34 @@ public:
                             vclmem[j].mCLMem?(void *)&vclmem[j].mCLMem:
                             (void*)&vclmem[j].mConst);
                     if (CL_SUCCESS != err)
-                        throw OpenCLError(err);
+                        throw OpenCLError(err, __FILE__, __LINE__);
                 }
                 err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void *)&mpClmem2);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                 err = clSetKernelArg(redKernel, vclmem.size()+1, sizeof(cl_int), (void*)&nInput);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
 
                 err = clSetKernelArg(redKernel, vclmem.size()+2, sizeof(cl_int), (void*)&nCurWindowSize);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
                 // set work group size and execute
                 size_t global_work_size[] = {256, (size_t)nVectorWidth };
                 size_t local_work_size[] = {256, 1};
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
                         global_work_size, local_work_size, 0, NULL, NULL);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
                 err = clFinish(kEnv.mpkCmdQueue);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
                 clReleaseKernel(redKernel);
                  // Pass mpClmem2 to the "real" kernel
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&mpClmem2);
                 if (CL_SUCCESS != err)
-                    throw OpenCLError(err);
+                    throw OpenCLError(err, __FILE__, __LINE__);
             }
         }
         return i;
@@ -2955,17 +2955,17 @@ public:
                 (cl_mem_flags) CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR,
                 nr*sizeof(double), NULL, &err);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         // The rest of buffers
         mSyms.Marshal(mpKernel, nr, mpProgram);
         size_t global_work_size[] = {nr};
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
             global_work_size, NULL, 0, NULL, NULL);
         if (CL_SUCCESS != err)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
     }
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
@@ -3037,7 +3037,7 @@ void DynamicKernel::CreateKernel(void)
             mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
                     &src, NULL, &err);
             if (err != CL_SUCCESS)
-                throw OpenCLError(err);
+                throw OpenCLError(err, __FILE__, __LINE__);
             err = clBuildProgram(mpProgram, 1,
                     OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
             if (err != CL_SUCCESS)
@@ -3086,7 +3086,7 @@ void DynamicKernel::CreateKernel(void)
                     }
                 }
 #endif
-                throw OpenCLError(err);
+                throw OpenCLError(err, __FILE__, __LINE__);
             }
             // Generate binary out of compiled kernel.
             OpenclDevice::generatBinFromKernelSource(mpProgram,
@@ -3099,7 +3099,7 @@ void DynamicKernel::CreateKernel(void)
     }
     mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
     if (err != CL_SUCCESS)
-        throw OpenCLError(err);
+        throw OpenCLError(err, __FILE__, __LINE__);
 }
 // Symbol lookup. If there is no such symbol created, allocate one
 // kernel with argument with unique name and return so.
@@ -3277,11 +3277,11 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
                 xGroup->mnLength*sizeof(double), 0, NULL, NULL,
                 &err);
         if (err != CL_SUCCESS)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
-            throw OpenCLError(err);
+            throw OpenCLError(err, __FILE__, __LINE__);
         if (xGroup->meCalcState == sc::GroupCalcRunning)
             delete pKernel;
     }
@@ -3297,7 +3297,9 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     catch (const OpenCLError &oce) {
         std::cerr << "Dynamic formula compiler: OpenCL error: ";
-        std::cerr << oce.mError << "\n";
+        std::cerr << oce.mError;
+        std::cerr <<" at ";
+        std::cerr << oce.mFile << ":" << oce.mLineNumber << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
         return true;

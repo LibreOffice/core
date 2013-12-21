@@ -103,11 +103,14 @@ private:
     }
 
 public:
-    OpenCLError(cl_int err): mError(err)
+    OpenCLError(cl_int err, std::string fn, int ln): mError(err),
+    mFile(fn), mLineNumber(ln)
     {
         SAL_INFO("sc.opencl", "OpenCLError:" << mError << ": " << strerror(mError));
     }
     cl_int mError;
+    std::string mFile;
+    int mLineNumber;
 };
 
 /// Inconsistent state
