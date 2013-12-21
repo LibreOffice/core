@@ -1404,7 +1404,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 
     const SwCntntFrm *pAct = pCntnt;
     Point aAct       = rPt;
-    sal_uLong nDist  = SAL_MAX_UINT64;
+    sal_uInt64 nDist = SAL_MAX_UINT64;
 
     while ( pCntnt )
     {
