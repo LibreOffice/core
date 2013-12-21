@@ -26,6 +26,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
 #include <unotools/datetime.hxx>
 #include <sstream>
 #include <iomanip>
@@ -324,10 +325,15 @@ namespace dbtools
         return aRet;
     }
     // -------------------------------------------------------------------------
-    utl::Time DBTypeConversion::toTime(double dVal)
+    utl::Time DBTypeConversion::toTime(double dVal, short nDigits)
     {
         sal_Int32 nDays     = (sal_Int32)dVal;
-        sal_Int64 nNS = static_cast<sal_Int64>((dVal - (double)nDays) * fNanoSecondsPerDay + 0.5);
+        sal_Int64 nNS;
+        {
+            double fSeconds((dVal - (double)nDays) * (fNanoSecondsPerDay / nanoSecInSec));
+            fSeconds = ::rtl::math::round( fSeconds, nDigits );
+            nNS = fSeconds * nanoSecInSec;
+        }
 
         sal_Int16 nSign;
         if ( nNS < 0 )
@@ -370,7 +376,11 @@ namespace dbtools
     utl::DateTime DBTypeConversion::toDateTime(double dVal, const utl::Date& _rNullDate)
     {
         utl::Date aDate = toDate(dVal, _rNullDate);
-        utl::Time aTime = toTime(dVal);
+        // there is not enough precision in a double to have both a date
+        // and a time up to nanoseconds -> limit to microseconds to have
+        // correct rounding, that is e.g. 13:00:00.000000000 instead of
+        // 12:59:59.999999790
+        utl::Time aTime = toTime(dVal, 6);
 
         utl::DateTime xRet;
 
