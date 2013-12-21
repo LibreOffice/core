@@ -44,7 +44,6 @@ private:
 
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
-    Window* m_pParent;
 
     DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK(ViewCertHdl_Impl, void *);
@@ -55,11 +54,9 @@ private:
                        const css::uno::Reference< css::uno::XComponentContext >& xContext,
                        ResMgr * pResMgr );
 
-    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; };
+    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; }
 
-    Window* getParent() { return m_pParent; };
-
-    void setDescriptionText( const OUString &aText ) { m_aLabel1.SetText( aText ); };
+    void setDescriptionText( const OUString &aText ) { m_aLabel1.SetText( aText ); }
 
 };
 

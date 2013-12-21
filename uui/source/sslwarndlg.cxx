@@ -45,8 +45,7 @@ SSLWarnDialog::SSLWarnDialog(Window* pParent,
     , m_xContext(xContext)
     , m_rXCert(rXCert)
 {
-    m_pParent = pParent;
-};
+}
 
 void SSLWarnDialog::response(short nResponseId)
 {

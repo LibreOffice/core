@@ -83,9 +83,8 @@ UnknownAuthDialog::UnknownAuthDialog
     FreeResource();
 
     m_aWarnImage.SetImage( WarningBox::GetStandardImage() );
-    m_pParent = pParent;
     m_aView_Certificate.SetClickHdl( LINK( this, UnknownAuthDialog, ViewCertHdl_Impl ) );
     m_aCommandButtonOK.SetClickHdl( LINK( this, UnknownAuthDialog, OKHdl_Impl ) );
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

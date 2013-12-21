@@ -34,7 +34,6 @@ class SSLWarnDialog : public MessageDialog
 private:
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
-    Window* m_pParent;
 
     void ViewCert();
 
@@ -44,8 +43,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; }
-
-    Window* getParent() { return m_pParent; }
 
     virtual void response(short nResponseId);
 
