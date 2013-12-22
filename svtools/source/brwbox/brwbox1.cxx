@@ -381,7 +381,7 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
         // to be moved?
         if ( (sal_Int32)nItemPos != FrozenColCount()-1 )
         {
-            // move to the leftmost scrollable colum
+            // move to the leftmost scrollable column
             sal_uInt16 nFirstScrollable = FrozenColCount();
             BrowserColumn *pColumn = (*pCols)[ nItemPos ];
             BrowserColumns::iterator it = pCols->begin();

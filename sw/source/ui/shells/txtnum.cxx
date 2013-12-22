@@ -178,7 +178,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,sal_False ));
 
-        // Before the dialogue of the HTML mode will be droped at the Docshell.
+        // Before the dialogue of the HTML mode will be dropped at the Docshell.
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

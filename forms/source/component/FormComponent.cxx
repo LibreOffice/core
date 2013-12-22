@@ -1954,7 +1954,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
-        OSL_ENSURE( evt.Source == getField(), "OBoundControlModel::propertyChange: value changes from components other than our database colum?" );
+        OSL_ENSURE( evt.Source == getField(), "OBoundControlModel::propertyChange: value changes from components other than our database column?" );
         osl::MutexGuard aGuard(m_aMutex);
         if ( m_bForwardValueChanges && m_xColumn.is() )
             transferDbValueToControl();

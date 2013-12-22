@@ -80,7 +80,7 @@ namespace drawinglayer {
     --------------------------------------------------------------------------
 
     The number of columns must be either set with SetColCount() or
-    SetItemWidth(). If the number of colums is specified by SetColCount()
+    SetItemWidth(). If the number of columns is specified by SetColCount()
     the width of the items will be calculated by the visible range.
     If the items should have a static width, it has to be specified
     with SetItemWidth(). In this case the number of columns will be calculated

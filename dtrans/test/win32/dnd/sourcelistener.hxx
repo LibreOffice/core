@@ -33,7 +33,7 @@ using namespace ::com::sun::star::lang;
 
 class DragSourceListener: public WeakImplHelper1<XDragSourceListener>
 {
-    // this is a window where droped data are shown as text (only text)
+    // this is a window where dropped data are shown as text (only text)
 public:
     DragSourceListener( );
     ~DragSourceListener();

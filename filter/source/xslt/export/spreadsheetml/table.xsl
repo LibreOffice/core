@@ -212,7 +212,7 @@
 				<xsl:copy-of select="." />
 			</xsl:when>
 			<xsl:otherwise>
-				<!-- repeated colums will be written explicit several times in the variable-->
+				<!-- repeated columns will be written explicit several times in the variable-->
 				<xsl:call-template name="repeat-adding-table-column">
 					<xsl:with-param name="numberColumnsRepeated"  select="@table:number-columns-repeated" />
 				</xsl:call-template>

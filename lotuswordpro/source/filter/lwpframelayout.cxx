@@ -352,7 +352,7 @@ void LwpFrame::ApplyBorders(XFFrameStyle *pFrameStyle)
     }
 }
 /**
-* @descr:  set frame colums style
+* @descr:  set frame columns style
 * @param:  pFrameStyle - Frame Style object
 *
 */

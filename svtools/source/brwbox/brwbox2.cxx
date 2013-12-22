@@ -965,7 +965,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
             if ( aPos.X() >= _rRect.Right() )
                 break;
 
-            // skip invisible colums between frozen and scrollable area
+            // skip invisible columns between frozen and scrollable area
             if ( nCol < nFirstCol && !pCol->IsFrozen() )
             {
                 nCol = nFirstCol;

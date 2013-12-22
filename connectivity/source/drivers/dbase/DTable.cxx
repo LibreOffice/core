@@ -2418,7 +2418,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     }
     catch(const SQLException&)
     {
-        // here we know that the old table wasn't droped before
+        // here we know that the old table wasn't dropped before
         if(!bAlreadyDroped)
             xHold = pNewTable = NULL;
 

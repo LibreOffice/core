@@ -178,8 +178,8 @@ public:
 
     /**
      * @descr   Set drop caption of the paragraph.
-     * @param   nLength number of chars to be droped.
-     * @param   nLines line of which the droped chars will occupy.
+     * @param   nLength number of chars to be dropped.
+     * @param   nLines line of which the dropped chars will occupy.
      */
     void    SetDropCap(sal_Int16 nLength = 1,sal_Int16 nLines = 3,double fDistance = 0);
 

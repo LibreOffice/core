@@ -1013,7 +1013,7 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
             pCellMark[nRowLoop] = 0;//reset all cell mark to zero
         }
 
-        //find if other row has the same colum
+        //find if other row has the same column
         for (nRowLoop=1;nRowLoop<=nRowNum;nRowLoop++)
         {
             pTmpRow = pXFTable->GetRow(nRowLoop);

@@ -235,7 +235,7 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
             for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
             {
                 OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
-                            "number of colums doesn't match number of Edits");
+                            "number of columns doesn't match number of Edits");
                 (*aEditIter)->SetText(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
             }
         }

@@ -88,7 +88,7 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const OUString& _sUserName) :
     aCancelBtn          ( this, ModuleRes( BTN_PASSWORD_CANCEL ) ),
     aHelpBtn            ( this, ModuleRes( BTN_PASSWORD_HELP ) )
 {
-    // hide until a help is avalable
+    // hide until a help is available
     aHelpBtn.Hide();
 
     FreeResource();

@@ -700,7 +700,7 @@ static ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
     ScDPAggData* pAgg = pFirst;
     long nSkip = nMeasure;
 
-    // subtotal settings are ignored - colum/row totals exist once per measure
+    // subtotal settings are ignored - column/row totals exist once per measure
 
     for ( long nPos=0; nPos<nSkip; nPos++ )
         pAgg = pAgg->GetChild();    // column total is constructed empty - children need to be created

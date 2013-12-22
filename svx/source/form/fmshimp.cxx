@@ -2519,7 +2519,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         // mark the SdrObject (accelerates the treatment in OnFoundData)
                         m_arrSearchedControls.push_back(pCurrent);
 
-                        // the number of the colum (here a dummy, since it is only interesting for GridControls)
+                        // the number of the column (here a dummy, since it is only interesting for GridControls)
                         m_arrRelativeGridColumn.push_back(-1);
 
                         // and for the formatted search...

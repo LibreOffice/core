@@ -245,7 +245,7 @@ void Table::alterColumnByName(
     const Reference< XPropertySet >& descriptor )
     throw (SQLException,NoSuchElementException,RuntimeException)
 {
-    Reference< com::sun::star::container::XNameAccess > colums =
+    Reference< com::sun::star::container::XNameAccess > columns =
         Reference< com::sun::star::container::XNameAccess > ( getColumns(), UNO_QUERY );
 
     OUString newName = extractStringProperty(descriptor, getStatics().NAME );
@@ -254,7 +254,7 @@ void Table::alterColumnByName(
         extractStringProperty( this, getStatics().NAME ),
         m_pSettings,
         m_conn->createStatement(),
-        Reference< com::sun::star::beans::XPropertySet>( colums->getByName( colName ), UNO_QUERY) ,
+        Reference< com::sun::star::beans::XPropertySet>( columns->getByName( colName ), UNO_QUERY) ,
         descriptor );
 
     if( colName !=  newName )
@@ -269,9 +269,9 @@ void Table::alterColumnByIndex(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
     throw (SQLException,IndexOutOfBoundsException,RuntimeException)
 {
-    Reference< com::sun::star::container::XIndexAccess > colums =
+    Reference< com::sun::star::container::XIndexAccess > columns =
         Reference< com::sun::star::container::XIndexAccess>( getColumns(), UNO_QUERY );
-    Reference< com::sun::star::beans::XPropertySet> column(colums->getByIndex( index ), UNO_QUERY );
+    Reference< com::sun::star::beans::XPropertySet> column(columns->getByIndex( index ), UNO_QUERY );
     ::pq_sdbc_driver::alterColumnByDescriptor(
         extractStringProperty( this, getStatics().SCHEMA_NAME ),
         extractStringProperty( this, getStatics().NAME ),

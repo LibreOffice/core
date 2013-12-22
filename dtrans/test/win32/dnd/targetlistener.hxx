@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang;
 
 class DropTargetListener: public WeakImplHelper1<XDropTargetListener>
 {
-    // this is a window where droped data are shown as text (only text)
+    // this is a window where dropped data are shown as text (only text)
     HWND m_hEdit;
 public:
     DropTargetListener( HWND hEdit);

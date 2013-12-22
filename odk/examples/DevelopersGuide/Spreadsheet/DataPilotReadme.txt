@@ -40,7 +40,7 @@ Simple usage scenario:
    - select the "thousands" field and drop it in the "Column Fields"
      area.
    -> press Ok
-8. you see a matrix with rows and colums for the selected fields
+8. you see a matrix with rows and columns for the selected fields
    and a value area with a sum up of all fields valid for this
    coordinate. For example cell F:21=1221 (ones=B:21=1, tens=c:21=2
    hundreds=D:21=2 and thousands=F:3=1)

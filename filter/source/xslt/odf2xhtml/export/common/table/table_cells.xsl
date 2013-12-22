@@ -59,7 +59,7 @@
 	<!-- matching cells to give out -> covered table cells are not written out -->
 	<xsl:template match="table:table-cell">
 		<xsl:param name="globalData" />
-		<!-- position of the current input cell to get the correct colum style (hidden are also counted)-->
+		<!-- position of the current input cell to get the correct column style (hidden are also counted)-->
 		<xsl:param name="allTableColumns" />
 		<xsl:param name="maxRowLength" />
 		<xsl:param name="tableDataType" />
@@ -96,7 +96,7 @@
 		<xsl:choose>
 			<xsl:when test="function-available('common:node-set')">
 				<xsl:call-template name="create-table-cell">
-					<!-- position of the current input cell to get the correct colum style (hidden are also counted)-->
+					<!-- position of the current input cell to get the correct column style (hidden are also counted)-->
 					<xsl:with-param name="allTableColumns"  select="$allTableColumns" />
 					<xsl:with-param name="maxRowLength"     select="$maxRowLength" />
 					<xsl:with-param name="precedingColumns"   select="sum(common:node-set($precedingCells)/*)" />
@@ -106,7 +106,7 @@
 			</xsl:when>
 			<xsl:when test="function-available('xalan:nodeset')">
 				<xsl:call-template name="create-table-cell">
-					<!-- position of the current input cell to get the correct colum style (hidden are also counted)-->
+					<!-- position of the current input cell to get the correct column style (hidden are also counted)-->
 					<xsl:with-param name="allTableColumns"  select="$allTableColumns" />
 					<xsl:with-param name="maxRowLength"     select="$maxRowLength" />
 					<xsl:with-param name="precedingColumns"   select="sum(xalan:nodeset($precedingCells)/*)" />
@@ -116,7 +116,7 @@
 			</xsl:when>
 			<xsl:when test="function-available('xt:node-set')">
 				<xsl:call-template name="create-table-cell">
-					<!-- position of the current input cell to get the correct colum style (hidden are also counted)-->
+					<!-- position of the current input cell to get the correct column style (hidden are also counted)-->
 					<xsl:with-param name="allTableColumns"  select="$allTableColumns" />
 					<xsl:with-param name="maxRowLength"     select="$maxRowLength" />
 					<xsl:with-param name="precedingColumns"   select="sum(xt:node-set($precedingCells)/*)" />
@@ -133,7 +133,7 @@
 
 	<!-- current node is a table:table-cell -->
 	<xsl:template name="create-table-cell">
-		<!-- position of the current input cell to get the correct colum style (hidden are also counted)-->
+		<!-- position of the current input cell to get the correct column style (hidden are also counted)-->
 		<xsl:param name="allTableColumns" />
 		<xsl:param name="globalData" />
 		<xsl:param name="maxRowLength" />
