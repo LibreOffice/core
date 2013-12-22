@@ -1,1 +1,29 @@
-iOS specific code and tests
+experimental iOS apps that use LibreOffice code.
+
+experimental/LibreOffice - Uses the "normal" desktop-style main loop
+and output mechanism to display the document, and also accepts input
+and selections. Broken since the tiled rendering changes. As tiled
+rendering seems to be what will/should be used, this app is of limited
+usefulness now. (Don't get excited by the name of this app, it was
+never intended to become a "complete" LibreOffice in any sense. In
+retrospect it was silly to call it just "LibreOffice.)
+
+Note that this app is built using gbuild: The executable as a normal
+executable from gbuild's perspective, and the app bundle then using a
+CustomTarget that constructs it. Its Xcode project has no normal
+"Compile Sources" or "Link Binary" build phases but instead a "Run
+Script" one that runs make.
+
+experimental/TiledLibreOffice - Uses tiled rendering and CATiledLayer.
+No input handling, but scrolling around and zooming around works
+nicely. Displays the number of tiles rendered per second. Also the
+name of this app is a bit too grandiose. Built by an Xcode project.
+(When built from the shell, running xcodebuild).
+
+MobileLibreOffice - Uses the code in "shared" subdirectory. Can be
+built in two configurations: 1) the "normal" configurations (Debug and
+Release) that matches experimental/LibreOffice in functionality, more
+or less. (But the coded is entirely differently structred.) But also
+this is currently broken, 2) the Debug_tile_tester configuration,
+where one can tweak tiling parameters and see a tile rendered. Also
+built by an Xcode project.
