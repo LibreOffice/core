@@ -1,0 +1,14 @@
+diff -ur mysqlcppconn.org/driver/mysql_metadata.cpp mysqlcppconn/driver/mysql_metadata.cpp
+--- mysqlcppconn.org/driver/mysql_metadata.cpp	2013-12-22 19:51:33.614406603 +0100
++++ mysqlcppconn/driver/mysql_metadata.cpp	2013-12-22 19:52:54.202099961 +0100
+@@ -4007,8 +4007,9 @@
+ MySQL_ConnectionMetaData::getUserName()
+ {
+ 	CPP_ENTER("MySQL_ConnectionMetaData::getUserName");
++        const sql::SQLString query = "SELECT grantee FROM information_schema.user_privileges WHERE replace( grantee, CHAR(39), '' ) = (SELECT user()) GROUP BY grantee";
+ 	boost::scoped_ptr< sql::Statement > stmt(connection->createStatement());
+-	boost::scoped_ptr< sql::ResultSet > rset(stmt->executeQuery("SELECT USER()"));
++	boost::scoped_ptr< sql::ResultSet > rset(stmt->executeQuery(query));
+ 	if (rset->next()) {
+ 		return sql::SQLString(rset->getString(1));
+ 	}

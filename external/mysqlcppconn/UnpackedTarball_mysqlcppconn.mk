@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,mysqlcppconn,\
 	external/mysqlcppconn/patches/mysql-connector-c++-1.1.0.patch \
 	external/mysqlcppconn/patches/default_to_protocol_tcp.patch \
 	external/mysqlcppconn/patches/retrieve_grants.patch.1 \
+	external/mysqlcppconn/patches/retrieve_currentuser_with_account_syntax.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
