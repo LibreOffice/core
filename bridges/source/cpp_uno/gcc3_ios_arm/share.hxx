@@ -47,18 +47,21 @@ namespace CPPU_CURRENT_NAMESPACE
 
 namespace arm
 {
-    enum armlimits {
 #if defined(__arm)
+    enum armlimits {
         MAX_GPR_REGS = 4,
         MAX_FPR_REGS = 8
+    };
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
 #elif defined(__arm64)
+    enum armlimits {
         MAX_GPR_REGS = 8,
         MAX_FPR_REGS = 8
+    };
+    bool return_in_x8( typelib_TypeDescriptionReference *pTypeRef );
 #else
 #error wtf
 #endif
-    };
-    bool return_in_x8( typelib_TypeDescriptionReference *pTypeRef );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
