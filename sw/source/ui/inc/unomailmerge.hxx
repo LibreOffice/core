@@ -21,7 +21,7 @@
 #define _UNOMAILMERGE_HXX_
 
 #include <functional>
-#include <cppuhelper/implbase5.hxx> // WeakImplHelper4
+#include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/interfacecontainer.hxx>    // OMultiTypeInterfaceContainerHelperVar
 #include <unotools/configitem.hxx>  // !! needed for OMultiTypeInterfaceContainerHelperVar !!
 
@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
 #include <svl/itemprop.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -78,16 +79,22 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
 
 ////////////////////////////////////////////////////////////
 
+class SwNewDBMgr;
+class MailMergeExecuteFinalizer;
+
 class SwXMailMerge :
-    public cppu::WeakImplHelper5
+    public cppu::WeakImplHelper6
     <
         com::sun::star::task::XJob,
+        com::sun::star::util::XCancellable,
         com::sun::star::beans::XPropertySet,
         com::sun::star::text::XMailMergeBroadcaster,
         com::sun::star::lang::XComponent,
         com::sun::star::lang::XServiceInfo
     >
 {
+    friend class MailMergeExecuteFinalizer;
+
     cppu::OInterfaceContainerHelper     aEvtListeners;
     cppu::OInterfaceContainerHelper     aMergeListeners;
     OPropertyListenerContainerHelper    aPropListeners;
@@ -135,6 +142,7 @@ class SwXMailMerge :
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
 
     sal_Bool        bDisposing;
+    SwNewDBMgr     *m_pMgr;
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
@@ -151,6 +159,9 @@ public:
 
     // XJob
     virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XCancellable
+    virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);

@@ -191,10 +191,9 @@ friend class SwConnectionDisposedListener_Impl;
     String              sEMailAddrFld;      ///< Mailing: Column name of email address.
     String              sSubject;           ///< Mailing: Subject
     String              sAttached;          ///< Mailing: Attached Files.
+    sal_Bool            bCancel;            ///< Mail merge canceled.
     sal_Bool            bInitDBFields : 1;
     sal_Bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
-    sal_Bool            bCancel : 1;        ///< Mail merge save canceled.
-
     sal_Bool            bInMerge    : 1;    ///< merge process active
     sal_Bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
     sal_Bool            bMergeLock : 1;     /**< prevent update of database fields while document is
@@ -234,6 +233,7 @@ public:
     /// Merging of data records into fields.
     sal_Bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
     sal_Bool            Merge(SwWrtShell* pSh);
+    void                MergeCancel();
 
     /// Initialize data fields that lack name of database.
     inline sal_Bool     IsInitDBFields() const  { return bInitDBFields; }

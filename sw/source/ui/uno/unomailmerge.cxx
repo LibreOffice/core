@@ -404,7 +404,8 @@ SwXMailMerge::SwXMailMerge() :
     bSendAsHTML(sal_False),
     bSendAsAttachment(sal_False),
     bSaveAsSingleFile(sal_False),
-    bDisposing(sal_False)
+    bDisposing(sal_False),
+    m_pMgr(0)
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
@@ -433,11 +434,31 @@ SwXMailMerge::~SwXMailMerge()
     }
 }
 
+// Guarantee object consistence in case of an exception
+class MailMergeExecuteFinalizer {
+public:
+    MailMergeExecuteFinalizer(SwXMailMerge *mailmerge) {
+        OSL_ENSURE( mailmerge, "mailmerge object missing" );
+        this->m_aMailMerge = mailmerge;
+    }
+    ~MailMergeExecuteFinalizer() {
+        osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
+        m_aMailMerge->m_pMgr = 0;
+    }
+
+private:
+    // Disallow copy
+    MailMergeExecuteFinalizer(const MailMergeExecuteFinalizer&) {}
+
+    SwXMailMerge *m_aMailMerge;
+};
+
 uno::Any SAL_CALL SwXMailMerge::execute(
         const uno::Sequence< beans::NamedValue >& rArguments )
     throw (IllegalArgumentException, Exception, RuntimeException)
 {
     SolarMutexGuard aGuard;
+    MailMergeExecuteFinalizer aFinalizer(this);
 
     //
     // get property values to be used
@@ -678,6 +699,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     //force layout creation
     rSh.CalcLayout();
     OSL_ENSURE( pMgr, "database manager missing" );
+    m_pMgr = pMgr;
 
     SwMergeDescriptor aMergeDesc( nMergeType, rSh, aDescriptor );
 
@@ -820,6 +842,15 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aMergeDesc.xSmtpServer->disconnect();
 
     return makeAny( sal_True );
+}
+
+void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeException)
+{
+    // Cancel may be called from a second thread, so this protects from m_pMgr
+    /// cleanup in the execute function.
+    osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
+    if (m_pMgr)
+        m_pMgr->MergeCancel();
 }
 
 void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
