@@ -523,7 +523,7 @@ public class LocalOfficeConnection
 
     /* replaces each substring aSearch in aString by aReplace.
 
-        StringBuffer.replaceAll() is not avaialable in Java 1.3.x.
+        StringBuffer.replaceAll() is not available in Java 1.3.x.
      */
     private static String replaceAll(String aString, String aSearch, String aReplace )
     {

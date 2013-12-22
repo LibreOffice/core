@@ -424,7 +424,7 @@ endef
 		    echo "Patch $$patch_file generated" ; \
 		); \
 	else \
-		echo "Error: No pristine tarball avaialable for $*" 1>&2 ; \
+		echo "Error: No pristine tarball available for $*" 1>&2 ; \
 	fi
 
 
