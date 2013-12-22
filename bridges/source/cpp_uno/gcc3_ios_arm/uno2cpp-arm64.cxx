@@ -152,7 +152,7 @@ void callVirtualMethod(
     sal_uInt64 x0;
     sal_uInt64 x1;
 
-  __asm__ __volatile__
+    __asm__ __volatile__
     (
      "  ldp x0, x1, %[pgpr_0]\n"
      "  ldp x2, x3, %[pgpr_2]\n"

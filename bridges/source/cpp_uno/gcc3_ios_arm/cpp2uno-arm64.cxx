@@ -56,9 +56,14 @@ namespace
         void ** pCallStack,
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
-        // pCallStack: x8, ret, [return ptr], this, params
-        char * pTopStack = (char *)(pCallStack + 0);
-        char * pCppStack = pTopStack;
+        // pCallStack: x8, lr, d0..d7, x0..x7, rest of params originally on stack
+        char *pTopStack = (char *)pCallStack;
+        char *pFloatRegs = pTopStack + 2;
+        char *pGPRegs =  pTopStack + (2+8)*8;
+        char *pStackedArgs = pTopStack + (2+8+8)*8;
+
+        int nGPR = 0;
+        int nFPR = 0;
 
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -73,10 +78,9 @@ namespace
         {
             if (!arm::return_in_x8(pReturnTypeRef))
                 pUnoReturn = pRegisterReturn; // direct way for simple types
-            else // complex return via ptr (pCppReturn)
+            else // complex return via x8
             {
-                pCppReturn = *(void **)pCppStack;
-                pCppStack += 16;
+                pCppReturn = pCallStack[0];
 
                 pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
                     pReturnTypeDescr )
@@ -84,8 +88,10 @@ namespace
                         : pCppReturn); // direct way
             }
         }
-        // pop this
-        pCppStack += sizeof( void* );
+
+        // Skip 'this'
+        pGPRegs += 8;
+        nGPR++;
 
         // Parameters
         void ** pUnoArgs = (void **)alloca( sizeof(void *) * nParams );
@@ -109,52 +115,67 @@ namespace
             if (!rParam.bOut &&
                 bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
             {
-#ifdef __ARM_EABI__
-                switch (pParamTypeDescr->eTypeClass)
+                if (nFPR < 8 && (pParamTypeDescr->eTypeClass == typelib_TypeClass_FLOAT ||
+                                 pParamTypeDescr->eTypeClass == typelib_TypeClass_DOUBLE))
                 {
-                    case typelib_TypeClass_HYPER:
-                    case typelib_TypeClass_UNSIGNED_HYPER:
-#ifndef __ARM_PCS_VFP
-                    case typelib_TypeClass_DOUBLE:
-#endif
-                        if ((pCppStack - pTopStack) % 8) pCppStack+=sizeof(sal_Int32); //align to 8
-                        break;
-                    default:
-                        break;
+                    pCppArgs[nPos] = pUnoArgs[nPos] = pFloatRegs;
+                    pFloatRegs += 8;
+                    nFPR++;
                 }
-#endif
-
-// For armhf we get the floating point arguments from a different area of the stack
-#ifdef __ARM_PCS_VFP
-                if (pParamTypeDescr->eTypeClass == typelib_TypeClass_FLOAT)
+                else if (pParamTypeDescr->eTypeClass == typelib_TypeClass_FLOAT)
                 {
-                    pCppArgs[nPos] =  pUnoArgs[nPos] = pFloatArgs;
-                    pFloatArgs += sizeof(float);
-                } else
-                if (pParamTypeDescr->eTypeClass == typelib_TypeClass_DOUBLE)
+                    if ((pStackedArgs - pTopStack) % 4)
+                        pStackedArgs += 4 - ((pStackedArgs - pTopStack) % 4);
+                    pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
+                    pStackedArgs += 4;
+                }
+                else if (pParamTypeDescr->eTypeClass == typelib_TypeClass_DOUBLE)
                 {
-                    if ((pFloatArgs - pTopStack) % 8) pFloatArgs+=sizeof(float); //align to 8
-                    pCppArgs[nPos] = pUnoArgs[nPos] = pFloatArgs;
-                    pFloatArgs += sizeof(double);
-                    if (++dc == arm::MAX_FPR_REGS) {
-                        if (pCppStack - pTopStack < 16)
-                            pCppStack = pTopStack + 16;
-                        pFloatArgs = pCppStack;
-                    }
-                } else
-#endif
-                    pCppArgs[nPos] = pUnoArgs[nPos] = pCppStack;
-
+                    if ((pStackedArgs - pTopStack) % 8)
+                        pStackedArgs += 8 - ((pStackedArgs - pTopStack) % 8);
+                    pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
+                    pStackedArgs += 8;
+                }
+                else if (nGPR < 8)
+                {
+                    pCppArgs[nPos] = pUnoArgs[nPos] = pGPRegs;
+                    pGPRegs += 8;
+                    nGPR++;
+                }
+                else
                 switch (pParamTypeDescr->eTypeClass)
                 {
                     case typelib_TypeClass_HYPER:
                     case typelib_TypeClass_UNSIGNED_HYPER:
-#ifndef __ARM_PCS_VFP
-                    case typelib_TypeClass_DOUBLE:
-#endif
-                        pCppStack += sizeof(sal_Int32); // extra long
+                        if ((pStackedArgs - pTopStack) % 8)
+                            pStackedArgs += 8 - ((pStackedArgs - pTopStack) % 8);
+                        pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
+                        pStackedArgs += 8;
+                        break;
+                    case typelib_TypeClass_ENUM:
+                    case typelib_TypeClass_LONG:
+                    case typelib_TypeClass_UNSIGNED_LONG:
+                        if ((pStackedArgs - pTopStack) % 4)
+                            pStackedArgs += 4 - ((pStackedArgs - pTopStack) % 4);
+                        pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
+                        pStackedArgs += 4;
+                        break;
+                    case typelib_TypeClass_CHAR:
+                    case typelib_TypeClass_SHORT:
+                    case typelib_TypeClass_UNSIGNED_SHORT:
+                        if ((pStackedArgs - pTopStack) % 2)
+                            pStackedArgs += 1;
+                        pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
+                        pStackedArgs += 2;
+                        break;
+                        break;
+                    case typelib_TypeClass_BOOLEAN:
+                    case typelib_TypeClass_BYTE:
+                        pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
+                        pStackedArgs += 1;
                         break;
                     default:
+                        assert(!"should not happen");
                         break;
                 }
                 // no longer needed
@@ -162,7 +183,18 @@ namespace
             }
             else // ptr to complex value | ref
             {
-                pCppArgs[nPos] = *(void **)pCppStack;
+                if (nGPR < 8)
+                {
+                    pCppArgs[nPos] = *(void **)pGPRegs;
+                    pGPRegs += 8;
+                }
+                else
+                {
+                    if ((pStackedArgs - pTopStack) % 8)
+                        pStackedArgs += 8 - ((pStackedArgs - pTopStack) % 8);
+                    pCppArgs[nPos] = pStackedArgs;
+                    pStackedArgs += 8;
+                }
 
                 if (! rParam.bIn) // is pure out
                 {
@@ -173,12 +205,11 @@ namespace
                     ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
                 }
                 // is in/inout
-                else if (bridges::cpp_uno::shared::relatesToInterfaceType(
-                    pParamTypeDescr ))
+                else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
                 {
                     uno_copyAndConvertData( pUnoArgs[nPos] =
                         alloca( pParamTypeDescr->nSize ),
-                        *(void **)pCppStack, pParamTypeDescr,
+                        pCppArgs[nPos], pParamTypeDescr,
                         pThis->getBridge()->getCpp2Uno() );
                     pTempIndices[nTempIndices] = nPos; // has to be reconverted
                     // will be released at reconversion
@@ -186,19 +217,11 @@ namespace
                 }
                 else // direct way
                 {
-                    pUnoArgs[nPos] = *(void **)pCppStack;
+                    pUnoArgs[nPos] = pCppArgs[nPos];
                     // no longer needed
                     TYPELIB_DANGER_RELEASE( pParamTypeDescr );
                 }
             }
-#ifdef __ARM_PCS_VFP
-            // use the stack for output parameters or non floating point values
-                if (rParam.bOut ||
-                        ((pParamTypeDescr->eTypeClass != typelib_TypeClass_DOUBLE)
-                         && (pParamTypeDescr->eTypeClass != typelib_TypeClass_FLOAT))
-                    )
-#endif
-            pCppStack += sizeof(sal_Int32); // standard parameter length
         }
 
         // ExceptionHolder
@@ -262,7 +285,6 @@ namespace
                     // destroy temp uno return
                     uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
                 }
-                // complex return ptr is set to eax
                 *(void **)pRegisterReturn = pCppReturn;
             }
             if (pReturnTypeDescr)
@@ -284,10 +306,9 @@ namespace
                                           void ** pCallStack,
                                           sal_Int64 * pRegisterReturn )
     {
-        // pCallStack: x8, ret *, this, params
+        // pCallStack: x8, lr, d0..d7, x0..x7, rest of params originally on stack
         // _this_ ptr is patched cppu_XInterfaceProxy object
-        nFunctionIndex &= 0x7fffffff;
-        void *pThis = pCallStack[2];
+        void *pThis = pCallStack[2 + 8];
 
         pThis = static_cast< char * >(pThis) - nVtableOffset;
         bridges::cpp_uno::shared::CppInterfaceProxy * pCppI =
@@ -296,20 +317,17 @@ namespace
 
         typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
-        OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
-            "### illegal vtable index!" );
+        // determine called method
+        assert( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex );
+
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
             throw RuntimeException( "illegal vtable index!", (XInterface *)pCppI );
         }
 
-        // determine called method
-        OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
-            "### illegal vtable index!" );
         sal_Int32 nMemberPos =
             pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers,
-            "### illegal member index!" );
+        assert( nMemberPos < pTypeDescr->nAllMembers );
 
         TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
@@ -444,7 +462,7 @@ extern "C" sal_Int64 cpp_vtable_call( sal_Int32 *pFunctionAndOffset,
 namespace
 {
     unsigned char *codeSnippet(sal_Int32 functionIndex,
-        sal_Int32 vtableOffset, bool bReturnThroughX8)
+                               sal_Int32 vtableOffset)
     {
         assert(functionIndex < nFunIndexes);
         if (!(functionIndex < nFunIndexes))
@@ -454,16 +472,12 @@ namespace
         if (!(vtableOffset < nVtableOffsets))
             return NULL;
 
-        // The codeSnippets table is indexed by functionIndex,
-        // vtableOffset, and the return-through-x8 flag
+        // The codeSnippets table is indexed by functionIndex and vtableOffset
 
-        int index = functionIndex*nVtableOffsets*2 + vtableOffset*2 + bReturnThroughX8;
+        int index = functionIndex*nVtableOffsets + vtableOffset;
         unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
 
-        SAL_INFO( "bridges.ios",
-                  "codeSnippet: [" <<
-                  functionIndex << "," << vtableOffset << "," << bReturnThroughX8 << "]=" <<
-                  (void *) result);
+        SAL_INFO( "bridges.ios", "codeSnippet: [" << functionIndex << "," << vtableOffset << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
 
         return result;
     }
@@ -494,9 +508,12 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code,
-    typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
-    sal_Int32 functionCount, sal_Int32 vtableOffset)
+    Slot ** slots,
+    unsigned char * code,
+    typelib_InterfaceTypeDescription const * type,
+    sal_Int32 functionOffset,
+    sal_Int32 functionCount,
+    sal_Int32 vtableOffset)
 {
     (*slots) -= functionCount;
     Slot * s = *slots;
@@ -513,26 +530,18 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
 
                 // Getter:
-                (s++)->fn = codeSnippet(
-                    functionOffset++, vtableOffset,
-                    arm::return_in_x8( pAttrTD->pAttributeTypeRef ));
+                (s++)->fn = codeSnippet( functionOffset++, vtableOffset );
 
                 // Setter:
                 if (!pAttrTD->bReadOnly)
                 {
-                    (s++)->fn = codeSnippet(
-                        functionOffset++, vtableOffset, false);
+                    (s++)->fn = codeSnippet( functionOffset++, vtableOffset );
                 }
                 break;
             }
             case typelib_TypeClass_INTERFACE_METHOD:
             {
-                typelib_InterfaceMethodTypeDescription *pMethodTD =
-                    reinterpret_cast<
-                        typelib_InterfaceMethodTypeDescription * >(member);
-
-                (s++)->fn = codeSnippet(functionOffset++, vtableOffset,
-                    arm::return_in_x8(pMethodTD->pReturnTypeRef));
+                (s++)->fn = codeSnippet( functionOffset++, vtableOffset );
                 break;
             }
         default:
