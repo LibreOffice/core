@@ -1961,8 +1961,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         {
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
             pCellColorHandler->setOutputFormat( CellColorHandler::Paragraph );
+            sal_Bool bEnableTempGrabBag = !pCellColorHandler->isInteropGrabBagEnabled();
+            if( bEnableTempGrabBag )
+                pCellColorHandler->enableInteropGrabBag( "TempShdPropsGrabBag" );
+
             pProperties->resolve(*pCellColorHandler);
             rContext->InsertProps(pCellColorHandler->getProperties());
+
+            rContext->Insert(PROP_CHAR_THEME_FILL,  pCellColorHandler->getInteropGrabBag().Value, true, PARA_GRAB_BAG);
+            if(bEnableTempGrabBag)
+                pCellColorHandler->disableInteropGrabBag();
         }
     }
     break;

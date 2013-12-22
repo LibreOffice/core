@@ -694,6 +694,14 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
+
+    if ( m_pBackgroundAttrList )
+    {
+        XFastAttributeListRef xAttrList( m_pBackgroundAttrList );
+        m_pBackgroundAttrList = NULL;
+
+        m_pSerializer->singleElementNS( XML_w, XML_shd, xAttrList );
+    }
 }
 
 void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted )
@@ -5769,10 +5777,24 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
     else if ( !m_rExport.bOutPageDescs )
     {
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
-                FSNS( XML_w, XML_fill ), sColor.getStr( ),
-                FSNS( XML_w, XML_val ), "clear",
-                FSEND );
+        if( !m_pBackgroundAttrList )
+            m_pBackgroundAttrList = m_pSerializer->createAttrList();
+
+        // compare fill color with the original fill color
+        OString sOriginalFill = rtl::OUStringToOString(
+                m_pBackgroundAttrList->getOptionalValue( FSNS( XML_w, XML_fill ) ), RTL_TEXTENCODING_UTF8 );
+        if( sOriginalFill.isEmpty() )
+        {
+            m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
+        }
+        else if ( sOriginalFill != sColor )
+        {
+            // fill was modified during edition, theme fill attribute must be dropped
+            delete m_pBackgroundAttrList;
+            m_pBackgroundAttrList = m_pSerializer->createAttrList();
+            m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
+        }
+        m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
     }
 }
 
@@ -6109,6 +6131,27 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             m_nParaAfterSpacing = MM100_TO_TWIP(m_nParaAfterSpacing);
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaAfterSpacing);
         }
+        else if (i->first == "CharThemeFill")
+        {
+            uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+            i->second >>= aGrabBagSeq;
+            OUString sThemeFill, sOriginalFill;
+            for (sal_Int32 j=0; j < aGrabBagSeq.getLength(); ++j)
+            {
+                if (aGrabBagSeq[j].Name == "themeFill")
+                    aGrabBagSeq[j].Value >>= sThemeFill;
+                else if (aGrabBagSeq[j].Name == "fill")
+                    aGrabBagSeq[j].Value >>= sOriginalFill;
+            }
+
+            if (!m_pBackgroundAttrList)
+                m_pBackgroundAttrList = m_pSerializer->createAttrList();
+
+            m_pBackgroundAttrList->add(FSNS(XML_w, XML_themeFill),
+                                       OUStringToOString(sThemeFill, RTL_TEXTENCODING_UTF8));
+            m_pBackgroundAttrList->add(FSNS(XML_w, XML_fill),
+                                       OUStringToOString(sOriginalFill, RTL_TEXTENCODING_UTF8));
+        }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
     }
@@ -6236,6 +6279,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFlyWrapAttrList( NULL ),
       m_pTextboxAttrList( NULL ),
       m_pColorAttrList( NULL ),
+      m_pBackgroundAttrList( NULL ),
       m_pFlyFrameSize(0),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
@@ -6293,6 +6337,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pBodyPrAttrList, m_pBodyPrAttrList = NULL;
     delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
+    delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
 
     delete m_pFootnotesList, m_pFootnotesList = NULL;
     delete m_pEndnotesList, m_pEndnotesList = NULL;

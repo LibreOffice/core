@@ -2092,6 +2092,9 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
                          getProperty<OUString>(getRun(getParagraph(4, "Direct format font"), 1), "CharFontName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Trebuchet MS"),
                          getProperty<OUString>(getParagraph(5, "Major theme font"), "CharFontName"));
+
+    // check the paragraph background theme color has been preserved
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeFill", "text2");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testcantSplit, "2_table_doc.docx")

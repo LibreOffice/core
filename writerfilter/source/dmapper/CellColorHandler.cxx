@@ -359,6 +359,17 @@ beans::PropertyValue CellColorHandler::getInteropGrabBag()
     return aRet;
 }
 
+void CellColorHandler::disableInteropGrabBag()
+{
+    m_aInteropGrabBagName = "";
+    m_aInteropGrabBag.clear();
+}
+
+sal_Bool CellColorHandler::isInteropGrabBagEnabled()
+{
+    return !(m_aInteropGrabBagName.isEmpty());
+}
+
 } //namespace dmapper
 } //namespace writerfilter
 

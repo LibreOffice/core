@@ -686,6 +686,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
     /// Attributes of the run color
     ::sax_fastparser::FastAttributeList *m_pColorAttrList;
+    /// Attributes of the paragraph background
+    ::sax_fastparser::FastAttributeList *m_pBackgroundAttrList;
     /// When exporting fly frames, this holds the real size of the frame.
     const Size* m_pFlyFrameSize;
 
