@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <deque>
+
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -984,7 +986,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         SwMultiCreator *pRet = new SwMultiCreator;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        SvXub_StrLens aEnd;
+        std::deque< xub_StrLen > aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, it is compatible with the winner-attribute or
@@ -1101,7 +1103,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         pRet->nId = SW_MC_ROTATE;
 
         // We note the endpositions of the 2-line attributes in aEnd as stack
-        SvXub_StrLens aEnd;
+        std::deque< xub_StrLen > aEnd;
 
         // The bOn flag signs the state of the last 2-line attribute in the
         // aEnd-stack, which could interrupts the winning rotation attribute.

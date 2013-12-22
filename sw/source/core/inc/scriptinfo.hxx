@@ -29,7 +29,6 @@ class SwTxtNode;
 class Point;
 class MultiSelection;
 typedef std::list< xub_StrLen > PositionList;
-typedef std::deque< xub_StrLen > SvXub_StrLens;
 
 #define SPACING_PRECISION_FACTOR 100
 
@@ -60,11 +59,11 @@ private:
         inline DirectionChangeInfo(xub_StrLen pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     std::vector<DirectionChangeInfo> aDirectionChanges;
-    SvXub_StrLens aKashida;
-    SvXub_StrLens aKashidaInvalid;
-    SvXub_StrLens aNoKashidaLine;
-    SvXub_StrLens aNoKashidaLineEnd;
-    SvXub_StrLens aHiddenChg;
+    std::deque< xub_StrLen > aKashida;
+    std::deque< xub_StrLen > aKashidaInvalid;
+    std::deque< xub_StrLen > aNoKashidaLine;
+    std::deque< xub_StrLen > aNoKashidaLineEnd;
+    std::deque< xub_StrLen > aHiddenChg;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
