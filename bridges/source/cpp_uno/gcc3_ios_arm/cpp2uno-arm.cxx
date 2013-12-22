@@ -484,10 +484,7 @@ namespace
         int index = functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam;
         unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
 
-        SAL_INFO( "bridges.ios",
-                  "codeSnippet: [" <<
-                  functionIndex << "," << vtableOffset << "," << bHasHiddenParam << "]=" <<
-                  (void *) result);
+        SAL_INFO( "bridges.ios", "codeSnippet: [" << functionIndex << "," << vtableOffset << "," << (int)bHasHiddenParam << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
 
         return result;
     }
