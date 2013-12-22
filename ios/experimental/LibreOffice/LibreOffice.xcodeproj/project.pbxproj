@@ -21,6 +21,7 @@
 		BE02DE57175F2E2A00ED4032 /* guess.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guess.cxx; path = ../../../../sw/source/core/text/guess.cxx; sourceTree = "<group>"; };
 		BE08805B16FDB784000CED5C /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		BE08805C16FDB784000CED5C /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
+		BE1AB205186775FE008FFBF2 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../../lo.xcconfig; sourceTree = "<group>"; };
 		BE2CB9601808247600953CB4 /* winproc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winproc.cxx; path = ../../../../vcl/source/window/winproc.cxx; sourceTree = "<group>"; };
 		BE2CB9611808297500953CB4 /* select.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = select.cxx; path = ../../../../sw/source/ui/wrtsh/select.cxx; sourceTree = "<group>"; };
 		BE2CB962180829DD00953CB4 /* txtcrsr.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = txtcrsr.cxx; path = ../../../../sw/source/ui/shells/txtcrsr.cxx; sourceTree = "<group>"; };
@@ -247,6 +248,7 @@
 		BE5A22601664F87600CF01C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BE1AB205186775FE008FFBF2 /* lo.xcconfig */,
 				BE5A22611664F87600CF01C9 /* LibreOffice-Info.plist */,
 				BE5A22621664F87600CF01C9 /* InfoPlist.strings */,
 				BE5A22651664F87600CF01C9 /* main.m */,
@@ -424,6 +426,7 @@
 /* Begin XCBuildConfiguration section */
 		BE5A22861664F87600CF01C9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE1AB205186775FE008FFBF2 /* lo.xcconfig */;
 			buildSettings = {
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -447,6 +450,7 @@
 		};
 		BE5A22871664F87600CF01C9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE1AB205186775FE008FFBF2 /* lo.xcconfig */;
 			buildSettings = {
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
