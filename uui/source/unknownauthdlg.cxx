@@ -32,7 +32,7 @@ using namespace css;
 
 IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)
 {
-    if ( m_aOptionButtonAccept.IsChecked() )
+    if ( m_pOptionButtonAccept->IsChecked() )
     {
         EndDialog( RET_OK );
     } else
@@ -47,10 +47,10 @@ IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)
 
 IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
 {
-    uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
+    uno::Reference< ::css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
-    xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    ::com::sun::star::security::DocumentDigitalSignatures::createDefault(m_xContext) );
+    xDocumentDigitalSignatures = uno::Reference< ::css::security::XDocumentDigitalSignatures >(
+                    ::css::security::DocumentDigitalSignatures::createDefault(m_xContext) );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
@@ -59,32 +59,21 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-UnknownAuthDialog::UnknownAuthDialog
-(
-    Window*                                     pParent,
+UnknownAuthDialog::UnknownAuthDialog(Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
-    ResMgr*                                     pResMgr
-) :
-    ModalDialog( pParent, ResId( DLG_UUI_UNKNOWNAUTH, *pResMgr ) ),
-
-    m_aCommandButtonOK ( this, ResId( PB_OK, *pResMgr ) ),
-    m_aCommandButtonCancel ( this, ResId( PB_CANCEL, *pResMgr ) ),
-    m_aCommandButtonHelp ( this, ResId( PB_HELP, *pResMgr ) ),
-    m_aView_Certificate ( this, ResId( PB_VIEW__CERTIFICATE, *pResMgr ) ),
-    m_aOptionButtonAccept ( this, ResId( RB_ACCEPT_1, *pResMgr ) ),
-    m_aOptionButtonDontAccept ( this, ResId( RB_DONTACCEPT_2, *pResMgr ) ),
-    m_aLine ( this, ResId( FL_LINE, *pResMgr ) ),
-    m_aLabel1 ( this, ResId( FT_LABEL_1, *pResMgr ) ),
-    m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
-    m_xContext ( xContext ),
-    m_rXCert ( rXCert )
+    const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : MessageDialog(pParent, "UnknownAuthDialog",
+        "uui/ui/unknownauthdialog.ui")
+    , m_xContext(xContext)
+    , m_rXCert(rXCert)
 {
-    FreeResource();
+    get(m_pOptionButtonAccept, "accept");
+    get(m_pOptionButtonDontAccept, "reject");
+    get(m_pCommandButtonOK, "ok");
+    get(m_pView_Certificate, "examine");
 
-    m_aWarnImage.SetImage( WarningBox::GetStandardImage() );
-    m_aView_Certificate.SetClickHdl( LINK( this, UnknownAuthDialog, ViewCertHdl_Impl ) );
-    m_aCommandButtonOK.SetClickHdl( LINK( this, UnknownAuthDialog, OKHdl_Impl ) );
+    m_pView_Certificate->SetClickHdl(LINK(this, UnknownAuthDialog, ViewCertHdl_Impl));
+    m_pCommandButtonOK->SetClickHdl(LINK(this, UnknownAuthDialog, OKHdl_Impl));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

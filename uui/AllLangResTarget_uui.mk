@@ -34,7 +34,6 @@ $(eval $(call gb_SrsTarget_add_files,uui/res,\
 	uui/source/passworderrs.src \
 	uui/source/secmacrowarnings.src \
 	uui/source/trylater.src \
-	uui/source/unknownauthdlg.src \
 ))
 
 # vim: set noet sw=4 ts=4:

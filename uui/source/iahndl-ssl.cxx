@@ -145,12 +145,8 @@ executeUnknownAuthDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         boost::scoped_ptr< UnknownAuthDialog > xDialog(
-            new UnknownAuthDialog( pParent,
-                                   rXCert,
-                                   xContext,
-                                   xManager.get()));
+            new UnknownAuthDialog(pParent, rXCert, xContext));
 
         // Get correct resource string
         OUString aMessage;
@@ -158,6 +154,7 @@ executeUnknownAuthDialog(
         std::vector< OUString > aArguments;
         aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
+        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (xManager.get())
         {
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());

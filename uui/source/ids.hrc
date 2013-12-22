@@ -38,8 +38,6 @@
 #define STR_ERROR_SIMPLE_PASSWORD_WRONG                 (RID_UUI_START + 23)
 #define STR_ERROR_PASSWORD_TO_OPEN_WRONG                (RID_UUI_START + 24)
 #define STR_ERROR_PASSWORD_TO_MODIFY_WRONG              (RID_UUI_START + 25)
-#define DLG_UUI_UNKNOWNAUTH                             (RID_UUI_START + 26)
-#define DLG_UUI_SSLWARN                                 (RID_UUI_START + 28)
 #define RID_XMLSECDLG_MACROWARN                         (RID_UUI_START + 30)
 #define STR_UNKNOWNUSER                                 (RID_UUI_START + 31)
 #define STR_OPENLOCKED_TITLE                            (RID_UUI_START + 32)
@@ -158,7 +156,6 @@
 #define HID_DLG_LOGIN                                          "UUI_HID_DLG_LOGIN"
 #define HID_DLG_FILTER_SELECT                                  "UUI_HID_DLG_FILTER_SELECT"
 #define HID_DLG_PASSWORD_UUI                                   "UUI_HID_DLG_PASSWORD_UUI"
-#define HID_DLG_UNKNOWNAUTH_UUI                                "UUI_HID_DLG_UNKNOWNAUTH_UUI"
 #define HID_XMLSECDLG_MACROWARN                                "UUI_HID_XMLSECDLG_MACROWARN"
 #define HID_DLG_NEWERVERSIONWARNING                            "UUI_HID_DLG_NEWERVERSIONWARNING"
 

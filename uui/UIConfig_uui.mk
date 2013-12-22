@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,uui,\
 	uui/uiconfig/ui/masterpassworddlg \
 	uui/uiconfig/ui/setmasterpassworddlg \
 	uui/uiconfig/ui/sslwarndialog \
+	uui/uiconfig/ui/unknownauthdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -19,9 +19,8 @@
 #ifndef UUI_UNKNOWNAUTH_HXX
 #define UUI_UNKNOWNAUTH_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -29,18 +28,13 @@
 //=====================================================================
 //= Https_UADialog
 //=====================================================================
-class UnknownAuthDialog : public ModalDialog
+class UnknownAuthDialog : public MessageDialog
 {
 private:
-    PushButton  m_aCommandButtonOK;
-    CancelButton  m_aCommandButtonCancel;
-    HelpButton  m_aCommandButtonHelp;
-    PushButton  m_aView_Certificate;
-    RadioButton m_aOptionButtonAccept;
-    RadioButton m_aOptionButtonDontAccept;
-    FixedLine   m_aLine;
-    FixedText   m_aLabel1;
-    FixedImage  m_aWarnImage;
+    PushButton* m_pCommandButtonOK;
+    PushButton* m_pView_Certificate;
+    RadioButton* m_pOptionButtonAccept;
+    RadioButton* m_pOptionButtonDontAccept;
 
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
@@ -48,16 +42,20 @@ private:
     DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK(ViewCertHdl_Impl, void *);
 
-    public:
-    UnknownAuthDialog( Window* pParent,
-                       const css::uno::Reference< css::security::XCertificate >& rXCert,
-                       const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                       ResMgr * pResMgr );
+public:
+    UnknownAuthDialog(Window* pParent,
+        const css::uno::Reference< css::security::XCertificate >& rXCert,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; }
+    css::uno::Reference< css::security::XCertificate > getCert()
+    {
+        return m_rXCert;
+    }
 
-    void setDescriptionText( const OUString &aText ) { m_aLabel1.SetText( aText ); }
-
+    void setDescriptionText(const OUString &rText)
+    {
+        set_primary_text(rText);
+    }
 };
 
 #endif // UUI_UNKNOWNAUTH_HXX
