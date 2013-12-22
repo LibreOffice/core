@@ -4,7 +4,7 @@
   <object class="GtkDialog" id="OptimalColWidthDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Optimal Column Height</property>
+    <property name="title" translatable="yes">Optimal Column Width</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
