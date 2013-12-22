@@ -14491,6 +14491,7 @@ module com {
     published service MailMerge {
      service ::com::sun::star::sdb::DataAccessDescriptor;
      interface ::com::sun::star::task::XJob;
+     [optional] interface ::com::sun::star::util::XCancellable;
      interface ::com::sun::star::beans::XPropertySet;
      [optional] interface ::com::sun::star::text::XMailMergeBroadcaster;
      [property] string DataSourceName;

@@ -238,6 +238,7 @@ public:
     /// Merging of data records into fields.
     sal_Bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
     sal_Bool            Merge(SwWrtShell* pSh);
+    void                MergeCancel();
 
     /// Initialize data fields that lack name of database.
     inline sal_Bool     IsInitDBFields() const  { return bInitDBFields; }

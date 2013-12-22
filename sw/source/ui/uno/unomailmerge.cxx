@@ -381,7 +381,8 @@ SwXMailMerge::SwXMailMerge() :
     bSendAsHTML(sal_False),
     bSendAsAttachment(sal_False),
     bSaveAsSingleFile(sal_False),
-    bDisposing(sal_False)
+    bDisposing(sal_False),
+    pMgr(0)
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
@@ -410,11 +411,30 @@ SwXMailMerge::~SwXMailMerge()
     }
 }
 
+class SolarMutexMailMergeCleanupGuard : public SolarMutexGuard {
+public:
+    SolarMutexMailMergeCleanupGuard(SwXMailMerge *mailmerge): SolarMutexGuard() {
+        OSL_ENSURE( mailmerge, "mailmerge object missing" );
+        this->maMailMerge = mailmerge;
+    }
+    ~SolarMutexMailMergeCleanupGuard() {
+        osl::MutexGuard pMgrGuard(maMailMerge->maMutex);
+        maMailMerge->pMgr = 0;
+    }
+
+private:
+    // Disallow copy
+    SolarMutexMailMergeCleanupGuard(const SolarMutexMailMergeCleanupGuard&)
+        :SolarMutexGuard() {}
+
+    SwXMailMerge *maMailMerge;
+};
+
 uno::Any SAL_CALL SwXMailMerge::execute(
         const uno::Sequence< beans::NamedValue >& rArguments )
     throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    SolarMutexMailMergeCleanupGuard aGuard(this);
 
     // get property values to be used
     // (use values from the service as default and override them with
@@ -650,7 +670,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw IllegalArgumentException("Invalid value of property: OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
 
-    SwNewDBMgr* pMgr = rSh.GetNewDBMgr();
+    pMgr = rSh.GetNewDBMgr();
     //force layout creation
     rSh.CalcLayout();
     OSL_ENSURE( pMgr, "database manager missing" );
@@ -795,6 +815,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aMergeDesc.xSmtpServer->disconnect();
 
     return makeAny( sal_True );
+}
+
+void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeException)
+{
+    osl::MutexGuard pMgrGuard(maMutex);
+    if (pMgr)
+        pMgr->MergeCancel();
 }
 
 void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
