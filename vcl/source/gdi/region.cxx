@@ -670,7 +670,7 @@ bool Region::Intersect( const Rectangle& rRect )
     const long nRight(std::max(rRect.Left(), rRect.Right()));
     const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
 
     // process intersect
@@ -751,7 +751,7 @@ bool Region::Exclude( const Rectangle& rRect )
     const long nRight(std::max(rRect.Left(), rRect.Right()));
     const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
 
     // process exclude
@@ -836,7 +836,7 @@ bool Region::XOr( const Rectangle& rRect )
     const long nRight(std::max(rRect.Left(), rRect.Right()));
     const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
 
     // process xor

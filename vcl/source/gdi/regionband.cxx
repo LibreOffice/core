@@ -936,7 +936,7 @@ void RegionBand::Union(const RegionBand& rSource)
 
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         InsertBands(pBand->mnYTop, pBand->mnYBottom);
 
         // process all elements of the list
@@ -1050,7 +1050,7 @@ void RegionBand::Intersect(const RegionBand& rSource)
 
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
         // process all elements of the list
@@ -1083,7 +1083,7 @@ void RegionBand::Intersect(const RegionBand& rSource)
         pBand = pBand->mpNextBand;
     }
 
-    // remove all untouched bands if bands allready left
+    // remove all untouched bands if bands already left
     ImplRegionBand* pPrevBand = 0;
     pBand = mpFirstBand;
 
@@ -1123,7 +1123,7 @@ bool RegionBand::Exclude(const RegionBand& rSource)
 
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
         // process all elements of the list
@@ -1177,7 +1177,7 @@ void RegionBand::XOr(const RegionBand& rSource)
 
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
         // process all elements of the list
