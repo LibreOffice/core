@@ -373,29 +373,24 @@ SwXMailMerge::SwXMailMerge() :
     aMergeListeners ( GetMailMergeMutex() ),
     aPropListeners  ( GetMailMergeMutex() ),
     pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_MAILMERGE ) ),
+    nDataCommandType(sdb::CommandType::TABLE),
+    nOutputType(MailMergeType::PRINTER),
+    bEscapeProcessing(sal_True),     //!! allow to process properties like "Filter", "Order", ...
+    bSinglePrintJobs(sal_False),
+    bFileNameFromColumn(sal_False),
     bSendAsHTML(sal_False),
     bSendAsAttachment(sal_False),
-    bSaveAsSingleFile(sal_False)
-
+    bSaveAsSingleFile(sal_False),
+    bDisposing(sal_False)
 {
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
-    SwDocShell *pDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
-    xDocSh = pDocShell;
+    xDocSh = new SwDocShell( SFX_CREATE_MODE_STANDARD );
     xDocSh->DoInitNew( 0 );
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView *pView = (SwView*) pFrame->GetViewShell();
-    pView->AttrChangedNotify( &pView->GetWrtShell() );//So that SelectShell is called.
-
-    xModel = pDocShell->GetModel();
-
-    nDataCommandType    = sdb::CommandType::TABLE;
-    nOutputType         = MailMergeType::PRINTER;
-    bEscapeProcessing   = sal_True;     //!! allow to process properties like "Filter", "Order", ...
-    bSinglePrintJobs    = sal_False;
-    bFileNameFromColumn = sal_False;
-
-    bDisposing = sal_False;
+    pView->AttrChangedNotify( &pView->GetWrtShell() ); //So that SelectShell is called.
+    xModel = xDocSh->GetModel();
 }
 
 SwXMailMerge::~SwXMailMerge()
