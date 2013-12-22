@@ -1364,10 +1364,15 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     return bLoop;
 }
 
+void SwNewDBMgr::MergeCancel()
+{
+    bCancel = sal_True;
+}
+
 IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 {
     pButton->GetParent()->Hide();
-    bCancel = sal_True;
+    MergeCancel();
     return 0;
 }
 IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
