@@ -113,7 +113,6 @@ class SwXMailMerge :
     sal_Bool        bSinglePrintJobs;
     sal_Bool        bFileNameFromColumn;
 
-
     OUString                                         sInServerPassword;
     OUString                                         sOutServerPassword;
     OUString                                         sSubject;
@@ -133,10 +132,7 @@ class SwXMailMerge :
     OUString                                         sSaveFilterOptions;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
 
-
-
     sal_Bool        bDisposing;
-
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
