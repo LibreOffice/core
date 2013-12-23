@@ -61,22 +61,19 @@ static sal_uInt16 pValueRanges[] =
 
 // ============================================================================
 
-ScValidationDlg::ScValidationDlg( Window*           pParent,
-                                 const SfxItemSet* pArgSet,
-                                 ScTabViewShell *pTabViewSh,
-                                 SfxBindings *pB /*= NULL*/
-                      ) :
-        ScValidationDlgBase( pParent ? pParent : SFX_APP()->GetTopWindow(), TAB_DLG_VALIDATION, pArgSet, pB ),
-            m_bOwnRefHdlr( false ),
-            m_pTabVwSh( pTabViewSh ),
-            m_bRefInputting( false )
+ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
+    ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
+    : ScValidationDlgBase(pParent ? pParent : SFX_APP()->GetTopWindow(),
+        "ValidationDialog", "modules/scalc/ui/validationdialog.ui", pArgSet, pB)
+    , m_pTabVwSh(pTabViewSh)
+    , m_nValuePageId(0)
+    , m_bOwnRefHdlr(false)
+    , m_bRefInputting(false)
 {
-    AddTabPage( TP_VALIDATION_VALUES,    ScTPValidationValue::Create, 0 );
-    AddTabPage( TP_VALIDATION_INPUTHELP, ScTPValidationHelp::Create,  0 );
-    AddTabPage( TP_VALIDATION_ERROR,     ScTPValidationError::Create, 0 );
-    FreeResource();
-    //temp hack until converted to .ui
-    mpHBox = new VclHBox(get_content_area());
+    m_nValuePageId = AddTabPage("criteria", ScTPValidationValue::Create, 0);
+    AddTabPage("inputhelp", ScTPValidationHelp::Create, 0);
+    AddTabPage("erroralert", ScTPValidationError::Create, 0);
+    get(m_pHBox, "refinputbox");
 }
 
 void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pDoc )
@@ -155,8 +152,10 @@ void            ScTPValidationValue::RefInputDonePostHdl()
 sal_Bool ScValidationDlg::Close()
 {
     if( m_bOwnRefHdlr )
-        if( SfxTabPage* pPage = GetTabPage( TP_VALIDATION_VALUES ) )
+    {
+        if (SfxTabPage* pPage = GetTabPage(m_nValuePageId))
             static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
+    }
 
     return ScValidationDlgBase::Close();
 }
@@ -165,9 +164,7 @@ ScValidationDlg::~ScValidationDlg()
 {
     if( m_bOwnRefHdlr )
         RemoveRefDlg( false );
-    delete mpHBox;
 }
-
 
 // ============================================================================
 

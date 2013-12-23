@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #define TP_VALIDATION_VALUES    696
-#define TP_VALIDATION_INPUTHELP 697
-#define TP_VALIDATION_ERROR     698
-#define TAB_DLG_VALIDATION      699
 
 #define FT_ALLOW                1
 #define LB_ALLOW                2

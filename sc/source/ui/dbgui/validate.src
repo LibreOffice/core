@@ -21,41 +21,6 @@
 
 #include "validate.hrc"
 
-TabDialog TAB_DLG_VALIDATION
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 289 , 176 ) ;
-    Moveable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TP_VALIDATION_VALUES ;
-                PageResID = TP_VALIDATION_VALUES ;
-                Text [ en-US ] = "Criteria";
-            };
-            PageItem
-            {
-                Identifier = TP_VALIDATION_INPUTHELP ;
-                PageResID = TP_VALIDATION_INPUTHELP ;
-                Text [ en-US ] = "Input Help" ;
-            };
-            PageItem
-            {
-                Identifier = TP_VALIDATION_ERROR ;
-                PageResID = TP_VALIDATION_ERROR ;
-                Text [ en-US ] = "Error Alert" ;
-            };
-        };
-    };
-    Text [ en-US ] = "Validity" ;
-};
-
 #define OFFSET_X    30
 
 TabPage TP_VALIDATION_VALUES

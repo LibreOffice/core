@@ -1173,22 +1173,11 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Windo
     return 0;
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Window* pParent,
-                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  )
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg(Window* pParent,
+    const SfxItemSet* pArgSet, ScTabViewShell *pTabVwSh)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nId )
-    {
-        case TAB_DLG_VALIDATION :
-            pDlg = new ScValidationDlg( pParent, pArgSet, pTabVwSh );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new ScValidationDlg(pParent, pArgSet, pTabVwSh);
+    return new ScAbstractTabDialog_Impl(pDlg);
 }
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg(Window* pParent, const SfxItemSet* pArgSet)

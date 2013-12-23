@@ -80,26 +80,35 @@ public:
 };
 
 /** The "Validity" tab dialog. */
-class ScValidationDlg :public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>, public ScRefHandlerHelper
+class ScValidationDlg
+    : public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>
+    , public ScRefHandlerHelper
 {
     typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
 
     DECL_LINK( OkHdl, Button * );
 
-    bool    m_bOwnRefHdlr:1;
-
     ScTabViewShell *m_pTabVwSh;
-    VclHBox* mpHBox;
+    VclHBox* m_pHBox;
+    sal_uInt16 m_nValuePageId;
+    bool    m_bOwnRefHdlr:1;
     bool    m_bRefInputting:1;
+
     bool    EnterRefStatus();
     bool    LeaveRefStatus();
 
 public:
     explicit ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
     virtual                     ~ScValidationDlg();
-    inline static ScValidationDlg * Find1AliveObject( Window *pAncestor );
+    static ScValidationDlg * Find1AliveObject( Window *pAncestor )
+    {
+        return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
+    }
     bool    IsAlive();
-    inline  ScTabViewShell * GetTabViewShell();
+    ScTabViewShell *GetTabViewShell()
+    {
+        return m_pTabVwSh;
+    }
 
     bool    SetupRefDlg();
     bool    RemoveRefDlg( sal_Bool bRestoreModal = sal_True );
@@ -129,7 +138,7 @@ public:
     }
 
     bool IsRefInputting(){  return m_bRefInputting; }
-    Window*             get_refinput_shrink_parent() { return mpHBox; }
+    Window*             get_refinput_shrink_parent() { return m_pHBox; }
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL )
     {
@@ -301,16 +310,6 @@ public:
     virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
-
-inline ScTabViewShell *ScValidationDlg::GetTabViewShell()
-{
-    return m_pTabVwSh;
-}
-
-inline ScValidationDlg * ScValidationDlg::Find1AliveObject( Window *pAncestor )
-{
-    return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
-}
 
 #endif // SC_VALIDATE_HXX
 

@@ -566,8 +566,8 @@ public:
     virtual SfxAbstractTabDialog * CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,
                                                             int nId );
 
-    virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent,
-                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  );
+    virtual SfxAbstractTabDialog * CreateScValidationDlg(Window* pParent,
+        const SfxItemSet* pArgSet, ScTabViewShell *pTabVwSh);
 
     virtual SfxAbstractTabDialog * CreateScSortDlg(Window* pParent, const SfxItemSet* pArgSet);
 

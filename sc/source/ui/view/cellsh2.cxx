@@ -848,8 +848,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
 
                     // cell range picker
-                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, TAB_DLG_VALIDATION, pTabViewShell );
-                    OSL_ENSURE(pDlg, "Dialog create fail!");
+                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg(NULL, &aArgSet, pTabViewShell);
+                    assert(pDlg); //Dialog create fail!
 
                     short nResult = pDlg->Execute();
                     //When picking Cell Range, other Tab may be switched. Need restore the correct tab

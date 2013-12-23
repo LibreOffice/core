@@ -99,6 +99,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/leftheaderdialog \
 	sc/uiconfig/scalc/ui/namerangesdialog \
 	sc/uiconfig/scalc/ui/managenamesdialog \
+	sc/uiconfig/scalc/ui/movecopysheet \
+	sc/uiconfig/scalc/ui/movingaveragedialog \
 	sc/uiconfig/scalc/ui/nosolutiondialog \
 	sc/uiconfig/scalc/ui/optcalculatepage \
 	sc/uiconfig/scalc/ui/optchangespage \
@@ -148,9 +150,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/tpviewpage \
 	sc/uiconfig/scalc/ui/ttestdialog \
 	sc/uiconfig/scalc/ui/ungroupdialog \
+	sc/uiconfig/scalc/ui/validationdialog \
 	sc/uiconfig/scalc/ui/validationhelptabpage \
-	sc/uiconfig/scalc/ui/movecopysheet \
-	sc/uiconfig/scalc/ui/movingaveragedialog \
 ))
 
 # vim: set noet sw=4 ts=4:
