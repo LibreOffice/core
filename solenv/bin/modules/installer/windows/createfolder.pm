@@ -90,7 +90,7 @@ sub get_createfolder_component
             if ($file->{'modules'} eq $rootmodulegid)
             {
                 $onefile = $file;
-                break;
+                last;
             }
         }
     }

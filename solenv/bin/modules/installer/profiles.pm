@@ -84,7 +84,7 @@ sub add_profile_into_filelist
         if ($file->{'modules'} eq $rootmodulegid)
         {
             $rootfile = $file;
-            break;
+            last;
         }
     }
     if (! defined $rootfile) {
