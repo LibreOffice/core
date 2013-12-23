@@ -246,7 +246,10 @@ ShapeExport& ShapeExport::WriteOpenBezierShape( Reference< XShape > xShape )
 ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape)
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS(mnXmlNamespace, XML_wgp, FSEND);
+    bool bToplevel = !m_xParent.is();
+    if (!bToplevel)
+        mnXmlNamespace = XML_wpg;
+    pFS->startElementNS(mnXmlNamespace, (bToplevel ? XML_wgp : XML_grpSp), FSEND);
 
     // non visual properties
     pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr, FSEND);
@@ -269,7 +272,7 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
     }
     m_xParent = xParent;
 
-    pFS->endElementNS(mnXmlNamespace, XML_wgp);
+    pFS->endElementNS(mnXmlNamespace, (bToplevel ? XML_wgp : XML_grpSp));
     return *this;
 }
 
