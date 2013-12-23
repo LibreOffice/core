@@ -138,7 +138,7 @@ SwContourCache::~SwContourCache()
 
 void SwContourCache::ClrObject( MSHORT nPos )
 {
-    OSL_ENSURE( pTextRanger[ nPos ], "ClrObject: Allready cleared. Good Bye!" );
+    OSL_ENSURE( pTextRanger[ nPos ], "ClrObject: Already cleared. Good Bye!" );
     nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
     delete pTextRanger[ nPos ];
     --nObjCnt;

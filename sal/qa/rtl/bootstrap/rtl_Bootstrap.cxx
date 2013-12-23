@@ -241,7 +241,7 @@ namespace rtl_Bootstrap
                 CPPUNIT_ASSERT_MESSAGE("get the value of a variable in ini file.", !suGetname.isEmpty());
             }
 
-        //use defaut value
+        //use default value
         void getFrom_003()
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);

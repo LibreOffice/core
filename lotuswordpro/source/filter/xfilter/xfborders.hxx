@@ -65,7 +65,7 @@
 
 /**
  * @brief
- * Single border obejct for all objects with borders.
+ * Single border object for all objects with borders.
  */
 class XFBorder
 {

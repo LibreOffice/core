@@ -221,8 +221,8 @@ void ImplSalYieldMutexAcquireWithWait()
 
     // If we are the main thread, then we must wait with wait, because
     // in if we don't reschedule, then we create deadlocks if a Windows
-    // Function is called from another thread. If we arn't the main thread,
-    // than we call qcquire directly.
+    // Function is called from another thread. If we aren't the main thread,
+    // than we call acquire directly.
     DWORD nThreadId = GetCurrentThreadId();
     SalData* pSalData = GetSalData();
     if ( pSalData->mnAppThreadId == nThreadId )

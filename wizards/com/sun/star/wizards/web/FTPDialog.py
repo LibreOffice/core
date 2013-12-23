@@ -423,7 +423,7 @@ class FTPDialog(UnoDialog2, UIConsts):
                 AbstractErrorHandler.showMessage(self.xMSF, self.xUnoDialog.getPeer(), self.resources.resIllegalFolder, ErrorHandler.ERROR_PROCESS_FATAL)
 
     # practical to have such a method...
-    # @param p the publisher obejct that contains the ftp connection info.
+    # @param p the publisher object that contains the ftp connection info.
     # @return the full ftp url with username password and everything one needs.
     @classmethod
     def getFullURL1(self, p):

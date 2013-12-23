@@ -106,8 +106,8 @@ public:
     OUString GetMasterPage();
 
     /**
-     * @descr   set the paragraph defaut font.
-     * @param   font font obejct to be setted.Font object are deleted by font-factory,so
+     * @descr   set the paragraph default font.
+     * @param   font font object to be setted.Font object are deleted by font-factory,so
      *          dont't delete it in the destructure function of para style.
      */
     void    SetFont(XFFont *font);

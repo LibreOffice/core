@@ -100,7 +100,7 @@ public:
 public:
     /**
      * @descr   loading the file. It's call be SfxObejctShell::ImportFrom.
-     * @param   aDescriptor the parameters include file URL or XInputStream obejct, from which the filter can
+     * @param   aDescriptor the parameters include file URL or XInputStream object, from which the filter can
      *          get which file to import.
      */
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )

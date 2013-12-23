@@ -74,7 +74,7 @@ class XFBGImage;
 
 /**
  * @brief
- * Style for all frame obejcts.
+ * Style for all frame objects.
  */
 class XFFrameStyle : public XFStyle
 {

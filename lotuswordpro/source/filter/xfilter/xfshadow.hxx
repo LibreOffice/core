@@ -87,7 +87,7 @@ public:
     enumXFShadowPos GetPosition();
 
     /**
-     * @descr   Set shadow offset from owner obejct.
+     * @descr   Set shadow offset from owner object.
      */
     void    SetOffset(double offset);
 

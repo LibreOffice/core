@@ -1022,7 +1022,7 @@ bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
     if ( bEditCell )
     {
         // #i61702# With bLoseContent set, the content of rEngine isn't restored
-        // (used in loading XML, where after the removeActionLock call the API obejct's
+        // (used in loading XML, where after the removeActionLock call the API object's
         // EditEngine isn't accessed again.
         sal_Bool bLoseContent = pDoc->IsImportingXML();
 
@@ -1238,7 +1238,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
             aOldData = pOldNote->GetNoteData();
         }
 
-        // collect drawing undo actions for deleting/inserting caption obejcts
+        // collect drawing undo actions for deleting/inserting caption objects
         if( pUndoMgr )
             pDrawLayer->BeginCalcUndo(false);
 

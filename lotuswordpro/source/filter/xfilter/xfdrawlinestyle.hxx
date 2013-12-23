@@ -65,7 +65,7 @@
 
 /**
  * @brief
- * Border line style for drawing obejct.
+ * Border line style for drawing object.
  */
 class XFDrawLineStyle : public XFStyle
 {

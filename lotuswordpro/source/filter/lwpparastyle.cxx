@@ -343,7 +343,7 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
         }
     }
 
-    //convert to XFBorders obejct:
+    //convert to XFBorders object:
     LwpBorderStuff  *pBorderStuff = pBorder->GetBorderStuff();
     if( pBorderStuff && pBorderStuff->GetSide() != 0 )
     {

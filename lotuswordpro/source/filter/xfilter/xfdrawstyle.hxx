@@ -94,7 +94,7 @@ public:
     void    SetLineStyle(double width, XFColor color = XFColor(0,0,0), sal_Int32 transparency = 0);
 
     /**
-     * @descr   Set drawing obejct dash border style.
+     * @descr   Set drawing object dash border style.
      */
     void    SetLineDashStyle(enumXFLineStyle style, int num1, int num2, double len1, double len2, double space );
 
@@ -104,7 +104,7 @@ public:
     void    SetAreaColor(XFColor& color);
 
     /**
-     * @descr   Set drawing obejct area grid style.
+     * @descr   Set drawing object area grid style.
      */
     void    SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle = 0, double space = 0.102, XFColor lineColor = XFColor(0,0,0));
 
@@ -114,7 +114,7 @@ public:
     void    SetArrowStart(OUString start, double size=0.3, sal_Bool center = sal_False);
 
     /**
-     * @descr   Set drawing obejct arrow end style,only lines can have arrows.
+     * @descr   Set drawing object arrow end style,only lines can have arrows.
      */
     void    SetArrowEnd(OUString end, double size=0.3, sal_Bool center = sal_False);
 

@@ -98,7 +98,7 @@ public abstract class DataAware {
     }
 
     /**
-     * gets the current value from the data obejct.
+     * gets the current value from the data object.
      * this method delegates the job to
      * the value object.
      * @return the current value of the data object.

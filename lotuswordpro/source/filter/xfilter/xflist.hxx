@@ -67,7 +67,7 @@ class XFListItem;
 
 /**
  * @brief
- * list obejct for order-list and unordered-list.
+ * list object for order-list and unordered-list.
  */
 class   XFList : public XFContentContainer
 {
@@ -88,7 +88,7 @@ public:
     void    SetContinueNumber(sal_Bool bContinueNumber=sal_False);
 
     /**
-     * @descr   Output list obejct.
+     * @descr   Output list object.
      */
     virtual void    ToXml(IXFStream *pStrm);
 

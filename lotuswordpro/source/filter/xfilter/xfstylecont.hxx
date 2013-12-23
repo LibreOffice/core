@@ -66,7 +66,7 @@
 class IXFStyle;
 
 /**
- * @descr   container obejct for styles.
+ * @descr   container object for styles.
  *          All styles can be placed into an style container.
  */
 class XFStyleContainer : public IXFObject

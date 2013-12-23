@@ -226,7 +226,7 @@ protected:
     sal_Bool                        bTextSizeDirty : 1;
 
     // #101684#
-    sal_Bool                        mbInEditMode : 1;   // Is this text obejct in edit mode?
+    sal_Bool                        mbInEditMode : 1;   // Is this text object in edit mode?
 
     // Fuer Objekt mit freier Groesse im Draw (Mengentext). Das Flag wird vom
     // der App beim Create gesetzt.

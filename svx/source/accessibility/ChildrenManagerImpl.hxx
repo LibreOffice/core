@@ -425,7 +425,7 @@ private:
         create the missing accessible objects now.
         @param raDescriptorList
             Create an accessible object for every member of this list where
-            that obejct does not already exist.
+            that object does not already exist.
     */
     void CreateAccessibilityObjects (ChildDescriptorListType& raChildList);
 

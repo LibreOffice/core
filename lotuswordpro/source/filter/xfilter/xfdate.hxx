@@ -64,7 +64,7 @@
 #include "xfcontent.hxx"
 
 /**
- * @descr   Date obejct.
+ * @descr   Date object.
  */
 class XFDate : public XFContent
 {

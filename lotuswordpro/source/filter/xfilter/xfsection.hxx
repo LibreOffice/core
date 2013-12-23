@@ -79,7 +79,7 @@ public:
 public:
 
     /**
-     * @descr   Output section obejct.
+     * @descr   Output section object.
      */
     virtual void    ToXml(IXFStream *pStrm);
 

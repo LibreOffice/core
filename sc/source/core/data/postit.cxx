@@ -172,7 +172,7 @@ public:
 
     /** Returns the drawing layer page of the sheet contained in maPos. */
     SdrPage*            GetDrawPage();
-    /** Returns the caption drawing obejct. */
+    /** Returns the caption drawing object. */
     inline SdrCaptionObj* GetCaption() { return mpCaption; }
 
     /** Moves the caption inside the passed rectangle. Uses page area if 0 is passed. */

@@ -64,7 +64,7 @@
 #include <vector>
 
 /**
- * @descr   Foot obejct. It's just a container.
+ * @descr   Foot object. It's just a container.
  */
 class XFFooter : public XFContentContainer
 {

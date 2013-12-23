@@ -69,7 +69,7 @@ class IXFStream;
 /**
  * @brief
  * Paragraph object for SODC.
- * You can call Add() to add text span or drawing obejcts to XFParagraph.
+ * You can call Add() to add text span or drawing objects to XFParagraph.
  */
 class XFParagraph : public XFContentContainer
 {

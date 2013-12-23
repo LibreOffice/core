@@ -66,7 +66,7 @@
 
 /**
  * @brief
- * Group obejct for drawing.
+ * Group object for drawing.
  */
 class XFDrawGroup : public XFDrawObject
 {
@@ -82,7 +82,7 @@ public:
     void    Add(XFFrame *pFrame);
 
     /**
-     * @descr   Output group obejct and all it's children.
+     * @descr   Output group object and all it's children.
      */
     virtual void ToXml(IXFStream *pStrm);
 

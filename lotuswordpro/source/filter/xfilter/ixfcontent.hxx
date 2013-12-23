@@ -64,7 +64,7 @@
 
 /**
  * @brief Base interface for all content object.Implementation classes include text span,paragraph,
-    Drawing obejcts, image, ole and so on.
+    Drawing objects, image, ole and so on.
  */
 class IXFContent : public IXFObject
 {

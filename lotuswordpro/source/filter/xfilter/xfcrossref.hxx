@@ -64,7 +64,7 @@
 
 /**
  * @brief
- * Index entry obejct.
+ * Index entry object.
  */
 class XFCrossRefStart : public XFContent
 {

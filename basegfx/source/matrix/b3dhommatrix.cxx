@@ -528,7 +528,7 @@ namespace basegfx
                 rRotate.setZ(atan2(aCol0.getY(), aCol0.getX()));
             }
 
-            // corrcet rotate values
+            // correct rotate values
             rRotate.correctValues();
         }
 

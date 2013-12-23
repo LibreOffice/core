@@ -73,7 +73,7 @@ class XFMargins;
 class XFBGImage;
 
 /**
- * @descr   Style obejct for cell.
+ * @descr   Style object for cell.
  */
 class XFCellStyle : public XFStyle
 {

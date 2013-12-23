@@ -74,7 +74,7 @@
  * Base class for all drawing object(ellipse,rect,circle,...).
  * I can set Postions,anchor,rotate,text style name here.
  *
- * Drawing obejcts can be rotated,scaled and skewed, drawing objects must have positions setted,
+ * Drawing objects can be rotated,scaled and skewed, drawing objects must have positions setted,
  * you can use SetPosition(...).
  */
 class XFDrawObject : public XFFrame
@@ -89,7 +89,7 @@ public:
     void    SetTextStyleName(OUString style);
 
     /**
-     * @descr   Set drawing obejct rotate.
+     * @descr   Set drawing object rotate.
      */
     void    SetRotate(double degree, XFPoint aRotatePoint=XFPoint(0,0));
 
@@ -104,7 +104,7 @@ public:
     void    SetSkewX(double cx);
 
     /**
-     * @descr   Set drawing obejct y skew.
+     * @descr   Set drawing object y skew.
      */
     void    SetSkewY(double cy);
 

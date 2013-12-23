@@ -65,7 +65,7 @@
 
 /**
  * @brief
- * Line obejct of drawing layer.
+ * Line object of drawing layer.
  */
 class XFDrawLine : public XFDrawObject
 {

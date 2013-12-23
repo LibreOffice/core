@@ -64,7 +64,7 @@
 
 /**
  * @brief
- * Image obejct.
+ * Image object.
  * There are two way to import an image, file link or base64 stream.
  */
 class XFImage : public XFFrame

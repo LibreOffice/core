@@ -85,13 +85,13 @@ public:
 
 private:
     /**
-     * @descr   Add a font. if there exist a font with same properties with pFont, them the font obejct
+     * @descr   Add a font. if there exist a font with same properties with pFont, them the font object
      *          will not be added.
      */
     void    AddFont(XFFont *pFont);
 
     /**
-     * @descr   Find whether same font obejct exists.
+     * @descr   Find whether same font object exists.
      */
     XFFont* FindSameFont(XFFont *pFont);
 

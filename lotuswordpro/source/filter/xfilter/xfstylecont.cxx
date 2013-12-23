@@ -114,7 +114,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 
     if( !pStyle )
         return NULL;
-    //no matter we want to delete the style or not,XFFont obejct should be saved first.
+    //no matter we want to delete the style or not,XFFont object should be saved first.
     ManageStyleFont(pStyle);
 
     if( pStyle->GetStyleName().isEmpty() )

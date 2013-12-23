@@ -66,7 +66,7 @@
 
 /**
  * @brief
- * End note obejct.
+ * End note object.
  */
 class XFEndNote : public XFContentContainer
 {

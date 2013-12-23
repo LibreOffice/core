@@ -473,9 +473,9 @@ namespace drawinglayer
 
         basegfx::B3DRange SdrExtrudePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
+            // use default from sdrPrimitive3D which uses transformation expanded by line width/2
             // The parent implementation which uses the ranges of the decomposition would be more
-            // corrcet, but for historical reasons it is necessary to do the old method: To get
+            // correct, but for historical reasons it is necessary to do the old method: To get
             // the range of the non-transformed geometry and transform it then. This leads to different
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.

@@ -78,7 +78,7 @@ class XFEndnoteConfig;
 /**
  * @brief
  * Style manager for the filter.
- * This is a global obejct, all styles will be placed here before output.
+ * This is a global object, all styles will be placed here before output.
  */
 class XFStyleManager// : public IXFObject
 {

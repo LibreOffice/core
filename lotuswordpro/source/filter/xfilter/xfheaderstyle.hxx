@@ -114,7 +114,7 @@ public:
     void    SetBackColor(XFColor color);
 
     /**
-     * @descr   Output header style obejct.
+     * @descr   Output header style object.
      */
     virtual void    ToXml(IXFStream *pStrm);
 
