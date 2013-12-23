@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="svt" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.graphic.GraphicProvider">
+  <implementation name="com.sun.star.comp.graphic.GraphicProvider"
+      constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
     <service name="com.sun.star.graphic.GraphicProvider"/>
   </implementation>
   <implementation name="com.sun.star.comp.graphic.GraphicRendererVCL"

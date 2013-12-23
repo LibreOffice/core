@@ -28,13 +28,7 @@
 #include "descriptor.hxx"
 #include "transformer.hxx"
 
-class Graphic;
-
 namespace unographic {
-
-// -------------------
-// - GraphicProvider -
-// -------------------
 
 class Graphic : public ::com::sun::star::graphic::XGraphic,
                 public ::com::sun::star::awt::XBitmap,

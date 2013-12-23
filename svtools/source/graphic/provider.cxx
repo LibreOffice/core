@@ -43,18 +43,9 @@
 
 using namespace com::sun::star;
 
-namespace unographic {
+namespace {
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
-
-// -------------------
-// - GraphicProvider -
-// -------------------
-
-uno::Reference< uno::XInterface > SAL_CALL GraphicProvider_CreateInstance( const uno::Reference< lang::XMultiServiceFactory >& )
-{
-    return (static_cast< ::cppu::OWeakObject* >(new GraphicProvider ));
-}
 
 GraphicProvider::GraphicProvider()
 {
@@ -68,30 +59,10 @@ GraphicProvider::~GraphicProvider()
 
 // ------------------------------------------------------------------------------
 
-OUString GraphicProvider::getImplementationName_Static()
-    throw()
-{
-    return OUString( "com.sun.star.comp.graphic.GraphicProvider" );
-}
-
-// ------------------------------------------------------------------------------
-
-uno::Sequence< OUString > GraphicProvider::getSupportedServiceNames_Static()
-    throw()
-{
-    uno::Sequence< OUString > aSeq( 1 );
-
-    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicProvider";
-
-    return aSeq;
-}
-
-// ------------------------------------------------------------------------------
-
 OUString SAL_CALL GraphicProvider::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return getImplementationName_Static();
+    return OUString( "com.sun.star.comp.graphic.GraphicProvider" );
 }
 
 // ------------------------------------------------------------------------------
@@ -114,7 +85,9 @@ sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName 
 uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    return getSupportedServiceNames_Static();
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq.getArray()[ 0 ] = "com.sun.star.graphic.GraphicProvider";
+    return aSeq;
 }
 
 // ------------------------------------------------------------------------------
@@ -384,7 +357,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
     if( xIStm.is() )
     {
-        GraphicDescriptor* pDescriptor = new GraphicDescriptor;
+        unographic::GraphicDescriptor* pDescriptor = new unographic::GraphicDescriptor;
         pDescriptor->init( xIStm, aURL );
         xRet = pDescriptor;
     }
@@ -408,7 +381,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         }
         else
         {
-            GraphicDescriptor* pDescriptor = new GraphicDescriptor;
+            unographic::GraphicDescriptor* pDescriptor = new unographic::GraphicDescriptor;
             pDescriptor->init( aURL );
             xRet = pDescriptor;
         }
@@ -896,6 +869,18 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     }
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_graphic_GraphicProvider_get_implementation(
+        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+        uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+            static_cast<cppu::OWeakObject *>(new GraphicProvider));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
