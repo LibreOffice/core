@@ -79,7 +79,7 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
         Normalize();
 
     ListenersType::iterator dest(maDestructedListeners.begin());
-    for (ListenersType::iterator it(maListeners.begin()); it < maListeners.end(); ++it)
+    for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
         bool bStart = true;
 
@@ -108,7 +108,7 @@ SvtBroadcaster::~SvtBroadcaster()
     // listeners, with the exception of those that already asked to be removed
     // during their own destruction
     ListenersType::iterator dest(maDestructedListeners.begin());
-    for (ListenersType::iterator it(maListeners.begin()); it < maListeners.end(); ++it)
+    for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
         // skip the destructed ones
         while (dest != maDestructedListeners.end() && (*dest < *it))
@@ -124,7 +124,7 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
     Normalize();
 
     ListenersType::iterator dest(maDestructedListeners.begin());
-    for (ListenersType::iterator it(maListeners.begin()); it < maListeners.end(); ++it)
+    for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
         // skip the destructed ones
         while (dest != maDestructedListeners.end() && (*dest < *it))
