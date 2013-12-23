@@ -119,8 +119,6 @@ void dummy_can_throw_anything( char const * )
 
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
-    char const * start = p;
-
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
@@ -143,8 +141,6 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
     }
 
     OUString result( buf.makeStringAndClear() );
-
-    SAL_INFO( "bridges.ios", "toUNOname(" << start << "): " << result );
 
     return result;
 }
@@ -207,11 +203,11 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-        SAL_INFO( "bridges.ios", "getRTTI: calling dlsym() for type_info for " << unoName );
         rtti = (std::type_info *)dlsym( m_hApp, symName.getStr() );
 
         if (rtti)
         {
+            SAL_INFO( "bridges.ios", "getRTTI: dlsym() found type_info for " << unoName );
             std::pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
             SAL_WARN_IF( !insertion.second,

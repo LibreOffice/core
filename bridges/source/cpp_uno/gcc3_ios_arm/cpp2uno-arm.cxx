@@ -467,8 +467,11 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
 
 namespace
 {
-    unsigned char *codeSnippet(sal_Int32 functionIndex,
-        sal_Int32 vtableOffset, bool bHasHiddenParam)
+    unsigned char *codeSnippet(const typelib_InterfaceTypeDescription *type,
+                               const typelib_TypeDescription *member,
+                               sal_Int32 functionIndex,
+                               sal_Int32 vtableOffset,
+                               bool bHasHiddenParam)
     {
         assert(functionIndex < nFunIndexes);
         if (!(functionIndex < nFunIndexes))
@@ -484,7 +487,7 @@ namespace
         int index = functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam;
         unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
 
-        SAL_INFO( "bridges.ios", "codeSnippet: [" << functionIndex << "," << vtableOffset << "," << (int)bHasHiddenParam << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
+        SAL_INFO( "bridges.ios", "codeSnippet(" << OUString(type->aBase.pTypeName) << "::" << OUString(member->pTypeName) << "): [" << functionIndex << "," << vtableOffset << "," << (int)bHasHiddenParam << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
 
         return result;
     }
@@ -534,15 +537,16 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
 
                 // Getter:
-                (s++)->fn = codeSnippet(
-                    functionOffset++, vtableOffset,
-                    arm::return_in_hidden_param( pAttrTD->pAttributeTypeRef ));
+                (s++)->fn = codeSnippet(type, member,
+                                        functionOffset++, vtableOffset,
+                                        arm::return_in_hidden_param( pAttrTD->pAttributeTypeRef ));
 
                 // Setter:
                 if (!pAttrTD->bReadOnly)
                 {
-                    (s++)->fn = codeSnippet(
-                        functionOffset++, vtableOffset, false);
+                    (s++)->fn = codeSnippet(type, member,
+                                            functionOffset++, vtableOffset,
+                                            false);
                 }
                 break;
             }
@@ -552,8 +556,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription * >(member);
 
-                (s++)->fn = codeSnippet(functionOffset++, vtableOffset,
-                    arm::return_in_hidden_param(pMethodTD->pReturnTypeRef));
+                (s++)->fn = codeSnippet(type, member,
+                                        functionOffset++, vtableOffset,
+                                        arm::return_in_hidden_param(pMethodTD->pReturnTypeRef));
                 break;
             }
         default:
