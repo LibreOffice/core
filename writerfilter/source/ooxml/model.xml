@@ -14800,13 +14800,13 @@
             <ref name="CT_MoveBookmark"/>
           </element>
           <element name="moveFromRangeEnd">
-            <ref name="CT_MarkupRange"/>
+            <ref name="CT_MarkupRangeBookmark"/>
           </element>
           <element name="moveToRangeStart">
             <ref name="CT_MoveBookmark"/>
           </element>
           <element name="moveToRangeEnd">
-            <ref name="CT_MarkupRange"/>
+            <ref name="CT_MarkupRangeBookmark"/>
           </element>
           <element name="commentRangeStart">
             <ref name="CT_MarkupRangeCommentStart"/>
