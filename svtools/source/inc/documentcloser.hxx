@@ -32,6 +32,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
+namespace {
 
 // the service is implemented as a wrapper to be able to die by refcount
 // the disposing mechanics is required for java related scenarios
@@ -40,27 +41,15 @@ class ODocumentCloser : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::
                                                         ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 
     sal_Bool m_bDisposed;
     sal_Bool m_bInitialized;
 
 public:
-    ODocumentCloser( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+    ODocumentCloser();
     ~ODocumentCloser();
-
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-            impl_staticGetSupportedServiceNames();
-
-    static OUString SAL_CALL impl_staticGetImplementationName();
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
 
 // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -76,6 +65,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 };
+
+}
 
 #endif
 

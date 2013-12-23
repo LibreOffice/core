@@ -36,10 +36,7 @@
 
 using namespace ::com::sun::star;
 
-
-// ====================================================================
-// MainThreadFrameCloserRequest
-// ====================================================================
+namespace {
 
 class MainThreadFrameCloserRequest
 {
@@ -124,9 +121,8 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
 // ====================================================================
 
 // --------------------------------------------------------
-ODocumentCloser::ODocumentCloser( const uno::Reference< uno::XComponentContext >& xContext )
-: m_xContext( xContext )
-, m_pListenersContainer( NULL )
+ODocumentCloser::ODocumentCloser()
+: m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
 , m_bInitialized( sal_False )
 {
@@ -225,7 +221,7 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return impl_staticGetImplementationName();
+    return OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
 ::sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )
@@ -237,28 +233,24 @@ OUString SAL_CALL ODocumentCloser::getImplementationName(  )
 uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    return impl_staticGetSupportedServiceNames();
-}
-
-// Static methods
-uno::Sequence< OUString > SAL_CALL ODocumentCloser::impl_staticGetSupportedServiceNames()
-{
     const OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
-OUString SAL_CALL ODocumentCloser::impl_staticGetImplementationName()
-{
-    return OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
-// --------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL ODocumentCloser::impl_staticCreateSelfInstance(
-                                const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_embed_DocumentCloser_get_implementation(
+        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+        uno_Sequence * arguments)
 {
-    uno::Reference< uno::XComponentContext > xContext(
-        comphelper::getComponentContext( xServiceManager ) );
-    return static_cast< cppu::OWeakObject * >( new ODocumentCloser( xContext ) );
+    assert(arguments != 0 && arguments->nElements == 1);
+    css::uno::Reference<css::uno::XInterface> xx(
+            static_cast<cppu::OWeakObject *>(new ODocumentCloser));
+    css::uno::Reference<css::lang::XInitialization> x(xx, css::uno::UNO_QUERY_THROW);
+    x->acquire();
+    x->initialize(css::uno::Sequence<css::uno::Any>(arguments, SAL_NO_ACQUIRE));
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
