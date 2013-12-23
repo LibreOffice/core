@@ -40,6 +40,12 @@ certain functionality.
 @li @c basic
 @li @c basic.sbx
 
+@section bridges
+
+@li @c bridges
+@li @c bridges.ios
+@li @c bridges.osx
+
 @section canvas
 
 @li @c canvas
@@ -426,7 +432,6 @@ certain functionality.
 @li @c avmedia
 @li @c basebmp
 @li @c binaryurp
-@li @c bridges
 @li @c configmgr
 @li @c cppcanvas
 @li @c cppcanvas.emf

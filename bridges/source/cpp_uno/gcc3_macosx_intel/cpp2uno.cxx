@@ -361,6 +361,8 @@ extern "C" typedef void (*PrivateSnippetExecutor)();
 int const codeSnippetSize = 16;
 
 unsigned char * codeSnippet(
+    const typelib_InterfaceTypeDescription *type,
+    const typelib_TypeDescription *member,
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
     typelib_TypeDescriptionReference * pReturnTypeRef)
 {
@@ -427,18 +429,19 @@ unsigned char * codeSnippet(
         = ((unsigned char *) exec) - p - sizeof (sal_Int32);
     p += sizeof (sal_Int32);
     OSL_ASSERT(p - code <= codeSnippetSize);
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr,
-            "==> codeSnippet to %s, functionIndex=%lu%s, vtableOffset=%"SAL_PRIdINT32"\n",
-            (exec == privateSnippetExecutorGeneral ? "General" :
-             (exec == privateSnippetExecutorVoid ? "Void" :
-              (exec == privateSnippetExecutorHyper ? "Hyper" :
-               (exec == privateSnippetExecutorFloat ? "Float" :
-                (exec == privateSnippetExecutorDouble ? "Double" :
-                 (exec == privateSnippetExecutorClass ? "Class" :
-                  "???")))))),
-            (functionIndex & ~0x80000000), (functionIndex & 0x80000000) ? "|0x80000000":"", vtableOffset);
-#endif
+
+    SAL_INFO( "bridges.osx", "codeSnippet("
+              << OUString(type->aBase.pTypeName) << "::" << OUString(member->pTypeName) << "): ["
+              << (functionIndex & ~0x80000000) << ((functionIndex & 0x80000000) ? "|0x80000000":"") << "," << vtableOffset << ","
+              << (exec == privateSnippetExecutorGeneral ? "General" :
+                  (exec == privateSnippetExecutorVoid ? "Void" :
+                   (exec == privateSnippetExecutorHyper ? "Hyper" :
+                    (exec == privateSnippetExecutorFloat ? "Float" :
+                     (exec == privateSnippetExecutorDouble ? "Double" :
+                      (exec == privateSnippetExecutorClass ? "Class" :
+                       "???"))))))
+              << "]=" << (void *)(code + codeSnippetSize) );
+
     return code + codeSnippetSize;
 }
 
@@ -484,6 +487,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             // Getter:
             (s++)->fn = code;
             code = codeSnippet(
+                type, member,
                 code, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
                     member)->pAttributeTypeRef);
@@ -494,6 +498,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             {
                 (s++)->fn = code;
                 code = codeSnippet(
+                    type, member,
                     code, functionOffset++, vtableOffset,
                     0 /* indicates VOID */);
             }
@@ -502,6 +507,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         case typelib_TypeClass_INTERFACE_METHOD:
             (s++)->fn = code;
             code = codeSnippet(
+                type, member,
                 code, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
                     member)->pReturnTypeRef);
