@@ -461,7 +461,9 @@ extern "C" sal_Int64 cpp_vtable_call( sal_Int32 *pFunctionAndOffset,
 
 namespace
 {
-    unsigned char *codeSnippet(sal_Int32 functionIndex,
+    unsigned char *codeSnippet(const typelib_InterfaceTypeDescription *type,
+                               const typelib_TypeDescription *member,
+                               sal_Int32 functionIndex,
                                sal_Int32 vtableOffset)
     {
         assert(functionIndex < nFunIndexes);
@@ -477,7 +479,7 @@ namespace
         int index = functionIndex*nVtableOffsets + vtableOffset;
         unsigned char *result = ((unsigned char *) &codeSnippets) + codeSnippets[index];
 
-        SAL_INFO( "bridges.ios", "codeSnippet: [" << functionIndex << "," << vtableOffset << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
+        SAL_INFO( "bridges.ios", "codeSnippet(" << OUString(type->aBase.pTypeName) << "::" << OUString(member->pTypeName) << "): [" << functionIndex << "," << vtableOffset << "]=" << (void *) result << " (" << std::hex << ((int*)result)[0] << "," << ((int*)result)[1] << "," << ((int*)result)[2] << "," << ((int*)result)[3] << ")");
 
         return result;
     }
@@ -530,18 +532,18 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( member );
 
                 // Getter:
-                (s++)->fn = codeSnippet( functionOffset++, vtableOffset );
+                (s++)->fn = codeSnippet( type, member, functionOffset++, vtableOffset );
 
                 // Setter:
                 if (!pAttrTD->bReadOnly)
                 {
-                    (s++)->fn = codeSnippet( functionOffset++, vtableOffset );
+                    (s++)->fn = codeSnippet( type, member, functionOffset++, vtableOffset );
                 }
                 break;
             }
             case typelib_TypeClass_INTERFACE_METHOD:
             {
-                (s++)->fn = codeSnippet( functionOffset++, vtableOffset );
+                (s++)->fn = codeSnippet( type, member, functionOffset++, vtableOffset );
                 break;
             }
         default:
