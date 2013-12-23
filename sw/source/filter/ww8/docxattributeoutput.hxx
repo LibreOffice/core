@@ -672,6 +672,9 @@ private:
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );
 
+    void AddToAttrList( ::sax_fastparser::FastAttributeList* &pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
+    void AddToAttrList( ::sax_fastparser::FastAttributeList* &pAttrList, sal_Int32 nArgs, ... );
+
     ::sax_fastparser::FastAttributeList *m_pFontsAttrList, *m_pEastAsianLayoutAttrList;
     ::sax_fastparser::FastAttributeList *m_pCharLangAttrList;
     ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
