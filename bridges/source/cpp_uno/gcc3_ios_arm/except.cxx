@@ -17,8 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <typeinfo>
+
 #include <dlfcn.h>
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
 #include <cxxabi.h>
+#endif
+
+#include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
 
 #include <rtl/strbuf.hxx>
@@ -34,26 +40,91 @@
 
 #include "share.hxx"
 
-using namespace ::std;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-using namespace ::__cxxabiv1;
 
-namespace CPPU_CURRENT_NAMESPACE
+namespace CPPU_CURRENT_NAMESPACE {
+
+namespace {
+
+struct Fake_type_info {
+    virtual ~Fake_type_info() {}
+    char const * name;
+};
+
+struct Fake_class_type_info: Fake_type_info {};
+
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+BOOST_STATIC_ASSERT(
+    sizeof (Fake_class_type_info) == sizeof (__cxxabiv1::__class_type_info));
+#endif
+
+struct Fake_si_class_type_info: Fake_class_type_info {
+    void const * base;
+};
+
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+BOOST_STATIC_ASSERT(
+    sizeof (Fake_si_class_type_info)
+    == sizeof (__cxxabiv1::__si_class_type_info));
+#endif
+
+struct Base {};
+struct Derived: Base {};
+
+std::type_info * createFake_class_type_info(char const * name) {
+    char * buf = new char[sizeof (Fake_class_type_info)];
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+    assert(
+        dynamic_cast<__cxxabiv1::__class_type_info const *>(&typeid(Base))
+        != 0);
+#endif
+    *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
+        &typeid(Base));
+        // copy __cxxabiv1::__class_type_info vtable into place
+    Fake_class_type_info * fake = reinterpret_cast<Fake_class_type_info *>(buf);
+    fake->name = name;
+#ifdef _LIBCPP_NONUNIQUE_RTTI_BIT
+    *(uintptr_t*)(&fake->name) |= _LIBCPP_NONUNIQUE_RTTI_BIT;
+#endif
+    return reinterpret_cast<std::type_info *>(
+        static_cast<Fake_type_info *>(fake));
+}
+
+std::type_info * createFake_si_class_type_info(
+    char const * name, std::type_info const * base)
 {
+    char * buf = new char[sizeof (Fake_si_class_type_info)];
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+    assert(
+        dynamic_cast<__cxxabiv1::__si_class_type_info const *>(&typeid(Derived))
+        != 0);
+#endif
+    *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
+        &typeid(Derived));
+        // copy __cxxabiv1::__si_class_type_info vtable into place
+    Fake_si_class_type_info * fake
+        = reinterpret_cast<Fake_si_class_type_info *>(buf);
+    fake->name = name;
+    fake->base = base;
+    return reinterpret_cast<std::type_info *>(
+        static_cast<Fake_type_info *>(fake));
+}
+
+}
 
 void dummy_can_throw_anything( char const * )
 {
 }
 
-//==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
+    char const * start = p;
+
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
-    OSL_ASSERT( 'N' == *p );
+    assert( 'N' == *p );
     ++p; // skip N
 
     while ('E' != *p)
@@ -73,13 +144,14 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 
     OUString result( buf.makeStringAndClear() );
 
+    SAL_INFO( "bridges.ios", "toUNOname(" << start << "): " << result );
+
     return result;
 }
 
-//==================================================================================================
 class RTTI
 {
-    typedef boost::unordered_map< OUString, const type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
@@ -91,27 +163,28 @@ public:
     RTTI() SAL_THROW(());
     ~RTTI() SAL_THROW(());
 
-    const type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    std::type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
-//__________________________________________________________________________________________________
+
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
+#if 0
     // Insert commonly needed type_infos to avoid dlsym() calls
     // Ideally we should insert all needed ones
     m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
                                             &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
+#endif
 }
-//__________________________________________________________________________________________________
+
 RTTI::~RTTI() SAL_THROW(())
 {
     dlclose( m_hApp );
 }
 
-//__________________________________________________________________________________________________
-const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
-    const type_info * rtti;
+    std::type_info * rtti;
 
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
@@ -135,11 +208,11 @@ const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) S
 
         OString symName( buf.makeStringAndClear() );
         SAL_INFO( "bridges.ios", "getRTTI: calling dlsym() for type_info for " << unoName );
-        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
+        rtti = (std::type_info *)dlsym( m_hApp, symName.getStr() );
 
         if (rtti)
         {
-            pair< t_rtti_map::iterator, bool > insertion(
+            std::pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
             SAL_WARN_IF( !insertion.second,
                          "bridges",
@@ -154,25 +227,26 @@ const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) S
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
-                char const * rttiName = symName.getStr() +4;
+                char * rttiName = strdup(symName.getStr() + 4);
+                if (rttiName == 0) {
+                    throw std::bad_alloc();
+                }
 
                 SAL_INFO( "bridges.ios", "getRTTI: generating typeinfo " << rttiName );
 
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
-                    const type_info * base_rtti = getRTTI(
+                    std::type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
-                    rtti = new __si_class_type_info(
-                        strdup( rttiName ), (__class_type_info *)base_rtti );
+                    rtti = createFake_si_class_type_info(rttiName, base_rtti);
                 }
                 else
                 {
-                    // this class has no base class
-                    rtti = new __class_type_info( strdup( rttiName ) );
+                    rtti = createFake_class_type_info(rttiName);
                 }
 
-                pair< t_rtti_map::iterator, bool > insertion(
+                std::pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                 SAL_WARN_IF( !insertion.second,
                              "bridges",
@@ -192,7 +266,6 @@ const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) S
     return rtti;
 }
 
-//--------------------------------------------------------------------------------------------------
 static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
@@ -207,13 +280,12 @@ static void deleteException( void * pExc )
     }
 }
 
-//==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
     SAL_INFO( "bridges.ios", "raiseException: " << *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
 
     void * pCppExc;
-    const type_info * rtti;
+    std::type_info * rtti;
 
     {
     // construct cpp exception object
@@ -249,9 +321,8 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
         }
     }
     rtti = s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
-
     TYPELIB_DANGER_RELEASE( pTypeDescr );
-    OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
+    assert( rtti );
     if (! rtti)
     {
         throw RuntimeException(
@@ -261,10 +332,9 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     }
     }
 
-    __cxa_throw( pCppExc, (type_info *) rtti, deleteException );
+    __cxa_throw( pCppExc, rtti, deleteException );
 }
 
-//==================================================================================================
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
     if (! header)
@@ -294,7 +364,6 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr.getStr() );
