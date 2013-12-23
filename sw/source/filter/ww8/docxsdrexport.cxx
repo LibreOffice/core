@@ -153,6 +153,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         case text::RelOrientation::CHAR:
             relativeFromH = "character";
             break;
+        case text::RelOrientation::PAGE_RIGHT:
+            relativeFromH = "page";
+            alignH = "right";
+            break;
         case text::RelOrientation::FRAME:
         default:
             relativeFromH = "column";

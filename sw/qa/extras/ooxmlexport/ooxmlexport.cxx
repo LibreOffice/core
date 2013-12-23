@@ -2163,6 +2163,18 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
       assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // This was text::RelOrientation::FRAME, when handling relativeFrom=page, align=right
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_RIGHT, getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
+
+    uno::Reference<drawing::XShapes> xGroup(xShape, uno::UNO_QUERY);
+    // This resulted in lang::IndexOutOfBoundsException, as nested groupshapes weren't handled.
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
