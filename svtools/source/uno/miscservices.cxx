@@ -30,7 +30,6 @@
 #include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
 #include "provider.hxx"
-#include "renderer.hxx"
 #include "unowizard.hxx"
 
 #include "comphelper/servicedecl.hxx"
@@ -77,7 +76,6 @@ namespace
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
 DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicProvider )
-DECLARE_CREATEINSTANCE_NAMESPACE( unographic, GraphicRendererVCL )
 
 extern "C"
 {
@@ -121,13 +119,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
                 GraphicProvider::getImplementationName_Static(),
                 GraphicProvider_CreateInstance,
                 GraphicProvider::getSupportedServiceNames_Static() );
-        }
-        else if( GraphicRendererVCL::getImplementationName_Static().equalsAscii( pImplementationName ) )
-        {
-            xFactory = ::cppu::createOneInstanceFactory(xSMgr,
-                GraphicRendererVCL::getImplementationName_Static(),
-                GraphicRendererVCL_CreateInstance,
-                GraphicRendererVCL::getSupportedServiceNames_Static() );
         }
         else if (rtl_str_compare (pImplementationName, "com.sun.star.comp.embed.DocumentCloser") == 0)
         {

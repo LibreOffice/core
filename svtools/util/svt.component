@@ -22,7 +22,8 @@
   <implementation name="com.sun.star.comp.graphic.GraphicProvider">
     <service name="com.sun.star.graphic.GraphicProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.graphic.GraphicRendererVCL">
+  <implementation name="com.sun.star.comp.graphic.GraphicRendererVCL"
+      constructor="com_sun_star_comp_graphic_GraphicRendererVCL_get_implementation">
     <service name="com.sun.star.graphic.GraphicRendererVCL"/>
   </implementation>
   <implementation name="com.sun.star.comp.svtools.OAddressBookSourceDialogUno">
