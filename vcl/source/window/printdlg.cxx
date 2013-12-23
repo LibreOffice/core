@@ -1842,63 +1842,46 @@ void PrintDialog::previewBackward()
 //
 // -----------------------------------------------------------------------------
 
-PrintProgressDialog::PrintProgressDialog( Window* i_pParent, int i_nMax ) :
-    ModelessDialog( i_pParent, VclResId( SV_DLG_PRINT_PROGRESS ) ),
-    maText( this, VclResId( SV_PRINT_PROGRESS_TEXT ) ),
-    maButton( this, VclResId( SV_PRINT_PROGRESS_CANCEL ) ),
-    mbCanceled( false ),
-    mnCur( 0 ),
-    mnMax( i_nMax ),
-    mnProgressHeight( 15 ),
-    mbNativeProgress( false )
+PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)
+    : ModelessDialog(i_pParent, "PrintProgressDialog",
+        "vcl/ui/printprogressdialog.ui")
+    , mbCanceled(false)
+    , mnCur(0)
+    , mnMax(i_nMax)
 {
-    FreeResource();
+    get(mpButton, "cancel");
+    get(mpProgress, "progressbar");
+    get(mpText, "label");
 
     if( mnMax < 1 )
         mnMax = 1;
 
-    maStr = maText.GetText();
+    maStr = mpText->GetText();
 
-    maButton.SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
+    //just multiply largest value by 10 and take the width of that string as
+    //the max size we will want
+    OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::number( mnMax * 10 ) ) );
+    aNewText = searchAndReplace( aNewText, "%n", 2, OUString::number( mnMax * 10 ) );
+    mpText->SetText( aNewText );
+    mpText->set_width_request(mpText->get_preferred_size().Width());
 
-}
+    //Pick a useful max width
+    mpProgress->set_width_request(mpProgress->LogicToPixel(Size(100, 0), MapMode(MAP_APPFONT)).Width());
 
-PrintProgressDialog::~PrintProgressDialog()
-{
+    mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
+
 }
 
 IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton )
 {
-    if( pButton == &maButton )
+    if( pButton == mpButton )
         mbCanceled = true;
 
     return 0;
 }
 
-void PrintProgressDialog::implCalcProgressRect()
-{
-    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
-    {
-        ImplControlValue aValue;
-        Rectangle aControlRegion( Point(), Size( 100, mnProgressHeight ) );
-        Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                    CTRL_STATE_ENABLED, aValue, OUString(),
-                                    aNativeControlRegion, aNativeContentRegion ) )
-        {
-            mnProgressHeight = aNativeControlRegion.GetHeight();
-        }
-        mbNativeProgress = true;
-    }
-    maProgressRect = Rectangle( Point( 10, maText.GetPosPixel().Y() + maText.GetSizePixel().Height() + 8 ),
-                                Size( GetSizePixel().Width() - 20, mnProgressHeight ) );
-}
-
 void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
 {
-    if( maProgressRect.IsEmpty() )
-        implCalcProgressRect();
-
     mnCur = i_nCurrent;
     if( i_nMax != -1 )
         mnMax = i_nMax;
@@ -1906,12 +1889,11 @@ void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
     if( mnMax < 1 )
         mnMax = 1;
 
+    mpProgress->SetValue(mnCur*100/mnMax);
+
     OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::number( mnCur ) ) );
     aNewText = searchAndReplace( aNewText, "%n", 2, OUString::number( mnMax ) );
-    maText.SetText( aNewText );
-
-    // update progress
-    Invalidate( maProgressRect, INVALIDATE_UPDATE );
+    mpText->SetText( aNewText );
 }
 
 void PrintProgressDialog::tick()
@@ -1924,46 +1906,6 @@ void PrintProgressDialog::reset()
 {
     mbCanceled = false;
     setProgress( 0 );
-}
-
-void PrintProgressDialog::Paint( const Rectangle& )
-{
-    if( maProgressRect.IsEmpty() )
-        implCalcProgressRect();
-
-    Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Color aPrgsColor = rStyleSettings.GetHighlightColor();
-    if ( aPrgsColor == rStyleSettings.GetFaceColor() )
-        aPrgsColor = rStyleSettings.GetDarkShadowColor();
-    SetLineColor();
-    SetFillColor( aPrgsColor );
-
-    const long nOffset = 3;
-    const long nWidth = 3*mnProgressHeight/2;
-    const long nFullWidth = nWidth + nOffset;
-    const long nMaxCount = maProgressRect.GetWidth() / nFullWidth;
-    DrawProgress( this, maProgressRect.TopLeft(),
-                        nOffset,
-                        nWidth,
-                        mnProgressHeight,
-                        static_cast<sal_uInt16>(0),
-                        static_cast<sal_uInt16>(10000*mnCur/mnMax),
-                        static_cast<sal_uInt16>(10000/nMaxCount),
-                        maProgressRect
-                        );
-    Pop();
-
-    if( ! mbNativeProgress )
-    {
-        DecorationView aDecoView( this );
-        Rectangle aFrameRect( maProgressRect );
-        aFrameRect.Left() -= nOffset;
-        aFrameRect.Right() += nOffset;
-        aFrameRect.Top() -= nOffset;
-        aFrameRect.Bottom() += nOffset;
-        aDecoView.DrawFrame( aFrameRect );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

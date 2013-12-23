@@ -30,6 +30,7 @@
 #include "vcl/button.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/lstbox.hxx"
+#include "vcl/prgsbar.hxx"
 #include "vcl/field.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/tabpage.hxx"
@@ -271,29 +272,23 @@ namespace vcl
     class PrintProgressDialog : public ModelessDialog
     {
         OUString            maStr;
-        FixedText           maText;
-        CancelButton        maButton;
+        FixedText*          mpText;
+        ProgressBar*        mpProgress;
+        CancelButton*       mpButton;
 
         bool                mbCanceled;
         sal_Int32           mnCur;
         sal_Int32           mnMax;
-        long                mnProgressHeight;
-        Rectangle           maProgressRect;
-        bool                mbNativeProgress;
 
         DECL_LINK( ClickHdl, Button* );
 
-        void implCalcProgressRect();
     public:
-        PrintProgressDialog( Window* i_pParent, int i_nMax );
-        ~PrintProgressDialog();
+        PrintProgressDialog(Window* i_pParent, int i_nMax);
 
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );
         void tick();
         void reset();
-
-        virtual void Paint( const Rectangle& );
     };
 }
 

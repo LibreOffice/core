@@ -115,10 +115,6 @@
 #define SV_PRINT_OPT_TOFILE                 2
 #define SV_PRINT_OPT_SINGLEJOBS             3
 
-#define SV_DLG_PRINT_PROGRESS             2049
-#define SV_PRINT_PROGRESS_CANCEL            1
-#define SV_PRINT_PROGRESS_TEXT              2
-
 #define SV_PRINT_NATIVE_STRINGS           2050
 
 #define SV_HELPTEXT_CLOSE                   10000

@@ -19,31 +19,6 @@
 
 #include "svids.hrc"
 
-ModelessDialog SV_DLG_PRINT_PROGRESS
-{
-    HelpID = "vcl:ModelessDialog:SV_DLG_PRINT_PROGRESS";
-    Text [en-US] = "Printing";
-    Closeable = FALSE;
-    Sizeable = FALSE;
-    Moveable = TRUE;
-    SVLook = TRUE;
-
-    Size = MAP_APPFONT( 120, 70 );
-
-    CancelButton SV_PRINT_PROGRESS_CANCEL
-    {
-        Pos = MAP_APPFONT( 35, 50 );
-        Size = MAP_APPFONT( 50, 15 );
-    };
-    FixedText SV_PRINT_PROGRESS_TEXT
-    {
-        Pos = MAP_APPFONT( 5,10 );
-        Size = MAP_APPFONT( 110, 10 );
-        Text [ en-US ] = "Page %p of %n";
-        Center = TRUE;
-    };
-};
-
 StringArray SV_PRINT_NATIVE_STRINGS
 {
     ItemList [en-US] =
