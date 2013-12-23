@@ -87,9 +87,8 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         boost::scoped_ptr< LoginDialog > xDialog(
-                new LoginDialog( pParent, nFlags, rInfo.GetServer(), rRealm, xManager.get()));
+                new LoginDialog(pParent, nFlags, rInfo.GetServer(), rRealm));
         if (!rInfo.GetErrorText().isEmpty())
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
@@ -101,6 +100,7 @@ executeLoginDialog(
 
         if (bSavePassword)
         {
+            boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
             xDialog->SetSavePasswordText(
                 ResId(rInfo.GetIsRememberPersistent()
                           ? RID_SAVE_PASSWORD

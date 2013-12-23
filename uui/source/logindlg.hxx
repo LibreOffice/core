@@ -43,26 +43,21 @@
 //============================================================================
 class LoginDialog : public ModalDialog
 {
-    FixedText       aErrorFT;
-    FixedInfo       aErrorInfo;
-    FixedLine       aLogin1FL;
-    FixedInfo       aRequestInfo;
-    FixedLine       aLogin2FL;
-    FixedText       aPathFT;
-    Edit            aPathED;
-    PushButton      aPathBtn;
-    FixedText       aNameFT;
-    Edit            aNameED;
-    FixedText       aPasswordFT;
-    Edit            aPasswordED;
-    FixedText       aAccountFT;
-    Edit            aAccountED;
-    CheckBox        aSavePasswdBtn;
-    CheckBox        aUseSysCredsCB;
-    FixedLine       aButtonsFL;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    FixedText*      m_pErrorFT;
+    FixedText*      m_pErrorInfo;
+    FixedText*      m_pRequestInfo;
+    FixedText*      m_pPathFT;
+    Edit*           m_pPathED;
+    PushButton*     m_pPathBtn;
+    FixedText*      m_pNameFT;
+    Edit*           m_pNameED;
+    FixedText*      m_pPasswordFT;
+    Edit*           m_pPasswordED;
+    FixedText*      m_pAccountFT;
+    Edit*           m_pAccountED;
+    CheckBox*       m_pSavePasswdBtn;
+    CheckBox*       m_pUseSysCredsCB;
+    OKButton*       m_pOKBtn;
 
     void            HideControls_Impl( sal_uInt16 nFlags );
     void            EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled );
@@ -72,26 +67,24 @@ class LoginDialog : public ModalDialog
     DECL_LINK(UseSysCredsHdl_Impl, void *);
 
 public:
-    LoginDialog( Window* pParent, sal_uInt16 nFlags,
-                 const OUString& rServer, const OUString &rRealm,
-                 ResMgr * pResMgr );
-    virtual ~LoginDialog();
+    LoginDialog(Window* pParent, sal_uInt16 nFlags,
+        const OUString& rServer, const OUString &rRealm);
 
-    OUString        GetPath() const                             { return aPathED.GetText(); }
-    void            SetPath( const OUString& rNewPath )           { aPathED.SetText( rNewPath ); }
-    OUString        GetName() const                             { return aNameED.GetText(); }
-    void            SetName( const OUString& rNewName )           { aNameED.SetText( rNewName ); }
-    OUString        GetPassword() const                         { return aPasswordED.GetText(); }
-    void            SetPassword( const OUString& rNew )           { aPasswordED.SetText( rNew ); }
-    OUString        GetAccount() const                          { return aAccountED.GetText(); }
-    void            SetAccount( const OUString& rNew )            { aAccountED.SetText( rNew ); }
-    sal_Bool            IsSavePassword() const                      { return aSavePasswdBtn.IsChecked(); }
-    void            SetSavePassword( sal_Bool bSave )               { aSavePasswdBtn.Check( bSave ); }
-    void            SetSavePasswordText( const OUString& rTxt )   { aSavePasswdBtn.SetText( rTxt ); }
-    sal_Bool            IsUseSystemCredentials() const              { return aUseSysCredsCB.IsChecked(); }
+    OUString        GetPath() const                             { return m_pPathED->GetText(); }
+    void            SetPath( const OUString& rNewPath )           { m_pPathED->SetText( rNewPath ); }
+    OUString        GetName() const                             { return m_pNameED->GetText(); }
+    void            SetName( const OUString& rNewName )           { m_pNameED->SetText( rNewName ); }
+    OUString        GetPassword() const                         { return m_pPasswordED->GetText(); }
+    void            SetPassword( const OUString& rNew )           { m_pPasswordED->SetText( rNew ); }
+    OUString        GetAccount() const                          { return m_pAccountED->GetText(); }
+    void            SetAccount( const OUString& rNew )            { m_pAccountED->SetText( rNew ); }
+    sal_Bool            IsSavePassword() const                      { return m_pSavePasswdBtn->IsChecked(); }
+    void            SetSavePassword( sal_Bool bSave )               { m_pSavePasswdBtn->Check( bSave ); }
+    void            SetSavePasswordText( const OUString& rTxt )   { m_pSavePasswdBtn->SetText( rTxt ); }
+    sal_Bool        IsUseSystemCredentials() const              { return m_pUseSysCredsCB->IsChecked(); }
     void            SetUseSystemCredentials( sal_Bool bUse );
-    void            SetErrorText( const OUString& rTxt )          { aErrorInfo.SetText( rTxt ); }
-    void            SetLoginRequestText( const OUString& rTxt )   { aRequestInfo.SetText( rTxt ); }
+    void            SetErrorText( const OUString& rTxt )          { m_pErrorInfo->SetText( rTxt ); }
+    void            SetLoginRequestText( const OUString& rTxt )   { m_pRequestInfo->SetText( rTxt ); }
     void            ClearPassword();
     void            ClearAccount();
 };
