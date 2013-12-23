@@ -81,6 +81,25 @@
 		BE82BDAB182190E400A447B5 /* TiledView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiledView.m; sourceTree = "<group>"; };
 		BE82BDAD1821A1D000A447B5 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		BE82BDAE1821A1D000A447B5 /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
+		BE9F45F91868396500B8BE69 /* cpp2uno-arm.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm.cxx"; sourceTree = "<group>"; };
+		BE9F45FA1868396500B8BE69 /* cpp2uno-arm64.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm64.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm64.cxx"; sourceTree = "<group>"; };
+		BE9F45FB1868396500B8BE69 /* cpp2uno-i386.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-i386.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-i386.cxx"; sourceTree = "<group>"; };
+		BE9F45FC1868396500B8BE69 /* cpp2uno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno.cxx; sourceTree = "<group>"; };
+		BE9F45FD1868396500B8BE69 /* except.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/except.cxx; sourceTree = "<group>"; };
+		BE9F45FE1868396500B8BE69 /* helper.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; name = helper.s; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/helper.s; sourceTree = "<group>"; };
+		BE9F45FF1868396500B8BE69 /* temp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = temp.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/temp.cxx; sourceTree = "<group>"; };
+		BE9F46001868396500B8BE69 /* uno2cpp-arm.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-arm.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-arm.cxx"; sourceTree = "<group>"; };
+		BE9F46011868396500B8BE69 /* uno2cpp-arm64.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-arm64.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-arm64.cxx"; sourceTree = "<group>"; };
+		BE9F46021868396500B8BE69 /* uno2cpp-i386.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-i386.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-i386.cxx"; sourceTree = "<group>"; };
+		BE9F46031868396500B8BE69 /* uno2cpp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp.cxx; sourceTree = "<group>"; };
+		BE9F4604186839C100B8BE69 /* bridge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bridge.cxx; path = ../../../bridges/source/cpp_uno/shared/bridge.cxx; sourceTree = "<group>"; };
+		BE9F4605186839C100B8BE69 /* component.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = component.cxx; path = ../../../bridges/source/cpp_uno/shared/component.cxx; sourceTree = "<group>"; };
+		BE9F4606186839C100B8BE69 /* cppinterfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cppinterfaceproxy.cxx; path = ../../../bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx; sourceTree = "<group>"; };
+		BE9F4607186839C100B8BE69 /* guardedarray.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = guardedarray.hxx; path = ../../../bridges/source/cpp_uno/shared/guardedarray.hxx; sourceTree = "<group>"; };
+		BE9F4608186839C100B8BE69 /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
+		BE9F4609186839C100B8BE69 /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
+		BE9F460A186839C100B8BE69 /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../../../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
+		BE9F460B186839C100B8BE69 /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
 		BECAB371186054DE00F814F9 /* lo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lo.mm; sourceTree = "<group>"; };
 		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../../lo.xcconfig; sourceTree = "<group>"; };
 		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = Resources/program; sourceTree = SOURCE_ROOT; };
@@ -117,6 +136,7 @@
 		BE0898E61860D3CD0021A679 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
+				BE9F45F81868393D00B8BE69 /* bridges */,
 				BE0898E71860D3DA0021A679 /* vcl */,
 			);
 			name = "LibreOffice source files";
@@ -234,6 +254,32 @@
 				BE82BD8318218E2E00A447B5 /* TiledLibreOffice-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BE9F45F81868393D00B8BE69 /* bridges */ = {
+			isa = PBXGroup;
+			children = (
+				BE9F4604186839C100B8BE69 /* bridge.cxx */,
+				BE9F4605186839C100B8BE69 /* component.cxx */,
+				BE9F4606186839C100B8BE69 /* cppinterfaceproxy.cxx */,
+				BE9F4607186839C100B8BE69 /* guardedarray.hxx */,
+				BE9F4608186839C100B8BE69 /* types.cxx */,
+				BE9F4609186839C100B8BE69 /* unointerfaceproxy.cxx */,
+				BE9F460A186839C100B8BE69 /* vtablefactory.cxx */,
+				BE9F460B186839C100B8BE69 /* vtables.cxx */,
+				BE9F45F91868396500B8BE69 /* cpp2uno-arm.cxx */,
+				BE9F45FA1868396500B8BE69 /* cpp2uno-arm64.cxx */,
+				BE9F45FB1868396500B8BE69 /* cpp2uno-i386.cxx */,
+				BE9F45FC1868396500B8BE69 /* cpp2uno.cxx */,
+				BE9F45FD1868396500B8BE69 /* except.cxx */,
+				BE9F45FE1868396500B8BE69 /* helper.s */,
+				BE9F45FF1868396500B8BE69 /* temp.cxx */,
+				BE9F46001868396500B8BE69 /* uno2cpp-arm.cxx */,
+				BE9F46011868396500B8BE69 /* uno2cpp-arm64.cxx */,
+				BE9F46021868396500B8BE69 /* uno2cpp-i386.cxx */,
+				BE9F46031868396500B8BE69 /* uno2cpp.cxx */,
+			);
+			name = bridges;
 			sourceTree = "<group>";
 		};
 		BEEEF9681860A21F00FBDE67 /* Resources */ = {
