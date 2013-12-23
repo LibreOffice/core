@@ -49,7 +49,8 @@
   <implementation name="com.sun.star.comp.embed.DocumentCloser">
     <service name="com.sun.star.embed.DocumentCloser"/>
   </implementation>
-  <implementation name="com.sun.star.comp.embed.HatchWindowFactory">
+  <implementation name="com.sun.star.comp.embed.HatchWindowFactory"
+      constructor="com_sun_star_comp_embed_HatchWindowFactory_get_implementation">
     <service name="com.sun.star.comp.embed.HatchWindowFactory"/>
     <service name="com.sun.star.embed.HatchWindowFactory"/>
   </implementation>

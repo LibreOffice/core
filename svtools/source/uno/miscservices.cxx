@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <uno/mapping.hxx>
 #include "documentcloser.hxx"
-#include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
 #include "provider.hxx"
 #include "unowizard.hxx"
@@ -126,13 +125,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
                 ODocumentCloser::impl_staticGetImplementationName(),
                 ODocumentCloser::impl_staticCreateSelfInstance,
                 ODocumentCloser::impl_staticGetSupportedServiceNames());
-        }
-        else if (rtl_str_compare (pImplementationName, "com.sun.star.comp.embed.HatchWindowFactory") == 0)
-        {
-            xFactory =  ::cppu::createOneInstanceFactory(xSMgr,
-                OHatchWindowFactory::impl_staticGetImplementationName(),
-                OHatchWindowFactory::impl_staticCreateSelfInstance,
-                OHatchWindowFactory::impl_staticGetSupportedServiceNames());
         }
         else
         {
