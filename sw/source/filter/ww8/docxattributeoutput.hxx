@@ -801,6 +801,8 @@ private:
     std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
 
     boost::optional<XFillStyle> m_oFillStyle;
+    /// If FormatBox() already handled fill style / gradient.
+    bool m_bIgnoreNextFill;
 
     /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
     bool m_bBtLr;

@@ -31,6 +31,8 @@
 #include "fmtruby.hxx"
 #include "breakit.hxx"
 #include "redline.hxx"
+#include "unocoll.hxx"
+#include "unoframe.hxx"
 
 #include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
@@ -5800,12 +5802,15 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
 void DocxAttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
-    m_oFillStyle.reset(rFillStyle.GetValue());
+    if (!m_bIgnoreNextFill)
+        m_oFillStyle.reset(rFillStyle.GetValue());
+    else
+        m_bIgnoreNextFill = false;
 }
 
 void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGradient )
 {
-    if (*m_oFillStyle == XFILL_GRADIENT)
+    if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && !m_bDMLTextFrameSyntax)
     {
         if ( !m_pFlyFillAttrList )
             m_pFlyFillAttrList = m_pSerializer->createAttrList();
@@ -5849,11 +5854,35 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         m_pFlyAttrList->add(XML_fillcolor , "#" + sColor1);
         m_pFlyFillAttrList->add(XML_color2, "#" + sColor2);
     }
+    else if (m_oFillStyle && *m_oFillStyle == XFILL_GRADIENT && m_bDMLTextFrameSyntax)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet = SwXFrames::GetObject(const_cast<SwFrmFmt&>(m_rExport.mpParentFrame->GetFrmFmt()), FLYCNTTYPE_FRM);
+        m_rDrawingML.SetFS(m_pSerializer);
+        m_rDrawingML.WriteGradientFill(xPropertySet);
+    }
     m_oFillStyle.reset();
 }
 
 void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
+    if (m_bDMLTextFrameSyntax)
+    {
+        // <a:gradFill> should be before <a:ln>.
+        const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
+        if (pItem)
+        {
+            const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
+            FormatFillStyle(*pFillStyle);
+        }
+
+        pItem = GetExport().HasItem(RES_FILL_GRADIENT);
+        if (pItem)
+        {
+            const XFillGradientItem* pFillGradient = static_cast<const XFillGradientItem*>(pItem);
+            FormatFillGradient(*pFillGradient);
+        }
+        m_bIgnoreNextFill = true;
+    }
     if (m_bTextFrameSyntax || m_bDMLTextFrameSyntax)
     {
         const SvxBorderLine* pLeft = rBox.GetLeft( );
@@ -6314,6 +6343,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nextFontId( 1 ),
       m_tableReference(new TableReference()),
       m_oldTableReference(new TableReference()),
+      m_bIgnoreNextFill(false),
       m_bBtLr(false),
       m_bFrameBtLr(false),
       m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),

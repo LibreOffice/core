@@ -308,7 +308,7 @@ cppu::WeakImplHelper4
     ::com::sun::star::lang::XServiceInfo
 > SwXFramesBaseClass;
 
-class SwXFrames : public SwXFramesBaseClass,
+class SW_DLLPUBLIC SwXFrames : public SwXFramesBaseClass,
     public SwUnoCollection
 {
     const FlyCntType    eType;
