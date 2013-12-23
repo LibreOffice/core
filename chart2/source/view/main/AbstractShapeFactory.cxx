@@ -80,7 +80,6 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
     if(pShapeFactory)
         return pShapeFactory;
 
-    /*
     if(getenv("CHART_DUMMY_FACTORY"))
     {
         osl::Module* pModule = getOpenGLModule();
@@ -94,7 +93,6 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
             }
         }
     }
-    */
 
 
     if(!pShapeFactory)

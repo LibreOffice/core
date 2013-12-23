@@ -12,6 +12,9 @@ $(eval $(call gb_Module_Module,chart2))
 $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcontroller \
     Library_chartcore \
+	$(if $(filter LINUX FREEBSD WNT,$(OS)), \
+		Library_chartopengl \
+	) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,chart2,\

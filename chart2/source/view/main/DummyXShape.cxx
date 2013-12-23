@@ -185,7 +185,7 @@ uno::Sequence< OUString > DummyXShape::getSupportedServiceNames()
 sal_Bool DummyXShape::supportsService( const OUString& rServiceName )
     throw(uno::RuntimeException)
 {
-    return cppu::supportsService(this, ServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Reference< uno::XInterface > DummyXShape::getParent()
