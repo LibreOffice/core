@@ -13,7 +13,7 @@ BOOTSTRAPDIR=../../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
-	$< -f EXTENDED_CORE -f BASE_CORE -f CALC_CORE -f DRAW_CORE -f MATH -f WRITER \
+	$< -g extended_core -g base_core -g calc_core -g draw_core -g math -g writer \
 		-s dlgprov -s protocolhandler -s scriptframe -s sb -s stringresource -s vbaswobj -s vbaevents \
 		> $@
 
