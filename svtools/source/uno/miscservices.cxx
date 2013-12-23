@@ -26,7 +26,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
 #include <uno/mapping.hxx>
-#include "documentcloser.hxx"
 #include "hatchwindow.hxx"
 #include "unowizard.hxx"
 
@@ -108,13 +107,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
                 OUString::createFromAscii( pImplementationName ),
                 SvFilterOptionsDialog_CreateInstance,
                 aServiceNames);
-        }
-        else if (rtl_str_compare (pImplementationName, "com.sun.star.comp.embed.DocumentCloser") == 0)
-        {
-            xFactory =  ::cppu::createOneInstanceFactory(xSMgr,
-                ODocumentCloser::impl_staticGetImplementationName(),
-                ODocumentCloser::impl_staticCreateSelfInstance,
-                ODocumentCloser::impl_staticGetSupportedServiceNames());
         }
         else
         {

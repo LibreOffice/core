@@ -47,7 +47,8 @@
       constructor="com_sun_star_comp_svt_FolderPicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.FolderPicker"/>
   </implementation>
-  <implementation name="com.sun.star.comp.embed.DocumentCloser">
+  <implementation name="com.sun.star.comp.embed.DocumentCloser"
+      constructor="com_sun_star_comp_embed_DocumentCloser_get_implementation">
     <service name="com.sun.star.embed.DocumentCloser"/>
   </implementation>
   <implementation name="com.sun.star.comp.embed.HatchWindowFactory"
