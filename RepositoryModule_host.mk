@@ -73,6 +73,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	linguistic \
 	lotuswordpro \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
+	$(call gb_Helper_optional,GLM,glm) \
 	$(call gb_Helper_optional,MARIADBC,mysqlc) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	o3tl \

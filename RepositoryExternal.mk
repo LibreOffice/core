@@ -126,6 +126,23 @@ endef
 
 endif
 
+ifeq ($(SYSTEM_GLM),YES)
+
+gb_LinkTarget__use_glm_headers :=
+
+else
+
+define gb_LinkTarget__use_glm_headers
+$(call gb_LinkTarget_use_unpacked,$(1),glm)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,glm) \
+	$$(INCLUDE) \
+)
+
+endef
+
+endif
+
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers
