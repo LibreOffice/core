@@ -105,7 +105,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Databases in Use</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">inuselb</property>
+                            <property name="mnemonic_widget">inuselb:border</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -121,7 +121,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Available Databases</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">availablelb</property>
+                            <property name="mnemonic_widget">availablelb:border</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -166,7 +166,7 @@ Use the browse button to select a database file.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-SvTreeListBox" id="inuselb">
+                          <object class="svtlo-SvTreeListBox" id="inuselb:border">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -180,7 +180,7 @@ Use the browse button to select a database file.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="swlo-SwDBTreeList" id="availablelb">
+                          <object class="swlo-SwDBTreeList" id="availablelb:border">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
