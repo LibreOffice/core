@@ -29,7 +29,6 @@
 #include "documentcloser.hxx"
 #include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
-#include "fpicker.hxx"
 #include "provider.hxx"
 #include "renderer.hxx"
 #include "unowizard.hxx"
@@ -70,18 +69,6 @@ namespace
             ::svt::uno::Wizard::getImplementationName_static,
             ::svt::uno::Wizard::getSupportedServiceNames_static,
             ::cppu::createSingleComponentFactory, NULL, 0
-        },
-        {
-            FilePicker_CreateInstance,
-            FilePicker_getImplementationName,
-            FilePicker_getSupportedServiceNames,
-            ::cppu::createSingleComponentFactory, 0, 0
-        },
-        {
-            FolderPicker_CreateInstance,
-            FolderPicker_getImplementationName,
-            FolderPicker_getSupportedServiceNames,
-            ::cppu::createSingleComponentFactory, 0, 0
         },
         { 0, 0, 0, 0, 0, 0 }
     };

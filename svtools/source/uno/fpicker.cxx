@@ -53,18 +53,16 @@ static OUString FilePicker_getSystemPickerServiceName()
 #endif
 }
 
-Reference< css::uno::XInterface > FilePicker_CreateInstance (
-    Reference< css::uno::XComponentContext > const & rxContext)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svt_FilePicker_get_implementation(
+        css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     Reference< css::uno::XInterface > xResult;
-
-    if (!rxContext.is())
-        return xResult;
-
-    Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
+    Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( rxContext ) );
+        xResult = Reference< css::uno::XInterface >( Application::createFilePicker( context ) );
 
         if (!xResult.is())
         {
@@ -72,7 +70,7 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
             {
                 xResult = xFactory->createInstanceWithContext (
                         FilePicker_getSystemPickerServiceName(),
-                        rxContext);
+                        context);
             }
             catch (css::uno::Exception const &)
             {
@@ -87,27 +85,15 @@ Reference< css::uno::XInterface > FilePicker_CreateInstance (
         // Always fall back to OfficeFilePicker.
         xResult = xFactory->createInstanceWithContext (
                 OUString( "com.sun.star.ui.dialogs.OfficeFilePicker"),
-                rxContext);
+                context);
     }
     if (xResult.is())
     {
         // Add to FilePicker history.
         svt::addFilePicker (xResult);
     }
-    return xResult;
-}
-
-OUString SAL_CALL FilePicker_getImplementationName()
-{
-    return OUString("com.sun.star.comp.svt.FilePicker");
-}
-
-Sequence< OUString > FilePicker_getSupportedServiceNames()
-{
-    Sequence< OUString > aServiceNames(1);
-    aServiceNames.getArray()[0] =
-        OUString( "com.sun.star.ui.dialogs.FilePicker");
-    return aServiceNames;
+    xResult->acquire();
+    return xResult.get();
 }
 
 /*
@@ -127,25 +113,23 @@ static OUString FolderPicker_getSystemPickerServiceName()
     return OUString("com.sun.star.ui.dialogs.SystemFolderPicker");
 }
 
-Reference< css::uno::XInterface > FolderPicker_CreateInstance (
-    Reference< css::uno::XComponentContext > const & rxContext)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svt_FolderPicker_get_implementation(
+        css::uno::XComponentContext *context, uno_Sequence * arguments)
 {
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
     Reference< css::uno::XInterface > xResult;
-
-    if (!rxContext.is())
-        return xResult;
-
-    Reference< css::lang::XMultiComponentFactory > xFactory (rxContext->getServiceManager());
+    Reference< css::lang::XMultiComponentFactory > xFactory (context->getServiceManager());
     if (xFactory.is() && SvtMiscOptions().UseSystemFileDialog())
     {
-        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( rxContext ) );
+        xResult = Reference< css::uno::XInterface >( Application::createFolderPicker( context ) );
         if (!xResult.is())
         {
             try
             {
                 xResult = xFactory->createInstanceWithContext (
                                 FolderPicker_getSystemPickerServiceName(),
-                                rxContext);
+                                context);
             }
             catch (css::uno::Exception const &)
             {
@@ -158,27 +142,15 @@ Reference< css::uno::XInterface > FolderPicker_CreateInstance (
         // Always fall back to OfficeFolderPicker.
         xResult = xFactory->createInstanceWithContext (
                 OUString( "com.sun.star.ui.dialogs.OfficeFolderPicker"),
-                rxContext);
+                context);
     }
     if (xResult.is())
     {
         // Add to FolderPicker history.
         svt::addFolderPicker (xResult);
     }
-    return xResult;
-}
-
-OUString SAL_CALL FolderPicker_getImplementationName()
-{
-    return OUString("com.sun.star.comp.svt.FolderPicker");
-}
-
-Sequence< OUString > FolderPicker_getSupportedServiceNames()
-{
-    Sequence< OUString > aServiceNames(1);
-    aServiceNames.getArray()[0] =
-        OUString( "com.sun.star.ui.dialogs.FolderPicker");
-    return aServiceNames;
+    xResult->acquire();
+    return xResult.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

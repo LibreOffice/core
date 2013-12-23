@@ -37,10 +37,12 @@
   <implementation name="com.sun.star.svtools.SvFilterOptionsDialog">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svt.FilePicker">
+  <implementation name="com.sun.star.comp.svt.FilePicker"
+      constructor="com_sun_star_comp_svt_FilePicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilePicker"/>
   </implementation>
-  <implementation name="com.sun.star.comp.svt.FolderPicker">
+  <implementation name="com.sun.star.comp.svt.FolderPicker"
+      constructor="com_sun_star_comp_svt_FolderPicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.FolderPicker"/>
   </implementation>
   <implementation name="com.sun.star.comp.embed.DocumentCloser">
