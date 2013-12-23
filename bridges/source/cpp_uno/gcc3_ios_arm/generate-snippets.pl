@@ -47,8 +47,8 @@ printf ("#if defined(__arm) || defined(__arm64)\n");
 printf ("\n");
 printf ("// Each codeSnippetX function stores into ip (arm64: x15) an address and branches to _privateSnippetExecutor\n");
 printf ("// The address is that following the branch instruction, containing two 32-bit ints:\n");
-printf ("// - the function index (for 32-bit can have the 0x80000000 bit set\n");
-printf ("//   to indicate that a hidden parameter is used for returning large values)\n");
+printf ("// - the function index, which for 32-bit can have the 0x80000000 bit set\n");
+printf ("//   to indicate that a hidden parameter is used for returning large values\n");
 printf ("// - the vtable offset\n");
 printf ("\n");
 
