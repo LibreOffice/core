@@ -42,6 +42,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <ucbhelper/content.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -71,51 +72,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 namespace {
-
-bool isXMLStream(const OString& aHeaderStrm)
-{
-    const char* p = aHeaderStrm.getStr();
-    size_t n = aHeaderStrm.getLength();
-    size_t i = 0;
-
-    // Skip UTF-8 BOM
-    const unsigned char sBOM[] = {0xEF, 0xBB, 0xBF};
-    for (i = 0; i < n; ++i, ++p)
-    {
-        if (i < 3 && (unsigned char)(*p) == sBOM[i])
-            continue;
-        else if (i == 3 || i == 0)
-            break;
-        else if (i > 0)
-            return false;
-    }
-
-    n -= i;
-
-    // Skip all preceding blank characters.
-    for (i = 0; i < n; ++i, ++p)
-    {
-        char c = *p;
-        if (c == ' ' || c == '\n' || c == '\t')
-            continue;
-        break;
-    }
-
-    n -= i;
-
-    // First text must be '<?xml', else it's not a valid XML file stream.
-    const char* sInitChars = "<?xml";
-    const size_t nInitCharLen = std::strlen(sInitChars);
-    for (i = 0; i < n; ++i, ++p)
-    {
-        if (i < nInitCharLen)
-        {
-            if (*p != sInitChars[i])
-                return false;
-        }
-    }
-    return true;
-}
 
 OUString supportedByType( const OUString clipBoardFormat ,  const OString resultString, const OUString checkType)
 {
@@ -174,13 +130,36 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
                 return sTypeName;
             }
         }
-        com::sun::star::uno::Sequence< sal_Int8 > aData;
-        /* long nBytesToRead= */ xInStream->available();
-        xInStream->skipBytes (0);
-        long bytestRead =xInStream->readBytes (aData,  4000);
-        resultString=OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
 
-        if (!isXMLStream(resultString))
+        SvStream* pInStream = ::utl::UcbStreamHelper::CreateStream( xInStream );
+        pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
+        sal_Size nUniPos = pInStream->Tell();
+
+        const sal_uInt16 nSize = 4000;
+        bool  bTryUtf16 = false;
+
+        if ( nUniPos == 0 ) // No BOM detected, try to guess UTF-16 endianness
+        {
+            sal_uInt16 sHeader = 0;
+            *pInStream >> sHeader;
+            if ( sHeader == 0x003C )
+                bTryUtf16 = true;
+            else if ( sHeader == 0x3C00 )
+            {
+                bTryUtf16 = true;
+                pInStream->SetEndianSwap( !pInStream->IsEndianSwap() );
+            }
+            pInStream->Seek( STREAM_SEEK_TO_BEGIN );
+        }
+
+        if ( nUniPos == 3 || ( nUniPos == 0 && !bTryUtf16 ) ) // UTF-8 or non-Unicode
+            resultString = read_uInt8s_ToOString( *pInStream, nSize );
+        else if ( nUniPos == 2 || bTryUtf16 ) // UTF-16
+            resultString = OUStringToOString( read_uInt16s_ToOUString( *pInStream, nSize ), RTL_TEXTENCODING_UNICODE );
+
+        delete pInStream;
+
+        if ( !resultString.startsWith( "<?xml" ) )
             // This is not an XML stream.  It makes no sense to try to detect
             // a non-XML file type here.
             return OUString();

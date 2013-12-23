@@ -28,6 +28,8 @@ $(eval $(call gb_Library_use_libraries,xmlfd,\
 	cppuhelper \
 	cppu \
 	sal \
+	utl \
+	tl \
 	$(gb_UWINAPI) \
 ))
 
