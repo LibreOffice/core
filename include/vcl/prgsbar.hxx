@@ -79,9 +79,10 @@ public:
     virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual Size        GetOptimalSize() const;
 
     void                SetValue( sal_uInt16 nNewPercent );
-    sal_uInt16              GetValue() const { return mnPercent; }
+    sal_uInt16          GetValue() const { return mnPercent; }
 };
 
 #endif // INCLUDED_VCL_PRGSBAR_HXX

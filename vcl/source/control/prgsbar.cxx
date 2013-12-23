@@ -43,10 +43,15 @@ static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
     return nOutStyle;
 }
 
+Size ProgressBar::GetOptimalSize() const
+{
+    return Size(150, 20);
+}
+
 ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
 {
-    SetOutputSizePixel( Size( 150, 20 ) );
+    SetOutputSizePixel( GetOptimalSize() );
     ImplInit();
 }
 
