@@ -17,29 +17,63 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "documentcloser.hxx"
-
 using namespace ::com::sun::star;
 
+namespace {
 
-// ====================================================================
-// MainThreadFrameCloserRequest
-// ====================================================================
+// the service is implemented as a wrapper to be able to die by refcount
+// the disposing mechanics is required for java related scenarios
+class ODocumentCloser : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XComponent,
+                                                        ::com::sun::star::lang::XInitialization,
+                                                        ::com::sun::star::lang::XServiceInfo >
+{
+    ::osl::Mutex m_aMutex;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
+
+    sal_Bool m_bDisposed;
+    sal_Bool m_bInitialized;
+
+public:
+    ODocumentCloser();
+    ~ODocumentCloser();
+
+// XComponent
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+// XInitialization
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+// XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+};
 
 class MainThreadFrameCloserRequest
 {
@@ -124,9 +158,8 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
 // ====================================================================
 
 // --------------------------------------------------------
-ODocumentCloser::ODocumentCloser( const uno::Reference< uno::XComponentContext >& xContext )
-: m_xContext( xContext )
-, m_pListenersContainer( NULL )
+ODocumentCloser::ODocumentCloser()
+: m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
 , m_bInitialized( sal_False )
 {
@@ -225,7 +258,7 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return impl_staticGetImplementationName();
+    return OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
 ::sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )
@@ -237,28 +270,25 @@ OUString SAL_CALL ODocumentCloser::getImplementationName(  )
 uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    return impl_staticGetSupportedServiceNames();
-}
-
-// Static methods
-uno::Sequence< OUString > SAL_CALL ODocumentCloser::impl_staticGetSupportedServiceNames()
-{
     const OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
-OUString SAL_CALL ODocumentCloser::impl_staticGetImplementationName()
-{
-    return OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
-// --------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL ODocumentCloser::impl_staticCreateSelfInstance(
-                                const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_embed_DocumentCloser_get_implementation(
+        SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+        uno_Sequence * arguments)
 {
-    uno::Reference< uno::XComponentContext > xContext(
-        comphelper::getComponentContext( xServiceManager ) );
-    return static_cast< cppu::OWeakObject * >( new ODocumentCloser( xContext ) );
+    assert(arguments != 0 );
+    rtl::Reference<ODocumentCloser> x(new ODocumentCloser);
+    css::uno::Sequence<css::uno::Any> aArgs(
+            reinterpret_cast<css::uno::Any *>(arguments->elements),
+            arguments->nElements);
+    x->initialize(aArgs);
+    x->acquire();
+    return static_cast<cppu::OWeakObject *>(x.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
