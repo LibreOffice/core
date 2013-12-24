@@ -135,6 +135,7 @@ public:
     void testVmlTextVerticalAdjust();
     void testGroupshapeSdt();
     void testBnc779620();
+    void testRPrChangeClosed();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -235,6 +236,7 @@ void Test::run()
         {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
         {"bnc779620.docx", &Test::testBnc779620},
+        {"rprchange_closed.docx", &Test::testRPrChangeClosed},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1650,6 +1652,13 @@ void Test::testBnc779620()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+void Test::testRPrChangeClosed()
+{
+    // Redline defined by rPrChanged wasn't removed.
+    // First paragraph has an rPrChange element, make sure it doesn't appear in the second paragraph.
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
