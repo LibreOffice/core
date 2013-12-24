@@ -1793,6 +1793,26 @@ void OpInt::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return tmp;\n";
     ss << "}";
 }
+void OpNegSub::GenSlidingWindowFunction(std::stringstream &ss,
+             const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n{\n";
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    int singleIndex =  gid0;\n";
+    GenTmpVariables(ss,vSubArguments);
+    CheckAllSubArgumentIsNan(ss,vSubArguments);
+    ss << "    return -tmp0;\n";
+    ss << "}";
+}
+
 void OpRadians::GenSlidingWindowFunction(std::stringstream &ss,
              const std::string sSymName, SubArguments &vSubArguments)
 {
