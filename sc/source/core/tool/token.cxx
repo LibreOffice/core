@@ -1506,6 +1506,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocSecantHyp:
             case ocSumIf:
             case ocNegSub:
+            case ocAveDev:
             // Don't change the state.
             break;
             default:
