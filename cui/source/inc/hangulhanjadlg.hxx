@@ -199,18 +199,14 @@ namespace svx
     class HangulHanjaOptionsDialog : public ModalDialog
     {
     private:
-        FixedText           m_aUserdefdictFT;
-        SvxCheckListBox     m_aDictsLB;
-        FixedLine           m_aOptionsFL;
-        CheckBox            m_aIgnorepostCB;
-        CheckBox            m_aShowrecentlyfirstCB;
-        CheckBox            m_aAutoreplaceuniqueCB;
-        PushButton          m_aNewPB;
-        PushButton          m_aEditPB;
-        PushButton          m_aDeletePB;
-        OKButton            m_aOkPB;
-        CancelButton        m_aCancelPB;
-        HelpButton          m_aHelpPB;
+        SvxCheckListBox*    m_pDictsLB;
+        CheckBox*           m_pIgnorepostCB;
+        CheckBox*           m_pShowrecentlyfirstCB;
+        CheckBox*           m_pAutoreplaceuniqueCB;
+        PushButton*         m_pNewPB;
+        PushButton*         m_pEditPB;
+        PushButton*         m_pDeletePB;
+        OKButton*           m_pOkPB;
 
         SvLBoxButtonData*   m_pCheckButtonData;
 

@@ -934,7 +934,7 @@ namespace svx
         }
 
         m_aDictList.clear();
-        m_aDictsLB.Clear();
+        m_pDictsLB->Clear();
 
         Reference< XNameContainer > xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
         if( xNameCont.is() )
@@ -974,12 +974,12 @@ namespace svx
         while( nCnt )
         {
             Reference< XConversionDictionary >  xDict = m_aDictList[ n ];
-            SvTreeListEntry*                        pEntry = m_aDictsLB.SvTreeListBox::GetEntry( n );
+            SvTreeListEntry*                        pEntry = m_pDictsLB->SvTreeListBox::GetEntry( n );
 
             DBG_ASSERT( xDict.is(), "-HangulHanjaOptionsDialog::OkHdl(): someone is evaporated..." );
             DBG_ASSERT( pEntry, "-HangulHanjaOptionsDialog::OkHdl(): no one there in list?" );
 
-            bool    bActive = m_aDictsLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
+            bool    bActive = m_pDictsLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
             xDict->setActive( bActive );
             Reference< util::XFlushable > xFlush( xDict, uno::UNO_QUERY );
             if( xFlush.is() )
@@ -1002,13 +1002,13 @@ namespace svx
         aTmp <<= aActiveDics;
         aLngCfg.SetProperty( UPH_ACTIVE_CONVERSION_DICTIONARIES, aTmp );
 
-        aTmp <<= bool( m_aIgnorepostCB.IsChecked() );
+        aTmp <<= bool( m_pIgnorepostCB->IsChecked() );
         aLngCfg.SetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD, aTmp );
 
-        aTmp <<= bool( m_aShowrecentlyfirstCB.IsChecked() );
+        aTmp <<= bool( m_pShowrecentlyfirstCB->IsChecked() );
         aLngCfg.SetProperty( UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST, aTmp );
 
-        aTmp <<= bool( m_aAutoreplaceuniqueCB.IsChecked() );
+        aTmp <<= bool( m_pAutoreplaceuniqueCB->IsChecked() );
         aLngCfg.SetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES, aTmp );
 
         EndDialog( RET_OK );
@@ -1017,10 +1017,10 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DictsLB_SelectHdl)
     {
-        bool    bSel = m_aDictsLB.FirstSelected() != NULL;
+        bool bSel = m_pDictsLB->FirstSelected() != NULL;
 
-        m_aEditPB.Enable( bSel );
-        m_aDeletePB.Enable( bSel );
+        m_pEditPB->Enable(bSel);
+        m_pDeletePB->Enable(bSel);
 
         return 0;
     }
@@ -1060,11 +1060,11 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, EditDictHdl)
     {
-        SvTreeListEntry*    pEntry = m_aDictsLB.FirstSelected();
+        SvTreeListEntry*    pEntry = m_pDictsLB->FirstSelected();
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
         if( pEntry )
         {
-            HangulHanjaEditDictDialog   aEdDlg( this, m_aDictList, m_aDictsLB.GetSelectEntryPos() );
+            HangulHanjaEditDictDialog   aEdDlg( this, m_aDictList, m_pDictsLB->GetSelectEntryPos() );
             aEdDlg.Execute();
         }
         return 0L;
@@ -1072,7 +1072,7 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl)
     {
-        sal_uInt16 nSelPos = m_aDictsLB.GetSelectEntryPos();
+        sal_uInt16 nSelPos = m_pDictsLB->GetSelectEntryPos();
         if( nSelPos != LISTBOX_ENTRY_NOTFOUND )
         {
             Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
@@ -1087,7 +1087,7 @@ namespace svx
 
                         //adapt local caches:
                         m_aDictList.erase(m_aDictList.begin()+nSelPos );
-                        m_aDictsLB.RemoveEntry(nSelPos);
+                        m_pDictsLB->RemoveEntry(nSelPos);
                     }
                     catch( const ElementExistException& )
                     {
@@ -1102,65 +1102,62 @@ namespace svx
         return 0L;
     }
 
-    HangulHanjaOptionsDialog::HangulHanjaOptionsDialog( Window* _pParent )
-        :ModalDialog            ( _pParent, CUI_RES( RID_SVX_MDLG_HANGULHANJA_OPT ) )
-        ,m_aUserdefdictFT       ( this, CUI_RES( FT_USERDEFDICT ) )
-        ,m_aDictsLB             ( this, CUI_RES( LB_DICTS ) )
-        ,m_aOptionsFL           ( this, CUI_RES( FL_OPTIONS ) )
-        ,m_aIgnorepostCB        ( this, CUI_RES( CB_IGNOREPOST ) )
-        ,m_aShowrecentlyfirstCB ( this, CUI_RES( CB_SHOWRECENTLYFIRST ) )
-        ,m_aAutoreplaceuniqueCB ( this, CUI_RES( CB_AUTOREPLACEUNIQUE ) )
-        ,m_aNewPB               ( this, CUI_RES( PB_HHO_NEW ) )
-        ,m_aEditPB              ( this, CUI_RES( PB_HHO_EDIT ) )
-        ,m_aDeletePB            ( this, CUI_RES( PB_HHO_DELETE ) )
-        ,m_aOkPB                ( this, CUI_RES( PB_HHO_OK ) )
-        ,m_aCancelPB            ( this, CUI_RES( PB_HHO_CANCEL ) )
-        ,m_aHelpPB              ( this, CUI_RES( PB_HHO_HELP ) )
-
-        ,m_pCheckButtonData     ( NULL )
-        ,m_xConversionDictionaryList( NULL )
+    HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(Window* _pParent)
+        : ModalDialog( _pParent, "HangulHanjaOptDialog",
+            "cui/ui/hangulhanjaoptdialog.ui" )
+        , m_pCheckButtonData(NULL)
+        , m_xConversionDictionaryList(NULL)
     {
-        m_aDictsLB.SetStyle( m_aDictsLB.GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
-        m_aDictsLB.SetSelectionMode( SINGLE_SELECTION );
-        m_aDictsLB.SetHighlightRange();
-        m_aDictsLB.SetSelectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
-        m_aDictsLB.SetDeselectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
+        get(m_pDictsLB, "dicts");
+        get(m_pIgnorepostCB, "ignorepost");
+        get(m_pShowrecentlyfirstCB, "showrecentfirst");
+        get(m_pAutoreplaceuniqueCB, "autoreplaceunique");
+        get(m_pNewPB, "new");
+        get(m_pEditPB, "edit");
+        get(m_pDeletePB, "delete");
+        get(m_pOkPB, "ok");
 
-        m_aOkPB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, OkHdl ) );
-        m_aNewPB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, NewDictHdl ) );
-        m_aEditPB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, EditDictHdl ) );
-        m_aDeletePB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, DeleteDictHdl ) );
+        m_pDictsLB->set_height_request(m_pDictsLB->GetTextHeight() * 5);
+        m_pDictsLB->set_width_request(m_pDictsLB->approximate_char_width() * 32);
+        m_pDictsLB->SetStyle( m_pDictsLB->GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+        m_pDictsLB->SetSelectionMode( SINGLE_SELECTION );
+        m_pDictsLB->SetHighlightRange();
+        m_pDictsLB->SetSelectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
+        m_pDictsLB->SetDeselectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
 
-        FreeResource();
+        m_pOkPB->SetClickHdl( LINK( this, HangulHanjaOptionsDialog, OkHdl ) );
+        m_pNewPB->SetClickHdl( LINK( this, HangulHanjaOptionsDialog, NewDictHdl ) );
+        m_pEditPB->SetClickHdl( LINK( this, HangulHanjaOptionsDialog, EditDictHdl ) );
+        m_pDeletePB->SetClickHdl( LINK( this, HangulHanjaOptionsDialog, DeleteDictHdl ) );
 
         SvtLinguConfig  aLngCfg;
         Any             aTmp;
         bool            bVal = bool();
         aTmp = aLngCfg.GetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD );
         if( aTmp >>= bVal )
-            m_aIgnorepostCB.Check( bVal );
+            m_pIgnorepostCB->Check( bVal );
 
         aTmp = aLngCfg.GetProperty( UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST );
         if( aTmp >>= bVal )
-            m_aShowrecentlyfirstCB.Check( bVal );
+            m_pShowrecentlyfirstCB->Check( bVal );
 
         aTmp = aLngCfg.GetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES );
         if( aTmp >>= bVal )
-            m_aAutoreplaceuniqueCB.Check( bVal );
+            m_pAutoreplaceuniqueCB->Check( bVal );
 
         Init();
     }
 
     HangulHanjaOptionsDialog::~HangulHanjaOptionsDialog()
     {
-        SvTreeListEntry*    pEntry = m_aDictsLB.First();
+        SvTreeListEntry*    pEntry = m_pDictsLB->First();
         OUString*         pDel;
         while( pEntry )
         {
             pDel = ( OUString* ) pEntry->GetUserData();
             if( pDel )
                 delete pDel;
-            pEntry = m_aDictsLB.Next( pEntry );
+            pEntry = m_pDictsLB->Next( pEntry );
         }
 
         if( m_pCheckButtonData )
@@ -1169,8 +1166,8 @@ namespace svx
 
     void HangulHanjaOptionsDialog::AddDict( const OUString& _rName, bool _bChecked )
     {
-        SvTreeListEntry*    pEntry = m_aDictsLB.SvTreeListBox::InsertEntry( _rName );
-        m_aDictsLB.SetCheckButtonState( pEntry, _bChecked? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+        SvTreeListEntry*    pEntry = m_pDictsLB->SvTreeListBox::InsertEntry( _rName );
+        m_pDictsLB->SetCheckButtonState( pEntry, _bChecked? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
         pEntry->SetUserData( new OUString( _rName ) );
     }
 
@@ -1647,8 +1644,8 @@ namespace svx
         bool bNew = bHaveValidOriginalString && m_pSuggestions && m_pSuggestions->GetCount() > 0;
         bNew = bNew && (m_bModifiedSuggestions || m_bModifiedOriginal);
 
-        m_aNewPB.Enable( bNew );
-        m_aDeletePB.Enable( !m_bModifiedOriginal && bHaveValidOriginalString );
+        m_aNewPB.Enable(bNew);
+        m_aDeletePB.Enable(!m_bModifiedOriginal && bHaveValidOriginalString);
     }
 
     void HangulHanjaEditDictDialog::UpdateSuggestions( void )

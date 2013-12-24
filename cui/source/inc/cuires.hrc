@@ -221,7 +221,6 @@
 
 // hangulhanja
 #define RID_SVX_MDLG_HANGULHANJA            (RID_SVX_START +  1 )
-#define RID_SVX_MDLG_HANGULHANJA_OPT        ( RID_SVX_START +  4 )
 #define RID_SVX_MDLG_HANGULHANJA_EDIT       ( RID_SVX_START +  5 )
 
 // icon choice

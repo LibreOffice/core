@@ -48,6 +48,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/gallerythemeiddialog \
 	cui/uiconfig/ui/gallerytitledialog \
 	cui/uiconfig/ui/hangulhanjaadddialog \
+	cui/uiconfig/ui/hangulhanjaoptdialog \
 	cui/uiconfig/ui/hatchpage \
 	cui/uiconfig/ui/hyphenate \
 	cui/uiconfig/ui/insertfloatingframe \
