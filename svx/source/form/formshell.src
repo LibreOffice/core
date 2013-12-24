@@ -182,41 +182,4 @@ TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
     };
 };
 
-TabDialog RID_SVXDLG_TEXTCONTROL_PARAATTR
-{
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-
-    Text [ en-US ] = "Paragraph";
-
-    TabControl 1
-    {
-        OutputSize = TRUE;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_STD_PARAGRAPH;
-                Text [ en-US ] = "Indents & Spacing";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH;
-                Text [ en-US ] = "Alignment";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_PARA_ASIAN;
-                Text [ en-US ] = "Asian Typography";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_TABULATOR;
-                Text [ en-US ] = "Tabs";
-            };
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

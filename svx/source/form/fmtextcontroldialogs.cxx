@@ -78,33 +78,23 @@ namespace svx
         }
     }
 
-    //====================================================================
-    //= TextControlParaAttribDialog
-    //====================================================================
-    //--------------------------------------------------------------------
-    TextControlParaAttribDialog::TextControlParaAttribDialog( Window* _pParent, const SfxItemSet& _rCoreSet )
-        :SfxTabDialog( _pParent, SVX_RES( RID_SVXDLG_TEXTCONTROL_PARAATTR ), &_rCoreSet )
+    TextControlParaAttribDialog::TextControlParaAttribDialog(Window* _pParent,
+        const SfxItemSet& _rCoreSet)
+        : SfxTabDialog( _pParent, "TextControlParagraphPropertiesDialog",
+            "svx/ui/textcontrolparadialog.ui", &_rCoreSet )
     {
-        FreeResource();
-
-        AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
-        AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
+        AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
+        AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
 
         SvtCJKOptions aCJKOptions;
         if( aCJKOptions.IsAsianTypographyEnabled() )
-            AddTabPage( RID_SVXPAGE_PARA_ASIAN );
+            AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
         else
-            RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
+            RemoveTabPage("labelTP_PARA_ASIAN");
 
-        AddTabPage( RID_SVXPAGE_TABULATOR );
+        AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
     }
 
-    //--------------------------------------------------------------------
-    TextControlParaAttribDialog::~TextControlParaAttribDialog()
-    {
-    }
-
-//........................................................................
 }   // namespace svx
 //........................................................................
 

@@ -45,14 +45,10 @@ namespace svx
         virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage );
     };
 
-    //====================================================================
-    //= TextControlParaAttribDialog
-    //====================================================================
     class TextControlParaAttribDialog : public SfxTabDialog
     {
     public:
-        TextControlParaAttribDialog( Window* _pParent, const SfxItemSet& _rCoreSet );
-        ~TextControlParaAttribDialog();
+        TextControlParaAttribDialog(Window* _pParent, const SfxItemSet& _rCoreSet);
     };
 //........................................................................
 } // namespace svx
