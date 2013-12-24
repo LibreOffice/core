@@ -22126,6 +22126,9 @@
     </resource>
     <resource name="CT_RPrChange" resource="Properties" tag="character">
       <element name="rPr" tokenid="ooxml:CT_RPrChange_rPr"/>
+      <action name="end" action="tokenproperty"/>
+      <action name="end" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:endtrackchange"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_ParaRPrChange" resource="Properties" tag="character">
       <element name="rPr" tokenid="ooxml:CT_ParaRPrChange_rPr"/>
