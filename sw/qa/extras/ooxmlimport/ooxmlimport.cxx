@@ -1654,6 +1654,13 @@ void Test::testBnc779620()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
+DECLARE_OOXMLIMPORT_TEST(testRPrChangeClosed, "rprchange_closed.docx")
+{
+    // Redline defined by rPrChanged wasn't removed.
+    // First paragraph has an rPrChange element, make sure it doesn't appear in the second paragraph.
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
