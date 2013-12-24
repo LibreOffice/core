@@ -17,6 +17,8 @@ ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.dll,lib/.libs/libcurl.dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll,lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.4.dylib,lib/.libs/libcurl.4.dylib))
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so,lib/.libs/libcurl.so.4))
 else
