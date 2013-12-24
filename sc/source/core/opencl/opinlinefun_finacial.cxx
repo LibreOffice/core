@@ -159,6 +159,8 @@ std::string DaysInMonth =
 "            return aDaysInMonth[nMonth-1];\n"
 "    }\n"
 "}\n";
+std::string DaysInMonth_newDecl=
+"int DaysInMonth( int nMonth, int nYear );\n";
 
 std::string DaysInMonth_new =
 "int DaysInMonth( int nMonth, int nYear )\n"
