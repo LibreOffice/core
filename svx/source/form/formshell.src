@@ -150,36 +150,4 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
     };
 };
 
-TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
-{
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-
-    Text [ en-US ] = "Character";
-
-    TabControl 1
-    {
-        OutputSize = TRUE;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_NAME;
-                Text [ en-US ] = "Font";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_EFFECTS;
-                Text [ en-US ] = "Font Effects";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_POSITION;
-                Text [ en-US ] = "Position";
-            };
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

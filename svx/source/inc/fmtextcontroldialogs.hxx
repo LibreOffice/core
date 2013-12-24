@@ -36,10 +36,12 @@ namespace svx
     {
     private:
         SvxFontListItem m_aFontList;
+        sal_uInt16 m_nCharNamePageId;
+        sal_uInt16 m_nCharEffectsPageId;
+        sal_uInt16 m_nCharPositionPageId;
 
     public:
         TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList );
-        ~TextControlCharAttribDialog();
 
     protected:
         virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage );

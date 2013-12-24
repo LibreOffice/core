@@ -39,42 +39,36 @@ namespace svx
     //====================================================================
     //--------------------------------------------------------------------
     TextControlCharAttribDialog::TextControlCharAttribDialog( Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList )
-        :SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_TEXTCONTROL_CHARATTR ), &_rCoreSet )
-        ,m_aFontList( _rFontList )
+        : SfxTabDialog( pParent, "TextControlCharacterPropertiesDialog",
+            "svx/ui/textcontrolchardialog.ui", &_rCoreSet )
+        , m_aFontList(_rFontList)
+        , m_nCharNamePageId(0)
+        , m_nCharEffectsPageId(0)
+        , m_nCharPositionPageId(0)
     {
-        FreeResource();
-
-        AddTabPage( RID_SVXPAGE_CHAR_NAME);
-        AddTabPage( RID_SVXPAGE_CHAR_EFFECTS);
-        AddTabPage( RID_SVXPAGE_CHAR_POSITION);
+        m_nCharNamePageId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+        m_nCharEffectsPageId = AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
+        m_nCharPositionPageId = AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
     }
 
-    //--------------------------------------------------------------------
-    TextControlCharAttribDialog::~TextControlCharAttribDialog()
-    {
-    }
-
-    //--------------------------------------------------------------------
     void TextControlCharAttribDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-        switch( _nId )
+        if (_nId == m_nCharNamePageId)
         {
-            case RID_SVXPAGE_CHAR_NAME:
-                aSet.Put (m_aFontList);
-                _rPage.PageCreated(aSet);
-                break;
-
-            case RID_SVXPAGE_CHAR_EFFECTS:
-                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
-                _rPage.PageCreated(aSet);
-                break;
-
-            case RID_SVXPAGE_CHAR_POSITION:
-                aSet.Put( SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER) );
-                _rPage.PageCreated(aSet);
-                break;
+            aSet.Put (m_aFontList);
+            _rPage.PageCreated(aSet);
+        }
+        else if (_nId == m_nCharEffectsPageId)
+        {
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
+            _rPage.PageCreated(aSet);
+        }
+        else if (_nId == m_nCharPositionPageId)
+        {
+            aSet.Put( SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER) );
+            _rPage.PageCreated(aSet);
         }
     }
 
