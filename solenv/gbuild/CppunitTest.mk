@@ -23,7 +23,7 @@
 # $(1): "Cppunit" or "Python"
 # $(2): the name of the unit test that failed
 define gb_UNIT_FAILED_MSG
-printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport CPPUNITTRACE="gdb --args" # for interactive debugging on linux\nexport CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s\n\n' $(1) $(2)
+printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport CPPUNITTRACE="gdb --args" # for interactive debugging on GNU/Linux, *BSD, Mac OS X, or any other platform with GDB installed\nexport CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s\n\n' $(1) $(2)
 endef
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
