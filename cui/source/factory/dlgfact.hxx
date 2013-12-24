@@ -85,7 +85,7 @@ class VclAbstractDialog2_Impl : public VclAbstractDialog2
     Dialog*         m_pDlg;
     Link            m_aEndDlgHdl;
 public:
-                    VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}                             \
+                    VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
     virtual         ~VclAbstractDialog2_Impl();
     virtual void    StartExecuteModal( const Link& rEndDialogHdl );
     virtual long    GetResult();
