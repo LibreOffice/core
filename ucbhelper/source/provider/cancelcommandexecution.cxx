@@ -25,7 +25,10 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -71,8 +74,23 @@ void cancelCommandExecution( const uno::Any & rException,
         }
     }
 
-    cppu::throwException( rException );
+#if defined IOS && defined __arm64
+    // No Java, Basic, or Python on iOS, so try to throw the exception
+    // directly. Much simpler. Especially as I haven't managed yet to
+    // get the C++/UNO bridge to work for arm64, and this
+    // cppu::throwException thing seems to be the only use for it, at
+    // least in the test apps...
 
+    ucb::NameClashException aNCE;
+    if ( rException >>= aNCE )
+        throw aNCE;
+
+    lang::IllegalArgumentException aIAE;
+    if ( rException >>= aIAE )
+        throw aIAE;
+#endif
+
+    cppu::throwException( rException );
     OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
@@ -108,6 +126,13 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
                                                    xRequest->getRequest() );
         }
     }
+
+#if defined IOS && defined __arm64
+    // See comment above.
+    ucb::InteractiveAugmentedIOException aExc;
+    if ( xRequest->getRequest() >>= aExc )
+        throw aExc;
+#endif
 
     cppu::throwException( xRequest->getRequest() );
 
