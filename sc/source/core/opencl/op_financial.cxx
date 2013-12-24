@@ -291,10 +291,8 @@ void OpDISC::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
     decls.insert(GetYearFrac_newDecl);decls.insert(DaysToDate_newDecl);
-    decls.insert(GetNullDateDecl);decls.insert(DateToDaysDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
     funs.insert(GetYearFrac_new);funs.insert(DaysToDate_new);
-    funs.insert(GetNullDate);funs.insert(DateToDays);
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
 }
 
@@ -357,10 +355,10 @@ void OpDISC::GenSlidingWindowFunction(std::stringstream& ss,
         ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
 #endif
     }
-    ss << "    int nNullDate = GetNullDate();\n";
+    ss << "    int nNullDate = 693594;\n";
     ss << "    tmp = 1.0 - arg2 / arg3;\n";
-    ss << "    tmp /= ";
-    ss << "GetYearFrac_new(nNullDate, (int)arg0, (int)arg1, (int)arg4);\n";
+    ss << "    tmp /=";
+    ss << " GetYearFrac_new(nNullDate, (int)arg0, (int)arg1, (int)arg4);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
