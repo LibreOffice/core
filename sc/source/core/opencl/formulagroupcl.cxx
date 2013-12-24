@@ -2227,6 +2227,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpChiDist));
                 break;
+            case ocPow:
             case ocPower:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpPower));
