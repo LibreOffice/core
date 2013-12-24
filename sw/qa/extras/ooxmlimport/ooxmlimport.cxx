@@ -140,6 +140,7 @@ public:
     void testDefaultSectBreakCols();
     void testFdo66474();
     void testBnc780044Spacing();
+    void testRPrChangeClosed();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -244,6 +245,7 @@ void Test::run()
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
         {"fdo66474.docx", &Test::testFdo66474},
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
+        {"rprchange_closed.docx",&Test::testRPrChangeClosed},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1699,6 +1701,13 @@ void Test::testBnc780044Spacing()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
+void Test::testRPrChangeClosed()
+{
+    // Redline defined by rPrChanged wasn't removed.
+    // First paragraph has an rPrChange element, make sure it doesn't appear in the second paragraph.
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
