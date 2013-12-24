@@ -160,6 +160,37 @@ std::string DaysInMonth =
 "    }\n"
 "}\n";
 
+std::string DaysInMonth_new =
+"int DaysInMonth( int nMonth, int nYear )\n"
+"{\n"
+"    int tmp = 0;\n"
+"    switch(nMonth)\n"
+"    {\n"
+"    case 1:\n"
+"    case 3:\n"
+"    case 5:\n"
+"    case 7:\n"
+"    case 8:\n"
+"    case 10:\n"
+"    case 12:\n"
+"        tmp = 31;\n"
+"        break;\n"
+"    case 4:\n"
+"    case 6:\n"
+"    case 9:\n"
+"    case 11:\n"
+"        tmp =30;\n"
+"        break;\n"
+"    case 2:\n"
+"        if ( IsLeapYear(nYear)==1)\n"
+"            tmp = 29;\n"
+"        else\n"
+"            tmp = 28;\n"
+"        break;\n"
+"    }\n"
+"    return tmp;\n"
+"}\n";
+
 std::string DaysToDateDecl =
 "void DaysToDate( int nDays, int *rDay, int* rMonth, int* rYear );\n";
 
@@ -768,6 +799,45 @@ std::string lcl_Getcoupnum=
 "    n=n*nFreq/12;\n"
 "    return n;\n"
 "}\n";
+std::string lcl_Getcoupnum_newDecl=
+"double lcl_Getcoupnum_new(int nNullDate,int nSettle,int nMat,int nFreq,int"
+" nBase);\n";
+std::string lcl_Getcoupnum_new=
+"double lcl_Getcoupnum_new(int nNullDate,int nSettle, int nMat,int nFreq,int"
+" nBase)\n"
+"{\n"
+"    int aDate = nMat;\n"
+"    int mDay=0,mMonth=0, mYear=0;\n"
+"    int rDay=0,rMonth=0, rYear=0,rbLastDayMode=0, rbLastDay=0,rb30Days=0,"
+"rbUSMode=0,rnDay=0;\n"
+"    int sDay=0,sMonth=0, sYear=0,sbLastDayMode=0, sbLastDay=0,sb30Days=0,"
+"sbUSMode=0,snDay=0;\n"
+"    ScaDate( nNullDate,nSettle,nBase,&sDay,&sMonth,&sYear,&sbLastDayMode,"
+"&sbLastDay,&sb30Days,&sbUSMode,&snDay);\n"
+"    ScaDate( nNullDate,aDate,nBase,&rDay,&rMonth,&rYear,&rbLastDayMode,"
+"&rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
+"    mMonth = rMonth, mYear = rYear;\n"
+"    rYear=sYear;\n"
+"    setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
+"    if(checklessthan(rYear,sYear,rMonth,sMonth,rnDay,snDay,rbLastDay,"
+"sbLastDay,rDay,sDay))\n"
+"    {\n"
+"        rYear+=1;\n"
+"        setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
+"    }\n"
+"    int m= checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
+"rbLastDay,sDay,rDay);\n"
+"    while(m)\n"
+"    {\n"
+"        double d = -1*(12/nFreq);\n"
+"        addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,d,&rYear);\n"
+"        m = checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
+"rbLastDay,sDay,rDay);\n"
+"    }\n"
+"    int n=(mYear-rYear)*12+mMonth-rMonth;\n"
+"    double tmp = (double)(n*nFreq)/12.0;\n"
+"    return tmp;\n"
+"}\n";
 
 std::string setDayDecl=
 "void setDay(int nOrigDay, int nMonth,int nYear,int bLastDay,int b30Days,"
@@ -809,7 +879,7 @@ std::string coupdays_newDecl=
 std::string coupdays_new=
 "double coupdays_new(int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
-"    int nNullDate=GetNullDate_new();\n"
+"    int nNullDate=693594;\n"
 "    if( nBase == 1 )\n"
 "        return lcl_Getcoupdays_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "    else\n"
@@ -832,7 +902,7 @@ std::string coupdaybs_newDecl=
 std::string coupdaybs_new=
 "double coupdaybs_new( int nSettle,int nMat,int nFreq,int nBase)\n"
 "{\n"
-"    int nNullDate=GetNullDate_new();\n"
+"    int nNullDate=693594;\n"
 "    return lcl_Getcoupdaybs_new(nNullDate, nSettle, nMat,nFreq, nBase);\n"
 "}\n";
 
@@ -877,6 +947,49 @@ std::string coupdaysnc=
 "        return coupdays(nSettle,nMat,nFreq,nBase)- coupdaybs( nSettle,nMat,"
 "nFreq,nBase);\n"
 "}\n";
+std::string coupdaysnc_newDecl=
+"double coupdaysnc_new( int nSettle,int nMat,int nFreq,int nBase);\n";
+
+std::string coupdaysnc_new=
+"double coupdaysnc_new( int nSettle,int nMat,int nFreq,int nBase)\n"
+"{\n"
+"    int nNullDate=693594;\n"
+"    if((nBase != 0) && (nBase != 4))\n"
+"    {\n"
+"    int aDate = nMat;\n"
+"    int rDay=0,rMonth=0, rYear=0,rbLastDayMode=0, rbLastDay=0,rb30Days=0,"
+"rbUSMode=0,rnDay=0;\n"
+"    int sDay=0,sMonth=0, sYear=0,sbLastDayMode=0, sbLastDay=0,sb30Days=0,"
+"sbUSMode=0,snDay=0;\n"
+"    ScaDate( nNullDate,aDate,nBase,&rDay,&rMonth,&rYear,&rbLastDayMode,"
+"&rbLastDay,&rb30Days,&rbUSMode,&rnDay);\n"
+"    ScaDate( nNullDate,nSettle,nBase,&sDay,&sMonth,&sYear,&sbLastDayMode,"
+"&sbLastDay,&sb30Days,&sbUSMode,&snDay);\n"
+"    rYear=sYear;\n"
+"    setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
+"    aDate=DateToDays( rnDay,rMonth,rYear);\n"
+"    if(checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,rbLastDay"
+",sDay,rDay))\n"
+"    {\n"
+"        rYear-=1;\n"
+"        setDay(rDay,rMonth,rYear,rbLastDay,rb30Days,&rnDay);\n"
+"        aDate=DateToDays( rnDay,rMonth,rYear );\n"
+"    }\n"
+"    while(!checklessthan(sYear,rYear,sMonth,rMonth,snDay,rnDay,sbLastDay,"
+"rbLastDay,sDay,rDay))\n"
+"    {\n"
+"      addMonths(rb30Days,rbLastDay,&rnDay,rDay,&rMonth,12/nFreq,&rYear);\n"
+"      aDate=DateToDays( rnDay,rMonth,rYear );\n"
+"    }\n"
+"    return getDiff( nSettle+nNullDate,aDate,sDay,sMonth,sYear,sbLastDayMode, "
+"sbLastDay, sb30Days, sbUSMode, snDay, rDay, rMonth, rYear, rbLastDayMode, "
+"rbLastDay, rb30Days, rbUSMode, rnDay);\n"
+"    }\n"
+"    else\n"
+"        return coupdays_new(nSettle,nMat,nFreq,nBase)- coupdaybs_new( nSettle,"
+"nMat,nFreq,nBase);\n"
+"}\n";
+
 std::string checklessthanDecl=
 "int checklessthan(int aYear,int bYear,int aMonth,int bMonth,int anDay,int "
 "bnDay,int abLastDay,int bbLastDay,int anOrigDay,int bnOrigDay);\n";
@@ -904,6 +1017,15 @@ std::string coupnum=
 "    int nNullDate=GetNullDate();\n"
 "    return lcl_Getcoupnum(nNullDate,nSettle,nMat,nFreq);\n"
 "}\n";
+std::string coupnum_newDecl=
+"double coupnum_new( int nSettle,int nMat,int nFreq,int nBase);\n";
+
+std::string coupnum_new=
+"double coupnum_new( int nSettle,int nMat,int nFreq,int nBase)\n"
+"{\n"
+"    int nNullDate=693594;\n"
+"    return lcl_Getcoupnum_new(nNullDate,nSettle,nMat,nFreq,nBase);\n"
+"}\n";
 
 std::string getPrice_Decl=
 "double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
@@ -919,6 +1041,29 @@ std::string getPrice_=
 "    double      fDSC_E = coupdaysnc(  nSettle, nMat, nFreq, nBase ) / fE;\n"
 "    double      fN = coupnum( nSettle, nMat, nFreq, nBase );\n"
 "    double      fA = coupdaybs( nSettle, nMat, nFreq, nBase );\n"
+"    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + "
+"fDSC_E ) );\n"
+"    fRet -= 100.0 * fRate / fFreq * fA / fE;\n"
+"    double      fT1 = 100.0 * fRate / fFreq;\n"
+"    double      fT2 = 1.0 + fYield / fFreq;\n"
+"    for( double fK = 0.0 ; fK < fN ; fK+=1.0 )\n"
+"        fRet += fT1 / pow( fT2, fK + fDSC_E );\n"
+"    return fRet;\n"
+"}\n";
+std::string getPrice_new_Decl=
+"double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
+    "double fRedemp, int nFreq, int nBase );\n";
+
+
+std::string getPrice_new=
+"double getPrice_(int nSettle, int nMat, double fRate, double fYield,\n"
+    "double fRedemp, int nFreq, int nBase )\n"
+"{\n"
+"    double      fFreq = nFreq;\n"
+"    double      fE = coupdays_new( nSettle, nMat, nFreq, nBase );\n"
+"    double      fDSC_E = coupdaysnc_new(  nSettle, nMat, nFreq, nBase ) / fE;\n"
+"    double      fN = coupnum_new( nSettle, nMat, nFreq, nBase );\n"
+"    double      fA = coupdaybs_new( nSettle, nMat, nFreq, nBase );\n"
 "    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + "
 "fDSC_E ) );\n"
 "    fRet -= 100.0 * fRate / fFreq * fA / fE;\n"

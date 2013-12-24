@@ -2767,29 +2767,39 @@ void OpNPV::GenSlidingWindowFunction(std::stringstream &ss,
  void OpPrice::BinInlineFun(std::set<std::string>& decls,
      std::set<std::string>& funs)
  {
-    decls.insert(getPrice_Decl);
-    decls.insert(coupnumDecl);decls.insert(coupdaysncDecl);
-    decls.insert(coupdaybsDecl);decls.insert(coupdaysDecl);
-    decls.insert(lcl_GetcoupnumDecl);decls.insert(lcl_GetcoupdaysDecl);
-    decls.insert(lcl_GetcoupdaybsDecl);decls.insert(getDiffDecl);
-    decls.insert(getDaysInYearRangeDecl);decls.insert(GetDaysInYearDecl);
-    decls.insert(GetDaysInYearsDecl);decls.insert(getDaysInMonthRangeDecl);
-    decls.insert(addMonthsDecl);decls.insert(ScaDateDecl);
-    decls.insert(GetNullDateDecl);decls.insert(DateToDaysDecl);
-    decls.insert(DaysToDateDecl);decls.insert(DaysInMonthDecl);
-    decls.insert(IsLeapYearDecl);
-
-    funs.insert(getPrice_);
-    funs.insert(coupnum);funs.insert(coupdaysnc);
-    funs.insert(coupdaybs);funs.insert(coupdays);
-    funs.insert(lcl_Getcoupnum);funs.insert(lcl_Getcoupdays);
-    funs.insert(lcl_Getcoupdaybs);funs.insert(getDiff);
-    funs.insert(getDaysInYearRange);funs.insert(GetDaysInYear);
-    funs.insert(GetDaysInYears);funs.insert(getDaysInMonthRange);
-    funs.insert(addMonths);funs.insert(ScaDate);
-    funs.insert(GetNullDate);funs.insert(DateToDays);
-    funs.insert(DaysToDate);funs.insert(DaysInMonth);
-    funs.insert(IsLeapYear);
+    decls.insert(getPrice_new_Decl);
+    decls.insert(IsLeapYearDecl);decls.insert(DaysInMonthDecl);
+    decls.insert(DaysToDateDecl);
+    decls.insert(DateToDaysDecl);
+    decls.insert(ScaDateDecl);
+    decls.insert(setDayDecl);decls.insert(checklessthanDecl);
+    decls.insert(addMonthsDecl);decls.insert(lcl_Getcoupnum_newDecl);
+    decls.insert(coupnum_newDecl);
+    decls.insert(DateToDays_newDecl);
+    decls.insert(getDaysInMonthRangeDecl);
+    decls.insert(GetDaysInYearsDecl); decls.insert(GetDaysInYearDecl);
+    decls.insert(getDaysInYearRangeDecl); decls.insert(getDiffDecl);
+    decls.insert(coupdaybs_newDecl);
+    decls.insert(lcl_Getcoupdays_newDecl);
+    decls.insert(lcl_Getcoupdaybs_newDecl);
+    decls.insert(coupdays_newDecl);
+    decls.insert(coupdaysnc_newDecl);
+    funs.insert(IsLeapYear);funs.insert(DaysInMonth_new);
+    funs.insert(DaysToDate);funs.insert(DateToDays_new);
+    funs.insert(DateToDays);
+    funs.insert(ScaDate);
+    funs.insert(addMonths);funs.insert(getDaysInMonthRange);
+    funs.insert(GetDaysInYears);funs.insert(GetDaysInYear);
+    funs.insert(getDaysInYearRange);funs.insert(getDiff);
+    funs.insert(setDay);funs.insert(checklessthan);
+    funs.insert(lcl_Getcoupdaybs_new);
+    funs.insert(coupdaybs_new);
+    funs.insert(lcl_Getcoupdays_new);
+    funs.insert(coupdaysnc_new);
+    funs.insert(coupdays_new);
+    funs.insert(setDay);funs.insert(checklessthan);
+    funs.insert(lcl_Getcoupnum_new);
+    funs.insert(coupnum_new);funs.insert(getPrice_new);
  }
 void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
           const std::string sSymName, SubArguments &vSubArguments)
@@ -2802,106 +2812,69 @@ void OpPrice::GenSlidingWindowFunction(std::stringstream &ss,
           ss << ", ";
       vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n    ";
-    ss << "double tmp = 0;\n    ";
-    ss << "int gid0 = get_global_id(0);\n    ";
-    ss<<"double tmp0=0;\n    ";
-    ss<<"double tmp1=0;\n    ";
-    ss<<"double tmp2=0;\n    ";
-    ss<<"double tmp3=0;\n    ";
-    ss<<"double tmp4=0,tmp5=0;\n    ";
-    ss<<"double tmp6=0;\n    ";
-    size_t nItems = 0;
-    ss <<"\n    ";
+    ss<<") {\n";
+    ss<<"    double tmp = 0;\n";
+    ss<<"    int gid0 = get_global_id(0);\n";
+    ss<<"    double tmp0=0;\n";
+    ss<<"    double tmp1=0;\n";
+    ss<<"    double tmp2=0;\n";
+    ss<<"    double tmp3=0;\n";
+    ss<<"    double tmp4=0,tmp5=0;\n";
+    ss<<"    double tmp6=0;\n";
+    ss<<"\n";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
-        {
-            const formula::DoubleVectorRefToken* pDVR =
-                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-            size_t nCurWindowSize = pDVR->GetRefRowSize();
-            ss << "for (int i = ";
-            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                ss << "gid0; i < " << pDVR->GetArrayLength();
-                ss << " && i < " << nCurWindowSize  << "; i++){\n        ";
-#else
-                ss << "gid0; i < "<< nCurWindowSize << "; i++)\n        ";
-#endif
-            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
-#ifdef  ISNAN
-                ss << "0; i < " << pDVR->GetArrayLength();
-                ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n        ";
-#else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n        ";
-#endif
-            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
-#ifdef  ISNAN
-                ss << "0; i + gid0 < " << pDVR->GetArrayLength();
-                ss << " &&  i < "<< nCurWindowSize << "; i++){\n        ";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n        ";
-#endif
-            }
-            else {
-#ifdef  ISNAN
-                ss << "0; i < "<< nCurWindowSize << "; i++){\n        ";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; i++)\n        ";
-#endif
-            }
-            nItems += nCurWindowSize;
-        }
-        else if (pCur->GetType() == formula::svSingleVectorRef)
+        if (pCur->GetType() == formula::svSingleVectorRef)
         {
 #ifdef  ISNAN
             const formula::SingleVectorRefToken* pSVR =
                 dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n        ";
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #else
-            nItems += 1;
 #endif
         }
         else if (pCur->GetType() == formula::svDouble)
         {
 #ifdef  ISNAN
-            ss << "{\n        ";
+            ss << "{\n";
 #endif
-            nItems += 1;
         }
         else
         {
 #ifdef  ISNAN
 #endif
-            nItems += 1;
         }
 #ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
-            ss << "if (isNan(";
+            ss << "        if (isNan(";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << "))\n            ";
-            ss << "tmp"<<i<<"= 0;\n        ";
-            ss << "else\n            ";
-            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss << ";\n    }\n    ";
+            ss << "))\n";
+            ss << "            tmp"<<i<<"= 0;\n";
+            ss << "        else\n";
+            ss << "            tmp"<<i<<"=";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n    }\n";
         }
         else
         {
-            ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-            ss <<";\n    ";
+            ss << "        tmp"<<i<<"=";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss <<";\n";
         }
 #else
-        ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-        ss <<";\n    ";
+        ss << "        tmp"<<i<<"=";
+        ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
+        ss <<";\n";
 #endif
     }
-    ss << "tmp = getPrice_(tmp0,tmp1,tmp2,tmp3,tmp4,tmp5,tmp6);\n\t";
-    ss << "return tmp;\n";
+    ss << "    tmp = getPrice_(tmp0,tmp1,tmp2,tmp3,tmp4,tmp5,tmp6);\n";
+    ss << "    return tmp;\n";
     ss << "}";
 }
+
 void OpOddlprice::BinInlineFun(std::set<std::string>& decls,
      std::set<std::string>& funs)
 {
