@@ -169,7 +169,7 @@ RTTI::RTTI() SAL_THROW(())
     // Insert commonly needed type_infos to avoid dlsym() calls
     // Ideally we should insert all needed ones
     m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
-                                            &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
+                                            (std::type_info*) &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
 #endif
 }
 
@@ -207,7 +207,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
 
         if (rtti)
         {
-            SAL_INFO( "bridges.ios", "getRTTI: dlsym() found type_info for " << unoName );
+            SAL_INFO( "bridges.ios", "getRTTI: dlsym() found type_info for " << unoName << ": " << symName );
             std::pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
             SAL_WARN_IF( !insertion.second,
@@ -216,6 +216,8 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SA
         }
         else
         {
+            SAL_INFO( "bridges.ios", "getRTTI: dlsym() could NOT find type_info for " << unoName << ": " << symName );
+
             // try to lookup the symbol in the generated rtti map
             t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
             if (iFind2 == m_generatedRttis.end())
