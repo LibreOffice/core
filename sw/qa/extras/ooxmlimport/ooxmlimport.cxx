@@ -1556,6 +1556,13 @@ DECLARE_OOXMLIMPORT_TEST(testFdo65090, "fdo65090.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testRPrChangeClosed, "rprchange_closed.docx")
+{
+    // Redline defined by rPrChanged wasn't removed.
+    // First paragraph has an rPrChange element, make sure it doesn't appear in the second paragraph.
+    CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
