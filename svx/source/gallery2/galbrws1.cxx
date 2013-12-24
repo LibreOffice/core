@@ -326,7 +326,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
     }
 
     // destroy mpThemeProps asynchronously
-    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ) );
+    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog );
 }
 
 IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
