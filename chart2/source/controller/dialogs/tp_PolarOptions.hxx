@@ -40,14 +40,12 @@ public:
     virtual void Reset(const SfxItemSet& rInAttrs);
 
 private:
-    CheckBox         m_aCB_Clockwise;
-    FixedLine        m_aFL_StartingAngle;
-    svx::DialControl m_aAngleDial;
-    FixedText        m_aFT_Degrees;
-    NumericField     m_aNF_StartingAngle;
-
-    FixedLine        m_aFL_PlotOptions;
-    CheckBox         m_aCB_IncludeHiddenCells;
+    CheckBox*         m_pCB_Clockwise;
+    VclFrame*         m_pFL_StartingAngle;
+    svx::DialControl* m_pAngleDial;
+    NumericField*     m_pNF_StartingAngle;
+    VclFrame*         m_pFL_PlotOptions;
+    CheckBox*         m_pCB_IncludeHiddenCells;
 };
 
 } //namespace chart

@@ -82,8 +82,6 @@
 #define HID_SCH_LEGEND_SHOW                                 "CHART2_HID_SCH_LEGEND_SHOW"
 #define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
 
-#define HID_SCH_STARTING_ANGLE_DIAL                         "CHART2_HID_SCH_STARTING_ANGLE_DIAL"
-
 #define HID_SCH_STATISTIK_FUNCTION                          "CHART2_HID_SCH_STATISTIK_FUNCTION"
 #define HID_SCH_STATISTIK_RANGE                             "CHART2_HID_SCH_STATISTIK_RANGE"
 #define HID_SCH_STATISTIK_FUNCTION_LB                       "CHART2_HID_SCH_STATISTIK_FUNCTION_LB"
