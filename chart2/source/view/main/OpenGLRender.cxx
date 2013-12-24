@@ -654,19 +654,19 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     BitmapEx aBmp;
     aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
 
-    Bitmap aBitmap( aBmp.GetBitmap() );
-    Bitmap aAlpha( aBmp.GetAlpha().GetBitmap() );
+    Bitmap aBitmap( Size( m_iWidth, m_iHeight), 24 );
+    Bitmap aAlpha( Size( m_iWidth, m_iHeight), 24 );
 
     Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
     Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
     size_t nCurPos = 0;
-    for( int y = 0; y < m_iHeight; ++y)
+    for( size_t y = 0; y < m_iHeight; ++y)
     {
         Scanline pScan = pWriteAccess->GetScanline(y);
         Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
 
-        for( int x = 0; x < m_iWidth; ++x )
+        for( size_t x = 0; x < m_iWidth; ++x )
         {
             *pScan++ = buf[nCurPos];
             *pScan++ = buf[nCurPos+1];
