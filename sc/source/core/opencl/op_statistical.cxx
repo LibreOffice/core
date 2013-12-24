@@ -11326,7 +11326,128 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return sqrt(vSum * pow(fCount,-1.0));\n";
     ss << "}\n";
 }
-
+void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"( ";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ")\n";
+    ss <<"{\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double sum=0.0;\n";
+    ss << "    double length;\n";
+    ss << "    double totallength=0;\n";
+    ss << "    double tmp = 0;\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    length="<<nCurWindowSize;
+            ss << ";\n";
+            ss << "    for (int i = ";
+            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+            ss << "    {\n";
+            ss << "        double arg"<<i<<" = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "        if(isNan(arg"<<i<<")||((gid0+i)>=";
+            ss << pDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        {\n";
+            ss << "            length-=1.0;\n";
+            ss << "            continue;\n";
+            ss << "        }\n";
+#endif
+            ss << "        sum +=  arg"<<i<<";\n";
+            ss << "    }\n";
+            ss << "    totallength +=length;\n";
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+            ss << "    tmp = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(!isNan(tmp))\n";
+            ss << "    {\n";
+            ss << "        sum += tmp;\n";
+            ss << "        totallength +=1;\n";
+            ss << "    }\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+           ss << "    tmp = ";
+           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+           ss << ";\n";
+           ss << "    sum += tmp;\n";
+           ss << "    totallength +=1;\n";
+        }
+    }
+    ss << "    double mean = sum * pow(totallength,-1);\n";
+    ss << "    sum = 0.0;\n";
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
+            const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+            size_t nCurWindowSize = pDVR->GetRefRowSize();
+            ss << "    for (int i = ";
+            ss << "0; i < "<< nCurWindowSize << "; i++)\n";
+            ss << "    {\n";
+            ss << "        double arg"<<i<<" = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "        if(isNan(arg"<<i<<")||((gid0+i)>=";
+            ss << pDVR->GetArrayLength();
+            ss << "))\n";
+            ss << "        {\n";
+            ss << "            continue;\n";
+            ss << "        }\n";
+#endif
+            ss << "        sum +=  fabs(arg"<<i<<"-mean);\n";
+            ss << "    }\n";
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+            ss << "    tmp = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+#ifdef ISNAN
+            ss << "    if(!isNan(tmp))\n";
+            ss << "    {\n";
+            ss << "        sum += fabs(tmp-mean);\n";
+            ss << "    }\n";
+#endif
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+           ss << "    tmp = ";
+           ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+           ss << ";\n";
+           ss << "    sum += fabs(tmp-mean);\n";
+        }
+    }
+    ss << "    tmp=sum*pow(totallength,-1);\n";
+    ss << "    return tmp;\n";
+    ss << "}";
+}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
