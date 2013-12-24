@@ -31,11 +31,23 @@ $(eval $(call gb_Library_use_externals,chartopengl,\
 ))
 
 $(eval $(call gb_Library_use_libraries,chartopengl,\
+    basegfx \
     chartcore \
+    comphelper \
     cppu \
     cppuhelper \
+    drawinglayer \
+    editeng \
+    fwe \
+    i18nlangtag \
     sal \
-	svxcore \
+    sfx \
+    svl \
+    svt \
+    svxcore \
+    tl \
+    ucbhelper \
+    utl \
     vcl \
     $(gb_UWINAPI) \
 ))
