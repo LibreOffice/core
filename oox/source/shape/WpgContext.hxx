@@ -13,7 +13,10 @@
 #include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
 
-namespace oox { namespace shape {
+namespace oox
+{
+namespace shape
+{
 
 /// Wpg is the drawingML equivalent of v:group.
 class WpgContext : public oox::core::ContextHandler2
@@ -31,7 +34,8 @@ protected:
 };
 
 
-} }
+}
+}
 
 #endif
 

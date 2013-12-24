@@ -13,10 +13,13 @@
 
 using namespace com::sun::star;
 
-namespace oox { namespace shape {
+namespace oox
+{
+namespace shape
+{
 
 WpgContext::WpgContext(ContextHandler2Helper& rParent)
-: ContextHandler2(rParent)
+    : ContextHandler2(rParent)
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
 }
@@ -34,32 +37,33 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
 {
     switch (getBaseToken(nElementToken))
     {
-        case XML_wgp:
-            break;
-        case XML_cNvGrpSpPr:
-            break;
-        case XML_grpSpPr:
-            return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
-            break;
-        case XML_wsp:
-            {
-                oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
-                return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
-            }
-            break;
-        case XML_grpSp:
-            {
-                oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
-                return new oox::drawingml::ShapeGroupContext(*this, mpShape, pShape);
-            }
-            break;
-        default:
-            SAL_WARN("oox", "WpgContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
-            break;
+    case XML_wgp:
+        break;
+    case XML_cNvGrpSpPr:
+        break;
+    case XML_grpSpPr:
+        return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
+        break;
+    case XML_wsp:
+    {
+        oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
+        return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
+    }
+    break;
+    case XML_grpSp:
+    {
+        oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+        return new oox::drawingml::ShapeGroupContext(*this, mpShape, pShape);
+    }
+    break;
+    default:
+        SAL_WARN("oox", "WpgContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
+        break;
     }
     return 0;
 }
 
-} }
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
