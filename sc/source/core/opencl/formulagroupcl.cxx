@@ -291,10 +291,7 @@ public:
     }
     virtual void GenDeclRef(std::stringstream &ss) const
     {
-        double d;
-        srand((unsigned)time(NULL));
-        d=((double)rand())/RAND_MAX;
-        ss << d;
+        ss << mSymName;
     }
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
@@ -302,7 +299,27 @@ public:
     }
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
-        return mSymName;
+        return mSymName + "_Random()";
+    }
+    void GenSlidingWindowFunction(std::stringstream &ss)
+    {
+        ss << "\ndouble " << mSymName;
+        ss << "_Random ()\n{\n";
+        ss << "    int i, gid0=get_global_id(0);;\n";
+        ss << "    double tmp = 0;\n";
+        ss << "    double M = 2147483647;\n";
+        ss << "    double Lamda = 32719;\n";
+        ss << "    double f;\n";
+        ss << "    f = gid0 + 1;\n";
+        ss << "    int k;\n";
+        ss << "    for(i = 1;i <= 100; ++i){\n";
+        ss << "        f = Lamda * f;\n";
+        ss << "        k = (int)(f * pow(M,-1.0));\n";
+        ss << "        f = f - M * k;\n";
+        ss << "    }\n";
+        ss << "    tmp = f * pow(M,-1.0);\n";
+        ss << "    return tmp;\n";
+        ss << "}";
     }
     virtual size_t GetWindowSize(void) const
     {
