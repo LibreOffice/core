@@ -828,7 +828,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 {
     //check if the doc is synchronized and contains at least one linked section
     bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
-    sal_Bool bLoop = sal_True;
+    sal_Bool bNoError = sal_True;
     bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
     const bool bAsSingleFile = rMergeDescriptor.nMergeType == DBMGR_MERGE_SINGLE_FILE;
 
@@ -866,19 +866,20 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             aCol >>= xColumnProp;
         }
 
+        // Try saving the source document
         SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
-        SwDocShell* pSourrceDocSh = pSourceShell->GetView().GetDocShell();
-        pSfxDispatcher->Execute( pSourrceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
-        // has document been saved successfully?
-        if( !pSourrceDocSh->IsModified() )
+        SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
+        pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
+        if( !pSourceDocSh->IsModified() )
         {
-            SfxMedium* pOrig = pSourceShell->GetView().GetDocShell()->GetMedium();
+            SfxMedium* pOrig = pSourceDocSh->GetMedium();
             OUString sSourceDocumentURL(pOrig->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ));
             const SfxFilter* pSfxFlt = SwIoSystem::GetFileFilter(
                                                     sSourceDocumentURL, ::aEmptyOUStr );
             const SfxFilter* pStoreToFilter = pSfxFlt;
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
             const OUString* pStoreToFilterOptions = 0;
+
             // if a save_to filter is set then use it - otherwise use the default
             if( bEMail && !rMergeDescriptor.bSendAsAttachment )
             {
@@ -957,14 +958,14 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 aPrtMonDlg.Show();
 
             // Progress, to prohibit KeyInputs
-            SfxProgress aProgress(pSourrceDocSh, ::aEmptyOUStr, 1);
+            SfxProgress aProgress(pSourceDocSh, ::aEmptyOUStr, 1);
 
             // lock all dispatchers
-            SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(pSourrceDocSh);
+            SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(pSourceDocSh);
             while (pViewFrm)
             {
                 pViewFrm->GetDispatcher()->Lock(sal_True);
-                pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourrceDocSh);
+                pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
             }
             sal_uLong nDocNo = 1;
 
@@ -1012,7 +1013,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     if( !aTempFile->IsValid() )
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
-                        bLoop = sal_False;
+                        bNoError = sal_False;
                         bCancel = sal_True;
                     }
                     else
@@ -1150,7 +1151,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     // error message ??
                                     ErrorHandler::HandleError( xWorkDocSh->GetError() );
                                     bCancel = sal_True;
-                                    bLoop = sal_False;
+                                    bNoError = sal_False;
                                 }
                                 if( bEMail )
                                 {
@@ -1287,7 +1288,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     {
                         // error message ??
                         ErrorHandler::HandleError( xTargetDocShell->GetError() );
-                        bLoop = sal_False;
+                        bNoError = sal_False;
                     }
                 }
                 else if( pTargetView ) // must be available!
@@ -1341,11 +1342,11 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 SWUnoHelper::UCB_DeleteFile( *aFileIter );
 
             // unlock all dispatchers
-            pViewFrm = SfxViewFrame::GetFirst(pSourrceDocSh);
+            pViewFrm = SfxViewFrame::GetFirst(pSourceDocSh);
             while (pViewFrm)
             {
                 pViewFrm->GetDispatcher()->Lock(sal_False);
-                pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourrceDocSh);
+                pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
             }
 
             SW_MOD()->SetView(&pSourceShell->GetView());
@@ -1358,10 +1359,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     {
         xMailDispatcher->stop();
         xMailDispatcher->shutdown();
-
     }
 
-    return bLoop;
+    return bNoError;
 }
 
 IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
