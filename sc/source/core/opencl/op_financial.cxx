@@ -4049,113 +4049,106 @@ void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int nDate,nFirstPer,nBase;\n";
 #ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
     FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
     FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur2);
     FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur3);
     FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur4);
     FormulaToken *tmpCur5 = vSubArguments[5]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR5= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur5);
     FormulaToken *tmpCur6 = vSubArguments[6]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR6= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur6);
-    ss<< "    int buffer_Cost_len = ";
-    ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_Date_len = ";
-    ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_FirstPer_len = ";
-    ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_RestVal_len = ";
-    ss<< tmpCurDVR3->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_Per_len = ";
-    ss<< tmpCurDVR4->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_Rate_len = ";
-    ss<< tmpCurDVR5->GetArrayLength();
-    ss << ";\n";
-    ss<< "    int buffer_Base_len = ";
-    ss<< tmpCurDVR6->GetArrayLength();
-    ss << ";\n";
 #endif
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_Cost_len || isNan(";
-    ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur0->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur0);
+    ss <<"    if(isNan("<<vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR0->GetArrayLength()<<"))\n";
     ss <<"        fCost = 0;\n    else\n";
- #endif
+    }
+#endif
     ss << "        fCost=";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_Date_len || isNan(";
-    ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur1->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur1);
+    ss <<"    if(isNan("<<vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR1->GetArrayLength()<<"))\n";
     ss <<"        nDate = 0;\n    else\n";
+    }
 #endif
     ss << "        nDate=(int)";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_FirstPer_len || isNan(";
-    ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur2->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur2);
+    ss <<"    if(isNan("<<vSubArguments[2]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR2->GetArrayLength()<<"))\n";
     ss <<"        nFirstPer = 0;\n    else\n";
+    }
 #endif
     ss << "        nFirstPer=(int)";
     ss << vSubArguments[2]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_RestVal_len || isNan(";
-    ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur3->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur3);
+    ss <<"    if(isNan(" <<vSubArguments[3]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR3->GetArrayLength()<<"))\n";
     ss <<"        fRestVal = 0;\n    else\n";
+    }
 #endif
     ss << "        fRestVal=";
     ss << vSubArguments[3]->GenSlidingWindowDeclRef();
     ss << ";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_Per_len || isNan(";
-    ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur4->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur4);
+    ss <<"    if(isNan(" <<vSubArguments[4]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR4->GetArrayLength()<<"))\n";
     ss <<"        fPer = 0;\n    else\n";
+    }
 #endif
     ss << "        fPer = ";
     ss << vSubArguments[4]->GenSlidingWindowDeclRef();
     ss <<";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_Rate_len || isNan(";
-    ss <<vSubArguments[5]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur5->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR5= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur5);
+    ss <<"    if(isNan(" <<vSubArguments[5]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR5->GetArrayLength()<<"))\n";
     ss <<"        fRate = 0;\n    else\n";
+    }
 #endif
     ss << "        fRate=";
     ss << vSubArguments[5]->GenSlidingWindowDeclRef();
     ss << ";\n";
 #ifdef ISNAN
-    ss <<"    if(gid0 >= buffer_Base_len || isNan(";
-    ss <<vSubArguments[6]->GenSlidingWindowDeclRef();
-    ss <<"))\n";
+    if(tmpCur6->GetType() == formula::svSingleVectorRef)
+    {
+    const formula::SingleVectorRefToken*tmpCurDVR6= dynamic_cast<const
+    formula::SingleVectorRefToken *>(tmpCur6);
+    ss <<"    if(isNan(" <<vSubArguments[6]->GenSlidingWindowDeclRef();
+    ss <<")||(gid0 >="<<tmpCurDVR6->GetArrayLength()<<"))\n";
     ss <<"        nBase = 0;\n    else\n";
+    }
 #endif
     ss << "        nBase = (int)";
     ss << vSubArguments[6]->GenSlidingWindowDeclRef();
     ss << ";\n";
     ss <<"    uint nPer = convert_int( fPer );\n";
-    ss <<"    double fUsePer = 1.0 / fRate;\n";
+    ss <<"    double fUsePer = 1.0 *pow( fRate,-1);\n";
     ss <<"    double fAmorCoeff;\n";
     ss <<"    if( fUsePer < 3.0 )\n";
     ss <<"        fAmorCoeff = 1.0;\n";
@@ -4166,7 +4159,7 @@ void OpAmordegrc::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    else\n";
     ss <<"        fAmorCoeff = 2.5;\n";
     ss <<"    fRate *= fAmorCoeff;\n";
-    ss <<"    tmp = Round( GetYearFrac( GetNullDate(),";
+    ss <<"    tmp = Round( GetYearFrac( 693594,";
     ss <<"nDate, nFirstPer, nBase ) * fRate * fCost);\n";
     ss <<"    fCost = fCost-tmp;\n";
     ss <<"    double fRest = fCost - fRestVal;\n";
