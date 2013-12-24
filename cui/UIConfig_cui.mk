@@ -44,6 +44,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/formatcellsdialog \
 	cui/uiconfig/ui/gallerysearchprogress \
+	cui/uiconfig/ui/gallerythemedialog \
 	cui/uiconfig/ui/gallerythemeiddialog \
 	cui/uiconfig/ui/gallerytitledialog \
 	cui/uiconfig/ui/hangulhanjaadddialog \

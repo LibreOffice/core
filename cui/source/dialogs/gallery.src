@@ -24,30 +24,6 @@
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
-TabDialog RID_SVXTABDLG_GALLERYTHEME
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Properties of " ;
-    Moveable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
-                Text [ en-US ] = "General" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXTABPAGE_GALLERYTHEME_FILES ;
-                Text [ en-US ] = "Files" ;
-            };
-        };
-    };
-};
 
 /******************************************************************************/
 

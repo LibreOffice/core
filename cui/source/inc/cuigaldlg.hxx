@@ -197,12 +197,13 @@ class GalleryThemeProperties : public SfxTabDialog
 {
     ExchangeData*   pData;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    sal_uInt16 m_nGeneralPageId;
+    sal_uInt16 m_nFilesPageId;
+
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage);
 
 public:
-
-                    GalleryThemeProperties( Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet  );
-                    ~GalleryThemeProperties() {}
+    GalleryThemeProperties(Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet);
 };
 
 class TPGalleryThemeGeneral : public SfxTabPage

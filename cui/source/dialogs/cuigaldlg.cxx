@@ -589,17 +589,19 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 // - GalleryThemeProperties -
 // --------------------------
 
-GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _pData, SfxItemSet* pItemSet  ) :
-            SfxTabDialog    ( pParent, CUI_RES( RID_SVXTABDLG_GALLERYTHEME ), pItemSet ),
-            pData           ( _pData )
+GalleryThemeProperties::GalleryThemeProperties(Window* pParent,
+    ExchangeData* _pData, SfxItemSet* pItemSet)
+    : SfxTabDialog( pParent, "GalleryThemeDialog",
+        "cui/ui/gallerythemedialog.ui", pItemSet)
+    , pData(_pData)
+    , m_nGeneralPageId(0)
+    , m_nFilesPageId(0)
 {
-    FreeResource();
-
-    AddTabPage( RID_SVXTABPAGE_GALLERY_GENERAL, TPGalleryThemeGeneral::Create, 0 );
-    AddTabPage( RID_SVXTABPAGE_GALLERYTHEME_FILES, TPGalleryThemeProperties::Create, 0 );
+    m_nGeneralPageId = AddTabPage("general", TPGalleryThemeGeneral::Create, 0);
+    m_nFilesPageId = AddTabPage("files", TPGalleryThemeProperties::Create, 0);
 
     if( pData->pTheme->IsReadOnly() )
-        RemoveTabPage( RID_SVXTABPAGE_GALLERYTHEME_FILES );
+        RemoveTabPage(m_nFilesPageId);
 
     OUString aText( GetText() );
 
@@ -615,7 +617,7 @@ GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _
 
 void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    if( RID_SVXTABPAGE_GALLERY_GENERAL == nId )
+    if (nId == m_nGeneralPageId)
         ( (TPGalleryThemeGeneral&) rPage ).SetXChgData( pData );
     else
         ( (TPGalleryThemeProperties&) rPage ).SetXChgData( pData );

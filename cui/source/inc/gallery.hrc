@@ -18,9 +18,7 @@
  */
 #include <cuires.hrc>
 
-// Gallery TabDialogs/TabPages
-#define RID_SVXTABDLG_GALLERYTHEME              (RID_CUI_GALLERY_START + 2)
-
+// Gallery TabPages
 #define RID_SVXTABPAGE_GALLERY_GENERAL          (RID_CUI_GALLERY_START + 1)
 #define RID_SVXTABPAGE_GALLERYTHEME_FILES       (RID_CUI_GALLERY_START + 4)
 
