@@ -23,7 +23,6 @@
 #define HID_BASICIDE_OBJECTS                              "BASCTL_HID_BASICIDE_OBJECTS"
 #define HID_BASICIDE_MACROS                               "BASCTL_HID_BASICIDE_MACROS"
 #define HID_BASICIDE_LIBS                                 "BASCTL_HID_BASICIDE_LIBS"
-#define HID_BASICIDE_ORG_TC                               "BASCTL_HID_BASICIDE_ORG_TC"
 
 #define HID_BASICIDE_MODULES_TREE                         "BASCTL_HID_BASICIDE_MODULES_TREE"
 #define HID_BASICIDE_LIBS_TREE                            "BASCTL_HID_BASICIDE_LIBS_TREE"

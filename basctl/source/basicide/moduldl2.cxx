@@ -506,7 +506,6 @@ LibPage::LibPage( Window * pParent )
     ,aLibText( this, IDEResId( RID_STR_LIB ) )
     ,aLibBox( this, IDEResId( RID_TRLBOX ) )
     ,aEditButton( this, IDEResId( RID_PB_EDIT ) )
-    ,aCloseButton( this, IDEResId( RID_PB_CLOSE ) )
     ,aPasswordButton( this, IDEResId( RID_PB_PASSWORD ) )
     ,aNewLibButton( this, IDEResId( RID_PB_NEWLIB ) )
     ,aInsertLibButton( this, IDEResId( RID_PB_APPEND ) )
@@ -524,7 +523,6 @@ LibPage::LibPage( Window * pParent )
     aExportButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aInsertLibButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
-    aCloseButton.SetClickHdl( LINK( this, LibPage, ButtonHdl ) );
     aLibBox.SetSelectHdl( LINK( this, LibPage, TreeListHighlightHdl ) );
 
     aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
@@ -532,7 +530,6 @@ LibPage::LibPage( Window * pParent )
     aLibBox.SetMode(ObjectMode::Module);
     aLibBox.EnableInplaceEditing(true);
     aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
-    aCloseButton.GrabFocus();
 
     long aTabs[] = { 2, 30, 120 };
     aLibBox.SetTabs( aTabs, MAP_PIXEL );
@@ -581,8 +578,6 @@ void LibPage::CheckButtons()
             aInsertLibButton.Enable();
             aExportButton.Disable();
             aDelButton.Disable();
-            if ( !aLibBox.HasFocus() )
-                aCloseButton.GrabFocus();
         }
         else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
                   ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
@@ -676,11 +671,6 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         Export();
     else if ( pButton == &aDelButton )
         DeleteCurrent();
-    else if ( pButton == &aCloseButton )
-    {
-        EndTabDialog( 0 );
-        return 0;
-    }
     else if ( pButton == &aPasswordButton )
     {
         SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();

@@ -30,7 +30,6 @@
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
-#define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
 #define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
 #define RID_TP_DLGS                     ( RID_BASICIDE_START + 39 )

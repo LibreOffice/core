@@ -179,7 +179,7 @@ public:
 class OrganizeDialog : public TabDialog
 {
 private:
-    TabControl         aTabCtrl;
+    TabControl*        m_pTabCtrl;
     EntryDescriptor    m_aCurEntry;
 
 public:
@@ -197,7 +197,6 @@ protected:
     FixedText           aLibText;
     ExtTreeListBox      aBasicBox;
     PushButton          aEditButton;
-    CancelButton        aCloseButton;
     PushButton          aNewModButton;
     PushButton          aNewDlgButton;
     PushButton          aDelButton;
@@ -232,7 +231,6 @@ protected:
     FixedText           aLibText;
     CheckBox            aLibBox;
     PushButton          aEditButton;
-    CancelButton        aCloseButton;
     PushButton          aPasswordButton;
     PushButton          aNewLibButton;
     PushButton          aInsertLibButton;

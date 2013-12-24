@@ -459,27 +459,30 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
 // ==============
 //
 
-OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc )
-    :TabDialog( pParent, IDEResId( RID_TD_ORGANIZE ) )
-    ,aTabCtrl( this, IDEResId( RID_TC_ORGANIZE ) )
-    ,m_aCurEntry( rDesc )
+OrganizeDialog::OrganizeDialog(Window* pParent, sal_Int16 tabId,
+    EntryDescriptor& rDesc )
+    : TabDialog( pParent, "OrganizeDialog",
+        "modules/BasicIDE/ui/organizedialog.ui" )
+    , m_aCurEntry( rDesc )
 {
-    FreeResource();
-    aTabCtrl.SetActivatePageHdl( LINK( this, OrganizeDialog, ActivatePageHdl ) );
+    get(m_pTabCtrl, "tabcontrol");
+
+    m_pTabCtrl->SetActivatePageHdl(LINK(this, OrganizeDialog, ActivatePageHdl));
+
     if( tabId == 0 )
     {
-        aTabCtrl.SetCurPageId( RID_TP_MOD );
+        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("modules"));
     }
     else if ( tabId == 1 )
     {
-        aTabCtrl.SetCurPageId( RID_TP_DLG );
+        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("dialogs"));
     }
     else
     {
-        aTabCtrl.SetCurPageId( RID_TP_LIB );
+        m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId("libraries"));
     }
 
-    ActivatePageHdl( &aTabCtrl );
+    ActivatePageHdl(m_pTabCtrl);
 
     if (SfxDispatcher* pDispatcher = GetDispatcher())
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
@@ -487,8 +490,8 @@ OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, EntryDescripto
 
 OrganizeDialog::~OrganizeDialog()
 {
-    for ( sal_uInt16 i = 0; i < aTabCtrl.GetPageCount(); i++ )
-        delete aTabCtrl.GetTabPage( aTabCtrl.GetPageId( i ) );
+    for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
+        delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
 };
 
 short OrganizeDialog::Execute()
@@ -507,33 +510,31 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
+        OString sPageName(pTabCtrl->GetPageName(nId));
         TabPage* pNewTabPage = 0;
-        switch ( nId )
+        if (sPageName == "modules")
         {
-            case RID_TP_MOD:
-            {
-                ObjectPage* pObjectPage = new ObjectPage(pTabCtrl, IDEResId(RID_TP_MODULS), BROWSEMODE_MODULES);
-                pNewTabPage = pObjectPage;
-                pObjectPage->SetTabDlg(this);
-                pObjectPage->SetCurrentEntry(m_aCurEntry);
-            }
-            break;
-            case RID_TP_DLG:
-            {
-                ObjectPage* pObjectPage = new ObjectPage( pTabCtrl, IDEResId( RID_TP_DLGS ), BROWSEMODE_DIALOGS );
-                pNewTabPage = pObjectPage;
-                pObjectPage->SetTabDlg(this);
-                pObjectPage->SetCurrentEntry(m_aCurEntry);
-            }
-            break;
-            case RID_TP_LIB:
-            {
-                LibPage* pLibPage = new LibPage( pTabCtrl );
-                pNewTabPage = pLibPage;
-                pLibPage->SetTabDlg( this );
-            }
-            break;
-            default:    OSL_FAIL( "PageHdl: Unbekannte ID!" );
+            ObjectPage* pObjectPage = new ObjectPage(pTabCtrl, IDEResId(RID_TP_MODULS), BROWSEMODE_MODULES);
+            pNewTabPage = pObjectPage;
+            pObjectPage->SetTabDlg(this);
+            pObjectPage->SetCurrentEntry(m_aCurEntry);
+        }
+        else if (sPageName == "dialogs")
+        {
+            ObjectPage* pObjectPage = new ObjectPage( pTabCtrl, IDEResId( RID_TP_DLGS ), BROWSEMODE_DIALOGS );
+            pNewTabPage = pObjectPage;
+            pObjectPage->SetTabDlg(this);
+            pObjectPage->SetCurrentEntry(m_aCurEntry);
+        }
+        else if (sPageName == "libraries")
+        {
+            LibPage* pLibPage = new LibPage( pTabCtrl );
+            pNewTabPage = pLibPage;
+            pLibPage->SetTabDlg( this );
+        }
+        else
+        {
+            OSL_FAIL( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
@@ -551,7 +552,6 @@ ObjectPage::ObjectPage( Window * pParent, const ResId& rResId, sal_uInt16 nMode 
         aLibText(       this,   IDEResId( RID_STR_LIB ) ),
         aBasicBox(      this,   IDEResId( RID_TRLBOX ) ),
         aEditButton(    this,   IDEResId( RID_PB_EDIT ) ),
-        aCloseButton(   this,   IDEResId( RID_PB_CLOSE ) ),
         aNewModButton(  this,   IDEResId( RID_PB_NEWMOD ) ),
         aNewDlgButton(  this,   IDEResId( RID_PB_NEWDLG ) ),
         aDelButton(     this,   IDEResId( RID_PB_DELETE ) )
@@ -561,7 +561,6 @@ ObjectPage::ObjectPage( Window * pParent, const ResId& rResId, sal_uInt16 nMode 
 
     aEditButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-    aCloseButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     aBasicBox.SetSelectHdl( LINK( this, ObjectPage, BasicBoxHighlightHdl ) );
 
     if( nMode & BROWSEMODE_MODULES )
@@ -724,8 +723,6 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         NewDialog();
     else if ( pButton == &aDelButton )
         DeleteCurrent();
-    else if ( pButton == &aCloseButton )
-        EndTabDialog( 0 );
 
     return 0;
 }

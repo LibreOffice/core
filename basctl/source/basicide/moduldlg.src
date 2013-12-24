@@ -20,38 +20,7 @@
 #include "helpid.hrc"
 #include <moduldlg.hrc>
 #include <basidesh.hrc>
-TabDialog RID_TD_ORGANIZE
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Text[ en-US ] = "%PRODUCTNAME Basic Macro Organizer";
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-     // Da Cancel-Button auf TabPage, nicht auf Dialog!
-    TabControl RID_TC_ORGANIZE
-    {
-         //     HelpID = HID_BASICIDE_ORG_TC;
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_TP_MOD ;
-                Text [ en-US ] = "Modules" ;
-            };
-            PageItem
-            {
-                Identifier = RID_TP_DLG ;
-                Text [ en-US ] = "Dialogs" ;
-            };
-            PageItem
-            {
-                Identifier = RID_TP_LIB ;
-                Text [ en-US ] = "Libraries" ;
-            };
-        };
-    };
-};
+
 TabPage RID_TP_MODULS
 {
     HelpId = "basctl:TabPage:RID_TP_MODULS" ;
@@ -80,13 +49,6 @@ TabPage RID_TP_MODULS
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-    };
-    CancelButton RID_PB_CLOSE
-    {
-        Text [ en-US ] = "Close";
-        Pos = MAP_APPFONT ( 144 , 23 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        TabStop = TRUE ;
     };
     PushButton RID_PB_NEWMOD
     {
@@ -141,13 +103,6 @@ TabPage RID_TP_DLGS
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-    };
-    CancelButton RID_PB_CLOSE
-    {
-        Text[ en-US ] = "Close";
-        Pos = MAP_APPFONT ( 144 , 23 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        TabStop = TRUE ;
     };
     PushButton RID_PB_NEWMOD
     {
@@ -219,17 +174,10 @@ TabPage RID_TP_LIBS
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    CancelButton RID_PB_CLOSE
-    {
-        Text [ en-US ] = "Close";
-        Pos = MAP_APPFONT ( 144 , 23 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        TabStop = TRUE ;
-    };
     PushButton RID_PB_PASSWORD
     {
         HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_PASSWORD";
-        Pos = MAP_APPFONT ( 144 , 43 ) ;
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Password..." ;
         TabStop = TRUE ;

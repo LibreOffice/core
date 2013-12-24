@@ -26,7 +26,7 @@
 #define RID_TRLBOX              2
 // free
 #define RID_PB_EDIT             4
-#define RID_PB_CLOSE            5
+
 #define RID_PB_NEWMOD           6
 #define RID_PB_NEWDLG           7
 #define RID_PB_DELETE           8
@@ -37,10 +37,6 @@
 #define RID_STR_BASICS          13
 
 #define RID_PB_EXPORT           14
-
-#define RID_TP_MOD              20
-#define RID_TP_LIB              21
-#define RID_TP_DLG              22
 
 #define RID_TC_ORGANIZE         30
 
