@@ -8645,7 +8645,14 @@ AC_MSG_CHECKING([which libcurl to use])
 if test "$with_system_curl" = "auto"; then
     case "$_os" in
     Darwin)
-        with_system_curl=yes
+        case "$with_macosx_sdk" in
+        10.5)
+            with_system_curl="$with_system_libs"
+            ;;
+        *)
+            with_system_curl=yes
+            ;;
+        esac
         ;;
     *)
         with_system_curl="$with_system_libs"
