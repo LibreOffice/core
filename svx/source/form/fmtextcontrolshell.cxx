@@ -63,8 +63,6 @@
 #include <vcl/outdev.hxx>
 #include <osl/mutex.hxx>
 
-#include <memory>
-
 //........................................................................
 namespace svx
 {
@@ -662,24 +660,24 @@ namespace svx
 
         SfxItemPool* pPool = EditEngine::CreatePool();
         pPool->FreezeIdRanges();
-        ::std::auto_ptr< SfxItemSet > pPureItems( new SfxItemSet( *pPool ) );
+        boost::scoped_ptr< SfxItemSet > xPureItems( new SfxItemSet( *pPool ) );
 
         // put the current states of the items into the set
-        ::std::auto_ptr< SfxAllItemSet > pCurrentItems( new SfxAllItemSet( *pPureItems ) );
-        transferFeatureStatesToItemSet( m_aControlFeatures, *pCurrentItems );
+        boost::scoped_ptr<SfxAllItemSet> xCurrentItems( new SfxAllItemSet( *xPureItems ) );
+        transferFeatureStatesToItemSet( m_aControlFeatures, *xCurrentItems );
 
         // additional items, which we are not responsible for at the SfxShell level,
         // but which need to be forwarded to the dialog, anyway
         ControlFeatures aAdditionalFestures;
         fillFeatureDispatchers( m_xActiveControl, pDialogSlots, aAdditionalFestures );
-        transferFeatureStatesToItemSet( aAdditionalFestures, *pCurrentItems, true );
+        transferFeatureStatesToItemSet( aAdditionalFestures, *xCurrentItems, true );
 
-        ::std::auto_ptr< SfxTabDialog > pDialog ( _eSet == eCharAttribs
-                                                ? static_cast< SfxTabDialog* >( new TextControlCharAttribDialog( NULL, *pCurrentItems, *pFontList ) )
-                                                : static_cast< SfxTabDialog* >( new TextControlParaAttribDialog( NULL, *pCurrentItems ) ) );
-        if ( RET_OK == pDialog->Execute() )
+        boost::scoped_ptr<SfxTabDialog> xDialog ( _eSet == eCharAttribs
+                                                ? static_cast< SfxTabDialog* >( new TextControlCharAttribDialog( NULL, *xCurrentItems, *pFontList ) )
+                                                : static_cast< SfxTabDialog* >( new TextControlParaAttribDialog( NULL, *xCurrentItems ) ) );
+        if ( RET_OK == xDialog->Execute() )
         {
-            const SfxItemSet& rModifiedItems = *pDialog->GetOutputItemSet();
+            const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();
             for ( WhichId nWhich = pPool->GetFirstWhich(); nWhich <= pPool->GetLastWhich(); ++nWhich )
             {
                 if ( rModifiedItems.GetItemState( nWhich ) == SFX_ITEM_SET )
@@ -713,9 +711,9 @@ namespace svx
                         Sequence< PropertyValue > aArgs;
                         // temporarily put the modified item into a "clean" set,
                         // and let TransformItems calc the respective UNO parameters
-                        pPureItems->Put( *pModifiedItem );
-                        TransformItems( nSlotForItemSet, *pPureItems, aArgs );
-                        pPureItems->ClearItem( nWhich );
+                        xPureItems->Put( *pModifiedItem );
+                        TransformItems( nSlotForItemSet, *xPureItems, aArgs );
+                        xPureItems->ClearItem( nWhich );
 
                         if  (   ( nSlotForItemSet == SID_ATTR_PARA_HANGPUNCTUATION )
                             ||  ( nSlotForItemSet == SID_ATTR_PARA_FORBIDDEN_RULES )
@@ -760,9 +758,9 @@ namespace svx
             _rReq.Done( rModifiedItems );
         }
 
-        pDialog.reset();
-        pCurrentItems.reset();
-        pPureItems.reset();
+        xDialog.reset();
+        xCurrentItems.reset();
+        xPureItems.reset();
         SfxItemPool::Free(pPool);
     }
 
