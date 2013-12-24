@@ -8654,14 +8654,7 @@ dnl Check for system curl
 dnl ===================================================================
 AC_MSG_CHECKING([which libcurl to use])
 if test "$with_system_curl" = "auto"; then
-    case "$_os" in
-    Darwin)
-        with_system_curl=yes
-        ;;
-    *)
-        with_system_curl="$with_system_libs"
-        ;;
-    esac
+    with_system_curl="$with_system_libs"
 fi
 
 if test "$with_system_curl" = "yes"; then
