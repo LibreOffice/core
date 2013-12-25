@@ -43,18 +43,18 @@ namespace chart
 InsertErrorBarsDialog::InsertErrorBarsDialog(
     Window* pParent, const SfxItemSet& rMyAttrs,
     const uno::Reference< chart2::XChartDocument > & xChartDocument,
-    ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
+    oldErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
         ModalDialog( pParent, SchResId( DLG_DATA_YERRORBAR )),
         rInAttrs( rMyAttrs ),
         aBtnOK( this, SchResId( BTN_OK )),
         aBtnCancel( this, SchResId( BTN_CANCEL )),
         aBtnHelp( this, SchResId( BTN_HELP )),
-        m_apErrorBarResources( new ErrorBarResources(
+        m_apErrorBarResources( new oldErrorBarResources(
                                    this, this, rInAttrs,
                                    /* bNoneAvailable = */ true, eType ))
 {
     FreeResource();
-    ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
+    ObjectType objType = eType == oldErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
     this->SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
 

@@ -496,7 +496,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
             InsertErrorBarsDialog aDlg(
                 m_pChartWindow, aItemSet,
                 uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
-                bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
+                bYError ? oldErrorBarResources::ERROR_BAR_Y : oldErrorBarResources::ERROR_BAR_X);
 
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, OUString() ) );
