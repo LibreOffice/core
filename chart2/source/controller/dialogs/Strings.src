@@ -591,10 +591,12 @@ String STR_DATA_SELECT_RANGE_FOR_DATALABELS
 {
     Text [ en-US ] = "Select Range for data labels" ;
 };
+//TODO: ohallot: String inserted into tp_ErrorBars.ui
 String STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS
 {
     Text [ en-US ] = "Select Range for Positive Error Bars" ;
 };
+//TODO: ohallot: String inserted into tp_ErrorBars.ui
 String STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS
 {
     Text [ en-US ] = "Select Range for Negative Error Bars" ;

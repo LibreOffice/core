@@ -28,14 +28,17 @@ namespace chart
 {
 
 ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
-        SfxTabPage( pParent, SchResId( TP_YERRORBAR ), rInAttrs ),
+        SfxTabPage( pParent
+        ,"tp_ErrorBars"
+        ,"modules/schart/ui/tp_ErrorBars.ui"
+        , rInAttrs ),
         m_aErrorBarResources(
             this,
             // the parent is the tab control, of which the parent is the dialog
             pParent->GetParentDialog(),
             rInAttrs, /* bNoneAvailable = */ false )
 {
-    FreeResource();
+//     FreeResource();
 }
 
 ErrorBarsTabPage::~ErrorBarsTabPage()
