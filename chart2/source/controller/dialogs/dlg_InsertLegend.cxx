@@ -18,10 +18,7 @@
  */
 
 #include "dlg_InsertLegend.hxx"
-#include "dlg_InsertLegend.hrc"
 #include "res_LegendPosition.hxx"
-#include "ObjectNameProvider.hxx"
-#include "ResId.hxx"
 
 namespace chart
 {
@@ -29,14 +26,11 @@ namespace chart
 using namespace ::com::sun::star;
 
 SchLegendDlg::SchLegendDlg(Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC )
-    : ModalDialog(pWindow, SchResId(DLG_LEGEND))
-    , m_apLegendPositionResources( new oldLegendPositionResources(this,xCC) )
-    , aBtnOK(this, SchResId(BTN_OK))
-    , aBtnCancel(this, SchResId(BTN_CANCEL))
-    , aBtnHelp(this, SchResId(BTN_HELP))
+    : ModalDialog(pWindow
+    ,"dlg_InsertLegend"
+    ,"modules/schart/ui/dlg_InsertLegend.ui")
+    , m_apLegendPositionResources( new LegendPositionResources(*this,xCC) )
 {
-    FreeResource();
-    this->SetText( ObjectNameProvider::getName(OBJECTTYPE_LEGEND) );
 }
 
 SchLegendDlg::~SchLegendDlg()
