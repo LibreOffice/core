@@ -36,7 +36,7 @@ public:
     InsertErrorBarsDialog( Window* pParent, const SfxItemSet& rMyAttrs,
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::XChartDocument > & xChartDocument,
-                           ErrorBarResources::tErrorBarType eType );
+                           oldErrorBarResources::tErrorBarType eType );
     virtual ~InsertErrorBarsDialog();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
@@ -58,7 +58,7 @@ private:
     CancelButton      aBtnCancel;
     HelpButton        aBtnHelp;
 
-    ::std::auto_ptr< ErrorBarResources >    m_apErrorBarResources;
+    boost::scoped_ptr< oldErrorBarResources >    m_apErrorBarResources;
 };
 
 } //namespace chart

@@ -33,6 +33,7 @@ String STR_INDICATE_UP
 };
 
 // used for own data in error bar dialog
+//TODO: ohallot: String inserted into tp_ErrorBars.ui
 String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
 {
     Text [ en-US ] = "From Data Table" ;
