@@ -6143,7 +6143,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     sal_Bool bWriteEastAsiaTheme = sal_True;
     sal_Bool bWriteThemeFontColor = sal_True;
     OUString sOriginalValue;
-    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); i++ )
+    for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
     {
         if ( m_pFontsAttrList && i->first == "CharThemeFontNameCs" )
         {

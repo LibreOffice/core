@@ -1527,7 +1527,7 @@ bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
         RectangleVector aRectangles;
         i_rClip.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             const long nW(aRectIter->Right() - aRectIter->Left() + 1); // uses +1 logic in original
 
