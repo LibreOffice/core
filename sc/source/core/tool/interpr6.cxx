@@ -973,7 +973,7 @@ void ScInterpreter::ScCount()
 
                 FuncCount aAction;
                 aSet.executeColumnAction(*pDok, aAction);
-                nCount = aAction.getCount();
+                nCount += aAction.getCount();
 
                 // Get the number format of the last iterated cell.
                 nFuncFmtIndex = aAction.getNumberFormat();
