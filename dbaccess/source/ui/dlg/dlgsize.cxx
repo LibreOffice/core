@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlgsize.hrc"
 #include "dlgsize.hxx"
 #include "dbu_dlg.hrc"
 #include "moduledbu.hxx"
@@ -30,64 +29,52 @@ namespace dbaui
 
 DBG_NAME(DlgSize)
 DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard )
-        :ModalDialog( pParent, ModuleRes(bRow ? DLG_ROWHEIGHT : DLG_COLWIDTH))
-        ,m_nPrevValue(nVal)
-        ,m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
-        ,aFT_VALUE(this,    ModuleRes( FT_VALUE))
-        ,aMF_VALUE(this,    ModuleRes( MF_VALUE))
-        ,aCB_STANDARD(this, ModuleRes(CB_STANDARD))
-        ,aPB_OK(this,       ModuleRes(PB_OK))
-        ,aPB_CANCEL(this,   ModuleRes(PB_CANCEL))
-        ,aPB_HELP(this,     ModuleRes(PB_HELP))
+    : ModalDialog(pParent, bRow ? OString("RowHeightDialog") : OString("ColWidthDialog"),
+        bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"))
+    , m_nPrevValue(nVal)
+    , m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
 {
-    DBG_CTOR(DlgSize,NULL);
+    get(m_pMF_VALUE, "value");
+    get(m_pCB_STANDARD, "automatic");
 
     if ( _nAlternativeStandard > 0 )
         m_nStandard = _nAlternativeStandard;
-    aCB_STANDARD.SetClickHdl(LINK(this,DlgSize,CbClickHdl));
+    m_pCB_STANDARD->SetClickHdl(LINK(this,DlgSize,CbClickHdl));
 
-    aMF_VALUE.EnableEmptyFieldValue(sal_True);
+    m_pMF_VALUE->EnableEmptyFieldValue(sal_True);
     sal_Bool bDefault = -1 == nVal;
-    aCB_STANDARD.Check(bDefault);
+    m_pCB_STANDARD->Check(bDefault);
     if (bDefault)
     {
         SetValue(m_nStandard);
         m_nPrevValue = m_nStandard;
     }
-    LINK(this,DlgSize,CbClickHdl).Call(&aCB_STANDARD);
-
-    FreeResource();
-}
-
-DlgSize::~DlgSize()
-{
-
-    DBG_DTOR(DlgSize,NULL);
+    LINK(this,DlgSize,CbClickHdl).Call(m_pCB_STANDARD);
 }
 
 void DlgSize::SetValue( sal_Int32 nVal )
 {
-    aMF_VALUE.SetValue(nVal, FUNIT_CM );
+    m_pMF_VALUE->SetValue(nVal, FUNIT_CM );
 }
 
 sal_Int32 DlgSize::GetValue()
 {
-    if (aCB_STANDARD.IsChecked())
+    if (m_pCB_STANDARD->IsChecked())
         return -1;
-    return (sal_Int32)aMF_VALUE.GetValue( FUNIT_CM );
+    return (sal_Int32)m_pMF_VALUE->GetValue( FUNIT_CM );
 }
 
 IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
 {
 
-    if( pButton == &aCB_STANDARD )
+    if( pButton == m_pCB_STANDARD )
     {
-        aMF_VALUE.Enable(!aCB_STANDARD.IsChecked());
-        if (aCB_STANDARD.IsChecked())
+        m_pMF_VALUE->Enable(!m_pCB_STANDARD->IsChecked());
+        if (m_pCB_STANDARD->IsChecked())
         {
-            m_nPrevValue = static_cast<sal_Int32>(aMF_VALUE.GetValue(FUNIT_CM));
-                // don't use getValue as this will use aCB_STANDARD.to determine if we're standard
-            aMF_VALUE.SetEmptyFieldValue();
+            m_nPrevValue = static_cast<sal_Int32>(m_pMF_VALUE->GetValue(FUNIT_CM));
+                // don't use getValue as this will use m_pCB_STANDARD->to determine if we're standard
+            m_pMF_VALUE->SetEmptyFieldValue();
         }
         else
         {

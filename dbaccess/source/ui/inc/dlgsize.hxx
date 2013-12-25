@@ -39,17 +39,11 @@ namespace dbaui
     protected:
         DECL_LINK( CbClickHdl, Button * );
 
-        FixedText       aFT_VALUE;
-        MetricField     aMF_VALUE;
-        CheckBox        aCB_STANDARD;
-        OKButton        aPB_OK;
-        CancelButton    aPB_CANCEL;
-        HelpButton      aPB_HELP;
+        MetricField*    m_pMF_VALUE;
+        CheckBox*       m_pCB_STANDARD;
 
     public:
         DlgSize( Window * pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard = -1 );
-        ~DlgSize();
-
         sal_Int32 GetValue();
     };
 }   // namespace dbaui

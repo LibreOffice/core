@@ -83,8 +83,7 @@
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 #define DLG_FILTERCRIT                  RID_DIALOG_START +  6
 #define DLG_ORDERCRIT                   RID_DIALOG_START +  7
-#define DLG_ROWHEIGHT                   RID_DIALOG_START +  8
-#define DLG_COLWIDTH                    RID_DIALOG_START +  9
+
 #define DLG_ATTR                        RID_DIALOG_START + 10
 #define DLG_SAVE_AS                     RID_DIALOG_START + 11
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14

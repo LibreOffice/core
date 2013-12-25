@@ -78,10 +78,6 @@
 #define HID_BROWSER_CLOSECONN                             "DBACCESS_HID_BROWSER_CLOSECONN"
 #define HID_BROWSER_REFRESHCONN                           "DBACCESS_HID_BROWSER_REFRESHCONN"
 
-#define HID_DLG_ROWHEIGHT                                 "DBACCESS_HID_DLG_ROWHEIGHT"
-#define HID_DLG_COLWIDTH                                  "DBACCESS_HID_DLG_COLWIDTH"
-
-
 #define HID_TLB_QUERYDESIGN                               "DBACCESS_HID_TLB_QUERYDESIGN"
 #define HID_CTL_QRYSQLEDIT                                "DBACCESS_HID_CTL_QRYSQLEDIT"
 #define HID_DSADMIN_SPECIAL_MESSAGE                       "DBACCESS_HID_DSADMIN_SPECIAL_MESSAGE"
