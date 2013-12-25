@@ -72,51 +72,6 @@ private:
     Link            m_aChangeLink;
 };
 
-
-class oldLegendPositionResources
-{
-
-public:
-    //constructor without Display checkbox
-    oldLegendPositionResources( Window* pParent );
-    //constructor inclusive Display checkbox
-    oldLegendPositionResources( Window* pParent, const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>& xCC );
-    virtual ~oldLegendPositionResources();
-
-    void writeToResources( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel );
-    void writeToModel( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xChartModel ) const;
-
-    void initFromItemSet( const SfxItemSet& rInAttrs );
-    void writeToItemSet( SfxItemSet& rOutAttrs ) const;
-
-    void SetChangeHdl( const Link& rLink );
-
-    DECL_LINK( PositionEnableHdl, void* );
-    DECL_LINK( PositionChangeHdl, RadioButton* );
-
-    void SetAccessibleRelationMemberOf(Window* pMemberOf);
-
-private:
-    void impl_setRadioButtonToggleHdl();
-
-private:
-    ::com::sun::star::uno::Reference<
-                       ::com::sun::star::uno::XComponentContext>    m_xCC;
-
-    CheckBox        m_aCbxShow;
-
-    RadioButton     m_aRbtLeft;
-    RadioButton     m_aRbtRight;
-    RadioButton     m_aRbtTop;
-    RadioButton     m_aRbtBottom;
-
-    Link            m_aChangeLink;
-};
-
-
 } //namespace chart
 
 #endif

@@ -22,24 +22,21 @@
 // header for class ModalDialog
 #include <vcl/dialog.hxx>
 // header for class CheckBox
-#include <vcl/button.hxx>
-//for auto_ptr
-#include <memory>
+#include <sfx2/basedlgs.hxx>
+
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace chart
 {
 
-class oldLegendPositionResources;
+class LegendPositionResources;
+
 class SchLegendDlg : public ModalDialog
 {
 private:
-    ::std::auto_ptr< oldLegendPositionResources >    m_apLegendPositionResources;
-
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    boost::scoped_ptr < LegendPositionResources >    m_apLegendPositionResources;
 
 public:
     SchLegendDlg( Window* pParent, const ::com::sun::star::uno::Reference<

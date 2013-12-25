@@ -101,7 +101,6 @@
 #define HID_DIAGRAM_TYPE                                    "CHART2_HID_DIAGRAM_TYPE"
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
-#define HID_INSERT_CHART_LEGEND                             "CHART2_HID_INSERT_CHART_LEGEND"
 #define HID_INSERT_DESCRIPTION                              "CHART2_HID_INSERT_DESCRIPTION"
 
 
