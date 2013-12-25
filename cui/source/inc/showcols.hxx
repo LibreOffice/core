@@ -35,16 +35,13 @@
 
 class FmShowColsDialog : public ModalDialog
 {
-    ListBox         m_aList;
-    FixedText       m_aLabel;
-    OKButton        m_aOK;
-    CancelButton    m_aCancel;
+    ListBox*        m_pList;
+    OKButton*       m_pOK;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xColumns;
 
 public:
-    FmShowColsDialog( Window* pParent );
-    virtual ~FmShowColsDialog();
+    FmShowColsDialog(Window* pParent);
 
     void SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols);
 

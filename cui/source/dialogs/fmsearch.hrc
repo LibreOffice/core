@@ -21,7 +21,6 @@
 
 #include "svl/solar.hrc"
 
-#define RID_SVX_DLG_SHOWGRIDCOLUMNS                 (RID_FORMS_START + 11)
 #define RID_SVXDLG_SEARCHFORM                       (RID_FORMS_START + 7)
 #define RID_STR_SEARCH_ANYWHERE                     (RID_FORMS_START +  85)
 #define RID_STR_SEARCH_BEGINNING                    (RID_FORMS_START +  86)

@@ -36,23 +36,14 @@
 DBG_NAME(FmShowColsDialog)
 //--------------------------------------------------------------------------
 FmShowColsDialog::FmShowColsDialog(Window* pParent)
-    :ModalDialog(pParent, CUI_RES(RID_SVX_DLG_SHOWGRIDCOLUMNS))
-    ,m_aList(this, CUI_RES(1))
-    ,m_aLabel(this, CUI_RES(1))
-    ,m_aOK(this, CUI_RES(1))
-    ,m_aCancel(this, CUI_RES(1))
+    : ModalDialog(pParent, "ShowColDialog", "cui/ui/showcoldialog.ui")
 {
-    DBG_CTOR(FmShowColsDialog,NULL);
-    m_aList.EnableMultiSelection(sal_True);
-    m_aOK.SetClickHdl( LINK( this, FmShowColsDialog, OnClickedOk ) );
-
-    FreeResource();
-}
-
-//--------------------------------------------------------------------------
-FmShowColsDialog::~FmShowColsDialog()
-{
-    DBG_DTOR(FmShowColsDialog,NULL);
+    get(m_pOK, "ok");
+    get(m_pList, "treeview");
+    m_pList->set_height_request(m_pList->GetTextHeight() * 8);
+    m_pList->set_width_request(m_pList->approximate_char_width() * 56);
+    m_pList->EnableMultiSelection(true);
+    m_pOK->SetClickHdl( LINK( this, FmShowColsDialog, OnClickedOk ) );
 }
 
 //--------------------------------------------------------------------------
@@ -62,9 +53,9 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     if (m_xColumns.is())
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
-        for (sal_uInt16 i=0; i<m_aList.GetSelectEntryCount(); ++i)
+        for (sal_uInt16 i=0; i < m_pList->GetSelectEntryCount(); ++i)
         {
-            m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_aList.GetEntryData(m_aList.GetSelectEntryPos(i))))) >>= xCol;
+            m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_pList->GetEntryData(m_pList->GetSelectEntryPos(i))))) >>= xCol;
             if (xCol.is())
             {
                 try
@@ -91,7 +82,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
         return;
     m_xColumns = xCols.get();
 
-    m_aList.Clear();
+    m_pList->Clear();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  xCurCol;
     OUString sCurName;
@@ -116,7 +107,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
         // if the col is hidden, put it into the list
         if (bIsHidden)
-            m_aList.SetEntryData( m_aList.InsertEntry(sCurName), reinterpret_cast<void*>((sal_Int64)i) );
+            m_pList->SetEntryData( m_pList->InsertEntry(sCurName), reinterpret_cast<void*>((sal_Int64)i) );
     }
 }
 
