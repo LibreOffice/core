@@ -115,7 +115,6 @@ public:
     OString sResTyp;
     OString sId;
     OString sGId;
-    OString sHelpId;
     OString sFilename;
 
     OStringHashMap sText;

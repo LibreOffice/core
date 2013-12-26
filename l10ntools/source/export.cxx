@@ -507,10 +507,6 @@ int Export::Execute( int nToken, const char * pToken )
                     replaceAll(" ", OString()));
                 pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
-            else if (sKey == "HELPID")
-            {
-                pResData->sHelpId = sValue;
-            }
             else if (sKey =="STRINGLIST")
             {
                 pResData->bList = sal_True;
