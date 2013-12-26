@@ -53,7 +53,6 @@
 #define RSCDEFINELEND       516         /*                                  */
 #define PRAGMA              519         /* #pragma ...                      */
 #define _LISTTEXT           521         /* { "Text" ... }                   */
-#define TEXTREFID           522         /* Text = 12345                     */
 #define NORMDEFINE          524         /* #define ...                      */
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */

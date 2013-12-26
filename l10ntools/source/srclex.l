@@ -168,11 +168,6 @@ void YYWarning();
 	WorkOnTokenSet( APPFONTMAPPING, yytext );
 }
 
-[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*[0123456789]{1,5}[ \t]*";"?\\? {
-/* TEXTREFID // TextTyp = 12345 */
-	WorkOnTokenSet( TEXTREFID, yytext );
-}
-
 [a-zA-Z0-9_]+[ \t]*"="[\t ]*([ \t]*"//".*\n)*.*	|
 [a-zA-Z0-9_]+[ \t]*"=".*	{
 /* ASSIGNMENT  Typ = ...  */

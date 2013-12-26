@@ -695,8 +695,6 @@ int Export::Execute( int nToken, const char * pToken )
             exit(-1);
         }
         break;
-        case TEXTREFID :
-        break;
         }
     if ( bWriteToMerged ) {
         // the current token must be written to dest. without merging
