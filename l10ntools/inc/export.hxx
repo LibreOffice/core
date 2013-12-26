@@ -160,12 +160,6 @@ private:
     void CleanValue( OString &rValue );
     OString GetText(const OString &rSource, int nToken);
 
-    /**
-      Get all MergeEntrys for the ExportList identified by pResData
-      Check whether list can merge and load all needed MergeEntry from DataBase.
-    */
-    bool GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys);
-
     void ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
     void MergeRest( ResData *pResData );
     void ConvertMergeContent( OString &rText );

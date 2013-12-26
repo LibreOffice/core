@@ -1007,55 +1007,6 @@ void Export::ConvertExportContent( OString& rText )
     rText = helper::unEscapeAll(rText,"\\n""\\t""\\\\""\\\"","\n""\t""\\""\"");
 }
 
-bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys )
-{
-    o_vMergeEntrys.clear();
-
-    if (!pResData->sGId.isEmpty())
-        pResData->sGId = pResData->sGId + OString('.');
-    pResData->sGId = pResData->sGId + pResData->sId;
-
-    pResData->sResTyp = lcl_GetListTyp( nList, false );
-
-    const sal_uInt16 nMaxIndex = pResData->m_aList.size();
-    /**
-      * Check whether count of listentries match with count
-      * of translated items. If not than write origin items
-      * to the list to avoid mixed translations
-      * (exclude pairedlist)
-      */
-    if( nList != LIST_PAIRED )
-    {
-        MergeEntrys* pEntrys;
-        // MergeData contains longer list
-        pResData->sId = OString::number(nMaxIndex+1);
-        pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-        if ( pEntrys )
-            return false;
-        // MergeData contains shorter list
-        pResData->sId = OString::number(nMaxIndex);
-        pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-        if ( !pEntrys )
-            return false;
-        pResData->sId = "1";
-    }
-
-    for( sal_uInt16 nLIndex = 1; nLIndex <= nMaxIndex; ++nLIndex )
-    {
-        // Set matching pairedlist identifier
-        if ( nList == LIST_PAIRED )
-        {
-            pResData->sId = GetPairedListID ( pResData->m_aList[ ( nLIndex ) -1 ] );
-        }
-        else
-            pResData->sId = OString::number(nLIndex);
-
-        MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-        o_vMergeEntrys.push_back(pEntrys);
-    }
-    return true;
- }
-
 void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType )
 {
     sal_Bool bAddSemicolon = sal_False;
@@ -1134,12 +1085,16 @@ void Export::MergeRest( ResData *pResData )
         OString sOldGId = pResData->sGId;
         OString sOldTyp = pResData->sResTyp;
 
+        // Set pResData so we can find the corresponding string
+        if (!pResData->sGId.isEmpty())
+            pResData->sGId = pResData->sGId + OString('.');
+        pResData->sGId = pResData->sGId + pResData->sId;
+
+        pResData->sResTyp = lcl_GetListTyp( nList, false );
+
         OString sSpace;
         for ( sal_uInt16 i = 1; i < nLevel-1; i++ )
             sSpace += "\t";
-
-        std::vector<MergeEntrys*> vMergeEntryVector;
-        bool bTranslateList = GetAllMergeEntrysOfList(pResData, vMergeEntryVector);
 
         OString sCur;
         for( unsigned int n = 0; n < aLanguages.size(); n++ )
@@ -1180,17 +1135,31 @@ void Export::MergeRest( ResData *pResData )
                     }
                 }
 
-                if( bTranslateList && nLIndex < vMergeEntryVector.size() && vMergeEntryVector[nLIndex] )
+                // Set matching identifier
+                if ( nList == LIST_PAIRED )
                 {
-                    OString sText;
-                    bool bText = vMergeEntryVector[nLIndex]->GetText( sText, STRING_TYP_TEXT, sCur, sal_True );
-                    if ( bText && !sText.isEmpty() )
-                    {
-                        ConvertMergeContent( sText );
-                        OString sPre  = sLine.copy( 0 , sLine.indexOf('"') );
-                        OString sPost = sLine.copy( sLine.lastIndexOf('"') + 1 );
-                        sLine = sPre + sText + sPost;
-                    }
+                    pResData->sId = GetPairedListID ( sLine );
+                }
+                else
+                {
+                    pResData->sId =
+                        sLine.copy(
+                        sLine.indexOf('"')+1,
+                        sLine.lastIndexOf('"')-sLine.indexOf('"')-1);
+                    ConvertExportContent( pResData->sId );
+                }
+
+                MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+                OString sText;
+                bool bText = pEntrys ? pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, sal_True ) : false;
+
+                if( bText && !sText.isEmpty())
+                {
+                    ConvertMergeContent( sText );
+                    sLine =
+                        sLine.copy( 0 , sLine.indexOf('"') ) +
+                        sText +
+                        sLine.copy( sLine.lastIndexOf('"') + 1 );
                 }
 
                 OString sText1( "\t" );
