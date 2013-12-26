@@ -132,11 +132,11 @@ using namespace ::com::sun::star::io;
 
 namespace {
 
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+
 static const sal_Int8 LOCK_UI_NOLOCK = 0;
 static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
 static const sal_Int8 LOCK_UI_TRY = 2;
-
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
 bool IsSystemFileLockingUsed()
 {
