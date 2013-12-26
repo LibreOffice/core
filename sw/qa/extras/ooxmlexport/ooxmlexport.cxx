@@ -2175,6 +2175,22 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTOCFlag_f, "toc_doc.docx")
+{
+    // Export logic for all TOC field flags was enclosed inside
+    // if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() ) in ww8atr.cxx which gets true for \f,
+    // this was the reason if there is \f flag present in original doc then only other flags like
+    // \o \h \n used to come after RoundTrip.
+    // This test case is to verify even if there is no \f flag in original doc, \h flag is getting
+    // preserved after RT.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.endsWith("\\h"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
