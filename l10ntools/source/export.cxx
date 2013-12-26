@@ -807,12 +807,14 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
         }
         else
         {
-            sLID = OString::number(i + 1);
             sText = StripList( sText );
             if( sText == "\\\"" )
                 sText = "\"";
         }
         ConvertExportContent(sText);
+
+        if (nTyp != LIST_PAIRED)
+            sLID = sText;
 
         OString sType = lcl_GetListTyp( nList, false );
 
