@@ -90,12 +90,8 @@ public:
 //
 
 #define ID_LEVEL_NULL       0x0000
-#define ID_LEVEL_AUTOID     0x0001
 #define ID_LEVEL_TEXT       0x0002
-#define ID_LEVEL_FIELDNAME  0x0003
-#define ID_LEVEL_ACCESSPATH 0x0004
 #define ID_LEVEL_IDENTIFIER 0x0005
-#define ID_LEVEL_LISTINDEX  0x0006
 
 
 /// Purpose: holds mandatory data to export a single res (used with ResStack)

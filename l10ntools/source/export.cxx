@@ -622,11 +622,7 @@ int Export::Execute( int nToken, const char * pToken )
                 if ( !sText.isEmpty() && !sLang.isEmpty() )
                 {
                     sKey = sKey.toAsciiUpperCase();
-                    if (sKey == "TEXT" ||
-                        sKey == "MESSAGE"  ||
-                        sKey == "CUSTOMUNITTEXT"  ||
-                        sKey == "SLOTNAME"  ||
-                        sKey == "UINAME")
+                    if (sKey == "TEXT" || sKey == "MESSAGE"  || sKey == "CUSTOMUNITTEXT")
                     {
                         SetChildWithText();
                         if ( sLangIndex.equalsIgnoreAsciiCase("en-US") )
@@ -675,12 +671,6 @@ int Export::Execute( int nToken, const char * pToken )
                             }
                             pResData->sTitle[ sLangIndex ] = sText;
                         }
-                    }
-                    else if ( sKey == "ACCESSPATH" ) {
-                        pResData->SetId( sText, ID_LEVEL_ACCESSPATH );
-                    }
-                    else if ( sKey == "FIELDNAME" ) {
-                        pResData->SetId( sText, ID_LEVEL_FIELDNAME );
                     }
                 }
             }
