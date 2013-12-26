@@ -55,10 +55,9 @@ const int OfficeIPCThread::sc_nShSeqLength = 5;
 
 namespace {
 
-static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
-
 #if HAVE_FEATURE_DESKTOP
 
+static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
 
