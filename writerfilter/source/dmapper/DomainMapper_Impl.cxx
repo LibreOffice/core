@@ -2698,6 +2698,7 @@ void DomainMapper_Impl::handleToc
     bool bHideTabLeaderPageNumbers = false ;
     bool bIsTabEntry = false ;
     bool bNewLine = false ;
+    bool bParagraphOutlineLevel = false;
 
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
@@ -2782,6 +2783,7 @@ void DomainMapper_Impl::handleToc
     if( lcl_FindInCommand( pContext->GetCommand(), 'u', sValue ))
     {
         bFromOutline = true;
+        bParagraphOutlineLevel = true;
                         //todo: what doesn 'the applied paragraph outline level' refer to?
     }
 //    \w Preserve tab characters within table entries
@@ -2824,6 +2826,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS ), uno::makeAny( bHideTabLeaderPageNumbers ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TAB_IN_TOC ), uno::makeAny( bIsTabEntry ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TOC_NEW_LINE ), uno::makeAny( bNewLine ));
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TOC_PARAGRAPH_OUTLINE_LEVEL ), uno::makeAny( bParagraphOutlineLevel ));
         if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels

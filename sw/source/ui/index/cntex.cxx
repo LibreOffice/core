@@ -245,7 +245,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS,          0!=(nContentOptions&nsSwTOXElement::TOX_TABLEADER       ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TAB_IN_TOC,                  0!=(nContentOptions&nsSwTOXElement::TOX_TAB_IN_TOC       ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TOC_NEWLINE,                 0!=(nContentOptions&nsSwTOXElement::TOX_NEWLINE));
-
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_TOC_PARAGRAPH_OUTLINE_LEVEL,                 0!=(nContentOptions&nsSwTOXElement::TOX_PARAGRAPH_OUTLINE_LEVEL));
 
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_CHAPTER, rDesc.IsFromChapter());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_PROTECTED, rDesc.IsReadonly());

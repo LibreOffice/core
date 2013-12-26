@@ -335,6 +335,7 @@ enum PropertyIds
         ,PROP_TAB_IN_TOC
         ,PROP_TOC_BOOKMARK
         ,PROP_TOC_NEW_LINE
+        ,PROP_TOC_PARAGRAPH_OUTLINE_LEVEL
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

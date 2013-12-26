@@ -364,6 +364,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TAB_IN_TOC : sName = "TabInTOC"; break ;
             case PROP_TOC_BOOKMARK: sName = "TOCBookmark"; break;
             case PROP_TOC_NEW_LINE: sName = "TOCNewLine"; break;
+            case PROP_TOC_PARAGRAPH_OUTLINE_LEVEL   :   sName = "TOCParagraphOutlineLevel"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

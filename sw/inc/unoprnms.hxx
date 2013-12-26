@@ -125,6 +125,7 @@
 #define UNO_NAME_TAB_IN_TOC "TabInTOC"
 #define UNO_NAME_TOC_BOOKMARK "TOCBookmark"
 #define UNO_NAME_TOC_NEWLINE "TOCNewLine"
+#define UNO_NAME_TOC_PARAGRAPH_OUTLINE_LEVEL "TOCParagraphOutlineLevel"
 
 #define UNO_NAME_CHAR_FLASH "CharFlash"
 #define UNO_NAME_CHAR_KERNING "CharKerning"

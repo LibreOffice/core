@@ -662,6 +662,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_CREATE_FROM_OUTLINE:
             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_OUTLINELEVEL);
         break;
+        case WID_TOC_PARAGRAPH_OUTLINE_LEVEL:
+            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_PARAGRAPH_OUTLINE_LEVEL);
+        break;
         case WID_TAB_IN_TOC:
              lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TAB_IN_TOC);
         break;
