@@ -184,7 +184,6 @@ Export::Export(const OString &rOutput)
                 bMergeMode( false ),
                 bError( sal_False ),
                 bReadOver( sal_False ),
-                bDontWriteOutput( sal_False ),
                 sFilename( global::inputPathname ),
                 sLanguages( OString() ),
                 pParseQueue( new ParserQueue( *this ) )
@@ -211,7 +210,6 @@ Export::Export(
                 sMergeSrc( rMergeSource ),
                 bError( sal_False ),
                 bReadOver( sal_False ),
-                bDontWriteOutput( sal_False ),
                 sFilename( global::inputPathname ),
                 sLanguages( rLanguage ),
                 pParseQueue( new ParserQueue( *this ) )
@@ -386,7 +384,6 @@ int Export::Execute( int nToken, const char * pToken )
 
         case RESOURCE:
         case RESOURCEEXPR: {
-            bDontWriteOutput = sal_False;
             if ( nToken != RSCDEFINE )
                 bNextMustBeDefineEOL = sal_False;
             // this is the beginning of a new res.
@@ -426,7 +423,6 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case SMALRESOURCE: {
-            bDontWriteOutput = sal_False;
             // this is the beginning of a new res.
             bNextMustBeDefineEOL = sal_False;
             nLevel++;
@@ -454,7 +450,6 @@ int Export::Execute( int nToken, const char * pToken )
             if ( nList )
                 break;
 
-            bDontWriteOutput = sal_False;
             OString sLowerTyp;
             if ( pResData )
                 sLowerTyp = "unknown";
@@ -471,7 +466,6 @@ int Export::Execute( int nToken, const char * pToken )
         case LEVELDOWN: {
             // pop
             if ( !nList  ) {
-                bDontWriteOutput = sal_False;
                 if ( nLevel ) {
                     if ( bDefine && (nLevel == 1 )) {
                         bDefine = sal_False;
@@ -498,7 +492,6 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case ASSIGNMENT:
         {
-            bDontWriteOutput = sal_False;
             // interpret different types of assignement
             sal_Int32 n = 0;
             OString sKey = sToken.getToken(0, '=', n).
@@ -553,7 +546,6 @@ int Export::Execute( int nToken, const char * pToken )
         case UIENTRIES:
         case LISTASSIGNMENT:
         {
-            bDontWriteOutput = sal_False;
             OString sTmpToken(
                 sToken.replaceAll(" ", OString()).toAsciiLowerCase());
             sal_Int32 nPos = sTmpToken.indexOf("[en-us]=");
@@ -625,7 +617,6 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case LONGTEXTLINE:
         case TEXTLINE:
-            bDontWriteOutput = sal_False;
             if ( nLevel )
             {
                 CutComment( sToken );
@@ -727,22 +718,16 @@ int Export::Execute( int nToken, const char * pToken )
             }
         break;
         case APPFONTMAPPING:
-        {
-            bDontWriteOutput = sal_False;
-        }
         break;
         case RSCDEFINELEND:
-            bDontWriteOutput = sal_False;
         break;
         case CONDITION: {
-            bDontWriteOutput = sal_False;
             if ( nLevel ) {
                 WriteData( pResData, sal_True );
             }
         }
         break;
         case EMPTYLINE : {
-            bDontWriteOutput = sal_False;
             if ( bDefine ) {
                 bNextMustBeDefineEOL = sal_False;
                 bDefine = sal_False;
@@ -752,14 +737,12 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case PRAGMA : {
-            bDontWriteOutput = sal_False;
             fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
             exit(-1);
         }
         break;
-        case TEXTREFID : {
-            bDontWriteOutput = sal_True;
-        }
+        case TEXTREFID :
+        break;
         }
     if ( bWriteToMerged ) {
         // the current token must be written to dest. without merging
