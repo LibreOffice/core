@@ -313,7 +313,9 @@ static inline OUString getBridgeName(
     aBridgeName.append( EnvDcp::getTypeName(rTo.getTypeName()) );
     return aBridgeName.makeStringAndClear();
 }
-//==================================================================================================
+
+#ifndef DISABLE_DYNLOADING
+
 static inline void setNegativeBridge( const OUString & rBridgeName )
     SAL_THROW(())
 {
@@ -321,6 +323,8 @@ static inline void setNegativeBridge( const OUString & rBridgeName )
     MutexGuard aGuard( rData.aNegativeLibsMutex );
     rData.aNegativeLibs.insert( rBridgeName );
 }
+
+#endif
 
 #ifdef DISABLE_DYNLOADING
 
