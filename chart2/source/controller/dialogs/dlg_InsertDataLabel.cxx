@@ -18,25 +18,18 @@
  */
 
 #include "dlg_InsertDataLabel.hxx"
-#include "dlg_InsertDataLabel.hrc"
-#include "ResId.hxx"
-#include "ObjectNameProvider.hxx"
 #include "res_DataLabel.hxx"
 
 namespace chart
 {
 
 DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter) :
-    ModalDialog(pWindow, SchResId(DLG_DATA_DESCR)),
-    m_aBtnOK(this, SchResId(BTN_OK)),
-    m_aBtnCancel(this, SchResId(BTN_CANCEL)),
-    m_aBtnHelp(this, SchResId(BTN_HELP)),
-    m_apDataLabelResources( new oldDataLabelResources(this,rInAttrs) ),
+    ModalDialog(pWindow
+                ,"dlg_DataLabels"
+                ,"modules/schart/ui/dlg_DataLabel.ui"),
+    m_apDataLabelResources( new DataLabelResources(this, this, rInAttrs) ),
     m_rInAttrs(rInAttrs)
 {
-    FreeResource();
-    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_LABELS ) );
-
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
     Reset();
 }

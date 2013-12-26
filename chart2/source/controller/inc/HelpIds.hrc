@@ -57,18 +57,6 @@
 #define HID_SCH_STATISTIK_PERCENT                           "CHART2_HID_SCH_STATISTIK_PERCENT"
 #define HID_SCH_STATISTIK_CONSTERROR                        "CHART2_HID_SCH_STATISTIK_CONSTERROR"
 
-#define HID_SCH_DATALABEL_VALUE                             "CHART2_HID_SCH_DATALABEL_VALUE"
-#define HID_SCH_DATALABEL_PERCENT                           "CHART2_HID_SCH_DATALABEL_PERCENT"
-#define HID_SCH_DATALABEL_TEXT                              "CHART2_HID_SCH_DATALABEL_TEXT"
-#define HID_SCH_DATALABEL_SYMBOL                            "CHART2_HID_SCH_DATALABEL_SYMBOL"
-#define HID_SCH_PB_NUMBERFORMAT                             "CHART2_HID_SCH_PB_NUMBERFORMAT"
-#define HID_SCH_PB_PERCENT_NUMBERFORMAT                     "CHART2_HID_SCH_PB_PERCENT_NUMBERFORMAT"
-#define HID_SCH_DATALABEL_SEPARATOR                         "CHART2_HID_SCH_DATALABEL_SEPARATOR"
-#define HID_SCH_DATALABEL_PLACEMENT                         "CHART2_HID_SCH_DATALABEL_PLACEMENT"
-#define HID_SCH_TEXTDIRECTION                               "CHART2_HID_SCH_TEXTDIRECTION"
-#define HID_SCH_DATALABEL_ROTATION_KNOB                     "CHART2_HID_SCH_DATALABEL_ROTATION_KNOB"
-#define HID_SCH_DATALABEL_ROTATION_EDIT                     "CHART2_HID_SCH_DATALABEL_ROTATION_EDIT"
-
 #define HID_SCH_WIZARD_ROADMAP                              "CHART2_HID_SCH_WIZARD_ROADMAP"
 #define HID_SCH_LEGEND_SHOW                                 "CHART2_HID_SCH_LEGEND_SHOW"
 #define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
@@ -90,7 +78,6 @@
 #define HID_DIAGRAM_TYPE                                    "CHART2_HID_DIAGRAM_TYPE"
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
-#define HID_INSERT_DESCRIPTION                              "CHART2_HID_INSERT_DESCRIPTION"
 
 #endif
 
