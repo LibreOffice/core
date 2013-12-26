@@ -71,13 +71,8 @@ ResData::ResData( const OString &rGId )
     bText( sal_False ),
     bQuickHelpText( sal_False ),
     bTitle( sal_False ),
-    bList( sal_False ),
     sGId( rGId ),
-    sTextTyp( "Text" ),
-    pStringList( NULL ),
-    pItemList( NULL ),
-    pFilterList( NULL ),
-    pPairedList( NULL )
+    sTextTyp( "Text" )
 {
     sGId = sGId.replaceAll("\r", OString());
 }
@@ -90,45 +85,11 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
     bText( sal_False ),
     bQuickHelpText( sal_False ),
     bTitle( sal_False ),
-    bList( sal_False ),
     sGId( rGId ),
     sFilename( rFilename ),
-    sTextTyp( "Text" ),
-    pStringList( NULL ),
-    pItemList( NULL ),
-    pFilterList( NULL ),
-    pPairedList( NULL )
+    sTextTyp( "Text" )
 {
     sGId = sGId.replaceAll("\r", OString());
-}
-
-
-ResData::~ResData()
-{
-    if ( pStringList ) {
-        // delete existing res. of type StringList
-        for ( size_t i = 0; i < pStringList->size(); i++ ) {
-            ExportListEntry* test = (*pStringList)[ i ];
-            if( test != NULL ) delete test;
-        }
-        delete pStringList;
-    }
-    if ( pFilterList ) {
-        // delete existing res. of type FilterList
-        for ( size_t i = 0; i < pFilterList->size(); i++ ) {
-            ExportListEntry* test = (*pFilterList)[ i ];
-            delete test;
-        }
-        delete pFilterList;
-    }
-    if ( pItemList ) {
-        // delete existing res. of type ItemList
-        for ( size_t i = 0; i < pItemList->size(); i++ ) {
-            ExportListEntry* test = (*pItemList)[ i ];
-            delete test;
-        }
-        delete pItemList;
-    }
 }
 
 //

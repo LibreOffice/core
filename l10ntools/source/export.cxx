@@ -46,6 +46,28 @@ boost::scoped_ptr< Export > exporter;
 
 }
 
+static OString lcl_GetListTyp( const sal_uInt16 nTyp, const bool bUpperCamelCase )
+{
+    OString sType;
+    switch (nTyp)
+    {
+        case LIST_STRING:
+            sType = bUpperCamelCase ? "StringList" : "stringlist";
+            break;
+        case LIST_FILTER:
+            sType = bUpperCamelCase ? "FilterList" : "filterlist";
+            break;
+        case LIST_ITEM:
+            sType = bUpperCamelCase ? "ItemList" : "itemlist";
+            break;
+        case LIST_PAIRED:
+            sType = bUpperCamelCase ? "PairedList" : "pairedlist";
+            break;
+        default: break;
+    }
+    return sType;
+}
+
 }
 
 extern "C" {
@@ -225,7 +247,6 @@ void Export::Init()
     bNextMustBeDefineEOL = sal_False;
     nLevel = 0;
     nList = LIST_NON;
-    m_sListLang = OString();
     nListIndex = 0;
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
@@ -263,7 +284,6 @@ int Export::Execute( int nToken, const char * pToken )
 
     OString sToken( pToken );
     OString sOrig( sToken );
-    sal_Bool bWriteToMerged = bMergeMode;
 
     if ( nToken == CONDITION )
     {
@@ -348,6 +368,8 @@ int Export::Execute( int nToken, const char * pToken )
         if ( nOpen < nClose )
             bExecuteDown = sal_True;
     }
+
+    sal_Bool bWriteToMerged = bMergeMode;
     switch ( nToken ) {
 
         case NORMDEFINE:
@@ -421,9 +443,10 @@ int Export::Execute( int nToken, const char * pToken )
         case LEVELUP: {
             // push
             if ( nList )
+            {
                 nListLevel++;
-            if ( nList )
                 break;
+            }
 
             OString sLowerTyp;
             if ( pResData )
@@ -440,7 +463,7 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case LEVELDOWN: {
             // pop
-            if ( !nList  ) {
+            if ( !nList || !nListLevel ) {
                 if ( nLevel ) {
                     if ( bDefine && (nLevel == 1 )) {
                         bDefine = sal_False;
@@ -453,15 +476,17 @@ int Export::Execute( int nToken, const char * pToken )
                     aResStack.erase( it );
                     nLevel--;
                 }
+                if( nList )
+                {
+                    nList = LIST_NON;
+                    nListLevel = 1;
+                }
             }
-            else {
+            else
+            {
                 if ( bDefine )
                     bNextMustBeDefineEOL = sal_True;
-                if ( !nListLevel ) {
-                    nList = LIST_NON;
-                }
-                else
-                    nListLevel--;
+                nListLevel--;
             }
         }
         break;
@@ -484,19 +509,15 @@ int Export::Execute( int nToken, const char * pToken )
             }
             else if (sKey =="STRINGLIST")
             {
-                pResData->bList = sal_True;
                 nList = LIST_STRING;
-                m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
-                nListLevel = 0;
+                nListLevel = 1;
             }
             else if (sKey == "FILTERLIST")
             {
-                pResData->bList = sal_True;
                 nList = LIST_FILTER;
-                m_sListLang = SOURCE_LANGUAGE;
                 nListIndex = 0;
-                nListLevel = 0;
+                nListLevel = 1;
             }
             if (sToken.indexOf( '{' ) != -1
                 && (lcl_countOccurrences(sToken, '{')
@@ -520,35 +541,24 @@ int Export::Execute( int nToken, const char * pToken )
                 sKey = sKey.toAsciiUpperCase();
                 if (sKey == "STRINGLIST")
                 {
-                    pResData->bList = sal_True;
                     nList = LIST_STRING;
-                    m_sListLang = SOURCE_LANGUAGE;
-                    nListIndex = 0;
-                    nListLevel = 0;
                 }
                 else if (sKey == "FILTERLIST")
                 {
-                    pResData->bList = sal_True;
                     nList = LIST_FILTER;
-                    m_sListLang = SOURCE_LANGUAGE;
-                    nListIndex = 0;
-                    nListLevel = 0;
                 }
                 else if (sKey == "PAIREDLIST")
                 {
-                    pResData->bList = sal_True;
                     nList = LIST_PAIRED;
-                    m_sListLang = SOURCE_LANGUAGE;
-                    nListIndex = 0;
-                    nListLevel = 0;
                 }
                 else if (sKey == "ITEMLIST")
                 {
-                    pResData->bList = sal_True;
                     nList = LIST_ITEM;
-                    m_sListLang = SOURCE_LANGUAGE;
+                }
+                if( nList )
+                {
                     nListIndex = 0;
-                    nListLevel = 0;
+                    nListLevel = 1;
                 }
             }
         }
@@ -556,16 +566,11 @@ int Export::Execute( int nToken, const char * pToken )
         case TEXT:
         case _LISTTEXT:
         case LISTTEXT: {
-            // this is an entry for a String- or FilterList
-            if ( nList ) {
+            // this is an entry for a List
+            if ( nList )
+            {
                 SetChildWithText();
-                sal_Int32 n = 0;
-                OString sEntry(sToken.getToken(1, '"', n));
-                if ( lcl_countOccurrences(sToken, '"') > 2 )
-                    sEntry += "\"";
-                if ( sEntry == "\\\"" )
-                    sEntry = "\"";
-                InsertListEntry( sEntry, sOrig );
+                InsertListEntry( sOrig );
             }
         }
         break;
@@ -743,29 +748,12 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
             pResData->sTitle[ SOURCE_LANGUAGE ]        = "";
         }
     }
-    if ( pResData->pStringList ) {
-        OString sList( "stringlist" );
-        WriteExportList( pResData, pResData->pStringList, sList, bCreateNew );
+
+    if( nList )
+    {
+        WriteExportList( pResData, pResData->m_aList, nList );
         if ( bCreateNew )
-            pResData->pStringList = 0;
-    }
-    if ( pResData->pFilterList ) {
-        OString sList( "filterlist" );
-        WriteExportList( pResData, pResData->pFilterList, sList, bCreateNew );
-        if ( bCreateNew )
-            pResData->pFilterList = 0;
-    }
-    if ( pResData->pItemList ) {
-        OString sList( "itemlist" );
-        WriteExportList( pResData, pResData->pItemList, sList, bCreateNew );
-        if ( bCreateNew )
-            pResData->pItemList = 0;
-    }
-    if ( pResData->pPairedList ) {
-        OString sList( "pairedlist" );
-        WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
-        if ( bCreateNew )
-            pResData->pPairedList = 0;
+            pResData->m_aList.clear();
     }
     return sal_True;
 }
@@ -792,8 +780,8 @@ OString Export::StripList(const OString & rText)
     return s1.copy( 0 , s1.lastIndexOf('\"'));
 }
 
-sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
-    const OString &rTyp, sal_Bool bCreateNew)
+sal_Bool Export::WriteExportList(ResData *pResData, ExportList& rExportList,
+    const sal_uInt16 nTyp)
 {
     OString sGID(pResData->sGId);
     if (sGID.isEmpty())
@@ -806,15 +794,13 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
         }
     }
 
-    for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ )
+    for ( size_t i = 0; i < rExportList.size(); i++ )
     {
-        ExportListEntry *pEntry = (*pExportList)[  i ];
-
         OString sLID;
-        OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
+        OString sText(rExportList[ i ]);
 
         // Strip PairList Line String
-        if (rTyp.equalsIgnoreAsciiCase("pairedlist"))
+        if (nTyp == LIST_PAIRED)
         {
             sLID = GetPairedListID( sText );
             sText = GetPairedListString( sText );
@@ -827,15 +813,13 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
                 sText = "\"";
         }
         ConvertExportContent(sText);
+
+        OString sType = lcl_GetListTyp( nList, false );
+
         common::writePoEntry(
             "Transex3", *aOutput.mPo, global::inputPathname,
-            rTyp, sGID, sLID, OString(), sText);
-
-        if ( bCreateNew )
-            delete [] pEntry;
+            sType, sGID, sLID, OString(), sText);
     }
-    if ( bCreateNew )
-        delete pExportList;
 
     return sal_True;
 }
@@ -863,67 +847,14 @@ OString Export::FullId()
     return sFull.makeStringAndClear();
 }
 
-void Export::InsertListEntry(const OString &rText, const OString &rLine)
+void Export::InsertListEntry(const OString &rLine)
 {
     ResData *pResData = ( nLevel-1 < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
 
-    ExportList *pList = NULL;
-    if ( nList == LIST_STRING ) {
-        pList = pResData->pStringList;
-        if ( !pList ) {
-            pResData->pStringList = new ExportList();
-            pList = pResData->pStringList;
-            nListIndex = 0;
-        }
-    }
-    else if ( nList == LIST_FILTER ) {
-        pList = pResData->pFilterList;
-        if ( !pList ) {
-            pResData->pFilterList = new ExportList();
-            pList = pResData->pFilterList;
-            nListIndex = 0;
-        }
-    }
-    else if ( nList == LIST_ITEM ) {
-        pList = pResData->pItemList;
-        if ( !pList ) {
-            pResData->pItemList = new ExportList();
-            pList = pResData->pItemList;
-            nListIndex = 0;
-        }
-    }
-    else if ( nList == LIST_PAIRED ) {
-        pList = pResData->pPairedList;
-        if ( !pList ) {
-            pResData->pPairedList = new ExportList();
-            pList = pResData->pPairedList;
-            nListIndex = 0;
-        }
-    }
-    else
-        return;
+    if( pResData->m_aList.empty() )
+        nListIndex = 0;
 
-    if ( nListIndex + 1 > pList->size())
-    {
-        ExportListEntry *pNew = new ExportListEntry();
-        (*pNew)[LIST_REFID] = OString::number(REFID_NONE);
-        pList->push_back(pNew);
-    }
-    ExportListEntry *pCurEntry = (*pList)[ nListIndex ];
-
-    // For paired list use the line to set proper lid
-    if( nList == LIST_PAIRED ){
-        (*pCurEntry)[ m_sListLang ] = rLine;
-    }else
-        (*pCurEntry)[ m_sListLang ] = rText;
-
-    if ( m_sListLang.equalsIgnoreAsciiCase("en-US") ) {
-        (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
-
-        pList->NewSourceLanguageListEntry();
-    }
-
-    nListIndex++;
+    pResData->m_aList.push_back(rLine);
 }
 
 void Export::CleanValue( OString &rValue )
@@ -1074,62 +1005,24 @@ void Export::ConvertExportContent( OString& rText )
     rText = helper::unEscapeAll(rText,"\\n""\\t""\\\\""\\\"","\n""\t""\\""\"");
 }
 
-bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys, ExportList*& o_pList )
+bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys )
 {
     o_vMergeEntrys.clear();
-    o_pList = 0;
 
     if (!pResData->sGId.isEmpty())
         pResData->sGId = pResData->sGId + OString('.');
     pResData->sGId = pResData->sGId + pResData->sId;
 
-    // Find out the type of List
-    MergeEntrys* pEntrysOfFirstItem = 0;
-    sal_uInt16 nType = LIST_STRING;
-    bool bPairedList = false;
-    while( !pEntrysOfFirstItem && nType <= LIST_PAIRED )
-    {
-        switch ( nType )
-        {
-            case LIST_STRING : pResData->sResTyp = "stringlist"; o_pList = pResData->pStringList; bPairedList = false; break;
-            case LIST_FILTER : pResData->sResTyp = "filterlist"; o_pList = pResData->pFilterList; bPairedList = false; break;
-            case LIST_ITEM : pResData->sResTyp = "itemlist"; o_pList = pResData->pItemList;       bPairedList = false; break;
-            case LIST_PAIRED : pResData->sResTyp = "pairedlist"; o_pList = pResData->pPairedList; bPairedList = true;  break;
-        }
+    pResData->sResTyp = lcl_GetListTyp( nList, false );
 
-        // Set matching pairedlist identifier
-        if( bPairedList && pResData->pPairedList )
-        {
-            ExportListEntry* pListE = ( ExportListEntry* ) (*pResData->pPairedList)[ 0 ];
-            pResData->sId = GetPairedListID ( (*pListE)[ SOURCE_LANGUAGE ] );
-        }
-        else
-            pResData->sId = "1";
-
-        pEntrysOfFirstItem = pMergeDataFile->GetMergeEntrys( pResData );
-        ++nType;
-    }
-
-    if( !pEntrysOfFirstItem )
-    {
-        o_pList = 0;
-        return false;
-    }
-    else
-        nList = nType-1;
-
-    sal_uInt16 nMaxIndex = 0;
-    if ( o_pList )
-    {
-        nMaxIndex = o_pList->GetSourceLanguageListEntryCount();
-    }
+    const sal_uInt16 nMaxIndex = pResData->m_aList.size();
     /**
       * Check whether count of listentries match with count
       * of translated items. If not than write origin items
       * to the list to avoid mixed translations
       * (exclude pairedlist)
       */
-    if( !bPairedList )
+    if( nList != LIST_PAIRED )
     {
         MergeEntrys* pEntrys;
         // MergeData contains longer list
@@ -1145,18 +1038,12 @@ bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*
         pResData->sId = "1";
     }
 
-    o_vMergeEntrys.push_back(pEntrysOfFirstItem);
-
-    for( sal_uInt16 nLIndex = 2; nLIndex <= nMaxIndex; ++nLIndex )
+    for( sal_uInt16 nLIndex = 1; nLIndex <= nMaxIndex; ++nLIndex )
     {
         // Set matching pairedlist identifier
-        if ( bPairedList )
+        if ( nList == LIST_PAIRED )
         {
-            ExportListEntry* pListE = ( ExportListEntry* )(*pResData->pPairedList)[ ( nLIndex ) -1 ];
-            if( pListE )
-            {
-                pResData->sId = GetPairedListID ( (*pListE)[ SOURCE_LANGUAGE ] );
-            }
+            pResData->sId = GetPairedListID ( pResData->m_aList[ ( nLIndex ) -1 ] );
         }
         else
             pResData->sId = OString::number(nLIndex);
@@ -1214,159 +1101,126 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
     }
 }
 
-void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
+void Export::MergeRest( ResData *pResData )
 {
     if ( !pMergeDataFile ){
         pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
         aLanguages = pMergeDataFile->GetLanguages();
 
     }
-    switch ( nMode ) {
-        case MERGE_MODE_NORMAL : {
-            MergeEntrys *pEntry = 0;
-            if( pResData->bText || pResData->bQuickHelpText || pResData->bTitle )
-                pEntry = pMergeDataFile->GetMergeEntrys( pResData );
 
-            if ( pEntry ) {
-                if ( pResData->bText )
-                    ResData2Output( pEntry, STRING_TYP_TEXT, pResData->sTextTyp );
+    MergeEntrys *pEntry = 0;
+    if( pResData->bText || pResData->bQuickHelpText || pResData->bTitle )
+        pEntry = pMergeDataFile->GetMergeEntrys( pResData );
 
-                if ( pResData->bQuickHelpText )
-                    ResData2Output( pEntry, STRING_TYP_QUICKHELPTEXT, OString("QuickHelpText") );
+    if ( pEntry )
+    {
+        if ( pResData->bText )
+            ResData2Output( pEntry, STRING_TYP_TEXT, pResData->sTextTyp );
 
-                if ( pResData->bTitle )
-                    ResData2Output( pEntry, STRING_TYP_TITLE, OString("Title") );
-            }
+        if ( pResData->bQuickHelpText )
+            ResData2Output( pEntry, STRING_TYP_QUICKHELPTEXT, OString("QuickHelpText") );
 
-            // Merge Lists
-            if ( pResData->bList ) {
-                OString sOldId = pResData->sId;
-                OString sOldGId = pResData->sGId;
-                OString sOldTyp = pResData->sResTyp;
-                sal_uInt16 nOldListTyp = nList;
+        if ( pResData->bTitle )
+            ResData2Output( pEntry, STRING_TYP_TITLE, OString("Title") );
+    }
 
-                OString sSpace;
-                for ( sal_uInt16 i = 1; i < nLevel-1; i++ )
-                    sSpace += "\t";
+    // Merge Lists
+    if ( nList )
+    {
+        OString sOldId = pResData->sId;
+        OString sOldGId = pResData->sGId;
+        OString sOldTyp = pResData->sResTyp;
 
-                std::vector<MergeEntrys*> vMergeEntryVector;
-                ExportList* pList = 0;
-                bool bTranslateList = GetAllMergeEntrysOfList(pResData, vMergeEntryVector, pList);
+        OString sSpace;
+        for ( sal_uInt16 i = 1; i < nLevel-1; i++ )
+            sSpace += "\t";
 
-                if( pList )
+        std::vector<MergeEntrys*> vMergeEntryVector;
+        bool bTranslateList = GetAllMergeEntrysOfList(pResData, vMergeEntryVector);
+
+        OString sCur;
+        for( unsigned int n = 0; n < aLanguages.size(); n++ )
+        {
+            sCur = aLanguages[ n ];
+
+            sal_uInt16 nLIndex = 0;
+            sal_uInt16 nMaxIndex = pResData->m_aList.size();
+            while( nLIndex < nMaxIndex )
+            {
+                if ( nLIndex == 0 )
                 {
-                    OString sCur;
-                    for( unsigned int n = 0; n < aLanguages.size(); n++ )
+                    OStringBuffer sHead;
+                    if ( bNextMustBeDefineEOL )
+                        sHead.append("\\\n\t");
+                    sHead.append(sSpace + lcl_GetListTyp( nList, true ) + " [ " + sCur + " ] ");
+
+                    if ( bDefine || bNextMustBeDefineEOL )
                     {
-                        sCur = aLanguages[ n ];
+                        sHead.append("= \\\n" + sSpace + "\t{\\\n\t");
+                    }
+                    else
+                    {
+                        sHead.append("= \n" + sSpace + "\t{\n\t");
+                    }
+                    WriteToMerged(sHead.makeStringAndClear() , true);
+                }
 
-                        sal_uInt16 nLIndex = 0;
-                        sal_uInt16 nMaxIndex = pList->GetSourceLanguageListEntryCount();
-                        while( nLIndex < nMaxIndex )
-                        {
-                            if ( nLIndex == 0 )
-                            {
-                                OStringBuffer sHead;
-                                if ( bNextMustBeDefineEOL )
-                                    sHead.append("\\\n\t");
-                                sHead.append(sSpace);
-                                switch ( nList )
-                                {
-                                    case LIST_STRING:
-                                        sHead.append("StringList ");
-                                        break;
-                                    case LIST_FILTER:
-                                        sHead.append("FilterList ");
-                                        break;
-                                    case LIST_ITEM:
-                                        sHead.append("ItemList ");
-                                        break;
-                                    case LIST_PAIRED:
-                                        sHead.append("PairedList ");
-                                        break;
-                                }
-                                sHead.append("[ ");
-                                sHead.append(sCur);
-                                sHead.append(" ] ");
-                                if ( bDefine || bNextMustBeDefineEOL )
-                                {
-                                    sHead.append("= \\\n");
-                                    sHead.append(sSpace);
-                                    sHead.append("\t{\\\n\t");
-                                }
-                                else
-                                {
-                                    sHead.append("= \n");
-                                    sHead.append(sSpace);
-                                    sHead.append("\t{\n\t");
-                                }
-                                WriteToMerged(sHead.makeStringAndClear() , true);
-                            }
-                            OString sLine;
-                            if ( pList && (*pList)[ nLIndex ] )
-                                sLine = ( *(*pList)[ nLIndex ])[ SOURCE_LANGUAGE ];
-
-                            if ( sLine.indexOf( '>' ) != -1 ) {
-                                if ((( sLine.indexOf( '{' ) == -1 ) ||
-                                    ( sLine.indexOf( '{' ) >= sLine.indexOf( '"' ))) &&
-                                    (( sLine.indexOf( '<' ) == -1 ) ||
-                                    ( sLine.indexOf( '<' ) >= sLine.indexOf( '"' ))))
-                                {
-                                    sLine = sLine.replaceFirst("\"", "< \"" );
-                                }
-                            }
-
-                            if( bTranslateList && nLIndex < vMergeEntryVector.size() && vMergeEntryVector[nLIndex] )
-                            {
-                                OString sText;
-                                sal_Bool bText;
-                                bText = vMergeEntryVector[nLIndex]->GetText( sText, STRING_TYP_TEXT, sCur, sal_True );
-                                if ( bText && !sText.isEmpty() )
-                                {
-                                    ConvertMergeContent( sText );
-                                    OString sPre  = sLine.copy( 0 , sLine.indexOf('"') );
-                                    OString sPost = sLine.copy( sLine.lastIndexOf('"') + 1 );
-                                    sLine = sPre + sText + sPost;
-                                }
-                            }
-
-                            OString sText1( "\t" );
-                            sText1 += sLine;
-                            if ( bDefine || bNextMustBeDefineEOL )
-                                sText1 += " ;\\\n";
-                            else
-                                sText1 += " ;\n";
-                            sText1 += sSpace;
-                            sText1 += "\t";
-                            WriteToMerged( sText1 ,true );
-                            ++nLIndex;
-                        }
-                        if ( nLIndex > 0 ) {
-                            OString sFooter;
-                            if (!sSpace.isEmpty()) {
-                                sFooter = sSpace.copy(1);
-                            }
-                            if ( bNextMustBeDefineEOL )
-                                sFooter += "};";
-                            else if ( !bDefine )
-                                sFooter += "};\n\t";
-                            else
-                                sFooter += "\n\n";
-                            WriteToMerged( sFooter ,true );
-                        }
+                OString sLine = pResData->m_aList[ nLIndex ];
+                if ( sLine.indexOf( '>' ) != -1 )
+                {
+                    if ((( sLine.indexOf( '{' ) == -1 ) ||
+                        ( sLine.indexOf( '{' ) >= sLine.indexOf( '"' ))) &&
+                        (( sLine.indexOf( '<' ) == -1 ) ||
+                        ( sLine.indexOf( '<' ) >= sLine.indexOf( '"' ))))
+                    {
+                        sLine = sLine.replaceFirst("\"", "< \"" );
                     }
                 }
 
-                pResData->sId = sOldId;
-                pResData->sGId = sOldGId;
-                pResData->sResTyp = sOldTyp;
-                nList = nOldListTyp;
+                if( bTranslateList && nLIndex < vMergeEntryVector.size() && vMergeEntryVector[nLIndex] )
+                {
+                    OString sText;
+                    bool bText = vMergeEntryVector[nLIndex]->GetText( sText, STRING_TYP_TEXT, sCur, sal_True );
+                    if ( bText && !sText.isEmpty() )
+                    {
+                        ConvertMergeContent( sText );
+                        OString sPre  = sLine.copy( 0 , sLine.indexOf('"') );
+                        OString sPost = sLine.copy( sLine.lastIndexOf('"') + 1 );
+                        sLine = sPre + sText + sPost;
+                    }
+                }
+
+                OString sText1( "\t" );
+                sText1 += sLine;
+                if ( bDefine || bNextMustBeDefineEOL )
+                    sText1 += " ;\\\n";
+                else
+                    sText1 += " ;\n";
+                sText1 += sSpace;
+                sText1 += "\t";
+                WriteToMerged( sText1 ,true );
+                ++nLIndex;
+            }
+
+            if ( nLIndex > 0 )
+            {
+                OString sFooter;
+                if (!sSpace.isEmpty())
+                    sFooter = sSpace.copy(1);
+
+                if ( bNextMustBeDefineEOL )
+                    sFooter += "};";
+                else if ( !bDefine )
+                    sFooter += "};\n\t";
+                else
+                    sFooter += "\n\n";
+                WriteToMerged( sFooter ,true );
             }
         }
-        break;
-        case MERGE_MODE_LIST : {
-        }
-        break;
+        pResData->sId = sOldId;
+        pResData->sGId = sOldGId;
+        pResData->sResTyp = sOldTyp;
     }
     pParseQueue->bMflag = false;
 }

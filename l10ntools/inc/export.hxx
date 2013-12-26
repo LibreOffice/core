@@ -54,36 +54,6 @@ typedef boost::unordered_map<OString, bool, OStringHash>
 
 #define SOURCE_LANGUAGE "en-US"
 #define X_COMMENT "x-comment"
-#define LIST_REFID  "LIST_REFID"
-
-//
-// class ExportList
-//
-
-typedef OStringHashMap ExportListEntry;
-
-
-/// Container for parse different types of string lists
-class ExportList
-{
-private:
-    std::vector< ExportListEntry* > maList;
-    std::size_t nSourceLanguageListEntryCount;
-
-public:
-    ExportList() { nSourceLanguageListEntryCount = 0; }
-    std::size_t GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
-    void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
-    size_t size() const { return maList.size(); }
-    void push_back( ExportListEntry* item ) { maList.push_back( item ); }
-
-    ExportListEntry* operator [] ( size_t i )
-        {
-            return ( i < maList.size() ) ? maList[ i ] : NULL;
-        }
-};
-
-#define REFID_NONE 0xFFFF
 
 //
 // class ResData
@@ -93,6 +63,7 @@ public:
 #define ID_LEVEL_TEXT       0x0002
 #define ID_LEVEL_IDENTIFIER 0x0005
 
+typedef std::vector< OString > ExportList;
 
 /// Purpose: holds mandatory data to export a single res (used with ResStack)
 class ResData
@@ -100,7 +71,6 @@ class ResData
 public:
     ResData( const OString &rGId );
     ResData( const OString &rGId , const OString &rFilename );
-    ~ResData();
     sal_Bool SetId(const OString &rId, sal_uInt16 nLevel);
 
     sal_uInt16 nIdLevel;
@@ -110,7 +80,6 @@ public:
     sal_Bool bText;
     sal_Bool bQuickHelpText;
     sal_Bool bTitle;
-    sal_Bool bList;
 
     OString sResTyp;
     OString sId;
@@ -125,10 +94,7 @@ public:
 
     OString sTextTyp;
 
-    ExportList  *pStringList;
-    ExportList  *pItemList;
-    ExportList  *pFilterList;
-    ExportList  *pPairedList;
+    ExportList  m_aList;
 };
 
 
@@ -168,7 +134,6 @@ private:
     sal_Bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
     std::size_t nLevel; // res. recursiv? how deep?
     sal_uInt16 nList;                       ///< cur. res. is List
-    OString m_sListLang;
     std::size_t nListIndex;
     std::size_t nListLevel;
     sal_Bool bMergeMode;
@@ -181,8 +146,7 @@ private:
     std::vector<OString> aLanguages;
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False ); ///< called befor dest. cur ResData
-    sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
-                        const OString &rTyp, sal_Bool bCreateNew = sal_False );
+    sal_Bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
 
     OString MergePairedList( OString const & sLine , OString const & sText );
 
@@ -192,7 +156,7 @@ private:
     OString GetPairedListString(const OString& rText);
     OString StripList(const OString& rText);
 
-    void InsertListEntry(const OString &rText, const OString &rLine);
+    void InsertListEntry(const OString &rLine);
     void CleanValue( OString &rValue );
     OString GetText(const OString &rSource, int nToken);
 
@@ -200,10 +164,10 @@ private:
       Get all MergeEntrys for the ExportList identified by pResData
       Check whether list can merge and load all needed MergeEntry from DataBase.
     */
-    bool GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys, ExportList*& o_pList);
+    bool GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys);
 
     void ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
-    void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
+    void MergeRest( ResData *pResData );
     void ConvertMergeContent( OString &rText );
     void ConvertExportContent( OString &rText );
 
