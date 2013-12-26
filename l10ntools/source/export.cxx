@@ -628,13 +628,6 @@ int Export::Execute( int nToken, const char * pToken )
                         pResData->sTextTyp = sOrigKey;
                         if ( !bMergeMode )
                         {
-                            if (!pResData->sText[ sLangIndex ].isEmpty())
-                            {
-                                OStringBuffer sError("Language ");
-                                sError.append(sLangIndex);
-                                sError.append("defined twice");
-                                yyerror(sError.getStr());
-                            }
                             pResData->sText[ sLangIndex ] = sText;
                         }
                     }
@@ -643,13 +636,6 @@ int Export::Execute( int nToken, const char * pToken )
                         pResData->bQuickHelpText = sal_True;
                         if ( !bMergeMode )
                         {
-                            if (!pResData->sQuickHelpText[ sLangIndex ].isEmpty())
-                            {
-                                OStringBuffer sError("Language ");
-                                sError.append(sLangIndex);
-                                sError.append(" defined twice");
-                                YYWarning(sError.getStr());
-                            }
                             pResData->sQuickHelpText[ sLangIndex ] = sText;
                         }
                     }
@@ -658,13 +644,6 @@ int Export::Execute( int nToken, const char * pToken )
                         pResData->bTitle = sal_True;
                         if ( !bMergeMode )
                         {
-                            if ( !pResData->sTitle[ sLangIndex ].isEmpty())
-                            {
-                                OStringBuffer sError("Language ");
-                                sError.append(sLangIndex);
-                                sError.append(" defined twice");
-                                YYWarning(sError.getStr());
-                            }
                             pResData->sTitle[ sLangIndex ] = sText;
                         }
                     }
