@@ -186,7 +186,6 @@
 // dialogs
 #define RID_SVX_WND_COMMON_LINGU            ( RID_SVX_START +  0 )
 #define STR_MODIFY                          (RID_SVX_START + 336)//from optdict.src
-#define RID_SVXDLG_SEARCHATTR               (RID_SVX_START +  22)
 
 // hyperlink dialog
 #define RID_SVXDLG_NEWHYPERLINK             (RID_SVX_START + 227)

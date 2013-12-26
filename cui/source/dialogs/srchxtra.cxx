@@ -24,7 +24,6 @@
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
 #include <cuires.hrc>
-#include "srchxtra.hrc"
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/flstitem.hxx>
@@ -111,29 +110,20 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
     }
 }
 
-// class SvxSearchFormatDialog -------------------------------------------
-
-SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
-                                                    SearchAttrItemList& rLst,
-                                                    const sal_uInt16* pWhRanges ) :
-
-    ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHATTR )  ),
-
-    aAttrFL ( this, CUI_RES( FL_ATTR ) ),
-    aAttrLB ( this, CUI_RES( LB_ATTR ) ),
-    aOKBtn  ( this, CUI_RES( BTN_ATTR_OK ) ),
-    aEscBtn ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
-    aHelpBtn( this, CUI_RES( BTN_ATTR_HELP ) ),
-
-    rList( rLst )
-
+SvxSearchAttributeDialog::SvxSearchAttributeDialog(Window* pParent,
+    SearchAttrItemList& rLst, const sal_uInt16* pWhRanges)
+    : ModalDialog(pParent, "SearchAttrDialog", "cui/ui/searchattrdialog.ui")
+    , rList(rLst)
 {
-    FreeResource();
+    get(m_pOKBtn, "ok");
+    get(m_pAttrLB, "treeview");
+    m_pAttrLB->set_height_request(m_pAttrLB->GetTextHeight() * 12);
+    m_pAttrLB->set_width_request(m_pAttrLB->approximate_char_width() * 56);
 
-    aAttrLB.SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
-    aAttrLB.GetModel()->SetSortMode( SortAscending );
+    m_pAttrLB->SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    m_pAttrLB->GetModel()->SetSortMode( SortAscending );
 
-    aOKBtn.SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
@@ -164,21 +154,21 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
             SvTreeListEntry* pEntry = NULL;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
-                pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
+                pEntry = m_pAttrLB->SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
             else
                 SAL_WARN( "cui.dialogs", "no resource for slot id " << static_cast<sal_Int32>(nSlot) );
 
             if ( pEntry )
             {
-                aAttrLB.SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                m_pAttrLB->SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
                 pEntry->SetUserData( (void*)(sal_uLong)nSlot );
             }
         }
         nWhich = aIter.NextWhich();
     }
 
-    aAttrLB.SetHighlightRange();
-    aAttrLB.SelectEntryPos( 0 );
+    m_pAttrLB->SetHighlightRange();
+    m_pAttrLB->SelectEntryPos( 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -188,10 +178,10 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = (SfxPoolItem*)-1;
 
-    for ( sal_uInt16 i = 0; i < aAttrLB.GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < m_pAttrLB->GetEntryCount(); ++i )
     {
-        sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)aAttrLB.GetEntryData(i);
-        sal_Bool bChecked = aAttrLB.IsChecked(i);
+        sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)m_pAttrLB->GetEntryData(i);
+        sal_Bool bChecked = m_pAttrLB->IsChecked(i);
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )

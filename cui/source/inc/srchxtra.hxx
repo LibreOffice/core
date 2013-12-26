@@ -52,12 +52,8 @@ public:
                               const sal_uInt16* pWhRanges );
 
 private:
-    FixedText           aAttrFL;
-    SvxCheckListBox     aAttrLB;
-
-    OKButton            aOKBtn;
-    CancelButton        aEscBtn;
-    HelpButton          aHelpBtn;
+    SvxCheckListBox*    m_pAttrLB;
+    OKButton*           m_pOKBtn;
 
     SearchAttrItemList& rList;
 
