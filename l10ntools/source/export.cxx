@@ -726,10 +726,6 @@ int Export::Execute( int nToken, const char * pToken )
                 }
             }
         break;
-        case NEWTEXTINRES: {
-            bDontWriteOutput = sal_True;
-        }
-        break;
         case APPFONTMAPPING:
         {
             bDontWriteOutput = sal_False;

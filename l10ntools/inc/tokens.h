@@ -29,8 +29,6 @@
 #define COMMENT             401         /*...                               */
 #define DEFINEDRES          402         /* Text = {                         */
 #define ANYTOKEN            404         /* XYZ                              */
-#define UNKNOWNTOKEN        405         /* XYZ[ \t]$                        */
-#define UNKNOWNCONSTRUCTION 406         /* XYZ ( xxx, yyy, zzz )            */
 #define UNKNOWNCHAR         407         /* .                                */
 /*------------------------------------------------------                    */
 /* prev. tokens will not be executed                                        */
@@ -53,13 +51,10 @@
 #define LISTTEXT            514         /* < "Text" ... >                   */
 #define RSCDEFINE           515         /* #define MY_TEXT                  */
 #define RSCDEFINELEND       516         /*                                  */
-#define NEWTEXTINRES        517         /* ### Achtung : Ne...              */
 #define UIENTRIES           518         /* UIEntries = {                    */
 #define PRAGMA              519         /* #pragma ...                      */
 #define _LISTTEXT           521         /* { "Text" ... }                   */
 #define TEXTREFID           522         /* Text = 12345                     */
-#define LISTRESID           523         /* < 12345; ... >                   */
-#define _LISTRESID          523         /* { 12345; ... }                   */
 #define NORMDEFINE          524         /* #define ...                      */
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
