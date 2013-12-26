@@ -167,18 +167,23 @@ namespace cppcanvas
             {
                 for (int i = 0; i < nPoints; i ++) {
                     if (pathFlags & 0x4000) {
-                        // points are stored in signed short 16bit integer format
+                        // EMFPlusPoint: stored in signed short 16bit integer format
                         sal_Int16 x, y;
 
                         s >> x >> y;
-                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint [x,y]: " << x << "," << y);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPoint [x,y]: " << x << "," << y);
                         pPoints [i*2] = x;
                         pPoints [i*2 + 1] = y;
-                    } else {
-                        // points are stored in Single (float) format
+                    } else if (!(pathFlags & 0xC000)) {
+                        // EMFPlusPointF: stored in Single (float) format
                         s >> pPoints [i*2] >> pPoints [i*2 + 1];
-                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
+                    } else { //if (pathFlags & 0x8000)
+                        // EMFPlusPointR: points are stored in EMFPlusInteger7 or
+                        // EMFPlusInteger15 objects, see section 2.2.2.21/22
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - parse EMFPlusPointR object (section 2.2.1.6)");
                     }
+
                 }
 
                 if (pPointTypes)
