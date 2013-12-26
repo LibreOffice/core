@@ -46,7 +46,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/fontwork.src \
     svx/source/dialog/frmsel.src \
     svx/source/dialog/imapdlg.src \
-    svx/source/dialog/langbox.src \
     svx/source/dialog/language.src \
     svx/source/dialog/passwd.src \
     svx/source/dialog/prtqry.src \
@@ -86,7 +85,8 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/toolbars/fontworkbar.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalized_files,svx/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,svx/res,\
+    svx/source/dialog/langbox.src \
     svx/source/unodraw/unodraw.src \
 ))
 

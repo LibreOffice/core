@@ -27,14 +27,8 @@ $(eval $(call gb_SrsTarget_set_include,chart2/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,chart2/res,\
-    chart2/source/controller/dialogs/Bitmaps.src \
-    chart2/source/controller/dialogs/dlg_ChartType.src \
-    chart2/source/controller/dialogs/dlg_CreationWizard.src \
     chart2/source/controller/dialogs/dlg_DataEditor.src \
     chart2/source/controller/dialogs/dlg_DataSource.src \
-    chart2/source/controller/dialogs/dlg_InsertDataLabel.src \
-    chart2/source/controller/dialogs/dlg_InsertErrorBars.src \
-    chart2/source/controller/dialogs/dlg_InsertLegend.src \
     chart2/source/controller/dialogs/dlg_ShapeFont.src \
     chart2/source/controller/dialogs/dlg_ShapeParagraph.src \
     chart2/source/controller/dialogs/res_BarGeometry.src \
@@ -44,16 +38,21 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/Strings_Scale.src \
     chart2/source/controller/dialogs/Strings.src \
     chart2/source/controller/dialogs/Strings_Statistic.src \
-    chart2/source/controller/dialogs/tp_AxisLabel.src \
     chart2/source/controller/dialogs/tp_ChartType.src \
     chart2/source/controller/dialogs/tp_DataSource.src \
-    chart2/source/controller/dialogs/tp_ErrorBars.src \
-    chart2/source/controller/dialogs/tp_PointGeometry.src \
     chart2/source/controller/dialogs/tp_PolarOptions.src \
     chart2/source/controller/dialogs/tp_RangeChooser.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalized_files,chart2/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,chart2/res,\
+    chart2/source/controller/dialogs/Bitmaps.src \
+    chart2/source/controller/dialogs/dlg_ChartType.src \
+    chart2/source/controller/dialogs/dlg_CreationWizard.src \
+    chart2/source/controller/dialogs/dlg_InsertDataLabel.src \
+    chart2/source/controller/dialogs/dlg_InsertErrorBars.src \
+    chart2/source/controller/dialogs/dlg_InsertLegend.src \
+    chart2/source/controller/dialogs/tp_ErrorBars.src \
+    chart2/source/controller/dialogs/tp_PointGeometry.src \
     chart2/source/controller/menus/ShapeContextMenu.src \
     chart2/source/controller/menus/ShapeEditContextMenu.src \
 ))

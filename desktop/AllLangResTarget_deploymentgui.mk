@@ -25,13 +25,16 @@ $(eval $(call gb_SrsTarget_set_include,deploymentgui/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,deploymentgui/res,\
-    desktop/source/deployment/gui/dp_gui_backend.src \
     desktop/source/deployment/gui/dp_gui_dependencydialog.src \
     desktop/source/deployment/gui/dp_gui_dialog2.src \
     desktop/source/deployment/gui/dp_gui_dialog.src \
     desktop/source/deployment/gui/dp_gui_updatedialog.src \
     desktop/source/deployment/gui/dp_gui_updateinstalldialog.src \
     desktop/source/deployment/gui/dp_gui_versionboxes.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocaliable_files,deploymentgui/res,\
+    desktop/source/deployment/gui/dp_gui_backend.src \
 ))
 
 # vim: set ts=4 sw=4 et:

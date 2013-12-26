@@ -69,7 +69,7 @@ $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\
     dbaccess/source/ui/uno/dbinteraction.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalized_files,dbaccess/dbu,\
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,dbaccess/dbu,\
     dbaccess/source/ui/imagelists/dbimagelists.src \
 ))
 

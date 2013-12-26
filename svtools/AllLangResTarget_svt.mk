@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/wizardmachine.src \
     $(if $(ENABLE_JAVA), \
         svtools/source/java/javaerror.src) \
-    svtools/source/misc/ehdl.src \
     svtools/source/misc/imagemgr.src \
     svtools/source/misc/langtab.src \
     svtools/source/misc/svtools.src \
@@ -57,7 +56,8 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/toolpanel/toolpanel.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocalized_files,svt/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,svt/res,\
+    svtools/source/misc/ehdl.src \
     svtools/source/brwbox/editbrowsebox.src \
 ))
 

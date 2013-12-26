@@ -20,7 +20,7 @@ $(eval $(call gb_SrsTarget_set_include,sdbcl/res,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,sdbcl/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sdbcl/res,\
 	connectivity/source/resource/conn_log_res.src \
 ))
 

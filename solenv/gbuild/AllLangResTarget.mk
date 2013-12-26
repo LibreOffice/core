@@ -128,7 +128,7 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1),$(true))
+$(call gb_SrsPartMergeTarget_SrsPartMergeTarget,$(1),$(2))
 endif
 
 endef
@@ -202,7 +202,7 @@ $(call gb_SrsTemplateTarget_get_clean_target,%) :
 		    $(foreach part,$(PARTS),$(call gb_SrsPartMergeTarget_get_target,$(part))))
 
 define gb_SrsTemplateTarget_add_file
-$(call gb_SrsTemplatePartTarget_SrsTemplatePartTarget,$(2))
+$(call gb_SrsTemplatePartTarget_SrsTemplatePartTarget,$(2),$(3))
 $(call gb_SrsTemplateTarget_get_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTemplateTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTemplateTarget__get_target,$(1)) : $(call gb_SrsTemplatePartTarget_get_target,$(2))
@@ -316,28 +316,24 @@ $(foreach file,$(2),$(call gb_SrsTarget_add_file,$(1),$(file)))
 endef
 
 # Add a srs file that does not have any localizable content.
+# These files will be copied instead of parsing them with transex3.
 #
-# This only exists to allow dependencies on SDF files. It must be used
-# if neither of the srs files in a directory have any localizable
-# content, because in that case there is going to be no SDF generated
-# for the directory. Therefore we must avoid depending on the SDF.
-#
-# gb_SrsTarget_add_nonlocalized_file srs file
-define gb_SrsTarget_add_nonlocalized_file
+# gb_SrsTarget_add_nonlocalizable_file srs file
+define gb_SrsTarget_add_nonlocalizable_file
 $(call gb_SrsTarget__add_file,$(1),$(2),$(false))
 
 endef
 
 # Add srs files that do not have any localizable content.
 #
-# gb_SrsTarget_add_nonlocalized_files srs file(s)
-define gb_SrsTarget_add_nonlocalized_files
-$(foreach file,$(2),$(call gb_SrsTarget_add_nonlocalized_file,$(1),$(file)))
+# gb_SrsTarget_add_nonlocalizable_files srs file(s)
+define gb_SrsTarget_add_nonlocalizable_files
+$(foreach file,$(2),$(call gb_SrsTarget_add_nonlocalizable_file,$(1),$(file)))
 
 endef
 
 define gb_SrsTarget_add_template
-$(call gb_SrsTemplateTarget_add_file,$(1),$(2))
+$(call gb_SrsTemplateTarget_add_file,$(1),$(2),$(true))
 
 endef
 
@@ -345,6 +341,24 @@ define gb_SrsTarget_add_templates
 $(foreach template,$(2),$(call gb_SrsTarget_add_template,$(1),$(template)))
 
 endef
+
+# Add a srs template that does not have any localizable content.
+# These files will be copied instead of parsing them with transex3.
+#
+# gb_SrsTarget_add_nonlocalizable_template srs template
+define gb_SrsTarget_add_nonlocalizable_template
+$(call gb_SrsTemplateTarget_add_file,$(1),$(2),$(false))
+
+endef
+
+# Add srs templates that do not have any localizable content.
+#
+# gb_SrsTarget_add_nonlocalizable_templates srs template(s)
+define gb_SrsTarget_add_nonlocalizable_templates
+$(foreach template,$(2),$(call gb_SrsTarget_add_nonlocalizable_template,$(1),$(template)))
+
+endef
+
 
 # Use templates built by another SrsTarget.
 #

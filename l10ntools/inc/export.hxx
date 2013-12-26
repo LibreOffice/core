@@ -171,7 +171,6 @@ private:
     OString m_sListLang;
     std::size_t nListIndex;
     std::size_t nListLevel;
-    bool bSkipFile;
     sal_Bool bMergeMode;
     OString sMergeSrc;
     sal_Bool bError;                        // any errors while export?

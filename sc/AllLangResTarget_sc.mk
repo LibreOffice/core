@@ -33,7 +33,6 @@ $(eval $(call gb_SrsTarget_set_include,sc/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sc/res,\
-    sc/source/ui/src/iconsets.src \
     sc/source/ui/src/popup.src \
     sc/source/ui/src/autofmt.src \
     sc/source/ui/src/globstr.src \
@@ -42,7 +41,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/scfuncs.src \
     sc/source/ui/src/textdlgs.src \
     sc/source/ui/src/sc.src \
-    sc/source/ui/src/pseudo.src \
     sc/source/ui/src/hdrcont.src \
     sc/source/ui/src/scerrors.src \
     sc/source/ui/src/simpref.src \
@@ -56,7 +54,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/xmlsourcedlg.src \
     sc/source/ui/cctrl/checklistmenu.src \
     sc/source/ui/navipi/navipi.src \
-    sc/source/ui/pagedlg/pagedlg.src \
     sc/source/ui/styleui/scstyles.src \
     sc/source/ui/dbgui/pivot.src \
     sc/source/ui/dbgui/dpgroupdlg.src \
@@ -64,7 +61,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/dbgui/dapitype.src \
     sc/source/ui/dbgui/imoptdlg.src \
     sc/source/ui/dbgui/scendlg.src \
-    sc/source/ui/dbgui/outline.src \
     sc/source/ui/dbgui/validate.src \
     sc/source/ui/drawfunc/drformsh.src \
     sc/source/ui/drawfunc/objdraw.src \
@@ -72,11 +68,16 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/miscdlgs/highred.src \
     sc/source/ui/miscdlgs/conflictsdlg.src \
     sc/source/ui/miscdlgs/acredlin.src \
-    sc/source/ui/formdlg/formdlgs.src \
     sc/source/ui/formdlg/dwfunctr.src \
     sc/source/ui/sidebar/CellAppearancePropertyPanel.src \
     sc/source/ui/StatisticsDialogs/StatisticsDialogs.src \
     sc/source/core/src/compiler.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sc/res,\
+    sc/source/ui/src/iconsets.src \
+    sc/source/ui/pagedlg/pagedlg.src \
+    sc/source/ui/dbgui/outline.src \
 ))
 
 # vim: set noet sw=4 ts=4:

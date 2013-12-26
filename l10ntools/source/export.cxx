@@ -180,7 +180,6 @@ Export::Export(const OString &rOutput)
                 nList( LIST_NON ),
                 nListIndex( 0 ),
                 nListLevel( 0 ),
-                bSkipFile( false ),
                 bMergeMode( false ),
                 bError( sal_False ),
                 bReadOver( sal_False ),
@@ -205,7 +204,6 @@ Export::Export(
                 nList( LIST_NON ),
                 nListIndex( 0 ),
                 nListLevel( 0 ),
-                bSkipFile( false ),
                 bMergeMode( sal_True ),
                 sMergeSrc( rMergeSource ),
                 bError( sal_False ),
@@ -304,14 +302,6 @@ int Export::Execute( int nToken, const char * pToken )
             WriteToMerged( sOrig , false );
         return 0;
     }
-    // #define NO_LOCALIZE_EXPORT
-    if( bSkipFile ){
-        if ( bMergeMode ) {
-            WriteToMerged( sOrig , false );
-        }
-        return 1;
-    }
-
 
     if ( bDefine ) {
         if (( nToken != EMPTYLINE ) && ( nToken != LEVELDOWN ) && ( nToken != LEVELUP )) {
@@ -361,24 +351,9 @@ int Export::Execute( int nToken, const char * pToken )
     switch ( nToken ) {
 
         case NORMDEFINE:
-            sToken = sToken.replace('\r', ' ').replace('\t', ' ');
-            for (;;) {
-                sal_Int32 n = 0;
-                sToken = sToken.replaceFirst("  ", " ", &n);
-                if (n == -1) {
-                    break;
-                }
-            }
-            if( sToken.equalsIgnoreAsciiCase("#define NO_LOCALIZE_EXPORT") ){
-                            bSkipFile = true;
-                            return 0;
-                        }
-                        if ( bMergeMode )
-                          WriteToMerged( sOrig , false );
-
-                        return 0;
-
-
+            if ( bMergeMode )
+                WriteToMerged( sOrig , false );
+            return 0;
         case RSCDEFINE:
             bDefine = sal_True; // res. defined in macro
 

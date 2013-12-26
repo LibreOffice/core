@@ -35,15 +35,17 @@ $(eval $(call gb_SrsTarget_set_include,vcl/source/src,\
 $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\
     vcl/source/src/btntext.src \
     vcl/source/src/helptext.src \
-    vcl/source/src/images.src \
     vcl/source/src/menu.src \
     vcl/source/src/print.src \
     vcl/source/src/stdtext.src \
-    vcl/source/src/throbber.src \
     vcl/source/src/units.src \
     vcl/source/src/fpicker.src \
     vcl/source/edit/textundo.src \
 ))
 
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,vcl/source/src,\
+    vcl/source/src/images.src \
+    vcl/source/src/throbber.src \
+))
 
 # vim: set noet sw=4 ts=4:

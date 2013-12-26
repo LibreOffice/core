@@ -89,7 +89,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/docvw/access.src \
     sw/source/ui/docvw/docvw.src \
     sw/source/ui/envelp/envelp.src \
-    sw/source/ui/envelp/envprt.src \
     sw/source/ui/envelp/label.src \
     sw/source/ui/envelp/labfmt.src \
     sw/source/ui/envelp/mailmrge.src \
@@ -121,6 +120,10 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/utlui/utlui.src \
     sw/source/ui/web/web.src \
     sw/source/ui/wrtsh/wrtsh.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sw/res,\
+    sw/source/ui/envelp/envprt.src \
 ))
 
 # vim: set noet sw=4 ts=4:

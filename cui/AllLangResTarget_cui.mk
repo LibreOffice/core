@@ -55,7 +55,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optlingu.src \
     cui/source/options/optpath.src \
     cui/source/options/treeopt.src \
-    cui/source/tabpages/align.src \
     cui/source/tabpages/autocdlg.src \
     cui/source/tabpages/border.src \
     cui/source/tabpages/dstribut.src \
@@ -65,6 +64,10 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/page.src \
     cui/source/tabpages/paragrph.src \
     cui/source/tabpages/strings.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,cui/res,\
+    cui/source/tabpages/align.src \
 ))
 
 # vim: set noet sw=4 ts=4:

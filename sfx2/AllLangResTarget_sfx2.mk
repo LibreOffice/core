@@ -39,7 +39,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/appl/dde.src \
     sfx2/source/appl/newhelp.src \
     sfx2/source/appl/sfx.src \
-    sfx2/source/bastyp/bastyp.src \
     sfx2/source/bastyp/fltfnc.src \
     sfx2/source/control/templateview.src \
     sfx2/source/dialog/dialog.src \
@@ -50,17 +49,21 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/taskpane.src \
     sfx2/source/dialog/templateinfodlg.src \
     sfx2/source/dialog/templdlg.src \
-    sfx2/source/dialog/titledockwin.src \
     sfx2/source/dialog/versdlg.src \
     sfx2/source/doc/doc.src \
     sfx2/source/doc/doctempl.src \
-    sfx2/source/doc/graphhelp.src \
     sfx2/source/doc/new.src \
     sfx2/source/doc/templatelocnames.src \
     sfx2/source/doc/templatedlg.src \
     sfx2/source/menu/menu.src \
     sfx2/source/sidebar/Sidebar.src \
     sfx2/source/view/view.src \
+))
+
+$(eval $(call gb_SrsTarget_add_nonlocaliable_files,sfx/res,\
+    sfx2/source/bastyp/bastyp.src \
+    sfx2/source/dialog/titledockwin.src \
+    sfx2/source/doc/graphhelp.src \
 ))
 
 # vim: set noet sw=4 ts=4:
