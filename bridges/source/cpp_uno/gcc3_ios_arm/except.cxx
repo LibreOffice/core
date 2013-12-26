@@ -52,6 +52,9 @@ struct Fake_type_info {
     char const * name;
 };
 
+BOOST_STATIC_ASSERT(
+    sizeof (Fake_type_info) == sizeof (std::type_info));
+
 struct Fake_class_type_info: Fake_type_info {};
 
 #if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
