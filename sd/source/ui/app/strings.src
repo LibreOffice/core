@@ -798,10 +798,6 @@ String STR_FILEFORMAT_NAME
 {
     Text [ en-US ] = "File name without extension" ;
 };
-String STR_RELEASE_GRAPHICLINK
-{
-    Text [ en-US ] = "This image is linked to a document. Do you want to unlink the image in order to edit it?" ;
-};
 String STR_NEW_CUSTOMSHOW
 {
     Text [ en-US ] = "New Custom Slide Show" ;

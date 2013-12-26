@@ -284,8 +284,6 @@
 #define STR_FILEFORMAT_PATH                 (RID_APP_START+509)
 #define STR_FILEFORMAT_NAME                 (RID_APP_START+510)
 
-#define STR_RELEASE_GRAPHICLINK             (RID_APP_START+511)
-
 #define STR_NEW_CUSTOMSHOW                  (RID_APP_START+512)
 #define STR_COPY_CUSTOMSHOW                 (RID_APP_START+513)
 
