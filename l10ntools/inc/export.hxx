@@ -112,7 +112,6 @@ public:
     sal_Bool bChildWithText;
 
     sal_Bool bText;
-    sal_Bool bHelpText;
     sal_Bool bQuickHelpText;
     sal_Bool bTitle;
     sal_Bool bList;
@@ -124,8 +123,6 @@ public:
     OString sFilename;
 
     OStringHashMap sText;
-
-    OStringHashMap sHelpText;
 
     OStringHashMap sQuickHelpText;
 
@@ -150,7 +147,6 @@ public:
 #define LIST_ITEM                   0x0004
 #define LIST_PAIRED                 0x0005
 #define STRING_TYP_TEXT             0x0010
-#define STRING_TYP_HELPTEXT         0x0020
 #define STRING_TYP_QUICKHELPTEXT    0x0040
 #define STRING_TYP_TITLE            0x0080
 

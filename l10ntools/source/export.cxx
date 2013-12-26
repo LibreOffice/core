@@ -646,21 +646,6 @@ int Export::Execute( int nToken, const char * pToken )
                             pResData->sText[ sLangIndex ] = sText;
                         }
                     }
-                    else if ( sKey == "HELPTEXT" ) {
-                        SetChildWithText();
-                        pResData->bHelpText = sal_True;
-                        if ( !bMergeMode )
-                        {
-                            if (!pResData->sHelpText[ sLangIndex ].isEmpty())
-                            {
-                                OStringBuffer sError("Language ");
-                                sError.append(sLangIndex);
-                                sError.append(" defined twice");
-                                YYWarning(sError.getStr());
-                            }
-                            pResData->sHelpText[ sLangIndex ] = sText;
-                        }
-                    }
                     else if ( sKey == "QUICKHELPTEXT" ) {
                         SetChildWithText();
                         pResData->bQuickHelpText = sal_True;
@@ -774,8 +759,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 
      if (( !pResData->sText[ SOURCE_LANGUAGE ].isEmpty())
         ||
-        (  !pResData->sHelpText[ SOURCE_LANGUAGE ].isEmpty())
-        ||
         (  !pResData->sQuickHelpText[ SOURCE_LANGUAGE ].isEmpty())
          ||
         (  !pResData->sTitle[ SOURCE_LANGUAGE ].isEmpty()))
@@ -794,10 +777,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         OString sXTitle;
 
         sXText = pResData->sText[ SOURCE_LANGUAGE ];
-        if (!pResData->sText[ X_COMMENT ].isEmpty())
-            sXHText = pResData->sText[ X_COMMENT ];
-        else
-            sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
+        sXHText = pResData->sText[ X_COMMENT ];
         sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
         sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
 
@@ -826,7 +806,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 
         if ( bCreateNew ) {
             pResData->sText[ SOURCE_LANGUAGE ]         = "";
-            pResData->sHelpText[ SOURCE_LANGUAGE ]     = "";
             pResData->sQuickHelpText[ SOURCE_LANGUAGE ]= "";
             pResData->sTitle[ SOURCE_LANGUAGE ]        = "";
         }
