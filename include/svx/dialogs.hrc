@@ -107,7 +107,6 @@
 #define RID_SVX_GRFFILTER_DLG_SOLARIZE      (RID_SVX_START + 333)
 #define RID_SVX_GRFFILTER_DLG_EMBOSS        (RID_SVX_START + 336)
 #define RID_SVX_GRFFILTER_DLG_SMOOTH        (RID_SVX_START + 337)
-#define RID_SVXDLG_SEARCHFORMAT             (RID_SVX_START +  21)
 #define RID_SVXDLG_CHARMAP                  ( RID_SVX_START +  10 )
 
 // IDs of options pages of applications

@@ -1313,23 +1313,11 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( sal_uInt32,
     return new CuiAbstractSfxDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* pParent,
-                                            const SfxItemSet& rSet,
-                                            sal_uInt32 nResId)
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog(Window* pParent,
+    const SfxItemSet& rSet)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RID_SVXDLG_SEARCHFORMAT :
-            pDlg = new SvxSearchFormatDialog( pParent, rSet );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new CuiAbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SvxSearchFormatDialog(pParent, rSet);
+    return new CuiAbstractTabDialog_Impl(pDlg);
 }
 
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog( Window* pParent,

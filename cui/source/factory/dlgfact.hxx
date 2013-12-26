@@ -552,9 +552,8 @@ public:
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView,
                                             SdrModel* pModel=0 );
-    virtual SfxAbstractTabDialog*       CreateTabItemDialog( Window* pParent,
-                                            const SfxItemSet& rSet,
-                                            sal_uInt32 nResId);
+    virtual SfxAbstractTabDialog*       CreateTabItemDialog(Window* pParent,
+                                            const SfxItemSet& rSet);
     virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             sal_uInt16 nAnchorTypes = 0 );

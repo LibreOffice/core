@@ -22,67 +22,7 @@
 #include "srchxtra.hrc"
 #include <svx/dialogs.hrc>
 
- // RID_SVXDLG_SEARCHFORMAT -----------------------------------------------
-TabDialog RID_SVXDLG_SEARCHFORMAT
-{
-    OutputSize = TRUE ;
-    SvLook = TRUE ;
-    Text [ en-US ] = "Text Format" ;
-    Moveable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_NAME ;
-                Text [ en-US ] = "Font" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ en-US ] = "Font Effects" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_POSITION ;
-                Text [ en-US ] = "Position" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_TWOLINES ;
-                Text [ en-US ] = "Asian Layout" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ en-US ] = "Indents & Spacing" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
-                Text [ en-US ] = "Alignment" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_EXT_PARAGRAPH ;
-                Text [ en-US ] = "Text Flow" ;
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_PARA_ASIAN;
-                Text [ en-US ] = "Asian Typography";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_BACKGROUND;
-                Text [ en-US ] = "Background" ;
-            };
-        };
-    };
-};
- // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
+// RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHATTR
 {
     HelpId = HID_SEARCHATTR ;

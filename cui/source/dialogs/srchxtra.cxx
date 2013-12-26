@@ -37,87 +37,77 @@
 #include <rtl/strbuf.hxx>
 #include "svtools/treelistentry.hxx"
 
-// class SvxSearchFormatDialog -------------------------------------------
-
-SvxSearchFormatDialog::SvxSearchFormatDialog( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHFORMAT ), &rSet ),
-
-    pFontList( NULL )
-
+SvxSearchFormatDialog::SvxSearchFormatDialog(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabDialog(pParent, "SearchFormatDialog", "cui/ui/searchformatdialog.ui", &rSet)
+    , m_pFontList(NULL)
+    , m_nNamePageId(0)
+    , m_nParaStdPageId(0)
+    , m_nParaAlignPageId(0)
+    , m_nBackPageId(0)
 {
-    FreeResource();
-
-    AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_POSITION, SvxCharPositionPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_TWOLINES, SvxCharTwoLinesPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH, SvxExtParagraphTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_BACKGROUND, SvxBackgroundTabPage::Create, 0 );
+    m_nNamePageId = AddTabPage("font", SvxCharNamePage::Create, 0);
+    AddTabPage("fonteffects", SvxCharEffectsPage::Create, 0);
+    AddTabPage("position", SvxCharPositionPage::Create, 0);
+    AddTabPage("asianlayout", SvxCharTwoLinesPage::Create, 0);
+    m_nParaStdPageId = AddTabPage("labelTP_PARA_STD", SvxStdParagraphTabPage::Create, 0);
+    m_nParaAlignPageId = AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, 0);
+    AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, 0);
+    AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, 0 );
+    m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0);
 
     // remove asian tabpages if necessary
     SvtCJKOptions aCJKOptions;
     if ( !aCJKOptions.IsDoubleLinesEnabled() )
-        RemoveTabPage( RID_SVXPAGE_CHAR_TWOLINES );
+        RemoveTabPage("asianlayout");
     if ( !aCJKOptions.IsAsianTypographyEnabled() )
-        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
+        RemoveTabPage("labelTP_PARA_ASIAN");
 }
-
-// -----------------------------------------------------------------------
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
 {
-    delete pFontList;
+    delete m_pFontList;
 }
-
-// -----------------------------------------------------------------------
 
 void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
-    switch ( nId )
+    if (nId == m_nNamePageId)
     {
-        case RID_SVXPAGE_CHAR_NAME:
+        const FontList* pApm_pFontList = 0;
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+
+        if ( pSh )
         {
-            const FontList* pAppFontList = 0;
-            SfxObjectShell* pSh = SfxObjectShell::Current();
-
-            if ( pSh )
-            {
-                const SvxFontListItem* pFLItem = (const SvxFontListItem*)
-                    pSh->GetItem( SID_ATTR_CHAR_FONTLIST );
-                if ( pFLItem )
-                    pAppFontList = pFLItem->GetFontList();
-            }
-
-            const FontList* pList = pAppFontList;
-
-            if ( !pList )
-            {
-                if ( !pFontList )
-                    pFontList = new FontList( this );
-                pList = pFontList;
-            }
-
-            if ( pList )
-                ( (SvxCharNamePage&)rPage ).
-                    SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
-            ( (SvxCharNamePage&)rPage ).EnableSearchMode();
-            break;
+            const SvxFontListItem* pFLItem = (const SvxFontListItem*)
+                pSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+            if ( pFLItem )
+                pApm_pFontList = pFLItem->GetFontList();
         }
 
-        case RID_SVXPAGE_STD_PARAGRAPH:
-            ( (SvxStdParagraphTabPage&)rPage ).EnableAutoFirstLine();
-            break;
+        const FontList* pList = pApm_pFontList;
 
-        case RID_SVXPAGE_ALIGN_PARAGRAPH:
-            ( (SvxParaAlignTabPage&)rPage ).EnableJustifyExt();
-            break;
-        case RID_SVXPAGE_BACKGROUND :
-            ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(sal_True);
-            break;
+        if ( !pList )
+        {
+            if ( !m_pFontList )
+                m_pFontList = new FontList( this );
+            pList = m_pFontList;
+        }
+
+        if ( pList )
+            ( (SvxCharNamePage&)rPage ).
+                SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
+        ( (SvxCharNamePage&)rPage ).EnableSearchMode();
+    }
+    else if (nId == m_nParaStdPageId)
+    {
+        ( (SvxStdParagraphTabPage&)rPage ).EnableAutoFirstLine();
+    }
+    else if (nId == m_nParaAlignPageId)
+    {
+        ( (SvxParaAlignTabPage&)rPage ).EnableJustifyExt();
+    }
+    else if (nId == m_nBackPageId)
+    {
+        ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(sal_True);
     }
 }
 

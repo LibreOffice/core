@@ -128,6 +128,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/recordnumberdialog \
 	cui/uiconfig/ui/rotationtabpage \
 	cui/uiconfig/ui/scriptorganizer \
+	cui/uiconfig/ui/searchformatdialog \
 	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \
 	cui/uiconfig/ui/shadowtabpage \

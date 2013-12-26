@@ -358,9 +358,8 @@ public:
                                             TargetList& rTargetList ) = 0;
     virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) =0;
 
-    virtual SfxAbstractTabDialog* CreateTabItemDialog( Window* pParent,
-                                            const SfxItemSet& rSet,
-                                            sal_uInt32 nResId) = 0;
+    virtual SfxAbstractTabDialog* CreateTabItemDialog(Window* pParent,
+                                            const SfxItemSet& rSet) = 0;
     virtual VclAbstractDialog*      CreateSvxSearchAttributeDialog( Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges)=0;

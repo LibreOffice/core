@@ -26,19 +26,21 @@
 #include <svx/checklbx.hxx>
 #include <svx/srchdlg.hxx>
 
-// class SvxSearchFormatDialog -------------------------------------------
-
 class SvxSearchFormatDialog : public SfxTabDialog
 {
 public:
     SvxSearchFormatDialog( Window* pParent, const SfxItemSet& rSet );
-    ~SvxSearchFormatDialog();
+    virtual ~SvxSearchFormatDialog();
 
 protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 private:
-    FontList*       pFontList;
+    FontList*  m_pFontList;
+    sal_uInt16 m_nNamePageId;
+    sal_uInt16 m_nParaStdPageId;
+    sal_uInt16 m_nParaAlignPageId;
+    sal_uInt16 m_nBackPageId;
 };
 
 // class SvxSearchFormatDialog -------------------------------------------

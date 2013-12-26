@@ -1950,7 +1950,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, RID_SVXDLG_SEARCHFORMAT );
+        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog(this, aSet);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         aTxt = pDlg->GetText() + aTxt;
         pDlg->SetText( aTxt );
