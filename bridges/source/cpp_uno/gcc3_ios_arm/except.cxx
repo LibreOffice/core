@@ -106,6 +106,9 @@ std::type_info * createFake_si_class_type_info(
     Fake_si_class_type_info * fake
         = reinterpret_cast<Fake_si_class_type_info *>(buf);
     fake->name = name;
+#ifdef _LIBCPP_NONUNIQUE_RTTI_BIT
+    *(uintptr_t*)(&fake->name) |= _LIBCPP_NONUNIQUE_RTTI_BIT;
+#endif
     fake->base = base;
     return reinterpret_cast<std::type_info *>(
         static_cast<Fake_type_info *>(fake));
