@@ -301,19 +301,18 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
                 SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
-                sal_Bool        bCont = sal_True;
+                bool bCont = true;
 
                 if( pNewObj->IsLinkedGraphic() )
                 {
-                    QueryBox aQBox( (Window*) GetActiveWindow(), WB_YES_NO | WB_DEF_YES,
-                                    SD_RESSTR( STR_RELEASE_GRAPHICLINK ) );
+                    MessageDialog aQueryBox( (Window*) GetActiveWindow(),"QueryUnlinkImageDialog","modules/sdraw/ui/queryunlinkimagedialog.ui");
 
-                    if( RET_YES == aQBox.Execute() )
+                    if (RET_YES == aQueryBox.Execute())
                         pNewObj->ReleaseGraphicLink();
                     else
                     {
                         delete pNewObj;
-                        bCont = sal_False;
+                        bCont = false;
                     }
                 }
 
