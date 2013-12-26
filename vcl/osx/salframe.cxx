@@ -700,7 +700,6 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
     SalData::ensureThreadAutoreleasePool();
 
     NSArray* pScreens = [NSScreen screens];
-    Rectangle aRet;
     NSScreen* pScreen = nil;
     if( pScreens && nScreen < [pScreens count] )
     {
