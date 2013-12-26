@@ -105,7 +105,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         // to see what dictionaries the admin/user has installed
 
         int numshr;          // number of shared dictionary entries
-        SvtPathOptions aPathOpt;
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
         std::vector<NSString *> postspdict;
