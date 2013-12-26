@@ -2120,6 +2120,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             sStr += OUString((sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
                             sStr += sEntryEnd;
                         }
+                    }
                         if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                         {
                             // Take the TOC value of the max level to evaluate to as
@@ -2287,7 +2288,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                         if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
                             sStr += "\\h";
-                    }
                     break;
                 }
             }
