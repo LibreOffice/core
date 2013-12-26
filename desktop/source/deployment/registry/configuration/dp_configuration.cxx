@@ -548,13 +548,13 @@ BackendImpl::PackageImpl::isRegistered_(
     Reference<XCommandEnvironment> const & )
 {
     BackendImpl * that = getMyBackend();
-    const OUString url(getURL());
 
     bool bReg = false;
     if (that->hasActiveEntry(getURL()))
         bReg = true;
 
 #if HAVE_FEATURE_EXTENSIONS
+    const OUString url(getURL());
     if (!bReg && that->m_registeredPackages.get())
     {
         // fallback for user extension registered in berkeley DB
