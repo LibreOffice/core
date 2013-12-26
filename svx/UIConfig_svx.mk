@@ -26,8 +26,10 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/passwd \
 	svx/uiconfig/ui/querydeletecontourdialog \
+	svx/uiconfig/ui/querymodifyimagemapchangesdialog \
 	svx/uiconfig/ui/querynewcontourdialog \
 	svx/uiconfig/ui/querysavecontchangesdialog \
+	svx/uiconfig/ui/querysaveimagemapchangesdialog \
 	svx/uiconfig/ui/queryunlinkgraphicsdialog \
 	svx/uiconfig/ui/redlinecontrol \
 	svx/uiconfig/ui/redlinefilterpage \

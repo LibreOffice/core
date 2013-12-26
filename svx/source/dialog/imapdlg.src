@@ -344,14 +344,5 @@ Menu RID_SVXMN_IMAP
 
 /******************************************************************************/
 
-String STR_IMAPDLG_SAVE
-{
-    Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?";
-};
-
-String STR_IMAPDLG_MODIFY
-{
-    Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

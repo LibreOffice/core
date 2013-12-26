@@ -86,11 +86,4 @@
 
 /******************************************************************************/
 
-
-#define STR_IMAPDLG_SAVE        (RID_SVX_IMAPDLG_START + 5)
-#define STR_IMAPDLG_MODIFY      (RID_SVX_IMAPDLG_START + 6)
-
-
-/******************************************************************************/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
