@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_d4339cf4",
+        "filename": "filter/source/xmlfilterdetect/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-12-26T15:03:41Z",
+      "side": 1,
+      "message": "You should use boost::scoped_ptr to hold pInStream. IMHO there is no excuse to use naked pointers in situations like that in new code.",
+      "revId": "4889a4db9fa6705b253c02e1e1ac95f27de1c795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
