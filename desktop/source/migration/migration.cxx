@@ -514,9 +514,10 @@ static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
         return result;
 }
 
+#if defined UNX && ! defined MACOSX
+
 static const char XDG_CONFIG_PART[] = "/.config/";
 
-#if defined UNX && ! defined MACOSX
 OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
 {
     OUString aPreXDGConfigPath;
