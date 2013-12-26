@@ -141,6 +141,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         return;
 
     OUString sApplicationID;
+
+#if !defined(MACOSX)
     try
     {
         // SYNCHRONIZED ->
@@ -152,7 +154,6 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create( xContext );
 
-#if !defined(MACOSX)
         OUString sDesktopName;
         OUString aModuleId = xModuleManager->identify(xFrame);
         if ( aModuleId == "com.sun.star.text.TextDocument" ||
@@ -186,11 +187,11 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         sApplicationID += "-";
         sApplicationID += sDesktopName.toAsciiLowerCase();
 #endif
-#endif
     }
     catch(const css::uno::Exception&)
     {
     }
+#endif
 
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
