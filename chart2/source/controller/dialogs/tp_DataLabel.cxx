@@ -25,12 +25,12 @@
 namespace chart
 {
 
-DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs) :
-        SfxTabPage(pWindow
+DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs)
+        : SfxTabPage(pWindow
         , "tp_DataLabel"
         , "modules/schart/ui/tp_DataLabel.ui"
         , rInAttrs)
-        , m_aDataLabelResources(this, rInAttrs)
+        , m_aDataLabelResources(this, this, rInAttrs)
 {
 }
 

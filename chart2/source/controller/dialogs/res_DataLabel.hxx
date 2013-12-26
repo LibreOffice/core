@@ -21,7 +21,6 @@
 
 #define NUMBER_SEPARATORS 4
 
-#include "res_TextSeparator.hxx"
 // header for class CheckBox
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
@@ -41,7 +40,7 @@ namespace chart
 class DataLabelResources
 {
 public:
-    DataLabelResources( SfxTabPage* pParent,  const SfxItemSet& rInAttrs );
+    DataLabelResources( VclBuilderContainer* pWindow, Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~DataLabelResources();
 
     sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
@@ -54,10 +53,10 @@ private:
     PushButton*          m_pPB_NumberFormatForValue;
     CheckBox*            m_pCBPercent;
     PushButton*          m_pPB_NumberFormatForPercent;
+    FixedText*           m_pFT_NumberFormatForPercent;
     CheckBox*            m_pCBCategory;
     CheckBox*            m_pCBSymbol;
 
-//     TextSeparatorResources  m_aSeparatorResources;
     VclHBox*             m_pSeparatorResources;
     ListBox*             m_pLB_Separator;
     OUString             m_aEntryMap[NUMBER_SEPARATORS];
@@ -87,61 +86,6 @@ private:
     bool                m_bSourceFormatForValue;
     bool                m_bSourceFormatForPercent;
 
-    SfxTabPage*   m_pWindow;
-    SfxItemPool*        m_pPool;
-
-    DECL_LINK(NumberFormatDialogHdl, PushButton * );
-    DECL_LINK(CheckHdl, CheckBox* );
-    void EnableControls();
-};
-
-class oldDataLabelResources
-{
-public:
-    oldDataLabelResources( Window* pParent, const SfxItemSet& rInAttrs );
-
-    virtual ~oldDataLabelResources();
-
-    sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
-    void Reset(const SfxItemSet& rInAttrs);
-
-    void SetNumberFormatter( SvNumberFormatter* pFormatter );
-
-private:
-    CheckBox            m_aCBNumber;
-    PushButton          m_aPB_NumberFormatForValue;
-    CheckBox            m_aCBPercent;
-    PushButton          m_aPB_NumberFormatForPercent;
-    CheckBox            m_aCBCategory;
-    CheckBox            m_aCBSymbol;
-
-    TextSeparatorResources  m_aSeparatorResources;
-
-    FixedText           m_aFT_LabelPlacement;
-    ListBox             m_aLB_LabelPlacement;
-
-    FixedLine           m_aFL_Rotate;
-    svx::DialControl    m_aDC_Dial;
-    FixedText           m_aFT_Degrees;
-    svx::WrapField      m_aNF_Degrees;
-
-    FixedText               m_aFT_TextDirection;
-    TextDirectionListBox    m_aLB_TextDirection;
-
-    ::std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
-    ::std::map< sal_uInt16, sal_Int32 > m_aListBoxToPlacementMap;
-
-    SvNumberFormatter*  m_pNumberFormatter;
-    bool                m_bNumberFormatMixedState;
-    bool                m_bPercentFormatMixedState;
-    sal_uLong               m_nNumberFormatForValue;
-    sal_uLong               m_nNumberFormatForPercent;
-
-    bool                m_bSourceFormatMixedState;
-    bool                m_bPercentSourceMixedState;
-    bool                m_bSourceFormatForValue;
-    bool                m_bSourceFormatForPercent;
-
     Window*             m_pWindow;
     SfxItemPool*        m_pPool;
 
@@ -149,6 +93,7 @@ private:
     DECL_LINK(CheckHdl, CheckBox* );
     void EnableControls();
 };
+
 } //namespace chart
 
 #endif

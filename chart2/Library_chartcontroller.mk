@@ -115,7 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/res_DataLabel \
     chart2/source/controller/dialogs/res_ErrorBar \
     chart2/source/controller/dialogs/res_LegendPosition \
-    chart2/source/controller/dialogs/res_TextSeparator \
     chart2/source/controller/dialogs/res_Titles \
     chart2/source/controller/dialogs/res_Trendline \
     chart2/source/controller/dialogs/TextDirectionListBox \

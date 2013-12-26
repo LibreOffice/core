@@ -25,22 +25,22 @@
 #include <vcl/button.hxx>
 // header for class SfxItemSet
 #include <svl/itemset.hxx>
-//for auto_ptr
-#include <memory>
+#include <boost/scoped_ptr.hpp>
+
 
 class SvNumberFormatter;
 
 namespace chart
 {
 
-class oldDataLabelResources;
+class DataLabelResources;
 class DataLabelsDialog : public ModalDialog
 {
 private:
-    OKButton            m_aBtnOK;
-    CancelButton        m_aBtnCancel;
-    HelpButton          m_aBtnHelp;
-    ::std::auto_ptr< oldDataLabelResources >    m_apDataLabelResources;
+//     OKButton            m_aBtnOK;
+//     CancelButton        m_aBtnCancel;
+//     HelpButton          m_aBtnHelp;
+    boost::scoped_ptr < DataLabelResources >    m_apDataLabelResources;
 
     const SfxItemSet&   m_rInAttrs;
 
