@@ -33,11 +33,6 @@ String STR_DLG_STEPPED_LINE_PROPERTIES
     Text [ en-US ] = "Stepped Lines" ;
 };
 
-String STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE
-{
-    Text [ en-US ] = "Number Format for Percentage Value" ;
-};
-
 String STR_PAGE_CHARTTYPE
 {
     Text [ en-US ] = "Chart Type" ;
