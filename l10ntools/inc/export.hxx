@@ -176,7 +176,6 @@ private:
     OString sMergeSrc;
     sal_Bool bError;                        // any errors while export?
     sal_Bool bReadOver;
-    OString sLastTextTyp;
     OString sFilename;
     OString sLanguages;
 
