@@ -155,7 +155,7 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
     }
 
 
-    int nResult = NSRunAlertPanel( pTitle, pMessage, pDefText, pAltText, pOthText );
+    int nResult = NSRunAlertPanel( pTitle, @"%@", pDefText, pAltText, pOthText, pMessage );
 
     if( pTitle )
         [pTitle release];
