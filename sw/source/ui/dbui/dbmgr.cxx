@@ -869,11 +869,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
         if( !pSourceDocSh->IsModified() )
         {
-            SfxMedium* pOrig = pSourceDocSh->GetMedium();
-            OUString sSourceDocumentURL(pOrig->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ));
-            const SfxFilter* pSfxFlt = SwIoSystem::GetFileFilter(
-                                                    sSourceDocumentURL, ::aEmptyOUStr );
-            const SfxFilter* pStoreToFilter = pSfxFlt;
+            const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(
+                pSourceDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), ::aEmptyOUStr );
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
             const OUString* pStoreToFilterOptions = 0;
 
@@ -922,14 +919,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
                 pTargetShell = pTargetView->GetWrtShellPtr();
                 //copy the styles from the source to the target document
-                SwgReaderOption aOpt;
-                aOpt.SetTxtFmts( sal_True );
-                aOpt.SetFrmFmts( sal_True );
-                aOpt.SetPageDescs( sal_True );
-                aOpt.SetNumRules( sal_True );
-                aOpt.SetMerge( sal_False );
-                pTargetView->GetDocShell()->LoadStylesFromFile(
-                        sSourceDocumentURL, aOpt, sal_True );
+                pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, sal_True );
                 //determine the page style and number used at the start of the source document
                 pSourceShell->SttEndDoc(sal_True);
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
@@ -1026,13 +1016,19 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         for (sal_uInt16 i = 0; i < 25; i++)
                             Application::Reschedule();
 
-                        // Create and save new document
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
-                        SfxObjectShellLock xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
-                        SfxMedium* pWorkMed = new SfxMedium( sSourceDocumentURL, STREAM_STD_READ );
-                        pWorkMed->SetFilter( pSfxFlt );
+                        SfxObjectShellLock xWorkDocSh;
+                        // copy the source document
+                        if( 1 == nDocNo && (bAsSingleFile || rMergeDescriptor.bCreateSingleFile) )
+                        {
+                            uno::Reference< util::XCloneable > xClone( pSourceDocSh->GetModel(), uno::UNO_QUERY);
+                            uno::Reference< lang::XUnoTunnel > xWorkDocShell( xClone->createClone(), uno::UNO_QUERY);
+                            SwXTextDocument* pWorkModel = reinterpret_cast<SwXTextDocument*>(xWorkDocShell->getSomething(SwXTextDocument::getUnoTunnelId()));
+                            xWorkDocSh = pWorkModel->GetDocShell();
+                        }
+                        else
+                            xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
 
-                        if (xWorkDocSh->DoLoad(pWorkMed))
                         {
                             //create a view frame for the document
                             SfxViewFrame* pWorkFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
