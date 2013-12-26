@@ -152,9 +152,9 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create( xContext );
 
-        OUString aModuleId = xModuleManager->identify(xFrame);
-        OUString sDesktopName;
 #if !defined(MACOSX)
+        OUString sDesktopName;
+        OUString aModuleId = xModuleManager->identify(xFrame);
         if ( aModuleId == "com.sun.star.text.TextDocument" ||
              aModuleId == "com.sun.star.text.GlobalDocument" ||
              aModuleId == "com.sun.star.text.WebDocument" ||
