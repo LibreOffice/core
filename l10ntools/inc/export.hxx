@@ -134,7 +134,6 @@ public:
     OString sTextTyp;
 
     ExportList  *pStringList;
-    ExportList  *pUIEntries;
     ExportList  *pItemList;
     ExportList  *pFilterList;
     ExportList  *pPairedList;
@@ -150,7 +149,6 @@ public:
 #define LIST_FILTER                 0x0002
 #define LIST_ITEM                   0x0004
 #define LIST_PAIRED                 0x0005
-#define LIST_UIENTRIES              0x0008
 #define STRING_TYP_TEXT             0x0010
 #define STRING_TYP_HELPTEXT         0x0020
 #define STRING_TYP_QUICKHELPTEXT    0x0040

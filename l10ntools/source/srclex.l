@@ -191,11 +191,6 @@ void YYWarning();
 	WorkOnTokenSet( LISTASSIGNMENT, yytext );
 }
 
-"UIEntries"[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?"="[ \t]*(\\[ \t]*)?\n?[ \t]*"{"	{
-/* UIENTRIES */
-	WorkOnTokenSet( UIENTRIES, yytext );
-}
-
 "<"?[ \t]*L?\".*\".*">" {
 /* LISTTEXT */
 	WorkOnTokenSet( LISTTEXT, yytext );

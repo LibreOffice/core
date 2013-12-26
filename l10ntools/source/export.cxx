@@ -527,14 +527,6 @@ int Export::Execute( int nToken, const char * pToken )
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            else if (sKey == "UIENTRIES")
-            {
-                pResData->bList = sal_True;
-                nList = LIST_UIENTRIES;
-                m_sListLang = SOURCE_LANGUAGE;
-                nListIndex = 0;
-                nListLevel = 0;
-            }
             if (sToken.indexOf( '{' ) != -1
                 && (lcl_countOccurrences(sToken, '{')
                     > lcl_countOccurrences(sToken, '}')))
@@ -543,7 +535,6 @@ int Export::Execute( int nToken, const char * pToken )
             }
          }
         break;
-        case UIENTRIES:
         case LISTASSIGNMENT:
         {
             OString sTmpToken(
@@ -584,14 +575,6 @@ int Export::Execute( int nToken, const char * pToken )
                 {
                     pResData->bList = sal_True;
                     nList = LIST_ITEM;
-                    m_sListLang = SOURCE_LANGUAGE;
-                    nListIndex = 0;
-                    nListLevel = 0;
-                }
-                else if (sKey == "UIENTRIES")
-                {
-                    pResData->bList = sal_True;
-                    nList = LIST_UIENTRIES;
                     m_sListLang = SOURCE_LANGUAGE;
                     nListIndex = 0;
                     nListLevel = 0;
@@ -872,12 +855,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         if ( bCreateNew )
             pResData->pPairedList = 0;
     }
-    if ( pResData->pUIEntries ) {
-        OString sList( "uientries" );
-        WriteExportList( pResData, pResData->pUIEntries, sList, bCreateNew );
-        if ( bCreateNew )
-            pResData->pUIEntries = 0;
-    }
     return sal_True;
 }
 
@@ -1008,14 +985,6 @@ void Export::InsertListEntry(const OString &rText, const OString &rLine)
         if ( !pList ) {
             pResData->pPairedList = new ExportList();
             pList = pResData->pPairedList;
-            nListIndex = 0;
-        }
-    }
-    else if ( nList == LIST_UIENTRIES ) {
-        pList = pResData->pUIEntries;
-        if ( !pList ) {
-            pResData->pUIEntries = new ExportList();
-            pList = pResData->pUIEntries;
             nListIndex = 0;
         }
     }
@@ -1206,13 +1175,12 @@ bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*
     MergeEntrys* pEntrysOfFirstItem = 0;
     sal_uInt16 nType = LIST_STRING;
     bool bPairedList = false;
-    while( !pEntrysOfFirstItem && nType <= LIST_UIENTRIES )
+    while( !pEntrysOfFirstItem && nType <= LIST_PAIRED )
     {
         switch ( nType )
         {
             case LIST_STRING : pResData->sResTyp = "stringlist"; o_pList = pResData->pStringList; bPairedList = false; break;
             case LIST_FILTER : pResData->sResTyp = "filterlist"; o_pList = pResData->pFilterList; bPairedList = false; break;
-            case LIST_UIENTRIES : pResData->sResTyp = "uientries"; o_pList = pResData->pUIEntries;bPairedList = false; break;
             case LIST_ITEM : pResData->sResTyp = "itemlist"; o_pList = pResData->pItemList;       bPairedList = false; break;
             case LIST_PAIRED : pResData->sResTyp = "pairedlist"; o_pList = pResData->pPairedList; bPairedList = true;  break;
         }
@@ -1364,7 +1332,6 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             }
 
             // Merge Lists
-
             if ( pResData->bList ) {
                 OString sOldId = pResData->sId;
                 OString sOldGId = pResData->sGId;
@@ -1410,9 +1377,6 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                     case LIST_PAIRED:
                                         sHead.append("PairedList ");
                                         break;
-                                    case LIST_UIENTRIES:
-                                        sHead.append("UIEntries ");
-                                        break;
                                 }
                                 sHead.append("[ ");
                                 sHead.append(sCur);
@@ -1436,8 +1400,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 sLine = ( *(*pList)[ nLIndex ])[ SOURCE_LANGUAGE ];
 
                             if ( sLine.indexOf( '>' ) != -1 ) {
-                                if (( nList != LIST_UIENTRIES ) &&
-                                    (( sLine.indexOf( '{' ) == -1 ) ||
+                                if ((( sLine.indexOf( '{' ) == -1 ) ||
                                     ( sLine.indexOf( '{' ) >= sLine.indexOf( '"' ))) &&
                                     (( sLine.indexOf( '<' ) == -1 ) ||
                                     ( sLine.indexOf( '<' ) >= sLine.indexOf( '"' ))))

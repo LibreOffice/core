@@ -51,7 +51,6 @@
 #define LISTTEXT            514         /* < "Text" ... >                   */
 #define RSCDEFINE           515         /* #define MY_TEXT                  */
 #define RSCDEFINELEND       516         /*                                  */
-#define UIENTRIES           518         /* UIEntries = {                    */
 #define PRAGMA              519         /* #pragma ...                      */
 #define _LISTTEXT           521         /* { "Text" ... }                   */
 #define TEXTREFID           522         /* Text = 12345                     */

@@ -76,7 +76,6 @@ ResData::ResData( const OString &rGId )
     sGId( rGId ),
     sTextTyp( "Text" ),
     pStringList( NULL ),
-    pUIEntries( NULL ),
     pItemList( NULL ),
     pFilterList( NULL ),
     pPairedList( NULL )
@@ -98,7 +97,6 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
     sFilename( rFilename ),
     sTextTyp( "Text" ),
     pStringList( NULL ),
-    pUIEntries( NULL ),
     pItemList( NULL ),
     pFilterList( NULL ),
     pPairedList( NULL )
@@ -132,14 +130,6 @@ ResData::~ResData()
             delete test;
         }
         delete pItemList;
-    }
-    if ( pUIEntries ) {
-        // delete existing res. of type UIEntries
-        for ( size_t i = 0; i < pUIEntries->size(); i++ ) {
-            ExportListEntry* test = (*pUIEntries)[ i ];
-            delete test;
-        }
-        delete pUIEntries;
     }
 }
 
