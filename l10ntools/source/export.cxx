@@ -734,15 +734,10 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         else
             sLID = pResData->sId;
 
-        OString sXText;
-        OString sXHText;
-        OString sXQHText;
-        OString sXTitle;
-
-        sXText = pResData->sText[ SOURCE_LANGUAGE ];
-        sXHText = pResData->sText[ X_COMMENT ];
-        sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
-        sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
+        OString sXText = pResData->sText[ SOURCE_LANGUAGE ];
+        OString sXHText = pResData->sText[ X_COMMENT ];
+        OString sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
+        OString sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
 
         if( !sXText.isEmpty() )
         {
@@ -1209,43 +1204,38 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
         OString sText;
         sal_Bool bText = pEntry->GetText( sText, nType, sCur , sal_True );
         if ( bText && !sText.isEmpty() ) {
-            OString sOutput;
+            OStringBuffer sOutput;
             if ( bNextMustBeDefineEOL)  {
                 if ( bFirst )
-                    sOutput += "\t\\\n";
+                    sOutput.append("\t\\\n");
                 else
-                    sOutput += ";\t\\\n";
+                    sOutput.append(";\t\\\n");
             }
             bFirst=sal_False;
-            sOutput += "\t";
-
-            sOutput += rTextType;
+            sOutput.append("\t" + rTextType);
 
             if ( !sCur.equalsIgnoreAsciiCase("en-US") ) {
-                sOutput += "[ ";
-                sOutput += sCur;
-                sOutput += " ] ";
+                sOutput.append("[ " + sCur + " ] ");
             }
-            sOutput += "= ";
+
             ConvertMergeContent( sText );
-            sOutput += sText;
+            sOutput.append("= " + sText);
 
             if ( bDefine )
-                sOutput += ";\\\n";
+                sOutput.append(";\\\n");
             else if ( !bNextMustBeDefineEOL )
-                sOutput += ";\n";
+                sOutput.append(";\n");
             else
                 bAddSemicolon = sal_True;
             for ( sal_uInt16 j = 1; j < nLevel; j++ )
-                sOutput += "\t";
-            WriteToMerged( sOutput , true );
+                sOutput.append("\t");
+            WriteToMerged( sOutput.makeStringAndClear() , true );
         }
     }
 
 
     if ( bAddSemicolon ) {
-        OString sOutput( ";" );
-        WriteToMerged( sOutput , false );
+        WriteToMerged( ";" , false );
     }
 }
 
