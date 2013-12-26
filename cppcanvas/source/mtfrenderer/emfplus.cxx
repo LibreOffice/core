@@ -169,8 +169,8 @@ namespace cppcanvas
             {
                 for (int i = 0; i < nPoints; i ++) {
                     if (pathFlags & 0x4000) {
-                        // points are stored in short 16bit integer format
-                        sal_uInt16 x, y;
+                        // points are stored in signed short 16bit integer format
+                        sal_Int16 x, y;
 
                         s >> x >> y;
                         SAL_INFO ("cppcanvas.emf", "EMF+\tpoint [x,y]: " << x << "," << y);
