@@ -656,6 +656,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
 //          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
 //          break;
+        case WID_HIDE_TABLEADER_PAGENUMBERS:
+              lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TABLEADER);
+        break ;
         case WID_CREATE_FROM_CHAPTER:
             rTOXBase.SetFromChapter(lcl_AnyToBool(rValue));
         break;

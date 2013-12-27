@@ -30,6 +30,8 @@
 #include "fmtruby.hxx"
 #include "breakit.hxx"
 
+#include "wrtww8.hxx"
+
 #include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
@@ -1143,6 +1145,10 @@ void DocxAttributeOutput::StartRunProperties()
 
     m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
 
+    if(GetExport().bHideTabLeaderAndPageNumbers && m_pHyperlinkAttrList )
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+    }
     InitCollectedRunProperties();
 
     OSL_ASSERT( m_postponedGraphic == NULL );

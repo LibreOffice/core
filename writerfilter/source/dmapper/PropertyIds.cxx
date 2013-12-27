@@ -353,6 +353,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_THEME_FONT_NAME_CS       :   sName = "CharThemeFontNameCs"; break;
             case PROP_CHAR_THEME_FONT_NAME_H_ANSI   :   sName = "CharThemeFontNameHAnsi"; break;
             case PROP_CHAR_THEME_FONT_NAME_EAST_ASIA:   sName = "CharThemeFontNameEastAsia"; break;
+            case PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS      :    sName = "hideTabLeaderAndPageNumber" ; break ;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

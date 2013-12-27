@@ -121,6 +121,7 @@
 #define UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX "CharDiffHeightComplex"
 #define UNO_NAME_CHAR_ESCAPEMENT_HEIGHT "CharEscapementHeight"
 #define UNO_NAME_CHAR_COLOR "CharColor"
+#define UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS "hideTabLeaderAndPageNumber"
 
 #define UNO_NAME_CHAR_FLASH "CharFlash"
 #define UNO_NAME_CHAR_KERNING "CharKerning"
