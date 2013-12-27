@@ -117,6 +117,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sGlossaryType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument");
     static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
+    static OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
+    static OUString sEmbeddingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
     static OUString sExternal("External");
@@ -174,6 +176,12 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
         case WEBSETTINGS:
             sStreamType = sWebSettings;
           break;
+        case CHARTS:
+            sStreamType = sChartType;
+          break;
+        case EMBEDDINGS:
+            sStreamType = sEmbeddingsType;
+          break;
         default:
             break;
     }
@@ -202,7 +210,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                 else if (aPair.First.compareTo(sTarget) == 0)
                 {
                     // checking item[n].xml or activex[n].xml is not visited already.
-                    if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType))
+                    if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType))
                     {
                         bFound = false;
                     }
@@ -233,6 +241,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     // path will start with the fragment separator. need to
                     // remove that
                     rDocumentTarget = rDocumentTarget.copy( 1 );
+                    if(sStreamType == sEmbeddingsType)
+                        embeddingsTarget = rDocumentTarget;
                 }
 
                 break;

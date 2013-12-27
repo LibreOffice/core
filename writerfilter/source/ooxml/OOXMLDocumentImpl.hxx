@@ -50,6 +50,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Sequence<uno::Reference<xml::dom::XDocument> > mxActiveXDomList;
     uno::Sequence<uno::Reference<io::XInputStream> > mxActiveXBinList;
     uno::Reference<io::XInputStream> mxActiveXBin;
+    uno::Reference<io::XInputStream> mxEmbeddings;
+    uno::Sequence < beans::PropertyValue > mxEmbeddingsList;
     bool mbIsSubstream;
 
 protected:
@@ -76,6 +78,7 @@ protected:
     void resolveCustomXmlStream(Stream & rStream);
     void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
+    void resolveEmbeddingsStream(Stream & rStream);
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLDocumentImpl();
@@ -127,6 +130,7 @@ public:
     virtual uno::Sequence<uno::Reference<io::XInputStream> > getActiveXBinList();
     virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom();
     virtual uno::Sequence<uno::Sequence< uno::Any> >  getGlossaryDomList();
+    virtual uno::Sequence<beans::PropertyValue >  getEmbeddingsList();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX
