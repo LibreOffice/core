@@ -710,7 +710,6 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
 
 ModalDialog RID_SVXDLG_ADD_SUBMISSION
 {
-    HelpID = HID_XFORMS_ADDSUBMISSION_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 180 , 136 ) ;
@@ -841,31 +840,36 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+};
 
-    String STR_METHOD_POST
-    {
-        Text [ en-US ] = "Post" ;
-    };
-    String STR_METHOD_PUT
-    {
-        Text [ en-US ] = "Put" ;
-    };
-    String STR_METHOD_GET
-    {
-        Text [ en-US ] = "Get" ;
-    };
-    String STR_REPLACE_NONE
-    {
-        Text [ en-US ] = "None" ;
-    };
-    String STR_REPLACE_INST
-    {
-        Text [ en-US ] = "Instance" ;
-    };
-    String STR_REPLACE_DOC
-    {
-        Text [ en-US ] = "Document" ;
-    };
+String RID_STR_METHOD_POST
+{
+    Text [ en-US ] = "Post" ;
+};
+
+String RID_STR_METHOD_PUT
+{
+    Text [ en-US ] = "Put" ;
+};
+
+String RID_STR_METHOD_GET
+{
+    Text [ en-US ] = "Get" ;
+};
+
+String RID_STR_REPLACE_NONE
+{
+    Text [ en-US ] = "None" ;
+};
+
+String RID_STR_REPLACE_INST
+{
+    Text [ en-US ] = "Instance" ;
+};
+
+String RID_STR_REPLACE_DOC
+{
+    Text [ en-US ] = "Document" ;
 };
 
 String RID_STR_DATANAV_SUBM_PARENT

@@ -180,6 +180,12 @@
 #define RID_STR_PROPTITLE_SPINBUTTON                (RID_FORMS_START + 100)
 #define RID_STR_PROPTITLE_HIDDEN                    (RID_FORMS_START + 101)
     // FREE
+#define RID_STR_METHOD_POST                         (RID_FORMS_START + 118)
+#define RID_STR_METHOD_PUT                          (RID_FORMS_START + 119)
+#define RID_STR_METHOD_GET                          (RID_FORMS_START + 120)
+#define RID_STR_REPLACE_NONE                        (RID_FORMS_START + 121)
+#define RID_STR_REPLACE_INST                        (RID_FORMS_START + 122)
+#define RID_STR_REPLACE_DOC                         (RID_FORMS_START + 123)
 #define RID_STR_DATANAVIGATOR                       (RID_FORMS_START + 124)
 #define RID_STR_DATANAV_SUBM_PARENT                 (RID_FORMS_START + 125)
 #define RID_STR_DATANAV_SUBM_ID                     (RID_FORMS_START + 126)

@@ -34,6 +34,8 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/fmresids.hrc>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -132,10 +134,108 @@ namespace svxform
         void                    RemoveEntry( SvTreeListEntry* _pEntry );
     };
 
+    class ReplaceString
+    {
+        OUString m_sDoc_UI;
+        OUString m_sInstance_UI;
+        OUString m_sNone_UI;
+
+        OUString m_sDoc_API;
+        OUString m_sInstance_API;
+        OUString m_sNone_API;
+
+        ReplaceString( const ReplaceString& );
+
+    public:
+        ReplaceString() :
+            m_sDoc_API(      "all" ),
+            m_sInstance_API( "instance" ),
+            m_sNone_API(     "none" )
+        {
+            m_sDoc_UI = SVX_RESSTR(RID_STR_REPLACE_DOC);
+            m_sInstance_UI = SVX_RESSTR(RID_STR_REPLACE_INST);
+            m_sNone_UI = SVX_RESSTR(RID_STR_REPLACE_NONE);
+        }
+
+        /** convert submission replace string from API value to UI value.
+            Use 'none' as default. */
+        OUString toUI( const OUString& rStr ) const
+        {
+            if( rStr == m_sDoc_API )
+                return m_sDoc_UI;
+            else if( rStr == m_sInstance_API )
+                return m_sInstance_UI;
+            else
+                return m_sNone_UI;
+        }
+
+        /** convert submission replace string from UI to API.
+            Use 'none' as default. */
+        OUString toAPI( const OUString& rStr ) const
+        {
+            if( rStr == m_sDoc_UI )
+                return m_sDoc_API;
+            else if( rStr == m_sInstance_UI )
+                return m_sInstance_API;
+            else
+                return m_sNone_API;
+        }
+    };
+
+    class MethodString
+    {
+        OUString m_sPost_UI;
+        OUString m_sPut_UI;
+        OUString m_sGet_UI;
+
+        OUString m_sPost_API;
+        OUString m_sPut_API;
+        OUString m_sGet_API;
+
+        MethodString( const MethodString& );
+
+    public:
+
+        MethodString() :
+            m_sPost_API( "post" ),
+            m_sPut_API(  "put" ),
+            m_sGet_API(  "get" )
+        {
+            m_sPost_UI = SVX_RESSTR(RID_STR_METHOD_POST);
+            m_sPut_UI  = SVX_RESSTR(RID_STR_METHOD_PUT);
+            m_sGet_UI  = SVX_RESSTR(RID_STR_METHOD_GET);
+        }
+
+        /** convert from API to UI; put is default. */
+        OUString toUI( const OUString& rStr ) const
+        {
+            if( rStr == m_sGet_API )
+                return m_sGet_UI;
+            else if( rStr == m_sPost_API )
+                return m_sPost_UI;
+            else
+                return m_sPut_UI;
+        }
+
+        /** convert from UI to API; put is default */
+        OUString toAPI( const OUString& rStr ) const
+        {
+            if( rStr == m_sGet_UI )
+                return m_sGet_API;
+            else if( rStr == m_sPost_UI )
+                return m_sPost_API;
+            else
+                return m_sPut_API;
+        }
+    };
+
     //========================================================================
     class XFormsPage : public TabPage
     {
     private:
+        MethodString                m_aMethodString;
+        ReplaceString               m_aReplaceString;
+
         ToolBox                     m_aToolBox;
         DataTreeListBox             m_aItemList;
 
@@ -464,25 +564,18 @@ namespace svxform
     class AddSubmissionDialog : public ModalDialog
     {
     private:
-        FixedLine           m_aSubmissionFL;
-        FixedText           m_aNameFT;
-        Edit                m_aNameED;
-        FixedText           m_aActionFT;
-        Edit                m_aActionED;
-        FixedText           m_aMethodFT;
-        ListBox             m_aMethodLB;
-        FixedText           m_aRefFT;
-        Edit                m_aRefED;
-        PushButton          m_aRefBtn;
-        FixedText           m_aBindFT;
-        ListBox             m_aBindLB;
-        FixedText           m_aReplaceFT;
-        ListBox             m_aReplaceLB;
+        MethodString        m_aMethodString;
+        ReplaceString       m_aReplaceString;
 
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        Edit*               m_pNameED;
+        Edit*               m_pActionED;
+        ListBox*            m_pMethodLB;
+        Edit*               m_pRefED;
+        PushButton*         m_pRefBtn;
+        ListBox*            m_pBindLB;
+        ListBox*            m_pReplaceLB;
+
+        OKButton*           m_pOKBtn;
 
         ItemNode*           m_pItemNode;
 

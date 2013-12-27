@@ -23,13 +23,11 @@
 #include "fmservs.hxx"
 
 #include "datanavi.hrc"
-#include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
-#include "svx/xmlexchg.hxx"
-#include <svx/dialmgr.hxx>
+#include <svx/xmlexchg.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
@@ -767,191 +765,6 @@ namespace svxform
         return m_aItemList.InsertEntry(
             sName, aImage, aImage, pParent, sal_False, LIST_APPEND, _pNewNode );
     }
-    //------------------------------------------------------------------------
-    class lcl_ResourceString
-    {
-    protected:
-        lcl_ResourceString()
-        {
-        }
-
-        lcl_ResourceString( const lcl_ResourceString& );
-
-        virtual ~lcl_ResourceString()
-        {
-        }
-
-        // load UI resources from resource file
-        void init()
-        {
-            // create a resource manager, for the svx resource file
-            // and the UI locale
-            ResMgr* pResMgr = ResMgr::CreateResMgr(
-                "svx", Application::GetSettings().GetUILanguageTag() );
-
-            // load the resources for the AddSubmission modal dialog.
-            // This will create our own resource context.
-            ResId aRes( RID_SVXDLG_ADD_SUBMISSION, *pResMgr );
-            aRes.SetRT( RSC_MODALDIALOG );
-            pResMgr->GetResource( aRes );
-
-            // now, we can access the local resources from the dialog's
-            // resource context
-            _initResources(pResMgr);
-
-            // clean up: remove context, and delete the resource manager
-            // ( Increment(..) is needed since PopContext() requires that
-            //   the file pointer is at the end. )
-            pResMgr->Increment( pResMgr->GetRemainSize() );
-            pResMgr->PopContext();
-            delete pResMgr;
-        }
-
-        // load resources... to be overloaded in sub-classes
-        virtual void _initResources( ResMgr* pMgr ) = 0;
-    };
-
-    class lcl_ReplaceString : public lcl_ResourceString
-    {
-        OUString m_sDoc_UI;
-        OUString m_sInstance_UI;
-        OUString m_sNone_UI;
-
-        OUString m_sDoc_API;
-        OUString m_sInstance_API;
-        OUString m_sNone_API;
-
-        lcl_ReplaceString() :
-            lcl_ResourceString(),
-            m_sDoc_API(      "all" ),
-            m_sInstance_API( "instance" ),
-            m_sNone_API(     "none" )
-        {
-            init();
-        }
-
-        lcl_ReplaceString( const lcl_ReplaceString& );
-
-        virtual ~lcl_ReplaceString()
-        {
-        }
-
-        // load UI resources from resource file
-        virtual void _initResources( ResMgr * pMgr )
-        {
-            // now, we can access the local resources from the dialog's
-            // resource context
-            m_sDoc_UI      = ResId( STR_REPLACE_DOC, *pMgr ).toString();
-            m_sInstance_UI = ResId( STR_REPLACE_INST, *pMgr ).toString();
-            m_sNone_UI     = ResId( STR_REPLACE_NONE, *pMgr ).toString();
-        }
-
-    public:
-
-        /** create and obtain the singleton instance */
-        static const lcl_ReplaceString& get()
-        {
-            // keep the singleton instance here
-            static lcl_ReplaceString* m_pInstance = NULL;
-
-            if( m_pInstance == NULL )
-                m_pInstance = new lcl_ReplaceString();
-            return *m_pInstance;
-        }
-
-        /** convert submission replace string from API value to UI value.
-            Use 'none' as default. */
-        OUString toUI( const OUString& rStr ) const
-        {
-            if( rStr == m_sDoc_API )
-                return m_sDoc_UI;
-            else if( rStr == m_sInstance_API )
-                return m_sInstance_UI;
-            else
-                return m_sNone_UI;
-        }
-
-        /** convert submission replace string from UI to API.
-            Use 'none' as default. */
-        OUString toAPI( const OUString& rStr ) const
-        {
-            if( rStr == m_sDoc_UI )
-                return m_sDoc_API;
-            else if( rStr == m_sInstance_UI )
-                return m_sInstance_API;
-            else
-                return m_sNone_API;
-        }
-    };
-
-    class lcl_MethodString : public lcl_ResourceString
-    {
-        OUString m_sPost_UI;
-        OUString m_sPut_UI;
-        OUString m_sGet_UI;
-
-        OUString m_sPost_API;
-        OUString m_sPut_API;
-        OUString m_sGet_API;
-
-        lcl_MethodString() :
-            lcl_ResourceString(),
-            m_sPost_API( "post" ),
-            m_sPut_API(  "put" ),
-            m_sGet_API(  "get" )
-        {
-            init();
-        }
-
-        lcl_MethodString( const lcl_MethodString& );
-
-        virtual ~lcl_MethodString()
-        {
-        }
-
-        // load UI resources from resource file
-        virtual void _initResources(ResMgr* pMgr)
-        {
-            m_sPost_UI = ResId( STR_METHOD_POST, *pMgr ).toString();
-            m_sPut_UI  = ResId( STR_METHOD_PUT, *pMgr ).toString();
-            m_sGet_UI  = ResId( STR_METHOD_GET, *pMgr ).toString();
-        }
-
-    public:
-
-        /** create and obtain the singleton instance */
-        static const lcl_MethodString& get()
-        {
-            // keep the singleton instance here
-            static lcl_MethodString* m_pInstance = NULL;
-
-            if( m_pInstance == NULL )
-                m_pInstance = new lcl_MethodString();
-            return *m_pInstance;
-        }
-
-        /** convert from API to UI; put is default. */
-        OUString toUI( const OUString& rStr ) const
-        {
-            if( rStr == m_sGet_API )
-                return m_sGet_UI;
-            else if( rStr == m_sPost_API )
-                return m_sPost_UI;
-            else
-                return m_sPut_UI;
-        }
-
-        /** convert from UI to API; put is default */
-        OUString toAPI( const OUString& rStr ) const
-        {
-            if( rStr == m_sGet_UI )
-                return m_sGet_API;
-            else if( rStr == m_sPost_UI )
-                return m_sPost_API;
-            else
-                return m_sPut_API;
-        }
-    };
 
     //------------------------------------------------------------------------
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
@@ -978,7 +791,7 @@ namespace svxform
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry +=  lcl_MethodString::get().toUI( sTemp );
+                sEntry +=  m_aMethodString.toUI( sTemp );
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
@@ -993,7 +806,7 @@ namespace svxform
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += lcl_ReplaceString::get().toUI( sTemp );
+                sEntry += m_aReplaceString.toUI( sTemp );
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
             }
             catch ( Exception& )
@@ -1065,12 +878,12 @@ namespace svxform
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry += lcl_MethodString::get().toUI( sTemp );
+                sEntry += m_aMethodString.toUI( sTemp );
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += lcl_ReplaceString::get().toUI( sTemp );
+                sEntry += m_aReplaceString.toUI( sTemp );
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
             }
@@ -3347,40 +3160,24 @@ namespace svxform
 
     AddSubmissionDialog::AddSubmissionDialog(
         Window* pParent, ItemNode* _pNode,
-        const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper ) :
-
-        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_SUBMISSION ) ),
-
-        m_aSubmissionFL ( this, SVX_RES( FL_SUBMISSION ) ),
-        m_aNameFT       ( this, SVX_RES( FT_SUBMIT_NAME ) ),
-        m_aNameED       ( this, SVX_RES( ED_SUBMIT_NAME ) ),
-        m_aActionFT     ( this, SVX_RES( FT_SUBMIT_ACTION ) ),
-        m_aActionED     ( this, SVX_RES( ED_SUBMIT_ACTION ) ),
-        m_aMethodFT     ( this, SVX_RES( FT_SUBMIT_METHOD ) ),
-        m_aMethodLB     ( this, SVX_RES( LB_SUBMIT_METHOD ) ),
-        m_aRefFT        ( this, SVX_RES( FT_SUBMIT_REF ) ),
-        m_aRefED        ( this, SVX_RES( ED_SUBMIT_REF ) ),
-        m_aRefBtn       ( this, SVX_RES( PB_SUBMIT_REF ) ),
-        m_aBindFT       ( this, SVX_RES( FT_SUBMIT_BIND ) ),
-        m_aBindLB       ( this, SVX_RES( LB_SUBMIT_BIND ) ),
-        m_aReplaceFT    ( this, SVX_RES( FT_SUBMIT_REPLACE ) ),
-        m_aReplaceLB    ( this, SVX_RES( LB_SUBMIT_REPLACE ) ),
-
-        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
-
-        m_pItemNode     ( _pNode ),
-        m_xUIHelper     ( _rUIHelper )
-
+        const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
+        : ModalDialog(pParent, "AddSubmissionDialog",
+            "svx/ui/addsubmissiondialog.ui")
+        , m_pItemNode(_pNode)
+        , m_xUIHelper(_rUIHelper)
     {
-        FillAllBoxes(); // we need local resources here, so call before FreeResource!!!
+        get(m_pNameED, "name");
+        get(m_pActionED, "action");
+        get(m_pMethodLB, "method");
+        get(m_pRefED, "expression");
+        get(m_pRefBtn, "browse");
+        get(m_pBindLB, "binding");
+        get(m_pReplaceLB, "replace");
+        get(m_pOKBtn, "ok");
+        FillAllBoxes();
 
-        FreeResource();
-
-        m_aRefBtn.SetClickHdl( LINK( this, AddSubmissionDialog, RefHdl ) );
-        m_aOKBtn.SetClickHdl( LINK( this, AddSubmissionDialog, OKHdl ) );
+        m_pRefBtn->SetClickHdl( LINK( this, AddSubmissionDialog, RefHdl ) );
+        m_pOKBtn->SetClickHdl( LINK( this, AddSubmissionDialog, OKHdl ) );
     }
 
     //------------------------------------------------------------------------
@@ -3395,9 +3192,9 @@ namespace svxform
     IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl)
     {
         AddConditionDialog aDlg( this, PN_BINDING_EXPR, m_xTempBinding );
-        aDlg.SetCondition( m_aRefED.GetText() );
+        aDlg.SetCondition( m_pRefED->GetText() );
         if ( aDlg.Execute() == RET_OK )
-            m_aRefED.SetText( aDlg.GetCondition() );
+            m_pRefED->SetText( aDlg.GetCondition() );
 
         return 0;
     }
@@ -3405,7 +3202,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl)
     {
-        OUString sName(m_aNameED.GetText());
+        OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
 
             ErrorBox aErrorBox(this,SVX_RES(RID_ERR_EMPTY_SUBMISSIONNAME));
@@ -3437,23 +3234,23 @@ namespace svxform
 
         if ( m_xSubmission.is() )
         {
-            OUString sTemp = m_aNameED.GetText();
+            OUString sTemp = m_pNameED->GetText();
             try
             {
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
-                sTemp = m_aActionED.GetText();
+                sTemp = m_pActionED->GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, makeAny( sTemp ) );
-                sTemp = lcl_MethodString::get().toAPI( m_aMethodLB.GetSelectEntry() );
+                sTemp = m_aMethodString.toAPI( m_pMethodLB->GetSelectEntry() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
-                sTemp = m_aRefED.GetText();
+                sTemp = m_pRefED->GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
-                OUString sEntry = m_aBindLB.GetSelectEntry();
+                OUString sEntry = m_pBindLB->GetSelectEntry();
                 sal_Int32 nColonIdx = sEntry.indexOf(':');
                 if (nColonIdx != -1)
                     sEntry = sEntry.copy(0, nColonIdx);
                 sTemp = sEntry;
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
-                sTemp = lcl_ReplaceString::get().toAPI( m_aReplaceLB.GetSelectEntry() );
+                sTemp = m_aReplaceString.toAPI( m_pReplaceLB->GetSelectEntry() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
             }
             catch ( Exception& )
@@ -3470,10 +3267,10 @@ namespace svxform
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
-        m_aMethodLB.InsertEntry( SVX_RESSTR( STR_METHOD_POST   ) );
-        m_aMethodLB.InsertEntry( SVX_RESSTR( STR_METHOD_PUT ) );
-        m_aMethodLB.InsertEntry( SVX_RESSTR( STR_METHOD_GET ) );
-        m_aMethodLB.SelectEntryPos(0);
+        m_pMethodLB->InsertEntry( SVX_RESSTR( RID_STR_METHOD_POST   ) );
+        m_pMethodLB->InsertEntry( SVX_RESSTR( RID_STR_METHOD_PUT ) );
+        m_pMethodLB->InsertEntry( SVX_RESSTR( RID_STR_METHOD_GET ) );
+        m_pMethodLB->SelectEntryPos(0);
 
         // binding box
         Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -3501,7 +3298,7 @@ namespace svxform
                                 sEntry += sDelim;
                                 xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sEntry += sTemp;
-                                m_aBindLB.InsertEntry( sEntry );
+                                m_pBindLB->InsertEntry( sEntry );
 
                                 if ( !m_xTempBinding.is() )
                                     m_xTempBinding = xPropSet;
@@ -3529,9 +3326,9 @@ namespace svxform
         }
 
         // replace box
-        m_aReplaceLB.InsertEntry( SVX_RESSTR( STR_REPLACE_NONE ) );
-        m_aReplaceLB.InsertEntry( SVX_RESSTR( STR_REPLACE_INST ) );
-        m_aReplaceLB.InsertEntry( SVX_RESSTR( STR_REPLACE_DOC ) );
+        m_pReplaceLB->InsertEntry( SVX_RESSTR( RID_STR_REPLACE_NONE ) );
+        m_pReplaceLB->InsertEntry( SVX_RESSTR( RID_STR_REPLACE_INST ) );
+        m_pReplaceLB->InsertEntry( SVX_RESSTR( RID_STR_REPLACE_DOC ) );
 
 
         // init the controls with the values of the submission
@@ -3542,33 +3339,33 @@ namespace svxform
             try
             {
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                m_aNameED.SetText( sTemp );
+                m_pNameED->SetText( sTemp );
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                m_aActionED.SetText( sTemp );
+                m_pActionED->SetText( sTemp );
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                m_aRefED.SetText( sTemp );
+                m_pRefED->SetText( sTemp );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
-                sTemp = lcl_MethodString::get().toUI( sTemp );
-                sal_uInt16 nPos = m_aMethodLB.GetEntryPos( sTemp );
+                sTemp = m_aMethodString.toUI( sTemp );
+                sal_uInt16 nPos = m_pMethodLB->GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                    nPos = m_aMethodLB.InsertEntry( sTemp );
-                m_aMethodLB.SelectEntryPos( nPos );
+                    nPos = m_pMethodLB->InsertEntry( sTemp );
+                m_pMethodLB->SelectEntryPos( nPos );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                nPos = m_aBindLB.GetEntryPos( sTemp );
+                nPos = m_pBindLB->GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                    nPos = m_aBindLB.InsertEntry( sTemp );
-                m_aBindLB.SelectEntryPos( nPos );
+                    nPos = m_pBindLB->InsertEntry( sTemp );
+                m_pBindLB->SelectEntryPos( nPos );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
-                sTemp = lcl_ReplaceString::get().toUI( sTemp );
+                sTemp = m_aReplaceString.toUI( sTemp );
                 if ( sTemp.isEmpty() )
-                    sTemp = m_aReplaceLB.GetEntry(0); // first entry == "none"
-                nPos = m_aReplaceLB.GetEntryPos( sTemp );
+                    sTemp = m_pReplaceLB->GetEntry(0); // first entry == "none"
+                nPos = m_pReplaceLB->GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                    nPos = m_aReplaceLB.InsertEntry( sTemp );
-                m_aReplaceLB.SelectEntryPos( nPos );
+                    nPos = m_pReplaceLB->InsertEntry( sTemp );
+                m_pReplaceLB->SelectEntryPos( nPos );
             }
             catch ( Exception& )
             {
@@ -3576,7 +3373,7 @@ namespace svxform
             }
         }
 
-        m_aRefBtn.Enable( m_xTempBinding.is() );
+        m_pRefBtn->Enable( m_xTempBinding.is() );
     }
 
     //========================================================================

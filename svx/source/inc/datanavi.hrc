@@ -142,13 +142,6 @@
 #define FT_SUBMIT_REPLACE       22
 #define LB_SUBMIT_REPLACE       23
 
-#define STR_METHOD_POST         10
-#define STR_METHOD_PUT          11
-#define STR_METHOD_GET          12
-#define STR_REPLACE_NONE        13
-#define STR_REPLACE_INST        14
-#define STR_REPLACE_DOC         15
-
 // class AddModelDialog
 #define FL_MODEL                10
 #define FT_MODEL_NAME           11

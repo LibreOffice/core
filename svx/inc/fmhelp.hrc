@@ -74,7 +74,6 @@
 #define HID_XFORMS_MODELS_LIST                                "SVX_HID_XFORMS_MODELS_LIST"
 #define HID_XFORMS_MODELS_MENUBTN                             "SVX_HID_XFORMS_MODELS_MENUBTN"
 #define HID_XFORMS_INSTANCES_MENUBTN                          "SVX_HID_XFORMS_INSTANCES_MENUBTN"
-#define HID_XFORMS_ADDSUBMISSION_DLG                          "SVX_HID_XFORMS_ADDSUBMISSION_DLG"
 #define HID_XFORMS_MID_INSERT_CONTROL                         "SVX_HID_XFORMS_MID_INSERT_CONTROL"
 #define HID_XFORMS_TAB_CONTROL                                "SVX_HID_XFORMS_TAB_CONTROL"
 #define HID_FM_DELETEROWS                                     "SVX_HID_FM_DELETEROWS"
