@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     OUString sFldTypeName = m_pCategoryBox->GetText();
 
-    SfxNoLayoutSingleTabDialog *pDlg = dynamic_cast<SfxNoLayoutSingleTabDialog*>(GetParentDialog());
+    SfxSingleTabDialogBase *pDlg = dynamic_cast<SfxSingleTabDialogBase*>(GetParentDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
         pBtn->Enable(!sFldTypeName.isEmpty());
