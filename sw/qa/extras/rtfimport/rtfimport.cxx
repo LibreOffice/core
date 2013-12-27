@@ -161,6 +161,7 @@ public:
     void testFdo68291();
     void testFdo69384();
     void testFdo70221();
+    void testFdo65090();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -306,6 +307,7 @@ void Test::run()
         {"fdo68291.odt", &Test::testFdo68291},
         {"hello.rtf", &Test::testFdo69384},
         {"fdo70221.rtf", &Test::testFdo70221},
+        {"fdo65090.rtf", &Test::testFdo65090},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1486,6 +1488,16 @@ void Test::testFdo70221()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // The picture was imported twice.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testFdo65090()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // The first row had 3 cells, instead of a horizontally merged one and a normal one (2 -> 1 separator).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
