@@ -60,7 +60,7 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/view/view.src \
 ))
 
-$(eval $(call gb_SrsTarget_add_nonlocaliable_files,sfx/res,\
+$(eval $(call gb_SrsTarget_add_nonlocalizable_files,sfx/res,\
     sfx2/source/bastyp/bastyp.src \
     sfx2/source/dialog/titledockwin.src \
     sfx2/source/doc/graphhelp.src \
