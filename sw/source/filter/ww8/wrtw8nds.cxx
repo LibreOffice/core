@@ -2426,11 +2426,31 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 delete pNewSet;
         }
     }
-
+    boost::shared_ptr<SfxItemSet> sfxItemSet ;
+    if(const SwpHints* pTxtAttrs = rNode.GetpSwpHints())
+    {
+        for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
+        {
+            const SwTxtAttr* pHt = (*pTxtAttrs)[i];
+            const sal_Int32* startPos = pHt->GetStart();    // first Attr characters
+            const sal_Int32* endPos = pHt->End();    // end Attr characters
+            if( (startPos && endPos) && (*startPos == *endPos ) && (*endPos == rNode.GetTxt().getLength()) )
+            {
+                SAL_INFO( "sw.ww8", *startPos << "startPos == endPos" << *endPos);
+                sal_uInt16 nWhich = pHt->GetAttr().Which();
+                SAL_INFO( "sw.ww8", "nWhich" << nWhich);
+                if (nWhich == RES_TXTATR_AUTOFMT)
+                {
+                    const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
+                    sfxItemSet = rAutoFmt.GetStyleHandle();
+                }
+            }
+        }
+    }
     const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
     const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
     const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
-    AttrOutput().EndParagraphProperties( pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert );
+    AttrOutput().EndParagraphProperties( pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert , sfxItemSet);
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 

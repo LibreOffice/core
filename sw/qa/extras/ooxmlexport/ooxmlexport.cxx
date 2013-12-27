@@ -2175,6 +2175,14 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:u", "val").match("single"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

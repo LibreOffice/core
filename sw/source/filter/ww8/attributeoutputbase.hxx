@@ -161,7 +161,7 @@ public:
     virtual void StartParagraphProperties() = 0;
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted ) = 0;
+    virtual void EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted , const boost::shared_ptr<SfxItemSet> aParagraphMarkerProperties) = 0;
 
     /// Empty paragraph.
     virtual void EmptyParagraph() = 0;
