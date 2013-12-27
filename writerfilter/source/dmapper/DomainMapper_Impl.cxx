@@ -2891,7 +2891,6 @@ void DomainMapper_Impl::CloseFieldCommand()
     {
         m_bSetUserFieldContent = false;
         FieldConversionMap_t aFieldConversionMap = lcl_GetFieldConversion();
-        bool bCreateEnhancedField = false;
 
         try
         {
@@ -2905,6 +2904,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             FieldConversionMap_t::iterator aIt = aFieldConversionMap.find(sCommand);
             if(aIt != aFieldConversionMap.end())
             {
+                bool bCreateEnhancedField = false;
                 uno::Reference< beans::XPropertySet > xFieldProperties;
                 bool bCreateField = true;
                 switch (aIt->second.eFieldId)
