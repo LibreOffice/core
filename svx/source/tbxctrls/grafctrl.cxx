@@ -737,18 +737,19 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
                                                     aRBSize.Width(), aRBSize.Height() ) );
 
-                    SfxNoLayoutSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
-                                                    aCropDlgAttr, 950 );
-                    const OUString        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
+                    SfxSingleTabDialog  aCropDialog(
+                        SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
+                        aCropDlgAttr);
+                    const OUString aCropStr(SVX_RESSTR(RID_SVXSTR_GRAFCROP));
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "Dialogdiet error!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
                     DBG_ASSERT(fnCreatePage, "Dialogdiet error!");
-                    SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
+                    SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog.get_content_area(), aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );
-                    aCropDialog.SetTabPage( pTabPage );
+                    aCropDialog.setTabPage( pTabPage );
 
                     if( aCropDialog.Execute() == RET_OK )
                     {
