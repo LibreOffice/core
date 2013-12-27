@@ -80,6 +80,7 @@
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/datetimeutils.hxx>
+#include <svl/whiter.hxx>
 
 #include <docufld.hxx>
 #include <flddropdown.hxx>
@@ -702,7 +703,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
-void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted )
+void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted, const boost::shared_ptr<SfxItemSet> sfxItemSet, bool bIsParagraphMarkProperties)
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
@@ -711,11 +712,26 @@ void DocxAttributeOutput::EndParagraphProperties( const SwRedlineData* pRedlineD
     WriteCollectedParagraphProperties();
 
     // Write 'Paragraph Mark' properties
-    bool bIsParagraphMarkProperties = false; // In future - get the 'paragraph marker' properties as a parameter
     if (bIsParagraphMarkProperties || pRedlineParagraphMarkerDeleted || pRedlineParagraphMarkerInserted)
     {
         m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
 
+        if(sfxItemSet)
+        {
+            SfxWhichIter aIter( *sfxItemSet );
+            sal_uInt16 nWhichId = aIter.FirstWhich();
+            const SfxPoolItem* sfxPoolItem;
+            while( nWhichId )
+            {
+                if( SFX_ITEM_SET == sfxItemSet->GetItemState( nWhichId, sal_True, &sfxPoolItem ))
+                {
+                    SAL_INFO( "sw.docxattributeoutput", "nWhichId " << nWhichId);
+                    OutputItem( *sfxPoolItem );
+                }
+                nWhichId = aIter.NextWhich();
+            }
+            WriteCollectedRunProperties();
+        }
         if ( pRedlineParagraphMarkerDeleted )
         {
             StartRedline( pRedlineParagraphMarkerDeleted );
