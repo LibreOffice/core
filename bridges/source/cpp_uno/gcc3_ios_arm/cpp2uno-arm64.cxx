@@ -168,7 +168,6 @@ namespace
                         pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
                         pStackedArgs += 2;
                         break;
-                        break;
                     case typelib_TypeClass_BOOLEAN:
                     case typelib_TypeClass_BYTE:
                         pCppArgs[nPos] = pUnoArgs[nPos] = pStackedArgs;
