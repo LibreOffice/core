@@ -136,6 +136,7 @@ public:
     void testGroupshapeSdt();
     void testBnc779620();
     void testRPrChangeClosed();
+    void testFdo65090();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -237,6 +238,7 @@ void Test::run()
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
         {"bnc779620.docx", &Test::testBnc779620},
         {"rprchange_closed.docx", &Test::testRPrChangeClosed},
+        {"fdo65090.docx", &Test::testFdo65090},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1659,6 +1661,16 @@ void Test::testRPrChangeClosed()
     // Redline defined by rPrChanged wasn't removed.
     // First paragraph has an rPrChange element, make sure it doesn't appear in the second paragraph.
     CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+}
+
+void Test::testFdo65090()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // The first row had two cells, instead of a single horizontally merged one.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

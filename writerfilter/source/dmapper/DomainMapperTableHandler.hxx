@@ -50,6 +50,21 @@ typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 class DomainMapper_Impl;
 class TableStyleSheetEntry;
 struct TableInfo;
+
+/// A horizontally merged cell is in fact a range of cells till its merge is performed.
+struct HorizontallyMergedCell
+{
+    sal_Int32 m_nFirstRow;
+    sal_Int32 m_nFirstCol;
+    sal_Int32 m_nLastRow;
+    sal_Int32 m_nLastCol;
+    HorizontallyMergedCell(sal_Int32 nFirstRow, sal_Int32 nFirstCol)
+        : m_nFirstRow(nFirstRow),
+        m_nFirstCol(nFirstCol)
+    {
+    }
+};
+
 class WRITERFILTER_DLLPRIVATE DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
@@ -69,7 +84,7 @@ class WRITERFILTER_DLLPRIVATE DomainMapperTableHandler : public TableDataHandler
     sal_Int32 m_nRowIndex;
 
     TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, uno::Sequence<beans::PropertyValue>& rFrameProperties);
-    CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo);
+    CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
     RowPropertyValuesSeq_t endTableGetRowProperties();
 
 public:
