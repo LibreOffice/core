@@ -373,6 +373,8 @@ void DocxExport::ExportDocument_Impl()
 
     WriteActiveX();
 
+    WriteEmbeddings();
+
     delete pStyles, pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
 }
@@ -1076,6 +1078,66 @@ void DocxExport::WriteActiveX()
 
         }
      }
+}
+
+void DocxExport::WriteEmbeddings()
+{
+    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+        return;
+
+    uno::Sequence< beans::PropertyValue > embeddingsList;
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXEmbeddings" )
+        {
+             propList[nProp].Value >>= embeddingsList;
+             break;
+        }
+    }
+    for (sal_Int32 j = 0; j < embeddingsList.getLength(); j++)
+    {
+        OUString embeddingPath = embeddingsList[j].Name;
+        uno::Reference<io::XInputStream> embeddingsStream;
+        embeddingsList[j].Value >>= embeddingsStream;
+        if ( embeddingsStream.is() )
+        {
+            uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream(embeddingPath,
+                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            try
+            {
+                sal_Int32 nBufferSize = 512;
+                uno::Sequence< sal_Int8 > aDataBuffer(nBufferSize);
+                sal_Int32 nRead;
+                do
+                {
+                    nRead = embeddingsStream->readBytes( aDataBuffer, nBufferSize );
+                    if( nRead )
+                    {
+                        if( nRead < nBufferSize )
+                        {
+                            nBufferSize = nRead;
+                            aDataBuffer.realloc(nRead);
+                        }
+                        xOutStream->writeBytes( aDataBuffer );
+                    }
+                }
+                while( nRead );
+                xOutStream->flush();
+            }
+            catch(const uno::Exception&)
+            {
+                SAL_WARN("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception catched!");
+            }
+            xOutStream->closeOutput();
+        }
+    }
 }
 
 VMLExport& DocxExport::VMLExporter()

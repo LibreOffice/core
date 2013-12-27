@@ -225,6 +225,9 @@ private:
     /// Write word/activeX/activeX[n].xml
     void WriteActiveX();
 
+    /// Write word/embeddings/Worksheet[n].xlsx
+    void WriteEmbeddings();
+
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
 
