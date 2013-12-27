@@ -3597,37 +3597,23 @@ namespace svxform
     // class AddInstanceDialog
     //========================================================================
 
-    AddInstanceDialog::AddInstanceDialog( Window* pParent, bool _bEdit ) :
-
-        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_INSTANCE ) ),
-
-        m_aInstanceFL       ( this, SVX_RES( FL_INSTANCE ) ),
-        m_aNameFT           ( this, SVX_RES( FT_INST_NAME ) ),
-        m_aNameED           ( this, SVX_RES( ED_INST_NAME ) ),
-        m_aURLFT            ( this, SVX_RES( FT_INST_URL ) ),
-        m_aURLED            ( this, SVX_RES( ED_INST_URL ) ),
-        m_aFilePickerBtn    ( this, SVX_RES( PB_FILEPICKER ) ),
-        m_aLinkInstanceCB   ( this, SVX_RES( CB_INST_LINKINST ) ),
-        m_aButtonsFL        ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn            ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn           ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn          ( this, SVX_RES( BTN_DATANAV_HELP ) )
-
+    AddInstanceDialog::AddInstanceDialog(Window* pParent, bool _bEdit)
+        : ModalDialog(pParent, "AddInstanceDialog" , "svx/ui/addinstancedialog.ui")
     {
+        get(m_pNameED, "name");
+        get(m_pURLFT, "urlft");
+        get(m_pURLED, "url");
+        get(m_pFilePickerBtn, "browse");
+        get(m_pLinkInstanceCB, "link");
+
         if ( _bEdit )
-            SetText(SVX_RESSTR(STR_EDIT_TEXT));
+            SetText(get<FixedText>("alttitle")->GetText());
 
-        FreeResource();
-
-        m_aURLED.DisableHistory();
-        m_aFilePickerBtn.SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
+        m_pURLED->DisableHistory();
+        m_pFilePickerBtn->SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
         // load the filter name from fps_office resource
         m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
-    }
-
-    AddInstanceDialog::~AddInstanceDialog()
-    {
     }
 
     //------------------------------------------------------------------------
@@ -3644,7 +3630,7 @@ namespace svxform
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
-            m_aURLED.SetText( aDlg.GetPath() );
+            m_pURLED->SetText( aDlg.GetPath() );
 
         return 0;
     }

@@ -126,8 +126,6 @@
 #define STR_HEADER_PREFIX       10
 #define STR_HEADER_URL          11
 
-#define STR_EDIT_TEXT           10
-
 // class AddSubmissionDialog
 #define FL_SUBMISSION           10
 #define FT_SUBMIT_NAME          11
@@ -155,15 +153,6 @@
 #define FL_MODEL                10
 #define FT_MODEL_NAME           11
 #define ED_MODEL_NAME           12
-
-// class AddInstanceDialog
-#define FL_INSTANCE             10
-#define FT_INST_NAME            11
-#define ED_INST_NAME            12
-#define FT_INST_URL             13
-#define ED_INST_URL             14
-#define PB_FILEPICKER           15
-#define CB_INST_LINKINST        16
 
 // class AddModelDialog
 #define CB_MODIFIES_DOCUMENT    1

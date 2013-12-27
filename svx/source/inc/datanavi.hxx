@@ -526,17 +526,11 @@ namespace svxform
     class AddInstanceDialog : public ModalDialog
     {
     private:
-        FixedLine               m_aInstanceFL;
-        FixedText               m_aNameFT;
-        Edit                    m_aNameED;
-        FixedText               m_aURLFT;
-        SvtURLBox               m_aURLED;
-        PushButton              m_aFilePickerBtn;
-        CheckBox                m_aLinkInstanceCB;
-        FixedLine               m_aButtonsFL;
-        OKButton                m_aOKBtn;
-        CancelButton            m_aEscBtn;
-        HelpButton              m_aHelpBtn;
+        Edit*                   m_pNameED;
+        FixedText*              m_pURLFT;
+        SvtURLBox*              m_pURLED;
+        PushButton*             m_pFilePickerBtn;
+        CheckBox*               m_pLinkInstanceCB;
 
         OUString                m_sAllFilterName;
 
@@ -544,24 +538,21 @@ namespace svxform
 
     public:
         AddInstanceDialog( Window* pParent, bool _bEdit );
-        ~AddInstanceDialog();
 
-        inline void             SetRenameMode();
-        inline OUString         GetName() const { return m_aNameED.GetText(); }
-        inline void             SetName( const OUString& _rName ) { m_aNameED.SetText( _rName );}
-        inline OUString         GetURL() const { return m_aURLED.GetText(); }
-        inline void             SetURL( const OUString& _rURL ) { m_aURLED.SetText( _rURL );}
-        inline bool             IsLinkInstance() const { return ( m_aLinkInstanceCB.IsChecked() != sal_False ); }
-        inline void             SetLinkInstance( bool _bLink ) { m_aLinkInstanceCB.Check( _bLink != false ); }
+        void SetRenameMode()
+        {
+            m_pURLFT->Disable();
+            m_pURLED->Disable();
+            m_pFilePickerBtn->Disable();
+            m_pLinkInstanceCB->Disable();
+        }
+        OUString         GetName() const { return m_pNameED->GetText(); }
+        void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
+        OUString         GetURL() const { return m_pURLED->GetText(); }
+        void             SetURL( const OUString& _rURL ) { m_pURLED->SetText( _rURL );}
+        bool             IsLinkInstance() const { return ( m_pLinkInstanceCB->IsChecked() != sal_False ); }
+        void             SetLinkInstance( bool _bLink ) { m_pLinkInstanceCB->Check( _bLink != false ); }
     };
-
-    inline void AddInstanceDialog::SetRenameMode()
-    {
-        m_aURLFT.Disable();
-        m_aURLED.Disable();
-        m_aFilePickerBtn.Disable();
-        m_aLinkInstanceCB.Disable();
-    }
 
     //========================================================================
     class LinkedInstanceWarningBox : public MessBox
