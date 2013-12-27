@@ -93,6 +93,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         attrList->add(XML_allowOverlap, "1");   // TODO
         if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
             attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum()));
+        else
+            // relativeHeight is mandatory attribute, if value is not present, we must write default value
+            attrList->add(XML_relativeHeight, "0");
         sax_fastparser::XFastAttributeListRef xAttrList(attrList);
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_anchor, xAttrList);
         m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND);   // required, unused
