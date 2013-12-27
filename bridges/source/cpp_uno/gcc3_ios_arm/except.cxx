@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
@@ -171,12 +172,21 @@ public:
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
-#if 0
     // Insert commonly needed type_infos to avoid dlsym() calls
-    // Ideally we should insert all needed ones
+    // Ideally we should insert all needed ones, and we actually must,
+    // for arm64, as the dynamically generated type_infos don't seem
+    // to work correctly. Luckily it seems that quite few types of
+    // exceptions are thrown through the C++/UNO bridge at least in
+    // the TiledLibreOffice test app.
+
+    // (As no Java, Basic or Python is supported in LO code on iOS, we
+    // can know the set of types of exceptions throws a priori, so
+    // keeping this list complete should be possible.)
+
     m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
                                             (std::type_info*) &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
-#endif
+    m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.NameClashException",
+                                            (std::type_info*) &typeid( com::sun::star::ucb::NameClashException ) ) );
 }
 
 RTTI::~RTTI() SAL_THROW(())
