@@ -19,29 +19,26 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTLEGEND_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTLEGEND_HXX
 
-// header for class ModalDialog
 #include <vcl/dialog.hxx>
-// header for class CheckBox
 #include <sfx2/basedlgs.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include "res_LegendPosition.hxx"
+
 namespace chart
 {
-
-class LegendPositionResources;
 
 class SchLegendDlg : public ModalDialog
 {
 private:
-    boost::scoped_ptr < LegendPositionResources >    m_apLegendPositionResources;
+    boost::scoped_ptr < LegendPositionResources >    m_xLegendPositionResources;
 
 public:
     SchLegendDlg( Window* pParent, const ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext>& xCC );
-    virtual ~SchLegendDlg();
 
     void init( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::frame::XModel >& xChartModel );

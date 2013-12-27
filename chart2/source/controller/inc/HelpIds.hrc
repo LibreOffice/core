@@ -22,8 +22,6 @@
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
 #define HID_SCH_CTL_DATA                                    "CHART2_HID_SCH_CTL_DATA"
 
-#define HID_SCH_CT_INDICATE                                 "CHART2_HID_SCH_CT_INDICATE"
-
 //for chart type dialog:
 #define HID_SCH_CTL_TYPE                                    "CHART2_HID_SCH_CTL_TYPE"
 #define HID_SCH_CTL_VARIANT                                 "CHART2_HID_SCH_CTL_VARIANT"
@@ -56,15 +54,8 @@
 
 #define HID_SCH_STATISTIK_MEANVALUE                         "CHART2_HID_SCH_STATISTIK_MEANVALUE"
 #define HID_SCH_STATISTIK_NO_ERROR                          "CHART2_HID_SCH_STATISTIK_NO_ERROR"
-#define HID_SCH_STATISTIK_VARIANT                           "CHART2_HID_SCH_STATISTIK_VARIANT"
-#define HID_SCH_STATISTIK_SIGMA                             "CHART2_HID_SCH_STATISTIK_SIGMA"
 #define HID_SCH_STATISTIK_PERCENT                           "CHART2_HID_SCH_STATISTIK_PERCENT"
-#define HID_SCH_STATISTIK_BIGERROR                          "CHART2_HID_SCH_STATISTIK_BIGERROR"
 #define HID_SCH_STATISTIK_CONSTERROR                        "CHART2_HID_SCH_STATISTIK_CONSTERROR"
-#define HID_SCH_STATISTIK_PERCENT_VALUE                     "CHART2_HID_SCH_STATISTIK_PERCENT_VALUE"
-#define HID_SCH_STATISTIK_BIGERROR_VALUE                    "CHART2_HID_SCH_STATISTIK_BIGERROR_VALUE"
-#define HID_SCH_STATISTIK_PLUS_VALUE                        "CHART2_HID_SCH_STATISTIK_PLUS_VALUE"
-#define HID_SCH_STATISTIK_MINUS_VALUE                       "CHART2_HID_SCH_STATISTIK_MINUS_VALUE"
 
 #define HID_SCH_DATALABEL_VALUE                             "CHART2_HID_SCH_DATALABEL_VALUE"
 #define HID_SCH_DATALABEL_PERCENT                           "CHART2_HID_SCH_DATALABEL_PERCENT"
@@ -100,7 +91,6 @@
 #define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
 #define HID_INSERT_DESCRIPTION                              "CHART2_HID_INSERT_DESCRIPTION"
-
 
 #endif
 

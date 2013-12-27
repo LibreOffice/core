@@ -30,13 +30,12 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#include "res_LegendPosition.hxx"
+#include "res_Titles.hxx"
+
 namespace chart
 {
 
-/**
-*/
-class TitleResources;
-class LegendPositionResources;
 class TitlesAndObjectsTabPage : public svt::OWizardPage
 {
 public:

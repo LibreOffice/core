@@ -29,22 +29,18 @@ SchLegendDlg::SchLegendDlg(Window* pWindow, const uno::Reference< uno::XComponen
     : ModalDialog(pWindow
     ,"dlg_InsertLegend"
     ,"modules/schart/ui/dlg_InsertLegend.ui")
-    , m_apLegendPositionResources( new LegendPositionResources(*this,xCC) )
-{
-}
-
-SchLegendDlg::~SchLegendDlg()
+    , m_xLegendPositionResources( new LegendPositionResources(*this,xCC) )
 {
 }
 
 void SchLegendDlg::init( const uno::Reference< frame::XModel >& xChartModel )
 {
-    m_apLegendPositionResources->writeToResources( xChartModel );
+    m_xLegendPositionResources->writeToResources( xChartModel );
 }
 
 bool SchLegendDlg::writeToModel( const uno::Reference< frame::XModel >& xChartModel ) const
 {
-    m_apLegendPositionResources->writeToModel( xChartModel );
+    m_xLegendPositionResources->writeToModel( xChartModel );
     return true;
 }
 

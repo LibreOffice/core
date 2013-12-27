@@ -30,7 +30,6 @@ class ErrorBarsTabPage : public SfxTabPage
 {
 public:
     ErrorBarsTabPage ( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~ErrorBarsTabPage ();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( ErrorBarResources::tErrorBarType eNewType );

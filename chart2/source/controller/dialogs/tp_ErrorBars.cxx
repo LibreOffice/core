@@ -38,11 +38,6 @@ ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs 
             pParent->GetParentDialog(),
             rInAttrs, /* bNoneAvailable = */ false )
 {
-//     FreeResource();
-}
-
-ErrorBarsTabPage::~ErrorBarsTabPage()
-{
 }
 
 SfxTabPage* ErrorBarsTabPage::Create(
