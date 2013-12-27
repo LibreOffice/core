@@ -3895,7 +3895,7 @@ int RTFDocumentImpl::popState()
                 RTFReferenceTable::Entries_t aListTableEntries;
                 aListTableEntries.insert(make_pair(0, pProp));
                 writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
-                Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
+                Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
             }
             break;
         case DESTINATION_LISTENTRY:
@@ -4600,7 +4600,7 @@ int RTFDocumentImpl::popState()
                     RTFReferenceTable::Entries_t aListTableEntries;
                     aListTableEntries.insert(make_pair(0, pProp));
                     writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
-                    Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
+                    Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
 
                     // Use it
                     lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr, NS_sprm::LN_PIlvl, pIlvlValue);

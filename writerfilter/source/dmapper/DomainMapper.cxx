@@ -822,7 +822,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             OSL_FAIL("handled by DomainMapperTableManager");
         break;
 
-        case NS_rtf::LN_LISTTABLE:
+        case NS_ooxml::LN_NUMBERING:
             break;
         case NS_rtf::LN_LFOTABLE:
             break;
@@ -4106,7 +4106,6 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
         m_pImpl->SetStyleSheetImport( false );
         break;
     case NS_ooxml::LN_NUMBERING:
-    case NS_rtf::LN_LISTTABLE:
         {
 
             //the same for list tables

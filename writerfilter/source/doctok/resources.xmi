@@ -2288,26 +2288,6 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--Class List-->
-        <!--Class ListTable-->
-        <UML:Class xmi.id="ListTable" name="ListTable">
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:LISTTABLE</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="classid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="ListTable-Table">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="ListTable"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Table"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--Class ListTable-->
         <!--Class LFOLevel-->
         <UML:Class xmi.id="LFOLevel" name="LFOLevel">
           <UML:ModelElement.taggedValue>
@@ -2963,26 +2943,6 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--Class LFO-->
-        <!--Class SttbRgtplc-->
-        <UML:Class xmi.id="SttbRgtplc" name="SttbRgtplc">
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:SttbRgtplc</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="classid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="SttbRgtplc-Table">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="SttbRgtplc"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Table"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--Class SttbRgtplc-->
         <!--Class LFOData-->
         <UML:Class xmi.id="LFOData" name="LFOData">
           <UML:ModelElement.taggedValue>
