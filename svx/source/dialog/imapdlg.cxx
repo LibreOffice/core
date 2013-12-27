@@ -41,10 +41,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/layout.hxx>
-
-#define _IMAPDLG_PRIVATE
-#include "svx/imapdlg.hxx"
-
+#include <svx/imapdlg.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
@@ -117,7 +114,7 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
 {
     if ( SfxViewFrame::Current() &&
          SfxViewFrame::Current()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
-        SVXIMAPDLG()->Update( rGraphic, pImageMap, pTargetList, pEditingObj );
+        SVXIMAPDLG()->UpdateLink( rGraphic, pImageMap, pTargetList, pEditingObj );
 }
 
 SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
@@ -286,7 +283,7 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
         maCbbTarget.InsertEntry( aNewList[ i ] );
 }
 
-void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
+void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
                          const TargetList* pTargetList, void* pEditingObj )
 {
     pOwnData->aUpdateGraphic = rGraphic;

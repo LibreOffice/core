@@ -81,7 +81,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 {
     friend class IMapOwnData;
     friend class IMapWindow;
-    using Window::Update;
 
     ToolBox             aTbxIMapDlg1;
     FixedText           aFtURL;
@@ -100,26 +99,21 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     SvxIMapDlgItem      aIMapItem;
 
     virtual void        Resize();
-    virtual sal_Bool        Close();
+    virtual sal_Bool    Close();
 
-#ifdef _IMAPDLG_PRIVATE
-
-                        DECL_LINK( TbxClickHdl, ToolBox* );
-                        DECL_LINK( InfoHdl, IMapWindow* );
-                        DECL_LINK( MousePosHdl, IMapWindow* );
-                        DECL_LINK( GraphSizeHdl, IMapWindow* );
-                        DECL_LINK( URLModifyHdl, void* );
-                        DECL_LINK( URLLoseFocusHdl, void* );
-                        DECL_LINK(UpdateHdl, void *);
-                        DECL_LINK( TbxUpdateHdl, Timer* );
-                        DECL_LINK( StateHdl, IMapWindow* );
-                        DECL_LINK( MiscHdl, void* );
+    DECL_LINK( TbxClickHdl, ToolBox* );
+    DECL_LINK( InfoHdl, IMapWindow* );
+    DECL_LINK( MousePosHdl, IMapWindow* );
+    DECL_LINK( GraphSizeHdl, IMapWindow* );
+    DECL_LINK( URLModifyHdl, void* );
+    DECL_LINK( URLLoseFocusHdl, void* );
+    DECL_LINK(UpdateHdl, void *);
+    DECL_LINK( TbxUpdateHdl, Timer* );
+    DECL_LINK( StateHdl, IMapWindow* );
+    DECL_LINK( MiscHdl, void* );
 
     void                DoOpen();
-    sal_Bool                DoSave();
-
-#endif
-
+    sal_Bool            DoSave();
 
 public:
 
@@ -139,7 +133,7 @@ public:
 
     void                SetTargetList( const TargetList& rTargetList );
 
-    void                Update( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
+    void                UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
