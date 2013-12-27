@@ -136,7 +136,8 @@ enum
     PROP_DIAGRAM_AUTOMATIC_SIZE,
     PROP_DIAGRAM_DATATABLEHBORDER,
     PROP_DIAGRAM_DATATABLEVBORDER,
-    PROP_DIAGRAM_DATATABLEOUTLINE
+    PROP_DIAGRAM_DATATABLEOUTLINE,
+    PROP_DIAGRAM_EXTERNALDATA
 };
 
 void lcl_AddPropertiesToVector(
@@ -436,6 +437,12 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( "ExternalData",
+                  PROP_DIAGRAM_EXTERNALDATA,
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 
 }
 

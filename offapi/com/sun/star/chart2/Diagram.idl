@@ -120,6 +120,9 @@ service Diagram
         @see ::com::sun::star::chart::MissingValueTreatment
      */
     [optional, property] long                       MissingValueTreatment;
+
+    [optional, property] string                     ExternalData;
+
 };
 
 } ; // chart2

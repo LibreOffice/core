@@ -3225,6 +3225,7 @@ namespace xmloff { namespace token {
         XML_CHART_DTABLE_SHOWHORZBORDER,
         XML_CHART_DTABLE_SHOWVERTBORDER,
         XML_CHART_DTABLE_SHOWOUTLINE,
+        XML_EXTERNALDATA,
 
         XML_TOKEN_END
     };
