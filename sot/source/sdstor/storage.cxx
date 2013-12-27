@@ -775,7 +775,6 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
                                          StreamMode nMode,
                                          StorageMode nStorageMode )
 {
-    SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
@@ -785,7 +784,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
                         (nStorageMode & STORAGE_TRANSACTED) ? false : true );
         if( p )
         {
-            pStor = new SotStorage( p );
+            SotStorage * pStor = new SotStorage( p );
             if( !nE )
                 m_pOwnStg->ResetError(); // kein Fehler setzen
 
