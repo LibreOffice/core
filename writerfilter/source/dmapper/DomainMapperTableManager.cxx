@@ -309,6 +309,14 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 cellProps( pMergeProps);
             }
             break;
+            case NS_ooxml::LN_CT_TcPrBase_hMerge:
+            {
+                // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
+                TablePropertyMapPtr pMergeProps(new TablePropertyMap());
+                pMergeProps->Insert(PROP_HORIZONTAL_MERGE, uno::makeAny(bool(sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart)));
+                cellProps(pMergeProps);
+            }
+            break;
             case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
             {
 #ifdef DEBUG_DOMAINMAPPER

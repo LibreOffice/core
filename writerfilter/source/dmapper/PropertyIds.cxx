@@ -359,6 +359,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_THEME_ORIGINAL_COLOR     :   sName = "CharThemeOriginalColor"; break;
             case PROP_CHAR_THEME_COLOR_SHADE        :   sName = "CharThemeColorShade"; break;
             case PROP_CHAR_THEME_FILL               :   sName = "CharThemeFill"; break;
+            case PROP_HORIZONTAL_MERGE: sName = "HorizontalMerge"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

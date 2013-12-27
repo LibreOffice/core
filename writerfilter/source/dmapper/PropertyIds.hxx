@@ -330,6 +330,7 @@ enum PropertyIds
         ,PROP_CHAR_THEME_ORIGINAL_COLOR
         ,PROP_CHAR_THEME_COLOR_SHADE
         ,PROP_CHAR_THEME_FILL
+        ,PROP_HORIZONTAL_MERGE
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
