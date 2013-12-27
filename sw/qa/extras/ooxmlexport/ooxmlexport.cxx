@@ -2160,6 +2160,18 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
       assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
+{
+   // This test case is to verify \o flag should come once.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" TOC \\f \\o \"1-3\" \\h"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
