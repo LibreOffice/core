@@ -308,7 +308,8 @@ public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
     typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, TablePropertyMapPtr > TableDataHandler_t;
     typedef std::map < OUString, BookmarkInsertPosition > BookmarkMap_t;
-
+    bool                            m_bStartTOC;
+    bool                            m_bTOCPageRef;
 private:
     SourceDocumentType                                                              m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
@@ -392,6 +393,10 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
 
+
+    uno::Reference< text::XTextCursor > xTOCTextCursor;
+    uno::Reference< text::XTextContent > xTOCSection;
+    uno::Reference< text::XText > xTOCText;
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
     AnnotationPosition                                                         m_aAnnotationPosition;

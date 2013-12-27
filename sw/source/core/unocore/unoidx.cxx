@@ -1245,9 +1245,9 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
                     "SwXDocumentIndex::refresh: must be in attached state",
                      static_cast< ::cppu::OWeakObject*>(this));
         }
-        pTOXBase->Update();
+        //pTOXBase->Update();
         // page numbers
-        pTOXBase->UpdatePageNum();
+        //pTOXBase->UpdatePageNum();
     }
 
     ::cppu::OInterfaceContainerHelper *const pContainer(
