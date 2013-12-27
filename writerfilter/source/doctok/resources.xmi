@@ -3081,32 +3081,6 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--Class LFOTable-->
-        <!--Class FontTable-->
-        <UML:Class xmi.id="FontTable" name="FontTable">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="plcf"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:FONTTABLE</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="classid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="FontTable-Table">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="FontTable"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Table"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--Class FontTable-->
         <!--Class Font-->
         <UML:Class xmi.id="Font" name="Font">
           <UML:ModelElement.taggedValue>

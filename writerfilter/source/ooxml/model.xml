@@ -23717,7 +23717,7 @@
       <element name="embedBoldItalic" tokenid="ooxml:CT_Font_embedBoldItalic"/>
       <attribute name="name" tokenid="ooxml:CT_Font_name"/>
     </resource>
-    <resource name="CT_FontsList" resource="Table" tokenid="rtf:FONTTABLE" tag="font"/>
+    <resource name="CT_FontsList" resource="Table" tokenid="ooxml:FONTTABLE" tag="font"/>
     <resource name="EG_RunLevelElts" resource="Stream" tag="character">
       <element name="proofErr" tokenid="ooxml:EG_RunLevelElts_proofErr"/>
       <element name="permStart" tokenid="ooxml:EG_RunLevelElts_permStart"/>
@@ -23862,7 +23862,7 @@
       <element name="settings" tokenid="ooxml:settings_settings"/>
     </resource>
     <resource name="fonts" resource="Stream" tag="font">
-      <element name="fonts" tokenid="rtf:FONTTABLE"/>
+      <element name="fonts" tokenid="ooxml:FONTTABLE"/>
     </resource>
     <resource name="numbering" resource="Stream" tag="numbering">
       <element name="numbering" tokenid="ooxml:NUMBERING"/>

@@ -826,7 +826,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_LFOTABLE:
             break;
-        case NS_rtf::LN_FONTTABLE:
+        case NS_ooxml::LN_FONTTABLE:
             break;
         case NS_rtf::LN_STYLESHEET:
             break;
@@ -4092,7 +4092,7 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
     m_pImpl->SetAnyTableImport(true);
     switch(name)
     {
-    case NS_rtf::LN_FONTTABLE:
+    case NS_ooxml::LN_FONTTABLE:
 
         // create a font table object that listens to the attributes
         // each entry call inserts a new font entry

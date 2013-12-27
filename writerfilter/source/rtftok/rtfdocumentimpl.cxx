@@ -3879,7 +3879,7 @@ int RTFDocumentImpl::popState()
         case DESTINATION_FONTTABLE:
             {
                 writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aFontTableEntries));
-                Mapper().table(NS_rtf::LN_FONTTABLE, pTable);
+                Mapper().table(NS_ooxml::LN_FONTTABLE, pTable);
             }
             break;
         case DESTINATION_STYLESHEET:
