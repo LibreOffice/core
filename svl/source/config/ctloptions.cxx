@@ -286,11 +286,9 @@ void SvtCTLOptions_Impl::Load()
 
     if (!m_bCTLFontEnabled)
     {
-        bool bAutoEnableCTL = false;
-
         sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
         //system locale is CTL
-        bAutoEnableCTL = (nScriptType & SCRIPTTYPE_COMPLEX);
+        bool bAutoEnableCTL = (nScriptType & SCRIPTTYPE_COMPLEX);
 
         LanguageType eSystemLanguage = LANGUAGE_SYSTEM;
 
