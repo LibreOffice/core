@@ -329,6 +329,8 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+    bool                                                                            m_bStartTOC;
+    bool                                                                            m_bTOCPageRef;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
 
@@ -392,6 +394,10 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
 
+
+    uno::Reference< text::XTextCursor > xTOCTextCursor;
+    uno::Reference< text::XTextContent > xTOCSection;
+    uno::Reference< text::XText > xTOCText;
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
     AnnotationPosition                                                         m_aAnnotationPosition;
