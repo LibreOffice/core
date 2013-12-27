@@ -140,7 +140,6 @@ void DataStreamDlg::Init( const DataStream& rStrm )
         case DataStream::MOVE_DOWN:
             m_pRBDataDown->Check();
         break;
-        break;
         case DataStream::RANGE_DOWN:
             m_pRBRangeDown->Check();
         break;
