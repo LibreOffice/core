@@ -747,6 +747,8 @@ void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDo
     //XML_chart
     exportChart(rChartDoc);
 
+    exportExternalData(rChartDoc);
+
     // TODO: printSettings
     // TODO: style
     // TODO: text properties
@@ -755,6 +757,53 @@ void ChartExport::exportChartSpace( Reference< ::com::sun::star::chart::XChartDo
     if( xPropSet.is() )
         exportShapeProps( xPropSet );
     pFS->endElement( FSNS( XML_c, XML_chartSpace ) );
+}
+
+void ChartExport::exportExternalData( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc )
+{
+    // Embedded external data is grab bagged for docx file hence adding export part of
+    // external data for docx files only.
+    if(GetDocumentType() != DOCUMENT_DOCX)
+        return;
+
+    OUString externalDataPath;
+    Reference< beans::XPropertySet > xDocPropSet( rChartDoc->getDiagram(), uno::UNO_QUERY );
+    if( xDocPropSet.is())
+    {
+        try
+        {
+            Any aAny( xDocPropSet->getPropertyValue(
+                OUString(  "ExternalData" )));
+            aAny >>= externalDataPath;
+        }
+        catch( beans::UnknownPropertyException & )
+        {
+            DBG_WARNING( "Required property not found in ChartDocument" );
+        }
+    }
+    if(!externalDataPath.isEmpty())
+    {
+        // Here adding external data entry to relationship.
+        OUString relationPath = externalDataPath;
+        // Converting absolute path to relative path.
+        if( externalDataPath[ 0 ] != '.' && externalDataPath[ 1 ] != '.')
+        {
+            sal_Int32 nStartPos = 0;
+            sal_Int32 nSepPos = externalDataPath.indexOf( '/', nStartPos );
+            if( nSepPos > 0)
+            {
+                relationPath = relationPath.copy( nSepPos,  ::std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -  nSepPos );
+                relationPath = OUStringBuffer( ".." ).append( relationPath ).makeStringAndClear();
+            }
+        }
+        FSHelperPtr pFS = GetFS();
+        OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
+                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
+                        relationPath);
+        pFS->singleElementNS( XML_c, XML_externalData,
+                FSNS(XML_r, XML_id), OUStringToOString(sRelId, RTL_TEXTENCODING_UTF8),
+                FSEND);
+    }
 }
 
 void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocument > rChartDoc )
