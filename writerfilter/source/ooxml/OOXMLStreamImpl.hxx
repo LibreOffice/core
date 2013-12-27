@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XStream.hpp>
 
 extern OUString customTarget;
+extern OUString embeddingsTarget;
 
 namespace writerfilter {
 namespace ooxml

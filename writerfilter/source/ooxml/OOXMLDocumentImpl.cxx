@@ -35,6 +35,7 @@
 
 // this extern variable is declared in OOXMLStreamImpl.hxx
 OUString customTarget;
+OUString embeddingsTarget;
 using ::com::sun::star::xml::sax::SAXException;
 namespace writerfilter {
 namespace ooxml
@@ -157,6 +158,10 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     {
         importSubStreamRelations(pStream, OOXMLStream::ACTIVEXBIN);
     }
+    if(OOXMLStream::CHARTS == nType)
+    {
+        importSubStreamRelations(pStream, OOXMLStream::EMBEDDINGS);
+    }
 
     return xRet;
 }
@@ -206,6 +211,11 @@ void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream,
         {
             // imporing activex.bin files for activex.xml from activeX folder.
             mxActiveXBin = xcpInputStream;
+        }
+        else if(OOXMLStream::EMBEDDINGS == nType)
+        {
+            // imporing activex.bin files for activex.xml from activeX folder.
+            mxEmbeddings = xcpInputStream;
         }
     }
 
@@ -441,6 +451,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         mxGlossaryDocDom = importSubStream(OOXMLStream::GLOSSARY);
         if (mxGlossaryDocDom.is())
             resolveGlossaryStream(rStream);
+
+        resolveEmbeddingsStream(rStream);
+
         // Custom xml's are handled as part of grab bag.
         resolveCustomXmlStream(rStream);
 
@@ -627,6 +640,56 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
       }
 }
 
+void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
+{
+    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
+    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    if (mxRelationshipAccess.is())
+    {
+        OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
+        OUString sTarget("Target");
+        bool bFound = false;
+        sal_Int32 counter = 0;
+        uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
+                mxRelationshipAccess->getAllRelationships();
+        uno::Sequence<beans::PropertyValue > mxEmbeddingsListTemp(aSeqs.getLength());
+        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
+        {
+            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
+            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            {
+                beans::StringPair aPair = aSeq[i];
+                if (aPair.Second.compareTo(sChartType) == 0)
+                    bFound = true;
+                else if(aPair.First.compareTo(sTarget) == 0 && bFound)
+                {
+                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
+                    // to ensure chart.xml target is visited in lcl_getTarget.
+                    customTarget = aPair.Second;
+                }
+            }
+            if(bFound)
+            {
+                uno::Reference<xml::dom::XDocument> chartTemp = importSubStream(OOXMLStream::CHARTS);
+                beans::PropertyValue embeddingsTemp;
+                // This will add all ActiveX[n].xml to grabbag list.
+                if(chartTemp.is())
+                {
+                    if(mxEmbeddings.is())
+                    {
+                        embeddingsTemp.Name = embeddingsTarget;
+                        embeddingsTemp.Value = uno::makeAny(mxEmbeddings);
+                        mxEmbeddingsListTemp[counter] = embeddingsTemp;
+                    }
+                    counter++;
+                }
+                bFound = false;
+            }
+        }
+        mxEmbeddingsListTemp.realloc(counter);
+        mxEmbeddingsList = mxEmbeddingsListTemp;
+    }
+}
 
 void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
 {
@@ -774,6 +837,11 @@ uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getActive
 uno::Sequence<uno::Reference<io::XInputStream> > OOXMLDocumentImpl::getActiveXBinList( )
 {
     return mxActiveXBinList;
+}
+
+uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
+{
+    return mxEmbeddingsList;
 }
 
 OOXMLDocument *
