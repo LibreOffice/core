@@ -1073,6 +1073,26 @@ void WorksheetGlobals::finalizeValidationRanges() const
         {
             PropertySet aValProps( xValidation );
 
+            try
+            {
+                sal_Int32 nIndex = 0;
+                OUString aToken = aIt->msRef.getToken( 0, ' ', nIndex );
+
+                Reference<XSpreadsheet> xSheet = getSheetFromDoc( getCurrentSheetIndex() );
+                Reference<XCellRange> xDBCellRange;
+                Reference<XCell> xCell;
+                xDBCellRange = xSheet->getCellRangeByName( aToken );
+
+                xCell = xDBCellRange->getCellByPosition( 0, 0 );
+                Reference<XCellAddressable> xCellAddressable( xCell, UNO_QUERY_THROW );
+                CellAddress aFirstCell = xCellAddressable->getCellAddress();
+                Reference<XSheetCondition> xCondition( xValidation, UNO_QUERY_THROW );
+                xCondition->setSourcePosition( aFirstCell );
+            }
+            catch( Exception& )
+            {
+            }
+
             // convert validation type to API enum
             ValidationType eType = ValidationType_ANY;
             switch( aIt->mnType )
