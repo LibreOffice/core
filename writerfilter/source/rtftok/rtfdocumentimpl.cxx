@@ -3885,7 +3885,7 @@ int RTFDocumentImpl::popState()
         case DESTINATION_STYLESHEET:
             {
                 writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStyleTableEntries));
-                Mapper().table(NS_rtf::LN_STYLESHEET, pTable);
+                Mapper().table(NS_ooxml::LN_STYLESHEET, pTable);
             }
             break;
         case DESTINATION_LISTOVERRIDETABLE:

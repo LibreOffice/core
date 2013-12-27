@@ -106,31 +106,6 @@ const Id </xsl:text>
   </xsl:for-each>
 </xsl:for-each>
 <xsl:text>
-
-/* Classes */</xsl:text>
-<xsl:for-each select='.//UML:Class[@name!="reserved"]'>
-  <xsl:variable name="pos" select="position()"/>
-  <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
-    <xsl:choose>
-      <xsl:when test='.//UML:Stereotype[@xmi.idref="noqname"]'/>
-      <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
-      <xsl:otherwise>
-        <xsl:text>
-const Id </xsl:text>
-<xsl:call-template name='idtoqname'>
-  <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text> = </xsl:text>
-<xsl:value-of select='30000 + $pos'/>
-<xsl:text>; // 0x</xsl:text>
-<xsl:call-template name="dectohex">
-  <xsl:with-param name="number" select="30000 + position()"/>
-</xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-</xsl:for-each>
-<xsl:text>
 }
 
 namespace NS_dff

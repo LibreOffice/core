@@ -413,22 +413,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_FHIDDEN:
             break;
-        case NS_rtf::LN_CSTD:
-            break;
-        case NS_rtf::LN_CBSTDBASEINFILE:
-            break;
-        case NS_rtf::LN_FSTDSTYLENAMESWRITTEN:
-            break;
-        case NS_rtf::LN_UNUSED4_2:
-            break;
-        case NS_rtf::LN_STIMAXWHENSAVED:
-            break;
-        case NS_rtf::LN_ISTDMAXFIXEDWHENSAVED:
-            break;
-        case NS_rtf::LN_NVERBUILTINNAMESWHENSAVED:
-            break;
-        case NS_rtf::LN_RGFTCSTANDARDCHPSTSH:
-            break;
         case NS_rtf::LN_WIDENT:
 
         case NS_rtf::LN_NFIB:
@@ -826,7 +810,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_FONTTABLE:
             break;
-        case NS_rtf::LN_STYLESHEET:
+        case NS_ooxml::LN_STYLESHEET:
             break;
 
         case NS_rtf::LN_fcEastAsianLayout:
@@ -4096,7 +4080,7 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
         // each entry call inserts a new font entry
         ref->resolve( *m_pImpl->GetFontTable() );
         break;
-    case NS_rtf::LN_STYLESHEET:
+    case NS_ooxml::LN_STYLESHEET:
         //same as above to import style sheets
         m_pImpl->SetStyleSheetImport( true );
         ref->resolve( *m_pImpl->GetStyleSheetTable() );
