@@ -536,7 +536,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 #define CNF_LAST_ROW_LAST_COLUMN    0x002
 #define CNF_LAST_ROW_FIRST_COLUMN   0x001
 
-CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(TableInfo & rInfo)
+CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges)
 {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("getCellProperties");
@@ -692,6 +692,25 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     aCellIterator->get()->Insert( PROP_BOTTOM_BORDER_DISTANCE, false,
                                                  uno::makeAny((sal_Int32) rInfo.nBottomBorderDistance ) );
 
+                // Horizontal merge is not an UNO property, extract that info here to rMerges, and then remove it from the map.
+                const PropertyMap::const_iterator aHorizontalMergeIter = aCellIterator->get()->find(PropertyDefinition(PROP_HORIZONTAL_MERGE, false));
+                if (aHorizontalMergeIter != aCellIterator->get()->end())
+                {
+                    if (aHorizontalMergeIter->second.get<sal_Bool>())
+                    {
+                        // first cell in a merge
+                        HorizontallyMergedCell aMerge(nRow, nCell);
+                        rMerges.push_back(aMerge);
+                    }
+                    else if (!rMerges.empty())
+                    {
+                        // resuming an earlier merge
+                        HorizontallyMergedCell& rMerge = rMerges.back();
+                        rMerge.m_nLastRow = nRow;
+                        rMerge.m_nLastCol = nCell;
+                    }
+                    aCellIterator->get()->erase(PropertyDefinition(PROP_HORIZONTAL_MERGE, false));
+                }
                 pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->endElement();
@@ -804,7 +823,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties);
     //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
 
-    CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo);
+    std::vector<HorizontallyMergedCell> aMerges;
+    CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo, aMerges);
 
     RowPropertyValuesSeq_t aRowProperties = endTableGetRowProperties();
 
@@ -837,7 +857,26 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                         aTableInfo.aTableProperties);
 
                 if (xTable.is())
+                {
                     m_xTableRange = xTable->getAnchor( );
+
+                    if (!aMerges.empty())
+                    {
+                        // Perform horizontal merges in reverse order, so the fact that merging changes the position of cells won't cause a problem for us.
+                        for (std::vector<HorizontallyMergedCell>::reverse_iterator it = aMerges.rbegin(); it != aMerges.rend(); ++it)
+                        {
+                            uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY_THROW);
+                            uno::Reference<beans::XPropertySet> xCell(xCellRange->getCellByPosition(it->m_nFirstCol, it->m_nFirstRow), uno::UNO_QUERY_THROW);
+                            OUString aFirst = xCell->getPropertyValue("CellName").get<OUString>();
+                            xCell.set(xCellRange->getCellByPosition(it->m_nLastCol, it->m_nLastRow), uno::UNO_QUERY_THROW);
+                            OUString aLast = xCell->getPropertyValue("CellName").get<OUString>();
+
+                            uno::Reference<text::XTextTableCursor> xCursor = xTable->createCursorByCellName(aFirst);
+                            xCursor->gotoCellByName(aLast, true);
+                            xCursor->mergeRange();
+                        }
+                    }
+                }
 
                 // OOXML table style may container paragraph properties, apply these now.
                 for (int i = 0; i < aTableInfo.aTableProperties.getLength(); ++i)

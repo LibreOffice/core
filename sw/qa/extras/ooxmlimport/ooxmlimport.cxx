@@ -135,6 +135,7 @@ public:
     void testVmlTextVerticalAdjust();
     void testGroupshapeSdt();
     void testBnc779620();
+    void testFdo65090();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -235,6 +236,7 @@ void Test::run()
         {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
         {"bnc779620.docx", &Test::testBnc779620},
+        {"fdo65090.docx", &Test::testFdo65090},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1650,6 +1652,16 @@ void Test::testBnc779620()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+void Test::testFdo65090()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // The first row had two cells, instead of a single horizontally merged one.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
