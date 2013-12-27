@@ -34,13 +34,7 @@ extern "C" UINT __stdcall SortTree(MSIHANDLE)
         OutputDebugString("SortTree: SysTreeView32 not found\n");
         return ERROR_SUCCESS;
     }
-    HTREEITEM treeRoot = TreeView_GetRoot(hwndTV);
-    if (treeRoot == NULL)
-    {
-        OutputDebugString("SortTree: TreeView_GetRoot failed\n");
-        return ERROR_SUCCESS;
-    }
-    HTREEITEM optional = TreeView_GetNextSibling(hwndTV, treeRoot);
+    HTREEITEM optional = TreeView_GetRoot(hwndTV);
     if (optional == NULL)
     {
         OutputDebugString("SortTree: Optional Components branch not found\n");
