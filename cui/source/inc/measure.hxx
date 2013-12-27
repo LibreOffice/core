@@ -81,16 +81,14 @@ public:
 
 };
 
-/* Derived from SfxNoLayoutSingleTabDialog, in order to be able to be
+/* Derived from SfxSingleTabDialog, in order to be able to be
    informed about virtual methods by the control. */
 class SvxMeasureDialog : public SfxSingleTabDialog
 {
 public:
-    SvxMeasureDialog( Window* pParent, const SfxItemSet& rAttr,
-                       const SdrView* pView );
-    ~SvxMeasureDialog();
+    SvxMeasureDialog(Window* pParent, const SfxItemSet& rAttr,
+        const SdrView* pView);
 };
-
 
 #endif // INCLUDED_CUI_SOURCE_INC_MEASURE_HXX
 

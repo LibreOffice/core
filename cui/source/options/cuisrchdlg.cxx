@@ -52,25 +52,18 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(Window *pParent,
     : SfxSingleTabDialog(pParent, rOptionsSet)
     , nInitialTlFlags( nInitialFlags )
 {
+    // pPage will be implicitly destroyed by the
+    // SfxSingleTabDialog destructor
     pPage = (SvxJSearchOptionsPage *)
         SvxJSearchOptionsPage::Create(get_content_area(), rOptionsSet );
     setTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
     pPage->EnableSaveOptions(false);
 }
 
-
-SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
-{
-    // pPage will be implicitly destroyed by the
-    // SfxNoLayoutSingleTabDialog destructor
-}
-
-
 void SvxJSearchOptionsDialog::Activate()
 {
     pPage->SetTransliterationFlags( nInitialTlFlags );
 }
-
 
 sal_Int32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {

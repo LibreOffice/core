@@ -44,10 +44,8 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
     SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
 
 public:
-    SvxJSearchOptionsDialog( Window *pParent,
-                            const SfxItemSet& rOptionsSet,
-                            sal_Int32 nInitialFlags  );
-    virtual ~SvxJSearchOptionsDialog();
+    SvxJSearchOptionsDialog(Window *pParent,
+        const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags);
 
     // Window
     virtual void    Activate();
