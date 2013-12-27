@@ -503,9 +503,8 @@ void DlgEdFunc::unColorizeOverlappedObj()
 // -----------------------------------------------------------------------------
 bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
-    bool bOverlapping = false;
     SdrViewEvent aVEvt;
-    bOverlapping = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
+    bool bOverlapping = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
     if (bOverlapping && aVEvt.pObj)
     {
         colorizeOverlappedObject(aVEvt.pObj);
