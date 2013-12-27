@@ -229,6 +229,16 @@ void setProperties( uno::Reference< beans::XPropertySet > xPropSet, const tPrope
     }
 }
 
+void setProperties( const tNameSequence& rNames, const tAnySequence& rValues,
+        std::map<OUString, uno::Any>& rTargetMap)
+{
+    sal_Int32 nSize = std::min(rNames.getLength(), rValues.getLength());
+    for(sal_Int32 i = 0; i < nSize; ++i)
+    {
+        rTargetMap[rNames[i]] = rValues[i];
+    }
+}
+
 }
 
 DummyCube::DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
@@ -357,18 +367,20 @@ DummyRectangle::DummyRectangle(const awt::Size& rSize)
     setSize(rSize);
 }
 
-DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint, const tNameSequence& ,
-        const tAnySequence& )
+DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint, const tNameSequence& rNames,
+        const tAnySequence& rValues)
 {
     setSize(rSize);
     setPosition(rPoint);
+    setProperties(rNames, rValues, maProperties);
 }
 
-DummyText::DummyText(const OUString& rText, const tNameSequence& ,
-        const tAnySequence& , const uno::Any& rTrans ):
+DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
+        const tAnySequence& rValues, const uno::Any& rTrans ):
     maText(rText),
     maTrans(rTrans)
 {
+    setProperties(rNames, rValues, maProperties);
 }
 
 DummyGroup3D::DummyGroup3D(const OUString& rName)
