@@ -833,9 +833,9 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     {
         if( nPos >= pTable->GetEntryCount() )
             nPos = pTable->GetEntryCount() - 1;
-        pEntry = pTable->GetEntry( nPos );
+        pEntry = pTable->GetEntryAtAbsPos( nPos );
         if( !pEntry && nPos-- )
-            pEntry = pTable->GetEntry( nPos );
+            pEntry = pTable->GetEntryAtAbsPos( nPos );
         if( pEntry )
         {
             pTable->Select( pEntry );
