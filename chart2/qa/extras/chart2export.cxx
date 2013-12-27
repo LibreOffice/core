@@ -13,6 +13,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
@@ -36,6 +37,8 @@ public:
     void testBarChart();
     void testCrosses();
     void testChartDataTable();
+    void testChartExternalData();
+    void testEmbeddingsGrabBag();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -45,6 +48,8 @@ public:
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
     CPPUNIT_TEST(testChartDataTable);
+    CPPUNIT_TEST(testChartExternalData);
+    CPPUNIT_TEST(testEmbeddingsGrabBag);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -444,6 +449,55 @@ void Chart2ExportTest::testChartDataTable()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", "1");
+}
+
+void Chart2ExportTest::testChartExternalData()
+{
+    load("/chart2/qa/extras/data/docx/", "testMultipleChart.docx");
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/c:chartSpace/c:externalData");
+    CPPUNIT_ASSERT(pXmlNodes);
+}
+
+void Chart2ExportTest::testEmbeddingsGrabBag()
+{
+   // The problem was that .xlsx files were missing from docx file from embeddings folder
+   // after saving file.
+   // This test case tests whether embeddings files grabbagged properly in correct object.
+
+   load("/chart2/qa/extras/data/docx/", "testMultiplechartembeddings.docx" );
+   uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+   uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+   CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+   bool bEmbeddings = sal_False;
+   OUString testEmbeddedFileNames[3] = {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
+                                        "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
+                                        "word/embeddings/Microsoft_Excel_Worksheet1.xlsx"};
+   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   {
+       if (aGrabBag[i].Name == "OOXEmbeddings")
+       {
+           bEmbeddings = sal_True;
+           uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
+           uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
+           OUString aEmbeddedfileName;
+           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
+           sal_Int32 length = aEmbeddingsList.getLength();
+           CPPUNIT_ASSERT_EQUAL(sal_Int32(3), length);
+           for(int j = 0; j < length; ++j)
+           {
+               aEmbeddingsList[j].Value >>= aEmbeddingXlsxStream;
+               aEmbeddedfileName = aEmbeddingsList[j].Name;
+               CPPUNIT_ASSERT(aEmbeddingXlsxStream.get()); // Reference not empty
+               CPPUNIT_ASSERT_EQUAL(testEmbeddedFileNames[j],aEmbeddedfileName);
+           }
+       }
+   }
+   CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

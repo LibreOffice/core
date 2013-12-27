@@ -113,6 +113,8 @@ private:
                       sal_Bool bIncludeTable );
     void exportChart( com::sun::star::uno::Reference<
                           com::sun::star::chart::XChartDocument > rChartDoc );
+    void exportExternalData( com::sun::star::uno::Reference<
+                              com::sun::star::chart::XChartDocument > rChartDoc );
     void exportLegend( com::sun::star::uno::Reference<
                           com::sun::star::chart::XChartDocument > rChartDoc );
     void exportTitle( com::sun::star::uno::Reference<
