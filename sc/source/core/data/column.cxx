@@ -916,7 +916,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             break;
             case CELLTYPE_EDIT:
             {
-                it1 = maCells.set(it1, nRow1, aCell2.mpEditText);
+                it1 = maCells.set(
+                    it1, nRow1, const_cast<EditTextObject*>(aCell2.mpEditText));
                 EditTextObject* p;
                 maCells.release(it1, nRow2, p);
             }
@@ -999,7 +1000,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 break;
                 case CELLTYPE_EDIT:
                 {
-                    it1 = maCells.set(it1, nRow1, aCell2.mpEditText);
+                    it1 = maCells.set(
+                        it1, nRow1, const_cast<EditTextObject*>(aCell2.mpEditText));
                     EditTextObject* p;
                     it1 = maCells.release(it1, nRow2, p);
                 }
@@ -1031,7 +1033,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 break;
                 case CELLTYPE_EDIT:
                 {
-                    it1 = maCells.set(it1, nRow1, aCell2.mpEditText);
+                    it1 = maCells.set(
+                        it1, nRow1, const_cast<EditTextObject*>(aCell2.mpEditText));
                     EditTextObject* p;
                     it1 = maCells.release(it1, nRow2, p); // prevent it being overwritten.
                 }
@@ -1079,7 +1082,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                     ;
             }
 
-            maCells.set(it1, nRow2, aCell1.mpEditText);
+            maCells.set(it1, nRow2, const_cast<EditTextObject*>(aCell1.mpEditText));
         }
         break;
         case CELLTYPE_FORMULA:

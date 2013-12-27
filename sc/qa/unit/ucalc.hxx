@@ -275,6 +275,7 @@ public:
     void testFindAreaPosColRight();
     void testSort();
     void testSortWithFormulaRefs();
+    void testSortWithStrings();
     void testShiftCells();
     void testNoteDeleteRow();
     void testNoteDeleteCol();
@@ -384,6 +385,7 @@ public:
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortWithFormulaRefs);
+    CPPUNIT_TEST(testSortWithStrings);
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testNoteDeleteRow);
     CPPUNIT_TEST(testNoteDeleteCol);

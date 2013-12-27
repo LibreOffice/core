@@ -4096,6 +4096,47 @@ void Test::testSortWithFormulaRefs()
     pDoc->DeleteTab(1);
 }
 
+void Test::testSortWithStrings()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
+    rEE.SetText("Val1");
+    m_pDoc->SetString(ScAddress(1,1,0), "Header");
+    m_pDoc->SetString(ScAddress(1,2,0), "Val2");
+    m_pDoc->SetEditText(ScAddress(1,3,0), rEE.CreateTextObject());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,3,0)));
+
+    ScSortParam aParam;
+    aParam.nCol1 = 1;
+    aParam.nCol2 = 1;
+    aParam.nRow1 = 1;
+    aParam.nRow2 = 3;
+    aParam.bHasHeader = true;
+    aParam.maKeyState[0].bDoSort = true;
+    aParam.maKeyState[0].bAscending = true;
+    aParam.maKeyState[0].nField = 1;
+
+    m_pDoc->Sort(0, aParam, false, NULL);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,3,0)));
+
+    aParam.maKeyState[0].bAscending = false;
+
+    m_pDoc->Sort(0, aParam, false, NULL);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val2"), m_pDoc->GetString(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Val1"), m_pDoc->GetString(ScAddress(1,3,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSort()
 {
     OUString aTabName1("test1");
