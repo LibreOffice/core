@@ -53,8 +53,6 @@ DlgEdTransferableImpl::~DlgEdTransferableImpl()
 
 sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
-    bool bRet = false;
-
     // compare mime content types
     Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
     Reference< datatransfer::XMimeContentTypeFactory >
@@ -67,7 +65,7 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
     OUString aLFullMediaType = xLType->getFullMediaType();
     OUString aRFullMediaType = xRType->getFullMediaType();
 
-    bRet = aLFullMediaType.equalsIgnoreAsciiCase( aRFullMediaType );
+    bool bRet = aLFullMediaType.equalsIgnoreAsciiCase( aRFullMediaType );
 
     return bRet;
 }
