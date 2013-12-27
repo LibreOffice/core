@@ -824,8 +824,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 
         case NS_ooxml::LN_NUMBERING:
             break;
-        case NS_rtf::LN_LFOTABLE:
-            break;
         case NS_ooxml::LN_FONTTABLE:
             break;
         case NS_rtf::LN_STYLESHEET:
@@ -4111,14 +4109,6 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
             //the same for list tables
             ref->resolve( *m_pImpl->GetListTable() );
             m_pImpl->GetListTable( )->CreateNumberingRules( );
-        }
-        break;
-    case NS_rtf::LN_LFOTABLE:
-        {
-            m_pImpl->GetListTable( )->SetLFOImport( true );
-            ref->resolve( *m_pImpl->GetListTable() );
-            m_pImpl->GetListTable( )->CreateNumberingRules( );
-            m_pImpl->GetListTable( )->SetLFOImport( false );
         }
         break;
     case NS_ooxml::LN_THEMETABLE:

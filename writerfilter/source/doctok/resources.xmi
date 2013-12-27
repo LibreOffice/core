@@ -3021,26 +3021,6 @@
           </UML:Generalization.parent>
         </UML:Generalization>
         <!--Class LFOData-->
-        <!--Class LFOTable-->
-        <UML:Class xmi.id="LFOTable" name="LFOTable">
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:LFOTABLE</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="classid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="LFOTable-Table">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="LFOTable"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Table"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--Class LFOTable-->
         <!--Class Font-->
         <UML:Class xmi.id="Font" name="Font">
           <UML:ModelElement.taggedValue>
