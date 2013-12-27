@@ -2695,10 +2695,13 @@ void DomainMapper_Impl::handleToc
     bool bHyperlinks = false;
     bool bFromOutline = false;
     bool bFromEntries = false;
+    bool bHideTabLeaderPageNumbers = false ;
+
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
     OUString sChapterNoSeparator;
     OUString sFigureSequence;
+    uno::Reference< beans::XPropertySet > xTOC;
 
 //                  \a Builds a table of figures but does not include the captions's label and number
     if( lcl_FindInCommand( pContext->GetCommand(), 'a', sValue ))
@@ -2788,14 +2791,16 @@ void DomainMapper_Impl::handleToc
                         //todo: unsupported
 //                    }
 //                  \z Hides page numbers within the table of contens when shown in Web Layout View
-//                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
-//                    { //todo: unsupported feature  }
+                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
+                    {
+                        bHideTabLeaderPageNumbers = true ;
+                    }
 
                     //if there's no option then it should be created from outline
     if( !bFromOutline && !bFromEntries && sTemplate.isEmpty()  )
         bFromOutline = true;
 
-    uno::Reference< beans::XPropertySet > xTOC;
+
     if (m_xTextFactory.is())
         xTOC.set(
                 m_xTextFactory->createInstance
@@ -2810,6 +2815,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS ), uno::makeAny( bHideTabLeaderPageNumbers ));
         if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels

@@ -2039,7 +2039,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
         static const sal_Char sEntryEnd[] = "\" ";
 
         ww::eField eCode = ww::eTOC;
-        OUString sStr = pTOX->GetMSTOCExpression();
+        OUString sStr = pTOX ->GetMSTOCExpression();
         if ( sStr.isEmpty() )
         {
             switch (pTOX->GetType())
@@ -2110,6 +2110,11 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     if( !nTOXLvl )
                         ++nTOXLvl;
 
+                    if(nsSwTOXElement::TOX_TABLEADER & pTOX->GetCreateType())
+                    {
+                        sStr +="\\z " ;
+                        GetExport( ).bHideTabLeaderAndPageNumbers = true ;
+                    }
                     if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
                     {
                         sStr += "\\f ";
