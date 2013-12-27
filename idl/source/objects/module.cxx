@@ -153,20 +153,24 @@ void SvMetaModule::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     SvMetaExtern::WriteAttributesSvIdl( rBase, rOutStm, nTab );
     if( !aHelpFileName.getString().isEmpty() || !aSlotIdFile.getString().isEmpty() || !aTypeLibFile.getString().isEmpty() )
     {
-        WriteTab( rOutStm, nTab );
         if( !aHelpFileName.getString().isEmpty() )
         {
+            WriteTab( rOutStm, nTab );
             aHelpFileName.WriteSvIdl( SvHash_HelpFile(), rOutStm, nTab +1 );
+            rOutStm << ';' << endl;
         }
         if( !aSlotIdFile.getString().isEmpty() )
         {
+            WriteTab( rOutStm, nTab );
             aSlotIdFile.WriteSvIdl( SvHash_SlotIdFile(), rOutStm, nTab +1 );
+            rOutStm << ';' << endl;
         }
         if( !aTypeLibFile.getString().isEmpty() )
         {
+            WriteTab( rOutStm, nTab );
             aTypeLibFile.WriteSvIdl( SvHash_TypeLibFile(), rOutStm, nTab +1 );
+            rOutStm << ';' << endl;
         }
-        rOutStm << ';' << endl;
     }
 }
 
