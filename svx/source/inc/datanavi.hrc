@@ -126,22 +126,6 @@
 #define STR_HEADER_PREFIX       10
 #define STR_HEADER_URL          11
 
-// class AddSubmissionDialog
-#define FL_SUBMISSION           10
-#define FT_SUBMIT_NAME          11
-#define ED_SUBMIT_NAME          12
-#define FT_SUBMIT_ACTION        13
-#define ED_SUBMIT_ACTION        14
-#define FT_SUBMIT_METHOD        15
-#define LB_SUBMIT_METHOD        16
-#define FT_SUBMIT_REF           17
-#define ED_SUBMIT_REF           18
-#define PB_SUBMIT_REF           19
-#define FT_SUBMIT_BIND          20
-#define LB_SUBMIT_BIND          21
-#define FT_SUBMIT_REPLACE       22
-#define LB_SUBMIT_REPLACE       23
-
 // class AddModelDialog
 #define FL_MODEL                10
 #define FT_MODEL_NAME           11
