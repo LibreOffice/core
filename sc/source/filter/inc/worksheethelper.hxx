@@ -152,6 +152,7 @@ struct ValidationModel
     ApiCellRangeList    maRanges;
     ApiTokenSequence    maTokens1;
     ApiTokenSequence    maTokens2;
+    OUString     msRef;
     OUString     maInputTitle;
     OUString     maInputMessage;
     OUString     maErrorTitle;
