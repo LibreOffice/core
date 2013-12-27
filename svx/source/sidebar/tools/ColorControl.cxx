@@ -123,7 +123,7 @@ void ColorControl::FillColors (void)
             return;
 
         const WinBits aWinBits(maVSColor.GetStyle() | WB_TABSTOP | WB_ITEMBORDER | WB_NAMEFIELD |
-            WB_NO_DIRECTSELECT | WB_MENUSTYLEVALUESET | WB_NO_DIRECTSELECT);
+            WB_NO_DIRECTSELECT | WB_MENUSTYLEVALUESET);
 
         maVSColor.SetStyle(aWinBits);
 

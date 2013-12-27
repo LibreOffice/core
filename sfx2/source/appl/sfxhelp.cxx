@@ -339,7 +339,6 @@ OUString SfxHelp::GetHelpModuleName_Impl()
                 || aFactoryShortName.startsWith("dbapp")
                 || aFactoryShortName.startsWith("dbreport")
                 || aFactoryShortName.startsWith("swreport")
-                || aFactoryShortName.startsWith("dbbrowser")
                 || aFactoryShortName.startsWith("swform") )
             aFactoryShortName = "sdatabase";
         else if ( aFactoryShortName.startsWith("sbibliography")
