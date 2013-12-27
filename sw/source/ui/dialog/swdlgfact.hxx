@@ -22,7 +22,6 @@
 #include "swabstdlg.hxx"
 
 class SwInsertAbstractDlg;
-class SfxNoLayoutSingleTabDialog;
 class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
@@ -83,7 +82,6 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
     virtual sal_uInt8   GetPara() const ;
 };
 
-class SfxNoLayoutSingleTabDialog;
 class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)
