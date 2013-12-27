@@ -2304,6 +2304,20 @@ DECLARE_OOXMLEXPORT_TEST(testFDO71834, "fdo71834.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[4]/w:tr[2]/w:tc[1]/w:tcPr[1]/w:tcW[1]","type", "dxa");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
+{
+   // This test case is to verify \o flag should come once.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
+    // not to insert an empty paragraph before TOC.
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" TOC \\f \\o \"1-3\" \\h"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

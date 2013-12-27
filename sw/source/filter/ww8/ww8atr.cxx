@@ -2120,23 +2120,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             sStr += OUString((sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
                             sStr += sEntryEnd;
                         }
-
-                        if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
-                        {
-                            const int nMinLvl = nTOXLvl;
-                            if ( nMinLvl > 0 )
-                            {
-                                int nTmpLvl = nMinLvl;
-                                if (nTmpLvl > WW8ListManager::nMaxLevel)
-                                    nTmpLvl = WW8ListManager::nMaxLevel;
-
-                                sStr += "\\o \"1-";
-                                sStr += OUString::number(nTmpLvl);
-                                sStr += sEntryEnd;
-
-                            }
-                        }
-
                         if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                         {
                             // Take the TOC value of the max level to evaluate to as
