@@ -9,12 +9,12 @@
   <object class="GtkImage" id="imageRANGE_SELECT_POSITIVE">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">formula/res/refinp1.png</property>
+    <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkImage" id="imageRANGE_SELECT_NEG">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">formula/res/refinp1.png</property>
+    <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkListStore" id="liststoreFUNCTION">
     <columns>
