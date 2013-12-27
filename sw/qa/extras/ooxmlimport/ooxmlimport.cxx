@@ -1545,6 +1545,17 @@ DECLARE_OOXMLIMPORT_TEST(testLOCrash,"file_crash.docx")
     //The problem was libreoffice crash while opening the file.
     getParagraph(1,"Contents");
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFdo65090, "fdo65090.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // The first row had two cells, instead of a single horizontally merged one.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1720,7 +1720,7 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
             if(bRet)
             {
                 size_t nCount = pTblCrsr->GetSelectedBoxesCount();
-                while (--nCount)
+                while (nCount--)
                 {
                     pTblCrsr->DeleteBox(nCount);
                 }
