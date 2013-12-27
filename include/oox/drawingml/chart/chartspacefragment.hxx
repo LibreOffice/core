@@ -42,6 +42,8 @@ public:
     virtual             ~ChartSpaceFragment();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+    ::oox::core::XmlFilterBase& mpFilterBase;
 };
 
 // ============================================================================

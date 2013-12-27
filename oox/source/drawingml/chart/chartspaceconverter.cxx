@@ -212,6 +212,13 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         aProps.setProperty( PROP_DisableDataTableDialog , true );
         aProps.setProperty( PROP_DisableComplexChartTypes , true );
     }
+
+    if(!mrModel.maSheetPath.isEmpty() )
+    {
+        Reference< ::com::sun::star::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
+        PropertySet aProps( xChartDoc->getDiagram() );
+        aProps.setProperty( PROP_ExternalData , uno::makeAny(mrModel.maSheetPath) );
+    }
 }
 
 // ============================================================================
