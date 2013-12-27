@@ -23,6 +23,7 @@
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <editeng/unoprnms.hxx>
 
 
 #include <algorithm>
@@ -342,14 +343,49 @@ DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
     setSize(rSize);
 }
 
-DummyLine3D::DummyLine3D(const drawing::PolyPolygonShape3D& rPoints, const VLineProperties& ):
-    maPoints(rPoints)
+namespace {
+
+void setProperties( const VLineProperties& rLineProperties, std::map<OUString, uno::Any>& rTargetProps )
 {
+    //Transparency
+    if(rLineProperties.Transparence.hasValue())
+        rTargetProps.insert(std::pair<OUString, uno::Any>(
+                    UNO_NAME_LINETRANSPARENCE, rLineProperties.Transparence));
+
+    //LineStyle
+    if(rLineProperties.LineStyle.hasValue())
+        rTargetProps.insert(std::pair<OUString, uno::Any>(
+                    UNO_NAME_LINESTYLE, rLineProperties.LineStyle));
+
+    //LineWidth
+    if(rLineProperties.Width.hasValue())
+        rTargetProps.insert(std::pair<OUString, uno::Any>(
+                    UNO_NAME_LINEWIDTH, rLineProperties.Width));
+
+    //LineColor
+    if(rLineProperties.Color.hasValue())
+        rTargetProps.insert(std::pair<OUString, uno::Any>(
+                    UNO_NAME_LINECOLOR, rLineProperties.Transparence));
+
+    //LineDashName
+    if(rLineProperties.DashName.hasValue())
+        rTargetProps.insert(std::pair<OUString, uno::Any>(
+                    "LineDashName", rLineProperties.DashName));
 }
 
-DummyLine2D::DummyLine2D(const drawing::PointSequenceSequence& rPoints, const VLineProperties* ):
+}
+
+DummyLine3D::DummyLine3D(const drawing::PolyPolygonShape3D& rPoints, const VLineProperties& rLineProperties):
     maPoints(rPoints)
 {
+    setProperties(rLineProperties, maProperties);
+}
+
+DummyLine2D::DummyLine2D(const drawing::PointSequenceSequence& rPoints, const VLineProperties* pLineProperties):
+    maPoints(rPoints)
+{
+    if(pLineProperties)
+        setProperties(*pLineProperties, maProperties);
 }
 
 DummyLine2D::DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition)
