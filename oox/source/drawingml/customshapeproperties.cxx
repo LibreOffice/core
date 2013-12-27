@@ -213,7 +213,13 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Type ] <<= OUString( "ooxml-non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+        // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
+        // while if they are not, standard ooxml coordinates are used.
+        // This size specifically affects scaling.
+        // Note 2: Width and Height are set to 0 to force scaling to 1.
         awt::Rectangle aViewBox( 0, 0, aSize.Width, aSize.Height );
+        if( maGuideList.size() )
+            aViewBox = awt::Rectangle( 0, 0, 0, 0 );
         aPropertyMap[ PROP_ViewBox ] <<= aViewBox;
 
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
