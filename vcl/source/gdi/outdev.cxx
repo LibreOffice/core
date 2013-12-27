@@ -233,8 +233,6 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
         return;
 
     sal_uInt32          aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
-    PCONSTSALPOINT      aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
-    sal_uInt8*              aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
     sal_uInt32*         pPointAry;
     PCONSTSALPOINT*     pPointAryAry;
     const sal_uInt8**       pFlagAryAry;
@@ -248,6 +246,8 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
     }
     else
     {
+        PCONSTSALPOINT  aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
+        sal_uInt8*      aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
         pPointAry       = aStackAry1;
         pPointAryAry    = aStackAry2;
         pFlagAryAry     = (const sal_uInt8**)aStackAry3;
