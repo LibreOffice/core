@@ -36,7 +36,8 @@ using namespace ::oox::core;
 // ============================================================================
 
 ChartSpaceFragment::ChartSpaceFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, ChartSpaceModel& rModel ) :
-    FragmentBase< ChartSpaceModel >( rFilter, rFragmentPath, rModel )
+    FragmentBase< ChartSpaceModel >( rFilter, rFragmentPath, rModel ),
+    mpFilterBase(rFilter)
 {
 }
 
@@ -73,6 +74,9 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return 0;
                 case C_TOKEN( pivotSource ):
                     mrModel.mbPivotChart = true;
+                    return 0;
+                case C_TOKEN (externalData):
+                    mrModel.maSheetPath = getFragmentPathFromRelId(rAttribs.getString(R_TOKEN(id),OUString()));
                     return 0;
             }
         break;
