@@ -504,17 +504,17 @@ sal_uInt16 TextPortionList::GetStartPos(size_t nPortion)
     return nPos;
 }
 
-
 ExtraPortionInfo::ExtraPortionInfo()
+: nOrgWidth(0)
+, nWidthFullCompression(0)
+, nPortionOffsetX(0)
+, nMaxCompression100thPercent(0)
+, nAsianCompressionTypes(0)
+, bFirstCharIsRightPunktuation(sal_False)
+, bCompressed(sal_False)
+, pOrgDXArray(NULL)
+, lineBreaksList()
 {
-    nOrgWidth = 0;
-    nWidthFullCompression = 0;
-    nMaxCompression100thPercent = 0;
-    nAsianCompressionTypes = 0;
-    nPortionOffsetX = 0;
-    bFirstCharIsRightPunktuation = sal_False;
-    bCompressed = sal_False;
-    pOrgDXArray = NULL;
 }
 
 ExtraPortionInfo::~ExtraPortionInfo()
@@ -1765,16 +1765,16 @@ void ContentNode::DestroyWrongList()
     mpWrongList.reset();
 }
 
-ContentAttribs::ContentAttribs( SfxItemPool& rPool ) :
-                    aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
+ContentAttribs::ContentAttribs( SfxItemPool& rPool )
+: pStyle(0)
+, aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
 {
-    pStyle = 0;
 }
 
-ContentAttribs::ContentAttribs( const ContentAttribs& rRef ) :
-                    aAttribSet( rRef.aAttribSet )
+ContentAttribs::ContentAttribs( const ContentAttribs& rRef )
+: pStyle(rRef.pStyle)
+, aAttribSet( rRef.aAttribSet )
 {
-    pStyle = rRef.pStyle;
 }
 
 ContentAttribs::~ContentAttribs()
@@ -2698,9 +2698,11 @@ struct LessByStart : std::binary_function<EditCharAttrib, EditCharAttrib, bool>
 }
 
 CharAttribList::CharAttribList()
+: aAttribs()
+, aDefFont()
+, bHasEmptyAttribs(false)
 {
     DBG_CTOR( EE_CharAttribList, 0 );
-    bHasEmptyAttribs = sal_False;
 }
 
 CharAttribList::~CharAttribList()

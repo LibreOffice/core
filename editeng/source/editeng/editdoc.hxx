@@ -59,9 +59,9 @@ struct EPaM
     sal_Int32  nPara;
     sal_Int32  nIndex;
 
-    EPaM()                              { nPara = 0; nIndex = 0; }
-    EPaM( sal_Int32 nP, sal_Int32 nI )  { nPara = nP; nIndex = nI; }
-    EPaM( const EPaM& r)                { nPara = r.nPara; nIndex = r.nIndex; }
+    EPaM() : nPara(0), nIndex(0) {}
+    EPaM( sal_Int32 nP, sal_Int32 nI ) : nPara(nP), nIndex(nI) {}
+    EPaM( const EPaM& r) : nPara(r.nPara), nIndex(r.nIndex) {}
     EPaM& operator = ( const EPaM& r )  { nPara = r.nPara; nIndex = r.nIndex; return *this; }
     inline sal_Bool operator == ( const EPaM& r ) const;
     inline sal_Bool operator < ( const EPaM& r ) const;
@@ -85,10 +85,10 @@ struct ScriptTypePosInfo
     sal_uInt16  nEndPos;
 
     ScriptTypePosInfo( short _Type, sal_uInt16 _Start, sal_uInt16 _End )
+    : nScriptType(_Type)
+    , nStartPos(_Start)
+    , nEndPos(_End)
     {
-        nScriptType = _Type;
-        nStartPos = _Start;
-        nEndPos = _End;
     }
 };
 
@@ -101,10 +101,10 @@ struct WritingDirectionInfo
     sal_uInt16  nEndPos;
 
     WritingDirectionInfo( sal_uInt8 _Type, sal_uInt16 _Start, sal_uInt16 _End )
+    : nType(_Type)
+    , nStartPos(_Start)
+    , nEndPos(_End)
     {
-        nType = _Type;
-        nStartPos = _Start;
-        nEndPos = _End;
     }
 };
 
@@ -391,16 +391,39 @@ private:
     sal_Unicode         nExtraValue;
 
 
-                TextPortion()               { DBG_CTOR( EE_TextPortion, 0 );
-                                              pExtraInfos = NULL; nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = sal_False;}
+                TextPortion()
+                : pExtraInfos( NULL )
+                , nLen( 0 )
+                , aOutSz()
+                , nKind( PORTIONKIND_TEXT )
+                , nRightToLeft( sal_False )
+                , nExtraValue( 0 )
+                {
+                    DBG_CTOR( EE_TextPortion, 0 );
+                }
 
 public:
-                TextPortion( sal_uInt16 nL ) : aOutSz( -1, -1 )
-                                            {   DBG_CTOR( EE_TextPortion, 0 );
-                                                pExtraInfos = NULL; nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = sal_False;}
-                TextPortion( const TextPortion& r ) : aOutSz( r.aOutSz )
-                                            { DBG_CTOR( EE_TextPortion, 0 );
-                                                pExtraInfos = NULL; nLen = r.nLen; nKind = r.nKind; nExtraValue = r.nExtraValue; nRightToLeft = r.nRightToLeft; }
+                TextPortion( sal_uInt16 nL )
+                : pExtraInfos( NULL )
+                , nLen( nL )
+                , aOutSz( -1, -1 )
+                , nKind( PORTIONKIND_TEXT )
+                , nRightToLeft( sal_False )
+                , nExtraValue( 0 )
+                {
+                    DBG_CTOR( EE_TextPortion, 0 );
+                }
+
+                TextPortion( const TextPortion& r )
+                : pExtraInfos( NULL )
+                , nLen( r.nLen )
+                , aOutSz( r.aOutSz )
+                , nKind( r.nKind )
+                , nRightToLeft( r.nRightToLeft )
+                , nExtraValue( r.nExtraValue )
+                {
+                    DBG_CTOR( EE_TextPortion, 0 );
+                }
 
                 ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); delete pExtraInfos; }
 
@@ -716,8 +739,10 @@ private:
 
 public:
             DeletedNodeInfo( sal_uIntPtr nInvAdr, sal_Int32 nPos )
-                                            {   nInvalidAdressPtr = nInvAdr;
-                                                nInvalidParagraph = nPos; }
+            : nInvalidAdressPtr(nInvAdr)
+            , nInvalidParagraph(nPos)
+            {
+            }
 
     sal_uIntPtr GetInvalidAdress() const { return nInvalidAdressPtr; }
     sal_Int32   GetPosition() const { return nInvalidParagraph; }
