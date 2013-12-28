@@ -13,7 +13,10 @@
 #include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
 
-namespace oox { namespace shape {
+namespace oox
+{
+namespace shape
+{
 
 /// Wps is the drawingML equivalent of v:shape.
 class WpsContext : public oox::core::ContextHandler2
@@ -32,7 +35,8 @@ protected:
 };
 
 
-} }
+}
+}
 
 #endif
 
