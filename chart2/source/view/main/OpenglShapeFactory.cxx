@@ -531,6 +531,13 @@ void OpenglShapeFactory::renderSeries( const uno::Reference<
     SAL_WARN("chart2.opengl", "OpenglShapeFactory::renderSeries()-----test:");
 }
 
+void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
+{
+    dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
+    assert(pChart);
+    pChart->render();
+}
+
 } //namespace dummy
 
 } //namespace chart

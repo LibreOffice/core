@@ -206,6 +206,11 @@ public:
 
     virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize );
 
+    /**
+     * not necessary right now
+     */
+    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > ) SAL_OVERRIDE {}
+
 private:
     ShapeFactory();
 

@@ -202,6 +202,8 @@ private: //member
             m_xShapeFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage>
             m_xDrawPage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+            mxRootShape;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xDashTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xGradientTable;

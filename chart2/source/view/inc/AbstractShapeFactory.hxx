@@ -238,6 +238,11 @@ public:
 
     virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize ) = 0;
 
+    /**
+     * Only necessary for stateless implementations
+     */
+    virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) = 0;
+
 
     virtual void createSeries( const com::sun::star::uno::Reference<
             com::sun::star::drawing::XShapes> & xTarget,

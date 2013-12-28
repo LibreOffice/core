@@ -2390,8 +2390,8 @@ void ChartView::createShapes()
     awt::Size aPageSize = mrChartModel.getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
 
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-    uno::Reference<drawing::XShapes> xPageShapes(
-            pShapeFactory->getOrCreateChartRootShape( m_xDrawPage ) );
+    if(!mxRootShape.is())
+        mxRootShape = pShapeFactory->getOrCreateChartRootShape( m_xDrawPage );
 
     SdrPage* pPage = ChartView::getSdrPage();
     if(pPage) //it is necessary to use the implementation here as the uno page does not provide a propertyset
@@ -2400,14 +2400,14 @@ void ChartView::createShapes()
     {
         OSL_FAIL("could not set page size correctly");
     }
-    pShapeFactory->setPageSize(xPageShapes, aPageSize);
+    pShapeFactory->setPageSize(mxRootShape, aPageSize);
 
     {
         SolarMutexGuard aSolarGuard;
 
         // todo: it would be nicer to just pass the page m_xDrawPage and format it,
         // but the draw page does not support XPropertySet
-        formatPage( mrChartModel, aPageSize, xPageShapes, m_xShapeFactory );
+        formatPage( mrChartModel, aPageSize, mxRootShape, m_xShapeFactory );
 
         //sal_Int32 nYDistance = static_cast<sal_Int32>(aPageSize.Height*lcl_getPageLayoutDistancePercentage());
         awt::Rectangle aRemainingSpace( 0, 0, aPageSize.Width, aPageSize.Height );
@@ -2416,7 +2416,7 @@ void ChartView::createShapes()
         uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
         OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
         uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
-                pShapeFactory->createGroup2D(xPageShapes,aDiagramCID) );
+                pShapeFactory->createGroup2D(mxRootShape,aDiagramCID) );
 
         uno::Reference< drawing::XShape > xDiagram_MarkHandles( pShapeFactory->createInvisibleRectangle(
                     xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
@@ -2430,12 +2430,12 @@ void ChartView::createShapes()
 
         bool bAutoPositionDummy = true;
 
-        lcl_createTitle( TitleHelper::MAIN_TITLE, xPageShapes, m_xShapeFactory, mrChartModel
+        lcl_createTitle( TitleHelper::MAIN_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
-        lcl_createTitle( TitleHelper::SUB_TITLE, xPageShapes, m_xShapeFactory, mrChartModel
+        lcl_createTitle( TitleHelper::SUB_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2443,7 +2443,7 @@ void ChartView::createShapes()
         SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
         aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( mrChartModel );
 
-        lcl_createLegend( LegendHelper::getLegend( mrChartModel ), xPageShapes, m_xShapeFactory, m_xCC
+        lcl_createLegend( LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC
                     , aRemainingSpace, aPageSize, mrChartModel, aSeriesPlotterContainer.getLegendEntryProviderList()
                     , lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
@@ -2455,7 +2455,7 @@ void ChartView::createShapes()
         bool bAutoPosition_XTitle = true;
         boost::shared_ptr<VTitle> apVTitle_X;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
-            apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, xPageShapes, m_xShapeFactory, mrChartModel
+            apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2463,7 +2463,7 @@ void ChartView::createShapes()
         bool bAutoPosition_YTitle = true;
         boost::shared_ptr<VTitle> apVTitle_Y;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
-            apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, xPageShapes, m_xShapeFactory, mrChartModel
+            apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2471,7 +2471,7 @@ void ChartView::createShapes()
         bool bAutoPosition_ZTitle = true;
         boost::shared_ptr<VTitle> apVTitle_Z;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
-            apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, xPageShapes, m_xShapeFactory, mrChartModel
+            apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2482,7 +2482,7 @@ void ChartView::createShapes()
         bool bAutoPosition_SecondXTitle = true;
         boost::shared_ptr<VTitle> apVTitle_SecondX;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
-            apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, xPageShapes, m_xShapeFactory, mrChartModel
+            apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2490,7 +2490,7 @@ void ChartView::createShapes()
         bool bAutoPosition_SecondYTitle = true;
         boost::shared_ptr<VTitle> apVTitle_SecondY;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
-            apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, xPageShapes, m_xShapeFactory, mrChartModel
+            apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2526,7 +2526,7 @@ void ChartView::createShapes()
         }
 
         //cleanup: remove all empty group shapes to avoid grey border lines:
-        lcl_removeEmptyGroupShapes( xPageShapes );
+        lcl_removeEmptyGroupShapes( mxRootShape );
     }
 
     // #i12587# support for shapes in chart
@@ -2535,6 +2535,8 @@ void ChartView::createShapes()
         SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper->getSdrModel().EnableUndo( true );
     }
+
+    pShapeFactory->render( mxRootShape );
 
 #if OSL_DEBUG_LEVEL > 0
     clock_t nEnd = clock();
@@ -2940,15 +2942,16 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::Runt
 OUString ChartView::dump() throw (uno::RuntimeException)
 {
     impl_updateView();
-    uno::Reference<drawing::XShapes> xPageShapes( AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)
-        ->getOrCreateChartRootShape( m_xDrawPage ) );
+    if(!mxRootShape.is())
+        mxRootShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)
+            ->getOrCreateChartRootShape( m_xDrawPage );
 
-    if (!xPageShapes.is())
+    if (!mxRootShape.is())
         return OUString();
     else
     {
         XShapeDumper dumper;
-        return dumper.dump(xPageShapes);
+        return dumper.dump(mxRootShape);
     }
 
 }

@@ -213,6 +213,11 @@ void DummyXShape::setParent( const uno::Reference< uno::XInterface >& xParent )
     mxParent = xParent;
 }
 
+void DummyXShape::render()
+{
+    SAL_WARN("chart2.opengl", "maybe a missing implementation in a subclass?");
+}
+
 namespace {
 
 void setProperties( uno::Reference< beans::XPropertySet > xPropSet, const tPropertyNameMap& rPropertyNameMap,
@@ -534,6 +539,15 @@ uno::Any DummyXShapes::getByIndex(sal_Int32 nIndex)
     uno::Any aShape;
     aShape <<= maUNOShapes[nIndex];
     return aShape;
+}
+
+void DummyXShapes::render()
+{
+    for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
+            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    {
+        (*itr)->render();
+    }
 }
 
 bool DummyChart::initWindow()

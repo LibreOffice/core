@@ -174,7 +174,13 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
 
+    // normal non UNO methods
+
     virtual DummyChart* getRootShape();
+    /**
+     * Implement this method for all subclasses that should be rendered
+     */
+    virtual void render();
 
 protected:
 
@@ -392,6 +398,9 @@ public:
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // normal methods
+    virtual void render();
 
 private:
     std::vector<com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > maUNOShapes;
