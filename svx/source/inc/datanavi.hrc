@@ -83,13 +83,6 @@
 #define IID_TEXT                5
 #define IID_OTHER               6
 
-// class AddConditionDialog
-#define FT_CONDITION            10
-#define ED_CONDITION            11
-#define FT_RESULT               12
-#define FT_RESULT_PREVIEW       13
-#define PB_EDIT_NAMESPACES      14
-
 // class NamespaceItemDialog
 #define FT_NAMESPACES           10
 #define LB_NAMESPACES           11

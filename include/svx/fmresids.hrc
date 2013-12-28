@@ -61,7 +61,6 @@
 
 // Dialog-Id's -----------------------------------------------------------
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
-#define RID_SVXDLG_ADD_CONDITION                    (RID_FORMS_START + 13)
 #define RID_SVXDLG_NAMESPACE_ITEM                   (RID_FORMS_START + 14)
 
 #define RID_SVXWIN_DATANAVIGATOR                    (RID_FORMS_START + 19)

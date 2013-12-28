@@ -2763,34 +2763,28 @@ namespace svxform
     // class AddConditionDialog
     //========================================================================
 
-    AddConditionDialog::AddConditionDialog(
-        Window* pParent, const OUString& _rPropertyName,
-        const Reference< XPropertySet >& _rPropSet ) :
-
-        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_CONDITION ) ),
-
-        m_aConditionFT      ( this, SVX_RES( FT_CONDITION ) ),
-        m_aConditionED      ( this, SVX_RES( ED_CONDITION ) ),
-        m_aResultFT         ( this, SVX_RES( FT_RESULT ) ),
-        m_aResultWin        ( this, SVX_RES( FT_RESULT_PREVIEW ) ),
-        m_aEditNamespacesBtn( this, SVX_RES( PB_EDIT_NAMESPACES ) ),
-        m_aButtonsFL        ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn            ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn           ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn          ( this, SVX_RES( BTN_DATANAV_HELP ) ),
-
-        m_sPropertyName     ( _rPropertyName ),
-        m_xBinding          ( _rPropSet )
+    AddConditionDialog::AddConditionDialog(Window* pParent,
+        const OUString& _rPropertyName,
+        const Reference< XPropertySet >& _rPropSet)
+        : ModalDialog(pParent, "AddConditionDialog", "svx/ui/addconditiondialog.ui")
+        , m_sPropertyName(_rPropertyName)
+        , m_xBinding(_rPropSet)
 
     {
-        FreeResource();
-
+        get(m_pConditionED, "condition");
+        get(m_pResultWin, "result");
+        get(m_pEditNamespacesBtn, "edit");
+        get(m_pOKBtn, "ok");
         DBG_ASSERT( m_xBinding.is(), "AddConditionDialog::Ctor(): no Binding" );
 
-        m_aResultWin.SetBackground( m_aConditionED.GetBackground() );
-        m_aConditionED.SetModifyHdl( LINK( this, AddConditionDialog, ModifyHdl ) );
-        m_aEditNamespacesBtn.SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
-        m_aOKBtn.SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
+        m_pConditionED->set_height_request(m_pConditionED->GetTextHeight() * 4);
+        m_pConditionED->set_width_request(m_pConditionED->approximate_char_width() * 62);
+        m_pResultWin->set_height_request(m_pResultWin->GetTextHeight() * 4);
+        m_pResultWin->set_width_request(m_pResultWin->approximate_char_width() * 62);
+
+        m_pConditionED->SetModifyHdl( LINK( this, AddConditionDialog, ModifyHdl ) );
+        m_pEditNamespacesBtn->SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
+        m_pOKBtn->SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
         m_aResultTimer.SetTimeout( 500 );
         m_aResultTimer.SetTimeoutHdl( LINK( this, AddConditionDialog, ResultHdl ) );
 
@@ -2802,19 +2796,19 @@ namespace svxform
                 if ( ( m_xBinding->getPropertyValue( m_sPropertyName ) >>= sTemp )
                     && !sTemp.isEmpty() )
                 {
-                    m_aConditionED.SetText( sTemp );
+                    m_pConditionED->SetText( sTemp );
                 }
                 else
                 {
 //!                 m_xBinding->setPropertyValue( m_sPropertyName, makeAny( TRUE_VALUE ) );
-                    m_aConditionED.SetText( TRUE_VALUE );
+                    m_pConditionED->SetText( TRUE_VALUE );
                 }
 
                 Reference< css::xforms::XModel > xModel;
                 if ( ( m_xBinding->getPropertyValue( PN_BINDING_MODEL ) >>= xModel ) && xModel.is() )
                     m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( xModel, UNO_QUERY );
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
                 SAL_WARN( "svx.form", "AddConditionDialog::Ctor(): exception caught" );
             }
@@ -2822,11 +2816,6 @@ namespace svxform
 
         DBG_ASSERT( m_xUIHelper.is(), "AddConditionDialog::Ctor(): no UIHelper" );
         ResultHdl( &m_aResultTimer );
-    }
-
-    //------------------------------------------------------------------------
-    AddConditionDialog::~AddConditionDialog()
-    {
     }
 
     //------------------------------------------------------------------------
@@ -2861,7 +2850,7 @@ namespace svxform
         try
         {
             if ( m_xBinding.is() )
-                m_xBinding->setPropertyValue( m_sPropertyName, makeAny( OUString( m_aConditionED.GetText() ) ) );
+                m_xBinding->setPropertyValue( m_sPropertyName, makeAny( OUString( m_pConditionED->GetText() ) ) );
         }
         catch( const Exception& )
         {
@@ -2882,7 +2871,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(AddConditionDialog, ResultHdl)
     {
-        OUString sCondition = comphelper::string::strip(m_aConditionED.GetText(), ' ');
+        OUString sCondition = comphelper::string::strip(m_pConditionED->GetText(), ' ');
         OUString sResult;
         if ( !sCondition.isEmpty() )
         {
@@ -2895,7 +2884,7 @@ namespace svxform
                 SAL_WARN( "svx.form", "AddConditionDialog::ResultHdl(): exception caught" );
             }
         }
-        m_aResultWin.SetText( sResult );
+        m_pResultWin->SetText( sResult );
         return 0;
     }
 

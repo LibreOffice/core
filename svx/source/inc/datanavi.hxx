@@ -465,15 +465,10 @@ namespace svxform
     class AddConditionDialog : public ModalDialog
     {
     private:
-        FixedText               m_aConditionFT;
-        MultiLineEdit           m_aConditionED;
-        FixedText               m_aResultFT;
-        FixedText               m_aResultWin;
-        PushButton              m_aEditNamespacesBtn;
-        FixedLine               m_aButtonsFL;
-        OKButton                m_aOKBtn;
-        CancelButton            m_aEscBtn;
-        HelpButton              m_aHelpBtn;
+        VclMultiLineEdit*       m_pConditionED;
+        VclMultiLineEdit*       m_pResultWin;
+        PushButton*             m_pEditNamespacesBtn;
+        OKButton*               m_pOKBtn;
 
         Timer                   m_aResultTimer;
         OUString         m_sPropertyName;
@@ -487,20 +482,17 @@ namespace svxform
         DECL_LINK(OKHdl, void *);
 
     public:
-        AddConditionDialog( Window* pParent,
-            const OUString& _rPropertyName, const XPropertySet_ref& _rBinding );
-        ~AddConditionDialog();
+        AddConditionDialog(Window* pParent,
+            const OUString& _rPropertyName, const XPropertySet_ref& _rBinding);
 
-        inline XFormsUIHelper1_ref  GetUIHelper() const { return m_xUIHelper; }
-        inline OUString             GetCondition() const { return m_aConditionED.GetText(); }
-        inline void                 SetCondition( const OUString& _rCondition );
+        XFormsUIHelper1_ref GetUIHelper() const { return m_xUIHelper; }
+        OUString GetCondition() const { return m_pConditionED->GetText(); }
+        void SetCondition(const OUString& _rCondition)
+        {
+            m_pConditionED->SetText(_rCondition);
+            m_aResultTimer.Start();
+        }
     };
-
-    inline void AddConditionDialog::SetCondition( const OUString& _rCondition )
-    {
-        m_aConditionED.SetText( _rCondition );
-        m_aResultTimer.Start();
-    }
 
     //========================================================================
     class NamespaceItemDialog : public ModalDialog
