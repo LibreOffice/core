@@ -95,12 +95,12 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString("MergeContext" )
 #define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString("ToolBarItems" )
 
-#define PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT               ::rtl::OUString("MergePoint")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND             ::rtl::OUString("MergeCommand")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMANDPARAMETER    ::rtl::OUString("MergeCommandParameter")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK            ::rtl::OUString("MergeFallback")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT             ::rtl::OUString("MergeContext")
-#define PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS           ::rtl::OUString("StatusBarItems")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT               OUString("MergePoint")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND             OUString("MergeCommand")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMANDPARAMETER    OUString("MergeCommandParameter")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK            OUString("MergeFallback")
+#define PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT             OUString("MergeContext")
+#define PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS           OUString("StatusBarItems")
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL               0
