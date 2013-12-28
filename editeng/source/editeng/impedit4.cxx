@@ -2278,7 +2278,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             const sal_Int32 nInvStart = pWrongList->GetInvalidStart();
             const sal_Int32 nInvEnd = pWrongList->GetInvalidEnd();
 
-            sal_uInt16 nWrongs = 0; // Lose control also in the paragraphs
             sal_Int32 nPaintFrom = -1;
             sal_Int32 nPaintTo = 0;
             bool bSimpleRepaint = true;
@@ -2316,7 +2315,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     if ( !xSpeller->isValid( aWord, GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
                     {
                         // Check if already marked correctly...
-                        nWrongs++;
                         const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
                         if ( !pWrongList->HasWrong( nWStart, nXEnd ) )
                         {
