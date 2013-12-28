@@ -18,11 +18,8 @@
  */
 
 #include "dlg_InsertErrorBars.hxx"
-#include "dlg_InsertErrorBars.hrc"
 #include "res_ErrorBar.hxx"
-#include "ResourceIds.hrc"
 #include "ResId.hxx"
-#include "Strings.hrc"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ChartModelHelper.hxx"
 #include "ObjectIdentifier.hxx"
@@ -43,18 +40,16 @@ namespace chart
 InsertErrorBarsDialog::InsertErrorBarsDialog(
     Window* pParent, const SfxItemSet& rMyAttrs,
     const uno::Reference< chart2::XChartDocument > & xChartDocument,
-    oldErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
-        ModalDialog( pParent, SchResId( DLG_DATA_YERRORBAR )),
+    ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
+        ModalDialog( pParent
+        ,"dlg_InsertErrorBars"
+        ,"modules/schart/ui/dlg_InsertErrorBars.ui"),
         rInAttrs( rMyAttrs ),
-        aBtnOK( this, SchResId( BTN_OK )),
-        aBtnCancel( this, SchResId( BTN_CANCEL )),
-        aBtnHelp( this, SchResId( BTN_HELP )),
-        m_apErrorBarResources( new oldErrorBarResources(
+        m_apErrorBarResources( new ErrorBarResources(
                                    this, this, rInAttrs,
                                    /* bNoneAvailable = */ true, eType ))
 {
-    FreeResource();
-    ObjectType objType = eType == oldErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
+    ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
     this->SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
 

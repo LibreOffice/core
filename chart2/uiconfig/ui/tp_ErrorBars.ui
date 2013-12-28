@@ -6,12 +6,12 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkImage" id="imageRANGE_SELECT_POSITIVE">
+  <object class="GtkImage" id="imageRANGE_SELECT_NEG">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
-  <object class="GtkImage" id="imageRANGE_SELECT_NEG">
+  <object class="GtkImage" id="imageRANGE_SELECT_POSITIVE">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">chart2/res/selectrange.png</property>
@@ -416,6 +416,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Select data range</property>
                         <property name="image">imageRANGE_SELECT_POSITIVE</property>
                       </object>
                       <packing>
