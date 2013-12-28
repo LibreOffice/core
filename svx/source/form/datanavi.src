@@ -307,199 +307,6 @@ ErrorBox RID_ERR_EMPTY_SUBMISSIONNAME
     Message [ en-US ] = "The submission must have a name." ;
 };
 
-ModalDialog RID_SVXDLG_ADD_DATAITEM
-{
-    HelpID = HID_XFORMS_ADDDATAITEM_DLG ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 180 , 186 ) ;
-    Moveable = TRUE ;
-    FixedLine FL_ITEM
-    {
-        Pos = MAP_APPFONT ( 4 , 3 ) ;
-        Size = MAP_APPFONT ( 172 , 8 ) ;
-        Text [ en-US ] = "Item" ;
-    };
-    FixedText FT_NAME
-    {
-        Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 69 , 8 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "~Name" ;
-    };
-    Edit ED_NAME
-    {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_NAME";
-        Pos = MAP_APPFONT ( 78 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 12 ) ;
-        Border = TRUE ;
-    };
-    FixedText FT_DEFAULT
-    {
-        Pos = MAP_APPFONT ( 6 , 30 ) ;
-        Size = MAP_APPFONT ( 69 , 8 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "~Default Value" ;
-    };
-    Edit ED_DEFAULT
-    {
-        HelpID = "svx:Edit:RID_SVXDLG_ADD_DATAITEM:ED_DEFAULT";
-        Pos = MAP_APPFONT ( 78 , 29 ) ;
-        Size = MAP_APPFONT ( 96 , 12 ) ;
-        Border = TRUE ;
-    };
-    PushButton PB_DEFAULT
-    {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_DEFAULT";
-        Pos = MAP_APPFONT ( 160 , 29 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-        Text = "..." ;
-    };
-    FixedLine FL_SETTINGS
-    {
-        Pos = MAP_APPFONT ( 4 , 44 ) ;
-        Size = MAP_APPFONT ( 172 , 8 ) ;
-        Text [ en-US ] = "Settings" ;
-    };
-    FixedText FT_DATATYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 69 , 8 ) ;
-        LeftLabel = TRUE ;
-        Text [ en-US ] = "~Data Type" ;
-    };
-    ListBox LB_DATATYPE
-    {
-        HelpID = "svx:ListBox:RID_SVXDLG_ADD_DATAITEM:LB_DATATYPE";
-        Pos = MAP_APPFONT ( 78 , 55 ) ;
-        Size = MAP_APPFONT ( 96 , 45 ) ;
-        Border = TRUE ;
-        DropDown = TRUE;
-    };
-    CheckBox CB_REQUIRED
-    {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_REQUIRED";
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Required" ;
-    };
-    PushButton PB_REQUIRED
-    {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_REQUIRED";
-        Pos = MAP_APPFONT ( 78 , 70 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Condition" ;
-    };
-    CheckBox CB_RELEVANT
-    {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_RELEVANT";
-        Pos = MAP_APPFONT ( 6 , 89 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "R~elevant" ;
-    };
-    PushButton PB_RELEVANT
-    {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_RELEVANT";
-        Pos = MAP_APPFONT ( 78 , 87 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Condition" ;
-    };
-    CheckBox CB_CONSTRAINT
-    {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CONSTRAINT";
-        Pos = MAP_APPFONT ( 6 , 106 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Constraint" ;
-    };
-    PushButton PB_CONSTRAINT
-    {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CONSTRAINT";
-        Pos = MAP_APPFONT ( 78 , 104 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Condition" ;
-    };
-    CheckBox CB_READONLY
-    {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_READONLY";
-        Pos = MAP_APPFONT ( 6 , 123 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Read-~only" ;
-    };
-    PushButton PB_READONLY
-    {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_READONLY";
-        Pos = MAP_APPFONT ( 78 , 121 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Condition" ;
-    };
-    CheckBox CB_CALCULATE
-    {
-        HelpID = "svx:CheckBox:RID_SVXDLG_ADD_DATAITEM:CB_CALCULATE";
-        Pos = MAP_APPFONT ( 6 , 140 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Calc~ulate" ;
-    };
-    PushButton PB_CALCULATE
-    {
-        HelpID = "svx:PushButton:RID_SVXDLG_ADD_DATAITEM:PB_CALCULATE";
-        Pos = MAP_APPFONT ( 78 , 138 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Condition" ;
-    };
-    FixedLine FL_DATANAV_BTN
-    {
-        Pos = MAP_APPFONT ( 4 , 155 ) ;
-        Size = MAP_APPFONT ( 172 , 8 ) ;
-    };
-    OKButton BTN_DATANAV_OK
-    {
-        Pos = MAP_APPFONT ( 15 , 166 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_DATANAV_ESC
-    {
-        Pos = MAP_APPFONT ( 68 , 166 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_DATANAV_HELP
-    {
-        Pos = MAP_APPFONT ( 124 , 166 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    String STR_FIXEDLINE_ELEMENT
-    {
-        Text [ en-US ] = "Element" ;
-    };
-    String STR_FIXEDLINE_ATTRIBUTE
-    {
-        Text [ en-US ] = "Attribute" ;
-    };
-    String STR_FIXEDLINE_BINDING
-    {
-        Text [ en-US ] = "Binding" ;
-    };
-    String STR_FIXEDTEXT_BINDING
-    {
-        Text [ en-US ] = "Binding expression" ;
-    };
-};
-
 Menu RID_MENU_DATANAVIGATOR
 {
     ItemList =
@@ -742,81 +549,120 @@ String RID_STR_DATANAV_SUBM_PARENT
 {
     Text [ en-US ] = "Submission: " ;
 };
+
 String RID_STR_DATANAV_SUBM_ID
 {
     Text [ en-US ] = "ID: " ;
 };
+
 String RID_STR_DATANAV_SUBM_BIND
 {
     Text [ en-US ] = "Binding: " ;
 };
+
 String RID_STR_DATANAV_SUBM_REF
 {
     Text [ en-US ] = "Reference: " ;
 };
+
 String RID_STR_DATANAV_SUBM_ACTION
 {
     Text [ en-US ] = "Action: " ;
 };
+
 String RID_STR_DATANAV_SUBM_METHOD
 {
     Text [ en-US ] = "Method: " ;
 };
+
 String RID_STR_DATANAV_SUBM_REPLACE
 {
     Text [ en-US ] = "Replace: " ;
 };
+
 String RID_STR_DATANAV_ADD_ELEMENT
 {
     Text [ en-US ] = "Add Element" ;
 };
+
 String RID_STR_DATANAV_EDIT_ELEMENT
 {
     Text [ en-US ] = "Edit Element" ;
 };
+
 String RID_STR_DATANAV_REMOVE_ELEMENT
 {
     Text [ en-US ] = "Delete Element" ;
 };
+
 String RID_STR_DATANAV_ADD_ATTRIBUTE
 {
     Text [ en-US ] = "Add Attribute" ;
 };
+
 String RID_STR_DATANAV_EDIT_ATTRIBUTE
 {
     Text [ en-US ] = "Edit Attribute" ;
 };
+
 String RID_STR_DATANAV_REMOVE_ATTRIBUTE
 {
     Text [ en-US ] = "Delete Attribute" ;
 };
+
 String RID_STR_DATANAV_ADD_BINDING
 {
     Text [ en-US ] = "Add Binding" ;
 };
+
 String RID_STR_DATANAV_EDIT_BINDING
 {
     Text [ en-US ] = "Edit Binding" ;
 };
+
 String RID_STR_DATANAV_REMOVE_BINDING
 {
     Text [ en-US ] = "Delete Binding" ;
 };
+
 String RID_STR_DATANAV_ADD_SUBMISSION
 {
     Text [ en-US ] = "Add Submission" ;
 };
+
 String RID_STR_DATANAV_EDIT_SUBMISSION
 {
     Text [ en-US ] = "Edit Submission" ;
 };
+
 String RID_STR_DATANAV_REMOVE_SUBMISSION
 {
     Text [ en-US ] = "Delete Submission" ;
 };
+
 String RID_STR_DATANAV_LINKWARN_BUTTON
 {
     Text [ en-US ] = "~Edit" ;
+};
+
+String RID_STR_ELEMENT
+{
+    Text [ en-US ] = "Element" ;
+};
+
+String RID_STR_ATTRIBUTE
+{
+    Text [ en-US ] = "Attribute" ;
+};
+
+String RID_STR_BINDING
+{
+    Text [ en-US ] = "Binding" ;
+};
+
+String RID_STR_BINDING_EXPR
+{
+    Text [ en-US ] = "Binding expression" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2280,47 +2280,38 @@ namespace svxform
     // class AddDataItemDialog
     //========================================================================
 
-    AddDataItemDialog::AddDataItemDialog(
-        Window* pParent, ItemNode* _pNode,
-        const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper ) :
-
-        ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_DATAITEM ) ),
-
-        m_aItemFL       ( this, SVX_RES( FL_ITEM ) ),
-        m_aNameFT       ( this, SVX_RES( FT_NAME ) ),
-        m_aNameED       ( this, SVX_RES( ED_NAME ) ),
-        m_aDefaultFT    ( this, SVX_RES( FT_DEFAULT ) ),
-        m_aDefaultED    ( this, SVX_RES( ED_DEFAULT ) ),
-        m_aDefaultBtn   ( this, SVX_RES( PB_DEFAULT ) ),
-        m_aSettingsFL   ( this, SVX_RES( FL_SETTINGS ) ),
-        m_aDataTypeFT   ( this, SVX_RES( FT_DATATYPE ) ),
-        m_aDataTypeLB   ( this, SVX_RES( LB_DATATYPE ) ),
-        m_aRequiredCB   ( this, SVX_RES( CB_REQUIRED ) ),
-        m_aRequiredBtn  ( this, SVX_RES( PB_REQUIRED ) ),
-        m_aRelevantCB   ( this, SVX_RES( CB_RELEVANT ) ),
-        m_aRelevantBtn  ( this, SVX_RES( PB_RELEVANT ) ),
-        m_aConstraintCB ( this, SVX_RES( CB_CONSTRAINT ) ),
-        m_aConstraintBtn( this, SVX_RES( PB_CONSTRAINT ) ),
-        m_aReadonlyCB   ( this, SVX_RES( CB_READONLY ) ),
-        m_aReadonlyBtn  ( this, SVX_RES( PB_READONLY ) ),
-        m_aCalculateCB  ( this, SVX_RES( CB_CALCULATE ) ),
-        m_aCalculateBtn ( this, SVX_RES( PB_CALCULATE ) ),
-        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
-
-        m_xUIHelper     ( _rUIHelper ),
-        m_pItemNode     ( _pNode ),
-        m_eItemType     ( DITNone ),
-        m_sFL_Element   ( SVX_RESSTR( STR_FIXEDLINE_ELEMENT ) ),
-        m_sFL_Attribute ( SVX_RESSTR( STR_FIXEDLINE_ATTRIBUTE ) ),
-        m_sFL_Binding   ( SVX_RESSTR( STR_FIXEDLINE_BINDING ) ),
-        m_sFT_BindingExp( SVX_RESSTR( STR_FIXEDTEXT_BINDING ) )
-
+    AddDataItemDialog::AddDataItemDialog(Window* pParent, ItemNode* _pNode,
+        const Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper)
+        : ModalDialog(pParent, "AddDataItemDialog" , "svx/ui/adddataitemdialog.ui")
+        , m_xUIHelper(_rUIHelper)
+        , m_pItemNode(_pNode)
+        , m_eItemType(DITNone)
+        , m_sFL_Element(SVX_RESSTR(RID_STR_ELEMENT))
+        , m_sFL_Attribute(SVX_RESSTR(RID_STR_ATTRIBUTE))
+        , m_sFL_Binding(SVX_RESSTR(RID_STR_BINDING))
+        , m_sFT_BindingExp(SVX_RESSTR(RID_STR_BINDING_EXPR))
     {
-        FreeResource();
-        m_aDataTypeLB.SetDropDownLineCount( 10 );
+        get(m_pItemFrame, "itemframe");
+        get(m_pNameFT, "nameft");
+        get(m_pNameED, "name");
+        get(m_pDefaultFT, "valueft");
+        get(m_pDefaultED, "value");
+        get(m_pDefaultBtn, "browse");
+        get(m_pSettingsFrame, "settingsframe");
+        get(m_pDataTypeFT, "datatypeft");
+        get(m_pDataTypeLB, "datatype");
+        get(m_pRequiredCB, "required");
+        get(m_pRequiredBtn, "requiredcond");
+        get(m_pRelevantCB, "relevant");
+        get(m_pRelevantBtn, "relevantcond");
+        get(m_pConstraintCB, "constraint");
+        get(m_pConstraintBtn, "constraintcond");
+        get(m_pReadonlyCB, "readonly");
+        get(m_pReadonlyBtn, "readonlycond");
+        get(m_pCalculateCB, "calculate");
+        get(m_pCalculateBtn, "calculatecond");
+        get(m_pOKBtn, "ok");
+        m_pDataTypeLB->SetDropDownLineCount( 10 );
 
         InitDialog();
         InitFromNode();
@@ -2342,7 +2333,7 @@ namespace svxform
                     if ( xBindings.is() )
                         xBindings->remove( makeAny( m_xTempBinding ) );
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                     SAL_WARN( "svx.form", "AddDataItemDialog::Dtor(): exception caught" );
                 }
@@ -2359,24 +2350,24 @@ namespace svxform
     IMPL_LINK( AddDataItemDialog, CheckHdl, CheckBox *, pBox )
     {
         // Condition buttons are only enable if their check box is checked
-        m_aReadonlyBtn.Enable( m_aReadonlyCB.IsChecked() );
-        m_aRequiredBtn.Enable( m_aRequiredCB.IsChecked() );
-        m_aRelevantBtn.Enable( m_aRelevantCB.IsChecked() );
-        m_aConstraintBtn.Enable( m_aConstraintCB.IsChecked() );
-        m_aCalculateBtn.Enable( m_aCalculateCB.IsChecked() );
+        m_pReadonlyBtn->Enable( m_pReadonlyCB->IsChecked() );
+        m_pRequiredBtn->Enable( m_pRequiredCB->IsChecked() );
+        m_pRelevantBtn->Enable( m_pRelevantCB->IsChecked() );
+        m_pConstraintBtn->Enable( m_pConstraintCB->IsChecked() );
+        m_pCalculateBtn->Enable( m_pCalculateCB->IsChecked() );
 
         if ( pBox && m_xTempBinding.is() )
         {
             OUString sTemp, sPropName;
-            if ( &m_aRequiredCB == pBox )
+            if ( m_pRequiredCB == pBox )
                 sPropName = PN_REQUIRED_EXPR;
-            else if ( &m_aRelevantCB == pBox )
+            else if ( m_pRelevantCB == pBox )
                 sPropName = PN_RELEVANT_EXPR;
-            else if ( &m_aConstraintCB == pBox )
+            else if ( m_pConstraintCB == pBox )
                 sPropName = PN_CONSTRAINT_EXPR;
-            else if ( &m_aReadonlyCB == pBox )
+            else if ( m_pReadonlyCB == pBox )
                 sPropName = PN_READONLY_EXPR;
-            else if ( &m_aCalculateCB == pBox )
+            else if ( m_pCalculateCB == pBox )
                 sPropName = PN_CALCULATE_EXPR;
             bool bIsChecked = ( pBox->IsChecked() != sal_False );
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
@@ -2394,23 +2385,23 @@ namespace svxform
     IMPL_LINK( AddDataItemDialog, ConditionHdl, PushButton *, pBtn )
     {
         OUString sTemp, sPropName;
-        if ( &m_aDefaultBtn == pBtn )
+        if ( m_pDefaultBtn == pBtn )
             sPropName = PN_BINDING_EXPR;
-        else if ( &m_aRequiredBtn == pBtn )
+        else if ( m_pRequiredBtn == pBtn )
             sPropName = PN_REQUIRED_EXPR;
-        else if ( &m_aRelevantBtn == pBtn )
+        else if ( m_pRelevantBtn == pBtn )
             sPropName = PN_RELEVANT_EXPR;
-        else if ( &m_aConstraintBtn == pBtn )
+        else if ( m_pConstraintBtn == pBtn )
             sPropName = PN_CONSTRAINT_EXPR;
-        else if ( &m_aReadonlyBtn == pBtn )
+        else if (m_pReadonlyBtn == pBtn)
             sPropName = PN_READONLY_EXPR;
-        else if ( &m_aCalculateBtn == pBtn )
+        else if (m_pCalculateBtn == pBtn)
             sPropName = PN_CALCULATE_EXPR;
         AddConditionDialog aDlg( this, sPropName, m_xTempBinding );
-        bool bIsDefBtn = ( &m_aDefaultBtn == pBtn );
+        bool bIsDefBtn = ( m_pDefaultBtn == pBtn );
         OUString sCondition;
         if ( bIsDefBtn )
-            sCondition = m_aDefaultED.GetText();
+            sCondition = m_pDefaultED->GetText();
         else
         {
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
@@ -2424,7 +2415,7 @@ namespace svxform
         {
             OUString sNewCondition = aDlg.GetCondition();
             if ( bIsDefBtn )
-                m_aDefaultED.SetText( sNewCondition );
+                m_pDefaultED->SetText( sNewCondition );
             else
             {
 
@@ -2474,7 +2465,7 @@ namespace svxform
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
         bool bIsHandleText = ( DITText == m_eItemType );
-        OUString sNewName( m_aNameED.GetText() );
+        OUString sNewName( m_pNameED->GetText() );
 
         if ( ( !bIsHandleBinding && !bIsHandleText && !m_xUIHelper->isValidXMLName( sNewName ) ) ||
              ( bIsHandleBinding && sNewName.isEmpty() ) )
@@ -2488,7 +2479,7 @@ namespace svxform
             return 0;
         }
 
-        OUString sDataType( m_aDataTypeLB.GetSelectEntry() );
+        OUString sDataType( m_pDataTypeLB->GetSelectEntry() );
         m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, makeAny( sDataType ) );
 
         if ( bIsHandleBinding )
@@ -2497,9 +2488,9 @@ namespace svxform
             copyPropSet( m_xTempBinding, m_pItemNode->m_xPropSet );
             try
             {
-                OUString sValue = m_aNameED.GetText();
+                OUString sValue = m_pNameED->GetText();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_ID, makeAny( sValue ) );
-                sValue = m_aDefaultED.GetText();
+                sValue = m_pDefaultED->GetText();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, makeAny( sValue ) );
             }
             catch ( Exception& )
@@ -2514,12 +2505,12 @@ namespace svxform
             try
             {
                 if ( bIsHandleText )
-                    m_xUIHelper->setNodeValue( m_pItemNode->m_xNode, m_aDefaultED.GetText() );
+                    m_xUIHelper->setNodeValue( m_pItemNode->m_xNode, m_pDefaultED->GetText() );
                 else
                 {
                     Reference< css::xml::dom::XNode > xNewNode =
-                        m_xUIHelper->renameNode( m_pItemNode->m_xNode, m_aNameED.GetText() );
-                    m_xUIHelper->setNodeValue( xNewNode, m_aDefaultED.GetText() );
+                        m_xUIHelper->renameNode( m_pItemNode->m_xNode, m_pNameED->GetText() );
+                    m_xUIHelper->setNodeValue( xNewNode, m_pDefaultED->GetText() );
                     m_pItemNode->m_xNode = xNewNode;
                 }
             }
@@ -2538,21 +2529,21 @@ namespace svxform
     {
         // set handler
         Link aLink = LINK( this, AddDataItemDialog, CheckHdl );
-        m_aRequiredCB.SetClickHdl( aLink );
-        m_aRelevantCB.SetClickHdl( aLink );
-        m_aConstraintCB.SetClickHdl( aLink );
-        m_aReadonlyCB.SetClickHdl( aLink );
-        m_aCalculateCB.SetClickHdl( aLink );
+        m_pRequiredCB->SetClickHdl( aLink );
+        m_pRelevantCB->SetClickHdl( aLink );
+        m_pConstraintCB->SetClickHdl( aLink );
+        m_pReadonlyCB->SetClickHdl( aLink );
+        m_pCalculateCB->SetClickHdl( aLink );
 
         aLink = LINK( this, AddDataItemDialog, ConditionHdl );
-        m_aDefaultBtn.SetClickHdl( aLink );
-        m_aRequiredBtn.SetClickHdl( aLink );
-        m_aRelevantBtn.SetClickHdl( aLink );
-        m_aConstraintBtn.SetClickHdl( aLink );
-        m_aReadonlyBtn.SetClickHdl( aLink );
-        m_aCalculateBtn.SetClickHdl( aLink );
+        m_pDefaultBtn->SetClickHdl( aLink );
+        m_pRequiredBtn->SetClickHdl( aLink );
+        m_pRelevantBtn->SetClickHdl( aLink );
+        m_pConstraintBtn->SetClickHdl( aLink );
+        m_pReadonlyBtn->SetClickHdl( aLink );
+        m_pCalculateBtn->SetClickHdl( aLink );
 
-        m_aOKBtn.SetClickHdl( LINK( this, AddDataItemDialog, OKHdl ) );
+        m_pOKBtn->SetClickHdl( LINK( this, AddDataItemDialog, OKHdl ) );
     }
 
     //------------------------------------------------------------------------
@@ -2605,9 +2596,9 @@ namespace svxform
                     if ( m_eItemType != DITText )
                     {
                         OUString sName( m_xUIHelper->getNodeName( m_pItemNode->m_xNode ) );
-                        m_aNameED.SetText( sName );
+                        m_pNameED->SetText( sName );
                     }
-                    m_aDefaultED.SetText( m_pItemNode->m_xNode->getNodeValue() );
+                    m_pDefaultED->SetText( m_pItemNode->m_xNode->getNodeValue() );
                 }
                 catch( Exception& )
                 {
@@ -2639,14 +2630,14 @@ namespace svxform
                     if ( xInfo->hasPropertyByName( PN_BINDING_ID ) )
                     {
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                        m_aNameED.SetText( sTemp );
+                        m_pNameED->SetText( sTemp );
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                        m_aDefaultED.SetText( sTemp );
+                        m_pDefaultED->SetText( sTemp );
                     }
                     else if ( xInfo->hasPropertyByName( PN_SUBMISSION_BIND ) )
                     {
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                        m_aNameED.SetText( sTemp );
+                        m_pNameED->SetText( sTemp );
                     }
                 }
                 catch( Exception& )
@@ -2655,12 +2646,12 @@ namespace svxform
                 }
 
                 Size a3and1Sz = LogicToPixel( Size( 3, 1 ), MAP_APPFONT );
-                Size aNewSz = m_aDefaultED.GetSizePixel();
-                Point aNewPnt = m_aDefaultED.GetPosPixel();
+                Size aNewSz = m_pDefaultED->GetSizePixel();
+                Point aNewPnt = m_pDefaultED->GetPosPixel();
                 aNewPnt.Y() += a3and1Sz.Height();
-                aNewSz.Width() -= ( m_aDefaultBtn.GetSizePixel().Width() + a3and1Sz.Width() );
-                m_aDefaultED.SetPosSizePixel( aNewPnt, aNewSz );
-                m_aDefaultBtn.Show();
+                aNewSz.Width() -= ( m_pDefaultBtn->GetSizePixel().Width() + a3and1Sz.Width() );
+                m_pDefaultED->SetPosSizePixel( aNewPnt, aNewSz );
+                m_pDefaultBtn->Show();
             }
 
             if ( m_xTempBinding.is() )
@@ -2670,21 +2661,21 @@ namespace svxform
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_aRequiredCB.Check( sal_True );
+                        m_pRequiredCB->Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_aRelevantCB.Check( sal_True );
+                        m_pRelevantCB->Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_aConstraintCB.Check( sal_True );
+                        m_pConstraintCB->Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_aReadonlyCB.Check( sal_True );
+                        m_pReadonlyCB->Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_aCalculateCB.Check( sal_True );
+                        m_pCalculateCB->Check( sal_True );
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                     SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
                 }
@@ -2693,36 +2684,9 @@ namespace svxform
 
         if ( DITText == m_eItemType )
         {
-            long nDelta = m_aButtonsFL.GetPosPixel().Y() - m_aSettingsFL.GetPosPixel().Y();
-            size_t i = 0;
-            Window* pWinsForHide[] =
-            {
-                &m_aSettingsFL, &m_aDataTypeFT, &m_aDataTypeLB, &m_aRequiredCB,
-                &m_aRequiredBtn, &m_aRelevantCB, &m_aRelevantBtn, &m_aConstraintCB,
-                &m_aConstraintBtn, &m_aReadonlyCB, &m_aReadonlyBtn, &m_aCalculateCB,
-                &m_aCalculateBtn
-            };
-            Window** pCurrent = pWinsForHide;
-            for ( ; i < sizeof( pWinsForHide ) / sizeof( pWinsForHide[ 0 ] ); ++i, ++pCurrent )
-                (*pCurrent)->Hide();
-
-            Window* pWinsForMove[] =
-            {
-                &m_aButtonsFL, &m_aOKBtn, &m_aEscBtn, &m_aHelpBtn
-            };
-            pCurrent = pWinsForMove;
-            for ( i = 0; i < sizeof( pWinsForMove ) / sizeof( pWinsForMove[ 0 ] ); ++i, ++pCurrent )
-            {
-                Point aNewPos = (*pCurrent)->GetPosPixel();
-                aNewPos.Y() -= nDelta;
-                (*pCurrent)->SetPosPixel( aNewPos );
-            }
-            Size aNewWinSz = GetSizePixel();
-            aNewWinSz.Height() -= nDelta;
-            SetSizePixel( aNewWinSz );
-
-            m_aNameFT.Disable();
-            m_aNameED.Disable();
+            m_pSettingsFrame->Hide();
+            m_pNameFT->Disable();
+            m_pNameED->Disable();
         }
     }
 
@@ -2744,7 +2708,7 @@ namespace svxform
                         sal_Int32 i, nCount = aNameList.getLength();
                         OUString* pNames = aNameList.getArray();
                         for ( i = 0; i < nCount; ++i )
-                            m_aDataTypeLB.InsertEntry( pNames[i] );
+                            m_pDataTypeLB->InsertEntry( pNames[i] );
                     }
 
                     if ( m_xTempBinding.is() )
@@ -2752,10 +2716,10 @@ namespace svxform
                         OUString sTemp;
                         if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                         {
-                            sal_uInt16 nPos = m_aDataTypeLB.GetEntryPos( sTemp );
+                            sal_uInt16 nPos = m_pDataTypeLB->GetEntryPos( sTemp );
                             if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-                                nPos = m_aDataTypeLB.InsertEntry( sTemp );
-                            m_aDataTypeLB.SelectEntryPos( nPos );
+                                nPos = m_pDataTypeLB->InsertEntry( sTemp );
+                            m_pDataTypeLB->SelectEntryPos( nPos );
                         }
                     }
                 }
@@ -2782,7 +2746,7 @@ namespace svxform
             case DITBinding :
             {
                 sText = m_sFL_Binding;
-                m_aDefaultFT.SetText( m_sFT_BindingExp );
+                m_pDefaultFT->SetText( m_sFT_BindingExp );
                 break;
             }
 
@@ -2792,7 +2756,7 @@ namespace svxform
             }
         }
 
-        m_aItemFL.SetText( sText );
+        m_pItemFrame->set_label(sText);
     }
 
     //========================================================================

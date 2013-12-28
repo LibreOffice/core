@@ -21,6 +21,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/msgbox.hxx>
@@ -408,32 +409,30 @@ namespace svxform
     {
     private:
 
-        FixedLine           m_aItemFL;
-        FixedText           m_aNameFT;
-        Edit                m_aNameED;
-        FixedText           m_aDefaultFT;
-        Edit                m_aDefaultED;
-        PushButton          m_aDefaultBtn;
+        VclFrame*           m_pItemFrame;
+        FixedText*          m_pNameFT;
+        Edit*               m_pNameED;
+        FixedText*          m_pDefaultFT;
+        Edit*               m_pDefaultED;
+        PushButton*         m_pDefaultBtn;
 
-        FixedLine           m_aSettingsFL;
-        FixedText           m_aDataTypeFT;
-        ListBox             m_aDataTypeLB;
+        VclFrame*           m_pSettingsFrame;
 
-        CheckBox            m_aRequiredCB;
-        PushButton          m_aRequiredBtn;
-        CheckBox            m_aRelevantCB;
-        PushButton          m_aRelevantBtn;
-        CheckBox            m_aConstraintCB;
-        PushButton          m_aConstraintBtn;
-        CheckBox            m_aReadonlyCB;
-        PushButton          m_aReadonlyBtn;
-        CheckBox            m_aCalculateCB;
-        PushButton          m_aCalculateBtn;
+        FixedText*          m_pDataTypeFT;
+        ListBox*            m_pDataTypeLB;
 
-        FixedLine           m_aButtonsFL;
-        OKButton            m_aOKBtn;
-        CancelButton        m_aEscBtn;
-        HelpButton          m_aHelpBtn;
+        CheckBox*           m_pRequiredCB;
+        PushButton*         m_pRequiredBtn;
+        CheckBox*           m_pRelevantCB;
+        PushButton*         m_pRelevantBtn;
+        CheckBox*           m_pConstraintCB;
+        PushButton*         m_pConstraintBtn;
+        CheckBox*           m_pReadonlyCB;
+        PushButton*         m_pReadonlyBtn;
+        CheckBox*           m_pCalculateCB;
+        PushButton*         m_pCalculateBtn;
+
+        OKButton*           m_pOKBtn;
 
         XFormsUIHelper1_ref m_xUIHelper;
         XPropertySet_ref    m_xBinding;

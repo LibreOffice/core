@@ -61,7 +61,6 @@
 
 // Dialog-Id's -----------------------------------------------------------
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
-#define RID_SVXDLG_ADD_DATAITEM                     (RID_FORMS_START + 12)
 #define RID_SVXDLG_ADD_CONDITION                    (RID_FORMS_START + 13)
 #define RID_SVXDLG_NAMESPACE_ITEM                   (RID_FORMS_START + 14)
 
@@ -178,6 +177,10 @@
 #define RID_STR_PROPTITLE_SPINBUTTON                (RID_FORMS_START + 100)
 #define RID_STR_PROPTITLE_HIDDEN                    (RID_FORMS_START + 101)
     // FREE
+#define RID_STR_ELEMENT                             (RID_FORMS_START + 114)
+#define RID_STR_ATTRIBUTE                           (RID_FORMS_START + 115)
+#define RID_STR_BINDING                             (RID_FORMS_START + 116)
+#define RID_STR_BINDING_EXPR                        (RID_FORMS_START + 117)
 #define RID_STR_METHOD_POST                         (RID_FORMS_START + 118)
 #define RID_STR_METHOD_PUT                          (RID_FORMS_START + 119)
 #define RID_STR_METHOD_GET                          (RID_FORMS_START + 120)

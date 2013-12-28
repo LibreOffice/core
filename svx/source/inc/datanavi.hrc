@@ -83,32 +83,6 @@
 #define IID_TEXT                5
 #define IID_OTHER               6
 
-// class AddDataItemDialog
-#define FL_ITEM                 10
-#define FT_NAME                 11
-#define ED_NAME                 12
-#define FT_DEFAULT              13
-#define ED_DEFAULT              14
-#define PB_DEFAULT              15
-#define FL_SETTINGS             16
-#define FT_DATATYPE             17
-#define LB_DATATYPE             18
-#define CB_REQUIRED             19
-#define PB_REQUIRED             20
-#define CB_RELEVANT             21
-#define PB_RELEVANT             22
-#define CB_CONSTRAINT           23
-#define PB_CONSTRAINT           24
-#define CB_READONLY             25
-#define PB_READONLY             26
-#define CB_CALCULATE            27
-#define PB_CALCULATE            28
-
-#define STR_FIXEDLINE_ELEMENT   10
-#define STR_FIXEDLINE_ATTRIBUTE 11
-#define STR_FIXEDLINE_BINDING   12
-#define STR_FIXEDTEXT_BINDING   13
-
 // class AddConditionDialog
 #define FT_CONDITION            10
 #define ED_CONDITION            11
