@@ -10,8 +10,9 @@
 #ifndef __SC_XMLSOURCEDLG_HXX__
 #define __SC_XMLSOURCEDLG_HXX__
 
-#include "vcl/button.hxx"
-#include "vcl/fixed.hxx"
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include "svtools/treelistbox.hxx"
 
 #include "expftext.hxx"
@@ -26,30 +27,19 @@ class ScDocument;
 class ScRange;
 class ScOrcusXMLContext;
 
-class ScXMLSourceTree : public SvTreeListBox
-{
-public:
-    ScXMLSourceTree(Window* pParent, const ResId& rResId);
-};
-
 class ScXMLSourceDlg : public ScAnyRefDlg
 {
-    FixedLine maFlSourceFile;
-    ImageButton maBtnSelectSource;
-    ScExpandedFixedText maFtSourceFile;
+    PushButton* mpBtnSelectSource;
+    FixedText* mpFtSourceFile;
 
-    FixedLine maFtMapXmlDoc;
+    VclContainer* mpMapGrid;
 
-    FixedText maFtMappedCellTitle;
+    SvTreeListBox* mpLbTree;
+    formula::RefEdit* mpRefEdit;
+    formula::RefButton* mpRefBtn;
 
-    ScXMLSourceTree maLbTree;
-    formula::RefEdit   maRefEdit;
-    formula::RefButton maRefBtn;
-
-    OKButton maBtnOk;
-    CancelButton maBtnCancel;
-
-    Image maImgFileOpen;
+    PushButton* mpBtnOk;
+    CancelButton* mpBtnCancel;
 
     OUString maSrcPath;
 
@@ -68,7 +58,6 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 public:
     ScXMLSourceDlg(
         SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc);
-    virtual ~ScXMLSourceDlg();
 
     virtual sal_Bool IsRefInputMode() const;
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc);

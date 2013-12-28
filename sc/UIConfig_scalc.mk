@@ -152,6 +152,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/ungroupdialog \
 	sc/uiconfig/scalc/ui/validationdialog \
 	sc/uiconfig/scalc/ui/validationhelptabpage \
+	sc/uiconfig/scalc/ui/xmlsourcedialog \
 ))
 
 # vim: set noet sw=4 ts=4:

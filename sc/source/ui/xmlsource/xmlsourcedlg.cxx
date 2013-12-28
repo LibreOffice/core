@@ -8,8 +8,7 @@
  */
 
 #include "xmlsourcedlg.hxx"
-#include "xmlsourcedlg.hrc"
-
+#include "sc.hrc"
 #include "scresid.hxx"
 #include "document.hxx"
 #include "orcusfilters.hxx"
@@ -67,61 +66,56 @@ OUString getXPath(
 
 }
 
-ScXMLSourceTree::ScXMLSourceTree(Window* pParent, const ResId& rResId) :
-    SvTreeListBox(pParent, rResId) {}
-
 ScXMLSourceDlg::ScXMLSourceDlg(
-    SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc) :
-    ScAnyRefDlg(pB, pCW, pParent, RID_SCDLG_XML_SOURCE),
-    maFlSourceFile(this, ScResId(FL_SOURCE_FILE)),
-    maBtnSelectSource(this, ScResId(BTN_SELECT_SOURCE_FILE)),
-    maFtSourceFile(this, ScResId(FT_SOURCE_FILE)),
-    maFtMapXmlDoc(this, ScResId(FL_MAP_XML_TO_DOCUMENT)),
-    maFtMappedCellTitle(this, ScResId(FT_MAPPED_CELL_TITLE)),
-    maLbTree(this, ScResId(LB_SOURCE_TREE)),
-    maRefEdit(this, this, NULL, ScResId(ED_MAPPED_CELL)),
-    maRefBtn(this, ScResId(BTN_MAPPED_CELL), &maRefEdit, this),
-    maBtnOk(this, ScResId(BTN_OK)),
-    maBtnCancel(this, ScResId(BTN_CANCEL)),
-    maImgFileOpen(ScResId(IMG_FILE_OPEN)),
-    mpCurRefEntry(NULL),
-    mpDoc(pDoc),
-    mpActiveEdit(&maRefEdit),
-    mbDlgLostFocus(false)
+    SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc)
+    : ScAnyRefDlg(pB, pCW, pParent, "XMLSourceDialog",
+        "modules/scalc/ui/xmlsourcedialog.ui")
+    , mpCurRefEntry(NULL)
+    , mpDoc(pDoc)
+    , mbDlgLostFocus(false)
 {
+    get(mpBtnSelectSource, "selectsource");
+    get(mpFtSourceFile, "sourcefile");
+    get(mpMapGrid, "mapgrid");
+    get(mpLbTree, "tree");
+    Size aTreeSize(mpLbTree->LogicToPixel(Size(130, 120), MAP_APPFONT));
+    mpLbTree->set_width_request(aTreeSize.Width());
+    mpLbTree->set_height_request(aTreeSize.Height());
+    get(mpRefEdit, "edit");
+    mpRefEdit->SetReferences(this, NULL);
+    get(mpRefBtn, "ref");
+    mpRefBtn->SetReferences(this, mpRefEdit);
+    get(mpBtnCancel, "cancel");
+    get(mpBtnOk, "ok");
+
+    mpActiveEdit = mpRefEdit;
+
     maXMLParam.maImgElementDefault = Image(ScResId(IMG_ELEMENT_DEFAULT));
     maXMLParam.maImgElementRepeat = Image(ScResId(IMG_ELEMENT_REPEAT));
     maXMLParam.maImgAttribute = Image(ScResId(IMG_ELEMENT_ATTRIBUTE));
 
-    maBtnSelectSource.SetModeImage(maImgFileOpen);
-    FreeResource();
-
     Link aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
-    maBtnSelectSource.SetClickHdl(aBtnHdl);
-    maBtnOk.SetClickHdl(aBtnHdl);
-    maBtnCancel.SetClickHdl(aBtnHdl);
+    mpBtnSelectSource->SetClickHdl(aBtnHdl);
+    mpBtnOk->SetClickHdl(aBtnHdl);
+    mpBtnCancel->SetClickHdl(aBtnHdl);
 
     Link aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
-    maRefEdit.SetGetFocusHdl(aLink);
-    maRefBtn.SetGetFocusHdl(aLink);
+    mpRefEdit->SetGetFocusHdl(aLink);
+    mpRefBtn->SetGetFocusHdl(aLink);
     aLink = LINK(this, ScXMLSourceDlg, LoseFocusHdl);
-    maRefEdit.SetLoseFocusHdl(aLink);
-    maRefBtn.SetLoseFocusHdl(aLink);
+    mpRefEdit->SetLoseFocusHdl(aLink);
+    mpRefBtn->SetLoseFocusHdl(aLink);
 
     aLink = LINK(this, ScXMLSourceDlg, TreeItemSelectHdl);
-    maLbTree.SetSelectHdl(aLink);
+    mpLbTree->SetSelectHdl(aLink);
 
     aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
-    maRefEdit.SetModifyHdl(aLink);
+    mpRefEdit->SetModifyHdl(aLink);
 
-    maBtnOk.Disable();
+    mpBtnOk->Disable();
 
     SetNonLinkable();
-    maBtnSelectSource.GrabFocus(); // Initial focus is on the select source button.
-}
-
-ScXMLSourceDlg::~ScXMLSourceDlg()
-{
+    mpBtnSelectSource->GrabFocus(); // Initial focus is on the select source button.
 }
 
 sal_Bool ScXMLSourceDlg::IsRefInputMode() const
@@ -198,7 +192,7 @@ void ScXMLSourceDlg::SelectSourceFile()
 
     // There should only be one file returned from the file picker.
     maSrcPath = aFiles[0];
-    maFtSourceFile.SetText(maSrcPath);
+    mpFtSourceFile->SetText(maSrcPath);
     maHighlightedEntries.clear();
     LoadSourceFileStructure(maSrcPath);
 }
@@ -213,14 +207,14 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!mpXMLContext)
         return;
 
-    mpXMLContext->loadXMLStructure(maLbTree, maXMLParam);
+    mpXMLContext->loadXMLStructure(*mpLbTree, maXMLParam);
 }
 
 void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
 {
     mpActiveEdit = NULL;
-    if (pCtrl == &maRefEdit || pCtrl == &maRefBtn)
-        mpActiveEdit = &maRefEdit;
+    if (pCtrl == mpRefEdit || pCtrl == mpRefBtn)
+        mpActiveEdit = mpRefEdit;
 
     if (mpActiveEdit)
         mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
@@ -284,18 +278,18 @@ SvTreeListEntry* getReferenceEntry(SvTreeListBox& rTree, SvTreeListEntry* pCurEn
 
 void ScXMLSourceDlg::TreeItemSelected()
 {
-    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
+    SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
     if (!pEntry)
         return;
 
     if (!maHighlightedEntries.empty())
     {
         // Remove highlights from all previously highlighted entries (if any).
-        std::for_each(maHighlightedEntries.begin(), maHighlightedEntries.end(), UnhighlightEntry(maLbTree));
+        std::for_each(maHighlightedEntries.begin(), maHighlightedEntries.end(), UnhighlightEntry(*mpLbTree));
         maHighlightedEntries.clear();
     }
 
-    mpCurRefEntry = getReferenceEntry(maLbTree, pEntry);
+    mpCurRefEntry = getReferenceEntry(*mpLbTree, pEntry);
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
     OSL_ASSERT(pUserData);
@@ -304,10 +298,10 @@ void ScXMLSourceDlg::TreeItemSelected()
     if (rPos.IsValid())
     {
         OUString aStr(rPos.Format(SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
-        maRefEdit.SetRefString(aStr);
+        mpRefEdit->SetRefString(aStr);
     }
     else
-        maRefEdit.SetRefString(OUString());
+        mpRefEdit->SetRefString(OUString());
 
     switch (pUserData->meType)
     {
@@ -328,12 +322,12 @@ void ScXMLSourceDlg::TreeItemSelected()
 void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
 {
 
-    if (maLbTree.GetChildCount(&rEntry) > 0)
+    if (mpLbTree->GetChildCount(&rEntry) > 0)
     {
         // Only an element with no child elements (leaf element) can be linked.
         bool bHasChild = false;
         ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
-        for (SvTreeListEntry* pChild = maLbTree.FirstChild(&rEntry); pChild; pChild = maLbTree.NextSibling(pChild))
+        for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = mpLbTree->NextSibling(pChild))
         {
             pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
             OSL_ASSERT(pUserData);
@@ -384,13 +378,13 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
         return;
     }
 
-    SvViewDataEntry* p = maLbTree.GetViewDataEntry(&rEntry);
+    SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&rEntry);
     if (!p->IsHighlighted())
     {
         // Highlight the entry if not highlighted already.  This can happen
         // when the current entry is a child entry of a repeat element entry.
         p->SetHighlighted(true);
-        maLbTree.PaintEntry(&rEntry);
+        mpLbTree->PaintEntry(&rEntry);
         maHighlightedEntries.push_back(&rEntry);
     }
 
@@ -404,7 +398,7 @@ void ScXMLSourceDlg::AttributeSelected(SvTreeListEntry& rEntry)
     // repeat elements.  In attribute's case, it's okay to have the immediate
     // parent element linked (but not range-linked).
 
-    SvTreeListEntry* pParent = maLbTree.GetParent(&rEntry);
+    SvTreeListEntry* pParent = mpLbTree->GetParent(&rEntry);
     OSL_ASSERT(pParent); // attribute should have a parent element.
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
@@ -427,23 +421,17 @@ void ScXMLSourceDlg::AttributeSelected(SvTreeListEntry& rEntry)
 
 void ScXMLSourceDlg::SetNonLinkable()
 {
-    maFtMappedCellTitle.Disable();
-    maRefEdit.Disable();
-    maRefBtn.Disable();
+    mpMapGrid->Disable();
 }
 
 void ScXMLSourceDlg::SetSingleLinkable()
 {
-    maFtMappedCellTitle.Enable();
-    maRefEdit.Enable();
-    maRefBtn.Enable();
+    mpMapGrid->Enable();
 }
 
 void ScXMLSourceDlg::SetRangeLinkable()
 {
-    maFtMappedCellTitle.Enable();
-    maRefEdit.Enable();
-    maRefBtn.Enable();
+    mpMapGrid->Enable();
 }
 
 void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
@@ -454,9 +442,9 @@ void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
     {
         SvTreeListEntry& r = *it;
         SelectAllChildEntries(r); // select recursively.
-        SvViewDataEntry* p = maLbTree.GetViewDataEntry(&r);
+        SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&r);
         p->SetHighlighted(true);
-        maLbTree.PaintEntry(&r);
+        mpLbTree->PaintEntry(&r);
         maHighlightedEntries.push_back(&r);
     }
 }
@@ -464,7 +452,7 @@ void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
 bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
 {
     ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
-    SvTreeListEntry* pParent = maLbTree.GetParent(pEntry);
+    SvTreeListEntry* pParent = mpLbTree->GetParent(pEntry);
     while (pParent)
     {
         pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
@@ -479,7 +467,7 @@ bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
             // This is a repeat element.
             return true;
         }
-        pParent = maLbTree.GetParent(pParent);
+        pParent = mpLbTree->GetParent(pParent);
     }
     return false;
 }
@@ -487,7 +475,7 @@ bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
 bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
 {
     ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
-    for (SvTreeListEntry* pChild = maLbTree.FirstChild(pEntry); pChild; pChild = maLbTree.NextSibling(pChild))
+    for (SvTreeListEntry* pChild = mpLbTree->FirstChild(pEntry); pChild; pChild = mpLbTree->NextSibling(pChild))
     {
         pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
         OSL_ASSERT(pUserData);
@@ -567,7 +555,7 @@ void ScXMLSourceDlg::OkPressed()
         for (; it != itEnd; ++it)
         {
             const SvTreeListEntry& rEntry = **it;
-            OUString aPath = getXPath(maLbTree, rEntry, aParam.maNamespaces);
+            OUString aPath = getXPath(*mpLbTree, rEntry, aParam.maNamespaces);
             const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
 
             aParam.maCellLinks.push_back(
@@ -589,7 +577,7 @@ void ScXMLSourceDlg::OkPressed()
             aRangeLink.maPos = pUserData->maLinkedPos;
 
             // Go through all its child elements.
-            getFieldLinks(aRangeLink, aParam.maNamespaces, maLbTree, rEntry);
+            getFieldLinks(aRangeLink, aParam.maNamespaces, *mpLbTree, rEntry);
 
             aParam.maRangeLinks.push_back(aRangeLink);
         }
@@ -620,7 +608,7 @@ void ScXMLSourceDlg::CancelPressed()
 
 void ScXMLSourceDlg::RefEditModified()
 {
-    OUString aRefStr = maRefEdit.GetText();
+    OUString aRefStr = mpRefEdit->GetText();
 
     // Check if the address is valid.
     ScAddress aLinkedPos;
@@ -629,7 +617,7 @@ void ScXMLSourceDlg::RefEditModified()
 
     // TODO: For some unknown reason, setting the ref invalid will hide the text altogether.
     // Find out how to make this work.
-//  maRefEdit.SetRefValid(bValid);
+//  mpRefEdit->SetRefValid(bValid);
 
     if (!bValid)
         aLinkedPos.SetInvalid();
@@ -665,7 +653,7 @@ void ScXMLSourceDlg::RefEditModified()
 
     // Enable the import button only when at least one link exists.
     bool bHasLink = !maCellLinks.empty() || !maRangeLinks.empty();
-    maBtnOk.Enable(bHasLink);
+    mpBtnOk->Enable(bHasLink);
 }
 
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
@@ -682,11 +670,11 @@ IMPL_LINK(ScXMLSourceDlg, LoseFocusHdl, Control*, pCtrl)
 
 IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
 {
-    if (pBtn == &maBtnSelectSource)
+    if (pBtn == mpBtnSelectSource)
         SelectSourceFile();
-    else if (pBtn == &maBtnOk)
+    else if (pBtn == mpBtnOk)
         OkPressed();
-    else if (pBtn == &maBtnCancel)
+    else if (pBtn == mpBtnCancel)
         CancelPressed();
     return 0;
 }
