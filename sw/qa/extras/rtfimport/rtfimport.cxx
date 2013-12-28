@@ -1379,6 +1379,16 @@ DECLARE_RTFIMPORT_TEST(testCp1000016, "hello.rtf")
     CPPUNIT_ASSERT_EQUAL(false, bFound);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo65090, "fdo65090.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // The first row had 3 cells, instead of a horizontally merged one and a normal one (2 -> 1 separator).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
