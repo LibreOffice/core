@@ -39,7 +39,6 @@ $(eval $(call gb_SrsTarget_add_files,chart2/res,\
     chart2/source/controller/dialogs/Strings_Statistic.src \
     chart2/source/controller/dialogs/tp_ChartType.src \
     chart2/source/controller/dialogs/tp_DataSource.src \
-    chart2/source/controller/dialogs/tp_RangeChooser.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,chart2/res,\
