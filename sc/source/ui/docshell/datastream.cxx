@@ -110,12 +110,15 @@ class ReaderThread : public salhelper::Thread
     SvStream *mpStream;
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
-public:
-    osl::Condition maProduceResume;
-    osl::Condition maConsumeResume;
-    osl::Mutex maMtxLines;
+
     std::queue<LinesList* > maPendingLines;
     std::queue<LinesList* > maUsedLines;
+    osl::Mutex maMtxLines;
+
+    osl::Condition maCondReadStream;
+    osl::Condition maCondConsume;
+
+public:
 
     ReaderThread(SvStream *pData):
         Thread("ReaderThread"),
@@ -144,7 +147,41 @@ public:
     void endThread()
     {
         requestTerminate();
-        maProduceResume.set();
+        maCondReadStream.set();
+    }
+
+    void waitForNewLines()
+    {
+        maCondConsume.wait();
+        maCondConsume.reset();
+    }
+
+    LinesList* popNewLines()
+    {
+        LinesList* pLines = maPendingLines.front();
+        maPendingLines.pop();
+        return pLines;
+    }
+
+    void resumeReadStream()
+    {
+        if (maPendingLines.size() <= 4)
+            maCondReadStream.set(); // start producer again
+    }
+
+    bool hasNewLines()
+    {
+        return !maPendingLines.empty();
+    }
+
+    void pushUsedLines( LinesList* pLines )
+    {
+        maUsedLines.push(pLines);
+    }
+
+    osl::Mutex& getLinesMutex()
+    {
+        return maMtxLines;
     }
 
 private:
@@ -157,6 +194,7 @@ private:
 
             if (!maUsedLines.empty())
             {
+                // Re-use lines from previous runs.
                 pLines = maUsedLines.front();
                 maUsedLines.pop();
                 aGuard.clear(); // unlock
@@ -167,6 +205,7 @@ private:
                 pLines = new LinesList(10);
             }
 
+            // Read & store new lines from stream.
             for (size_t i = 0; i < pLines->size(); ++i)
                 mpStream->ReadLine( pLines->at(i) );
 
@@ -175,12 +214,12 @@ private:
             {
                 // pause reading for a bit
                 aGuard.clear(); // unlock
-                maProduceResume.wait();
-                maProduceResume.reset();
+                maCondReadStream.wait();
+                maCondReadStream.reset();
                 aGuard.reset(); // lock
             }
             maPendingLines.push(pLines);
-            maConsumeResume.set();
+            maCondConsume.set();
             if (!mpStream->good())
                 requestTerminate();
         }
@@ -281,22 +320,19 @@ OString DataStream::ConsumeLine()
         if (mxReaderThread->isTerminateRequested())
             return OString();
 
-        osl::ResettableMutexGuard aGuard(mxReaderThread->maMtxLines);
+        osl::ResettableMutexGuard aGuard(mxReaderThread->getLinesMutex());
         if (mpLines)
-            mxReaderThread->maUsedLines.push(mpLines);
+            mxReaderThread->pushUsedLines(mpLines);
 
-        while (mxReaderThread->maPendingLines.empty())
+        while (!mxReaderThread->hasNewLines())
         {
             aGuard.clear(); // unlock
-            mxReaderThread->maConsumeResume.wait();
-            mxReaderThread->maConsumeResume.reset();
+            mxReaderThread->waitForNewLines();
             aGuard.reset(); // lock
         }
 
-        mpLines = mxReaderThread->maPendingLines.front();
-        mxReaderThread->maPendingLines.pop();
-        if (mxReaderThread->maPendingLines.size() <= 4)
-            mxReaderThread->maProduceResume.set(); // start producer again
+        mpLines = mxReaderThread->popNewLines();
+        mxReaderThread->resumeReadStream();
     }
     return mpLines->at(mnLinesCount++);
 }
