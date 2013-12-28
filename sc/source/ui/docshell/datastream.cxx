@@ -96,6 +96,15 @@ private:
     }
 };
 
+void emptyLineQueue( std::queue<LinesList*>& rQueue )
+{
+    while (!rQueue.empty())
+    {
+        delete rQueue.front();
+        rQueue.pop();
+    }
+}
+
 class ReaderThread : public salhelper::Thread
 {
     SvStream *mpStream;
@@ -117,23 +126,14 @@ public:
     virtual ~ReaderThread()
     {
         delete mpStream;
-        while (!maPendingLines.empty())
-        {
-            delete maPendingLines.front();
-            maPendingLines.pop();
-        }
-        while (!maUsedLines.empty())
-        {
-            delete maUsedLines.front();
-            maUsedLines.pop();
-        }
+        emptyLineQueue(maPendingLines);
+        emptyLineQueue(maUsedLines);
     }
 
     void endThread()
     {
         mbTerminateReading = true;
         maProduceResume.set();
-        join();
     }
 
 private:
@@ -141,8 +141,9 @@ private:
     {
         while (!mbTerminateReading)
         {
-            LinesList *pLines = 0;
+            LinesList* pLines = NULL;
             osl::ResettableMutexGuard aGuard(maLinesProtector);
+
             if (!maUsedLines.empty())
             {
                 pLines = maUsedLines.front();
@@ -154,11 +155,14 @@ private:
                 aGuard.clear(); // unlock
                 pLines = new LinesList(10);
             }
+
             for (size_t i = 0; i < pLines->size(); ++i)
                 mpStream->ReadLine( pLines->at(i) );
+
             aGuard.reset(); // lock
             while (!mbTerminateReading && maPendingLines.size() >= 8)
-            { // pause reading for a bit
+            {
+                // pause reading for a bit
                 aGuard.clear(); // unlock
                 maProduceResume.wait();
                 maProduceResume.reset();
@@ -251,7 +255,10 @@ DataStream::~DataStream()
     mxThread->maStart.set();
     mxThread->join();
     if (mxReaderThread.is())
+    {
         mxReaderThread->endThread();
+        mxReaderThread->join();
+    }
     delete mpLines;
 }
 
