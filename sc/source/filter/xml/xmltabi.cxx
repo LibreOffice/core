@@ -286,6 +286,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                                       rLName, xAttrList );
         break;
     case XML_TOK_TABLE_PROTECTION:
+    case XML_TOK_TABLE_PROTECTION_EXT:
         pContext = new ScXMLTableProtectionContext( GetScImport(), nPrefix, rLName, xAttrList );
         break;
     case XML_TOK_TABLE_ROW_GROUP:
@@ -454,9 +455,11 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
         switch (rAttrTokenMap.Get(nLocalPrefix, aLocalName))
         {
             case XML_TOK_TABLE_SELECT_PROTECTED_CELLS:
+            case XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT:
                 bSelectProtectedCells = IsXMLToken(aValue, XML_TRUE);
             break;
             case XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS:
+            case XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT:
                 bSelectUnprotectedCells = IsXMLToken(aValue, XML_TRUE);
             break;
             default:
