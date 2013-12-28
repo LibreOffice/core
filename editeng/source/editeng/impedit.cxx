@@ -215,8 +215,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
             DBG_ASSERT( pLine, "Line not found: DrawSelection()" );
 
             sal_Bool bPartOfLine = sal_False;
-            sal_uInt16 nStartIndex = pLine->GetStart();
-            sal_uInt16 nEndIndex = pLine->GetEnd();
+            sal_Int32 nStartIndex = pLine->GetStart();
+            sal_Int32 nEndIndex = pLine->GetEnd();
             if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) && ( nStartIndex != aTmpSel.Min().GetIndex() ) )
             {
                 nStartIndex = aTmpSel.Min().GetIndex();
@@ -1188,7 +1188,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
     }
 
     const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
-    sal_uInt16 nXPos = aPaM.GetIndex();
+    const sal_Int32 nXPos = aPaM.GetIndex();
     for (size_t nAttr = rAttrs.size(); nAttr; )
     {
         const EditCharAttrib& rAttr = rAttrs[--nAttr];

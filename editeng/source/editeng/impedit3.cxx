@@ -1989,8 +1989,8 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     if ( ( nRemainingSpace < 0 ) || pLine->IsEmpty() )
         return ;
 
-    const sal_uInt16 nFirstChar = pLine->GetStart();
-    const sal_uInt16 nLastChar = pLine->GetEnd() -1;    // Last points behind
+    const sal_Int32 nFirstChar = pLine->GetStart();
+    const sal_Int32 nLastChar = pLine->GetEnd() -1;    // Last points behind
     ContentNode* pNode = pParaPortion->GetNode();
 
     DBG_ASSERT( nLastChar < pNode->Len(), "AdjustBlocks: Out of range!" );
@@ -1998,7 +1998,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     // Search blanks or Kashidas...
     std::vector<sal_uInt16> aPositions;
     sal_uInt16 nLastScript = i18n::ScriptType::LATIN;
-    for ( sal_uInt16 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
+    for ( sal_Int32 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
         EditPaM aPaM( pNode, nChar+1 );
         LanguageType eLang = GetLanguage(aPaM);
@@ -2115,7 +2115,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
 
     while ( ( aWordSel.Min().GetNode() == pNode ) && ( aWordSel.Min().GetIndex() < nEnd ) )
     {
-        sal_uInt16 nSavPos = aWordSel.Max().GetIndex();
+        const sal_Int32 nSavPos = aWordSel.Max().GetIndex();
         if ( aWordSel.Max().GetIndex() > nEnd )
            aWordSel.Max().GetIndex() = nEnd;
 
@@ -2124,8 +2124,8 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
         // restore selection for proper iteration at the end of the function
         aWordSel.Max().GetIndex() = nSavPos;
 
-        xub_StrLen nIdx = 0;
-        xub_StrLen nKashidaPos = STRING_LEN;
+        sal_Int32 nIdx = 0;
+        sal_Int32 nKashidaPos = -1;
         sal_Unicode cCh;
         sal_Unicode cPrevCh = 0;
 
@@ -2198,7 +2198,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
                 {
                     // only choose this position if we did not find
                     // a better one:
-                    if ( STRING_LEN == nKashidaPos )
+                    if ( nKashidaPos<0 )
                         nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
                     break;
                 }
@@ -2213,7 +2213,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
             ++nIdx;
         } // end of current word
 
-        if ( STRING_LEN != nKashidaPos )
+        if ( nKashidaPos>=0 )
             rArray.push_back( nKashidaPos );
 
         aWordSel = WordRight( aWordSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );

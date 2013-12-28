@@ -251,8 +251,8 @@ sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( pNode, "Node not founden: Search&Replace" );
 
-        sal_uInt16 nStartPos = 0;
-        sal_uInt16 nEndPos = pNode->Len();
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = pNode->Len();
         if ( bRange )
         {
             if ( nNode == nStartNode )
@@ -1228,7 +1228,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     {
         const ContentInfo* pC = &rTextObject.mpImpl->GetContents()[n];
         sal_Bool bNewContent = aPaM.GetNode()->Len() ? sal_False: sal_True;
-        sal_uInt16 nStartPos = aPaM.GetIndex();
+        const sal_Int32 nStartPos = aPaM.GetIndex();
 
         aPaM = ImpFastInsertText( aPaM, pC->GetText() );
 
@@ -1572,9 +1572,8 @@ void ImpEditEngine::Convert( EditView* pEditView,
         // not work. Thus since chinese conversion is not interactive we start
         // at the begin of the paragraph to solve the problem, i.e. have the
         // TextConversion service get those characters together in the same call.
-        sal_uInt16 nStartIdx = ( editeng::HangulHanjaConversion::IsChinese( nSrcLang ) ) ?
-                                0 : aWordStartPaM.GetIndex();
-        pConvInfo->aConvStart.nIndex = nStartIdx;
+        pConvInfo->aConvStart.nIndex = editeng::HangulHanjaConversion::IsChinese( nSrcLang )
+            ? 0 : aWordStartPaM.GetIndex();
     }
     //
     pConvInfo->aConvContinue = pConvInfo->aConvStart;
@@ -1698,22 +1697,22 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             pConvInfo->aConvContinue.nIndex >= pConvInfo->aConvTo.nIndex)
             break;
 
-        sal_uInt16 nAttribStart = USHRT_MAX;
-        sal_uInt16 nAttribEnd   = USHRT_MAX;
-        sal_uInt16 nCurPos      = USHRT_MAX;
+        sal_Int32 nAttribStart = -1;
+        sal_Int32 nAttribEnd   = -1;
+        sal_Int32 nCurPos      = -1;
         EPaM aCurStart = CreateEPaM( aCurSel.Min() );
         std::vector<sal_uInt16> aPortions;
         pEditEngine->GetPortions( aCurStart.nPara, aPortions );
         for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
         {
-            sal_uInt16 nEnd   = aPortions[ nPos ];
-            sal_uInt16 nStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
+            const sal_Int32 nEnd   = aPortions[ nPos ];
+            const sal_Int32 nStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
 
             // the language attribute is obtained from the left character
             // (like usually all other attributes)
             // thus we usually have to add 1 in order to get the language
             // of the text right to the cursor position
-            sal_uInt16 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
+            const sal_Int32 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
             LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx );
 #ifdef DEBUG
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
@@ -1722,7 +1721,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
                                 (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
                                  editeng::HangulHanjaConversion::IsChinese( nSrcLang ));
 
-            if (nAttribEnd != USHRT_MAX) // start already found?
+            if (nAttribEnd>=0) // start already found?
             {
                 DBG_ASSERT(nEnd >= aCurStart.nIndex, "error while scanning attributes (a)" );
                 DBG_ASSERT(nEnd >= nAttribEnd, "error while scanning attributes (b)" );
@@ -1731,7 +1730,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
                 else  // language attrib has changed
                     break;
             }
-            if (nAttribStart == USHRT_MAX && // start not yet found?
+            if (nAttribStart<0 && // start not yet found?
                 nEnd > aCurStart.nIndex && bLangOk)
             {
                 nAttribStart = nStart;
@@ -1743,7 +1742,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             //! attribute!)
             //! But since we don't want to start in the already processed part
             //! we clip the start accordingly.
-            if (nAttribStart < aCurStart.nIndex)
+            if (nAttribStart >= 0 && nAttribStart < aCurStart.nIndex)
             {
                 nAttribStart = aCurStart.nIndex;
             }
@@ -1770,12 +1769,12 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             nCurPos = nEnd;
         }
 
-        if (nAttribStart != USHRT_MAX  &&  nAttribEnd != USHRT_MAX)
+        if (nAttribStart>=0 && nAttribEnd>=0)
         {
             aCurSel.Min().SetIndex( nAttribStart );
             aCurSel.Max().SetIndex( nAttribEnd );
         }
-        else if (nCurPos != USHRT_MAX)
+        else if (nCurPos>=0)
         {
             // set selection to end of scanned text
             // (used to set the position where to continue from later on)
@@ -2217,8 +2216,8 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
             // restore cursor position to the end of the modified sentence.
             // (This will define the continuation position for spell/grammar checking)
             // First: check if the sentence/para length changed
-            sal_Int32 nDelta = rEditView.pImpEditView->GetEditSelection().Max().GetNode()->Len() - nOldLen;
-            xub_StrLen nEndOfSentence = aOldSel.Max().GetIndex() + nDelta;
+            const sal_Int32 nDelta = rEditView.pImpEditView->GetEditSelection().Max().GetNode()->Len() - nOldLen;
+            const sal_Int32 nEndOfSentence = aOldSel.Max().GetIndex() + nDelta;
             aNext = EditPaM( aOldSel.Max().GetNode(), nEndOfSentence );
         }
         rEditView.pImpEditView->SetEditSelection( aNext );
@@ -2276,11 +2275,12 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
         if (!pNode->GetWrongList()->IsValid())
         {
             WrongList* pWrongList = pNode->GetWrongList();
-            sal_uInt16 nInvStart = pWrongList->GetInvalidStart();
-            sal_uInt16 nInvEnd = pWrongList->GetInvalidEnd();
+            const sal_Int32 nInvStart = pWrongList->GetInvalidStart();
+            const sal_Int32 nInvEnd = pWrongList->GetInvalidEnd();
 
             sal_uInt16 nWrongs = 0; // Lose control also in the paragraphs
-            sal_uInt16 nPaintFrom = 0xFFFF, nPaintTo = 0;
+            sal_Int32 nPaintFrom = -1;
+            sal_Int32 nPaintTo = 0;
             bool bSimpleRepaint = true;
 
             pWrongList->SetValid();
@@ -2311,13 +2311,13 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 bool bChanged = false;
                 if (!aWord.isEmpty())
                 {
-                    sal_uInt16 nWStart = aSel.Min().GetIndex();
-                    sal_uInt16 nWEnd= aSel.Max().GetIndex();
+                    const sal_Int32 nWStart = aSel.Min().GetIndex();
+                    const sal_Int32 nWEnd = aSel.Max().GetIndex();
                     if ( !xSpeller->isValid( aWord, GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
                     {
                         // Check if already marked correctly...
                         nWrongs++;
-                        sal_uInt16 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
+                        const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
                         if ( !pWrongList->HasWrong( nWStart, nXEnd ) )
                         {
                             // Mark Word as wrong...
@@ -2357,7 +2357,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     }
                     if ( bChanged  )
                     {
-                        if ( nPaintFrom == 0xFFFF )
+                        if ( nPaintFrom<0 )
                             nPaintFrom = nWStart;
                         nPaintTo = nWEnd;
                     }
@@ -2376,7 +2376,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             }
 
             // Invalidate?
-            if ( ( nPaintFrom != 0xFFFF ) )
+            if ( nPaintFrom>=0 )
             {
                 aStatus.GetStatusWord() |= EE_STAT_WRONGWORDCHANGED;
                 CallStatusHdl();
@@ -2736,12 +2736,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         const OUString& aNodeStr = pNode->GetString();
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = aNodeStr.getLength();
-        if ( nNode == nStartNode )
-            nStartPos = aSel.Min().GetIndex();
-        if ( nNode == nEndNode ) // can also be == nStart!
-            nEndPos = aSel.Max().GetIndex();
+        const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : aNodeStr.getLength(); // can also be == nStart!
 
         sal_uInt16 nCurrentStart = nStartPos;
         sal_uInt16 nCurrentEnd = nEndPos;
@@ -2888,7 +2884,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
             while (nCurrentStart < nLastEnd)
             {
-                sal_Int32 nLen = nCurrentEnd - nCurrentStart;
+                const sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
                 OUString aText( aNodeStr.copy( nCurrentStart, nLen ) );
@@ -2932,7 +2928,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                         nCurrentEnd = nEndPos;
                 }
 
-                xub_StrLen nLen = nCurrentEnd - nCurrentStart;
+                const sal_Int32 nLen = nCurrentEnd - nCurrentStart;
 
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
@@ -2991,7 +2987,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     bLenChanged = sal_True;
 
                 // Change text without loosing the attributes
-                sal_uInt16 nDiffs = ReplaceTextOnly( rData.aSelection.Min().GetNode(),
+                const sal_Int32 nDiffs =
+                    ReplaceTextOnly( rData.aSelection.Min().GetNode(),
                         rData.nStart, rData.nLen, rData.aNewText, rData.aOffsets );
 
                 // adjust selection in end node to possibly changed size

@@ -57,10 +57,10 @@ class EditDoc;
 struct EPaM
 {
     sal_Int32  nPara;
-    sal_uInt16 nIndex;
+    sal_Int32  nIndex;
 
     EPaM()                              { nPara = 0; nIndex = 0; }
-    EPaM( sal_Int32 nP, sal_uInt16 nI ) { nPara = nP; nIndex = nI; }
+    EPaM( sal_Int32 nP, sal_Int32 nI )  { nPara = nP; nIndex = nI; }
     EPaM( const EPaM& r)                { nPara = r.nPara; nIndex = r.nIndex; }
     EPaM& operator = ( const EPaM& r )  { nPara = r.nPara; nIndex = r.nIndex; return *this; }
     inline sal_Bool operator == ( const EPaM& r ) const;
@@ -314,20 +314,20 @@ class EditPaM
 {
 private:
     ContentNode* pNode;
-    sal_uInt16          nIndex;
+    sal_Int32    nIndex;
 
 public:
     EditPaM();
     EditPaM(const EditPaM& r);
-    EditPaM(ContentNode* p, sal_uInt16 n);
+    EditPaM(ContentNode* p, sal_Int32 n);
 
     const ContentNode* GetNode() const;
     ContentNode* GetNode();
     void SetNode(ContentNode* p);
 
-    sal_uInt16          GetIndex() const                { return nIndex; }
-    sal_uInt16&         GetIndex()                      { return nIndex; }
-    void            SetIndex( sal_uInt16 n )            { nIndex = n; }
+    sal_Int32  GetIndex() const         { return nIndex; }
+    sal_Int32& GetIndex()               { return nIndex; }
+    void       SetIndex( sal_Int32 n )  { nIndex = n; }
 
     sal_Bool            DbgIsBuggy( EditDoc& rDoc );
 

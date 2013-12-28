@@ -1208,7 +1208,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
     {
         EditPaM aPaM = aSel.Min();
         const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
-        sal_uInt16 nXPos = aPaM.GetIndex();
+        const sal_Int32 nXPos = aPaM.GetIndex();
         for (size_t nAttr = rAttrs.size(); nAttr; )
         {
             const EditCharAttrib& rAttr = rAttrs[--nAttr];

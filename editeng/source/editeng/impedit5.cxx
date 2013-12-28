@@ -321,12 +321,8 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not found: GetAttrib" );
 
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pNode->Len();
-        if ( nNode == nStartNode )
-            nStartPos = aSel.Min().GetIndex();
-        if ( nNode == nEndNode ) // Can also be == nStart!
-            nEndPos = aSel.Max().GetIndex();
+        const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // Can also be == nStart!
 
         // Problem: Templates ....
         // =>  Other way:
@@ -528,12 +524,8 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         ParaPortion* pPortion = GetParaPortions()[nNode];
 
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pNode->Len();
-        if ( nNode == nStartNode )
-            nStartPos = aSel.Min().GetIndex();
-        if ( nNode == nEndNode ) // can also be == nStart!
-            nEndPos = aSel.Max().GetIndex();
+        const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
 
         // Iterate over the Items...
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
@@ -615,12 +607,8 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaA
         DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
         DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
 
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pNode->Len();
-        if ( nNode == nStartNode )
-            nStartPos = aSel.Min().GetIndex();
-        if ( nNode == nEndNode ) // can also be == nStart!
-            nEndPos = aSel.Max().GetIndex();
+        const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
 
         // Optimize: If whole paragraph, then RemoveCharAttribs (nPara)?
         sal_Bool bChanged = aEditDoc.RemoveAttribs( pNode, nStartPos, nEndPos, nWhich );

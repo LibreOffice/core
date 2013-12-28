@@ -65,6 +65,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#include <algorithm>
+
 using namespace ::com::sun::star;
 
 static sal_uInt16 lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rLSItem )
@@ -290,12 +292,8 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd eE
         OSL_ENSURE( aEditDoc.GetObject( nNode ), "Node not found: GetSelected" );
         const ContentNode* pNode = aEditDoc.GetObject( nNode );
 
-        xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pNode->Len();
-        if ( nNode == nStartNode )
-            nStartPos = aSel.Min().GetIndex();
-        if ( nNode == nEndNode ) // can also be == nStart!
-            nEndPos = aSel.Max().GetIndex();
+        const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
 
         aText += aEditDoc.GetParaAsString( pNode, nStartPos, nEndPos );
         if ( nNode < nEndNode )
@@ -941,7 +939,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
         sal_uInt16 nVisPos = bStart ? 0 : aLine.getLength()-1;
-        sal_uInt16 nLogPos = (sal_uInt16)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
+        const sal_Int32 nLogPos = ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
 
         ubidi_close( pBidi );
 
@@ -1050,7 +1048,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         sal_Bool bGotoEndOfPrevLine = sal_False;
 
         OUString aLine = aPaM.GetNode()->GetString().copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart());
-        sal_uInt16 nPosInLine = aPaM.GetIndex() - pLine->GetStart();
+        const sal_Int32 nPosInLine = aPaM.GetIndex() - pLine->GetStart();
 
         const sal_Unicode* pLineString = aLine.getStr();
 
@@ -1063,7 +1061,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         if ( !pEditView->IsInsertMode() )
         {
             sal_Bool bEndOfLine = nPosInLine == aLine.getLength();
-            sal_uInt16 nVisPos = (sal_uInt16)ubidi_getVisualIndex( pBidi, !bEndOfLine ? nPosInLine : nPosInLine-1, &nError );
+            sal_Int32 nVisPos = ubidi_getVisualIndex( pBidi, !bEndOfLine ? nPosInLine : nPosInLine-1, &nError );
             if ( bVisualToLeft )
             {
                 bGotoEndOfPrevLine = nVisPos == 0;
@@ -1161,7 +1159,7 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM, sal_uInt16 nCharacterIte
         sal_Int32 nCount = 1;
         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
          aNewPaM.SetIndex(
-             (sal_uInt16)_xBI->previousCharacters(
+             _xBI->previousCharacters(
                  aNewPaM.GetNode()->GetString(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount));
     }
     else
@@ -1188,7 +1186,7 @@ EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIt
         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
         sal_Int32 nCount = 1;
         aNewPaM.SetIndex(
-            (sal_uInt16)_xBI->nextCharacters(
+            _xBI->nextCharacters(
                 aNewPaM.GetNode()->GetString(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount));
     }
     else
@@ -1406,7 +1404,7 @@ EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView* pView )
 
 EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
 {
-    sal_uInt16 nCurrentPos = rPaM.GetIndex();
+    const sal_Int32 nCurrentPos = rPaM.GetIndex();
     EditPaM aNewPaM( rPaM );
     if ( nCurrentPos == 0 )
     {
@@ -1424,8 +1422,7 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
         // we need to increase the position by 1 when retrieving the locale
         // since the attribute for the char left to the cursor position is returned
         EditPaM aTmpPaM( aNewPaM );
-        xub_StrLen nMax = rPaM.GetNode()->Len();
-        if ( aTmpPaM.GetIndex() < nMax )
+        if ( aTmpPaM.GetIndex() < rPaM.GetNode()->Len() )
             aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
         lang::Locale aLocale( GetLocale( aTmpPaM ) );
 
@@ -1435,7 +1432,7 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
         if ( aBoundary.startPos >= nCurrentPos )
             aBoundary = _xBI->previousWord(
                 aNewPaM.GetNode()->GetString(), nCurrentPos, aLocale, nWordType);
-        aNewPaM.SetIndex( ( aBoundary.startPos != (-1) ) ? (sal_uInt16)aBoundary.startPos : 0 );
+        aNewPaM.SetIndex( ( aBoundary.startPos != (-1) ) ? aBoundary.startPos : 0 );
     }
 
     return aNewPaM;
@@ -1443,7 +1440,7 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
 
 EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
 {
-    xub_StrLen nMax = rPaM.GetNode()->Len();
+    const sal_Int32 nMax = rPaM.GetNode()->Len();
     EditPaM aNewPaM( rPaM );
     if ( aNewPaM.GetIndex() < nMax )
     {
@@ -1456,7 +1453,7 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
         i18n::Boundary aBoundary = _xBI->nextWord(
             aNewPaM.GetNode()->GetString(), aNewPaM.GetIndex(), aLocale, nWordType);
-        aNewPaM.SetIndex( (sal_uInt16)aBoundary.startPos );
+        aNewPaM.SetIndex( aBoundary.startPos );
     }
     // not 'else', maybe the index reached nMax now...
     if ( aNewPaM.GetIndex() >= nMax )
@@ -1480,8 +1477,7 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     // we need to increase the position by 1 when retrieving the locale
     // since the attribute for the char left to the cursor position is returned
     EditPaM aTmpPaM( aNewPaM );
-    xub_StrLen nMax = rPaM.GetNode()->Len();
-    if ( aTmpPaM.GetIndex() < nMax )
+    if ( aTmpPaM.GetIndex() < rPaM.GetNode()->Len() )
         aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
     lang::Locale aLocale( GetLocale( aTmpPaM ) );
 
@@ -1489,7 +1485,7 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     i18n::Boundary aBoundary = _xBI->getWordBoundary(
         rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, nWordType, true);
 
-    aNewPaM.SetIndex( (sal_uInt16)aBoundary.startPos );
+    aNewPaM.SetIndex( aBoundary.startPos );
     return aNewPaM;
 }
 
@@ -1500,8 +1496,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     // we need to increase the position by 1 when retrieving the locale
     // since the attribute for the char left to the cursor position is returned
     EditPaM aTmpPaM( aNewPaM );
-    xub_StrLen nMax = rPaM.GetNode()->Len();
-    if ( aTmpPaM.GetIndex() < nMax )
+    if ( aTmpPaM.GetIndex() < rPaM.GetNode()->Len() )
         aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
     lang::Locale aLocale( GetLocale( aTmpPaM ) );
 
@@ -1509,7 +1504,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     i18n::Boundary aBoundary = _xBI->getWordBoundary(
         rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, nWordType, true);
 
-    aNewPaM.SetIndex( (sal_uInt16)aBoundary.endPos );
+    aNewPaM.SetIndex( aBoundary.endPos );
     return aNewPaM;
 }
 
@@ -1521,8 +1516,7 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
     // we need to increase the position by 1 when retrieving the locale
     // since the attribute for the char left to the cursor position is returned
     EditPaM aTmpPaM( aPaM );
-    xub_StrLen nMax = aPaM.GetNode()->Len();
-    if ( aTmpPaM.GetIndex() < nMax )
+    if ( aTmpPaM.GetIndex() < aPaM.GetNode()->Len() )
         aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
     lang::Locale aLocale( GetLocale( aTmpPaM ) );
 
@@ -1539,8 +1533,8 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
         if ( ( aBoundary.endPos > aPaM.GetIndex() ) &&
              ( ( aBoundary.startPos < aPaM.GetIndex() ) || ( bAcceptStartOfWord && ( aBoundary.startPos == aPaM.GetIndex() ) ) ) )
         {
-            aNewSel.Min().SetIndex( (sal_uInt16)aBoundary.startPos );
-            aNewSel.Max().SetIndex( (sal_uInt16)aBoundary.endPos );
+            aNewSel.Min().SetIndex( aBoundary.startPos );
+            aNewSel.Max().SetIndex( aBoundary.endPos );
         }
     }
 
@@ -1565,8 +1559,8 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     EditSelection aNewSel( rCurSel );
     OSL_ENSURE(pNode->Len() ? (nStart < pNode->Len()) : (nStart == 0), "sentence start index out of range");
     OSL_ENSURE(nEnd <= pNode->Len(), "sentence end index out of range");
-    aNewSel.Min().SetIndex( (sal_uInt16)nStart );
-    aNewSel.Max().SetIndex( (sal_uInt16)nEnd );
+    aNewSel.Min().SetIndex( nStart );
+    aNewSel.Max().SetIndex( nEnd );
     return aNewSel;
 }
 
@@ -1577,10 +1571,7 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
         pCTLOptions = new SvtCTLOptions;
 
     // get the index that really is first
-    sal_uInt16 nFirstPos = rCurSel.Min().GetIndex();
-    sal_uInt16 nMaxPos   = rCurSel.Max().GetIndex();
-    if (nMaxPos < nFirstPos)
-        nFirstPos = nMaxPos;
+    const sal_Int32 nFirstPos = std::min(rCurSel.Min().GetIndex(), rCurSel.Max().GetIndex());
 
     sal_Bool bIsSequenceChecking =
         pCTLOptions->IsCTLFontEnabled() &&
@@ -1774,7 +1765,7 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_uInt16* pE
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
 
-        sal_uInt16 nPos = rPaM.GetIndex();
+        const sal_Int32 nPos = rPaM.GetIndex();
         ScriptTypePosInfos::const_iterator itr = std::find_if(rTypes.begin(), rTypes.end(), FindByPos(nPos));
         if(itr != rTypes.end())
         {
@@ -1847,7 +1838,7 @@ sal_Bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
             ((ImpEditEngine*)this)->InitScriptTypes( nPara );
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-        sal_uInt16 nPos = rPaM.GetIndex();
+        const sal_Int32 nPos = rPaM.GetIndex();
         for ( size_t n = 0; n < rTypes.size(); n++ )
         {
             if ( rTypes[n].nStartPos == nPos )
@@ -2059,8 +2050,8 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, Edit
         OUString aStr( rPaM.GetNode()->Copy( rPaM.GetIndex(), nChars ) );
 
         // Check whether attributes are deleted or changed:
-        sal_uInt16 nStart = rPaM.GetIndex();
-        sal_uInt16 nEnd = nStart + nChars;
+        const sal_Int32 nStart = rPaM.GetIndex();
+        const sal_Int32 nEnd = nStart + nChars;
         const CharAttribList::AttribsType& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
         for (size_t i = 0, n = rAttribs.size(); i < n; ++i)
         {
@@ -2337,7 +2328,7 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
 
             if (aDelEnd.GetIndex() == aCurPos.GetIndex())
             {
-                const xub_StrLen nLen(aCurPos.GetNode()->Len());
+                const sal_Int32 nLen(aCurPos.GetNode()->Len());
 
                 // #i120020# when 0 == nLen, aDelStart needs to be adapted, not
                 // aDelEnd. This would (and did) lead to a wrong order in the
@@ -2424,15 +2415,13 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     if ( aStartPaM.GetNode() != aEndPaM.GetNode() )
     {
         // The Rest of the StartNodes...
-        sal_uInt16 nChars;
-        nChars = aStartPaM.GetNode()->Len() - aStartPaM.GetIndex();
-        ImpRemoveChars( aStartPaM, nChars );
+        ImpRemoveChars( aStartPaM, aStartPaM.GetNode()->Len() - aStartPaM.GetIndex() );
         ParaPortion* pPortion = FindParaPortion( aStartPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in ImpDeleteSelection(3)" );
         pPortion->MarkSelectionInvalid( aStartPaM.GetIndex(), aStartPaM.GetNode()->Len() );
 
         // The beginning of the EndNodes....
-        nChars = aEndPaM.GetIndex();
+        const sal_Int32 nChars = aEndPaM.GetIndex();
         aEndPaM.SetIndex( 0 );
         ImpRemoveChars( aEndPaM, nChars );
         pPortion = FindParaPortion( aEndPaM.GetNode() );
@@ -2443,9 +2432,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     }
     else
     {
-        sal_uInt16 nChars;
-        nChars = aEndPaM.GetIndex() - aStartPaM.GetIndex();
-        ImpRemoveChars( aStartPaM, nChars );
+        ImpRemoveChars( aStartPaM, aEndPaM.GetIndex() - aStartPaM.GetIndex() );
         ParaPortion* pPortion = FindParaPortion( aStartPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in ImpDeleteSelection(5)" );
         pPortion->MarkInvalid( aEndPaM.GetIndex(), aStartPaM.GetIndex() - aEndPaM.GetIndex() );
@@ -2540,7 +2527,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         }
 
         ContentNode* pNode = aSel.Max().GetNode();
-        sal_uInt16 nIndex = aSel.Max().GetIndex();
+        const sal_Int32 nIndex = aSel.Max().GetIndex();
         EdtAutoCorrDoc aAuto(pEditEngine, pNode, nIndex, c);
         // FIXME: this _must_ be called with reference to the actual node text!
         OUString const& rNodeString(pNode->GetString());
@@ -2595,7 +2582,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
             if (_xISC.is() || pCTLOptions)
             {
-                xub_StrLen nTmpPos = aPaM.GetIndex();
+                const sal_Int32 nTmpPos = aPaM.GetIndex();
                 sal_Int16 nCheckMode = pCTLOptions->IsCTLSequenceCheckingRestricted() ?
                         i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
@@ -2620,7 +2607,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
                     OUString aChgText( aNewText.copy( nChgPos ) );
 
                     // select text from first pos to be changed to current pos
-                    EditSelection aSel( EditPaM( aPaM.GetNode(), (sal_uInt16) nChgPos ), aPaM );
+                    EditSelection aSel( EditPaM( aPaM.GetNode(), nChgPos ), aPaM );
 
                     if (!aChgText.isEmpty())
                         return InsertText( aSel, aChgText ); // implicitly handles undo
@@ -2785,7 +2772,7 @@ EditPaM ImpEditEngine::ImpInsertFeature(const EditSelection& rCurSel, const SfxP
     else
         aPaM = rCurSel.Max();
 
-    if ( aPaM.GetIndex() >= 0xfffe )
+    if ( aPaM.GetIndex() >= SAL_MAX_INT32-1 )
         return aPaM;
 
     if ( IsUndoEnabled() && !IsInUndo() )

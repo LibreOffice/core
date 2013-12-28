@@ -1165,7 +1165,7 @@ void EditLineList::Insert(size_t nPos, EditLine* p)
 
 EditPaM::EditPaM() : pNode(NULL), nIndex(0) {}
 EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
-EditPaM::EditPaM(ContentNode* p, sal_uInt16 n) : pNode(p), nIndex(n) {}
+EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
 
 const ContentNode* EditPaM::GetNode() const
 {
