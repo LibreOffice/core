@@ -57,22 +57,20 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    FixedLine       aFlVariables;
-    FixedText       aFtFormulaRange;
-    formula::RefEdit        aEdFormulaRange;
-    formula::RefButton      aRBFormulaRange;
+    FixedText* m_pFtFormulaRange;
+    formula::RefEdit* m_pEdFormulaRange;
+    formula::RefButton* m_pRBFormulaRange;
 
-    FixedText       aFtRowCell;
-    formula::RefEdit        aEdRowCell;
-    formula::RefButton      aRBRowCell;
+    FixedText* m_pFtRowCell;
+    formula::RefEdit* m_pEdRowCell;
+    formula::RefButton* m_pRBRowCell;
 
-    FixedText       aFtColCell;
-    formula::RefEdit        aEdColCell;
-    formula::RefButton      aRBColCell;
+    FixedText* m_pFtColCell;
+    formula::RefEdit* m_pEdColCell;
+    formula::RefButton* m_pRBColCell;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton*       m_pBtnOk;
+    CancelButton*   m_pBtnCancel;
 
     ScRefAddress    theFormulaCell;
     ScRefAddress    theFormulaEnd;
@@ -90,14 +88,12 @@ private:
     const OUString      errMsgNoColFormula;
     const OUString      errMsgNoRowFormula;
 
-#ifdef _TABOPDLG_CXX
     void    Init();
     void    RaiseError( ScTabOpErr eError );
 
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
-#endif  // _TABOPDLG_CXX
 };
 
 #endif // SC_TABOPDLG_HXX

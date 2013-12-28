@@ -865,4 +865,34 @@ String SCSTR_VALERR
     Text [ en-US ] = "Invalid value" ;
 };
 
+String STR_NOFORMULASPECIFIED
+{
+    Text [ en-US ] = "No formula specified." ;
+};
+
+String STR_NOCOLROW
+{
+    Text [ en-US ] = "Neither row or column specified." ;
+};
+
+String STR_WRONGFORMULA
+{
+    Text [ en-US ] = "Undefined name or range." ;
+};
+
+String STR_WRONGROWCOL
+{
+    Text [ en-US ] = "Undefined name or wrong cell reference." ;
+};
+
+String STR_NOCOLFORMULA
+{
+    Text [ en-US ] = "Formulas don't form a column." ;
+};
+
+String STR_NOROWFORMULA
+{
+    Text [ en-US ] = "Formulas don't form a row." ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

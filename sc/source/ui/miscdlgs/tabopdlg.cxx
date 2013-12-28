@@ -19,7 +19,7 @@
 
 #include "scitems.hxx"
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include "uiitems.hxx"
 #include "global.hxx"
@@ -27,9 +27,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "reffact.hxx"
-#include "tabopdlg.hrc"
 
-#define _TABOPDLG_CXX
 #include "tabopdlg.hxx"
 
 
@@ -41,36 +39,42 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         ScDocument*         pDocument,
                         const ScRefAddress& rCursorPos )
 
-    :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_TABOP ),
-        //
-        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
-        aFtFormulaRange     ( this, ScResId( FT_FORMULARANGE ) ),
-        aEdFormulaRange     ( this, this, &aFtFormulaRange, ScResId( ED_FORMULARANGE ) ),
-        aRBFormulaRange     ( this, ScResId( RB_FORMULARANGE ), &aEdFormulaRange, this ),
-        aFtRowCell          ( this, ScResId( FT_ROWCELL ) ),
-        aEdRowCell          ( this, this, &aFtRowCell, ScResId( ED_ROWCELL ) ),
-        aRBRowCell          ( this, ScResId( RB_ROWCELL ), &aEdRowCell, this ),
-        aFtColCell          ( this, ScResId( FT_COLCELL ) ),
-        aEdColCell          ( this, this, &aFtColCell, ScResId( ED_COLCELL ) ),
-        aRBColCell          ( this, ScResId( RB_COLCELL ), &aEdColCell, this ),
-        aBtnOk              ( this, ScResId( BTN_OK ) ),
-        aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp            ( this, ScResId( BTN_HELP ) ),
-        //
-        theFormulaCell      ( rCursorPos ),
-        pDoc                ( pDocument ),
-        nCurTab             ( theFormulaCell.Tab() ),
-        pEdActive           ( NULL ),
-        bDlgLostFocus       ( false ),
-        errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
-        errMsgNoColRow      ( ScResId( STR_NOCOLROW ) ),
-        errMsgWrongFormula  ( ScResId( STR_WRONGFORMULA ) ),
-        errMsgWrongRowCol   ( ScResId( STR_WRONGROWCOL ) ),
-        errMsgNoColFormula  ( ScResId( STR_NOCOLFORMULA ) ),
-        errMsgNoRowFormula  ( ScResId( STR_NOROWFORMULA ) )
+    : ScAnyRefDlg(pB, pCW, pParent, "MultipleOperationsDialog",
+        "modules/scalc/ui/multipleoperationsdialog.ui")
+    , theFormulaCell(rCursorPos)
+    , pDoc(pDocument)
+    , nCurTab(theFormulaCell.Tab())
+    , pEdActive(NULL)
+    , bDlgLostFocus(false)
+    , errMsgNoFormula(ScResId(STR_NOFORMULASPECIFIED))
+    , errMsgNoColRow(ScResId(STR_NOCOLROW))
+    , errMsgWrongFormula(ScResId(STR_WRONGFORMULA))
+    , errMsgWrongRowCol(ScResId(STR_WRONGROWCOL))
+    , errMsgNoColFormula(ScResId(STR_NOCOLFORMULA))
+    , errMsgNoRowFormula(ScResId(STR_NOROWFORMULA))
 {
+    get(m_pFtFormulaRange, "formulasft");
+    get(m_pEdFormulaRange, "formulas");
+    m_pEdFormulaRange->SetReferences(this, m_pFtFormulaRange);
+    get(m_pRBFormulaRange, "formulasref");
+    m_pRBFormulaRange->SetReferences(this, m_pEdFormulaRange);
+
+    get(m_pFtRowCell, "rowft");
+    get(m_pEdRowCell, "row");
+    m_pEdRowCell->SetReferences(this, m_pFtRowCell);
+    get(m_pRBRowCell, "rowref");
+    m_pRBRowCell->SetReferences(this, m_pEdRowCell);
+
+    get(m_pFtColCell, "colft");
+    get(m_pEdColCell, "col");
+    m_pEdColCell->SetReferences(this, m_pFtColCell);
+    get(m_pRBColCell, "colref");
+    m_pRBColCell->SetReferences(this, m_pEdColCell);
+
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
+
     Init();
-    FreeResource();
 }
 
 //----------------------------------------------------------------------------
@@ -84,27 +88,27 @@ ScTabOpDlg::~ScTabOpDlg()
 
 void ScTabOpDlg::Init()
 {
-    aBtnOk.         SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
-    aBtnCancel.     SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
+    m_pBtnOk->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
+    m_pBtnCancel->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
 
     Link aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
-    aEdFormulaRange.SetGetFocusHdl( aLink );
-    aRBFormulaRange.SetGetFocusHdl( aLink );
-    aEdRowCell.     SetGetFocusHdl( aLink );
-    aRBRowCell.     SetGetFocusHdl( aLink );
-    aEdColCell.     SetGetFocusHdl( aLink );
-    aRBColCell.     SetGetFocusHdl( aLink );
+    m_pEdFormulaRange->SetGetFocusHdl( aLink );
+    m_pRBFormulaRange->SetGetFocusHdl( aLink );
+    m_pEdRowCell->SetGetFocusHdl( aLink );
+    m_pRBRowCell->SetGetFocusHdl( aLink );
+    m_pEdColCell->SetGetFocusHdl( aLink );
+    m_pRBColCell->SetGetFocusHdl( aLink );
 
     aLink = LINK( this, ScTabOpDlg, LoseFocusHdl );
-    aEdFormulaRange.SetLoseFocusHdl( aLink );
-    aRBFormulaRange.SetLoseFocusHdl( aLink );
-    aEdRowCell.     SetLoseFocusHdl( aLink );
-    aRBRowCell.     SetLoseFocusHdl( aLink );
-    aEdColCell.     SetLoseFocusHdl( aLink );
-    aRBColCell.     SetLoseFocusHdl( aLink );
+    m_pEdFormulaRange->SetLoseFocusHdl( aLink );
+    m_pRBFormulaRange->SetLoseFocusHdl( aLink );
+    m_pEdRowCell->SetLoseFocusHdl( aLink );
+    m_pRBRowCell->SetLoseFocusHdl( aLink );
+    m_pEdColCell->SetLoseFocusHdl( aLink );
+    m_pRBColCell->SetLoseFocusHdl( aLink );
 
-    aEdFormulaRange.GrabFocus();
-    pEdActive = &aEdFormulaRange;
+    m_pEdFormulaRange->GrabFocus();
+    pEdActive = m_pEdFormulaRange;
 
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Enable();
@@ -149,18 +153,18 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
                                 ? SCR_ABS
                                 : SCR_ABS_3D;
 
-        if ( pEdActive == &aEdFormulaRange )
+        if (pEdActive == m_pEdFormulaRange)
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
             aStr = rRef.Format(nFmt, pDocP, aDetails);
         }
-        else if ( pEdActive == &aEdRowCell )
+        else if ( pEdActive == m_pEdRowCell )
         {
             theRowCell.Set( rRef.aStart, false, false, false);
             aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
         }
-        else if ( pEdActive == &aEdColCell )
+        else if ( pEdActive == m_pEdColCell )
         {
             theColCell.Set( rRef.aStart, false, false, false);
             aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
@@ -175,47 +179,47 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
     const OUString* pMsg = &errMsgNoFormula;
-    Edit*           pEd  = &aEdFormulaRange;
+    Edit*           pEd  = m_pEdFormulaRange;
 
     switch ( eError )
     {
         case TABOPERR_NOFORMULA:
             pMsg = &errMsgNoFormula;
-            pEd  = &aEdFormulaRange;
+            pEd  = m_pEdFormulaRange;
             break;
 
         case TABOPERR_NOCOLROW:
             pMsg = &errMsgNoColRow;
-            pEd  = &aEdRowCell;
+            pEd  = m_pEdRowCell;
             break;
 
         case TABOPERR_WRONGFORMULA:
             pMsg = &errMsgWrongFormula;
-            pEd  = &aEdFormulaRange;
+            pEd  = m_pEdFormulaRange;
             break;
 
         case TABOPERR_WRONGROW:
             pMsg = &errMsgWrongRowCol;
-            pEd  = &aEdRowCell;
+            pEd  = m_pEdRowCell;
             break;
 
         case TABOPERR_NOCOLFORMULA:
             pMsg = &errMsgNoColFormula;
-            pEd  = &aEdFormulaRange;
+            pEd  = m_pEdFormulaRange;
             break;
 
         case TABOPERR_WRONGCOL:
             pMsg = &errMsgWrongRowCol;
-            pEd  = &aEdColCell;
+            pEd  = m_pEdColCell;
             break;
 
         case TABOPERR_NOROWFORMULA:
             pMsg = &errMsgNoRowFormula;
-            pEd  = &aEdFormulaRange;
+            pEd  = m_pEdFormulaRange;
             break;
     }
 
-    ErrorBox( this, WinBits( WB_OK_CANCEL | WB_DEF_OK), *pMsg ).Execute();
+    MessageDialog(this, *pMsg, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL).Execute();
     pEd->GrabFocus();
 }
 
@@ -241,7 +245,7 @@ static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCur
 
 IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 {
-    if ( pBtn == &aBtnOk )
+    if (pBtn == m_pBtnOk)
     {
         ScTabOpParam::Mode eMode = ScTabOpParam::Column;
         sal_uInt16 nError = 0;
@@ -252,34 +256,34 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
         //    bzw. Einfachreferenz bei beidem?
         // 3. Ist mindestens Zeile oder Spalte und Formel voll?
 
-        if (aEdFormulaRange.GetText().isEmpty())
+        if (m_pEdFormulaRange->GetText().isEmpty())
             nError = TABOPERR_NOFORMULA;
-        else if (aEdRowCell.GetText().isEmpty() &&
-                 aEdColCell.GetText().isEmpty())
+        else if (m_pEdRowCell->GetText().isEmpty() &&
+                 m_pEdColCell->GetText().isEmpty())
             nError = TABOPERR_NOCOLROW;
-        else if ( !lcl_Parse( aEdFormulaRange.GetText(), pDoc, nCurTab,
+        else if ( !lcl_Parse( m_pEdFormulaRange->GetText(), pDoc, nCurTab,
                                 theFormulaCell, theFormulaEnd ) )
             nError = TABOPERR_WRONGFORMULA;
         else
         {
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-            if (!aEdRowCell.GetText().isEmpty())
+            if (!m_pEdRowCell->GetText().isEmpty())
             {
-                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab,
+                if (!ConvertSingleRef( pDoc, m_pEdRowCell->GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else
                 {
-                    if (aEdColCell.GetText().isEmpty() &&
+                    if (m_pEdColCell->GetText().isEmpty() &&
                         theFormulaCell.Col() != theFormulaEnd.Col())
                         nError = TABOPERR_NOCOLFORMULA;
                     else
                         eMode = ScTabOpParam::Row;
                 }
             }
-            if (!aEdColCell.GetText().isEmpty())
+            if (!m_pEdColCell->GetText().isEmpty())
             {
-                if (!ConvertSingleRef( pDoc, aEdColCell.GetText(), nCurTab,
+                if (!ConvertSingleRef( pDoc, m_pEdColCell->GetText(), nCurTab,
                                        theColCell, eConv ))
                     nError = TABOPERR_WRONGCOL;
                 else
@@ -287,7 +291,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                     if (eMode == ScTabOpParam::Row)                         // beides
                     {
                         eMode = ScTabOpParam::Both;
-                        ConvertSingleRef( pDoc, aEdFormulaRange.GetText(), nCurTab,
+                        ConvertSingleRef( pDoc, m_pEdFormulaRange->GetText(), nCurTab,
                                           theFormulaCell, eConv );
                     }
                     else if (theFormulaCell.Row() != theFormulaEnd.Row())
@@ -313,7 +317,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             Close();
         }
     }
-    else if ( pBtn == &aBtnCancel )
+    else if (pBtn == m_pBtnCancel)
         Close();
 
     return 0;
@@ -323,12 +327,12 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 
 IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 {
-    if( (pCtrl == (Control*)&aEdFormulaRange) || (pCtrl == (Control*)&aRBFormulaRange) )
-        pEdActive = &aEdFormulaRange;
-    else if( (pCtrl == (Control*)&aEdRowCell) || (pCtrl == (Control*)&aRBRowCell) )
-        pEdActive = &aEdRowCell;
-    else if( (pCtrl == (Control*)&aEdColCell) || (pCtrl == (Control*)&aRBColCell) )
-        pEdActive = &aEdColCell;
+    if( (pCtrl == (Control*)m_pEdFormulaRange) || (pCtrl == (Control*)m_pRBFormulaRange) )
+        pEdActive = m_pEdFormulaRange;
+    else if( (pCtrl == (Control*)m_pEdRowCell) || (pCtrl == (Control*)m_pRBRowCell) )
+        pEdActive = m_pEdRowCell;
+    else if( (pCtrl == (Control*)m_pEdColCell) || (pCtrl == (Control*)m_pRBColCell) )
+        pEdActive = m_pEdColCell;
     else
         pEdActive = NULL;
 

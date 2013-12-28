@@ -963,7 +963,14 @@
 
 #define SCSTR_VALERR            (STR_START + 414)
 
-#define STR_END                 (SCSTR_VALERR)
+#define STR_NOFORMULASPECIFIED  (STR_START + 415)
+#define STR_NOCOLROW            (STR_START + 416)
+#define STR_WRONGFORMULA        (STR_START + 417)
+#define STR_WRONGROWCOL         (STR_START + 418)
+#define STR_NOCOLFORMULA        (STR_START + 419)
+#define STR_NOROWFORMULA        (STR_START + 420)
+
+#define STR_END                 (STR_NOROWFORMULA)
 
 #define BMP_START               (STR_END)
 
@@ -1025,7 +1032,7 @@
 
 #define RID_SCPAGE_CALC         (SC_DIALOGS_START + 56)
 #define RID_SCDLG_NAVIGATOR     (SC_DIALOGS_START + 57)
-#define RID_SCDLG_TABOP         (SC_DIALOGS_START + 58)
+
 #define RID_SCDLG_IMPORTOPT     (SC_DIALOGS_START + 59)
 #define RID_POPUP_ROWHEADER     (SC_DIALOGS_START + 60)
 #define RID_POPUP_COLHEADER     (SC_DIALOGS_START + 61)
