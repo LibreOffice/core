@@ -2013,10 +2013,6 @@ void EditDoc::CreateDefFont( sal_Bool bUseStyles )
     }
 }
 
-static const sal_Unicode aCR[] = { 0x0d, 0x00 };
-static const sal_Unicode aLF[] = { 0x0a, 0x00 };
-static const sal_Unicode aCRLF[] = { 0x0d, 0x0a, 0x00 };
-
 sal_Int32 EditDoc::GetPos(const ContentNode* p) const
 {
     return FastGetPos(maContents, p, nLastCache);
@@ -2085,14 +2081,11 @@ sal_Int32 EditDoc::Count() const
 
 OUString EditDoc::GetSepStr( LineEnd eEnd )
 {
-    OUString aSep;
     if ( eEnd == LINEEND_CR )
-        aSep = aCR;
-    else if ( eEnd == LINEEND_LF )
-        aSep = aLF;
-    else
-        aSep = aCRLF;
-    return aSep;
+        return OUString("\015"); // 0x0d
+    if ( eEnd == LINEEND_LF )
+        return OUString("\012"); // 0x0a
+    return OUString("\015\012"); // 0x0d, 0x0a
 }
 
 OUString EditDoc::GetText( LineEnd eEnd ) const
@@ -3044,7 +3037,7 @@ SvxColorItem* SvxColorList::GetObject( size_t nIndex )
 }
 
 EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
-    : SfxItemPool( OUString( "EditEngineItemPool" ), EE_ITEMS_START, EE_ITEMS_END,
+    : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )
 {
     SetVersionMap( 1, 3999, 4015, aV1Map );
