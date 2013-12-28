@@ -2709,7 +2709,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
     SvXMLElementExport aElemT(*this, sElemTab, true, true);
 
-    if (pProtect && pProtect->isProtected())
+    if (pProtect && pProtect->isProtected() && getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS))
             AddAttribute(XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS, XML_TRUE);
