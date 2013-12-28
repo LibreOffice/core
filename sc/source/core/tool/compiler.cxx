@@ -3442,11 +3442,10 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( cSymbol[0] < 128 )
     {
         bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
-        if (!bMayBeFuncName)
+        if (!bMayBeFuncName && (cSymbol[0] == '_' && cSymbol[1] == '_') )
         {
             SvtMiscOptions aOpt;
-            if (aOpt.IsExperimentalMode())
-                bMayBeFuncName = (cSymbol[0] == '_' && cSymbol[1] == '_');
+            bMayBeFuncName = aOpt.IsExperimentalMode();
         }
 
         bAsciiNonAlnum = !bMayBeFuncName && !rtl::isAsciiDigit( cSymbol[0] );
