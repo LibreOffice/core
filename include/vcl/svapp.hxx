@@ -389,9 +389,9 @@ public:
     /** Create a platform specific file picker, if one is available,
         otherwise return an empty reference
     */
-    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-        createFilePicker( const com::sun::star::uno::Reference<
-                              com::sun::star::uno::XComponentContext >& rServiceManager );
+    static css::uno::Reference<css::ui::dialogs::XFilePicker2>
+        createFilePicker(const css::uno::Sequence<css::uno::Any>& rArguments,
+                         const css::uno::Reference<css::uno::XComponentContext>& rServiceManager);
 
     /** Create a platform specific folder picker, if one is available,
         otherwise return an empty reference
