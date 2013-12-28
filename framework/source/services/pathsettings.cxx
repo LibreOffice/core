@@ -46,8 +46,8 @@
 #include <fwkdllapi.h>
 
 
-#define CFGPROP_USERPATHS OUString("UserPaths")
-#define CFGPROP_WRITEPATH OUString("WritePath")
+#define CFGPROP_USERPATHS "UserPaths"
+#define CFGPROP_WRITEPATH "WritePath"
 
 /*
     0 : old style              "Template"              string using ";" as separator
@@ -56,9 +56,9 @@
     3 : write path             "Template_write"        string
  */
 
-#define POSTFIX_INTERNAL_PATHS OUString("_internal")
-#define POSTFIX_USER_PATHS OUString("_user")
-#define POSTFIX_WRITE_PATH OUString("_writable")
+#define POSTFIX_INTERNAL_PATHS "_internal"
+#define POSTFIX_USER_PATHS "_user"
+#define POSTFIX_WRITE_PATH "_writable"
 
 const sal_Int32 IDGROUP_OLDSTYLE        = 0;
 const sal_Int32 IDGROUP_INTERNAL_PATHS = 1;
