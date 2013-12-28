@@ -94,7 +94,6 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         m_eErrorBarType( eType ),
         m_nConstDecimalDigits( 1 ),
         m_nConstSpinSize( 1 ),
-        m_pParentWindow( pParent ),
         m_pParentDialog( pParentDialog ),
         m_pCurrentRangeChoosingField( 0 ),
         m_bHasInternalDataProvider( true ),

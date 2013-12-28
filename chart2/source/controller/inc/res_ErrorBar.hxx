@@ -118,7 +118,6 @@ private:
     sal_uInt16           m_nConstDecimalDigits;
     sal_Int64            m_nConstSpinSize;
 
-    VclBuilderContainer* m_pParentWindow;
     Dialog *             m_pParentDialog;
     boost::scoped_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
     Edit *               m_pCurrentRangeChoosingField;
