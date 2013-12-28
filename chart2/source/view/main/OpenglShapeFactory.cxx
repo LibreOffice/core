@@ -126,6 +126,7 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
         xRet = new dummy::DummyChart();
         m_pChart = (void *)((dummy::DummyChart *)xRet);
 #endif
+        xDrawPage->add(xTarget);
         xDrawPage->add(pContainer);
     }
     return xRet;
