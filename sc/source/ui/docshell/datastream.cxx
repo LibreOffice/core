@@ -38,6 +38,24 @@
 
 namespace sc {
 
+extern double datastream_get_time(int nIdx);
+
+enum {
+    DEBUG_TIME_IMPORT,
+    DEBUG_TIME_RECALC,
+    DEBUG_TIME_RENDER,
+    DEBUG_TIME_MAX
+};
+
+static double fTimes[DEBUG_TIME_MAX] = { 0.0, 0.0, 0.0 };
+
+double datastream_get_time(int nIdx)
+{
+    if( nIdx < 0 || nIdx > (int)SAL_N_ELEMENTS( fTimes ) )
+        return -1;
+    return fTimes[ nIdx ];
+}
+
 inline double getNow()
 {
     TimeValue now;
@@ -353,9 +371,13 @@ void DataStream::Refresh()
 {
     Application::Yield();
 
+    double fStart = getNow();
+
     // Hard recalc will repaint the grid area.
     mpDocShell->DoHardRecalc(true);
     mpDocShell->SetDocumentModified(true);
+
+    fTimes[ DEBUG_TIME_RECALC ] = getNow() - fStart;
 
     mfLastRefreshTime = getNow();
     mnLinesSinceRefresh = 0;
@@ -476,6 +498,8 @@ void DataStream::Text2Doc()
         return;
     }
 
+    double fStart = getNow();
+
     MoveData();
     {
         StrValArray::const_iterator it = rStrs.begin(), itEnd = rStrs.end();
@@ -488,6 +512,8 @@ void DataStream::Text2Doc()
         for (; it != itEnd; ++it)
             maDocAccess.setNumericCell(it->maPos, it->mfVal);
     }
+
+    fTimes[ DEBUG_TIME_IMPORT ] = getNow() - fStart;
 
     if (meMove == NO_MOVE)
         return;

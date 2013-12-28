@@ -25,6 +25,12 @@
 
 using namespace com::sun::star;
 
+namespace sc
+{
+    // punch through into the datastream impl.
+    extern double datastream_get_time( int nIdx );
+}
+
 // TODO: Add new methods for ScInterpreter here.
 
 void ScInterpreter::ScFilterXML()
@@ -248,10 +254,15 @@ void ScInterpreter::ScDebugVar()
             fVal = pDPs->GetCount();
         }
         PushDouble(fVal);
-        return;
     }
-
-    PushIllegalParameter();
+    else if (aStrUpper == "DATASTREAM_IMPORT")
+        PushDouble( sc::datastream_get_time( 0 ) );
+    else if (aStrUpper == "DATASTREAM_RECALC")
+        PushDouble( sc::datastream_get_time( 1 ) );
+    else if (aStrUpper == "DATASTREAM_RENDER")
+        PushDouble( sc::datastream_get_time( 2 ) );
+    else
+        PushIllegalParameter();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
