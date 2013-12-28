@@ -1581,7 +1581,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
                     break;
                 }
             }
-            aEndPaM.GetIndex() = aEndPaM.GetNode()->Len();
+            aEndPaM.SetIndex( aEndPaM.GetNode()->Len() );
             SetEditSelection( EditSelection( aStartPaM, aEndPaM ) );
         }
     }

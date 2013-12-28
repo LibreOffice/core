@@ -2275,7 +2275,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.getLength(), GetItemPool() );
-    aPaM.GetIndex() = aPaM.GetIndex() + rStr.getLength();
+    aPaM.SetIndex( aPaM.GetIndex() + rStr.getLength() );
 
     SetModified( sal_True );
 
@@ -2338,7 +2338,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
 
     SetModified( sal_True );
 
-    aPaM.GetIndex()++;
+    aPaM.SetIndex( aPaM.GetIndex() + 1 );
     return aPaM;
 }
 

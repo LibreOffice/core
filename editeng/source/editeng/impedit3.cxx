@@ -2111,18 +2111,18 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
     EditSelection aWordSel( EditPaM( pNode, nStart ) );
     aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     if ( aWordSel.Min().GetIndex() < nStart )
-       aWordSel.Min().GetIndex() = nStart;
+       aWordSel.Min().SetIndex( nStart );
 
     while ( ( aWordSel.Min().GetNode() == pNode ) && ( aWordSel.Min().GetIndex() < nEnd ) )
     {
         const sal_Int32 nSavPos = aWordSel.Max().GetIndex();
         if ( aWordSel.Max().GetIndex() > nEnd )
-           aWordSel.Max().GetIndex() = nEnd;
+           aWordSel.Max().SetIndex( nEnd );
 
         OUString aWord = GetSelected( aWordSel );
 
         // restore selection for proper iteration at the end of the function
-        aWordSel.Max().GetIndex() = nSavPos;
+        aWordSel.Max().SetIndex( nSavPos );
 
         sal_Int32 nIdx = 0;
         sal_Int32 nKashidaPos = -1;
@@ -2252,7 +2252,7 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
     DBG_ASSERT( pTextPortion->GetKind() == PORTIONKIND_TEXT, "SplitTextPortion: No TextPortion!" );
 
     sal_uInt16 nOverlapp = nTmpPos - nPos;
-    pTextPortion->GetLen() = pTextPortion->GetLen() - nOverlapp;
+    pTextPortion->SetLen( pTextPortion->GetLen() - nOverlapp );
     TextPortion* pNewPortion = new TextPortion( nOverlapp );
     pPortion->GetTextPortions().Insert(nSplitPortion+1, pNewPortion);
     // Set sizes
@@ -2399,10 +2399,9 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
             if ( ( nNewPortionPos < pParaPortion->GetTextPortions().Count() ) &&
                     !pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
             {
-                DBG_ASSERT( pParaPortion->GetTextPortions()[nNewPortionPos]->GetKind() == PORTIONKIND_TEXT, "the empty portion was no TextPortion!" );
-                sal_uInt16 & r =
-                    pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen();
-                r = r + nNewChars;
+                TextPortion* const pTP = pParaPortion->GetTextPortions()[nNewPortionPos];
+                DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "the empty portion was no TextPortion!" );
+                pTP->SetLen( pTP->GetLen() + nNewChars );
             }
             else
             {
@@ -2417,7 +2416,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
                 FindPortion( nStartPos, nPortionStart );
             TextPortion* const pTP = pParaPortion->GetTextPortions()[ nTP ];
             DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found"  );
-            pTP->GetLen() = pTP->GetLen() + nNewChars;
+            pTP->SetLen( pTP->GetLen() + nNewChars );
             pTP->GetSize().Width() = (-1);
         }
     }
@@ -2465,7 +2464,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
         else
         {
             DBG_ASSERT( pTP->GetLen() > (-nNewChars), "Portion too small to shrink! ");
-            pTP->GetLen() = pTP->GetLen() + nNewChars;
+            pTP->SetLen( pTP->GetLen() + nNewChars );
         }
 
         sal_uInt16 nPortionCount = pParaPortion->GetTextPortions().Count();

@@ -1490,7 +1490,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     {
         pEditView->pImpEditView->DrawSelection();
         if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
-            aCurSel.Max().GetIndex() = aCurSel.Max().GetNode()->Len();
+            aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
         aCurSel.Min() = aCurSel.Max();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
@@ -1615,7 +1615,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
     {
         pEditView->pImpEditView->DrawSelection();
         if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
-            aCurSel.Max().GetIndex() = aCurSel.Max().GetNode()->Len();
+            aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
         aCurSel.Min() = aCurSel.Max();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
@@ -1870,7 +1870,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
             sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
             if ( cNext == '.' )
             {
-                aCurSel.Max().GetIndex()++;
+                aCurSel.Max().SetIndex( aCurSel.Max().GetIndex()+1 );
                 aWord += OUString(cNext);
             }
         }
@@ -1929,7 +1929,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
             sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
             if ( cNext == '.' )
             {
-                aCurSel.Max().GetIndex()++;
+                aCurSel.Max().SetIndex( aCurSel.Max().GetIndex()+1 );
                 aWord += OUString(cNext);
             }
         }
@@ -2302,7 +2302,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     sal_Unicode cNext = aSel.Max().GetNode()->GetChar( aSel.Max().GetIndex() );
                     if ( cNext == '.' )
                     {
-                        aSel.Max().GetIndex()++;
+                        aSel.Max().SetIndex( aSel.Max().GetIndex()+1 );
                         bDottAdded = true;
                     }
                 }
@@ -2554,7 +2554,7 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
         {
             EditPaM aNewPaM( aFoundSel.Max() );
             if ( aNewPaM.GetIndex() > aNewPaM.GetNode()->Len() )
-                aNewPaM.GetIndex() =  aNewPaM.GetNode()->Len();
+                aNewPaM.SetIndex( aNewPaM.GetNode()->Len() );
             pEditView->pImpEditView->SetEditSelection( aNewPaM );
             FormatAndUpdate( pEditView );
             UndoActionEnd( EDITUNDO_REPLACEALL );
@@ -2993,7 +2993,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
                 // adjust selection in end node to possibly changed size
                 if (aSel.Max().GetNode() == rData.aSelection.Max().GetNode())
-                    aNewSel.Max().GetIndex() = aNewSel.Max().GetIndex() + nDiffs;
+                    aNewSel.Max().SetIndex( aNewSel.Max().GetIndex() + nDiffs );
 
                 sal_Int32 nSelNode = aEditDoc.GetPos( rData.aSelection.Min().GetNode() );
                 ParaPortion* pParaPortion = GetParaPortions()[nSelNode];

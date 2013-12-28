@@ -305,7 +305,7 @@ void EditUndoInsertChars::Undo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
-    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.getLength();
+    aSel.Max().SetIndex( aSel.Max().GetIndex() + aText.getLength() );
     EditPaM aNewPaM( GetEditEngine()->DeleteSelection(aSel) );
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
 }
@@ -316,7 +316,7 @@ void EditUndoInsertChars::Redo()
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     GetEditEngine()->InsertText(EditSelection(aPaM, aPaM), aText);
     EditPaM aNewPaM( aPaM );
-    aNewPaM.GetIndex() = aNewPaM.GetIndex() + aText.getLength();
+    aNewPaM.SetIndex( aNewPaM.GetIndex() + aText.getLength() );
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
 }
 
@@ -348,7 +348,7 @@ void EditUndoRemoveChars::Undo()
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     GetEditEngine()->InsertText(aSel, aText);
-    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.getLength();
+    aSel.Max().SetIndex( aSel.Max().GetIndex() + aText.getLength() );
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
@@ -357,7 +357,7 @@ void EditUndoRemoveChars::Redo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
-    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.getLength();
+    aSel.Max().SetIndex( aSel.Max().GetIndex() + aText.getLength() );
     EditPaM aNewPaM = GetEditEngine()->DeleteSelection(aSel);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aNewPaM);
 }
@@ -381,9 +381,9 @@ void EditUndoInsertFeature::Undo()
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     // Attributes are then corrected implicitly by the document ...
-    aSel.Max().GetIndex()++;
+    aSel.Max().SetIndex( aSel.Max().GetIndex()+1 );
     GetEditEngine()->DeleteSelection(aSel);
-    aSel.Max().GetIndex()--;    // For Selection
+    aSel.Max().SetIndex( aSel.Max().GetIndex()-1 ); // For Selection
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
@@ -395,7 +395,7 @@ void EditUndoInsertFeature::Redo()
     GetEditEngine()->InsertFeature(aSel, *pFeature);
     if ( pFeature->Which() == EE_FEATURE_FIELD )
         GetEditEngine()->UpdateFieldsOnly();
-    aSel.Max().GetIndex()++;
+    aSel.Max().SetIndex( aSel.Max().GetIndex()+1 );
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
@@ -617,14 +617,12 @@ void EditUndoTransliteration::Undo()
     if ( aNewSel.Min().GetNode() == aDelSel.Max().GetNode() )
     {
         aNewSel.Min().SetNode( aDelSel.Min().GetNode() );
-        aNewSel.Min().GetIndex() =
-            aNewSel.Min().GetIndex() + aDelSel.Min().GetIndex();
+        aNewSel.Min().SetIndex( aNewSel.Min().GetIndex() + aDelSel.Min().GetIndex() );
     }
     if ( aNewSel.Max().GetNode() == aDelSel.Max().GetNode() )
     {
         aNewSel.Max().SetNode( aDelSel.Min().GetNode() );
-        aNewSel.Max().GetIndex() =
-            aNewSel.Max().GetIndex() + aDelSel.Min().GetIndex();
+        aNewSel.Max().SetIndex( aNewSel.Max().GetIndex() + aDelSel.Min().GetIndex() );
     }
     pEE->DeleteSelected( aDelSel );
     pEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );

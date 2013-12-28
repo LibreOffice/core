@@ -880,7 +880,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         pInsertMenu->SetMenuFlags( MENU_FLAG_NOAUTOMNEMONICS );         //! necessary to retrieve the correct dictionary names later
 
         EditPaM aPaM2( aPaM );
-        aPaM2.GetIndex()++;
+        aPaM2.SetIndex( aPaM2.GetIndex()+1 );
 
         // Are there any replace suggestions?
         OUString aSelected( GetSelected() );

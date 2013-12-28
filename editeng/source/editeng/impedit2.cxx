@@ -372,9 +372,8 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             if ( mpIMEInfos->nLen )
             {
                 EditSelection aSel( mpIMEInfos->aPos );
-                aSel.Min().GetIndex() += mpIMEInfos->nLen-1;
-                aSel.Max().GetIndex() =
-                    aSel.Max().GetIndex() + mpIMEInfos->nLen;
+                aSel.Min().SetIndex( aSel.Min().GetIndex() + mpIMEInfos->nLen-1 );
+                aSel.Max().SetIndex( aSel.Max().GetIndex() + mpIMEInfos->nLen );
                 // #102812# convert quotes in IME text
                 // works on the last input character, this is escpecially in Korean text often done
                 // quotes that are inside of the string are not replaced!
@@ -411,8 +410,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             if ( !pData->IsOnlyCursorChanged() )
             {
                 EditSelection aSel( mpIMEInfos->aPos );
-                aSel.Max().GetIndex() =
-                    aSel.Max().GetIndex() + mpIMEInfos->nLen;
+                aSel.Max().SetIndex( aSel.Max().GetIndex() + mpIMEInfos->nLen );
                 aSel = DeleteSelected( aSel );
                 aSel = ImpInsertText( aSel, pData->GetText() );
 
@@ -427,7 +425,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                         // restore old characters
                         sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                         EditPaM aPaM( mpIMEInfos->aPos );
-                        aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
+                        aPaM.SetIndex( aPaM.GetIndex() + nNewIMETextLen );
                         ImpInsertText( aPaM, mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
                     }
                     else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
@@ -439,10 +437,9 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                             nOverwrite = mpIMEInfos->aOldTextAfterStartPos.getLength() - nOldIMETextLen;
                         OSL_ENSURE( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
                         EditPaM aPaM( mpIMEInfos->aPos );
-                        aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
+                        aPaM.SetIndex( aPaM.GetIndex() + nNewIMETextLen );
                         EditSelection _aSel( aPaM );
-                        _aSel.Max().GetIndex() =
-                            _aSel.Max().GetIndex() + nOverwrite;
+                        _aSel.Max().SetIndex( _aSel.Max().GetIndex() + nOverwrite );
                         DeleteSelected( _aSel );
                     }
                 }
@@ -943,7 +940,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
 
         ubidi_close( pBidi );
 
-        aPaM.GetIndex() = nLogPos + pLine->GetStart();
+        aPaM.SetIndex( nLogPos + pLine->GetStart() );
 
         sal_uInt16 nTmp;
         sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, sal_True );
@@ -956,13 +953,13 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
             pEditView->pImpEditView->SetCursorBidiLevel( bPortionRTL ? 0 : 1 );
             // Maybe we must be *behind* the character
             if ( bPortionRTL && pEditView->IsInsertMode() )
-                aPaM.GetIndex()++;
+                aPaM.SetIndex( aPaM.GetIndex()+1 );
         }
         else
         {
             pEditView->pImpEditView->SetCursorBidiLevel( bPortionRTL ? 1 : 0 );
             if ( !bPortionRTL && pEditView->IsInsertMode() )
-                aPaM.GetIndex()++;
+                aPaM.SetIndex( aPaM.GetIndex()+1 );
         }
     }
 
@@ -1077,8 +1074,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
 
             if ( !bGotoEndOfPrevLine && !bGotoStartOfNextLine )
             {
-                sal_uInt16 nLogPos = (sal_uInt16)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
-                aPaM.GetIndex() = pLine->GetStart() + nLogPos;
+                aPaM.SetIndex( pLine->GetStart() + ubidi_getLogicalIndex( pBidi, nVisPos, &nError ) );
                 pEditView->pImpEditView->SetCursorBidiLevel( 0 );
             }
         }
@@ -1112,9 +1108,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
 
             if ( !bGotoEndOfPrevLine && !bGotoStartOfNextLine )
             {
-                sal_uInt16 nLogPos = (sal_uInt16)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
-
-                aPaM.GetIndex() = pLine->GetStart() + nLogPos;
+                aPaM.SetIndex( pLine->GetStart() + ubidi_getLogicalIndex( pBidi, nVisPos, &nError ) );
 
                 // RTL portion, stay visually on the left side.
                 sal_uInt16 _nPortionStart;
@@ -1122,9 +1116,9 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
                 sal_uInt16 _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, sal_True );
                 const TextPortion* _pTextPortion = pParaPortion->GetTextPortions()[_nTextPortion];
                 if ( bVisualToLeft && !bRTLPortion && ( _pTextPortion->GetRightToLeft() % 2 ) )
-                    aPaM.GetIndex()++;
+                    aPaM.SetIndex( aPaM.GetIndex()+1 );
                 else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_pTextPortion->GetRightToLeft() % 2 )) )
-                    aPaM.GetIndex()++;
+                    aPaM.SetIndex( aPaM.GetIndex()+1 );
 
                 pEditView->pImpEditView->SetCursorBidiLevel( _nPortionStart );
             }
@@ -2059,7 +2053,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, Edit
             if (rAttr.GetEnd() >= nStart && rAttr.GetStart() < nEnd)
             {
                 EditSelection aSel( rPaM );
-                aSel.Max().GetIndex() = aSel.Max().GetIndex() + nChars;
+                aSel.Max().SetIndex( aSel.Max().GetIndex() + nChars );
                 EditUndoSetAttribs* pAttrUndo = CreateAttribUndo( aSel, GetEmptyItemSet() );
                 InsertUndo( pAttrUndo );
                 break;  // for
@@ -2567,7 +2561,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
     {
         // If selected, then do not also overwrite a character!
         EditSelection aTmpSel( aPaM );
-        aTmpSel.Max().GetIndex()++;
+        aTmpSel.Max().SetIndex( aTmpSel.Max().GetIndex()+1 );
         OSL_ENSURE( !aTmpSel.DbgIsBuggy( aEditDoc ), "Overwrite: Wrong selection! ");
         ImpDeleteSelection( aTmpSel );
     }
@@ -2636,7 +2630,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in InsertText" );
         pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
-        aPaM.GetIndex()++;   // does not do EditDoc-Method anymore
+        aPaM.SetIndex( aPaM.GetIndex()+1 );   // does not do EditDoc-Method anymore
     }
 
     TextModified();
@@ -3349,12 +3343,12 @@ void ImpEditEngine::UpdateSelections()
             // Check Index if node shrunk.
             if ( aCurSel.Min().GetIndex() > aCurSel.Min().GetNode()->Len() )
             {
-                aCurSel.Min().GetIndex() = aCurSel.Min().GetNode()->Len();
+                aCurSel.Min().SetIndex( aCurSel.Min().GetNode()->Len() );
                 pView->pImpEditView->SetEditSelection( aCurSel );
             }
             if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
             {
-                aCurSel.Max().GetIndex() = aCurSel.Max().GetNode()->Len();
+                aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
                 pView->pImpEditView->SetEditSelection( aCurSel );
             }
         }

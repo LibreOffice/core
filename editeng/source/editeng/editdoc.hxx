@@ -326,7 +326,6 @@ public:
     void SetNode(ContentNode* p);
 
     sal_Int32  GetIndex() const         { return nIndex; }
-    sal_Int32& GetIndex()               { return nIndex; }
     void       SetIndex( sal_Int32 n )  { nIndex = n; }
 
     sal_Bool            DbgIsBuggy( EditDoc& rDoc );
@@ -406,7 +405,6 @@ public:
                 ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); delete pExtraInfos; }
 
     sal_uInt16      GetLen() const              { return nLen; }
-    sal_uInt16&     GetLen()                    { return nLen; }
     void        SetLen( sal_uInt16 nL )         { nLen = nL; }
 
     Size&       GetSize()                   { return aOutSz; }
