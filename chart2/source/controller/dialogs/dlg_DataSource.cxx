@@ -160,8 +160,8 @@ DataSourceDialog::DataSourceDialog(
     m_pTabControl->InsertPage( TP_RANGECHOOSER, SCH_RESSTR(STR_PAGE_DATA_RANGE) );
     m_pTabControl->InsertPage( TP_DATA_SOURCE,  SCH_RESSTR(STR_OBJECT_DATASERIES_PLURAL) );
 
-    m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabePage );
     m_pTabControl->SetTabPage( TP_DATA_SOURCE,  m_pDataSourceTabPage );
+    m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabePage );
 
     m_pTabControl->SelectTabPage( m_nLastPageId );
 

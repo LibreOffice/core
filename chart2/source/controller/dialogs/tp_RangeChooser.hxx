@@ -78,16 +78,17 @@ protected: //methods
 
 protected: //member
 
-    FixedText       m_aFT_Caption;
-    FixedText       m_aFT_Range;
-    RangeEdit       m_aED_Range;
-    RangeSelectionButton     m_aIB_Range;
+    FixedText*       m_pFT_Caption;
+    FixedText*       m_pFT_Range;
+    Edit*            m_pED_Range;
+    PushButton*      m_pIB_Range;
 
-    RadioButton     m_aRB_Rows;
-    RadioButton     m_aRB_Columns;
+    RadioButton*     m_pRB_Rows;
+    RadioButton*     m_pRB_Columns;
 
-    CheckBox        m_aCB_FirstRowAsLabel;
-    CheckBox        m_aCB_FirstColumnAsLabel;
+    CheckBox*        m_pCB_FirstRowAsLabel;
+    CheckBox*        m_pCB_FirstColumnAsLabel;
+    FixedText*       m_pFTTitle;
 
     sal_Int32       m_nChangingControlCalls;
     bool            m_bIsDirty;
@@ -105,6 +106,7 @@ protected: //member
     DialogModel &                                           m_rDialogModel;
     Dialog *                                                m_pParentDialog;
     TabPageNotifiable *                                     m_pTabPageNotifiable;
+
 };
 
 } //namespace chart
