@@ -108,20 +108,19 @@ void emptyLineQueue( std::queue<LinesList*>& rQueue )
 class ReaderThread : public salhelper::Thread
 {
     SvStream *mpStream;
+    bool mbTerminate;
+    osl::Mutex maMtxTerminate;
 public:
-    bool mbTerminateReading;
     osl::Condition maProduceResume;
     osl::Condition maConsumeResume;
-    osl::Mutex maLinesProtector;
+    osl::Mutex maMtxLines;
     std::queue<LinesList* > maPendingLines;
     std::queue<LinesList* > maUsedLines;
 
     ReaderThread(SvStream *pData):
-        Thread("ReaderThread")
-        ,mpStream(pData)
-        ,mbTerminateReading(false)
-    {
-    }
+        Thread("ReaderThread"),
+        mpStream(pData),
+        mbTerminate(false) {}
 
     virtual ~ReaderThread()
     {
@@ -130,19 +129,31 @@ public:
         emptyLineQueue(maUsedLines);
     }
 
+    bool isTerminateRequested()
+    {
+        osl::MutexGuard aGuard(maMtxTerminate);
+        return mbTerminate;
+    }
+
+    void requestTerminate()
+    {
+        osl::MutexGuard aGuard(maMtxTerminate);
+        mbTerminate = true;
+    }
+
     void endThread()
     {
-        mbTerminateReading = true;
+        requestTerminate();
         maProduceResume.set();
     }
 
 private:
     virtual void execute() SAL_OVERRIDE
     {
-        while (!mbTerminateReading)
+        while (!isTerminateRequested())
         {
             LinesList* pLines = NULL;
-            osl::ResettableMutexGuard aGuard(maLinesProtector);
+            osl::ResettableMutexGuard aGuard(maMtxLines);
 
             if (!maUsedLines.empty())
             {
@@ -160,7 +171,7 @@ private:
                 mpStream->ReadLine( pLines->at(i) );
 
             aGuard.reset(); // lock
-            while (!mbTerminateReading && maPendingLines.size() >= 8)
+            while (!isTerminateRequested() && maPendingLines.size() >= 8)
             {
                 // pause reading for a bit
                 aGuard.clear(); // unlock
@@ -171,7 +182,7 @@ private:
             maPendingLines.push(pLines);
             maConsumeResume.set();
             if (!mpStream->good())
-                mbTerminateReading = true;
+                requestTerminate();
         }
     }
 };
@@ -267,11 +278,13 @@ OString DataStream::ConsumeLine()
     if (!mpLines || mnLinesCount >= mpLines->size())
     {
         mnLinesCount = 0;
-        if (mxReaderThread->mbTerminateReading)
+        if (mxReaderThread->isTerminateRequested())
             return OString();
-        osl::ResettableMutexGuard aGuard(mxReaderThread->maLinesProtector);
+
+        osl::ResettableMutexGuard aGuard(mxReaderThread->maMtxLines);
         if (mpLines)
             mxReaderThread->maUsedLines.push(mpLines);
+
         while (mxReaderThread->maPendingLines.empty())
         {
             aGuard.clear(); // unlock
@@ -279,6 +292,7 @@ OString DataStream::ConsumeLine()
             mxReaderThread->maConsumeResume.reset();
             aGuard.reset(); // lock
         }
+
         mpLines = mxReaderThread->maPendingLines.front();
         mxReaderThread->maPendingLines.pop();
         if (mxReaderThread->maPendingLines.size() <= 4)
