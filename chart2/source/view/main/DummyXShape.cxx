@@ -1043,9 +1043,6 @@ void DummyChart::setSize( const awt::Size& aSize )
     int height = aSize.Height / 10;
     width = (width + 3) & ~3;
     height = (height + 3) & ~3;
-    awt::Size tempSize;
-    tempSize.Width = width;
-    tempSize.Height = height;
     mpWindow->SetSizePixel(Size(width, height));
     pWindow->SetSizePixel(Size(width, height));
     DummyXShape::setSize(awt::Size(0,0));
