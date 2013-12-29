@@ -174,7 +174,7 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
     {
         // If present, this should be sent first.
         RTFValue::Pointer_t pString(new RTFValue(rString));
-        aAttributes.set(NS_rtf::LN_BOOKMARKNAME, pString);
+        aAttributes.set(NS_ooxml::LN_CT_Bookmark_name, pString);
     }
     aAttributes.set(NS_rtf::LN_IBKL, pPos);
     return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAttributes));

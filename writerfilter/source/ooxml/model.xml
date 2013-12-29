@@ -22116,7 +22116,7 @@
     </resource>
     <resource name="CT_Bookmark" resource="Properties" tag="reference">
       <type name="Bookmark"/>
-      <attribute name="name" tokenid="rtf:BOOKMARKNAME"/>
+      <attribute name="name" tokenid="ooxml:CT_Bookmark_name"/>
     </resource>
     <resource name="CT_MoveBookmark" resource="Properties" tag="reference">
       <attribute name="author" tokenid="ooxml:CT_MoveBookmark_author"/>

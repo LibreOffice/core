@@ -736,7 +736,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_endnote:
             break;
-        case NS_rtf::LN_BOOKMARKNAME:
+        case NS_ooxml::LN_CT_Bookmark_name:
             // sStringValue contains the bookmark name
             sLocalBookmarkName = sStringValue;
         break;
