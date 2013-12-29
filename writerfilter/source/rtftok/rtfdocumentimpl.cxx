@@ -2780,7 +2780,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
         case RTF_LEVELJC: nSprm = NS_ooxml::LN_CT_Lvl_lvlJc; break;
         case RTF_LEVELNFC: nSprm = NS_rtf::LN_NFC; break;
-        case RTF_LEVELSTARTAT: nSprm = NS_rtf::LN_ISTARTAT; break;
+        case RTF_LEVELSTARTAT: nSprm = NS_ooxml::LN_CT_Lvl_start; break;
         case RTF_LEVELPICTURE: nSprm = NS_ooxml::LN_CT_Lvl_lvlPicBulletId; break;
         default: break;
     }
@@ -3542,7 +3542,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aDrawingObject.nBottom = TWIP_TO_MM100(nParam);
             break;
         case RTF_PNSTART:
-            m_aStates.top().aTableSprms.set(NS_rtf::LN_ISTARTAT, pIntValue);
+            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_start, pIntValue);
             break;
         case RTF_PNF:
             {
@@ -4576,9 +4576,9 @@ int RTFDocumentImpl::popState()
                     if (pNfcValue.get())
                         aLevelSprms.set(NS_rtf::LN_NFC, pNfcValue);
 
-                    RTFValue::Pointer_t pStartatValue = aState.aTableSprms.find(NS_rtf::LN_ISTARTAT);
+                    RTFValue::Pointer_t pStartatValue = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_start);
                     if (pStartatValue.get())
-                        aLevelSprms.set(NS_rtf::LN_ISTARTAT, pStartatValue);
+                        aLevelSprms.set(NS_ooxml::LN_CT_Lvl_start, pStartatValue);
 
                     RTFValue::Pointer_t pLeveltextValue(new RTFValue(aLeveltextAttributes));
                     aLevelSprms.set(NS_ooxml::LN_CT_Lvl_lvlText, pLeveltextValue);

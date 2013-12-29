@@ -23543,7 +23543,7 @@
     </resource>
     <resource name="CT_Lvl" resource="Properties" tag="numbering">
       <kind name="paragraph"/>
-      <element name="start" tokenid="rtf:ISTARTAT"/>
+      <element name="start" tokenid="ooxml:CT_Lvl_start"/>
       <element name="numFmt" tokenid="rtf:NFC"/>
       <element name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
       <element name="pStyle" tokenid="ooxml:CT_Lvl_pStyle"/>

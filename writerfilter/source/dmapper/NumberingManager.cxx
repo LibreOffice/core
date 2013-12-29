@@ -109,7 +109,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
 {
     switch( nId )
     {
-        case NS_rtf::LN_ISTARTAT:
+        case NS_ooxml::LN_CT_Lvl_start:
             m_nIStartAt = nValue;
         break;
         case NS_rtf::LN_NFC:
@@ -771,7 +771,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
                 pCurrentLvl->SetBulletChar( rVal.getString() );
         }
         break;
-        case NS_rtf::LN_ISTARTAT:
+        case NS_ooxml::LN_CT_Lvl_start:
         case NS_rtf::LN_NFC:
         case NS_rtf::LN_JC:
         case NS_rtf::LN_FLEGAL:
@@ -990,7 +990,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             }
             break;
             case NS_rtf::LN_RGBXCHNUMS: break;
-            case NS_rtf::LN_ISTARTAT:
+            case NS_ooxml::LN_CT_Lvl_start:
             case NS_rtf::LN_NFC:
             case NS_rtf::LN_JC:
             case NS_rtf::LN_FLEGAL:

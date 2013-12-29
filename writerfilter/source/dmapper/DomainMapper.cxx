@@ -319,7 +319,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         }
         break;
-        case NS_rtf::LN_ISTARTAT:
+        case NS_ooxml::LN_CT_Lvl_start:
             break;
         case NS_rtf::LN_NFC:
             break;
