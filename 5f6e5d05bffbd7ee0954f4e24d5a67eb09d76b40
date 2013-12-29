@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_14ba74e1",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-12-29T15:26:33Z",
+      "side": 1,
+      "message": "row 66 still false, as the xlsx document contains an incorrect call to the formula.\nI intend to upload a revised xlsx document (with added cases to be tested) as attachment to bug 70798.",
+      "revId": "5f6e5d05bffbd7ee0954f4e24d5a67eb09d76b40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_f4edf8f0",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-12-29T15:26:33Z",
+      "side": 1,
+      "message": "Found no reason for the constraint fDF \u003c\u003d 1E10, tested with fDF up to 1E150.",
+      "revId": "5f6e5d05bffbd7ee0954f4e24d5a67eb09d76b40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
