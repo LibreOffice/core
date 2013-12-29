@@ -1798,12 +1798,16 @@ dnl ===================================================================
 dnl Search for a pre-installed dmake
 dnl ===================================================================
 AC_MSG_CHECKING([for dmake])
-AC_PATH_PROG(DMAKE, dmake, no)
-IS_SYSTEM_DMAKE=NO
-if test "$DMAKE" != "no"; then
-   AC_MSG_RESULT([using system dmake])
-   DMAKE_PATH="$DMAKE"
-   IS_SYSTEM_DMAKE=YES
+DMAKE="no"
+# Override system dmake if --with-dmake-path or --with-dmake-url is used.
+if test -z "$with_dmake_path" && test -z "$with_dmake_url"; then
+   AC_PATH_PROG(DMAKE, dmake, no)
+   IS_SYSTEM_DMAKE=NO
+   if test "$DMAKE" != "no"; then
+      AC_MSG_RESULT([using system dmake])
+      DMAKE_PATH="$DMAKE"
+      IS_SYSTEM_DMAKE=YES
+   fi
 elif test -n "$with_dmake_path" ; then
    # Did not find pre-installed dmake.
    # Is it at a nonstandard location provided by --with-dmake-path ?
