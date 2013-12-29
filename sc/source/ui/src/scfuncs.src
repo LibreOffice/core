@@ -7601,6 +7601,110 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Mode = 1 calculates the one-tailed test, 2 = two-tailed distribution." ;
         };
     };
+     // -=*# Resource for function T.DIST.2T #*=-
+    Resource SC_OPCODE_T_DIST_2T
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the two-tailed t-distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_TDIST_2T );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the T distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the T distribution." ;
+        };
+    };
+     // -=*# Resource for function T.DIST #*=-
+    Resource SC_OPCODE_T_DIST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the t-distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_TDIST_MS );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the T distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the T distribution." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "cumulative" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "True calculates the cumulative distribution function, false the probability density function." ;
+        };
+    };
+     // -=*# Resource for function T.DIST.RT #*=-
+    Resource SC_OPCODE_T_DIST_RT
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the right-tailed t-distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_TDIST_RT );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The value for which the T distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the T distribution." ;
+        };
+    };
      // -=*# Resource for function TINV #*=-
     Resource SC_OPCODE_T_INV
     {
@@ -7613,6 +7717,70 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_TINV );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse T distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the T distribution." ;
+        };
+    };
+     // -=*# Resource for function T.INV #*=-
+    Resource SC_OPCODE_T_INV_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the left-tailed inverse t-distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_TINV_MS );
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The probability value for which the inverse T distribution is to be calculated." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "degrees_freedom" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The degrees of freedom of the T distribution." ;
+        };
+    };
+     // -=*# Resource for function T.INV.2T #*=-
+    Resource SC_OPCODE_T_INV_2T
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Values of the two-tailed inverse t-distribution." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_TINV_2T );
             2;  0;  0;
             0;
         };
@@ -8566,6 +8734,54 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_TTEST );
+            4;  0;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "data_1" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The first record array." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "data_2" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The second record array." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "mode" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Mode specifies the number of distribution tails to return. 1= one-tailed, 2 = two-tailed distribution" ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US ] = "Type" ;
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US ] = "The type of the T test." ;
+        };
+    };
+     // -=*# Resource for function T.TEST #*=-
+    Resource SC_OPCODE_T_TEST_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the T test." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_TTEST_MS );
             4;  0;  0;  0;  0;
             0;
         };

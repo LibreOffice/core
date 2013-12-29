@@ -781,7 +781,13 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.NORM.DIST",              "NORM.DIST",           NOID,   NOID,    4,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.NORM.INV",               "NORM.INV",            NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.NORM.S.DIST",            "NORM.S.DIST",         NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.NORM.S.INV",             "NORM.S.INV",          NOID,   NOID,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
+    { "COM.MICROSOFT.NORM.S.INV",             "NORM.S.INV",          NOID,   NOID,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.T.DIST",                 "T.DIST",              NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.T.DIST.2T",              "T.DIST.2T",           NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.T.DIST.RT",              "T.DIST.RT",           NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.T.INV",                  "T.INV",               NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.T.INV.2T",               "T.INV.2T",            NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.T.TEST",                 "T.TEST",              NOID,   NOID,    4,  4,  V, { VA, VA, VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions new in Excel 2013.

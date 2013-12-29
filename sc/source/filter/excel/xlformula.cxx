@@ -463,7 +463,13 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR(         ocNormDist_MS,    4,  4,  0,  "NORM.DIST" ),
     EXC_FUNCENTRY_V_VR(         ocNormInv_MS,     3,  3,  0,  "NORM.INV" ),
     EXC_FUNCENTRY_V_VR(         ocStdNormDist_MS, 2,  2,  0,  "NORM.S.DIST" ),
-    EXC_FUNCENTRY_V_VR(         ocSNormInv_MS,    1,  1,  0,  "NORM.S.INV" )
+    EXC_FUNCENTRY_V_VR(         ocSNormInv_MS,    1,  1,  0,  "NORM.S.INV" ),
+    EXC_FUNCENTRY_V_VR(         ocTDist_2T,       2,  2,  0,  "T.DIST.2T" ),
+    EXC_FUNCENTRY_V_VR(         ocTDist_MS,       3,  3,  0,  "T.DIST" ),
+    EXC_FUNCENTRY_V_VR(         ocTDist_RT,       2,  2,  0,  "T.DIST.RT" ),
+    EXC_FUNCENTRY_V_VR(         ocTInv_2T,        2,  2,  0,  "T.INV.2T" ),
+    EXC_FUNCENTRY_V_VR(         ocTInv_MS,        2,  2,  0,  "T.INV" ),
+    EXC_FUNCENTRY_V_VR(         ocTTest_MS,       4,  4,  0,  "T.TEST" )
 };
 
 /** Functions new in Excel 2013.
