@@ -26230,64 +26230,6 @@
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
           <UML:Classifier.feature>
-            <UML:Attribute name="pid">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>Property ID</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="comment"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0x0</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="offset"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>14</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="bits"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0x3fff</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="mask"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="shift"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:shppid</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="attrid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:StructuralFeature.type>
-                <UML:DataType xmi.idref="U16"/>
-              </UML:StructuralFeature.type>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="attribute"/>
-              </UML:ModelElement.stereotype>
-            </UML:Attribute>
-          </UML:Classifier.feature>
-          <UML:Classifier.feature>
             <UML:Attribute name="fBid">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>

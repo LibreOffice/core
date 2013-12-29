@@ -627,9 +627,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break;// Shape has a shape type property
         case NS_rtf::LN_shptypename:
             break;// shape type name
-        case NS_rtf::LN_shppid:
-            m_pImpl->nShapeOptionType = nIntValue;
-            break; //type of shape option
         case NS_rtf::LN_shpfBid:
             break; //ignored
         case NS_rtf::LN_shpfComplex:
