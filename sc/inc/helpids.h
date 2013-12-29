@@ -713,5 +713,11 @@
 #define HID_FUNC_NORMINV_MS                                     "SC_HID_FUNC_NORMINV_MS"
 #define HID_FUNC_STD_NORMDIST_MS                                "SC_HID_FUNC_STD_NORMDIST_MS"
 #define HID_FUNC_STD_NORMINV_MS                                 "SC_HID_FUNC_STD_NORMINV_MS"
+#define HID_FUNC_TDIST_2T                                       "SC_HID_FUNC_TDIST_2T"
+#define HID_FUNC_TDIST_MS                                       "SC_HID_FUNC_TDIST_MS"
+#define HID_FUNC_TDIST_RT                                       "SC_HID_FUNC_TDIST_RT"
+#define HID_FUNC_TINV_2T                                        "SC_HID_FUNC_TINV_2T"
+#define HID_FUNC_TINV_MS                                        "SC_HID_FUNC_TINV_MS"
+#define HID_FUNC_TTEST_MS                                       "SC_HID_FUNC_TTEST_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -633,9 +633,23 @@ double ScInterpreter::GetFDist(double x, double fF1, double fF2)
     return (GetBetaDist(arg, alpha, beta));
 }
 
-double ScInterpreter::GetTDist(double T, double fDF)
+double ScInterpreter::GetTDist( double T, double fDF, int nType )
 {
-    return 0.5 * GetBetaDist(fDF/(fDF+T*T), fDF/2.0, 0.5);
+    switch ( nType )
+    {
+        case 1 : // 1-tailed T-distribution
+            return 0.5 * GetBetaDist( fDF / ( fDF + T * T ), fDF / 2.0, 0.5 );
+        case 2 : // 2-tailed T-distribution
+            return GetBetaDist( fDF / ( fDF + T * T ), fDF / 2.0, 0.5);
+        case 3 : // left-tailed T-distribution (probability density function)
+            return pow( 1 + ( T * T / fDF ), -( fDF + 1 ) / 2 ) / ( sqrt( fDF ) * GetBeta( 0.5, fDF / 2.0 ) );
+        case 4 : // left-tailed T-distribution (cumulative distribution function)
+            double X = fDF / ( T * T + fDF );
+            double R = 0.5 * GetBetaDist( X, 0.5 * fDF, 0.5 );
+            return ( T < 0 ? R : 1 - R );
+    }
+    SetError( errIllegalArgument );
+    return HUGE_VAL;
 }
 
 // for LEGACY.CHIDIST, returns right tail, fDF=degrees of freedom
@@ -1613,11 +1627,36 @@ void ScInterpreter::ScTDist()
         PushIllegalArgument();
         return;
     }
-    double R = GetTDist(T, fDF);
-    if (fFlag == 1.0)
-        PushDouble(R);
-    else
-        PushDouble(2.0*R);
+    PushDouble( GetTDist( T, fDF, ( int )fFlag ) );
+}
+
+void ScInterpreter::ScTDist_T( int nTails )
+{
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+    double fDF = ::rtl::math::approxFloor( GetDouble() );
+    double T   = GetDouble();
+    if ( fDF < 1.0 || T < 0.0 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+    PushDouble( GetTDist( T, fDF, nTails ) );
+}
+
+void ScInterpreter::ScTDist_MS()
+{
+    if ( !MustHaveParamCount( GetByte(), 3 ) )
+        return;
+    bool   bCumulative = GetBool();
+    double fDF = ::rtl::math::approxFloor( GetDouble() );
+    double T   = GetDouble();
+    if ( fDF < 1.0 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+    PushDouble( GetTDist( T, fDF, ( bCumulative ? 4 : 3 ) ) );
 }
 
 void ScInterpreter::ScFDist()
@@ -2213,34 +2252,43 @@ class ScTDistFunction : public ScDistFunc
 {
     ScInterpreter&  rInt;
     double          fp, fDF;
+    int             nT;
 
 public:
-            ScTDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
-                rInt(rI), fp(fpVal), fDF(fDFVal) {}
+            ScTDistFunction( ScInterpreter& rI, double fpVal, double fDFVal, int nType ) :
+                rInt( rI ), fp( fpVal ), fDF( fDFVal ), nT( nType ) {}
 
     virtual ~ScTDistFunction() {}
 
-    double  GetValue( double x ) const  { return fp - 2 * rInt.GetTDist(x, fDF); }
+    double  GetValue( double x ) const  { return fp - rInt.GetTDist( x, fDF, nT ); }
 };
 
-void ScInterpreter::ScTInv()
+void ScInterpreter::ScTInv( int nType )
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
     double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fP = GetDouble();
-    if (fDF < 1.0 || fDF > 1.0E10 || fP <= 0.0 || fP > 1.0 )
+    if (fDF < 1.0 || fP <= 0.0 || fP > 1.0 )
     {
         PushIllegalArgument();
         return;
     }
-    PushDouble( GetTInv( fP, fDF ) );
+    if ( nType == 4 ) // left-tailed cumulative t-distribution
+    {
+        if ( fP < 0.5 )
+            PushDouble( -GetTInv( 1 - fP, fDF, nType ) );
+        else
+            PushDouble( GetTInv( fP, fDF, nType ) );
+    }
+    else
+        PushDouble( GetTInv( fP, fDF, nType ) );
 };
 
-double ScInterpreter::GetTInv( double fAlpha, double fSize )
+double ScInterpreter::GetTInv( double fAlpha, double fSize, int nType )
 {
     bool bConvError;
-    ScTDistFunction aFunc( *this, fAlpha, fSize );
+    ScTDistFunction aFunc( *this, fAlpha, fSize, nType );
     double fVal = lcl_IterateInverse( aFunc, fSize * 0.5, fSize, bConvError );
     if (bConvError)
         SetError(errNoConvergence);
@@ -2396,7 +2444,7 @@ void ScInterpreter::ScConfidenceT()
         if (sigma <= 0.0 || alpha <= 0.0 || alpha >= 1.0 || n < 1.0)
             PushIllegalArgument();
         else
-            PushDouble( sigma * GetTInv( alpha, n - 1 ) / sqrt( n ) );
+            PushDouble( sigma * GetTInv( alpha, n - 1, 2 ) / sqrt( n ) );
     }
 }
 
@@ -2592,9 +2640,9 @@ void ScInterpreter::ScTTest()
 {
     if ( !MustHaveParamCount( GetByte(), 4 ) )
         return;
-    double fTyp = ::rtl::math::approxFloor(GetDouble());
-    double fAnz = ::rtl::math::approxFloor(GetDouble());
-    if (fAnz != 1.0 && fAnz != 2.0)
+    double fTyp   = ::rtl::math::approxFloor(GetDouble());
+    double fTails = ::rtl::math::approxFloor(GetDouble());
+    if (fTails != 1.0 && fTails != 2.0)
     {
         PushIllegalArgument();
         return;
@@ -2661,10 +2709,7 @@ void ScInterpreter::ScTTest()
         PushIllegalArgument();
         return;
     }
-    if (fAnz == 1.0)
-        PushDouble(GetTDist(fT, fF));
-    else
-        PushDouble(2.0*GetTDist(fT, fF));
+    PushDouble( GetTDist( fT, fF, ( int )fTails ) );
 }
 
 void ScInterpreter::ScFTest()

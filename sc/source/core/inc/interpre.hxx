@@ -715,7 +715,7 @@ double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns r
 double GetChiSqDistCDF(double fX, double fDF);  // for CHISQDIST, returns left tail
 double GetChiSqDistPDF(double fX, double fDF);  // probability density function
 double GetFDist(double x, double fF1, double fF2);
-double GetTDist(double T, double fDF);
+double GetTDist( double T, double fDF, int nType );
 double Fakultaet(double x);
 double BinomKoeff(double n, double k);
 double GetGamma(double x);
@@ -749,6 +749,8 @@ void ScHypGeomDist_MS();
 void ScLogNormDist( int nMinParamCount );
 void ScLogNormInv();
 void ScTDist();
+void ScTDist_MS();
+void ScTDist_T( int nTails );
 void ScFDist();
 void ScFDist_LT();
 void ScChiDist();   // for LEGACY.CHIDIST, returns right tail
@@ -760,7 +762,7 @@ void ScBetaDist();
 void ScBetaDist_MS();
 void ScFInv();
 void ScFInv_LT();
-void ScTInv();
+void ScTInv( int nType );
 void ScChiInv();
 void ScBetaInv();
 void ScCritBinom();
@@ -824,7 +826,7 @@ double GetUpRegIGamma(double fA,double fX);     // upper regularized incomplete 
 double GetGammaDistPDF(double fX, double fAlpha, double fLambda);
 // cumulative distribution function; fLambda is "scale" parameter
 double GetGammaDist(double fX, double fAlpha, double fLambda);
-double GetTInv( double fAlpha, double fSize );
+double GetTInv( double fAlpha, double fSize, int nType );
 
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
