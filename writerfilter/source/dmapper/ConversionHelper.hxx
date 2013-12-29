@@ -48,7 +48,7 @@ namespace ConversionHelper{
     sal_Int32 convertEMUToMM100(sal_Int32 _t);
     sal_Int32 ConvertColor(sal_Int32 nWordColor );
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
-    sal_Int16 ConvertNumberingType(sal_Int32 nNFC);
+    sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
 
 } // namespace ConversionHelper
 } //namespace dmapper

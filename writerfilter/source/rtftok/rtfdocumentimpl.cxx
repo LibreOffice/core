@@ -2714,13 +2714,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PNDEC:
                 {
                     RTFValue::Pointer_t pValue(new RTFValue(0)); // decimal, same as \levelnfc0
-                    m_aStates.top().aTableSprms.set(NS_rtf::LN_NFC, pValue);
+                    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, pValue);
                 }
                 break;
         case RTF_PNLVLBLT:
                 {
                     m_aStates.top().aTableAttributes.set(NS_rtf::LN_LSID, RTFValue::Pointer_t(new RTFValue(1)));
-                    m_aStates.top().aTableSprms.set(NS_rtf::LN_NFC, RTFValue::Pointer_t(new RTFValue(23))); // bullets, same as \levelnfc23
+                    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, RTFValue::Pointer_t(new RTFValue(23))); // bullets, same as \levelnfc23
                 }
                 break;
         case RTF_LANDSCAPE:
@@ -2779,7 +2779,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_FPRQ: nSprm = NS_rtf::LN_PRQ; break;
         case RTF_LEVELJC: nSprm = NS_ooxml::LN_CT_Lvl_lvlJc; break;
-        case RTF_LEVELNFC: nSprm = NS_rtf::LN_NFC; break;
+        case RTF_LEVELNFC: nSprm = NS_ooxml::LN_CT_Lvl_numFmt; break;
         case RTF_LEVELSTARTAT: nSprm = NS_ooxml::LN_CT_Lvl_start; break;
         case RTF_LEVELPICTURE: nSprm = NS_ooxml::LN_CT_Lvl_lvlPicBulletId; break;
         default: break;
@@ -4572,9 +4572,9 @@ int RTFDocumentImpl::popState()
                     RTFValue::Pointer_t pIlvlValue(new RTFValue(0));
                     aLevelAttributes.set(NS_ooxml::LN_CT_Lvl_ilvl, pIlvlValue);
 
-                    RTFValue::Pointer_t pNfcValue = aState.aTableSprms.find(NS_rtf::LN_NFC);
-                    if (pNfcValue.get())
-                        aLevelSprms.set(NS_rtf::LN_NFC, pNfcValue);
+                    RTFValue::Pointer_t pFmtValue = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_numFmt);
+                    if (pFmtValue.get())
+                        aLevelSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, pFmtValue);
 
                     RTFValue::Pointer_t pStartatValue = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_start);
                     if (pStartatValue.get())

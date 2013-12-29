@@ -270,10 +270,10 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     return nOrient;
 }
 
-sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
+sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
 {
     sal_Int16 nRet;
-    switch(nNFC)
+    switch(nFmt)
     {
         case NS_ooxml::LN_Value_ST_NumberFormat_decimal:
         case 0:

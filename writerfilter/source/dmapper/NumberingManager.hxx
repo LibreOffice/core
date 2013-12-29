@@ -43,7 +43,7 @@ class StyleSheetEntry;
 class ListLevel : public PropertyMap
 {
     sal_Int32                                     m_nIStartAt;       //LN_CT_Lvl_start
-    sal_Int32                                     m_nNFC;            //LN_NFC
+    sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
     sal_Int32                                     m_nJC;             //LN_JC
     sal_Int32                                     m_nFLegal;         //LN_FLEGAL
     sal_Int32                                     m_nFNoRestart;     //LN_FNORESTART
