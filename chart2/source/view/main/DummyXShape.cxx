@@ -128,11 +128,16 @@ void DummyXShape::removeVetoableChangeListener( const OUString&, const uno::Refe
 {
 }
 
-void DummyXShape::setPropertyValues( const uno::Sequence< OUString >& ,
-        const uno::Sequence< uno::Any >& )
+void DummyXShape::setPropertyValues( const uno::Sequence< OUString >& rNames,
+        const uno::Sequence< uno::Any >& rValues)
 throw (beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
+    size_t n = std::min<size_t>(rNames.getLength(), rValues.getLength());
+    for(size_t i = 0; i < n; ++i)
+    {
+        maProperties[rNames[i]] = rValues[i];
+    }
 }
 
 uno::Sequence< uno::Any > DummyXShape::getPropertyValues(
