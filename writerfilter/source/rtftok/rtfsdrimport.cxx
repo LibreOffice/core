@@ -450,9 +450,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             aViewBox.Height = i->second.toInt32();
         else if ( i->first == "dhgt" )
         {
-            resolveDhgt(xPropertySet, i->second.toInt32());
-            // dhgt is Word 2007, \shpz is Word 97-2003, the previous has priority.
-            rShape.oZ.reset();
+            // dhgt is Word 2007, \shpz is Word 97-2003, the later has priority.
+            if (!rShape.oZ)
+                resolveDhgt(xPropertySet, i->second.toInt32());
         }
         // These are in EMU, convert to mm100.
         else if (i->first == "dxTextLeft")
