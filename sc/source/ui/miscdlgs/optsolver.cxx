@@ -88,21 +88,24 @@ ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const OUStr
 //----------------------------------------------------------------------------
 
 ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const OUString& rSolution )
-    : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_SUCCESS ) ),
-    maFtSuccess     ( this, ScResId( FT_SUCCESS ) ),
-    maFtResult      ( this, ScResId( FT_RESULT ) ),
-    maFtQuestion    ( this, ScResId( FT_QUESTION ) ),
-    maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) )
+    : ModalDialog(pParent, "SolverSuccessDialog", "modules/scalc/ui/solversuccessdialog.ui")
 {
-    OUString aMessage = maFtResult.GetText() + " " + rSolution;
-    maFtResult.SetText( aMessage );
-    FreeResource();
+    get(m_pFtResult, "result");
+    get(m_pBtnOk, "ok");
+    m_pBtnOk->SetClickHdl(LINK(this, ScSolverSuccessDialog, ClickHdl));
+    get(m_pBtnCancel, "cancel");
+    m_pBtnCancel->SetClickHdl(LINK(this, ScSolverSuccessDialog, ClickHdl));
+    OUString aMessage = m_pFtResult->GetText() + " " + rSolution;
+    m_pFtResult->SetText(aMessage);
 }
 
-ScSolverSuccessDialog::~ScSolverSuccessDialog()
+IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
 {
+    if (pBtn == m_pBtnOk)
+        EndDialog(true);
+    else
+        EndDialog(false);
+    return 0;
 }
 
 //----------------------------------------------------------------------------

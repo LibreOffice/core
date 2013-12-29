@@ -229,16 +229,14 @@ public:
 
 class ScSolverSuccessDialog : public ModalDialog
 {
-    FixedText       maFtSuccess;
-    FixedText       maFtResult;
-    FixedText       maFtQuestion;
-    FixedLine       maFlButtons;
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
+    FixedText* m_pFtResult;
+    PushButton* m_pBtnOk;
+    PushButton* m_pBtnCancel;
+
+    DECL_LINK(ClickHdl, PushButton*);
 
 public:
     ScSolverSuccessDialog( Window* pParent, const OUString& rSolution );
-    ~ScSolverSuccessDialog();
 };
 
 

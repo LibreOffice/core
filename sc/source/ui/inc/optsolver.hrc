@@ -21,9 +21,6 @@
 
 #define FT_PROGRESS             7
 #define FT_TIMELIMIT            8
-#define FT_SUCCESS              11
-#define FT_RESULT               12
-#define FT_QUESTION             13
 
 #define FL_CONDITIONS           1
 #define FL_BUTTONS              2
