@@ -290,6 +290,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
     String SC_OPCODE_LOG_NORM_DIST_MS { Text = "COM.MICROSOFT.LOGNORM.DIST" ; };
     String SC_OPCODE_T_DIST { Text = "LEGACY.TDIST" ; };
+    String SC_OPCODE_T_DIST_2T { Text = "COM.MICROSOFT.T.DIST.2T" ; };
+    String SC_OPCODE_T_DIST_MS { Text = "COM.MICROSOFT.T.DIST" ; };
+    String SC_OPCODE_T_DIST_RT { Text = "COM.MICROSOFT.T.DIST.RT" ; };
     String SC_OPCODE_F_DIST { Text = "LEGACY.FDIST" ; };
     String SC_OPCODE_F_DIST_LT { Text = "COM.MICROSOFT.F.DIST" ; };
     String SC_OPCODE_F_DIST_RT { Text = "COM.MICROSOFT.F.DIST.RT" ; };
@@ -312,6 +315,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
+    String SC_OPCODE_T_TEST_MS { Text = "COM.MICROSOFT.T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
     String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
     String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
@@ -349,6 +353,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_GAMMA_INV_MS { Text = "COM.MICROSOFT.GAMMA.INV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
+    String SC_OPCODE_T_INV_2T { Text = "COM.MICROSOFT.T.INV.2T" ; };
+    String SC_OPCODE_T_INV_MS { Text = "COM.MICROSOFT.T.INV" ; };
     String SC_OPCODE_F_INV { Text = "LEGACY.FINV" ; };
     String SC_OPCODE_F_INV_LT { Text = "COM.MICROSOFT.F.INV" ; };
     String SC_OPCODE_F_INV_RT { Text = "COM.MICROSOFT.F.INV.RT" ; };
@@ -670,6 +676,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
     String SC_OPCODE_LOG_NORM_DIST_MS { Text = "_xlfn.LOGNORM.DIST" ; };
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
+    String SC_OPCODE_T_DIST_2T { Text = "_xlfn.T.DIST.2T" ; };
+    String SC_OPCODE_T_DIST_MS { Text = "_xlfn.T.DIST" ; };
+    String SC_OPCODE_T_DIST_RT { Text = "_xlfn.T.DIST.RT" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
     String SC_OPCODE_F_DIST_LT { Text = "_xlfn.F.DIST" ; };
     String SC_OPCODE_F_DIST_RT { Text = "_xlfn.F.DIST.RT" ; };
@@ -692,6 +701,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
+    String SC_OPCODE_T_TEST_MS { Text = "_xlfn.T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
     String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
     String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
@@ -729,6 +739,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_GAMMA_INV_MS { Text = "_xlfn.GAMMA.INV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
+    String SC_OPCODE_T_INV_2T { Text = "_xlfn.T.INV.2T" ; };
+    String SC_OPCODE_T_INV_MS { Text = "_xlfn.T.INV" ; };
     String SC_OPCODE_F_INV { Text = "FINV" ; };
     String SC_OPCODE_F_INV_LT { Text = "_xlfn.F.INV" ; };
     String SC_OPCODE_F_INV_RT { Text = "_xlfn.F.INV.RT" ; };
@@ -1052,6 +1064,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
     String SC_OPCODE_LOG_NORM_DIST_MS { Text = "LOGNORM.DIST" ; };
     String SC_OPCODE_T_DIST { Text = "TDIST" ; };
+    String SC_OPCODE_T_DIST_2T { Text = "T.DIST.2T" ; };
+    String SC_OPCODE_T_DIST_MS { Text = "T.DIST" ; };
+    String SC_OPCODE_T_DIST_RT { Text = "T.DIST.RT" ; };
     String SC_OPCODE_F_DIST { Text = "FDIST" ; };
     String SC_OPCODE_F_DIST_LT { Text = "F.DIST" ; };
     String SC_OPCODE_F_DIST_RT { Text = "F.DIST.RT" ; };
@@ -1074,6 +1089,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
     String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
     String SC_OPCODE_T_TEST { Text = "TTEST" ; };
+    String SC_OPCODE_T_TEST_MS { Text = "T.TEST" ; };
     String SC_OPCODE_RANK { Text = "RANK" ; };
     String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
     String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
@@ -1111,6 +1127,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
     String SC_OPCODE_GAMMA_INV_MS { Text = "GAMMA.INV" ; };
     String SC_OPCODE_T_INV { Text = "TINV" ; };
+    String SC_OPCODE_T_INV_2T { Text = "T.INV.2T" ; };
+    String SC_OPCODE_T_INV_MS { Text = "T.INV" ; };
     String SC_OPCODE_F_INV { Text = "FINV" ; };
     String SC_OPCODE_F_INV_LT { Text = "F.INV" ; };
     String SC_OPCODE_F_INV_RT { Text = "F.INV.RT" ; };
@@ -1548,7 +1566,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_STD_NORM_DIST_MS
     {
-        Text = "NORM.S.DIST" ;
+        Text [ en-US ] = "NORM.S.DIST" ;
     };
     String SC_OPCODE_FISHER
     {
@@ -1564,7 +1582,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_S_NORM_INV_MS
     {
-        Text = "NORM.S.INV" ;
+        Text [ en-US ] = "NORM.S.INV" ;
     };
     String SC_OPCODE_GAMMA_LN
     {
@@ -1788,7 +1806,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_NORM_DIST_MS
     {
-        Text = "NORM.DIST" ;
+        Text [ en-US ] = "NORM.DIST" ;
     };
     String SC_OPCODE_EXP_DIST
     {
@@ -2163,6 +2181,18 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "TDIST" ;
     };
+    String SC_OPCODE_T_DIST_2T
+    {
+        Text [ en-US ] = "T.DIST.2T" ;
+    };
+    String SC_OPCODE_T_DIST_MS
+    {
+        Text [ en-US ] = "T.DIST" ;
+    };
+    String SC_OPCODE_T_DIST_RT
+    {
+        Text [ en-US ] = "T.DIST.RT" ;
+    };
     String SC_OPCODE_F_DIST
     {
         Text [ en-US ] = "FDIST" ;
@@ -2251,6 +2281,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "TTEST" ;
     };
+    String SC_OPCODE_T_TEST_MS
+    {
+        Text [ en-US ] = "T.TEST" ;
+    };
     String SC_OPCODE_RANK
     {
         Text [ en-US ] = "RANK" ;
@@ -2285,7 +2319,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_NORM_INV_MS
     {
-        Text = "NORM.INV" ;
+        Text [ en-US ] = "NORM.INV" ;
     };
     String SC_OPCODE_CONFIDENCE
     {
@@ -2399,6 +2433,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "TINV" ;
     };
+    String SC_OPCODE_T_INV_2T
+    {
+        Text [ en-US ] = "T.INV.2T" ;
+    };
+    String SC_OPCODE_T_INV_MS
+    {
+        Text [ en-US ] = "T.INV" ;
+    };
     String SC_OPCODE_F_INV
     {
         Text [ en-US ] = "FINV" ;
@@ -2425,7 +2467,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_LOG_INV_MS
     {
-        Text = "LOGNORM.INV" ;
+        Text [ en-US ] = "LOGNORM.INV" ;
     };
     String SC_OPCODE_TABLE_OP
     {

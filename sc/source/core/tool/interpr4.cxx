@@ -4116,6 +4116,9 @@ StackVar ScInterpreter::Interpret()
                 case ocLogNormDist      : ScLogNormDist( 1 );           break;
                 case ocLogNormDist_MS   : ScLogNormDist( 4 );           break;
                 case ocTDist            : ScTDist();                    break;
+                case ocTDist_MS         : ScTDist_MS();                 break;
+                case ocTDist_RT         : ScTDist_T( 1 );               break;
+                case ocTDist_2T         : ScTDist_T( 2 );               break;
                 case ocFDist            :
                 case ocFDist_RT         : ScFDist();                    break;
                 case ocFDist_LT         : ScFDist_LT();                 break;
@@ -4141,7 +4144,8 @@ StackVar ScInterpreter::Interpret()
                 case ocNoName           : ScNoName();                   break;
                 case ocBad              : ScBadName();                  break;
                 case ocZTest            : ScZTest();                    break;
-                case ocTTest            : ScTTest();                    break;
+                case ocTTest            :
+                case ocTTest_MS         : ScTTest();                    break;
                 case ocFTest            :
                 case ocFTest_MS         : ScFTest();                    break;
                 case ocRank             : ScRank();                     break;
@@ -4187,7 +4191,9 @@ StackVar ScInterpreter::Interpret()
                 case ocChiInv_MS        : ScChiInv();                   break;
                 case ocChiSqInv         :
                 case ocChiSqInv_MS      : ScChiSqInv();                 break;
-                case ocTInv             : ScTInv();                     break;
+                case ocTInv             :
+                case ocTInv_2T          : ScTInv( 2 );                  break;
+                case ocTInv_MS          : ScTInv( 4 );                  break;
                 case ocFInv             :
                 case ocFInv_RT          : ScFInv();                     break;
                 case ocFInv_LT          : ScFInv_LT();                  break;
