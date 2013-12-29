@@ -26368,28 +26368,6 @@
             </UML:Operation>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
-            <UML:Operation name="value">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:shpvalue</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="Value"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="attribute"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
-          <UML:Classifier.feature>
             <UML:Operation name="stringValue">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>

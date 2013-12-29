@@ -633,12 +633,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_shpname:
             break;
-        case NS_rtf::LN_shpvalue:
-        {
-            if( NS_dff::LN_shpwzDescription == sal::static_int_cast<Id>(m_pImpl->nShapeOptionType) )
-                ProcessShapeOptions( val );
-        }
-        break;
 
         //BLIP store entry
         case NS_rtf::LN_shpbtWin32:
