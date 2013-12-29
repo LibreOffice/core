@@ -661,12 +661,12 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
     size_t nCurPos = 0;
-    for( size_t y = 0; y < m_iHeight; ++y)
+    for( size_t y = 0; y < size_t(m_iHeight); ++y)
     {
         Scanline pScan = pWriteAccess->GetScanline(y);
         Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
 
-        for( size_t x = 0; x < m_iWidth; ++x )
+        for( size_t x = 0; x < size_t(m_iWidth); ++x )
         {
             *pScan++ = buf[nCurPos];
             *pScan++ = buf[nCurPos+1];
