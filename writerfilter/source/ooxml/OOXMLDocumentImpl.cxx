@@ -376,13 +376,13 @@ void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
          getSubStream(rId);
      switch (type)
      {
-     case NS_ooxml::LN_Value_ST_HrdFtr_even:
+     case NS_ooxml::LN_Value_ST_HdrFtr_even:
          resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_headerl);
         break;
-     case NS_ooxml::LN_Value_ST_HrdFtr_default: // here we assume that default is right, but not necessarily true :-(
+     case NS_ooxml::LN_Value_ST_HdrFtr_default: // here we assume that default is right, but not necessarily true :-(
          resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_headerr);
          break;
-     case NS_ooxml::LN_Value_ST_HrdFtr_first:
+     case NS_ooxml::LN_Value_ST_HdrFtr_first:
          resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_headerf);
          break;
      default:
@@ -399,13 +399,13 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
      switch (type)
      {
-     case NS_ooxml::LN_Value_ST_HrdFtr_even:
+     case NS_ooxml::LN_Value_ST_HdrFtr_even:
          resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footerl);
          break;
-     case NS_ooxml::LN_Value_ST_HrdFtr_default: // here we assume that default is right, but not necessarily true :-(
+     case NS_ooxml::LN_Value_ST_HdrFtr_default: // here we assume that default is right, but not necessarily true :-(
          resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footerr);
          break;
-     case NS_ooxml::LN_Value_ST_HrdFtr_first:
+     case NS_ooxml::LN_Value_ST_HdrFtr_first:
          resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footerf);
          break;
      default:

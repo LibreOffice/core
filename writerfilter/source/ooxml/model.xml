@@ -22564,9 +22564,9 @@
       <attribute name="charSpace" tokenid="ooxml:CT_DocGrid_charSpace"/>
     </resource>
     <resource name="ST_HdrFtr" resource="List">
-      <value tokenid="ooxml:Value_ST_HrdFtr_even">even</value>
-      <value tokenid="ooxml:Value_ST_HrdFtr_default">default</value>
-      <value tokenid="ooxml:Value_ST_HrdFtr_first">first</value>
+      <value tokenid="ooxml:Value_ST_HdrFtr_even">even</value>
+      <value tokenid="ooxml:Value_ST_HdrFtr_default">default</value>
+      <value tokenid="ooxml:Value_ST_HdrFtr_first">first</value>
     </resource>
     <resource name="ST_FtnEdn" resource="List" generated="yes">
       <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_FtnEdn_normal">normal</value>
