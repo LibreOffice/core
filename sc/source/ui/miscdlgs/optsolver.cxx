@@ -38,7 +38,6 @@
 #include "solveroptions.hxx"
 #include "solverutil.hxx"
 #include "globstr.hrc"
-#include "optsolver.hrc"
 
 #include "optsolver.hxx"
 
@@ -47,33 +46,23 @@
 
 using namespace com::sun::star;
 
-//----------------------------------------------------------------------------
-
-ScSolverProgressDialog::ScSolverProgressDialog( Window* pParent )
-    : ModelessDialog( pParent, ScResId( RID_SCDLG_SOLVER_PROGRESS ) ),
-    maFtProgress    ( this, ScResId( FT_PROGRESS ) ),
-    maFtTime        ( this, ScResId( FT_TIMELIMIT ) ),
-    maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) )
+ScSolverProgressDialog::ScSolverProgressDialog(Window* pParent)
+    : ModelessDialog(pParent, "SolverProgressDialog",
+        "modules/scalc/ui/solverprogressdialog.ui")
 {
-    maBtnOk.Enable(false);
-    FreeResource();
-}
-
-ScSolverProgressDialog::~ScSolverProgressDialog()
-{
+    get(m_pFtTime, "progress");
 }
 
 void ScSolverProgressDialog::HideTimeLimit()
 {
-    maFtTime.Hide();
+    m_pFtTime->Hide();
 }
 
 void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
 {
-    OUString aOld = maFtTime.GetText();
-    OUString aNew = aOld.getToken(0,'#') + OUString::number( nSeconds ) + aOld.getToken(1,'#');
-    maFtTime.SetText( aNew );
+    OUString aOld = m_pFtTime->GetText();
+    OUString aNew = aOld.replaceFirst("#", OUString::number(nSeconds));
+    m_pFtTime->SetText( aNew );
 }
 
 //----------------------------------------------------------------------------

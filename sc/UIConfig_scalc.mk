@@ -137,6 +137,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sidebarnumberformat \
 	sc/uiconfig/scalc/ui/sidebarcellappearance \
 	sc/uiconfig/scalc/ui/solverdlg \
+	sc/uiconfig/scalc/ui/solverprogressdialog \
 	sc/uiconfig/scalc/ui/solversuccessdialog \
 	sc/uiconfig/scalc/ui/sortcriteriapage \
 	sc/uiconfig/scalc/ui/sortdialog \

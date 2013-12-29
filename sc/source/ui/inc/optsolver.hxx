@@ -206,14 +206,10 @@ private:
 
 class ScSolverProgressDialog : public ModelessDialog
 {
-    FixedText       maFtProgress;
-    FixedText       maFtTime;
-    FixedLine       maFlButtons;
-    OKButton        maBtnOk;
+    FixedText* m_pFtTime;
 
 public:
     ScSolverProgressDialog( Window* pParent );
-    ~ScSolverProgressDialog();
 
     void    HideTimeLimit();
     void    SetTimeLimit( sal_Int32 nSeconds );

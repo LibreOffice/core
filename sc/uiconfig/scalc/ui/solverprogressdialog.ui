@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="SolverSuccessDialog">
+  <object class="GtkDialog" id="SolverProgressDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Solving Result</property>
+    <property name="title" translatable="yes">Solving...</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -17,27 +17,11 @@
             <property name="can_focus">False</property>
             <property name="row_spacing">24</property>
             <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Do you want to keep the result or do you want to restore previous values?</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">40</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Solving successfully finished.</property>
+                <property name="label" translatable="yes">Solving in progress...</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -47,11 +31,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="result">
+              <object class="GtkLabel" id="progress">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Result:</property>
+                <property name="label" translatable="yes">(time limit # seconds)</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -73,32 +57,20 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label">Keep Result</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">Restore Previous</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -113,7 +85,6 @@
     </child>
     <action-widgets>
       <action-widget response="0">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>
