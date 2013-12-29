@@ -1739,8 +1739,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     while ( ( nBreakInLine < nMax ) && ( pLine->GetCharPosArray()[nBreakInLine] < nRemainingWidth ) )
         nBreakInLine++;
 
-    sal_uInt16 nMaxBreakPos = nBreakInLine + pLine->GetStart();
-       sal_uInt16 nBreakPos = 0xFFFF;
+    sal_Int32 nMaxBreakPos = nBreakInLine + pLine->GetStart();
+    sal_Int32 nBreakPos = 0xFFFF;
 
     sal_Bool bCompressBlank = sal_False;
     sal_Bool bHyphenated = sal_False;
@@ -1759,7 +1759,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     }
     else
     {
-        sal_uInt16 nMinBreakPos = pLine->GetStart();
+        sal_Int32 nMinBreakPos = pLine->GetStart();
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (size_t nAttr = rAttrs.size(); nAttr; )
         {
@@ -1789,7 +1789,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
         i18n::LineBreakResults aLBR = _xBI->getLineBreak(
             pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-        nBreakPos = (sal_uInt16)aLBR.breakIndex;
+        nBreakPos = aLBR.breakIndex;
 
         // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
         if ( nBreakPos < nMinBreakPos )

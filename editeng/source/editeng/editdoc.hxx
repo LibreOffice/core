@@ -48,7 +48,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = 
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType );
 sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
-EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE );
+EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
 
 class ContentNode;
 class EditDoc;

@@ -250,7 +250,7 @@ const sal_uInt16 aV5Map[] = {
     4035, 4036, 4037, 4038
 };
 
-EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
+EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
     // Create a new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rAttr );
@@ -1444,7 +1444,7 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
     // can also the order of the start list be change!
     bool bResort = false;
     bool bDelAttr = false;
-    sal_uInt16 nEndChanges = nIndex+nDeleted;
+    const sal_Int32 nEndChanges = nIndex+nDeleted;
 
     size_t nAttr = 0;
     CharAttribList::AttribsType& rAttribs = aCharAttribList.GetAttribs();
@@ -1579,7 +1579,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 {
     DBG_ASSERT( pNextNode, "Copy of attributes to a null pointer?" );
 
-    sal_uInt16 nNewStart = maString.getLength();
+    const sal_Int32 nNewStart = maString.getLength();
 
 #if OSL_DEBUG_LEVEL > 2
     OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
@@ -2119,12 +2119,12 @@ OUString EditDoc::GetParaAsString(
 
     DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
 
-    sal_uInt16 nIndex = nStartPos;
+    sal_Int32 nIndex = nStartPos;
     OUString aStr;
     const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( nIndex );
     while ( nIndex < nEndPos )
     {
-        sal_uInt16 nEnd = nEndPos;
+        sal_Int32 nEnd = nEndPos;
         if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
             nEnd = pNextFeature->GetStart();
         else
@@ -2395,8 +2395,10 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
     return RemoveAttribs( pNode, nStart, nEnd, pStarting, pEnding, nWhich );
 }
 
-sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
+sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart_, sal_uInt16 nEnd_, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
 {
+    const sal_Int32 nStart = nStart_;
+    const sal_Int32 nEnd = nEnd_;
 
     DBG_ASSERT( pNode, "What to do with the attribute?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
@@ -2539,7 +2541,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
             if ( pAttr->IsInside( nStart ) )    // split
             {
                 // check again if really splitting, or return !
-                sal_uInt16 nOldEnd = pAttr->GetEnd();
+                const sal_Int32 nOldEnd = pAttr->GetEnd();
                 pAttr->GetEnd() = nStart;
                 EditCharAttrib* pNew = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
                 rAttrList.InsertAttrib(pNew);
@@ -2558,8 +2560,11 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
     SetModified( sal_True );
 }
 
-void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet )
+void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos_, sal_uInt16 nEndPos_, SfxItemSet& rCurSet )
 {
+    const sal_Int32 nStartPos = nStartPos_;
+    const sal_Int32 nEndPos = nEndPos_;
+
     DBG_ASSERT( pNode, "Where to search?" );
     DBG_ASSERT( nStartPos <= nEndPos, "Invalid region!" );
 
@@ -2698,7 +2703,7 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
     // (InsertBinTextObject!) binary search would not be optimal here.
     // => Would bring something!
 
-    const sal_uInt16 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
+    const sal_Int32 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
 
     if ( pAttrib->IsEmpty() )
         bHasEmptyAttribs = true;
@@ -2908,9 +2913,9 @@ namespace {
 
 class FindByStartPos : std::unary_function<EditCharAttrib, bool>
 {
-    sal_uInt16 mnPos;
+    sal_Int32 mnPos;
 public:
-    FindByStartPos(sal_uInt16 nPos) : mnPos(nPos) {}
+    FindByStartPos(sal_Int32 nPos) : mnPos(nPos) {}
     bool operator() (const EditCharAttrib& r) const
     {
         return r.GetStart() >= mnPos;

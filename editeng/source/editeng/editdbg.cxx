@@ -348,9 +348,9 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
             aCharAttribs.append(":  ");
             aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetItem()->Which()));
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetStart()));
+            aCharAttribs.append(rAttr.GetStart());
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetEnd()));
+            aCharAttribs.append(rAttr.GetEnd());
             if ( rAttr.IsEmpty() )
                 bZeroAttr = sal_True;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
@@ -488,11 +488,11 @@ sal_Bool ParaPortion::DbgCheckTextPortions()
 
 bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
 {
-    sal_uInt16 nPrev = 0;
+    sal_Int32 nPrev = 0;
     for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
     {
         const EditCharAttrib& rAttr = rAttribs[nAttr];
-        sal_uInt16 nCur = bStart ? rAttr.GetStart() : rAttr.GetEnd();
+        const sal_Int32 nCur = bStart ? rAttr.GetStart() : rAttr.GetEnd();
         if ( nCur < nPrev )
             return false;
 
