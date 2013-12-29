@@ -1256,8 +1256,6 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
             m_pImpl->nBottomMargin = nIntValue / 360;
         break;
-        case NS_dff::LN_shpfPrint              /*959*/:
-            break;  // rtf:shpfPrint
         default:
             OSL_FAIL( "shape option unsupported?");
     }
