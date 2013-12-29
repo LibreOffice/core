@@ -1391,6 +1391,15 @@ DECLARE_RTFIMPORT_TEST(testFdo65090, "fdo65090.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
+DECLARE_RTFIMPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
+{
+    // Test that shpz has priority over dhght and not the other way around.
+    // Drawpage is sorted by ZOrder, so first should be red (back).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), getProperty<sal_Int32>(getShape(1), "FillColor"));
+    // Second (front) should be green.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(getShape(2), "FillColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
