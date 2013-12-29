@@ -634,12 +634,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break; //ignored
         case NS_rtf::LN_shpfComplex:
             break;
-        case NS_rtf::LN_shpop:
-        {
-            if(NS_dff::LN_shpwzDescription != sal::static_int_cast<Id>(m_pImpl->nShapeOptionType) )
-                ProcessShapeOptions( val );
-        }
-        break;
         case NS_rtf::LN_shpname:
             break;
         case NS_rtf::LN_shpvalue:
