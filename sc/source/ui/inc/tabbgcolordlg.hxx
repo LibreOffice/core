@@ -35,29 +35,29 @@ public:
                      const OUString& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
                      const OString& nHelpId );
-    ~ScTabBgColorDlg();
 
     void GetSelectedColor( Color& rColor ) const;
 
-private:
     class ScTabBgColorValueSet : public SvxColorValueSet
     {
     public:
-        ScTabBgColorValueSet(Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg);
+        ScTabBgColorValueSet(Window* pParent, WinBits nStyle);
+        void SetDialog(ScTabBgColorDlg* pTabBgColorDlg)
+        {
+            m_pTabBgColorDlg = pTabBgColorDlg;
+        }
 
         virtual void KeyInput( const KeyEvent& rKEvt );
     private:
-        ScTabBgColorDlg* aTabBgColorDlg;
+        ScTabBgColorDlg* m_pTabBgColorDlg;
     };
 
-    Control                 aBorderWin;
-    ScTabBgColorValueSet    aTabBgColorSet;
-    OKButton                aBtnOk;
-    CancelButton            aBtnCancel;
-    HelpButton              aBtnHelp;
-    Color                   aTabBgColor;
-    const OUString          aTabBgColorNoColorText;
-    OString                 msHelpId;
+private:
+    ScTabBgColorValueSet*   m_pTabBgColorSet;
+    OKButton*               m_pBtnOk;
+    Color                   m_aTabBgColor;
+    const OUString          m_aTabBgColorNoColorText;
+    OString                 m_sHelpId;
 
     void            FillColorValueSets_Impl();
 

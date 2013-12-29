@@ -101,8 +101,4 @@
 #define STR_GROUP       1
 #define STR_UNGROUP     2
 
-// Tab Bg Color
-#define TAB_BG_COLOR_CT_BORDER 1
-#define TAB_BG_COLOR_SET_BGDCOLOR 2
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

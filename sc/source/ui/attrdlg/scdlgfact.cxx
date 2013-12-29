@@ -1005,27 +1005,15 @@ AbstractScStringInputDlg * ScAbstractDialogFactory_Impl::CreateScStringInputDlg 
     return new AbstractScStringInputDlg_Impl( pDlg );
 }
 
-AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg (
+AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg(
                                                             Window* pParent,
                                                             const OUString& rTitle,
                                                             const OUString& rTabBgColorNoColorText,
                                                             const Color& rDefaultColor,
-                                                            const OString& sHelpId ,
-                                                            int nId )
+                                                            const OString& sHelpId)
 {
-    ScTabBgColorDlg * pDlg=NULL;
-    switch ( nId )
-        {
-        case RID_SCDLG_TAB_BG_COLOR :
-            pDlg = new ScTabBgColorDlg( pParent, rTitle, rTabBgColorNoColorText, rDefaultColor, sHelpId );
-            break;
-        default:
-            break;
-        }
-
-    if ( pDlg )
-        return new AbstractScTabBgColorDlg_Impl( pDlg );
-    return 0;
+    ScTabBgColorDlg * pDlg = new ScTabBgColorDlg( pParent, rTitle, rTabBgColorNoColorText, rDefaultColor, sHelpId );
+    return new AbstractScTabBgColorDlg_Impl( pDlg );
 }
 
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,

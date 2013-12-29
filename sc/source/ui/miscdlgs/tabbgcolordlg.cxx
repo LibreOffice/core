@@ -34,6 +34,7 @@
 #include <tools/resid.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
+#include <vcl/builder.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -41,41 +42,34 @@
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
-ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
-                                  const OUString&   rTitle,
-                                  const OUString&   rTabBgColorNoColorText,
-                                  const Color&    rDefaultColor,
-                                  const OString& sHelpId ) :
-    ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
-    aBorderWin              ( this, ScResId( TAB_BG_COLOR_CT_BORDER ) ),
-    aTabBgColorSet          ( &aBorderWin, ScResId( TAB_BG_COLOR_SET_BGDCOLOR ), this ),
-    aBtnOk                  ( this, ScResId( BTN_OK ) ),
-    aBtnCancel              ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp                ( this, ScResId( BTN_HELP ) ),
-    aTabBgColor             ( rDefaultColor ),
-    aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
-    msHelpId                ( sHelpId )
+ScTabBgColorDlg::ScTabBgColorDlg(Window* pParent, const OUString& rTitle,
+    const OUString& rTabBgColorNoColorText, const Color& rDefaultColor,
+    const OString& sHelpId)
+    : ModalDialog(pParent, "TabColorDialog", "modules/scalc/ui/tabcolordialog.ui")
+    , m_aTabBgColor(rDefaultColor)
+    , m_aTabBgColorNoColorText(rTabBgColorNoColorText)
+    , m_sHelpId(sHelpId)
 
 {
+    get(m_pTabBgColorSet, "colorset");
+    m_pTabBgColorSet->SetDialog(this);
+    m_pTabBgColorSet->SetColCount(m_pTabBgColorSet->getColumnCount());
+    get(m_pBtnOk, "ok");
+
     SetHelpId( sHelpId );
     this->SetText( rTitle );
     this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
 
     FillColorValueSets_Impl();
-    aTabBgColorSet.SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
-    aBtnOk.SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
-    FreeResource();
+    m_pTabBgColorSet->SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
+    m_pBtnOk->SetClickHdl( HDL(TabBgColorOKHdl_Impl) );
 }
 
 //------------------------------------------------------------------------
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {
-    rColor = this->aTabBgColor;
-}
-
-ScTabBgColorDlg::~ScTabBgColorDlg()
-{
+    rColor = this->m_aTabBgColor;
 }
 
 void ScTabBgColorDlg::FillColorValueSets_Impl()
@@ -98,67 +92,25 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     if ( pColorList.is() )
     {
         nColorCount = pColorList->Count();
-        aTabBgColorSet.addEntriesForXColorList(*pColorList);
+        m_pTabBgColorSet->addEntriesForXColorList(*pColorList);
     }
 
-    if(nColorCount)
+    if (nColorCount)
     {
-        const WinBits nBits(aTabBgColorSet.GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
-        aTabBgColorSet.SetText( aTabBgColorNoColorText );
-        aTabBgColorSet.SetStyle( nBits );
-        static sal_Int32 nAdd = 4;
-
-        // calculate new size of color control as base, derive size of border win
-        const Size aNewSize(aTabBgColorSet.layoutAllVisible(nColorCount));
-        const Size aNewSizeBorderWin(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd);
-
-        // from that, calculate a new dialog size
-        const Size aCurrentSizeDialog(GetOutputSizePixel());
-        const Size aCurrentSizeBorderWin(aBorderWin.GetOutputSizePixel());
-        const long nOffsetX(aCurrentSizeDialog.Width() - aCurrentSizeBorderWin.Width());
-        const long nOffsetY(aCurrentSizeDialog.Height() - aCurrentSizeBorderWin.Height());
-        const Size aNewSizeDialog(aNewSizeBorderWin.Width() + nOffsetX, aNewSizeBorderWin.Height() + nOffsetY);
-
-        // also need to adapt pos and size for the three buttons; as a base, take their original
-        // distance from the dialog bottom and get new Y-Pos
-        const long aButtonOffsetFromBottom(aCurrentSizeDialog.Height() - aBtnOk.GetPosPixel().Y());
-        const long aNewButtonY(aNewSizeDialog.Height() - aButtonOffsetFromBottom);
-
-        // for each button, scale width and x-pos by old/new dialog sizes and re-layout
-        // for Okay-Button
-        const long aNewWidthOkay((aBtnOk.GetSizePixel().Width() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
-        const long aNewPosOkay((aBtnOk.GetPosPixel().X() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
-        const Size aNewSizeOkay(aNewWidthOkay, aBtnOk.GetOutputSizePixel().Height());
-        aBtnOk.SetOutputSizePixel(aNewSizeOkay);
-        aBtnOk.SetPosSizePixel(Point(aNewPosOkay, aNewButtonY), aNewSizeOkay);
-
-        // for Cancel-Button
-        const long aNewWidthCancel((aBtnCancel.GetSizePixel().Width() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
-        const long aNewPosCancel((aBtnCancel.GetPosPixel().X() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
-        const Size aNewSizeCancel(aNewWidthCancel, aBtnCancel.GetOutputSizePixel().Height());
-        aBtnCancel.SetOutputSizePixel(aNewSizeCancel);
-        aBtnCancel.SetPosSizePixel(Point(aNewPosCancel, aNewButtonY), aNewSizeCancel);
-
-        // for Help-Button
-        const long aNewWidthHelp((aBtnHelp.GetSizePixel().Width() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
-        const long aNewPosHelp((aBtnHelp.GetPosPixel().X() * aNewSizeDialog.Width()) / aCurrentSizeDialog.Width());
-        const Size aNewSizeHelp(aNewWidthHelp, aBtnHelp.GetOutputSizePixel().Height());
-        aBtnHelp.SetOutputSizePixel(aNewSizeHelp);
-        aBtnHelp.SetPosSizePixel(Point(aNewPosHelp, aNewButtonY), aNewSizeHelp);
-
-        // set new sizes for color control
-        aTabBgColorSet.SetOutputSizePixel(aNewSize);
-        aTabBgColorSet.SetPosSizePixel(Point(nAdd/2, nAdd/2), aNewSize);
-
-        // set new size for border win
-        aBorderWin.SetOutputSizePixel(aNewSizeBorderWin);
-
-        // set new size for dialog itself
-        SetOutputSizePixel(aNewSizeDialog);
+        const WinBits nBits(m_pTabBgColorSet->GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
+        m_pTabBgColorSet->SetText( m_aTabBgColorNoColorText );
+        m_pTabBgColorSet->SetStyle( nBits );
     }
 
-    aTabBgColorSet.SelectItem(nSelectedItem);
-    aTabBgColorSet.Resize();
+    //lock down a preferred size
+    const sal_uInt32 nColCount = m_pTabBgColorSet->getColumnCount();
+    const sal_uInt32 nRowCount(ceil(double(nColorCount)/nColCount));
+    const sal_uInt32 nLength = m_pTabBgColorSet->getEntryEdgeLength();
+    Size aSize(m_pTabBgColorSet->CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
+    m_pTabBgColorSet->set_width_request(aSize.Width()+8);
+    m_pTabBgColorSet->set_height_request(aSize.Height()+8);
+
+    m_pTabBgColorSet->SelectItem(nSelectedItem);
 }
 
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
@@ -166,9 +118,9 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
     Handler, called when color selection is changed
 */
 {
-    sal_uInt16 nItemId = aTabBgColorSet.GetSelectItemId();
-    Color aColor = nItemId ? ( aTabBgColorSet.GetItemColor( nItemId ) ) : Color( COL_AUTO );
-    aTabBgColor = aColor;
+    sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
+    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
+    m_aTabBgColor = aColor;
     EndDialog( sal_True );
     return 0;
 }
@@ -178,17 +130,28 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl)
 
 //    Handler, called when the OK button is pushed
 
-    sal_uInt16 nItemId = aTabBgColorSet.GetSelectItemId();
-    Color aColor = nItemId ? ( aTabBgColorSet.GetItemColor( nItemId ) ) : Color( COL_AUTO );
-    aTabBgColor = aColor;
+    sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
+    Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
+    m_aTabBgColor = aColor;
     EndDialog( sal_True );
     return 0;
 }
 
-ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet( Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg ) :
-    SvxColorValueSet(pParent, rResId)
+ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(Window* pParent, WinBits nStyle)
+    : SvxColorValueSet(pParent, nStyle)
+    , m_pTabBgColorDlg(NULL)
 {
-    aTabBgColorDlg = pTabBgColorDlg;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScTabBgColorValueSet(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new ScTabBgColorDlg::ScTabBgColorValueSet(pParent, nWinBits);
 }
 
 void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
@@ -200,8 +163,8 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         {
             sal_uInt16 nItemId = GetSelectItemId();
             const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : Color( COL_AUTO );
-            aTabBgColorDlg->aTabBgColor = aColor;
-            aTabBgColorDlg->EndDialog(sal_True);
+            m_pTabBgColorDlg->m_aTabBgColor = aColor;
+            m_pTabBgColorDlg->EndDialog(sal_True);
         }
         break;
     }

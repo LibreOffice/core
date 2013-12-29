@@ -463,8 +463,7 @@ public:
                                                                 const OUString& rTitle, //Dialog Title
                                                                 const OUString& rTabBgColorNoColorText, //Label for no tab color
                                                                 const Color& rDefaultColor, //Currently selected Color
-                                                                const OString& ,
-                                                                int nId ) = 0;
+                                                                const OString& ) = 0;
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent,
                                                                     int nId,
