@@ -1740,7 +1740,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         nBreakInLine++;
 
     sal_Int32 nMaxBreakPos = nBreakInLine + pLine->GetStart();
-    sal_Int32 nBreakPos = 0xFFFF;
+    sal_Int32 nBreakPos = 0;
 
     sal_Bool bCompressBlank = sal_False;
     sal_Bool bHyphenated = sal_False;
