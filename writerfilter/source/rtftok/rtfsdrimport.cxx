@@ -239,6 +239,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     oox::vml::FillModel aFillModel; // Gradient.
     oox::vml::ShadowModel aShadowModel; // Shadow.
 
+    bool bOpaque = true;
+
     // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
     if (std::find_if(rShape.aProperties.begin(),
                 rShape.aProperties.end(),
@@ -535,6 +537,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             oRelRight.reset(TWIP_TO_MM100(i->second.toInt32()));
         else if (i->first == "relBottom")
             oRelBottom.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "fBehindDocument")
+            bOpaque = !i->second.toInt32();
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
@@ -669,6 +673,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
         xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+        xPropertySet->setPropertyValue("Opaque", uno::makeAny(bOpaque));
     }
 
     if (m_rImport.isInBackground())

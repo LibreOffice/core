@@ -1398,6 +1398,13 @@ DECLARE_RTFIMPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(getShape(2), "FillColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testBackground, "background.rtf")
+{
+    // The first shape wasn't in the foreground.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "Opaque")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
