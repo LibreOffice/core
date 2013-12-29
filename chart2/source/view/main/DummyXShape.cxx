@@ -1039,16 +1039,12 @@ void DummyChart::setSize( const awt::Size& aSize )
 //    DummyXShape::setSize(aSize);
 //    mpWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
 //    pWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
-    int width = aSize.Width / 10;
-    int height = aSize.Height / 10;
-    width = (width + 3) & ~3;
-    height = (height + 3) & ~3;
-    mpWindow->SetSizePixel(Size(width, height));
-    pWindow->SetSizePixel(Size(width, height));
+    mpWindow->SetSizePixel(Size(0,0));
+    pWindow->SetSizePixel(Size(0,0));
     DummyXShape::setSize(awt::Size(0,0));
-    m_GLRender.SetWidth(width);
-    m_GLRender.SetHeight(height);
-    SAL_WARN("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);
+    m_GLRender.SetWidth(aSize.Width);
+    m_GLRender.SetHeight(aSize.Height);
+    SAL_WARN("chart2.opengl", "DummyChart::GLRender.Width = " << aSize.Width << ", GLRender.Height = " << aSize.Height);
 #endif
  //[mod] by gaowei end
 
