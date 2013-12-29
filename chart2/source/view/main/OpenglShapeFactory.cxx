@@ -123,6 +123,7 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
                 "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
         dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
         SvxDummyShapeContainer* pContainer = new SvxDummyShapeContainer(pChart);
+        pContainer->setSize(awt::Size(0,0));
         xRet = pChart;
         xDrawPage->add(xTarget);
         xDrawPage->add(pContainer);
