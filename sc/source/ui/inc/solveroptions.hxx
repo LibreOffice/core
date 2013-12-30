@@ -37,15 +37,9 @@ namespace com { namespace sun { namespace star {
 
 class ScSolverOptionsDialog : public ModalDialog
 {
-    FixedText       maFtEngine;
-    ListBox         maLbEngine;
-    FixedText       maFtSettings;
-    SvxCheckListBox maLbSettings;
-    PushButton      maBtnEdit;
-    FixedLine       maFlButtons;
-    HelpButton      maBtnHelp;
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
+    ListBox* m_pLbEngine;
+    SvxCheckListBox* m_pLbSettings;
+    PushButton* m_pBtnEdit;
 
     SvLBoxButtonData* mpCheckButtonData;
     com::sun::star::uno::Sequence<OUString> maImplNames;

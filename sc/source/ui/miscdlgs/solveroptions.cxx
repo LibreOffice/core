@@ -113,32 +113,27 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
                         const uno::Sequence<OUString>& rDescriptions,
                         const OUString& rEngine,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
-    : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVEROPTIONS ) ),
-    maFtEngine      ( this, ScResId( FT_ENGINE ) ),
-    maLbEngine      ( this, ScResId( LB_ENGINE ) ),
-    maFtSettings    ( this, ScResId( FT_SETTINGS ) ),
-    maLbSettings    ( this, ScResId( LB_SETTINGS ) ),
-    maBtnEdit       ( this, ScResId( BTN_EDIT ) ),
-    maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    mpCheckButtonData( NULL ),
-    maImplNames( rImplNames ),
-    maDescriptions( rDescriptions ),
-    maEngine( rEngine ),
-    maProperties( rProperties )
+    : ModalDialog(pParent, "SolverOptionsDialog",
+        "modules/scalc/ui/solveroptionsdialog.ui")
+    , mpCheckButtonData(NULL)
+    , maImplNames(rImplNames)
+    , maDescriptions(rDescriptions)
+    , maEngine(rEngine)
+    , maProperties(rProperties)
 {
-    maLbEngine.SetSelectHdl( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );
+    get(m_pLbEngine, "engine");
+    get(m_pLbSettings, "settings");
+    get(m_pBtnEdit, "edit");
 
-    maBtnEdit.SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
+    m_pLbEngine->SetSelectHdl( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );
 
-    maLbSettings.SetStyle( maLbSettings.GetStyle()|WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
-    maLbSettings.SetHelpId( HID_SC_SOLVEROPTIONS_LB );
-    maLbSettings.SetHighlightRange();
+    m_pBtnEdit->SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
-    maLbSettings.SetSelectHdl( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );
-    maLbSettings.SetDoubleClickHdl( LINK( this, ScSolverOptionsDialog, SettingsDoubleClickHdl ) );
+    m_pLbSettings->SetStyle( m_pLbSettings->GetStyle()|WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
+    m_pLbSettings->SetHighlightRange();
+
+    m_pLbSettings->SetSelectHdl( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );
+    m_pLbSettings->SetDoubleClickHdl( LINK( this, ScSolverOptionsDialog, SettingsDoubleClickHdl ) );
 
     sal_Int32 nSelect = -1;
     sal_Int32 nImplCount = maImplNames.getLength();
@@ -146,7 +141,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
     {
         OUString aImplName( maImplNames[nImpl] );
         OUString aDescription( maDescriptions[nImpl] );   // user-visible descriptions in list box
-        maLbEngine.InsertEntry( aDescription );
+        m_pLbEngine->InsertEntry( aDescription );
         if ( aImplName == maEngine )
             nSelect = nImpl;
     }
@@ -162,13 +157,11 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
         maProperties.realloc(0);        // don't use options from different engine
     }
     if ( nSelect >= 0 )                 // select in list box
-        maLbEngine.SelectEntryPos( static_cast<sal_uInt16>(nSelect) );
+        m_pLbEngine->SelectEntryPos( static_cast<sal_uInt16>(nSelect) );
 
     if ( !maProperties.getLength() )
         ReadFromComponent();            // fill maProperties from component (using maEngine)
     FillListBox();                      // using maProperties
-
-    FreeResource();
 }
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
@@ -186,7 +179,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     // update maProperties from list box content
     // order of entries in list box and maProperties is the same
     sal_Int32 nEntryCount = maProperties.getLength();
-    SvTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = m_pLbSettings->GetModel();
     if ( nEntryCount == (sal_Int32)pModel->GetEntryCount() )
     {
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
@@ -211,7 +204,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
             }
             if ( !bHasData )
                 ScUnoHelpFunctions::SetBoolInAny( rValue,
-                                    maLbSettings.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+                                    m_pLbSettings->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
         }
     }
     else
@@ -252,14 +245,14 @@ void ScSolverOptionsDialog::FillListBox()
 
     // fill the list box
 
-    maLbSettings.SetUpdateMode(false);
-    maLbSettings.Clear();
+    m_pLbSettings->SetUpdateMode(false);
+    m_pLbSettings->Clear();
 
     OUString sEmpty;
     if (!mpCheckButtonData)
-        mpCheckButtonData = new SvLBoxButtonData( &maLbSettings );
+        mpCheckButtonData = new SvLBoxButtonData(m_pLbSettings);
 
-    SvTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = m_pLbSettings->GetModel();
     SvTreeListEntry* pEntry = NULL;
 
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
@@ -305,7 +298,7 @@ void ScSolverOptionsDialog::FillListBox()
         pModel->Insert( pEntry );
     }
 
-    maLbSettings.SetUpdateMode(sal_True);
+    m_pLbSettings->SetUpdateMode(sal_True);
 }
 
 void ScSolverOptionsDialog::ReadFromComponent()
@@ -315,7 +308,7 @@ void ScSolverOptionsDialog::ReadFromComponent()
 
 void ScSolverOptionsDialog::EditOption()
 {
-    SvTreeListEntry* pEntry = maLbSettings.GetCurEntry();
+    SvTreeListEntry* pEntry = m_pLbSettings->GetCurEntry();
     if (pEntry)
     {
         sal_uInt16 nItemCount = pEntry->ItemCount();
@@ -333,7 +326,7 @@ void ScSolverOptionsDialog::EditOption()
                     if ( aValDialog.Execute() == RET_OK )
                     {
                         pStringItem->SetDoubleValue( aValDialog.GetValue() );
-                        maLbSettings.InvalidateEntry( pEntry );
+                        m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
                 else
@@ -344,7 +337,7 @@ void ScSolverOptionsDialog::EditOption()
                     if ( aIntDialog.Execute() == RET_OK )
                     {
                         pStringItem->SetIntValue( aIntDialog.GetValue() );
-                        maLbSettings.InvalidateEntry( pEntry );
+                        m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
             }
@@ -354,7 +347,7 @@ void ScSolverOptionsDialog::EditOption()
 
 IMPL_LINK( ScSolverOptionsDialog, ButtonHdl, PushButton*, pBtn )
 {
-    if ( pBtn == &maBtnEdit )
+    if (pBtn == m_pBtnEdit)
         EditOption();
 
     return 0;
@@ -368,7 +361,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl)
 
 IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
 {
-    sal_uInt16 nSelectPos = maLbEngine.GetSelectEntryPos();
+    sal_uInt16 nSelectPos = m_pLbEngine->GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
     {
         OUString aNewEngine( maImplNames[nSelectPos] );
@@ -386,7 +379,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
 {
     sal_Bool bCheckbox = false;
 
-    SvTreeListEntry* pEntry = maLbSettings.GetCurEntry();
+    SvTreeListEntry* pEntry = m_pLbSettings->GetCurEntry();
     if (pEntry)
     {
         SvLBoxItem* pItem = pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON);
@@ -394,7 +387,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
             bCheckbox = true;
     }
 
-    maBtnEdit.Enable( !bCheckbox );
+    m_pBtnEdit->Enable( !bCheckbox );
 
     return 0;
 }

@@ -160,9 +160,6 @@
 #define HID_SC_DPDATEGROUP_LB                                   "SC_HID_SC_DPDATEGROUP_LB"
 #define HID_SC_DPSHOWDETAIL                                     "SC_HID_SC_DPSHOWDETAIL"
 
-#define HID_SC_SOLVEROPTIONS                                    "SC_HID_SC_SOLVEROPTIONS"
-#define HID_SC_SOLVEROPTIONS_LB                                 "SC_HID_SC_SOLVEROPTIONS_LB"
-
 #define HID_SCDLG_CONFLICTS                                     "SC_HID_SCDLG_CONFLICTS"
 
 #define HID_SC_HF_HL_DEFINED                                    "SC_HID_SC_HF_HL_DEFINED"
