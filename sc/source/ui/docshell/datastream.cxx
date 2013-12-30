@@ -56,11 +56,57 @@ double datastream_get_time(int nIdx)
     return fTimes[ nIdx ];
 }
 
+namespace {
+
 inline double getNow()
 {
     TimeValue now;
     osl_getSystemTime(&now);
     return static_cast<double>(now.Seconds) + static_cast<double>(now.Nanosec) / 1000000000.0;
+}
+
+#if ENABLE_ORCUS
+
+class CSVHandler
+{
+    DataStream::Line& mrLine;
+    size_t mnColCount;
+    size_t mnCols;
+    const char* mpLineHead;
+
+public:
+    CSVHandler( DataStream::Line& rLine, size_t nColCount ) :
+        mrLine(rLine), mnColCount(nColCount), mnCols(0), mpLineHead(rLine.maLine.getStr()) {}
+
+    void begin_parse() {}
+    void end_parse() {}
+    void begin_row() {}
+    void end_row() {}
+
+    void cell(const char* p, size_t n)
+    {
+        if (mnCols >= mnColCount)
+            return;
+
+        DataStream::Cell aCell;
+        if (ScStringUtil::parseSimpleNumber(p, n, '.', ',', aCell.mfValue))
+        {
+            aCell.mbValue = true;
+        }
+        else
+        {
+            aCell.mbValue = false;
+            aCell.maStr.Pos = std::distance(mpLineHead, p);
+            aCell.maStr.Size = n;
+        }
+        mrLine.maCells.push_back(aCell);
+
+        ++mnCols;
+    }
+};
+
+#endif
+
 }
 
 namespace datastreams {
@@ -96,7 +142,7 @@ private:
     }
 };
 
-void emptyLineQueue( std::queue<LinesList*>& rQueue )
+void emptyLineQueue( std::queue<DataStream::LinesType*>& rQueue )
 {
     while (!rQueue.empty())
     {
@@ -108,22 +154,34 @@ void emptyLineQueue( std::queue<LinesList*>& rQueue )
 class ReaderThread : public salhelper::Thread
 {
     SvStream *mpStream;
+    size_t mnColCount;
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
 
-    std::queue<LinesList* > maPendingLines;
-    std::queue<LinesList* > maUsedLines;
+    std::queue<DataStream::LinesType*> maPendingLines;
+    std::queue<DataStream::LinesType*> maUsedLines;
     osl::Mutex maMtxLines;
 
     osl::Condition maCondReadStream;
     osl::Condition maCondConsume;
 
+#if ENABLE_ORCUS
+    orcus::csv_parser_config maConfig;
+#endif
+
 public:
 
-    ReaderThread(SvStream *pData):
+    ReaderThread(SvStream *pData, size_t nColCount):
         Thread("ReaderThread"),
         mpStream(pData),
-        mbTerminate(false) {}
+        mnColCount(nColCount),
+        mbTerminate(false)
+    {
+#if ENABLE_ORCUS
+        maConfig.delimiters.push_back(',');
+        maConfig.text_qualifier = '"';
+#endif
+    }
 
     virtual ~ReaderThread()
     {
@@ -156,9 +214,9 @@ public:
         maCondConsume.reset();
     }
 
-    LinesList* popNewLines()
+    DataStream::LinesType* popNewLines()
     {
-        LinesList* pLines = maPendingLines.front();
+        DataStream::LinesType* pLines = maPendingLines.front();
         maPendingLines.pop();
         return pLines;
     }
@@ -174,7 +232,7 @@ public:
         return !maPendingLines.empty();
     }
 
-    void pushUsedLines( LinesList* pLines )
+    void pushUsedLines( DataStream::LinesType* pLines )
     {
         maUsedLines.push(pLines);
     }
@@ -189,7 +247,7 @@ private:
     {
         while (!isTerminateRequested())
         {
-            LinesList* pLines = NULL;
+            DataStream::LinesType* pLines = NULL;
             osl::ResettableMutexGuard aGuard(maMtxLines);
 
             if (!maUsedLines.empty())
@@ -202,12 +260,20 @@ private:
             else
             {
                 aGuard.clear(); // unlock
-                pLines = new LinesList(10);
+                pLines = new DataStream::LinesType(10);
             }
 
             // Read & store new lines from stream.
-            for (size_t i = 0; i < pLines->size(); ++i)
-                mpStream->ReadLine( pLines->at(i) );
+            for (size_t i = 0, n = pLines->size(); i < n; ++i)
+            {
+                DataStream::Line& rLine = (*pLines)[i];
+                rLine.maCells.clear();
+                mpStream->ReadLine(rLine.maLine);
+
+                CSVHandler aHdl(rLine, mnColCount);
+                orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
+                parser.parse();
+            }
 
             aGuard.reset(); // lock
             while (!isTerminateRequested() && maPendingLines.size() >= 8)
@@ -226,6 +292,19 @@ private:
     }
 };
 
+}
+
+DataStream::Cell::Cell() : mfValue(0.0), mbValue(true) {}
+
+DataStream::Cell::Cell( const Cell& r ) : mbValue(r.mbValue)
+{
+    if (r.mbValue)
+        mfValue = r.mfValue;
+    else
+    {
+        maStr.Pos = r.maStr.Pos;
+        maStr.Size = r.maStr.Size;
+    }
 }
 
 void DataStream::MakeToolbarVisible()
@@ -312,13 +391,13 @@ DataStream::~DataStream()
     delete mpLines;
 }
 
-OString DataStream::ConsumeLine()
+DataStream::Line DataStream::ConsumeLine()
 {
     if (!mpLines || mnLinesCount >= mpLines->size())
     {
         mnLinesCount = 0;
         if (mxReaderThread->isTerminateRequested())
-            return OString();
+            return Line();
 
         osl::ResettableMutexGuard aGuard(mxReaderThread->getLinesMutex());
         if (mpLines)
@@ -402,7 +481,7 @@ void DataStream::StartImport()
             pStream = new SvScriptStream(msURL);
         else
             pStream = new SvFileStream(msURL, STREAM_READ);
-        mxReaderThread = new datastreams::ReaderThread( pStream );
+        mxReaderThread = new datastreams::ReaderThread(pStream, maStartRange.aEnd.Col() - maStartRange.aStart.Col() + 1);
         mxReaderThread->launch();
     }
     mbRunning = true;
@@ -476,79 +555,10 @@ void DataStream::MoveData()
 
 #if ENABLE_ORCUS
 
-namespace {
-
-struct StrVal
-{
-    ScAddress maPos;
-    OUString maStr;
-
-    StrVal( const ScAddress& rPos, const OUString& rStr ) : maPos(rPos), maStr(rStr) {}
-};
-
-struct NumVal
-{
-    ScAddress maPos;
-    double mfVal;
-
-    NumVal( const ScAddress& rPos, double fVal ) : maPos(rPos), mfVal(fVal) {}
-};
-
-typedef std::vector<StrVal> StrValArray;
-typedef std::vector<NumVal> NumValArray;
-
-/**
- * This handler handles a single line CSV input.
- */
-class CSVHandler
-{
-    ScAddress maPos;
-    SCCOL mnEndCol;
-
-    StrValArray maStrs;
-    NumValArray maNums;
-
-public:
-    CSVHandler( const ScAddress& rPos, SCCOL nEndCol ) : maPos(rPos), mnEndCol(nEndCol) {}
-
-    void begin_parse() {}
-    void end_parse() {}
-    void begin_row() {}
-    void end_row() {}
-
-    void cell(const char* p, size_t n)
-    {
-        if (maPos.Col() <= mnEndCol)
-        {
-            OUString aStr(p, n, RTL_TEXTENCODING_UTF8);
-            double fVal;
-            if (ScStringUtil::parseSimpleNumber(aStr, '.', ',', fVal))
-                maNums.push_back(NumVal(maPos, fVal));
-            else
-                maStrs.push_back(StrVal(maPos, aStr));
-        }
-        maPos.IncCol();
-    }
-
-    const StrValArray& getStrs() const { return maStrs; }
-    const NumValArray& getNums() const { return maNums; }
-};
-
-}
-
 void DataStream::Text2Doc()
 {
-    OString aLine = ConsumeLine();
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.text_qualifier = '"';
-    CSVHandler aHdl(ScAddress(maStartRange.aStart.Col(), mnCurRow, maStartRange.aStart.Tab()), maStartRange.aEnd.Col());
-    orcus::csv_parser<CSVHandler> parser(aLine.getStr(), aLine.getLength(), aHdl, aConfig);
-    parser.parse();
-
-    const StrValArray& rStrs = aHdl.getStrs();
-    const NumValArray& rNums = aHdl.getNums();
-    if (rStrs.empty() && rNums.empty() && mbRefreshOnEmptyLine)
+    Line aLine = ConsumeLine();
+    if (aLine.maCells.empty() && mbRefreshOnEmptyLine)
     {
         // Empty line detected.  Trigger refresh and discard it.
         Refresh();
@@ -559,15 +569,24 @@ void DataStream::Text2Doc()
 
     MoveData();
     {
-        StrValArray::const_iterator it = rStrs.begin(), itEnd = rStrs.end();
-        for (; it != itEnd; ++it)
-            maDocAccess.setStringCell(it->maPos, it->maStr);
-    }
-
-    {
-        NumValArray::const_iterator it = rNums.begin(), itEnd = rNums.end();
-        for (; it != itEnd; ++it)
-            maDocAccess.setNumericCell(it->maPos, it->mfVal);
+        std::vector<Cell>::const_iterator it = aLine.maCells.begin(), itEnd = aLine.maCells.end();
+        SCCOL nCol = maStartRange.aStart.Col();
+        const char* pLineHead = aLine.maLine.getStr();
+        for (; it != itEnd; ++it, ++nCol)
+        {
+            const Cell& rCell = *it;
+            if (rCell.mbValue)
+            {
+                maDocAccess.setNumericCell(
+                    ScAddress(nCol, mnCurRow, maStartRange.aStart.Tab()), rCell.mfValue);
+            }
+            else
+            {
+                maDocAccess.setStringCell(
+                    ScAddress(nCol, mnCurRow, maStartRange.aStart.Tab()),
+                    OUString(pLineHead+rCell.maStr.Pos, rCell.maStr.Size, RTL_TEXTENCODING_UTF8));
+            }
+        }
     }
 
     fTimes[ DEBUG_TIME_IMPORT ] = getNow() - fStart;

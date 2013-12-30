@@ -18,10 +18,12 @@
  */
 
 #include "stringutil.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/math.hxx"
 #include "global.hxx"
 #include "svl/zforlist.hxx"
+
+#include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/math.hxx>
 
 ScSetStringParam::ScSetStringParam() :
     mpNumFormatter(NULL),
@@ -186,6 +188,150 @@ bool ScStringUtil::parseSimpleNumber(
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
     OUString aString( aBuf.makeStringAndClear());
+    rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
+    if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
+        // Not a valid number or not entire string consumed.
+        return false;
+
+    return true;
+}
+
+bool ScStringUtil::parseSimpleNumber(
+    const char* p, size_t n, char dsep, char gsep, double& rVal)
+{
+    // Actually almost the entire pre-check is unnecessary and we could call
+    // rtl::math::stringToDouble() just after having exchanged ascii space with
+    // non-breaking space, if it wasn't for check of grouped digits. The NaN
+    // and Inf cases that are accepted by stringToDouble() could be detected
+    // using rtl::math::isFinite() on the result.
+
+    /* TODO: The grouped digits check isn't even valid for locales that do not
+     * group in thousands ... e.g. Indian locales. But that's something also
+     * the number scanner doesn't implement yet, only the formatter. */
+
+    OStringBuffer aBuf;
+
+    size_t i = 0;
+    const char* pLast = p + (n-1);
+    sal_Int32 nPosDSep = -1, nPosGSep = -1;
+    sal_uInt32 nDigitCount = 0;
+    sal_Int32 nPosExponent = -1;
+
+    // Skip preceding spaces.
+    for (i = 0; i < n; ++i, ++p)
+    {
+        char c = *p;
+        if (c != ' ')
+            // first non-space character.  Exit.
+            break;
+    }
+
+    if (i == n)
+        // the whole string is space.  Fail.
+        return false;
+
+    n -= i; // Subtract the length of the preceding spaces.
+
+    // Determine the last non-space character.
+    for (; p != pLast; --pLast, --n)
+    {
+        char c = *pLast;
+        if (c != ' ')
+            // Non space character. Exit.
+            break;
+    }
+
+    for (i = 0; i < n; ++i, ++p)
+    {
+        char c = *p;
+
+        if ('0' <= c && c <= '9')
+        {
+            // this is a digit.
+            aBuf.append(c);
+            ++nDigitCount;
+        }
+        else if (c == dsep)
+        {
+            // this is a decimal separator.
+
+            if (nPosDSep >= 0)
+                // a second decimal separator -> not a valid number.
+                return false;
+
+            if (nPosGSep >= 0 && i - nPosGSep != 4)
+                // the number has a group separator and the decimal sep is not
+                // positioned correctly.
+                return false;
+
+            nPosDSep = i;
+            nPosGSep = -1;
+            aBuf.append(c);
+            nDigitCount = 0;
+        }
+        else if (c == gsep)
+        {
+            // this is a group (thousand) separator.
+
+            if (i == 0)
+                // not allowed as the first character.
+                return false;
+
+            if (nPosDSep >= 0)
+                // not allowed after the decimal separator.
+                return false;
+
+            if (nPosGSep >= 0 && nDigitCount != 3)
+                // must be exactly 3 digits since the last group separator.
+                return false;
+
+            if (nPosExponent >= 0)
+                // not allowed in exponent.
+                return false;
+
+            nPosGSep = i;
+            nDigitCount = 0;
+        }
+        else if (c == '-' || c == '+')
+        {
+            // A sign must be the first character if it's given, or immediately
+            // follow the exponent character if present.
+            if (i == 0 || (nPosExponent >= 0 && i == static_cast<size_t>(nPosExponent+1)))
+                aBuf.append(c);
+            else
+                return false;
+        }
+        else if (c == 'E' || c == 'e')
+        {
+            // this is an exponent designator.
+
+            if (nPosExponent >= 0)
+                // Only one exponent allowed.
+                return false;
+
+            if (nPosGSep >= 0 && nDigitCount != 3)
+                // must be exactly 3 digits since the last group separator.
+                return false;
+
+            aBuf.append(c);
+            nPosExponent = i;
+            nPosDSep = -1;
+            nPosGSep = -1;
+            nDigitCount = 0;
+        }
+        else
+            return false;
+    }
+
+    // finished parsing the number.
+
+    if (nPosGSep >= 0 && nDigitCount != 3)
+        // must be exactly 3 digits since the last group separator.
+        return false;
+
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    sal_Int32 nParseEnd = 0;
+    OString aString( aBuf.makeStringAndClear());
     rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
     if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
         // Not a valid number or not entire string consumed.

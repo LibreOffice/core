@@ -33,15 +33,37 @@ namespace datastreams {
     class ReaderThread;
 }
 
-typedef std::vector<OString> LinesList;
 
 class DataStream : boost::noncopyable
 {
-    OString ConsumeLine();
-    void MoveData();
-    void Text2Doc();
-
 public:
+    struct Cell
+    {
+        struct Str
+        {
+            size_t Pos;
+            size_t Size;
+        };
+
+        union
+        {
+            Str maStr;
+            double mfValue;
+        };
+
+        bool mbValue;
+
+        Cell();
+        Cell( const Cell& r );
+    };
+
+    struct Line
+    {
+        OString maLine;
+        std::vector<Cell> maCells;
+    };
+    typedef std::vector<Line> LinesType;
+
     enum MoveType { NO_MOVE, RANGE_DOWN, MOVE_DOWN, MOVE_UP };
     enum { SCRIPT_STREAM = 1, VALUES_IN_LINE = 2 };
 
@@ -75,6 +97,9 @@ public:
     void SetRefreshOnEmptyLine( bool bVal );
 
 private:
+    Line ConsumeLine();
+    void MoveData();
+    void Text2Doc();
     void Refresh();
 
 private:
@@ -89,7 +114,7 @@ private:
     bool mbRunning;
     bool mbValuesInLine;
     bool mbRefreshOnEmptyLine;
-    LinesList* mpLines;
+    LinesType* mpLines;
     size_t mnLinesCount;
     size_t mnLinesSinceRefresh;
     double mfLastRefreshTime;
