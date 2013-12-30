@@ -36,7 +36,7 @@
 #include "retypepassdlg.hxx"
 #include "tabprotection.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -261,11 +261,9 @@ sal_Bool ScTabViewShell::HasAccessibilityObjects()
 
 bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 {
-    using ::std::auto_ptr;
-
     ScDocument* pDoc = GetViewData()->GetDocument();
 
-    auto_ptr<ScRetypePassDlg> pDlg(new ScRetypePassDlg(GetDialogParent()));
+    boost::scoped_ptr<ScRetypePassDlg> pDlg(new ScRetypePassDlg(GetDialogParent()));
     pDlg->SetDataFromDocument(*pDoc);
     pDlg->SetDesiredHash(eDesiredHash);
     if (pDlg->Execute() != RET_OK)
