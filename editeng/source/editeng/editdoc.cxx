@@ -2757,7 +2757,7 @@ size_t CharAttribList::Count() const
     return aAttribs.size();
 }
 
-const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const
+const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
@@ -2771,7 +2771,7 @@ const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 
     return NULL;
 }
 
-EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
+EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     // Backwards, if one ends where the next starts.
     // => The starting one is the valid one ...
@@ -2785,7 +2785,7 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
     return NULL;
 }
 
-const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const
+const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
 {
     DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
     AttribsType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
@@ -2798,7 +2798,7 @@ const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uIn
     return NULL;
 }
 
-bool CharAttribList::HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const
+bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
 {
     AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
     for (; it != itEnd; ++it)
@@ -2879,7 +2879,7 @@ bool CharAttribList::HasBoundingAttrib( sal_uInt16 nBound ) const
     return false;
 }
 
-const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const
+const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const
 {
     if ( !bHasEmptyAttribs )
         return NULL;
@@ -2894,7 +2894,7 @@ const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uI
     return NULL;
 }
 
-EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
+EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
     if ( !bHasEmptyAttribs )
         return NULL;
@@ -2924,7 +2924,7 @@ public:
 
 }
 
-const EditCharAttrib* CharAttribList::FindFeature( sal_uInt16 nPos ) const
+const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 {
     // First, find the first attribute that starts at or after specified position.
     AttribsType::const_iterator it =

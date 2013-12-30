@@ -215,12 +215,12 @@ public:
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
     void            RemoveItemsFromPool( SfxItemPool* pItemPool );
 
-    const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const;
-    EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const;
-    const EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const;
-    EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    const EditCharAttrib* FindFeature( sal_uInt16 nPos ) const;
+    const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
+    EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
+    const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const;
+    const EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
+    EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
+    const EditCharAttrib* FindFeature( sal_Int32 nPos ) const;
 
 
     void            ResortAttribs();
@@ -235,7 +235,7 @@ public:
     bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
     void SetHasEmptyAttribs(bool b);
     bool HasBoundingAttrib( sal_uInt16 nBound ) const;
-    bool HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const;
+    bool HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const;
 
     AttribsType& GetAttribs();
     const AttribsType& GetAttribs() const;
