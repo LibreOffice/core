@@ -373,6 +373,9 @@ void ScFiltersTest::testFunctionsODS()
     // text functions
     createCSVPath(OUString("text-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 4);
+    // statistical functions
+    createCSVPath(OUString("statistical-functions."), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 5);
 
     xDocSh->DoClose();
 }
