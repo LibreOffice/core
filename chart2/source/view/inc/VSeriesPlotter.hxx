@@ -78,7 +78,7 @@ class VDataSeriesGroup SAL_FINAL
 public:
     VDataSeriesGroup();
     VDataSeriesGroup( VDataSeries* pSeries );
-    virtual ~VDataSeriesGroup();
+    ~VDataSeriesGroup();
 
     void addSeries( VDataSeries* pSeries );//takes ownership of pSeries
     sal_Int32 getSeriesCount() const;

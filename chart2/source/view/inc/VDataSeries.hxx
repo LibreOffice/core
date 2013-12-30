@@ -67,7 +67,7 @@ public:
         ::com::sun::star::chart2::XDataSeries >& xDataSeries,
         VDataSeries* pOldSeries, double nPercent);
 
-    virtual ~VDataSeries();
+    ~VDataSeries();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
         getModel() const;
