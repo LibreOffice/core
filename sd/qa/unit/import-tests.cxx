@@ -22,6 +22,7 @@
 #include <rsc/rscsfx.hxx>
 
 #include <svx/svdotext.hxx>
+#include <svx/svdoashp.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -57,6 +58,7 @@ public:
     void testN828390_4();
     void testN828390_5();
     void testFdo68594();
+    void testFdo72998();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -71,6 +73,7 @@ public:
     CPPUNIT_TEST(testN828390_4);
     CPPUNIT_TEST(testN828390_5);
     CPPUNIT_TEST(testFdo68594);
+    CPPUNIT_TEST(testFdo72998);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -387,6 +390,29 @@ void SdFiltersTest::testFdo68594()
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != NULL);
     // Color should be black
     CPPUNIT_ASSERT_MESSAGE( "Placeholder color mismatch", pC->GetValue().GetColor() == 0);
+}
+
+void SdFiltersTest::testFdo72998()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/cshapes.pptx"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>(pPage->GetObj(2));
+        const SdrCustomShapeGeometryItem& rGeometryItem = (const SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+        CPPUNIT_ASSERT_MESSAGE( "not a custom shape", pObj );
+        const ::com::sun::star::uno::Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( OUString( "ViewBox" ) );
+        CPPUNIT_ASSERT_MESSAGE( "Missing ViewBox", pViewBox );
+        com::sun::star::awt::Rectangle aViewBox;
+        CPPUNIT_ASSERT( (*pViewBox >>= aViewBox ) );
+        CPPUNIT_ASSERT_MESSAGE( "Width should be zero - for forcing scale to 1", !aViewBox.Width );
+        CPPUNIT_ASSERT_MESSAGE( "Height should be zero - for forcing scale to 1", !aViewBox.Height );
+    }
 }
 
 void SdFiltersTest::testFdo64512()
