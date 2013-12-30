@@ -9375,19 +9375,11 @@ if test "$enable_openssl" = "yes"; then
         #
         # http://stackoverflow.com/questions/7406946/why-is-apple-deprecating-openssl-in-macos-10-7-lion
         # http://stackoverflow.com/questions/7475914/libcrypto-deprecated-on-mac-os-x-10-7-lion
-        #
-        # They apparently got fed up with the unstable ABI of
-        # OpenSSL, or something, and recommend you either move to
-        # their "Common Crypto Architecture", or, if you have to stay
-        # with OpenSSL, just build it yourself statically and bundle
-        # with your application.
 
         with_system_openssl=no
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
-    elif test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
-            "$_os" = "DragonFly" && test "$with_system_openssl" != "no"; then
-        # Mac OS builds should get out without extra stuff is the Mac porters'
-        # wish. And pkg-config is although Xcode ships a .pc for openssl
+    elif test "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o "$_os" = "DragonFly" \
+            && test "$with_system_openssl" != "no"; then
         with_system_openssl=yes
         SYSTEM_OPENSSL=YES
         OPENSSL_CFLAGS=
