@@ -2047,7 +2047,7 @@ Resource RID_GLOBSTR
     };
     String STR_NOFORMULA
     {
-        Text [ en-US ] = "Cell must contain a formula." ;
+        Text [ en-US ] = "Formula cell must contain a formula." ;
     };
     String STR_INVALIDINPUT
     {
