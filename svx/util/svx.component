@@ -19,9 +19,6 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="svx" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Draw.GraphicExporter">
-    <service name="com.sun.star.drawing.GraphicExportFilter"/>
-  </implementation>
   <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider"
       constructor="com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory">
     <service name="com.sun.star.gallery.GalleryThemeProvider"/>
