@@ -57,7 +57,7 @@ public:
     mutable ::com::sun::star::uno::Sequence< double > Doubles;
 };
 
-class VDataSeries : boost::noncopyable
+class VDataSeries SAL_FINAL : boost::noncopyable
 {
 public:
     VDataSeries( const ::com::sun::star::uno::Reference<

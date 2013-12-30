@@ -73,7 +73,7 @@ private:
  * A list of series that have the same CoordinateSystem. They are used to be
  * plotted maybe in a stacked manner by a plotter.
  */
-class VDataSeriesGroup
+class VDataSeriesGroup SAL_FINAL
 {
 public:
     VDataSeriesGroup();
