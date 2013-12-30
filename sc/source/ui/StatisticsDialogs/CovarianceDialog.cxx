@@ -28,6 +28,11 @@ ScCovarianceDialog::ScCovarianceDialog(
             "CovarianceDialog", "modules/scalc/ui/covariancedialog.ui" )
 {}
 
+sal_Int16 ScCovarianceDialog::GetUndoNameId()
+{
+    return STR_COVARIANCE_UNDO_NAME;
+}
+
 sal_Bool ScCovarianceDialog::Close()
 {
     return DoClose( ScCovarianceDialogWrapper::GetChildWindowId() );
