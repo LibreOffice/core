@@ -182,7 +182,7 @@ public:
                     ContentAttribs( const ContentAttribs& );
                     ~ContentAttribs();  // only for larger Tabs
 
-    SvxTabStop      FindTabStop( long nCurPos, sal_uInt16 nDefTab );
+    SvxTabStop      FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab );
     SfxItemSet&     GetItems()                          { return aAttribSet; }
     const SfxItemSet& GetItems() const { return aAttribSet; }
     const SfxStyleSheet*  GetStyleSheet() const { return pStyle; }
