@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "tbunocontroller.hxx"
-
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -39,10 +39,48 @@
 
 using namespace ::com::sun::star;
 
-namespace svx
-{
+namespace {
 
-class FontHeightToolBoxControl;
+class SvxFontSizeBox_Impl;
+class FontHeightToolBoxControl : public svt::ToolboxController,
+                                 public lang::XServiceInfo
+{
+    public:
+        FontHeightToolBoxControl(
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rServiceManager );
+        ~FontHeightToolBoxControl();
+
+        // XInterface
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw ();
+        virtual void SAL_CALL release() throw ();
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+
+        // XComponent
+        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+
+        // XToolbarController
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException);
+
+        void dispatchCommand( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+        using svt::ToolboxController::dispatchCommand;
+
+    private:
+        SvxFontSizeBox_Impl*                  m_pBox;
+        ::com::sun::star::awt::FontDescriptor m_aCurrentFont;
+};
+
 class SvxFontSizeBox_Impl : public FontSizeBox
 {
 public:
@@ -284,17 +322,11 @@ throw(uno::RuntimeException)
 OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
 throw( uno::RuntimeException )
 {
-    return getImplementationName_Static();
+    return OUString("com.sun.star.svx.FontHeightToolBoxController");
 }
 
 uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
 throw( uno::RuntimeException )
-{
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > FontHeightToolBoxControl::getSupportedServiceNames_Static()
-throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = "com.sun.star.frame.ToolbarController";
@@ -404,12 +436,26 @@ void FontHeightToolBoxControl::dispatchCommand(
     }
 }
 
-uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-{
-    return *new FontHeightToolBoxControl( comphelper::getComponentContext(rSMgr) );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory(
+    css::uno::XComponentContext *rxContext,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new FontHeightToolBoxControl(rxContext)));
+    x->acquire();
+    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
+    if (xx.is())
+    {
+        css::uno::Sequence<css::uno::Any> aArgs(
+                reinterpret_cast<css::uno::Any *>(arguments->elements),
+                arguments->nElements);
+        xx->initialize(aArgs);
+    }
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

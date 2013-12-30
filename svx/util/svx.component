@@ -59,7 +59,8 @@
       constructor="com_sun_star_svx_FindAllToolboxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.svx.FontHeightToolBoxController">
+  <implementation name="com.sun.star.svx.FontHeightToolBoxController"
+      constructor="com_sun_star_svx_FontHeightToolBoxController_implementation_getFactory">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
   <implementation name="com.sun.star.svx.UpSearchToolboxController"

@@ -27,7 +27,6 @@
 #include <svx/xtable.hxx>
 #include "svx/unoshcol.hxx"
 #include "recoveryui.hxx"
-#include "tbunocontroller.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -272,13 +271,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 svx::GraphicExporter_getImplementationName(),
                 svx::GraphicExporter_createInstance,
                 svx::GraphicExporter_getSupportedServiceNames() );
-        }
-        else if ( svx::FontHeightToolBoxControl::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::FontHeightToolBoxControl::getImplementationName_Static(),
-                svx::FontHeightToolBoxControl_createInstance,
-                svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
         }
 
         if( xFactory.is())
