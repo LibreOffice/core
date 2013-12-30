@@ -69,7 +69,11 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
             for( sal_Int32 nIndex = 0; nIndex < nIndexes; ++nIndex)
             {
                 uno::Reference< text::XDocumentIndex> xIndex( xIndexes->getByIndex( nIndex ), uno::UNO_QUERY );
-                xIndex->update();
+                /*
+                 * Added support for pre-rendered TOC
+                 * so no need to update
+                 */
+                //xIndex->update();
             }
 
             // If we have PAGEREF fields, update fields as well.
