@@ -25,14 +25,14 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_slides"
         android:layout_weight="2"
+        android:padding="@dimen/padding_slide"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 
     <LinearLayout
         android:id="@+id/layout_notes"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/padding_slides_pager"
-        android:paddingRight="@dimen/padding_slides_pager"
+        android:paddingRight="@dimen/padding_slide_notes"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent">
@@ -45,6 +45,8 @@
 
         <ScrollView
             android:id="@+id/scroll_notes"
+            android:paddingTop="@dimen/padding_slide_notes"
+            android:paddingLeft="@dimen/padding_slide_notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -53,9 +55,6 @@
                 android:inAnimation="@android:anim/fade_in"
                 android:outAnimation="@android:anim/fade_out"
                 android:measureAllChildren="false"
-                android:paddingTop="@dimen/padding_slide_notes"
-                android:paddingLeft="@dimen/padding_slide_notes"
-                android:paddingRight="@dimen/padding_slide_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
