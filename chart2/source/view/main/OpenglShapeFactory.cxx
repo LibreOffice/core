@@ -52,6 +52,9 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 #include <algorithm>
+#include <iostream>
+using namespace std;
+
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

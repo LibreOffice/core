@@ -819,7 +819,17 @@ bool DummyChart::initOpengl()
         0, 0, 0                         // Layer Masks Ignored
     };
 
-    int WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
+    //  we must check whether can set the MSAA
+    int WindowPix;
+    m_GLRender.InitMultisample(PixelFormatFront);
+    if (m_GLRender.GetMSAASupport())
+    {
+        WindowPix = m_GLRender.GetMSAAFormat();
+    }
+    else
+    {
+        WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
+    }
     SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
     GLWin.hRC  = wglCreateContext(GLWin.hDC);
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);

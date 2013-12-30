@@ -124,6 +124,9 @@ public:
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b);
     void SetLine2DWidth(int width);
     BitmapEx GetAsBitmap();
+    int InitMultisample(PIXELFORMATDESCRIPTOR pfd);
+    int GetMSAASupport();
+    int GetMSAAFormat();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -131,6 +134,8 @@ private:
     int CreateFrameBufferObj();
     int RenderTexture(GLuint TexID);
     int RenderTexture2FBO(GLuint TexID);
+    int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
+    int WGLisExtensionSupported(const char *extension);
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
@@ -210,6 +215,10 @@ private:
     list <Line2DPointList> m_Line2DShapePointList;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
+	int m_iArbMultisampleSupported;
+	int m_iArbMultisampleFormat;
+	GLint m_iSampleBufs;
+	GLint m_iSamples;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
