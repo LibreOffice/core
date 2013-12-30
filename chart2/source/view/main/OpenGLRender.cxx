@@ -27,6 +27,13 @@ using namespace std;
 
 #define OPENGL_SHADER( ... )# __VA_ARGS__
 
+#define GL_PI 3.14159f
+
+#if defined( _WIN32 )
+#define WGL_SAMPLE_BUFFERS_ARB   0x2041
+#define WGL_SAMPLES_ARB          0x2042
+#endif
+
 const char *ColorFragmemtShader = OPENGL_SHADER (
 
 varying vec3 fragmentColor;
@@ -1223,6 +1230,186 @@ int OpenGLRender::CreateMultiSampleFrameBufObj()
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_renderBufferDepthMS);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+    return 0;
+}
+
+int OpenGLRender::Create2DCircle(int detail)
+{
+    float angle;
+    int idx = 2;
+    if (detail <= 0)
+    {
+        return -1;
+    }
+    m_Bubble2DCircle.bufLen = 2 * (detail + 3)* sizeof(float);
+    m_Bubble2DCircle.pointBuf = (float *)malloc(m_Bubble2DCircle.bufLen);
+    memset(m_Bubble2DCircle.pointBuf, 0, m_Bubble2DCircle.bufLen);
+    for(angle = 2.0f * GL_PI; angle > -(2.0f * GL_PI / detail); angle -= (2.0f * GL_PI / detail))
+    {
+        m_Bubble2DCircle.pointBuf[idx++] = sin(angle);
+        m_Bubble2DCircle.pointBuf[idx++] = cos(angle);
+    }
+    return 0;
+}
+
+int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float directionY)
+{
+    //check whether to create the circle data
+    if (!m_Bubble2DCircle.pointBuf)
+    {
+        Create2DCircle(100);
+    }
+
+    float actualX = (x / 10.0f) - ((float)m_iWidth / 2);
+    float actualY = (y / 10.0f) - ((float)m_iHeight / 2);
+    m_Bubble2DPointList.x = actualX;
+    m_Bubble2DPointList.y = actualY;
+    m_Bubble2DPointList.xScale = directionX / 10.0f;
+    m_Bubble2DPointList.yScale = directionY / 10.0f;
+
+    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
+
+    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
+
+    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
+
+    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+
+    m_Bubble2DShapePointList.push_back(m_Bubble2DPointList);
+    return 0;
+}
+
+int OpenGLRender::RenderBubble2FBO(int wholeFlag)
+{
+    char fileName[256] = {0};
+    GLenum status;
+    glViewport(0, 0, m_iWidth, m_iHeight);
+    glClearDepth(1.0f);
+    // Clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if ((!m_FboID[0]) || (!m_FboID[1]))
+    {
+        // create a texture object
+        CreateTextureObj(m_iWidth, m_iHeight);
+        //create render buffer object
+        CreateRenderObj(m_iWidth, m_iHeight);
+        //create fbo
+        CreateFrameBufferObj();
+        if (m_iArbMultisampleSupported)
+        {
+            CreateMultiSampleFrameBufObj();
+        }
+    }
+    //bind fbo
+    if (m_iArbMultisampleSupported)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER,m_frameBufferMS);
+    }
+    else
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+    }
+    // Clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (wholeFlag)
+    {
+        if (m_iFboIdx > 0)
+        {
+           RenderTexture2FBO(m_TextureObj[(m_iFboIdx - 1) % 2]);
+        }
+    }
+    int listNum = m_Bubble2DShapePointList.size();
+    for (int i = 0; i < listNum; i++)
+    {
+        //move the circle to the pos, and scale using the xScale and Y scale
+        Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
+        PosVecf3 trans = {pointList.x, pointList.y, 0.0f};
+        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+        PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
+        MoveModelf(trans, angle, scale);
+        m_MVP = m_Projection * m_View * m_Model;
+        //render to fbo
+        //fill vertex buffer
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        if (!m_Bubble2DCircle.pointBuf)
+        {
+            Create2DCircle(100);
+        }
+        glBufferData(GL_ARRAY_BUFFER, m_Bubble2DCircle.bufLen, m_Bubble2DCircle.pointBuf, GL_STATIC_DRAW);
+
+        glUseProgram(m_CommonProID);
+
+        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
+
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_2DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        glDrawArrays(GL_TRIANGLE_FAN, 0, m_Bubble2DCircle.bufLen / sizeof(float) / 2);
+        glDisableVertexAttribArray(m_2DVertexID);
+        glUseProgram(0);
+        m_Bubble2DShapePointList.pop_front();
+    }
+    //if use MSAA, we should copy the data to the FBO texture
+    GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if( fbResult != GL_FRAMEBUFFER_COMPLETE )
+    {
+        return -1;
+    }
+    if (m_iArbMultisampleSupported)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBufferMS);
+        status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            cout << "The frame buffer status is not complete!" << endl;
+            return -1;
+        }
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+        status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            cout << "The frame buffer status is not complete!" << endl;
+            return -1;
+        }
+        glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+    }
+    int wndLeft = ((int)m_fPicLeft + (m_iWidth / 2) - 1) & ~3;
+    int wndRight = ((int)m_fPicRight + (m_iWidth / 2) + 7) & ~3;
+    int wndBottom = ((int)m_fPicBottom + (m_iHeight/ 2) - 1) & ~3;
+    int wndTop = ((int)m_fPicTop + (m_iHeight/ 2) + 7) & ~3;
+    int picWidth = wndRight - wndLeft;
+    int picHeight = wndTop - wndBottom;
+    sprintf(fileName, "D:\\shaderout_%d_%d_%d.bmp", picWidth, picHeight, m_iFboIdx);
+    sal_uInt8 *buf = (sal_uInt8 *)malloc(picWidth * picHeight * 3 + BMP_HEADER_LEN);
+    CreateBMPHeader(buf, picWidth, picHeight);
+    glReadPixels(wndLeft, wndBottom, picWidth, picHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
+    FILE *pfile = fopen(fileName,"wb");
+    fwrite(buf, picWidth * picHeight * 3 + BMP_HEADER_LEN, 1, pfile);
+    free(buf);
+    fclose(pfile);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#if defined( WNT )
+    SwapBuffers(glWin.hDC);
+    glFlush();
+#elif defined( UNX )
+    unx::glXSwapBuffers(glWin.dpy, glWin.win);
+#endif
+//    RenderTexture(m_TextureObj[m_iFboIdx % 2]);
+    m_iFboIdx++;
     return 0;
 }
 

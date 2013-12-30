@@ -73,6 +73,21 @@ typedef struct Line2DPointList
     int bufLen;
 }Line2DPointList;
 
+typedef struct Bubble2DPointList
+{
+    float x;
+    float y;
+    float xScale;
+    float yScale;
+}Bubble2DPointList;
+
+typedef struct Bubble2DCircle
+{
+    float *pointBuf;
+    int bufLen;
+}Bubble2DCircle;
+
+
 /// Holds the information of our new child window
 struct GLWindow
 {
@@ -130,6 +145,8 @@ public:
     int GetMSAASupport();
     int GetMSAAFormat();
     void SetColor(sal_uInt32 color);
+    int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
+    int RenderBubble2FBO(int wholeFlag);
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -142,6 +159,7 @@ private:
 #endif
     int WGLisExtensionSupported(const char *extension);
 	int CreateMultiSampleFrameBufObj();
+    int Create2DCircle(int detail);
 
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -231,6 +249,23 @@ private:
 	GLuint m_frameBufferMS;
 	GLuint m_renderBufferColorMS;
 	GLuint m_renderBufferDepthMS;
+
+    float m_fPicRight;
+
+    float m_fPicLeft;
+
+    float m_fPicBottom;
+
+    float m_fPicTop;
+
+    Bubble2DCircle m_Bubble2DCircle;
+
+    Bubble2DPointList m_Bubble2DPointList;
+
+    list <Bubble2DPointList> m_Bubble2DShapePointList;
+         GLint m_CommonProID;
+    GLint m_2DVertexID;
+    GLint m_2DColorID;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

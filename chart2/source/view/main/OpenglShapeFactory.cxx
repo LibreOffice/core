@@ -321,6 +321,12 @@ uno::Reference< drawing::XShape >
             rPosition.PositionX - (rSize.DirectionX / 2.0),
             rPosition.PositionY - (rSize.DirectionY / 2.0),
             rPosition.PositionZ );
+    dummy::DummyChart *pChart = (dummy::DummyChart *)m_pChart;
+    long color = 0x3465AF;
+    pChart->m_GLRender.SetColor(color);
+    pChart->m_GLRender.Bubble2DShapePoint(rPosition.PositionX, rPosition.PositionY,
+                                          rSize.DirectionX / 2.0, rSize.DirectionY / 2.0);
+    pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);
     dummy::DummyCircle* pCircle = new dummy::DummyCircle(Position3DToAWTPoint( aCenterPosition ),
             Direction3DToAWTSize( rSize ));
     xTarget->add(pCircle);
