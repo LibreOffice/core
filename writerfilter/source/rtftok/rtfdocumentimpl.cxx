@@ -2148,7 +2148,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         if (nParam >= 0)
         {
             RTFValue::Pointer_t pValue(new RTFValue(nParam));
-            lcl_putBorderProperty(m_aStates, NS_rtf::LN_BRCTYPE, pValue);
+            lcl_putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_val, pValue);
             return 0;
         }
     }
@@ -3118,7 +3118,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (nParam > 1)
                     nParam = nParam * 2 / 5;
                 RTFValue::Pointer_t pValue(new RTFValue(nParam));
-                lcl_putBorderProperty(m_aStates, NS_rtf::LN_DPTLINEWIDTH, pValue);
+                lcl_putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_sz, pValue);
             }
             break;
         case RTF_BRDRCF:
@@ -3131,7 +3131,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 // dmapper expects it in points, we have it in twip
                 RTFValue::Pointer_t pValue(new RTFValue(nParam / 20));
-                lcl_putBorderProperty(m_aStates, NS_rtf::LN_DPTSPACE, pValue);
+                lcl_putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_space, pValue);
             }
             break;
         case RTF_TX:

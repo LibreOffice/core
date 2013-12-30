@@ -323,7 +323,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Lvl_numFmt:
             break;
-        case NS_rtf::LN_FLEGAL:
+        case NS_ooxml::LN_CT_Lvl_isLgl:
             break;
         case NS_rtf::LN_FNORESTART:
             break;
@@ -587,13 +587,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_SHDPATTERN:
             break;
-        case NS_rtf::LN_DPTLINEWIDTH:
+        case NS_ooxml::LN_CT_Border_sz:
             break;
-        case NS_rtf::LN_BRCTYPE:
+        case NS_ooxml::LN_CT_Border_val:
             break;
         case NS_rtf::LN_ICO:
             break;
-        case NS_rtf::LN_DPTSPACE:
+        case NS_ooxml::LN_CT_Border_space:
             break;
         case NS_rtf::LN_FSHADOW:
             break;

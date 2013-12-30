@@ -118,7 +118,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_rtf::LN_JC:
             m_nJC = nValue;
         break;
-        case NS_rtf::LN_FLEGAL:
+        case NS_ooxml::LN_CT_Lvl_isLgl:
             m_nFLegal = nValue;
         break;
         case NS_rtf::LN_FNORESTART:
@@ -774,7 +774,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_ooxml::LN_CT_Lvl_start:
         case NS_ooxml::LN_CT_Lvl_numFmt:
         case NS_rtf::LN_JC:
-        case NS_rtf::LN_FLEGAL:
+        case NS_ooxml::LN_CT_Lvl_isLgl:
         case NS_rtf::LN_FNORESTART:
         case NS_rtf::LN_FIDENTSAV:
         case NS_rtf::LN_FCONVERTED:
@@ -993,7 +993,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_CT_Lvl_start:
             case NS_ooxml::LN_CT_Lvl_numFmt:
             case NS_rtf::LN_JC:
-            case NS_rtf::LN_FLEGAL:
+            case NS_ooxml::LN_CT_Lvl_isLgl:
             case NS_rtf::LN_FNORESTART:
             case NS_rtf::LN_FIDENTSAV:
             case NS_rtf::LN_FCONVERTED:

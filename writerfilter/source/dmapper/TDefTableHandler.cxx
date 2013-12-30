@@ -324,13 +324,12 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             localResolve( rName, pProperties );
         }
         break;
-        //from LN_BRCXXXX - handled within the BorderHandler
-        case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
+        case NS_ooxml::LN_CT_Border_sz:
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = nIntValue * 5 / 2;
             appendGrabBag("sz", OUString::number(nIntValue));
         break;
-        case NS_rtf::LN_BRCTYPE:    // 0x2872
+        case NS_ooxml::LN_CT_Border_val:
             m_nLineType = nIntValue;
             appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
@@ -339,7 +338,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8));
             m_nLineColor = nIntValue;
         break;
-        case NS_rtf::LN_DPTSPACE:   // 0x2874
+        case NS_ooxml::LN_CT_Border_space:
             appendGrabBag("space", OUString::number(nIntValue));
             m_nLineDistance = nIntValue;
         break;

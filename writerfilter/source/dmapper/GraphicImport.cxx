@@ -662,16 +662,16 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_shpblipbname :
         break;
 
-        case NS_rtf::LN_DPTLINEWIDTH:  // 0x1759
+        case NS_ooxml::LN_CT_Border_sz:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = nIntValue;
         break;
-        case NS_rtf::LN_BRCTYPE:   // 0x175a
+        case NS_ooxml::LN_CT_Border_val:
             //graphic borders don't support different line types
         break;
         case NS_rtf::LN_ICO:   // 0x175b
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
         break;
-        case NS_rtf::LN_DPTSPACE:  // 0x175c
+        case NS_ooxml::LN_CT_Border_space:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
         case NS_rtf::LN_FSHADOW:   // 0x175d

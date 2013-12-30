@@ -21682,13 +21682,13 @@
       <value tokenid="227">zigZagStitch</value>
     </resource>
     <resource name="CT_Border" resource="Properties" tag="attribute">
-      <attribute name="val" tokenid="rtf:BRCTYPE"/>
+      <attribute name="val" tokenid="ooxml:CT_Border_val"/>
       <attribute name="color" tokenid="ooxml:CT_Border_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Border_themeColor"/>
       <attribute name="themeTint" tokenid="ooxml:CT_Border_themeTint"/>
       <attribute name="themeShade" tokenid="ooxml:CT_Border_themeShade"/>
-      <attribute name="sz" tokenid="rtf:DPTLINEWIDTH"/>
-      <attribute name="space" tokenid="rtf:DPTSPACE"/>
+      <attribute name="sz" tokenid="ooxml:CT_Border_sz"/>
+      <attribute name="space" tokenid="ooxml:CT_Border_space"/>
       <attribute name="shadow" tokenid="rtf:FSHADOW"/>
       <attribute name="frame" tokenid="rtf:FFRAME"/>
     </resource>
@@ -23547,7 +23547,7 @@
       <element name="numFmt" tokenid="ooxml:CT_Lvl_numFmt"/>
       <element name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
       <element name="pStyle" tokenid="ooxml:CT_Lvl_pStyle"/>
-      <element name="isLgl" tokenid="rtf:FLEGAL"/>
+      <element name="isLgl" tokenid="ooxml:CT_Lvl_isLgl"/>
       <element name="suff" tokenid="ooxml:CT_Lvl_suff"/>
       <element name="lvlText" tokenid="ooxml:CT_Lvl_lvlText"/>
       <element name="lvlPicBulletId" tokenid="ooxml:CT_Lvl_lvlPicBulletId"/>
