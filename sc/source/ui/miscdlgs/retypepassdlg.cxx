@@ -70,6 +70,7 @@ ScRetypePassDlg::ScRetypePassDlg(Window* pParent) :
     meDesiredHash(PASSHASH_SHA1)
 {
     Init();
+    FreeResource();
 }
 
 ScRetypePassDlg::~ScRetypePassDlg()
