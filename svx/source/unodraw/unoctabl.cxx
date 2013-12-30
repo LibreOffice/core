@@ -223,7 +223,6 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 //
 
 #include "UnoGraphicExporter.hxx"
-#include "unogalthemeprovider.hxx"
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include "sal/types.h"
 #include "osl/diagnose.h"
@@ -330,13 +329,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 svx::FindbarDispatcher::getImplementationName_Static(),
                 svx::FindbarDispatcher_createInstance,
                 svx::FindbarDispatcher::getSupportedServiceNames_Static() );
-        }
-        else if( ::unogallery::GalleryThemeProvider_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                ::unogallery::GalleryThemeProvider_getImplementationName(),
-                ::unogallery::GalleryThemeProvider_createInstance,
-                ::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
         }
 
         if( xFactory.is())
