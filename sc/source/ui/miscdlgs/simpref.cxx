@@ -24,7 +24,6 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "simpref.hrc"
 #include "rangenam.hxx"
 #include "simpref.hxx"
 #include "scmod.hxx"
@@ -37,33 +36,28 @@
                         | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-//============================================================================
-//  class ScSimpleRefDlg
+ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
+    ScViewData* ptrViewData)
+    : ScAnyRefDlg(pB, pCW, pParent, "SimpleRefDialog", "modules/scalc/ui/simplerefdialog.ui")
+,
 
-//----------------------------------------------------------------------------
-ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                          ScViewData*   ptrViewData )
-
-    :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_SIMPLEREF ),
-        //
-        aFtAssign       ( this, ScResId( FT_ASSIGN ) ),
-        aEdAssign       ( this, this, &aFtAssign, ScResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
-
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-
-        //
         pDoc            ( ptrViewData->GetDocument() ),
         bAutoReOpen     ( sal_True ),
         bCloseOnButtonUp( false ),
         bSingleCell     ( false ),
         bMultiSelection ( false )
 {
+    get(m_pFtAssign, "area");
+    get(m_pEdAssign, "assign");
+    m_pEdAssign->SetReferences(this, m_pFtAssign);
+    get(m_pRbAssign, "assignref");
+    m_pRbAssign->SetReferences(this, m_pEdAssign);
+
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
+
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
-    FreeResource();
     SetDispatcherLock( sal_True ); // Modal-Modus einschalten
 }
 
@@ -83,14 +77,14 @@ void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 //----------------------------------------------------------------------------
 void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
-    aEdAssign.SetText(rStr);
+    m_pEdAssign->SetText(rStr);
 }
 
 //----------------------------------------------------------------------------
 void ScSimpleRefDlg::Init()
 {
-    aBtnOk.SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
-    aBtnCancel.SetClickHdl  ( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
+    m_pBtnOk->SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
+    m_pBtnCancel->SetClickHdl  ( LINK( this, ScSimpleRefDlg, CancelBtnHdl ) );
     bCloseFlag=false;
 }
 
@@ -99,10 +93,10 @@ void ScSimpleRefDlg::Init()
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( aEdAssign.IsEnabled() )
+    if ( m_pEdAssign->IsEnabled() )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( &aEdAssign );
+            RefInputStart(m_pEdAssign);
 
         theCurArea = rRef;
         OUString aRefStr;
@@ -116,16 +110,16 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         if ( bMultiSelection )
         {
-            OUString aVal = aEdAssign.GetText();
-            Selection aSel = aEdAssign.GetSelection();
+            OUString aVal = m_pEdAssign->GetText();
+            Selection aSel = m_pEdAssign->GetSelection();
             aSel.Justify();
             aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aRefStr );
             Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.getLength() );
-            aEdAssign.SetRefString( aVal );
-            aEdAssign.SetSelection( aNewSel );
+            m_pEdAssign->SetRefString( aVal );
+            m_pEdAssign->SetSelection( aNewSel );
         }
         else
-            aEdAssign.SetRefString( aRefStr );
+            m_pEdAssign->SetRefString( aRefStr );
 
         aChangeHdl.Call( &aRefStr );
     }
@@ -135,14 +129,14 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 //----------------------------------------------------------------------------
 sal_Bool ScSimpleRefDlg::Close()
 {
-    CancelBtnHdl(&aBtnCancel);
+    CancelBtnHdl(m_pBtnCancel);
     return sal_True;
 }
 
 //------------------------------------------------------------------------
 void ScSimpleRefDlg::SetActive()
 {
-    aEdAssign.GrabFocus();
+    m_pEdAssign->GrabFocus();
 
     //  kein NameModifyHdl, weil sonst Bereiche nicht geaendert werden koennen
     //  (nach dem Aufziehen der Referenz wuerde der alte Inhalt wieder angezeigt)
@@ -158,7 +152,7 @@ sal_Bool ScSimpleRefDlg::IsRefInputMode() const
 
 OUString ScSimpleRefDlg::GetRefString() const
 {
-    return aEdAssign.GetText();
+    return m_pEdAssign->GetText();
 }
 
 void ScSimpleRefDlg::SetCloseHdl( const Link& rLink )
@@ -186,10 +180,10 @@ void ScSimpleRefDlg::StartRefInput()
     if ( bMultiSelection )
     {
         // initially select the whole string, so it gets replaced by default
-        aEdAssign.SetSelection( Selection( 0, aEdAssign.GetText().getLength() ) );
+        m_pEdAssign->SetSelection( Selection( 0, m_pEdAssign->GetText().getLength() ) );
     }
 
-    aRbAssign.DoRef();
+    m_pRbAssign->DoRef();
     bCloseFlag=sal_True;
 }
 
@@ -197,7 +191,7 @@ void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
-        OkBtnHdl(&aBtnOk);
+        OkBtnHdl(m_pBtnOk);
 }
 //------------------------------------------------------------------------
 // Handler:
@@ -205,7 +199,7 @@ void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 {
     bAutoReOpen=false;
-    OUString aResult=aEdAssign.GetText();
+    OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(&aResult);
     Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
@@ -217,7 +211,7 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
-    OUString aResult=aEdAssign.GetText();
+    OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(NULL);
     Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );

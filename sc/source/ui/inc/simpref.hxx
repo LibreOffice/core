@@ -45,13 +45,12 @@ private:
     Link            aAbortedHdl;
     Link            aChangeHdl;
 
-    FixedText       aFtAssign;
-    formula::RefEdit        aEdAssign;
-    formula::RefButton      aRbAssign;
+    FixedText* m_pFtAssign;
+    formula::RefEdit* m_pEdAssign;
+    formula::RefButton* m_pRbAssign;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton*       m_pBtnOk;
+    CancelButton*   m_pBtnCancel;
 
     ScDocument*     pDoc;
 
