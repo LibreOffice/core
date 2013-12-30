@@ -213,7 +213,7 @@ Resource RID_STATISTICS_DLGS
     };
     String STR_DISTRIBUTION_CHI_SQUARED
     {
-        Text [ en-US ] = "Geometric";
+        Text [ en-US ] = "Chi Squared";
     };
     String STR_DISTRIBUTION_GEOMETRIC
     {
