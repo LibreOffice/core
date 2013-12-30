@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_3494d036",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-12-30T10:17:21Z",
+      "side": 1,
+      "message": "I would put the paragraph marker properties as the first parameter in the function, as it is most important.",
+      "revId": "6aa815ac96b62ab2d8af1bc4e9f3e4d9422b0385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_f4725848",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-12-30T10:17:21Z",
+      "side": 1,
+      "message": "I would add a comment like\n\u0027Check if these attributes are for the last character in the paragraph - which means the paragraph marker.\nIf a paragraph has 7 characters, then properties on character 8 are for the paragraph marker\u0027.",
+      "revId": "6aa815ac96b62ab2d8af1bc4e9f3e4d9422b0385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
