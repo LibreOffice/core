@@ -19,29 +19,120 @@
 
 #include <config_folders.h>
 
-#include "recoveryui.hxx"
-#include "docrecovery.hxx"
-#include <com/sun/star/lang/XInitialization.hpp>
+#include <docrecovery.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <cppuhelper/implbase2.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <officecfg/Office/Recovery.hxx>
 
-namespace svx
-{
-
 namespace svxdr = ::svx::DocRecovery;
-
-using namespace ::rtl;
 using namespace ::osl;
+
+namespace {
+
+class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo        ,
+                                                   css::frame::XSynchronousDispatch > // => XDispatch!
+{
+    //-------------------------------------------
+    // const, types, etcpp.
+    private:
+
+        /** @short TODO */
+        enum EJob
+        {
+            E_JOB_UNKNOWN,
+            E_DO_EMERGENCY_SAVE,
+            E_DO_RECOVERY,
+            E_DO_CRASHREPORT
+        };
+
+    //-------------------------------------------
+    // member
+    private:
+
+        /** @short TODO */
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+        /** @short TODO */
+        Window* m_pParentWindow;
+
+        /** @short TODO */
+        RecoveryUI::EJob m_eJob;
+
+        /** @short TODO */
+        css::uno::Reference< css::task::XStatusIndicatorFactory > m_xProgressFactory;
+
+    //-------------------------------------------
+    // interface
+    public:
+
+        //---------------------------------------
+        /** @short  TODO */
+        RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+
+        //---------------------------------------
+        /** @short  TODO */
+        virtual ~RecoveryUI();
+
+        //---------------------------------------
+        // css.lang.XServiceInfo
+
+        virtual OUString SAL_CALL getImplementationName()
+            throw(css::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
+            throw(css::uno::RuntimeException);
+
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        virtual com::sun::star::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
+                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // css.frame.XDispatch
+
+        virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
+                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
+            throw(css::uno::RuntimeException);
+
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL&                                     aURL     )
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                   const css::util::URL&                                     aURL     )
+            throw(css::uno::RuntimeException);
+
+    //-------------------------------------------
+    // helper
+    private:
+
+        EJob impl_classifyJob(const css::util::URL& aURL);
+
+        sal_Bool impl_doEmergencySave();
+
+        void impl_doRecovery();
+
+        void impl_showAllRecoveredDocs();
+
+        void impl_doCrashReport();
+
+};
 
 RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext     (xContext                 )
@@ -57,7 +148,7 @@ RecoveryUI::~RecoveryUI()
 OUString SAL_CALL RecoveryUI::getImplementationName()
     throw(css::uno::RuntimeException)
 {
-    return RecoveryUI::st_getImplementationName();
+    return OUString("com.sun.star.comp.svx.RecoveryUI");
 }
 
 sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
@@ -69,7 +160,9 @@ sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
 {
-    return RecoveryUI::st_getSupportedServiceNames();
+    css::uno::Sequence< OUString > lServiceNames(1);
+    lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
+    return lServiceNames;
 }
 
 css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL& aURL,
@@ -132,24 +225,6 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
     OSL_FAIL("RecoveryUI::removeStatusListener()\nNot implemented yet!");
 }
 
-OUString RecoveryUI::st_getImplementationName()
-{
-    return OUString("com.sun.star.comp.svx.RecoveryUI");
-}
-
-css::uno::Sequence< OUString > RecoveryUI::st_getSupportedServiceNames()
-{
-    css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
-    return lServiceNames;
-}
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-{
-    RecoveryUI* pNew = new RecoveryUI(comphelper::getComponentContext(xSMGR));
-    return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XServiceInfo* >(pNew));
-}
-
 static OUString GetCrashConfigDir()
 {
 
@@ -160,7 +235,7 @@ static OUString GetCrashConfigDir()
 #else
     OUString    ustrValue = "$SYSUSERCONFIG";
 #endif
-    Bootstrap::expandMacros( ustrValue );
+    rtl::Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT)
     ustrValue += "/user/crashdata";
@@ -342,6 +417,17 @@ void RecoveryUI::impl_showAllRecoveredDocs()
     }
 }
 
-} // namespace svx
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svx_RecoveryUI_implementation_getFactory(
+    css::uno::XComponentContext *context, uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new RecoveryUI(context)));
+    x->acquire();
+    return x.get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

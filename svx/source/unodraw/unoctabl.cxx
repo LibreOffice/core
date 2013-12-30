@@ -26,7 +26,6 @@
 
 #include <svx/xtable.hxx>
 #include "svx/unoshcol.hxx"
-#include "recoveryui.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -256,13 +255,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 SvxShapeCollection::getImplementationName_Static(),
                 SvxShapeCollection_createInstance,
                 SvxShapeCollection::getSupportedServiceNames_Static() );
-        }
-        else if( svx::RecoveryUI::st_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::RecoveryUI::st_getImplementationName(),
-                svx::RecoveryUI::st_createInstance,
-                svx::RecoveryUI::st_getSupportedServiceNames() );
         }
 
         if( xFactory.is())
