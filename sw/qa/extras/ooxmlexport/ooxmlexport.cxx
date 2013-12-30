@@ -42,6 +42,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <libxml/xpathInternals.h>
 #include <libxml/parserInternals.h>
@@ -2067,6 +2068,18 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
+{
+    // The DOCX containing the Table of Contents was not exported with correct page nos
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[21]/w:hyperlink/w:r[2]/w:t");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match("15"));
 }
 
 #endif

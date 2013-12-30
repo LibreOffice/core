@@ -331,6 +331,8 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+    bool                                                                            m_bStartTOC;
+    bool                                                                            m_bTOCPageRef;
 
     LineNumberSettings                                                              m_aLineNumberSettings;
 
@@ -393,6 +395,8 @@ private:
     bool                            m_bUsingEnhancedFields;
     /// If the current paragraph is inside a structured document element.
     bool                            m_bSdt;
+
+    uno::Reference< text::XTextCursor > xTOCMarkerCursor;
 
     //annotation import
     uno::Reference< beans::XPropertySet > m_xAnnotationField;
