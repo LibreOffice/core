@@ -1045,7 +1045,7 @@ void SwPageFrm::PrepareRegisterChg()
 |*      einfache zu bereinigen.
 |*
 |*************************************************************************/
-void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
+void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields, SwPageFrm** ppPrev )
 {
     OSL_ENSURE( pStart, "Keine Startpage." );
 
@@ -1120,10 +1120,15 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
             {
                 SwPageFrm *pTmp = (SwPageFrm*)pPage->GetNext();
                 pPage->Cut();
+                bool bUpdatePrev = false;
+                if (ppPrev && *ppPrev == pPage)
+                    bUpdatePrev = true;
                 delete pPage;
                 if ( pStart == pPage )
                     pStart = pTmp;
                 pPage = pTmp;
+                if (bUpdatePrev)
+                    *ppPrev = pTmp;
                 continue;
             }
             else if ( pPage->IsEmptyPage() && !pFmtWish &&  //2.
@@ -1200,10 +1205,15 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
                 //Nachfolger, also ist die Leerseite ueberfluessig.
                 SwPageFrm *pTmp = (SwPageFrm*)pPage->GetNext();
                 pPage->Cut();
+                bool bUpdatePrev = false;
+                if (ppPrev && *ppPrev == pPage)
+                    bUpdatePrev = true;
                 delete pPage;
                 if ( pStart == pPage )
                     pStart = pTmp;
                 pPage = pTmp;
+                if (bUpdatePrev)
+                    *ppPrev = pTmp;
                 continue;
             }
         }
