@@ -525,6 +525,9 @@ void RtfExport::ExportDocument_Impl()
     // Record changes?
     if (nsRedlineMode_t::REDLINE_ON & mnRedlineMode)
         Strm() << OOO_STRING_SVTOOLS_RTF_REVISIONS;
+    // Init sections
+    m_pSections = new MSWordSections( *this );
+
     // Page description
     WritePageDescTable();
 
@@ -692,9 +695,6 @@ void RtfExport::ExportDocument_Impl()
     }
 
     Strm() << SAL_NEWLINE_STRING;
-
-    // Init sections
-    m_pSections = new MSWordSections( *this );
 
     WriteMainText();
 
