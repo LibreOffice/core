@@ -996,6 +996,7 @@ void OpenGLRender::SetLine2DWidth(int width)
     m_fLineWidth = (m_fLineWidth < 0.001) ? 0.001 : m_fLineWidth;
 }
 
+#if defined( _WIN32 )
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -1106,7 +1107,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     DestroyWindow(hWnd);
     return  m_iArbMultisampleSupported;
 }
-
+#endif
 int OpenGLRender::GetMSAASupport()
 {
     return m_iArbMultisampleSupported;
@@ -1117,6 +1118,7 @@ int OpenGLRender::GetMSAAFormat()
     return m_iArbMultisampleFormat;
 }
 
+#if defined( _WIN32 )
 int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd)
 {
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
@@ -1157,7 +1159,6 @@ int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATD
     }
     return 0;
 }
-
 int OpenGLRender::WGLisExtensionSupported(const char *extension)
 {
     const size_t extlen = strlen(extension);
@@ -1194,7 +1195,7 @@ int OpenGLRender::WGLisExtensionSupported(const char *extension)
     }
     return 1;
 }
-
+#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

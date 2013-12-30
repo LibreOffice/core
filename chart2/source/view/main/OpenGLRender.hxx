@@ -124,7 +124,9 @@ public:
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b);
     void SetLine2DWidth(int width);
     BitmapEx GetAsBitmap();
+#if defined( _WIN32 )
     int InitMultisample(PIXELFORMATDESCRIPTOR pfd);
+#endif
     int GetMSAASupport();
     int GetMSAAFormat();
 private:
@@ -134,7 +136,9 @@ private:
     int CreateFrameBufferObj();
     int RenderTexture(GLuint TexID);
     int RenderTexture2FBO(GLuint TexID);
+#if defined( _WIN32 )
     int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
+#endif
     int WGLisExtensionSupported(const char *extension);
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
