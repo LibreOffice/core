@@ -110,6 +110,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_rangelst_test,\
     svl/source/fsstor/fsstorage \
     svl/util/svl \
     svx/util/svx \
+    svx/util/svxcore \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

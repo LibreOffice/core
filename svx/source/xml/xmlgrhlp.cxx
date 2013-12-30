@@ -54,6 +54,8 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
 
+namespace {
+
 const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
 {
     const MetaCommentAction* pComment = NULL;
@@ -344,6 +346,8 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
     }
 
     return maGrfObj;
+}
+
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
@@ -885,8 +889,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 }
 
 // for instantiation via service manager
-namespace svx
-{
+namespace {
 
 namespace impl
 {
@@ -1014,8 +1017,8 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
     throw (uno::RuntimeException)
 {
     if( m_eGraphicHelperMode == GRAPHICHELPER_MODE_READ )
-        return SvXMLGraphicImportHelper_getImplementationName();
-    return SvXMLGraphicExportHelper_getImplementationName();
+        return OUString("com.sun.star.comp.Svx.GraphicImportHelper");
+    return OUString("com.sun.star.comp.Svx.GraphicExportHelper");
 }
 
 ::sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
@@ -1027,25 +1030,6 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
 Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    if( m_eGraphicHelperMode == GRAPHICHELPER_MODE_READ )
-        return SvXMLGraphicImportHelper_getSupportedServiceNames();
-    return SvXMLGraphicExportHelper_getSupportedServiceNames();
-}
-
-// import
-Reference< XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const Reference< XMultiServiceFactory > & /* rSMgr */ )
-    throw( Exception )
-{
-    return static_cast< XWeak* >( new SvXMLGraphicImportExportHelper( GRAPHICHELPER_MODE_READ ));
-}
-OUString SAL_CALL SvXMLGraphicImportHelper_getImplementationName()
-    throw()
-{
-    return OUString(  "com.sun.star.comp.Svx.GraphicImportHelper" );
-}
-Sequence< OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames()
-    throw()
-{
     // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
     Sequence< OUString > aSupportedServiceNames( 2 );
     aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
@@ -1053,27 +1037,71 @@ Sequence< OUString > SAL_CALL SvXMLGraphicImportHelper_getSupportedServiceNames(
     return aSupportedServiceNames;
 }
 
-// export
-Reference< XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const Reference< XMultiServiceFactory > & /* rSMgr */ )
-    throw( Exception )
-{
-    return static_cast< XWeak* >( new SvXMLGraphicImportExportHelper( GRAPHICHELPER_MODE_WRITE ));
-}
-OUString SAL_CALL SvXMLGraphicExportHelper_getImplementationName()
-    throw()
-{
-    return OUString(  "com.sun.star.comp.Svx.GraphicExportHelper" );
-}
-Sequence< OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServiceNames()
-    throw()
-{
-    // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
-    Sequence< OUString > aSupportedServiceNames( 2 );
-    aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
-    aSupportedServiceNames[1] = "com.sun.star.document.BinaryStreamResolver";
-    return aSupportedServiceNames;
 }
 
-} // namespace svx
+/** Create this with createInstanceWithArguments. service name
+    "com.sun.star.comp.Svx.GraphicImportHelper", one argument which is the
+    XStorage.  Without arguments no helper class is created.  With an empty
+    argument the helper class is created and initialized like in the CTOR to
+    SvXMLGraphicHelper that only gets the create mode.
+
+    You should call dispose after you no longer need this component.
+
+    uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == sal_True in
+    SvXMLGraphicHelper
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new SvXMLGraphicImportExportHelper(
+                GRAPHICHELPER_MODE_READ)));
+    x->acquire();
+    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
+    if (xx.is())
+    {
+        css::uno::Sequence<css::uno::Any> aArgs(
+                reinterpret_cast<css::uno::Any *>(arguments->elements),
+                arguments->nElements);
+        xx->initialize(aArgs);
+    }
+    return x.get();
+}
+
+/** Create this with createInstanceWithArguments. service name
+    "com.sun.star.comp.Svx.GraphicExportHelper", one argument which is the
+    XStorage.  Without arguments no helper class is created.  With an empty
+    argument the helper class is created and initialized like in the CTOR to
+    SvXMLGraphicHelper that only gets the create mode
+
+    To write the Pictures stream, you have to call dispose at this component.
+    Make sure you call dipose before you commit the parent storage.
+
+    uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == sal_True in
+    SvXMLGraphicHelper
+ */
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0);
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new SvXMLGraphicImportExportHelper(
+                GRAPHICHELPER_MODE_WRITE )));
+    x->acquire();
+    css::uno::Reference< css::lang::XInitialization > xx(x, css::uno::UNO_QUERY);
+    if (xx.is())
+    {
+        css::uno::Sequence<css::uno::Any> aArgs(
+                reinterpret_cast<css::uno::Any *>(arguments->elements),
+                arguments->nElements);
+        xx->initialize(aArgs);
+    }
+    return x.get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

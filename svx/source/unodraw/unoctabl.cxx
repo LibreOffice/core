@@ -27,7 +27,6 @@
 #include <svx/xtable.hxx>
 #include "svx/unoshcol.hxx"
 #include "recoveryui.hxx"
-#include "svx/xmlgrhlp.hxx"
 #include "tbunocontroller.hxx"
 #include "tbunosearchcontrollers.hxx"
 
@@ -347,22 +346,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static(),
                 drawinglayer::primitive2d::XPrimitiveFactory2DProvider_createInstance,
                 drawinglayer::primitive2d::PrimitiveFactory2D::getSupportedServiceNames_Static() );
-        }
-        else if( ::svx::SvXMLGraphicImportHelper_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                ::svx::SvXMLGraphicImportHelper_getImplementationName(),
-                ::svx::SvXMLGraphicImportHelper_createInstance,
-                ::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
-        }
-        else if( ::svx::SvXMLGraphicExportHelper_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                ::svx::SvXMLGraphicExportHelper_getImplementationName(),
-                ::svx::SvXMLGraphicExportHelper_createInstance,
-                ::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
         }
 
         if( xFactory.is())

@@ -36,4 +36,14 @@
   <implementation name="com.sun.star.comp.svx.FontworkCharacterSpacingController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper"
+      constructor="com_sun_star_comp_Svx_GraphicExportHelper_implementation_getFactory">
+    <service name="com.sun.star.document.BinaryStreamResolver"/>
+    <service name="com.sun.star.document.GraphicObjectResolver"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper"
+      constructor="com_sun_star_comp_Svx_GraphicImportHelper_implementation_getFactory">
+    <service name="com.sun.star.document.BinaryStreamResolver"/>
+    <service name="com.sun.star.document.GraphicObjectResolver"/>
+  </implementation>
 </component>

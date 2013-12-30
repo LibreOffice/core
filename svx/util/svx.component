@@ -22,14 +22,6 @@
   <implementation name="com.sun.star.comp.Draw.GraphicExporter">
     <service name="com.sun.star.drawing.GraphicExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Svx.GraphicExportHelper">
-    <service name="com.sun.star.document.BinaryStreamResolver"/>
-    <service name="com.sun.star.document.GraphicObjectResolver"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.Svx.GraphicImportHelper">
-    <service name="com.sun.star.document.BinaryStreamResolver"/>
-    <service name="com.sun.star.document.GraphicObjectResolver"/>
-  </implementation>
   <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider">
     <service name="com.sun.star.gallery.GalleryThemeProvider"/>
   </implementation>

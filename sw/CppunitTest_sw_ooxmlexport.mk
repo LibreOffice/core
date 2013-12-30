@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport,\
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
 	svx/util/svx \
+    svx/util/svxcore \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
