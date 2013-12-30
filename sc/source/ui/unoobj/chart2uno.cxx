@@ -1540,8 +1540,8 @@ ScChart2DataProvider::createDataSource(
             pValueTokens.reset(pChartMap->getAllColHeaderRanges());
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        auto_ptr< vector<ScTokenRef> > pLabelTokens(NULL);
-            pLabelTokens.reset(pChartMap->getLeftUpperCornerRanges());
+        auto_ptr< vector<ScTokenRef> > pLabelTokens(
+                pChartMap->getLeftUpperCornerRanges());
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
