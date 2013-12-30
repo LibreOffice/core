@@ -1344,7 +1344,6 @@ void OpSqrt::GenSlidingWindowFunction(std::stringstream &ss,
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
-        printf("const\n");
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
         }
