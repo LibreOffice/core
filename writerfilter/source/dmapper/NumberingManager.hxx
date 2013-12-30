@@ -132,7 +132,7 @@ private:
 class AbstractListDef
 {
 private:
-    sal_Int32                            m_nTPLC;          //LN_TPLC
+    sal_Int32                            m_nTmpl;
     OUString                      m_sRGISTD;        //LN_RGISTD
     sal_Int32                            m_nSimpleList;    //LN_FSIMPLELIST
     sal_Int32                            m_nRestart;       //LN_FRESTARTHDN

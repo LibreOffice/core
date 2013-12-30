@@ -23574,9 +23574,9 @@
     </resource>
     <resource name="CT_AbstractNum" resource="Properties" tag="numbering">
       <kind name="paragraph"/>
-      <element name="nsid" tokenid="rtf:LSID"/>
+      <element name="nsid" tokenid="ooxml:CT_AbstractNum_nsid"/>
       <element name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
-      <element name="tmpl" tokenid="rtf:TPLC"/>
+      <element name="tmpl" tokenid="ooxml:CT_AbstractNum_tmpl"/>
       <element name="name" tokenid="ooxml:CT_AbstractNum_name"/>
       <element name="styleLink" tokenid="ooxml:CT_AbstractNum_styleLink"/>
       <element name="numStyleLink" tokenid="ooxml:CT_AbstractNum_numStyleLink"/>
@@ -23659,7 +23659,7 @@
       <attribute name="default" tokenid="ooxml:CT_Style_default"/>
       <attribute name="customStyle" tokenid="ooxml:CT_Style_customStyle"/>
     </resource>
-    <resource name="CT_Styles" resource="Table" tokenid="rtf:STYLESHEET" tag="style"/>
+    <resource name="CT_Styles" resource="Table" tokenid="ooxml:STYLESHEET" tag="style"/>
     <resource name="ST_Panose" resource="Hex"/>
     <resource name="CT_Panose" resource="Value" tag="font">
       <attribute name="val" tokenid="ooxml:CT_Panose_val" action="setValue"/>

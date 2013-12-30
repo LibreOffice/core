@@ -345,9 +345,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_CBGRPPRLPAPX:
             break;
-        case NS_rtf::LN_LSID:
+        case NS_ooxml::LN_CT_AbstractNum_nsid:
             break;
-        case NS_rtf::LN_TPLC:
+        case NS_ooxml::LN_CT_AbstractNum_tmpl:
             break;
         case NS_rtf::LN_RGISTD:
             break;

@@ -2708,7 +2708,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PNLVLBODY:
                 {
                     RTFValue::Pointer_t pValue(new RTFValue(2));
-                    m_aStates.top().aTableAttributes.set(NS_rtf::LN_LSID, pValue);
+                    m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pValue);
                 }
                 break;
         case RTF_PNDEC:
@@ -2719,7 +2719,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 break;
         case RTF_PNLVLBLT:
                 {
-                    m_aStates.top().aTableAttributes.set(NS_rtf::LN_LSID, RTFValue::Pointer_t(new RTFValue(1)));
+                    m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, RTFValue::Pointer_t(new RTFValue(1)));
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_numFmt, RTFValue::Pointer_t(new RTFValue(23))); // bullets, same as \levelnfc23
                 }
                 break;
@@ -3159,7 +3159,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LS:
             {
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
-                    m_aStates.top().aTableAttributes.set(NS_rtf::LN_LSID, pIntValue);
+                    m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIntValue);
                 else
                     lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_sprm::LN_PIlfo, pIntValue);
             }
@@ -4551,7 +4551,7 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_PARAGRAPHNUMBERING:
             {
-                RTFValue::Pointer_t pIdValue = aState.aTableAttributes.find(NS_rtf::LN_LSID);
+                RTFValue::Pointer_t pIdValue = aState.aTableAttributes.find(NS_ooxml::LN_CT_AbstractNum_nsid);
                 if (pIdValue.get())
                 {
                     // Abstract numbering
@@ -4600,7 +4600,7 @@ int RTFDocumentImpl::popState()
                     // Numbering
                     RTFSprms aNumberingAttributes;
                     RTFSprms aNumberingSprms;
-                    aNumberingAttributes.set(NS_rtf::LN_LSID, pIdValue);
+                    aNumberingAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIdValue);
                     aNumberingSprms.set(NS_ooxml::LN_CT_Num_abstractNumId, pIdValue);
                     RTFValue::Pointer_t pNumberingValue(new RTFValue(aNumberingAttributes, aNumberingSprms));
                     aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pNumberingValue, false);

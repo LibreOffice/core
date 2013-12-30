@@ -449,7 +449,7 @@ uno::Reference<drawing::XShape> NumPicBullet::GetShape()
 //--------------------------------------- AbstractListDef implementation
 
 AbstractListDef::AbstractListDef( ) :
-    m_nTPLC( -1 )
+    m_nTmpl( -1 )
     ,m_nSimpleList( -1 )
     ,m_nRestart( -1 )
     ,m_nUnsigned( -1 )
@@ -465,8 +465,8 @@ void AbstractListDef::SetValue( sal_uInt32 nSprmId, sal_Int32 nValue )
 {
     switch( nSprmId )
     {
-        case NS_rtf::LN_TPLC:
-            m_nTPLC = nValue;
+        case NS_ooxml::LN_CT_AbstractNum_tmpl:
+            m_nTmpl = nValue;
         break;
         case NS_rtf::LN_FSIMPLELIST:
             m_nSimpleList = nValue;
@@ -788,10 +788,10 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_ooxml::LN_CT_Num_numId:
             m_pCurrentDefinition->SetId( rVal.getString().toInt32( ) );
         break;
-        case NS_rtf::LN_LSID:
+        case NS_ooxml::LN_CT_AbstractNum_nsid:
             m_pCurrentDefinition->SetId( nIntValue );
         break;
-        case NS_rtf::LN_TPLC:
+        case NS_ooxml::LN_CT_AbstractNum_tmpl:
         case NS_rtf::LN_FSIMPLELIST:
         case NS_rtf::LN_fAutoNum:
         case NS_rtf::LN_fHybrid:
@@ -978,7 +978,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             break;
             case NS_ooxml::LN_CT_AbstractNum_multiLevelType:
             break;
-            case NS_rtf::LN_TPLC:
+            case NS_ooxml::LN_CT_AbstractNum_tmpl:
                 m_pCurrentDefinition->SetValue( nSprmId, nIntValue );
             break;
             case NS_ooxml::LN_CT_AbstractNum_lvl:
