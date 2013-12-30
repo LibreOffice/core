@@ -384,9 +384,6 @@ protected:
 
     VDataSeries* getFirstSeries() const;
 
-    // ugly hack to cache the data for the next turn
-    const std::vector< std::vector< VDataSeriesGroup > >& getData();
-
 protected:
     PlottingPositionHelper*    m_pMainPosHelper;
 

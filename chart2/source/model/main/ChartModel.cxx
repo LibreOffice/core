@@ -58,6 +58,7 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
+#include <com/sun/star/chart2/XTimeBased.hpp>
 
 // header for class SvNumberFormatter
 #include <svl/zforlist.hxx>
@@ -1354,6 +1355,14 @@ bool ChartModel::isTimeBased() const
 void ChartModel::setTimeBased(bool bTimeBased)
 {
     mbTimeBased = bTimeBased;
+}
+
+void ChartModel::getNextTimePoint()
+{
+    uno::Reference< chart2::XTimeBased > xTimeBased(getUsedData(), uno::UNO_QUERY);
+    SAL_WARN_IF(!xTimeBased.is(), "chart2", "does not support time based charting");
+    if(xTimeBased.is())
+        xTimeBased->switchToNext();
 }
 
 }  // namespace chart

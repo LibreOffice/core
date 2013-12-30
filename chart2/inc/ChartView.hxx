@@ -43,6 +43,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SdrPage;
 
@@ -51,20 +52,19 @@ namespace chart {
 class VCoordinateSystem;
 class DrawModelWrapper;
 class SeriesPlotterContainer;
-class VDataSeriesGroup;
+class VDataSeries;
 
 struct TimeBasedInfo
 {
     TimeBasedInfo():
         bTimeBased(false),
-        nFrame(0),
-        m_pZSlots(NULL) {}
+        nFrame(0) {}
 
     bool bTimeBased;
     size_t nFrame;
 
     // only valid when we are in the time based mode
-    ::std::vector< ::std::vector< VDataSeriesGroup > >* m_pZSlots;
+    ::std::vector< std::vector< VDataSeries* > > m_aDataSeriesList;
 };
 
 /**

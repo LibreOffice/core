@@ -2444,6 +2444,25 @@ void ChartView::createShapes()
 
         SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
         aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( mrChartModel );
+        if(maTimeBased.bTimeBased)
+        {
+            std::vector<VSeriesPlotter*>& rSeriesPlotter =
+                aSeriesPlotterContainer.getSeriesPlotterList();
+            size_t n = rSeriesPlotter.size();
+            for(size_t i = 0; i < n; ++i)
+            {
+                std::vector< VDataSeries* > aAllNewDataSeries =
+                    rSeriesPlotter[i]->getAllSeries();
+                std::vector< VDataSeries* >& rAllOldDataSeries =
+                    maTimeBased.m_aDataSeriesList[i];
+                size_t m = std::min(aAllNewDataSeries.size(), rAllOldDataSeries.size());
+                for(size_t j = 0; j < m; ++j)
+                {
+                    aAllNewDataSeries[j]->setOldTimeBased(
+                            rAllOldDataSeries[j], (maTimeBased.nFrame % 60)/60.0);
+                }
+            }
+        }
 
         lcl_createLegend( LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC
                     , aRemainingSpace, aPageSize, mrChartModel, aSeriesPlotterContainer.getLegendEntryProviderList()
@@ -2529,6 +2548,31 @@ void ChartView::createShapes()
 
         //cleanup: remove all empty group shapes to avoid grey border lines:
         lcl_removeEmptyGroupShapes( mxRootShape );
+
+        if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
+        {
+            // create copy of the data for next frame
+            std::vector<VSeriesPlotter*>& rSeriesPlotter =
+                aSeriesPlotterContainer.getSeriesPlotterList();
+            size_t n = rSeriesPlotter.size();
+            maTimeBased.m_aDataSeriesList.clear();
+            maTimeBased.m_aDataSeriesList.resize(n);
+            for(size_t i = 0; i < n; ++i)
+            {
+                std::vector< VDataSeries* > aAllNewDataSeries =
+                    rSeriesPlotter[i]->getAllSeries();
+                std::vector< VDataSeries* >& rAllOldDataSeries =
+                    maTimeBased.m_aDataSeriesList[i];
+                size_t m = std::min(aAllNewDataSeries.size(), rAllOldDataSeries.size());
+                for(size_t j = 0; j < m; ++j)
+                {
+                    rAllOldDataSeries.push_back( aAllNewDataSeries[j]->
+                            createCopyForTimeBased() );
+                }
+            }
+
+            mrChartModel.getNextTimePoint();
+        }
     }
 
     // #i12587# support for shapes in chart
@@ -2540,11 +2584,6 @@ void ChartView::createShapes()
 
     pShapeFactory->render( mxRootShape );
 
-    if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
-    {
-        // create copy of the data for next frame
-
-    }
     if(maTimeBased.bTimeBased)
     {
         maTimeBased.nFrame++;

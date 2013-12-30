@@ -584,6 +584,8 @@ public:
 
     bool isTimeBased() const;
     void setTimeBased(bool bTimeBased);
+
+    void getNextTimePoint();
 };
 
 }  // namespace chart

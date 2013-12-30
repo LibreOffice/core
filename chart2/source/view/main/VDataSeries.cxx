@@ -182,6 +182,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_nCurrentAttributedPoint(-1)
     , m_nMissingValueTreatment(::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
     , m_bAllowPercentValueInDataLabel(false)
+    , mpOldSeries(NULL)
+    , mnPercent(0.0)
 {
     ::rtl::math::setNan( & m_fXMeanValue );
     ::rtl::math::setNan( & m_fYMeanValue );
@@ -1051,6 +1053,33 @@ void VDataSeries::setMissingValueTreatment( sal_Int32 nMissingValueTreatment )
 sal_Int32 VDataSeries::getMissingValueTreatment() const
 {
     return m_nMissingValueTreatment;
+}
+
+VDataSeries::VDataSeries()
+{
+}
+
+void VDataSeries::setOldTimeBased( VDataSeries* pOldSeries, double nPercent )
+{
+    mnPercent = nPercent;
+    mpOldSeries = pOldSeries;
+}
+
+VDataSeries* VDataSeries::createCopyForTimeBased() const
+{
+    VDataSeries* pNew = new VDataSeries();
+    pNew->m_aValues_X = m_aValues_X;
+    pNew->m_aValues_Y = m_aValues_Y;
+    pNew->m_aValues_Z = m_aValues_Z;
+    pNew->m_aValues_Y_Min = m_aValues_Y_Min;
+    pNew->m_aValues_Y_Max = m_aValues_Y_Max;
+    pNew->m_aValues_Y_First = m_aValues_Y_First;
+    pNew->m_aValues_Y_Last = m_aValues_Y_Last;
+    pNew->m_aValues_Bubble_Size = m_aValues_Bubble_Size;
+
+    pNew->m_nPointCount = m_nPointCount;
+
+    return pNew;
 }
 
 } //namespace chart

@@ -40,7 +40,7 @@
 namespace chart
 {
 
-class VDataSequence : boost::noncopyable
+class VDataSequence
 {
 public:
     void init( const ::com::sun::star::uno::Reference<
@@ -62,10 +62,6 @@ class VDataSeries SAL_FINAL : boost::noncopyable
 public:
     VDataSeries( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries >& xDataSeries );
-    // for time based charting
-    VDataSeries( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XDataSeries >& xDataSeries,
-        VDataSeries* pOldSeries, double nPercent);
 
     ~VDataSeries();
 
@@ -176,10 +172,16 @@ public:
     void setMissingValueTreatment( sal_Int32 nMissingValueTreatment );
     sal_Int32 getMissingValueTreatment() const;
 
+    void setOldTimeBased( VDataSeries* pOldSeries, double nPercent );
+    VDataSeries* createCopyForTimeBased() const;
+
 private: //methods
     ::com::sun::star::chart2::DataPointLabel*
                         getDataPointLabel( sal_Int32 index ) const;
     void adaptPointCache( sal_Int32 nNewPointIndex ) const;
+
+    // for copies for time based charting
+    VDataSeries();
 
 public: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape;
