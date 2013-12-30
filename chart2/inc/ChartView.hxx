@@ -51,6 +51,21 @@ namespace chart {
 class VCoordinateSystem;
 class DrawModelWrapper;
 class SeriesPlotterContainer;
+class VDataSeriesGroup;
+
+struct TimeBasedInfo
+{
+    TimeBasedInfo():
+        bTimeBased(false),
+        nFrame(0),
+        m_pZSlots(NULL) {}
+
+    bool bTimeBased;
+    size_t nFrame;
+
+    // only valid when we are in the time based mode
+    ::std::vector< ::std::vector< VDataSeriesGroup > >* m_pZSlots;
+};
 
 /**
  * The ChartView is responsible to manage the generation of Drawing Objects
@@ -237,6 +252,8 @@ private: //member
     sal_Bool m_bSdrViewIsInEditMode;
 
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
+
+    TimeBasedInfo maTimeBased;
 };
 
 }

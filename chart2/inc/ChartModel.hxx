@@ -120,6 +120,8 @@ private:
     sal_Int32               m_nInLoad;
     sal_Bool volatile       m_bUpdateNotificationsPending;
 
+    bool mbTimeBased;
+
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xChartView; // for the ref count
     ChartView* mpChartView;
 
@@ -579,6 +581,9 @@ public:
     // normal methods
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
         getNumberFormatsSupplier();
+
+    bool isTimeBased() const;
+    void setTimeBased(bool bTimeBased);
 };
 
 }  // namespace chart

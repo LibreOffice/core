@@ -465,7 +465,14 @@ double VDataSeries::getXValue( sal_Int32 index ) const
     if(m_aValues_X.is())
     {
         if( 0<=index && index<m_aValues_X.getLength() )
+        {
             fRet = m_aValues_X.Doubles[index];
+            if(mpOldSeries)
+            {
+                double nOldVal = mpOldSeries->m_aValues_X.Doubles[index];
+                fRet = nOldVal + (fRet - nOldVal) * mnPercent;
+            }
+        }
         else
             ::rtl::math::setNan( &fRet );
     }
@@ -487,7 +494,14 @@ double VDataSeries::getYValue( sal_Int32 index ) const
     if(m_aValues_Y.is())
     {
         if( 0<=index && index<m_aValues_Y.getLength() )
+        {
             fRet = m_aValues_Y.Doubles[index];
+            if(mpOldSeries)
+            {
+                double nOldVal = mpOldSeries->m_aValues_Y.Doubles[index];
+                fRet = nOldVal + (fRet - nOldVal) * mnPercent;
+            }
+        }
         else
             ::rtl::math::setNan( &fRet );
     }
@@ -548,7 +562,14 @@ double VDataSeries::getY_Last( sal_Int32 index ) const
 }
 double VDataSeries::getBubble_Size( sal_Int32 index ) const
 {
-    return m_aValues_Bubble_Size.getValue( index );
+    double nNewVal = m_aValues_Bubble_Size.getValue( index );
+    if(mpOldSeries)
+    {
+        double nOldVal = mpOldSeries->m_aValues_Bubble_Size.getValue( index );
+        nNewVal = nOldVal + (nNewVal - nOldVal) * mnPercent;
+    }
+
+    return nNewVal;
 }
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const

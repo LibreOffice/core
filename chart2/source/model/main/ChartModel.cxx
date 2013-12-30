@@ -1346,6 +1346,16 @@ OUString SAL_CALL ChartModel::dump()
     return OUString();
 }
 
+bool ChartModel::isTimeBased() const
+{
+    return mbTimeBased;
+}
+
+void ChartModel::setTimeBased(bool bTimeBased)
+{
+    mbTimeBased = bTimeBased;
+}
+
 }  // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
