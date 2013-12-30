@@ -2369,6 +2369,8 @@ void ChartView::createShapes()
     clock_t nStart = clock();
     OSL_TRACE( "\nPPPPPPPPP>>>>>>>>>>>> chart view :: createShapes()" );
 #endif
+    if(mrChartModel.isTimeBased())
+        maTimeBased.bTimeBased = true;
 
     //make sure add-in is refreshed after creating the shapes
     const ::comphelper::ScopeGuard aGuard( boost::bind( &ChartView::impl_refreshAddIn, this ) );
@@ -2537,6 +2539,16 @@ void ChartView::createShapes()
     }
 
     pShapeFactory->render( mxRootShape );
+
+    if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
+    {
+        // create copy of the data for next frame
+
+    }
+    if(maTimeBased.bTimeBased)
+    {
+        maTimeBased.nFrame++;
+    }
 
 #if OSL_DEBUG_LEVEL > 0
     clock_t nEnd = clock();
