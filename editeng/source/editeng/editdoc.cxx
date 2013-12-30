@@ -1768,7 +1768,7 @@ ContentAttribs::~ContentAttribs()
 {
 }
 
-SvxTabStop ContentAttribs::FindTabStop( long nCurPos, sal_uInt16 nDefTab )
+SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
 {
     const SvxTabStopItem& rTabs = (const SvxTabStopItem&) GetItem( EE_PARA_TABS );
     for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
@@ -1780,7 +1780,7 @@ SvxTabStop ContentAttribs::FindTabStop( long nCurPos, sal_uInt16 nDefTab )
 
     // Determine DefTab ...
     SvxTabStop aTabStop;
-    long x = nCurPos / nDefTab + 1;
+    const sal_Int32 x = nCurPos / nDefTab + 1;
     aTabStop.GetTabPos() = nDefTab * x;
     return aTabStop;
 }
