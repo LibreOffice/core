@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="svx" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider"
       constructor="com_sun_star_comp_gallery_GalleryThemeProvider_implementation_getFactory">
     <service name="com.sun.star.gallery.GalleryThemeProvider"/>
@@ -32,14 +32,16 @@
       constructor="com_sun_star_comp_svx_RecoveryUI_implementation_getFactory">
     <service name="com.sun.star.dialog.RecoveryUI"/>
   </implementation>
-  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine">
+  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine"
+      constructor="com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory">
     <service name="com.sun.star.drawing.CustomShapeEngine"/>
   </implementation>
   <implementation name="com.sun.star.drawing.SvxShapeCollection"
       constructor="com_sun_star_drawing_SvxShapeCollection_implementation_getFactory">
     <service name="com.sun.star.drawing.ShapeCollection"/>
   </implementation>
-  <implementation name="com.sun.star.drawing.SvxUnoColorTable">
+  <implementation name="com.sun.star.drawing.SvxUnoColorTable"
+      constructor="com_sun_star_drawing_SvxUnoColorTable_implementation_getFactory">
     <service name="com.sun.star.drawing.ColorTable"/>
   </implementation>
   <implementation name="com.sun.star.svx.DownSearchToolboxController"

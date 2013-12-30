@@ -20,17 +20,15 @@
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
-
-#include "../customshapes/EnhancedCustomShapeEngine.hxx"
-
 #include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
-using namespace ::cppu;
 
-class SvxUnoColorTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+namespace {
+
+class SvxUnoColorTable : public cppu::WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
     XColorListRef pList;
@@ -43,13 +41,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames() throw( uno::RuntimeException);
-
-    static OUString getImplementationName_Static() throw()
-    {
-        return OUString("com.sun.star.drawing.SvxUnoColorTable");
-    }
-
-    static uno::Sequence< OUString >  getSupportedServiceNames_Static(void) throw();
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
@@ -93,16 +84,11 @@ sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceNam
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString("SvxUnoColorTable");
+    return OUString("com.sun.star.drawing.SvxUnoColorTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
     throw( uno::RuntimeException )
-{
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > SvxUnoColorTable::getSupportedServiceNames_Static(void) throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = "com.sun.star.drawing.ColorTable";
@@ -202,63 +188,18 @@ sal_Bool SAL_CALL SvxUnoColorTable::hasElements()
     return pList.is() && pList->Count() != 0;
 }
 
-/**
- * Create a colortable
- */
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoColorTable_createInstance(const uno::Reference< lang::XMultiServiceFactory > & ) throw(uno::Exception)
-{
-    return *new SvxUnoColorTable();
-}
-uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( const uno::Reference< lang::XMultiServiceFactory >& rxFact ) throw(uno::Exception)
-{
-    return *new EnhancedCustomShapeEngine( rxFact );
 }
 
-//
-// export this service
-//
-
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include "sal/types.h"
-#include "osl/diagnose.h"
-#include "cppuhelper/factory.hxx"
-
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_drawing_SvxUnoColorTable_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
 {
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
-    const sal_Char * pImplName, void * pServiceManager, void *  )
-{
-    void * pRet = 0;
-    if( pServiceManager  )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory;
-
-        if( rtl_str_compare( pImplName, "com.sun.star.drawing.SvxUnoColorTable" ) == 0 )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                SvxUnoColorTable::getImplementationName_Static(),
-                SvxUnoColorTable_createInstance,
-                SvxUnoColorTable::getSupportedServiceNames_Static() );
-        }
-        else if ( rtl_str_compare( pImplName, "com.sun.star.drawing.EnhancedCustomShapeEngine" ) == 0 )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                EnhancedCustomShapeEngine_getImplementationName(),
-                create_EnhancedCustomShapeEngine,
-                EnhancedCustomShapeEngine_getSupportedServiceNames() );
-        }
-
-        if( xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new SvxUnoColorTable));
+    x->acquire();
+    return x.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,7 +45,6 @@ core_factory_list = [
     ("libspelllo.a", "spell_component_getFactory"),
     ("libsvllo.a", "svl_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
-    ("libsvxlo.a", "svx_component_getFactory"),
     ("libtklo.a", "tk_component_getFactory"),
     ("libucb1.a", "ucb_component_getFactory"),
     ("libucpexpand1lo.a", "ucpexpand1_component_getFactory"),
@@ -143,6 +142,9 @@ core_constructor_list = [
     "com_sun_star_comp_stoc_SimpleRegistry",
     "com_sun_star_security_comp_stoc_AccessController",
     "com_sun_star_security_comp_stoc_FilePolicy",
+# svx/util/svx.component
+# FIXME: what is missing ?
+    "com_sun_star_drawing_SvxShapeCollection_implementation_getFactory",
     ]
 
 # Components which are not in any group yet:
