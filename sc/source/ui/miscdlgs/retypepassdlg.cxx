@@ -393,25 +393,19 @@ IMPL_LINK_NOARG(ScRetypePassDlg, ScrollHdl)
 
 // ============================================================================
 
-ScRetypePassInputDlg::ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected) :
-    ModalDialog(pParent, ScResId(RID_SCDLG_RETYPEPASS_INPUT)),
-
-    maBtnOk     (this, ScResId(BTN_OK)),
-    maBtnCancel (this, ScResId(BTN_CANCEL)),
-    maBtnHelp   (this, ScResId(BTN_HELP)),
-
-    maBtnRetypePassword(this, ScResId(BTN_RETYPE_PASSWORD)),
-
-    maPassword1Text (this, ScResId(FT_PASSWORD1)),
-    maPassword1Edit (this, ScResId(ED_PASSWORD1)),
-    maPassword2Text (this, ScResId(FT_PASSWORD2)),
-    maPassword2Edit (this, ScResId(ED_PASSWORD2)),
-    maBtnMatchOldPass(this, ScResId(BTN_MATCH_OLD_PASSWORD)),
-
-    maBtnRemovePassword(this, ScResId(BTN_REMOVE_PASSWORD)),
-
-    mpProtected(pProtected)
+ScRetypePassInputDlg::ScRetypePassInputDlg(Window* pParent, ScPassHashProtectable* pProtected)
+    : ModalDialog(pParent, "RetypePasswordDialog",
+        "modules/scalc/ui/retypepassworddialog.ui")
+    , mpProtected(pProtected)
 {
+    get(m_pBtnOk, "ok");
+    get(m_pBtnRetypePassword, "retypepassword");
+    get(m_pBtnRemovePassword, "removepassword");
+    get(m_pPasswordGrid, "passwordgrid");
+    get(m_pPassword1Edit, "newpassEntry");
+    get(m_pPassword2Edit, "confirmpassEntry");
+    get(m_pBtnMatchOldPass, "mustmatch");
+
     Init();
 }
 
@@ -426,67 +420,67 @@ short ScRetypePassInputDlg::Execute()
 
 bool ScRetypePassInputDlg::IsRemovePassword() const
 {
-    return maBtnRemovePassword.IsChecked();
+    return m_pBtnRemovePassword->IsChecked();
 }
 
 OUString ScRetypePassInputDlg::GetNewPassword() const
 {
-    return maPassword1Edit.GetText();
+    return m_pPassword1Edit->GetText();
 }
 
 void ScRetypePassInputDlg::Init()
 {
     Link aLink = LINK( this, ScRetypePassInputDlg, OKHdl );
-    maBtnOk.SetClickHdl(aLink);
+    m_pBtnOk->SetClickHdl(aLink);
     aLink = LINK( this, ScRetypePassInputDlg, RadioBtnHdl );
-    maBtnRetypePassword.SetClickHdl(aLink);
-    maBtnRemovePassword.SetClickHdl(aLink);
+    m_pBtnRetypePassword->SetClickHdl(aLink);
+    m_pBtnRemovePassword->SetClickHdl(aLink);
     aLink = LINK( this, ScRetypePassInputDlg, CheckBoxHdl );
-    maBtnMatchOldPass.SetClickHdl(aLink);
+    m_pBtnMatchOldPass->SetClickHdl(aLink);
     aLink = LINK( this, ScRetypePassInputDlg, PasswordModifyHdl );
-    maPassword1Edit.SetModifyHdl(aLink);
-    maPassword2Edit.SetModifyHdl(aLink);
+    m_pPassword1Edit->SetModifyHdl(aLink);
+    m_pPassword2Edit->SetModifyHdl(aLink);
 
-    maBtnOk.Disable();
-    maBtnRetypePassword.Check(true);
-    maBtnMatchOldPass.Check(true);
-    maPassword1Edit.GrabFocus();
+    m_pBtnOk->Disable();
+    m_pBtnRetypePassword->Check(true);
+    m_pBtnMatchOldPass->Check(true);
+    m_pPassword1Edit->GrabFocus();
 }
 
 void ScRetypePassInputDlg::CheckPasswordInput()
 {
-    OUString aPass1 = maPassword1Edit.GetText();
-    OUString aPass2 = maPassword2Edit.GetText();
+    OUString aPass1 = m_pPassword1Edit->GetText();
+    OUString aPass2 = m_pPassword2Edit->GetText();
 
     if (aPass1.isEmpty() || aPass2.isEmpty())
     {
         // Empty password is not allowed.
-        maBtnOk.Disable();
+        m_pBtnOk->Disable();
         return;
     }
 
     if (aPass1 != aPass2)
     {
         // The two passwords differ.
-        maBtnOk.Disable();
+        m_pBtnOk->Disable();
         return;
     }
 
-    if (!maBtnMatchOldPass.IsChecked())
+    if (!m_pBtnMatchOldPass->IsChecked())
     {
-        maBtnOk.Enable();
+        m_pBtnOk->Enable();
         return;
     }
 
     if (!mpProtected)
     {
         // This should never happen!
-        maBtnOk.Disable();
+        m_pBtnOk->Disable();
         return;
     }
 
     bool bPassGood = mpProtected->verifyPassword(aPass1);
-    maBtnOk.Enable(bPassGood);
+    m_pBtnOk->Enable(bPassGood);
 }
 
 IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl)
@@ -497,25 +491,17 @@ IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl)
 
 IMPL_LINK( ScRetypePassInputDlg, RadioBtnHdl, RadioButton*, pBtn )
 {
-    if (pBtn == &maBtnRetypePassword)
+    if (pBtn == m_pBtnRetypePassword)
     {
-        maBtnRemovePassword.Check(false);
-        maPassword1Text.Enable();
-        maPassword1Edit.Enable();
-        maPassword2Text.Enable();
-        maPassword2Edit.Enable();
-        maBtnMatchOldPass.Enable();
+        m_pBtnRemovePassword->Check(false);
+        m_pPasswordGrid->Enable();
         CheckPasswordInput();
     }
-    else if (pBtn == &maBtnRemovePassword)
+    else if (pBtn == m_pBtnRemovePassword)
     {
-        maBtnRetypePassword.Check(false);
-        maPassword1Text.Disable();
-        maPassword1Edit.Disable();
-        maPassword2Text.Disable();
-        maPassword2Edit.Disable();
-        maBtnMatchOldPass.Disable();
-        maBtnOk.Enable();
+        m_pBtnRetypePassword->Check(false);
+        m_pPasswordGrid->Disable();
+        m_pBtnOk->Enable();
     }
 
     return 0;

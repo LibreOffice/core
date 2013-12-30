@@ -54,12 +54,4 @@
 #define STR_HASH_GOOD           203
 #define STR_HASH_REGENERATED    204
 
-#define FT_PASSWORD1            301
-#define ED_PASSWORD1            302
-#define FT_PASSWORD2            303
-#define ED_PASSWORD2            304
-#define BTN_MATCH_OLD_PASSWORD  305
-#define BTN_RETYPE_PASSWORD     306
-#define BTN_REMOVE_PASSWORD     307
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,10 +20,11 @@
 #ifndef SC_UI_RETYPEPASS_DLG_HXX
 #define SC_UI_RETYPEPASS_DLG_HXX
 
-#include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/checklbx.hxx>
 #include <svtools/stdctrl.hxx>
@@ -140,20 +141,17 @@ private:
     void CheckPasswordInput();
 
 private:
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    OKButton*       m_pBtnOk;
 
-    RadioButton     maBtnRetypePassword;
+    RadioButton*    m_pBtnRetypePassword;
 
-    FixedText       maPassword1Text;
-    Edit            maPassword1Edit;
-    FixedText       maPassword2Text;
-    Edit            maPassword2Edit;
+    VclContainer*   m_pPasswordGrid;
+    Edit*           m_pPassword1Edit;
+    Edit*           m_pPassword2Edit;
 
-    CheckBox        maBtnMatchOldPass;
+    CheckBox*       m_pBtnMatchOldPass;
 
-    RadioButton     maBtnRemovePassword;
+    RadioButton*    m_pBtnRemovePassword;
 
     DECL_LINK( OKHdl, void* );
     DECL_LINK( RadioBtnHdl, RadioButton* );
