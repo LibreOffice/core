@@ -70,6 +70,7 @@ ScRetypePassDlg::ScRetypePassDlg(Window* pParent) :
     meDesiredHash(PASSHASH_SHA1)
 {
     Init();
+    FreeResource();
 }
 
 ScRetypePassDlg::~ScRetypePassDlg()
@@ -413,6 +414,7 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(Window* pParent, ScPassHashProtectabl
     mpProtected(pProtected)
 {
     Init();
+    FreeResource();
 }
 
 ScRetypePassInputDlg::~ScRetypePassInputDlg()
