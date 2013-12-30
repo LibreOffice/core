@@ -35,7 +35,8 @@
   <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine">
     <service name="com.sun.star.drawing.CustomShapeEngine"/>
   </implementation>
-  <implementation name="com.sun.star.drawing.SvxShapeCollection">
+  <implementation name="com.sun.star.drawing.SvxShapeCollection"
+      constructor="com_sun_star_drawing_SvxShapeCollection_implementation_getFactory">
     <service name="com.sun.star.drawing.ShapeCollection"/>
   </implementation>
   <implementation name="com.sun.star.drawing.SvxUnoColorTable">

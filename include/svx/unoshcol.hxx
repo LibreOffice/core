@@ -81,11 +81,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    static com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static OUString getImplementationName_Static();
 };
 
-::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxShapeCollection_createInstance( const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 #endif
 
 

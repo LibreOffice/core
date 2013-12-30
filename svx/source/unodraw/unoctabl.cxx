@@ -25,7 +25,6 @@
 #include "../customshapes/EnhancedCustomShapeEngine.hxx"
 
 #include <svx/xtable.hxx>
-#include "svx/unoshcol.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -248,13 +247,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 EnhancedCustomShapeEngine_getImplementationName(),
                 create_EnhancedCustomShapeEngine,
                 EnhancedCustomShapeEngine_getSupportedServiceNames() );
-        }
-        else if( rtl_str_compare( pImplName, "com.sun.star.drawing.SvxShapeCollection" ) == 0 )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                SvxShapeCollection::getImplementationName_Static(),
-                SvxShapeCollection_createInstance,
-                SvxShapeCollection::getSupportedServiceNames_Static() );
         }
 
         if( xFactory.is())
