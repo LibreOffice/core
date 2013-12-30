@@ -28,7 +28,6 @@
 #include "svx/unoshcol.hxx"
 #include "recoveryui.hxx"
 #include "tbunocontroller.hxx"
-#include "tbunosearchcontrollers.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -280,55 +279,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 svx::FontHeightToolBoxControl::getImplementationName_Static(),
                 svx::FontHeightToolBoxControl_createInstance,
                 svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::FindTextToolbarController::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::FindTextToolbarController::getImplementationName_Static(),
-                svx::FindTextToolbarController_createInstance,
-                svx::FindTextToolbarController::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::DOWN ).equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::DOWN ),
-                svx::DownSearchToolboxController_createInstance,
-                svx::UpDownSearchToolboxController::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::UP ).equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::UpDownSearchToolboxController::getImplementationName_Static( svx::UpDownSearchToolboxController::UP ),
-                svx::UpSearchToolboxController_createInstance,
-                svx::UpDownSearchToolboxController::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::MatchCaseToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::MatchCaseToolboxController::getImplementationName_Static(),
-                svx::MatchCaseToolboxController_createInstance,
-                svx::MatchCaseToolboxController::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::FindAllToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::FindAllToolboxController::getImplementationName_Static(),
-                svx::FindAllToolboxController_createInstance,
-                svx::FindAllToolboxController::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::ExitSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::ExitSearchToolboxController::getImplementationName_Static(),
-                svx::ExitFindbarToolboxController_createInstance,
-                svx::ExitSearchToolboxController::getSupportedServiceNames_Static() );
-        }
-        else if ( svx::FindbarDispatcher::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                svx::FindbarDispatcher::getImplementationName_Static(),
-                svx::FindbarDispatcher_createInstance,
-                svx::FindbarDispatcher::getSupportedServiceNames_Static() );
         }
 
         if( xFactory.is())
