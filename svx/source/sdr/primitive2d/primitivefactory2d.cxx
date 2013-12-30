@@ -17,106 +17,86 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
+#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
-// UNO API helper methods
+namespace {
 
-namespace drawinglayer
+typedef cppu::WeakComponentImplHelper1< ::com::sun::star::graphic::XPrimitiveFactory2D > PrimitiveFactory2DImplBase;
+
+// base class for C++ implementation of com::sun::star::graphic::XPrimitiveFactory2D
+class PrimitiveFactory2D
+    :   protected comphelper::OBaseMutex,
+        public PrimitiveFactory2DImplBase
 {
-    namespace primitive2d
-    {
-        uno::Reference< uno::XInterface > SAL_CALL XPrimitiveFactory2DProvider_createInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& /*rSMgr*/) throw( uno::Exception )
-        {
-            return *(new PrimitiveFactory2D());
-        }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+public:
+    PrimitiveFactory2D(): PrimitiveFactory2DImplBase(m_aMutex) {}
 
-//////////////////////////////////////////////////////////////////////////////
-// UNO API helper methods
+            // Methods from XPrimitiveFactory2D
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException);
 
-namespace drawinglayer
+};
+
+Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
 {
-    namespace primitive2d
+    Primitive2DSequence aRetval;
+
+    if(xShape.is())
     {
-        PrimitiveFactory2D::PrimitiveFactory2D()
-        :   PrimitiveFactory2DImplBase(m_aMutex)
+        SdrObject* pSource = GetSdrObjectFromXShape(xShape);
+
+        if(pSource)
         {
+            const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
+            aRetval = rSource.getViewIndependentPrimitive2DSequence();
         }
+    }
 
-        Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
-            const uno::Reference< drawing::XShape >& xShape,
-            const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
+    return aRetval;
+}
+
+Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
+    const uno::Reference< drawing::XDrawPage >& xDrawPage,
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
+{
+    Primitive2DSequence aRetval;
+
+    if(xDrawPage.is())
+    {
+        SdrPage* pSource = GetSdrPageFromXDrawPage(xDrawPage);
+
+        if(pSource)
         {
-            Primitive2DSequence aRetval;
+            const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
 
-            if(xShape.is())
-            {
-                SdrObject* pSource = GetSdrObjectFromXShape(xShape);
-
-                if(pSource)
-                {
-                    const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
-                    aRetval = rSource.getViewIndependentPrimitive2DSequence();
-                }
-            }
-
-            return aRetval;
+            aRetval = rSource.getViewIndependentPrimitive2DSequence();
         }
+    }
 
-        Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
-            const uno::Reference< drawing::XDrawPage >& xDrawPage,
-            const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException)
-        {
-            Primitive2DSequence aRetval;
+    return aRetval;
+}
 
-            if(xDrawPage.is())
-            {
-                SdrPage* pSource = GetSdrPageFromXDrawPage(xDrawPage);
+}
 
-                if(pSource)
-                {
-                    const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
-
-                    aRetval = rSource.getViewIndependentPrimitive2DSequence();
-                }
-            }
-
-            return aRetval;
-        }
-
-        OUString PrimitiveFactory2D::getImplementationName_Static()
-        {
-            static OUString aRetval("com.sun.star.comp.graphic.PrimitiveFactory2D");
-            return aRetval;
-        }
-
-        uno::Sequence< OUString > PrimitiveFactory2D::getSupportedServiceNames_Static()
-        {
-            static uno::Sequence< OUString > aSeq;
-            osl::Mutex aMutex;
-            osl::MutexGuard aGuard( aMutex );
-
-            if(!aSeq.getLength())
-            {
-                aSeq.realloc(1L);
-                aSeq[0] = "com.sun.star.graphic.PrimitiveFactory2D";
-            }
-
-            return aSeq;
-        }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory(
+    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
+    uno_Sequence * arguments)
+{
+    assert(arguments != 0 && arguments->nElements == 0); (void) arguments;
+    css::uno::Reference<css::uno::XInterface> x(
+        static_cast<cppu::OWeakObject *>(new PrimitiveFactory2D));
+    x->acquire();
+    return x.get();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

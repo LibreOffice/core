@@ -228,7 +228,6 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #include "sal/types.h"
 #include "osl/diagnose.h"
 #include "cppuhelper/factory.hxx"
-#include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
 
 extern "C"
 {
@@ -338,14 +337,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 ::unogallery::GalleryThemeProvider_getImplementationName(),
                 ::unogallery::GalleryThemeProvider_createInstance,
                 ::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
-        }
-        else if( drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static().equalsAscii( pImplName ) )
-        {
-            // XPrimitiveFactory2D
-            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static(),
-                drawinglayer::primitive2d::XPrimitiveFactory2DProvider_createInstance,
-                drawinglayer::primitive2d::PrimitiveFactory2D::getSupportedServiceNames_Static() );
         }
 
         if( xFactory.is())

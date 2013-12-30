@@ -46,4 +46,8 @@
     <service name="com.sun.star.document.BinaryStreamResolver"/>
     <service name="com.sun.star.document.GraphicObjectResolver"/>
   </implementation>
+  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D"
+      constructor="com_sun_star_comp_graphic_PrimitiveFactory2D_implementation_getFactory">
+    <service name="com.sun.star.graphic.PrimitiveFactory2D"/>
+  </implementation>
 </component>

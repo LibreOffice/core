@@ -25,9 +25,6 @@
   <implementation name="com.sun.star.comp.gallery.GalleryThemeProvider">
     <service name="com.sun.star.gallery.GalleryThemeProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.graphic.PrimitiveFactory2D">
-    <service name="com.sun.star.graphic.PrimitiveFactory2D"/>
-  </implementation>
   <implementation name="com.sun.star.comp.svx.Impl.FindbarDispatcher">
     <service name="com.sun.star.comp.svx.FindbarDispatcher"/>
     <service name="com.sun.star.frame.ProtocolHandler"/>
