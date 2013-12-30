@@ -129,6 +129,7 @@ public:
 #endif
     int GetMSAASupport();
     int GetMSAAFormat();
+    void SetColor(sal_uInt32 color);
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -140,6 +141,8 @@ private:
     int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
 #endif
     int WGLisExtensionSupported(const char *extension);
+	int CreateMultiSampleFrameBufObj();
+
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glm::mat4 m_Projection;
@@ -223,6 +226,11 @@ private:
 	int m_iArbMultisampleFormat;
 	GLint m_iSampleBufs;
 	GLint m_iSamples;
+
+    glm::vec4 m_2DColor;
+	GLuint m_frameBufferMS;
+	GLuint m_renderBufferColorMS;
+	GLuint m_renderBufferDepthMS;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

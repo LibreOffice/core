@@ -1197,5 +1197,34 @@ int OpenGLRender::WGLisExtensionSupported(const char *extension)
 }
 #endif
 
+void OpenGLRender::SetColor(sal_uInt32 color)
+{
+    sal_uInt8 r = (color & 0x00FF0000) >> 16;
+    sal_uInt8 g = (color & 0x0000FF00) >> 8;
+    sal_uInt8 b = (color & 0x000000FF);
+    m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, m_fLineAlpha);
+}
+
+int OpenGLRender::CreateMultiSampleFrameBufObj()
+{
+    glGenFramebuffers(1, &m_frameBufferMS);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferMS);
+
+    glGenRenderbuffers(1, &m_renderBufferColorMS);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_renderBufferColorMS);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8,  GL_RGB, m_iWidth, m_iHeight);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_renderBufferColorMS);
+
+    glGenRenderbuffers(1, &m_renderBufferDepthMS);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_renderBufferDepthMS);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_DEPTH_COMPONENT24, m_iWidth, m_iHeight);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_renderBufferDepthMS);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    return 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
