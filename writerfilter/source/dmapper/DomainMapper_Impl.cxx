@@ -56,6 +56,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 #include <oox/mathml/import.hxx>
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -152,6 +153,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
+        m_bStartTOC(false),
+        m_bTOCPageRef(false),
         m_nSymboldata(-1),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
@@ -1221,14 +1224,46 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
     {
         try
         {
+            uno::Sequence< beans::PropertyValue > pValues = pPropertyMap->GetPropertyValues();
+            sal_Int32 len = pValues.getLength();
+
+            if (m_bStartTOC)
+                for( int i =0; i < len; ++i )
+                {
+                    if (pValues[i].Name == "CharHidden")
+                        pValues[i].Value = uno::makeAny(sal_False);
+                }
+
             uno::Reference< text::XTextRange > xTextRange;
             if (m_aTextAppendStack.top().xInsertPosition.is())
             {
-                xTextRange = xTextAppend->insertTextPortion(rString, pPropertyMap->GetPropertyValues(), m_aTextAppendStack.top().xInsertPosition);
+                xTextRange = xTextAppend->insertTextPortion(rString, pValues, m_aTextAppendStack.top().xInsertPosition);
                 m_aTextAppendStack.top().xCursor->gotoRange(xTextRange->getEnd(), false);
             }
             else
-                xTextRange = xTextAppend->appendTextPortion(rString, pPropertyMap->GetPropertyValues());
+            {
+                if (m_bStartTOC)
+                {
+                    uno::Reference< text::XTextCursor > xTOCTextCursor;
+                    xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
+                    xTOCTextCursor->gotoEnd(false);
+                    if (xTOCTextCursor.is())
+                    {
+                        xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
+                        xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
+                    }
+                    else
+                    {
+                        xTextRange = xTextAppend->appendTextPortion(rString, pValues);
+                        xTOCTextCursor = xTextAppend->createTextCursor();
+                        xTOCTextCursor->gotoRange(xTextRange->getEnd(), false);
+                    }
+                    m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
+                }
+                else
+                    xTextRange = xTextAppend->appendTextPortion(rString, pValues);
+            }
+
             CheckRedline( xTextRange );
             m_bParaChanged = true;
 
@@ -2778,6 +2813,7 @@ void DomainMapper_Impl::handleToc
     const OUString & sTOCServiceName)
 {
     OUString sValue;
+    m_bStartTOC = true;
     bool bTableOfFigures = false;
     bool bHyperlinks = false;
     bool bFromOutline = false;
@@ -2974,6 +3010,25 @@ void DomainMapper_Impl::handleToc
         }
     }
     pContext->SetTOC( xTOC );
+
+
+    OUString sMarker("Y");
+    //insert index
+    uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (xTextAppend.is())
+    {
+        uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
+
+        uno::Reference< text::XText > xText = xTextAppend->getText();
+        if(xCrsr.is() && xText.is())
+        {
+            xCrsr->gotoEnd(false);
+            xText->insertString(xCrsr, sMarker, sal_False);
+            xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, sal_False);
+            xTOCMarkerCursor = xCrsr;
+        }
+    }
 }
 
 
@@ -3039,6 +3094,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
                 default:
                     break;
+                }
+                if (m_bStartTOC && (aIt->second.eFieldId == FIELD_PAGEREF) )
+                {
+                    m_bTOCPageRef = true;
+                    bCreateField = false;
                 }
 
                 if( bCreateField || bCreateEnhancedField )
@@ -3351,7 +3411,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_PAGEREF:
                     case FIELD_REF:
-                    if (xFieldProperties.is())
+                    if (xFieldProperties.is() && !m_bStartTOC)
                     {
                         bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
 
@@ -3695,15 +3755,22 @@ void DomainMapper_Impl::PopFieldContext()
                 uno::Reference< text::XTextContent > xToInsert( pContext->GetTOC(), uno::UNO_QUERY );
                 if( xToInsert.is() )
                 {
-                    xCrsr->gotoEnd( true );
-                    xToInsert->attach( uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ));
+                    m_bStartTOC = false;
+                    m_aTextAppendStack.pop();
+                    if(xTOCMarkerCursor.is())
+                    {
+                        xTOCMarkerCursor->goLeft(1,sal_True);
+                        xTOCMarkerCursor->setString(OUString());
+                        xTOCMarkerCursor->goLeft(1,sal_True);
+                        xTOCMarkerCursor->setString(OUString());
+                    }
                 }
                 else
                 {
                     xToInsert = uno::Reference< text::XTextContent >(pContext->GetTC(), uno::UNO_QUERY);
-                    if( !xToInsert.is() )
+                    if( !xToInsert.is() && !m_bStartTOC )
                         xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
-                    if( xToInsert.is() )
+                    if( xToInsert.is() && !m_bStartTOC)
                     {
                         uno::Sequence<beans::PropertyValue> aValues;
                         // Character properties of the field show up here the
@@ -3740,6 +3807,12 @@ void DomainMapper_Impl::PopFieldContext()
                             uno::Reference< beans::XPropertySet > xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
                             xCrsrProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HYPER_LINK_U_R_L), uno::
                                                               makeAny(pContext->GetHyperlinkURL()));
+
+                            if (m_bStartTOC) {
+                                OUString sDisplayName("Index Link");
+                                xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::makeAny(sDisplayName));
+                                xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::makeAny(sDisplayName));
+                            }
                         }
                     }
                 }

@@ -42,7 +42,7 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <vcl/svapp.hxx>
 #include <unotools/fltrcfg.hxx>
 
@@ -1677,6 +1677,21 @@ DECLARE_OOXMLIMPORT_TEST(testBnc875718, "bnc875718.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "Text\n" ), text->getString());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo69649, "fdo69649.docx")
+{
+    // The DOCX containing the Table of Contents was not imported with correct page nos
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes( ), uno::UNO_QUERY);
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xTOCIndex->getAnchor(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xTextRange->getText( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor( ), uno::UNO_QUERY);
+    xTextCursor->gotoRange(xTextRange->getStart(),false);
+    xTextCursor->gotoRange(xTextRange->getEnd(),true);
+    OUString xTocString(xTextCursor->getString());
+    xTocString = xTocString.copy(256);
+    CPPUNIT_ASSERT(xTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

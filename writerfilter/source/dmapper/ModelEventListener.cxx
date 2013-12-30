@@ -58,19 +58,9 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         {
             PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-            uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( rEvent.Source, uno::UNO_QUERY );
             //remove listener
             uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
             uno::Reference<document::XEventListener>(this));
-
-            uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
-
-            sal_Int32 nIndexes = xIndexes->getCount();
-            for( sal_Int32 nIndex = 0; nIndex < nIndexes; ++nIndex)
-            {
-                uno::Reference< text::XDocumentIndex> xIndex( xIndexes->getByIndex( nIndex ), uno::UNO_QUERY );
-                xIndex->update();
-            }
 
             // If we have PAGEREF fields, update fields as well.
             uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(rEvent.Source, uno::UNO_QUERY);
