@@ -25,6 +25,7 @@ public:
 protected:
     virtual const OUString getLabel();
     virtual const OUString getTemplate();
+    virtual sal_Int16 GetUndoNameId();
 };
 
 #endif
