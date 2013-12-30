@@ -269,10 +269,11 @@ private:
                 DataStream::Line& rLine = (*pLines)[i];
                 rLine.maCells.clear();
                 mpStream->ReadLine(rLine.maLine);
-
+#if ENABLE_ORCUS
                 CSVHandler aHdl(rLine, mnColCount);
                 orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
                 parser.parse();
+#endif
             }
 
             aGuard.reset(); // lock
