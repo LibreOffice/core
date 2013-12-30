@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_7411e8ab",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-12-30T22:05:59Z",
+      "side": 1,
+      "message": "This comment confuses me a bit. Did you mean \"if _pParent is 0, then pEntry is the first _child_ of the root\", or is it something different?",
+      "revId": "7e13993acca09038467eb6e86c0cb33c5cf17394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
