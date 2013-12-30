@@ -100,8 +100,8 @@ friend class SvxConfigGroupListBox;
     virtual void                    MouseMove( const MouseEvent& rMEvt );
 
 public:
-                                    SvxConfigFunctionListBox(Window* pParent);
-                                    ~SvxConfigFunctionListBox();
+    SvxConfigFunctionListBox(Window* pParent, WinBits nStyle);
+    ~SvxConfigFunctionListBox();
     void                            ClearAll();
     OUString                        GetHelpText( SvTreeListEntry *pEntry );
     using Window::GetHelpText;
@@ -161,8 +161,8 @@ protected:
     using SvListView::Expand;
 
 public:
-            SvxConfigGroupListBox(Window* pParent);
-            ~SvxConfigGroupListBox();
+    SvxConfigGroupListBox(Window* pParent, WinBits nStyle);
+    ~SvxConfigGroupListBox();
 
     void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
                     < ::com::sun::star::frame::XFrame >& xFrame);

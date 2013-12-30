@@ -73,8 +73,8 @@ using namespace ::com::sun::star::container;
  * The implementations of SvxConfigFunctionListBox and
  * SvxConfigGroupListBox are copied from sfx2/source/dialog/cfg.cxx
  */
-SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent)
-    : SvTreeListBox(pParent, WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT | WB_TABSTOP)
+SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT | WB_TABSTOP)
     , pCurEntry(0)
     , m_pDraggingEntry(0)
 {
@@ -86,9 +86,15 @@ SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent)
         LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigFunctionListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigFunctionListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new SvxConfigFunctionListBox(pParent);
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new SvxConfigFunctionListBox(pParent, nWinBits);
 }
 
 SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
@@ -187,8 +193,8 @@ SvxConfigFunctionListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     return DND_ACTION_NONE;
 }
 
-SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent)
-    : SvTreeListBox(pParent,
+SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle |
             WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_TABSTOP)
     , m_bShowSlots(false)
     , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
@@ -206,9 +212,15 @@ SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent)
     );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigGroupListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigGroupListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new SvxConfigGroupListBox(pParent);
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new SvxConfigGroupListBox(pParent, nWinBits);
 }
 
 SvxConfigGroupListBox::~SvxConfigGroupListBox()
