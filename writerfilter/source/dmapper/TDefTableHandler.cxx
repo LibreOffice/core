@@ -342,9 +342,9 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             appendGrabBag("space", OUString::number(nIntValue));
             m_nLineDistance = nIntValue;
         break;
-        case NS_rtf::LN_FSHADOW:    // 0x2875
+        case NS_ooxml::LN_CT_Border_shadow:
             //if 1 then line has shadow - unsupported
-        case NS_rtf::LN_FFRAME:     // 0x2876
+        case NS_ooxml::LN_CT_Border_frame:
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;

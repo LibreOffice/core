@@ -89,10 +89,10 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
             appendGrabBag("space", OUString::number(nIntValue));
         break;
-        case NS_rtf::LN_FSHADOW:    // 0x2875
+        case NS_ooxml::LN_CT_Border_shadow:
             m_bShadow = nIntValue;
         break;
-        case NS_rtf::LN_FFRAME:     // 0x2876
+        case NS_ooxml::LN_CT_Border_frame:
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;

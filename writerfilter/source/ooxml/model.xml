@@ -21689,8 +21689,8 @@
       <attribute name="themeShade" tokenid="ooxml:CT_Border_themeShade"/>
       <attribute name="sz" tokenid="ooxml:CT_Border_sz"/>
       <attribute name="space" tokenid="ooxml:CT_Border_space"/>
-      <attribute name="shadow" tokenid="rtf:FSHADOW"/>
-      <attribute name="frame" tokenid="rtf:FFRAME"/>
+      <attribute name="shadow" tokenid="ooxml:CT_Border_shadow"/>
+      <attribute name="frame" tokenid="ooxml:CT_Border_frame"/>
     </resource>
     <!-- This DOCX values will be mapped to match the 'DOC' values that are defined here: -->
     <!-- http://msdn.microsoft.com/en-us/library/dd945712(v=office.12).aspx -->
@@ -22101,7 +22101,7 @@
       <attribute name="displacedByCustomXml" tokenid="ooxml:CT_MarkupRange_displacedByCustomXml"/>
     </resource>
     <resource name="CT_MarkupRangeBookmark" resource="Properties" tag="redline">
-      <attribute name="id" tokenid="rtf:IBKL"/>
+      <attribute name="id" tokenid="ooxml:CT_MarkupRangeBookmark_id"/>
     </resource>
     <resource name="CT_MarkupRangeCommentStart" resource="Properties" tag="content">
       <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeStart"/>
@@ -23551,7 +23551,7 @@
       <element name="suff" tokenid="ooxml:CT_Lvl_suff"/>
       <element name="lvlText" tokenid="ooxml:CT_Lvl_lvlText"/>
       <element name="lvlPicBulletId" tokenid="ooxml:CT_Lvl_lvlPicBulletId"/>
-      <element name="legacy" tokenid="rtf:FCONVERTED"/>
+      <element name="legacy" tokenid="ooxml:CT_Lvl_legacy"/>
       <element name="lvlJc" tokenid="ooxml:CT_Lvl_lvlJc"/>
       <element name="pPr" tokenid="ooxml:CT_Lvl_pPr"/>
       <element name="rPr" tokenid="ooxml:CT_Lvl_rPr"/>

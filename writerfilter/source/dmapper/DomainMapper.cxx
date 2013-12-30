@@ -329,7 +329,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_FIDENTSAV:
             break;
-        case NS_rtf::LN_FCONVERTED:
+        case NS_ooxml::LN_CT_Lvl_legacy:
             break;
         case NS_rtf::LN_FTENTATIVE:
             break;
@@ -595,9 +595,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Border_space:
             break;
-        case NS_rtf::LN_FSHADOW:
+        case NS_ooxml::LN_CT_Border_shadow:
             break;
-        case NS_rtf::LN_FFRAME:
+        case NS_ooxml::LN_CT_Border_frame:
             break;
         case NS_rtf::LN_UNUSED2_15:
             break;
@@ -740,7 +740,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             // sStringValue contains the bookmark name
             sLocalBookmarkName = sStringValue;
         break;
-        case NS_rtf::LN_IBKL:
+        case NS_ooxml::LN_CT_MarkupRangeBookmark_id:
             //contains the bookmark identifier - has to be added to the bookmark name imported before
             //if it is already available then the bookmark should be inserted
             m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );

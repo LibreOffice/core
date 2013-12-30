@@ -674,10 +674,10 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Border_space:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
-        case NS_rtf::LN_FSHADOW:   // 0x175d
+        case NS_ooxml::LN_CT_Border_shadow:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue ? true : false;
         break;
-        case NS_rtf::LN_FFRAME:            // ignored
+        case NS_ooxml::LN_CT_Border_frame: // ignored
         case NS_rtf::LN_UNUSED2_15: // ignored
             break;
 

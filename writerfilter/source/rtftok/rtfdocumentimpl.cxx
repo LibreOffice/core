@@ -176,7 +176,7 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
         RTFValue::Pointer_t pString(new RTFValue(rString));
         aAttributes.set(NS_ooxml::LN_CT_Bookmark_name, pString);
     }
-    aAttributes.set(NS_rtf::LN_IBKL, pPos);
+    aAttributes.set(NS_ooxml::LN_CT_MarkupRangeBookmark_id, pPos);
     return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAttributes));
 }
 
@@ -2755,7 +2755,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_trackRevisions, RTFValue::Pointer_t(new RTFValue(1)));
                 break;
         case RTF_BRDRSH:
-                lcl_putBorderProperty(m_aStates, NS_rtf::LN_FSHADOW, RTFValue::Pointer_t(new RTFValue(1)));
+                lcl_putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_shadow, RTFValue::Pointer_t(new RTFValue(1)));
                 break;
         default:
                 {
