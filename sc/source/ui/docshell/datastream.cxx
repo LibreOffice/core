@@ -111,37 +111,6 @@ public:
 
 namespace datastreams {
 
-class CallerThread : public salhelper::Thread
-{
-    DataStream *mpDataStream;
-public:
-    osl::Condition maStart;
-    bool mbTerminate;
-
-    CallerThread(DataStream *pData):
-        Thread("CallerThread")
-        ,mpDataStream(pData)
-        ,mbTerminate(false)
-    {}
-
-private:
-    virtual void execute()
-    {
-        while (!mbTerminate)
-        {
-            // wait for a small amount of time, so that
-            // painting methods have a chance to be called.
-            // And also to make UI more responsive.
-            TimeValue const aTime = {0, 1000};
-            maStart.wait();
-            maStart.reset();
-            if (!mbTerminate)
-                while (mpDataStream->ImportData())
-                    wait(aTime);
-        };
-    }
-};
-
 void emptyLineQueue( std::queue<DataStream::LinesType*>& rQueue )
 {
     while (!rQueue.empty())
@@ -371,8 +340,8 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mfLastRefreshTime(0.0),
     mnCurRow(0)
 {
-    mxThread = new datastreams::CallerThread( this );
-    mxThread->launch();
+    maImportTimer.SetTimeout(0);
+    maImportTimer.SetTimeoutHdl( LINK(this, DataStream, ImportTimerHdl) );
 
     Decode(rURL, rRange, nLimit, eMove, nSettings);
 }
@@ -381,9 +350,7 @@ DataStream::~DataStream()
 {
     if (mbRunning)
         StopImport();
-    mxThread->mbTerminate = true;
-    mxThread->maStart.set();
-    mxThread->join();
+
     if (mxReaderThread.is())
     {
         mxReaderThread->endThread();
@@ -487,7 +454,8 @@ void DataStream::StartImport()
     }
     mbRunning = true;
     maDocAccess.reset();
-    mxThread->maStart.set();
+
+    maImportTimer.Start();
 }
 
 void DataStream::StopImport()
@@ -497,6 +465,7 @@ void DataStream::StopImport()
 
     mbRunning = false;
     Refresh();
+    maImportTimer.Stop();
 }
 
 void DataStream::SetRefreshOnEmptyLine( bool bVal )
@@ -618,7 +587,6 @@ void DataStream::Text2Doc() {}
 
 bool DataStream::ImportData()
 {
-    SolarMutexGuard aGuard;
     if (!mbValuesInLine)
         // We no longer support this mode. To be deleted later.
         return false;
@@ -628,6 +596,14 @@ bool DataStream::ImportData()
 
     Text2Doc();
     return mbRunning;
+}
+
+IMPL_LINK_NOARG(DataStream, ImportTimerHdl)
+{
+    if (ImportData())
+        maImportTimer.Start();
+
+    return 0;
 }
 
 } // namespace sc

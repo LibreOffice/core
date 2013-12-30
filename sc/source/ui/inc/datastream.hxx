@@ -14,6 +14,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/timer.hxx>
 #include <address.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -102,6 +103,8 @@ private:
     void Text2Doc();
     void Refresh();
 
+    DECL_LINK( ImportTimerHdl, void* );
+
 private:
     ScDocShell* mpDocShell;
     ScDocument* mpDoc;
@@ -121,7 +124,9 @@ private:
     SCROW mnCurRow;
     ScRange maStartRange;
     ScRange maEndRange;
-    rtl::Reference<datastreams::CallerThread> mxThread;
+
+    Timer maImportTimer;
+
     rtl::Reference<datastreams::ReaderThread> mxReaderThread;
 };
 
