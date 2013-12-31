@@ -108,6 +108,9 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
+#include <osl/conditn.hxx>
+#include <osl/time.h>
+
 #include <boost/shared_ptr.hpp>
 
 namespace chart {
@@ -121,6 +124,30 @@ using ::com::sun::star::uno::Any;
 namespace
 {
     class theExplicitValueProviderUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId > {};
+
+class UpdateTimeBasedThread : public salhelper::Thread
+{
+public:
+    UpdateTimeBasedThread(ChartView& rChartView, TimeBasedInfo& rTimeBasedInfo):
+        salhelper::Thread("ChartUpdate"),
+        mrChartView(rChartView),
+        mrTimeBasedInfo(rTimeBasedInfo) {}
+private:
+    virtual void execute()
+    {
+        TimeValue const aTime = { 0, 100 };
+        for(size_t i = 0; i < 60; ++i)
+        {
+            mrChartView.setViewDirty();
+            mrChartView.update();
+            wait(aTime);
+        }
+    }
+
+    ChartView& mrChartView;
+    TimeBasedInfo& mrTimeBasedInfo;
+};
+
 }
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
@@ -2369,8 +2396,19 @@ void ChartView::createShapes()
     clock_t nStart = clock();
     OSL_TRACE( "\nPPPPPPPPP>>>>>>>>>>>> chart view :: createShapes()" );
 #endif
+
+    osl::ResettableMutexGuard aTimedGuard(maTimeMutex);
     if(mrChartModel.isTimeBased())
+    {
         maTimeBased.bTimeBased = true;
+
+        if(!maTimeBased.mpThread)
+        {
+            maTimeBased.mpThread = new UpdateTimeBasedThread(*this, maTimeBased);
+            maTimeBased.mpThread->launch();
+        }
+
+    }
 
     //make sure add-in is refreshed after creating the shapes
     const ::comphelper::ScopeGuard aGuard( boost::bind( &ChartView::impl_refreshAddIn, this ) );
@@ -2444,7 +2482,7 @@ void ChartView::createShapes()
 
         SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
         aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( mrChartModel );
-        if(maTimeBased.bTimeBased)
+        if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
         {
             std::vector<VSeriesPlotter*>& rSeriesPlotter =
                 aSeriesPlotterContainer.getSeriesPlotterList();
@@ -2549,6 +2587,8 @@ void ChartView::createShapes()
         //cleanup: remove all empty group shapes to avoid grey border lines:
         lcl_removeEmptyGroupShapes( mxRootShape );
 
+        pShapeFactory->render( mxRootShape );
+
         if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
         {
             // create copy of the data for next frame
@@ -2582,7 +2622,6 @@ void ChartView::createShapes()
         m_pDrawModelWrapper->getSdrModel().EnableUndo( true );
     }
 
-    pShapeFactory->render( mxRootShape );
 
     if(maTimeBased.bTimeBased)
     {
@@ -3005,6 +3044,12 @@ OUString ChartView::dump() throw (uno::RuntimeException)
         return dumper.dump(mxRootShape);
     }
 
+}
+
+void ChartView::setViewDirty()
+{
+    osl::ResettableMutexGuard aGuard(maTimeMutex);
+    m_bViewDirty = true;
 }
 
 } //namespace chart

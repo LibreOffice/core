@@ -45,6 +45,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <salhelper/thread.hxx>
+
 class SdrPage;
 
 namespace chart {
@@ -54,14 +56,25 @@ class DrawModelWrapper;
 class SeriesPlotterContainer;
 class VDataSeries;
 
+enum TimeBasedMode
+{
+    MANUAL,
+    AUTOMATIC,
+    AUTOMATIC_WRAP
+};
+
 struct TimeBasedInfo
 {
     TimeBasedInfo():
         bTimeBased(false),
-        nFrame(0) {}
+        nFrame(0),
+        eMode(AUTOMATIC),
+        mpThread(NULL) {}
 
     bool bTimeBased;
     size_t nFrame;
+    TimeBasedMode eMode;
+    salhelper::Thread* mpThread;
 
     // only valid when we are in the time based mode
     ::std::vector< std::vector< VDataSeries* > > m_aDataSeriesList;
@@ -181,6 +194,8 @@ public:
     virtual OUString SAL_CALL dump()
             throw(::com::sun::star::uno::RuntimeException);
 
+    void setViewDirty();
+
 private: //methods
     ChartView();
 
@@ -254,6 +269,7 @@ private: //member
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
     TimeBasedInfo maTimeBased;
+    osl::Mutex maTimeMutex;
 };
 
 }
