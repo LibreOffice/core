@@ -47,6 +47,8 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
     // of just spaces.)
     OUString aText(
         rText.replaceAll(" ", OUString()));
+    if (aText.isEmpty())
+        return false;
     sal_Unicode cFirst = aText[0];
     if (cFirst != '#' && !(cFirst >= '0' && cFirst <= '9'))
         return false;
