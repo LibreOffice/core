@@ -4428,25 +4428,28 @@ vSubArguments)
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
-            ss << "    double arg0 = ";
+            ss << "    tmp = ";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << ";\n";
 #ifdef ISNAN
-            ss << "    if(isNan(arg0))\n";
+            ss << "    if(!isNan(tmp))\n";
             ss << "    {\n";
-            ss << "        continue;\n";
+            ss << "        nVal += (1.0 * pow( tmp,-1));\n";
+            ss << "        totallength +=1;\n";
             ss << "    }\n";
 #endif
-            ss << "    nVal += (1.0 * pow( arg0,-1));\n";
-            ss << "    totallength +=1;\n";
         }
         else if (pCur->GetType() == formula::svDouble)
         {
-           ss << "    double arg0 = ";
+           ss << "    tmp = ";
            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
            ss << ";\n";
-           ss << "    nVal += (1.0 *pow( arg0,-1));\n";
+           ss << "    nVal += (1.0 *pow( tmp,-1));\n";
            ss << "    totallength +=1;\n";
+        }
+        else
+        {
+            ss << "    return DBL_MIN;\n";
         }
     }
     ss << "    tmp = totallength*pow(nVal,-1);\n";
