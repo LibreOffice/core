@@ -33,6 +33,10 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/MobileLibreOffice))
 $(call gb_CustomTarget_get_target,ios/MobileLibreOffice): $(call gb_CustomTarget_get_target,ios/Lo_Xcconfig) MobileLibreOffice_setup
 #==============================================================================
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
+	$(SRCDIR)/solenv/bin/native-code.py \
+		-g core -g writer_core \
+		-s i18nsearch -s uui \
+		> $(SRCDIR)/ios/shared/ios_sharedlo/cxx/native-code.mm
 	$(call MobileLibreOfficeXcodeBuild, clean build)
 
 #==============================================================================
