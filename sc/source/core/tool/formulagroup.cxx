@@ -543,7 +543,10 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
     if ( !msInstance )
     {
-        switchOpenCLDevice(OUString(), ScInterpreter::GetGlobalConfig().mbOpenCLEnabled);
+        const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
+        if (rConfig.mbOpenCLEnabled)
+            switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect, false);
+
         if ( !msInstance ) // software fallback
         {
             fprintf(stderr, "Create S/W interp\n");
