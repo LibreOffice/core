@@ -33,6 +33,7 @@
 #include "redline.hxx"
 #include "unocoll.hxx"
 #include "unoframe.hxx"
+#include "wrtww8.hxx"
 
 #include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
@@ -842,6 +843,10 @@ void DocxAttributeOutput::EndRun()
     WriteCommentRanges();
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+    if(GetExport().bTabInTOC && m_pHyperlinkAttrList)
+    {
+        RunText(OUString("\t")) ;
+    }
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND ); // merges with "postponed run start", see above
 
     // write the run start + the run content

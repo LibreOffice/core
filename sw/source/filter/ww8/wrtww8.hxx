@@ -536,6 +536,7 @@ public:
     sal_uInt8 bHasHdr : 1;
     sal_uInt8 bHasFtr : 1;
     sal_uInt8 bSubstituteBullets : 1; // true: SubstituteBullet() gets called
+    sal_uInt8 bTabInTOC : 1; //true for TOC field flag 'w'
 
     bool mbExportModeRTF;
     bool mbOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)

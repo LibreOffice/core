@@ -2110,6 +2110,11 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     if( !nTOXLvl )
                         ++nTOXLvl;
 
+                    if(nsSwTOXElement::TOX_TAB_IN_TOC & pTOX->GetCreateType())
+                    {
+                        sStr +="\\w " ;
+                        GetExport( ).bTabInTOC = true ;
+                    }
                     if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
                     {
                         sStr += "\\f ";

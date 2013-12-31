@@ -2175,6 +2175,17 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 }
 
+ DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+   CPPUNIT_ASSERT(contents.match(" TOC \\w \\f \\o \"1-3\" \\o \"1-3\" \\h"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

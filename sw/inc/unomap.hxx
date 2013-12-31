@@ -178,6 +178,7 @@
 #define WID_USE_LEVEL_FROM_SOURCE               1020
 #define WID_LEVEL_FORMAT                        1021
 #define WID_LEVEL_PARAGRAPH_STYLES              1022
+#define WID_TAB_IN_TOC                          1024
 #define WID_MAIN_ENTRY_CHARACTER_STYLE_NAME     1025
 #define WID_CREATE_FROM_TABLES                  1026
 #define WID_CREATE_FROM_TEXT_FRAMES             1027
