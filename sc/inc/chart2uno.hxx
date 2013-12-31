@@ -37,13 +37,14 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/DataSequenceRole.hpp>
+#include <com/sun/star/chart2/XTimeBased.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
@@ -189,8 +190,9 @@ private:
 
 // DataSource
 class ScChart2DataSource : public
-                ::cppu::WeakImplHelper2<
+                ::cppu::WeakImplHelper3<
                     ::com::sun::star::chart2::data::XDataSource,
+                    com::sun::star::chart2::XTimeBased,
                     ::com::sun::star::lang::XServiceInfo>,
                 SfxListener
 {
@@ -204,6 +206,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() throw (::com::sun::star::uno::RuntimeException);
+
+    // XTimeBased
+    virtual sal_Bool switchToNext() throw(
+            ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(
@@ -220,20 +226,28 @@ public:
 
     void AddLabeledSequence(const com::sun::star::uno::Reference < com::sun::star::chart2::data::XLabeledDataSequence >& xNew);
 
+    void SetTimeBased(SCTAB nTimeBasedStart, SCTAB nTimeBasedEnd);
+
 private:
 
     ScDocument*                 m_pDocument;
     typedef std::list < com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > >  LabeledList;
     LabeledList                 m_aLabeledSequences;
 
+    bool bTimeBased;
+    SCTAB mnTimeBasedStart;
+    SCTAB mnTimeBasedEnd;
+    SCTAB mnCurrentTab;
+
 };
 
 // DataSequence
 class ScChart2DataSequence : public
-                ::cppu::WeakImplHelper7<
+                ::cppu::WeakImplHelper8<
                     ::com::sun::star::chart2::data::XDataSequence,
                     ::com::sun::star::chart2::data::XTextualDataSequence,
                     ::com::sun::star::chart2::data::XNumericalDataSequence,
+                    com::sun::star::chart2::XTimeBased,
                     ::com::sun::star::util::XCloneable,
                     ::com::sun::star::util::XModifyBroadcaster,
                     ::com::sun::star::beans::XPropertySet,
@@ -275,6 +289,9 @@ public:
         SAL_CALL getTextualData()
             throw (::com::sun::star::uno::RuntimeException,
                    std::exception);
+
+    // XTimeBased
+    virtual sal_Bool switchToNext() throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<

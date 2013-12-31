@@ -1441,6 +1441,7 @@ ScChart2DataProvider::createDataSource(
     bool bOrientCol = true;
     OUString aRangeRepresentation;
     uno::Sequence< sal_Int32 > aSequenceMapping;
+    sal_Bool bTimeBased = false;
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
         if ( aArguments[i].Name == "DataRowSource" )
@@ -1470,6 +1471,10 @@ ScChart2DataProvider::createDataSource(
         {
             aArguments[i].Value >>= aSequenceMapping;
         }
+        else if ( aArguments[i].Name == "TimeBased" )
+        {
+            aArguments[i].Value >>= bTimeBased;
+        }
     }
 
     vector<ScTokenRef> aRefTokens;
@@ -1480,7 +1485,31 @@ ScChart2DataProvider::createDataSource(
         // Invalid range representation.  Bail out.
         throw lang::IllegalArgumentException();
 
-    shrinkToDataRange(m_pDocument, aRefTokens);
+    SCTAB nTimeBasedStart = MAXTAB;
+    SCTAB nTimeBasedEnd = 0;
+    if(bTimeBased)
+    {
+        // limit to first sheet
+        for(vector<ScTokenRef>::iterator itr = aRefTokens.begin(),
+                itrEnd = aRefTokens.end(); itr != itrEnd; ++itr)
+        {
+            if ((*itr)->GetType() != svDoubleRef)
+                continue;
+
+            ScComplexRefData& rData = (*itr)->GetDoubleRef();
+            ScSingleRefData& s = rData.Ref1;
+            ScSingleRefData& e = rData.Ref2;
+
+            nTimeBasedStart = std::min(nTimeBasedStart, s.Tab());
+            nTimeBasedEnd = std::min(nTimeBasedEnd, e.Tab());
+
+            if(s.Tab() != e.Tab())
+                e.SetAbsTab(s.Tab());
+        }
+    }
+
+    if(!bTimeBased)
+        shrinkToDataRange(m_pDocument, aRefTokens);
 
     if (bLabel)
         lcl_addUpperLeftCornerIfMissing(aRefTokens); //#i90669#
@@ -1550,6 +1579,8 @@ ScChart2DataProvider::createDataSource(
     }
 
     pDS = new ScChart2DataSource(m_pDocument);
+    if(bTimeBased)
+        pDS->SetTimeBased(nTimeBasedStart, nTimeBasedEnd);
     ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
     ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
 
@@ -2422,6 +2453,32 @@ ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException)
 void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data::XLabeledDataSequence >& xNew)
 {
     m_aLabeledSequences.push_back(xNew);
+}
+
+sal_Bool ScChart2DataSource::switchToNext() throw ( uno::RuntimeException)
+{
+    if(mnCurrentTab != mnTimeBasedEnd)
+    {
+        for(LabeledList::iterator itr = m_aLabeledSequences.begin(),
+                itrEnd = m_aLabeledSequences.end(); itr != itrEnd; ++itr)
+        {
+            uno::Reference< chart2::XTimeBased> xTimeBased(*itr, uno::UNO_QUERY);
+            if(xTimeBased.is())
+                xTimeBased->switchToNext();
+        }
+        ++mnCurrentTab;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+void ScChart2DataSource::SetTimeBased(SCTAB nTimeBasedStart, SCTAB nTimeBasedEnd)
+{
+    mnCurrentTab = nTimeBasedStart;
+    mnTimeBasedStart = nTimeBasedStart;
+    mnTimeBasedEnd = nTimeBasedEnd;
+    bTimeBased = true;
 }
 
 
@@ -3548,6 +3605,31 @@ void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
 void ScChart2DataSequence::setDataChangedHint(bool b)
 {
     m_bGotDataChangedHint = b;
+}
+
+sal_Bool ScChart2DataSequence::switchToNext()
+    throw (uno::RuntimeException)
+{
+    if(!m_pTokens)
+        return sal_True;
+
+    for(vector<ScTokenRef>::iterator itr = m_pTokens->begin(),
+            itrEnd = m_pTokens->end(); itr != itrEnd; ++itr)
+    {
+        if ((*itr)->GetType() != svDoubleRef)
+            continue;
+
+        ScComplexRefData& rData = (*itr)->GetDoubleRef();
+        ScSingleRefData& s = rData.Ref1;
+        ScSingleRefData& e = rData.Ref2;
+
+        s.IncTab(1);
+        e.IncTab(1);
+    }
+
+    RebuildDataCache();
+
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
