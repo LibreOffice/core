@@ -107,34 +107,6 @@ const Id </xsl:text>
 </xsl:for-each>
 <xsl:text>
 }
-
-namespace NS_dff
-{</xsl:text>
-<xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffopt"]'>
-  <xsl:variable name ="optname">
-    <xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="optname"]/UML:TaggedValue.dataValue'/>
-  </xsl:variable>
-  <xsl:variable name="fopid">
-    <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="fopid"]'>
-      <xsl:value-of select='UML:TaggedValue.dataValue'/>
-    </xsl:for-each>
-  </xsl:variable>
-  <xsl:text>
-const Id </xsl:text>
-  <xsl:call-template name="idtoqname">
-    <xsl:with-param name="id"><xsl:value-of select="$optname"/></xsl:with-param>
-  </xsl:call-template>
-  <xsl:text> = </xsl:text>
-  <xsl:value-of select="$fopid"/>
-  <xsl:text>; // 0x</xsl:text>
-  <xsl:call-template name="dectohex">
-    <xsl:with-param name="number" select="$fopid"/>
-  </xsl:call-template>
-</xsl:for-each>
-<xsl:text>
-}
-
-
 }
 
 #endif // INCLUDED_RESOURCESIDS&#xa;</xsl:text></out>

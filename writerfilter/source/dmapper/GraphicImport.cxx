@@ -860,24 +860,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Anchor_distL: // 90985;
         case NS_ooxml::LN_CT_Anchor_distR: // 90986;
         {
-            //redirect to shape option processing
-            switch( nName )
-            {
-                case NS_ooxml::LN_CT_Anchor_distT: // 90983;
-                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdyWrapDistTop;
-                break;
-                case NS_ooxml::LN_CT_Anchor_distB: // 90984;
-                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdyWrapDistBottom;
-                break;
-                case NS_ooxml::LN_CT_Anchor_distL: // 90985;
-                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdxWrapDistLeft;
-                break;
-                case NS_ooxml::LN_CT_Anchor_distR: // 90986;
-                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdxWrapDistRight;
-                break;
-                //m_pImpl->nShapeOptionType = NS_dff::LN_shpcropFromTop
-                default: ;
-            }
+            m_pImpl->nShapeOptionType = nName;
             ProcessShapeOptions(val);
         }
         break;
@@ -1109,135 +1092,21 @@ uno::Reference< ::com::sun::star::drawing::XShape> GraphicImport::GetXShapeObjec
 void GraphicImport::ProcessShapeOptions(Value& val)
 {
     sal_Int32 nIntValue = val.getInt();
-    sal_Int32 nTwipValue = ConversionHelper::convertTwipToMM100(nIntValue);
     switch( m_pImpl->nShapeOptionType )
     {
-        case NS_dff::LN_shpcropFromTop /*256*/ :
-            m_pImpl->nTopCrop   = nTwipValue;
-            break;// rtf:shpcropFromTop
-        case NS_dff::LN_shpcropFromBottom /*257*/ :
-            m_pImpl->nBottomCrop= nTwipValue;
-            break;// rtf:shpcropFromBottom
-        case NS_dff::LN_shpcropFromLeft   /*258*/ :
-            m_pImpl->nLeftCrop  = nTwipValue;
-            break;// rtf:shpcropFromLeft
-        case NS_dff::LN_shpcropFromRight/*259*/ :
-            m_pImpl->nRightCrop = nTwipValue;
-            break;// rtf:shpcropFromRight
-        case NS_dff::LN_shppib/*260*/:
-            break;  // rtf:shppib
-        case NS_dff::LN_shppibName/*261*/:
-            break;  // rtf:shppibName
-        case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
-        break;
-        case NS_dff::LN_shppictureContrast/*264*/: // rtf:shppictureContrast docu: "1<<16"
-            /*
-            0x10000 is msoffice 50%
-            < 0x10000 is in units of 1/50th of 0x10000 per 1%
-            > 0x10000 is in units where
-            a msoffice x% is stored as 50/(100-x) * 0x10000
-
-            plus, a (ui) microsoft % ranges from 0 to 100, OOO
-            from -100 to 100, so also normalize into that range
-            */
-            if ( nIntValue > 0x10000 )
-            {
-                double fX = nIntValue;
-                fX /= 0x10000;
-                fX /= 51;   // 50 + 1 to round
-                fX = 1/fX;
-                m_pImpl->nContrast = static_cast<sal_Int32>(fX);
-                m_pImpl->nContrast -= 100;
-                m_pImpl->nContrast = -m_pImpl->nContrast;
-                m_pImpl->nContrast = (m_pImpl->nContrast-50)*2;
-            }
-            else if ( nIntValue == 0x10000 )
-                m_pImpl->nContrast = 0;
-            else
-            {
-                m_pImpl->nContrast = nIntValue * 101;   //100 + 1 to round
-                m_pImpl->nContrast /= 0x10000;
-                m_pImpl->nContrast -= 100;
-            }
-        break;
-        case NS_dff::LN_shppictureBrightness/*265*/:  // rtf:shppictureBrightness
-            m_pImpl->nBrightness     = ( (sal_Int32) nIntValue / 327 );
-        break;
-        case NS_dff::LN_shppictureGamma/*266*/: // rtf:shppictureGamma
-            //todo check gamma value with _real_ document
-            m_pImpl->fGamma = double(nIntValue/655);
-        break;
-        case NS_dff::LN_shppictureId        /*267*/:
-            break;  // rtf:shppictureId
-        case NS_dff::LN_shppictureDblCrMod  /*268*/:
-            break;  // rtf:shppictureDblCrMod
-        case NS_dff::LN_shppictureFillCrMod /*269*/:
-            break;  // rtf:shppictureFillCrMod
-        case NS_dff::LN_shppictureLineCrMod /*270*/:
-            break;  // rtf:shppictureLineCrMod
-
-        case NS_dff::LN_shppictureActive/*319*/: // rtf:shppictureActive
-            switch( nIntValue & 0x06 )
-            {
-                case 0 : m_pImpl->eColorMode = drawing::ColorMode_STANDARD; break;
-                case 4 : m_pImpl->eColorMode = drawing::ColorMode_GREYS; break;
-                case 6 : m_pImpl->eColorMode = drawing::ColorMode_MONO; break;
-                default:;
-            }
-        break;
-        case NS_dff::LN_shpfillColor           /*385*/:
-            m_pImpl->nFillColor = (m_pImpl->nFillColor & 0xff000000) + ConversionHelper::ConvertColor( nIntValue );
-        break;
-        case NS_dff::LN_shpfillOpacity         /*386*/:
-        {
-            sal_Int32 nTrans = 0xff - ( nIntValue * 0xff ) / 0xffff;
-            m_pImpl->nFillColor = (nTrans << 0x18 ) + (m_pImpl->nFillColor & 0xffffff);
-        }
-        break;
-        case NS_dff::LN_shpfNoFillHitTest      /*447*/:
-            break;  // rtf:shpfNoFillHitTest
-        case NS_dff::LN_shplineColor           /*448*/:
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
-        break;
-        case NS_dff::LN_shplineWidth           /*459*/:
-            //1pt == 12700 units
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = ConversionHelper::convertTwipToMM100(nIntValue / 635);
-        break;
-        case NS_dff::LN_shplineDashing         /*462*/:
-            //graphic borders don't support different dashing
-            /*MSOLINEDASHING
-                msolineSolid,              // Solid (continuous) pen
-                msolineDashSys,            // PS_DASH system   dash style
-                msolineDotSys,             // PS_DOT system   dash style
-                msolineDashDotSys,         // PS_DASHDOT system dash style
-                msolineDashDotDotSys,      // PS_DASHDOTDOT system dash style
-                msolineDotGEL,             // square dot style
-                msolineDashGEL,            // dash style
-                msolineLongDashGEL,        // long dash style
-                msolineDashDotGEL,         // dash short dash
-                msolineLongDashDotGEL,     // long dash short dash
-                msolineLongDashDotDotGEL   // long dash short dash short dash*/
-        break;
-        case NS_dff::LN_shpfNoLineDrawDash     /*511*/:
-        break;  // rtf:shpfNoLineDrawDash
-        case NS_dff::LN_shpwzDescription /*897*/: //alternative text
-            m_pImpl->sAlternativeText = val.getString();
-        break;
-        case NS_dff::LN_shppWrapPolygonVertices/*899*/:
-            break;  // rtf:shppWrapPolygonVertices
-        case NS_dff::LN_shpdxWrapDistLeft /*900*/: // contains a twip/635 value
+        case NS_ooxml::LN_CT_Anchor_distL:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
             m_pImpl->nLeftMargin = nIntValue / 360;
         break;
-        case NS_dff::LN_shpdyWrapDistTop /*901*/:  // contains a twip/635 value
+        case NS_ooxml::LN_CT_Anchor_distT:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
             m_pImpl->nTopMargin = nIntValue / 360;
         break;
-        case NS_dff::LN_shpdxWrapDistRight /*902*/:// contains a twip/635 value
+        case NS_ooxml::LN_CT_Anchor_distR:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
             m_pImpl->nRightMargin = nIntValue / 360;
         break;
-        case NS_dff::LN_shpdyWrapDistBottom /*903*/:// contains a twip/635 value
+        case NS_ooxml::LN_CT_Anchor_distB:
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
             m_pImpl->nBottomMargin = nIntValue / 360;
         break;
