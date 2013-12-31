@@ -73,9 +73,8 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
         size_t nCurWindowSize = pCurDVR->GetArrayLength() <
         pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
         pCurDVR->GetRefRowSize() ;
-        int unrollSize = 16;
+        int unrollSize = 8;
         ss << "    int loop;\n";
-        ss << "    int remainder;\n";
         if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
             ss << "    loop = ("<<nCurWindowSize<<" - gid0)/";
             ss << unrollSize<<";\n";
@@ -126,7 +125,6 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << 1+i;
                 ss << ";\n";
                 ss << "            }\n";
-
                 ss << "            i++;\n";
                 ss << "            doubleIndex++;\n";
             }
@@ -143,12 +141,28 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "            {\n";
                 ss << "                rowNum = doubleIndex;\n";
                 ss << "            }\n";
-
                 ss << "            i++;\n";
                 ss << "            doubleIndex++;\n";
             }
             ss << "        }\n\n";
 
+            ss << "    }\n";
+            ss << "    if(rowNum!=-1)\n";
+            ss << "    {\n";
+            for(int j=0;j< secondParaWidth; j++)
+            {
+
+                ss << "        if(tmp";
+                ss << 2+(secondParaWidth-1);
+                ss << " == ";
+                ss << j+1;
+                ss << ")\n";
+                ss << "            tmp = ";
+                vSubArguments[1+j]->GenDeclRef(ss);
+                ss << "[rowNum];\n";
+
+            }
+            ss << "    return tmp;\n";
             ss << "    }\n";
             ss << "    for (int i = ";
             if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
@@ -196,25 +210,27 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "        }\n";
 
             ss << "    }\n\n";
+            ss << "    if(rowNum!=-1)\n";
+            ss << "    {\n";
+
+            for(int j=0;j< secondParaWidth; j++)
+            {
+
+                ss << "        if(tmp";
+                ss << 2+(secondParaWidth-1);
+                ss << " == ";
+                ss << j+1;
+                ss << ")\n";
+                ss << "            tmp = ";
+                vSubArguments[1+j]->GenDeclRef(ss);
+                ss << "[rowNum];\n";
+
+            }
+            ss << "    return tmp;\n";
+            ss << "    }\n";
 
         }
 
-        ss << "    if(rowNum!=-1)\n";
-        ss << "    {\n";
-
-        for(int j=0;j< secondParaWidth; j++)
-        {
-
-            ss << "        if(tmp";
-            ss << 2+(secondParaWidth-1);
-            ss << " == ";
-            ss << j+1;
-            ss << ")\n";
-            ss << "            tmp = ";
-            vSubArguments[1+j]->GenDeclRef(ss);
-            ss << "[rowNum];\n";
-        }
-        ss << "    }\n";
     }
     else
     {
@@ -228,7 +244,6 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "            tmp = tmp1;\n";
         ss << "    }\n";
     }
-
     ss << "    return tmp;\n";
     ss << "}";
 }
