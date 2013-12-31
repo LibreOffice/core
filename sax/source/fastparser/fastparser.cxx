@@ -95,10 +95,10 @@ struct NameWithToken
 
 struct SaxContext
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > mxContext;
-    sal_Int32                   mnElementToken;
-    boost::optional< OUString > maNamespace;
-    boost::optional< OUString > maElementName;
+    Reference< XFastContextHandler > mxContext;
+    sal_Int32 mnElementToken;
+    OUString  maNamespace;
+    OUString  maElementName;
 
     SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName ):
             mnElementToken(nElementToken)
@@ -500,7 +500,7 @@ void Entity::endElement()
         if( nElementToken != FastToken::DONTKNOW )
             xContext->endFastElement( nElementToken );
         else
-            xContext->endUnknownElement( aContext.maNamespace.get(), aContext.maElementName.get() );
+            xContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
     }
     catch (const Exception& e)
     {
