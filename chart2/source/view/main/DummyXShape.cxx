@@ -833,9 +833,6 @@ bool DummyChart::initOpengl()
     SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
     GLWin.hRC  = wglCreateContext(GLWin.hDC);
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
-//[Mod] GaoWei
-    m_GLRender.InitOpenGL(GLWin);
-//[Mod] GaoWei end
 
 #elif defined( UNX )
     if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) )
@@ -885,7 +882,10 @@ bool DummyChart::initOpengl()
         unx::XSetErrorHandler( oldHandler );
         }
     }
+
 #endif
+
+    m_GLRender.InitOpenGL(GLWin);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);

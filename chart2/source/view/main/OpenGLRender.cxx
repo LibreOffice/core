@@ -308,6 +308,15 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
         cout << "Failed to initialize GLEW" << endl;
         return -1;
     }
+
+    // These guys don't just check support but setup the vtables.
+    if (glewIsSupported("framebuffer_object") != GLEW_OK)
+    {
+        cout << "GL stack has no framebuffer support" << endl;
+        return -1;
+    }
+    cerr << "Initialized openGL successfully" << endl;
+
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
