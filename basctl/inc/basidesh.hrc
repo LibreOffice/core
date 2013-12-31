@@ -34,7 +34,6 @@
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
 #define RID_TP_DLGS                     ( RID_BASICIDE_START + 39 )
 #define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
-#define RID_DLG_EXPORT                  ( RID_BASICIDE_START + 43 )
 #define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 #define RID_PRINTDLG_STRLIST            ( RID_BASICIDE_START + 78 )
 

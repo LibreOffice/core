@@ -272,48 +272,6 @@ ModalDialog RID_DLG_LIBS
     };
 };
 
-ModalDialog RID_DLG_EXPORT
-{
-    HelpID = "basctl:ModalDialog:RID_DLG_EXPORT";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 115 , 55 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Text [ en-US ] = "Export Basic library";
-    OKButton RID_PB_OK
-    {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton RID_PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 59 , 35 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-
-    RadioButton RB_EXPORTASPACKAGE
-    {
-        HelpID = "basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASPACKAGE";
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 103, 10 );
-        Group = TRUE;
-        Text [ en-US ] = "Export as ~extension";
-        TabStop = TRUE ;
-    };
-    RadioButton RB_EXPORTASBASIC
-    {
-        HelpID = "basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASBASIC";
-        Pos = MAP_APPFONT( 6, 19 );
-        Size = MAP_APPFONT( 103, 10 );
-        //Group = TRUE;
-        Text [ en-US ] = "Export as BASIC library";
-    };
-};
-
 String RID_STR_EXPORTPACKAGE
 {
     Text [ en-US ] = "Export library as extension";

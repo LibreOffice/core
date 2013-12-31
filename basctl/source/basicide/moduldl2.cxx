@@ -456,28 +456,20 @@ IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
 
 IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
 {
-    mbExportAsPackage = maExportAsPackageButton.IsChecked();
+    mbExportAsPackage = m_pExportAsPackageButton->IsChecked();
     EndDialog(1);
     return 0;
 }
 
-ExportDialog::ExportDialog( Window * pParent )
-    : ModalDialog( pParent, IDEResId( RID_DLG_EXPORT ) )
-    , maExportAsPackageButton( this, IDEResId( RB_EXPORTASPACKAGE ) )
-    , maExportAsBasicButton( this, IDEResId( RB_EXPORTASBASIC ) )
-    , maOKButton( this, IDEResId( RID_PB_OK ) )
-    , maCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+ExportDialog::ExportDialog(Window * pParent)
+    : ModalDialog(pParent, "ExportDialog", "modules/BasicIDE/ui/exportdialog.ui")
     , mbExportAsPackage(false)
 {
-    FreeResource();
-    maExportAsPackageButton.Check();
-    maOKButton.SetClickHdl(LINK(this, ExportDialog, OkButtonHandler));
-}
+    get(m_pExportAsPackageButton, "extension");
+    get(m_pOKButton, "ok");
 
-//----------------------------------------------------------------------------
-
-ExportDialog::~ExportDialog()
-{
+    m_pExportAsPackageButton->Check();
+    m_pOKButton->SetClickHdl(LINK(this, ExportDialog, OkButtonHandler));
 }
 
 //----------------------------------------------------------------------------

@@ -81,10 +81,8 @@ public:
 class ExportDialog : public ModalDialog
 {
 private:
-    RadioButton     maExportAsPackageButton;
-    RadioButton     maExportAsBasicButton;
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
+    RadioButton*    m_pExportAsPackageButton;
+    OKButton*       m_pOKButton;
 
     bool            mbExportAsPackage;
 
@@ -92,7 +90,6 @@ private:
 
 public:
     ExportDialog( Window * pParent );
-    ~ExportDialog();
 
     bool isExportAsPackage () { return mbExportAsPackage; }
 };
