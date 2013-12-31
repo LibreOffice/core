@@ -88,6 +88,7 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     get(m_pCB_FirstRowAsLabel, "CB_FIRST_ROW_ASLABELS");
     get(m_pCB_FirstColumnAsLabel, "CB_FIRST_COLUMN_ASLABELS");
     get(m_pFTTitle, "STR_PAGE_DATA_RANGE");// OH:remove later with dialog title
+    m_pCB_TimeBased = NULL;
 
     m_pFT_Caption->Show(!bHideDescription);
 
@@ -201,10 +202,22 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             || ( m_pCB_FirstRowAsLabel->IsChecked()    && !m_pRB_Rows->IsChecked() );
         sal_Bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
             || ( m_pCB_FirstRowAsLabel->IsChecked()    && m_pRB_Rows->IsChecked() );
+        sal_Bool bTimeBased = false;
+#if 0
+        sal_Bool bTimeBased = m_pCB_TimeBased->IsChecked();
+#endif
 
         Sequence< beans::PropertyValue > aArguments(
             DataSourceHelper::createArguments(
                 m_pRB_Columns->IsChecked(), bFirstCellAsLabel, bHasCategories ) );
+
+        if(bTimeBased)
+        {
+            aArguments.realloc( aArguments.getLength() + 1 );
+            aArguments[aArguments.getLength() - 1] =
+                beans::PropertyValue( "TimeBased", -1, uno::makeAny(bTimeBased),
+                        beans::PropertyState_DIRECT_VALUE );
+        }
 
         // only if range is valid
         if( m_aLastValidRangeString.equals(m_pED_Range->GetText()))

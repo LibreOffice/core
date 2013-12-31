@@ -28,4 +28,6 @@
 #define CB_Y_SECONDARY 5
 #define CB_Z_SECONDARY 6
 
+#define CB_TIME_BASED         3
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

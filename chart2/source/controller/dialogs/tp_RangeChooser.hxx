@@ -89,6 +89,8 @@ protected: //member
     CheckBox*        m_pCB_FirstColumnAsLabel;
     FixedText*       m_pFTTitle;
 
+    CheckBox*        m_pCB_TimeBased;
+
     sal_Int32       m_nChangingControlCalls;
     bool            m_bIsDirty;
 
