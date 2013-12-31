@@ -503,7 +503,7 @@ public:
     virtual void BinInlineFun(std::set<std::string>& ,std::set<std::string>& );
 };
 
-class OpTbillprice: public Normal
+class OpTbillprice: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
