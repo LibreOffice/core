@@ -139,7 +139,10 @@ private:
         for(size_t i = 0; i < 60; ++i)
         {
             mrChartView.setViewDirty();
-            mrChartView.update();
+            {
+                SolarMutexGuard aSolarGuard;
+                mrChartView.update();
+            }
             wait(aTime);
         }
     }
