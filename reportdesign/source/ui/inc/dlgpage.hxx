@@ -37,8 +37,7 @@ private:
     void operator =(const ORptPageDialog&);
 public:
 
-    ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,sal_uInt16 _nPageId);
-    virtual ~ORptPageDialog() {}
+    ORptPageDialog(Window* pParent, const SfxItemSet* pAttr, const OString &rDialog);
 };
 // =============================================================================
 } // namespace rptui

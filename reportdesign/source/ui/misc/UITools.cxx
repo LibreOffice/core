@@ -715,10 +715,10 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(pParent, pDescriptor.get(),RID_PAGEDIALOG_CHAR);
+            ORptPageDialog aDlg(pParent, pDescriptor.get(), "CharDialog");
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
-                aDlg.RemoveTabPage( RID_PAGE_BACKGROUND );
+                aDlg.RemoveTabPage("background");
             bSuccess = ( RET_OK == aDlg.Execute() );
             if ( bSuccess )
             {

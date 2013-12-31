@@ -38,7 +38,6 @@ $(eval $(call gb_SrsTarget_set_include,reportdesign/rptui,\
 
 
 $(eval $(call gb_SrsTarget_add_files,reportdesign/rptui,\
-	reportdesign/source/ui/dlg/dlgpage.src	\
 	reportdesign/source/ui/dlg/PageNumber.src	\
 	reportdesign/source/ui/dlg/CondFormat.src	\
 	reportdesign/source/ui/dlg/Navigator.src	\

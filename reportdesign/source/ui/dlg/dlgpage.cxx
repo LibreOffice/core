@@ -37,39 +37,39 @@ namespace rptui
 |*
 \************************************************************************/
 
-ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,sal_uInt16 _nPageId) :
-SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
-        rOutAttrs           ( *pAttr )
+ORptPageDialog::ORptPageDialog( Window* pParent, const SfxItemSet* pAttr, const OString &rDialog)
+    : SfxTabDialog (pParent, rDialog, OUString("modules/dbreport/ui/") +
+        OStringToOUString(rDialog, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
+        OUString(".ui"), pAttr)
+    , rOutAttrs(*pAttr)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    switch( _nPageId )
-    {
-        case RID_PAGEDIALOG_BACKGROUND:
-            AddTabPage( RID_SVXPAGE_BACKGROUND, OUString(ModuleRes(1)));
-            break;
-        case RID_PAGEDIALOG_PAGE:
-            AddTabPage(RID_SVXPAGE_PAGE, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
-            AddTabPage(RID_SVXPAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-            break;
-        case RID_PAGEDIALOG_CHAR:
-            AddTabPage(RID_PAGE_CHAR, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
-            AddTabPage(RID_PAGE_EFFECTS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
-            AddTabPage(RID_PAGE_POSITION, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
-            AddTabPage(RID_PAGE_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
-            AddTabPage(RID_PAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-            AddTabPage(RID_PAGE_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), 0 );
 
-            break;
-        default:
-            OSL_FAIL("Unknown page id");
+    if (rDialog == "BackgroundDialog")
+    {
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
     }
+    else if (rDialog == "PageDialog")
+    {
+        AddTabPage("page", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+    }
+    else if (rDialog == "CharDialog")
+    {
+        AddTabPage("font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
+        AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
+        AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
+        AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+        AddTabPage("alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), 0 );
+    }
+    else
+        OSL_FAIL("Unknown page id");
 
     SvtCJKOptions aCJKOptions;
     if ( !aCJKOptions.IsDoubleLinesEnabled() )
-        RemoveTabPage(RID_PAGE_TWOLN);
-
-    FreeResource();
+        RemoveTabPage("asianlayout");
 }
 // =============================================================================
 } // namespace rptui
