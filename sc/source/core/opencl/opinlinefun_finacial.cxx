@@ -1428,6 +1428,44 @@ std::string GetDuration=
 "    fDur /= nFreq;\n"
 "    return fDur;\n""}\n";
 
+std::string GetDuration_newDecl=
+"double GetDuration_new( \n"
+"                int nNullDate, int nSettle, int nMat, double fCoup,\n"
+"                double fYield, int nFreq, int nBase );\n";
+
+std::string GetDuration_new=
+"double GetDuration_new( \n"
+"                int nNullDate, int nSettle, int nMat, double fCoup,\n"
+"                double fYield, int nFreq, int nBase )\n"
+"    {\n"
+"        double fYearfrac = GetYearFrac(nNullDate,nSettle,nMat,nBase);\n"
+"        double fNumOfCoups = lcl_Getcoupnum_new(nNullDate,nSettle,nMat,"
+"nFreq,nBase);\n"
+"        double fDur = 0.0;\n"
+"        fCoup = fCoup * 100.0 * pow(nFreq, -1.0);\n"
+"        fYield = fYield * pow(nFreq, -1.0);\n"
+"        fYield += 1.0;\n"
+"        double nDiff = fYearfrac * nFreq - fNumOfCoups;\n"
+"        int  t;\n"
+"        double tmp0 = 0, tmp1 = 0, tmp2 = 0;\n"
+"        for( t = 1 ; t < fNumOfCoups ; t++ ){\n"
+"            tmp0 = (t + nDiff) * ( fCoup ) ;\n"
+"            tmp1 = pow( fYield, t + nDiff ) ;\n"
+"            tmp2 = tmp0 * pow(tmp1, -1);\n"
+"            fDur += tmp2;\n"
+"        }\n"
+"        fDur += (fNumOfCoups + nDiff) * (fCoup + 100.0) * pow(pow(fYield,"
+" fNumOfCoups + nDiff ),-1);\n"
+"        double  p = 0.0;\n"
+"        for( t = 1 ; t < fNumOfCoups ; t++ ){\n"
+"            tmp0 = pow( fYield, t + nDiff );\n"
+"            p += fCoup * pow(tmp0, -1);}\n"
+"        p += (fCoup + 100.0) * pow(pow(fYield, fNumOfCoups + nDiff), -1);\n"
+"        fDur = fDur * pow(p, -1.0);\n"
+"        fDur = fDur * pow(nFreq, -1.0);\n"
+"        return fDur;\n"
+"    }\n";
+
 std::string ScGetGDADecl=
 "double ScGetGDA(double fWert, double fRest, double fDauer, double fPeriode,"
 "double fFaktor);\n";

@@ -761,13 +761,15 @@ void OpDuration_ADD::GenSlidingWindowFunction(std::stringstream& ss,
 void OpMDuration::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetDurationDecl);decls.insert(lcl_GetcoupnumDecl);
+    decls.insert(GetDuration_newDecl);decls.insert(lcl_Getcoupnum_newDecl);
+    decls.insert(addMonthsDecl);decls.insert(checklessthanDecl);
+    decls.insert(setDayDecl);decls.insert(ScaDateDecl);
     decls.insert(GetYearFracDecl);decls.insert(DaysToDateDecl);
-    decls.insert(GetNullDateDecl);decls.insert(DateToDaysDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
-    funs.insert(GetDuration);funs.insert(lcl_Getcoupnum);
+    funs.insert(GetDuration_new);funs.insert(lcl_Getcoupnum_new);
+    funs.insert(addMonths);funs.insert(checklessthan);
+    funs.insert(setDay);funs.insert(ScaDate);
     funs.insert(GetYearFrac);funs.insert(DaysToDate);
-    funs.insert(GetNullDate);funs.insert(DateToDays);
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
 }
 
@@ -791,31 +793,50 @@ void OpMDuration::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double arg3 = " << GetBottom() << ";\n";
     ss << "    double arg4 = " << GetBottom() << ";\n";
     ss << "    double arg5 = " << GetBottom() << ";\n";
-    unsigned j = vSubArguments.size();
-    while (j--)
-        {
-        FormulaToken* pCur = vSubArguments[j]->GetFormulaToken();
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
-        if(pCur->GetType() == formula::svSingleVectorRef)
-            {
+        if (pCur->GetType() == formula::svSingleVectorRef)
+        {
 #ifdef  ISNAN
             const formula::SingleVectorRefToken* pSVR =
-            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
-            ss << "    if(gid0 >= " << pSVR->GetArrayLength() << " || isNan(";
-            ss << vSubArguments[j]->GenSlidingWindowDeclRef();
-            ss << "))\n";
-            ss << "        arg" << j << " = " <<GetBottom() << ";\n";
-            ss << "    else\n";
+                dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+            ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
 #endif
-            ss << "        arg" << j << " = ";
-            ss << vSubArguments[j]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            }
         }
-    ss << "    int nNullDate = GetNullDate();\n";
-    ss << "    tmp = GetDuration( nNullDate, (int)arg0, (int)arg1, arg2,";
+        else if (pCur->GetType() == formula::svDouble)
+        {
+#ifdef  ISNAN
+            ss << "    {\n";
+#endif
+        }
+#ifdef  ISNAN
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
+            ss << "        if (isNan(";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << "))\n";
+            ss << "            arg" << i << " = 0;\n";
+            ss << "        else\n";
+            ss << "            arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+            ss << "    }\n";
+        }
+        else
+        {
+            ss << "    arg" << i << " = ";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+        }
+#else
+        ss << "    arg" << i;
+        ss << vSubArguments[i]->GenSlidingWindowDeclRef() << ";\n";
+#endif
+    }
+    ss << "    int nNullDate = 693594;\n";
+    ss << "    tmp = GetDuration_new( nNullDate, (int)arg0, (int)arg1, arg2,";
     ss << " arg3, (int)arg4, (int)arg5);\n";
-    ss << "    tmp /= 1.0 + arg3 / (int)arg4;\n";
+    ss << "    tmp = tmp * pow(1.0 + arg3 * pow((int)arg4, -1.0), -1);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
