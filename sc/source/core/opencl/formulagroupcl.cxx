@@ -1929,7 +1929,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     mvSubArguments.push_back(
                             SubArgument(new DynamicKernelConstantArgument(ts,
                                     ft->Children[i])));
-                } else if (pChild->GetType() == formula::svString) {
+                } else if (pChild->GetType() == formula::svString
+                && pCodeGen->takeString()) {
                     mvSubArguments.push_back(
                             SubArgument(new ConstStringArgument(ts,
                                     ft->Children[i])));
@@ -3042,19 +3043,16 @@ void DynamicKernel::CreateKernel(void)
     std::string KernelHash = mKernelSignature+GetMD5();
     if (lastOneKernelHash == KernelHash && lastOneProgram)
     {
-        std::cerr<<"cl_program cache hit: "<< KernelHash << "\n";
         mpProgram = lastOneProgram;
     }
     else if(lastSecondKernelHash == KernelHash && lastSecondProgram)
     {
-        std::cerr<<"cl_program cache hit: "<< KernelHash << "\n";
         mpProgram = lastSecondProgram;
     }
     else
     {   // doesn't match the last compiled formula.
 
         if (lastSecondProgram) {
-            std::cerr<<"Freeing lastsecond program: "<< GetMD5() << "\n";
             clReleaseProgram(lastSecondProgram);
         }
         if (OpenclDevice::buildProgramFromBinary("",
@@ -3197,6 +3195,10 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
         free(pDynamicKernel);
         return NULL;
 #endif
+    }
+    catch (...) {
+        std::cerr << "Dynamic formula compiler: unhandled compiler error\n";
+        return NULL;
     }
     return pDynamicKernel;
 }
