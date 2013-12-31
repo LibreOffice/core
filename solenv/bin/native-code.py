@@ -52,6 +52,7 @@ core_factory_list = [
     ("libunordflo.a", "unordf_component_getFactory"),
     ("libunoxmllo.a", "unoxml_component_getFactory"),
     ("libutllo.a", "utl_component_getFactory"),
+    ("libuuilo.a", "uui_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libxmlsecurity.a", "xmlsecurity_component_getFactory"),
     ("libxolo.a", "xo_component_getFactory"),
@@ -131,20 +132,10 @@ core_constructor_list = [
 # sax/source/expatwrap/expwrap.component
     "com_sun_star_comp_extensions_xml_sax_ParserExpat",
     "com_sun_star_comp_extensions_xml_sax_FastParser",
-    "com_sun_star_extensions_xml_sax_Writer",
-# stoc/util/bootstrap.component
-    "com_sun_star_comp_stoc_DLLComponentLoader",
-    "com_sun_star_comp_stoc_ImplementationRegistration",
-    "com_sun_star_comp_stoc_NestedRegistry",
-    "com_sun_star_comp_stoc_ORegistryServiceManager",
-    "com_sun_star_comp_stoc_OServiceManager",
-    "com_sun_star_comp_stoc_OServiceManagerWrapper",
-    "com_sun_star_comp_stoc_SimpleRegistry",
-    "com_sun_star_security_comp_stoc_AccessController",
-    "com_sun_star_security_comp_stoc_FilePolicy",
+# svtools/util/svt.component
+    "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
 # svx/util/svx.component
-# FIXME: what is missing ?
-    "com_sun_star_drawing_SvxShapeCollection_implementation_getFactory",
+    "com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory",
     ]
 
 # Components which are not in any group yet:
@@ -157,7 +148,6 @@ single_component_map = {
     'sb' : ("libsblo.a", "sb_component_getFactory"),
     'spl' : ("libspllo.a", "spl_component_getFactory"),
     'stringresource' :("libstringresourcelo.a", "stringresource_component_getFactory"),
-    'uui' : ("libuuilo.a", "uui_component_getFactory"),
     'vbaswobj' : ("libvbaswobjlo.a", "vbaswobj_component_getFactory"),
     'vbaevents' : ("libvbaeventslo.a", "vbaevents_component_getFactory"),
     }

@@ -13,8 +13,7 @@ include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 	$< -j \
-		-g core -g writer \
-		-s basprov -s dlgprov -s cui -s protocolhandler -s scriptframe -s sb -s spl -s stringresource -s uui -s vbaswobj -s vbaevents \
+		-g core -g writer_core \
 		> $@
 
 # The name of the Bootstrap activity class
