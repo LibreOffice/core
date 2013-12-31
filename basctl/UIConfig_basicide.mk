@@ -31,6 +31,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/BasicIDE,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/ui/basicmacrodialog \
 	basctl/uiconfig/basicide/ui/gotolinedialog \
+	basctl/uiconfig/basicide/ui/newlibdialog \
 	basctl/uiconfig/basicide/ui/organizedialog \
 ))
 

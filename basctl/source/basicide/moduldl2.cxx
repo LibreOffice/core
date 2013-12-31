@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <sot/storinfo.hxx>
 
 #include <moduldlg.hrc>
@@ -291,7 +291,7 @@ sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     OUString aLibName = GetEntryText( pEntry, 0 );
     if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
     {
-        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB) ).Execute();
+        MessageDialog(this, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB)).Execute();
         return false;
     }
 
@@ -301,7 +301,7 @@ sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
-        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_LIBISREADONLY) ).Execute();
+        MessageDialog(this, IDE_RESSTR(RID_STR_LIBISREADONLY)).Execute();
         return false;
     }
 
@@ -353,7 +353,7 @@ sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewNam
         }
         catch (const container::ElementExistException& )
         {
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED) ).Execute();
+            MessageDialog(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED)).Execute();
             return false;
         }
         catch (const container::NoSuchElementException& )
@@ -366,9 +366,9 @@ sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewNam
     if ( !bValid )
     {
         if ( rNewName.getLength() > 30 )
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_LIBNAMETOLONG) ).Execute();
+            MessageDialog(this, IDE_RESSTR(RID_STR_LIBNAMETOLONG)).Execute();
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) ).Execute();
+            MessageDialog(this, IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
     }
 
     return bValid;
@@ -380,27 +380,24 @@ sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewNam
 
 IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
 {
-    if (IsValidSbxName(aEdit.GetText()))
+    if (IsValidSbxName(m_pEdit->GetText()))
         EndDialog(1);
     else
     {
-        ErrorBox(this, WB_OK | WB_DEF_OK,
-                 IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
-        aEdit.GrabFocus();
+        MessageDialog(this, IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
+        m_pEdit->GrabFocus();
     }
     return 0;
 }
 
 NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
-                                 bool bCheckName)
-    : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
-        aText( this, IDEResId( RID_FT_NEWLIB ) ),
-        aEdit( this, IDEResId( RID_ED_LIBNAME ) ),
-        aOKButton( this, IDEResId( RID_PB_OK ) ),
-        aCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+    bool bCheckName)
+    : ModalDialog(pParent, "NewLibDialog", "modules/BasicIDE/ui/newlibdialog.ui")
 {
-    FreeResource();
-    aEdit.GrabFocus();
+    get(m_pOKButton, "ok");
+    get(m_pEdit, "entry");
+
+    m_pEdit->GrabFocus();
 
     switch (eMode)
     {
@@ -421,15 +418,8 @@ NewObjectDialog::NewObjectDialog(Window * pParent, ObjectMode::Mode eMode,
     }
 
     if (bCheckName)
-        aOKButton.SetClickHdl(LINK(this, NewObjectDialog, OkButtonHandler));
+        m_pOKButton->SetClickHdl(LINK(this, NewObjectDialog, OkButtonHandler));
 }
-
-//----------------------------------------------------------------------------
-
-NewObjectDialog::~NewObjectDialog()
-{
-}
-
 
 //----------------------------------------------------------------------------
 // GotoLineDialog
@@ -878,7 +868,7 @@ void LibPage::InsertLib()
             }
 
             if ( !pLibDlg )
-                InfoBox( this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE) ).Execute();
+                MessageDialog(this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE), VCL_MESSAGE_INFO).Execute();
             else
             {
                 bool bChanges = false;
@@ -915,7 +905,7 @@ void LibPage::InsertLib()
                                     // check, if the library is the Standard library
                                     if ( aLibName == "Standard" )
                                     {
-                                        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_REPLACESTDLIB) ).Execute();
+                                        MessageDialog(this, IDE_RESSTR(RID_STR_REPLACESTDLIB)).Execute();
                                         continue;
                                     }
 
@@ -927,7 +917,7 @@ void LibPage::InsertLib()
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         aErrStr += "\n";
                                         aErrStr += IDE_RESSTR(RID_STR_LIBISREADONLY);
-                                        ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
+                                        MessageDialog(this, aErrStr).Execute();
                                         continue;
                                     }
 
@@ -944,7 +934,7 @@ void LibPage::InsertLib()
                                     aErrStr = aErrStr.replaceAll("XX", aLibName);
                                     aErrStr += "\n" ;
                                     aErrStr += IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
-                                    ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
+                                    MessageDialog(this, aErrStr).Execute();
                                     continue;
                                 }
                             }
@@ -963,7 +953,7 @@ void LibPage::InsertLib()
                                     {
                                         OUString aErrStr( IDE_RESSTR(RID_STR_NOIMPORT) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                        ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
+                                        MessageDialog(this, aErrStr).Execute();
                                         continue;
                                     }
                                 }
@@ -1555,17 +1545,15 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
         if ( aLibName.getLength() > 30 )
         {
-            ErrorBox( pWin, WB_OK | WB_DEF_OK, IDEResId(RID_STR_LIBNAMETOLONG).toString() ).Execute();
+            MessageDialog(pWin, IDEResId(RID_STR_LIBNAMETOLONG).toString()).Execute();
         }
         else if ( !IsValidSbxName( aLibName ) )
         {
-            ErrorBox( pWin, WB_OK | WB_DEF_OK,
-                        IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
+            MessageDialog(pWin, IDEResId(RID_STR_BADSBXNAME).toString()).Execute();
         }
         else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
         {
-            ErrorBox( pWin, WB_OK | WB_DEF_OK,
-                        IDEResId(RID_STR_SBXNAMEALLREADYUSED2).toString() ).Execute();
+            MessageDialog(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2).toString()).Execute();
         }
         else
         {

@@ -54,19 +54,18 @@ namespace ObjectMode
 class NewObjectDialog : public ModalDialog
 {
 private:
-    FixedText       aText;
-    Edit            aEdit;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
+    Edit*           m_pEdit;
+    OKButton*       m_pOKButton;
 
     DECL_LINK(OkButtonHandler, void *);
-
 public:
     NewObjectDialog (Window* pParent, ObjectMode::Mode, bool bCheckName = false);
-    virtual ~NewObjectDialog ();
-
-    OUString    GetObjectName() const { return aEdit.GetText(); }
-    void        SetObjectName( const OUString& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.getLength() ) );}
+    OUString GetObjectName() const { return m_pEdit->GetText(); }
+    void SetObjectName( const OUString& rName )
+    {
+        m_pEdit->SetText( rName );
+        m_pEdit->SetSelection(Selection( 0, rName.getLength()));
+    }
 };
 
 class GotoLineDialog : public ModalDialog

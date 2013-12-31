@@ -272,43 +272,6 @@ ModalDialog RID_DLG_LIBS
     };
 };
 
-ModalDialog RID_DLG_NEWLIB
-{
-    HelpID = "basctl:ModalDialog:RID_DLG_NEWLIB";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 160 , 55 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    OKButton RID_PB_OK
-    {
-        Pos = MAP_APPFONT ( 104 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton RID_PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 104 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText RID_FT_NEWLIB
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ en-US ] = "~Name:" ;
-    };
-    Edit RID_ED_LIBNAME
-    {
-        HelpID = "basctl:Edit:RID_DLG_NEWLIB:RID_ED_LIBNAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
-        TabStop = TRUE ;
-    };
-};
-
 ModalDialog RID_DLG_EXPORT
 {
     HelpID = "basctl:ModalDialog:RID_DLG_EXPORT";
