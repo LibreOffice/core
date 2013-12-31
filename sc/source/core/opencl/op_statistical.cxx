@@ -11085,6 +11085,7 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
             {
                 const formula::DoubleVectorRefToken* pDVR =
                     dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+                assert(pDVR);
                 if(pDVR->GetArrays()[0].mpNumericArray
                     && pDVR->GetArrays()[0].mpStringArray)
                     isMixedDV = svDoubleVectorRefDoubleString;
@@ -11297,6 +11298,17 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
             {
                 const formula::DoubleVectorRefToken* pDVR =
                     dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+                assert(pDVR);
+                if(pDVR->GetArrays()[0].mpNumericArray
+                    && pDVR->GetArrays()[0].mpStringArray)
+                    isMixedDV = svDoubleVectorRefDoubleString;
+                else if(pDVR->GetArrays()[0].mpNumericArray)
+                    isMixedDV = svDoubleVectorRefDouble;
+                else if(pDVR->GetArrays()[0].mpStringArray)
+                    isMixedDV = svDoubleVectorRefString;
+                else
+                    isMixedDV = svDoubleVectorRefNULL;
+
                 size_t nCurWindowSize = pDVR->GetRefRowSize();
                 ss << "    for (int i = ";
                 if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
@@ -11395,6 +11407,16 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
                 const formula::SingleVectorRefToken* pSVR =
                     dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
                 assert(pSVR);
+                if(pSVR->GetArray().mpNumericArray
+                    && pSVR->GetArray().mpStringArray)
+                    isMixedSV = svSingleVectorRefDoubleString;
+                else if(pSVR->GetArray().mpNumericArray)
+                    isMixedSV = svSingleVectorRefDouble;
+                else if(pSVR->GetArray().mpStringArray)
+                    isMixedSV = svSingleVectorRefString;
+                else
+                    isMixedSV = svSingleVectorRefNULL;
+
                 if(isMixedSV == svSingleVectorRefDoubleString)
                 {
 #ifdef  ISNAN
@@ -11474,6 +11496,7 @@ void OpStDevPA::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        return sqrt(vSum * pow(fCount,-1.0));\n";
     ss << "}\n";
 }
+
 void OpAveDev:: GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
 {
