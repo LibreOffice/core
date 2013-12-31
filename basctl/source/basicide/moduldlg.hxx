@@ -71,14 +71,12 @@ public:
 
 class GotoLineDialog : public ModalDialog
 {
-    FixedText       aText;
-    Edit            aEdit;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
+    Edit*           m_pEdit;
+    OKButton*       m_pOKButton;
     DECL_LINK(OkButtonHandler, void *);
 public:
-    GotoLineDialog( Window * pParent );
-    sal_Int32   GetLineNumber();
+    GotoLineDialog(Window * pParent);
+    sal_Int32 GetLineNumber() const;
 };
 
 class ExportDialog : public ModalDialog

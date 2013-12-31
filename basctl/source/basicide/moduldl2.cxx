@@ -436,23 +436,18 @@ NewObjectDialog::~NewObjectDialog()
 //----------------------------------------------------------------------------
 
 GotoLineDialog::GotoLineDialog(Window * pParent )
-    : ModalDialog( pParent, IDEResId( RID_DLG_GOTOLINE ) ),
-        aText( this, IDEResId( RID_FT_LINE ) ),
-        aEdit( this, IDEResId( RID_ED_LINE ) ),
-        aOKButton( this, IDEResId( RID_PB_OK ) ),
-        aCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+    : ModalDialog(pParent, "GotoLineDialog",
+        "modules/BasicIDE/ui/gotolinedialog.ui")
 {
-    FreeResource();
-    aEdit.GrabFocus();
-
-    SetText( IDE_RESSTR(RID_STR_GETLINE) );
-    aOKButton.SetClickHdl(LINK(this, GotoLineDialog, OkButtonHandler));
-
+    get(m_pEdit, "entry");
+    get(m_pOKButton, "ok");
+    m_pEdit->GrabFocus();
+    m_pOKButton->SetClickHdl(LINK(this, GotoLineDialog, OkButtonHandler));
 }
 
-sal_Int32 GotoLineDialog::GetLineNumber()
+sal_Int32 GotoLineDialog::GetLineNumber() const
 {
-    return OUString( aEdit.GetText() ).toInt32();
+    return m_pEdit->GetText().toInt32();
 }
 
 IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
@@ -460,7 +455,7 @@ IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
     if ( GetLineNumber() )
         EndDialog(1);
     else
-        aEdit.SetText( aEdit.GetText(), Selection(0, aEdit.GetText().getLength() ));
+        m_pEdit->SetText(m_pEdit->GetText(), Selection(0, m_pEdit->GetText().getLength()));
     return 0;
 }
 
