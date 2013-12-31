@@ -123,6 +123,7 @@ public:
     int SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b);
     void SetLine2DWidth(int width);
+    BitmapEx GetAsBitmap();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);

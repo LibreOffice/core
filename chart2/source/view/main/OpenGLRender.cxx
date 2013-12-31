@@ -14,6 +14,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/pngwrite.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -430,6 +431,55 @@ int OpenGLRender::RenderModelf(float *vertexArray, unsigned int vertexArraySize,
 #endif
     return 0;
 }
+
+BitmapEx OpenGLRender::GetAsBitmap()
+{
+    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
+    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf.get());
+
+    Bitmap aBitmap( Size(m_iWidth, m_iHeight), 24 );
+    AlphaMask aAlpha( Size(m_iWidth, m_iHeight) );
+
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+        AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
+
+        size_t nCurPos = 0;
+        for( int y = 0; y < m_iHeight; ++y)
+        {
+            Scanline pScan = pWriteAccess->GetScanline(y);
+            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+            for( int x = 0; x < m_iWidth; ++x )
+            {
+                *pScan++ = buf[nCurPos];
+                *pScan++ = buf[nCurPos+1];
+                *pScan++ = buf[nCurPos+2];
+
+                nCurPos += 3;
+
+                *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
+            }
+        }
+    }
+
+    BitmapEx aBmp(aBitmap, aAlpha);
+
+#if 0 // debug PNG writing
+    static int nIdx = 0;
+    OUString aName = OUString( "file://c/temp/image" ) + OUString::number( nIdx++ ) + ".png";
+    try {
+        vcl::PNGWriter aWriter( aBmp );
+        SvFileStream sOutput( aName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_INFO("slideshow.opengl", "Error writing png to " << aName);
+    }
+#endif
+
+    return aBmp;
+}
+
 int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArraySize, float *colorArray, unsigned int colorArraySize)
 {
     char fileName[256] = {0};
@@ -507,37 +557,10 @@ int OpenGLRender::RenderModelf2FBO(float *vertexArray, unsigned int vertexArrayS
     fclose(pfile);
 
 #else
-    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_RGBA, GL_UNSIGNED_BYTE, buf.get());
-    BitmapEx aBmp;
-    aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
-
-    Bitmap aBitmap( aBmp.GetBitmap() );
-    Bitmap aAlpha( aBmp.GetAlpha().GetBitmap() );
-
-    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-    Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
-
-    size_t nCurPos = 0;
-    for( int y = 0; y < m_iHeight; ++y)
-    {
-        Scanline pScan = pWriteAccess->GetScanline(y);
-        Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
-
-        for( int x = 0; x < m_iWidth; ++x )
-        {
-            *pScan++ = buf[nCurPos];
-            *pScan++ = buf[nCurPos+1];
-            *pScan++ = buf[nCurPos+2];
-
-            nCurPos += 3;
-
-            *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
-        }
-    }
-
-    aBmp = BitmapEx(aBitmap, aAlpha);
+    fprintf( stderr, "this RGBA guy ...\n");
+    BitmapEx aBmp = GetAsBitmap(); // unclear why we create then do nothing with this.
 #endif
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     RenderTexture(m_TextureObj[0]);
 #if 0
@@ -649,37 +672,7 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     free(buf);
     fclose(pfile);
 #else
-    boost::scoped_array<sal_uInt8> buf(new sal_uInt8[m_iWidth * m_iHeight * 4]);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf.get());
-    BitmapEx aBmp;
-    aBmp.SetSizePixel(Size(m_iWidth, m_iHeight));
-
-    Bitmap aBitmap( Size( m_iWidth, m_iHeight), 24 );
-    Bitmap aAlpha( Size( m_iWidth, m_iHeight), 24 );
-
-    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-    Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
-
-    size_t nCurPos = 0;
-    for( size_t y = 0; y < size_t(m_iHeight); ++y)
-    {
-        Scanline pScan = pWriteAccess->GetScanline(y);
-        Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
-
-        for( size_t x = 0; x < size_t(m_iWidth); ++x )
-        {
-            *pScan++ = buf[nCurPos];
-            *pScan++ = buf[nCurPos+1];
-            *pScan++ = buf[nCurPos+2];
-
-            nCurPos += 3;
-
-            *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
-        }
-    }
-
-    aBmp = BitmapEx(aBitmap, aAlpha);
-    Graphic aGraphic(aBmp);
+    Graphic aGraphic( GetAsBitmap() );
     uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
     uno::Reference < beans::XPropertySet > xPropSet ( mxRenderTarget, uno::UNO_QUERY );
     xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
