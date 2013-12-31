@@ -2961,12 +2961,7 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
 void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-    const formula::DoubleVectorRefToken*pCurDVR= dynamic_cast<const
-        formula::DoubleVectorRefToken *>(tmpCur);
-    size_t nCurWindowSize = pCurDVR->GetArrayLength() <
-        pCurDVR->GetRefRowSize() ? pCurDVR->GetArrayLength():
-        pCurDVR->GetRefRowSize() ;
+
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -2978,39 +2973,143 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double tmp =0;\n";
     ss << "    double count=0;\n";
+    ss << "    int singleIndex =gid0;\n";
+    ss << "    int doubleIndex;\n";
     ss << "    int i ;\n";
+    ss << "    int j ;\n";
     GenTmpVariables(ss,vSubArguments);
-    ss << "    for (i = ";
-    if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-        ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
-    } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-        ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
-    } else {
-        ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
-    }
-    ss << "    {\n";
-    if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
+
+    unsigned paraOneIsDoubleVector = 0;
+    unsigned paraOneWidth = 1;
+    unsigned paraTwoWidth = 1;
+    unsigned paraThreeWidth = 1;
+    unsigned loopTimes = 0;
+    unsigned loopIndex = 0;
+    if(vSubArguments[0]->GetFormulaToken()->GetType() ==
+    formula::svDoubleVectorRef)
     {
-        ss << "        int doubleIndex =i+gid0;\n";
-    }else
-    {
-        ss << "        int doubleIndex =i;\n";
+        paraOneIsDoubleVector = 1;
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::DoubleVectorRefToken*pCurDVR0= dynamic_cast<const
+            formula::DoubleVectorRefToken *>(tmpCur0);
+        paraOneWidth = pCurDVR0->GetArrays().size();
+        loopTimes = paraOneWidth;
+        if(paraOneWidth > 1)
+        {
+            throw Unhandled();
+        } 
     }
-    ss << "        int singleIndex =gid0;\n";
-    CheckSubArgumentIsNan(ss,vSubArguments,0);
-    CheckSubArgumentIsNan(ss,vSubArguments,1);
-    ss << "        if ( isequal( tmp0 , tmp1 ) ) \n";
-    ss << "        {";
-    if(vSubArguments.size() == 2)
-        ss << "            tmp += tmp0;\n";
-    else
+
+    if(vSubArguments[paraOneWidth]->GetFormulaToken()->GetType() ==
+     formula::svDoubleVectorRef)
+ 
     {
-        CheckSubArgumentIsNan(ss,vSubArguments,2);
-        ss << "            tmp += tmp2;\n";
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::DoubleVectorRefToken*pCurDVR1= dynamic_cast<const
+            formula::DoubleVectorRefToken *>(tmpCur1);
+        paraTwoWidth = pCurDVR1->GetArrays().size();
+        if(paraTwoWidth > 1)
+        {
+            throw Unhandled();
+        }
+        ss << "    i = ";
+        if (!pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed()) {
+            ss << "gid0;\n";
+        } else {
+            ss << "0;\n";
+        }
+        if(!pCurDVR1->IsStartFixed() && !pCurDVR1->IsEndFixed())
+        {
+            ss << "        doubleIndex =i+gid0;\n";
+        }else
+        {
+            ss << "        doubleIndex =i;\n";
+        }
     }
-    ss << "            count+=1.0;\n";
-    ss << "        }\n";
-    ss << "    }\n";
+
+    CheckSubArgumentIsNan(ss,vSubArguments,paraOneWidth);
+
+    unsigned paraThreeIndex = paraOneWidth + paraTwoWidth;
+    if(vSubArguments.size() > paraThreeIndex)
+    {
+        if(vSubArguments[paraThreeIndex]->GetFormulaToken()->GetType() ==
+        formula::svDoubleVectorRef)
+        {
+            FormulaToken *tmpCur2 =
+            vSubArguments[paraThreeIndex]->GetFormulaToken();
+            const formula::DoubleVectorRefToken*pCurDVR2= dynamic_cast<const
+                formula::DoubleVectorRefToken *>(tmpCur2);
+            paraThreeWidth = pCurDVR2->GetArrays().size();
+             if(paraThreeWidth > 1)
+            {
+                throw Unhandled();
+            }
+        }
+    }
+
+    if(paraOneIsDoubleVector)
+    {
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::DoubleVectorRefToken*pCurDVR0= dynamic_cast<const
+            formula::DoubleVectorRefToken *>(tmpCur0);
+        size_t nCurWindowSize = pCurDVR0->GetArrayLength() <
+            pCurDVR0->GetRefRowSize() ? pCurDVR0->GetArrayLength():
+            pCurDVR0->GetRefRowSize() ;
+
+        for(loopIndex =0; loopIndex < loopTimes; loopIndex++)
+        {
+            ss << "    for (i = ";
+            if (!pCurDVR0->IsStartFixed() && pCurDVR0->IsEndFixed()) {
+                ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n";
+            } else if (pCurDVR0->IsStartFixed() && !pCurDVR0->IsEndFixed()) {
+                ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n";
+            } else {
+                ss << "0; i < "<< nCurWindowSize <<"; i++)\n";
+            }
+            ss << "    {\n";
+            if(!pCurDVR0->IsStartFixed() && !pCurDVR0->IsEndFixed())
+            {
+                ss << "        doubleIndex =i+gid0;\n";
+            }else
+            {
+                ss << "        doubleIndex =i;\n";
+            }
+
+            CheckSubArgumentIsNan(ss,vSubArguments, loopIndex);
+
+            ss << "        if ( isequal( tmp";
+            ss << loopIndex<<" , tmp"<<paraOneWidth<<") ) \n";
+            ss << "        {\n";
+            if(vSubArguments.size() == paraThreeIndex)
+                ss << "            tmp += tmp"<<loopIndex<<";\n";
+            else
+            {
+                CheckSubArgumentIsNan(ss,vSubArguments,
+                paraThreeIndex+loopIndex);
+                ss << "            tmp += tmp";
+                ss << paraThreeIndex+loopIndex<<";\n";
+            }
+            ss << "            count+=1.0;\n";
+            ss << "        }\n";
+            ss << "    }\n";
+        }
+    }
+      else
+    {
+        CheckSubArgumentIsNan(ss,vSubArguments, 0);
+        ss << "        if ( isequal( tmp0 , tmp1 ) ) \n";
+        ss << "        {\n";
+        if(vSubArguments.size() == 2)
+            ss << "            tmp += tmp0;\n";
+        else
+        {
+            CheckSubArgumentIsNan(ss,vSubArguments,2);
+            ss << "            tmp += tmp2;\n";
+        }
+        ss << "            count+=1.0;\n";
+        ss << "        }\n";
+    }
+  
     ss << "    if(count!=0)\n";
     ss << "        tmp=tmp/count;\n";
     ss << "    else\n";
