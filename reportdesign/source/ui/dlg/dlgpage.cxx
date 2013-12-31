@@ -61,9 +61,6 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
             AddTabPage(RID_PAGE_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), 0 );
 
             break;
-        case RID_PAGEDIALOG_LINE:
-            AddTabPage( RID_SVXPAGE_LINE,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), 0 );
-            break;
         default:
             OSL_FAIL("Unknown page id");
     }
