@@ -2148,7 +2148,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
 {
-        xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
     if (!pXmlDoc)
         return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
@@ -2173,6 +2173,14 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     // This resulted in lang::IndexOutOfBoundsException, as nested groupshapes weren't handled.
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
 }
 
 #endif
