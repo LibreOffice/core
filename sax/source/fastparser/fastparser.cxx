@@ -1088,7 +1088,7 @@ void FastSaxParserImpl::pushEntity( const Entity& rEntity )
 void FastSaxParserImpl::popEntity()
 {
     maEntities.pop();
-    mpTop = &maEntities.top();
+    mpTop = !maEntities.empty() ? &maEntities.top() : NULL;
 }
 
 // starts parsing with actual parser !
