@@ -4571,11 +4571,11 @@ void OpYielddisc::GenSlidingWindowFunction(
  void OpTbillprice::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(GetYearFracDecl);decls.insert(GetNullDateDecl);
+    decls.insert(GetYearFracDecl);
     decls.insert(DateToDaysDecl);decls.insert(DaysToDateDecl);
     decls.insert(DaysInMonthDecl);decls.insert(IsLeapYearDecl);
 
-    funs.insert(GetYearFrac);funs.insert(GetNullDate);
+    funs.insert(GetYearFrac);
     funs.insert(DateToDays);funs.insert(DaysToDate);
     funs.insert(DaysInMonth);funs.insert(IsLeapYear);
 }
@@ -4591,75 +4591,20 @@ void OpTbillprice::GenSlidingWindowFunction(
             ss << ",";
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
-    ss << ") {\n\t";
-    ss << "int gid0 = get_global_id(0);\n\t";
-    ss << "double tmp = 0;\n\t";
-    ss << "double tmp000;\n\t";
-    ss << "double tmp001;\n\t";
-    ss << "double tmp002;\n\t";
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+    ss << "    double tmp = 0;\n";
 
+    ss << "    int singleIndex = gid0;\n";
+    ss << "    int doubleIndex = gid0;\n";
+    ss << "    int i = gid0;\n";
+    GenTmpVariables(ss,vSubArguments);
+    CheckAllSubArgumentIsNan(ss,vSubArguments);
 
-
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur0);
-
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur1);
-
-    FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
-    formula::SingleVectorRefToken *>(tmpCur2);
-
-    ss<< "int buffer_tmp000_len = ";
-    ss<< tmpCurDVR0->GetArrayLength();
-    ss << ";\n\t";
-
-    ss<< "int buffer_tmp001_len = ";
-    ss<< tmpCurDVR1->GetArrayLength();
-    ss << ";\n\t";
-
-    ss<< "int buffer_tmp002_len = ";
-    ss<< tmpCurDVR2->GetArrayLength();
-    ss << ";\n\t";
-#endif
-
-#ifdef ISNAN
-    ss<<"if(gid0>=buffer_tmp000_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"tmp000 = 0;\n\telse \n\t\t";
-#endif
-    ss<<"tmp000 = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-
-#ifdef ISNAN
-    ss<<"if(gid0>=buffer_tmp001_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"tmp001 = 0;\n\telse \n\t\t";
-#endif
-    ss<<"tmp001 = ";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-
-#ifdef ISNAN
-    ss<<"if(gid0>=buffer_tmp002_len || isNan(";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<"))\n\t\t";
-    ss<<"tmp002 = 0;\n\telse \n\t\t";
-#endif
-    ss<<"tmp002 = ";
-    ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss<<";\n\t";
-
-    ss<<"tmp001+=1.0;\n";
-    ss<<"double  fFraction =GetYearFrac(GetNullDate(),tmp000,tmp001,0);\n";
-    ss<<"tmp = 100.0 * ( 1.0 - tmp002 * fFraction );\n";
-    ss << "return tmp;\n";
+    ss << "    tmp1+=1.0;\n";
+    ss << "    double  fFraction =GetYearFrac(693594,tmp0,tmp1,0);\n";
+    ss << "    tmp = 100.0 * ( 1.0 - tmp2 * fFraction );\n";
+    ss << "    return tmp;\n";
     ss << "}\n";
 }
  void RATE::BinInlineFun(std::set<std::string>& decls,
