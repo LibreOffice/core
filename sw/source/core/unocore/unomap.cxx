@@ -1414,6 +1414,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_LEVEL), WID_LEVEL                               ,  cppu::UnoType<sal_Int16>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS), WID_HIDE_TABLEADER_PAGENUMBERS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_TAB_IN_TOC), WID_TAB_IN_TOC, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_CREATE_FROM_OUTLINE), WID_CREATE_FROM_OUTLINE                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
@@ -1451,6 +1452,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     _BASE_INDEX_PROPERTIES_
                     { OUString(UNO_NAME_CREATE_FROM_MARKS), WID_CREATE_FROM_MARKS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_HIDE_TAB_LEADER_AND_PAGE_NUMBERS), WID_HIDE_TABLEADER_PAGENUMBERS                   ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
+                    { OUString(UNO_NAME_TAB_IN_TOC), WID_TAB_IN_TOC, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_CREATE_FROM_CHAPTER), WID_CREATE_FROM_CHAPTER                 ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_IS_PROTECTED), WID_PROTECTED                           ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_USE_LEVEL_FROM_SOURCE), WID_USE_LEVEL_FROM_SOURCE               ,  cppu::UnoType<bool>::get()  , PROPERTY_NONE,     0},

@@ -2696,6 +2696,7 @@ void DomainMapper_Impl::handleToc
     bool bFromOutline = false;
     bool bFromEntries = false;
     bool bHideTabLeaderPageNumbers = false ;
+    bool bIsTabEntry = false ;
 
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
@@ -2780,11 +2781,11 @@ void DomainMapper_Impl::handleToc
         bFromOutline = true;
                         //todo: what doesn 'the applied paragraph outline level' refer to?
     }
-//                  \w Preserve tab characters within table entries
-//                    if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
-//                    {
-                        //todo: not supported
-//                    }
+//    \w Preserve tab characters within table entries
+     if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
+     {
+         bIsTabEntry = true ;
+     }
 //                  \x Preserve newline characters within table entries
 //                    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
 //                    {
@@ -2816,6 +2817,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS ), uno::makeAny( bHideTabLeaderPageNumbers ));
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TAB_IN_TOC ), uno::makeAny( bIsTabEntry ));
         if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels
