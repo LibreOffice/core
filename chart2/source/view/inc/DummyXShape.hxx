@@ -420,6 +420,8 @@ public:
     virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
 
+    virtual void render() SAL_OVERRIDE;
+
 private:
 
     GLWindow GLWin;    /// Holds the information of our new child window

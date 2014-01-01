@@ -1047,6 +1047,13 @@ void DummyChart::setSize( const awt::Size& aSize )
 
 }
 
+void DummyChart::render()
+{
+    m_GLRender.prepareToRender();
+    DummyXShapes::render();
+    m_GLRender.renderToBitmap();
+}
+
 }
 
 }
