@@ -19,4 +19,6 @@ else
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.2))
 endif
 
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/firebird.msg,gen/firebird/firebird.msg))
+
 # vim: set noet sw=4 ts=4:

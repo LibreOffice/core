@@ -33,4 +33,10 @@ File gid_File_Firebird_Lib
   #endif
 End
 
+File gid_File_Firebird_Msg
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_LIB_DIR;
+    Name = "firebird.msg";
+End
 #endif
