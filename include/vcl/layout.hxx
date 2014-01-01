@@ -693,6 +693,8 @@ class VCL_DLLPUBLIC MessageDialog : public Dialog
 private:
     VclButtonsType m_eButtonsType;
     VclMessageType m_eMessageType;
+    VclBox *m_pOwnedContentArea;
+    VclButtonBox *m_pOwnedActionArea;
     VclGrid* m_pGrid;
     FixedImage* m_pImage;
     VclMultiLineEdit* m_pPrimaryMessage;
@@ -704,14 +706,15 @@ private:
     DECL_DLLPRIVATE_LINK(ButtonHdl, Button *);
     void setButtonHandlers(VclButtonBox *pButtonBox);
     short get_response(const Window *pWindow) const;
+    void create_owned_areas();
 public:
 
     MessageDialog(Window* pParent,
         const OUString &rMessage,
         VclMessageType eMessageType = VCL_MESSAGE_ERROR,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
-        WinBits nStyle = WB_CLIPCHILDREN | WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
-    MessageDialog(Window* pParent, WinBits nStyle = WB_CLIPCHILDREN);
+        WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
+    MessageDialog(Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
     MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue);
     virtual short Execute();

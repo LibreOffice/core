@@ -1897,6 +1897,17 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void MessageDialog::create_owned_areas()
+{
+    set_border_width(12);
+    m_pOwnedContentArea = new VclVBox(this, false, 24);
+    set_content_area(m_pOwnedContentArea);
+    m_pOwnedContentArea->Show();
+    m_pOwnedActionArea = new VclHButtonBox(m_pOwnedContentArea);
+    set_action_area(m_pOwnedActionArea);
+    m_pOwnedActionArea->Show();
+}
+
 MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
     , m_eButtonsType(VCL_BUTTONS_NONE)
@@ -1907,6 +1918,7 @@ MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     , m_pSecondaryMessage(NULL)
 {
     SetType(WINDOW_MESSBOX);
+    create_owned_areas();
 }
 
 MessageDialog::MessageDialog(Window* pParent,
@@ -1924,12 +1936,15 @@ MessageDialog::MessageDialog(Window* pParent,
     , m_sPrimaryString(rMessage)
 {
     SetType(WINDOW_MESSBOX);
+    create_owned_areas();
 }
 
 MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
+    , m_pOwnedContentArea(NULL)
+    , m_pOwnedActionArea(NULL)
     , m_pGrid(NULL)
     , m_pImage(NULL)
     , m_pPrimaryMessage(NULL)
@@ -1945,6 +1960,8 @@ MessageDialog::~MessageDialog()
     delete m_pPrimaryMessage;
     delete m_pImage;
     delete m_pGrid;
+    delete m_pOwnedActionArea;
+    delete m_pOwnedContentArea;
 }
 
 void MessageDialog::response(short nResponseId)
@@ -2085,6 +2102,7 @@ short MessageDialog::Execute()
 
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
+
         PushButton *pBtn;
         switch (m_eButtonsType)
         {
@@ -2140,7 +2158,6 @@ short MessageDialog::Execute()
         setButtonHandlers(pButtonBox);
         pButtonBox->sort_native_button_order();
         m_pGrid->Show();
-
     }
     return Dialog::Execute();
 }
