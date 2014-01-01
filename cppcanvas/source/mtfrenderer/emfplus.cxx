@@ -786,7 +786,7 @@ namespace cppcanvas
                     SAL_INFO ("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct\n");
                 }
 #endif
-                rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX());
+                rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getLength());
             }
 
             void SetStrokeDashing(rendering::StrokeAttributes& rStrokeAttributes)
