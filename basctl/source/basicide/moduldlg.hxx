@@ -91,7 +91,7 @@ private:
 public:
     ExportDialog( Window * pParent );
 
-    bool isExportAsPackage () { return mbExportAsPackage; }
+    bool isExportAsPackage () const { return mbExportAsPackage; }
 };
 
 
