@@ -1195,7 +1195,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
             case( MN_DELETE ):
             {
                 if( !mpCurTheme->IsReadOnly() &&
-                    QueryBox(NULL, WB_YES_NO, GAL_RESSTR(RID_SVXSTR_GALLERY_DELETEOBJ)).Execute() == RET_YES )
+                    MessageDialog(NULL, "QueryDeleteObjectDialog","svx/ui/querydeleteobjectdialog.ui").Execute() == RET_YES )
                 {
                     mpCurTheme->RemoveObject( mnCurActionPos );
                 }

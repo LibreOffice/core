@@ -373,7 +373,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
         case( MN_DELETE  ):
         {
-            if( QueryBox( NULL, WB_YES_NO, GAL_RESSTR(RID_SVXSTR_GALLERY_DELETETHEME)).Execute() == RET_YES )
+            if( MessageDialog( NULL, "QueryDeleteThemeDialog","svx/ui/querydeletethemedialog.ui").Execute() == RET_YES )
                 mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
         }
         break;
