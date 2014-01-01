@@ -38,11 +38,12 @@
 
 using namespace ::basegfx;
 
+extern double getRandomOrdinal( const ::std::size_t n );
 
 namespace basegfx2d
 {
 /// Gets a random ordinal [0,n)
-inline double getRandomOrdinal( const ::std::size_t n )
+double getRandomOrdinal( const ::std::size_t n )
 {
     // use this one when displaying polygons in OOo, which still sucks
     // great rocks when trying to import non-integer svg:d attributes

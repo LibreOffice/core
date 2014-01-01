@@ -30,6 +30,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/range/b1drange.hxx>
@@ -51,6 +52,7 @@ using namespace ::basegfx;
 
 namespace basegfx2d
 {
+    extern double getRandomOrdinal( const ::std::size_t n );
 
 class b2dsvgdimpex : public CppUnit::TestFixture
 {
@@ -858,13 +860,39 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygontools
 
-
 class b2dpolypolygon : public CppUnit::TestFixture
 {
 public:
     // insert your test code here.
-    void EmptyMethod()
+    void testTrapezoidHelper()
     {
+        B2DPolygon aPolygon;
+        // provoke the PointBlockAllocator to exercise the freeIfLast path
+        for(int i = 0; i < 16 * 10; i++)
+        {
+            B2DPoint aPoint(getRandomOrdinal(1000), getRandomOrdinal(1000));
+            aPolygon.append(aPoint);
+        }
+        // scatter some duplicate points in to stress things more.
+        for(int i = 0; i < 16 * 10; i++)
+        {
+            aPolygon.insert(getRandomOrdinal(aPolygon.count() - 1),
+                            aPolygon.getB2DPoint(getRandomOrdinal(aPolygon.count() - 1)));
+        }
+        B2DPolygon aPolygonOffset;
+        // duplicate the polygon and offset it slightly.
+        for(size_t i = 0; i < aPolygon.count(); i++)
+        {
+            B2DPoint aPoint(aPolygon.getB2DPoint(i));
+            aPoint += B2DPoint(0.5-getRandomOrdinal(1),0.5-getRandomOrdinal(1));
+        }
+        B2DPolyPolygon aPolyPolygon;
+        aPolyPolygon.append(aPolygon);
+        aPolyPolygon.append(aPolygonOffset);
+        B2DTrapezoidVector aVector;
+        basegfx::tools::trapezoidSubdivide(aVector, aPolyPolygon);
+        CPPUNIT_ASSERT_MESSAGE("more than zero sub-divided trapezoids",
+                               aVector.size() > 0);
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -872,7 +900,7 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolypolygon);
-    CPPUNIT_TEST(EmptyMethod);
+    CPPUNIT_TEST(testTrapezoidHelper);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolypolygon
 

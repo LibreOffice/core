@@ -193,6 +193,60 @@ namespace basegfx
 {
     namespace trapezoidhelper
     {
+        // FIXME: templatize this and use it for TrDeEdgeEntries too ...
+
+        /// Class to allow efficient allocation and release of B2DPoints
+        class PointBlockAllocator
+        {
+            static const int nBlockSize = 32;
+            size_t nCurPoint;
+            B2DPoint *mpPointBase;
+            /// Special case the first allocation to avoid it.
+            B2DPoint maFirstStackBlock[nBlockSize];
+            std::vector< B2DPoint * > maBlocks;
+        public:
+            PointBlockAllocator() :
+                nCurPoint( nBlockSize ),
+                mpPointBase( maFirstStackBlock )
+            {
+            }
+
+            ~PointBlockAllocator()
+            {
+                while(maBlocks.size() > 0)
+                {
+                    delete [] maBlocks.back();
+                    maBlocks.pop_back();
+                }
+            }
+
+            B2DPoint *allocatePoint()
+            {
+                if(nCurPoint >= nBlockSize)
+                {
+                    mpPointBase = new B2DPoint[nBlockSize];
+                    maBlocks.push_back(mpPointBase);
+                    nCurPoint = 0;
+                }
+                return mpPointBase + nCurPoint++;
+            }
+
+            B2DPoint *allocatePoint(const B2DTuple &rPoint)
+            {
+                B2DPoint *pPoint = allocatePoint();
+                *pPoint = rPoint;
+                return pPoint;
+            }
+
+            /// This is a very uncommon case but why not ...
+            void freeIfLast(B2DPoint *pPoint)
+            {
+                // just re-use the last point if we can.
+                if ( nCurPoint > 0 && pPoint == mpPointBase + nCurPoint - 1 )
+                    nCurPoint--;
+            }
+        };
+
         // helper class to handle the complete trapezoid subdivision of a PolyPolygon
         class TrapezoidSubdivider
         {
@@ -201,7 +255,8 @@ namespace basegfx
             sal_uInt32                  mnInitialEdgeEntryCount;
             TrDeEdgeEntries             maTrDeEdgeEntries;
             ::std::vector< B2DPoint >   maPoints;
-            ::std::vector< B2DPoint* >  maNewPoints;
+            /// new points allocated for cuts
+            PointBlockAllocator         maNewPoints;
 
             void addEdgeSorted(
                 TrDeEdgeEntries::iterator aCurrent,
@@ -349,22 +404,16 @@ namespace basegfx
                     const double fSimpleLengthB(aDeltaB.getX() + aDeltaB.getY());
                     const bool bAIsLonger(fSimpleLengthA > fSimpleLengthB);
                     B2DPoint* pNewPoint = bAIsLonger
-                        ? new B2DPoint(aEdgeA.getStart() + (fCutA * aDeltaA))
-                        : new B2DPoint(aEdgeB.getStart() + (fCutB * aDeltaB));
-                    bool bRetval(false);
+                        ? maNewPoints.allocatePoint(aEdgeA.getStart() + (fCutA * aDeltaA))
+                        : maNewPoints.allocatePoint(aEdgeB.getStart() + (fCutB * aDeltaB));
+                    bool bRetval = false;
 
                     // try to split both edges
                     bRetval = splitEdgeAtGivenPoint(aEdgeA, *pNewPoint, aCurrent);
                     bRetval |= splitEdgeAtGivenPoint(aEdgeB, *pNewPoint, aCurrent);
 
-                    if(bRetval)
-                    {
-                        maNewPoints.push_back(pNewPoint);
-                    }
-                    else
-                    {
-                        delete pNewPoint;
-                    }
+                    if(!bRetval)
+                        maNewPoints.freeIfLast(pNewPoint);
 
                     return bRetval;
                 }
@@ -419,16 +468,12 @@ namespace basegfx
                                 if(fTools::more(aSplit.getX(), aRange.getMinimum())
                                     && fTools::less(aSplit.getX(), aRange.getMaximum()))
                                 {
-                                    // cut is in XRange of horizontal edge, potenitally needed cut
-                                    B2DPoint* pNewPoint = new B2DPoint(aSplit);
+                                    // cut is in XRange of horizontal edge, potentially needed cut
+                                    B2DPoint* pNewPoint = maNewPoints.allocatePoint(aSplit);
 
-                                    if(splitEdgeAtGivenPoint(aCompare, *pNewPoint, aCurrent))
+                                    if(!splitEdgeAtGivenPoint(aCompare, *pNewPoint, aCurrent))
                                     {
-                                        maNewPoints.push_back(pNewPoint);
-                                    }
-                                    else
-                                    {
-                                        delete pNewPoint;
+                                        maNewPoints.freeIfLast(pNewPoint);
                                     }
                                 }
                             }
@@ -551,17 +596,6 @@ namespace basegfx
                 }
             }
 
-            ~TrapezoidSubdivider()
-            {
-                // delete the extra points created for cuts
-                const sal_uInt32 nCount(maNewPoints.size());
-
-                for(sal_uInt32 a(0); a < nCount; a++)
-                {
-                    delete maNewPoints[a];
-                }
-            }
-
             void Subdivide(B2DTrapezoidVector& ro_Result)
             {
                 // This is the central subdivider. The strategy is to use the first two entries
@@ -671,28 +705,20 @@ namespace basegfx
                         {
                             if(bLeftIsLonger)
                             {
-                                B2DPoint* pNewPoint = new B2DPoint(aLeftEnd);
+                                B2DPoint* pNewPoint = maNewPoints.allocatePoint(aLeftEnd);
 
-                                if(splitEdgeAtGivenPoint(aLeft, *pNewPoint, aCurrent))
+                                if(!splitEdgeAtGivenPoint(aLeft, *pNewPoint, aCurrent))
                                 {
-                                    maNewPoints.push_back(pNewPoint);
-                                }
-                                else
-                                {
-                                    delete pNewPoint;
+                                    maNewPoints.freeIfLast(pNewPoint);
                                 }
                             }
                             else
                             {
-                                B2DPoint* pNewPoint = new B2DPoint(aRightEnd);
+                                B2DPoint* pNewPoint = maNewPoints.allocatePoint(aRightEnd);
 
-                                if(splitEdgeAtGivenPoint(aRight, *pNewPoint, aCurrent))
+                                if(!splitEdgeAtGivenPoint(aRight, *pNewPoint, aCurrent))
                                 {
-                                    maNewPoints.push_back(pNewPoint);
-                                }
-                                else
-                                {
-                                    delete pNewPoint;
+                                    maNewPoints.freeIfLast(pNewPoint);
                                 }
                             }
                         }
@@ -780,28 +806,26 @@ namespace basegfx
                                         aCompare.getStart().getX() <= aSplitRight.getX())
                                     {
                                         // is inside, correct and restart loop
-                                        B2DPoint* pNewLeft = new B2DPoint(aSplitLeft);
+                                        B2DPoint* pNewLeft = maNewPoints.allocatePoint(aSplitLeft);
 
                                         if(splitEdgeAtGivenPoint(aLeft, *pNewLeft, aCurrent))
                                         {
-                                            maNewPoints.push_back(pNewLeft);
                                             bDone = true;
                                         }
                                         else
                                         {
-                                            delete pNewLeft;
+                                            maNewPoints.freeIfLast(pNewLeft);
                                         }
 
-                                        B2DPoint* pNewRight = new B2DPoint(aSplitRight);
+                                        B2DPoint* pNewRight = maNewPoints.allocatePoint(aSplitRight);
 
                                         if(splitEdgeAtGivenPoint(aRight, *pNewRight, aCurrent))
                                         {
-                                            maNewPoints.push_back(pNewRight);
                                             bDone = true;
                                         }
                                         else
                                         {
-                                            delete pNewRight;
+                                            maNewPoints.freeIfLast(pNewRight);
                                         }
                                     }
                                 }
@@ -837,28 +861,20 @@ namespace basegfx
                     {
                         if(bLeftIsLonger)
                         {
-                            B2DPoint* pNewPoint = new B2DPoint(aLeftEnd);
+                            B2DPoint* pNewPoint = maNewPoints.allocatePoint(aLeftEnd);
 
-                            if(splitEdgeAtGivenPoint(aLeft, *pNewPoint, aCurrent))
+                            if(!splitEdgeAtGivenPoint(aLeft, *pNewPoint, aCurrent))
                             {
-                                maNewPoints.push_back(pNewPoint);
-                            }
-                            else
-                            {
-                                delete pNewPoint;
+                                maNewPoints.freeIfLast(pNewPoint);
                             }
                         }
                         else
                         {
-                            B2DPoint* pNewPoint = new B2DPoint(aRightEnd);
+                            B2DPoint* pNewPoint = maNewPoints.allocatePoint(aRightEnd);
 
-                            if(splitEdgeAtGivenPoint(aRight, *pNewPoint, aCurrent))
+                            if(!splitEdgeAtGivenPoint(aRight, *pNewPoint, aCurrent))
                             {
-                                maNewPoints.push_back(pNewPoint);
-                            }
-                            else
-                            {
-                                delete pNewPoint;
+                                maNewPoints.freeIfLast(pNewPoint);
                             }
                         }
                     }
