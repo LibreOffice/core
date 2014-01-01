@@ -983,7 +983,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
     {
         aLastFilterName = aText;
 
-        if( QueryBox( this, WB_YES_NO, OUString( CUI_RES( RID_SVXSTR_GALLERY_SEARCH ) ) ).Execute() == RET_YES )
+        if( MessageDialog( this, "QueryUpdateFileListDialog","cui/ui/queryupdategalleryfilelistdialog.ui" ).Execute() == RET_YES )
             SearchFiles();
     }
 

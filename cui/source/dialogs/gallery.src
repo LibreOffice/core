@@ -257,10 +257,6 @@ String RID_SVXSTR_GALLERY_NOFILES
 {
     Text [ en-US ] = "<No Files>" ;
 };
-String RID_SVXSTR_GALLERY_SEARCH
-{
-    Text [ en-US ] = "Do you want to update the file list?" ;
-};
 String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
     Text [ en-US ] = "Object;Objects" ;
