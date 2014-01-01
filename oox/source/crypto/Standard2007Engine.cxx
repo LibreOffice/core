@@ -129,7 +129,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     // data = iterator (4bytes) + hash
     vector<sal_uInt8> data(RTL_DIGEST_LENGTH_SHA1 + 4, 0);
 
-    for (int i = 0; i < 50000; i++)
+    for (sal_Int32 i = 0; i < 50000; ++i)
     {
         ByteOrderConverter::writeLittleEndian( &data[0], i );
         std::copy(hash.begin(), hash.end(), data.begin() + 4);

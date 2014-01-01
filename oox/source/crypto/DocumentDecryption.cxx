@@ -287,9 +287,22 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     if( (nHeaderSize < actualHeaderSize) )
         return false;
 
-    rStream >> info.header;
+    rStream >> info.header.flags;
+    rStream >> info.header.sizeExtra;
+    rStream >> info.header.algId;
+    rStream >> info.header.algIdHash;
+    rStream >> info.header.keyBits;
+    rStream >> info.header.providedType;
+    rStream >> info.header.reserved1;
+    rStream >> info.header.reserved2;
+
     rStream.skip( nHeaderSize - actualHeaderSize );
-    rStream >> info.verifier;
+
+    rStream >> info.verifier.saltSize;
+    rStream.readArray(info.verifier.salt, SAL_N_ELEMENTS(info.verifier.salt));
+    rStream.readArray(info.verifier.encryptedVerifier, SAL_N_ELEMENTS(info.verifier.encryptedVerifier));
+    rStream >> info.verifier.encryptedVerifierHashSize;
+    rStream.readArray(info.verifier.encryptedVerifierHash, SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash));
 
     if( info.verifier.saltSize != 16 )
         return false;
