@@ -198,7 +198,7 @@ namespace basegfx
         /// Class to allow efficient allocation and release of B2DPoints
         class PointBlockAllocator
         {
-            static const int nBlockSize = 32;
+            static const size_t nBlockSize = 32;
             size_t nCurPoint;
             B2DPoint *mpPointBase;
             /// Special case the first allocation to avoid it.
