@@ -25,7 +25,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <editeng/unoprnms.hxx>
 
-
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -35,6 +34,23 @@ using namespace std;
 namespace chart {
 
 namespace dummy {
+
+namespace {
+
+struct PrintProperties
+{
+    void operator()(const std::pair<OUString, uno::Any>& rProp)
+    {
+        SAL_WARN("chart2.opengl", "Property: " << rProp.first);
+    }
+};
+
+void debugProperties(std::map<OUString, uno::Any>& rProperties)
+{
+    for_each(rProperties.begin(), rProperties.end(), PrintProperties());
+}
+
+}
 
 DummyXShape::DummyXShape():
     mpParent(NULL)
@@ -355,6 +371,7 @@ DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
 
 void DummyCircle::render()
 {
+    debugProperties(maProperties);
     long color = 0x3465AF;
     DummyChart* pChart = getRootShape();
     pChart->m_GLRender.SetColor(color);
