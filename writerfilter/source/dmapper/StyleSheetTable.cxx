@@ -455,18 +455,10 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         case NS_rtf::LN_UNUSED8_3:
             //noone seems to care about it
         break;
-        case NS_rtf::LN_XSTZNAME:
-            m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
-            if (!m_pImpl->m_pCurrentEntry->sStyleIdentifierI.isEmpty())
-                m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
-        break;
         case NS_rtf::LN_XSTZNAME1:
             m_pImpl->m_pCurrentEntry->sStyleName = sValue;
             if (!m_pImpl->m_pCurrentEntry->sStyleIdentifierI.isEmpty())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
-        break;
-        case NS_rtf::LN_UPX:
-            resolveAttributeProperties(val);
         break;
         case NS_ooxml::LN_CT_Style_type:
         {
@@ -1507,14 +1499,6 @@ OUString StyleSheetTable::GetStyleIdFromIndex(const sal_uInt32 sti)
         sRet = OUString::createFromAscii(aStyleNamePairs[2 * sti]);
     return sRet;
 }
-
-void StyleSheetTable::resolveAttributeProperties(Value & val)
-{
-    writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
-    if( pProperties.get())
-        pProperties->resolve(*this);
-}
-
 
 void StyleSheetTable::applyDefaults(bool bParaProperties)
 {

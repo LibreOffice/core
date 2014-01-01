@@ -117,7 +117,6 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
-    void resolveAttributeProperties(Value & val);
     void applyDefaults(bool bParaProperties);
 };
 typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;

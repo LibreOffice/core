@@ -1036,7 +1036,7 @@ void RTFDocumentImpl::text(OUString& rString)
                         case DESTINATION_FONTENTRY:
                             {
                                 RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
-                                m_aStates.top().aTableAttributes.set(NS_rtf::LN_XSZFFN, pValue);
+                                m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Font_name, pValue);
 
                                 writerfilter::Reference<Properties>::Pointer_t const pProp(
                                         new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)

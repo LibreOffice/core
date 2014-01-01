@@ -45,7 +45,6 @@ struct FontEntry
     sal_Int32       nAltFontIndex;
     OUString sPanose;
     OUString sFontSignature;
-    OUString sAlternativeFont;
     FontEntry() :
         bTrueType(false),
         nPitchRequest( 0 ),
