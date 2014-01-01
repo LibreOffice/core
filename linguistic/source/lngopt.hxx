@@ -145,7 +145,7 @@ public:
     virtual void SAL_CALL setIsSpellCapitalization(sal_Bool p1) throw (css::uno::RuntimeException)
         { setProperty(UPN_IS_SPELL_CAPITALIZATION, p1); }
     virtual sal_Int16 SAL_CALL getHyphMinLeading() throw (css::uno::RuntimeException)
-        { return getPropertyBool(UPN_HYPH_MIN_LEADING); }
+        { return getPropertyInt16(UPN_HYPH_MIN_LEADING); }
     virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) throw (css::uno::RuntimeException)
         { setProperty(UPN_HYPH_MIN_LEADING, p1); }
     virtual sal_Int16 SAL_CALL getHyphMinTrailing() throw (css::uno::RuntimeException)
