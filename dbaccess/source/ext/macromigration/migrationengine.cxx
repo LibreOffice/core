@@ -1028,7 +1028,7 @@ namespace dbmm
                 else
                 {
                     Reference< XCommandProcessor > xCommandProcessor( aElement, UNO_QUERY );
-                    OSL_ENSURE( xCommandProcessor.is(), "lcl_collectHierarchicalElementNames_throw: no container, and no comand processor? What *is* it, then?!" );
+                    OSL_ENSURE( xCommandProcessor.is(), "lcl_collectHierarchicalElementNames_throw: no container, and no command processor? What *is* it, then?!" );
                     if ( xCommandProcessor.is() )
                     {
                         _out_rDocs.push_back( SubDocument( xCommandProcessor, sElementName, _eType, ++_io_counter ) );
