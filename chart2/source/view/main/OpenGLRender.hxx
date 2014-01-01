@@ -126,7 +126,6 @@ public:
     int InitOpenGL(GLWindow);
     int SetViewPoint(PosVeci3 camPos, PosVeci3 orgPos, int headUpFlag);
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
-    int RenderModelf(float *vertexArray, unsigned int vertexArraySize, float *colorArray, unsigned int colorArraySize);
     void SetWidth(int width);
     void SetHeight(int height);
     int GetWidth();
