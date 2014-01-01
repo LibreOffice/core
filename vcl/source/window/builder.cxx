@@ -1867,12 +1867,12 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
                                 pFrameParent->designate_label(pCurrentChild);
                         }
-                        if (sInternalChild.equals("vbox") || sInternalChild.equals("messagedialog-vbox"))
+                        if (sInternalChild.startsWith("vbox") || sInternalChild.startsWith("messagedialog-vbox"))
                         {
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
                                 pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild));
                         }
-                        else if (sInternalChild.equals("action_area") || sInternalChild.equals("messagedialog-action_area"))
+                        else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
                         {
                             Window *pContentArea = pCurrentChild->GetParent();
                             assert(pContentArea && pContentArea->GetType() == WINDOW_CONTAINER);
