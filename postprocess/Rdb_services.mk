@@ -48,7 +48,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	hwpfilter/source/hwp \
 	i18npool/source/search/i18nsearch \
 	i18npool/util/i18npool \
-	lingucomponent/source/hyphenator/altlinuxhyph/hyphen/hyphen \
+	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
 	lingucomponent/source/spellcheck/spell/spell \
 	lingucomponent/source/thesaurus/libnth/lnth \

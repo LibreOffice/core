@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,hyphen))
 
-$(eval $(call gb_Library_set_componentfile,hyphen,lingucomponent/source/hyphenator/altlinuxhyph/hyphen/hyphen))
+$(eval $(call gb_Library_set_componentfile,hyphen,lingucomponent/source/hyphenator/hyphen/hyphen))
 
 $(eval $(call gb_Library_set_include,hyphen,\
 	$$(INCLUDE) \
@@ -41,8 +41,8 @@ $(eval $(call gb_Library_use_externals,hyphen,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,hyphen,\
-	lingucomponent/source/hyphenator/altlinuxhyph/hyphen/hreg \
-	lingucomponent/source/hyphenator/altlinuxhyph/hyphen/hyphenimp \
+	lingucomponent/source/hyphenator/hyphen/hreg \
+	lingucomponent/source/hyphenator/hyphen/hyphenimp \
 ))
 
 # vim: set noet sw=4 ts=4:
