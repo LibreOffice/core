@@ -34,6 +34,8 @@ using namespace std;
 #define WGL_SAMPLES_ARB          0x2042
 #endif
 
+#define RENDER_TO_FILE 0
+
 const char *ColorFragmemtShader = OPENGL_SHADER (
 
 varying vec3 fragmentColor;
@@ -455,37 +457,8 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     return 0;
 }
 
-int OpenGLRender::RenderLine2FBO(int wholeFlag)
+int OpenGLRender::RenderLine2FBO(int)
 {
-    char fileName[256] = {0};
-    sprintf(fileName, "D:\\shaderout_%d_%d_%d.bmp", m_iWidth, m_iHeight, m_iFboIdx);
-
-    glViewport(0, 0, m_iWidth, m_iHeight);
-    glClearDepth(1.0f);
-    // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if ((!m_FboID[0]) || (!m_FboID[1]))
-    {
-        // create a texture object
-        CreateTextureObj(m_iWidth, m_iHeight);
-        //create render buffer object
-        CreateRenderObj(m_iWidth, m_iHeight);
-        //create fbo
-        if ( CreateFrameBufferObj() !=0 )
-            return -1;
-    }
-    //bind fbo
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
-
-    // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (wholeFlag)
-    {
-        if (m_iFboIdx > 0)
-        {
-           RenderTexture2FBO(m_TextureObj[(m_iFboIdx - 1) % 2]);
-        }
-    }
     glLineWidth(m_fLineWidth);
     int listNum = m_Line2DShapePointList.size();
     for (int i = 0; i < listNum; i++)
@@ -519,7 +492,49 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     m_iPointNum = 0;
     GLenum status;
     CHECK_GL_FRAME_BUFFER_STATUS();
-#if 0
+    return 0;
+}
+
+void OpenGLRender::prepareToRender()
+{
+    glViewport(0, 0, m_iWidth, m_iHeight);
+    glClearDepth(1.0f);
+    // Clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if ((!m_FboID[0]) || (!m_FboID[1]))
+    {
+        // create a texture object
+        CreateTextureObj(m_iWidth, m_iHeight);
+        //create render buffer object
+        CreateRenderObj(m_iWidth, m_iHeight);
+        //create fbo
+        CreateFrameBufferObj();
+        if (m_iArbMultisampleSupported)
+        {
+            CreateMultiSampleFrameBufObj();
+        }
+    }
+    //bind fbo
+    if (m_iArbMultisampleSupported)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER,m_frameBufferMS);
+    }
+    else
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+    }
+
+    // Clear the screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    RenderTexture2FBO(m_TextureObj[(m_iFboIdx - 1) % 2]);
+}
+
+void OpenGLRender::renderToBitmap()
+{
+#if RENDER_TO_FILE
+    char fileName[256] = {0};
+    sprintf(fileName, "D:\\shaderout_%d_%d_%d.bmp", m_iWidth, m_iHeight, m_iFboIdx);
     sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
     CreateBMPHeader(buf, m_iWidth, m_iHeight);
     glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
@@ -534,7 +549,6 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
     xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
     mxRenderTarget->setSize(awt::Size(m_iWidth, m_iHeight));
     mxRenderTarget->setPosition(awt::Point(0,0));
-
 #endif
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #if defined( WNT )
@@ -545,7 +559,7 @@ int OpenGLRender::RenderLine2FBO(int wholeFlag)
 #endif
     RenderTexture(m_TextureObj[m_iFboIdx % 2]);
     m_iFboIdx++;
-    return 0;
+
 }
 
 int OpenGLRender::RenderTexture2FBO(GLuint TexID)
@@ -964,6 +978,7 @@ int OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     return  m_iArbMultisampleSupported;
 }
 #endif
+
 int OpenGLRender::GetMSAASupport()
 {
     return m_iArbMultisampleSupported;
@@ -1015,6 +1030,7 @@ int OpenGLRender::InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATD
     }
     return 0;
 }
+
 int OpenGLRender::WGLisExtensionSupported(const char *extension)
 {
     const size_t extlen = strlen(extension);
@@ -1128,45 +1144,9 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
     return 0;
 }
 
-int OpenGLRender::RenderBubble2FBO(int wholeFlag)
+int OpenGLRender::RenderBubble2FBO(int)
 {
-    char fileName[256] = {0};
     GLenum status;
-    glViewport(0, 0, m_iWidth, m_iHeight);
-    glClearDepth(1.0f);
-    // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if ((!m_FboID[0]) || (!m_FboID[1]))
-    {
-        // create a texture object
-        CreateTextureObj(m_iWidth, m_iHeight);
-        //create render buffer object
-        CreateRenderObj(m_iWidth, m_iHeight);
-        //create fbo
-        CreateFrameBufferObj();
-        if (m_iArbMultisampleSupported)
-        {
-            CreateMultiSampleFrameBufObj();
-        }
-    }
-    //bind fbo
-    if (m_iArbMultisampleSupported)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER,m_frameBufferMS);
-    }
-    else
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
-    }
-    // Clear the screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (wholeFlag)
-    {
-        if (m_iFboIdx > 0)
-        {
-           RenderTexture2FBO(m_TextureObj[(m_iFboIdx - 1) % 2]);
-        }
-    }
     int listNum = m_Bubble2DShapePointList.size();
     for (int i = 0; i < listNum; i++)
     {
@@ -1235,30 +1215,6 @@ int OpenGLRender::RenderBubble2FBO(int wholeFlag)
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
         glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
     }
-    int wndLeft = ((int)m_fPicLeft + (m_iWidth / 2) - 1) & ~3;
-    int wndRight = ((int)m_fPicRight + (m_iWidth / 2) + 7) & ~3;
-    int wndBottom = ((int)m_fPicBottom + (m_iHeight/ 2) - 1) & ~3;
-    int wndTop = ((int)m_fPicTop + (m_iHeight/ 2) + 7) & ~3;
-    int picWidth = wndRight - wndLeft;
-    int picHeight = wndTop - wndBottom;
-    sprintf(fileName, "D:\\shaderout_%d_%d_%d.bmp", picWidth, picHeight, m_iFboIdx);
-    sal_uInt8 *buf = (sal_uInt8 *)malloc(picWidth * picHeight * 3 + BMP_HEADER_LEN);
-    CreateBMPHeader(buf, picWidth, picHeight);
-    glReadPixels(wndLeft, wndBottom, picWidth, picHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
-    FILE *pfile = fopen(fileName,"wb");
-    fwrite(buf, picWidth * picHeight * 3 + BMP_HEADER_LEN, 1, pfile);
-    free(buf);
-    fclose(pfile);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-#if defined( WNT )
-    SwapBuffers(glWin.hDC);
-    glFlush();
-#elif defined( UNX )
-    unx::glXSwapBuffers(glWin.dpy, glWin.win);
-#endif
-//    RenderTexture(m_TextureObj[m_iFboIdx % 2]);
-    m_iFboIdx++;
     return 0;
 }
 

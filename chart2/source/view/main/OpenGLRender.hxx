@@ -145,6 +145,9 @@ public:
     void SetColor(sal_uInt32 color);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
     int RenderBubble2FBO(int wholeFlag);
+
+    void prepareToRender();
+    void renderToBitmap();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
