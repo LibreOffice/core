@@ -32,6 +32,7 @@
 #include "connectionsfragment.hxx"
 #include "externallinkbuffer.hxx"
 #include "externallinkfragment.hxx"
+#include "formulabuffer.hxx"
 #include "pivotcachebuffer.hxx"
 #include "sharedstringsbuffer.hxx"
 #include "sharedstringsfragment.hxx"
@@ -299,7 +300,7 @@ public:
     }
 };
 
-void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
+static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
     sal_Int32 nThreads = std::min( rSheets.size(), (size_t) 4 /* FIXME: ncpus/2 */ );
 
@@ -458,6 +459,9 @@ void WorkbookFragment::finalizeImport()
             }
         }
     }
+
+    // setup structure sizes for the number of sheets
+    getFormulaBuffer().SetSheetCount( aSheetFragments.size() );
 
     // create all defined names and database ranges
     getDefinedNames().finalizeImport();

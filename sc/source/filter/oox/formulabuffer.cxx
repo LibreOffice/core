@@ -335,6 +335,15 @@ FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( 
 {
 }
 
+void FormulaBuffer::SetSheetCount( SCTAB nSheets )
+{
+    maCellFormulas.resize( nSheets );
+    maCellArrayFormulas.resize( nSheets );
+    maSharedFormulas.resize( nSheets );
+    maSharedFormulaIds.resize( nSheets );
+    maCellFormulaValues.resize( nSheets );
+}
+
 void FormulaBuffer::finalizeImport()
 {
     ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
@@ -401,35 +410,24 @@ FormulaBuffer::SheetItem FormulaBuffer::getSheetItem( SCTAB nTab )
     osl::MutexGuard aGuard(&maMtxData);
 
     SheetItem aItem;
+
+    if( (size_t) nTab >= maCellFormulas.size() )
     {
-        FormulaDataMap::iterator it = maCellFormulas.find(nTab);
-        if (it != maCellFormulas.end())
-            aItem.mpCellFormulas = &it->second;
+        SAL_WARN( "sc", "Tab " << nTab << " out of bounds " << maCellFormulas.size() );
+        return aItem;
     }
 
-    {
-        ArrayFormulaDataMap::iterator it = maCellArrayFormulas.find(nTab);
-        if (it != maCellArrayFormulas.end())
-            aItem.mpArrayFormulas = &it->second;
-    }
+    if( maCellFormulas[ nTab ].size() > 0 )
+        aItem.mpCellFormulas = &maCellFormulas[ nTab ];
+    if( maCellArrayFormulas[ nTab ].size() > 0 )
+        aItem.mpArrayFormulas = &maCellArrayFormulas[ nTab ];
+    if( maCellFormulaValues[ nTab ].size() > 0 )
+        aItem.mpCellFormulaValues = &maCellFormulaValues[ nTab ];
+    if( maSharedFormulas[ nTab ].size() > 0 )
+        aItem.mpSharedFormulaEntries = &maSharedFormulas[ nTab ];
+    if( maSharedFormulaIds[ nTab ].size() > 0 )
+        aItem.mpSharedFormulaIDs = &maSharedFormulaIds[ nTab ];
 
-    {
-        FormulaValueMap::iterator it = maCellFormulaValues.find(nTab);
-        if (it != maCellFormulaValues.end())
-            aItem.mpCellFormulaValues = &it->second;
-    }
-
-    {
-        SheetToFormulaEntryMap::iterator it = maSharedFormulas.find(nTab);
-        if (it != maSharedFormulas.end())
-            aItem.mpSharedFormulaEntries = &it->second;
-    }
-
-    {
-        SheetToSharedFormulaid::iterator it = maSharedFormulaIds.find(nTab);
-        if (it != maSharedFormulaIds.end())
-            aItem.mpSharedFormulaIDs = &it->second;
-    }
     return aItem;
 }
 
@@ -437,6 +435,7 @@ void FormulaBuffer::createSharedFormulaMapEntry(
     const table::CellAddress& rAddress, const table::CellRangeAddress& rRange,
     sal_Int32 nSharedId, const OUString& rTokens )
 {
+    assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maSharedFormulas.size() );
     std::vector<SharedFormulaEntry>& rSharedFormulas = maSharedFormulas[ rAddress.Sheet ];
     SharedFormulaEntry aEntry(rAddress, rRange, rTokens, nSharedId);
     rSharedFormulas.push_back( aEntry );
@@ -444,12 +443,14 @@ void FormulaBuffer::createSharedFormulaMapEntry(
 
 void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const OUString& rTokenStr )
 {
+    assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maCellFormulas.size() );
     maCellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
 }
 
 void FormulaBuffer::setCellFormula(
     const table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType )
 {
+    assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maSharedFormulaIds.size() );
     maSharedFormulaIds[rAddress.Sheet].push_back(
         SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
 }
@@ -458,11 +459,13 @@ void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRang
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
+    assert( rRangeAddress.Sheet >= 0 && (size_t)rRangeAddress.Sheet < maCellArrayFormulas.size() );
     maCellArrayFormulas[ rRangeAddress.Sheet ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
 }
 
 void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress, double fValue )
 {
+    assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maCellFormulaValues.size() );
     maCellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
 }
 
