@@ -54,7 +54,7 @@ __SLEEP_SLICE_IN_MILLISECONDS__ = 500
 __PT_TO_TWIP__ = 20
 __MM_TO_PT__ = 1/(25.4/72)
 __MM10_TO_TWIP__ = 1/(2540.0/72/20) # 0.01 mm to twentieth point
-__FILLCOLOR__ = 0x8000ff00
+__FILLCOLOR__ = 0x8000cc00
 __LINEWIDTH__ = 0.5 * __PT_TO_TWIP__
 __ENCODED_STRING__ = "_s_%s___"
 __DECODE_STRING_REGEX__ = "_s_([0-9]+)___"
@@ -652,6 +652,11 @@ def run(arg=None, arg2 = -1):
         turtle = uno.getComponentContext().ServiceManager.createInstance('com.sun.star.drawing.ShapeCollection')
         turtle.add(__getshape__(__TURTLE__))
         _.doc.CurrentController.select(turtle)
+        # set working directory for file operations
+        if _.doc.hasLocation():
+          name = os.chdir(unohelper.fileUrlToSystemPath(re.sub("[^/]*$", "", _.doc.getURL())))
+        else:
+          name = os.chdir(os.path.expanduser('~'))
         __thread__.start()
     except Exception as e:
         __thread__ = None
@@ -777,6 +782,16 @@ def forward(n):
         dx = n[1] * sin((pi/180) * angle) + n[0] * sin((pi/180)*(angle + 90))
         dy = n[1] * cos((pi/180) * angle) + n[0] * cos((pi/180)*(angle + 90))
         position([pos[0] + dx, pos[1] - dy])
+    elif type(n) == str:
+        siz = label([1, 1, n])
+        shape = __getshape__(__ACTUAL__)
+        pos = position()
+        angle = heading()
+        w, h = siz.Width / (__PT_TO_TWIP__ / __MM10_TO_TWIP__), siz.Height / (__PT_TO_TWIP__ / __MM10_TO_TWIP__)
+        dx = 0 * sin((pi/180) * (angle)) + w * sin((pi/180)*(angle + 90))
+        dy = 0 * cos((pi/180) * (angle)) + w * cos((pi/180)*(angle + 90))
+        position([pos[0] + dx, pos[1] - dy])
+        heading(angle)
     else:
         __go__(__TURTLE__, -n * __PT_TO_TWIP__)
 
@@ -1085,6 +1100,7 @@ def label(st):
         dy = n[1] * cos((pi/180) * angle) + n[0] * cos((pi/180)*(angle + 90)) 
         lab.setPosition(__Point__(round(pos[0] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ + dx - lab.BoundRect.Width/2), round(pos[1] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ - dy - lab.BoundRect.Height/2)))
     _.shapecache[__ACTUAL__] = actual
+    return z
 
 def text(shape, st):
     if shape:
@@ -1348,7 +1364,7 @@ def __groupend__(name = ""):
       pic.setPosition(__Point__((g.BoundRect.Width - g.Size.Width)//2, (g.BoundRect.Height - g.Size.Height)//2))
       drawpage.Height, drawpage.Width = g.BoundRect.Height, g.BoundRect.Width
       if not os.path.isabs(name):
-        name = os.path.expanduser('~') + os.path.sep + name
+        name = os.getcwd() + os.path.sep + name
       __dispatcher__(".uno:ExportTo", (__getprop__("URL", unohelper.systemPathToFileUrl(name)), __getprop__("FilterName", "draw_svg_Export")), draw)
       draw.close(True)
       while XSCRIPTCONTEXT.getDocument() != _.doc:
