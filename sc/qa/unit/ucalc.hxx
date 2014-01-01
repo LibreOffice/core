@@ -213,6 +213,7 @@ public:
      */
     void testPivotTableDocFunc();
 
+    void testCellCopy();
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -351,6 +352,7 @@ public:
     CPPUNIT_TEST(testPivotTableNumStability);
     CPPUNIT_TEST(testPivotTableFieldReference);
     CPPUNIT_TEST(testPivotTableDocFunc);
+    CPPUNIT_TEST(testCellCopy);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);

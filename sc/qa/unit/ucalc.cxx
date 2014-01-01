@@ -1639,6 +1639,19 @@ void Test::testEnterMixedMatrix()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCellCopy()
+{
+    m_pDoc->InsertTab(0, "TestTab");
+    ScAddress aSrc(0,0,0);
+    ScAddress aDest(0,1,0);
+    OUString aStr("please copy me");
+    m_pDoc->SetString(aSrc, aStr);
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aSrc), aStr);
+    // copy to self - why not ?
+    m_pDoc->CopyCellToDocument(aSrc,aDest,*m_pDoc);
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aDest), aStr);
+}
+
 void Test::testSheetCopy()
 {
     m_pDoc->InsertTab(0, "TestTab");
