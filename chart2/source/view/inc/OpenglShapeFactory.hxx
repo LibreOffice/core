@@ -16,6 +16,8 @@ namespace chart {
 
 namespace opengl {
 
+// This class is stateless!!!!!
+// Don't add member variables
 class OpenglShapeFactory : public chart::AbstractShapeFactory
 {
 public:
@@ -193,8 +195,6 @@ public:
     virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize );
 
     virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xRootShape) SAL_OVERRIDE;
-private:
-    void *m_pChart;
 
 };
 

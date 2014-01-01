@@ -122,13 +122,8 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
         uno::Reference< drawing::XShape > xTarget (m_xShapeFactory->createInstance(
                 "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
         dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
-        m_pChart = (void *)pChart;
         SvxDummyShapeContainer* pContainer = new SvxDummyShapeContainer(pChart);
         xRet = pChart;
-#if 0
-        xRet = new dummy::DummyChart();
-        m_pChart = (void *)((dummy::DummyChart *)xRet);
-#endif
         xDrawPage->add(xTarget);
         xDrawPage->add(pContainer);
     }
@@ -321,7 +316,6 @@ uno::Reference< drawing::XShape >
             rPosition.PositionX - (rSize.DirectionX / 2.0),
             rPosition.PositionY - (rSize.DirectionY / 2.0),
             rPosition.PositionZ );
-    dummy::DummyChart *pChart = (dummy::DummyChart *)m_pChart;
     dummy::DummyCircle* pCircle = new dummy::DummyCircle(Position3DToAWTPoint( aCenterPosition ),
             Direction3DToAWTSize( rSize ));
     xTarget->add(pCircle);
