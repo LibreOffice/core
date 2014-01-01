@@ -404,6 +404,55 @@ DummyLine2D::DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition)
     setSize(rSize);
 }
 
+void DummyLine2D::render()
+{
+    DummyChart* pChart = getRootShape();
+    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find(UNO_NAME_LINECOLOR);
+    if(itr != maProperties.end())
+    {
+        //set line color
+        uno::Any co =  itr->second;
+        sal_Int32 nColorValue = co.get<sal_Int32>();
+        SAL_WARN("chart2.opengl", "*colorvalue = " << nColorValue);
+        sal_uInt8 R = (nColorValue & 0x00FF0000) >> 16;
+        sal_uInt8 G = (nColorValue & 0x0000FF00) >> 8;
+        sal_uInt8 B = (nColorValue & 0x000000FF);
+        pChart->m_GLRender.SetLine2DColor(R, G, B);
+
+        SAL_WARN("chart2.opengl", "*colorvalue = " << nColorValue << ", R = " << R << ", G = " << G << ", B = " << B);
+    }
+    else
+        SAL_WARN("chart2.opengl", "no line color set");
+
+    //set line width
+    itr = maProperties.find(UNO_NAME_LINEWIDTH);
+    if(itr != maProperties.end())
+    {
+        uno::Any cow = itr->second;
+        sal_Int32 nWidth = cow.get<sal_Int32>();
+        pChart->m_GLRender.SetLine2DWidth(nWidth);
+
+        SAL_WARN("chart2.opengl", "width = " << nWidth);
+    }
+    else
+        SAL_WARN("chart2.opengl", "no line width set");
+
+    sal_Int32 pointsscount = maPoints.getLength();
+    for(sal_Int32 i = 0; i < pointsscount; i++)
+    {
+        com::sun::star::uno::Sequence<com::sun::star::awt::Point>& points = maPoints[i];
+        sal_Int32 pointscount = points.getLength();
+        for(sal_Int32 j = 0; j < pointscount; j++)
+        {
+            com::sun::star::awt::Point& p = points[j];
+            pChart->m_GLRender.SetLine2DShapePoint((float)p.X, (float)p.Y, pointscount);
+        }
+
+    }
+    pChart->m_GLRender.RenderLine2FBO(GL_TRUE);
+
+}
+
 DummyRectangle::DummyRectangle()
 {
 }

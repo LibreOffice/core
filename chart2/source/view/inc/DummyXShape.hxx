@@ -353,6 +353,8 @@ public:
     DummyLine2D(const drawing::PointSequenceSequence& rPoints, const VLineProperties* pProperties);
     DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition);
 
+    virtual void render() SAL_OVERRIDE;
+
 private:
     drawing::PointSequenceSequence maPoints;
 };
