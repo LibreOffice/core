@@ -785,7 +785,7 @@ namespace cppcanvas
             void SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
             {
                 EMFP_DEBUG (if (width == 0.0) printf ("EMF+\tTODO: pen with zero width - using minimal which might not be correct\n"));
-                rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX());
+                rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getLength());
             }
 
             void SetStrokeAttributes(rendering::StrokeAttributes& rStrokeAttributes)
