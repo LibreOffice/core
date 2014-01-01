@@ -631,7 +631,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     const short nInvalidDiff = pParaPortion->GetInvalidDiff();
     const sal_uInt16 nInvalidStart = pParaPortion->GetInvalidPosStart();
-    const sal_uInt16 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
+    const sal_Int32 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
 
     bool bQuickFormat = false;
     if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
@@ -729,7 +729,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     sal_uInt16 nDelFromLine = 0xFFFF;
     bool bLineBreak = false;
 
-    sal_uInt16 nIndex = pLine->GetStart();
+    sal_Int32 nIndex = pLine->GetStart();
     EditLine aSaveLine( *pLine );
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
@@ -1090,12 +1090,12 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                 pPortion->SetRightToLeft( GetRightToLeft( nPara, nTmpPos+1 ) );
 
-                sal_uInt16 _nPortionEnd = nTmpPos + pPortion->GetLen();
-                if( bScriptSpace && ( _nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, _nPortionEnd ) ) )
+                const sal_Int32 nTmpPortionEnd = nTmpPos + pPortion->GetLen();
+                if( bScriptSpace && ( nTmpPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPortionEnd ) ) )
                 {
                     bool bAllow = false;
-                    sal_uInt16 nScriptTypeLeft = GetI18NScriptType( EditPaM( pNode, _nPortionEnd ) );
-                    sal_uInt16 nScriptTypeRight = GetI18NScriptType( EditPaM( pNode, _nPortionEnd+1 ) );
+                    sal_uInt16 nScriptTypeLeft = GetI18NScriptType( EditPaM( pNode, nTmpPortionEnd ) );
+                    sal_uInt16 nScriptTypeRight = GetI18NScriptType( EditPaM( pNode, nTmpPortionEnd+1 ) );
                     if ( ( nScriptTypeLeft == i18n::ScriptType::ASIAN ) || ( nScriptTypeRight == i18n::ScriptType::ASIAN ) )
                         bAllow = true;
 
@@ -1734,8 +1734,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 {
     ContentNode* const pNode = pParaPortion->GetNode();
 
-    sal_uInt16 nBreakInLine = nPortionStart - pLine->GetStart();
-    sal_uInt16 nMax = nBreakInLine + pPortion->GetLen();
+    sal_Int32 nBreakInLine = nPortionStart - pLine->GetStart();
+    const sal_Int32 nMax = nBreakInLine + pPortion->GetLen();
     while ( ( nBreakInLine < nMax ) && ( pLine->GetCharPosArray()[nBreakInLine] < nRemainingWidth ) )
         nBreakInLine++;
 

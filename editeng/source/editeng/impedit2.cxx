@@ -2229,8 +2229,8 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     if ( GetStatus().DoOnlineSpelling() )
     {
-        xub_StrLen nEnd = pLeft->Len();
-        xub_StrLen nInv = nEnd ? nEnd-1 : nEnd;
+        const size_t nEnd = pLeft->Len();
+        const size_t nInv = nEnd ? nEnd-1 : nEnd;
         pLeft->GetWrongList()->ClearWrongs( nInv, 0xFFFF, pLeft );  // Possibly remove one
         pLeft->GetWrongList()->SetInvalidRange(nInv, nEnd+1);
         // Take over misspelled words
@@ -2676,10 +2676,10 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
         if ( nEnd > nStart )
         {
             OUString aLine = aText.copy( nStart, nEnd-nStart );
-            sal_Int32 nChars = aPaM.GetNode()->Len() + aLine.getLength();
+            const sal_Int32 nChars = aPaM.GetNode()->Len() + aLine.getLength();
             if ( nChars > MAXCHARSINPARA )
             {
-                sal_Int32 nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
+                const sal_Int32 nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
                 nEnd -= ( aLine.getLength() - nMaxNewChars ); // Then the characters end up in the next paragraph.
                 aLine = aLine.copy( 0, nMaxNewChars );            // Delete the Rest...
             }
@@ -2806,7 +2806,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
 
     if ( GetStatus().DoOnlineSpelling() )
     {
-        xub_StrLen nEnd = rPaM.GetNode()->Len();
+        const size_t nEnd = rPaM.GetNode()->Len();
         aPaM.GetNode()->CreateWrongList();
         WrongList* pLWrongs = rPaM.GetNode()->GetWrongList();
         WrongList* pRWrongs = aPaM.GetNode()->GetWrongList();
@@ -2825,7 +2825,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
             else if (i->mnStart < nEnd && i->mnEnd > nEnd)
                 i->mnEnd = nEnd;
         }
-        sal_uInt16 nInv = nEnd ? nEnd-1 : nEnd;
+        const size_t nInv = nEnd ? nEnd-1 : nEnd;
         if ( nEnd )
             pLWrongs->SetInvalidRange(nInv, nEnd);
         else
@@ -3360,7 +3360,7 @@ EditSelection ImpEditEngine::ConvertSelection(
 
     // Start...
     ContentNode* pNode = aEditDoc.GetObject( nStartPara );
-    sal_uInt16 nIndex = nStartPos;
+    sal_Int32 nIndex = nStartPos;
     if ( !pNode )
     {
         pNode = aEditDoc[ aEditDoc.Count()-1 ];
@@ -3673,8 +3673,8 @@ sal_uInt16 ImpEditEngine::GetChar(
 {
     OSL_ENSURE( pLine, "No line received: GetChar" );
 
-    sal_uInt16 nChar = 0xFFFF;
-    sal_uInt16 nCurIndex = pLine->GetStart();
+    sal_Int32 nChar = -1;
+    sal_Int32 nCurIndex = pLine->GetStart();
 
 
     // Search best matching portion with GetPortionXOffset()
@@ -3748,7 +3748,7 @@ sal_uInt16 ImpEditEngine::GetChar(
                 nChar = nChar + nOffset;
 
                 // Check if index is within a cell:
-                if ( nChar && ( nChar < pParaPortion->GetNode()->Len() ) )
+                if ( nChar>0 && nChar < pParaPortion->GetNode()->Len() )
                 {
                     EditPaM aPaM( pParaPortion->GetNode(), nChar+1 );
                     sal_uInt16 nScriptType = GetI18NScriptType( aPaM );
@@ -3757,9 +3757,9 @@ sal_uInt16 ImpEditEngine::GetChar(
                         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
                         sal_Int32 nCount = 1;
                         lang::Locale aLocale = GetLocale( aPaM );
-                        sal_uInt16 nRight = (sal_uInt16)_xBI->nextCharacters(
+                        const sal_Int32 nRight = _xBI->nextCharacters(
                             pParaPortion->GetNode()->GetString(), nChar, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
-                        sal_uInt16 nLeft = (sal_uInt16)_xBI->previousCharacters(
+                        const sal_Int32 nLeft = _xBI->previousCharacters(
                             pParaPortion->GetNode()->GetString(), nRight, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
                         if ( ( nLeft != nChar ) && ( nRight != nChar ) )
                         {
@@ -3773,7 +3773,7 @@ sal_uInt16 ImpEditEngine::GetChar(
         nCurIndex = nCurIndex + pPortion->GetLen();
     }
 
-    if ( nChar == 0xFFFF )
+    if ( nChar < 0 )
     {
         nChar = ( nXPos <= pLine->GetStartPosX() ) ? pLine->GetStart() : pLine->GetEnd();
     }

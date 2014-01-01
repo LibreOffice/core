@@ -326,7 +326,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     for ( sal_Int32 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions().Count(); nPortion++)
     {
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
-        fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %i, Invalid = %i\nText = '%s'",
+        fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %" SAL_PRIdINT32 ", Invalid = %i\nText = '%s'",
                  nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(),
                  OUStringToOString(pPPortion->GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nVorlage:" );
@@ -367,7 +367,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         aPortionStr.append(" \nA");
         aPortionStr.append(static_cast<sal_Int32>(nPortion));
         aPortionStr.append(": Paragraph Length = ");
-        aPortionStr.append(static_cast<sal_Int32>(pPPortion->GetNode()->Len()));
+        aPortionStr.append(pPPortion->GetNode()->Len());
         aPortionStr.append("\nA");
         aPortionStr.append(static_cast<sal_Int32>(nPortion));
         aPortionStr.append(": ");
@@ -390,7 +390,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         aPortionStr.append(static_cast<sal_Int32>(nPortion));
         aPortionStr.append(": Total length: ");
         aPortionStr.append(static_cast<sal_Int32>(n));
-        if ( pPPortion->GetNode()->Len() != n )
+        if ( static_cast<sal_uLong>(pPPortion->GetNode()->Len()) != n )
             aPortionStr.append(" => Error !!!");
         fprintf(fp, "%s", aPortionStr.getStr());
 

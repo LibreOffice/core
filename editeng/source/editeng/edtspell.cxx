@@ -35,6 +35,8 @@
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <algorithm>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::linguistic2;
@@ -434,7 +436,7 @@ void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
             {
                 i->mnStart = nEnd;
                 // Blanks?
-                while (i->mnStart < pNode->Len() &&
+                while (i->mnStart < static_cast<size_t>(pNode->Len()) &&
                        (pNode->GetChar(i->mnStart) == ' ' ||
                         pNode->IsFeature(i->mnStart)))
                 {
@@ -627,9 +629,7 @@ sal_Bool EdtAutoCorrDoc::Replace(sal_Int32 nPos, const OUString& rTxt)
 sal_Bool EdtAutoCorrDoc::ReplaceRange(sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt)
 {
     // Actually a Replace introduce => corresponds to UNDO
-    sal_uInt16 nEnd = nPos+nSourceLength;
-    if ( nEnd > pCurNode->Len() )
-        nEnd = pCurNode->Len();
+    const sal_Int32 nEnd = std::min<sal_Int32>(nPos+nSourceLength, pCurNode->Len());
 
     // #i5925# First insert new text behind to be deleted text, for keeping attributes.
     mpEditEngine->InsertText(EditSelection(EditPaM(pCurNode, nEnd)), rTxt);

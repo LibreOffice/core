@@ -1299,7 +1299,7 @@ ContentNode::~ContentNode()
 {
 }
 
-void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool& rItemPool )
+void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& rItemPool )
 {
     if ( !nNew )
         return;
@@ -1435,7 +1435,7 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
 #endif
 }
 
-void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxItemPool& rItemPool )
+void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemPool& rItemPool )
 {
     if ( !nDeleted )
         return;
@@ -1527,7 +1527,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
 {
     DBG_ASSERT( pPrevNode, "Copy of attributes to a null pointer?" );
 
-    sal_uInt16 nCut = pPrevNode->Len();
+    const sal_Int32 nCut = pPrevNode->Len();
 
     size_t nAttr = 0;
     CharAttribList::AttribsType& rPrevAttribs = pPrevNode->GetCharAttribs().GetAttribs();
@@ -1664,12 +1664,12 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont )
         CreateDefFont();
 }
 
-bool ContentNode::IsFeature( sal_uInt16 nPos ) const
+bool ContentNode::IsFeature( sal_Int32 nPos ) const
 {
     return maString[nPos] == CH_FEATURE;
 }
 
-sal_uInt16 ContentNode::Len() const
+sal_Int32 ContentNode::Len() const
 {
     return maString.getLength();
 }
@@ -1679,12 +1679,12 @@ const OUString& ContentNode::GetString() const
     return maString;
 }
 
-void ContentNode::SetChar(sal_uInt16 nPos, sal_Unicode c)
+void ContentNode::SetChar(sal_Int32 nPos, sal_Unicode c)
 {
     maString = maString.replaceAt(nPos, 1, OUString(c));
 }
 
-void ContentNode::Insert(const OUString& rStr, sal_uInt16 nPos)
+void ContentNode::Insert(const OUString& rStr, sal_Int32 nPos)
 {
     maString = maString.replaceAt(nPos, 0, rStr);
 }
@@ -1694,27 +1694,27 @@ void ContentNode::Append(const OUString& rStr)
     maString += rStr;
 }
 
-void ContentNode::Erase(sal_uInt16 nPos)
+void ContentNode::Erase(sal_Int32 nPos)
 {
     maString = maString.copy(0, nPos);
 }
 
-void ContentNode::Erase(sal_uInt16 nPos, sal_uInt16 nCount)
+void ContentNode::Erase(sal_Int32 nPos, sal_Int32 nCount)
 {
     maString = maString.replaceAt(nPos, nCount, "");
 }
 
-OUString ContentNode::Copy(sal_uInt16 nPos) const
+OUString ContentNode::Copy(sal_Int32 nPos) const
 {
     return maString.copy(nPos);
 }
 
-OUString ContentNode::Copy(sal_uInt16 nPos, sal_uInt16 nCount) const
+OUString ContentNode::Copy(sal_Int32 nPos, sal_Int32 nCount) const
 {
     return maString.copy(nPos, nCount);
 }
 
-sal_Unicode ContentNode::GetChar(sal_uInt16 nPos) const
+sal_Unicode ContentNode::GetChar(sal_Int32 nPos) const
 {
     return maString[nPos];
 }

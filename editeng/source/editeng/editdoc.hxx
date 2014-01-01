@@ -271,8 +271,8 @@ public:
     CharAttribList& GetCharAttribs()        { return aCharAttribList; }
     const CharAttribList& GetCharAttribs() const { return aCharAttribList; }
 
-    void            ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNewChars, SfxItemPool& rItemPool );
-    void            CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars, SfxItemPool& rItemPool );
+    void            ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars, SfxItemPool& rItemPool );
+    void            CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars, SfxItemPool& rItemPool );
     void            AppendAttribs( ContentNode* pNextNode );
     void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, sal_Bool bKeepEndingAttribs );
 
@@ -291,19 +291,19 @@ public:
     void            CreateWrongList();
     void            DestroyWrongList();
 
-    bool IsFeature( sal_uInt16 nPos ) const;
+    bool IsFeature( sal_Int32 nPos ) const;
 
-    sal_uInt16 Len() const;
+    sal_Int32 Len() const;
     const OUString& GetString() const;
 
-    void SetChar(sal_uInt16 nPos, sal_Unicode c);
-    void Insert(const OUString& rStr, sal_uInt16 nPos);
+    void SetChar(sal_Int32 nPos, sal_Unicode c);
+    void Insert(const OUString& rStr, sal_Int32 nPos);
     void Append(const OUString& rStr);
-    void Erase(sal_uInt16 nPos);
-    void Erase(sal_uInt16 nPos, sal_uInt16 nCount);
-    OUString Copy(sal_uInt16 nPos) const;
-    OUString Copy(sal_uInt16 nPos, sal_uInt16 nCount) const;
-    sal_Unicode GetChar(sal_uInt16 nPos) const;
+    void Erase(sal_Int32 nPos);
+    void Erase(sal_Int32 nPos, sal_Int32 nCount);
+    OUString Copy(sal_Int32 nPos) const;
+    OUString Copy(sal_Int32 nPos, sal_Int32 nCount) const;
+    sal_Unicode GetChar(sal_Int32 nPos) const;
 };
 
 // -------------------------------------------------------------------------

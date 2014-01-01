@@ -1046,8 +1046,8 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
             nTextPortions += pParaPortion->GetTextPortions().Count();
         }
 
-        sal_uInt16 nStartPos = 0;
-        sal_uInt16 nEndPos = pNode->Len();
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = pNode->Len();
 
         sal_Bool bEmptyPara = nEndPos ? sal_False : sal_True;
 
@@ -2117,7 +2117,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
         // get current paragraph length to calculate later on how the sentence length changed,
         // in order to place the cursor at the end of the sentence again
         EditSelection aOldSel( rEditView.pImpEditView->GetEditSelection() );
-        xub_StrLen nOldLen = aOldSel.Max().GetNode()->Len();
+        const sal_Int32 nOldLen = aOldSel.Max().GetNode()->Len();
 
         UndoActionStart( EDITUNDO_INSERT );
         if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
@@ -3038,7 +3038,7 @@ short ImpEditEngine::ReplaceTextOnly(
     short nDiffs = 0;
     for ( sal_uInt16 n = 0; n < nCharsAfterTransliteration; n++ )
     {
-        sal_uInt16 nCurrentPos = nCurrentStart+n;
+        const sal_Int32 nCurrentPos = nCurrentStart+n;
         sal_Int32 nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
 
         if ( !nDiff )

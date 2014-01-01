@@ -744,7 +744,7 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
 void ImpEditEngine::ParaAttribsToCharAttribs( ContentNode* pNode )
 {
     pNode->GetCharAttribs().DeleteEmptyAttribs( GetEditDoc().GetItemPool() );
-    xub_StrLen nEndPos = pNode->Len();
+    const sal_Int32 nEndPos = pNode->Len();
     for ( sal_uInt16 nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
         if ( pNode->GetContentAttribs().HasItem( nWhich ) )

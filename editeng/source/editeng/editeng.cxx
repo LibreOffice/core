@@ -1289,7 +1289,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     if ( pImpEditEngine->GetStatus().DoAutoComplete() && ( nCharCode != ' ' ) )
                     {
                         // Only at end of word...
-                        sal_uInt16 nIndex = aCurSel.Max().GetIndex();
+                        const sal_Int32 nIndex = aCurSel.Max().GetIndex();
                         if ( ( nIndex >= aCurSel.Max().GetNode()->Len() ) ||
                              ( pImpEditEngine->aWordDelimiters.indexOf( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != -1 ) )
                         {
