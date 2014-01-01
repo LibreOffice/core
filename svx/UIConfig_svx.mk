@@ -30,6 +30,8 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/passwd \
 	svx/uiconfig/ui/querydeletecontourdialog \
+	svx/uiconfig/ui/querydeleteobjectdialog \
+	svx/uiconfig/ui/querydeletethemedialog \
 	svx/uiconfig/ui/querymodifyimagemapchangesdialog \
 	svx/uiconfig/ui/querynewcontourdialog \
 	svx/uiconfig/ui/querysavecontchangesdialog \
