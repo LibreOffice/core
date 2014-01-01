@@ -798,7 +798,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             m_pCurrentDefinition->SetValue( nName, nIntValue );
         break;
         case NS_ooxml::LN_CT_NumLvl_ilvl:
-        case NS_rtf::LN_LISTLEVEL:
         {
             //add a new level to the level vector and make it the current one
             m_pCurrentDefinition->AddLevel();

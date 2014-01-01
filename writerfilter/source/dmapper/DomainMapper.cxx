@@ -746,12 +746,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
             sLocalBookmarkName = OUString();
         break;
-        case NS_rtf::LN_LISTLEVEL:
-            break;
-        case NS_rtf::LN_LFOData:
-            break;
-        case NS_rtf::LN_F:
-            break;
         case NS_rtf::LN_ALTFONTNAME:
             break;
         case NS_rtf::LN_XSZFFN:

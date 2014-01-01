@@ -89,8 +89,6 @@ void FontTable::lcl_attribute(Id Name, Value & val)
         case NS_rtf::LN_FS:
             m_pImpl->pCurrentEntry->sFontSignature += sValue;
         break;
-        case NS_rtf::LN_F:
-        break;
         case NS_rtf::LN_ALTFONTNAME:
             m_pImpl->pCurrentEntry->sAlternativeFont = sValue;
         break;
