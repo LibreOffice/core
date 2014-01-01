@@ -433,6 +433,8 @@ DummyLine2D::DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition)
 
 void DummyLine2D::render()
 {
+    SAL_WARN("chart2.opengl", "rendering line 2D");
+    debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
     std::map< OUString, uno::Any >::const_iterator itr = maProperties.find(UNO_NAME_LINECOLOR);
     if(itr != maProperties.end())
