@@ -185,11 +185,11 @@ public:
 protected:
 
     std::map<OUString, uno::Any> maProperties;
+    com::sun::star::awt::Point maPosition;
+    com::sun::star::awt::Size maSize;
 
 private:
     OUString maName;
-    com::sun::star::awt::Point maPosition;
-    com::sun::star::awt::Size maSize;
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > mxParent;
     DummyXShape* mpParent;
@@ -336,6 +336,7 @@ class DummyCircle : public DummyXShape
 public:
     DummyCircle(const awt::Point& rPosition, const awt::Size& rSize);
 
+    virtual void render() SAL_OVERRIDE;
 };
 
 class DummyLine3D : public DummyXShape

@@ -353,6 +353,16 @@ DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
     setSize(rSize);
 }
 
+void DummyCircle::render()
+{
+    long color = 0x3465AF;
+    DummyChart* pChart = getRootShape();
+    pChart->m_GLRender.SetColor(color);
+    pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
+                                          maSize.Width, maSize.Height);
+    pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);
+}
+
 namespace {
 
 void setProperties( const VLineProperties& rLineProperties, std::map<OUString, uno::Any>& rTargetProps )
