@@ -620,6 +620,19 @@ namespace cppcanvas
             return rendering::PathCapType::BUTT;
         }
 
+        sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin)
+        {
+            switch (nEmfLineJoin)
+            {
+                case EmfPlusLineJoinTypeMiter:        // fall-through
+                case EmfPlusLineJoinTypeMiterClipped: return rendering::PathJoinType::MITER;
+                case EmfPlusLineJoinTypeBevel:        return rendering::PathJoinType::BEVEL;
+                case EmfPlusLineJoinTypeRound:        return rendering::PathJoinType::ROUND;
+            }
+            assert(false); // Line Join type isn't in specification.
+            return 0;
+        }
+
         struct EMFPCustomLineCap : public EMFPObject
         {
             sal_uInt32 type;
@@ -641,14 +654,7 @@ namespace cppcanvas
             {
                 aAttributes.StartCapType = lcl_convertStrokeCap(strokeStartCap);
                 aAttributes.EndCapType = lcl_convertStrokeCap(strokeEndCap);
-
-                switch (strokeJoin)
-                {
-                    case EmfPlusLineJoinTypeMiter:        // fall-through
-                    case EmfPlusLineJoinTypeMiterClipped: aAttributes.JoinType = rendering::PathJoinType::MITER; break;
-                    case EmfPlusLineJoinTypeBevel:        aAttributes.JoinType = rendering::PathJoinType::BEVEL; break;
-                    case EmfPlusLineJoinTypeRound:        aAttributes.JoinType = rendering::PathJoinType::ROUND; break;
-                }
+                aAttributes.JoinType = lcl_convertLineJoinType(strokeJoin);
 
                 aAttributes.MiterLimit = miterLimit;
             }
@@ -782,8 +788,10 @@ namespace cppcanvas
                 rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX());
             }
 
-            void SetStrokeDashing(rendering::StrokeAttributes& rStrokeAttributes)
+            void SetStrokeAttributes(rendering::StrokeAttributes& rStrokeAttributes)
             {
+                rStrokeAttributes.JoinType = lcl_convertLineJoinType(lineJoin);
+
                 if (dashStyle != EmfPlusLineStyleSolid)
                 {
                     const float dash[] = {3, 3};
@@ -1394,7 +1402,7 @@ namespace cppcanvas
                 // but eg. dashing has to be additionally set only on the
                 // polygon
                 rendering::StrokeAttributes aPolygonAttributes(aCommonAttributes);
-                pen->SetStrokeDashing(aPolygonAttributes);
+                pen->SetStrokeAttributes(aPolygonAttributes);
 
                 basegfx::B2DPolyPolygon aFinalPolyPolygon;
 
