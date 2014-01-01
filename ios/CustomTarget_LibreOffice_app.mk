@@ -137,10 +137,6 @@ else
 # Copy the Xcode project to BUILDDIR if SRCDIR!=BUILDDIR, so that one
 # can then open it from there in Xcode.
 $(call gb_CustomTarget_get_target,ios/LibreOffice_app) : $(gb_Helper_PHONY)
-	$(SRCDIR)/solenv/bin/native-code.py \
-		-g extended_core -g writer \
-		-s cui -s spl -s uui \
-		> $(SRCDIR)/ios/experimental/LibreOffice/LibreOffice/native-code.mm
 	if test $(SRCDIR) != $(BUILDDIR); then \
 		(cd $(SRCDIR) && tar cf - ios/experimental/LibreOffice/LibreOffice.xcodeproj/project.pbxproj) | (cd $(BUILDDIR) && tar xf -); \
 	fi

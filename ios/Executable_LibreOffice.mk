@@ -21,6 +21,17 @@ $(eval $(call gb_Executable_use_system_darwin_frameworks,LibreOffice,\
     UIKit \
 ))
 
+$(eval $(call gb_Executable_add_generated_cxxobjects,LibreOffice,\
+    CustomTarget/ios/LibreOffice/native-code \
+))
+
+$(call gb_CustomTarget_get_workdir,ios/LibreOffice)/native-code.cxx :
+	mkdir -p `dirname $@`
+	$(SRCDIR)/solenv/bin/native-code.py \
+		-g extended_core -g writer \
+		-s cui -s spl -s uui \
+		> $@
+
 $(eval $(call gb_Executable_add_objcxxobjects,LibreOffice,\
     ios/experimental/LibreOffice/LibreOffice/lo \
 ))
