@@ -127,7 +127,6 @@ public:
     int SetViewPoint(PosVeci3 camPos, PosVeci3 orgPos, int headUpFlag);
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
     int RenderModelf(float *vertexArray, unsigned int vertexArraySize, float *colorArray, unsigned int colorArraySize);
-    int RenderModelf2FBO(float *vertexArray, unsigned int vertexArraySize, float *colorArray, unsigned int colorArraySize);
     void SetWidth(int width);
     void SetHeight(int height);
     int GetWidth();
@@ -263,7 +262,7 @@ private:
     Bubble2DPointList m_Bubble2DPointList;
 
     list <Bubble2DPointList> m_Bubble2DShapePointList;
-         GLint m_CommonProID;
+    GLint m_CommonProID;
     GLint m_2DVertexID;
     GLint m_2DColorID;
 };
