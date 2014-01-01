@@ -72,7 +72,6 @@ using namespace ::rtl;
 namespace writerfilter {
 
 using resourcemodel::resolveSprmProps;
-using resourcemodel::resolveAttributeProperties;
 
 namespace dmapper{
 
@@ -568,13 +567,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
             }
             break;
-        case NS_rtf::LN_FN:
-        case NS_rtf::LN_FCSEPX:
-        case NS_rtf::LN_FNMPR:
-        case NS_rtf::LN_FCMPR:
-
-            //section descriptor, unused or internally used
-            break;
         case NS_rtf::LN_ICOFORE:
             break;
         case NS_rtf::LN_ICOBACK:
@@ -747,10 +739,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             sLocalBookmarkName = OUString();
         break;
         case NS_rtf::LN_XSTZNAME1:
-            break;
-        case NS_rtf::LN_sed:
-            //section properties
-            resolveAttributeProperties(*this, val);
             break;
         case NS_rtf::LN_tbdAdd:
             //
