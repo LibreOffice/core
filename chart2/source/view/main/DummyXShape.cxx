@@ -372,7 +372,8 @@ DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
 void DummyCircle::render()
 {
     debugProperties(maProperties);
-    std::map<OUString, uno::Any> itr = maProperties.find("FillColor");
+    DummyChart* pChart = getRootShape();
+    std::map<OUString, uno::Any>::const_iterator itr = maProperties.find("FillColor");
     if(itr != maProperties.end())
     {
         sal_Int32 nColor = itr->second.get<sal_Int32>();
@@ -380,10 +381,10 @@ void DummyCircle::render()
     }
     else
         SAL_WARN("chart2.opengl", "missing color");
-    long color = 0x3465AF;
-    DummyChart* pChart = getRootShape();
     pChart->m_GLRender.Bubble2DShapePoint(maPosition.X, maPosition.Y,
                                           maSize.Width, maSize.Height);
+    SAL_WARN("chart2.opengl", "Bubble Position: " << maPosition.X << "," << maPosition.Y);
+    SAL_WARN("chart2.opengl", "Bubble Size: " << maSize.Width << "," << maSize.Height);
     pChart->m_GLRender.RenderBubble2FBO(GL_TRUE);
 }
 
