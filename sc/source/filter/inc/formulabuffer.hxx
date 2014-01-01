@@ -91,21 +91,21 @@ public:
     };
 
 private:
-    typedef ::std::map< SCTAB, std::vector<TokenAddressItem> > FormulaDataMap;
-    typedef ::std::map< SCTAB, std::vector<TokenRangeAddressItem> > ArrayFormulaDataMap;
+    // Vectors indexed by SCTAB - cf. SetSheetCount
+    typedef ::std::vector< std::vector<TokenAddressItem> > FormulaDataArray;
+    typedef ::std::vector< std::vector<TokenRangeAddressItem> > ArrayFormulaDataArray;
     // sheet -> list of shared formula descriptions
-    typedef ::std::map< SCTAB, std::vector<SharedFormulaDesc> > SheetToSharedFormulaid;
+    typedef ::std::vector< std::vector<SharedFormulaDesc> > SheetToSharedFormulaid;
     // sheet -> stuff needed to create shared formulae
-    typedef ::std::map< SCTAB, std::vector<SharedFormulaEntry> >  SheetToFormulaEntryMap;
-
-    typedef ::std::map< SCTAB, std::vector<ValueAddressPair> > FormulaValueMap;
+    typedef ::std::vector< std::vector<SharedFormulaEntry> >  SheetToFormulaEntryArray;
+    typedef ::std::vector< std::vector<ValueAddressPair> > FormulaValueArray;
 
     osl::Mutex maMtxData;
-    FormulaDataMap maCellFormulas;
-    ArrayFormulaDataMap maCellArrayFormulas;
-    SheetToFormulaEntryMap maSharedFormulas;
-    SheetToSharedFormulaid maSharedFormulaIds;
-    FormulaValueMap maCellFormulaValues;
+    FormulaDataArray         maCellFormulas;
+    ArrayFormulaDataArray    maCellArrayFormulas;
+    SheetToFormulaEntryArray maSharedFormulas;
+    SheetToSharedFormulaid   maSharedFormulaIds;
+    FormulaValueArray        maCellFormulaValues;
 
     SheetItem getSheetItem( SCTAB nTab );
 
@@ -118,13 +118,19 @@ public:
         const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
 
-    void                setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress, double fValue  );
-    void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
-    void createSharedFormulaMapEntry(
-        const com::sun::star::table::CellAddress& rAddress,
-        const com::sun::star::table::CellRangeAddress& rRange,
-        sal_Int32 nSharedId, const OUString& rTokens );
+    void                setCellFormulaValue( const ::css::table::CellAddress& rAddress,
+                                             double fValue );
+    void                setCellArrayFormula( const ::css::table::CellRangeAddress& rRangeAddress,
+                                             const ::css::table::CellAddress& rTokenAddress,
+                                             const OUString& );
+    void                createSharedFormulaMapEntry( const ::css::table::CellAddress& rAddress,
+                                                     const ::css::table::CellRangeAddress& rRange,
+                                                     sal_Int32 nSharedId, const OUString& rTokens );
+
+    /// ensure sizes of vectors matches the number of sheets
+    void SetSheetCount( SCTAB nSheets );
 };
+
 
 }}
 
