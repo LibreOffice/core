@@ -25,6 +25,8 @@ using namespace com::sun::star;
 
 using namespace std;
 
+#define RENDER_TO_FILE 0
+
 #define OPENGL_SHADER( ... )# __VA_ARGS__
 
 #define GL_PI 3.14159f
@@ -33,8 +35,6 @@ using namespace std;
 #define WGL_SAMPLE_BUFFERS_ARB   0x2041
 #define WGL_SAMPLES_ARB          0x2042
 #endif
-
-#define RENDER_TO_FILE 0
 
 const char *ColorFragmemtShader = OPENGL_SHADER (
 
@@ -532,6 +532,28 @@ void OpenGLRender::prepareToRender()
 
 void OpenGLRender::renderToBitmap()
 {
+    if (m_iArbMultisampleSupported)
+    {
+        GLenum status;
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBufferMS);
+        status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            cout << "The frame buffer status is not complete!" << endl;
+        }
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+        status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+        if (status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            cout << "The frame buffer status is not complete!" << endl;
+        }
+        glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
+    }
+
 #if RENDER_TO_FILE
     char fileName[256] = {0};
     sprintf(fileName, "D:\\shaderout_%d_%d_%d.bmp", m_iWidth, m_iHeight, m_iFboIdx);
@@ -1146,7 +1168,6 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
 
 int OpenGLRender::RenderBubble2FBO(int)
 {
-    GLenum status;
     int listNum = m_Bubble2DShapePointList.size();
     for (int i = 0; i < listNum; i++)
     {
@@ -1192,28 +1213,6 @@ int OpenGLRender::RenderBubble2FBO(int)
     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
     {
         return -1;
-    }
-    if (m_iArbMultisampleSupported)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBufferMS);
-        status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE)
-        {
-            cout << "The frame buffer status is not complete!" << endl;
-            return -1;
-        }
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
-        status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE)
-        {
-            cout << "The frame buffer status is not complete!" << endl;
-            return -1;
-        }
-        glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[m_iFboIdx % 2]);
     }
     return 0;
 }
