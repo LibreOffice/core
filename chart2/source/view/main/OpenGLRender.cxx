@@ -765,17 +765,19 @@ void OpenGLRender::Release()
 }
 
 
-OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
+OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
+    m_Model(glm::mat4(1.0f)),
+    m_TranslationMatrix(glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f))),
+    m_RotationMatrix(glm::eulerAngleYXZ(0.0f, 0.0f, 0.0f)),
+    m_ScaleMatrix(glm::scale(m_Model, glm::vec3(1.0f, 1.0f, 1.0f))),
+    m_Line2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0)),
+    m_iWidth(0),
+    m_iHeight(0),
+    m_iPointNum(0),
+    m_iFboIdx(0),
+    m_fLineAlpha(1.0),
+    mxRenderTarget(xTarget)
 {
-    //[mod] by gaowei
-    m_Model = glm::mat4(1.0f);
-    m_TranslationMatrix = glm::translate(m_Model, glm::vec3(0.0f, 0.0f, 0.0f));
-    m_ScaleMatrix = glm::scale(m_Model, glm::vec3(1.0f, 1.0f, 1.0f));
-    m_RotationMatrix = glm::eulerAngleYXZ(0.0f, 0.0f, 0.0f);
-    m_iWidth = 0;
-    m_iHeight = 0;
-    m_Line2DColor = glm::vec4(1.0, 0.0, 0.0, 1.0);
-    m_iPointNum = 0;
     memset(&m_Line2DPoitList, 0, sizeof(Line2DPointList));
     m_iFboIdx = 0;
     m_FboID[0] = 0;
@@ -784,9 +786,7 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
     m_TextureObj[1] = 0;
     m_RboID[0] = 0;
     m_RboID[1] = 0;
-    m_fLineAlpha = 1.0;
 
-    mxRenderTarget = xTarget;
     mxRenderTarget->setPosition(awt::Point(0,0));
 }
 OpenGLRender::~OpenGLRender()
