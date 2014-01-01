@@ -567,12 +567,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
             }
             break;
-        case NS_rtf::LN_ICOFORE:
-            break;
-        case NS_rtf::LN_ICOBACK:
-            break;
-        case NS_rtf::LN_IPAT:
-            break;
         case NS_rtf::LN_SHDFORECOLOR:
             break;
         case NS_rtf::LN_SHDBACKCOLOR:

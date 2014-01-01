@@ -811,9 +811,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_FANCHORLOCK:
         case NS_rtf::LN_CTXBX:
         break;
-        case NS_rtf::LN_shptxt:
-            //todo: text content
-        break;
         case NS_rtf::LN_dffheader: break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
