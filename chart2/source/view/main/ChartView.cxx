@@ -125,32 +125,6 @@ namespace
 {
     class theExplicitValueProviderUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId > {};
 
-class UpdateTimeBasedThread : public salhelper::Thread
-{
-public:
-    UpdateTimeBasedThread(ChartView& rChartView, TimeBasedInfo& rTimeBasedInfo):
-        salhelper::Thread("ChartUpdate"),
-        mrChartView(rChartView),
-        mrTimeBasedInfo(rTimeBasedInfo) {}
-private:
-    virtual void execute()
-    {
-        TimeValue const aTime = { 0, 100 };
-        for(size_t i = 0; i < 60; ++i)
-        {
-            mrChartView.setViewDirty();
-            {
-                SolarMutexGuard aSolarGuard;
-                mrChartView.update();
-            }
-            wait(aTime);
-        }
-    }
-
-    ChartView& mrChartView;
-    TimeBasedInfo& mrTimeBasedInfo;
-};
-
 }
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
@@ -2404,13 +2378,6 @@ void ChartView::createShapes()
     if(mrChartModel.isTimeBased())
     {
         maTimeBased.bTimeBased = true;
-
-        if(!maTimeBased.mpThread)
-        {
-            maTimeBased.mpThread = new UpdateTimeBasedThread(*this, maTimeBased);
-            maTimeBased.mpThread->launch();
-        }
-
     }
 
     //make sure add-in is refreshed after creating the shapes
@@ -2606,7 +2573,7 @@ void ChartView::createShapes()
                     rSeriesPlotter[i]->getAllSeries();
                 std::vector< VDataSeries* >& rAllOldDataSeries =
                     maTimeBased.m_aDataSeriesList[i];
-                size_t m = std::min(aAllNewDataSeries.size(), rAllOldDataSeries.size());
+                size_t m = aAllNewDataSeries.size();
                 for(size_t j = 0; j < m; ++j)
                 {
                     rAllOldDataSeries.push_back( aAllNewDataSeries[j]->
@@ -2614,7 +2581,17 @@ void ChartView::createShapes()
                 }
             }
 
-            mrChartModel.getNextTimePoint();
+            if(maTimeBased.eMode != MANUAL)
+                mrChartModel.getNextTimePoint();
+            else
+                maTimeBased.maTimer.Stop();
+        }
+
+        if(maTimeBased.bTimeBased && maTimeBased.eMode != MANUAL && !maTimeBased.maTimer.IsActive())
+        {
+            maTimeBased.maTimer.SetTimeout(15);
+            maTimeBased.maTimer.SetTimeoutHdl(LINK(this, ChartView, UpdateTimeBased));
+            maTimeBased.maTimer.Start();
         }
     }
 
@@ -3053,6 +3030,14 @@ void ChartView::setViewDirty()
 {
     osl::ResettableMutexGuard aGuard(maTimeMutex);
     m_bViewDirty = true;
+}
+
+IMPL_LINK_NOARG(ChartView, UpdateTimeBased)
+{
+    setViewDirty();
+    update();
+
+    return 0;
 }
 
 } //namespace chart

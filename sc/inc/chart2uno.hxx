@@ -42,7 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase8.hxx>
 #include <rtl/ustring.hxx>
@@ -190,9 +190,8 @@ private:
 
 // DataSource
 class ScChart2DataSource : public
-                ::cppu::WeakImplHelper3<
+                ::cppu::WeakImplHelper2<
                     ::com::sun::star::chart2::data::XDataSource,
-                    com::sun::star::chart2::XTimeBased,
                     ::com::sun::star::lang::XServiceInfo>,
                 SfxListener
 {
@@ -206,10 +205,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() throw (::com::sun::star::uno::RuntimeException);
-
-    // XTimeBased
-    virtual sal_Bool switchToNext() throw(
-            ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(
@@ -226,18 +221,11 @@ public:
 
     void AddLabeledSequence(const com::sun::star::uno::Reference < com::sun::star::chart2::data::XLabeledDataSequence >& xNew);
 
-    void SetTimeBased(SCTAB nTimeBasedStart, SCTAB nTimeBasedEnd);
-
 private:
 
     ScDocument*                 m_pDocument;
     typedef std::list < com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > >  LabeledList;
     LabeledList                 m_aLabeledSequences;
-
-    bool bTimeBased;
-    SCTAB mnTimeBasedStart;
-    SCTAB mnTimeBasedEnd;
-    SCTAB mnCurrentTab;
 
 };
 
@@ -292,6 +280,7 @@ public:
 
     // XTimeBased
     virtual sal_Bool switchToNext() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool setToPointInTime(sal_Int32 nPoint) throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<
@@ -475,6 +464,12 @@ private:
 
     bool                        m_bGotDataChangedHint;
     bool                        m_bExtDataRebuildQueued;
+
+    bool mbTimeBased;
+    SCTAB mnTimeBasedStart;
+    SCTAB mnTimeBasedEnd;
+    SCTAB mnCurrentTab;
+
 };
 
 #endif // SC_CHART2UNO_HXX

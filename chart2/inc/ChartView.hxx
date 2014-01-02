@@ -45,7 +45,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include <salhelper/thread.hxx>
+#include <vcl/timer.hxx>
 
 class SdrPage;
 
@@ -68,13 +68,12 @@ struct TimeBasedInfo
     TimeBasedInfo():
         bTimeBased(false),
         nFrame(0),
-        eMode(AUTOMATIC),
-        mpThread(NULL) {}
+        eMode(AUTOMATIC) {}
 
     bool bTimeBased;
     size_t nFrame;
     TimeBasedMode eMode;
-    salhelper::Thread* mpThread;
+    Timer maTimer;
 
     // only valid when we are in the time based mode
     ::std::vector< std::vector< VDataSeries* > > m_aDataSeriesList;
@@ -219,6 +218,8 @@ private: //methods
         , const ::com::sun::star::awt::Size& rPageSize
         , bool bUseFixedInnerSize
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& xDiagram_MarkHandles );
+
+    DECL_LINK( UpdateTimeBased, void* );
 
 private: //member
     ::osl::Mutex m_aMutex;

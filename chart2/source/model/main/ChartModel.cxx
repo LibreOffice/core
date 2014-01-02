@@ -1357,14 +1357,34 @@ bool ChartModel::isTimeBased() const
 void ChartModel::setTimeBased(bool bTimeBased)
 {
     mbTimeBased = bTimeBased;
+    uno::Sequence<Reference< chart2::data::XLabeledDataSequence > >
+        xDataSequences = getDataSequences();
+    sal_Int32 n = xDataSequences.getLength();
+    for(sal_Int32 i = 0; i < n; ++i)
+    {
+        uno::Reference< chart2::XTimeBased > xTimeBased(xDataSequences[i]->getValues(), uno::UNO_QUERY);
+        SAL_WARN_IF(!xTimeBased.is(), "chart2", "does not support time based charting");
+        if(xTimeBased.is())
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(xTimeBased, uno::UNO_QUERY_THROW);
+            xPropSet->setPropertyValue("TimeBased", uno::makeAny(bTimeBased));
+        }
+    }
 }
 
 void ChartModel::getNextTimePoint()
 {
-    uno::Reference< chart2::XTimeBased > xTimeBased(getUsedData(), uno::UNO_QUERY);
-    SAL_WARN_IF(!xTimeBased.is(), "chart2", "does not support time based charting");
-    if(xTimeBased.is())
-        xTimeBased->switchToNext();
+    uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences = getDataSequences();
+    sal_Int32 n = xDataSequences.getLength();
+    for(sal_Int32 i = 0; i < n; ++i)
+    {
+        uno::Reference< chart2::XTimeBased > xTimeBased(xDataSequences[i]->getValues(), uno::UNO_QUERY);
+        SAL_WARN_IF(!xTimeBased.is(), "chart2", "does not support time based charting");
+        if(xTimeBased.is())
+        {
+            xTimeBased->switchToNext();
+        }
+    }
 }
 
 }  // namespace chart

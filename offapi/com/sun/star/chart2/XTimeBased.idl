@@ -21,6 +21,13 @@ interface XTimeBased : com::sun::star::uno::XInterface
      *      FALSE if the data wrapped around
      */
     boolean switchToNext();
+
+    /**
+     * point is the zero based index into the time based array
+     *
+     * @return FALSE if the point is outside of the supported array
+     */
+    boolean setToPointInTime( [in] long point );
 };
 
 }; }; }; };
