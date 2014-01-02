@@ -1825,11 +1825,50 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
                 WW8_CP nStart = GetAnnotationStart(nAtnIndex);
                 WW8_CP nEnd = GetAnnotationEnd(nAtnIndex);
                 sal_Int32 nLen = nEnd - nStart;
-                // Don't support ranges affecting multiple SwTxtNode for now.
-                if (nLen && pPaM->GetPoint()->nContent.GetIndex() >= nLen)
-                {
-                    pPaM->SetMark();
-                    pPaM->GetPoint()->nContent -= nLen;
+                if( nLen )
+                 {
+                    if (pPaM->GetPoint()->nContent.GetIndex() >= nLen)
+                    {
+                        pPaM->SetMark();
+                        pPaM->GetPoint()->nContent -= nLen;
+                    }
+                    else if (pPaM->GetPoint()->nNode.GetNode().IsTxtNode() )
+                    {
+                        pPaM->SetMark();
+                        nLen -= pPaM->GetPoint()->nContent.GetIndex();
+
+                        SwTxtNode* pTxtNode = 0;
+                        // Find first text node which affected by the comment
+                        while( pPaM->GetPoint()->nNode >= 0 )
+                        {
+                            SwNode* pNode = 0;
+                            // Find previous text node
+                            do
+                            {
+                                pPaM->GetPoint()->nNode--;
+                                nLen--; // End line character
+                                pNode = &pPaM->GetPoint()->nNode.GetNode();
+                            }
+                            while( !pNode->IsTxtNode() && pPaM->GetPoint()->nNode >= 0 );
+
+                            // Subtrackt previous text node's length
+                            if( pNode && pNode->IsTxtNode() )
+                            {
+                                pTxtNode = pNode->GetTxtNode();
+                                if( nLen < pTxtNode->Len() )
+                                    break;
+                                else
+                                    nLen -= pTxtNode->Len();
+                            }
+                        }
+
+                        // Set postion of the text range's first character
+                        if( pTxtNode )
+                        {
+                            pTxtNode->MakeStartIndex(&pPaM->GetPoint()->nContent);
+                            pPaM->GetPoint()->nContent += pTxtNode->Len() - nLen;
+                        }
+                    }
                 }
             }
         }
