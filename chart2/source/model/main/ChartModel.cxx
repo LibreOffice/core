@@ -1401,6 +1401,7 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     bSet = false;
     mnStart = nStart;
     mnEnd = nEnd;
+    mbTimeBased = true;
 }
 
 }  // namespace chart

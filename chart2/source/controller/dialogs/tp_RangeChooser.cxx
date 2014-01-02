@@ -118,6 +118,11 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     m_pRB_Rows->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pCB_FirstRowAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pCB_FirstColumnAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+#if 0
+    m_pCB_TimeBased->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_pEd_TimeStart->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_pEd_TimeEnd->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+#endif
 }
 
 RangeChooserTabPage::~RangeChooserTabPage()

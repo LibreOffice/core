@@ -176,7 +176,7 @@ public:
     int RenderRectangleShape();
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
-    int CreateTextTexture(::rtl::OUString textValue, long color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation);
+    int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation);
     int RenderTextShape();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);

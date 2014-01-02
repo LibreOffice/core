@@ -1315,7 +1315,7 @@ int OpenGLRender::RenderRectangleShape()
     return 0;
 }
 
-int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation)
+int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation)
 {
     VirtualDevice aDevice;
     Font aFont(font, Size(0, 100));
