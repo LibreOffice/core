@@ -55,6 +55,8 @@ namespace unx
 #define OPENGL_SCALE_VALUE 20
 
 using namespace std;
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
 
 typedef struct PosVeci3
 {
@@ -97,6 +99,15 @@ typedef struct RectanglePointList
     float xScale;
     float yScale;
 }RectanglePointList;
+typedef struct TextInfo
+{
+    GLuint texture;
+    float x;
+    float y;
+    float z;
+    double rotation;
+    float vertex[8];
+}TextInfo;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -142,6 +153,7 @@ public:
     int GetHeight();
     void Release();
     int CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);
+    int CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize);
     int RenderLine2FBO(int wholeFlag);
     int SetLine2DShapePoint(float x, float y, int listLength);
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b);
@@ -164,6 +176,9 @@ public:
     int RenderRectangleShape();
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
+    int ProcessText(com::sun::star::uno::Reference<com::sun::star::drawing::XShape > &xShape);
+    int CreateTextTexture(::rtl::OUString textValue, long color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation);
+    int RenderTextShape();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -292,6 +307,15 @@ private:
     RectanglePointList m_RectangleList;
 
     list <RectanglePointList> m_RectangleShapePointList;
+    // add for text
+    TextInfo m_TextInfo;
+    list <TextInfo> m_TextInfoList;
+    GLint m_TextProID;
+    GLint m_TextMatrixID;
+    GLint m_TextVertexID;
+    GLint m_TextTexCoordID;
+    GLuint m_TextTexCoordBuf;
+    GLint m_TextTexID;
 
 };
 

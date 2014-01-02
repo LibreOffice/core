@@ -14,11 +14,11 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/pngwrite.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <comphelper/InlineContainer.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
@@ -36,6 +36,9 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <editeng/unoprnms.hxx>
 #include <boost/scoped_array.hpp>
+#include <vcl/virdev.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/bmpacc.hxx>
 
 using namespace com::sun::star;
 
@@ -52,6 +55,8 @@ using namespace std;
 #if defined( _WIN32 )
 #define WGL_SAMPLE_BUFFERS_ARB   0x2041
 #define WGL_SAMPLES_ARB          0x2042
+#else
+typedef unsigned char BYTE;
 #endif
 
 const char *ColorFragmemtShader = OPENGL_SHADER (
@@ -1312,5 +1317,267 @@ int OpenGLRender::RenderRectangleShape()
     return 0;
 }
 
+
+int OpenGLRender::ProcessText(uno::Reference< drawing::XShape > &xShape)
+{
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    awt::Point aPos( xShape->getPosition() );
+    awt::Size aSize( xShape->getSize());
+    //use device to create text bitmap
+#if 0
+    com::sun::star::uno::Sequence<com::sun::star::beans::Property> Sequenceproperty = xProp->getPropertySetInfo()->getProperties();
+    com::sun::star::beans::Property* Propertyarr = Sequenceproperty.getArray();
+    int count = Sequenceproperty.getLength();
+    printf("Property length:%d\n",count);
+    for(int i=0;i<count;i++)
+    {
+        wprintf(L"item %d,name:%s", i,Propertyarr[i].Name.getStr());
+        com::sun::star::uno::Type t = Propertyarr[i].Type;
+        ::rtl::OUString strtypename = t.getTypeName();
+        sal_Unicode * typeName = (sal_Unicode *)strtypename.getStr();
+        wprintf(L",Type:%s ", typeName);
+        com::sun::star::uno::TypeClass typeclass = t.getTypeClass();
+        com::sun::star::uno::Any value = xProp->getPropertyValue(Propertyarr[i].Name);
+        if(strtypename.equals(OUString(L"string")))
+        {
+            ::rtl::OUString * strvalue = (::rtl::OUString *)value.getValue();
+           wprintf(L",Value:%s \n", strvalue->getStr());
+        }
+        else if(strtypename.equals(OUString(L"short")))
+        {
+            short * shortvalue = (short*)value.getValue();
+            printf(",Value:%d \n",*shortvalue);
+        }
+        else if(strtypename.equals(OUString(L"long")))
+        {
+            long * longvalue = (long*)value.getValue();
+            printf(",Value:%d \n",*longvalue);
+        }
+        else if(strtypename.equals(OUString(L"boolean")))
+        {
+            short * bvalue = (short*)value.getValue();
+            if(*bvalue==0)
+                printf(",Value:false \n");
+            else
+                printf(",Value:true \n");
+        }
+        else
+        {
+            printf(",Value:object \n");
+        }
+    }
+    printf("\n");
+#endif
+    //get the string
+    uno::Reference< text::XTextRange > xTextRange( xShape, uno::UNO_QUERY );
+
+    ::rtl::OUString textValue = xTextRange->getString();
+    wprintf(L"Text value:%s \n", textValue.getStr());
+    //get text color, the output value always be white, so we use black color to text
+    uno::Any co =  xProp->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR);
+    long *colorvalue = (long*)co.getValue();
+
+    //get font
+    uno::Any font =  xProp->getPropertyValue(UNO_NAME_EDIT_CHAR_FONTNAME);
+    ::rtl::OUString *fontValue = (::rtl::OUString *)font.getValue();
+    wprintf(L"Text font:%s \n", fontValue->getStr());
+    uno::Any rotation =  xProp->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE);
+    long *rot = (long*)rotation.getValue();
+    cout << "*rot = " << (*rot) << endl;
+    //using the string and the color to create the text texture
+    cout << "color value = " << *colorvalue << endl;
+    CreateTextTexture(textValue, *colorvalue, *fontValue, aPos, aSize, (*rot));
+    RenderTextShape();
+    m_fZStep += 0.01f;
+    return 0;
+}
+
+int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation)
+{
+    VirtualDevice aDevice;
+    Font aFont(font, Size(0, 100));
+    aFont.SetWeight(WEIGHT_BOLD);
+    aFont.SetItalic(ITALIC_NORMAL);
+    aDevice.SetFont(aFont);
+    Rectangle aRect;
+    aDevice.GetTextBoundRect(aRect, textValue);
+    int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
+    int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
+    aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
+    aDevice.DrawText(Point(0, 0), textValue);
+    int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
+    int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
+    BitmapEx aBitmapEx(aDevice.GetBitmap(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+    Bitmap aBitmap( aBitmapEx.GetBitmap());
+    int bitmapsize = aBitmap.GetSizeBytes();
+    BYTE *bitmapBuf = (BYTE *)malloc(bitmapsize * 4 / 3 + BMP_HEADER_LEN);
+    CreateBMPHeaderRGBA(bitmapBuf, bmpWidth, bmpHeight);
+    BitmapReadAccess* pRAcc = aBitmap.AcquireReadAccess();
+    BYTE r = (color & 0x00FF0000) >> 16;
+    BYTE g = (color & 0x0000FF00) >> 8;
+    BYTE b = (color & 0x000000FF);
+
+    cout << "r = " << r << ", g = " << g << ", b = " << b <<endl;
+    for (long ny = 0; ny < bmpHeight; ny++)
+    {
+        for(long nx = 0; nx < bmpWidth; nx++)
+        {
+           sal_uInt8 *pm = pRAcc->GetScanline(ny) + nx * 3;
+           sal_uInt8 *mk = bitmapBuf +  BMP_HEADER_LEN + ny * bmpWidth * 4 + nx * 4;
+           if ((*pm == 0xFF) && (*(pm + 1) == 0xFF) && (*(pm + 2) == 0xFF))
+           {
+               *mk = *pm;
+               *(mk + 1) = *(pm + 1);
+               *(mk + 2) = *(pm + 2);
+               *(mk + 3) = 0;
+           }
+           else
+           {
+               *mk = b;
+               *(mk + 1) = g;
+               *(mk + 2) = r;
+               *(mk + 3) = ((0xFF - *pm) + (0xFF - *(pm + 1)) + (0xFF - *(pm + 2))) / 3;
+           }
+        }
+    }
+    aBitmap.ReleaseAccess(pRAcc);
+    m_TextInfo.x = (float)(aPos.X + aSize.Width / 2) / OPENGL_SCALE_VALUE - ((float)m_iWidth / 2);
+    m_TextInfo.y = (float)(aPos.Y + aSize.Height / 2) / OPENGL_SCALE_VALUE - ((float)m_iHeight / 2);
+    m_TextInfo.z = m_fZStep;
+    m_TextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
+    m_TextInfo.vertex[0] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    m_TextInfo.vertex[1] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
+
+    m_TextInfo.vertex[2] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    m_TextInfo.vertex[3] = (float)(-aSize.Height / 2) / OPENGL_SCALE_VALUE;
+
+    m_TextInfo.vertex[4] = (float)(aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    m_TextInfo.vertex[5] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
+
+    m_TextInfo.vertex[6] = (float)(-aSize.Width / 2) / OPENGL_SCALE_VALUE;
+    m_TextInfo.vertex[7] = (float)(aSize.Height / 2) / OPENGL_SCALE_VALUE;
+
+    m_fPicLeft = (m_TextInfo.x + m_TextInfo.vertex[0])< m_fPicLeft ? (m_TextInfo.x + m_TextInfo.vertex[0]) : m_fPicLeft;
+
+    m_fPicRight = (m_TextInfo.x + m_TextInfo.vertex[2]) > m_fPicRight ? (m_TextInfo.x + m_TextInfo.vertex[2]) : m_fPicRight;
+
+    m_fPicBottom = (m_TextInfo.y + m_TextInfo.vertex[1]) < m_fPicBottom ? (m_TextInfo.y + m_TextInfo.vertex[1]) : m_fPicBottom;
+
+    m_fPicTop = (m_TextInfo.y + m_TextInfo.vertex[5]) > m_fPicTop ? (m_TextInfo.y + m_TextInfo.vertex[5]) : m_fPicTop;
+    //if has ratotion, we must re caculate the centrol pos
+
+    if (rotation)
+    {
+        //use left top
+        double r = sqrt((double)(aSize.Width * aSize.Width + aSize.Height * aSize.Height)) / 2;
+        double sinOrgAngle =  m_TextInfo.vertex[1] / r / 2;
+        double cosOrgAngle = m_TextInfo.vertex[0] / r / 2;
+        double sinDiataAngle = sin(m_TextInfo.rotation);
+        double cosDiataAngle = cos(m_TextInfo.rotation);
+        double x = r * (cosOrgAngle * cosDiataAngle - sinOrgAngle * sinDiataAngle);
+        double y = r * (sinOrgAngle * cosDiataAngle + cosOrgAngle * sinDiataAngle);
+        double diataX = x - m_TextInfo.vertex[0];
+        double diataY = y - m_TextInfo.vertex[1];
+        m_TextInfo.x = m_TextInfo.x - diataX;
+        m_TextInfo.y = m_TextInfo.y - diataY;
+
+    }
+
+    glGenTextures(1, &m_TextInfo.texture);
+    glBindTexture(GL_TEXTURE_2D, m_TextInfo.texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf + BMP_HEADER_LEN);
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    m_TextInfoList.push_back(m_TextInfo);
+    free(bitmapBuf);
+    return 0;
+}
+
+int OpenGLRender::RenderTextShape()
+{
+    int listNum = m_TextInfoList.size();
+    for (int i = 0; i < listNum; i++)
+    {
+        TextInfo &textInfo = m_TextInfoList.front();
+        PosVecf3 trans = {textInfo.x, textInfo.y, textInfo.z};
+        PosVecf3 angle = {0.0f, 0.0f, textInfo.rotation};
+        PosVecf3 scale = {1.0, 1.0, 1.0f};
+        MoveModelf(trans, angle, scale);
+        m_MVP = m_Projection * m_View * m_Model;
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(textInfo.vertex), textInfo.vertex, GL_STATIC_DRAW);
+        glUseProgram(m_TextProID);
+
+        glUniformMatrix4fv(m_TextMatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_TextVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_TextVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        //tex coord
+        glEnableVertexAttribArray(m_TextTexCoordID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBuf);
+        glVertexAttribPointer(
+            m_TextTexCoordID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        //texture
+        glBindTexture(GL_TEXTURE_2D, textInfo.texture);
+        glUniform1i(m_TextTexID, 0);
+        glDrawArrays(GL_QUADS, 0, 4);
+        glDisableVertexAttribArray(m_TextTexCoordID);
+        glDisableVertexAttribArray(m_TextVertexID);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glUseProgram(0);
+        glDeleteTextures(1, &textInfo.texture);
+        m_TextInfoList.pop_front();
+    }
+    return 0;
+}
+
+int OpenGLRender::CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize)
+{
+    unsigned char header[BMP_HEADER_LEN] = {
+        0x42, 0x4d, 0, 0, 0, 0, 0, 0, 0, 0,
+        54, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 32, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0
+    };
+
+    long file_size = (long)xsize * (long)ysize * 4 + 54;
+    header[2] = (unsigned char)(file_size &0x000000ff);
+    header[3] = (file_size >> 8) & 0x000000ff;
+    header[4] = (file_size >> 16) & 0x000000ff;
+    header[5] = (file_size >> 24) & 0x000000ff;
+
+    long width = xsize;
+    header[18] = width & 0x000000ff;
+    header[19] = (width >> 8) &0x000000ff;
+    header[20] = (width >> 16) &0x000000ff;
+    header[21] = (width >> 24) &0x000000ff;
+
+    long height = -ysize;
+    header[22] = height &0x000000ff;
+    header[23] = (height >> 8) &0x000000ff;
+    header[24] = (height >> 16) &0x000000ff;
+    header[25] = (height >> 24) &0x000000ff;
+    memcpy(bmpHeader, header, BMP_HEADER_LEN);
+    return 0;
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
