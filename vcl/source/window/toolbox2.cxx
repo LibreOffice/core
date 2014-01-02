@@ -624,6 +624,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 
     // Item anlegen und in die Liste einfuegen
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, rImage, nBits ) );
+    SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( sal_True );
@@ -645,6 +646,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 
     // Item anlegen und in die Liste einfuegen
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), ImplToolItem( nItemId, rImage, ImplConvertMenuString( rText ), nBits ) );
+    SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( sal_True );
