@@ -99,6 +99,21 @@ void ValueSetWithTextControl::AddItem(
     aItem.maSelectedItemImage = (pSelectedItemImage != 0)
                                 ? *pSelectedItemImage
                                 : rItemImage;
+
+    if ( GetDPIScaleFactor() > 1 )
+    {
+        BitmapEx b = aItem.maItemImage.GetBitmapEx();
+        b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+        aItem.maItemImage = Image(b);
+
+        if ( pSelectedItemImage != 0 )
+        {
+            b = aItem.maSelectedItemImage.GetBitmapEx();
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+            aItem.maSelectedItemImage = Image(b);
+        }
+    }
+
     aItem.maItemText = rItemText;
 
     maItems.push_back( aItem );
@@ -151,6 +166,20 @@ void ValueSetWithTextControl::ReplaceItemImages(
     maItems[nItemId-1].maSelectedItemImage = (pSelectedItemImage != 0)
                                              ? *pSelectedItemImage
                                              : rItemImage;
+
+    if ( GetDPIScaleFactor() > 1 )
+    {
+        BitmapEx b = maItems[nItemId-1].maItemImage.GetBitmapEx();
+        b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+        maItems[nItemId-1].maItemImage = Image(b);
+
+        if ( pSelectedItemImage != 0 )
+        {
+            b = maItems[nItemId-1].maSelectedItemImage.GetBitmapEx();
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+            maItems[nItemId-1].maSelectedItemImage = Image(b);
+        }
+    }
 }
 
 
