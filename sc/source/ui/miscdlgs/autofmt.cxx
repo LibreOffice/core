@@ -109,7 +109,7 @@ void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, Font& rFont, Font& rCJKFont
     if ( pCurData )
     {
         rFont = rCJKFont = rCTLFont = GetFont();
-        Size aFontSize( rFont.GetSize().Width(), 10 );
+        Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
 
         const SvxFontItem*        pFontItem       = (const SvxFontItem*)      pCurData->GetItem( nIndex, ATTR_FONT );
         const SvxWeightItem*      pWeightItem     = (const SvxWeightItem*)    pCurData->GetItem( nIndex, ATTR_FONT_WEIGHT );

@@ -167,6 +167,7 @@ Control RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE
     DialogControl = TRUE;
     Border = FALSE;
 
+    //This is broken with the auto-doubled hidpi bitmaps
     Size = MAP_PIXEL(  POPUPPANEL_MARGIN_SMALL_PIXEL * 2 + 108,  POPUPPANEL_MARGIN_SMALL_PIXEL * 2  + 138);
 
     ToolBox TB_BORDER1
