@@ -59,6 +59,7 @@ my $shape_name = "";
 my $state = "";
 my $path = "";
 my $adjust = "";
+my %adj_names;
 my $max_adj_no = 0;
 my @formulas = ();
 my %variables = ();
@@ -887,6 +888,10 @@ sub start_element( $% )
     elsif ( $state eq "adjust" ) {
         if ( $element eq "gd" ) {
             my $adj_no = $attr{'name'};
+
+            # Save this adj number for this type for later use.
+            push(@{$adj_names{$shape_name}}, $adj_no);
+
             my $is_const = 0;
 
             $adj_no =~ s/^adj//;
@@ -1189,6 +1194,7 @@ print <<EOF;
 //   '$src_text'
 // which are part of the OOXML documentation
 
+#include <map>
 #include <filter/msfilter/escherex.hxx>
 
 const char* pShapeTypes[ ESCHER_ShpInst_COUNT ] =
@@ -1224,4 +1230,23 @@ for ( my $i = 0; $i < 203; ++$i ) {
 
 print <<EOF;
 };
+
+std::map< OString, std::vector<OString> > ooxDrawingMLGetAdjNames()
+{
+    std::map< OString, std::vector<OString> > aMap;
 EOF
+
+foreach my $adj_name (keys %adj_names)
+{
+    foreach my $adj (@{$adj_names{$adj_name}})
+    {
+        print "    aMap[\"$adj_name\"].push_back(\"$adj\");\n";
+    }
+}
+
+print <<EOF;
+    return aMap;
+}
+EOF
+
+# vim:set ft=perl shiftwidth=4 softtabstop=4 expandtab: #
