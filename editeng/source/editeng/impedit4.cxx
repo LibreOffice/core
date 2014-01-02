@@ -585,9 +585,9 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         ParaPortion* pParaPortion = FindParaPortion( pNode );
         DBG_ASSERT( pParaPortion, "Portion not found: WriteRTF" );
 
-        sal_uInt16 nIndex = 0;
-        sal_uInt16 nStartPos = 0;
-        sal_uInt16 nEndPos = pNode->Len();
+        sal_Int32 nIndex = 0;
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = pNode->Len();
         sal_uInt16 nStartPortion = 0;
         sal_uInt16 nEndPortion = (sal_uInt16)pParaPortion->GetTextPortions().Count() - 1;
         sal_Bool bFinishPortion = sal_False;
@@ -653,12 +653,8 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 if ( WriteItemListAsRTF( aAttribItems, rOutput, nNode, nIndex, aFontTable, aColorList ) )
                     rOutput.WriteChar( ' ' );
 
-                sal_uInt16 nS = nIndex;
-                sal_uInt16 nE = nIndex + pTextPortion->GetLen();
-                if ( n == nStartPortion )
-                    nS = nStartPos;
-                if ( n == nEndPortion )
-                    nE = nEndPos;
+                const sal_Int32 nS = n == nStartPortion ? nStartPos : nIndex;
+                const sal_Int32 nE = n == nEndPortion ? nEndPos : nIndex + pTextPortion->GetLen();
 
                 OUString aRTFStr = aEditDoc.GetParaAsString( pNode, nS, nE);
                 RTFOutFuncs::Out_String( rOutput, aRTFStr, eDestEnc );
@@ -3039,7 +3035,7 @@ short ImpEditEngine::ReplaceTextOnly(
     for ( sal_uInt16 n = 0; n < nCharsAfterTransliteration; n++ )
     {
         const sal_Int32 nCurrentPos = nCurrentStart+n;
-        sal_Int32 nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
+        const sal_Int32 nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
 
         if ( !nDiff )
         {
@@ -3053,7 +3049,7 @@ short ImpEditEngine::ReplaceTextOnly(
             pNode->SetChar( nCurrentPos, rNewText[n] );
 
             DBG_ASSERT( (nCurrentPos+1) < pNode->Len(), "TransliterateText - String smaller than expected!" );
-            GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), sal::static_int_cast< sal_uInt16 >(-nDiff) );
+            GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), -nDiff );
         }
         else
         {

@@ -2112,9 +2112,9 @@ OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 }
 
 OUString EditDoc::GetParaAsString(
-    const ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, bool bResolveFields) const
+    const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, bool bResolveFields) const
 {
-    if ( nEndPos > pNode->Len() )
+    if ( nEndPos < 0 || nEndPos > pNode->Len() )
         nEndPos = pNode->Len();
 
     DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
@@ -2340,7 +2340,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     return aPaM;
 }
 
-EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_uInt16 nChars )
+EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 {
     // Maybe remove Features!
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
@@ -2351,7 +2351,7 @@ EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_uInt16 nChars )
     return aPaM;
 }
 
-void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem )
+void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem )
 {
     DBG_ASSERT( pNode, "What to do with the attribute?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
@@ -2388,18 +2388,15 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_uInt16 nStart, sa
     SetModified(true);
 }
 
-sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt16 nWhich )
+sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nWhich )
 {
     EditCharAttrib* pStarting;
     EditCharAttrib* pEnding;
     return RemoveAttribs( pNode, nStart, nEnd, pStarting, pEnding, nWhich );
 }
 
-sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart_, sal_uInt16 nEnd_, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
+sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
 {
-    const sal_Int32 nStart = nStart_;
-    const sal_Int32 nEnd = nEnd_;
-
     DBG_ASSERT( pNode, "What to do with the attribute?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
@@ -2475,7 +2472,7 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart_, sal_uIn
                 }
                 else // Attribute must be split ...
                 {
-                    sal_uInt16 nOldEnd = pAttr->GetEnd();
+                    const sal_Int32 nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
@@ -2506,7 +2503,7 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart_, sal_uIn
     return bChanged;
 }
 
-void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd )
+void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd )
 {
     // This method no longer checks whether a corresponding attribute already
     // exists at this place!
@@ -2517,7 +2514,7 @@ void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sa
     SetModified( sal_True );
 }
 
-void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem )
+void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, const SfxPoolItem& rPoolItem )
 {
     if ( nStart != nEnd )
     {
@@ -2560,11 +2557,8 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
     SetModified( sal_True );
 }
 
-void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos_, sal_uInt16 nEndPos_, SfxItemSet& rCurSet )
+void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet )
 {
-    const sal_Int32 nStartPos = nStartPos_;
-    const sal_Int32 nEndPos = nEndPos_;
-
     DBG_ASSERT( pNode, "Where to search?" );
     DBG_ASSERT( nStartPos <= nEndPos, "Invalid region!" );
 
