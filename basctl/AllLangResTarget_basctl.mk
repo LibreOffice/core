@@ -41,7 +41,6 @@ $(eval $(call gb_SrsTarget_set_include,basctl/res,\
 $(eval $(call gb_SrsTarget_add_files,basctl/res,\
 	basctl/source/basicide/basicprint.src \
 	basctl/source/basicide/basidesh.src \
-	basctl/source/basicide/brkdlg.src \
 	basctl/source/basicide/macrodlg.src \
 	basctl/source/basicide/moduldlg.src \
 	basctl/source/basicide/objdlg.src \

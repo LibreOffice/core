@@ -34,16 +34,12 @@ namespace basctl
 class BreakPointDialog : public ModalDialog
 {
 private:
-    ComboBox        aComboBox;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    PushButton      aNewButton;
-    PushButton      aDelButton;
-//  PushButton      aShowButton;
-    ::CheckBox      aCheckBox;
-    FixedText       aBrkText;
-    FixedText       aPassText;
-    NumericField    aNumericField;
+    ComboBox*       m_pComboBox;
+    OKButton*       m_pOKButton;
+    PushButton*     m_pNewButton;
+    PushButton*     m_pDelButton;
+    ::CheckBox*     m_pCheckBox;
+    NumericField*   m_pNumericField;
 
     BreakPointList & m_rOriginalBreakPointList;
     BreakPointList m_aModifiedBreakPointList;
