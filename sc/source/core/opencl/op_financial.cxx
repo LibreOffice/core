@@ -3665,7 +3665,7 @@ void OpCouppcd::GenSlidingWindowFunction(
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
       if (i)
-      ss << ",";
+          ss << ",";
       vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
@@ -3762,7 +3762,7 @@ vSubArguments)
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
       if (i)
-      ss << ",";
+          ss << ",";
       vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
@@ -3872,7 +3872,7 @@ void OpCoupdaysnc::GenSlidingWindowFunction(
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
       if (i)
-      ss << ",";
+          ss << ",";
       vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
@@ -3968,7 +3968,7 @@ void OpCoupnum::GenSlidingWindowFunction(std::stringstream &ss,
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
       if (i)
-      ss << ",";
+          ss << ",";
       vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ") {\n";
