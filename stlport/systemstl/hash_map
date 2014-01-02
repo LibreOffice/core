@@ -25,6 +25,8 @@
 #ifdef HAVE_STL_INCLUDE_PATH
 	// TODO: use computed include file name
 	#include_next <unordered_map>
+#elif defined(__cplusplus) && (__cplusplus >= 201103L)
+	#include <unordered_map>
 #elif defined(_MSC_VER)
 	#include <../../VC/include/unordered_map>
 	#define STLP4_EMUBASE_NS ::std::tr1
