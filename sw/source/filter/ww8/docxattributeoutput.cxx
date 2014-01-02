@@ -5716,16 +5716,29 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
     else if (m_bDMLTextFrameSyntax)
     {
-        m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
-        m_pSerializer->startElementNS(XML_a, XML_srgbClr,
-                                      XML_val, sColor,
-                                      FSEND);
-        if (oAlpha)
-            m_pSerializer->singleElementNS(XML_a, XML_alpha,
-                                           XML_val, OString::number(*oAlpha),
-                                           FSEND);
-        m_pSerializer->endElementNS(XML_a, XML_srgbClr);
-        m_pSerializer->endElementNS(XML_a, XML_solidFill);
+        bool notImageBackground = true;
+        const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
+        if (pItem)
+        {
+            const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
+            if(pFillStyle->GetValue() == XFILL_BITMAP)
+            {
+                notImageBackground = false;
+            }
+        }
+        if(notImageBackground)
+        {
+            m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
+            m_pSerializer->startElementNS(XML_a, XML_srgbClr,
+                                          XML_val, sColor,
+                                          FSEND);
+            if (oAlpha)
+                m_pSerializer->singleElementNS(XML_a, XML_alpha,
+                                              XML_val, OString::number(*oAlpha),
+                                              FSEND);
+            m_pSerializer->endElementNS(XML_a, XML_srgbClr);
+            m_pSerializer->endElementNS(XML_a, XML_solidFill);
+        }
     }
     else if ( !m_rExport.bOutPageDescs )
     {
@@ -5823,6 +5836,14 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         {
             const XFillStyleItem* pFillStyle = static_cast<const XFillStyleItem*>(pItem);
             FormatFillStyle(*pFillStyle);
+            if (m_oFillStyle && *m_oFillStyle == XFILL_BITMAP)
+            {
+                const SdrObject* pSdrObj = m_rExport.mpParentFrame->GetFrmFmt().FindRealSdrObject();
+                uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
+                m_rDrawingML.SetFS(m_pSerializer);
+                m_rDrawingML.WriteBlipFill( xPropertySet, "BackGraphicURL" );
+            }
         }
 
         pItem = GetExport().HasItem(RES_FILL_GRADIENT);

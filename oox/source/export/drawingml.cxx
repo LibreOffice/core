@@ -605,7 +605,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
 
         WriteBlip( rXPropSet, aURL );
 
-        if( sURLPropName == "FillBitmapURL" )
+        if( sURLPropName == "FillBitmapURL" || sURLPropName == "BackGraphicURL")
             WriteBlipMode( rXPropSet );
         else if( GetProperty( rXPropSet, "FillBitmapStretch" ) ) {
                 bool bStretch = false;

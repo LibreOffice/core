@@ -627,6 +627,12 @@ Reference< XShape > Shape::createAndInsert(
                     aShapeProps.setProperty(PROP_BackColorTransparency, aShapeProps[PROP_FillTransparence]);
                     aShapeProps.erase(PROP_FillTransparence);
                 }
+                // TextFrames have BackGrahicURL, not FillBitmapURL
+                if (aShapeProps.hasProperty(PROP_FillBitmapURL))
+                {
+                    aShapeProps.setProperty(PROP_BackGraphicURL, aShapeProps[PROP_FillBitmapURL]);
+                    aShapeProps.erase(PROP_FillBitmapURL);
+                }
                 // And no LineColor property; individual borders can have colors
                 if (aShapeProps.hasProperty(PROP_LineColor))
                 {
