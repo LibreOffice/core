@@ -772,7 +772,6 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "bang", "irregularSeal2" },
     { "lightning", "lightningBolt" },
     { "heart", "heart" },
-    { "mso-spt75", "pictureFrame" },
     { "quad-arrow", "quadArrow" },
     { "left-arrow-callout", "leftArrowCallout" },
     { "right-arrow-callout", "rightArrowCallout" },
