@@ -55,6 +55,7 @@
 #include <wrong.hxx>
 #include <unotextrange.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
 #include <comphelper/flagguard.hxx>

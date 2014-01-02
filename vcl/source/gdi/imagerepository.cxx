@@ -21,6 +21,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/svapp.hxx>
+#include "vcl/settings.hxx"
 #include "impimagetree.hxx"
 
 namespace vcl

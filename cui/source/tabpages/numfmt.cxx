@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <svx/dialogs.hrc>

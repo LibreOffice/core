@@ -45,6 +45,7 @@
 #include <osl/file.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>

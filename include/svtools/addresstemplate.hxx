@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <unotools/configitem.hxx>
 

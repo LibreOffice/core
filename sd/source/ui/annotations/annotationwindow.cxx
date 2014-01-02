@@ -67,6 +67,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/helpers.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

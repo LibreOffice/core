@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svdobj.hxx>

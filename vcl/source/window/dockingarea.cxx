@@ -21,6 +21,7 @@
 #include <vcl/dockingarea.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 

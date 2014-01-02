@@ -29,6 +29,7 @@
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include <vcl/settings.hxx>
 
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;

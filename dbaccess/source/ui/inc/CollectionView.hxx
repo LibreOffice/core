@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace dbaui
 {

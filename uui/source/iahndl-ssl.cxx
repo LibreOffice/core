@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "svl/zforlist.hxx"
 #include "vcl/svapp.hxx"
+#include <vcl/settings.hxx>
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"

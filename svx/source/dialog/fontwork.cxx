@@ -36,6 +36,7 @@
 #include <editeng/outlobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <vcl/settings.hxx>
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxFontWorkChildWindow, SID_FONTWORK );
 

@@ -31,6 +31,7 @@
 #include <svl/stritem.hxx>
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>

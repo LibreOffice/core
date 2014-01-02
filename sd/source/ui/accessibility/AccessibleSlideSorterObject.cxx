@@ -38,6 +38,7 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "glob.hrc"
 

@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/settings.hxx>
 
 #include "parawin.hxx"
 #include "parawin.hrc"

@@ -32,6 +32,7 @@
 #include "listviewitems.hxx"
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/settings.hxx>
 #include "browserids.hxx"
 #include "AppDetailPageHelper.hxx"
 #include <vcl/svapp.hxx>

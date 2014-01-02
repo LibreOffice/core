@@ -44,6 +44,8 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/valueset.hxx>

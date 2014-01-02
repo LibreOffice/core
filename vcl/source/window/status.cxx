@@ -27,6 +27,7 @@
 #include <vcl/help.hxx>
 #include <vcl/status.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 #include <window.h>

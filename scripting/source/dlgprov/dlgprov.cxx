@@ -50,7 +50,7 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-
+#include "vcl/settings.hxx"
 #include <util/MiscUtils.hxx>
 
 using namespace ::com::sun::star;

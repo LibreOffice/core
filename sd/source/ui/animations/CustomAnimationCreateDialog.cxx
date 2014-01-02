@@ -30,6 +30,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/settings.hxx>
 
 #include <svx/svdetc.hxx>
 #include <svx/svdstr.hrc>

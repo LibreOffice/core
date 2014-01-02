@@ -28,6 +28,7 @@
 
 // header for class ToolBox
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
 
 //.............................................................................
 namespace svx

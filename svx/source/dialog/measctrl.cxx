@@ -24,6 +24,7 @@
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
 
 SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)

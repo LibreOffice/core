@@ -36,6 +36,8 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/settings.hxx>
+
 #if !GTK_CHECK_VERSION(3,0,0)
 #  include <unx/x11/xlimits.hxx>
 #endif

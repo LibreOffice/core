@@ -24,6 +24,7 @@
 #include <svl/fstathelper.hxx>
 #include <osl/thread.h>
 #include <unotools/textsearch.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <sfx2/docfile.hxx>
 

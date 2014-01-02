@@ -106,7 +106,7 @@ private:
 
     // item ID for the given icon theme
     // might be zero when the theme is not installed and the item is removed
-    sal_uLong           aIconStyleItemId[STYLE_SYMBOLS_THEMES_MAX];
+    std::vector<unsigned> aIconStyleItemId;
     SvtTabAppearanceCfg*    pAppearanceCfg;
     CanvasSettings*         pCanvasSettings;
     SvtOptionsDrawinglayer* mpDrawinglayerOpt;

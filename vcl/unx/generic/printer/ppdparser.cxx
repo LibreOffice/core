@@ -28,6 +28,7 @@
 #include "vcl/strhelper.hxx"
 #include "vcl/helper.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
 #include "cupsmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"

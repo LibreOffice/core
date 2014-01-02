@@ -47,6 +47,8 @@
 #include <boost/unordered_set.hpp>
 
 #include <vcl/sysdata.hxx>
+#include <vcl/settings.hxx>
+
 #include "generic/printergfx.hxx"
 #include "fontmanager.hxx"
 #include "vcl/jobdata.hxx"

@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svx/xlnwtit.hxx>
 #include <sfx2/bindings.hxx>

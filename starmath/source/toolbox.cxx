@@ -24,6 +24,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
+
 #include "toolbox.hxx"
 #include "starmath.hrc"
 #include "toolbox.hrc"

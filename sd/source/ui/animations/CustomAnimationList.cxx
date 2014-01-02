@@ -33,6 +33,8 @@
 #include "CustomAnimation.hrc"
 #include "CustomAnimationPreset.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include "sdresid.hxx"
 
 #include "svtools/svlbitm.hxx"

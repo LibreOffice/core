@@ -55,6 +55,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/settings.hxx>
 
 #include <edtwin.hxx>
 #include <view.hxx>

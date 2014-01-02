@@ -24,6 +24,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <uiitems.hxx>
 #include <fmtinfmt.hxx>

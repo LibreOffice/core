@@ -47,6 +47,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #define TEXT_PADDING 5
 #define BOX_DISTANCE 10

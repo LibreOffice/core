@@ -46,6 +46,8 @@
 #include <svtools/insdlg.hxx>
 #include "svtools/treelistentry.hxx"
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
+
 #include <comphelper/classids.hxx>
 #include <unotools/configmgr.hxx>
 #include <docsh.hxx>

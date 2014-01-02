@@ -28,7 +28,9 @@
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
+
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dockwin.hxx>

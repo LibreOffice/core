@@ -26,6 +26,7 @@
 #include "globals.hrc"
 
 #include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
 
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>

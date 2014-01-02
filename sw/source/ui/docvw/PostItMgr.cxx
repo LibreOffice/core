@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 
 #include <viewopt.hxx>
 

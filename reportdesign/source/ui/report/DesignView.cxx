@@ -38,6 +38,8 @@
 #include "Navigator.hxx"
 #include "SectionWindow.hxx"
 #include "RptResId.hrc"
+
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 namespace rptui

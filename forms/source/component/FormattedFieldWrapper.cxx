@@ -27,6 +27,7 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace frm
 {

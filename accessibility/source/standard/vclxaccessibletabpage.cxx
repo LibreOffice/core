@@ -34,6 +34,7 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include "vcl/settings.hxx"
 
 #include <memory>
 

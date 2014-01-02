@@ -27,16 +27,6 @@
 
 namespace dbaui
 {
-    namespace
-    {
-        void lcl_setSpecialReadOnly( sal_Bool _bReadOnly, Window* _pWin )
-        {
-            StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-            const Color& rNewColor = _bReadOnly ? aSystemStyle.GetDialogColor() : aSystemStyle.GetFieldColor();
-            _pWin->SetBackground(Wallpaper(rNewColor));
-            _pWin->SetControlBackground(rNewColor);
-        }
-    }
 
     class OPropColumnEditCtrl : public OSQLNameEdit
     {
@@ -44,29 +34,17 @@ namespace dbaui
         short                m_nPos;
         OUString             m_strHelpText;
     public:
-        inline OPropColumnEditCtrl(Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropColumnEditCtrl(Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const SAL_OVERRIDE { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly)
-        {
-            SetReadOnly(_bReadOnly);
-            lcl_setSpecialReadOnly(_bReadOnly,this);
-        }
+        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly);
+
     };
-    inline OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
-                                                    OUString& _rAllowedChars,
-                                                    sal_uInt16 nHelpId,
-                                                    short nPosition,
-                                                    WinBits nWinStyle)
-        :OSQLNameEdit(pParent, nWinStyle, _rAllowedChars)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
+
     class OPropEditCtrl :   public Edit
     {
         OModuleClient m_aModuleClient;
@@ -74,33 +52,16 @@ namespace dbaui
         OUString             m_strHelpText;
 
     public:
-        inline OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
-        inline OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
+        OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
 
         virtual bool IsModified() const SAL_OVERRIDE { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly)
-        {
-            SetReadOnly(_bReadOnly);
-            lcl_setSpecialReadOnly(_bReadOnly,this);
-        }
+        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly);
     };
-
-    inline OPropEditCtrl::OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
-        :Edit(pParent, nWinStyle)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
-    inline OPropEditCtrl::OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition)
-        :Edit(pParent, _rRes)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
 
     class OPropNumericEditCtrl : public NumericField
     {
@@ -108,33 +69,17 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        inline OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
-        inline OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
+        OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
 
         virtual bool IsModified() const SAL_OVERRIDE { return GetText() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly)
-        {
-            SetReadOnly(_bReadOnly);
-            lcl_setSpecialReadOnly(_bReadOnly,this);
-        }
-    };
+        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly);
 
-    inline OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
-        :NumericField(pParent, nWinStyle)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
-    inline OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition)
-        :NumericField(pParent, _rRes)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
+    };
 
     class OPropListBoxCtrl : public ListBox
     {
@@ -142,33 +87,18 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        inline OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
-        inline OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
+        OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition = -1);
 
-        inline sal_Bool IsModified() const { return GetSelectEntryPos() != GetSavedValue(); }
+        sal_Bool IsModified() const { return GetSelectEntryPos() != GetSavedValue(); }
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly)
-        {
-            SetReadOnly(_bReadOnly);
-            lcl_setSpecialReadOnly(_bReadOnly,this);
-        }
+        virtual void SetSpecialReadOnly(sal_Bool _bReadOnly);
+
     };
 
-    inline OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
-        :ListBox(pParent, nWinStyle)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
-    inline OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition)
-        :ListBox(pParent, _rRes)
-        ,m_nPos(nPosition)
-    {
-        m_strHelpText = ModuleRes(nHelpId);
-    }
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_FIELDCONTROLS_HXX
 

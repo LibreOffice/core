@@ -29,6 +29,8 @@
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include <editeng/eeitem.hxx>
+
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <editeng/autokernitem.hxx>

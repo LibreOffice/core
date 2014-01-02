@@ -37,6 +37,7 @@
 #include "helpid.hrc"
 #include <algorithm>
 #include <svx/dialmgr.hxx>
+#include <vcl/settings.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

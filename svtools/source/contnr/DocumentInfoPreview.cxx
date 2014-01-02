@@ -30,6 +30,7 @@
 #include "svtools/DocumentInfoPreview.hxx"
 #include "svtools/imagemgr.hxx"
 #include "vcl/txtattr.hxx"
+#include "vcl/settings.hxx"
 #include "tools/datetime.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/pathoptions.hxx"

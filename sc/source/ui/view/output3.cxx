@@ -25,6 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "output.hxx"
 #include "drwlayer.hxx"

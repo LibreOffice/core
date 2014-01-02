@@ -33,6 +33,7 @@
 #include <svx/sxmkitm.hxx>
 
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
 
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)

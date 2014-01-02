@@ -29,6 +29,7 @@
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/settings.hxx>
 
 #include <window.h>
 #include <outdev.h>

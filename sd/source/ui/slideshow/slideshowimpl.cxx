@@ -66,6 +66,8 @@
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include "vcl/canvastools.hxx"
+#include <vcl/settings.hxx>
+
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"

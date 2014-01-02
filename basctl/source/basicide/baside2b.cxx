@@ -44,6 +44,7 @@
 #include <svl/urihelper.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/textwindowpeer.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/syntaxhighlight.hxx>

@@ -32,6 +32,8 @@
 #include "sdresid.hxx"
 #include "helpids.h"
 #include "strings.hrc"
+
+#include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
 using namespace ::com::sun::star;

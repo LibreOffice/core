@@ -32,6 +32,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/graph.hxx>
+#include <vcl/settings.hxx>
 
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

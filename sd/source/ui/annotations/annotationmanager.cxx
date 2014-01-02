@@ -29,6 +29,8 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
+
+#include <vcl/settings.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 

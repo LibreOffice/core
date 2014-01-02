@@ -28,6 +28,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
 #include <svl/smplhint.hxx>

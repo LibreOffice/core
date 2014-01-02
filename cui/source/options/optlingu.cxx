@@ -20,6 +20,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/settings.hxx>
 #include <tools/shl.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/lingucfg.hxx>

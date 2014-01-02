@@ -36,6 +36,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/settings.hxx>
 #include "igif/gifread.hxx"
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"

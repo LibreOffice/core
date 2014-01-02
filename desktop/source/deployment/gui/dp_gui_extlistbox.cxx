@@ -30,6 +30,7 @@
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include "cppuhelper/weakref.hxx"
+#include <vcl/settings.hxx>
 
 #define USER_PACKAGE_MANAGER    "user"
 #define SHARED_PACKAGE_MANAGER  "shared"

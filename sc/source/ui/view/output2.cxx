@@ -43,6 +43,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/settings.hxx>
 
 #include "output.hxx"
 #include "document.hxx"

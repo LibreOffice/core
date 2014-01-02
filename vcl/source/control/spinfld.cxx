@@ -24,6 +24,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/spin.h"
 #include "vcl/spinfld.hxx"
+#include "vcl/settings.hxx"
 
 #include "controldata.hxx"
 #include "svdata.hxx"

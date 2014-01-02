@@ -23,6 +23,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/formatbreakitem.hxx>

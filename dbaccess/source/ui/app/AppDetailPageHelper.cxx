@@ -59,6 +59,7 @@
 #include "databaseobjectview.hxx"
 #include "imageprovider.hxx"
 #include <vcl/waitobj.hxx>
+#include <vcl/settings.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "IApplicationController.hxx"

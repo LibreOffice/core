@@ -41,6 +41,7 @@
 #include "vcl/bmpacc.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/edit.hxx"
+#include <vcl/settings.hxx>
 // declare system types in sysdata.hxx
 #include <svsys.h>
 #include "vcl/sysdata.hxx"

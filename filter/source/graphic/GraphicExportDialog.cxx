@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <svtools/GraphicExportOptionsDialog.hxx>
+#include <unotools/syslocale.hxx>
 
 using namespace css;
 using namespace css::uno;

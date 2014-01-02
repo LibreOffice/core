@@ -40,6 +40,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>

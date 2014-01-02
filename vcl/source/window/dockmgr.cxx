@@ -34,6 +34,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/settings.hxx>
 
 
 // =======================================================================

@@ -35,6 +35,7 @@
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
 #include <vcl/txtattr.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>

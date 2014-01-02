@@ -55,6 +55,7 @@
 #include <vcl/lineinfo.hxx>
 #include "vcl/cvtgrf.hxx"
 #include "vcl/strhelper.hxx"
+#include "vcl/settings.hxx"
 
 #include <fontsubset.hxx>
 #include <outdev.h>

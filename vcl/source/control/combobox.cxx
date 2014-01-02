@@ -27,6 +27,7 @@
 #include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 #include <ilstbox.hxx>

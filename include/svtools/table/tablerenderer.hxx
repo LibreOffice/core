@@ -26,6 +26,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+class StyleSettings;
+
 //........................................................................
 namespace svt { namespace table
 {

@@ -36,6 +36,7 @@
 #include "unotools/localfilehelper.hxx"
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/settings.hxx>
 #include "svl/solar.hrc"
 #include "comphelper/string.hxx"
 #include "comphelper/storagehelper.hxx"

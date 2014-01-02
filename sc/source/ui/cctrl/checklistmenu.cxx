@@ -22,6 +22,7 @@
 #include "strload.hxx"
 
 #include <vcl/decoview.hxx>
+#include <vcl/settings.hxx>
 #include <tools/wintypes.hxx>
 
 #include "AccessibleFilterMenu.hxx"

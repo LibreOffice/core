@@ -52,6 +52,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
 namespace basctl

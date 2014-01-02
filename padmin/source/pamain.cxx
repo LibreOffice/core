@@ -24,6 +24,7 @@
 #include "vcl/vclmain.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/unowrap.hxx"
+#include <vcl/settings.hxx>
 
 #include "padialog.hxx"
 #include "helper.hxx"

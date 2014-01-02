@@ -28,6 +28,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/help.hxx"
+#include "vcl/settings.hxx"
 
 #include "helpwin.hxx"
 #include "svdata.hxx"

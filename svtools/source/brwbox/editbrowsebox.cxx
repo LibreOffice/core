@@ -28,6 +28,7 @@
 #include <vcl/edit.hxx>
 #include <tools/resid.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/svtresid.hxx>
 
 #include <svtools/svtools.hrc>

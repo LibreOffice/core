@@ -39,6 +39,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <boost/bind.hpp>
 
 #include "helpids.hrc"

@@ -22,6 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/settings.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

@@ -58,6 +58,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
+
 #include <fstream>
 
 #include "unomodel.hxx"

@@ -27,6 +27,8 @@
 #include "starmath.hrc"
 
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
+
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>

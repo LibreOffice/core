@@ -35,6 +35,7 @@
 #include "dbustrings.hrc"
 #include "QTableWindow.hxx"
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
 #include "sqlmessage.hxx"
 #include "UITools.hxx"

@@ -40,6 +40,7 @@
 #include <wrtsh.hxx>
 #include <svl/imageitm.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>

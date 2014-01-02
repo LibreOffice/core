@@ -20,6 +20,7 @@
 
 #include "pdfwriter_impl.hxx"
 #include <rtl/strbuf.hxx>
+#include <vcl/settings.hxx>
 
 using namespace vcl;
 

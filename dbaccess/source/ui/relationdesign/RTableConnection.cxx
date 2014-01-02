@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include "RelationTableView.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "ConnectionLine.hxx"
 
 using namespace dbaui;

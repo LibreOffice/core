@@ -49,6 +49,7 @@
 #include "viewuno.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace com::sun::star;
 

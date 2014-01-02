@@ -29,6 +29,7 @@
 #include "tableselectionpage.hxx"
 #include <vcl/waitobj.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include "abpfinalpage.hxx"
 #include "fieldmappingpage.hxx"
 #include "fieldmappingimpl.hxx"

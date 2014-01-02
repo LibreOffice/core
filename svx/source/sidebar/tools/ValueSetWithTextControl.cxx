@@ -36,6 +36,7 @@
 #include <svtools/valueset.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/settings.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
 

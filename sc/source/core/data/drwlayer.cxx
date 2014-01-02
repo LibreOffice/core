@@ -55,6 +55,7 @@
 #include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>

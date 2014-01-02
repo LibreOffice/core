@@ -22,6 +22,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/timer.hxx"
+#include "vcl/settings.hxx"
 
 #include "svdata.hxx"
 

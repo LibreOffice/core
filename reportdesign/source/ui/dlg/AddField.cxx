@@ -27,6 +27,8 @@
 
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/diagnose_ex.h>
 #include "rptui_slotid.hrc"
 

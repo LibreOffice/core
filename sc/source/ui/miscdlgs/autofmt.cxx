@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 

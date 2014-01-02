@@ -34,6 +34,7 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/status.hxx>
 #include <vcl/controllayout.hxx>
+#include "vcl/settings.hxx"
 
 #include <memory>
 

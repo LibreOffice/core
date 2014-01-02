@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/settings.hxx>
 #include "general.hxx"
 #include "sections.hrc"
 #include "bibresid.hxx"

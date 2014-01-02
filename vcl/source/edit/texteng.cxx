@@ -27,8 +27,9 @@
 #include <textund2.hxx>
 #include <svl/ctloptions.hxx>
 #include <vcl/window.hxx>
-
+#include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 

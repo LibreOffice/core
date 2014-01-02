@@ -85,6 +85,7 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 
 #include <algorithm>

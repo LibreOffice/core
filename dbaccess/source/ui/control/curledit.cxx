@@ -19,6 +19,7 @@
 
 #include "curledit.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <osl/diagnose.h>
 
 namespace dbaui

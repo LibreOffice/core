@@ -19,6 +19,7 @@
 
 #include "optHeaderTabListbox.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>

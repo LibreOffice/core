@@ -21,6 +21,8 @@
 
 #include "scitems.hxx"
 
+#include <vcl/settings.hxx>
+
 #include "tptable.hxx"
 #include "global.hxx"
 #include "attrib.hxx"

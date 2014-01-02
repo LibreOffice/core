@@ -26,6 +26,8 @@
 #include "sdpage.hxx"
 #include "ViewShell.hxx"
 #include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
+
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/eeitem.hxx>

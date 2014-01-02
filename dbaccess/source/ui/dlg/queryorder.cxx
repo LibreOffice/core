@@ -30,6 +30,7 @@
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <tools/diagnose_ex.h>
+#include <vcl/settings.hxx>
 #include <algorithm>
 
 using namespace dbaui;

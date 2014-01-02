@@ -39,6 +39,7 @@
 // header for class Bitmap
 #include <vcl/bitmap.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

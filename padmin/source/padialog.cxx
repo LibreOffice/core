@@ -37,6 +37,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
 #include "vcl/printerinfomanager.hxx"
+#include <vcl/settings.hxx>
 
 #include "tools/stream.hxx"
 #include "tools/color.hxx"
