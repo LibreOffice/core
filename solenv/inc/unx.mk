@@ -151,6 +151,14 @@
 .INCLUDE : unxmacxi.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "CLANGMACOSXI"
+.INCLUDE : unxmacci.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "CLANGMACOSXX"
+.INCLUDE : unxmaccx.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
 .INCLUDE : unxlngmips.mk
 .ENDIF

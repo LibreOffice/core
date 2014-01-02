@@ -753,29 +753,41 @@ elsif ( $platform =~ m/os2/ )
 elsif ( $platform =~ m/darwin/ ) 
 {     print "Setting Mac OS X/Darwin specific values... ";
       $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
-      if ($platform =~ m/^i[3456]86/)
+      print "Darwin platform = " . $platform ." ";
+      if( $CC =~ "gcc" )
       {
-          print "Setting values for Mac OS X/Darwin on x86... ";
+          print "Setting values for MacOSX/Darwin for Xcode<=3";
+          $COM            = "GCC";
           $outfile        = "MacOSXX86Env.Set"; 
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
       }
-      elsif ($platform =~ m/^powerpc/)
+      elsif ($platform =~ m/^i[3456]86/)
       {
-          print "Setting values for Mac OS X/Darwin on PowerPC... ";
-          $outfile        = "MacOSXPPCEnv.Set"; 
-          $CPU            = "P";
-          $CPUNAME        = "POWERPC";
-          $OUTPATH        = "unxmacxp";
+          print "Setting values for MacOSX/Darwin on x86_32... ";
+          $COM            = "CLANG";
+          $outfile        = "MacOSXX32Env.Set"; 
+          $CPU            = "I";
+          $CPUNAME        = "INTEL";
+          $OUTPATH        = "unxmacci";
       }
-      if (@GCCVER@ >= 30401) {
-	  $CVER           = "C341";
-      } else {
-	  $CVER           = "C300";
+      elsif ($platform =~ m/^x86_64/)
+      {
+          print "Setting values for MacOSX/Darwin on x86_64... ";
+          $COM            = "CLANG";
+          $outfile        = "MacOSXX64Env.Set";
+          $CPU            = "X";
+          $CPUNAME        = "X86_64";
+          $OUTPATH        = "unxmaccx";
       }
+      else
+      {
+	  print "\nset_soenv: Unknown MacOSX/Darwin platform: $platform\n";
+	  exit 1;
+      }
+      $CVER           = "DUMMY_CVER";
       $GUI            = "UNX";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
