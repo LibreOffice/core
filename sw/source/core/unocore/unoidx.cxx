@@ -67,6 +67,7 @@
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <unoevtlstnr.hxx>
+#include <editsh.hxx>
 
 
 using namespace ::com::sun::star;
@@ -583,6 +584,21 @@ throw (uno::RuntimeException)
 /*-- 14.12.98 09:35:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void lcl_CalcLayout(SwDoc *pDoc)
+{
+    ViewShell *pViewShell = 0;
+    SwEditShell* pEditShell = pDoc ? pDoc->GetEditShell(&pViewShell) : 0;
+    if (pEditShell)
+    {
+        pEditShell->CalcLayout();
+    }
+    else if (pViewShell)
+    {
+        pViewShell->CalcLayout();
+    }
+
+}
+
 void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -595,6 +611,10 @@ void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
     pTOXBase->Update();
+
+    // the insertion of TOC will affect the document layout
+    lcl_CalcLayout(m_pImpl->m_pDoc);
+
     // page numbers
     pTOXBase->UpdatePageNum();
 }
