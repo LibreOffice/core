@@ -126,6 +126,10 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
         {
             VirtualDevice aVDev;
             const Point aNull(0, 0);
+
+            if (GetDPIScaleFactor() > 1)
+                aThumb.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+
             const Size aSize(aThumb.GetSizePixel());
 
             aVDev.SetOutputSizePixel(aSize);

@@ -201,7 +201,6 @@ sal_Int32 DeckLayouter::PlacePanels (
 {
     ::std::vector<sal_Int32> aSeparators;
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
-    const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight));
     sal_Int32 nY (0);
 
     // Assign heights and places.
@@ -220,6 +219,8 @@ sal_Int32 DeckLayouter::PlacePanels (
         PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
         if (pTitleBar != NULL)
         {
+            const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rPanel.GetDPIScaleFactor());
+
             if (iItem->mbShowTitleBar)
             {
                 pTitleBar->setPosSizePixel(0, nY, nWidth, nPanelTitleBarHeight);
@@ -295,7 +296,6 @@ void DeckLayouter::GetRequestedSizes (
 {
     rAvailableHeight = rContentBox.GetHeight();
 
-    const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight));
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
 
     IterateLayoutItems(iItem,rLayoutItems)
@@ -315,6 +315,8 @@ void DeckLayouter::GetRequestedSizes (
             {
                 // Show the title bar and a separator above and below
                 // the title bar.
+                const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * iItem->mpPanel->GetDPIScaleFactor());
+
                 rAvailableHeight -= nPanelTitleBarHeight;
                 rAvailableHeight -= nDeckSeparatorHeight;
             }
@@ -438,7 +440,7 @@ Rectangle DeckLayouter::PlaceDeckTitle (
     }
     else
     {
-        const sal_Int32 nDeckTitleBarHeight (Theme::GetInteger(Theme::Int_DeckTitleBarHeight));
+        const sal_Int32 nDeckTitleBarHeight (Theme::GetInteger(Theme::Int_DeckTitleBarHeight) * rDeckTitleBar.GetDPIScaleFactor());
         rDeckTitleBar.setPosSizePixel(
             rAvailableSpace.Left(),
             rAvailableSpace.Top(),

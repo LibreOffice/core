@@ -150,7 +150,14 @@ void TabBar::SetDecks (
 
 void TabBar::UpdateButtonIcons (void)
 {
-    mpMenuButton->SetModeImage(Theme::GetImage(Theme::Image_TabBarMenu));
+    Image aImage = Theme::GetImage(Theme::Image_TabBarMenu);
+    if ( mpMenuButton->GetDPIScaleFactor() > 1 )
+    {
+        BitmapEx b = aImage.GetBitmapEx();
+        b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BMP_SCALE_FAST);
+        aImage = Image(b);
+    }
+    mpMenuButton->SetModeImage(aImage);
 
     for(ItemContainer::const_iterator
             iItem(maItems.begin()), iEnd(maItems.end());
@@ -159,7 +166,17 @@ void TabBar::UpdateButtonIcons (void)
     {
         const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(iItem->msDeckId);
         if (pDeckDescriptor != NULL)
-            iItem->mpButton->SetModeImage(GetItemImage(*pDeckDescriptor));
+        {
+            aImage = GetItemImage(*pDeckDescriptor);
+            if ( mpMenuButton->GetDPIScaleFactor() > 1 )
+            {
+                BitmapEx b = aImage.GetBitmapEx();
+                b.Scale(mpMenuButton->GetDPIScaleFactor(), mpMenuButton->GetDPIScaleFactor(), BMP_SCALE_FAST);
+                aImage = Image(b);
+            }
+
+            iItem->mpButton->SetModeImage(aImage);
+        }
     }
 
     Invalidate();
@@ -178,8 +195,8 @@ void TabBar::Layout (void)
     sal_Int32 nX (aPadding.Top());
     sal_Int32 nY (aPadding.Left());
     const Size aTabItemSize (
-        Theme::GetInteger(Theme::Int_TabItemWidth),
-        Theme::GetInteger(Theme::Int_TabItemHeight));
+        Theme::GetInteger(Theme::Int_TabItemWidth) * GetDPIScaleFactor(),
+        Theme::GetInteger(Theme::Int_TabItemHeight) * GetDPIScaleFactor());
 
     // Place the menu button and the separator.
     if (mpMenuButton != 0)

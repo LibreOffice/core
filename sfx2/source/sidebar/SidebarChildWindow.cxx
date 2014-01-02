@@ -68,7 +68,7 @@ sal_Int32 SidebarChildWindow::GetDefaultWidth (Window* pWindow)
         const static sal_Int32 nMaxPropertyPageWidth (115);
 
         return pWindow->LogicToPixel(Point(nMaxPropertyPageWidth,1), MAP_APPFONT).X()
-            + TabBar::GetDefaultWidth();
+            + TabBar::GetDefaultWidth() * pWindow->GetDPIScaleFactor();
     }
     else
         return 0;
