@@ -2175,6 +2175,18 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFieldFlagB,"TOC_field_b.docx")
+{
+   // This test case is to verify \b flag.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" TOC \\b \"bookmark111\" \\o \"1-9\" \\o \"1-9\" \\h"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

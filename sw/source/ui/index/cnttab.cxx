@@ -457,6 +457,8 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
         pDesc->SetStyleNames(pCurTOX->GetStyleNames(i), i);
     pDesc->SetAutoMarkURL(rSh.GetTOIAutoMarkURL());
     pDesc->SetTitle(pCurTOX->GetTitle());
+    OUString bookmarkName = pCurTOX->GetBookmarkName();
+    pDesc->SetBookmarkName(bookmarkName);
 
     pDesc->SetContentOptions(pCurTOX->GetCreateType());
     if(pDesc->GetTOXType() == TOX_INDEX)
