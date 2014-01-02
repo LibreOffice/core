@@ -3078,7 +3078,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\p")));
                         xFieldProperties->setPropertyValue(
                                 rPropNameSupplier.GetName(PROP_FILE_FORMAT),
-                                uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME ));
+                                uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME_AND_EXT ));
                     }
                     break;
                     case FIELD_FILESIZE     : break;
