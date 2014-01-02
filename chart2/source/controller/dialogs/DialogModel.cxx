@@ -716,6 +716,11 @@ bool DialogModel::setData(
     return true;
 }
 
+void DialogModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd) const
+{
+    getModel().setTimeBasedRange(nStart, nEnd);
+}
+
 OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString )
 {
     return lcl_ConvertRole( rRoleString, true );
@@ -818,6 +823,13 @@ sal_Int32 DialogModel::countSeries() const
 {
     ::std::vector< Reference< XDataSeriesContainer > > aCnt( getAllDataSeriesContainers());
     return ::std::accumulate( aCnt.begin(), aCnt.end(), 0, lcl_addSeriesNumber());
+}
+
+ChartModel& DialogModel::getModel() const
+{
+    uno::Reference< frame::XModel > xModel = getChartModel();
+    ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
+    return *pModel;
 }
 
 } //  namespace chart

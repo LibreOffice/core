@@ -2491,6 +2491,10 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
     , m_pValueListener( NULL )
     , m_bGotDataChangedHint(false)
     , m_bExtDataRebuildQueued(false)
+    , mbTimeBased(false)
+    , mnTimeBasedStart(0)
+    , mnTimeBasedEnd(0)
+    , mnCurrentTab(0)
 {
     OSL_ENSURE(pTokens, "reference token list is null");
 
@@ -3588,14 +3592,18 @@ void ScChart2DataSequence::setDataChangedHint(bool b)
     m_bGotDataChangedHint = b;
 }
 
-sal_Bool ScChart2DataSequence::switchToNext()
+sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
     throw (uno::RuntimeException)
 {
-    if(!m_pTokens)
+    if(!m_pTokens || !mbTimeBased)
         return sal_True;
 
     if(mnCurrentTab >= mnTimeBasedEnd)
+    {
+        if(bWrap)
+            setToPointInTime(0);
         return false;
+    }
 
     for(vector<ScTokenRef>::iterator itr = m_pTokens->begin(),
             itrEnd = m_pTokens->end(); itr != itrEnd; ++itr)
@@ -3611,9 +3619,19 @@ sal_Bool ScChart2DataSequence::switchToNext()
         e.IncTab(1);
     }
 
+    ++mnCurrentTab;
+
     RebuildDataCache();
 
     return sal_True;
+}
+
+void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
+    throw (uno::RuntimeException)
+{
+    mnTimeBasedStart = nStart;
+    mnTimeBasedEnd = nEnd;
+    mnCurrentTab = mnTimeBasedStart;
 }
 
 sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
@@ -3639,6 +3657,8 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
         s.SetAbsTab(nTab);
         e.SetAbsTab(nTab);
     }
+
+    mnCurrentTab = nTab;
 
     RebuildDataCache();
 

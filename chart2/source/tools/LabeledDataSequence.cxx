@@ -101,37 +101,6 @@ void SAL_CALL LabeledDataSequence::setLabel(
     }
 }
 
-// XTimeBased
-
-sal_Bool LabeledDataSequence::switchToNext()
-    throw (uno::RuntimeException)
-{
-    uno::Reference< chart2::XTimeBased > xTimeBasedValues(m_xData, uno::UNO_QUERY);
-    if(xTimeBasedValues.is())
-        xTimeBasedValues->switchToNext();
-
-    uno::Reference< chart2::XTimeBased > xTimeBasedLabels(m_xLabel, uno::UNO_QUERY);
-    if(xTimeBasedLabels.is())
-        xTimeBasedLabels->switchToNext();
-
-    return sal_True;
-}
-
-sal_Bool LabeledDataSequence::setToPointInTime(sal_Int32 nPoint)
-    throw (uno::RuntimeException)
-{
-    sal_Bool bRet = sal_False;
-    uno::Reference< chart2::XTimeBased > xTimeBasedValues(m_xData, uno::UNO_QUERY);
-    if(xTimeBasedValues.is())
-        bRet = xTimeBasedValues->setToPointInTime(nPoint);
-
-    uno::Reference< chart2::XTimeBased > xTimeBasedLabels(m_xLabel, uno::UNO_QUERY);
-    if(xTimeBasedLabels.is())
-        xTimeBasedLabels->setToPointInTime(nPoint);
-
-    return bRet;
-}
-
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
     throw (uno::RuntimeException)

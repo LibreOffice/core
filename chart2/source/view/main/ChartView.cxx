@@ -192,6 +192,7 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& )
 
 ChartView::~ChartView()
 {
+    maTimeBased.maTimer.Stop();
     // #i120831#. In ChartView::initialize(), m_xShapeFactory is created from SdrModel::getUnoModel() and indirectly
     //   from SfxBaseModel, it needs call dispose() to make sure SfxBaseModel object is freed correctly.
     uno::Reference< lang::XComponent > xComp( m_xShapeFactory, uno::UNO_QUERY);
@@ -2582,7 +2583,10 @@ void ChartView::createShapes()
             }
 
             if(maTimeBased.eMode != MANUAL)
+            {
+                mrChartModel.setTimeBased(true);
                 mrChartModel.getNextTimePoint();
+            }
             else
                 maTimeBased.maTimer.Stop();
         }

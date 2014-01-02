@@ -93,7 +93,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_bModified( sal_False )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
-    , mbTimeBased(true)
+    , mbTimeBased(false)
     , mpChartView(NULL)
     , m_pUndoManager( NULL )
     , m_aControllers( m_aModelMutex )
@@ -105,6 +105,9 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xPageBackground( new PageBackground( m_xContext ) )
     , m_xXMLNamespaceMap( createNameContainer( ::getCppuType( (const OUString*) 0 ),
                 "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
+    , mnStart(0)
+    , mnEnd(0)
+    ,bSet(false)
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
@@ -147,6 +150,9 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
     , m_xDataProvider( rOther.m_xDataProvider )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
+    , mnStart(rOther.mnStart)
+    , mnEnd(rOther.mnEnd)
+    , bSet(false)
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -1382,9 +1388,19 @@ void ChartModel::getNextTimePoint()
         SAL_WARN_IF(!xTimeBased.is(), "chart2", "does not support time based charting");
         if(xTimeBased.is())
         {
-            xTimeBased->switchToNext();
+            if(!bSet)
+                xTimeBased->setRange(mnStart, mnEnd);
+            xTimeBased->switchToNext(sal_True);
         }
     }
+    bSet = true;
+}
+
+void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
+{
+    bSet = false;
+    mnStart = nStart;
+    mnEnd = nEnd;
 }
 
 }  // namespace chart

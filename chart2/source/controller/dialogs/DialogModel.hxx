@@ -24,6 +24,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include "ChartModel.hxx"
+
 #include <vector>
 #include <map>
 #include <boost/shared_ptr.hpp>
@@ -140,6 +142,8 @@ public:
     bool setData( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rArguments );
 
+    void setTimeBasedRange( sal_Int32 nStart, sal_Int32 nEnd) const;
+
     void startControllerLockTimer();
 
     static OUString ConvertRoleFromInternalToUI( const OUString & rRoleString );
@@ -177,6 +181,8 @@ private:
         bool bSetStyles );
 
     sal_Int32 countSeries() const;
+
+    ChartModel& getModel() const;
 };
 
 } //  namespace chart

@@ -21,23 +21,21 @@
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/chart2/XTimeBased.hpp>
 
 namespace chart
 {
 
 namespace impl
 {
-typedef cppu::WeakImplHelper3<
+typedef cppu::WeakImplHelper2<
         ::com::sun::star::chart2::data::XLabeledDataSequence2,
-        com::sun::star::chart2::XTimeBased,
         ::com::sun::star::lang::XServiceInfo >
     LabeledDataSequence_Base;
 }
@@ -78,10 +76,6 @@ protected:
     virtual void SAL_CALL setLabel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xSequence )
         throw (::com::sun::star::uno::RuntimeException);
-
-    // XTimeBased
-    virtual sal_Bool switchToNext() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool setToPointInTime(sal_Int32 nPoint) throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()

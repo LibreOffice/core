@@ -586,6 +586,11 @@ public:
     void setTimeBased(bool bTimeBased);
 
     void getNextTimePoint();
+    void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
+
+    sal_Int32 mnStart;
+    sal_Int32 mnEnd;
+    bool bSet;
 };
 
 }  // namespace chart

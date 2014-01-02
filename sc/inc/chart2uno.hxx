@@ -279,8 +279,10 @@ public:
                    std::exception);
 
     // XTimeBased
-    virtual sal_Bool switchToNext() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool switchToNext(sal_Bool bWrap) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool setToPointInTime(sal_Int32 nPoint) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void setRange(sal_Int32 nStart, sal_Int32 nEnd) throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<

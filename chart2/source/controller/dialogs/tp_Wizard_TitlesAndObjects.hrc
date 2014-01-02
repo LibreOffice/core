@@ -29,5 +29,8 @@
 #define CB_Z_SECONDARY 6
 
 #define CB_TIME_BASED         3
+#define FT_TIME_BASED         4
+#define ED_TIME_START         5
+#define ED_TIME_END           6
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

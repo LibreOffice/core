@@ -89,6 +89,9 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     get(m_pCB_FirstColumnAsLabel, "CB_FIRST_COLUMN_ASLABELS");
     get(m_pFTTitle, "STR_PAGE_DATA_RANGE");// OH:remove later with dialog title
     m_pCB_TimeBased = NULL;
+    m_pFt_TimeBased = NULL;
+    m_pEd_TimeStart = NULL;
+    m_pEd_TimeEnd = NULL;
 
     m_pFT_Caption->Show(!bHideDescription);
 
@@ -230,6 +233,13 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
                                       beans::PropertyState_DIRECT_VALUE );
             m_rDialogModel.setData( aArguments );
             m_bIsDirty = false;
+
+            if(bTimeBased)
+            {
+                sal_Int32 nStart = m_pEd_TimeStart->GetText().toInt32();
+                sal_Int32 nEnd = m_pEd_TimeEnd->GetText().toInt32();
+                m_rDialogModel.setTimeBasedRange(nStart, nEnd);
+            }
         }
 
         //@todo warn user that the selected range is not valid
