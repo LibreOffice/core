@@ -87,6 +87,10 @@ MasterPagesSelector::MasterPagesSelector (
     PreviewValueSet::SetRightMouseClickHandler (
         LINK(this, MasterPagesSelector, RightClickHandler));
     PreviewValueSet::SetStyle(PreviewValueSet::GetStyle() | WB_NO_DIRECTSELECT);
+
+    if ( GetDPIScaleFactor() > 1 )
+        mpContainer->SetPreviewSize(MasterPageContainer::LARGE);
+
     PreviewValueSet::SetPreviewSize(mpContainer->GetPreviewSizePixel());
     PreviewValueSet::Show();
 
