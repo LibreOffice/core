@@ -31,6 +31,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>
+#include <outfont.hxx>
 
 // ------------
 // - Impl_Font -
@@ -230,6 +231,8 @@ public:
 };
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
+
+void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttributes& );
 
 #endif // _SV_IMPFONT_HXX
 

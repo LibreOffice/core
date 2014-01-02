@@ -347,6 +347,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/imagerepository \
     vcl/source/gdi/impanmvw \
     vcl/source/gdi/impbmp \
+    vcl/source/gdi/impfont \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/impimage \
     vcl/source/gdi/impimagetree \

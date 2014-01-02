@@ -97,19 +97,19 @@ public:
                         FontCharMap();
                         ~FontCharMap();
 
-    sal_Bool                IsDefaultMap() const;
-    sal_Bool                HasChar( sal_uInt32 ) const;
-    int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
-    int                 GetCharCount() const;
+    bool                IsDefaultMap( void ) const;
+    bool                HasChar( sal_UCS4 ) const;
+    int                 CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const;
+    int                 GetCharCount( void ) const;
 
-    sal_uInt32          GetFirstChar() const;
-    sal_uInt32          GetLastChar() const;
+    sal_UCS4            GetFirstChar( void ) const;
+    sal_UCS4            GetLastChar( void ) const;
 
-    sal_uInt32          GetNextChar( sal_uInt32 ) const;
-    sal_uInt32          GetPrevChar( sal_uInt32 ) const;
+    sal_UCS4            GetNextChar( sal_UCS4 ) const;
+    sal_UCS4            GetPrevChar( sal_UCS4 ) const;
 
-    int                 GetIndexFromChar( sal_uInt32 ) const;
-    sal_uInt32          GetCharFromIndex( int ) const;
+    int                 GetIndexFromChar( sal_UCS4 ) const;
+    sal_UCS4            GetCharFromIndex( int ) const;
 
 
 private:
