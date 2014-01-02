@@ -74,14 +74,6 @@ Apache Commons
 
    See Apache License Version 2.0 below
 
-Apache Jakarta Tomcat
-
-   The following software may be included in this product: Apache Jakarta
-   Tomcat. Use of any of this software is governed by the terms of the
-   license below:
-
-   See Apache License Version 2.0 below
-
 beanshell
 
    The following software may be included in this product: beanshell. Use
@@ -574,6 +566,20 @@ License.  */
    segment and dl_iterate_phdr to avoid register/deregister calls at
    DSO load/unload.  */
 
+Firebird
+
+   The applicable and approved licenses for the source files of the
+   Firebird RDBMS project are:
+
+   1) InterBase Public License (IPL), version 1.0
+
+   2) Initial Developer's Public License (IDPL), version 1.0
+
+   The IPL is copyright of Borland Corp., the other licenses are copyright
+   by the source code authors and contributors. Both are variants of the
+   Mozilla Public License V.1.1 (MPL). See
+   http://www.firebirdsql.org/en/licensing/
+
 fontconfig
 
    The following software may be included in this product: fontconfig. Use
@@ -630,6 +636,44 @@ Graphite2
    See LGPL Version 2.1 below
 
    See MPL Version 1.1 below
+
+HarfBuzz
+
+   HarfBuzz is licensed under the so-called "Old MIT" license. Details
+   follow. For parts of HarfBuzz that are licensed under different
+   licenses see individual files names COPYING in subdirectories where
+   applicable.
+
+   Copyright © 2010,2011,2012 Google, Inc.
+   Copyright © 2012 Mozilla Foundation
+   Copyright © 2011 Codethink Limited
+   Copyright © 2008,2010 Nokia Corporation and/or its subsidiary(-ies)
+   Copyright © 2009 Keith Stribley
+   Copyright © 2009 Martin Hosken and SIL International
+   Copyright © 2007 Chris Wilson
+   Copyright © 2006 Behdad Esfahbod
+   Copyright © 2005 David Turner
+   Copyright © 2004,2007,2008,2009,2010 Red Hat, Inc.
+   Copyright © 1998-2004 David Turner and Werner Lemberg
+
+   For full copyright notices consult the individual files in the package.
+
+   Permission is hereby granted, without written agreement and without
+   license or royalty fees, to use, copy, modify, and distribute this
+   software and its documentation for any purpose, provided that the above
+   copyright notice and the following two paragraphs appear in all copies
+   of this software.
+
+   IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE TO ANY PARTY FOR
+   DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING
+   OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
+   COPYRIGHT HOLDER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+   THE COPYRIGHT HOLDER SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING,
+   BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+   FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+   AN "AS IS" BASIS, AND THE COPYRIGHT HOLDER HAS NO OBLIGATION TO PROVIDE
+   MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 HSQLDB
 
@@ -994,6 +1038,14 @@ JDOM
    <brett_AT_jdom_DOT_org>. For more information on the JDOM Project,
    please see http://www.jdom.org/.
 
+libatomic-ops
+
+   The following software may be included in this product: libatomic-ops.
+   Use of any of this software is governed by the terms of the license
+   below:
+
+   See GPL Version 2 below
+
 libcdr
 
    The following software may be included in this product: libcdr. Use of
@@ -1047,6 +1099,31 @@ libcurl
    or other dealings in this Software without prior written authorization
    of the copyright holder.
 
+libeot
+
+   The following software may be included in this product: libeot. Use of
+   any of this software is governed by the terms of the license below:
+
+   See MPL Version 2 below
+
+libe-book
+
+   The following software may be included in this product: libe-book. Use
+   of any of this software is governed by the terms of the license below:
+
+   LGPL v2.1+ / MPL 2+
+
+   See LGPL Version 2.1 below
+
+   See MPL Version 2 below
+
+libetonyek
+
+   The following software may be included in this product: libetonyek. Use
+   of any of this software is governed by the terms of the license below:
+
+   See MPL Version 2 below
+
 libexttextcat
 
    The following software may be included in this product: libexttextcat.
@@ -1083,6 +1160,14 @@ libexttextcat
    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+libfreehand
+
+   The following software may be included in this product: libfreehand.
+   Use of any of this software is governed by the terms of the license
+   below:
+
+   See MPL Version 2 below
 
 liblangtag
 
@@ -1917,6 +2002,13 @@ Pixman
    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+poppler
+
+   The following software may be included in this product: poppler. Use of
+   any of this software is governed by the terms of the license below:
+
+   See GPL Version 2 below
+
 PostgreSQL
 
    The following software may be included in this product: PostgreSQL. Use
@@ -2703,16 +2795,6 @@ XSLT MathML Library
    CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
    THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Xpdf
-
-   The following software may be included in this product: Xpdf. Use of
-   any of this software is governed by the terms of the license below:
-
-   The Xpdf software and documentation are copyright 1996-2007 Glyph &
-   Cog, LLC.
-
-   See GPL Version 2 below
-
 zlib
 
    The following software may be included in this product: zlib. Use of
@@ -2897,6 +2979,25 @@ Adobe PostScript® AFM files
    noted in the modified file(s); and that this paragraph is not modified.
    Adobe Systems has no responsibility or obligation to support the use of
    the AFM files.
+
+Caladea
+
+   Copyright (c) 2012 Huerta Tipografia
+
+   This Font Software is licensed under the Apache License, Version 2.0 as
+   shown below.
+
+   See Apache License Version 2.0 below
+
+Carlito
+
+   Copyright (c) 2010-2013 by tyPoland Lukasz Dziedzic with Reserved Font
+   Name "Carlito".
+
+   This Font Software is licensed under the SIL Open Font License, Version
+   1.1 as shown below.
+
+   See SIL Open Font License, Version 1.1 below
 
 Deja Vu
 
@@ -4588,6 +4689,18 @@ Kurdish
 
    See MPL Version 1.1 below
 
+Lao
+
+  Spelling dictionary
+
+   The following software may be included in this product: Lao spelling
+   dictionary. Use of any of this software is governed by the terms of the
+   license below:
+
+   Copyright (C) 2013 by Brian Eugene Wilson, Robert Martin Campbell
+
+   See LGPL Version 2.1 below
+
 Latvian
 
   Spelling dictionary
@@ -4797,47 +4910,13 @@ Portuguese
 
    Dep. Informatica, Universidade do Minho, Portugal
 
-   All dictionary files and associated programs are currently covered by
-   the GPL and BSD license.
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
+   GPL 2.0/LGPL 2.1/MPL 1.1 tri-license
 
    See GPL Version 2 below
 
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions are
-   met:
-    1. Redistributions of source code must retain the above copyright
-       notice, this list of conditions and the following disclaimer.
-    2. Redistributions in binary form must reproduce the above copyright
-       notice, this list of conditions and the following disclaimer in the
-       documentation and/or other materials provided with the
-       distribution.
-    3. All advertising materials mentioning features or use of this
-       software must display the following acknowledgement: This product
-       includes software developed by the University of California,
-       Berkeley and its contributors.
-    4. Neither the name of the name of the authors mentioned above, nor
-       the names of its contributors may be used to endorse or promote
-       products derived from this software without specific prior written
-       permission.
+   See LGPL Version 2.1 below
 
-   THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ''AS IS'' AND
-   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS
-   BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-   SUBSTITUTE GOODS OR SERVICES;
-
-   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
-   AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
-   THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-   DAMAGE.
+   See MPL Version 1.1 below
 
   Hyphenation patterns
 
@@ -4868,17 +4947,21 @@ Portuguese (Brazilian)
    (Brazilian) spelling dictionary. Use of any of this software is
    governed by the terms of the license below:
 
-   This dictionary is under development by Raimundo Moura and his team. It
-   is licensed under the terms of the GNU Lesser General Public License
-   version 2.1 (LGPLv2.1), as published by the Free Software Foundation.
-   The credits are available at http://www.broffice.org/creditos and
-   you can find new releases at
-   http://www.broffice.org/verortografico.
+   This dictionary is under continuous development by Raimundo Moura and
+   his team. It is icensed under the terms of the GNU Lesser General
+   Public License version 3 (LGPLv3), as published by the Free Software
+   Foundation, and Mozilla Public License as published by The Mozilla
+   Foundation. The credits are available at
+   http://pt-br.libreoffice.org/projetos/projeto-vero-verificador-ort
+   ografico/ and you can find new releases at
+   http://extensions.libreoffice.org
 
-   Copyright (C) 2006 - 2008 by Raimundo Santos Moura
-   <raimundomoura@openoffice.org>
+   Copyright (C) 2006 - 2013 by Raimundo Santos Moura
+   <raimundo.smoura@gmail.com>
 
-   See LGPL Version 2.1 below
+   See LGPL Version 3 below
+
+   See MPL Version 1.1 below
 
   Hyphenation patterns
 
@@ -4886,23 +4969,27 @@ Portuguese (Brazilian)
    (Brazilian) hyphenation patterns. Use of any of this software is
    governed by the terms of the license below:
 
-   These hyphenation patterns are under development by Raimundo Moura and
-   his team. It is licensed under the terms of the GNU Lesser General
-   Public License version 2.1 (LGPLv2.1), as published by the Free
-   Software Foundation. The credits are available at
-   http://www.broffice.org/creditos and you can find new releases at
-   http://www.broffice.org/verortografico.
+   These hyphenation patterns are under continuous development by Raimundo
+   Moura and his team. It is icensed under the terms of the GNU Lesser
+   General Public License version 3 (LGPLv3), as published by the Free
+   Software Foundation, and Mozilla Public License as published by The
+   Mozilla Foundation. The credits are available at
+   http://pt-br.libreoffice.org/projetos/projeto-vero-verificador-ort
+   ografico/ and you can find new releases at
+   http://extensions.libreoffice.org
 
-   Copyright (C) 2008 - 2009 by Raimundo Santos Moura
-   <raimundomoura@openoffice.org>
+   Copyright (C) 2006 - 2013 by Raimundo Santos Moura
+   <raimundo.smoura@gmail.com>
 
-   See LGPL Version 2.1 below
+   See LGPL Version 3 below
 
-  Portuguese Brasilian sentence checker for LibreOffice
+   See MPL Version 1.1 below
+
+  Portuguese Brazilian sentence checker for LibreOffice
 
    The following software may be included in this product: Portuguese
-   (Brazilian) hyphenation patterns. Use of any of this software is
-   governed by the terms of the license below:
+   (Brazilian) sentence checker. Use of any of this software is governed
+   by the terms of the license below:
 
    MPL 1.1 / GPLv3+ / LGPLv3+
 
