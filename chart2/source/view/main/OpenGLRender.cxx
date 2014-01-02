@@ -55,8 +55,6 @@ using namespace std;
 #if defined( _WIN32 )
 #define WGL_SAMPLE_BUFFERS_ARB   0x2041
 #define WGL_SAMPLES_ARB          0x2042
-#else
-typedef unsigned char BYTE;
 #endif
 
 const char *ColorFragmemtShader = OPENGL_SHADER (
@@ -1410,20 +1408,20 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl
     BitmapEx aBitmapEx(aDevice.GetBitmap(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
     Bitmap aBitmap( aBitmapEx.GetBitmap());
     int bitmapsize = aBitmap.GetSizeBytes();
-    BYTE *bitmapBuf = (BYTE *)malloc(bitmapsize * 4 / 3 + BMP_HEADER_LEN);
-    CreateBMPHeaderRGBA(bitmapBuf, bmpWidth, bmpHeight);
+    boost::scoped_array<sal_uInt8> bitmapBuf(new sal_uInt8[bitmapsize * 4 / 3 + BMP_HEADER_LEN]);
+    CreateBMPHeaderRGBA(bitmapBuf.get(), bmpWidth, bmpHeight);
     BitmapReadAccess* pRAcc = aBitmap.AcquireReadAccess();
-    BYTE r = (color & 0x00FF0000) >> 16;
-    BYTE g = (color & 0x0000FF00) >> 8;
-    BYTE b = (color & 0x000000FF);
+    sal_uInt8 red = (color & 0x00FF0000) >> 16;
+    sal_uInt8 g = (color & 0x0000FF00) >> 8;
+    sal_uInt8 b = (color & 0x000000FF);
 
-    cout << "r = " << r << ", g = " << g << ", b = " << b <<endl;
+    cout << "r = " << red << ", g = " << g << ", b = " << b <<endl;
     for (long ny = 0; ny < bmpHeight; ny++)
     {
         for(long nx = 0; nx < bmpWidth; nx++)
         {
            sal_uInt8 *pm = pRAcc->GetScanline(ny) + nx * 3;
-           sal_uInt8 *mk = bitmapBuf +  BMP_HEADER_LEN + ny * bmpWidth * 4 + nx * 4;
+           sal_uInt8 *mk = bitmapBuf.get() +  BMP_HEADER_LEN + ny * bmpWidth * 4 + nx * 4;
            if ((*pm == 0xFF) && (*(pm + 1) == 0xFF) && (*(pm + 2) == 0xFF))
            {
                *mk = *pm;
@@ -1435,7 +1433,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl
            {
                *mk = b;
                *(mk + 1) = g;
-               *(mk + 2) = r;
+               *(mk + 2) = red;
                *(mk + 3) = ((0xFF - *pm) + (0xFF - *(pm + 1)) + (0xFF - *(pm + 2))) / 3;
            }
         }
@@ -1464,7 +1462,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl
     m_fPicBottom = (m_TextInfo.y + m_TextInfo.vertex[1]) < m_fPicBottom ? (m_TextInfo.y + m_TextInfo.vertex[1]) : m_fPicBottom;
 
     m_fPicTop = (m_TextInfo.y + m_TextInfo.vertex[5]) > m_fPicTop ? (m_TextInfo.y + m_TextInfo.vertex[5]) : m_fPicTop;
-    //if has ratotion, we must re caculate the centrol pos
+    //if has ratotion, we must re caculate the central pos
 
     if (rotation)
     {
@@ -1489,11 +1487,10 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf + BMP_HEADER_LEN);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, bitmapBuf.get() + BMP_HEADER_LEN);
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
     m_TextInfoList.push_back(m_TextInfo);
-    free(bitmapBuf);
     return 0;
 }
 
@@ -1504,7 +1501,7 @@ int OpenGLRender::RenderTextShape()
     {
         TextInfo &textInfo = m_TextInfoList.front();
         PosVecf3 trans = {textInfo.x, textInfo.y, textInfo.z};
-        PosVecf3 angle = {0.0f, 0.0f, textInfo.rotation};
+        PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
