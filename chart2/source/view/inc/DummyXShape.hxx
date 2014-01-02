@@ -367,6 +367,8 @@ public:
     DummyRectangle(const awt::Size& rSize);
     DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint, const tNameSequence& rNames,
             const tAnySequence& rValues );
+
+    virtual void render() SAL_OVERRIDE;
 };
 
 class DummyText : public DummyXShape

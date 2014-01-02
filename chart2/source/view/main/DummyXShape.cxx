@@ -456,7 +456,7 @@ void DummyLine2D::render()
         sal_uInt8 B = (nColorValue & 0x000000FF);
         pChart->m_GLRender.SetLine2DColor(R, G, B);
 
-        SAL_WARN("chart2.opengl", "*colorvalue = " << nColorValue << ", R = " << R << ", G = " << G << ", B = " << B);
+        SAL_WARN("chart2.opengl", "*colorvalue = " << nColorValue << ", R = " << (int)R << ", G = " << (int)G << ", B = " << (int)B);
     }
     else
         SAL_WARN("chart2.opengl", "no line color set");
@@ -505,6 +505,21 @@ DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint,
     setSize(rSize);
     setPosition(rPoint);
     setProperties(rNames, rValues, maProperties);
+}
+
+void DummyRectangle::render()
+{
+    debugProperties(maProperties);
+    DummyChart* pChart = getRootShape();
+    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("FillColor");
+    if(itr != maProperties.end())
+    {
+        uno::Any co =  itr->second;
+        sal_Int32 nColorValue = co.get<sal_Int32>();
+        pChart->m_GLRender.SetColor(nColorValue);
+    }
+    pChart->m_GLRender.RectangleShapePoint(maPosition.X, maPosition.Y, maSize.Width, maSize.Height);
+    pChart->m_GLRender.RenderRectangleShape();
 }
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,

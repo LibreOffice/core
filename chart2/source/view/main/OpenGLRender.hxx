@@ -161,8 +161,6 @@ public:
 
 
     void SetTransparency(sal_uInt32 transparency);
-    int ProcessRectangle(com::sun::star::uno::Reference<
-            com::sun::star::drawing::XShape > &xShape);
     int RenderRectangleShape();
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
