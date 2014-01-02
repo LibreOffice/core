@@ -64,10 +64,12 @@ extended_core_factory_list = core_factory_list + [
     ("libanimcorelo.a", "animcore_component_getFactory"),
     ("libavmedialo.a", "avmedia_component_getFactory"),
     ("libchartcorelo.a", "chartcore_component_getFactory"),
+    ("libcuilo.a", "cui_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfrmlo.a", "frm_component_getFactory"),
     ("libfwklo.a", "fwk_component_getFactory"),
     ("libfwmlo.a", "fwm_component_getFactory"),
+    ("libspllo.a", "spl_component_getFactory"),
     ("libsvxcorelo.a", "svxcore_component_getFactory"),
     ("libtextfdlo.a", "textfd_component_getFactory"),
     ("libtklo.a", "tk_component_getFactory"),
@@ -138,26 +140,9 @@ core_constructor_list = [
     "com_sun_star_drawing_EnhancedCustomShapeEngine_implementation_getFactory",
     ]
 
-# Components which are not in any group yet:
-single_component_map = {
-    'basprov' : ("libbasprovlo.a", "basprov_component_getFactory"),
-    'cui' : ("libcuilo.a", "cui_component_getFactory"),
-    'dlgprov' : ("libdlgprovlo.a", "dlgprov_component_getFactory"),
-    'protocolhandler' : ("libprotocolhandlerlo.a", "protocolhandler_component_getFactory"),
-    'scriptframe' : ("libscriptframe.a", "scriptframe_component_getFactory"),
-    'sb' : ("libsblo.a", "sb_component_getFactory"),
-    'spl' : ("libspllo.a", "spl_component_getFactory"),
-    'stringresource' :("libstringresourcelo.a", "stringresource_component_getFactory"),
-    'vbaswobj' : ("libvbaswobjlo.a", "vbaswobj_component_getFactory"),
-    'vbaevents' : ("libvbaeventslo.a", "vbaevents_component_getFactory"),
-    }
-
 opts = OptionParser()
 opts.add_option("-j", "--java-guard", action="store_true", help="include external java functions", dest="java", default=False)
 opts.add_option("-g", "--group", action="append", help="group of implementations to make available in application", dest="groups")
-# TODO: components from single_component_map should be put into
-# one of the groups too and --single-component should die.
-opts.add_option("-s", "--single-component", action="append", help="list of single getFactories to get into lib_to_factory_mapping", dest="components")
 
 (options, args) = opts.parse_args()
 
@@ -176,11 +161,6 @@ if options.groups:
         for (factory_name,factory_function) in factory_map[factory_group]:
             print ('void * '+factory_function+'( const char* , void* , void* );')
 
-if options.components:
-    for c in options.components:
-        (c_name, c_function) = single_component_map[c]
-        print ('void * '+c_function+'( const char* , void* , void* );')
-
 print ('')
 for constructor in core_constructor_list:
     print ('void * '+constructor+'( void *, void * );')
@@ -195,11 +175,6 @@ if options.groups:
     for factory_group in options.groups:
         for (factory_name,factory_function) in factory_map[factory_group]:
             print ('        { "'+factory_name+'", '+factory_function+' },')
-
-if options.components:
-    for c in options.components:
-        (c_name, c_function) = single_component_map[c]
-        print ('        { "'+c_name+'", '+c_function+' },')
 
 print ("""
         { 0, 0 }

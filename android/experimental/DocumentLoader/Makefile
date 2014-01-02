@@ -13,8 +13,7 @@ include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 	$< \
-		-g extended_core -g base_core -g calc_core -g draw_core -g math -g writer \
-		-s protocolhandler -s sb \
+		-g extended_core -g writer \
 		> $@
 
 copy-stuff:

@@ -30,7 +30,6 @@ $(call gb_CustomTarget_get_target,ios/TiledLibreOffice): $(call gb_CustomTarget_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	$(SRCDIR)/solenv/bin/native-code.py \
 		-g extended_core -g writer \
-		-s cui -s spl \
 		> $(SRCDIR)/ios/experimental/TiledLibreOffice/TiledLibreOffice/native-code.mm
 	$(call TiledLibreOfficeXcodeBuild, clean build)
 
