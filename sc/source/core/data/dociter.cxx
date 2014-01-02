@@ -1547,8 +1547,24 @@ bool ScQueryCellIterator::BinarySearch()
             continue; // while
         }
 
+        bool bHaveRefCell = false;
         PositionType aPos = pCol->maCells.position(i);
-        bool bStr = aPos.first->type == sc::element_type_string;
+        bool bStr;
+        switch (aPos.first->type)
+        {
+            case sc::element_type_formula:
+                aCell = sc::toRefCell(aPos.first, aPos.second);
+                bHaveRefCell = true;
+                bStr = aCell.hasString();
+                break;
+            case sc::element_type_string:
+            case sc::element_type_edittext:
+                bStr = true;
+                break;
+            default:
+                bStr = false;
+                break;
+        }
         nRes = 0;
 
         // compares are content<query:-1, content>query:1
@@ -1556,7 +1572,8 @@ bool ScQueryCellIterator::BinarySearch()
         if (!bStr && !bByString)
         {
             double nCellVal;
-            aCell = sc::toRefCell(aPos.first, aPos.second);
+            if (!bHaveRefCell)
+                aCell = sc::toRefCell(aPos.first, aPos.second);
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
@@ -1611,7 +1628,8 @@ bool ScQueryCellIterator::BinarySearch()
         {
             OUString aCellStr;
             sal_uLong nFormat = pCol->GetNumberFormat(i);
-            aCell = sc::toRefCell(aPos.first, aPos.second);
+            if (!bHaveRefCell)
+                aCell = sc::toRefCell(aPos.first, aPos.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
