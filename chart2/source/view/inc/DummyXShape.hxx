@@ -377,6 +377,8 @@ public:
     DummyText(const OUString& rText, const tNameSequence& rNames,
             const tAnySequence& rValues, const uno::Any& rTrans );
 
+    virtual void render() SAL_OVERRIDE;
+
 private:
     OUString maText;
     uno::Any maTrans;

@@ -530,6 +530,29 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     setProperties(rNames, rValues, maProperties);
 }
 
+void DummyText::render()
+{
+    debugProperties(maProperties);
+
+    //get text color, the output value always be white, so we use black color to text
+    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("CharColor");
+    sal_Int32 nColor = 0;
+    if(itr != maProperties.end())
+    {
+        uno::Any co =  itr->second;
+        nColor = co.get<sal_Int32>();
+    }
+
+    //get font, assuming that every font has a set font name
+    uno::Any font = maProperties.find("CharFontName")->second;
+    OUString aFontName = font.get<OUString>();
+
+    sal_Int32 nRot = 0;
+    DummyChart* pChart = getRootShape();
+    pChart->m_GLRender.CreateTextTexture(maText, nColor, aFontName, maPosition, maSize, nRot);
+    pChart->m_GLRender.RenderTextShape();
+}
+
 DummyGroup3D::DummyGroup3D(const OUString& rName)
 {
     setName(rName);

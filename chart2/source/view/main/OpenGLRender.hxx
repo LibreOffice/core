@@ -176,7 +176,6 @@ public:
     int RenderRectangleShape();
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
-    int ProcessText(com::sun::star::uno::Reference<com::sun::star::drawing::XShape > &xShape);
     int CreateTextTexture(::rtl::OUString textValue, long color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation);
     int RenderTextShape();
 private:

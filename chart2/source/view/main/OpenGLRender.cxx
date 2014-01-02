@@ -1315,81 +1315,6 @@ int OpenGLRender::RenderRectangleShape()
     return 0;
 }
 
-
-int OpenGLRender::ProcessText(uno::Reference< drawing::XShape > &xShape)
-{
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    awt::Point aPos( xShape->getPosition() );
-    awt::Size aSize( xShape->getSize());
-    //use device to create text bitmap
-#if 0
-    com::sun::star::uno::Sequence<com::sun::star::beans::Property> Sequenceproperty = xProp->getPropertySetInfo()->getProperties();
-    com::sun::star::beans::Property* Propertyarr = Sequenceproperty.getArray();
-    int count = Sequenceproperty.getLength();
-    printf("Property length:%d\n",count);
-    for(int i=0;i<count;i++)
-    {
-        wprintf(L"item %d,name:%s", i,Propertyarr[i].Name.getStr());
-        com::sun::star::uno::Type t = Propertyarr[i].Type;
-        ::rtl::OUString strtypename = t.getTypeName();
-        sal_Unicode * typeName = (sal_Unicode *)strtypename.getStr();
-        wprintf(L",Type:%s ", typeName);
-        com::sun::star::uno::TypeClass typeclass = t.getTypeClass();
-        com::sun::star::uno::Any value = xProp->getPropertyValue(Propertyarr[i].Name);
-        if(strtypename.equals(OUString(L"string")))
-        {
-            ::rtl::OUString * strvalue = (::rtl::OUString *)value.getValue();
-           wprintf(L",Value:%s \n", strvalue->getStr());
-        }
-        else if(strtypename.equals(OUString(L"short")))
-        {
-            short * shortvalue = (short*)value.getValue();
-            printf(",Value:%d \n",*shortvalue);
-        }
-        else if(strtypename.equals(OUString(L"long")))
-        {
-            long * longvalue = (long*)value.getValue();
-            printf(",Value:%d \n",*longvalue);
-        }
-        else if(strtypename.equals(OUString(L"boolean")))
-        {
-            short * bvalue = (short*)value.getValue();
-            if(*bvalue==0)
-                printf(",Value:false \n");
-            else
-                printf(",Value:true \n");
-        }
-        else
-        {
-            printf(",Value:object \n");
-        }
-    }
-    printf("\n");
-#endif
-    //get the string
-    uno::Reference< text::XTextRange > xTextRange( xShape, uno::UNO_QUERY );
-
-    ::rtl::OUString textValue = xTextRange->getString();
-    wprintf(L"Text value:%s \n", textValue.getStr());
-    //get text color, the output value always be white, so we use black color to text
-    uno::Any co =  xProp->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR);
-    long *colorvalue = (long*)co.getValue();
-
-    //get font
-    uno::Any font =  xProp->getPropertyValue(UNO_NAME_EDIT_CHAR_FONTNAME);
-    ::rtl::OUString *fontValue = (::rtl::OUString *)font.getValue();
-    wprintf(L"Text font:%s \n", fontValue->getStr());
-    uno::Any rotation =  xProp->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE);
-    long *rot = (long*)rotation.getValue();
-    cout << "*rot = " << (*rot) << endl;
-    //using the string and the color to create the text texture
-    cout << "color value = " << *colorvalue << endl;
-    CreateTextTexture(textValue, *colorvalue, *fontValue, aPos, aSize, (*rot));
-    RenderTextShape();
-    m_fZStep += 0.01f;
-    return 0;
-}
-
 int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation)
 {
     VirtualDevice aDevice;
@@ -1415,7 +1340,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl
     sal_uInt8 g = (color & 0x0000FF00) >> 8;
     sal_uInt8 b = (color & 0x000000FF);
 
-    cout << "r = " << red << ", g = " << g << ", b = " << b <<endl;
+    SAL_WARN("chart2.opengl", "r = " << (int)red << ", g = " << (int)g << ", b = " << (int)b );
     for (long ny = 0; ny < bmpHeight; ny++)
     {
         for(long nx = 0; nx < bmpWidth; nx++)
@@ -1496,6 +1421,7 @@ int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, long color, ::rtl
 
 int OpenGLRender::RenderTextShape()
 {
+    m_fZStep += 0.01f;
     int listNum = m_TextInfoList.size();
     for (int i = 0; i < listNum; i++)
     {
