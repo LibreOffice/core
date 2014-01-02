@@ -31,12 +31,14 @@
 #include <comphelper/solarmutex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/thread.hxx>
+#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/apptypes.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/metric.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 class BitmapEx;
 class Link;

@@ -37,6 +37,7 @@
 #include "dbustrings.hrc"
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

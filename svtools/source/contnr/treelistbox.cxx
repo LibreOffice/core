@@ -29,6 +29,7 @@
 #include <vcl/accel.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>

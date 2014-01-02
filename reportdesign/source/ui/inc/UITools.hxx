@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "ReportSection.hxx"
 #include <rtl/ref.hxx>
 #include <vcl/taskpanelist.hxx>

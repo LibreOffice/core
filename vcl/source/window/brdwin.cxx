@@ -34,6 +34,7 @@
 #include <vcl/help.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::uno;
 

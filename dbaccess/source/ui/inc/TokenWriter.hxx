@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <tools/stream.hxx>

@@ -28,6 +28,7 @@
 #include <sfx2/sfx.hrc>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/settings.hxx>
 
 namespace dbaui
 {

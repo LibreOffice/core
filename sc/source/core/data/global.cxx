@@ -35,6 +35,7 @@
 #include <svl/zformat.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <unotools/charclass.hxx>

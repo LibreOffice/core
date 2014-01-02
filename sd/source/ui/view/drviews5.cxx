@@ -26,6 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/poly.hxx>
 #include <svx/fmshell.hxx>
 #include <editeng/eeitem.hxx>

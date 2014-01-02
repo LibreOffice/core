@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 #include "dbustrings.hrc"
 #include <sfx2/cntids.hrc>

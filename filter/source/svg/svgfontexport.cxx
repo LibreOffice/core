@@ -26,6 +26,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 
 static const sal_Int32 nFontEM = 2048;
 

@@ -20,6 +20,7 @@
 
 #include <oooresourceloader.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <tools/simplerm.hxx>
 #include <tools/rcid.h>
 #include <cppuhelper/implbase1.hxx>

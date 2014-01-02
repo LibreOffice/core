@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "unokywds.hxx"
+#include <vcl/settings.hxx>
 
 #include <vector>
 #include "ViewShell.hxx"

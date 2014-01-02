@@ -57,6 +57,7 @@
 #include <svl/zformat.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

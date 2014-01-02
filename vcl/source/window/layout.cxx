@@ -12,6 +12,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "window.h"
 
 VclContainer::VclContainer(Window *pParent, WinBits nStyle)

@@ -51,6 +51,7 @@
 #include "UITools.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>

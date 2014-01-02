@@ -25,6 +25,7 @@
 #include "dbu_misc.hrc"
 #include "WizardPages.hrc"
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 #include "svtools/treelistentry.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 

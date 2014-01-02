@@ -28,6 +28,7 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/image.hxx>
+#include <vcl/settings.hxx>
 #include "svtaccessiblefactory.hxx"
 #include <filectrl.hrc>
 #include <svtools/svtresid.hxx>

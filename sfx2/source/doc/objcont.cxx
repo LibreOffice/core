@@ -49,6 +49,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/oldprintadaptor.hxx>
+#include <vcl/settings.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>

@@ -45,6 +45,7 @@
 #include "scmod.hxx"
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 // ause
 #include "editutil.hxx"
 

@@ -11,6 +11,7 @@
 #include <tools/datetime.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
 #include <vector>
 
 //these tab pages both have the same basic layout with a preview on the

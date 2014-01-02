@@ -27,6 +27,7 @@
 
 #include <svtools/langtab.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <svx/numfmtsh.hxx>

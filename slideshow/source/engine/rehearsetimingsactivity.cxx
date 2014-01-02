@@ -24,6 +24,8 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
+
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <basegfx/range/b2drange.hxx>

@@ -21,6 +21,7 @@
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 //---------------------------------------------------
 #include <osl/thread.h>
 #include <com/sun/star/util/XMacroExpander.hpp>

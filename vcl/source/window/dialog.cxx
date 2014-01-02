@@ -45,6 +45,8 @@
 #include <vcl/decoview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/settings.hxx>
+
 #include <iostream>
 
 #if !HAVE_FEATURE_DESKTOP

@@ -24,6 +24,7 @@
 #include <editeng/svxenum.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace dbaui
 {

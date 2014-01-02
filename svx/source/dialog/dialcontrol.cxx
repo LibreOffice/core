@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/field.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/builder.hxx>
 

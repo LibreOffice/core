@@ -22,6 +22,7 @@
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <svtools/ehdl.hxx>
 #include <svtools/svtresid.hxx>

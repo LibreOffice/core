@@ -27,6 +27,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <editeng/lineitem.hxx>
 
 namespace sc { namespace sidebar {

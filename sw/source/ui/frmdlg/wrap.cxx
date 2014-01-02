@@ -19,6 +19,8 @@
 
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
+#include <vcl/settings.hxx>
+
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>

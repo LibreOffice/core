@@ -26,6 +26,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <fadedef.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/settings.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdorect.hxx>

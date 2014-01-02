@@ -23,6 +23,7 @@
 
 #include <vcl/toolbox.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
 //........................................................................

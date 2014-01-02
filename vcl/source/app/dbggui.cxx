@@ -41,6 +41,7 @@
 #include "vcl/group.hxx"
 #include "vcl/field.hxx"
 #include "vcl/msgbox.hxx"
+#include "vcl/settings.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/threadex.hxx"
 

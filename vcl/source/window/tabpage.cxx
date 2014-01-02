@@ -26,6 +26,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 

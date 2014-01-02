@@ -39,6 +39,7 @@
 #include "dview.hxx"
 #include "flyfrm.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 

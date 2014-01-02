@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include "vcl/image.hxx"
+#include "vcl/settings.hxx"
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <unotools/ucbhelper.hxx>

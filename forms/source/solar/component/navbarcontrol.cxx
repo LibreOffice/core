@@ -37,6 +37,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()

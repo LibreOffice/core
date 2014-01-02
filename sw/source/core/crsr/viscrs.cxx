@@ -22,6 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
 #include <viewopt.hxx>
 #include <frmtool.hxx>
 #include <viscrs.hxx>

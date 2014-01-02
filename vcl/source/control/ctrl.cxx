@@ -26,6 +26,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/settings.hxx>
 
 #include <textlayout.hxx>
 #include <svdata.hxx>
@@ -559,6 +560,15 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
     }
     _rTargetDevice.Pop();
 #endif
+}
+
+Font
+Control::GetUnzoomedControlPointFont() const
+{
+    Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
+    if ( IsControlFont() )
+        aFont.Merge( GetControlFont() );
+    return aFont;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

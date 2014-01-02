@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/settings.hxx>
 
 #include "olinewin.hxx"
 #include "olinetab.hxx"

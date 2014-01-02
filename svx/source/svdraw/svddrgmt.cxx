@@ -22,6 +22,7 @@
 
 #include <tools/bigint.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>

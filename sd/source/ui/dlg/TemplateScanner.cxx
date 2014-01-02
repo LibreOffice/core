@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/templatelocnames.hrc>
 #include <com/sun/star/frame/DocumentTemplates.hpp>

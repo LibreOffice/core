@@ -91,6 +91,7 @@
 #include <fmthdft.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/syslocale.hxx>
 #include <fmtflcnt.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/unolingu.hxx>

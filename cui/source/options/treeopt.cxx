@@ -97,6 +97,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/settings.hxx>
 #include "svtools/treelistentry.hxx"
 
 #ifdef LINUX

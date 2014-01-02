@@ -18,6 +18,7 @@
 #include "LineWidthValueSet.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
+#include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {
 

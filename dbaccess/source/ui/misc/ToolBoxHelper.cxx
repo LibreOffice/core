@@ -24,6 +24,7 @@
 #include "UITools.hxx"
 #include <svtools/imgdef.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
 
 namespace dbaui
 {

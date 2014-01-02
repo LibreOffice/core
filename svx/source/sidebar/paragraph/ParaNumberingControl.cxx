@@ -34,6 +34,8 @@
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/settings.hxx>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

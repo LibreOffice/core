@@ -12,6 +12,7 @@
 #include "i18nlangtag/lang.h"
 #include "svl/ctloptions.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
 
 #include "getdigitlanguage.hxx"
 

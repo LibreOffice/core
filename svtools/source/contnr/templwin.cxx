@@ -33,6 +33,7 @@
 #include <svtools/templatefoldercache.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/txtattr.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/svtools.hrc>
 #include "templwin.hrc"
 #include <svtools/helpid.hrc>

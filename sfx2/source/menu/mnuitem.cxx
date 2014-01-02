@@ -59,6 +59,7 @@
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "../doc/doc.hrc"
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

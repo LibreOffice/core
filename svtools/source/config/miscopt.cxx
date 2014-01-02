@@ -30,6 +30,7 @@
 
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <list>
 

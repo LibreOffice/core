@@ -29,6 +29,8 @@
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/settings.hxx>
+
 #include "svtools/treelistentry.hxx"
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>

@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 
 #include <stack>
 

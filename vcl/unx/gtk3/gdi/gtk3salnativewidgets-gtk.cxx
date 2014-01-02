@@ -14,6 +14,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <vcl/settings.hxx>
 #include "fontmanager.hxx"
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;

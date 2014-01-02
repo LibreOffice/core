@@ -70,6 +70,7 @@
 #include <vcl/image.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 
 #include <math.h>
 

@@ -40,7 +40,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
-
+#include <vcl/settings.hxx>
 
 #define BUTTON_WIDTH 30
 #define BUTTON_HEIGHT 19

@@ -12,6 +12,7 @@
 #include <rtl/instance.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "global.hxx"
 

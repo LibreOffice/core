@@ -33,6 +33,7 @@
 #include <avmedia/mediawindow.hxx>
 #include "gallery.hrc"
 #include <vcl/graphicfilter.hxx>
+#include <vcl/settings.hxx>
 
 #define GALLERY_BRWBOX_TITLE    1
 #define GALLERY_BRWBOX_PATH     2

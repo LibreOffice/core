@@ -22,6 +22,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
 
 namespace vcl
 {

@@ -21,6 +21,7 @@
 
 #include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace accessibility;
 // -----------------------------------------------------------------------------

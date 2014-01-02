@@ -20,6 +20,7 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
 

@@ -40,6 +40,7 @@
 #include "WindowUpdater.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace sd {
 

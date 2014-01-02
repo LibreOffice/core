@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/unohelp2.hxx>
-
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

@@ -52,6 +52,7 @@
 
 #include <framework/addonmenu.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;

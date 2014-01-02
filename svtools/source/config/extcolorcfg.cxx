@@ -35,6 +35,7 @@
 #include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>

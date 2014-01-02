@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/keycodes.hxx>
 #include <tools/wintypes.hxx>
 
 #include <connectivity/dbtools.hxx>

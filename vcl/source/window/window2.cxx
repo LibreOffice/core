@@ -34,6 +34,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/settings.hxx>
 
 #include <window.h>
 #include <outfont.hxx>

@@ -39,6 +39,7 @@
  ------------- */
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 
 //-----------------------------------------------------------------------------

@@ -20,7 +20,10 @@
 #include <config_features.h>
 
 #include "hintids.hxx"
+
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
+
 #include <svx/ruler.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/lrspitem.hxx>

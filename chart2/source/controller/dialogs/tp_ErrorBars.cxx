@@ -21,6 +21,7 @@
 #include "ResId.hxx"
 #include "TabPages.hrc"
 #include "TabPageNotifiable.hxx"
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 

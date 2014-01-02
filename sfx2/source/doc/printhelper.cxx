@@ -44,6 +44,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/settings.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

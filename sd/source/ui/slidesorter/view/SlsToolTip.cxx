@@ -25,8 +25,9 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "glob.hrc"
-#include <vcl/help.hxx>
 
+#include <vcl/settings.hxx>
+#include <vcl/help.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

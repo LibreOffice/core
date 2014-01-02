@@ -44,6 +44,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <vcl/waitobj.hxx>
+#include <vcl/settings.hxx>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>

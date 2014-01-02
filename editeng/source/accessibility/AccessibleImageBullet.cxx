@@ -20,6 +20,7 @@
 #include <tools/gen.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

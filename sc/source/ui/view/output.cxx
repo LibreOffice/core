@@ -39,6 +39,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/settings.hxx>
 #include <svx/unoapi.hxx>
 
 #include "output.hxx"

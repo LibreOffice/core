@@ -125,6 +125,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
 
 #include <memory>
 

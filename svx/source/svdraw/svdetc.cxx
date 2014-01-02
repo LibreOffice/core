@@ -55,6 +55,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>

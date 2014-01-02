@@ -30,6 +30,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>

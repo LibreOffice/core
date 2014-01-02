@@ -37,6 +37,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 namespace basctl
 {

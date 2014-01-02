@@ -10,6 +10,8 @@
 #include "namedefdlg.hxx"
 
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <sfx2/app.hxx>
 
 #include "document.hxx"

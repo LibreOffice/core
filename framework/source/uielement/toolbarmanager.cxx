@@ -69,6 +69,8 @@
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <svtools/menuoptions.hxx>
 #include <boost/bind.hpp>
 #include <svtools/acceleratorexecute.hxx>

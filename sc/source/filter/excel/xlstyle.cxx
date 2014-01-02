@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/font.hxx>
 #include <sal/macros.h>
 #include <rtl/tencinfo.h>

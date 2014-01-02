@@ -27,6 +27,7 @@
 #include <svx/dialmgr.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>
 #include "frmsel.hrc"

@@ -26,6 +26,7 @@
 #include <math.h>
 #include <osl/diagnose.h>
 #include <vcl/lineinfo.hxx>
+#include <vcl/settings.hxx>
 
 using namespace dbaui;
 const long DESCRIPT_LINE_WIDTH = 15;

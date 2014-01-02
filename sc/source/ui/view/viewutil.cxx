@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>

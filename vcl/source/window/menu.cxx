@@ -41,6 +41,7 @@
 #include "vcl/controllayout.hxx"
 #include "vcl/toolbox.hxx"
 #include "vcl/dockingarea.hxx"
+#include "vcl/settings.hxx"
 
 #include "salinst.hxx"
 #include "svdata.hxx"

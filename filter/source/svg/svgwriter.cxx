@@ -23,6 +23,8 @@
 
 #include <rtl/crc.h>
 #include <vcl/unohelp.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <tools/helpers.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>

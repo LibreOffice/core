@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <tools/diagnose_ex.h>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;

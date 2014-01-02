@@ -20,6 +20,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include "impimagetree.hxx"
 

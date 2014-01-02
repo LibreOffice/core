@@ -26,6 +26,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/settings.hxx>
 #include "IApplicationController.hxx"
 
 using namespace ::dbaui;

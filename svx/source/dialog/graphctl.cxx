@@ -20,6 +20,7 @@
 #include <svl/itempool.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>

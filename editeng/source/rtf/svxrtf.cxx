@@ -35,6 +35,7 @@
 #include <editeng/svxrtf.hxx>
 #include <editeng/editids.hrc>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 

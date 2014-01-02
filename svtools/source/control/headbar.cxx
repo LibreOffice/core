@@ -25,6 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/settings.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 

@@ -35,6 +35,8 @@
 #include "Client.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/settings.hxx>
+
 #include <osl/mutex.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>

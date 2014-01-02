@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 #include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>
+#include <vcl/settings.hxx>
 #include "exportdialog.hxx"
 #include <uno/mapping.hxx>
 #include <tools/fldunit.hxx>

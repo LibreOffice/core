@@ -21,6 +21,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
 
 #include <svl/itempool.hxx>
 

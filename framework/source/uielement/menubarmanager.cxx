@@ -68,6 +68,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>

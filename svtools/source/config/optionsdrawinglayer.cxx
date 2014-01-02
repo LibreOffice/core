@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 
 //_________________________________________________________________________________________________________________

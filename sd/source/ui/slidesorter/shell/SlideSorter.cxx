@@ -37,6 +37,7 @@
 
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include "sdresid.hxx"

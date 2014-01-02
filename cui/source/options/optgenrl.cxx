@@ -25,6 +25,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/settings.hxx>
 
 #include <cuires.hrc>
 #include <unotools/useroptions.hxx>

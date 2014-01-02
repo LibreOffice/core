@@ -30,6 +30,7 @@
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>
 #include <vcl/splitwin.hxx>
+#include <vcl/settings.hxx>
 
 #include <rsc/rsc-vcl-shared-types.hxx>
 

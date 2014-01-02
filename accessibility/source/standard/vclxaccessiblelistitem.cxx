@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/settings.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>

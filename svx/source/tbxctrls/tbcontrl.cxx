@@ -47,6 +47,7 @@
 #include <unotools/fontoptions.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svl/smplhint.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

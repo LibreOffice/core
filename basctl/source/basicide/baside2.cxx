@@ -49,6 +49,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <cassert>

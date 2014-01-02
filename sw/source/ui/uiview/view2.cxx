@@ -137,6 +137,7 @@
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
+#include <vcl/settings.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

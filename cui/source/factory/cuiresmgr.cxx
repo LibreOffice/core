@@ -20,6 +20,7 @@
 #include <dialmgr.hxx>
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 // struct DialogsResMgr --------------------------------------------------
 ResMgr* CuiResMgr::GetResMgr()

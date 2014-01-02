@@ -56,6 +56,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces

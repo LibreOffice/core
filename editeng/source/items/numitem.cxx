@@ -25,6 +25,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/brushitem.hxx>
 #include <vcl/font.hxx>
+#include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/numdef.hxx>

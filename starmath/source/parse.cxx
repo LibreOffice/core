@@ -25,6 +25,7 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include <sal/macros.h>
+#include <vcl/settings.hxx>
 #include "parse.hxx"
 #include "starmath.hrc"
 #include "smdll.hxx"

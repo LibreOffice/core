@@ -53,6 +53,7 @@
 #include <comphelper/InlineContainer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

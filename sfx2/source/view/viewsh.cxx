@@ -50,7 +50,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
+#include <vcl/settings.hxx>
 
 #include <sfx2/app.hxx>
 #include "view.hrc"

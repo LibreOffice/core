@@ -23,6 +23,7 @@
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <ucbhelper/content.hxx>
 #include <sfx2/app.hxx>
 #include "helpid.hrc"

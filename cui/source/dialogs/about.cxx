@@ -20,6 +20,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>

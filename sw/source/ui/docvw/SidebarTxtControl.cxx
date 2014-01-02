@@ -40,6 +40,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>

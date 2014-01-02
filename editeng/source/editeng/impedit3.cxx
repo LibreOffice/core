@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/settings.hxx>
 
 #include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>

@@ -25,6 +25,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 void MenuButton::ImplInitMenuButtonData()
 {

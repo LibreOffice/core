@@ -22,6 +22,7 @@
 #include "datwin.hxx"
 #include <svtools/colorcfg.hxx>
 #include <vcl/salgtype.hxx>
+#include <vcl/settings.hxx>
 
 #include <tools/multisel.hxx>
 #include <algorithm>

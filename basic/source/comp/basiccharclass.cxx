@@ -21,6 +21,7 @@
 
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 BasicCharClass::BasicCharClass()
 {

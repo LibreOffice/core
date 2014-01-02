@@ -55,6 +55,7 @@
 #include <svx/xmlsecctrl.hxx>
 #include <sfx2/viewfac.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 namespace basctl
 {

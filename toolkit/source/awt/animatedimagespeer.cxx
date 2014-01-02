@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/throbber.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <limits>
 

@@ -8,6 +8,7 @@
  */
 #include "basictest.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <comphelper/processfactory.hxx>
 using namespace ::com::sun::star;
 

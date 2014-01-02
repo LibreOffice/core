@@ -35,6 +35,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/lboxctrl.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/svxids.hrc>

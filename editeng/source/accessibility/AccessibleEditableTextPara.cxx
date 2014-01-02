@@ -47,6 +47,8 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <vcl/unohelp.hxx>
+#include <vcl/settings.hxx>
+
 #include <editeng/editeng.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unoipset.hxx>

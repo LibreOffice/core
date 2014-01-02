@@ -20,6 +20,7 @@
 #include "TableDesignHelpBar.hxx"
 #include <tools/debug.hxx>
 #include <svtools/svmedit.hxx>
+#include <vcl/settings.hxx>
 #include "dbaccess_helpid.hrc"
 #include <boost/scoped_ptr.hpp>
 using namespace dbaui;

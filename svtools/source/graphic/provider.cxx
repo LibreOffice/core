@@ -31,6 +31,7 @@
 #include <vcl/wmf.hxx>
 #include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <comphelper/servicehelper.hxx>

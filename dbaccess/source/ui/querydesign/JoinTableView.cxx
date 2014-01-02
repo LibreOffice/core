@@ -34,6 +34,7 @@
 #include "QueryMoveTabWinUndoAct.hxx"
 #include "QuerySizeTabWinUndoAct.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "TableWindowData.hxx"
 #include "JAccess.hxx"
 #include <com/sun/star/accessibility/XAccessible.hpp>

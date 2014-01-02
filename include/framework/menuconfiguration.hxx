@@ -28,6 +28,8 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <framework/fwedllapi.h>
 
 #include <cppuhelper/weak.hxx>

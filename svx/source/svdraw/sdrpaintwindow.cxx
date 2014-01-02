@@ -22,7 +22,7 @@
 #include <svx/svdpntv.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
-
+#include <vcl/settings.hxx>
 
 void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
 {

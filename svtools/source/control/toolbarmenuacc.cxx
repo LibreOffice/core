@@ -25,6 +25,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "svtools/toolbarmenu.hxx"
 

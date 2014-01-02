@@ -36,6 +36,7 @@
 #include "svx/galmisc.hxx"
 #include "galobj.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/dibtools.hxx>
 #include "gallerydrawmodel.hxx"
 

@@ -33,7 +33,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
-
+#include <vcl/settings.hxx>
 
 
 // =======================================================================

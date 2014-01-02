@@ -25,6 +25,8 @@
 #include <com/sun/star/drawing/XSlideRenderer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <boost/noncopyable.hpp>

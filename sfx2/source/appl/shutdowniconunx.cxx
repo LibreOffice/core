@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
+#include "tools/rc.hxx"
 #include <sfx2/app.hxx>
 #include "app.hrc"
 #ifndef __SHUTDOWNICON_HXX__

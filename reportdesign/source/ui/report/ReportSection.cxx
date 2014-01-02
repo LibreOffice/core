@@ -39,6 +39,7 @@
 #include <svx/dbaexchange.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <toolkit/helper/convert.hxx>

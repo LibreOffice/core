@@ -25,6 +25,7 @@
 #include <tools/svborder.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace css;
 using namespace cssu;

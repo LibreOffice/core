@@ -23,6 +23,7 @@
 #include <tools/shl.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svl/eitem.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/smplhint.hxx>

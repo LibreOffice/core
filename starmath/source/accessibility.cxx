@@ -36,6 +36,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/gen.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemset.hxx>

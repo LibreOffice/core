@@ -35,6 +35,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

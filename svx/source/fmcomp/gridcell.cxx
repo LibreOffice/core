@@ -64,6 +64,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/shl.hxx>
 #include <vcl/longcurr.hxx>
+#include <vcl/settings.hxx>
 
 #include <math.h>
 #include <stdio.h>

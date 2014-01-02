@@ -31,8 +31,9 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
-
+#include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
+
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 using namespace ::com::sun::star;

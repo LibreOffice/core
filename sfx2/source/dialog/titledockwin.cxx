@@ -25,6 +25,7 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <svl/eitem.hxx>
+#include <vcl/settings.hxx>
 
 //......................................................................................................................
 namespace sfx2

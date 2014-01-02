@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/errcode.hxx>
 #include <tools/color.hxx>

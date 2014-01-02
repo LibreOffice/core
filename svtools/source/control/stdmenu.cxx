@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/stdmenu.hxx>

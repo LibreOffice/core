@@ -30,6 +30,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/settings.hxx>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <comphelper/string.hxx>

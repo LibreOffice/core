@@ -29,6 +29,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <unotools/syslocale.hxx>
+#include <vcl/settings.hxx>
 #include "UITools.hxx"
 
 using namespace ::dbaui;

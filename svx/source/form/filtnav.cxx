@@ -51,6 +51,7 @@
 #include <svx/svxids.hrc>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
 #include "svtools/treelistentry.hxx"

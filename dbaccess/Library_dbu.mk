@@ -108,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/ColumnControlWindow \
     dbaccess/source/ui/control/curledit \
     dbaccess/source/ui/control/dbtreelistbox \
+    dbaccess/source/ui/control/FieldControls \
     dbaccess/source/ui/control/FieldDescControl \
     dbaccess/source/ui/control/listviewitems \
     dbaccess/source/ui/control/marktree \

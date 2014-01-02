@@ -21,6 +21,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <impedit.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>

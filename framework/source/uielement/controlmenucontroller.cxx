@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>

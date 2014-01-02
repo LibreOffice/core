@@ -24,6 +24,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com {
 namespace sun {

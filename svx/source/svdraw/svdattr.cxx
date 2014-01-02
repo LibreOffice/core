@@ -44,6 +44,7 @@
 #include <tools/stream.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"

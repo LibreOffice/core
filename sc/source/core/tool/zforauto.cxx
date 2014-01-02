@@ -20,6 +20,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "zforauto.hxx"
 #include "global.hxx"
