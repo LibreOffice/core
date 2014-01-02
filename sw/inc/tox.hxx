@@ -404,6 +404,7 @@ namespace nsSwTOXElement
     const SwTOXElement TOX_TABLEADER        = 256;
     const SwTOXElement TOX_TAB_IN_TOC       = 512;
     const SwTOXElement TOX_BOOKMARK         = 1024;
+    const SwTOXElement TOX_NEWLINE          = 2048;
 }
 
 typedef sal_uInt16 SwTOIOptions;

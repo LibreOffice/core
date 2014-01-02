@@ -2697,6 +2697,7 @@ void DomainMapper_Impl::handleToc
     bool bFromEntries = false;
     bool bHideTabLeaderPageNumbers = false ;
     bool bIsTabEntry = false ;
+    bool bNewLine = false ;
 
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
@@ -2789,10 +2790,10 @@ void DomainMapper_Impl::handleToc
          bIsTabEntry = true ;
      }
 //                  \x Preserve newline characters within table entries
-//                    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
-//                    {
-                        //todo: unsupported
-//                    }
+    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
+    {
+        bNewLine = true ;
+    }
 //                  \z Hides page numbers within the table of contens when shown in Web Layout View
                     if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
                     {
@@ -2822,6 +2823,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS ), uno::makeAny( bHideTabLeaderPageNumbers ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TAB_IN_TOC ), uno::makeAny( bIsTabEntry ));
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TOC_NEW_LINE ), uno::makeAny( bNewLine ));
         if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels

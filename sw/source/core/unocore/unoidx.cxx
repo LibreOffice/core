@@ -665,6 +665,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_TAB_IN_TOC:
              lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_TAB_IN_TOC);
         break;
+        case WID_TOC_NEWLINE:
+            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_NEWLINE);
+        break;
 //          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
 //          break;
         case WID_HIDE_TABLEADER_PAGENUMBERS:
