@@ -3097,7 +3097,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName(PROP_FILE_FORMAT),
-                                    uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME ));
+                                    uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME_AND_EXT ));
                     }
                     break;
                     case FIELD_FILESIZE     : break;
