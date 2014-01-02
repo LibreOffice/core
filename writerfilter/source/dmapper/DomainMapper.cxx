@@ -746,10 +746,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 }
             }
             break;
-        case NS_rtf::LN_dxaDel:
-            //deleted tab
-        case NS_rtf::LN_dxaAdd:
-            //set tab
         case NS_rtf::LN_TLC:
             //tab leading characters - for decimal tabs
         case NS_rtf::LN_JC:

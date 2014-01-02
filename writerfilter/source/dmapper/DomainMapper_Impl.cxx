@@ -476,10 +476,10 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
 
 void DomainMapper_Impl::ModifyCurrentTabStop( Id nId, sal_Int32 nValue)
 {
-    OSL_ENSURE(nId == NS_rtf::LN_dxaAdd || m_nCurrentTabStopIndex < m_aCurrentTabStops.size(),
+    OSL_ENSURE(m_nCurrentTabStopIndex < m_aCurrentTabStops.size(),
         "tab stop creation error");
 
-    if( nId != NS_rtf::LN_dxaAdd && m_nCurrentTabStopIndex >= m_aCurrentTabStops.size())
+    if( m_nCurrentTabStopIndex >= m_aCurrentTabStops.size())
         return;
     static const style::TabAlign aTabAlignFromWord[] =
     {
@@ -501,26 +501,6 @@ void DomainMapper_Impl::ModifyCurrentTabStop( Id nId, sal_Int32 nValue)
 
     switch(nId)
     {
-        case NS_rtf::LN_dxaAdd: //set tab
-            m_aCurrentTabStops.push_back(
-                    DeletableTabStop(style::TabStop(ConversionHelper::convertTwipToMM100(nValue), style::TabAlign_LEFT, ' ', ' ')));
-        break;
-        case NS_rtf::LN_dxaDel: //deleted tab
-        {
-            //mark the tab stop at the given position as deleted
-            ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
-            ::std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
-            sal_Int32 nConverted = ConversionHelper::convertTwipToMM100(nValue);
-            for( ; aIt != aEndIt; ++aIt)
-            {
-                if( aIt->Position == nConverted )
-                {
-                    aIt->bDeleted = true;
-                    break;
-                }
-            }
-        }
-        break;
         case NS_rtf::LN_TLC: //tab leading characters - for decimal tabs
             // 0 - no leader, 1- dotted, 2 - hyphenated, 3 - single line, 4 - heavy line, 5 - middle dot
             if( nValue >= 0 &&  nValue < sal::static_int_cast<sal_Int32>(sizeof(aTabFillCharWord) / sizeof (sal_Unicode)))

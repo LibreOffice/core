@@ -463,7 +463,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_BRCLEFT: //left border
         case NS_rtf::LN_BRCBOTTOM: //bottom border
         case NS_rtf::LN_BRCRIGHT: //right border
-        case NS_rtf::LN_shape: //shape
         case NS_rtf::LN_blip: //the binary graphic data in a shape
             {
                 switch(nName)
@@ -630,8 +629,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_shpfBid:
             break; //ignored
         case NS_rtf::LN_shpfComplex:
-            break;
-        case NS_rtf::LN_shpname:
             break;
 
         //BLIP store entry
