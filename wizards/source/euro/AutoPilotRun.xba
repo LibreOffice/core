@@ -28,7 +28,7 @@ Public Source as String
 Public SubstFile as String
 Public SubstDir as String
 Public NoArgs()
-Public TypeList(14) as String
+Public TypeList(6) as String
 Public GoOn as Boolean
 Public DoUnprotect as Integer
 Public Password as String
@@ -74,21 +74,13 @@ Dim bDisposable as Boolean
 			TargetStemDir = TargetDir
 			TypeList(0) = &quot;calc8&quot;
 			TypeList(1) = &quot;calc_StarOffice_XML_Calc&quot;
-			TypeList(2) = &quot;calc_StarCalc_30&quot;
-			TypeList(3) = &quot;calc_StarCalc_40&quot;
-			TypeList(4) = &quot;calc_StarCalc_50&quot;
 			If DialogModel.chkTextDocuments.State = 1 Then
-				ReDim Preserve TypeList(13) as String
+				ReDim Preserve TypeList(5) as String
 
-				TypeList(5) = &quot;writer8&quot;
-				TypeList(6) = &quot;writerglobal8&quot;
-				TypeList(7) = &quot;writer_StarOffice_XML_Writer&quot;
-				TypeList(8) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
-				TypeList(9) = &quot;writer_StarWriter_30&quot;
-				TypeList(10) = &quot;writer_StarWriter_40&quot;
-				TypeList(11) = &quot;writer_globaldocument_StarWriter_40GlobalDocument&quot;
-				TypeList(12) = &quot;writer_StarWriter_50&quot;
-				TypeList(13) = &quot;writer_globaldocument_StarWriter_50GlobalDocument&quot;
+				TypeList(2) = &quot;writer8&quot;
+				TypeList(3) = &quot;writerglobal8&quot;
+				TypeList(4) = &quot;writer_StarOffice_XML_Writer&quot;
+				TypeList(5) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
 			End If
 			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, TypeList())
 			TotDocCount = Ubound(FilesList(),1) + 1
@@ -387,34 +379,26 @@ Sub CallFilePicker()
 		oTypes() = oMasterKey.Types
 		oUIKey = GetRegistryKeyContent(&quot;org.openoffice.Office.UI/FilterClassification/LocalFilters&quot;)
 		If DialogModel.chkTextDocuments.State = 1 Then
-			Dim FilterNames(11,1) as String
-			FilterNames(6,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
-			FilterNames(6,1) = &quot;*.sxw&quot;
-			FilterNames(7,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
-			FilterNames(7,1) = &quot;*.stw&quot;
-			FilterNames(8,0) = oUIKey.Classes.GetByName(&quot;sw3to5&quot;).DisplayName
-			FilterNames(8,1) = &quot;*.sdw&quot;
-			FilterNames(9,0) = oUIKey.Classes.GetByName(&quot;sw3to5templ&quot;).DisplayName
-			Filternames(9,1) = &quot;*.vor&quot;
-			FilterNames(10,0) = oTypes.GetByName(&quot;writer8&quot;).UIName
-			FilterNames(10,1) = &quot;*.odt&quot;
-			FilterNames(11,0) = oTypes.GetByName(&quot;writer8_template&quot;).UIName
-			FilterNames(11,1) = &quot;*.ott&quot;
+			Dim FilterNames(7,1) as String
+			FilterNames(4,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+			FilterNames(4,1) = &quot;*.sxw&quot;
+			FilterNames(5,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
+			FilterNames(5,1) = &quot;*.stw&quot;
+			FilterNames(6,0) = oTypes.GetByName(&quot;writer8&quot;).UIName
+			FilterNames(6,1) = &quot;*.odt&quot;
+			FilterNames(7,0) = oTypes.GetByName(&quot;writer8_template&quot;).UIName
+			FilterNames(7,1) = &quot;*.ott&quot;
 		Else
-			ReDim FilterNames(5,1) as String
+			ReDim FilterNames(3,1) as String
 		End If
-		FilterNames(0,0) = oTypes.GetByName(&quot;calc_StarOffice_XML_Calc&quot;).UIName	
+		FilterNames(0,0) = oTypes.GetByName(&quot;calc_StarOffice_XML_Calc&quot;).UIName
 		Filternames(0,1) = &quot;*.sxc&quot;
 		FilterNames(1,0) = oTypes.GetByName(&quot;calc_StarOffice_XML_Calc_Template&quot;).UIName
 		Filternames(1,1) = &quot;*.stc&quot;
-		FilterNames(2,0) = oUIKey.Classes.GetByName(&quot;sc345&quot;).DisplayName
-		FilterNames(2,1) = &quot;*.sdc&quot;
-		FilterNames(3,0) = oUIKey.Classes.GetByName(&quot;sc345templ&quot;).DisplayName
-		Filternames(3,1) = &quot;*.vor&quot;
-		FilterNames(4,0) = oTypes.GetByName(&quot;calc8&quot;).UIName	
-		Filternames(4,1) = &quot;*.ods&quot;
-		FilterNames(5,0) = oTypes.GetByName(&quot;calc8_template&quot;).UIName	
-		Filternames(5,1) = &quot;*.ots&quot;
+		FilterNames(2,0) = oTypes.GetByName(&quot;calc8&quot;).UIName
+		Filternames(2,1) = &quot;*.ods&quot;
+		FilterNames(3,0) = oTypes.GetByName(&quot;calc8_template&quot;).UIName
+		Filternames(3,1) = &quot;*.ots&quot;
 		GetFileName(DialogModel.txtSource, Filternames())
 	Else
 		GetFolderName(DialogModel.txtSource)
