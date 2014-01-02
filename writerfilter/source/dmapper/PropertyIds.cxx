@@ -362,6 +362,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_HORIZONTAL_MERGE: sName = "HorizontalMerge"; break;
             case PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS      :    sName = "HideTabLeaderAndPageNumber" ; break ;
             case PROP_TAB_IN_TOC : sName = "TabInTOC"; break ;
+            case PROP_TOC_BOOKMARK: sName = "TOCBookmark"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

@@ -2370,6 +2370,20 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveZfield,"preserve_Z_field_TOC.docx")
    CPPUNIT_ASSERT(contents.match(" TOC \\z \\w \\f \\o \"1-3\" \\h"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFieldFlagB,"TOC_field_b.docx")
+{
+   // This test case is to verify \b flag.
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
+    // not to insert an empty paragraph before TOC.
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" TOC \\b \"bookmark111\" \\o \"1-9\" \\h"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -2131,6 +2131,14 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             sStr += sEntryEnd;
                         }
                     }
+                    if(nsSwTOXElement::TOX_BOOKMARK & pTOX->GetCreateType())
+                    {
+                        sStr += "\\b ";
+                        OUString bName = pTOX->GetBookmarkName();
+                        sStr += bName;
+                        sStr += sEntryEnd;
+                    }
+
                         if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                         {
                             // Take the TOC value of the max level to evaluate to as

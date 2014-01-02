@@ -218,6 +218,7 @@
 #define WID_TEXT_READING                        1058
 #define WID_PRIMARY_KEY_READING                 1059
 #define WID_SECONDARY_KEY_READING               1060
+#define WID_TOC_BOOKMARK                        1061
 
 // Text document
 #define WID_DOC_CHAR_COUNT                      1000

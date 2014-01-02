@@ -565,6 +565,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     nCreateType = rSource.nCreateType;
     aTitle      = rSource.aTitle;
     aForm       = rSource.aForm;
+    m_aBookmarkName = rSource.m_aBookmarkName;
     bProtected  = rSource.bProtected;
     bFromChapter = rSource.bFromChapter;
     bFromObjectNames = rSource.bFromObjectNames;
@@ -603,12 +604,18 @@ SwTOXBase::~SwTOXBase()
 void SwTOXBase::SetTitle(const OUString& rTitle)
     {   aTitle = rTitle; }
 
+void SwTOXBase::SetBookmarkName(const OUString& bName)
+{
+     m_aBookmarkName = bName;
+}
+
 
 SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 {
     aForm = rSource.aForm;
     aName = rSource.aName;
     aTitle = rSource.aTitle;
+    m_aBookmarkName = rSource.m_aBookmarkName;
     sMainEntryCharStyle = rSource.sMainEntryCharStyle;
     for(sal_uInt16 nLevel = 0; nLevel < MAXLEVEL; nLevel++)
         aStyleNames[nLevel] = rSource.aStyleNames[nLevel];
