@@ -33,6 +33,13 @@ SeriesEntry::~SeriesEntry()
 SeriesListBox::SeriesListBox( Window* pParent, const ResId & rResId ) :
         SvTreeListBox( pParent, rResId )
 {}
+SeriesListBox::SeriesListBox( Window* pParent) :
+        SvTreeListBox( pParent)
+{}
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSeriesListBox(Window *pParent)//, VclBuilder::stringmap &)
+     {
+         return new SeriesListBox(pParent);
+     }
 
 SeriesListBox::~SeriesListBox()
 {}

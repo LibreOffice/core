@@ -18,7 +18,6 @@
  */
 
 #include "tp_DataSource.hxx"
-#include "tp_DataSource.hrc"
 #include "Strings.hrc"
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
@@ -130,23 +129,6 @@ static long lcl_pRoleListBoxTabs[] =
         0, 75
     };
 
-void lcl_ShowChooserButton(
-    ::chart::RangeSelectionButton & rChooserButton,
-    Edit & rEditField,
-    sal_Bool bShow )
-{
-    if( rChooserButton.IsVisible() != bShow )
-    {
-        rChooserButton.Show( bShow );
-        sal_Int32 nWidthDiff = 12 + 4;
-        if( bShow )
-            nWidthDiff = -nWidthDiff;
-        Size aSize = rChooserButton.PixelToLogic( rEditField.GetSizePixel(), MAP_APPFONT );
-        aSize.setWidth( aSize.getWidth() + nWidthDiff );
-        rEditField.SetSizePixel( rChooserButton.LogicToPixel( aSize, MAP_APPFONT ));
-    }
-}
-
 void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
@@ -215,25 +197,9 @@ DataSourceTabPage::DataSourceTabPage(
     ChartTypeTemplateProvider* pTemplateProvider,
     Dialog * pParentDialog,
     bool bHideDescription /* = false */ ) :
-        ::svt::OWizardPage( pParent, SchResId( TP_DATA_SOURCE )),
-
-    m_aFT_CAPTION     ( this, SchResId( FT_CAPTION_FOR_WIZARD )),
-    m_aFT_SERIES      ( this, SchResId( FT_SERIES      )),
-    m_apLB_SERIES( new SeriesListBox( this, SchResId( LB_SERIES ))),
-    m_aBTN_ADD        ( this, SchResId( BTN_ADD        )),
-    m_aBTN_REMOVE     ( this, SchResId( BTN_REMOVE     )),
-    m_aBTN_UP         ( this, SchResId( BTN_UP         )),
-    m_aBTN_DOWN       ( this, SchResId( BTN_DOWN       )),
-    m_aFT_ROLE        ( this, SchResId( FT_ROLE        )),
-    m_aLB_ROLE        ( this, SchResId( LB_ROLE        )),
-    m_aFT_RANGE       ( this, SchResId( FT_RANGE       )),
-    m_aEDT_RANGE      ( this, SchResId( EDT_RANGE      )),
-    m_aIMB_RANGE_MAIN ( this, SchResId( IMB_RANGE_MAIN )),
-    m_aFT_CATEGORIES  ( this, SchResId( FT_CATEGORIES  )),
-    m_aFT_DATALABELS  ( this, SchResId( FT_DATALABELS  )),
-    m_aEDT_CATEGORIES ( this, SchResId( EDT_CATEGORIES )),
-    m_aIMB_RANGE_CAT  ( this, SchResId( IMB_RANGE_CAT  )),
-
+        ::svt::OWizardPage( pParent
+                           ,"tp_DataSource"
+                           ,"modules/schart/ui/tp_DataSource.ui"),
     m_pTemplateProvider( pTemplateProvider ),
     m_rDialogModel( rDialogModel ),
 
@@ -242,96 +208,73 @@ DataSourceTabPage::DataSourceTabPage(
     m_pParentDialog( pParentDialog ),
     m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
 {
-    FreeResource();
 
-    if( bHideDescription )
-    {
-        // note: the offset should be a negative value for shifting upwards, the
-        // 4 is for the offset difference between a wizard page and a tab-page
-        long nYOffset = - ( m_aFT_SERIES.GetPosPixel().getY() - m_aFT_CAPTION.GetPosPixel().getY() + 4 );
-        long nUpShift = - 2;
-        long nYResize = - (nYOffset - nUpShift);
-        m_aFT_CAPTION.Hide();
+    get(m_pFT_CAPTION     ,"FT_CAPTION_FOR_WIZARD");
+    get(m_pFT_SERIES      ,"FT_SERIES");
 
-        // shift list boxes and enlarge them by the space saved by hiding the caption
-        lcl_shiftControlY( m_aFT_SERIES, nYOffset );
-        lcl_shiftControlY( *(m_apLB_SERIES.get()), nYOffset );
-        lcl_increaseHeightOfControl( *(m_apLB_SERIES.get()), nYResize );
+    get(m_apLB_SERIES     ,"LB_SERIES");
 
-        lcl_shiftControlY( m_aFT_ROLE, nYOffset );
-        lcl_shiftControlY( m_aLB_ROLE, nYOffset );
-        lcl_increaseHeightOfControl( m_aLB_ROLE, nYResize );
+    get(m_pBTN_ADD        ,"BTN_ADD");
+    get(m_pBTN_REMOVE     ,"BTN_REMOVE");
+    get(m_pBTN_UP         ,"BTN_UP");
+    get(m_pBTN_DOWN       ,"BTN_DOWN");
+    get(m_pFT_ROLE        ,"FT_ROLE");
+    get(m_pLB_ROLE        ,"LB_ROLE");
+    get(m_pFT_RANGE       ,"FT_RANGE");
+    get(m_pEDT_RANGE      ,"EDT_RANGE");
+    get(m_pIMB_RANGE_MAIN ,"IMB_RANGE_MAIN");
+    get(m_pFT_CATEGORIES  ,"FT_CATEGORIES");
+    get(m_pFT_DATALABELS  ,"FT_DATALABELS");
+    get(m_pEDT_CATEGORIES ,"EDT_CATEGORIES");
+    get(m_pIMB_RANGE_CAT  ,"IMB_RANGE_CAT");
 
-        lcl_shiftControlY( m_aBTN_ADD, nUpShift );
-        lcl_shiftControlY( m_aBTN_REMOVE, nUpShift );
-        lcl_shiftControlY( m_aBTN_UP, nUpShift );
-        lcl_shiftControlY( m_aBTN_DOWN, nUpShift );
-        lcl_shiftControlY( m_aFT_RANGE, nUpShift );
-        lcl_shiftControlY( m_aEDT_RANGE, nUpShift );
-        lcl_shiftControlY( m_aIMB_RANGE_MAIN, nUpShift );
-        lcl_shiftControlY( m_aFT_CATEGORIES, nUpShift );
-        lcl_shiftControlY( m_aFT_DATALABELS, nUpShift );
-        lcl_shiftControlY( m_aEDT_CATEGORIES, nUpShift );
-        lcl_shiftControlY( m_aIMB_RANGE_CAT, nUpShift );
-    }
-    else
-    {
-        // make font of caption bold
-        Font aFont( m_aFT_CAPTION.GetControlFont() );
-        aFont.SetWeight( WEIGHT_BOLD );
-        m_aFT_CAPTION.SetControlFont( aFont );
+    m_pFT_CAPTION->Show(!bHideDescription);
 
-        // no mnemonic
-        m_aFT_CAPTION.SetStyle( m_aFT_CAPTION.GetStyle() | WB_NOLABEL );
-    }
-
-    m_aFixedTextRange = OUString( m_aFT_RANGE.GetText() );
+    m_aFixedTextRange = OUString( m_pFT_RANGE->GetText() );
     this->SetText( SCH_RESSTR( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
     m_apLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
 
-    m_aLB_ROLE.SetStyle( m_aLB_ROLE.GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
-    m_aLB_ROLE.SetSelectionMode( SINGLE_SELECTION );
-    m_aLB_ROLE.SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
+    m_pLB_ROLE->SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
 
-    m_aEDT_RANGE.SetKeyInputHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
-    m_aEDT_CATEGORIES.SetKeyInputHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
+//     m_pEDT_RANGE->SetKeyInputHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
+//     m_pEDT_CATEGORIES->SetKeyInputHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
 
-    m_aIMB_RANGE_MAIN.SetClickHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
-    m_aIMB_RANGE_CAT.SetClickHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
+    m_pIMB_RANGE_MAIN->SetClickHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
+    m_pIMB_RANGE_CAT->SetClickHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
 
-    m_aBTN_ADD.SetClickHdl( LINK( this, DataSourceTabPage, AddButtonClickedHdl ));
-    m_aBTN_REMOVE.SetClickHdl( LINK( this, DataSourceTabPage, RemoveButtonClickedHdl ));
+    m_pBTN_ADD->SetClickHdl( LINK( this, DataSourceTabPage, AddButtonClickedHdl ));
+    m_pBTN_REMOVE->SetClickHdl( LINK( this, DataSourceTabPage, RemoveButtonClickedHdl ));
 
-    m_aBTN_UP.SetClickHdl( LINK( this, DataSourceTabPage, UpButtonClickedHdl ));
-    m_aBTN_DOWN.SetClickHdl( LINK( this, DataSourceTabPage, DownButtonClickedHdl ));
+    m_pBTN_UP->SetClickHdl( LINK( this, DataSourceTabPage, UpButtonClickedHdl ));
+    m_pBTN_DOWN->SetClickHdl( LINK( this, DataSourceTabPage, DownButtonClickedHdl ));
 
-    m_aEDT_RANGE.SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
-    m_aEDT_CATEGORIES.SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
-    m_aEDT_RANGE.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
-    m_aEDT_CATEGORIES.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
+    m_pEDT_RANGE->SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
+    m_pEDT_CATEGORIES->SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
+    m_pEDT_RANGE->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
+    m_pEDT_CATEGORIES->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
 
     // #i75179# enable setting the background to a different color
-    m_aEDT_RANGE.SetStyle( m_aEDT_RANGE.GetStyle() | WB_FORCECTRLBACKGROUND );
-    m_aEDT_CATEGORIES.SetStyle( m_aEDT_CATEGORIES.GetStyle() | WB_FORCECTRLBACKGROUND );
+    m_pEDT_RANGE->SetStyle( m_pEDT_RANGE->GetStyle() | WB_FORCECTRLBACKGROUND );
+    m_pEDT_CATEGORIES->SetStyle( m_pEDT_CATEGORIES->GetStyle() | WB_FORCECTRLBACKGROUND );
 
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo
-    Font aSymbolFont( m_aBTN_UP.GetFont());
+    Font aSymbolFont( m_pBTN_UP->GetFont());
     aSymbolFont.SetName( "StarSymbol" );
-    m_aBTN_UP.SetControlFont( aSymbolFont );
-    m_aBTN_DOWN.SetControlFont( aSymbolFont );
+    m_pBTN_UP->SetControlFont( aSymbolFont );
+    m_pBTN_DOWN->SetControlFont( aSymbolFont );
 
     // set button text
     sal_Unicode cBlackUpPointingTriangle( 0x25b2 );
     sal_Unicode cBlackDownPointingTriangle( 0x25bc );
-    m_aBTN_UP.SetText( OUString( cBlackUpPointingTriangle ));
-    m_aBTN_DOWN.SetText( OUString( cBlackDownPointingTriangle ));
+    m_pBTN_UP->SetText( OUString( cBlackUpPointingTriangle ));
+    m_pBTN_DOWN->SetText( OUString( cBlackDownPointingTriangle ));
 
     // init controls
-    m_aLB_ROLE.SetTabs( lcl_pRoleListBoxTabs, MAP_APPFONT );
-    m_aLB_ROLE.Show();
+    m_pLB_ROLE->SetTabs( lcl_pRoleListBoxTabs, MAP_APPFONT );
+    m_pLB_ROLE->Show();
 
     updateControlsFromDialogModel();
 
@@ -339,8 +282,9 @@ DataSourceTabPage::DataSourceTabPage(
     if( m_apLB_SERIES->First())
         m_apLB_SERIES->Select( m_apLB_SERIES->First());
     m_apLB_SERIES->GrabFocus();
-    m_aBTN_UP.SetAccessibleName(SCH_RESSTR(STR_BUTTON_UP));
-    m_aBTN_DOWN.SetAccessibleName(SCH_RESSTR(STR_BUTTON_DOWN));
+
+    m_pBTN_UP->SetAccessibleName(SCH_RESSTR(STR_BUTTON_UP));
+    m_pBTN_DOWN->SetAccessibleName(SCH_RESSTR(STR_BUTTON_DOWN));
 }
 
 DataSourceTabPage::~DataSourceTabPage()
@@ -406,9 +350,9 @@ bool DataSourceTabPage::isValid()
     bool bHasSelectedEntry = (m_apLB_SERIES->FirstSelected() != 0);
 
     if( bHasSelectedEntry )
-        bRoleRangeValid = isRangeFieldContentValid( m_aEDT_RANGE );
-    if( m_aEDT_CATEGORIES.IsEnabled() )
-        bCategoriesRangeValid = isRangeFieldContentValid( m_aEDT_CATEGORIES );
+        bRoleRangeValid = isRangeFieldContentValid( *m_pEDT_RANGE );
+    if( m_pEDT_CATEGORIES->IsEnabled() )
+        bCategoriesRangeValid = isRangeFieldContentValid( *m_pEDT_CATEGORIES );
     bool bValid = ( bRoleRangeValid && bCategoriesRangeValid );
 
     if( m_pTabPageNotifiable )
@@ -434,7 +378,7 @@ void DataSourceTabPage::updateControlsFromDialogModel()
     SeriesSelectionChangedHdl( 0 );
 
     // categories
-    m_aEDT_CATEGORIES.SetText( m_rDialogModel.getCategoriesRange() );
+    m_pEDT_CATEGORIES->SetText( m_rDialogModel.getCategoriesRange() );
 
     updateControlState();
 }
@@ -501,10 +445,10 @@ void DataSourceTabPage::fillRoleListBox()
     SeriesEntry * pSeriesEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
     bool bHasSelectedEntry = (pSeriesEntry != 0);
 
-    SvTreeListEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
+    SvTreeListEntry * pRoleEntry =  m_pLB_ROLE->FirstSelected();
     sal_uLong nRoleIndex = SAL_MAX_UINT32;
     if( pRoleEntry )
-        nRoleIndex = m_aLB_ROLE.GetModel()->GetAbsPos( pRoleEntry );
+        nRoleIndex = m_pLB_ROLE->GetModel()->GetAbsPos( pRoleEntry );
 
     if( bHasSelectedEntry )
     {
@@ -515,25 +459,25 @@ void DataSourceTabPage::fillRoleListBox()
                 pSeriesEntry->m_xChartType ));
 
         // fill role list
-        m_aLB_ROLE.SetUpdateMode( sal_False );
-        m_aLB_ROLE.Clear();
-        m_aLB_ROLE.RemoveSelection();
+        m_pLB_ROLE->SetUpdateMode( sal_False );
+        m_pLB_ROLE->Clear();
+        m_pLB_ROLE->RemoveSelection();
 
         for( DialogModel::tRolesWithRanges::const_iterator aIt( aRoles.begin());
              aIt != aRoles.end(); ++ aIt )
         {
-            m_aLB_ROLE.InsertEntry( lcl_GetRoleLBEntry( aIt->first, aIt->second ));
+            m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aIt->first, aIt->second ));
         }
 
         // series may contain no roles, check listbox size before selecting entries
-        if( m_aLB_ROLE.GetEntryCount() > 0 )
+        if( m_pLB_ROLE->GetEntryCount() > 0 )
         {
-            if( nRoleIndex >= m_aLB_ROLE.GetEntryCount())
+            if( nRoleIndex >= m_pLB_ROLE->GetEntryCount())
                 nRoleIndex = 0;
-            m_aLB_ROLE.Select( m_aLB_ROLE.GetEntry( nRoleIndex ));
+            m_pLB_ROLE->Select( m_pLB_ROLE->GetEntry( nRoleIndex ));
         }
 
-        m_aLB_ROLE.SetUpdateMode( sal_True );
+        m_pLB_ROLE->SetUpdateMode( sal_True );
     }
 }
 
@@ -546,32 +490,35 @@ void DataSourceTabPage::updateControlState()
 
     if( bHasSelectedSeries )
     {
-        SvTreeListEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
+        SvTreeListEntry * pRoleEntry =  m_pLB_ROLE->FirstSelected();
         bHasValidRole = (pRoleEntry != 0);
     }
 
-    m_aBTN_ADD.Enable( true );
-    m_aBTN_REMOVE.Enable( bHasSelectedSeries );
+    m_pBTN_ADD->Enable( true );
+    m_pBTN_REMOVE->Enable( bHasSelectedSeries );
 
-    m_aBTN_UP.Enable( bHasSelectedSeries && (pSeriesEntry != m_apLB_SERIES->First()));
-    m_aBTN_DOWN.Enable( bHasSelectedSeries && (pSeriesEntry != m_apLB_SERIES->Last()));
+    m_pBTN_UP->Enable( bHasSelectedSeries && (pSeriesEntry != m_apLB_SERIES->First()));
+    m_pBTN_DOWN->Enable( bHasSelectedSeries && (pSeriesEntry != m_apLB_SERIES->Last()));
 
     bool bHasCategories = m_rDialogModel.isCategoryDiagram();
 
-    m_aFT_DATALABELS.Show(!bHasCategories);
-    m_aFT_CATEGORIES.Show( bHasCategories);
+    m_pFT_DATALABELS->Show(!bHasCategories);
+    m_pFT_CATEGORIES->Show( bHasCategories);
     sal_Bool bShowIB = bHasRangeChooser;
-    lcl_ShowChooserButton( m_aIMB_RANGE_CAT, m_aEDT_CATEGORIES, bShowIB );
 
-    m_aFT_SERIES.Enable();
+    m_pIMB_RANGE_CAT->Show(bShowIB);
+
+    m_pFT_SERIES->Enable();
     m_apLB_SERIES->Enable();
 
-    m_aFT_ROLE.Enable( bHasSelectedSeries );
-    m_aLB_ROLE.Enable( bHasSelectedSeries );
+    m_pFT_ROLE->Enable( bHasSelectedSeries );
+    m_pLB_ROLE->Enable( bHasSelectedSeries );
 
-    m_aFT_RANGE.Enable( bHasValidRole );
-    m_aEDT_RANGE.Enable( bHasValidRole );
-    lcl_ShowChooserButton( m_aIMB_RANGE_MAIN, m_aEDT_RANGE, bShowIB );
+    m_pFT_RANGE->Enable( bHasValidRole );
+    m_pEDT_RANGE->Enable( bHasValidRole );
+
+    m_pIMB_RANGE_MAIN->Show(bShowIB);
+
     isValid();
 }
 
@@ -591,23 +538,23 @@ IMPL_LINK_NOARG(DataSourceTabPage, SeriesSelectionChangedHdl)
 IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
-    SvTreeListEntry * pEntry = m_aLB_ROLE.FirstSelected();
+    SvTreeListEntry * pEntry = m_pLB_ROLE->FirstSelected();
     if( pEntry )
     {
-        OUString aSelectedRoleUI = lcl_GetSelectedRole( m_aLB_ROLE, true );
-        OUString aSelectedRange = lcl_GetSelectedRolesRange( m_aLB_ROLE );
+        OUString aSelectedRoleUI = lcl_GetSelectedRole( *m_pLB_ROLE, true );
+        OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_pLB_ROLE );
 
         // replace role in fixed text label
         const OUString aReplacementStr( "%VALUETYPE" );
         sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
         if( nIndex != -1 )
         {
-            m_aFT_RANGE.SetText(
+            m_pFT_RANGE->SetText(
                 m_aFixedTextRange.replaceAt(
                             nIndex, aReplacementStr.getLength(), aSelectedRoleUI ));
         }
 
-        m_aEDT_RANGE.SetText( aSelectedRange );
+        m_pEDT_RANGE->SetText( aSelectedRange );
         isValid();
     }
 
@@ -617,17 +564,17 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
 IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
-    m_pCurrentRangeChoosingField = & m_aEDT_RANGE;
-    if( !m_aEDT_RANGE.GetText().isEmpty() &&
+    m_pCurrentRangeChoosingField = m_pEDT_RANGE;
+    if( !m_pEDT_RANGE->GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
     bool bHasSelectedEntry = (pEntry != 0);
 
-    OUString aSelectedRolesRange = lcl_GetSelectedRolesRange( m_aLB_ROLE );
+    OUString aSelectedRolesRange = lcl_GetSelectedRolesRange( *m_pLB_ROLE );
 
-    if( bHasSelectedEntry && (m_aLB_ROLE.FirstSelected() != 0))
+    if( bHasSelectedEntry && (m_pLB_ROLE->FirstSelected() != 0))
     {
         OUString aUIStr(SCH_RESSTR(STR_DATA_SELECT_RANGE_FOR_SERIES));
 
@@ -637,7 +584,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
         if( nIndex != -1 )
         {
             aUIStr = aUIStr.replaceAt( nIndex, aReplacement.getLength(),
-                                       lcl_GetSelectedRole( m_aLB_ROLE, true ));
+                                       lcl_GetSelectedRole( *m_pLB_ROLE, true ));
         }
         // replace series name
         aReplacement = "%SERIESNAME";
@@ -660,12 +607,12 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
 IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
-    m_pCurrentRangeChoosingField = & m_aEDT_CATEGORIES;
-    if( !m_aEDT_CATEGORIES.GetText().isEmpty() &&
+    m_pCurrentRangeChoosingField = m_pEDT_CATEGORIES;
+    if( !m_pEDT_CATEGORIES->GetText().isEmpty() &&
         ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 
-    OUString aStr( SCH_RESSTR( m_aFT_CATEGORIES.IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
+    OUString aStr( SCH_RESSTR( m_pFT_CATEGORIES->IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
         m_rDialogModel.getCategoriesRange(), aStr, *this );
@@ -719,8 +666,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl)
     if( pEntry )
     {
         Reference< XDataSeries > xNewSelSeries;
-        SeriesEntry * pNewSelEntry = dynamic_cast< SeriesEntry * >(
-            m_apLB_SERIES->Next( pEntry ));
+        SeriesEntry * pNewSelEntry = dynamic_cast< SeriesEntry * >(m_apLB_SERIES->Next( pEntry ));
         if( pNewSelEntry )
             xNewSelSeries.set( pNewSelEntry->m_xDataSeries );
         else
@@ -809,7 +755,7 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
     {
         setDirty();
         updateModelFromControl( pEdit );
-        if( pEdit== &m_aEDT_RANGE )
+        if( pEdit== m_pEDT_RANGE )
         {
             if( ! lcl_UpdateCurrentSeriesName( *m_apLB_SERIES ))
                 fillSeriesListBox();
@@ -821,8 +767,7 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
     return 0;
 }
 
-void DataSourceTabPage::listeningFinished(
-    const OUString & rNewRange )
+void DataSourceTabPage::listeningFinished(const OUString & rNewRange )
 {
     // rNewRange becomes invalid after removing the listener
     OUString aRange( rNewRange );
@@ -841,14 +786,14 @@ void DataSourceTabPage::listeningFinished(
         m_pCurrentRangeChoosingField->GrabFocus();
     }
 
-    if( m_pCurrentRangeChoosingField == & m_aEDT_RANGE )
+    if( m_pCurrentRangeChoosingField == m_pEDT_RANGE )
     {
-        m_aEDT_RANGE.SetText( aRange );
+        m_pEDT_RANGE->SetText( aRange );
         setDirty();
     }
-    else if( m_pCurrentRangeChoosingField == & m_aEDT_CATEGORIES )
+    else if( m_pCurrentRangeChoosingField == m_pEDT_CATEGORIES )
     {
-        m_aEDT_CATEGORIES.SetText( aRange );
+        m_pEDT_CATEGORIES->SetText( aRange );
         setDirty();
     }
 
@@ -879,12 +824,12 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
     bool bAll = (pField == 0);
     Reference< data::XDataProvider > xDataProvider( m_rDialogModel.getDataProvider());
 
-    if( bAll || (pField == & m_aEDT_CATEGORIES) )
+    if( bAll || (pField == m_pEDT_CATEGORIES) )
     {
         Reference< data::XLabeledDataSequence > xLabeledSeq( m_rDialogModel.getCategories() );
         if( xDataProvider.is())
         {
-            OUString aRange( m_aEDT_CATEGORIES.GetText());
+            OUString aRange( m_pEDT_CATEGORIES->GetText());
             if( !aRange.isEmpty())
             {
                 // create or change categories
@@ -917,12 +862,12 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
 
     if( bHasSelectedEntry )
     {
-        if( bAll || (pField == & m_aEDT_RANGE) )
+        if( bAll || (pField == m_pEDT_RANGE) )
         {
             try
             {
-                OUString aSelectedRole = lcl_GetSelectedRole( m_aLB_ROLE );
-                OUString aRange( m_aEDT_RANGE.GetText());
+                OUString aSelectedRole = lcl_GetSelectedRole( *m_pLB_ROLE );
+                OUString aRange( m_pEDT_RANGE->GetText());
                 OUString aSequenceRole( aSelectedRole );
                 bool bIsLabel = (aSequenceRole == lcl_aLabelRole );
                 OUString aSequenceNameForLabel( lcl_GetSequenceNameForLabel( pSeriesEntry ));
@@ -1019,7 +964,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                     }
                 }
 
-                lcl_UpdateCurrentRange( m_aLB_ROLE, aSelectedRole, aRange );
+                lcl_UpdateCurrentRange( *m_pLB_ROLE, aSelectedRole, aRange );
             }
             catch( const uno::Exception & ex )
             {

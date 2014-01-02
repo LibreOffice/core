@@ -18,7 +18,7 @@
  */
 
 #include "dlg_DataSource.hxx"
-#include "dlg_DataSource.hrc"
+#include "ResourceIds.hrc"
 #include "Strings.hrc"
 #include "ResId.hxx"
 #include "ChartTypeTemplateProvider.hxx"
@@ -86,6 +86,7 @@ class DataSourceTabControl : public TabControl
 {
 public:
     DataSourceTabControl( Window* pParent, const ResId& rResId );
+    DataSourceTabControl( Window* pParent);
     ~DataSourceTabControl();
 
     virtual long DeactivatePage();
@@ -101,6 +102,16 @@ DataSourceTabControl::DataSourceTabControl( Window* pParent, const ResId& rResId
         TabControl( pParent, rResId ),
         m_bTogglingEnabled( true )
 {}
+
+DataSourceTabControl::DataSourceTabControl( Window* pParent):
+        TabControl( pParent),
+        m_bTogglingEnabled( true )
+{}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDataSourceTabControl(Window *pParent)
+     {
+         return new DataSourceTabControl(pParent);
+     }
 
 DataSourceTabControl::~DataSourceTabControl()
 {}
@@ -132,24 +143,20 @@ DataSourceDialog::DataSourceDialog(
     const Reference< XChartDocument > & xChartDocument,
     const Reference< uno::XComponentContext > & xContext ) :
 
-        TabDialog( pParent, SchResId( DLG_DATA_SOURCE )),
-
+        TabDialog( pParent
+        ,"dlg_DataSource"
+        ,"modules/schart/ui/dlg_DataSource.ui"),
         m_xChartDocument( xChartDocument ),
         m_xContext( xContext ),
         m_apDocTemplateProvider( new DocumentChartTypeTemplateProvider( xChartDocument )),
         m_apDialogModel( new DialogModel( xChartDocument, xContext )),
-
-        m_pTabControl( new DataSourceTabControl( this, SchResId( TABCTRL ) )),
-        m_aBtnOK( this, SchResId( BTN_OK ) ),
-        m_aBtnCancel( this, SchResId( BTN_CANCEL ) ),
-        m_aBtnHelp( this, SchResId( BTN_HELP ) ),
-
         m_pRangeChooserTabePage(0),
         m_pDataSourceTabPage(0),
         m_bRangeChooserTabIsValid( true ),
         m_bDataSourceTabIsValid( true )
 {
-    FreeResource();
+    get(m_pTabControl,"tabcontrol");
+    get(m_pBtnOK,"ok");
 
     //don't create the tabpages before FreeResource, otherwise the help ids are not matched correctly
     m_pRangeChooserTabePage = new RangeChooserTabPage( m_pTabControl, *(m_apDialogModel.get()),
@@ -174,7 +181,6 @@ DataSourceDialog::~DataSourceDialog()
     delete m_pDataSourceTabPage;
 
     m_nLastPageId = m_pTabControl->GetCurPageId();
-    delete m_pTabControl;
 }
 
 short DataSourceDialog::Execute()
@@ -199,7 +205,7 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 
     if( ! (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid ))
     {
-        m_aBtnOK.Enable( sal_False );
+        m_pBtnOK->Enable( sal_False );
         OSL_ASSERT( m_pTabControl );
         // note: there seems to be no suitable mechanism to address pages by
         // identifier, at least it is unclear what the page identifiers are.
@@ -221,7 +227,7 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
 
     if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
     {
-        m_aBtnOK.Enable( sal_True );
+        m_pBtnOK->Enable( sal_True );
         OSL_ASSERT( m_pTabControl );
         m_pTabControl->EnableTabToggling();
     }

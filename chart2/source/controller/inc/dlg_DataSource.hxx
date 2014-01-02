@@ -26,6 +26,7 @@
 // header for class OKButton
 #include <vcl/button.hxx>
 
+
 #include "TabPageNotifiable.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -72,9 +73,8 @@ protected:
 
 private:
     DataSourceTabControl* m_pTabControl;
-    OKButton              m_aBtnOK;
-    CancelButton          m_aBtnCancel;
-    HelpButton            m_aBtnHelp;
+
+    OKButton*              m_pBtnOK;
 
     RangeChooserTabPage * m_pRangeChooserTabePage;
     DataSourceTabPage *   m_pDataSourceTabPage;
