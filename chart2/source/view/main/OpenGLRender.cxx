@@ -283,11 +283,18 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
 
     // Check Vertex Shader
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
-    glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if ( InfoLogLength > 0 ){
-        std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
-        glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-        cout << "vertex shader compile fail : " << VertexShaderErrorMessage[0] << endl;
+    if ( !Result )
+    {
+        glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        if ( InfoLogLength > 0 )
+        {
+            std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
+            glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+            VertexShaderErrorMessage.push_back('\0');
+            cout << "vertex shader compile fail : " << &VertexShaderErrorMessage[0] << endl;
+        }
+        else
+            cout << "vertex shader compile failed without error log" << endl;
     }
 
 
@@ -299,14 +306,19 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
 
     // Check Fragment Shader
     glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
-    glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if ( InfoLogLength > 0 ){
-        std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
-        glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-        cout << "fragment shader compile fail : " << FragmentShaderErrorMessage[0] << endl;
+    if ( !Result )
+    {
+        glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        if ( InfoLogLength > 0 )
+        {
+            std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
+            glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+            FragmentShaderErrorMessage.push_back('\0');
+            cout << "fragment shader compile fail : " << &FragmentShaderErrorMessage[0] << endl;
+        }
+        else
+            cout << "fragment shader compile failed without error log" << endl;
     }
-
-
 
     // Link the program
     GLint ProgramID = glCreateProgram();
@@ -316,11 +328,18 @@ GLint OpenGLRender::LoadShaders(const char *vertexShader,const char *fragmentSha
 
     // Check the program
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-    glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if ( InfoLogLength > 0 ){
-        std::vector<char> ProgramErrorMessage(InfoLogLength+1);
-        glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-        cout << "Shader Program fail : " << ProgramErrorMessage[0] << endl;
+    if ( !Result )
+    {
+        glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        if ( InfoLogLength > 0 )
+        {
+            std::vector<char> ProgramErrorMessage(InfoLogLength+1);
+            glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+            ProgramErrorMessage.push_back('\0');
+            cout << "Shader Program fail : " << &ProgramErrorMessage[0] << endl;
+        }
+        else
+            cout << "shader program link failed without error log" << endl;
     }
 
     glDeleteShader(VertexShaderID);
