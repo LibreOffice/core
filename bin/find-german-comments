@@ -192,7 +192,7 @@ class Parser:
 
         elif not self.options.filenames_only:
             for linenum, s in self.get_comments(path):
-                if self.is_german(s) and self.options.line_numbers:
+                if self.is_german(s):
                     print "%s:%s: %s" % (path, linenum, s)
         else:
             fnames = set([])
