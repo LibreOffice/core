@@ -163,7 +163,6 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
     xRunEnum->nextElement();
-    xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
@@ -173,6 +172,20 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
+
+    // Test commented text range which spans over more text nodes
+    // Comment starts in the second paragraph
+    xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement();
+    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    // Comment ends in the third paragraph
+    xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement();
+    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 }
 
 #endif
