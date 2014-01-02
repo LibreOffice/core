@@ -96,6 +96,9 @@ using ::sax_fastparser::FSHelperPtr;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
 
+// Defined in generated code.
+extern std::map< OString, std::vector<OString> > ooxDrawingMLGetAdjNames();
+
 namespace oox {
 namespace drawingml {
 
@@ -1408,6 +1411,12 @@ void DrawingML::WritePresetShape( const char* pShape )
 
 void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const PropertyValue& rProp )
 {
+    static std::map< OString, std::vector<OString> > aAdjMap = ooxDrawingMLGetAdjNames();
+    // If there are predefined adj names for this shape type, look them up now.
+    std::vector<OString> aAdjustments;
+    if (aAdjMap.find(OString(pShape)) != aAdjMap.end())
+        aAdjustments = aAdjMap[OString(pShape)];
+
     mpFS->startElementNS( XML_a, XML_prstGeom,
                           XML_prst, pShape,
                           FSEND );
@@ -1425,10 +1434,17 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
         sal_Int32 nValue, nLength = aAdjustmentSeq.getLength();
         for( sal_Int32 i=0; i < nLength; i++ )
             if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
+            {
+                // If the document model doesn't have an adjustment name (e.g. shape was created from VML), then take it from the predefined list.
+                OString aAdjName;
+                if (aAdjustmentSeq[i].Name.isEmpty() && static_cast<sal_uInt32>(i) < aAdjustments.size())
+                    aAdjName = aAdjustments[i];
+
                 mpFS->singleElementNS( XML_a, XML_gd,
-                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : (nLength > 1 ? OString( "adj" + OString::number( i + 1 ) ).getStr() : "adj"),
+                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : aAdjName.getStr(),
                                        XML_fmla, OString("val " + OString::number( nValue )).getStr(),
                                        FSEND );
+            }
     }
 
     mpFS->endElementNS( XML_a, XML_avLst );
