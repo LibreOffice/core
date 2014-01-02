@@ -28,13 +28,14 @@
 #include <map>
 #include "charttoolsdllapi.hxx"
 
+#include <boost/unordered_map.hpp>
+
 namespace chart
 {
 
 typedef int tPropertyValueMapKey;
 
-typedef ::std::map< tPropertyValueMapKey, ::com::sun::star::uno::Any >
-    tPropertyValueMap;
+typedef boost::unordered_map<tPropertyValueMapKey, com::sun::star::uno::Any> tPropertyValueMap;
 
 namespace PropertyHelper
 {
