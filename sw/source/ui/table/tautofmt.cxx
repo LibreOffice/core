@@ -566,7 +566,7 @@ void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, F
     const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
-    Size aFontSize( rFont.GetSize().Width(), 10 );
+    Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
 
     lcl_SetFontProperties( rFont, rBoxFmt.GetFont(), rBoxFmt.GetWeight(), rBoxFmt.GetPosture() );
     lcl_SetFontProperties( rCJKFont, rBoxFmt.GetCJKFont(), rBoxFmt.GetCJKWeight(), rBoxFmt.GetCJKPosture() );

@@ -1265,6 +1265,17 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
     AddStatusListener(OUString(".uno:BorderReducedMode"));
     aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
+    if( pParentWindow->GetDPIScaleFactor() > 1 )
+    {
+        for (short i = 0; i < aImgList.GetImageCount(); i++)
+        {
+            OUString rImageName = aImgList.GetImageName(i);
+            BitmapEx b = aImgList.GetImage(rImageName).GetBitmapEx();
+            b.Scale(pParentWindow->GetDPIScaleFactor(), pParentWindow->GetDPIScaleFactor());
+            aImgList.ReplaceImage(rImageName, Image(b));
+        }
+    }
+
     /*
      *  1       2        3         4
      *  -------------------------------------
@@ -1287,7 +1298,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
     aFrameSet.SetColCount( 4 );
     aFrameSet.SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
 
-    lcl_CalcSizeValueSet( *this, aFrameSet,Size( 20, 20 ));
+    lcl_CalcSizeValueSet( *this, aFrameSet, Size( 20 * pParentWindow->GetDPIScaleFactor(), 20 * pParentWindow->GetDPIScaleFactor() ));
 
     SetHelpId( HID_POPUP_FRAME );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );

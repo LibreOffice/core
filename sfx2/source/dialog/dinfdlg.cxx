@@ -1055,7 +1055,16 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const OUString& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
-    m_pBmp->SetImage( SvFileInformationManager::GetImage( aURL, sal_True ) );
+    Image aImage = SvFileInformationManager::GetImage( aURL, sal_True );
+
+    if ( GetDPIScaleFactor() > 1)
+    {
+        BitmapEx b = aImage.GetBitmapEx();
+        b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+        aImage = Image(b);
+    }
+
+    m_pBmp->SetImage( aImage );
 
     // determine size and type
     OUString aSizeText( m_aUnknownSize );
