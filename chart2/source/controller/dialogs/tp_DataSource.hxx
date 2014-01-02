@@ -46,8 +46,6 @@
 #include <vector>
 
 #include "RangeSelectionListener.hxx"
-#include "RangeSelectionButton.hxx"
-#include "RangeEdit.hxx"
 
 namespace chart
 {
@@ -126,26 +124,26 @@ protected:
     void fillRoleListBox();
 
 private:
-    FixedText               m_aFT_CAPTION;
-    FixedText               m_aFT_SERIES;
-    boost::scoped_ptr< SvTreeListBox > m_apLB_SERIES;
-    PushButton              m_aBTN_ADD;
-    PushButton              m_aBTN_REMOVE;
-    PushButton              m_aBTN_UP;
-    PushButton              m_aBTN_DOWN;
+    FixedText*     m_pFT_CAPTION;
+    FixedText*     m_pFT_SERIES;
+    SvTreeListBox* m_pLB_SERIES;
+    PushButton*    m_pBTN_ADD;
+    PushButton*    m_pBTN_REMOVE;
+    PushButton*    m_pBTN_UP;
+    PushButton*    m_pBTN_DOWN;
 
-    FixedText               m_aFT_ROLE;
-    SvTabListBox            m_aLB_ROLE;
-    FixedText               m_aFT_RANGE;
-    RangeEdit               m_aEDT_RANGE;
-    RangeSelectionButton    m_aIMB_RANGE_MAIN;
+    FixedText*     m_pFT_ROLE;
+    SvTabListBox*  m_pLB_ROLE;
+    FixedText*     m_pFT_RANGE;
+    Edit*          m_pEDT_RANGE;
+    PushButton*    m_pIMB_RANGE_MAIN;
 
-    FixedText               m_aFT_CATEGORIES;
-    FixedText               m_aFT_DATALABELS;//used for xy charts
-    RangeEdit               m_aEDT_CATEGORIES;
-    RangeSelectionButton    m_aIMB_RANGE_CAT;
+    FixedText*     m_pFT_CATEGORIES;
+    FixedText*     m_pFT_DATALABELS;//used for xy charts
+    Edit*          m_pEDT_CATEGORIES;
+    PushButton*    m_pIMB_RANGE_CAT;
 
-    OUString         m_aFixedTextRange;
+    OUString       m_aFixedTextRange;
 
     ChartTypeTemplateProvider * m_pTemplateProvider;
     DialogModel &               m_rDialogModel;

@@ -18,7 +18,6 @@
  */
 
 #include "dlg_DataSource.hxx"
-#include "dlg_DataSource.hrc"
 #include "Strings.hrc"
 #include "ResId.hxx"
 #include "ChartTypeTemplateProvider.hxx"
@@ -123,6 +122,12 @@ void DataSourceTabControl::EnableTabToggling()
 }
 
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
+
+enum DataSourceDialogPages
+{
+    TP_RANGECHOOSER = 1,
+    TP_DATA_SOURCE = 2
+};
 
 DataSourceDialog::DataSourceDialog(Window * pParent,
     const Reference< XChartDocument > & xChartDocument,

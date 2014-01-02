@@ -26,8 +26,6 @@
 #define HID_SCH_CTL_TYPE                                    "CHART2_HID_SCH_CTL_TYPE"
 #define HID_SCH_CTL_VARIANT                                 "CHART2_HID_SCH_CTL_VARIANT"
 #define HID_SCH_NUM_OF_LINES                                "CHART2_HID_SCH_NUM_OF_LINES"
-#define HID_SCH_SERIES_LIST                                 "CHART2_HID_SCH_SERIES_LIST"
-#define HID_SCH_DATA_RANGES_LIST                            "CHART2_HID_SCH_DATA_RANGES_LIST"
 //
 
 #define HID_SCH_TBI_DATA_INSERT_ROW                         "CHART2_HID_SCH_TBI_DATA_INSERT_ROW"
