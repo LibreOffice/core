@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	jpeg \
 	lcms2 \
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
+	libeot \
 	liblangtag \
 	libxml2 \
 	libxslt \
