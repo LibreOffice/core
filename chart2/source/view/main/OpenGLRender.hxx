@@ -50,7 +50,9 @@ namespace unx
 #include "glm/gtx/transform.hpp"
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/quaternion.hpp"
+
 #define BMP_HEADER_LEN 54
+#define OPENGL_SCALE_VALUE 20
 
 using namespace std;
 
@@ -87,6 +89,14 @@ typedef struct Bubble2DCircle
     int bufLen;
 }Bubble2DCircle;
 
+typedef struct RectanglePointList
+{
+    float x;
+    float y;
+    float z;
+    float xScale;
+    float yScale;
+}RectanglePointList;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -148,6 +158,14 @@ public:
 
     void prepareToRender();
     void renderToBitmap();
+
+
+    void SetTransparency(sal_uInt32 transparency);
+    int ProcessRectangle(com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShape > &xShape);
+    int RenderRectangleShape();
+    int RectangleShapePoint(float x, float y, float directionX, float directionY);
+
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -267,6 +285,16 @@ private:
     GLint m_CommonProID;
     GLint m_2DVertexID;
     GLint m_2DColorID;
+
+
+    float m_fZStep;
+
+    float m_fAlpha;
+
+    RectanglePointList m_RectangleList;
+
+    list <RectanglePointList> m_RectangleShapePointList;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

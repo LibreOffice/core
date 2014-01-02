@@ -18,6 +18,24 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <comphelper/InlineContainer.hxx>
+#include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/drawing/DoubleSequence.hpp>
+#include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/NormalsKind.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/PolygonKind.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/TextureProjectionMode.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <editeng/unoprnms.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 
@@ -126,6 +144,13 @@ static GLfloat coordVertices[] = {
     1.0f, 0.0f,
     1.0f, 1.0f,
     0.0f, 1.0f,
+};
+
+static GLfloat square2DVertices[] = {
+    -1.0f, -1.0f,
+    1.0f, -1.0f,
+    1.0f,  1.0f,
+    -1.0f,  1.0f
 };
 #if 0
 static const GLfloat g_vertex_buffer_data[] = {
@@ -410,7 +435,6 @@ BitmapEx OpenGLRender::GetAsBitmap()
                 *pScan++ = buf[nCurPos+2];
 
                 nCurPos += 3;
-
                 *pAlphaScan++ = static_cast<sal_uInt8>( 255 - buf[nCurPos++] );
             }
         }
@@ -1213,6 +1237,145 @@ int OpenGLRender::RenderBubble2FBO(int)
     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
     {
         return -1;
+    }
+    return 0;
+}
+
+void OpenGLRender::SetTransparency(sal_uInt32 transparency)
+{
+    m_fAlpha = (float)transparency / 255.0;
+    m_2DColor = glm::vec4(m_2DColor.r, m_2DColor.g, m_2DColor.b, m_fAlpha);
+}
+
+int OpenGLRender::ProcessRectangle(uno::Reference< drawing::XShape > &xShape)
+{
+    //Get position
+    awt::Point aPos( xShape->getPosition() );
+    awt::Size aSize( xShape->getSize() );
+    //Set Rectangle Pos
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    //Get the back ground color
+    uno::Any co =  xProp->getPropertyValue(UNO_NAME_FILLCOLOR);
+    long *colorvalue = (long*)co.getValue();
+    SetColor(*colorvalue);
+
+    uno::Any trans =  xProp->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE);
+    long *transparency = (long*)trans.getValue();
+    SetTransparency((*transparency) & 0xFF);
+    SetTransparency(0xFF);
+    RectangleShapePoint(aPos.X, aPos.Y, aSize.Width, aSize.Height);
+#if 0
+    com::sun::star::uno::Sequence<com::sun::star::beans::Property> Sequenceproperty = xProp->getPropertySetInfo()->getProperties();
+    com::sun::star::beans::Property* Propertyarr = Sequenceproperty.getArray();
+    int count = Sequenceproperty.getLength();
+    printf("Property length:%d\n",count);
+    for(int i=0;i<count;i++)
+    {
+
+        wprintf(L"item %d,name:%s", i,Propertyarr[i].Name.getStr());
+        com::sun::star::uno::Type t = Propertyarr[i].Type;
+        ::rtl::OUString strtypename = t.getTypeName();
+        sal_Unicode * typeName = (sal_Unicode *)strtypename.getStr();
+        wprintf(L",Type:%s ", typeName);
+        com::sun::star::uno::TypeClass typeclass = t.getTypeClass();
+        com::sun::star::uno::Any value = xProp->getPropertyValue(Propertyarr[i].Name);
+        if(strtypename.equals(OUString(L"string")))
+        {
+            ::rtl::OUString * strvalue = (::rtl::OUString *)value.getValue();
+           wprintf(L",Value:%s \n", strvalue->getStr());
+        }
+        else if(strtypename.equals(OUString(L"short")))
+        {
+            short * shortvalue = (short*)value.getValue();
+            printf(",Value:%d \n",*shortvalue);
+        }
+        else if(strtypename.equals(OUString(L"long")))
+        {
+            long * longvalue = (long*)value.getValue();
+            printf(",Value:%d \n",*longvalue);
+        }
+        else if(strtypename.equals(OUString(L"boolean")))
+        {
+            short * bvalue = (short*)value.getValue();
+            if(*bvalue==0)
+                printf(",Value:false \n");
+            else
+                printf(",Value:true \n");
+        }
+        else
+        {
+            printf(",Value:object \n");
+        }
+    }
+    printf("\n");
+#endif
+    //render rectangle
+    RenderRectangleShape();
+    m_fZStep += 0.01f;
+    return 0;
+}
+
+int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float directionY)
+{
+    //check whether to create the circle data
+    float actualX = x / OPENGL_SCALE_VALUE;
+    float actualY = y / OPENGL_SCALE_VALUE;
+    m_RectangleList.x = actualX;
+    m_RectangleList.y = actualY;
+    m_RectangleList.z = m_fZStep;
+    m_RectangleList.xScale = directionX / OPENGL_SCALE_VALUE;
+    m_RectangleList.yScale = directionY / OPENGL_SCALE_VALUE;
+
+    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
+
+    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
+
+    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
+
+    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+
+    m_RectangleShapePointList.push_back(m_RectangleList);
+    return 0;
+}
+
+
+int OpenGLRender::RenderRectangleShape()
+{
+    int listNum = m_RectangleShapePointList.size();
+    for (int i = 0; i < listNum; i++)
+    {
+        //move the circle to the pos, and scale using the xScale and Y scale
+        RectanglePointList &pointList = m_RectangleShapePointList.front();
+        PosVecf3 trans = {pointList.x, pointList.y, pointList.z};
+        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+        PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
+        MoveModelf(trans, angle, scale);
+        m_MVP = m_Projection * m_View * m_Model;
+        //render to fbo
+        //fill vertex buffer
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(square2DVertices), square2DVertices, GL_STATIC_DRAW);
+
+        glUseProgram(m_CommonProID);
+
+        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_2DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        glDrawArrays(GL_QUADS, 0, 4);
+        glDisableVertexAttribArray(m_2DVertexID);
+        glUseProgram(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        m_RectangleShapePointList.pop_front();
     }
     return 0;
 }
