@@ -905,14 +905,20 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 {
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
     // non visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
-    WriteNonVisualDrawingProperties( xShape, IDS( TextShape ) );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        WriteNonVisualDrawingProperties( xShape, IDS( TextShape ) );
+    }
     pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1", FSEND );
-    WriteNonVisualProperties( xShape );
-    pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        WriteNonVisualProperties( xShape );
+        pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    }
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
@@ -923,7 +929,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, XML_sp );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     return *this;
 }

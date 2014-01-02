@@ -2175,6 +2175,14 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testBezier, "bezier.odt")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // Check that no shape got lost: a bezier, a line and a text shape.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
