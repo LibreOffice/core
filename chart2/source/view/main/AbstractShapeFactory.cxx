@@ -33,6 +33,7 @@
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
+#include <vcl/svapp.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -78,7 +79,7 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
     if(pShapeFactory)
         return pShapeFactory;
 
-    if(getenv("CHART_DUMMY_FACTORY"))
+    if(getenv("CHART_DUMMY_FACTORY") && !Application::IsHeadlessModeEnabled())
     {
         osl::Module* pModule = getOpenGLModule();
         if(pModule)
