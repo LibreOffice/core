@@ -46,6 +46,7 @@ class SW_DLLPUBLIC SwTOXDescription
     sal_uInt16          nOLEOptions;
     LanguageType        eLanguage;
     OUString            sSortAlgorithm;
+    OUString*           sBookmarkName;      //Bookmark Name
 
     OUString            sAuthBrackets;
     SwCaptionDisplay    eCaptionDisplay;
@@ -95,6 +96,15 @@ public:
             delete pTOUName;
         }
 
+    void SetBookmarkName(OUString& sName)
+    {
+        delete sBookmarkName;
+        sBookmarkName = new OUString(sName);
+    }
+    OUString* GetBookmarkName() const
+    {
+        return sBookmarkName;
+    }
     void            SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
     TOXTypes        GetTOXType() const { return eTOXType;}
 

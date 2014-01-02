@@ -210,6 +210,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             //title
             if(rDesc.GetTitle())
                 lcl_SetProp(xInfo, xIdxProps, UNO_NAME_TITLE, *rDesc.GetTitle());
+            if(xInfo->hasPropertyByName(UNO_NAME_TOC_BOOKMARK))
+                lcl_SetProp(xInfo, xIdxProps, UNO_NAME_TOC_BOOKMARK, *rDesc.GetBookmarkName());
 
             //stylenames
             sal_uInt16  nContentOptions = rDesc.GetContentOptions();
@@ -234,6 +236,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     xAcc->replaceByIndex(i, aAny);
                 }
             }
+         //   lcl_SetProp(xInfo, xIdxProps, UNO_NAME_TOC_BOOKMARK, *rDesc.GetBookmarkName());
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LEVEL, (sal_Int16)rDesc.GetLevel());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_MARKS,           0!=(nContentOptions&nsSwTOXElement::TOX_MARK        ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_OUTLINE,         0!=(nContentOptions&nsSwTOXElement::TOX_OUTLINELEVEL));

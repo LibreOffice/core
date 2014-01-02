@@ -3121,10 +3121,12 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                     }
                     break;
 
+                case 'b':
+                       eCreateFrom |= nsSwTOXElement::TOX_BOOKMARK;
+                    break;
                 /*
                 // the following switches are not (yet) supported
                 // by good old StarWriter:
-                case 'b':
                 case 's':
                 case 'd':
                     break;
