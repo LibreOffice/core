@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <editeng/escapementitem.hxx>
+#include <editeng/escpitem.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
