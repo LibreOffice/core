@@ -55,6 +55,7 @@
 #include <ndtxt.hxx>
 #include <docsh.hxx>
 #include <chpfld.hxx>
+#include <editsh.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
@@ -1230,6 +1231,20 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
 }
 
+void lcl_CalcLayout(SwDoc *pDoc)
+{
+    SwViewShell *pViewShell = 0;
+    SwEditShell* pEditShell = pDoc ? pDoc->GetEditShell(&pViewShell) : 0;
+    if (pEditShell)
+    {
+        pEditShell->CalcLayout();
+    }
+    else if (pViewShell)
+    {
+        pViewShell->CalcLayout();
+    }
+}
+
 // XRefreshable
 void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
 {
@@ -1246,6 +1261,10 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
                      static_cast< ::cppu::OWeakObject*>(this));
         }
         pTOXBase->Update();
+
+        // the insertion of TOC will affect the document layout
+        lcl_CalcLayout(m_pImpl->m_pDoc);
+
         // page numbers
         pTOXBase->UpdatePageNum();
     }
