@@ -329,7 +329,7 @@ void AlignmentTabPage::InitVsRefEgde()
         {
             OUString rImageName = aImageList.GetImageName(i);
             BitmapEx b = aImageList.GetImage(rImageName).GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
             aImageList.ReplaceImage(rImageName, Image(b));
         }
     }

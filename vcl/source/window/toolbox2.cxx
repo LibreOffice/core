@@ -1359,7 +1359,7 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
             // FIXME find out what that code is & fix accordingly
             if (aBitmap.GetSizePixel().Width() < 32)
             {
-                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
                 aImage = Image(aBitmap);
             }
         }
