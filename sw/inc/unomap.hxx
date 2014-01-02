@@ -185,6 +185,7 @@
 #define WID_CREATE_FROM_EMBEDDED_OBJECTS        1029
 #define WID_CREATE_FROM_STAR_MATH               1030
 #define WID_PROTECTED                           1031
+#define WID_NEWLINE                             1070
 
 #define WID_CREATE_FROM_STAR_CHART              1032
 #define WID_CREATE_FROM_STAR_CALC               1033

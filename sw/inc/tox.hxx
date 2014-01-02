@@ -398,6 +398,7 @@ namespace nsSwTOXElement
     const SwTOXElement TOX_GRAPHIC          = 32;
     const SwTOXElement TOX_FRAME            = 64;
     const SwTOXElement TOX_SEQUENCE         = 128;
+    const SwTOXElement TOX_NEWLINE          = 1024;
 }
 
 typedef sal_uInt16 SwTOIOptions;

@@ -2110,6 +2110,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     if( !nTOXLvl )
                         ++nTOXLvl;
 
+                    if(nsSwTOXElement::TOX_NEWLINE & pTOX->GetCreateType())
+                    {
+                        sStr +="\\x " ;
+                    }
                     if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
                     {
                         sStr += "\\f ";

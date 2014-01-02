@@ -2681,6 +2681,7 @@ void DomainMapper_Impl::handleToc
     bool bHyperlinks = false;
     bool bFromOutline = false;
     bool bFromEntries = false;
+    bool bNewLine = false ;
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
     OUString sChapterNoSeparator;
@@ -2769,10 +2770,10 @@ void DomainMapper_Impl::handleToc
                         //todo: not supported
 //                    }
 //                  \x Preserve newline characters within table entries
-//                    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
-//                    {
-                        //todo: unsupported
-//                    }
+    if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
+    {
+        bNewLine = true ;
+    }
 //                  \z Hides page numbers within the table of contens when shown in Web Layout View
 //                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
 //                    { //todo: unsupported feature  }
@@ -2796,6 +2797,7 @@ void DomainMapper_Impl::handleToc
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
         xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
+        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_NEWLINE_IN_TOC ), uno::makeAny( bNewLine ));
         if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels

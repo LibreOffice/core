@@ -654,6 +654,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_CREATE_FROM_OUTLINE:
             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_OUTLINELEVEL);
         break;
+        case WID_NEWLINE:
+            lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_NEWLINE);
+        break;
 //          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
 //          break;
         case WID_CREATE_FROM_CHAPTER:
