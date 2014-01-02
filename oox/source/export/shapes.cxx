@@ -192,7 +192,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
     DBG(printf("write open bezier shape\n"));
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS( mnXmlNamespace, XML_sp, FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
 
     PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     Rectangle aRect( aPolyPolygon.GetBoundRect() );
@@ -203,14 +203,20 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 #endif
 
     // non visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id, I32S( GetNewShapeID( xShape ) ),
-                          XML_name, IDS( Freeform ),
-                          FSEND );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+                              XML_id, I32S( GetNewShapeID( xShape ) ),
+                              XML_name, IDS( Freeform ),
+                              FSEND );
+    }
     pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
-    WriteNonVisualProperties( xShape );
-    pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        WriteNonVisualProperties( xShape );
+        pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
+    }
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
@@ -228,7 +234,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, XML_sp );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     return *this;
 }
