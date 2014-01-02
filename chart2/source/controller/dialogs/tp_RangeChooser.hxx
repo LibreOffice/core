@@ -23,7 +23,6 @@
 #include "RangeSelectionListener.hxx"
 #include "RangeSelectionButton.hxx"
 #include "TabPageNotifiable.hxx"
-#include "RangeEdit.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/layout.hxx>
 #include "tp_DataSourceControls.hxx"
 
 using namespace ::com::sun::star;
@@ -30,12 +31,18 @@ namespace chart
 SeriesEntry::~SeriesEntry()
 {}
 
-SeriesListBox::SeriesListBox( Window* pParent, const ResId & rResId ) :
-        SvTreeListBox( pParent, rResId )
+SeriesListBox::SeriesListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
 {}
 
-SeriesListBox::~SeriesListBox()
-{}
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSeriesListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SeriesListBox(pParent, nWinStyle);
+}
 
 SvTreeListEntry* SeriesListBox::CreateEntry() const
 {
