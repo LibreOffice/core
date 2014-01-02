@@ -2625,8 +2625,11 @@ void ScInterpreter::ScHyperLink()
     }
 }
 
-
-bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
+/** Resources at the website of the European Commission:
+    http://ec.europa.eu/economy_finance/euro/adoption/conversion/
+    http://ec.europa.eu/economy_finance/euro/countries/
+ */
+static bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
 {
     struct ConvertInfo
     {
@@ -2651,7 +2654,9 @@ bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
         { "SIT", 239.640,  2 },
         { "MTL", 0.429300, 2 },
         { "CYP", 0.585274, 2 },
-        { "SKK", 30.1260,  2 }
+        { "SKK", 30.1260,  2 },
+        { "EEK", 15.6466,  2 },
+        { "LVL", 0.702804, 2 }
     };
 
     const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
