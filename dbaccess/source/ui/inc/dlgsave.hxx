@@ -23,6 +23,7 @@
 #include "apitools.hxx"
 #include <vcl/dialog.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/msgbox.hxx>
 
 namespace com { namespace sun { namespace star {

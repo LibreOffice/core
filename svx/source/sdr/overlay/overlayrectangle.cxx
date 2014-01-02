@@ -25,6 +25,7 @@
 #include <svx/sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

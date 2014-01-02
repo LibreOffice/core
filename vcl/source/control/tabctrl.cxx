@@ -31,6 +31,7 @@
 #include "vcl/controllayout.hxx"
 #include "vcl/layout.hxx"
 #include "vcl/lstbox.hxx"
+#include "vcl/settings.hxx"
 
 #include "controldata.hxx"
 #include "svdata.hxx"

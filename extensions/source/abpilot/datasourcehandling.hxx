@@ -21,6 +21,8 @@
 #define EXTENSIONS_ABP_DATASOURCEHANDLING_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include "abptypes.hxx"
 
 //========================================================================

@@ -53,6 +53,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <boost/bind.hpp>

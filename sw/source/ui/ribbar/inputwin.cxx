@@ -28,6 +28,7 @@
 #include <svx/ruler.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/settings.hxx>
 
 #include "swtypes.hxx"
 #include "cmdid.h"

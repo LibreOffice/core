@@ -22,6 +22,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 {

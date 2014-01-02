@@ -29,6 +29,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "RelationControl.hxx"
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

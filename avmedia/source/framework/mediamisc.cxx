@@ -20,6 +20,7 @@
 #include <tools/resmgr.hxx>
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace avmedia {
 

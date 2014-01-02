@@ -24,6 +24,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>

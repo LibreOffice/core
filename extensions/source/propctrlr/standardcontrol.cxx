@@ -44,6 +44,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 //==================================================================
 
 #include <limits>

@@ -25,6 +25,7 @@
 #include "tablegeometry.hxx"
 
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 
 //......................................................................................................................
 namespace svt { namespace table

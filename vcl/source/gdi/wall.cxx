@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <wall2.hxx>
 #include <vcl/dibtools.hxx>
-
+#include <vcl/settings.hxx>
 
 // -----------------------------------------------------------------------
 

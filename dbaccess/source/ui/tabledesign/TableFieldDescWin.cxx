@@ -23,6 +23,7 @@
 #include "dbu_tbl.hrc"
 #include "TableDesignHelpBar.hxx"
 #include <vcl/fixed.hxx>
+#include <vcl/settings.hxx>
 #include "dbaccess_helpid.hrc"
 #include "moduledbu.hxx"
 #include <boost/scoped_ptr.hpp>

@@ -29,6 +29,7 @@
 #include <sfx2/imagemgr.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 

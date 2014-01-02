@@ -49,6 +49,7 @@
 
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <functional>
 

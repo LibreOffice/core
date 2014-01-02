@@ -24,6 +24,8 @@
 
 #include <algorithm>
 #include <vcl/window.hxx>
+#include <vcl/settings.hxx>
+
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <viewsh.hxx>

@@ -22,6 +22,7 @@
 #include <svl/solar.hrc>
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>

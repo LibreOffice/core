@@ -20,6 +20,7 @@
 
 #include "controller/SlsProperties.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 

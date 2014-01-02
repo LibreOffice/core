@@ -34,6 +34,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/lineitem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/sidebar/ColorControl.hxx>
 #include <boost/bind.hpp>
 #include <svx/sidebar/PopupContainer.hxx>

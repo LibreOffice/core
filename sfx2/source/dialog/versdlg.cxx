@@ -27,6 +27,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <tools/datetime.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svtools/miscopt.hxx>

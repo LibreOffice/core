@@ -34,6 +34,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/ctrltool.hxx>
 #include <osl/mutex.hxx>
 

@@ -25,6 +25,7 @@
 #include <svx/xtable.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

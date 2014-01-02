@@ -37,6 +37,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
 #include "svx/dialmgr.hxx"

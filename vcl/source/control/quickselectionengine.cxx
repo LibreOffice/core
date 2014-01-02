@@ -23,6 +23,7 @@
 #include "vcl/timer.hxx"
 #include "vcl/i18nhelp.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
 
 #include <boost/optional.hpp>
 

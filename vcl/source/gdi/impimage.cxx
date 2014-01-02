@@ -25,6 +25,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
+#include <vcl/settings.hxx>
 
 #include <image.h>
 

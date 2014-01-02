@@ -11,6 +11,7 @@
 #include <tools/resmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <rtftokenizer.hxx>

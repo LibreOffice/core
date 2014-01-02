@@ -39,6 +39,7 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>

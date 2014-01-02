@@ -50,8 +50,8 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-
 #include <util/MiscUtils.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 using namespace awt;

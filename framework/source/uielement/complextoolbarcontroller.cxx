@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

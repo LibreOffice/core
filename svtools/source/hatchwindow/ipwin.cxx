@@ -20,6 +20,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <ipwin.hxx>
 #include <hatchwindow.hxx>

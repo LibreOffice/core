@@ -20,6 +20,7 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svx/paraprev.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
 
 // class SvxParaPrevWindow -----------------------------------------------
 

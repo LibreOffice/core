@@ -84,6 +84,7 @@
 #include <com/sun/star/office/Quickstart.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "optgdlg.hxx"
 #include <svx/ofaitem.hxx>
@@ -537,6 +538,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", rSet)
     , nSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
+    , aIconStyleItemId(STYLE_SYMBOLS_THEMES_MAX, 0)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
@@ -625,10 +627,10 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
         // prefer the icon style set by the desktop native widgets modules
         sal_uLong nAutoStyle = aStyleSettings.GetPreferredSymbolsStyle();
         // fallback to the statically defined values
-        if ( nAutoStyle == STYLE_SYMBOLS_AUTO || !aIconStyleItemId[nAutoStyle] )
+        if ( nAutoStyle == STYLE_SYMBOLS_AUTO || !aIconStyleItemId.at(nAutoStyle) )
             nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
-        if ( aIconStyleItemId[nAutoStyle] )
-            aAutoStr += m_pIconStyleLB->GetEntry( aIconStyleItemId[nAutoStyle] );
+        if ( aIconStyleItemId.at(nAutoStyle) )
+            aAutoStr += m_pIconStyleLB->GetEntry( aIconStyleItemId.at(nAutoStyle) );
 
         m_pIconStyleLB->RemoveEntry( 0 );
         m_pIconStyleLB->InsertEntry( aAutoStr += ")", 0 );
@@ -879,7 +881,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     m_pIconSizeLB->SaveValue();
 
     if( aMiscOptions.GetSymbolsStyle() != STYLE_SYMBOLS_AUTO )
-        nStyleLB_InitialSelection = aIconStyleItemId[aMiscOptions.GetCurrentSymbolsStyle()];
+        nStyleLB_InitialSelection = aIconStyleItemId.at(aMiscOptions.GetCurrentSymbolsStyle());
 
     m_pIconStyleLB->SelectEntryPos( nStyleLB_InitialSelection );
     m_pIconStyleLB->SaveValue();

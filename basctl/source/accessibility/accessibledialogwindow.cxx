@@ -36,6 +36,7 @@
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace basctl
 {

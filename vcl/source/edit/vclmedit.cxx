@@ -33,6 +33,7 @@
 
 #include <svids.hrc>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 
 
 class TextWindow : public Window

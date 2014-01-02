@@ -80,10 +80,11 @@
 #include <tools/tenccvt.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <vcl/svapp.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

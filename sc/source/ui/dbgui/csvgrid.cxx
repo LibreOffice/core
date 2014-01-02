@@ -35,7 +35,7 @@
 // *** edit engine ***
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
+#include <vcl/settings.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>

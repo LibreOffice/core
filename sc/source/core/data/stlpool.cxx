@@ -40,6 +40,7 @@
 #include <unotools/fontcvt.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "sc.hrc"
 #include "attrib.hxx"

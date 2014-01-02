@@ -22,6 +22,7 @@
 #include <svheader.hxx>
 #include <svtools/svmedit.hxx>
 #include <iderid.hxx>
+#include <vcl/accel.hxx>
 
 namespace basctl
 {

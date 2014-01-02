@@ -21,6 +21,7 @@
 #include <vcl/spin.h>
 #include <vcl/event.hxx>
 #include <vcl/spin.hxx>
+#include <vcl/settings.hxx>
 
 // =======================================================================
 

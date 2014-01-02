@@ -21,6 +21,7 @@
 #include "moduledbu.hxx"
 #include "memory"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
 namespace dbaui

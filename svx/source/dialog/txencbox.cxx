@@ -26,6 +26,7 @@
 #endif
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <rtl/strbuf.hxx>

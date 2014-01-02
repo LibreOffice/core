@@ -25,6 +25,7 @@
 #include <svx/dialmgr.hxx>
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 static ResMgr* pResMgr=0;
 

@@ -96,6 +96,7 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/settings.hxx>
 
 #include <algorithm>
 #include <functional>

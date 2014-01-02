@@ -29,6 +29,8 @@
 #include <svl/itempool.hxx>
 #include <unotools/syslocale.hxx>
 
+#include <vcl/settings.hxx>
+
 #include "RptDef.hxx"
 #include "dlgedfunc.hxx"
 #include "RptModel.hxx"

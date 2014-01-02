@@ -36,6 +36,8 @@
 #include <functional>
 #include <algorithm>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <connectivity/dbtools.hxx>
 
 namespace rptui

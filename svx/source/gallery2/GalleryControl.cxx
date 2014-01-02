@@ -25,6 +25,7 @@
 #include "galbrws2.hxx"
 #include "GallerySplitter.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <boost/bind.hpp>

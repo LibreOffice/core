@@ -26,6 +26,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/settings.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>

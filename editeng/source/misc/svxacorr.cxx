@@ -22,6 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sot/storinfo.hxx>
 #include <svl/fstathelper.hxx>
 #include <svtools/helpopt.hxx>

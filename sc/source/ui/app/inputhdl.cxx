@@ -48,6 +48,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/help.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>

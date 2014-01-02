@@ -30,6 +30,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
+
 #include <svl/style.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>

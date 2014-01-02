@@ -19,6 +19,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace std;
 

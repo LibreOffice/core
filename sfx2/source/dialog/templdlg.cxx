@@ -21,6 +21,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>

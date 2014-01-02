@@ -33,6 +33,7 @@
 #include <tools/mapunit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #define EMPTY_PAPER_SIZE    0x7FFFFFFF
 

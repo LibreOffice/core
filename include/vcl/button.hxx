@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_BUTTON_HXX
 
 #include <tools/solar.h>
+#include <tools/color.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>

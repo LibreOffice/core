@@ -35,6 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

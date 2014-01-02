@@ -45,6 +45,7 @@
 #include "vcl/print.hxx"
 #include "vcl/pdfwriter.hxx"
 #include "vcl/printerinfomanager.hxx"
+#include "vcl/settings.hxx"
 
 #include "saldatabasic.hxx"
 #include "generic/genprn.h"

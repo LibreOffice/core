@@ -37,6 +37,7 @@
 #include <sot/storinfo.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/settings.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header

@@ -26,6 +26,7 @@
 #include <tools/time.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>

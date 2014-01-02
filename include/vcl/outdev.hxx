@@ -29,14 +29,15 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/fontdefs.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+
 #include <vector>
 
 struct ImplOutDevData;
@@ -53,6 +54,7 @@ class ImplMultiTextLineInfo;
 class SalGraphics;
 class Gradient;
 class Hatch;
+class AllSettings;
 class Bitmap;
 class BitmapReadAccess;
 class BitmapEx;
@@ -70,6 +72,7 @@ class SalLayout;
 class ImplLayoutArgs;
 class ImplFontAttributes;
 class VirtualDevice;
+class Window;
 struct SalTwoRect;
 
 namespace com {
@@ -325,7 +328,7 @@ private:
     TextAlign                   meTextAlign;
     RasterOp                    meRasterOp;
     Wallpaper                   maBackground;
-    AllSettings                 maSettings;
+    boost::scoped_ptr<AllSettings> mxSettings;
     MapMode                     maMapMode;
     Point                       maRefPoint;
     sal_uInt16                  mnAntialiasing;
@@ -1169,7 +1172,7 @@ public:
     TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
 
     virtual void                SetSettings( const AllSettings& rSettings );
-    const AllSettings&          GetSettings() const { return maSettings; }
+    const AllSettings&          GetSettings() const { return *mxSettings; }
 
     SystemGraphicsData          GetSystemGfxData() const;
     css::uno::Any               GetSystemGfxDataAny() const;

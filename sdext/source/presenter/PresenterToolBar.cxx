@@ -18,6 +18,7 @@
  */
 
 #include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
 #include "PresenterToolBar.hxx"
 
 #include "PresenterBitmapContainer.hxx"

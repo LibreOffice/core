@@ -26,6 +26,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/settings.hxx>
 #include <basic/sbxvar.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>

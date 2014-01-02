@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/settings.hxx>
 
 #include <svtools/ruler.hxx>
 #include <svtools/svtresid.hxx>

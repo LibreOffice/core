@@ -19,6 +19,7 @@
 
 #include <toolkit/awt/scrollabledialog.hxx>
 #include <vcl/group.hxx>
+#include <vcl/settings.hxx>
 
 namespace toolkit
 {

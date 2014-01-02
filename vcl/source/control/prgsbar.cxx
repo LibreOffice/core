@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <vcl/status.hxx>
 #include <vcl/prgsbar.hxx>
+#include <vcl/settings.hxx>
 
 #define PROGRESSBAR_OFFSET          3
 #define PROGRESSBAR_WIN_OFFSET      2

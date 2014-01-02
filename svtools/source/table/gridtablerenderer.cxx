@@ -31,6 +31,7 @@
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/settings.hxx>
 
 //......................................................................................................................
 namespace svt { namespace table

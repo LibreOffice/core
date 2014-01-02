@@ -22,6 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>

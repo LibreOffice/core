@@ -26,6 +26,8 @@
 #include <stdlib.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <math.h>
 #include <string.h>
 #include <ctype.h>

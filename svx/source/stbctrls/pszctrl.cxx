@@ -22,6 +22,7 @@
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
+#include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/itempool.hxx>

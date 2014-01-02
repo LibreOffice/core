@@ -20,6 +20,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
+#include "tools/resmgr.hxx"
 
 // -----------------------------------------------------------------------
 

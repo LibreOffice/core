@@ -57,6 +57,8 @@
 #include <svx/xlnclit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
 #include <algorithm>

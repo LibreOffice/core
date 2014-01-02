@@ -20,6 +20,7 @@
 #include <tools/resmgr.hxx>
 #include <svtools/svtresid.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 static ResMgr* pMgr=NULL;
 

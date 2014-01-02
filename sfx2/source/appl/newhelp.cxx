@@ -94,6 +94,7 @@
 #include <svtools/imgdef.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/settings.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>

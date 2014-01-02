@@ -39,6 +39,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;

@@ -37,6 +37,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace css::awt;
 using namespace css::awt::grid;

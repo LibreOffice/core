@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <map>
 #include <vector>
 #include <comphelper/stl_types.hxx>

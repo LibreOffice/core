@@ -32,6 +32,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/settings.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
 #include "colex.hxx"

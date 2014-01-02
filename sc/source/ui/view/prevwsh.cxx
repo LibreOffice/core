@@ -33,6 +33,7 @@
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>

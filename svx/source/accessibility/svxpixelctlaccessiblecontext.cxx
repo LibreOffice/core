@@ -27,6 +27,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>

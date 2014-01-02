@@ -47,6 +47,7 @@
 
 #include <boost/shared_array.hpp>
 
+class StyleSettings;
 class FontSelectPattern;
 class ImplFontMetricData;
 class FontSubsetInfo;

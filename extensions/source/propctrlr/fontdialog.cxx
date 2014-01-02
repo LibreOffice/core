@@ -55,6 +55,8 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
+#include <vcl/settings.hxx>
+
 //............................................................................
 namespace pcr
 {

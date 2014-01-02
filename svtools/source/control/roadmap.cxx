@@ -22,6 +22,7 @@
 #include <vector>
 #include <algorithm>
 #include <vcl/bitmap.hxx>
+#include <vcl/settings.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
 #include <boost/scoped_ptr.hpp>

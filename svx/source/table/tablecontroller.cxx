@@ -32,6 +32,8 @@
 #include <sal/config.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <svl/whiter.hxx>
 
 #include <sfx2/request.hxx>

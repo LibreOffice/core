@@ -28,6 +28,7 @@
 #include <svtools/unitconv.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
+#include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {
 

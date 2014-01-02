@@ -19,6 +19,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 #include <tools/poly.hxx>
 #include <svtools/colorcfg.hxx>
 

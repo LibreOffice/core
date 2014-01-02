@@ -48,6 +48,7 @@
 #include <com/sun/star/document/CmisProperty.hpp>
 
 #include <vcl/timer.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/securitypage.hxx>
 #include <sfx2/sfxresid.hxx>

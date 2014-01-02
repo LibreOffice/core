@@ -31,6 +31,7 @@
 #include <svtools/apearcfg.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/settings.hxx>
 
 using ::std::vector;
 

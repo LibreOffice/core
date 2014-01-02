@@ -18,6 +18,7 @@
  */
 
 #include <svtools/scrwin.hxx>
+#include <vcl/settings.hxx>
 
 //===================================================================
 

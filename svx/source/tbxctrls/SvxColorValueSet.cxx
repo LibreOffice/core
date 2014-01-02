@@ -20,6 +20,7 @@
 #include <svx/xtable.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

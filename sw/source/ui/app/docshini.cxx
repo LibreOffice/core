@@ -52,6 +52,7 @@
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <view.hxx>
 #include <prtopt.hxx>
 #include <fmtcol.hxx>

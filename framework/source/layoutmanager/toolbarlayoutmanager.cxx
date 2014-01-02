@@ -41,6 +41,8 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/dockingarea.hxx>
+#include <vcl/settings.hxx>
+
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;

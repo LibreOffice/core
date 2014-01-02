@@ -30,6 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

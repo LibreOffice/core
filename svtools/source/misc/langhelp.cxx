@@ -11,6 +11,7 @@
 #include <svtools/langhelp.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 
 void localizeWebserviceURI( OUString& rURI )

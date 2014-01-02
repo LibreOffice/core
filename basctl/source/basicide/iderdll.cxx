@@ -41,6 +41,7 @@
 #include <svl/srchitem.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <vcl/settings.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

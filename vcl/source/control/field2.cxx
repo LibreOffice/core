@@ -29,6 +29,7 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 

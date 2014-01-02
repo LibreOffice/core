@@ -21,6 +21,7 @@
 #include <vcl/virdev.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>

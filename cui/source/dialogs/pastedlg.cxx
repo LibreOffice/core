@@ -32,6 +32,7 @@
 #include <sot/stg.hxx>
 #include <svtools/sores.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <dialmgr.hxx>
 

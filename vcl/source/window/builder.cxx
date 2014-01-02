@@ -31,6 +31,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/settings.hxx>
 #include <svdata.hxx>
 #include <svids.hrc>
 #include <window.h>

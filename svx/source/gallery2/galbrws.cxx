@@ -19,6 +19,7 @@
 
 #include <vcl/split.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>

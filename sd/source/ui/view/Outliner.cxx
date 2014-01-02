@@ -19,6 +19,8 @@
 
 #include "Outliner.hxx"
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
+
 #include <svl/srchitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>

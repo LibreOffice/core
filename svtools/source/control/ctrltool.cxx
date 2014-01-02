@@ -25,6 +25,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
 #include <sal/macros.h>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>

@@ -25,6 +25,8 @@
 #include "RptDef.hxx"
 #include "helpids.hrc"
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include "UITools.hxx"
 #include "uistrings.hrc"
 #include "ReportController.hxx"

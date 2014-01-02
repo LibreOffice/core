@@ -18,6 +18,7 @@
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 #include "anyrefdg.hxx"
 #include "document.hxx"

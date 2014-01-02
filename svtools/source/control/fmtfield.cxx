@@ -24,6 +24,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/fmtfield.hxx>
 #include <i18nlangtag/languagetag.hxx>

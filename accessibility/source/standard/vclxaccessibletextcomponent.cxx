@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/settings.hxx>
 
 #include <vector>
 

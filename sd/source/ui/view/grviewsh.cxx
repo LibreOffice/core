@@ -24,6 +24,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/helpers.hxx>
 
 namespace sd {

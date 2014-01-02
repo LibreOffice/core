@@ -30,6 +30,7 @@
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/settings.hxx>
 #include <svsys.h>
 #include <vcl/sysdata.hxx>
 
@@ -305,7 +306,7 @@ OutputDevice::OutputDevice() :
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
-    maSettings( Application::GetSettings() )
+    mxSettings( new AllSettings(Application::GetSettings()) )
 {
 
     mpGraphics          = NULL;
@@ -2468,7 +2469,7 @@ void OutputDevice::EnableOutput( sal_Bool bEnable )
 
 void OutputDevice::SetSettings( const AllSettings& rSettings )
 {
-    maSettings = rSettings;
+    *mxSettings = rSettings;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetSettings( rSettings );

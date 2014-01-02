@@ -33,6 +33,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/menuoptions.hxx>
 

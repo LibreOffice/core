@@ -44,6 +44,7 @@
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 
 #include "svx/fmresids.hrc"
 

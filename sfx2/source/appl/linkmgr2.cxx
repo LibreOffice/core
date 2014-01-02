@@ -37,6 +37,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/dibtools.hxx>
+#include "unotools/charclass.hxx"
 
 #include "fileobj.hxx"
 #include "impldde.hxx"

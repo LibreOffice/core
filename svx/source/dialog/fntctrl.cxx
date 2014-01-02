@@ -23,6 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/BreakIterator.hpp>

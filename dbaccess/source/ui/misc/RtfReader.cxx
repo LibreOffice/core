@@ -46,6 +46,7 @@
 #include "QEnumTypes.hxx"
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

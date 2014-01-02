@@ -26,6 +26,7 @@
 #include <vcl/image.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/settings.hxx>
 
 #include "svtools/valueset.hxx"
 #include "svtools/toolbarmenu.hxx"

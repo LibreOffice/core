@@ -52,6 +52,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "dlgunit.hxx"
 
 #define SELF_TARGET         "_self"

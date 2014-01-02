@@ -24,6 +24,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 // SvSimpleTableContainer  ------------------------------------------------------
 

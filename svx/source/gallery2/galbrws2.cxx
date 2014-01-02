@@ -42,6 +42,7 @@
 #include "galbrws2.hxx"
 #include "gallery.hrc"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>

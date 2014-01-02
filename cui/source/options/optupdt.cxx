@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"

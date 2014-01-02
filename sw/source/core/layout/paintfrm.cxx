@@ -75,6 +75,7 @@
 #include <svx/charthelper.hxx>
 #include <PostItMgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)

@@ -25,6 +25,8 @@
 #include "vcl/event.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
+
 #include <comphelper/string.hxx>
 #include "controldata.hxx"
 #include "impimagetree.hxx"

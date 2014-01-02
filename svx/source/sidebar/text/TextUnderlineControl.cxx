@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <editeng/udlnitem.hxx>
+#include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {
 

@@ -23,6 +23,7 @@
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 //---------------------------------------------------
 
 #include <svl/solar.hrc>

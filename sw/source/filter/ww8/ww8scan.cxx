@@ -43,6 +43,8 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
+
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <stdio.h>

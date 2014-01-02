@@ -22,6 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
 #include <SpellAttrib.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>

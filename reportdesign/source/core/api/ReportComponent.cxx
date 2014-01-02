@@ -21,6 +21,8 @@
 #include "corestrings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>

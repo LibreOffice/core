@@ -25,7 +25,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdmrkv.hxx>
 #include <vcl/window.hxx>
-
+#include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bmpacc.hxx>

@@ -26,6 +26,7 @@
 
 #include "vcl/msgbox.hxx"
 #include "vcl/strhelper.hxx"
+#include <vcl/settings.hxx>
 
 #include <tools/config.hxx>
 #include <osl/thread.h>

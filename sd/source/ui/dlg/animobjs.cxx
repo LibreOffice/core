@@ -28,6 +28,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include "anminfo.hxx"
 #include "animobjs.hxx"
 #include "animobjs.hrc"
@@ -41,6 +43,7 @@
 #include "ViewShell.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 // #i42894#
 #include <EffectMigration.hxx>
