@@ -26,6 +26,8 @@
 #include <vcl/outdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <svtools/colorcfg.hxx>
 
 namespace sd { namespace slidesorter { namespace view {

@@ -73,6 +73,7 @@
 #include <osl/file.h>
 #include <vcl/dibtools.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"

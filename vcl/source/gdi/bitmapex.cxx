@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 
 #include <image.h>
 #include <impimagetree.hxx>

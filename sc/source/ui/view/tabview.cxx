@@ -23,6 +23,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"

@@ -22,6 +22,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/settings.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/transfer.hxx>
 #include <unotools/syslocale.hxx>

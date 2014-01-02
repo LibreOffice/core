@@ -32,6 +32,7 @@
 #include <svl/itemset.hxx>
 #include <tools/multisel.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/settings.hxx>
 
 #include "preview.hxx"
 #include "prevwsh.hxx"

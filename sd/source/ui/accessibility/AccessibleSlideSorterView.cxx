@@ -44,6 +44,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
+
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

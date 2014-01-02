@@ -45,6 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/settings.hxx>
 
 #include "pvlaydlg.hxx"
 #include "dpuiglobal.hxx"

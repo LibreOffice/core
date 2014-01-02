@@ -35,6 +35,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 #include <window.h>

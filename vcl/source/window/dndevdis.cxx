@@ -25,6 +25,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

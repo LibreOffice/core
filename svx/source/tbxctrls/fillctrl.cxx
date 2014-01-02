@@ -23,7 +23,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <rtl/ustring.hxx>
-
+#include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
 
 #define DELAY_TIMEOUT           300

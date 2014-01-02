@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>

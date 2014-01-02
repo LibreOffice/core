@@ -62,6 +62,8 @@
 #include <svx/xtable.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/strarray.hxx>
+
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 

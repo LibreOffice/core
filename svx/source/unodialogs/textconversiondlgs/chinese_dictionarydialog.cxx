@@ -33,6 +33,8 @@
 #include "svtools/treelistentry.hxx"
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 // header for class SvtLinguConfigItem
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

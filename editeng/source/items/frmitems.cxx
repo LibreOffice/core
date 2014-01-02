@@ -57,6 +57,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>

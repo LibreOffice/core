@@ -25,6 +25,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <tools/shl.hxx>
+#include "tools/rc.hxx"
 #include <sfx2/module.hxx>
 
 #include "starmath.hrc"

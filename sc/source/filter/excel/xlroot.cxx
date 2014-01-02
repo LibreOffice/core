@@ -32,6 +32,8 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/font.hxx>
+#include <vcl/settings.hxx>
+
 #include <editeng/editstat.hxx>
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>

@@ -53,6 +53,7 @@
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "svtools/treelistentry.hxx"
+#include <vcl/settings.hxx>
 
 const long STD_WIN_SIZE_X = 120;
 const long STD_WIN_SIZE_Y = 150;

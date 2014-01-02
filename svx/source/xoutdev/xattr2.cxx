@@ -30,6 +30,7 @@
 #include <svx/xdef.hxx>
 #include <svx/AffineMatrixItem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 // class XLineTransparenceItem
 

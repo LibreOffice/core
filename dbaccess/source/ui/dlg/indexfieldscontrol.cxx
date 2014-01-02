@@ -21,6 +21,7 @@
 #include "dbu_dlg.hrc"
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
+#include <vcl/settings.hxx>
 
 namespace dbaui
 {

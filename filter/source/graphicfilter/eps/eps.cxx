@@ -31,6 +31,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/settings.hxx>
 #include <unotools/configmgr.hxx>
 #include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>

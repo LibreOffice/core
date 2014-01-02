@@ -78,6 +78,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <tools/diagnose_ex.h>
 
 #include "fubullet.hxx"

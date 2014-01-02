@@ -25,6 +25,8 @@
 #include <vcl/help.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/button.hxx>
+#include <vcl/settings.hxx>
+
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

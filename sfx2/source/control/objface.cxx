@@ -24,6 +24,7 @@
 
 #include <tools/rcid.h>
 #include <tools/stream.hxx>
+#include "tools/resmgr.hxx"
 
 #include <sfx2/module.hxx>
 #include <sfx2/objface.hxx>

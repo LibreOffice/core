@@ -20,6 +20,8 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <vcl/wrkwin.hxx>
+#include <vcl/settings.hxx>
+
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include "Outliner.hxx"

@@ -28,6 +28,7 @@
 
 // forward
 namespace vcl { struct ImplControlData; struct ControlLayoutData; }
+class StyleSettings;
 
 // -----------
 // - Control -
@@ -180,13 +181,7 @@ public:
     void            SetReferenceDevice( OutputDevice* _referenceDevice );
     OutputDevice*   GetReferenceDevice() const;
 
-    Font            GetUnzoomedControlPointFont() const
-    {
-        Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        return aFont;
-    }
+    Font            GetUnzoomedControlPointFont() const;
 };
 
 #endif // INCLUDED_VCL_CTRL_HXX

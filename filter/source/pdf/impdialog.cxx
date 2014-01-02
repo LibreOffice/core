@@ -23,6 +23,7 @@
 #include "impdialog.hrc"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
+#include <vcl/settings.hxx>
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
 

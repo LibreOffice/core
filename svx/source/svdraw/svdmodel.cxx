@@ -84,6 +84,7 @@
 #include <svx/sdr/properties/properties.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
+#include "vcl/settings.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

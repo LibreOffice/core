@@ -20,6 +20,7 @@
 #include <string>
 #include <vcl/toolbox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>

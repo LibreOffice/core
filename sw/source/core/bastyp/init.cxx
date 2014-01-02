@@ -126,6 +126,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <viscrs.hxx>
 
 using namespace ::com::sun::star;

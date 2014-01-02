@@ -47,6 +47,8 @@
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/print.hxx>
+#include <vcl/settings.hxx>
+
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <mmgreetingspage.hxx>

@@ -21,6 +21,8 @@
 #include <tools/shl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>
 #include <unotools/configmgr.hxx>

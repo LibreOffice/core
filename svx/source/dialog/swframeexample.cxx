@@ -21,6 +21,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/swframeexample.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

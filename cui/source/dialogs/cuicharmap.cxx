@@ -30,6 +30,7 @@
 #include <svx/ucsubset.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 
 #include <cuires.hrc>

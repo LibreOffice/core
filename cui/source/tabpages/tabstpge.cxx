@@ -21,6 +21,7 @@
 #include <tools/shl.hxx>
 #include <svtools/ruler.hxx>
 #include <svx/dialogs.hrc>
+#include <vcl/settings.hxx>
 
 #include <cuires.hrc>
 #include <editeng/lrspitem.hxx>

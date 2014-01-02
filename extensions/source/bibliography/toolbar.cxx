@@ -28,6 +28,7 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/mnemonic.hxx>
 #include "bibbeam.hxx"
 #include "toolbar.hrc"

@@ -24,6 +24,7 @@
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>

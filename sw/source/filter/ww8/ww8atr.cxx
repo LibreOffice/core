@@ -26,6 +26,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
+#include <vcl/settings.hxx>
+
 #include <svl/zformat.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

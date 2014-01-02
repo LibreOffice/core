@@ -19,6 +19,8 @@
 
 #include <tools/poly.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
+
 #include <viewopt.hxx>
 
 #include "swtypes.hxx"

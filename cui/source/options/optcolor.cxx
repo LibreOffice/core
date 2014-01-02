@@ -30,6 +30,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <boost/shared_ptr.hpp>
 #include <svx/svxdlg.hxx>
 #include <helpid.hrc>

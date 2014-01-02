@@ -25,6 +25,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/settings.hxx>
 #include "fmitems.hxx"
 #include "formtoolbars.hxx"
 

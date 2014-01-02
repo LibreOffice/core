@@ -28,6 +28,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
 
 #include <linguistic/misc.hxx>

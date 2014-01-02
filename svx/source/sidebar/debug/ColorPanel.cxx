@@ -20,6 +20,7 @@
 
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace svx { namespace sidebar {
 

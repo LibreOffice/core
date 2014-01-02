@@ -40,6 +40,7 @@
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
+#include <vcl/settings.hxx>
 
 namespace svx {
 

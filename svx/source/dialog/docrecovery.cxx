@@ -31,6 +31,7 @@
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

@@ -30,6 +30,7 @@
 #include "vcl/edit.hxx"
 #include "vcl/lstbox.hxx"
 #include "vcl/combobox.hxx"
+#include "vcl/settings.hxx"
 
 #include "svdata.hxx"
 #include "controldata.hxx"

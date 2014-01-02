@@ -67,6 +67,8 @@
 #include <vcl/mapmod.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>

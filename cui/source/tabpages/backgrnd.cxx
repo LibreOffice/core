@@ -20,6 +20,7 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>

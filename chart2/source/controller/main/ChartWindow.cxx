@@ -22,6 +22,7 @@
 #include "HelpIds.hrc"
 
 #include <vcl/help.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;
 

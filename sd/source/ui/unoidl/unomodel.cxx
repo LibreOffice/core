@@ -39,6 +39,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/forbiddencharacterstable.hxx>

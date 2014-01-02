@@ -27,6 +27,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 #include <window.h>
 #include <svdata.hxx>

@@ -26,6 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/settings.hxx>
 
 #define _DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF           283

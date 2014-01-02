@@ -42,6 +42,8 @@
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/settings.hxx>
+
 #include <svl/whiter.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itempool.hxx>

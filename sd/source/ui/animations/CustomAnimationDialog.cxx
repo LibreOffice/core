@@ -49,6 +49,8 @@
 #include <vcl/decoview.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/settings.hxx>
+
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>

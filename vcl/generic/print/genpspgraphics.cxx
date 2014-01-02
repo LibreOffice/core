@@ -36,6 +36,7 @@
 #include "vcl/bmpacc.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/sysdata.hxx"
+#include "vcl/settings.hxx"
 
 #include "generic/printergfx.hxx"
 #include "salbmp.hxx"

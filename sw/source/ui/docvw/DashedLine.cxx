@@ -16,6 +16,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 SwDashedLine::SwDashedLine( Window* pParent, Color& ( *pColorFn )() ) :
     FixedLine( pParent, WB_DIALOGCONTROL | WB_HORZ ),

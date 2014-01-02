@@ -94,6 +94,7 @@
 #include "../ui/inc/FrameView.hxx"
 
 #include <tools/tenccvt.hxx>
+#include <vcl/settings.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

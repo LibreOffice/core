@@ -20,6 +20,7 @@
 #include "TableDesignHelpBar.hxx"
 #include <tools/debug.hxx>
 #include <svtools/svmedit.hxx>
+#include <vcl/settings.hxx>
 #include "dbaccess_helpid.hrc"
 #include <memory>
 using namespace dbaui;

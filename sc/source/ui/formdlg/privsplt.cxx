@@ -18,6 +18,7 @@
  */
 
 #include "privsplt.hxx"
+#include <vcl/settings.hxx>
 
 /*************************************************************************
 #*  Member:     ScPrivatSplit

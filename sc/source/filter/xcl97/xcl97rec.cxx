@@ -30,6 +30,8 @@
 #include <svx/unoapi.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
 #include "formulacell.hxx"

@@ -28,6 +28,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/settings.hxx>
 
 #include <tools/rc.h>
 #include <tools/debug.hxx>

@@ -35,8 +35,9 @@
 #include <vcl/apptypes.hxx>
 #include <generic/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
-
 #include <rtl/uri.hxx>
+
+#include <vcl/settings.hxx>
 
 #include <dlfcn.h>
 #include <fcntl.h>

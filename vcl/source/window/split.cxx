@@ -27,6 +27,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/settings.hxx>
 
 #include <rtl/instance.hxx>
 

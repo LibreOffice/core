@@ -41,6 +41,7 @@
 #include <svx/svdopath.hxx>
 #include "svx/dlgutil.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
 #include <vcl/layout.hxx>

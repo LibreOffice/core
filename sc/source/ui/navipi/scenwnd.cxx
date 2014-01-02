@@ -24,6 +24,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "navipi.hxx"
 #include "popmenu.hxx"
 #include "scresid.hxx"

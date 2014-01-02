@@ -18,6 +18,7 @@
  */
 
 #include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
 
 #include "PresenterSlideSorter.hxx"
 #include "PresenterButton.hxx"

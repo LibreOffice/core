@@ -33,6 +33,7 @@
 #include "vcl/layout.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
+#include "vcl/settings.hxx"
 
 #include "unotools/localedatawrapper.hxx"
 

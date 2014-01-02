@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
 

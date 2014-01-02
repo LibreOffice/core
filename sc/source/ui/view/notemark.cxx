@@ -26,6 +26,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include "notemark.hxx"
 #include "document.hxx"

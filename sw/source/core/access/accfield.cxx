@@ -18,6 +18,7 @@
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <swurl.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <ndtxt.hxx>
 #include <txtinet.hxx>
 

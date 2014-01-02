@@ -34,6 +34,7 @@
 #include "undosqledit.hxx"
 #include "QueryDesignView.hxx"
 #include <svl/smplhint.hxx>
+#include <vcl/settings.hxx>
 
 using namespace dbaui;
 

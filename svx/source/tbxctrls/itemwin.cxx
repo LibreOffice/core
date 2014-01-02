@@ -25,6 +25,7 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>
 

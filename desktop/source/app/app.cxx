@@ -93,6 +93,7 @@
 #include <rtl/bootstrap.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>

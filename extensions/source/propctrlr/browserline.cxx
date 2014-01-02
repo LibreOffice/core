@@ -30,6 +30,7 @@
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 //............................................................................
 namespace pcr

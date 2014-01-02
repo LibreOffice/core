@@ -45,6 +45,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 
 #include "dbdocfun.hxx"
 #include "uiitems.hxx"

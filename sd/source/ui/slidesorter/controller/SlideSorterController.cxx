@@ -76,6 +76,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>

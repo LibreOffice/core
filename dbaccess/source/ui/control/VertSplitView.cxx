@@ -21,6 +21,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/split.hxx>
+#include <vcl/settings.hxx>
 
 #define SPLITTER_WIDTH  80
 

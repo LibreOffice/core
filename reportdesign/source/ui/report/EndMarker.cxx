@@ -20,6 +20,8 @@
 #include "ColorChanger.hxx"
 #include "SectionWindow.hxx"
 #include "helpids.hrc"
+
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>

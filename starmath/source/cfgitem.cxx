@@ -18,6 +18,8 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <sal/macros.h>
 #include "cfgitem.hxx"
 

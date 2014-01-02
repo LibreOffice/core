@@ -32,11 +32,13 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
+#include "vcl/settings.hxx"
 #include <tools/debug.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
+#include "vcl/settings.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;

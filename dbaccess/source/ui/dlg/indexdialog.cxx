@@ -28,6 +28,7 @@
 #include "indexfieldscontrol.hxx"
 #include "indexcollection.hxx"
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include "UITools.hxx"
 #include <svtools/imgdef.hxx>

@@ -42,6 +42,8 @@
 #include <comphelper/property.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <algorithm>
 
 #include <cppuhelper/bootstrap.hxx>

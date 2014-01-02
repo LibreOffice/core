@@ -33,6 +33,8 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+
 #include <swmodule.hxx>
 #include <sal/macros.h>
 

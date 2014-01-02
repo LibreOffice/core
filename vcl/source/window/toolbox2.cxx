@@ -31,6 +31,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageListProvider.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 #include <brdwin.hxx>

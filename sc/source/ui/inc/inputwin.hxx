@@ -38,6 +38,7 @@ class ScAccessibleEditLineTextData;
 struct EENotify;
 class ScRangeList;
 class ScTabViewShell;
+class Accelerator;
 
 //========================================================================
 

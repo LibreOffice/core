@@ -24,7 +24,8 @@
 
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
-
+#include <vcl/settings.hxx>
+#include <rtl/string.hxx>
 #include <tools/debug.hxx>
 
 //===================================================================

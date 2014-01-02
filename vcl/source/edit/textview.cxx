@@ -19,6 +19,7 @@
 
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
+#include <vcl/settings.hxx>
 #include <textdoc.hxx>
 #include <vcl/textdata.hxx>
 #include <textdat2.hxx>

@@ -23,6 +23,8 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/settings.hxx>
+
 using namespace ::com::sun::star::accessibility;
 
 /*****************************************************************************

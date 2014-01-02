@@ -30,6 +30,7 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
 
 #include "pdfwriter_impl.hxx"
 

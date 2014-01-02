@@ -21,6 +21,8 @@
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
 
+#include <vcl/settings.hxx>
+
 //==================================================================
 
 ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pData ) :

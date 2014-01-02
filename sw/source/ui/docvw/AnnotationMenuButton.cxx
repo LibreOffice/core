@@ -29,6 +29,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/settings.hxx>
 
 #include <cmdid.h>
 #include <SidebarWin.hxx>

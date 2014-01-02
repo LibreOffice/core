@@ -21,6 +21,7 @@
 #include "QueryDesignView.hxx"
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include "JoinController.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "dbustrings.hrc"

@@ -33,6 +33,7 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 #include <vcl/builder.hxx>
+#include <vcl/settings.hxx>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440

@@ -20,6 +20,7 @@
 #include <stdio.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <rtl/textenc.h>

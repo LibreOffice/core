@@ -22,6 +22,7 @@
 #include <sfx2/request.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/settings.hxx>
 #include "misc.hrc"
 
 #define CONTROL_BORDER_WIDTH    1

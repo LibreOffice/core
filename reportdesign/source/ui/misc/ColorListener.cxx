@@ -18,6 +18,8 @@
  */
 #include "ColorListener.hxx"
 #include <svl/smplhint.hxx>
+#include <vcl/settings.hxx>
+
 #include "uistrings.hrc"
 
 //=====================================================================

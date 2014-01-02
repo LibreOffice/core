@@ -33,6 +33,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace basctl
 {

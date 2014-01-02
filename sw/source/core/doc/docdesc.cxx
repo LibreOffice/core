@@ -52,6 +52,7 @@
 #include <SwUndoPageDesc.hxx>
 #include <pagedeschint.hxx>
 #include <tgrditem.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

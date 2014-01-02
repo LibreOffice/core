@@ -20,6 +20,8 @@
 #include <i18nutil/unicode.hxx>
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 #include <editeng/itemtype.hxx>
 #include <svtools/grfmgr.hxx>
 #include <unotools/intlwrapper.hxx>

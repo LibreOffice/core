@@ -52,6 +52,7 @@
 #include "vcl/popupmenuwindow.hxx"
 #include "vcl/lazydelete.hxx"
 #include "vcl/virdev.hxx"
+#include "vcl/settings.hxx"
 
 // declare system types in sysdata.hxx
 #include "svsys.h"
@@ -987,7 +988,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     // setup the scale factor for Hi-DPI displays
     mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
 
-    const StyleSettings& rStyleSettings = maSettings.GetStyleSettings();
+    const StyleSettings& rStyleSettings = maSettings->GetStyleSettings();
     sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
     mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
     mnDPIY          = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
@@ -1724,7 +1725,7 @@ void Window::ImplInitResolutionSettings()
     // recalculate AppFont-resolution and DPI-resolution
     if ( mpWindowImpl->mbFrame )
     {
-        const StyleSettings& rStyleSettings = maSettings.GetStyleSettings();
+        const StyleSettings& rStyleSettings = maSettings->GetStyleSettings();
         sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
         mnDPIX = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
         mnDPIY = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
@@ -1756,7 +1757,7 @@ void Window::ImplInitResolutionSettings()
 void Window::ImplPointToLogic( Font& rFont ) const
 {
     Size    aSize = rFont.GetSize();
-    sal_uInt16  nScreenFontZoom = maSettings.GetStyleSettings().GetScreenFontZoom();
+    sal_uInt16  nScreenFontZoom = maSettings->GetStyleSettings().GetScreenFontZoom();
 
     if ( aSize.Width() )
     {
@@ -1783,7 +1784,7 @@ void Window::ImplPointToLogic( Font& rFont ) const
 void Window::ImplLogicToPoint( Font& rFont ) const
 {
     Size    aSize = rFont.GetSize();
-    sal_uInt16  nScreenFontZoom = maSettings.GetStyleSettings().GetScreenFontZoom();
+    sal_uInt16  nScreenFontZoom = maSettings->GetStyleSettings().GetScreenFontZoom();
 
     if ( IsMapModeEnabled() )
         aSize = LogicToPixel( aSize );
@@ -5668,7 +5669,7 @@ void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->SetSettings( rSettings, sal_True );
     }
 
-    AllSettings aOldSettings = maSettings;
+    AllSettings aOldSettings(*maSettings);
     OutputDevice::SetSettings( rSettings );
     sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
 
@@ -5705,8 +5706,8 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->UpdateSettings( rSettings, sal_True );
     }
 
-    AllSettings aOldSettings = maSettings;
-    sal_uLong nChangeFlags = maSettings.Update( maSettings.GetWindowUpdate(), rSettings );
+    AllSettings aOldSettings(*maSettings);
+    sal_uLong nChangeFlags = maSettings->Update( maSettings->GetWindowUpdate(), rSettings );
     nChangeFlags |= SETTINGS_IN_UPDATE_SETTINGS; // Set this flag so the receiver of the data changed
                                                  // event can distinguish between the changing of global
                                                  // setting and a local change ( with SetSettings )
@@ -5721,9 +5722,9 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
     *  so we can spare all our users the hassle of reacting on
     *  this in their respective DataChanged.
     */
-    MouseSettings aSet( maSettings.GetMouseSettings() );
+    MouseSettings aSet( maSettings->GetMouseSettings() );
     aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
-    maSettings.SetMouseSettings( aSet );
+    maSettings->SetMouseSettings( aSet );
 
     if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
     {
@@ -9373,7 +9374,7 @@ void Window::EnableNativeWidget( sal_Bool bEnable )
 
         // send datachanged event to allow for internal changes required for NWF
         // like clipmode, transparency, etc.
-        DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &maSettings, SETTINGS_STYLE );
+        DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, maSettings.get(), SETTINGS_STYLE );
         DataChanged( aDCEvt );
 
         // sometimes the borderwindow is queried, so keep it in sync

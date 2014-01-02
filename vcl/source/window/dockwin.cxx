@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/settings.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
