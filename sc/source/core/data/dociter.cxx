@@ -330,11 +330,11 @@ const ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SC
 }
 
 bool ScDBQueryDataIterator::IsQueryValid(
-    ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScRefCellValue& rCell)
+    ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScRefCellValue* pCell)
 {
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
-    return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, &rCell);
+    return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
 // ----------------------------------------------------------------------------
@@ -376,10 +376,11 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
     // Start with the current row position, and find the first row position
     // that satisfies the query.
 
-    // TODO: The following line nFirstQueryField is supposed to be used some
-    // way. Find out how it's supposed to be used and fix this bug.
+    // If the query starts in the same column as the result vector we can
+    // prefetch the cell which saves us one fetch in the success case.
+    SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
+    ScRefCellValue aCell;
 
-    // SCCOLROW nFirstQueryField = mpParam->GetEntry(0).nField;
     while (true)
     {
         if (maCurPos.first == mpCells->end() || nRow > mpParam->nRow2)
@@ -396,10 +397,17 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             continue;
         }
 
-        ScRefCellValue aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
-
-        if (ScDBQueryDataIterator::IsQueryValid(*mpDoc, *mpParam, nTab, nRow, aCell))
+        ScRefCellValue* pCell = NULL;
+        if (nCol == static_cast<SCCOL>(nFirstQueryField))
         {
+            aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
+            pCell = &aCell;
+        }
+
+        if (ScDBQueryDataIterator::IsQueryValid(*mpDoc, *mpParam, nTab, nRow, pCell))
+        {
+            if (!pCell)
+                aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE:
