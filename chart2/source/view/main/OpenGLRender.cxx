@@ -1334,13 +1334,10 @@ int OpenGLRender::RenderRectangleShape()
     return 0;
 }
 
-int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation)
+int OpenGLRender::CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation)
 {
     VirtualDevice aDevice;
-    Font aFont(font, Size(0, 100));
-    aFont.SetWeight(WEIGHT_BOLD);
-    aFont.SetItalic(ITALIC_NORMAL);
-    aDevice.SetFont(aFont);
+    aDevice.SetFont(rFont);
     Rectangle aRect;
     aDevice.GetTextBoundRect(aRect, textValue);
     int screenWidth = (aRect.BottomRight().X() + 3) & ~3;

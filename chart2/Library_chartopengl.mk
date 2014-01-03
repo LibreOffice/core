@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,chartopengl,\
     svt \
     svxcore \
     tl \
+	tk \
     ucbhelper \
     utl \
     vcl \

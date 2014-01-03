@@ -24,6 +24,7 @@
 #include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <editeng/unoprnms.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 
@@ -530,26 +531,64 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     setProperties(rNames, rValues, maProperties);
 }
 
+namespace {
+
+struct FontAttribSetter
+{
+    FontAttribSetter(Font& rFont):
+        mrFont(rFont) {}
+
+    void operator()(const std::pair<OUString, uno::Any>& rProp)
+    {
+        const OUString& rPropName = rProp.first;
+        if(rPropName == "CharFontName")
+        {
+            OUString aName = rProp.second.get<OUString>();
+            mrFont.SetName(aName);
+        }
+        else if(rPropName == "CharColor")
+        {
+            sal_Int32 nColor = rProp.second.get<sal_Int32>();
+            mrFont.SetFillColor(nColor);
+        }
+        else if(rPropName == "CharHeight")
+        {
+            //float fHeight = rProp.second.get<float>();
+            mrFont.SetSize(Size(0,100)); //taken from the MCW implementation
+        }
+        else if(rPropName == "CharUnderline")
+        {
+            FontUnderline eUnderline = static_cast<FontUnderline>(rProp.second.get<sal_Int16>());
+            mrFont.SetUnderline(eUnderline);
+        }
+        else if(rPropName == "CharWeight")
+        {
+            float fWeight = rProp.second.get<float>();
+            FontWeight eFontWeight = VCLUnoHelper::ConvertFontWeight(fWeight);
+            mrFont.SetWeight(eFontWeight);
+        }
+        else if(rPropName == "ChartWidth")
+        {
+            float fWidth = rProp.second.get<float>();
+            FontWidth eFontWidth = VCLUnoHelper::ConvertFontWidth(fWidth);
+            mrFont.SetWidth(eFontWidth);
+        }
+    }
+private:
+    Font& mrFont;
+};
+
+}
+
 void DummyText::render()
 {
     debugProperties(maProperties);
 
-    //get text color, the output value always be white, so we use black color to text
-    std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("CharColor");
-    sal_Int32 nColor = 0;
-    if(itr != maProperties.end())
-    {
-        uno::Any co =  itr->second;
-        nColor = co.get<sal_Int32>();
-    }
+    Font aFont;
+    std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
 
-    //get font, assuming that every font has a set font name
-    uno::Any font = maProperties.find("CharFontName")->second;
-    OUString aFontName = font.get<OUString>();
-
-    sal_Int32 nRot = 0;
     DummyChart* pChart = getRootShape();
-    pChart->m_GLRender.CreateTextTexture(maText, nColor, aFontName, maPosition, maSize, nRot);
+    pChart->m_GLRender.CreateTextTexture(maText, 0, aFont, maPosition, maSize, 0);
     pChart->m_GLRender.RenderTextShape();
 }
 

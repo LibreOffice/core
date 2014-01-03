@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <vcl/font.hxx>
 
 #if defined( _WIN32 )
 #include "prewin.h"
@@ -176,7 +177,7 @@ public:
     int RenderRectangleShape();
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
-    int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, ::rtl::OUString font, awt::Point aPos, awt::Size aSize, long rotation);
+    int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation);
     int RenderTextShape();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
