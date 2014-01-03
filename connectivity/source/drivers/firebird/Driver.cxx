@@ -27,7 +27,9 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/file.hxx>
 #include <osl/process.h>
+#include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
 
 using namespace com::sun::star;
@@ -57,6 +59,7 @@ namespace connectivity
 // Static const member variables
 const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
 const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
+const OUString FirebirdDriver::our_sFirebirdMsgVar("FIREBIRD_MSG");
 
 FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
@@ -76,6 +79,16 @@ FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::su
 
     // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
     osl_setEnvironment(our_sFirebirdLockVar.pData, m_firebirdLockDirectory.GetFileName().pData);
+
+#ifndef SYSTEM_FIREBIRD
+    // Overrides firebird's hardcoded default of /usr/local/firebird on *nix,
+    // however on Windows it seems to use the current directory as a default.
+    OUString sMsgURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/firebird");
+    ::rtl::Bootstrap::expandMacros(sMsgURL);
+    OUString sMsgPath;
+    ::osl::FileBase::getSystemPathFromFileURL(sMsgURL, sMsgPath);
+    osl_setEnvironment(our_sFirebirdMsgVar.pData, sMsgPath.pData);
+#endif
 }
 
 void FirebirdDriver::disposing()
@@ -92,6 +105,10 @@ void FirebirdDriver::disposing()
 
     osl_clearEnvironment(our_sFirebirdTmpVar.pData);
     osl_clearEnvironment(our_sFirebirdLockVar.pData);
+
+#ifndef SYSTEM_FIREBIRD
+    osl_clearEnvironment(our_sFirebirdMsgVar.pData);
+#endif
 
     ODriver_BASE::disposing();
 }

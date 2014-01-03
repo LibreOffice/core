@@ -26,7 +26,7 @@ Module gid_Module_Firebird
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Files = (
-        File gid_File_Firebird_Lib
+        File gid_File_Firebird
     );
     Styles = (HIDDEN_ROOT);
 End
