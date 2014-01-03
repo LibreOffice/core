@@ -212,12 +212,11 @@ TabPage RID_SVXPAGE_CAPTION
         File = "legtyp4.bmp" ;
     };
 };
- // RID_SVXDLG_CAPTION ----------------------------------------------------
 
 #define  _POS_SIZE_TEXT \
                 Text [ en-US ] = "Position and Size" ;             \
 
-TabDialog RID_SVXDLG_CAPTION\
+TabDialog RID_SVXDLG_CAPTION
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
