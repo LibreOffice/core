@@ -35,6 +35,7 @@ LIB4TARGET=$(SLB)$/sdbtshared.lib
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Types -------------------------------------
 
