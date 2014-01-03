@@ -36,7 +36,7 @@ namespace
         PushButton& rChooserButton,
         bool bShow)
     {
-        if( rChooserButton.IsVisible() != bShow )
+        if( rChooserButton.IsVisible() != (sal_Bool) bShow )
         {
             rChooserButton.Show( bShow );
         }
