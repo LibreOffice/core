@@ -858,7 +858,9 @@ OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget):
     m_iPointNum(0),
     m_iFboIdx(0),
     m_fLineAlpha(1.0),
-    mxRenderTarget(xTarget)
+    mxRenderTarget(xTarget),
+    m_TextVertexID(0),
+    m_TextTexCoordID(1)
 {
     memset(&m_Line2DPoitList, 0, sizeof(Line2DPointList));
     m_iFboIdx = 0;
