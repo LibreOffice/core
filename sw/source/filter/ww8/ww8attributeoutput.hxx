@@ -393,6 +393,8 @@ protected:
     virtual bool DropdownField( const SwField* pFld );
     virtual bool PlaceholderField( const SwField* pFld );
 
+    virtual void WritePostitFieldStart();
+
     virtual bool AnalyzeURL( const String& rURL, const String& rTarget, String* pLinkURL, String* pMark );
 
     /// Reference to the export, where to get the data from

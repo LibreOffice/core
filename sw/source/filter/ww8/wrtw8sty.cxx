@@ -1945,9 +1945,11 @@ void WW8_WrPlcFtnEdn::Append( WW8_CP nCp, const SwFmtFtn& rFtn )
     aCntnt.push_back( &rFtn );
 }
 
-WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
+WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart, WW8_CP nRangeEnd)
     :
-        maDateTime( DateTime::EMPTY )
+        maDateTime( DateTime::EMPTY ),
+        m_nRangeStart(nRangeStart),
+        m_nRangeEnd(nRangeEnd)
 {
     mpRichText = pPostIt->GetTextObject();
     if (!mpRichText)
@@ -1960,17 +1962,33 @@ WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
 WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
     :
         mpRichText(0),
-        maDateTime( DateTime::EMPTY )
+        maDateTime( DateTime::EMPTY ),
+        m_nRangeStart(0),
+        m_nRangeEnd(0)
 {
     msSimpleText = pRedline->GetComment();
     msOwner = SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor());
     maDateTime = pRedline->GetTimeStamp();
 }
 
+void WW8_WrPlcAnnotations::AddRangeStartPosition( WW8_CP nStartCp)
+{
+    m_nLastRangeStartPos = nStartCp;
+}
+
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 {
     aCps.push_back( nCp );
-    WW8_Annotation* p = new WW8_Annotation(pPostIt);
+    WW8_Annotation* p;
+    if( m_nLastRangeStartPos != -1 )
+    {
+        p = new WW8_Annotation(pPostIt, m_nLastRangeStartPos, nCp);
+        m_nLastRangeStartPos = -1;
+    }
+    else
+    {
+        p = new WW8_Annotation(pPostIt, nCp, nCp);
+    }
     aCntnt.push_back( p );
 }
 
@@ -2144,11 +2162,19 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     {
         case TXT_ATN:
             {
+                std::vector<WW8_CP> aRangeStartPos;
+                std::vector<WW8_CP> aRangeEndPos;
                 // then write first the GrpXstAtnOwners
                 for ( i = 0; i < nLen; ++i )
                 {
                     const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+
                     aStrArr.push_back(std::pair<String,String>(rAtn.msOwner,rAtn.m_sInitials));
+                    if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
+                    {
+                        aRangeStartPos.push_back(rAtn.m_nRangeStart);
+                        aRangeEndPos.push_back(rAtn.m_nRangeEnd);
+                    }
                 }
 
                 //sort and remove duplicates
@@ -2180,6 +2206,67 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 rFib.fcGrpStAtnOwners = nFcStart;
                 nFcStart = rWrt.pTableStrm->Tell();
                 rFib.lcbGrpStAtnOwners = nFcStart - rFib.fcGrpStAtnOwners;
+
+                // Commented text ranges
+                if ( rWrt.bWrtWW8 )
+                {
+                    if( aRangeStartPos.size() > 0 )
+                    {
+                        // Commented text ranges starting positions (Plcfbkf.aCP)
+                        rFib.fcPlcfAtnbkf = nFcStart;
+                        for ( i = 0; i < aRangeStartPos.size(); ++i )
+                        {
+                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i] );
+                        }
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i-1] + 1);
+
+                        // Commented text ranges additional informations (Plcfbkf.aFBKF)
+                        for ( i = 0; i < aRangeStartPos.size(); ++i )
+                        {
+                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, i ); // FBKF.ibkl
+                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 ); // FBKF.bkc
+                        }
+
+                        nFcStart = rWrt.pTableStrm->Tell();
+                        rFib.lcbPlcfAtnbkf = nFcStart - rFib.fcPlcfAtnbkf;
+
+                        // Commented text ranges ending positions (PlcfBkl.aCP)
+                        rFib.fcPlcfAtnbkl = nFcStart;
+                        for ( i = 0; i < aRangeEndPos.size(); ++i )
+                        {
+                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i] );
+                        }
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i-1] + 1);
+
+                        // Commented text ranges additional informations (Plcfbkl.aFBKF)
+                        for ( i = 0; i < aRangeEndPos.size(); ++i )
+                        {
+                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, i ); // FBKF.ibkl
+                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 ); // FBKF.bkc
+                        }
+
+                        nFcStart = rWrt.pTableStrm->Tell();
+                        rFib.lcbPlcfAtnbkl = nFcStart - rFib.fcPlcfAtnbkl;
+
+                        // Commented text ranges as bookmarks (SttbfAtnBkmk)
+                        rFib.fcSttbfAtnbkmk = nFcStart;
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xFFFF );                // SttbfAtnBkmk.fExtend
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
+
+                        for ( i = 0; i < aRangeStartPos.size(); ++i )
+                        {
+                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );         // SttbfAtnBkmk.cchData
+                            // One ATNBE structure for all text ranges
+                            SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0x0100 );    // ATNBE.bmc
+                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, i );          // ATNBE.lTag
+                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, -1 );         // ATNBE.lTagOld
+                        }
+
+                        nFcStart = rWrt.pTableStrm->Tell();
+                        rFib.lcbSttbfAtnbkmk = nFcStart - rFib.fcSttbfAtnbkmk;
+                    }
+                }
 
                 // Write the extended >= Word XP ATLD records
                 if( rWrt.bWrtWW8 )
@@ -2265,6 +2352,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
         if ( TXT_ATN == nTTyp )
         {
+            sal_uInt16 nlTag = 0;
             for ( i = 0; i < nLen; ++i )
             {
                 const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
@@ -2314,7 +2402,13 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, nFndPos );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
-                SwWW8Writer::WriteLong( *rWrt.pTableStrm, -1 );
+                if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
+                {
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, nlTag );
+                    ++nlTag;
+                }
+                else
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, -1 );
             }
         }
         else
