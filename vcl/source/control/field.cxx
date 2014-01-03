@@ -889,6 +889,8 @@ NumericBox::NumericBox( Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
+    if ( !(nWinStyle & WB_HIDE ) )
+        Show();
 }
 
 NumericBox::NumericBox( Window* pParent, const ResId& rResId ) :
