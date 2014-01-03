@@ -2017,6 +2017,54 @@ void Test::testFuncNUMBERVALUE()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncLOOKUP()
+{
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Raw data
+    const char* aData[][2] = {
+        { "=CONCATENATE(\"A\")", "1" },
+        { "=CONCATENATE(\"B\")", "2" },
+        { "=CONCATENATE(\"C\")", "3" },
+        { 0, 0 } // terminator
+    };
+
+    // Insert raw data into A1:B3.
+    for (SCROW i = 0; aData[i][0]; ++i)
+    {
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
+        m_pDoc->SetString(1, i, 0, OUString::createFromAscii(aData[i][1]));
+    }
+
+    const char* aData2[][2] = {
+        { "A", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
+        { "B", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
+        { "C", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
+    };
+
+    // Insert check formulas into A5:B7.
+    for (SCROW i = 0; aData2[i][0]; ++i)
+    {
+        m_pDoc->SetString(0, i+4, 0, OUString::createFromAscii(aData2[i][0]));
+        m_pDoc->SetString(1, i+4, 0, OUString::createFromAscii(aData2[i][1]));
+    }
+
+    printRange(m_pDoc, ScRange(0,4,0,1,6,0), "Data range for LOOKUP.");
+
+    // Values for B5:B7 should be 1, 2, and 3.
+    CPPUNIT_ASSERT_MESSAGE("This formula should not have an error code.", m_pDoc->GetErrCode(ScAddress(1,4,0)) == 0);
+    CPPUNIT_ASSERT_MESSAGE("This formula should not have an error code.", m_pDoc->GetErrCode(ScAddress(1,5,0)) == 0);
+    CPPUNIT_ASSERT_MESSAGE("This formula should not have an error code.", m_pDoc->GetErrCode(ScAddress(1,6,0)) == 0);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,5,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,6,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncVLOOKUP()
 {
     // VLOOKUP
