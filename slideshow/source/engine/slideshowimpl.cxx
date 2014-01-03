@@ -365,7 +365,7 @@ protected:
 
 private:
     struct SeparateListenerImpl; friend struct SeparateListenerImpl;
-    struct PrefetchPropertiesFunc; friend struct PrefetchPropertiesFunc;
+    class PrefetchPropertiesFunc; friend class PrefetchPropertiesFunc;
 
     /// Stop currently running show.
     void stopShow();
