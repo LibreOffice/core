@@ -1908,6 +1908,10 @@ private: // CLOOK-Impl-Methoden
 
 public:
     void    FillDPCache( ScDPTableDataCache * pCache, SCTAB nDocTab, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
+private:
+    SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol );
+    SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRw1, SCROW nRw2 );
+    bool   ReservedPatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserved );
 };
 inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
 {

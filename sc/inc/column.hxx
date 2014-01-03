@@ -404,6 +404,9 @@ public:
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
+    SCSIZE      GetPatternCount( );
+    SCSIZE      GetPatternCount( SCROW nRw1, SCROW nRw2 );
+    bool        ReservedPatternCount( SCSIZE nReserved );
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);
 //UNUSED2008-05  void       CorrectSymbolCells( CharSet eStreamCharSet );

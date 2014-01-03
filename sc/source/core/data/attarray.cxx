@@ -295,6 +295,24 @@ void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, sal_Boo
     SetPatternArea( nRow, nRow, pPattern, bPutToPool );
 }
 
+bool ScAttrArray::Reserve( SCSIZE nReserve )
+{
+    if ( nCount <= nReserve )
+    {
+        if( ScAttrEntry* pNewData = new (std::nothrow) ScAttrEntry[nReserve] )
+        {
+            nLimit = nReserve;
+            memcpy( pNewData, pData, nCount*sizeof(ScAttrEntry) );
+            delete[] pData;
+            pData = pNewData;
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
 
 void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPatternAttr *pPattern, sal_Bool bPutToPool )
 {
@@ -2647,3 +2665,15 @@ void ScAttrArray::Load( SvStream& /* rStream */ )
 //UNUSED2008-05      }
 //UNUSED2008-05  }
 
+SCSIZE ScAttrArray::Count( SCROW nStartRow, SCROW nEndRow )
+{
+    SCSIZE  nIndex1, nIndex2;
+
+    if( !Search( nStartRow, nIndex1 ) )
+        return 0;
+
+    if( !Search( nEndRow, nIndex2 ) )
+        nIndex2 = this->nCount - 1;
+
+    return nIndex2 - nIndex1 + 1;
+}

@@ -1885,7 +1885,17 @@ sal_uLong ScColumn::GetCodeCount() const
     return nCodeCount;
 }
 
+SCSIZE ScColumn::GetPatternCount()
+{
+    return this->pAttrArray ? this->pAttrArray->Count() : 0;
+}
 
+SCSIZE ScColumn::GetPatternCount( SCROW nRw1, SCROW nRw2 )
+{
+    return this->pAttrArray ? this->pAttrArray->Count( nRw1, nRw2 ) : 0;
+}
 
-
-
+bool ScColumn::ReservedPatternCount( SCSIZE nReserved )
+{
+    return this->pAttrArray ? this->pAttrArray->Reserve( nReserved ) : false;
+}

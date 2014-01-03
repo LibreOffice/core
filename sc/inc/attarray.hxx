@@ -188,6 +188,11 @@ public:
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 
 //UNUSED2008-05  void    ConvertFontsAfterLoad();     // old binary file format
+
+    /* i123909: Pre-calculate needed memory, and pre-reserve enough memory */
+    bool    Reserve( SCSIZE nCount );
+    SCSIZE  Count() const{ return nCount; }
+    SCSIZE  Count( SCROW nRw1, SCROW nRw2 );
 };
 
 
