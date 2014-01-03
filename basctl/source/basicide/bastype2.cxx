@@ -193,8 +193,8 @@ TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)
     Init();
 }
 
-TreeListBox::TreeListBox (Window* pParent)
-    : SvTreeListBox(pParent, WB_TABSTOP)
+TreeListBox::TreeListBox (Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
     , m_aNotifier( *this )
 {
     Init();
@@ -207,9 +207,13 @@ void TreeListBox::Init()
     nMode = 0xFF;   // everything
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTreeListBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new TreeListBox(pParent);
+    WinBits nWinBits = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+    return new TreeListBox(pParent, nWinBits);
 }
 
 TreeListBox::~TreeListBox ()

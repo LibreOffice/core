@@ -206,7 +206,7 @@ protected:
 
 public:
     TreeListBox(Window* pParent, const ResId& rRes);
-    TreeListBox(Window* pParent);
+    TreeListBox(Window* pParent, WinBits nStyle);
     ~TreeListBox();
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
