@@ -46,7 +46,7 @@
 #include "aqua/salbmp.h"
 #include "aqua/salframe.h"
 #include "aqua/salcolorutils.hxx"
-#include "aqua/salatsuifontutils.hxx"
+#include "atsfonts.hxx"
 
 #include "fontsubset.hxx"
 #include "impfont.hxx"

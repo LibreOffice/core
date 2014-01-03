@@ -32,7 +32,7 @@
 
 #include "aqua/salgdi.h"
 #include "aqua/saldata.hxx"
-#include "aqua/salatsuifontutils.hxx"
+#include "atsfonts.hxx"
 #include "impfont.hxx"
 
 // -----------------------------------------------------------------------

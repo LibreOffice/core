@@ -25,7 +25,7 @@
 
 #include "aqua/saldata.hxx"
 #include "aqua/salgdi.h"
-#include "aqua/salatsuifontutils.hxx"
+#include "atsfonts.hxx"
 
 #include "sallayout.hxx"
 #include "salgdi.hxx"
@@ -541,7 +541,7 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, 
         ++nCount;
         sal_GlyphId aGlyphId = mpGlyphIds[ nStart];
 
-           // check if glyph fallback is needed for this glyph
+        // check if glyph fallback is needed for this glyph
         // TODO: use ATSUDirectGetLayoutDataArrayPtrFromTextLayout(kATSUDirectDataStyleIndex) API instead?
         const int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart + mnMinCharPos;
         ATSUFontID nFallbackFontID = kATSUInvalidFontID;
@@ -556,7 +556,7 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, 
                 mpFallbackInfo = new FallbackInfo;
             // register fallback font
             const int nLevel = mpFallbackInfo->AddFallback( nFallbackFontID );
-               // update sal_GlyphId with fallback level
+            // update sal_GlyphId with fallback level
             aGlyphId |= (nLevel << GF_FONTSHIFT);
         }
 
