@@ -492,7 +492,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 
     // Max segment size is 2^16 == SAL_MAX_UINT16
     sal_uInt64 nDataWritten = 0;
-    ISC_STATUS aErr;
+    ISC_STATUS aErr = 0;
     while (xBlob->length() - nDataWritten > 0)
     {
         sal_uInt64 nDataRemaining = xBlob->length() - nDataWritten;
@@ -592,7 +592,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
     // Max segment size is 2^16 == SAL_MAX_UINT16
     sal_uInt64 nDataWritten = 0;
-    ISC_STATUS aErr;
+    ISC_STATUS aErr = 0;
     while (xBytes.getLength() - nDataWritten > 0)
     {
         sal_uInt64 nDataRemaining = xBytes.getLength() - nDataWritten;
