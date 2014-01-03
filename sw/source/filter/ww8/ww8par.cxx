@@ -2124,7 +2124,6 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     OUString sAuthor;
     OUString sInitials;
-    OUString sName;
     if( bVer67 )
     {
         const WW67_ATRD* pDescri = (const WW67_ATRD*)pSD->GetData();
@@ -2157,7 +2156,6 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sal_uInt32 nTagBkmk = SVBT32ToUInt32(pDescri->ITagBkmk);
         if (nTagBkmk != 0xFFFFFFFF)
         {
-            sName = OUString::number(nTagBkmk);
             int nAtnIndex = GetAnnotationIndex(nTagBkmk);
             if (nAtnIndex != -1)
             {
@@ -2192,14 +2190,15 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     this->pFmtOfJustInsertedApo = 0;
     SwPostItField aPostIt(
         (SwPostItFieldType*)rDoc.GetSysFldType(RES_POSTITFLD), sAuthor,
-        sTxt, sInitials, sName, aDate );
+        sTxt, sInitials, OUString(), aDate );
     aPostIt.SetTextObject(pOutliner);
 
     // If this is a range, create the associated fieldmark.
     if (pPaM->HasMark())
     {
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
-        pMarksAccess->makeFieldBookmark(*pPaM, aPostIt.GetName(), ODF_COMMENTRANGE);
+        sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(*pPaM, OUString(), ODF_COMMENTRANGE);
+        aPostIt.SetName(pFieldmark->GetName());
         pPaM->Exchange();
         pPaM->DeleteMark();
     }

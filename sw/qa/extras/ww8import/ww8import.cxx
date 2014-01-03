@@ -194,7 +194,6 @@ DECLARE_WW8IMPORT_TEST(testFdo59530, "fdo59530.doc")
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("346376201"), getProperty<OUString>(xPropertySet, "Name"));
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
