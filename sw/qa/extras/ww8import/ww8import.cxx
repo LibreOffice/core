@@ -173,30 +173,6 @@ DECLARE_WW8IMPORT_TEST(testAllGapsWord, "all_gaps_word.doc")
     borderTest.testTheBorders(mxComponent);
 }
 
-DECLARE_WW8IMPORT_TEST(testFdo59530, "fdo59530.doc")
-{
-    // See ooxmlexport's testFdo38244().
-    // Test comment range feature.
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    xRunEnum->nextElement();
-    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
-    xRunEnum->nextElement();
-    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
-
-    // Test initials.
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
-}
-
 DECLARE_WW8IMPORT_TEST(testI120158, "i120158.doc")
 {
     // See https://issues.apache.org/ooo/show_bug.cgi?id=120158

@@ -1194,7 +1194,8 @@ struct WW8_Annotation
     OUString msOwner;
     OUString m_sInitials;
     DateTime maDateTime;
-    WW8_Annotation(const SwPostItField* pPostIt);
+    WW8_CP m_nRangeStart, m_nRangeEnd;
+    WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart, WW8_CP nRangeEnd);
     WW8_Annotation(const SwRedlineData* pRedline);
 };
 
@@ -1205,10 +1206,13 @@ private:
     WW8_WrPlcAnnotations(const WW8_WrPlcAnnotations&);
     WW8_WrPlcAnnotations& operator=(WW8_WrPlcAnnotations&);
     std::set<const SwRedlineData*> maProcessedRedlines;
+
+    WW8_CP  m_nLastRangeStartPos;
 public:
-    WW8_WrPlcAnnotations() {}
+    WW8_WrPlcAnnotations(): m_nLastRangeStartPos(-1){}
     ~WW8_WrPlcAnnotations();
 
+    void AddRangeStartPosition( WW8_CP nStartCp );
     void Append( WW8_CP nCp, const SwPostItField* pPostIt );
     void Append( WW8_CP nCp, const SwRedlineData* pRedLine );
     bool IsNewRedlineComment( const SwRedlineData* pRedLine );
