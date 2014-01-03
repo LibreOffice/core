@@ -2042,6 +2042,7 @@ void Test::testFuncLOOKUP()
         { "A", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
         { "B", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
         { "C", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
+        { 0, 0 } // terminator
     };
 
     // Insert check formulas into A5:B7.
