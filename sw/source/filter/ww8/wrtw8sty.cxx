@@ -2377,7 +2377,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                         // Commented text ranges as bookmarks (SttbfAtnBkmk)
                         rFib.fcSttbfAtnbkmk = nFcStart;
-                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xFFFF );                // SttbfAtnBkmk.fExtend
+                        SwWW8Writer::WriteShort( *rWrt.pTableStrm, (sal_Int16)(sal_uInt16)0xFFFF ); // SttbfAtnBkmk.fExtend
                         SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
                         SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
 
