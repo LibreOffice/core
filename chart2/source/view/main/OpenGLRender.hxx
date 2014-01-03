@@ -109,7 +109,11 @@ typedef struct TextInfo
     double rotation;
     float vertex[8];
 }TextInfo;
-
+typedef struct Area2DPointList
+{
+    float *pointBuf;
+    int bufLen;
+}Area2DPointList;
 /// Holds the information of our new child window
 struct GLWindow
 {
@@ -179,6 +183,11 @@ public:
 
     int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation);
     int RenderTextShape();
+
+    int SetArea2DShapePoint(float x, float y, int listLength);
+    int ProcessArea2D(com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShape > &xShape);
+    int RenderArea2DShape();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);
     int CreateTextureObj(int width, int height);
@@ -316,6 +325,9 @@ private:
     GLint m_TextTexCoordID;
     GLuint m_TextTexCoordBuf;
     GLint m_TextTexID;
+
+    Area2DPointList m_Area2DPointList;
+    list <Area2DPointList> m_Area2DShapePointList;
 
 };
 

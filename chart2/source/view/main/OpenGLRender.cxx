@@ -1520,5 +1520,104 @@ int OpenGLRender::CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize
     return 0;
 
 }
+int OpenGLRender::ProcessArea2D(uno::Reference< drawing::XShape > &xShape)
+{
+    //get point from shape
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    com::sun::star::uno::Sequence<drawing::PointSequence> pointss;
+    com::sun::star::uno::Any value = xProp->getPropertyValue(UNO_NAME_POLYPOLYGON);
+    value >>= pointss;
+    int pointsscount = pointss.getLength();
+
+    uno::Any co =  xProp->getPropertyValue(UNO_NAME_FILLCOLOR);
+    long *colorvalue = (long*)co.getValue();
+    SetColor(*colorvalue);
+    for(int i = 0; i < pointsscount; i++)
+    {
+        com::sun::star::uno::Sequence<com::sun::star::awt::Point> points = pointss[i];
+        int pointscount = points.getLength();
+        for(int j = 0; j < pointscount; j++)
+        {
+            com::sun::star::awt::Point p = points[j];
+            SetArea2DShapePoint((float)p.X, (float)p.Y, pointscount);
+        }
+    }
+    //render the shape
+    RenderArea2DShape();
+    m_fZStep += 0.01f;
+    return 0;
+}
+int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
+{
+    if (!m_Area2DPointList.pointBuf)
+    {
+        //a new point buffer should be alloc, we should push the old buffer first
+        m_Area2DPointList.bufLen = listLength * sizeof(float) * 3;
+        m_Area2DPointList.pointBuf = (float *)malloc(m_Area2DPointList.bufLen);
+    }
+    float actualX = (x / OPENGL_SCALE_VALUE) - ((float)m_iWidth / 2);
+    float actualY = (y / OPENGL_SCALE_VALUE) - ((float)m_iHeight / 2);
+    m_Area2DPointList.pointBuf[m_iPointNum++] = actualX;
+    m_Area2DPointList.pointBuf[m_iPointNum++] = actualY;
+    m_Area2DPointList.pointBuf[m_iPointNum++] = m_fZStep;
+    m_fPicLeft = actualX < m_fPicLeft ? actualX : m_fPicLeft;
+
+    m_fPicRight = actualX > m_fPicRight ? actualX : m_fPicRight;
+
+    m_fPicBottom = actualY < m_fPicBottom ? actualY : m_fPicBottom;
+
+    m_fPicTop = actualY > m_fPicTop ? actualY : m_fPicTop;
+
+    if (m_iPointNum == (listLength * 3))
+    {
+        m_Area2DShapePointList.push_back(m_Area2DPointList);
+        m_Area2DPointList.pointBuf = NULL;
+        m_iPointNum = 0;
+    }
+    return 0;
+}
+int OpenGLRender::RenderArea2DShape()
+{
+    glDisable(GL_MULTISAMPLE);
+    int listNum = m_Area2DShapePointList.size();
+    cout << "listNum = " << listNum << endl;
+    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    MoveModelf(trans, angle, scale);
+    m_MVP = m_Projection * m_View * m_Model;
+    for (int i = 0; i < listNum; i++)
+    {
+        Area2DPointList &pointList = m_Area2DShapePointList.front();
+        //fill vertex buffer
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, pointList.bufLen, pointList.pointBuf, GL_STATIC_DRAW);
+        // Use our shader
+        glUseProgram(m_CommonProID);
+
+        glUniform4fv(m_2DColorID, 1, &m_2DColor[0]);
+
+        glUniformMatrix4fv(m_MatrixID, 1, GL_FALSE, &m_MVP[0][0]);
+
+        // 1rst attribute buffer : vertices
+        glEnableVertexAttribArray(m_2DVertexID);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glVertexAttribPointer(
+            m_2DVertexID,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+            );
+        glDrawArrays(GL_POLYGON, 0, pointList.bufLen / sizeof(float) / 3); // 12*3 indices starting at 0 -> 12 triangles
+        glDisableVertexAttribArray(m_2DVertexID);
+        glUseProgram(0);
+        m_Area2DShapePointList.pop_front();
+        free(pointList.pointBuf);
+    }
+    glEnable(GL_MULTISAMPLE);
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
