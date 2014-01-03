@@ -48,6 +48,7 @@ namespace connectivity
         private:
             static const ::rtl::OUString our_sFirebirdTmpVar;
             static const ::rtl::OUString our_sFirebirdLockVar;
+            static const ::rtl::OUString our_sFirebirdMsgVar;
 
             css::uno::Reference<css::uno::XComponentContext> m_aContext;
             ::utl::TempFile m_firebirdTMPDirectory;

@@ -20,17 +20,11 @@
 
 #ifndef SYSTEM_FIREBIRD
 
-File gid_File_Firebird_Lib
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_LIB_DIR;
-  #if defined MACOSX
-    Name = "libfbembed.dylib";
-  #elif defined UNX
-    Name = STRING(CONCAT3(libfbembed,UNXSUFFIX,.2.5));
-  #else
-    Name = "ifbembed.dll";
-  #endif
+File gid_File_Firebird
+    TXT_FILE_BODY;
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "firebird.filelist";
 End
 
 #endif
