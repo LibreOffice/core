@@ -38,7 +38,7 @@ dispatch_queue_t backgroundQueue;
 // Received a set of instructions from server.
 // Marker equals to the end of the one command
 - (void) parse:(NSArray*)command{
-    uint marker = 0;
+    uint marker = 1;
     if ([command count] == 0) {
         return;
     }
@@ -49,18 +49,13 @@ dispatch_queue_t backgroundQueue;
                                                             object:nil];
         marker = 2;
     }
+    else if ([instruction isEqualToString:STATUS_SERVER_VERSION]){
+                  [[[[CommunicationManager sharedComManager] client] server] setServerVersion:[command objectAtIndex:1]];
+                  marker = 3;
+              }
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
-        // if LibO sends its remote server version, than this command should contain more than 3 items, we retrieve the version code and save it as a property of the server
-        if ([command count] > 3 && ![[command objectAtIndex:3] isEqualToString:@""]){
-            [[[[CommunicationManager sharedComManager] client] server] setServerVersion:[command objectAtIndex:3]];
-            marker = 4;
-        } else {
-            // Otherwise, we mark 3 as the end of this command (i.e. there is no version code sent to the client.
-            [[[[CommunicationManager sharedComManager] client] server] setServerVersion:@"Unspecified"];
-            marker = 3;
-        }
         // print out server info with server version / or unspecified if didn't receive it from the server
         NSLog(@"Connected to %@", [[[CommunicationManager sharedComManager] client] server].description);
     }
@@ -128,6 +123,7 @@ dispatch_queue_t backgroundQueue;
         NSRange range;
         range.location = marker;
         range.length = [command count] - marker;
+//        NSLog([command subarrayWithRange:range]);
         [self parse:[command subarrayWithRange:range]];
     }
 }
