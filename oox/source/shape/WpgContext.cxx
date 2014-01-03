@@ -22,6 +22,7 @@ WpgContext::WpgContext(ContextHandler2Helper& rParent)
     : ContextHandler2(rParent)
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+    mpShape->setWps(true);
 }
 
 WpgContext::~WpgContext()
@@ -56,6 +57,7 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
     case XML_grpSp:
     {
         oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+        pShape->setWps(true);
         return new oox::drawingml::ShapeGroupContext(*this, mpShape, pShape);
     }
     break;

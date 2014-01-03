@@ -2175,6 +2175,14 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     // This resulted in lang::IndexOutOfBoundsException, as nested groupshapes weren't handled.
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"), xShapeDescriptor->getShapeType());
+
+    // Right after import we get a rounding error: 8662 vs 8664.
+    if (m_bExported)
+    {
+        uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
+        // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), xYear->getSize().Width);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBezier, "bezier.odt")

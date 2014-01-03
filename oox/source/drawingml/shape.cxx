@@ -345,17 +345,22 @@ void Shape::addChildren(
 
     aChildTransformation.translate(-maChPosition.X, -maChPosition.Y);
     aChildTransformation.scale(1/(maChSize.Width ? maChSize.Width : 1.0), 1/(maChSize.Height ? maChSize.Height : 1.0));
-    aChildTransformation *= aTransformation;
+
+    // Child position and size is typically non-zero, but it's allowed to have
+    // it like that, and in that case Word ignores the parent transformation, it
+    // seems.
+    if (!mbWps || maChPosition.X || maChPosition.Y || maChSize.Width || maChSize.Height)
+        aChildTransformation *= aTransformation;
 
     SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "parent matrix:\n"
-             << aChildTransformation.get(0, 0)
-             << aChildTransformation.get(0, 1)
+             << aChildTransformation.get(0, 0) << " "
+             << aChildTransformation.get(0, 1) << " "
              << aChildTransformation.get(0, 2) << "\n"
-             << aChildTransformation.get(1, 0)
-             << aChildTransformation.get(1, 1)
-             << aChildTransformation.get(1, 2)
-             << aChildTransformation.get(2, 0)
-             << aChildTransformation.get(2, 1)
+             << aChildTransformation.get(1, 0) << " "
+             << aChildTransformation.get(1, 1) << " "
+             << aChildTransformation.get(1, 2) << "\n"
+             << aChildTransformation.get(2, 0) << " "
+             << aChildTransformation.get(2, 1) << " "
              << aChildTransformation.get(2, 2));
 
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
