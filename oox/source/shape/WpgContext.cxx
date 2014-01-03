@@ -46,7 +46,10 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_wsp:
     {
-        oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
+        // Don't set default character height, Writer has its own way to set
+        // the default, and if we don't set it here, editeng properly inherits
+        // it.
+        oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false));
         return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
     }
     break;

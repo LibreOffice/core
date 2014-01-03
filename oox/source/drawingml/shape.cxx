@@ -82,7 +82,7 @@ namespace oox { namespace drawingml {
 
 // ============================================================================
 
-Shape::Shape( const sal_Char* pServiceName )
+Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 : mbIsChild( false )
 , mpLinePropertiesPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
@@ -103,7 +103,7 @@ Shape::Shape( const sal_Char* pServiceName )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
-    setDefaults();
+    setDefaults(bDefaultHeight);
 }
 
 Shape::Shape( const ShapePtr& pSourceShape )
@@ -151,7 +151,7 @@ table::TablePropertiesPtr Shape::getTableProperties()
     return mpTablePropertiesPtr;
 }
 
-void Shape::setDefaults()
+void Shape::setDefaults(bool bHeight)
 {
     maDefaultShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
     maDefaultShapeProperties[ PROP_TextWordWrap ] <<= true;
@@ -159,7 +159,8 @@ void Shape::setDefaults()
     maDefaultShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
     maDefaultShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
     maDefaultShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maDefaultShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
+    if (bHeight)
+        maDefaultShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
     maDefaultShapeProperties[ PROP_TextVerticalAdjust ] <<= TextVerticalAdjust_TOP;
     maDefaultShapeProperties[ PROP_ParaAdjust ] <<= static_cast< sal_Int16 >( ParagraphAdjust_LEFT ); // check for RTL?
 }

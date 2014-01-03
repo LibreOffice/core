@@ -2198,6 +2198,17 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73215, "fdo73215.docx")
                 "name", "adj1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGroupshapeTextbox, "groupshape-textbox.docx")
+{
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // The VML export lost text on textboxes inside groupshapes.
+    // The DML export does not, make sure it stays that way.
+    CPPUNIT_ASSERT_EQUAL(OUString("first"), xShape->getString());
+    // This was 16, i.e. inheriting doc default char height didn't work.
+    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

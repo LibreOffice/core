@@ -72,7 +72,7 @@ class OOX_DLLPUBLIC Shape
 {
 public:
 
-    explicit Shape( const sal_Char* pServiceType = 0 );
+    explicit Shape( const sal_Char* pServiceType = 0, bool bDefaultHeight = true );
     explicit Shape( const ShapePtr& pSourceShape );
     virtual ~Shape();
 
@@ -126,7 +126,7 @@ public:
     const OptValue< sal_Int32 >&    getSubTypeIndex() const { return moSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
-    void                            setDefaults();
+    void                            setDefaults(bool bHeight);
 
     ::oox::vml::OleObjectInfo&      setOleObjectType();
     ChartShapeInfo&                 setChartType( bool bEmbedShapes );
