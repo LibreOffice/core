@@ -909,31 +909,22 @@ void ObjectPage::EndTabDialog( sal_uInt16 nRet )
         pTabDlg->EndDialog( nRet );
 }
 
-
 LibDialog::LibDialog( Window* pParent )
-    : ModalDialog( pParent, IDEResId( RID_DLG_LIBS ) ),
-        aOKButton(      this, IDEResId( RID_PB_OK ) ),
-        aCancelButton(  this, IDEResId( RID_PB_CANCEL ) ),
-        aStorageName(   this, IDEResId( RID_FT_STORAGENAME ) ),
-        aLibBox(        this, IDEResId( RID_CTRL_LIBS ) ),
-        aFixedLine(     this, IDEResId( RID_FL_OPTIONS ) ),
-        aReferenceBox(  this, IDEResId( RID_CB_REF ) ),
-        aReplaceBox(    this, IDEResId( RID_CB_REPL ) )
+    : ModalDialog(pParent, "ImportLibDialog", "modules/BasicIDE/ui/importlibdialog.ui")
 {
-    SetText( IDE_RESSTR(RID_STR_APPENDLIBS) );
-    FreeResource();
-}
-
-
-LibDialog::~LibDialog()
-{
+    get(m_pStorageFrame, "storageframe");
+    get(m_pReferenceBox, "ref");
+    get(m_pReplaceBox, "replace");
+    get(m_pLibBox, "entries");
+    m_pLibBox->set_height_request(m_pLibBox->GetTextHeight() * 8);
+    m_pLibBox->set_width_request(m_pLibBox->approximate_char_width() * 32);
 }
 
 void LibDialog::SetStorageName( const OUString& rName )
 {
     OUString aName( IDE_RESSTR(RID_STR_FILENAME) );
     aName += rName;
-    aStorageName.SetText( aName );
+    m_pStorageFrame->set_label(aName);
 }
 
 // Helper function

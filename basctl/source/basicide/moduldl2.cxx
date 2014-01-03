@@ -173,6 +173,26 @@ CheckBox::CheckBox( Window* pParent, const ResId& rResId )
     Init();
 }
 
+CheckBox::CheckBox(Window* pParent, WinBits nStyle)
+    : SvTabListBox(pParent, nStyle)
+    , eMode(ObjectMode::Module)
+    , m_aDocument(ScriptDocument::getApplicationScriptDocument())
+{
+    long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
+                                // 12 because of the CheckBox
+    SetTabs( aTabs_ );
+    Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCheckBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+    return new CheckBox(pParent, nWinBits);
+}
+
 //----------------------------------------------------------------------------
 
 CheckBox::~CheckBox()

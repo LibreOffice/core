@@ -23,17 +23,16 @@
 #include <svheader.hxx>
 
 #include <bastype2.hxx>
-#include <vcl/dialog.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <svtools/svtabbx.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
-#include <vcl/tabctrl.hxx>
-#include <vcl/lstbox.hxx>
 
 class SvxPasswordDialog;
 
@@ -125,7 +124,8 @@ private:
     void                Init();
 
 public:
-    CheckBox( Window* pParent, const ResId& rResId );
+    CheckBox(Window* pParent, const ResId& rResId);
+    CheckBox(Window* pParent, WinBits nStyle);
     ~CheckBox();
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
@@ -147,28 +147,23 @@ public:
 class LibDialog: public ModalDialog
 {
 private:
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-    FixedText       aStorageName;
-    CheckBox        aLibBox;
-    FixedLine       aFixedLine;
-    ::CheckBox      aReferenceBox;
-    ::CheckBox      aReplaceBox;
+    VclFrame*       m_pStorageFrame;
+    CheckBox*       m_pLibBox;
+    ::CheckBox*     m_pReferenceBox;
+    ::CheckBox*     m_pReplaceBox;
 
 public:
-                    LibDialog( Window* pParent );
-                    ~LibDialog();
+    LibDialog( Window* pParent );
 
     void            SetStorageName( const OUString& rName );
 
-    CheckBox&       GetLibBox()                 { return aLibBox; }
-    bool            IsReference() const         { return aReferenceBox.IsChecked(); }
-    bool            IsReplace() const           { return aReplaceBox.IsChecked(); }
+    CheckBox&       GetLibBox()                 { return *m_pLibBox; }
+    bool            IsReference() const         { return m_pReferenceBox->IsChecked(); }
+    bool            IsReplace() const           { return m_pReplaceBox->IsChecked(); }
 
-    void            EnableReference (bool b)    { aReferenceBox.Enable(b); }
-    void            EnableReplace (bool b)      { aReplaceBox.Enable(b); }
+    void            EnableReference (bool b)    { m_pReferenceBox->Enable(b); }
+    void            EnableReplace (bool b)      { m_pReplaceBox->Enable(b); }
 };
-
 
 class OrganizeDialog : public TabDialog
 {
