@@ -2069,6 +2069,7 @@ WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
     if (!mpRichText)
         msSimpleText = pPostIt->GetTxt();
     msOwner = pPostIt->GetPar1();
+    m_sInitials = pPostIt->GetInitials();
     maDateTime = DateTime(pPostIt->GetDate(), pPostIt->GetTime());
 }
 
@@ -2245,10 +2246,14 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
     return ( rCount != 0 );
 }
 
+static bool lcl_AuthorComp( const std::pair<OUString,OUString>& aFirst, const std::pair<OUString,OUString>& aSecond)
+{
+    return aFirst.first < aSecond.first;
+}
+
 void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     WW8_FC& rTxtStart, sal_Int32& rTxtCount, WW8_FC& rRefStart, sal_Int32& rRefCount ) const
 {
-    typedef ::std::vector<OUString>::iterator myiter;
 
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
     sal_uInt16 nLen = aCps.size();
@@ -2257,7 +2262,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
     OSL_ENSURE( aCps.size() + 2 == pTxtPos->Count(), "WritePlc: DeSync" );
 
-    ::std::vector<OUString> aStrArr;
+    ::std::vector<std::pair<OUString,OUString> > aStrArr;
+    typedef ::std::vector<std::pair<OUString,OUString> >::iterator myiter;
     WW8Fib& rFib = *rWrt.pFib;              // n+1-te CP-Pos nach Handbuch
     sal_uInt16 i;
     bool bWriteCP = true;
@@ -2270,11 +2276,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 for ( i = 0; i < nLen; ++i )
                 {
                     const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
-                    aStrArr.push_back(rAtn.msOwner);
+                    aStrArr.push_back(std::pair<OUString,OUString>(rAtn.msOwner,rAtn.m_sInitials));
                 }
 
                 //sort and remove duplicates
-                ::std::sort(aStrArr.begin(), aStrArr.end());
+                ::std::sort(aStrArr.begin(), aStrArr.end(),&lcl_AuthorComp);
                 myiter aIter = ::std::unique(aStrArr.begin(), aStrArr.end());
                 aStrArr.erase(aIter, aStrArr.end());
 
@@ -2282,9 +2288,9 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     for ( i = 0; i < aStrArr.size(); ++i )
                     {
-                        const OUString& rStr = aStrArr[i];
-                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, rStr.getLength());
-                        SwWW8Writer::WriteString16(*rWrt.pTableStrm, rStr,
+                        const OUString& sAuthor = aStrArr[i].first;
+                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, sAuthor.getLength());
+                        SwWW8Writer::WriteString16(*rWrt.pTableStrm, sAuthor,
                                 false);
                     }
                 }
@@ -2292,9 +2298,9 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     for ( i = 0; i < aStrArr.size(); ++i )
                     {
-                        const OUString& rStr = aStrArr[i];
-                        *rWrt.pTableStrm << (sal_uInt8)rStr.getLength();
-                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, rStr, false,
+                        const OUString& sAuthor = aStrArr[i].first;
+                        *rWrt.pTableStrm << (sal_uInt8)sAuthor.getLength();
+                        SwWW8Writer::WriteString8(*rWrt.pTableStrm, sAuthor, false,
                                 RTL_TEXTENCODING_MS_1252);
                     }
                 }
@@ -2409,35 +2415,36 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                 //aStrArr is sorted
                 myiter aIter = ::std::lower_bound(aStrArr.begin(),
-                        aStrArr.end(), rAtn.msOwner);
-                OSL_ENSURE(aIter != aStrArr.end() && *aIter == rAtn.msOwner,
+                        aStrArr.end(), std::pair<OUString,OUString>(rAtn.msOwner,OUString()),
+                        &lcl_AuthorComp);
+                OSL_ENSURE(aIter != aStrArr.end() && aIter->first == rAtn.msOwner,
                         "Impossible");
                 sal_uInt16 nFndPos = static_cast< sal_uInt16 >(aIter - aStrArr.begin());
-                OUString sAuthor(*aIter);
-                sal_uInt8 nNameLen = (sal_uInt8)sAuthor.getLength();
-                if ( nNameLen > 9 )
+                OUString sInitials( aIter->second );
+                sal_uInt8 nInitalsLen = (sal_uInt8)sInitials.getLength();
+                if ( nInitalsLen > 9 )
                 {
-                    sAuthor = sAuthor.copy( 0, 9 );
-                    nNameLen = 9;
+                    sInitials = sInitials.copy( 0, 9 );
+                    nInitalsLen = 9;
                 }
 
                 // xstUsrInitl[ 10 ] pascal-style String holding initials
                 // of annotation author
                 if ( rWrt.bWrtWW8 )
                 {
-                    SwWW8Writer::WriteShort(*rWrt.pTableStrm, nNameLen);
-                    SwWW8Writer::WriteString16(*rWrt.pTableStrm, sAuthor,
+                    SwWW8Writer::WriteShort(*rWrt.pTableStrm, nInitalsLen);
+                    SwWW8Writer::WriteString16(*rWrt.pTableStrm, sInitials,
                             false);
                     SwWW8Writer::FillCount( *rWrt.pTableStrm,
-                            (9 - nNameLen) * 2 );
+                            (9 - nInitalsLen) * 2 );
 
                 }
                 else
                 {
-                    *rWrt.pTableStrm << nNameLen;
-                    SwWW8Writer::WriteString8(*rWrt.pTableStrm, sAuthor,
+                    *rWrt.pTableStrm << nInitalsLen;
+                    SwWW8Writer::WriteString8(*rWrt.pTableStrm, sInitials,
                             false, RTL_TEXTENCODING_MS_1252);
-                    SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nNameLen);
+                    SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nInitalsLen);
                 }
 
                 // documents layout of WriteShort's below:

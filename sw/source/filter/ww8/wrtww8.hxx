@@ -1192,6 +1192,7 @@ struct WW8_Annotation
     const OutlinerParaObject* mpRichText;
     OUString msSimpleText;
     OUString msOwner;
+    OUString m_sInitials;
     DateTime maDateTime;
     WW8_Annotation(const SwPostItField* pPostIt);
     WW8_Annotation(const SwRedlineData* pRedline);
