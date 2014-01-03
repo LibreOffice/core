@@ -191,22 +191,21 @@ void Timer::ImplTimerCallbackProc()
     pSVData->mbNotAllTimerCalled = sal_False;
 }
 
-Timer::Timer()
+Timer::Timer():
+    mpTimerData(NULL),
+    mnTimeout(1),
+    mbActive(false),
+    mbAuto(false)
 {
-    mpTimerData     = NULL;
-    mnTimeout       = 1;
-    mbAuto          = false;
-    mbActive        = false;
 }
 
-Timer::Timer( const Timer& rTimer )
+Timer::Timer( const Timer& rTimer ):
+    mpTimerData(NULL),
+    mnTimeout(rTimer.mnTimeout),
+    mbActive(false),
+    mbAuto(false),
+    maTimeoutHdl(rTimer.maTimeoutHdl)
 {
-    mpTimerData     = NULL;
-    mnTimeout       = rTimer.mnTimeout;
-    mbAuto          = false;
-    mbActive        = false;
-    maTimeoutHdl    = rTimer.maTimeoutHdl;
-
     if ( rTimer.IsActive() )
         Start();
 }
@@ -217,7 +216,7 @@ Timer::~Timer()
     {
         mpTimerData->mbDelete = true;
         mpTimerData->mpTimer = NULL;
-    }
+     }
 }
 
 void Timer::Timeout()
@@ -256,7 +255,7 @@ void Timer::Start()
         }
 
         // insert timer and start
-        mpTimerData                 = new ImplTimerData;
+        mpTimerData = new ImplTimerData;
         mpTimerData->mpTimer        = this;
         mpTimerData->mnUpdateTime   = Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate  = pSVData->mnTimerUpdate;
