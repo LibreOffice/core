@@ -2016,4 +2016,28 @@ void ScDocument::ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
         maTabs[nTab]->ExtendPrintArea( pDev, nStartCol, nStartRow, rEndCol, nEndRow );
 }
 
+SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol )
+{
+    if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->GetPatternCount( nCol );
+    else
+        return 0;
+}
+
+SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRw1, SCROW nRw2 )
+{
+    if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->GetPatternCount( nCol, nRw1, nRw2 );
+    else
+        return 0;
+}
+
+bool ScDocument::ReservedPatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserved )
+{
+    if( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+        return maTabs[nTab]->ReservedPatternCount( nCol, nReserved );
+    else
+        return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

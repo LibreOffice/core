@@ -2698,6 +2698,26 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         if (nR2 > nRow2)
             nR2 = nRow2;
 
+        const SCCOLROW PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD = 8192;
+        bool bNeedPerformanceOptimization4Pattern = nRow2 - nRow1 > PERFORMANCEOPTIMIZATION4PATTERNTHRESHOLD;
+        std::vector< std::vector< SCSIZE > > vvPatternCount( bNeedPerformanceOptimization4Pattern ? nCol2 - nCol1 + 1 : 0 );
+        std::vector< SCTAB > vTables;
+
+        if (bNeedPerformanceOptimization4Pattern)
+        {
+            for (SCTAB i = aCxt.getTabStart(); i <= aCxt.getTabEnd(); ++i)
+                if (maTabs[i] && rMark.GetTableSelect( i ) )
+                    vTables.push_back( i );
+
+            for (SCSIZE i = 0; i < vvPatternCount.size(); ++i)
+            {
+                vvPatternCount[i].resize( vTables.size() );
+
+                for (std::vector< SCTAB >::size_type j = 0; j < vTables.size(); ++j)
+                    vvPatternCount[i][j] = this->GetPatternCount( vTables[j], nCol1+i );
+            }
+        }
+
         do
         {
             // Pasting is done column-wise, when pasting to a filtered
@@ -2731,6 +2751,21 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             nC2 = nC1 + nXw;
             if (nC2 > nCol2)
                 nC2 = nCol2;
+
+            if (bNeedPerformanceOptimization4Pattern && !vvPatternCount.empty())
+            {
+                for (SCSIZE i = 0; i < vvPatternCount.size(); ++i)
+                {
+                    vvPatternCount[i].resize( vTables.size() );
+
+                    for (std::vector< SCTAB >::size_type j = 0; j<vTables.size(); ++j)
+                        this->ReservedPatternCount( vTables[j], nCol1+i, vvPatternCount[i][j] + ( this->GetPatternCount( vTables[j], nCol1+i, nR1, nR2 ) ) * ( ( nRow2 - nRow1 + 1 ) / ( nYw + 1 ) ) );
+                }
+
+                bNeedPerformanceOptimization4Pattern = false;
+                vvPatternCount.clear();
+            }
+
             nR1 = nR2 + 1;
             nR2 = std::min((SCROW)(nR1 + nYw), nRow2);
         } while (nR1 <= nRow2);
