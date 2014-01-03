@@ -1900,7 +1900,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     if (pPaM->HasMark())
     {
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
-        sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(*pPaM, OString(), ODF_COMMENTRANGE);
+        sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(*pPaM, OUString(), ODF_COMMENTRANGE);
         aPostIt.SetName(pFieldmark->GetName());
         pPaM->Exchange();
         pPaM->DeleteMark();
