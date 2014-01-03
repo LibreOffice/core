@@ -2508,30 +2508,30 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                         "Impossible");
                 sal_uInt16 nFndPos = static_cast< sal_uInt16 >(aIter - aStrArr.begin());
                 OUString sInitials( aIter->second );
-                sal_uInt8 nInitalsLen = (sal_uInt8)sInitials.getLength();
-                if ( nInitalsLen > 9 )
+                sal_uInt8 nInitialsLen = (sal_uInt8)sInitials.getLength();
+                if ( nInitialsLen > 9 )
                 {
                     sInitials = sInitials.copy( 0, 9 );
-                    nInitalsLen = 9;
+                    nInitialsLen = 9;
                 }
 
                 // xstUsrInitl[ 10 ] pascal-style String holding initials
                 // of annotation author
                 if ( rWrt.bWrtWW8 )
                 {
-                    SwWW8Writer::WriteShort(*rWrt.pTableStrm, nInitalsLen);
+                    SwWW8Writer::WriteShort(*rWrt.pTableStrm, nInitialsLen);
                     SwWW8Writer::WriteString16(*rWrt.pTableStrm, sInitials,
                             false);
                     SwWW8Writer::FillCount( *rWrt.pTableStrm,
-                            (9 - nInitalsLen) * 2 );
+                            (9 - nInitialsLen) * 2 );
 
                 }
                 else
                 {
-                    *rWrt.pTableStrm << nInitalsLen;
+                    *rWrt.pTableStrm << nInitialsLen;
                     SwWW8Writer::WriteString8(*rWrt.pTableStrm, sInitials,
                             false, RTL_TEXTENCODING_MS_1252);
-                    SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nInitalsLen);
+                    SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nInitialsLen);
                 }
 
                 // documents layout of WriteShort's below:
