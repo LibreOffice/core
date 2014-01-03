@@ -80,7 +80,7 @@ namespace {
     }
 }
 
-ManageLanguageDialog::ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr ) :
+ManageLanguageDialog::ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr ) :
     ModalDialog( pParent, IDEResId( RID_DLG_MANAGE_LANGUAGE ) ),
     m_aLanguageFT       ( this, IDEResId( FT_LANGUAGE ) ),
     m_aLanguageLB       ( this, IDEResId( LB_LANGUAGE ) ),
@@ -91,7 +91,7 @@ ManageLanguageDialog::ManageLanguageDialog( Window* pParent, boost::shared_ptr<L
     m_aBtnLine          ( this, IDEResId( FL_BUTTONS ) ),
     m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
     m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
-    m_pLocalizationMgr  ( _pLMgr ),
+    m_xLocalizationMgr  ( xLMgr ),
     m_sDefLangStr       (IDE_RESSTR(STR_DEF_LANG)),
     m_sDeleteStr        (IDE_RESSTR(STR_DELETE)),
     m_sCreateLangStr    (IDE_RESSTR(STR_CREATE_LANG))
@@ -158,13 +158,13 @@ void ManageLanguageDialog::CalcInfoSize()
 
 void ManageLanguageDialog::FillLanguageBox()
 {
-    DBG_ASSERT( m_pLocalizationMgr, "ManageLanguageDialog::FillLanguageBox(): no localization manager" );
+    DBG_ASSERT( m_xLocalizationMgr, "ManageLanguageDialog::FillLanguageBox(): no localization manager" );
 
-    if ( m_pLocalizationMgr->isLibraryLocalized() )
+    if ( m_xLocalizationMgr->isLibraryLocalized() )
     {
         SvtLanguageTable aLangTable;
-        Locale aDefaultLocale = m_pLocalizationMgr->getStringResourceManager()->getDefaultLocale();
-        Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
+        Locale aDefaultLocale = m_xLocalizationMgr->getStringResourceManager()->getDefaultLocale();
+        Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
         sal_Int32 i, nCount = aLocaleSeq.getLength();
         for ( i = 0;  i < nCount;  ++i )
@@ -197,12 +197,12 @@ void ManageLanguageDialog::ClearLanguageBox()
 
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 {
-    SetDefaultLanguageDialog aDlg( this, m_pLocalizationMgr );
+    SetDefaultLanguageDialog aDlg( this, m_xLocalizationMgr );
     if ( RET_OK == aDlg.Execute() )
     {
         // add new locales
         Sequence< Locale > aLocaleSeq = aDlg.GetLocales();
-        m_pLocalizationMgr->handleAddLocales( aLocaleSeq );
+        m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
         // update listbox
         ClearLanguageBox();
         FillLanguageBox();
@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
         }
-        m_pLocalizationMgr->handleRemoveLocales( aLocaleSeq );
+        m_xLocalizationMgr->handleRemoveLocales( aLocaleSeq );
         // update listbox
         ClearLanguageBox();
         FillLanguageBox();
@@ -251,7 +251,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
         // set new default entry
-        m_pLocalizationMgr->handleSetDefaultLocale( pSelectEntry->m_aLocale );
+        m_xLocalizationMgr->handleSetDefaultLocale( pSelectEntry->m_aLocale );
         // update Listbox
         ClearLanguageBox();
         FillLanguageBox();
@@ -279,39 +279,34 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 
 // class SetDefaultLanguageDialog -----------------------------------------------
 
-SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr ) :
-
-    ModalDialog( pParent, IDEResId( RID_DLG_SETDEF_LANGUAGE ) ),
-    m_aLanguageFT   ( this, IDEResId( FT_DEF_LANGUAGE ) ),
-    m_pLanguageLB   ( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
-    m_pCheckLangLB  ( NULL ),
-    m_aInfoFT       ( this, IDEResId( FT_DEF_INFO ) ),
-    m_aBtnLine      ( this, IDEResId( FL_DEF_BUTTONS ) ),
-    m_aOKBtn        ( this, IDEResId( PB_DEF_OK ) ),
-    m_aCancelBtn    ( this, IDEResId( PB_DEF_CANCEL ) ),
-    m_aHelpBtn      ( this, IDEResId( PB_DEF_HELP ) ),
-    m_pLocalizationMgr( _pLMgr )
+SetDefaultLanguageDialog::SetDefaultLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
+    : ModalDialog(pParent, "DefaultLanguageDialog", "modules/BasicIDE/ui/defaultlanguage.ui")
+    , m_pCheckLangLB(NULL)
+    , m_xLocalizationMgr(xLMgr)
 {
-    if ( m_pLocalizationMgr->isLibraryLocalized() )
+    get(m_pLanguageLB, "entries");
+    get(m_pCheckLangLB, "checkedentries");
+    get(m_pDefinedFT, "defined");
+    get(m_pAddedFT, "added");
+    get(m_pLanguageFT, "defaultlabel");
+    get(m_pCheckLangFT, "checkedlabel");
+
+    m_pLanguageLB->set_height_request(m_pLanguageLB->GetTextHeight() * 10);
+    m_pCheckLangLB->set_height_request(m_pCheckLangLB->GetTextHeight() * 10);
+
+    if (m_xLocalizationMgr->isLibraryLocalized())
     {
         // change to "Add Interface Language" mode
-        SetHelpId( HID_BASICIDE_ADDNEW_LANGUAGE );
-        m_pCheckLangLB = new SvxCheckListBox( this, IDEResId( LB_ADD_LANGUAGE ) );
-        SetText( IDE_RESSTR(STR_ADDLANG_TITLE) );
-        m_aLanguageFT.SetText( IDE_RESSTR(STR_ADDLANG_LABEL) );
-        m_aInfoFT.SetText( IDE_RESSTR(STR_ADDLANG_INFO) );
+        m_pLanguageLB->Hide();
+        m_pCheckLangLB->Show();
+        SetText(get<FixedText>("alttitle")->GetText());
+        m_pLanguageFT->Hide();
+        m_pCheckLangFT->Show();
+        m_pDefinedFT->Hide();
+        m_pAddedFT->Show();
     }
 
-    FreeResource();
-
     FillLanguageBox();
-    CalcInfoSize();
-}
-
-SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
-{
-    delete m_pLanguageLB;
-    delete m_pCheckLangLB;
 }
 
 void SetDefaultLanguageDialog::FillLanguageBox()
@@ -319,14 +314,14 @@ void SetDefaultLanguageDialog::FillLanguageBox()
     // fill list with all languages
     m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, false );
     // remove the already localized languages
-    Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
+    Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();
     sal_Int32 i, nCount = aLocaleSeq.getLength();
     for ( i = 0;  i < nCount;  ++i )
         m_pLanguageLB->RemoveLanguage( LanguageTag::convertToLanguageType( pLocale[i] ) );
 
     // fill checklistbox if not in default mode
-    if ( m_pLocalizationMgr->isLibraryLocalized() )
+    if ( m_xLocalizationMgr->isLibraryLocalized() )
     {
         sal_uInt16 j, nCount_ = m_pLanguageLB->GetEntryCount();
         for ( j = 0;  j < nCount_;  ++j )
@@ -334,7 +329,6 @@ void SetDefaultLanguageDialog::FillLanguageBox()
             m_pCheckLangLB->InsertEntry(
                 m_pLanguageLB->GetEntry(j), LISTBOX_APPEND, m_pLanguageLB->GetEntryData(j) );
         }
-        delete m_pLanguageLB;
         m_pLanguageLB = NULL;
     }
     else
@@ -342,37 +336,9 @@ void SetDefaultLanguageDialog::FillLanguageBox()
         m_pLanguageLB->SelectLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
 }
 
-void SetDefaultLanguageDialog::CalcInfoSize()
-{
-    OUString sInfoStr = m_aInfoFT.GetText();
-    long nInfoWidth = m_aInfoFT.GetSizePixel().Width();
-    long nLongWord = getLongestWordWidth( sInfoStr, m_aInfoFT );
-    long nTxtWidth = m_aInfoFT.GetCtrlTextWidth( sInfoStr ) + nLongWord;
-    long nLines = ( nTxtWidth / nInfoWidth ) + 1;
-    if ( nLines > INFO_LINES_COUNT )
-    {
-        Size aFTSize = m_aLanguageFT.GetSizePixel();
-        Size aSize = m_aInfoFT.GetSizePixel();
-        long nNewHeight = aFTSize.Height() * nLines;
-        long nDelta = nNewHeight - aSize.Height();
-        aSize.Height() = nNewHeight;
-        m_aInfoFT.SetSizePixel( aSize );
-
-        Window* pWin = ( m_pLanguageLB != NULL ) ? dynamic_cast< Window* >( m_pLanguageLB )
-                                                 : dynamic_cast< Window* >( m_pCheckLangLB );
-        aSize = pWin->GetSizePixel();
-        aSize.Height() -= nDelta;
-        pWin->SetSizePixel( aSize );
-
-        Point aNewPos = m_aInfoFT.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        m_aInfoFT.SetPosPixel( aNewPos );
-    }
-}
-
 Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
 {
-    bool bNotLocalized = !m_pLocalizationMgr->isLibraryLocalized();
+    bool bNotLocalized = !m_xLocalizationMgr->isLibraryLocalized();
     sal_Int32 nSize = bNotLocalized ? 1 : m_pCheckLangLB->GetCheckedEntryCount();
     Sequence< Locale > aLocaleSeq( nSize );
     if ( bNotLocalized )

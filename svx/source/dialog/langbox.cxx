@@ -136,9 +136,15 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, sal_Bool bCheck 
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    SvxLanguageBox *pListBox = new SvxLanguageBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
+    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+    else
+        nBits |= WB_BORDER;
+    SvxLanguageBox *pListBox = new SvxLanguageBox(pParent, nBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

@@ -63,7 +63,7 @@ private:
     HelpButton          m_aHelpBtn;
     OKButton            m_aCloseBtn;
 
-    boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
+    boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
     OUString            m_sDefLangStr;
     OUString            m_sDeleteStr;
@@ -87,24 +87,19 @@ public:
 class SetDefaultLanguageDialog : public ModalDialog
 {
 private:
-    FixedText           m_aLanguageFT;
+    FixedText*          m_pLanguageFT;
     SvxLanguageBox*     m_pLanguageLB;
+    FixedText*          m_pCheckLangFT;
     SvxCheckListBox*    m_pCheckLangLB;
-    FixedText           m_aInfoFT;
+    FixedText*          m_pDefinedFT;
+    FixedText*          m_pAddedFT;
 
-    FixedLine           m_aBtnLine;
-    OKButton            m_aOKBtn;
-    CancelButton        m_aCancelBtn;
-    HelpButton          m_aHelpBtn;
-
-    boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
+    boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
     void                FillLanguageBox();
-    void                CalcInfoSize();
 
 public:
-    SetDefaultLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
-    ~SetDefaultLanguageDialog();
+    SetDefaultLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
 };

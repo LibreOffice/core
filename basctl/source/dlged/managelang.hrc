@@ -47,9 +47,6 @@
 #define PB_DEF_OK           6
 #define PB_DEF_CANCEL       7
 #define PB_DEF_HELP         8
-#define STR_ADDLANG_TITLE   9
-#define STR_ADDLANG_LABEL   10
-#define STR_ADDLANG_INFO    11
 
 // Metrics -----------------------------------------------------------------------
 

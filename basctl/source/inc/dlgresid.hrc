@@ -60,7 +60,6 @@
 
 #define RID_DLG_MANAGE_LANGUAGE             ( RID_DLG_START +  70 )
 #define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  71 )
-#define RID_DLG_SETDEF_LANGUAGE             ( RID_DLG_START +  72 )
 
 // -----------------------------------------------------------------------
 

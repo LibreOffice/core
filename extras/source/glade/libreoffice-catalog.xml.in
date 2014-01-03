@@ -187,10 +187,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
-                        generic-name="LanguageBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="Font ListBox" name="svtlo-FontStyleBox"
                         generic-name="FontStyleBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
@@ -495,6 +491,10 @@
     <glade-widget-class title="NumFormatListBox" name="swlo-NumFormatListBox"
                         generic-name="NumFormatListBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
+
+    <glade-widget-class title="Language ListBox" name="svxcorelo-SvxLanguageBox"
+                        generic-name="LanguageBox" parent="VclComboBoxText"
+                        icon-name="widget-gtk-combobox"/>
 
     <glade-widget-class title="Reference Button" name="foruilo-RefButton"
                         generic-name="Reference Button" parent="GtkButton"
