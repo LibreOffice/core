@@ -374,6 +374,8 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
             GlyphCache::GetInstance().RemovingGlyph( rGD );
             it = maGlyphList.erase( it );
         }
+        else
+            ++it;
     }
 }
 
