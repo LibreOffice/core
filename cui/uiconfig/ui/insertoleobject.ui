@@ -76,7 +76,7 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkTreeView" id="types">
+                      <object class="GtkTreeView" id="types:border">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <child internal-child="selection">
