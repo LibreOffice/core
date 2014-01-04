@@ -1101,7 +1101,6 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
         return fNan;
     }
 
-    // TODO:moggi handle time based charting
     const VDataSequence* pData = itr->second;
     double fValue = pData->getValue(nIndex);
     if(mpOldSeries && mpOldSeries->hasPropertyMapping(rPropName))
