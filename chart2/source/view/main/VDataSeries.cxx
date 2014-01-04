@@ -1069,6 +1069,7 @@ void VDataSeries::setOldTimeBased( VDataSeries* pOldSeries, double nPercent )
 {
     mnPercent = nPercent;
     mpOldSeries = pOldSeries;
+    mpOldSeries->mpOldSeries = NULL;
 }
 
 VDataSeries* VDataSeries::createCopyForTimeBased() const
@@ -1082,6 +1083,7 @@ VDataSeries* VDataSeries::createCopyForTimeBased() const
     pNew->m_aValues_Y_First = m_aValues_Y_First;
     pNew->m_aValues_Y_Last = m_aValues_Y_Last;
     pNew->m_aValues_Bubble_Size = m_aValues_Bubble_Size;
+    pNew->maPropertyMap = maPropertyMap;
 
     pNew->m_nPointCount = m_nPointCount;
 
@@ -1101,7 +1103,13 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
 
     // TODO:moggi handle time based charting
     const VDataSequence* pData = itr->second;
-    return pData->getValue(nIndex);
+    double fValue = pData->getValue(nIndex);
+    if(mpOldSeries && mpOldSeries->hasPropertyMapping(rPropName))
+    {
+        double fOldValue = mpOldSeries->getValueByProperty( nIndex, rPropName );
+        return fOldValue + (fValue - fOldValue) * mnPercent;
+    }
+    return fValue;
 }
 
 bool VDataSeries::hasPropertyMapping(const OUString& rPropName ) const
