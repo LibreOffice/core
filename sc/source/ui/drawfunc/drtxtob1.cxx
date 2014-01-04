@@ -94,7 +94,8 @@ sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
+    SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg(
+        pViewData->GetDialogParent(), &aNewAttr);
     OSL_ENSURE(pDlg, "Dialog create fail!");
     sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 

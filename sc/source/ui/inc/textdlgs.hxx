@@ -40,14 +40,13 @@ public:
 class ScParagraphDlg : public SfxTabDialog
 {
 private:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
+    sal_uInt16 m_nTabPageId;
+
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage);
 
 public:
-            ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr );
-            ~ScParagraphDlg() {}
+    ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr);
 };
-
-
 
 #endif
 

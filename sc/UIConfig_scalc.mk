@@ -114,6 +114,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/optimalrowheightdialog \
 	sc/uiconfig/scalc/ui/optsortlists \
 	sc/uiconfig/scalc/ui/pagetemplatedialog \
+	sc/uiconfig/scalc/ui/paradialog \
 	sc/uiconfig/scalc/ui/paratemplatedialog \
 	sc/uiconfig/scalc/ui/printareasdialog \
 	sc/uiconfig/scalc/ui/printeroptions \

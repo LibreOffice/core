@@ -1132,22 +1132,11 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg(
     return new ScAbstractTabDialog_Impl(pDlg);
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,
-                                                                            int nId )
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
+    Window* pParent, const SfxItemSet* pAttr)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_PARAGRAPH :
-            pDlg = new ScParagraphDlg( pParent, pAttr );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new ScParagraphDlg(pParent, pAttr);
+    return new ScAbstractTabDialog_Impl(pDlg);
 }
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg(Window* pParent,

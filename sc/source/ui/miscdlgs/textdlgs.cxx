@@ -67,36 +67,31 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 // -----------------------------------------------------------------------
 
-ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
-        SfxTabDialog        ( pParent, ScResId( RID_SCDLG_PARAGRAPH ), pAttr )
+ScParagraphDlg::ScParagraphDlg(Window* pParent, const SfxItemSet* pAttr)
+    : SfxTabDialog(pParent, "ParagraphDialog",
+        "modules/scalc/ui/paradialog.ui", pAttr)
+    , m_nTabPageId(0)
 {
-    FreeResource();
-
+    AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
     SvtCJKOptions aCJKOptions;
-
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
-    if ( aCJKOptions.IsAsianTypographyEnabled() )
-        AddTabPage( RID_SVXPAGE_PARA_ASIAN);
+    if (aCJKOptions.IsAsianTypographyEnabled() )
+        AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     else
-        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
-    AddTabPage( RID_SVXPAGE_TABULATOR );
+        RemoveTabPage("labelTP_PARA_ASIAN");
+    m_nTabPageId = AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
 // -----------------------------------------------------------------------
 
 void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch( nId )
+    if (nId == m_nTabPageId)
     {
-        case RID_SVXPAGE_TABULATOR:
-            {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,(TABTYPE_ALL &~TABTYPE_LEFT) |
-                                (TABFILL_ALL &~TABFILL_NONE) ));
-            rPage.PageCreated(aSet);
-            }
-        break;
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,
+            (TABTYPE_ALL &~TABTYPE_LEFT) | (TABFILL_ALL &~TABFILL_NONE)));
+        rPage.PageCreated(aSet);
     }
 }
 
