@@ -27,14 +27,14 @@ class SfxObjectShell;
 class ScCharDlg : public SfxTabDialog
 {
 private:
-    const SfxObjectShell&   rDocShell;
+    const SfxObjectShell& rDocShell;
+    sal_uInt16 m_nNamePageId;
+    sal_uInt16 m_nEffectsPageId;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage);
 public:
-            ScCharDlg( Window* pParent, const SfxItemSet* pAttr,
-                        const SfxObjectShell* pDocShell );
-            ~ScCharDlg() {}
+    ScCharDlg(Window* pParent, const SfxItemSet* pAttr,
+        const SfxObjectShell* pDocShell);
 };
 
 class ScParagraphDlg : public SfxTabDialog

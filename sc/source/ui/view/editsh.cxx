@@ -457,8 +457,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg( pViewData->GetDialogParent(), &aAttrs,
-                                                                     pObjSh, RID_SCDLG_CHAR );
+                SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(
+                    pViewData->GetDialogParent(), &aAttrs, pObjSh);
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {

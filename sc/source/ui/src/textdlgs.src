@@ -20,65 +20,6 @@
 #include <svx/dialogs.hrc>
 #include "sc.hrc"
 
-TabDialog RID_SCDLG_CHAR
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ en-US ] = "Character" ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_NAME ;
-                Text [ en-US ] = "Font";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ en-US ] = "Font Effects";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_POSITION ;
-                Text [ en-US ] = "Font Position";
-            };
-        };
-    };
-    OKButton 1
-    {
-        Pos = MAP_APPFONT ( 6 , 151 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton 1
-    {
-        Pos = MAP_APPFONT ( 60 , 151 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton 1
-    {
-        Pos = MAP_APPFONT ( 114 , 151 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    PushButton 1
-    {
-        Pos = MAP_APPFONT ( 169 , 151 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Back" ;
-        TabStop = TRUE ;
-    };
-};
-
 TabDialog RID_SCDLG_PARAGRAPH
 {
     OutputSize = TRUE ;

@@ -1049,7 +1049,6 @@
 
 
 
-#define RID_SCDLG_CHAR                  (SC_DIALOGS_START + 76)
 #define RID_SCDLG_PARAGRAPH             (SC_DIALOGS_START + 77)
 #define RID_SCDLG_CONTACTS              (SC_DIALOGS_START + 78)
 

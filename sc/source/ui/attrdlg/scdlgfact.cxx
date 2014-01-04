@@ -1125,22 +1125,11 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(Window*
     return new ScAbstractTabDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg( Window* pParent, const SfxItemSet* pAttr,
-                                                    const SfxObjectShell* pDocShell, int nId )
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg(
+    Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_CHAR :
-            pDlg = new ScCharDlg( pParent, pAttr, pDocShell );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new ScCharDlg(pParent, pAttr, pDocShell);
+    return new ScAbstractTabDialog_Impl(pDlg);
 }
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,

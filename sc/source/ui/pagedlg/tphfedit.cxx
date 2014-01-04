@@ -216,8 +216,8 @@ void ScEditWindow::SetCharAttriutes()
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  GetParent(),  &aSet,
-                                                            pDocSh,RID_SCDLG_CHAR );
+        SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(
+            GetParent(),  &aSet, pDocSh);
         OSL_ENSURE(pDlg, "Dialog create fail!");
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
