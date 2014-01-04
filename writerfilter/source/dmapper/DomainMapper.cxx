@@ -743,13 +743,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_UNUSED0_6:
             // really unused
             break;
-        case NS_rtf::LN_shd:
-            break;
-        case NS_rtf::LN_cellShd:
-            break;
-        case NS_rtf::LN_cellTopColor:
         case NS_rtf::LN_cellLeftColor:
-        case NS_rtf::LN_cellBottomColor:
         case NS_rtf::LN_cellRightColor:
             OSL_FAIL("handled by DomainMapperTableManager");
         break;

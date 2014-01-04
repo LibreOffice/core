@@ -102,9 +102,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
     {
-        case NS_rtf::LN_cellTopColor:
         case NS_rtf::LN_cellLeftColor:
-        case NS_rtf::LN_cellBottomColor:
         case NS_rtf::LN_cellRightColor:
             // nIntValue contains the color, directly
         break;

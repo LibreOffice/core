@@ -33642,28 +33642,6 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="shd">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:shd</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="SHD"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
@@ -33700,36 +33678,6 @@
               <UML:TaggedValue.dataValue>rtf:sprmTCellShd</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="shd">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:cellShd</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="CellShd"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34964,28 +34912,6 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="cellTopColor">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:cellTopColor</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="U32"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
@@ -35083,36 +35009,6 @@
               <UML:TaggedValue.dataValue>rtf:sprmTCellBottomColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="cellBottomColor">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:cellBottomColor</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="U32"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
