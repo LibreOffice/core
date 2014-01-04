@@ -29,11 +29,10 @@ namespace chart
 class ShapeParagraphDialog : public SfxTabDialog
 {
 public:
-    ShapeParagraphDialog( Window* pParent, const SfxItemSet* pAttr );
-    virtual ~ShapeParagraphDialog();
-
+    ShapeParagraphDialog(Window* pParent, const SfxItemSet* pAttr);
 private:
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
+    sal_uInt16 m_nTabPageId;
 };
 
 } //  namespace chart

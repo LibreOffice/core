@@ -32,46 +32,35 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ShapeParagraphDialog::ShapeParagraphDialog( Window* pParent, const SfxItemSet* pAttr )
-    :SfxTabDialog( pParent, SchResId( DLG_SHAPE_PARAGRAPH ), pAttr )
+ShapeParagraphDialog::ShapeParagraphDialog(Window* pParent,
+    const SfxItemSet* pAttr)
+    : SfxTabDialog(pParent, "ParagraphDialog",
+        "modules/schart/ui/paradialog.ui", pAttr)
+    , m_nTabPageId(0)
 {
-    FreeResource();
-
     SvtCJKOptions aCJKOptions;
 
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
-    if ( aCJKOptions.IsAsianTypographyEnabled() )
+    AddTabPage("labelTP_PARA_STD",  RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH );
+    if (aCJKOptions.IsAsianTypographyEnabled())
     {
-        AddTabPage( RID_SVXPAGE_PARA_ASIAN );
+        AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     }
     else
     {
-        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
+        RemoveTabPage("labelTP_PARA_ASIAN");
     }
-    AddTabPage( RID_SVXPAGE_TABULATOR );
-}
-
-ShapeParagraphDialog::~ShapeParagraphDialog()
-{
+    m_nTabPageId = AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
 void ShapeParagraphDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
-    SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
-    switch ( nId )
+    if (nId == m_nTabPageId)
     {
-        case RID_SVXPAGE_TABULATOR:
-            {
-                aSet.Put( SfxUInt16Item( SID_SVXTABULATORTABPAGE_CONTROLFLAGS,
-                    ( TABTYPE_ALL &~TABTYPE_LEFT ) | ( TABFILL_ALL &~TABFILL_NONE ) ) );
-                rPage.PageCreated( aSet );
-            }
-            break;
-        default:
-            {
-            }
-            break;
+        SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
+        aSet.Put( SfxUInt16Item( SID_SVXTABULATORTABPAGE_CONTROLFLAGS,
+            ( TABTYPE_ALL &~TABTYPE_LEFT ) | ( TABFILL_ALL &~TABFILL_NONE ) ) );
+        rPage.PageCreated( aSet );
     }
 }
 
