@@ -231,7 +231,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
         const ::std::vector< XMLPropertyState >* pProperties,
         sal_uInt32 nIdx ) const
 {
-    XMLPageMasterExportPropMapper* pThis = (XMLPageMasterExportPropMapper*) this;
+    XMLPageMasterExportPropMapper* pThis = const_cast<XMLPageMasterExportPropMapper*>(this);
 
     sal_uInt32 nContextId = getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex );
     switch( nContextId )
