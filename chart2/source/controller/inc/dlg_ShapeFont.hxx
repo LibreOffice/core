@@ -31,14 +31,14 @@ class ViewElementListProvider;
 class ShapeFontDialog : public SfxTabDialog
 {
 public:
-    ShapeFontDialog( Window* pParent, const SfxItemSet* pAttr,
-        const ViewElementListProvider* pViewElementListProvider );
-    virtual ~ShapeFontDialog();
-
+    ShapeFontDialog(Window* pParent, const SfxItemSet* pAttr,
+        const ViewElementListProvider* pViewElementListProvider);
 private:
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 
     const ViewElementListProvider* m_pViewElementListProvider;
+    sal_uInt16 m_nNamePageId;
+    sal_uInt16 m_nEffectsPageId;
 };
 
 } //  namespace chart

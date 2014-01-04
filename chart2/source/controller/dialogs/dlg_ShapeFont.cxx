@@ -36,41 +36,29 @@ namespace chart
 
 ShapeFontDialog::ShapeFontDialog( Window* pParent, const SfxItemSet* pAttr,
     const ViewElementListProvider* pViewElementListProvider )
-    :SfxTabDialog( pParent, SchResId( DLG_SHAPE_FONT ), pAttr )
-    ,m_pViewElementListProvider( pViewElementListProvider )
+    : SfxTabDialog(pParent, "CharDialog",
+        "modules/schart/ui/chardialog.ui", pAttr)
+    , m_pViewElementListProvider(pViewElementListProvider)
+    , m_nNamePageId(0)
+    , m_nEffectsPageId(0)
 {
-    FreeResource();
-
-    AddTabPage( RID_SVXPAGE_CHAR_NAME );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
-    AddTabPage( RID_SVXPAGE_CHAR_POSITION );
-}
-
-ShapeFontDialog::~ShapeFontDialog()
-{
+    m_nNamePageId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+    m_nEffectsPageId = AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage("position", RID_SVXPAGE_CHAR_POSITION );
 }
 
 void ShapeFontDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
     SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
-    switch ( nId )
+    if (nId == m_nNamePageId)
     {
-        case RID_SVXPAGE_CHAR_NAME:
-            {
-                aSet.Put( SvxFontListItem( m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST ) );
-                rPage.PageCreated( aSet );
-            }
-            break;
-        case RID_SVXPAGE_CHAR_EFFECTS:
-            {
-                aSet.Put( SfxUInt16Item( SID_DISABLE_CTL, DISABLE_CASEMAP ) );
-                rPage.PageCreated( aSet );
-            }
-            break;
-        default:
-            {
-            }
-            break;
+        aSet.Put( SvxFontListItem( m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST ) );
+        rPage.PageCreated( aSet );
+    }
+    else if (nId == m_nEffectsPageId)
+    {
+        aSet.Put( SfxUInt16Item( SID_DISABLE_CTL, DISABLE_CASEMAP ) );
+        rPage.PageCreated( aSet );
     }
 }
 

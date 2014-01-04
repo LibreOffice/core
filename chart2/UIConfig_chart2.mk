@@ -32,6 +32,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/schart,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/3dviewdialog \
 	chart2/uiconfig/ui/attributedialog \
+	chart2/uiconfig/ui/chardialog \
 	chart2/uiconfig/ui/dlg_DataLabel \
 	chart2/uiconfig/ui/dlg_InsertErrorBars \
 	chart2/uiconfig/ui/insertaxisdlg \
