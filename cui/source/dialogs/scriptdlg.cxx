@@ -60,6 +60,7 @@
 #include <tools/urlobj.hxx>
 #include <vector>
 #include <algorithm>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -922,9 +923,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             }
         }
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
         do
@@ -1052,9 +1051,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         }
         sal_uInt16 nMode = INPUTMODE_RENAME;
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
         sal_Bool bValid;
