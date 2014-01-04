@@ -1057,7 +1057,7 @@ void RTFDocumentImpl::text(OUString& rString)
                             if (m_aStates.top().aTableAttributes.find(NS_rtf::LN_SGC))
                             {
                                 RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
-                                m_aStates.top().aTableAttributes.set(NS_rtf::LN_XSTZNAME1, pValue);
+                                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
                                 writerfilter::Reference<Properties>::Pointer_t const pProp(
                                         new RTFReferenceProperties(mergeAttributes(), mergeSprms())

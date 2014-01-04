@@ -3365,18 +3365,6 @@
               </UML:ModelElement.taggedValue>
             </UML:Attribute>
           </UML:Classifier.feature>
-          <UML:Classifier.feature>
-            <UML:Operation name="xstzName1">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:XSTZNAME1</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-            </UML:Operation>
-          </UML:Classifier.feature>
         </UML:Class>
         <!--Class Style-->
         <!--Class Fib-->

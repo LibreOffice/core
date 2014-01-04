@@ -732,8 +732,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
             sLocalBookmarkName = OUString();
         break;
-        case NS_rtf::LN_XSTZNAME1:
-            break;
         case NS_rtf::LN_TLC:
             //tab leading characters - for decimal tabs
         case NS_rtf::LN_JC:
