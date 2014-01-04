@@ -347,6 +347,8 @@ void PieChart::createShapes()
         if(!pSeries)
             continue;
 
+        bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+
         m_pPosHelper->m_fAngleDegreeOffset = pSeries->getStartingAngle();
 
         double fLogicYSum = 0.0;
@@ -431,6 +433,13 @@ void PieChart::createShapes()
                                     , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
                                     , fUnitCircleInnerRadius, fUnitCircleOuterRadius
                                     , fLogicZ, fDepth, fExplodePercentage, apOverwritePropertiesMap.get() ) );
+
+                if(bHasFillColorMapping)
+                {
+                    uno::Reference< beans::XPropertySet > xProps( xPointShape, uno::UNO_QUERY_THROW );
+                    xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(
+                                    pSeries->getValueByProperty(nPointIndex, "FillColor"))));
+                }
 
                 //create label
                 if( pSeries->getDataPointLabelIfLabel(nPointIndex) )
