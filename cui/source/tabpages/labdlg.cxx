@@ -50,12 +50,6 @@
 #define AT_MITTE        1
 #define AT_UNTEN        2
 
-#define WK_OPTIMAL      0
-#define WK_30           1
-#define WK_45           2
-#define WK_60           3
-#define WK_90           4
-
 // static ----------------------------------------------------------------
 
 static sal_uInt16 pCaptionRanges[] =
@@ -81,8 +75,6 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     aCT_CAPTTYPE(       this, CUI_RES( CT_CAPTTYPE ) ),
     aFT_ABSTAND(        this, CUI_RES( FT_ABSTAND ) ),
     aMF_ABSTAND(        this, CUI_RES( MF_ABSTAND ) ),
-    aFT_WINKEL(         this, CUI_RES( FT_WINKEL ) ),
-    aLB_WINKEL(         this, CUI_RES( LB_WINKEL ) ),
     aFT_ANSATZ(         this, CUI_RES( FT_ANSATZ ) ),
     aLB_ANSATZ(         this, CUI_RES( LB_ANSATZ ) ),
     aFT_UM(             this, CUI_RES( FT_UM ) ),
@@ -98,10 +90,6 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
 
     rOutAttrs       ( rInAttrs )
 {
-    //------------NYI-------------------------------------------
-    aFT_WINKEL.Hide();
-    aLB_WINKEL.Hide();
-
     //------------correct positions-------------------------
     aFT_ANSATZ_REL.SetPosPixel( aFT_UM.GetPosPixel() );
     aLB_ANSATZ_REL.SetPosPixel(
@@ -257,10 +245,6 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     sal_uInt16          nWhich;
     SfxMapUnit      eUnit;
 
-    //------- angle ----------
-    nWhich = GetWhich( SDRATTR_CAPTIONANGLE );
-    nFixedAngle = ( ( const SdrCaptionAngleItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
-
     nWhich = GetWhich( SDRATTR_CAPTIONESCABS );
     eUnit = pPool->GetMetric( nWhich );
     nEscAbs = ( ( const SdrCaptionEscAbsItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
@@ -285,7 +269,6 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nGap = static_cast<long>(aMF_ABSTAND.GetValue());
 
     nCaptionType = (short)( ( const SdrCaptionTypeItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
-    bFixedAngle = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFIXEDANGLE ) ) ).GetValue();
     bFitLineLen = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
     nEscDir = (short)( ( const SdrCaptionEscDirItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
     bEscRel = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
@@ -302,7 +285,6 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 
     nAnsatzRelPos=AT_MITTE;
     nAnsatzTypePos=AZ_OPTIMAL;
-    nWinkelTypePos=WK_OPTIMAL;
 
     aMF_ABSTAND.SetValue( nGap );
 
@@ -343,23 +325,10 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
         nAnsatzTypePos = AZ_OPTIMAL;
     }
 
-    if( bFixedAngle )
-    {
-        if( nFixedAngle <= 3000 )
-            nWinkelTypePos=WK_30;
-        else if( nFixedAngle <= 4500 )
-            nWinkelTypePos=WK_45;
-        else if( nFixedAngle <= 6000 )
-            nWinkelTypePos=WK_60;
-        else
-            nWinkelTypePos=WK_90;
-    }
-
     aCB_LAENGE.Check( bFitLineLen );
     aMF_LAENGE.SetValue( nLineLen );
 
     aLB_ANSATZ.SelectEntryPos( nAnsatzTypePos );
-    aLB_WINKEL.SelectEntryPos( nWinkelTypePos );
 
     SetupAnsatz_Impl( nAnsatzTypePos );
     aCT_CAPTTYPE.SelectItem( nCaptionType+1 ); // Enum starts at 0!
@@ -505,32 +474,24 @@ void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
     switch( nType-1 )
     {
         case SDRCAPT_TYPE1:
-        aFT_WINKEL.Disable();
-        aLB_WINKEL.Disable();
         aFT_LAENGE.Disable();
         aCB_LAENGE.Disable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE2:
-        aFT_WINKEL.Enable();
-        aLB_WINKEL.Enable();
         aFT_LAENGE.Disable();
         aCB_LAENGE.Disable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE3:
-        aFT_WINKEL.Enable();
-        aLB_WINKEL.Enable();
         aFT_LAENGE.Enable();
         aCB_LAENGE.Enable();
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
 
         case SDRCAPT_TYPE4:
-        aFT_WINKEL.Enable();
-        aLB_WINKEL.Enable();
         aFT_LAENGE.Enable();
         aCB_LAENGE.Enable();
         LineOptHdl_Impl( &aCB_LAENGE );

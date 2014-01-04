@@ -36,8 +36,6 @@ private:
     ValueSet        aCT_CAPTTYPE;
     FixedText       aFT_ABSTAND;
     MetricField     aMF_ABSTAND;
-    FixedText       aFT_WINKEL;
-    ListBox         aLB_WINKEL;
     FixedText       aFT_ANSATZ;
     ListBox         aLB_ANSATZ;
     FixedText       aFT_UM;
@@ -54,8 +52,6 @@ private:
     OUString        aStrVertList;
 
     short           nCaptionType;
-    sal_Bool            bFixedAngle;
-    sal_Int32           nFixedAngle;
     sal_Int32           nGap;
     short           nEscDir;
     sal_Bool            bEscRel;

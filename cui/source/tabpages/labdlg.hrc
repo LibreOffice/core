@@ -24,7 +24,6 @@
 #define BTN_HELP                1
 
 #define FT_ABSTAND              1
-#define FT_WINKEL               2
 #define FT_ANSATZ               3
 #define FT_LAENGE               4
 #define FT_UM                   5
@@ -38,7 +37,6 @@
 
 #define CB_LAENGE               1
 
-#define LB_WINKEL               1
 #define LB_ANSATZ               2
 #define LB_ANSATZ_REL           3
 
