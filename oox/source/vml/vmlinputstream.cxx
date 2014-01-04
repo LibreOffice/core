@@ -98,11 +98,11 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
     {
         // pcNameBeg points to begin of attribute name, find equality sign
         const sal_Char* pcEqualSign = lclFindCharacter( pcNameBeg, pcEnd, '=' );
-        if( (bOk = pcEqualSign < pcEnd) == true )
+        if ((bOk = (pcEqualSign < pcEnd)) == true)
         {
             // find end of attribute name (ignore whitespace between name and equality sign)
             const sal_Char* pcNameEnd = lclTrimWhiteSpaceFromEnd( pcNameBeg, pcEqualSign );
-            if( (bOk = pcNameBeg < pcNameEnd) == true )
+            if( (bOk = (pcNameBeg < pcNameEnd)) == true )
             {
                 // find begin of attribute value (must be single or double quote)
                 const sal_Char* pcValueBeg = lclFindNonWhiteSpace( pcEqualSign + 1, pcEnd );
@@ -110,7 +110,7 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
                 {
                     // find end of attribute value (matching quote character)
                     const sal_Char* pcValueEnd = lclFindCharacter( pcValueBeg + 1, pcEnd, *pcValueBeg );
-                    if( (bOk = pcValueEnd < pcEnd) == true )
+                    if( (bOk = (pcValueEnd < pcEnd)) == true )
                     {
                         ++pcValueEnd;
                         OString aAttribName( pcNameBeg, static_cast< sal_Int32 >( pcNameEnd - pcNameBeg ) );
