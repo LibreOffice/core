@@ -427,68 +427,36 @@ void SFTreeListBox::ExpandedHdl()
 // CuiInputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
-    : ModalDialog( pParent, CUI_RES( RID_DLG_NEWLIB ) ),
-        aText( this, CUI_RES( FT_NEWLIB ) ),
-        aEdit( this, CUI_RES( ED_LIBNAME ) ),
-        aOKButton( this, CUI_RES( PB_OK ) ),
-        aCancelButton( this, CUI_RES( PB_CANCEL ) )
+    : ModalDialog(pParent, "NewLibDialog",
+        "cui/ui/newlibdialog.ui")
 {
-    aEdit.GrabFocus();
-    if ( nMode == INPUTMODE_NEWLIB )
+    get(m_pEdit, "entry");
+    m_pEdit->GrabFocus();
+
+    FixedText *pNewLibFT = get<FixedText>("newlibft");
+
+    if ( nMode == INPUTMODE_NEWMACRO )
     {
-        SetText( OUString( CUI_RES( STR_NEWLIB ) ) );
-    }
-    else if ( nMode == INPUTMODE_NEWMACRO )
-    {
-        SetText( OUString( CUI_RES( STR_NEWMACRO ) ) );
-        aText.SetText( OUString( CUI_RES( STR_FT_NEWMACRO ) ) );
+        pNewLibFT->Hide();
+        FixedText *pNewMacroFT = get<FixedText>("newmacroft");
+        pNewMacroFT->Show();
+        SetText(get<FixedText>("altmacrotitle")->GetText());
     }
     else if ( nMode == INPUTMODE_RENAME )
     {
-        SetText( OUString( CUI_RES( STR_RENAME ) ) );
-        aText.SetText( OUString( CUI_RES( STR_FT_RENAME ) ) );
+        pNewLibFT->Hide();
+        FixedText *pRenameFT = get<FixedText>("renameft");
+        pRenameFT->Show();
+        SetText(get<FixedText>("altrenametitle")->GetText());
     }
-    FreeResource();
-
-    // some resizing so that the text fits
-    Point point, newPoint;
-    Size siz, newSiz;
-    long gap;
-
-    sal_uInt16 style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
-                   TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK;
-
-    // get dimensions of dialog instructions control
-    point = aText.GetPosPixel();
-    siz = aText.GetSizePixel();
-
-    // get dimensions occupied by text in the control
-    Rectangle rect =
-        GetTextRect( Rectangle( point, siz ), aText.GetText(), style );
-    newSiz = rect.GetSize();
-
-    // the gap is the difference between the text width and its control width
-    gap = siz.Height() - newSiz.Height();
-
-    //resize the text field
-    newSiz = Size( siz.Width(), siz.Height() - gap );
-    aText.SetSizePixel( newSiz );
-
-    //move the OK & cancel buttons
-    point = aEdit.GetPosPixel();
-    newPoint = Point( point.X(), point.Y() - gap );
-    aEdit.SetPosPixel( newPoint );
-
 }
 
-CuiInputDialog::~CuiInputDialog()
-{
-}
 // ----------------------------------------------------------------------------
 // ScriptOrgDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
-    : SfxModalDialog(pParent, "ScriptOrganizerDialog", "cui/ui/scriptorganizer.ui")
+    : SfxModalDialog(pParent, "ScriptOrganizerDialog",
+        "cui/ui/scriptorganizer.ui")
     , m_sLanguage(language)
     , m_delErrStr(CUI_RESSTR(RID_SVXSTR_DELFAILED))
     , m_delErrTitleStr(CUI_RESSTR(RID_SVXSTR_DELFAILED_TITLE))

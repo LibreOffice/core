@@ -101,23 +101,22 @@ public:
 class CuiInputDialog : public ModalDialog
 {
 private:
-    FixedText       aText;
-    Edit            aEdit;
-    OKButton        aOKButton;
-    CancelButton    aCancelButton;
-
+    Edit* m_pEdit;
 public:
-    CuiInputDialog( Window * pParent, sal_uInt16 nMode );
-    ~CuiInputDialog();
+    CuiInputDialog(Window * pParent, sal_uInt16 nMode);
 
-    OUString    GetObjectName() const { return aEdit.GetText(); }
-    void        SetObjectName( const OUString& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.getLength() ) );}
+    OUString GetObjectName() const { return m_pEdit->GetText(); }
+    void SetObjectName(const OUString& rName)
+    {
+        m_pEdit->SetText( rName );
+        m_pEdit->SetSelection( Selection( 0, rName.getLength() ) );
+    }
 };
 
 class SFEntry
 {
 private:
-    sal_uInt8           nType;
+    sal_uInt8       nType;
     bool            loaded;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > model;

@@ -241,7 +241,6 @@
 
 // script organizer
 #define RID_DLG_SCRIPTORGANIZER             (RID_SVX_START + 258)
-#define RID_DLG_NEWLIB                      (RID_SVX_START + 290)
 #define RID_SVXSTR_DELQUERY                 (RID_SVX_START + 1027)
 #define RID_SVXSTR_DELQUERY_TITLE           (RID_SVX_START + 1028)
 #define RID_SVXSTR_DELFAILED                (RID_SVX_START + 1029)
