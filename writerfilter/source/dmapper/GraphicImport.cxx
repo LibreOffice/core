@@ -251,7 +251,6 @@ public:
     bool            bSizeProtected;
     bool            bPositionProtected;
 
-    bool            bInShapeOptionMode;
     sal_Int32       nShapeOptionType;
 
     OUString sName;
@@ -311,7 +310,6 @@ public:
         ,bVertFlip(false)
         ,bSizeProtected(false)
         ,bPositionProtected(false)
-        ,bInShapeOptionMode(false)
         {}
 
     void setXSize(sal_Int32 _nXSize)
@@ -457,7 +455,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_LCB: break;//byte count
         case NS_rtf::LN_CBHEADER: break;//ignored
         case NS_rtf::LN_MFP: //MetafilePict
-        case NS_rtf::LN_shpopt: //shape options
         case NS_rtf::LN_shpfbse: //BLIP store entry
         case NS_rtf::LN_BRCTOP: //top border
         case NS_rtf::LN_BRCLEFT: //left border
@@ -479,9 +476,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                     case NS_rtf::LN_BRCRIGHT: //right border
                         m_pImpl->nCurrentBorderLine = BORDER_RIGHT;
                     break;
-                    case NS_rtf::LN_shpopt:
-                        m_pImpl->bInShapeOptionMode = true;
-                    break;
                     default:;
                 }
             writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
@@ -489,13 +483,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             {
                 pProperties->resolve(*this);
             }
-                switch(nName)
-                {
-                    case NS_rtf::LN_shpopt:
-                        m_pImpl->bInShapeOptionMode = false;
-                    break;
-                    default:;
-                }
         }
         break;
         case NS_rtf::LN_payload :

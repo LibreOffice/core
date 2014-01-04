@@ -81,31 +81,6 @@ const Id </xsl:text>
   </xsl:for-each>
 </xsl:for-each>
 <xsl:text>
-
-/* Operations */</xsl:text>
-<xsl:for-each select='.//UML:Operation[@name!="reserved"][count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0]'>
-  <xsl:variable name="pos" select="position()"/>
-  <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
-    <xsl:choose>
-      <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
-      <xsl:otherwise>
-        <xsl:text>
-const Id </xsl:text>
-<xsl:call-template name='idtoqname'>
-  <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text> = </xsl:text>
-<xsl:variable name="id" select="20000 + $pos"/>
-<xsl:value-of select='$id'/>
-<xsl:text>; // 0x</xsl:text>
-<xsl:call-template name="dectohex">
-  <xsl:with-param name="number" select="$id"/>
-</xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-</xsl:for-each>
-<xsl:text>
 }
 }
 
