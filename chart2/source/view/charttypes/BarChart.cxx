@@ -549,6 +549,8 @@ void BarChart::createShapes()
                     if(!pSeries)
                         continue;
 
+                    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+
                     bOnlyConnectionLinesForThisPoint = false;
 
                     if(nPointIndex==nStartIndex)//do not create a regression line for each point
@@ -783,6 +785,13 @@ void BarChart::createShapes()
                                 pPosHelper->transformScaledLogicToScene( aPoly );
                                 xShape = m_pShapeFactory->createArea2D( xPointGroupShape_Shapes, aPoly );
                                 this->setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+                            }
+
+                            if(bHasFillColorMapping)
+                            {
+                                uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+                                xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(
+                                                pSeries->getValueByProperty(nPointIndex, "FillColor"))));
                             }
                             //set name/classified ObjectID (CID)
                             ShapeFactory::setShapeName(xShape
