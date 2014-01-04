@@ -218,6 +218,8 @@ DataSourceTabPage::DataSourceTabPage(
     get(m_pEDT_CATEGORIES ,"EDT_CATEGORIES");
     get(m_pIMB_RANGE_CAT  ,"IMB_RANGE_CAT");
 
+    m_pBtn_AddMapping = NULL;
+
     m_pFT_CAPTION->Show(!bHideDescription);
 
     m_aFixedTextRange = OUString( m_pFT_RANGE->GetText() );
@@ -245,6 +247,11 @@ DataSourceTabPage::DataSourceTabPage(
     // #i75179# enable setting the background to a different color
     m_pEDT_RANGE->SetStyle( m_pEDT_RANGE->GetStyle() | WB_FORCECTRLBACKGROUND );
     m_pEDT_CATEGORIES->SetStyle( m_pEDT_CATEGORIES->GetStyle() | WB_FORCECTRLBACKGROUND );
+
+    // mapped properties
+#if 0
+    m_pBtn_AddMapping->SetClickHdl( LINK( this, DataSourceTabPage, AddMappingHdl ));
+#endif
 
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo
@@ -754,7 +761,16 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
     return 0;
 }
 
-void DataSourceTabPage::listeningFinished(const OUString & rNewRange )
+IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
+{
+    OUString aNewMappingName = "FillColor";
+    m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aNewMappingName, OUString()));
+
+    return 0;
+}
+
+void DataSourceTabPage::listeningFinished(
+    const OUString & rNewRange )
 {
     // rNewRange becomes invalid after removing the listener
     OUString aRange( rNewRange );

@@ -88,6 +88,7 @@ protected:
     DECL_LINK( RangeUpdateDataHdl, Edit* );
     DECL_LINK( UpButtonClickedHdl, void* );
     DECL_LINK( DownButtonClickedHdl, void* );
+    DECL_LINK( AddMappingHdl, void* );
 
     // ____ RangeSelectionListenerParent ____
     virtual void listeningFinished( const OUString & rNewRange );
@@ -108,8 +109,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelectionListener >
         getSelectionRangeListener();
 
-    /** @return </sal_True>, if the edit field contains a valid range entry. if no
-        XCellRangesAccess can be obtained, </sal_True> is returned.
+    /** @return </sal_True>, if the edit field contains a valid range entry. If no
+        XCellRangesAccess can be obtained, </sal_False> is returned.
      */
     bool isRangeFieldContentValid( Edit & rEdit );
 
@@ -142,6 +143,7 @@ private:
     FixedText*     m_pFT_DATALABELS;//used for xy charts
     Edit*          m_pEDT_CATEGORIES;
     PushButton*    m_pIMB_RANGE_CAT;
+    PushButton*    m_pBtn_AddMapping;
 
     OUString       m_aFixedTextRange;
 

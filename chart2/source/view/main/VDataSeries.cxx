@@ -226,6 +226,12 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                     m_aValues_Y_Last.init( xDataSequence );
                 else if (aRole == "values-size")
                     m_aValues_Bubble_Size.init( xDataSequence );
+                else
+                {
+                    VDataSequence* pSequence = new VDataSequence();
+                    pSequence->init( xDataSequence );
+                    maPropertyMap.insert(aRole, pSequence);
+                }
             }
             catch( const uno::Exception& e )
             {
@@ -1080,6 +1086,27 @@ VDataSeries* VDataSeries::createCopyForTimeBased() const
     pNew->m_nPointCount = m_nPointCount;
 
     return pNew;
+}
+
+double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropName ) const
+{
+    boost::ptr_map<OUString, VDataSequence>::const_iterator itr =
+        maPropertyMap.find(rPropName);
+    if(itr == maPropertyMap.end())
+    {
+        double fNan;
+        ::rtl::math::setNan( & fNan );
+        return fNan;
+    }
+
+    // TODO:moggi handle time based charting
+    const VDataSequence* pData = itr->second;
+    return pData->getValue(nIndex);
+}
+
+bool VDataSeries::hasPropertyMapping(const OUString& rPropName ) const
+{
+    return maPropertyMap.find(rPropName) != maPropertyMap.end();
 }
 
 } //namespace chart

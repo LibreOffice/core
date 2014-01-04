@@ -36,6 +36,7 @@
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 namespace chart
 {
@@ -92,6 +93,10 @@ public:
 
     double      getMinimumofAllDifferentYValues( sal_Int32 index ) const;
     double      getMaximumofAllDifferentYValues( sal_Int32 index ) const;
+
+    double      getValueByProperty( sal_Int32 index, const OUString& rPropName ) const;
+
+    bool        hasPropertyMapping( const OUString& rPropName ) const;
 
     ::com::sun::star::uno::Sequence< double > getAllX() const;
     ::com::sun::star::uno::Sequence< double > getAllY() const;
@@ -213,6 +218,8 @@ private: //member
     VDataSequence   m_aValues_Bubble_Size;
 
     VDataSequence*  m_pValueSequenceForDataLabelNumberFormatDetection;
+
+    boost::ptr_map<OUString, VDataSequence> maPropertyMap;
 
     mutable double m_fXMeanValue;
     mutable double m_fYMeanValue;

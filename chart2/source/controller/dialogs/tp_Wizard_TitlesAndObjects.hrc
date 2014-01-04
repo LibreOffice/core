@@ -33,4 +33,6 @@
 #define ED_TIME_START         5
 #define ED_TIME_END           6
 
+#define BTN_ADDMAPPING    160
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -248,6 +248,8 @@ void BubbleChart::createShapes()
                     if(!pSeries)
                         continue;
 
+                    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
@@ -318,6 +320,13 @@ void BubbleChart::createShapes()
                         this->setMappedProperties( xShape
                                 , pSeries->getPropertiesOfPoint( nIndex )
                                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+
+                        if(bHasFillColorMapping)
+                        {
+                            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+                            xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(
+                                            pSeries->getValueByProperty(nIndex, "FillColor"))));
+                        }
 
                         m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
 
