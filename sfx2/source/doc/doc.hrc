@@ -26,9 +26,9 @@
 #define RID_SFX_DOC_END                     (RID_SFX_DIALOG_START-1)
 
 #define STR_NODEFPRINTER                    (RID_SFX_DOC_START+ 0)
-#define STR_PRINT_OPTIONS                   (RID_SFX_DOC_START+ 6)
-#define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 7)
-#define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 8)
+#define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 1)
+#define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 2)
+
 #define MSG_CONFIRM_FILTER                  (RID_SFX_DOC_START+11)
 #define MSG_CONFIRM_OVERWRITE_TEMPLATE      (RID_SFX_DOC_START+12)
 
