@@ -30,7 +30,6 @@ public:
     void testN757118();
     void testN757905();
     void testAllGapsWord();
-    void testFdo59530();
     void testI120158();
     void testN816603();
     void testN816593();
@@ -59,7 +58,6 @@ void Test::run()
         {"n757118.doc", &Test::testN757118},
         {"n757905.doc", &Test::testN757905},
         {"all_gaps_word.doc", &Test::testAllGapsWord},
-        {"fdo59530.doc", &Test::testFdo59530},
         {"i120158.doc", &Test::testI120158},
         {"n816603.doc", &Test::testN816603},
         {"n816593.doc", &Test::testN816593},
