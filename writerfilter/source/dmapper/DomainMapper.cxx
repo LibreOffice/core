@@ -734,18 +734,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_rtf::LN_XSTZNAME1:
             break;
-        case NS_rtf::LN_tbdAdd:
-            //
-            {
-                writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
-                if( pProperties.get())
-                {
-                    pProperties->resolve(*this);
-                    //increment to the next tab stop
-                    m_pImpl->NextTabStop();
-                }
-            }
-            break;
         case NS_rtf::LN_TLC:
             //tab leading characters - for decimal tabs
         case NS_rtf::LN_JC:
@@ -754,8 +742,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_rtf::LN_UNUSED0_6:
             // really unused
-            break;
-        case NS_rtf::LN_rgbrc:
             break;
         case NS_rtf::LN_shd:
             break;

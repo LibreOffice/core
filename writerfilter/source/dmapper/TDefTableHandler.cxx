@@ -283,23 +283,6 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
     (void)rName;
     switch( rName )
     {
-        case NS_rtf::LN_cellx:
-            // nIntValue contains the vert. line position
-            //TODO: nIntValue is wrong for negative values!
-            if( nIntValue > 0x7fff )
-                nIntValue -= 0xffff;
-            m_aCellBorderPositions.push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
-        break;
-        case NS_rtf::LN_tc:
-        {
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-            if( pProperties.get())
-            {
-                pProperties->resolve( *this );
-            }
-        }
-        break;
-        //from LN_tc
         case NS_rtf::LN_FFIRSTMERGED:
         case NS_rtf::LN_FMERGED:
         case NS_rtf::LN_FVERTICAL:

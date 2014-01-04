@@ -58,19 +58,6 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
     {
-        case NS_rtf::LN_rgbrc:
-        {
-            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-            if( pProperties.get())
-            {
-                pProperties->resolve(*this);
-                ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
-                                                                                m_aBorderLines[m_nCurrentBorderPosition], m_bOOXML );
-                OSL_ENSURE(m_nCurrentBorderPosition < BORDER_COUNT, "too many border values");
-                ++m_nCurrentBorderPosition;
-            }
-        }
-        break;
         case NS_ooxml::LN_CT_Border_sz:
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = nIntValue * 5 / 2;

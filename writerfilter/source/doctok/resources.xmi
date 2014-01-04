@@ -27198,44 +27198,6 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="tbdAdd">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:tbdAdd</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>array of tab descriptors corresponding to rgdxaAdd</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="comment"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="TBD"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPChgTabsPapx-->
         <!--SPRM sprmPDxaRight-->
@@ -33564,45 +33526,7 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="rgbbrc">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:rgbrc</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="BRC"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
         </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="sprmTTableBorders-Properties">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="sprmTTableBorders"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Properties"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
         <!--SPRM sprmTTableBorders-->
         <!--SPRM sprmTDefTable10-->
         <UML:Class xmi.id="sprmTDefTable10" name="sprmTDefTable10">
@@ -33684,56 +33608,6 @@
               <UML:TaggedValue.dataValue>rtf:sprmTDefTable</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:Classifier.feature>
-            <UML:Operation name="cellx">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:cellx</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="U16"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-            <UML:Operation name="tc">
-              <UML:ModelElement.taggedValue>
-                <UML:TaggedValue>
-                  <UML:TaggedValue.dataValue>rtf:tc</UML:TaggedValue.dataValue>
-                  <UML:TaggedValue.type>
-                    <UML:TagDefinition xmi.idref="opid"/>
-                  </UML:TaggedValue.type>
-                </UML:TaggedValue>
-              </UML:ModelElement.taggedValue>
-              <UML:BehavioralFeature.parameter>
-                <UML:Parameter kind="return" name="return">
-                  <UML:Parameter.type>
-                    <UML:Class xmi.idref="TC"/>
-                  </UML:Parameter.type>
-                </UML:Parameter>
-              </UML:BehavioralFeature.parameter>
-              <UML:ModelElement.stereotype>
-                <UML:Stereotype xmi.idref="array"/>
-              </UML:ModelElement.stereotype>
-            </UML:Operation>
-          </UML:Classifier.feature>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
