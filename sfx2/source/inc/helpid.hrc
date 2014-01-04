@@ -129,7 +129,6 @@
 #define HID_HELP_ONSTARTUP_BOX                                "SFX2_HID_HELP_ONSTARTUP_BOX"
 #define HID_DLG_CHECKFORONLINEUPDATE                          "SFX2_HID_DLG_CHECKFORONLINEUPDATE"
 #define HID_CTRL_CUSTOMPROPS_YES_NO                           "SFX2_HID_CTRL_CUSTOMPROPS_YES_NO"
-#define HID_DLG_CUSTOMPROPS_DURATION                          "SFX2_HID_DLG_CUSTOMPROPS_DURATION"
 
 #define HID_HELP_ONHELP                                       "SFX2_HID_HELP_ONHELP"
 

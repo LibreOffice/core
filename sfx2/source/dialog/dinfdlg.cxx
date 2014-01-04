@@ -1199,87 +1199,60 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( Window* pParent, const
     m_aYesButton.SetBackground( aWall );
     m_aNoButton.SetBackground( aWall );
 }
+
 class DurationDialog_Impl : public ModalDialog
 {
-    FixedLine       aDurationFL;
-
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-
-    CheckBox        aNegativeCB;
-    FixedText       aYearFT;
-    NumericField    aYearNF;
-    FixedText       aMonthFT;
-    NumericField    aMonthNF;
-    FixedText       aDayFT;
-    NumericField    aDayNF;
-    FixedText       aHourFT;
-    NumericField    aHourNF;
-    FixedText       aMinuteFT;
-    NumericField    aMinuteNF;
-    FixedText       aSecondFT;
-    NumericField    aSecondNF;
-    FixedText       aMSecondFT;
-    NumericField    aMSecondNF;
+    CheckBox*       m_pNegativeCB;
+    NumericField*   m_pYearNF;
+    NumericField*   m_pMonthNF;
+    NumericField*   m_pDayNF;
+    NumericField*   m_pHourNF;
+    NumericField*   m_pMinuteNF;
+    NumericField*   m_pSecondNF;
+    NumericField*   m_pMSecondNF;
 
 public:
 
     DurationDialog_Impl( Window* pParent, const util::Duration& rDuration );
-    ~DurationDialog_Impl();
 
     util::Duration  GetDuration() const;
 };
 
-DurationDialog_Impl::DurationDialog_Impl(
-    Window* pParent, const util::Duration& rDuration)
-        :   ModalDialog( pParent, SfxResId( RID_EDIT_DURATIONS ) ),
-            aDurationFL(this, SfxResId( FL_DURATION       )),
-            aOKPB(      this, SfxResId( PB_OK       )),
-            aCancelPB(  this, SfxResId( PB_CANCEL   )),
-            aHelpPB(    this, SfxResId( PB_HELP     )),
-            aNegativeCB(this, SfxResId( CB_NEGATIVE     )),
-            aYearFT(    this, SfxResId( FT_YEAR         )),
-            aYearNF(    this, SfxResId( ED_YEAR         )),
-            aMonthFT(   this, SfxResId( FT_MONTH        )),
-            aMonthNF(   this, SfxResId( ED_MONTH        )),
-            aDayFT(     this, SfxResId( FT_DAY          )),
-            aDayNF(     this, SfxResId( ED_DAY          )),
-            aHourFT(    this, SfxResId( FT_HOUR         )),
-            aHourNF(    this, SfxResId( ED_HOUR         )),
-            aMinuteFT(  this, SfxResId( FT_MINUTE       )),
-            aMinuteNF(  this, SfxResId( ED_MINUTE       )),
-            aSecondFT(  this, SfxResId( FT_SECOND       )),
-            aSecondNF(  this, SfxResId( ED_SECOND       )),
-            aMSecondFT( this, SfxResId( FT_MSECOND      )),
-            aMSecondNF( this, SfxResId( ED_MSECOND      ))
+DurationDialog_Impl::DurationDialog_Impl(Window* pParent,
+    const util::Duration& rDuration)
+    : ModalDialog(pParent, "EditDurationDialog",
+        "sfx/ui/editdurationdialog.ui")
 {
-    FreeResource();
-    aNegativeCB.Check(rDuration.Negative);
-    aYearNF.SetValue(rDuration.Years);
-    aMonthNF.SetValue(rDuration.Months );
-    aDayNF.SetValue(rDuration.Days   );
-    aHourNF.SetValue(rDuration.Hours  );
-    aMinuteNF.SetValue(rDuration.Minutes);
-    aSecondNF.SetValue(rDuration.Seconds);
-    aMSecondNF.SetValue(rDuration.NanoSeconds);
-}
+    get(m_pNegativeCB, "negative");
+    get(m_pYearNF, "years");
+    get(m_pMonthNF, "months");
+    get(m_pDayNF, "days");
+    get(m_pHourNF, "hours");
+    get(m_pMinuteNF, "minutes");
+    get(m_pSecondNF, "seconds");
+    get(m_pMSecondNF, "milliseconds");
 
-DurationDialog_Impl::~DurationDialog_Impl()
-{
+    m_pNegativeCB->Check(rDuration.Negative);
+    m_pYearNF->SetValue(rDuration.Years);
+    m_pMonthNF->SetValue(rDuration.Months);
+    m_pDayNF->SetValue(rDuration.Days);
+    m_pHourNF->SetValue(rDuration.Hours);
+    m_pMinuteNF->SetValue(rDuration.Minutes);
+    m_pSecondNF->SetValue(rDuration.Seconds);
+    m_pMSecondNF->SetValue(rDuration.NanoSeconds);
 }
 
 util::Duration  DurationDialog_Impl::GetDuration() const
 {
     util::Duration  aRet;
-    aRet.Negative = aNegativeCB.IsChecked();
-    aRet.Years = aYearNF.GetValue();
-    aRet.Months = aMonthNF.GetValue( );
-    aRet.Days = aDayNF.GetValue(   );
-    aRet.Hours  = aHourNF.GetValue( );
-    aRet.Minutes = aMinuteNF.GetValue();
-    aRet.Seconds = aSecondNF.GetValue();
-    aRet.NanoSeconds = aMSecondNF.GetValue();
+    aRet.Negative = m_pNegativeCB->IsChecked();
+    aRet.Years = m_pYearNF->GetValue();
+    aRet.Months = m_pMonthNF->GetValue( );
+    aRet.Days = m_pDayNF->GetValue(   );
+    aRet.Hours  = m_pHourNF->GetValue( );
+    aRet.Minutes = m_pMinuteNF->GetValue();
+    aRet.Seconds = m_pSecondNF->GetValue();
+    aRet.NanoSeconds = m_pMSecondNF->GetValue();
     return aRet;
 }
 
