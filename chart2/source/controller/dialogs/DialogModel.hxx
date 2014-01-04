@@ -47,6 +47,15 @@ namespace chart
 
 class RangeSelectionHelper;
 
+struct TimeBasedInfo
+{
+    TimeBasedInfo();
+
+    bool bTimeBased;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+};
+
 class DialogModel
 {
 public:
@@ -142,7 +151,9 @@ public:
     bool setData( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rArguments );
 
-    void setTimeBasedRange( sal_Int32 nStart, sal_Int32 nEnd) const;
+    void setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const;
+
+    const TimeBasedInfo& getTimeBasedInfo() const { return maTimeBasedInfo; }
 
     void startControllerLockTimer();
 
@@ -183,6 +194,7 @@ private:
     sal_Int32 countSeries() const;
 
     ChartModel& getModel() const;
+    mutable TimeBasedInfo maTimeBasedInfo;
 };
 
 } //  namespace chart

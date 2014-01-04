@@ -367,6 +367,13 @@ struct lcl_addSeriesNumber : public ::std::binary_function<
 namespace chart
 {
 
+TimeBasedInfo::TimeBasedInfo():
+    bTimeBased(false),
+    nStart(0),
+    nEnd(0)
+{
+}
+
 DialogModel::DialogModel(
     const Reference< XChartDocument > & xChartDocument,
     const Reference< uno::XComponentContext > & xContext ) :
@@ -377,7 +384,12 @@ DialogModel::DialogModel(
 }
 
 DialogModel::~DialogModel()
-{}
+{
+    if(maTimeBasedInfo.bTimeBased)
+    {
+        getModel().setTimeBasedRange(maTimeBasedInfo.nStart, maTimeBasedInfo.nEnd);
+    }
+}
 
 void DialogModel::setTemplate(
     const Reference< XChartTypeTemplate > & xTemplate )
@@ -716,9 +728,11 @@ bool DialogModel::setData(
     return true;
 }
 
-void DialogModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd) const
+void DialogModel::setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const
 {
-    getModel().setTimeBasedRange(nStart, nEnd);
+    maTimeBasedInfo.nStart = nStart;
+    maTimeBasedInfo.nEnd = nEnd;
+    maTimeBasedInfo.bTimeBased = bTimeBased;
 }
 
 OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString )

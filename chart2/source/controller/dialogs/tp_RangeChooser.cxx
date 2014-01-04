@@ -243,7 +243,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             {
                 sal_Int32 nStart = m_pEd_TimeStart->GetText().toInt32();
                 sal_Int32 nEnd = m_pEd_TimeEnd->GetText().toInt32();
-                m_rDialogModel.setTimeBasedRange(nStart, nEnd);
+                m_rDialogModel.setTimeBasedRange(true, nStart, nEnd);
             }
         }
 
