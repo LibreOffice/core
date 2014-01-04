@@ -945,6 +945,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 
                     *pValue <<= static_cast<sal_Int32>( pDocSh->pTree->GetFormulaBaseline() );
                 }
+                break;
             }
             case HANDLE_INTEROP_GRAB_BAG:
                 getGrabBagItem(*pValue);
