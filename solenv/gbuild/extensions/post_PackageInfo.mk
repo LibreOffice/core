@@ -28,6 +28,7 @@ define gb_PackageInfo_emit_binaries_command
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf))
 @$(foreach executable,$(gb_Executable_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Executable_get_target,$(executable)))" >> $(gb_PackageInfo_get_target)/$(1).executables &&) true
 @$(foreach library,$(gb_Library_MODULE_$(1)),echo "$(patsubst $(INSTDIR)/%,%,$(call gb_Library_get_target,$(library)))" >> $(gb_PackageInfo_get_target)/$(1).libraries &&) true
+@echo "$(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
 endef
 
@@ -40,6 +41,7 @@ define gb_PackageInfo_emit_help_for_one_lang
 @touch $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/help-$(1).$(suf))
 $(foreach target,$(gb_AllLangHelp_ALLTARGETS),$(call gb_PackageInfo_emit_help_for_one_target,$(1)/$(target),$(gb_PackageInfo_get_target)/help-$(1).files))
 $(foreach suf,html css,$(foreach file,$(wildcard $(INSTDIR)/help/$(1)/*.$(suf)),echo "$(patsubst $(INSTDIR)/%,%,$(file))" >> $(gb_PackageInfo_get_target)/help-$(1).files && )) true
+@echo " $(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/help-$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
 endef
 
@@ -70,19 +72,26 @@ $(if $(filter-out qtz en-US,$(1)),$(foreach packagedir,$(patsubst %/,%,$(gb_AllL
 $(if $(filter $(gb_AllLangResTarget_LANGS),$(1)),$(foreach target,$(gb_AllLangResTarget_ALLTARGETS),$(call gb_PackageInfo_emit_l10n_for_one_ressource,$(target),$(1))))
 $(foreach uifile,$(gb_UIConfig_ALLFILES),$(call gb_PackageInfo_emit_l10n_for_one_uifile,$(1),$(firstword $(subst :,$(WHITESPACE),$(uifile))),$(lastword $(subst :,$(WHITESPACE),$(uifile)))))
 $(if $(filter $(gb_Configuration_LANGS),$(1)),$(foreach configfile,Langpack- res/fcfg_langpack_ res/registry_,$(call gb_PackageInfo_emit_l10n_for_one_configfile,$(1),$(configfile))))
+@echo "$(foreach suf,executables libraries files,$(gb_PackageInfo_get_target)/l10n-$(1).$(suf)) \\" >> $(WORKDIR)/Dep/packageinfo.d
 
 endef
 
-.PHONY: packageinfo
+-include $(WORKDIR)/Dep/packageinfo.d
 $(foreach filelist,files executables libraries,$(gb_PackageInfo_get_target)/%.$(filelist)):
-	@rm -rf $(gb_PackageInfo_get_target) && mkdir $(gb_PackageInfo_get_target)
+	@rm -rf $(gb_PackageInfo_get_target) $(WORKDIR)/Dep/packageinfo.d && mkdir $(gb_PackageInfo_get_target)
 	$(foreach installmodule,$(gb_PackageInfo_InstallModules),$(call gb_PackageInfo_emit_binaries_command,$(installmodule)))
 	$(foreach helplang,$(gb_HELP_LANGS),$(call gb_PackageInfo_emit_help_for_one_lang,$(helplang)))
 	$(foreach l10nlang,$(if $(strip $(gb_WITH_LANG)),$(gb_WITH_LANG),en-US),$(call gb_PackageInfo_emit_l10n_for_one_lang,$(l10nlang)))
+	@echo "$(gb_PackageInfo_get_target)/packageinfo_all : $(filter-out $(WORKDIR)/Dep/%,$(MAKEFILE_LIST))" >> $(WORKDIR)/Dep/packageinfo.d
+	@touch $(gb_PackageInfo_get_target)/packageinfo_all
 
-packageinfo: $(gb_PackageInfo_get_target)/ure.files
+$(gb_PackageInfo_get_target)/packageinfo_all:
+	$(MAKE) -f $(firstword $(MAKEFILE_LIST)) $(gb_PackageInfo_get_target)/$(firstword $(gb_PackageInfo_InstallModules)).files
 
-install-package-%: $(foreach filelist,files executables libraries,$(gb_PackageInfo_get_target)/%.$(filelist))
+.PHONY : packageinfo
+packageinfo: $(gb_PackageInfo_get_target)/packageinfo_all
+
+install-package-%: $(gb_PackageInfo_get_target)/packageinfo_all
 	for executable in `cat $(gb_PackageInfo_get_target)/$*.executables`; \
 	do \
 		install -D $(INSTDIR)/$${executable} $(INSTALLDIR)/$${executable} ;\
