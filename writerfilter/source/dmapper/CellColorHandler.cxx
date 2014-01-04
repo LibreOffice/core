@@ -102,10 +102,6 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
     {
-        case NS_rtf::LN_cellLeftColor:
-        case NS_rtf::LN_cellRightColor:
-            // nIntValue contains the color, directly
-        break;
         case NS_ooxml::LN_CT_Shd_val:
         {
             createGrabBag("val", lcl_ConvertShd(nIntValue));

@@ -743,11 +743,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_UNUSED0_6:
             // really unused
             break;
-        case NS_rtf::LN_cellLeftColor:
-        case NS_rtf::LN_cellRightColor:
-            OSL_FAIL("handled by DomainMapperTableManager");
-        break;
-
         case NS_ooxml::LN_NUMBERING:
             break;
         case NS_ooxml::LN_FONTTABLE:

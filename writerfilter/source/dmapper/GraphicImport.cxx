@@ -624,8 +624,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break;// Background shape
         case NS_rtf::LN_shpfHaveSpt:
             break;// Shape has a shape type property
-        case NS_rtf::LN_shptypename:
-            break;// shape type name
         case NS_rtf::LN_shpfBid:
             break; //ignored
         case NS_rtf::LN_shpfComplex:
@@ -656,9 +654,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             break;
 
         //border properties
-        case NS_rtf::LN_shpblipbname :
-        break;
-
         case NS_ooxml::LN_CT_Border_sz:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = nIntValue;
         break;
