@@ -83,6 +83,7 @@ ClientBox::ClientBox( Window* pParent, WinBits nStyle ) :
     m_aScrollBar.EnableDrag();
 
     m_aPinBox.SetUseThousandSep(false);
+    m_aPinBox.Show();
 
     SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
