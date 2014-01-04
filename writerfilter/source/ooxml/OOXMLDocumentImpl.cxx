@@ -345,7 +345,7 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
     OOXMLValue::Pointer_t pBlipValue(new OOXMLPropertySetValue(pBlipSet));
 
     OOXMLProperty::Pointer_t pBlipProperty
-        (new OOXMLPropertyImpl(NS_rtf::LN_blip, pBlipValue,
+        (new OOXMLPropertyImpl(NS_ooxml::LN_blip, pBlipValue,
                                OOXMLPropertyImpl::ATTRIBUTE));
 
     OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();

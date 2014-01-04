@@ -463,7 +463,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_rtf::LN_BRCLEFT: //left border
         case NS_rtf::LN_BRCBOTTOM: //bottom border
         case NS_rtf::LN_BRCRIGHT: //right border
-        case NS_rtf::LN_blip: //the binary graphic data in a shape
+        case NS_ooxml::LN_blip: //the binary graphic data in a shape
             {
                 switch(nName)
                 {

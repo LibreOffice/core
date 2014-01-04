@@ -1172,7 +1172,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_TblBorders_bottom: // 92379;
         //todo: handle cell mar
         break;
-        case NS_rtf::LN_blip: // contains the binary graphic
+        case NS_ooxml::LN_blip: // contains the binary graphic
         case NS_ooxml::LN_shape:
         {
             //looks a bit like a hack - and it is. The graphic import is split into the inline_inline part and

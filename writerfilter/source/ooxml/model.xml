@@ -45,6 +45,7 @@
   <token tokenid="ooxml:tblEnd"/>
   <token tokenid="ooxml:ffdata"/>
   <token tokenid="ooxml:starmath"/>
+  <token tokenid="ooxml:blip"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
