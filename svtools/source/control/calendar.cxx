@@ -306,7 +306,7 @@ DayOfWeek Calendar::ImplGetWeekStart() const
 
 void Calendar::ImplGetWeekFont( Font& rFont ) const
 {
-    // Wochennummer geben wir in WEEKNUMBER_HEIGHT%-Fonthoehe aus
+    // weeknumber is displayed in WEEKNUMBER_HEIGHT%-Fontheight
     Size aFontSize = rFont.GetSize();
     aFontSize.Height() *= WEEKNUMBER_HEIGHT;
     aFontSize.Height() /= 100;
@@ -357,7 +357,7 @@ void Calendar::ImplFormat()
         long n99TextWidth = GetTextWidth( a99Text );
         long nTextHeight = GetTextHeight();
 
-        // Breiten und X-Positionen berechnen
+        // calculate width and x-position
         mnDayWidth      = n99TextWidth+DAY_OFFX;
         mnMonthWidth    = mnDayWidth*7;
         mnMonthWidth   += mnWeekWidth;
@@ -371,7 +371,7 @@ void Calendar::ImplFormat()
         mnDaysOffX     += nOver/2;
         mnDaysOffX     += mnWeekWidth;
 
-        // Hoehen und Y-Positionen berechnen
+        // calculate height and y-position
         mnDayHeight     = nTextHeight + DAY_OFFY;
         mnWeekDayOffY   = nTextHeight + TITLE_OFFY + (TITLE_BORDERY*2);
         mnDaysOffY      = mnWeekDayOffY + nTextHeight + WEEKDAY_OFFY;
@@ -382,7 +382,7 @@ void Calendar::ImplFormat()
             mnLines = 1;
         mnMonthHeight  += (aOutSize.Height()-(mnLines*mnMonthHeight)) / mnLines;
 
-        // Spinfelder berechnen
+        // calculate spinfields
         long nSpinSize      = nTextHeight+TITLE_BORDERY-SPIN_OFFY;
         maPrevRect.Left()   = SPIN_OFFX;
         maPrevRect.Top()    = SPIN_OFFY;
@@ -422,7 +422,7 @@ void Calendar::ImplFormat()
         mbCalc = sal_False;
     }
 
-    // Anzahl Tage berechnen
+    // calculate number of days
 
     DayOfWeek eStartDay = ImplGetWeekStart();
 
@@ -449,7 +449,7 @@ void Calendar::ImplFormat()
     nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
     mnDayCount += 42-nDaysInMonth-nWeekDay;
 
-    // Farben festlegen
+    // determine colours
     maOtherColor = Color( COL_LIGHTGRAY );
     if ( maOtherColor.IsRGBEqual( GetBackground().GetColor() ) )
         maOtherColor.SetColor( COL_GRAY );
@@ -463,7 +463,7 @@ void Calendar::ImplFormat()
         DateRangeChanged();
     }
 
-    // DateInfo besorgen
+    // get DateInfo
     sal_uInt16 nNewFirstYear = maFirstDate.GetYear();
     sal_uInt16 nNewLastYear = GetLastDate().GetYear();
     if ( mnFirstYear )
@@ -528,7 +528,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 
             sal_uInt16 nDaysInMonth = rDate.GetDaysInMonth();
 
-            // Entsprechender Monat gefunden
+            // matching month was found
             if ( (rPos.X() > nX) && (rPos.Y() < nYMonth) &&
                  (rPos.X() < nX+mnMonthWidth) )
             {
@@ -712,7 +712,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
 
     sal_Bool bSel = sal_False;
     sal_Bool bFocus = sal_False;
-    // Aktueller Tag
+    // actual day
     if ( (nDay   == maCurDate.GetDay()) &&
          (nMonth == maCurDate.GetMonth()) &&
          (nYear  == maCurDate.GetYear()) )
@@ -723,7 +723,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
             bSel = sal_True;
     }
 
-    // Textfarbe ermitteln
+    // get textcolour
     if ( bSel )
         pTextColor = &maSelColor;
     else if ( bOther )
@@ -741,11 +741,11 @@ void Calendar::ImplDrawDate( long nX, long nY,
     if ( bFocus )
         HideFocus();
 
-    // Font ermitteln
+    // get font
     Font aOldFont = GetFont();
     sal_Bool bBoldFont = sal_False;
 
-    // Hintergrund ausgeben
+    // display background
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( bSel || bBack )
     {
@@ -759,7 +759,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
             Erase( aDateRect );
     }
 
-    // Text ausgeben
+    // display text
     long nTextX = nX+(mnDayWidth-GetTextWidth( rDay ))-(DAY_OFFX/2);
     long nTextY = nY+(mnDayHeight-GetTextHeight())/2;
     if ( pTextColor )
@@ -772,7 +772,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
     else
         DrawText( Point( nTextX, nTextY ), rDay );
 
-    // Heute
+    // today
     Date aTodayDate( maCurDate );
     if ( nToday )
         aTodayDate.SetDate( nToday );
@@ -787,7 +787,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
         DrawRect( aDateRect );
     }
 
-    // Evt. noch FocusRect
+    // if needed do FocusRect
     if ( bFocus && HasFocus() )
         ShowFocus( aDateRect );
 
@@ -826,7 +826,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
     nY = 0;
     for ( i = 0; i < mnLines; i++ )
     {
-        // Titleleiste ausgeben
+        // display title bar
         SetLineColor();
         SetFillColor( rStyleSettings.GetFaceColor() );
         Rectangle aTitleRect( 0, nY, aOutSize.Width()-1, nY+mnDayHeight-DAY_OFFY+TITLE_BORDERY*2 );
@@ -880,7 +880,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
             nMonth  = aDate.GetMonth();
             nYear   = aDate.GetYear();
 
-            // Monat in der Titleleiste ausgeben
+            // display month in title bar
             nDeltaX = nX;
             nDeltaY = nY+TITLE_BORDERY;
             OUString aMonthText( maCalendarWrapper.getDisplayName(
@@ -921,7 +921,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
             DrawText( Point( nDeltaX, nDeltaY ), aMonthText );
             SetTextColor( rStyleSettings.GetWindowTextColor() );
 
-            // Weekleiste ausgeben
+            // display week bar
             if ( bPaint )
             {
                 nDayX = nX+mnDaysOffX;
@@ -935,7 +935,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 DrawTextArray( Point( nDayX+mnDayOfWeekAry[0], nDayY ), maDayOfWeekText, &(mnDayOfWeekAry[1]) );
             }
 
-            // Week-Numbers ausgeben
+            // display weeknumbers
             if ( mnWinStyle & WB_WEEKNUMBER )
             {
                 nDayX = nX+mnDaysOffX;
@@ -967,7 +967,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 SetFont( aOldFont );
             }
 
-            // Tage ausgeben
+            // display days
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
             nDayX = nX+mnDaysOffX;
             nDayY = nY+mnDaysOffY;
@@ -1036,7 +1036,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
         nY += mnMonthHeight;
     }
 
-    // Spin-Buttons zeichnen
+    // draw spin buttons
     if ( bPaint )
         ImplDrawSpin();
 }
@@ -1190,7 +1190,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
             ImplUpdateSelection( pOldSel );
         if ( !bNewSel || pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
             ImplUpdateDate( aOldDate );
-        // Damit Focus-Rechteck auch wieder neu ausgegeben wird
+        // assure focus rectangle is displayed again
         if ( HasFocus() || !bNewSel
              || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
             ImplUpdateDate( maCurDate );
@@ -1273,7 +1273,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     else
         nMonthOff -= aOldFirstDate.GetMonth()-rDate.GetMonth();
 
-    // Menu aufbauen (Jahre mit verschiedenen Monaten aufnehmen)
+    // construct menu (include years with different months)
     for ( i = 0; i < MENU_YEAR_COUNT; i++ )
     {
         pYearPopupMenus[i] = new PopupMenu;
@@ -1290,7 +1290,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     nCurItemId = aPopupMenu.Execute( this, rPos );
     mbMenuDown = sal_False;
 
-    // Menu zerstoeren
+    // destroy menu
     aPopupMenu.SetPopupMenu( 2, NULL );
     for ( i = 0; i < MENU_YEAR_COUNT; i++ )
     {
@@ -1369,7 +1369,7 @@ void Calendar::ImplEndTracking( sal_Bool bCancel )
             ImplUpdateSelection( pOldSel );
             if ( pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
                 ImplUpdateDate( aOldDate );
-            // Damit Focus-Rechteck auch wieder neu ausgegeben wird
+            //  assure focus rectangle is displayed again
             if ( HasFocus() || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
                 ImplUpdateDate( maCurDate );
             delete pOldSel;
@@ -1380,7 +1380,7 @@ void Calendar::ImplEndTracking( sal_Bool bCancel )
     {
         if ( !bCancel )
         {
-            // Feststellen, ob wir sichtbaren Bereich scrollen sollen
+            // determine if we should scroll the visible area
             sal_uLong nSelCount = mpSelectTable->size();
             if ( nSelCount )
             {
@@ -1446,9 +1446,9 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                     mbScrollDateRange = sal_True;
                     ImplScroll( mbPrevIn );
                     mbScrollDateRange = sal_False;
-                    // Hier muss BUTTONREPEAT stehen, also nicht wieder
-                    // auf SCROLLREPEAT aendern, sondern mit TH abklaeren,
-                    // warum es evtl. anders sein sollte (71775)
+                    // it should really read BUTTONREPEAT, therefore do not
+                    // change it to SCROLLREPEAT, check with TH,
+                    // why it could be different (71775)
                     StartTracking( STARTTRACK_BUTTONREPEAT );
                 }
                 else
@@ -1695,7 +1695,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
                 aStr += maWeekText;
                 aStr += ": ";
                 aStr += OUString::number(nWeek);
-                // Evt. noch Jahr hinzufuegen, wenn es nicht das gleiche ist
+        // if year is not the same, add it
                 if ( (nMonth == 12) && (nWeek == 1) )
                 {
                     aStr += ",  ";
@@ -1908,7 +1908,7 @@ void Calendar::SetCurDate( const Date& rNewDate )
         else if ( !HasFocus() )
             bUpdate = sal_False;
 
-        // Aktuelles Datum noch in den sichtbaren Bereich verschieben
+        // shift actual date in the visible area
         if ( mbFormat || (maCurDate < GetFirstMonth()) )
             SetFirstDate( maCurDate );
         else if ( maCurDate > GetLastMonth() )
@@ -2072,7 +2072,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
         {
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
 
-            // Monat gerufen
+            // month is called
             if ( (aDate.GetMonth() == rDate.GetMonth()) &&
                  (aDate.GetYear() == rDate.GetYear()) )
             {
@@ -2148,7 +2148,7 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
     OUString a99Text("99");
     Font        aOldFont = GetFont();
 
-    // Wochenanzeige beruecksichtigen
+    // take display of week into account
     long nWeekWidth;
     if ( mnWinStyle & WB_WEEKNUMBER )
     {

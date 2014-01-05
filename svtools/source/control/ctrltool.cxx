@@ -167,11 +167,10 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 
 ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
 {
-    // Wenn kein Eintrag in der Liste oder der Eintrag groesser ist als
-    // der Letzte, dann hinten dranhaengen. Wir vergleichen erst mit dem
-    // letzten Eintrag, da die Liste von VCL auch sortiert zurueckkommt
-    // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
-    // sehr gross ist.
+    // Append if there is no enty in the list or if the entry is larger
+    // then the last one. We only compare to the last entry as the list of VCL
+    // is returned sorted, which increases the probability that appending
+    // is more likely
     sal_uLong nCnt = maEntries.size();
     if ( !nCnt )
     {
@@ -193,7 +192,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
             return const_cast<ImplFontListNameInfo*>(pCmpData);
     }
 
-    // Fonts in der Liste suchen
+    // search fonts in the list
     const ImplFontListNameInfo* pCompareData;
     const ImplFontListNameInfo* pFoundData = NULL;
     sal_uLong                   nLow = 0;
@@ -253,15 +252,14 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
     else
         nType = FONTLIST_FONTNAMETYPE_PRINTER;
 
-    // Alle Fonts vom Device abfragen
+    // inquire all fonts from the device
     int n = pDevice->GetDevFontCount();
     sal_uInt16  i;
     for( i = 0; i < n; i++ )
     {
         FontInfo aFontInfo = pDevice->GetDevFont( i );
 
-        // Wenn keine Raster-Schriften angezeigt werden sollen,
-        // dann diese ignorieren
+        // ignore raster-fonts if they are not to be displayed
         if ( !bAll && (aFontInfo.GetType() == TYPE_RASTER) )
             continue;
 
@@ -341,12 +339,12 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll )
 {
-    // Variablen initialisieren
+    // initialise variables
     mpDev = pDevice;
     mpDev2 = pDevice2;
     mpSizeAry = NULL;
 
-    // Stylenamen festlegen
+    // store style names
     maLight         = SVT_RESSTR(STR_SVT_STYLE_LIGHT);
     maLightItalic   = SVT_RESSTR(STR_SVT_STYLE_LIGHT_ITALIC);
     maNormal        = SVT_RESSTR(STR_SVT_STYLE_NORMAL);
@@ -358,8 +356,8 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
 
     ImplInsertFonts( pDevice, bAll, sal_True );
 
-    // Gegebenenfalls muessen wir mit den Bildschirmfonts vergleichen,
-    // damit dort die eigentlich doppelten auf Equal mappen koennen
+    // if required compare to the screen fonts
+    // in order to map the duplicates to Equal
     sal_Bool bCompareWindow = sal_False;
     if ( !pDevice2 && (pDevice->GetOutDevType() == OUTDEV_PRINTER) )
     {
@@ -376,10 +374,10 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
 
 FontList::~FontList()
 {
-    // Gegebenenfalls SizeArray loeschen
+    // delete SizeArray if required
     delete[] mpSizeAry;
 
-    // FontInfos loeschen
+    // delete FontInfos
     ImplFontListFontInfo *pTemp, *pInfo;
     boost::ptr_vector<ImplFontListNameInfo>::iterator it;
     for (it = maEntries.begin(); it != maEntries.end(); ++it)
@@ -450,8 +448,7 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
     FontWeight eWeight = rInfo.GetWeight();
     FontItalic eItalic = rInfo.GetItalic();
 
-    // Nur wenn kein StyleName gesetzt ist, geben wir einen syntetischen
-    // Namen zurueck
+    // return synthetic Name if no StyleName was set
     if (aStyleName.isEmpty())
         aStyleName = GetStyleName(eWeight, eItalic);
     else
@@ -577,7 +574,7 @@ namespace
         FontWeight eWeight, FontItalic eItalic)
     {
         FontInfo aInfo;
-        // Falls der Fontname stimmt, uebernehmen wir soviel wie moeglich
+        // if the fontname matches, we copy as much as possible
         if (pFontNameInfo)
         {
             aInfo = *pFontNameInfo;
@@ -618,8 +615,7 @@ FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
         }
     }
 
-    // Konnten die Daten nicht gefunden werden, dann muessen bestimmte
-    // Attribute nachgebildet werden
+    // reproduce attributes if data could not be found
     FontInfo aInfo;
     if ( !pFontInfo )
     {
@@ -703,8 +699,7 @@ FontInfo FontList::Get(const OUString& rName,
         }
     }
 
-    // Konnten die Daten nicht gefunden werden, dann muessen bestimmte
-    // Attribute nachgebildet werden
+    // reproduce attributes if data could not be found
     FontInfo aInfo;
     if ( !pFontInfo )
         aInfo = makeMissing(pFontNameInfo, rName, eWeight, eItalic);
@@ -764,19 +759,18 @@ const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
 
 const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
 {
-    // Size-Array vorher loeschen
+    // first delete Size-Array
     if ( mpSizeAry )
     {
         delete[] ((FontList*)this)->mpSizeAry;
         ((FontList*)this)->mpSizeAry = NULL;
     }
 
-    // Falls kein Name, dann Standardgroessen
+    // use standarad sizes if no name
     if ( rInfo.GetName().isEmpty() )
         return aStdSizeAry;
 
-    // Zuerst nach dem Fontnamen suchen um das Device dann von dem
-    // entsprechenden Font zu nehmen
+    // first search fontname in order to use device from the matching font
     OutputDevice*           pDevice = mpDev;
     ImplFontListNameInfo*   pData = ImplFindByName( rInfo.GetName() );
     if ( pData )

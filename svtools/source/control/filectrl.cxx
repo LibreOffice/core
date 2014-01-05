@@ -125,8 +125,8 @@ void FileControl::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_CONTROLFONT )
     {
         GetEdit().SetControlFont( GetControlFont() );
-        // Fuer den Button nur die Hoehe uebernehmen, weil in
-        // HTML immer Courier eingestellt wird.
+        // Only use height of the button, as in HTML
+        // always Courier is used
         Font aFont = GetButton().GetControlFont();
         aFont.SetSize( GetControlFont().GetSize() );
         GetButton().SetControlFont( aFont );

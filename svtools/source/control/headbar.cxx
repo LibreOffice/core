@@ -183,7 +183,7 @@ Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 {
     Rectangle aRect( ImplGetItemPos( nPos ), 0, 0, mnDY-1 );
     aRect.Right() = aRect.Left() + (*mpItemList)[ nPos ]->mnSize - 1;
-    // Gegen Ueberlauf auf einigen Systemen testen
+    // check for overflow on various systems
     if ( aRect.Right() > 16000 )
         aRect.Right() = 16000;
     return aRect;
@@ -317,11 +317,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
 
     Rectangle aRect = rItemRect;
 
-    // Wenn kein Platz, dann brauchen wir auch nichts ausgeben
+    // do not display if there is no space
     if ( aRect.GetWidth() <= 1 )
         return;
 
-    // Feststellen, ob Rectangle ueberhaupt sichtbar
+    // check of rectangle is visible
     if ( pRect )
     {
         if ( aRect.Right() < pRect->Left() )
@@ -351,11 +351,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
     else
     {
-        // Border muss nicht gemalt werden
+        // do not draw border
         aRect.Top()     += mnBorderOff1;
         aRect.Bottom()  -= mnBorderOff2;
 
-        // Hintergrund loeschen
+        // delete background
         if ( !pRect || bDrag )
         {
             if ( bDrag )
@@ -384,12 +384,12 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
     else
     {
-        // Trennlinie malen
+        // draw separation line
         pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
         pDev->DrawLine( Point( aRect.Right(), aRect.Top() ),
                         Point( aRect.Right(), aRect.Bottom() ) );
 
-        // ButtonStyle malen
+        // draw ButtonStyle
         // avoid 3D borders
         if( bHigh )
             DrawSelectionBackground( aRect, 1, sal_True, sal_False, sal_False, &aSelectionTextColor );
@@ -397,11 +397,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             DrawSelectionBackground( aRect, 0, sal_True, sal_False, sal_False, &aSelectionTextColor );
     }
 
-    // Wenn kein Platz, dann brauchen wir auch nichts ausgeben
+    // do not draw if there is no space
     if ( aRect.GetWidth() < 1 )
         return;
 
-    // Positionen und Groessen berechnen und Inhalt ausgeben
+    // calculate size and position and draw content
     pItem->maOutText = pItem->maText;
     Size aImageSize = pItem->maImage.GetSizePixel();
     Size aTxtSize( pDev->GetTextWidth( pItem->maOutText ), 0  );
@@ -411,7 +411,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     if ( nBits & (HIB_UPARROW | HIB_DOWNARROW) )
         nArrowWidth = HEAD_ARROWSIZE2+HEADERBAR_ARROWOFF;
 
-    // Wenn kein Platz fuer Image, dann nicht ausgeben
+    // do not draw if there is not enough space for the image
     long nTestHeight = aImageSize.Height();
     if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
         nTestHeight += aTxtSize.Height();
@@ -421,7 +421,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         aImageSize.Height() = 0;
     }
 
-    // Text auf entsprechende Laenge kuerzen
+    // cut text to correct length
     sal_Bool bLeftText = sal_False;
     long nMaxTxtWidth = aRect.GetWidth()-(HEADERBAR_TEXTOFF*2)-nArrowWidth;
     if ( nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE) )
@@ -446,7 +446,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    // Text/Imageposition berechnen
+    // calculate text/imageposition
     long nTxtPos;
     if ( !bLeftText && (nBits & HIB_RIGHT) )
     {
@@ -481,7 +481,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             nTxtPos += nArrowWidth;
     }
 
-    // TextPosition berechnen
+    // calculate text/imageposition
     long nTxtPosY = 0;
     if ( !pItem->maOutText.isEmpty() || (nArrowWidth && aTxtSize.Height()) )
     {
@@ -504,7 +504,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    // Text ausgebeben
+    // display text
     if (!pItem->maOutText.isEmpty())
     {
         if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
@@ -520,7 +520,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             pDev->Pop();
     }
 
-    // Wenn Image vorhanden, Position berechnen und ausgeben
+    // calculate the position and draw image if it is available
     long nImagePosY = 0;
     if ( aImageSize.Width() && aImageSize.Height() )
     {
@@ -586,7 +586,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                 nArrowX += aImageSize.Width();
         }
 
-        // Feststellen, ob Platz genug ist, das Item zu malen
+        // is there enough space to draw the item?
         sal_Bool bDraw = sal_True;
         if ( nArrowX < aRect.Left()+HEADERBAR_TEXTOFF )
             bDraw = sal_False;
@@ -650,7 +650,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    // Gegebenenfalls auch UserDraw aufrufen
+    // all UserDraw if required
     if ( nBits & HIB_USERDRAW )
     {
         Region aRegion( aRect );
@@ -795,7 +795,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         else
             bNewOutDrag = sal_True;
 
-        // Evt. ItemDrag anschalten
+        //  if needed switch on ItemDrag
         if ( bNewOutDrag && mbDragable && !mbItemDrag &&
              !((*mpItemList)[ nPos ]->mnBits & HIB_FIXEDPOS) )
         {
@@ -829,7 +829,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
                         mnItemDragPos = GetItemCount()-1;
                 }
 
-                // Nicht verschiebbare Items aussparen
+                // do not use non-movable items
                 if ( mnItemDragPos < nPos )
                 {
                     while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HIB_FIXEDPOS) &&
@@ -1076,7 +1076,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     {
         aItemRect.Left() = aRect.Left()+ImplGetItemPos( i );
         aItemRect.Right() = aItemRect.Left() + (*mpItemList)[ i ]->mnSize - 1;
-        // Gegen Ueberlauf auf einigen Systemen testen
+        // check for overflow on some systems
         if ( aItemRect.Right() > 16000 )
             aItemRect.Right() = 16000;
         Region aRegion( aRect );
@@ -1133,9 +1133,8 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             if ( aStr.isEmpty() || !(rHEvt.GetMode() & HELPMODE_BALLOON) )
             {
                 ImplHeadItem* pItem = (*mpItemList)[ GetItemPos( nItemId ) ];
-                // Wir zeigen die Quick-Hilfe nur an, wenn Text nicht
-                // vollstaendig sichtbar, ansonsten zeigen wir den Hilfetext
-                // an, wenn das Item keinen Text besitzt
+                // Quick-help is only displayed if the text is not fully visible.
+                // Otherwise we display Helptext only if the items do not contain text
                 if ( pItem->maOutText != pItem->maText )
                     aStr = pItem->maText;
                 else if (!pItem->maText.isEmpty())
@@ -1156,7 +1155,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
-                // Wenn eine Hilfe existiert, dann ausloesen
+                // display it if help is available
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
                     pHelp->Start( aHelpId, this );
@@ -1260,7 +1259,7 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
     DBG_ASSERT( GetItemPos( nItemId ) == HEADERBAR_ITEM_NOTFOUND,
                 "HeaderBar::InsertItem(): ItemId already exists" );
 
-    // Item anlegen und in die Liste einfuegen
+    // create item and insert in the list
     ImplHeadItem* pItem = new ImplHeadItem;
     pItem->mnId         = nItemId;
     pItem->mnBits       = nBits;
@@ -1274,7 +1273,7 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
         mpItemList->push_back( pItem );
     }
 
-    // Ausgabe updaten
+    // update display
     ImplUpdate( nPos, sal_True );
 }
 
@@ -1320,7 +1319,7 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
 
 void HeaderBar::Clear()
 {
-    // Alle Items loeschen
+    // delete all items
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         delete (*mpItemList)[ i ];
     }
@@ -1333,7 +1332,7 @@ void HeaderBar::Clear()
 
 void HeaderBar::SetOffset( long nNewOffset )
 {
-    // Bereich verschieben
+    // move area
     Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2-1 );
     long nDelta = mnOffset-nNewOffset;
     mnOffset = nNewOffset;
@@ -1511,21 +1510,21 @@ Size HeaderBar::CalcWindowSizePixel() const
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
     {
         ImplHeadItem* pItem = (*mpItemList)[ i ];
-        // Image-Groessen beruecksichtigen
+        // take image size into account
         long nImageHeight = pItem->maImage.GetSizePixel().Height();
         if ( !(pItem->mnBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && !pItem->maText.isEmpty() )
             nImageHeight += aSize.Height();
         if ( nImageHeight > nMaxImageSize )
             nMaxImageSize = nImageHeight;
 
-        // Breite aufaddieren
+        // add width
         aSize.Width() += pItem->mnSize;
     }
 
     if ( nMaxImageSize > aSize.Height() )
         aSize.Height() = nMaxImageSize;
 
-    // Border aufaddieren
+    // add border
     if ( mbButtonStyle )
         aSize.Height() += 4;
     else
