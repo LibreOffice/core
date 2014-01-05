@@ -191,6 +191,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
+, m_nModifiedListenerCount( 0 )
 , m_xContext( xContext )
 , m_xProperties( xProperties )
 , m_bHasCommonEncryptionData( sal_False )
@@ -230,6 +231,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
+, m_nModifiedListenerCount( 0 )
 , m_xContext( xContext )
 , m_xProperties( xProperties )
 , m_bHasCommonEncryptionData( sal_False )
@@ -272,6 +274,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_bCommited( sal_False )
 , m_bIsRoot( sal_False )
 , m_bListCreated( sal_False )
+, m_nModifiedListenerCount( 0 )
 , m_xPackageFolder( xPackageFolder )
 , m_xPackage( xPackage )
 , m_xContext( xContext )
@@ -1959,6 +1962,7 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
     // since the listeners could dispose the object while being notified
        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
+    m_pImpl->m_nModifiedListenerCount = 0;
 
     if ( m_pData->m_bReadOnlyWrap )
     {
@@ -4203,6 +4207,7 @@ void SAL_CALL OStorage::addModifyListener(
         throw lang::DisposedException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     }
 
+    osl_atomic_increment( &m_pImpl->m_nModifiedListenerCount );
     m_pData->m_aListenersContainer.addInterface(
                                 ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ), aListener );
 }
@@ -4219,6 +4224,7 @@ void SAL_CALL OStorage::removeModifyListener(
         throw lang::DisposedException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     }
 
+    osl_atomic_decrement( &m_pImpl->m_nModifiedListenerCount );
     m_pData->m_aListenersContainer.removeInterface(
                                 ::getCppuType( ( const uno::Reference< util::XModifyListener >* )0 ), aListener );
 }
