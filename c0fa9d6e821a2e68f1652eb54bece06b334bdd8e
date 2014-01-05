@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_b792a29d",
+        "filename": "cppu/source/uno/data.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2014-01-05T12:12:59Z",
+      "side": 1,
+      "message": "Just nitpicking but what about adding || defined(IOS) here and therefore remove 1 line?",
+      "revId": "c0fa9d6e821a2e68f1652eb54bece06b334bdd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
