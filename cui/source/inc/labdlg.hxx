@@ -93,22 +93,22 @@ public:
 class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
-    const SdrView*      pView;
-    sal_uInt16              nAnchorCtrls;
+    const SdrView* pView;
+    sal_uInt16 nAnchorCtrls;
+    sal_uInt16 m_nSwPosSizePageId;
+    sal_uInt16 m_nPositionSizePageId;
+    sal_uInt16 m_nCaptionPageId;
 
     Link                aValidateLink;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
+    SvxCaptionTabDialog(Window* pParent, const SdrView* pView,
+                            sal_uInt16 nAnchorTypes = 0);
 
-            SvxCaptionTabDialog(Window* pParent, const SdrView* pView,
-                                    sal_uInt16 nAnchorTypes = 0 );
-
-            ~SvxCaptionTabDialog();
-
-            /// link for the Writer to validate positions
-            void SetValidateFramePosLink( const Link& rLink );
+    /// link for the Writer to validate positions
+    void SetValidateFramePosLink( const Link& rLink );
 };
 
 

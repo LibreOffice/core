@@ -34,7 +34,6 @@
 #include <svx/sxctitm.hxx>
 
 #include "svx/dlgutil.hxx"
-#include "labdlg.hrc"
 #include "labdlg.hxx"
 #include "transfrm.hxx"
 
@@ -508,65 +507,56 @@ void SvxCaptionTabPage::FillValueSet()
 //========================================================================
 
 
-SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, sal_uInt16 nAnchorTypes)
- :  SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_CAPTION ) ),
-    pView       ( pSdrView ),
-    nAnchorCtrls(nAnchorTypes)
+SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView,
+    sal_uInt16 nAnchorTypes)
+    : SfxTabDialog( pParent, "CalloutDialog", "cui/ui/calloutdialog.ui")
+    , pView(pSdrView)
+    , nAnchorCtrls(nAnchorTypes)
+    , m_nSwPosSizePageId(0)
+    , m_nPositionSizePageId(0)
+    , m_nCaptionPageId(0)
 {
-    FreeResource();
-
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
+    assert(pView); //Keine gueltige View Uebergeben!
 
     //different positioning page in Writer
-    if(nAnchorCtrls & 0x00ff )
+    if (nAnchorCtrls & 0x00ff)
     {
-        AddTabPage( RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create,
-                                SvxSwPosSizeTabPage::GetRanges );
-        RemoveTabPage( RID_SVXPAGE_POSITION_SIZE);
+        m_nSwPosSizePageId = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create,
+            SvxSwPosSizeTabPage::GetRanges );
+        RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
     }
     else
     {
-        AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
-                                SvxPositionSizeTabPage::GetRanges );
-        RemoveTabPage( RID_SVXPAGE_SWPOSSIZE );
+        m_nPositionSizePageId = AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create,
+            SvxPositionSizeTabPage::GetRanges );
+        RemoveTabPage("RID_SVXPAGE_SWPOSSIZE");
     }
-    AddTabPage( RID_SVXPAGE_CAPTION, SvxCaptionTabPage::Create,
-                            SvxCaptionTabPage::GetRanges );
+    m_nCaptionPageId = AddTabPage("RID_SVXPAGE_CAPTION", SvxCaptionTabPage::Create,
+        SvxCaptionTabPage::GetRanges );
 }
-
-// -----------------------------------------------------------------------
-
-SvxCaptionTabDialog::~SvxCaptionTabDialog()
-{
-}
-
-// -----------------------------------------------------------------------
 
 void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch( nId )
+    if (nId == m_nPositionSizePageId)
     {
-        case RID_SVXPAGE_POSITION_SIZE:
-            ( (SvxPositionSizeTabPage&) rPage ).SetView( pView );
-            ( (SvxPositionSizeTabPage&) rPage ).Construct();
-            if( nAnchorCtrls & SVX_OBJ_NORESIZE )
-                ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
+        ( (SvxPositionSizeTabPage&) rPage ).SetView( pView );
+        ( (SvxPositionSizeTabPage&) rPage ).Construct();
+        if( nAnchorCtrls & SVX_OBJ_NORESIZE )
+            ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
 
-            if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
-                ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
-        break;
-        case RID_SVXPAGE_SWPOSSIZE :
-        {
-            SvxSwPosSizeTabPage& rSwPage = static_cast<SvxSwPosSizeTabPage&>(rPage);
-            rSwPage.EnableAnchorTypes(nAnchorCtrls);
-            rSwPage.SetValidateFramePosLink( aValidateLink );
-        }
-        break;
-
-        case RID_SVXPAGE_CAPTION:
-            ( (SvxCaptionTabPage&) rPage ).SetView( pView );
-            ( (SvxCaptionTabPage&) rPage ).Construct();
-        break;
+        if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
+            ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
+    }
+    else if (nId == m_nSwPosSizePageId)
+    {
+        SvxSwPosSizeTabPage& rSwPage = static_cast<SvxSwPosSizeTabPage&>(rPage);
+        rSwPage.EnableAnchorTypes(nAnchorCtrls);
+        rSwPage.SetValidateFramePosLink( aValidateLink );
+    }
+    else if (nId == m_nCaptionPageId)
+    {
+        ( (SvxCaptionTabPage&) rPage ).SetView( pView );
+        ( (SvxCaptionTabPage&) rPage ).Construct();
     }
 }
 

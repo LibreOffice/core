@@ -82,8 +82,6 @@
 #define RID_SVXPAGE_PICK_BULLET             (RID_SVX_START + 216)
 #define RID_SVXPAGE_PICK_NUM                (RID_SVX_START + 217)
 #define RID_SVXPAGE_PICK_BMP                (RID_SVX_START + 218)
-#define RID_SVXPAGE_CAPTION                 (RID_SVX_START + 150)
-#define RID_SVXPAGE_SWPOSSIZE               (RID_SVX_START + 288)
 #define RID_SVXPAGE_POSITION_SIZE           (RID_SVX_START +  87)
 #define RID_SVXPAGE_EVENTASSIGN             (RID_SVX_START + 303)
 #define RID_SVXPAGE_HATCH                   (RID_SVX_START +  57)
