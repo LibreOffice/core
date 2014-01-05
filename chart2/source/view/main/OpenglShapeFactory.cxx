@@ -348,7 +348,6 @@ uno::Reference< drawing::XShape >
                     , const drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties )
 {
-    SAL_WARN("chart2.opengl", "OpenglShapeFactory::createLine2D()-----test:");
     dummy::DummyLine2D* pLine = new dummy::DummyLine2D(rPoints, pLineProperties);
     xTarget->add(pLine);
 
