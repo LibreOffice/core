@@ -185,8 +185,6 @@ public:
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);
-    int ProcessArea2D(com::sun::star::uno::Reference<
-            com::sun::star::drawing::XShape > &xShape);
     int RenderArea2DShape();
 private:
     GLint LoadShaders(const char *vertexShader,const char *fragmentShader);

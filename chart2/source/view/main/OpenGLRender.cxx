@@ -1520,33 +1520,7 @@ int OpenGLRender::CreateBMPHeaderRGBA(sal_uInt8 *bmpHeader, int xsize, int ysize
     return 0;
 
 }
-int OpenGLRender::ProcessArea2D(uno::Reference< drawing::XShape > &xShape)
-{
-    //get point from shape
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    com::sun::star::uno::Sequence<drawing::PointSequence> pointss;
-    com::sun::star::uno::Any value = xProp->getPropertyValue(UNO_NAME_POLYPOLYGON);
-    value >>= pointss;
-    int pointsscount = pointss.getLength();
 
-    uno::Any co =  xProp->getPropertyValue(UNO_NAME_FILLCOLOR);
-    long *colorvalue = (long*)co.getValue();
-    SetColor(*colorvalue);
-    for(int i = 0; i < pointsscount; i++)
-    {
-        com::sun::star::uno::Sequence<com::sun::star::awt::Point> points = pointss[i];
-        int pointscount = points.getLength();
-        for(int j = 0; j < pointscount; j++)
-        {
-            com::sun::star::awt::Point p = points[j];
-            SetArea2DShapePoint((float)p.X, (float)p.Y, pointscount);
-        }
-    }
-    //render the shape
-    RenderArea2DShape();
-    m_fZStep += 0.01f;
-    return 0;
-}
 int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
 {
     if (!m_Area2DPointList.pointBuf)
@@ -1576,6 +1550,7 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     }
     return 0;
 }
+
 int OpenGLRender::RenderArea2DShape()
 {
     glDisable(GL_MULTISAMPLE);
@@ -1617,6 +1592,7 @@ int OpenGLRender::RenderArea2DShape()
         free(pointList.pointBuf);
     }
     glEnable(GL_MULTISAMPLE);
+    m_fZStep += 0.01f;
     return 0;
 }
 

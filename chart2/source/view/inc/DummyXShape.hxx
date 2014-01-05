@@ -305,10 +305,12 @@ private:
 class DummyArea2D : public DummyXShape
 {
 public:
-    DummyArea2D(const drawing::PolyPolygonShape3D& rShape);
+    DummyArea2D(const drawing::PointSequenceSequence& rShape);
+
+    virtual void render() SAL_OVERRIDE;
 
 private:
-    drawing::PolyPolygonShape3D maShapes;
+    drawing::PointSequenceSequence maShapes;
 };
 
 class DummySymbol2D : public DummyXShape

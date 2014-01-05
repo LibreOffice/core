@@ -257,7 +257,7 @@ uno::Reference< drawing::XShape >
         OpenglShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
-    dummy::DummyArea2D* pArea = new dummy::DummyArea2D(rPolyPolygon);
+    dummy::DummyArea2D* pArea = new dummy::DummyArea2D(PolyToPointSequence(rPolyPolygon));
     xTarget->add(pArea);
     return pArea;
 }

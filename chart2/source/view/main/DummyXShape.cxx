@@ -351,9 +351,35 @@ DummyArea3D::DummyArea3D(const drawing::PolyPolygonShape3D& rShape, double fDept
 {
 }
 
-DummyArea2D::DummyArea2D(const drawing::PolyPolygonShape3D& rShape):
+DummyArea2D::DummyArea2D(const drawing::PointSequenceSequence& rShape):
     maShapes(rShape)
 {
+}
+
+void DummyArea2D::render()
+{
+    DummyChart* pChart = getRootShape();
+    sal_Int32 nPointssCount = maShapes.getLength();
+    for(sal_Int32 i = 0; i < nPointssCount; i++)
+    {
+        const com::sun::star::uno::Sequence<com::sun::star::awt::Point>& points = maShapes[i];
+        sal_Int32 nPointsCount = points.getLength();
+        for(sal_Int32 j = 0; j < nPointsCount; j++)
+        {
+            const com::sun::star::awt::Point& p = points[j];
+            pChart->m_GLRender.SetArea2DShapePoint((float)p.X, (float)p.Y, nPointsCount);
+        }
+    }
+
+    std::map<OUString, uno::Any>::const_iterator itr = maProperties.find(UNO_NAME_FILLCOLOR);
+    if(itr != maProperties.end())
+    {
+        sal_Int32 nColor = itr->second.get<sal_Int32>();
+        pChart->m_GLRender.SetColor(nColor);
+    }
+
+    //render the shape
+    pChart->m_GLRender.RenderArea2DShape();
 }
 
 DummySymbol2D::DummySymbol2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
