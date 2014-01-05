@@ -124,10 +124,18 @@ struct OStorage_Impl
     sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
     sal_Bool                    m_bIsModified;  // only modified elements will be sent to the original content
     sal_Bool                    m_bBroadcastModified;  // will be set if notification is required
+
     sal_Bool                    m_bCommited;    // sending the streams is coordinated by the root storage of the package
 
     sal_Bool                    m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
     sal_Bool                    m_bListCreated;
+
+    /// Count of registered modification listeners
+    oslInterlockedCount         m_nModifiedListenerCount;
+    bool                        HasModifiedListener()
+    {
+        return m_nModifiedListenerCount > 0 && m_pAntiImpl != NULL;
+    }
 
     SotElementList_Impl                         m_aChildrenList;
     SotElementList_Impl                         m_aDeletedList;
