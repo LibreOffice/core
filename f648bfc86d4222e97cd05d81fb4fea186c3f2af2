@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1abeadc6_93393cdb",
+        "filename": "svtools/source/control/calendar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-01-05T19:06:33Z",
+      "side": 1,
+      "message": "Please take care to maintain consistency of whitespace while you translate the comment. (8 missing spaces here.)",
+      "revId": "f648bfc86d4222e97cd05d81fb4fea186c3f2af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
