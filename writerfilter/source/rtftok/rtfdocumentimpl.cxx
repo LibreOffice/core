@@ -1739,6 +1739,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().bInShapeGroup = true;
             }
             break;
+        case RTF_FTNSEP:
+            m_aStates.top().nDestinationState = DESTINATION_FOOTNOTESEPARATOR;
+            m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)));
+            break;
         default:
             SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -1806,7 +1810,13 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     runProps();
                 if (!m_aStates.top().pCurrentBuffer)
                 {
-                    parBreak();
+                    if (m_aStates.top().nDestinationState == DESTINATION_FOOTNOTESEPARATOR)
+                    {
+                        static const sal_Unicode uCR = 0xd;
+                        Mapper().utext((const sal_uInt8*)&uCR, 1);
+                    }
+                    else
+                        parBreak();
                     // Not in table? Reset max width.
                     m_nCellxMax = 0;
                 }
@@ -2018,6 +2028,12 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 text(aStr);
                 singleChar(0x14, true);
                 singleChar(0x15);
+            }
+            break;
+        case RTF_CHFTNSEP:
+            {
+                static const sal_Unicode uFtnEdnSep = 0x3;
+                Mapper().utext((const sal_uInt8*)&uFtnEdnSep, 1);
             }
             break;
         default:

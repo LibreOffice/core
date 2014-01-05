@@ -150,6 +150,7 @@ namespace writerfilter {
             DESTINATION_LFOLEVEL,
             DESTINATION_BACKGROUND,
             DESTINATION_SHAPEGROUP,
+            DESTINATION_FOOTNOTESEPARATOR,
         };
 
         enum RTFErrors
