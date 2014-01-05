@@ -54,10 +54,6 @@ namespace unx
 
 #define OPENGL_SCALE_VALUE 20
 
-using namespace std;
-using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
-
 typedef struct PosVeci3
 {
     int x;
@@ -180,7 +176,8 @@ public:
     int RenderRectangleShape();
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
-    int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont, awt::Point aPos, awt::Size aSize, long rotation);
+    int CreateTextTexture(::rtl::OUString textValue, sal_uInt32 color, const Font& rFont,
+            com::sun::star::awt::Point aPos, com::sun::star::awt::Size aSize, long rotation);
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);
@@ -275,7 +272,7 @@ private:
 
     float m_fLineAlpha;
 
-    list <Line2DPointList> m_Line2DShapePointList;
+    std::list <Line2DPointList> m_Line2DShapePointList;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxRenderTarget;
 	int m_iArbMultisampleSupported;
@@ -300,7 +297,7 @@ private:
 
     Bubble2DPointList m_Bubble2DPointList;
 
-    list <Bubble2DPointList> m_Bubble2DShapePointList;
+    std::list <Bubble2DPointList> m_Bubble2DShapePointList;
     GLint m_CommonProID;
     GLint m_2DVertexID;
     GLint m_2DColorID;
@@ -312,10 +309,10 @@ private:
 
     RectanglePointList m_RectangleList;
 
-    list <RectanglePointList> m_RectangleShapePointList;
+    std::list <RectanglePointList> m_RectangleShapePointList;
     // add for text
     TextInfo m_TextInfo;
-    list <TextInfo> m_TextInfoList;
+    std::list <TextInfo> m_TextInfoList;
     GLint m_TextProID;
     GLint m_TextMatrixID;
     GLint m_TextVertexID;
@@ -324,7 +321,7 @@ private:
     GLint m_TextTexID;
 
     Area2DPointList m_Area2DPointList;
-    list <Area2DPointList> m_Area2DShapePointList;
+    std::list <Area2DPointList> m_Area2DShapePointList;
 
 };
 
