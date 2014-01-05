@@ -1861,7 +1861,7 @@ void OWriteStream::ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aG
 {
     if ( m_pImpl->m_pParent )
     {
-        if ( m_pImpl->m_pParent->m_pAntiImpl )
+        if ( m_pImpl->m_pParent->HasModifiedListener() )
         {
             uno::Reference< util::XModifiable > xParentModif( (util::XModifiable*)(m_pImpl->m_pParent->m_pAntiImpl) );
             aGuard.clear();
