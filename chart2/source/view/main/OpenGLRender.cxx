@@ -47,6 +47,7 @@ using namespace com::sun::star;
 using namespace std;
 
 #define RENDER_TO_FILE 0
+#define BMP_HEADER_LEN 54
 
 #define OPENGL_SHADER( ... )# __VA_ARGS__
 

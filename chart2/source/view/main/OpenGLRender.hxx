@@ -52,7 +52,6 @@ namespace unx
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/quaternion.hpp"
 
-#define BMP_HEADER_LEN 54
 #define OPENGL_SCALE_VALUE 20
 
 using namespace std;
