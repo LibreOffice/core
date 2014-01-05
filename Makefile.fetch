@@ -119,6 +119,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,FONTCONFIG,$(FONTCONFIG_TARBALL)) \
 		$(call fetch_Optional,FREETYPE,$(FREETYPE_TARBALL)) \
 		$(GOOGLE_DOCS_EXTENSION_PACK) \
+		$(call fetch_Optional,GLEW,$(GLEW_TARBALL)) \
 		$(call fetch_Optional,GLM,$(GLM_TARBALL)) \
 		$(call fetch_Optional,HSQLDB,$(HSQLDB_TARBALL)) \
 		$(call fetch_Optional,HUNSPELL,$(HUNSPELL_TARBALL)) \

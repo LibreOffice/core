@@ -21,14 +21,11 @@ $(eval $(call gb_Library_use_externals,chartopengl,\
 	boost_headers \
 	mdds_headers \
 	glm_headers \
+	mesa_headers \
+	glew \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,chartopengl))
-
-$(eval $(call gb_Library_use_externals,chartopengl,\
-	boost_headers \
-	mesa_headers \
-))
 
 $(eval $(call gb_Library_use_libraries,chartopengl,\
     basegfx \
@@ -54,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,chartopengl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,chartopengl,\
-    chart2/source/glew/glew \
     chart2/source/view/main/OpenglShapeFactory \
     chart2/source/view/main/DummyXShape \
     chart2/source/view/main/OpenGLRender \

@@ -126,6 +126,27 @@ endef
 
 endif
 
+ifeq ($(SYSTEM_GLEW),YES)
+
+gb_LinkTarget__use_glew :=
+
+else
+
+define gb_LinkTarget__use_glew
+$(call gb_LinkTarget_use_external_project,$(1),glew)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,glew/include) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,glew)/lib/ -lGLEW \
+)
+
+endef
+
+endif
+
 ifeq ($(SYSTEM_GLM),YES)
 
 gb_LinkTarget__use_glm_headers :=
