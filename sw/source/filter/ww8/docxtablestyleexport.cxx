@@ -116,9 +116,9 @@ void DocxTableStyleExport::Impl::tableStyleTblCellMar(uno::Sequence<beans::Prope
         {
             comphelper::SequenceAsHashMap aMap(rTblCellMar[i].Value.get< uno::Sequence<beans::PropertyValue> >());
             m_pSerializer->singleElementNS(XML_w, nToken,
-                    FSNS(XML_w, XML_w), OString::number(aMap["w"].get<sal_Int32>()),
-                    FSNS(XML_w, XML_type), OUStringToOString(aMap["type"].get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
-                    FSEND);
+                                           FSNS(XML_w, XML_w), OString::number(aMap["w"].get<sal_Int32>()),
+                                           FSNS(XML_w, XML_type), OUStringToOString(aMap["type"].get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
+                                           FSEND);
         }
     }
     m_pSerializer->endElementNS(XML_w, nType);
@@ -376,7 +376,8 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
             {
                 aSpacing = rRPr[i].Value.get<OUString>();
             }
-            else {
+            else
+            {
                 aSpacingSequence = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >() ;
                 bSequenceFlag = true ; // set the uno::Sequence flag.
             }
@@ -390,24 +391,24 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     handleBoolean(aCaps, XML_caps);
     handleBoolean(aSmallCaps, XML_smallCaps);
     tableStyleRColor(aColor);
-    if(bSequenceFlag)
+    if (bSequenceFlag)
     {
-           m_pSerializer->singleElementNS(XML_w, XML_spacing,
-                FSNS(XML_w, XML_val),OUStringToOString(aSpacingSequence[0].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
-                   FSEND);
+        m_pSerializer->singleElementNS(XML_w, XML_spacing,
+                                       FSNS(XML_w, XML_val),OUStringToOString(aSpacingSequence[0].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
     }
     if (!aSpacing.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_spacing,
-                FSNS(XML_w, XML_val), OUStringToOString(aSpacing, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aSpacing, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
     if (!aSz.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_sz,
-                FSNS(XML_w, XML_val), OUStringToOString(aSz, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aSz, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
     if (!aSzCs.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_szCs,
-                FSNS(XML_w, XML_val), OUStringToOString(aSzCs, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aSzCs, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
 
     m_pSerializer->endElementNS(XML_w, XML_rPr);
 }
@@ -442,8 +443,8 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
     tableStylePSpacing(aSpacing);
     if (!aJc.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_jc,
-                FSNS(XML_w, XML_val), OUStringToOString(aJc, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aJc, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
 
     m_pSerializer->endElementNS(XML_w, XML_pPr);
 }
@@ -472,12 +473,12 @@ void DocxTableStyleExport::Impl::tableStyleTblPr(uno::Sequence<beans::PropertyVa
     }
     if (oTblStyleRowBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleRowBandSize,
-                FSNS(XML_w, XML_val), OString::number(oTblStyleRowBandSize.get()),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OString::number(oTblStyleRowBandSize.get()),
+                                       FSEND);
     if (oTblStyleColBandSize)
         m_pSerializer->singleElementNS(XML_w, XML_tblStyleColBandSize,
-                FSNS(XML_w, XML_val), OString::number(oTblStyleColBandSize.get()),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OString::number(oTblStyleColBandSize.get()),
+                                       FSEND);
     tableStyleTblInd(aTblInd);
     tableStyleTcBorders(aTblBorders, XML_tblBorders);
     tableStyleTblCellMar(aTblCellMar);
@@ -510,8 +511,8 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
     tableStyleShd(aShd);
     if (!aVAlign.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_vAlign,
-                FSNS(XML_w, XML_val), OUStringToOString(aVAlign, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aVAlign, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
 
     m_pSerializer->endElementNS(XML_w, XML_tcPr);
 }
@@ -538,8 +539,8 @@ void DocxTableStyleExport::Impl::tableStyleTblStylePr(uno::Sequence<beans::Prope
     }
 
     m_pSerializer->startElementNS(XML_w, XML_tblStylePr,
-            FSNS(XML_w, XML_type), OUStringToOString(aType, RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND);
+                                  FSNS(XML_w, XML_type), OUStringToOString(aType, RTL_TEXTENCODING_UTF8).getStr(),
+                                  FSEND);
 
     tableStylePPr(aPPr);
     tableStyleRPr(aRPr);
@@ -607,16 +608,16 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
     m_pSerializer->startElementNS(XML_w, XML_style, xAttributeList);
 
     m_pSerializer->singleElementNS(XML_w, XML_name,
-            FSNS(XML_w, XML_val), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND);
+                                   FSNS(XML_w, XML_val), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
+                                   FSEND);
     if (!aBasedOn.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_basedOn,
-                FSNS(XML_w, XML_val), OUStringToOString(aBasedOn, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aBasedOn, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
     if (!aUiPriority.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
-                FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
     if (bQFormat)
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (bSemiHidden)
@@ -625,8 +626,8 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
     if (!aRsid.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
-                FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
+                                       FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSEND);
 
     tableStylePPr(aPPr);
     tableStyleRPr(aRPr);
