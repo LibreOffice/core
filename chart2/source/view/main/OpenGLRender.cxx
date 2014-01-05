@@ -245,9 +245,9 @@ int static checkGLError(const char *file, int line)
         const GLubyte* sError = gluErrorString(glErr);
 
         if (sError)
-            cout << "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line << endl;
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line);
         else
-            cout << "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line << endl;
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line);
 
         retCode = -1;
         return retCode;
