@@ -236,7 +236,6 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

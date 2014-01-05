@@ -90,7 +90,6 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

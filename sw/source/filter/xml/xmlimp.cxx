@@ -915,7 +915,6 @@ void SwXMLImport::endDocument( void )
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
@@ -1484,7 +1483,6 @@ void SwXMLImport::SetDocumentSpecificSettings(
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

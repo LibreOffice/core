@@ -262,7 +262,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             catch (const uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
             }
             rReq.Ignore ();
         }
